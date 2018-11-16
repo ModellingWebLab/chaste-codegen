@@ -1,11 +1,16 @@
 #
 # fccodegen setuptools script
 #
+import os
 from setuptools import setup, find_packages
 
 # Load text for description
 with open('README.md') as f:
     readme = f.read()
+
+# Load version number
+with open(os.path.join('fccodegen', 'version.txt'), 'r') as f:
+    version = f.read()
 
 # Go!
 setup(
