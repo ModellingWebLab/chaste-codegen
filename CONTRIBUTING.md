@@ -34,7 +34,7 @@ They are divided into base dependencies (listed in `install_requires`) and `test
 Users install these requirements automatically when they `pip install fccodegen`.
 
 **Developer requirements** are listed in `base.in`, `test.in`, and `dev.in` (where `test` requires `base`, while `dev` requires `base` and `test`).
-These `.in` files are compiled into `.txt` files for `pip` using [isort](https://pypi.org/project/isort/) and [pip-tools](https://pypi.org/project/pip-tools/).
+These `.in` files are compiled into `.txt` files for `pip` using [pip-tools](https://pypi.org/project/pip-tools/).
 To compile them, use the Makefile in the `requirements` folder, by simply typing `make`.
 
 To install the developer requirements into your virtualenv:
