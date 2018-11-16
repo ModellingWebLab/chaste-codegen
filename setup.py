@@ -41,7 +41,7 @@ setup(
     ],
     extras_require={
         'test': [
-            'pytest>=3',            # For unit tests
+            'pytest>=3.9',          # For unit tests
             'pytest-cov>=2.5',      # For coverage checking
             'flake8>=3',            # For code style checking
         ],
