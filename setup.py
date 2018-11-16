@@ -17,9 +17,7 @@ setup(
     # Module name (lowercase)
     name='fccodegen',
 
-    # Remember to keep this in sync with fccodegen/__init__.py
-    version='0.0.1',
-
+    version=version,
     description='Code generation for the Web Lab',
     long_description=readme,
     license='BSD 3-clause license',
