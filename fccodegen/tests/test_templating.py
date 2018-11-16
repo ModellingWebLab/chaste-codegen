@@ -1,25 +1,24 @@
+#
+# Tests templating functionality
+#
 import fccodegen as cg
 import logging
 #import pytest
-
-from .shared import TemporaryDirectory
 
 
 # Show more logging output
 logging.getLogger().setLevel(logging.INFO)
 
 
-class TestBasics(object):
-    """
-    Tests the templating methods.
-    """
-    def test_load_template(self):
+def test_load_template():
 
-        template = cg.load_template('tests', 'hello.txt')
-        assert template.render(name='Michael') == 'Hello Michael!'
+    template = cg.load_template('tests', 'hello.txt')
+    assert template.render(name='Michael') == 'Hello Michael!'
 
-    def test_weblab_model(self):
+def test_weblab_model(tmp_path):
 
-        with TemporaryDirectory() as d:
-            path = d.path('model.pyx')
-            cg.create_weblab_model(None, path)
+    path = tmp_path / 'model.pyx'
+    cg.create_weblab_model(None, path)
+
+    # To see the result, use pytest -s
+    # print(path.read_text())
