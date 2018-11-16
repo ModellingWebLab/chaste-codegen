@@ -15,6 +15,7 @@ def test_load_template():
     template = cg.load_template('tests', 'hello.txt')
     assert template.render(name='Michael') == 'Hello Michael!'
 
+
 def test_weblab_model(tmp_path):
 
     path = tmp_path / 'model.pyx'
