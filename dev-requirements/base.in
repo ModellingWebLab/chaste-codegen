@@ -1,2 +1,3 @@
+-e git://github.com/ModellingWebLab/cellmlmanip.git#egg=cellmlmanip
 Jinja2
 

@@ -4,6 +4,7 @@
 #
 #    pip-compile --output-file dev.txt dev.in
 #
+-e git+git://github.com/ModellingWebLab/cellmlmanip.git#egg=cellmlmanip
 atomicwrites==1.2.1       # via pytest
 attrs==18.2.0             # via pytest
 click==7.0                # via pip-tools

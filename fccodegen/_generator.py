@@ -20,6 +20,7 @@ def create_weblab_model(model, path):
     Takes a :class:`cellmlmanip.Model`, generates a ``.pyx`` model for use
     with the Web Lab, and stores it at ``path``.
     """
+    
     template = load_template('wl', 'weblab_model.pyx')
     with open(path, 'w') as f:
         f.write(template.render())
