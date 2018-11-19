@@ -14,10 +14,13 @@ finally:
     # Always manually delete frame
     # https://docs.python.org/2/library/inspect.html#the-interpreter-stack
     del(frame)
+del(inspect)    # Don't expose imported modules
 
 # Template directory
 DIR_TEMPLATE = os.path.join(DIR_ROOT, 'templates')
-del(inspect)    # Don't expose as part of codegen
+
+# Directory for any other data
+DIR_DATA = os.path.join(DIR_ROOT, 'data')
 
 
 #
@@ -26,7 +29,7 @@ del(inspect)    # Don't expose as part of codegen
 with open(os.path.join(DIR_ROOT, 'version.txt'), 'r') as f:
     VERSION_INT = tuple([int(x) for x in f.read().split('.', 3)])
 VERSION = '.'.join([str(x) for x in VERSION_INT])
-del(os)
+del(os)     # Don't expose imported modules
 
 
 #

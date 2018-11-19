@@ -1,1 +1,2 @@
 graft fccodegen/templates
+graft fccodegen/data

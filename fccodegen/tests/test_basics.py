@@ -1,5 +1,5 @@
 #
-# Tests the absolute basics of fccodegen
+# Tests the basics of fccodegen
 #
 #import pytest
 import logging
@@ -14,6 +14,7 @@ def test_module_import():
 
 
 def test_version():
+    # Test the version() method
     import fccodegen
 
     version = fccodegen.version()
@@ -32,4 +33,5 @@ def test_version():
 
 
 def test_cellmlmanip_import():
+    # cellmlmanip should be available, via the setup scripts
     import cellmlmanip  # noqa
