@@ -208,8 +208,8 @@ class WebLabPrinter(sympy.printing.printer.Printer):
         args = self._bracket_args(expr.args, 0)
         return self._prefix + name + '(' + args + ')'
 
-    def _print_Infinity(self, expr):
-        return 'float(\'inf\')'
+    #def _print_Infinity(self, expr):
+    #    return 'float(\'inf\')'
 
     def _print_int(self, expr):
         """ Handles python ints """
@@ -294,11 +294,11 @@ class WebLabPrinter(sympy.printing.printer.Printer):
         b_str = ' * '.join(b_str)
         return a_str + ' / ' + (b_str if len(b) == 1 else '(' + b_str + ')')
 
-    def _print_NaN(self, expr):
-        return 'float(\'nan\')'
+    #def _print_NaN(self, expr):
+    #    return 'float(\'nan\')'
 
-    def _print_NegativeInfinity(self, expr):
-        return 'float(\'-inf\')'
+    #def _print_NegativeInfinity(self, expr):
+    #    return 'float(\'-inf\')'
 
     def _print_Or(self, expr):
         """ Handles logical Or. """
@@ -336,9 +336,9 @@ class WebLabPrinter(sympy.printing.printer.Printer):
             # Add e-if-c-else-? statement
             parts.append('(')
             parts.append(self._print(e))
-            parts.append(') if ')
+            parts.append(') if (')
             parts.append(self._print(c))
-            parts.append(' else (')
+            parts.append(') else (')
             brackets += 1
         parts.append(other)
         parts.append(')' * brackets)

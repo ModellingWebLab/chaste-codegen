@@ -4,6 +4,7 @@
 import fccodegen as cg
 import logging
 import math
+import pytest
 import sympy as sp
 
 
@@ -20,6 +21,7 @@ def test_simple():
     assert p.doprint(1) == '1'                  # int
     assert p.doprint(1.2) == '1.2'              # float, short format
     assert p.doprint(math.pi) == '3.141592653589793'    # float, long format
+    assert p.doprint(1.436432635636e-123) == '1.436432635636e-123'
     assert p.doprint(x - x) == '0'              # Zero
     assert p.doprint(x / x) == '1'              # One
     assert p.doprint(-x / x) == '-1'            # Negative one
@@ -33,6 +35,24 @@ def test_simple():
 
     # Symbols
     assert p.doprint(x) == 'x'
+
+    # Symbol function
+    def symbol_function(symbol):
+        return symbol.name.upper()
+
+    q = cg.WebLabPrinter(symbol_function)
+    assert q.doprint(x) == 'X'
+
+    # Derivatives
+    assert p.doprint(sp.Derivative(x, y)) == 'Derivative(x, y)'
+
+    # Derivative function
+    def derivative_function(deriv):
+        a, b = deriv.args
+        return 'd' + symbol_function(a) + '/' + 'd' + symbol_function(b)
+
+    q = cg.WebLabPrinter(derivative_function=derivative_function)
+    assert q.doprint(sp.Derivative(x, y)) == 'dX/dY'
 
     # Addition and subtraction
     assert p.doprint(x + y) == 'x + y'
@@ -56,6 +76,15 @@ def test_simple():
     assert p.doprint(1 / x) == '1 / x'  # Uses pow
     assert p.doprint(1 / (x * y)) == '1 / (x * y)'
     assert p.doprint(1 / -(x * y)) == '-1 / (x * y)'
+    assert p.doprint(x + (y + z)) == 'x + y + z'
+    assert p.doprint(x * (y + z)) == 'x * (y + z)'
+    assert p.doprint(x * y * z) == 'x * y * z'
+    assert p.doprint(x + y > x * z), 'x + y > x * z'
+    assert p.doprint(x**2 + y**2) == 'x**2 + y**2'
+    assert p.doprint(x**2 + 3 * y**2) == 'x**2 + 3 * y**2'
+    assert p.doprint(x**(2 + y**2)) == 'x**(2 + y**2)'
+    assert p.doprint(x**(2 + 3 * y**2)) == 'x**(2 + 3 * y**2)'
+    assert p.doprint(x**-1 * y**-1) == '1 / (x * y)'
 
     # Powers and square roots
     assert p.doprint(sp.sqrt(2)) == 'math.sqrt(2)'
@@ -66,11 +95,15 @@ def test_simple():
     assert p.doprint(1 / sp.sqrt(x)) == '1 / math.sqrt(x)'
     assert p.doprint(x**(x / (2 * x))) == 'math.sqrt(x)'
     assert p.doprint(x**(x / (-2 * x))) == '1 / math.sqrt(x)'
+    assert p.doprint(x**-1) == '1 / x'
     assert p.doprint(x**0.5) == 'x**0.5'
     assert p.doprint(x**-0.5) == 'x**(-0.5)'
     assert p.doprint(x**(1 + y)) == 'x**(1 + y)'
     assert p.doprint(x**-2) == 'x**(-2)'
     assert p.doprint(x**3.2) == 'x**3.2'
+    assert p.doprint(x / y / z) == 'x / (y * z)'
+    assert p.doprint(x / y * z) == 'x * z / y'
+    assert p.doprint(x / (y * z)) == 'x / (y * z)'
 
     # Trig functions
     assert p.doprint(sp.acos(x)) == 'math.acos(x)'
@@ -100,22 +133,50 @@ def test_simple():
     assert p.doprint(sp.Lt(x, y)) == 'x < y'
     assert p.doprint(sp.Ge(x, y)) == 'x >= y'
     assert p.doprint(sp.Le(x, y)) == 'x <= y'
+    assert p.doprint(sp.Eq(sp.Eq(x, 3), 12)) == '(x == 3) == 12'
 
     # Boolean logic
-    assert p.doprint(x == x) == 'True'
-    assert p.doprint(x != x) == 'False'
+    assert p.doprint(True) == 'True'
+    assert p.doprint(False) == 'False'
+    assert p.doprint(sp.Eq(x, x)) == 'True'
+    assert p.doprint(sp.Ne(x, x)) == 'False'
     assert p.doprint(sp.And(sp.Eq(x, y), sp.Eq(x, z))) == 'x == y and x == z'
     assert (
         p.doprint(sp.And(sp.Eq(x, y), sp.Eq(x, z), sp.Eq(x, 2))) ==
-        'x == y and x == z and x == 2')
+        'x == 2 and x == y and x == z')
     assert p.doprint(sp.Or(sp.Eq(x, y), sp.Eq(x, z))) == 'x == y or x == z'
     assert (
         p.doprint(sp.Or(sp.Eq(x, y), sp.Eq(x, z), sp.Eq(x, 2))) ==
-        'x == y or x == z or x == 2')
-    #assert p.doprint(x != x) == 'False'
+        'x == 2 or x == y or x == z')
+    a, b, c = x > 2, x > y, x > z
+    assert p.doprint(a & b) == 'x > 2 and x > y'
+    # 1 or (0 and 0) = 1 = 1 or 0 and 0 -- and binds stronger
+    # (1 or 0) and 0 = 0
+    assert p.doprint(a | (b & c)) == 'x > 2 or x > y and x > z'
+    assert p.doprint((a | b) & c) == 'x > z and (x > 2 or x > y)'
+
+    # Piecewise expressions
+    e = sp.Piecewise((0, x > 0), (1, True))
+    assert p.doprint(e) == '((0) if (x > 0) else (1))'
+    e = sp.Piecewise((0, x > 0), (1, x > 1), (2, True))
+    assert p.doprint(e) == '((0) if (x > 0) else ((1) if (x > 1) else (2)))'
+    e = sp.Piecewise((0, x > 0), (1, x > 1), (2, True), (3, x > 3))
+    assert p.doprint(e) == '((0) if (x > 0) else ((1) if (x > 1) else (2)))'
+    e = sp.Piecewise((0, x > 0), (1, False), (2, True), (3, x > 3))
+    assert p.doprint(e) == '((0) if (x > 0) else (2))'
 
     # Longer expressions
     assert (
         p.doprint((x + y) / (2 + z / sp.exp(x - y))) ==
         '(x + y) / (2 + z * math.exp(y - x))')
+    assert p.doprint((y + sp.sin(x))**-1) == '1 / (y + math.sin(x))'
 
+    # Unsupported sympy item
+    e = sp.Matrix()
+    with pytest.raises(RuntimeError):
+        p.doprint(e)
+
+    # Unsupported sympy function
+    e = sp.gamma(x)
+    with pytest.raises(RuntimeError):
+        p.doprint(e)

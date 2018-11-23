@@ -25,16 +25,16 @@ def test_create_weblab_model(tmp_path):
         cg.DIR_DATA, 'tests',
         'hodgkin_huxley_squid_axon_model_1952_modified.cellml')
     model = cg.load_model(model)
-    eqs = cg.get_equations(model)
+    #eqs = cg.get_equations(model)
 
     # Create expression printer
-    p = cg.WebLabPrinter()
+    #p = cg.WebLabPrinter()
 
     #TODO
-    for eq in eqs:
-        lhs, rhs = eq.lhs, eq.rhs
-        print('LHS: ' + p.doprint(lhs))
-        print('  = ' + p.doprint(rhs))
+    #for eq in eqs:
+    #    lhs, rhs = eq.lhs, eq.rhs
+    #    print('LHS: ' + p.doprint(lhs))
+    #    print('  = ' + p.doprint(rhs))
 
     # Select output path (in temporary dir)
     path = tmp_path / 'model.pyx'
