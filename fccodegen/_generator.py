@@ -30,8 +30,7 @@ def load_model(path):
 
     model = cellmlmanip.parser.Parser(path).parse()
     model.make_connections()
-    for c in model.components.values():
-        c.add_units_to_equations()
+    model.add_units_to_equations()
     for e in model.equations:
         model.check_left_right_units_equal(e)
     return model
