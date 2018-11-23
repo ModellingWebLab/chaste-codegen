@@ -184,11 +184,12 @@ class WebLabPrinter(sympy.printing.printer.Printer):
 
     def _print_float(self, expr):
         """ Handles Python floats """
+        return str(expr)
         # Print short format if it doesn't change the value, else long format
-        short = str(expr)
-        if float(short) == expr:
-            return short
-        return '{: .17e}'.format(expr)
+        #short = str(expr)
+        #if float(short) == expr:
+        #    return short
+        #return '{: .17e}'.format(expr)
 
     def _print_Float(self, expr):
         """ Handles Sympy Float objects """
@@ -252,6 +253,7 @@ class WebLabPrinter(sympy.printing.printer.Printer):
                 and item.exp.is_Rational and item.exp.is_negative)
             if negative_power:
                 if item.exp != -1:
+                    # E.g. x * y**(-2 / 3) --> x / y**(2 / 3)
                     # Add as power
                     b.append(sympy.Pow(item.base, -item.exp, evaluate=False))
                 else:
@@ -259,6 +261,7 @@ class WebLabPrinter(sympy.printing.printer.Printer):
                     b.append(sympy.Pow(item.base, -item.exp))
 
                     # Check if it's a negative power that needs brackets
+                    # Sympy issue #14160
                     if (len(item.args[0].args) != 1
                             and isinstance(item.base, sympy.Mul)):
                         pow_brackets.append(item)
@@ -317,7 +320,7 @@ class WebLabPrinter(sympy.printing.printer.Printer):
         evaluated by returning the first ``expr`` whose ``cond`` is true. If
         non of the conditions hold a value error is raised.
         """
-        from sympy.logic.boolalg import BooleanTrue, BooleanFalse
+        from sympy.logic.boolalg import BooleanTrue
 
         # Assign NaN if no conditions hold
         # If a condition `True` is found, use its expression instead
@@ -330,8 +333,9 @@ class WebLabPrinter(sympy.printing.printer.Printer):
             if isinstance(c, BooleanTrue):
                 other = self._print(e)
                 break
-            elif isinstance(c, BooleanFalse):
-                continue
+            # Sympy filters these out:
+            #elif isinstance(c, BooleanFalse):
+            #    continue
 
             # Add e-if-c-else-? statement
             parts.append('(')

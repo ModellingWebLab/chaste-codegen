@@ -85,6 +85,19 @@ def test_simple():
     assert p.doprint(x**(2 + y**2)) == 'x**(2 + y**2)'
     assert p.doprint(x**(2 + 3 * y**2)) == 'x**(2 + 3 * y**2)'
     assert p.doprint(x**-1 * y**-1) == '1 / (x * y)'
+    assert p.doprint(x / y / z) == 'x / (y * z)'
+    assert p.doprint(x / y * z) == 'x * z / y'
+    assert p.doprint(x / (y * z)) == 'x / (y * z)'
+    assert p.doprint(x * y**(-2 / (3 * x / x))) == 'x / y**(2 / 3)'
+
+    # Sympy issue #14160
+    d = sp.Mul(
+        -2,
+        x,
+        sp.Pow(sp.Mul(y, y, evaluate=False), -1, evaluate=False),
+        evaluate=False
+    )
+    assert p.doprint(d) == '-2 * x / (y * y)'
 
     # Powers and square roots
     assert p.doprint(sp.sqrt(2)) == 'math.sqrt(2)'
@@ -99,11 +112,10 @@ def test_simple():
     assert p.doprint(x**0.5) == 'x**0.5'
     assert p.doprint(x**-0.5) == 'x**(-0.5)'
     assert p.doprint(x**(1 + y)) == 'x**(1 + y)'
+    assert p.doprint(x**-(1 + y)) == 'x**(-1 - y)'
+    assert p.doprint((x + z)**-(1 + y)) == '(x + z)**(-1 - y)'
     assert p.doprint(x**-2) == 'x**(-2)'
     assert p.doprint(x**3.2) == 'x**3.2'
-    assert p.doprint(x / y / z) == 'x / (y * z)'
-    assert p.doprint(x / y * z) == 'x * z / y'
-    assert p.doprint(x / (y * z)) == 'x / (y * z)'
 
     # Trig functions
     assert p.doprint(sp.acos(x)) == 'math.acos(x)'
@@ -162,7 +174,10 @@ def test_simple():
     assert p.doprint(e) == '((0) if (x > 0) else ((1) if (x > 1) else (2)))'
     e = sp.Piecewise((0, x > 0), (1, x > 1), (2, True), (3, x > 3))
     assert p.doprint(e) == '((0) if (x > 0) else ((1) if (x > 1) else (2)))'
-    e = sp.Piecewise((0, x > 0), (1, False), (2, True), (3, x > 3))
+    # Sympy filters out False statements
+    e = sp.Piecewise(
+        (0, x > 0), (1, x != x), (2, True), (3, x > 3),
+        evaluate=False)
     assert p.doprint(e) == '((0) if (x > 0) else (2))'
 
     # Longer expressions
