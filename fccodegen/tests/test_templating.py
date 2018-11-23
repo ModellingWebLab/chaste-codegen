@@ -17,24 +17,45 @@ def test_load_template():
     assert template.render(name='Michael') == 'Hello Michael!'
 
 
+def test_unique_name_generation():
+    # Tests if unique variable names are generated correctly
+
+    # Load cellml model, get unique names
+    model = os.path.join(
+        cg.DIR_DATA, 'tests',
+        #'hodgkin_huxley_squid_axon_model_1952_modified.cellml'
+        'conflicting_names.cellml',
+    )
+    model = cg.load_model(model)
+    graph = model.get_equation_graph()
+
+    # Test unique names
+    from fccodegen._generator import get_unique_names
+    unames = get_unique_names(graph)
+    assert len(unames) == 9
+    symbols = [v for v in graph]
+    symbols.sort(key=lambda x: str(x))
+
+    assert unames[symbols[0]] == 'time'         # env$time
+    assert unames[symbols[1]] == 'x_a'          # x$a
+    assert unames[symbols[2]] == 'b'            # x$b
+    assert unames[symbols[3]] == 'x_y_z_1'      # x$y_z
+    assert unames[symbols[4]] == 'x_y_a'        # x_y$a
+    assert unames[symbols[5]] == 'x_y_z'        # x_y$x_y_z
+    assert unames[symbols[6]] == 'z'            # x_y$z
+    assert unames[symbols[7]] == 'z_a'          # z$a
+    assert unames[symbols[8]] == 'z_y_z'        # z$y_z
+
+
 def test_create_weblab_model(tmp_path):
     # Tests the create_weblab_model() method
 
     # Load cellml model
     model = os.path.join(
         cg.DIR_DATA, 'tests',
-        'hodgkin_huxley_squid_axon_model_1952_modified.cellml')
+        'hodgkin_huxley_squid_axon_model_1952_modified.cellml'
+    )
     model = cg.load_model(model)
-    #eqs = cg.get_equations(model)
-
-    # Create expression printer
-    #p = cg.WebLabPrinter()
-
-    #TODO
-    #for eq in eqs:
-    #    lhs, rhs = eq.lhs, eq.rhs
-    #    print('LHS: ' + p.doprint(lhs))
-    #    print('  = ' + p.doprint(rhs))
 
     # Select output path (in temporary dir)
     path = tmp_path / 'model.pyx'
