@@ -373,8 +373,6 @@ class WebLabPrinter(sympy.printing.printer.Printer):
 
     def _print_Rational(self, expr):
         """ Handles rationals (int divisions, stored symbollicaly) """
-        if expr.q == 1:
-            return str(expr.p)
         return str(expr.p) + ' / ' + str(expr.q)
 
     def _print_Relational(self, expr):
@@ -382,7 +380,7 @@ class WebLabPrinter(sympy.printing.printer.Printer):
 
         op = expr.rel_op
         ops = {'==', '!=', '<', '<=', '>', '>='}
-        if op not in ops:
+        if op not in ops:   # pragma: no cover
             raise RuntimeError('Unsupported relational: "' + str(op) + '".')
 
         # Note: Nested relationals (x == (y == z)) should get brackets, so

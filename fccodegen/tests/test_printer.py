@@ -27,7 +27,7 @@ def test_simple():
     assert p.doprint(-x / x) == '-1'            # Negative one
     assert p.doprint(5 * (x / x)) == '5'        # Sympy integer
     assert p.doprint(5.5 * (x / x)) == '5.5'        # Sympy float
-    assert p.doprint(5 * (x / x) / 7) == '5 / 7'    # Sympy rational
+    assert p.doprint(sp.Rational(5, 7)) == '5 / 7'  # Sympy rational
 
     # Special numbers
     assert p.doprint(sp.pi) == 'math.pi'
