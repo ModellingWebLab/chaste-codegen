@@ -6,6 +6,7 @@ import fccodegen as cg
 import jinja2
 import os
 import sympy as sp
+import time
 
 
 def load_template(*name):
@@ -118,6 +119,17 @@ def get_unique_names(graph):
     return symbols
 
 
+def get_state_list(graph):
+    """
+    Returns a list of state variables found in the given model graph.
+    """
+    states = []
+    for v in graph:
+        if isinstance(v, sp.Derivative):
+            states.append(v.args[0])
+    return states
+
+
 def create_weblab_model(model, path):
     """
     Takes a :class:`cellmlmanip.Model`, generates a ``.pyx`` model for use
@@ -138,17 +150,31 @@ def create_weblab_model(model, path):
 
     # Derivative naming function
     def derivative_name(deriv):
-        return 'd_dt_' + unames[deriv.args[0]]
+        var = deriv.args[0] if isinstance(deriv, sp.Derivative) else deriv
+        return 'd_dt_' + unames[var]
 
     # Create expression printer
     p = cg.WebLabPrinter(symbol_name, derivative_name)
 
-    #TODO
+    # Create a list of state variable indices, variables, and derivative vars
+    states = []
+    for i, state in enumerate(get_state_list(graph)):
+        states.append((i, symbol_name(state), derivative_name(state)))
+
+    # Create the RHS equations
+    rhs_equations = []
     for eq in eqs:
         lhs, rhs = eq.lhs, eq.rhs
-        print(p.doprint(lhs) + ' = ' + p.doprint(rhs))
+        rhs_equations.append(p.doprint(lhs) + ' = ' + p.doprint(rhs))
 
+    # Generate model
     template = load_template('wl', 'weblab_model.pyx')
     with open(path, 'w') as f:
-        f.write(template.render())
+        f.write(template.render({
+            'date': time.strftime('%Y-%m-%d %H:%M:%S'),
+            'generator': cg.version(formatted=True),
+            'name': model.name,
+            'rhs_equations': rhs_equations,
+            'states': states,
+        }))
 

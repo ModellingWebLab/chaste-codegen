@@ -46,22 +46,3 @@ def test_unique_name_generation():
     assert unames[symbols[7]] == 'z_a'          # z$a
     assert unames[symbols[8]] == 'z_y_z'        # z$y_z
 
-
-def test_create_weblab_model(tmp_path):
-    # Tests the create_weblab_model() method
-
-    # Load cellml model
-    model = os.path.join(
-        cg.DIR_DATA, 'tests',
-        'hodgkin_huxley_squid_axon_model_1952_modified.cellml'
-    )
-    model = cg.load_model(model)
-
-    # Select output path (in temporary dir)
-    path = tmp_path / 'model.pyx'
-
-    # Create weblab model at path
-    cg.create_weblab_model(model, path)
-
-    # To see the result, use pytest -s
-    # print(path.read_text())
