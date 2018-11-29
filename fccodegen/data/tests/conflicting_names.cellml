@@ -13,7 +13,7 @@
 	<component name="x">
 		<variable name="a" units="dimensionless"/>
 		<variable name="b" units="dimensionless"/>
-		<variable name="y_z" units="dimensionless"/>
+		<variable name="y__z" units="dimensionless"/>
 		<math xmlns="http://www.w3.org/1998/Math/MathML">
 			<apply>
 				<eq/>
@@ -27,15 +27,15 @@
 			</apply>
 			<apply>
 				<eq/>
-				<ci>y_z</ci>
+				<ci>y__z</ci>
 				<cn cellml:units="dimensionless">1.0</cn>
 			</apply>
 		</math>
 	</component>
-	<component name="x_y">
+	<component name="x__y">
 		<variable name="a" units="dimensionless"/>
 		<variable name="z" units="dimensionless"/>
-		<variable name="x_y_z" units="dimensionless"/>
+		<variable name="x__y__z" units="dimensionless"/>
 		<math xmlns="http://www.w3.org/1998/Math/MathML">
 			<apply>
 				<eq/>
@@ -49,14 +49,14 @@
 			</apply>
 			<apply>
 				<eq/>
-				<ci>x_y_z</ci>
+				<ci>x__y__z</ci>
 				<cn cellml:units="dimensionless">2.0</cn>
 			</apply>
         </math>
 	</component>
 	<component name="z">
 		<variable name="a" units="dimensionless"/>
-		<variable name="y_z" units="dimensionless"/>
+		<variable name="y__z" units="dimensionless"/>
 		<math xmlns="http://www.w3.org/1998/Math/MathML">
 		    <apply>
 			    <eq/>
@@ -65,7 +65,7 @@
 		    </apply>
 			<apply>
 				<eq/>
-				<ci>y_z</ci>
+				<ci>y__z</ci>
 				<cn cellml:units="dimensionless">3.0</cn>
 			</apply>
         </math>

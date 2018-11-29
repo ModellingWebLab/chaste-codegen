@@ -72,6 +72,10 @@ def get_unique_names(graph):
     """
     Creates unique names for all symbols in a cellml model graph.
     """
+    # Component variable separator
+    # Note that variables are free to use __ in their names too, it makes the
+    # produced code less readable but doesn't break anything.
+    sep = '__'
 
     # Create a symbol => name mapping, and a reverse name => symbol mapping
     symbols = {}
@@ -105,12 +109,12 @@ def get_unique_names(graph):
             if symbols[other] == name:
                 oparts = other.name.split('$')
                 assert len(oparts) == 2
-                oname = uname(oparts[0] + '_' + oparts[1])
+                oname = uname(oparts[0] + sep + oparts[1])
                 symbols[other] = oname
                 reverse[oname] = other
 
             # Get new name for v
-            name = uname(parts[0] + '_' + parts[1])
+            name = uname(parts[0] + sep + parts[1])
 
         # Store symbol name
         symbols[v] = name

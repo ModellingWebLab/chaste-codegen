@@ -36,13 +36,13 @@ def test_unique_name_generation():
     symbols = [v for v in graph]
     symbols.sort(key=lambda x: str(x))
 
-    assert unames[symbols[0]] == 'time'         # env$time
-    assert unames[symbols[1]] == 'x_a'          # x$a
-    assert unames[symbols[2]] == 'b'            # x$b
-    assert unames[symbols[3]] == 'x_y_z_1'      # x$y_z
-    assert unames[symbols[4]] == 'x_y_a'        # x_y$a
-    assert unames[symbols[5]] == 'x_y_z'        # x_y$x_y_z
-    assert unames[symbols[6]] == 'z'            # x_y$z
-    assert unames[symbols[7]] == 'z_a'          # z$a
-    assert unames[symbols[8]] == 'z_y_z'        # z$y_z
+    assert unames[symbols[0]] == 'time'         # env.time
+    assert unames[symbols[1]] == 'x__a'         # x.a
+    assert unames[symbols[2]] == 'b'            # x.b
+    assert unames[symbols[3]] == 'x__y__z_1'    # x.y__z
+    assert unames[symbols[4]] == 'x__y__a'      # x__y.a
+    assert unames[symbols[5]] == 'x__y__z'      # x__y.x__y__z
+    assert unames[symbols[6]] == 'z'            # x__y.z
+    assert unames[symbols[7]] == 'z__a'         # z.a
+    assert unames[symbols[8]] == 'z__y__z'      # z.y__z
 
