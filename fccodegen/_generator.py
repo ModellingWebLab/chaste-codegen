@@ -171,7 +171,11 @@ def create_weblab_model(model, path):
     # Create a list of state variable indices, variables, and derivative vars
     states = []
     for i, state in enumerate(get_state_list(graph)):
-        states.append((i, symbol_name(state), derivative_name(state)))
+        states.append({
+            'index': i,
+            'var_name': symbol_name(state),
+            'deriv_name': derivative_name(state),
+        })
 
     # Create the RHS equations
     rhs_equations = []

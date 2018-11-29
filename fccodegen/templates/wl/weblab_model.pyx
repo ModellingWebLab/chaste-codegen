@@ -32,7 +32,7 @@ cdef int _EvaluateRhs(Sundials.realtype var_environment__time, Sundials.N_Vector
 
     # Unpack state variables
     {%- for state in states %}
-    cdef double {{state[1]}} = (<Sundials.N_VectorContent_Serial>y.content).data[{{state[0]}}]
+    cdef double {{state.var_name}} = (<Sundials.N_VectorContent_Serial>y.content).data[{{state.index}}]
     {%- endfor %}
 
     # Mathematics
@@ -42,7 +42,7 @@ cdef int _EvaluateRhs(Sundials.realtype var_environment__time, Sundials.N_Vector
 
     # Pack state variable derivatives
     {%- for state in states %}
-    (<Sundials.N_VectorContent_Serial>ydot.content).data[{{state[0]}}] = {{state[2]}}
+    (<Sundials.N_VectorContent_Serial>ydot.content).data[{{state.index}}] = {{state.deriv_name}}
     {%- endfor %}
 
 
