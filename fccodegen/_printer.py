@@ -111,7 +111,7 @@ class WebLabPrinter(sympy.printing.printer.Printer):
 
     def _bracket(self, expr, parent_precedence):
         """
-        Converts ``expr`` to string, and adds parentheses around the resut, if
+        Converts ``expr`` to string, and adds parentheses around the result, if
         and only if ``precedence(expr) < parent_precedence``.
         """
         if precedence(expr) < parent_precedence:
@@ -232,7 +232,7 @@ class WebLabPrinter(sympy.printing.printer.Printer):
         """
         # This method is mostly copied from sympy.printing.Str
 
-        # Check overal sign of multiplication
+        # Check overall sign of multiplication
         from sympy.core.mul import _keep_coeff
         sign = ''
         c, e = expr.as_coeff_Mul()
@@ -318,7 +318,7 @@ class WebLabPrinter(sympy.printing.printer.Printer):
 
         Sympy's piecewise is defined as a list of tuples ``(expr, cond)`` and
         evaluated by returning the first ``expr`` whose ``cond`` is true. If
-        non of the conditions hold a value error is raised.
+        none of the conditions hold a value error is raised.
         """
         from sympy.logic.boolalg import BooleanTrue
 
