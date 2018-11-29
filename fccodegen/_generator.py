@@ -160,6 +160,14 @@ def create_weblab_model(model, path):
     # Create expression printer
     p = cg.WebLabPrinter(symbol_name, derivative_name)
 
+    #TODO: Update cellmlmanip to make this code look more like:
+    #
+    # state_vars = model.get_state_variables()
+    # free_var = model.get_free_variable()
+    # derivatives = [sp.Derivative(state, free_var) for state in state_vars]
+    # eqs = model.get_equations_for(derivatives)
+    #
+
     # Create a list of state variable indices, variables, and derivative vars
     states = []
     for i, state in enumerate(get_state_list(graph)):
