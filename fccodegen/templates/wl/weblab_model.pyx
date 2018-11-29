@@ -42,7 +42,7 @@ cdef int _EvaluateRhs(Sundials.realtype var_environment__time, Sundials.N_Vector
 
     # Pack state variable derivatives
     {%- for state in states %}
-    (<Sundials.N_VectorContent_Serial>ydot.content).data[{{state[0]}}] = {{state[1]}}
+    (<Sundials.N_VectorContent_Serial>ydot.content).data[{{state[0]}}] = {{state[2]}}
     {%- endfor %}
 
 
