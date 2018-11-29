@@ -220,6 +220,7 @@ class TestWebLabPrinter(object):
         assert p.doprint(e) == '((0) if (x > 0) else (2))'
 
     def test_long_expression(self, p, x, y, z):
+
         # Longer expressions
         assert (
             p.doprint((x + y) / (2 + z / sp.exp(x - y))) ==
@@ -230,10 +231,11 @@ class TestWebLabPrinter(object):
 
         # Unsupported sympy item
         e = sp.Matrix()
-        with pytest.raises(RuntimeError):
+        with pytest.raises(ValueError):
             p.doprint(e)
 
         # Unsupported sympy function
         e = sp.gamma(x)
-        with pytest.raises(RuntimeError):
+        with pytest.raises(ValueError):
             p.doprint(e)
+

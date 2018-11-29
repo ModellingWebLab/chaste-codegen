@@ -129,7 +129,7 @@ class WebLabPrinter(sympy.printing.printer.Printer):
         """
         Called by :class:`Printer` as a last resort for unknown expressions.
         """
-        raise RuntimeError(
+        raise ValueError(
             'Unsupported expression type (' + str(type(expr)) + '): '
             + str(expr))
 
@@ -203,7 +203,7 @@ class WebLabPrinter(sympy.printing.printer.Printer):
         if name == 'ceiling':
             name = 'ceil'
         if name not in _math_functions:
-            raise RuntimeError('Unsupported function: ' + str(name))
+            raise ValueError('Unsupported function: ' + str(name))
 
         # Convert arguments and return
         args = self._bracket_args(expr.args, 0)
@@ -381,7 +381,7 @@ class WebLabPrinter(sympy.printing.printer.Printer):
         op = expr.rel_op
         ops = {'==', '!=', '<', '<=', '>', '>='}
         if op not in ops:   # pragma: no cover
-            raise RuntimeError('Unsupported relational: "' + str(op) + '".')
+            raise ValueError('Unsupported relational: "' + str(op) + '".')
 
         # Note: Nested relationals (x == (y == z)) should get brackets, so
         # using slightly increased parent precedence here
