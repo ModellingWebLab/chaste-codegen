@@ -21,12 +21,8 @@ def test_unique_name_generation():
     # Tests if unique variable names are generated correctly
 
     # Load cellml model, get unique names
-    model = os.path.join(
-        cg.DIR_DATA, 'tests',
-        #'hodgkin_huxley_squid_axon_model_1952_modified.cellml'
-        'conflicting_names.cellml',
-    )
-    model = cg.load_model(model)
+    model = cg.load_model(
+        os.path.join(cg.DIR_DATA, 'tests', 'conflicting_names.cellml'))
     graph = model.get_equation_graph()
 
     # Test unique names
