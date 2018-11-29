@@ -135,7 +135,7 @@ class WebLabPrinter(sympy.printing.printer.Printer):
 
     def _print_Add(self, expr):
         """ Handles addition & subtraction, with n terms. """
-        # This method is mostly copied from sympy.printing.Str
+        # This method is based on sympy.printing.Str
 
         parts = []
         my_prec = precedence(expr)
