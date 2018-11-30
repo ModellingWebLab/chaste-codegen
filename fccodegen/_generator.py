@@ -255,10 +255,11 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
     # Create parameter information dicts
     parameter_info = []
     for i, parameter in enumerate(parameters):
+        symbol = get_symbol_by_cmeta_id(graph, output)
         parameter_info.append({
             'index': i,
             'cmeta_id': parameter,
-            'var_name': symbol_name(get_symbol_by_cmeta_id(graph, output)),
+            'var_name': symbol_name(symbol),
             'initial_value': 654.321,
         })
 
