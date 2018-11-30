@@ -24,7 +24,7 @@ from fc.sundials.solver cimport CvodeSolver
 from fc.utility.error_handling import ProtocolError
 
 
-cdef int _EvaluateRhs(Sundials.realtype var_environment__time, # TODO Replace name
+cdef int _EvaluateRhs(Sundials.realtype var_time,
                       Sundials.N_Vector y,
                       Sundials.N_Vector ydot,
                       void* user_data):
@@ -82,7 +82,7 @@ cdef int _EvaluateRhs(Sundials.realtype var_environment__time, # TODO Replace na
     (<Sundials.N_VectorContent_Serial>ydot.content).data[3] = d_dt_n
 
 
-cdef class GeneratedModel_Proto_tmpHzG5bQ(CvodeSolver): # TODO Generate name
+cdef class TestModel(CvodeSolver):
 
     # The name of the free variable, for use in the ModelWrapperEnvironment
     # From: fc.simulations.AbstractOdeModel
@@ -159,42 +159,43 @@ cdef class GeneratedModel_Proto_tmpHzG5bQ(CvodeSolver): # TODO Generate name
         self.freeVariableName = "time"
         self.freeVariable = 0.0
 
-        # TODO Generate this
-        self.state = np.zeros(2)
+        # State values
+        self.state = np.zeros(4)
+
+        # Mapping from cmeta ids to state indices
+        # TODO Is this correct? Not all states need to have a cmeta id!
         self.stateVarMap = {}
 
-        # TODO Generate this
-        self.initialState = np.zeros(2)
-        self.initialState[0] = 0 # (c,rapid_time_dependent_potassium_current_Xr1_gate__Xr1) dimensionless
-        self.initialState[1] = 1 # (c,rapid_time_dependent_potassium_current_Xr2_gate__Xr2) dimensionless
+        # Initial state
+        self.initialState = np.zeros(4)
+        self.initialState[0] = 123456.789
+        self.initialState[1] = 123456.789
+        self.initialState[2] = 123456.789
+        self.initialState[3] = 123456.789
 
-        # TODO Generate this
+        # Mapping of parameter cmeta ids to parameter array indices
         self.parameterMap = {}
-        self.parameters = np.zeros(4)
-        self.parameterMap["cytosolic_potassium_concentration"] = 0
-        self.parameters[0] = 138.3 # (c,potassium_dynamics__K_i) millimolar
-        self.parameterMap["cytosolic_sodium_concentration"] = 1
-        self.parameters[1] = 11.6 # (c,sodium_dynamics__Na_i) millimolar
-        self.parameterMap["extracellular_potassium_concentration"] = 2
-        self.parameters[2] = 5.4 # (c,potassium_dynamics__K_o) millimolar
-        self.parameterMap["membrane_voltage"] = 3
-        self.parameters[3] = 0.0 # (c,membrane__V) millivolt
+        self.parameterMap['membrane_fast_sodium_current_conductance'] = 0
+        self.parameterMap['membrane_potassium_current_conductance'] = 1
 
-        # TODO Generate this
+        # Initial parameter values
+        self.parameters = np.zeros(2)
+        self.parameters[0] = 654.321
+        self.parameters[1] = 654.321
+
+        # Output cmeta ids
         self.outputNames = []
-        outputs = self._outputs = []
-        self.outputNames.append("cytosolic_potassium_concentration")
-        outputs.append(np.array(0.0))
-        self.outputNames.append("cytosolic_sodium_concentration")
-        outputs.append(np.array(0.0))
-        self.outputNames.append("extracellular_potassium_concentration")
-        outputs.append(np.array(0.0))
-        self.outputNames.append("membrane_rapid_delayed_rectifier_potassium_current")
-        outputs.append(np.array(0.0))
-        self.outputNames.append("membrane_voltage")
-        outputs.append(np.array(0.0))
-        self.outputNames.append("time")
-        outputs.append(np.array(0.0))
+        self.outputNames.append('membrane_fast_sodium_current')
+        self.outputNames.append('membrane_voltage')
+        self.outputNames.append('time')
+
+        # Create and cache list of arrays, to avoid constant list/array
+        # creation
+        self._outputs = []
+        self._outputs.append(np.array(0.0))
+        self._outputs.append(np.array(0.0))
+        self._outputs.append(np.array(0.0))
+        # TODO Handle vector outputs
 
         self.state = self.initialState.copy()
         self.savedStates = {}
@@ -258,7 +259,7 @@ cdef class GeneratedModel_Proto_tmpHzG5bQ(CvodeSolver): # TODO Generate name
         # TODO Generate this method
 
         cdef np.ndarray[Sundials.realtype, ndim=1] parameters = self.parameters
-        cdef double var_environment__time = self.freeVariable
+        cdef double var_time = self.freeVariable
 
         # State variables
         cdef double var_rapid_time_dependent_potassium_current_Xr1_gate__Xr1 = self.state[0]
@@ -328,7 +329,7 @@ cdef class GeneratedModel_Proto_tmpHzG5bQ(CvodeSolver): # TODO Generate name
     def SetRhsWrapper(self):
         flag = Sundials.CVodeInit(
             self.cvode_mem, _EvaluateRhs, 0.0, self._state)
-        self.CheckFlag(flag, "CVodeInit")
+        self.CheckFlag(flag, 'CVodeInit')
 
     def SetSolver(self, solver):
         """
@@ -338,4 +339,4 @@ cdef class GeneratedModel_Proto_tmpHzG5bQ(CvodeSolver): # TODO Generate name
         """
         # TODO Update this (and rest of fc) to Python3
         # TODO Use logging here, or raise an exception
-        print >>sys.stderr, "  " * self.indentLevel, "SetSolver: Models implemented using Cython contain a built-in ODE solver, so ignoring setting."
+        print >>sys.stderr, '  ' * self.indentLevel, 'SetSolver: Models implemented using Cython contain a built-in ODE solver, so ignoring setting.'

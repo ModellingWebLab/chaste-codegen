@@ -17,6 +17,16 @@ def test_load_template():
     assert template.render(name='Michael') == 'Hello Michael!'
 
 
+def test_missing_variable_raises_exception():
+    # An error should be raised if the template uses variables that are not
+    # given as input
+
+    # TODO Start using `Environment` instead of `Template`
+    # http://jinja.pocoo.org/docs/2.10/api/#jinja2.Environment
+    # https://stackoverflow.com/questions/3983581
+    pass
+
+
 def test_unique_name_generation():
     # Tests if unique variable names are generated correctly
 

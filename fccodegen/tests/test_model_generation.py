@@ -14,6 +14,12 @@ logging.getLogger().setLevel(logging.INFO)
 def test_generate_weblab_model(tmp_path):
     # Tests the create_weblab_model() method
 
+    # Select output path (in temporary dir)
+    path = tmp_path / 'model.pyx'
+
+    # Select class name
+    class_name = 'TestModel'
+
     # Load cellml model
     model = os.path.join(
         cg.DIR_DATA, 'tests',
@@ -23,17 +29,19 @@ def test_generate_weblab_model(tmp_path):
 
     # Select model outputs (as oxmeta names)
     outputs = [
+        'membrane_fast_sodium_current',
+        'membrane_voltage',
+        'time',
     ]
 
     # Select model parameters (as oxmeta names)
     parameters = [
+        'membrane_fast_sodium_current_conductance',
+        'membrane_potassium_current_conductance',
     ]
 
-    # Select output path (in temporary dir)
-    path = tmp_path / 'model.pyx'
-
     # Create weblab model at path
-    cg.create_weblab_model(path, model, outputs, parameters)
+    cg.create_weblab_model(path, class_name, model, outputs, parameters)
 
     # Read expected output from file
     expected = os.path.join(cg.DIR_DATA, 'tests', 'weblab_model.pyx')
