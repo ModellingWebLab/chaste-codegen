@@ -17,7 +17,7 @@ from ._config import (   # noqa
 
 
 #
-# Load main classes and functions
+# Load public classes and functions
 #
 from ._generator import (   # noqa
     create_weblab_model,

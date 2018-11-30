@@ -20,7 +20,15 @@ def _jinja_environment():
     global _environment
     if _environment is None:
         _environment = jinja2.Environment(
+            # Automatic loading of templates stored in the module
+            # This also enables template inheritance
             loader=jinja2.PackageLoader('fccodegen', 'templates'),
+
+            # Keep a single trailing newline, if present
+            keep_trailing_newline=True,
+
+            # Don't replace undefined template variables by an empty string
+            # but raise a jinja2.UndefinedError instead.
             undefined=jinja2.StrictUndefined,
         )
     return _environment
