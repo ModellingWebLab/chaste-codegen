@@ -134,10 +134,25 @@ def get_state_list(graph):
     return states
 
 
-def create_weblab_model(model, path):
+def create_weblab_model(path, model, outputs, parameters):
     """
-    Takes a :class:`cellmlmanip.Model`, generates a ``.pyx`` model for use
-    with the Web Lab, and stores it at ``path``.
+    Takes a :class:`cellmlmanip.Model`, generates a ``.pyx`` model for use with
+    the Web Lab, and stores it at ``path``.
+
+    Arguments
+
+    ``path``
+        The path to store the generated model code at.
+    ``model``
+        A :class:`cellmlmanip.Model` object.
+    ``outputs``
+        An ordered list of oxmeta variable names to use as model outputs. The
+        model should have a variable annotated with each of these.
+    ``parameters``
+        An ordered list of oxmeta variable names to use as model parameters.
+        The model should have a variable annotated with each of these, and its
+        variable must be a literal.
+
     """
     # Get equation graph
     graph = model.get_equation_graph()

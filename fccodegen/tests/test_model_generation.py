@@ -21,11 +21,19 @@ def test_generate_weblab_model(tmp_path):
     )
     model = cg.load_model(model)
 
+    # Select model outputs (as oxmeta names)
+    outputs = [
+    ]
+
+    # Select model parameters (as oxmeta names)
+    parameters = [
+    ]
+
     # Select output path (in temporary dir)
     path = tmp_path / 'model.pyx'
 
     # Create weblab model at path
-    cg.create_weblab_model(model, path)
+    cg.create_weblab_model(path, model, outputs, parameters)
 
     # Read expected output from file
     expected = os.path.join(cg.DIR_DATA, 'tests', 'weblab_model.pyx')

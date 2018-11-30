@@ -33,7 +33,7 @@ cdef int _EvaluateRhs(Sundials.realtype var_environment__time, # TODO Replace na
 
     See :meth:`fc.sundials.solver._EvaluateRhs()`.
     """
-    # Cast user data point from sundials back to numpy parameter vector.
+    # We passed the Python model object in as CVODE user data; get it back as an object
     model = <object>user_data
     # TODO Generate this
     cdef np.ndarray[Sundials.realtype, ndim=1] parameters = <np.ndarray>model.parameters
@@ -93,17 +93,18 @@ cdef class GeneratedModel_Proto_tmpHzG5bQ(CvodeSolver): # TODO Generate name
     # From: fc.simulations.AbstractOdeModel
     cdef public object savedStates
 
-    # An instance of fc.utility.environment.ModelWrapperEnvironment
-    # TODO: What's this?
+    # Maps oxmeta variable names to model variables (outputs, states,
+    # parameters, or the free variable).
     # From: fc.simulations.AbstractOdeModel
+    # See: fc.utility.environment.ModelWrapperEnvironment
     cdef public object env
 
-    # True if the solver needs to be reset due to a model change.
-    # TODO This is only ever set via the "environment". Not sure why.
+    # True if the solver needs to be reset due to a model change made in the
+    # ModelWrapperEnvironment.
     # From: fc.simulations.AbstractOdeModel
     cdef public bint dirty
 
-    # TODO Not documented in AbstractModel
+    # Where to write protocol outputs, error logs, etc.
     # From: fc.simulations.AbstractModel
     cdef public char* outputPath
 
@@ -113,8 +114,8 @@ cdef class GeneratedModel_Proto_tmpHzG5bQ(CvodeSolver): # TODO Generate name
 
     # Link to generated module.
     # Set in: fc.utility.protocol.Protocol
-    # TODO: Nobody seems to ever access this variable. Is it just to prevent
-    # garbage collection?
+    # Note: Nobody seems to ever access this variable. Seems this is just to
+    # prevent garbage collection.
     cdef public object _module
 
     # TODO What's this?
@@ -309,8 +310,7 @@ cdef class GeneratedModel_Proto_tmpHzG5bQ(CvodeSolver): # TODO Generate name
 
         See :meth:`fc.simulations.AbstractOdeModel.SetSolver()`.
         """
-        # TODO Should this be python 3 syntax? Or is this special Cython
-        # syntax?
-        # TODO Can we use logging here instead? Or an exception?
+        # TODO Update this (and rest of fc) to Python3
+        # TODO Use logging here, or raise an exception
         print >>sys.stderr, "  " * self.indentLevel, "SetSolver: Models implemented using Cython contain a built-in ODE solver, so ignoring setting."
 
