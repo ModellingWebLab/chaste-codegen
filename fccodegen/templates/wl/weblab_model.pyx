@@ -35,7 +35,6 @@ cdef int _EvaluateRhs(Sundials.realtype {{ free_variable }},
     """
     # We passed the Python model object in as CVODE user data; get it back as an object
     model = <object>user_data
-    # TODO Generate this
     cdef np.ndarray[Sundials.realtype, ndim=1] parameters = <np.ndarray>model.parameters
 
     # Unpack state variables
@@ -44,10 +43,12 @@ cdef int _EvaluateRhs(Sundials.realtype {{ free_variable }},
     {%- endfor %}
 
     # Mathematics
-    # TODO Ignore free variable
-    # TODO replace RHS by parameters if required (or skip over parameters)
     {%- for eq in rhs_equations %}
-    cdef double {{eq}}
+    {%- if eq.parameter_index is none %}
+    cdef double {{ eq.lhs }} = {{ eq.rhs }}
+    {%- else %}
+    cdef double {{ eq.lhs }} = parameters[{{ eq.parameter_index }}]
+    {%- endif %}
     {%- endfor %}
 
     # Pack state variable derivatives
@@ -233,28 +234,36 @@ cdef class {{ class_name }}(CvodeSolver):
 
         See :meth:`fc.simulations.AbstractModel.getOutputs()`.
         """
-        # TODO Generate this method
 
+        # Get parameters as sundials realtype numpy array
         cdef np.ndarray[Sundials.realtype, ndim=1] parameters = self.parameters
+
+        # Get current free variable
         cdef double {{ free_variable }} = self.freeVariable
 
-        # State variables
-        cdef double var_rapid_time_dependent_potassium_current_Xr1_gate__Xr1 = self.state[0]
-        cdef double var_rapid_time_dependent_potassium_current_Xr2_gate__Xr2 = self.state[1]
+        # Unpack state variables
+        {%- for state in states %}
+        cdef double {{state.var_name}} = (<Sundials.N_VectorContent_Serial>y.content).data[{{state.index}}]
+        {%- endfor %}
 
-        # Compute outputs
-        cdef double var_reversal_potentials__E_K = 26.713760659695648 * math.log(parameters[2] / parameters[0]) # millivolt
-        cdef double var_rapid_time_dependent_potassium_current__g_Kr = 0.096000000000000002 # nanoS_per_picoF
-        cdef double var_protocol__rapid_time_dependent_potassium_current__i_Kr = (var_rapid_time_dependent_potassium_current__g_Kr * math.sqrt(parameters[2] * 0.18518518518518517) * var_rapid_time_dependent_potassium_current_Xr1_gate__Xr1 * var_rapid_time_dependent_potassium_current_Xr2_gate__Xr2 * (parameters[3] - var_reversal_potentials__E_K)) * 1.0 # uA_per_cm2
+        # Mathematics
+        {%- for eq in output_equations %}
+        {%- if eq.parameter_index is none %}
+        cdef double {{ eq.lhs }} = {{ eq.rhs }}
+        {%- else %}
+        cdef double {{ eq.lhs }} = parameters[{{ eq.parameter_index }}]
+        {%- endif %}
+        {%- endfor %}
 
         # Update output vector and return
         outputs = self._outputs
-        outputs[0][()] = parameters[0]
-        outputs[1][()] = parameters[1]
-        outputs[2][()] = parameters[2]
-        outputs[3][()] = var_protocol__rapid_time_dependent_potassium_current__i_Kr
-        outputs[4][()] = parameters[3]
-        outputs[5][()] = var_environment__time
+        {%- for output in outputs %}
+        {%- if output.parameter_index is none %}
+        outputs[{{ output.index }}][()] = {{ output.var_name }}
+        {%- else %}
+        outputs[{{ output.index }}][()] = parameters[{{ output.parameter_index }}]
+        {%- endif %}
+        {%- endfor %}
         return outputs
 
     cpdef ResetState(self, name=None):

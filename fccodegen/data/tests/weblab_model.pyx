@@ -35,7 +35,6 @@ cdef int _EvaluateRhs(Sundials.realtype var_time,
     """
     # We passed the Python model object in as CVODE user data; get it back as an object
     model = <object>user_data
-    # TODO Generate this
     cdef np.ndarray[Sundials.realtype, ndim=1] parameters = <np.ndarray>model.parameters
 
     # Unpack state variables
@@ -45,8 +44,6 @@ cdef int _EvaluateRhs(Sundials.realtype var_time,
     cdef double var_n = (<Sundials.N_VectorContent_Serial>y.content).data[3]
 
     # Mathematics
-    # TODO Ignore free variable
-    # TODO replace RHS by parameters if required (or skip over parameters)
     cdef double var_g_L = 0.3
     cdef double var_Cm = 1.0
     cdef double var_E_R = -75.0
@@ -59,13 +56,13 @@ cdef int _EvaluateRhs(Sundials.realtype var_time,
     cdef double var_stim_start = 10.0
     cdef double var_i_Stim = ((var_stim_amplitude) if (var_time >= var_stim_start and var_time <= var_stim_end and -var_stim_start - var_stim_period * math.floor((-var_stim_start + var_time) / var_stim_period) + var_time <= var_stim_duration) else (0.0))
     cdef double var_E_K = -12.0 + var_E_R
-    cdef double var_g_K = 36.0
+    cdef double var_g_K = parameters[1]
     cdef double var_alpha_n = -0.01 * (65.0 + var_V) / (-1.0 + 0.0015034391929775724 * math.exp(-0.1 * var_V))
     cdef double var_beta_n = 0.31919868225786585 * math.exp(0.0125 * var_V)
     cdef double d_dt_n = (1.0 - var_n) * var_alpha_n - var_beta_n * var_n
     cdef double var_i_K = var_n**4.0 * (-var_E_K + var_V) * var_g_K
     cdef double var_E_Na = 115.0 + var_E_R
-    cdef double var_g_Na = 120.0
+    cdef double var_g_Na = parameters[0]
     cdef double var_alpha_h = 0.0016462422099206377 * math.exp(-0.05 * var_V)
     cdef double var_beta_h = 1.0 / (1.0 + 0.011108996538242306 * math.exp(-0.1 * var_V))
     cdef double d_dt_h = (1.0 - var_h) * var_alpha_h - var_beta_h * var_h
@@ -256,28 +253,30 @@ cdef class TestModel(CvodeSolver):
 
         See :meth:`fc.simulations.AbstractModel.getOutputs()`.
         """
-        # TODO Generate this method
 
+        # Get parameters as sundials realtype numpy array
         cdef np.ndarray[Sundials.realtype, ndim=1] parameters = self.parameters
+
+        # Get current free variable
         cdef double var_time = self.freeVariable
 
-        # State variables
-        cdef double var_rapid_time_dependent_potassium_current_Xr1_gate__Xr1 = self.state[0]
-        cdef double var_rapid_time_dependent_potassium_current_Xr2_gate__Xr2 = self.state[1]
+        # Unpack state variables
+        cdef double var_V = (<Sundials.N_VectorContent_Serial>y.content).data[0]
+        cdef double var_m = (<Sundials.N_VectorContent_Serial>y.content).data[1]
+        cdef double var_h = (<Sundials.N_VectorContent_Serial>y.content).data[2]
+        cdef double var_n = (<Sundials.N_VectorContent_Serial>y.content).data[3]
 
-        # Compute outputs
-        cdef double var_reversal_potentials__E_K = 26.713760659695648 * math.log(parameters[2] / parameters[0]) # millivolt
-        cdef double var_rapid_time_dependent_potassium_current__g_Kr = 0.096000000000000002 # nanoS_per_picoF
-        cdef double var_protocol__rapid_time_dependent_potassium_current__i_Kr = (var_rapid_time_dependent_potassium_current__g_Kr * math.sqrt(parameters[2] * 0.18518518518518517) * var_rapid_time_dependent_potassium_current_Xr1_gate__Xr1 * var_rapid_time_dependent_potassium_current_Xr2_gate__Xr2 * (parameters[3] - var_reversal_potentials__E_K)) * 1.0 # uA_per_cm2
+        # Mathematics
+        cdef double var_E_R = -75.0
+        cdef double var_E_Na = 115.0 + var_E_R
+        cdef double var_g_Na = parameters[0]
+        cdef double var_i_Na = var_m**3.0 * (-var_E_Na + var_V) * var_g_Na * var_h
 
         # Update output vector and return
         outputs = self._outputs
-        outputs[0][()] = parameters[0]
-        outputs[1][()] = parameters[1]
-        outputs[2][()] = parameters[2]
-        outputs[3][()] = var_protocol__rapid_time_dependent_potassium_current__i_Kr
-        outputs[4][()] = parameters[3]
-        outputs[5][()] = var_environment__time
+        outputs[0][()] = var_i_Na
+        outputs[1][()] = var_V
+        outputs[2][()] = var_time
         return outputs
 
     cpdef ResetState(self, name=None):

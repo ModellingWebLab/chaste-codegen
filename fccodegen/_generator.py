@@ -38,9 +38,10 @@ def load_model(path):
     return model
 
 
-def get_equations(graph):
+def get_equations_for(graph, symbols):
     """
-    Gets the equations from a cellml model graph.
+    Gets the equations from a cellmlmanip model to calculate the values of the
+    given symbols.
     """
     #TODO: This should become part of cellmlmanip, with a syntax like
     # get_equations_for(variables), and then called with the derivatives to
@@ -51,12 +52,23 @@ def get_equations(graph):
     #      this does _not_ get moved to cellmlmanip, it should become a dep.
     #      here too.
     import networkx as nx
-    symbols = nx.lexicographical_topological_sort(graph, key=lambda x: str(x))
+    sorted_symbols = nx.lexicographical_topological_sort(
+        graph, key=lambda x: str(x))
+
+    # Create set of symbols for which we require equations
+    required_symbols = set()
+    for output in symbols:
+        required_symbols.add(output)
+        required_symbols.update(nx.ancestors(graph, output))
 
     # Create list of equations
     from sympy.physics.units import Quantity
     eqs = []
-    for symbol in symbols:
+    for symbol in sorted_symbols:
+        # Ingore symbols we don't need
+        if symbol not in required_symbols:
+            continue
+
         # Get equation
         eq = graph.nodes[symbol]['equation']
 
@@ -230,44 +242,19 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
     # Create expression printer
     printer = cg.WebLabPrinter(symbol_name, derivative_name)
 
-    #TODO: Update cellmlmanip to make this code look more like:
-    #
-    # free_var = model.get_free_variable()
-    # state_vars = model.get_state_variables()
-    # derivatives = [sp.Derivative(state, free_var) for state in state_vars]
-    # eqs = model.get_equations_for(derivatives)
-    #
-
     # Create free variable name
     free_name = symbol_name(get_free_variable_symbol(graph))
 
     # Create state information dicts
     state_info = []
     for i, state in enumerate(get_state_symbols(graph)):
+        #TODO: Update cellmlmanip so this graph.nodes goes away
         initial_value = float(graph.nodes[state]['initial_value'])
         state_info.append({
             'index': i,
             'var_name': symbol_name(state),
             'deriv_name': derivative_name(state),
             'initial_value': initial_value,
-        })
-
-    # Create output information dicts
-    # Each output is associated either with a symbol or a parameter.
-    output_info = []
-    for i, output in enumerate(outputs):
-        # For outputs that are parameters, obtain the parameter index
-        pid = None
-        try:
-            pid = parameters.index(output)
-        except ValueError:
-            pass
-
-        output_info.append({
-            'index': i,
-            'cmeta_id': output,
-            'var_name': symbol_name(get_symbol_by_cmeta_id(graph, output)),
-            'parameter_index': pid,
         })
 
     # Create parameter information dicts
@@ -281,13 +268,42 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
             'initial_value': get_value(graph, symbol),
         })
 
-    # Create the RHS equations
-    #deriv_syms = get_derivative_symbols(graph)
+    # Create map of parameter symbols to their indices
+    parameter_symbols = {}
+    for i, parameter in enumerate(parameters):
+        symbol = get_symbol_by_cmeta_id(graph, parameter)
+        parameter_symbols[symbol] = i
+
+    # Create output information dicts
+    # Each output is associated either with a symbol or a parameter.
+    output_info = []
+    for i, output in enumerate(outputs):
+        symbol = get_symbol_by_cmeta_id(graph, output)
+        output_info.append({
+            'index': i,
+            'cmeta_id': output,
+            'var_name': symbol_name(symbol),
+            'parameter_index': parameter_symbols.get(symbol, None),
+        })
+
+    # Create RHS equation information dicts
     rhs_equations = []
-    for eq in get_equations(graph):
-        lhs, rhs = eq.lhs, eq.rhs
-        rhs_equations.append(
-            printer.doprint(lhs) + ' = ' + printer.doprint(rhs))
+    for eq in get_equations_for(graph, get_derivative_symbols(graph)):
+        rhs_equations.append({
+            'lhs': printer.doprint(eq.lhs),
+            'rhs': printer.doprint(eq.rhs),
+            'parameter_index': parameter_symbols.get(eq.lhs, None),
+        })
+
+    # Create output equation information dicts
+    output_equations = []
+    output_symbols = [get_symbol_by_cmeta_id(graph, x) for x in outputs]
+    for eq in get_equations_for(graph, output_symbols):
+        output_equations.append({
+            'lhs': printer.doprint(eq.lhs),
+            'rhs': printer.doprint(eq.rhs),
+            'parameter_index': parameter_symbols.get(eq.lhs, None),
+        })
 
     # Generate model
     template = load_template('wl', 'weblab_model.pyx')
@@ -301,6 +317,7 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
             'n_parameters': len(parameter_info),
             'n_states': len(state_info),
             'outputs': output_info,
+            'output_equations': output_equations,
             'parameters': parameter_info,
             'rhs_equations': rhs_equations,
             'states': state_info,

@@ -21,7 +21,6 @@ from ._config import (   # noqa
 #
 from ._generator import (   # noqa
     create_weblab_model,
-    get_equations,
     load_model,
     load_template,
 )
