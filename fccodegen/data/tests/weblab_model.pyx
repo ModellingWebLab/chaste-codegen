@@ -168,10 +168,10 @@ cdef class TestModel(CvodeSolver):
 
         # Initial state
         self.initialState = np.zeros(4)
-        self.initialState[0] = 123456.789
-        self.initialState[1] = 123456.789
-        self.initialState[2] = 123456.789
-        self.initialState[3] = 123456.789
+        self.initialState[0] = -75.0
+        self.initialState[1] = 0.05
+        self.initialState[2] = 0.6
+        self.initialState[3] = 0.325
 
         # Mapping of parameter cmeta ids to parameter array indices
         self.parameterMap = {}
@@ -180,8 +180,8 @@ cdef class TestModel(CvodeSolver):
 
         # Initial parameter values
         self.parameters = np.zeros(2)
-        self.parameters[0] = 654.321
-        self.parameters[1] = 654.321
+        self.parameters[0] = 120.0
+        self.parameters[1] = 36.0
 
         # Output cmeta ids
         self.outputNames = []

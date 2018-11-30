@@ -175,6 +175,23 @@ def get_symbol_by_cmeta_id(graph, cmeta_id):
     raise KeyError('No variable with cmeta id "' + str(cmeta_id) + '" found.')
 
 
+def get_value(graph, symbol):
+    """
+    Returns the evaluated value of the given symbol's RHS.
+    """
+    # TODO This should become part of cellmlmanip
+
+    # Find RHS
+    rhs = graph.nodes[symbol]['equation'].rhs
+
+    # Remove units
+    from sympy.physics.units import Quantity
+    rhs = rhs.subs({q: 1 for q in rhs.atoms(Quantity)}, simultaneous=True)
+
+    # Evaluate and return
+    return float(rhs.evalf())
+
+
 def create_weblab_model(path, class_name, model, outputs, parameters):
     """
     Takes a :class:`cellmlmanip.Model`, generates a ``.pyx`` model for use with
@@ -227,11 +244,12 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
     # Create state information dicts
     state_info = []
     for i, state in enumerate(get_state_symbols(graph)):
+        initial_value = float(graph.nodes[state]['initial_value'])
         state_info.append({
             'index': i,
             'var_name': symbol_name(state),
             'deriv_name': derivative_name(state),
-            'initial_value': '123456.789',
+            'initial_value': initial_value,
         })
 
     # Create output information dicts
@@ -255,12 +273,12 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
     # Create parameter information dicts
     parameter_info = []
     for i, parameter in enumerate(parameters):
-        symbol = get_symbol_by_cmeta_id(graph, output)
+        symbol = get_symbol_by_cmeta_id(graph, parameter)
         parameter_info.append({
             'index': i,
             'cmeta_id': parameter,
             'var_name': symbol_name(symbol),
-            'initial_value': 654.321,
+            'initial_value': get_value(graph, symbol),
         })
 
     # Create the RHS equations
