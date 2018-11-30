@@ -2,8 +2,10 @@
 # Tests templating functionality
 #
 import fccodegen as cg
+import jinja2
 import logging
 import os
+import pytest
 
 
 # Show more logging output
@@ -19,12 +21,11 @@ def test_load_template():
 
 def test_missing_variable_raises_exception():
     # An error should be raised if the template uses variables that are not
-    # given as input
+    # given as input. We want errors to be noticed!
 
-    # TODO Start using `Environment` instead of `Template`
-    # http://jinja.pocoo.org/docs/2.10/api/#jinja2.Environment
-    # https://stackoverflow.com/questions/3983581
-    pass
+    template = cg.load_template('tests', 'hello.txt')
+    with pytest.raises(jinja2.UndefinedError):
+        template.render()
 
 
 def test_unique_name_generation():

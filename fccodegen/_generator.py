@@ -9,16 +9,37 @@ import sympy as sp
 import time
 
 
+# Shared Jinja environment
+_environment = None
+
+
+def _jinja_environment():
+    """
+    Returns a shared Jinja environment to create templates from.
+    """
+    global _environment
+    if _environment is None:
+        _environment = jinja2.Environment(
+            loader=jinja2.PackageLoader('fccodegen', 'templates'),
+            undefined=jinja2.StrictUndefined,
+        )
+    return _environment
+
+
 def load_template(*name):
     """
     Returns a path to the given template
     """
-    path = os.path.join(cg.DIR_TEMPLATE, *name)
-    #TODO: Check absolute path is still in DIR_TEMPLATE
+    path = os.path.join(*name)
+    #TODO: Check absolute path is still in cg.DIR_TEMPLATE
+
+    env = _jinja_environment()
+    return env.get_template(path)
+
     #TODO: Check exists
     #TODO: Look at the jinja PackageLoader. What's the advantage?
-    with open(path, 'r') as f:
-        return jinja2.Template(f.read())
+    #with open(path, 'r') as f:
+    #    return jinja2.Template(f.read())
 
 
 def load_model(path):

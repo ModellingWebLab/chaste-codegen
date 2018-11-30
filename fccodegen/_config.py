@@ -14,8 +14,8 @@ finally:
     # https://docs.python.org/2/library/inspect.html#the-interpreter-stack
     del(frame)
 
-# Template directory
-DIR_TEMPLATE = os.path.join(DIR_ROOT, 'templates')
+# Template sub-directory
+SUBDIR_TEMPLATE = os.path.join('templates')
 
 # Directory for any other data
 DIR_DATA = os.path.join(DIR_ROOT, 'data')

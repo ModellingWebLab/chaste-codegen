@@ -9,7 +9,7 @@ Main module for Web Lab code generation
 from ._config import (   # noqa
     DIR_DATA,
     DIR_ROOT,
-    DIR_TEMPLATE,
+    SUBDIR_TEMPLATE,
     VERSION,
     VERSION_INT,
     version,
