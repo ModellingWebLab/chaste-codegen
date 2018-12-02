@@ -16,7 +16,7 @@ def test_load_template():
     # Tests the load_template() method
 
     template = cg.load_template('tests', 'hello.txt')
-    assert template.render(name='Michael') == 'Hello Michael!'
+    assert template.render(name='Michael') == 'Hello Michael!\n'
 
 
 def test_missing_variable_raises_exception():
