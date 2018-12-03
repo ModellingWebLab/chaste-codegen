@@ -196,9 +196,8 @@ def get_free_variable_symbol(graph):
         if graph.nodes[v].get('variable_type', '') == 'free':
             return v
 
-    # pragma: no cover
     # This should be unreachable
-    raise ValueError('No free variable set in model.')
+    raise ValueError('No free variable set in model.')  # pragma: no cover
 
 
 def get_symbol_by_cmeta_id(graph, cmeta_id):
