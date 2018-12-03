@@ -212,7 +212,12 @@ def get_symbol_by_cmeta_id(graph, cmeta_id):
     for v in graph:
         if graph.nodes[v].get('cmeta:id', '') == cmeta_id:
             return v
-    raise KeyError('No variable with cmeta id "' + str(cmeta_id) + '" found.')
+
+    # Using cover pragma here: This should be in cellmlmanip, so not adding
+    # tests for it in fccodegen :-)
+    raise KeyError(
+        'No variable with cmeta id "' + str(cmeta_id) + '" found.'
+        )   # pragma: no cover
 
 
 def get_value(graph, symbol):
