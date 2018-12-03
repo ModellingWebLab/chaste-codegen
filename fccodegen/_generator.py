@@ -217,7 +217,7 @@ def get_symbol_by_cmeta_id(graph, cmeta_id):
     # tests for it in fccodegen :-)
     raise KeyError(
         'No variable with cmeta id "' + str(cmeta_id) + '" found.'
-        )   # pragma: no cover
+    )   # pragma: no cover
 
 
 def get_value(graph, symbol):
