@@ -22,7 +22,7 @@ def test_generate_weblab_model(tmp_path):
 
     # Load cellml model
     model = os.path.join(
-        cg.DIR_DATA, 'tests',
+        cg.DATA_DIR, 'tests',
         'hodgkin_huxley_squid_axon_model_1952_modified.cellml'
     )
     model = cg.load_model(model)
@@ -44,7 +44,7 @@ def test_generate_weblab_model(tmp_path):
     cg.create_weblab_model(path, class_name, model, outputs, parameters)
 
     # Read expected output from file
-    expected = os.path.join(cg.DIR_DATA, 'tests', 'weblab_model.pyx')
+    expected = os.path.join(cg.DATA_DIR, 'tests', 'weblab_model.pyx')
     with open(expected, 'r') as f:
         expected = f.read()
 

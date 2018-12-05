@@ -33,7 +33,7 @@ def test_unique_name_generation():
 
     # Load cellml model, get unique names
     model = cg.load_model(
-        os.path.join(cg.DIR_DATA, 'tests', 'conflicting_names.cellml'))
+        os.path.join(cg.DATA_DIR, 'tests', 'conflicting_names.cellml'))
     graph = model.get_equation_graph()
 
     # Test unique names

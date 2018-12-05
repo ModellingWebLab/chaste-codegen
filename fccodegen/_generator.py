@@ -22,7 +22,7 @@ def _jinja_environment():
         _environment = jinja2.Environment(
             # Automatic loading of templates stored in the module
             # This also enables template inheritance
-            loader=jinja2.PackageLoader('fccodegen', 'templates'),
+            loader=jinja2.PackageLoader('fccodegen', cg.TEMPLATE_SUBDIR),
 
             # Keep a single trailing newline, if present
             keep_trailing_newline=True,
@@ -39,15 +39,10 @@ def load_template(*name):
     Returns a path to the given template
     """
     path = os.path.join(*name)
-    #TODO: Check absolute path is still in cg.DIR_TEMPLATE
+    #TODO: Check absolute path is still in cg.TEMPLATE_SUBDIR
 
     env = _jinja_environment()
     return env.get_template(path)
-
-    #TODO: Check exists
-    #TODO: Look at the jinja PackageLoader. What's the advantage?
-    #with open(path, 'r') as f:
-    #    return jinja2.Template(f.read())
 
 
 def load_model(path):

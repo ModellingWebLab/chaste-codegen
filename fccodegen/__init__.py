@@ -7,11 +7,11 @@ Main module for Web Lab code generation
 # Load constants and version information
 #
 from ._config import (   # noqa
-    DIR_DATA,
-    DIR_ROOT,
-    SUBDIR_TEMPLATE,
-    VERSION,
-    VERSION_INT,
+    DATA_DIR,
+    MODULE_DIR,
+    TEMPLATE_SUBDIR,
+    __version__,
+    __version_int__,
     version,
 )
 

@@ -8,25 +8,25 @@ Constants and version information.
 import os, inspect  # noqa
 try:
     frame = inspect.currentframe()
-    DIR_ROOT = os.path.dirname(inspect.getfile(frame))
+    MODULE_DIR = os.path.dirname(inspect.getfile(frame))
 finally:
     # Always manually delete frame
     # https://docs.python.org/2/library/inspect.html#the-interpreter-stack
     del(frame)
 
 # Template sub-directory
-SUBDIR_TEMPLATE = os.path.join('templates')
+TEMPLATE_SUBDIR = os.path.join('templates')
 
 # Directory for any other data
-DIR_DATA = os.path.join(DIR_ROOT, 'data')
+DATA_DIR = os.path.join(MODULE_DIR, 'data')
 
 
 #
 # Version info
 #
-with open(os.path.join(DIR_ROOT, 'version.txt'), 'r') as f:
-    VERSION_INT = tuple([int(x) for x in f.read().split('.', 3)])
-VERSION = '.'.join([str(x) for x in VERSION_INT])
+with open(os.path.join(MODULE_DIR, 'version.txt'), 'r') as f:
+    __version_int__ = tuple([int(x) for x in f.read().split('.', 3)])
+__version__ = '.'.join([str(x) for x in __version_int__])
 
 
 #
@@ -39,6 +39,6 @@ def version(formatted=False):
     "codegen 1.0.0").
     """
     if formatted:
-        return 'fccodegen ' + VERSION
+        return 'fccodegen ' + __version__
     else:
-        return VERSION_INT
+        return __version_int__
