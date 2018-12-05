@@ -52,7 +52,7 @@ def test_generate_weblab_model(tmp_path):
     generated = path.read_text()
 
     # Store locally to update test output file
-    if False:
+    if os.environ.get('WEBLAB_REGENERATE_REF'):
         print('WRITING TEMPLATING OUTPUT TO FILE')
         with open('./weblab_model.pyx', 'w') as f:
             f.write(generated)
