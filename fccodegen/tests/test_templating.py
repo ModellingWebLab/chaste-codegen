@@ -41,7 +41,7 @@ def test_unique_name_generation():
     unames = get_unique_names(graph)
     assert len(unames) == 9
     symbols = [v for v in graph]
-    symbols.sort(key=lambda x: str(x))
+    symbols.sort(key=str)
 
     assert unames[symbols[0]] == 'time'         # env.time
     assert unames[symbols[1]] == 'x__a'         # x.a

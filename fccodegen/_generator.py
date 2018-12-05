@@ -76,8 +76,7 @@ def get_equations_for(graph, symbols):
     #      this does _not_ get moved to cellmlmanip, it should become a dep.
     #      here too.
     import networkx as nx
-    sorted_symbols = nx.lexicographical_topological_sort(
-        graph, key=lambda x: str(x))
+    sorted_symbols = nx.lexicographical_topological_sort(graph, key=str)
 
     # Create set of symbols for which we require equations
     required_symbols = set()
