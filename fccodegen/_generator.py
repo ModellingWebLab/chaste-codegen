@@ -285,6 +285,7 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
         })
 
     # Create parameter information dicts
+    #TODO: Cmeta_id should be replaced by oxmeta annotation via RDF lookup
     parameter_info = []
     for i, parameter in enumerate(parameters):
         symbol = get_symbol_by_cmeta_id(graph, parameter)
