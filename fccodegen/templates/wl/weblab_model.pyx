@@ -137,8 +137,8 @@ cdef class {{ class_name }}(CvodeSolver):
         # State values
         self.state = np.zeros({{ n_states }})
 
-        # Mapping from cmeta ids to state indices
-        # TODO Is this correct? Not all states need to have a cmeta id!
+        # Mapping from oxmeta names to state indices; only for states that have
+        # a variable name.
         self.stateVarMap = {}
         {%- for state in states %}
         {%- endfor %}
@@ -149,7 +149,7 @@ cdef class {{ class_name }}(CvodeSolver):
         self.initialState[{{ state.index }}] = {{ state.initial_value }}
         {%- endfor %}
 
-        # Mapping of parameter cmeta ids to parameter array indices
+        # Mapping of parameter oxmeta names to parameter array indices
         self.parameterMap = {}
         {%- for parameter in parameters %}
         self.parameterMap['{{ parameter.cmeta_id }}'] = {{ parameter.index }}
@@ -161,7 +161,7 @@ cdef class {{ class_name }}(CvodeSolver):
         self.parameters[{{ parameter.index }}] = {{ parameter.initial_value }}
         {%- endfor %}
 
-        # Output cmeta ids
+        # Oxmeta names of output variables
         self.outputNames = []
         {%- for output in outputs %}
         self.outputNames.append('{{ output.cmeta_id }}')
