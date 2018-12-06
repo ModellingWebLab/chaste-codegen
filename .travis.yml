@@ -4,6 +4,9 @@ python:
 install:
     - pip install .[test]
     - pip install codecov
+    # Temporary cellmlmanip install, until it can be done with pip
+    - pip install -e git://github.com/ModellingWebLab/cellmlmanip.git@feature/cellml-parsing#egg=cellmlmanip
+
 script:
     - python -m flake8
     - python -m pytest --cov=fccodegen fccodegen

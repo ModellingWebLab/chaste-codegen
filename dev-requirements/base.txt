@@ -4,5 +4,6 @@
 #
 #    pip-compile --output-file base.txt base.in
 #
+-e git+git://github.com/ModellingWebLab/cellmlmanip.git@feature/cellml-parsing#egg=cellmlmanip
 jinja2==2.10
 markupsafe==1.1.0         # via jinja2

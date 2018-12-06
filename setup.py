@@ -28,13 +28,15 @@ setup(
     url='https://github.com/ModellingWebLab/fccodegen',
 
     # Packages to include
-    packages=find_packages(include=('fccodegen', 'fccodegen.*')),
+    packages=find_packages(
+        include=('fccodegen', 'fccodegen.*')),
 
     # Include non-python files (via MANIFEST.in)
     include_package_data=True,
 
     # List of dependencies
     install_requires=[
+        #cellmlmanip                # Add this in when cellmlmanip is ready
         'Jinja2>=2.10',
     ],
     extras_require={
