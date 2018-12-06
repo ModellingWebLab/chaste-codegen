@@ -342,8 +342,6 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
             'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
             'generator_name': cg.version(formatted=True),
             'model_name': model.name,
-            'n_parameters': len(parameter_info),
-            'n_states': len(state_info),
             'outputs': output_info,
             'output_equations': output_equations,
             'parameters': parameter_info,

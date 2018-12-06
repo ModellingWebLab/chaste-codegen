@@ -135,7 +135,7 @@ cdef class {{ class_name }}(CvodeSolver):
         self.freeVariable = 0.0
 
         # State values
-        self.state = np.zeros({{ n_states }})
+        self.state = np.zeros({{ states|length }})
 
         # Mapping from oxmeta names to state indices; only for states that have
         # a variable name.
@@ -144,7 +144,7 @@ cdef class {{ class_name }}(CvodeSolver):
         {%- endfor %}
 
         # Initial state
-        self.initialState = np.zeros({{ n_states }})
+        self.initialState = np.zeros({{ states|length }})
         {%- for state in states %}
         self.initialState[{{ state.index }}] = {{ state.initial_value }}
         {%- endfor %}
@@ -156,7 +156,7 @@ cdef class {{ class_name }}(CvodeSolver):
         {%- endfor %}
 
         # Initial parameter values
-        self.parameters = np.zeros({{ n_parameters }})
+        self.parameters = np.zeros({{ parameters|length }})
         {%- for parameter in parameters %}
         self.parameters[{{ parameter.index }}] = {{ parameter.initial_value }}
         {%- endfor %}
