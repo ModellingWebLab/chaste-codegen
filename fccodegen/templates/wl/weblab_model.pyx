@@ -105,6 +105,10 @@ cdef class {{ class_name }}(CvodeSolver):
     # From: fc.simulations.AbstractOdeModel
     cdef public bint dirty
 
+    # Environment for the simulation running this model. Mainly useful when
+    # evaluating set_variable() type modifiers during the course of a
+    # simulation.
+
     # Where to write protocol outputs, error logs, etc.
     # From: fc.simulations.AbstractModel
     cdef public char* outputPath
@@ -118,10 +122,6 @@ cdef class {{ class_name }}(CvodeSolver):
     # Note: Nobody seems to ever access this variable. Seems this is just to
     # prevent garbage collection.
     cdef public object _module
-
-    # TODO What's this?
-    # Set in: fc.simulations.Sim.AbstractSimulation
-    cdef public object simEnv
 
     # Cached list of output values (single values or vectors e.g. the state) to
     # avoid recreating a list every time output is returned.
