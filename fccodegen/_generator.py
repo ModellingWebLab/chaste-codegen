@@ -317,6 +317,8 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
     # Create RHS equation information dicts
     rhs_equations = []
     for eq in get_equations_for(graph, get_derivative_symbols(graph)):
+        #TODO: Parameters should never appear as the left-hand side of an
+        # equation (cellmlmanip should already have filtered these out).
         rhs_equations.append({
             'lhs': printer.doprint(eq.lhs),
             'rhs': printer.doprint(eq.rhs),
