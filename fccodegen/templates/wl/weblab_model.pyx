@@ -123,6 +123,9 @@ cdef class {{ class_name }}(CvodeSolver):
     # prevent garbage collection.
     cdef public object _module
 
+    # NOT SURE
+    cdef public object simEnv
+
     # Cached list of output values (single values or vectors e.g. the state) to
     # avoid recreating a list every time output is returned.
     cdef public object _outputs
@@ -243,7 +246,7 @@ cdef class {{ class_name }}(CvodeSolver):
 
         # Unpack state variables
         {%- for state in states %}
-        cdef double {{state.var_name}} = (<Sundials.N_VectorContent_Serial>y.content).data[{{state.index}}]
+        cdef double {{state.var_name}} = self.state[{{state.index}}]
         {%- endfor %}
 
         # Mathematics

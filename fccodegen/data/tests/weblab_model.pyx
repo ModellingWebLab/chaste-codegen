@@ -145,6 +145,9 @@ cdef class TestModel(CvodeSolver):
     # prevent garbage collection.
     cdef public object _module
 
+    # NOT SURE
+    cdef public object simEnv
+
     # Cached list of output values (single values or vectors e.g. the state) to
     # avoid recreating a list every time output is returned.
     cdef public object _outputs
@@ -261,10 +264,10 @@ cdef class TestModel(CvodeSolver):
         cdef double var_time = self.freeVariable
 
         # Unpack state variables
-        cdef double var_V = (<Sundials.N_VectorContent_Serial>y.content).data[0]
-        cdef double var_m = (<Sundials.N_VectorContent_Serial>y.content).data[1]
-        cdef double var_h = (<Sundials.N_VectorContent_Serial>y.content).data[2]
-        cdef double var_n = (<Sundials.N_VectorContent_Serial>y.content).data[3]
+        cdef double var_V = self.state[0]
+        cdef double var_m = self.state[1]
+        cdef double var_h = self.state[2]
+        cdef double var_n = self.state[3]
 
         # Mathematics
         cdef double var_E_R = -75.0
