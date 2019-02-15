@@ -100,38 +100,6 @@ def get_unique_names(graph):
     return symbols
 
 
-def get_derivative_symbols(graph):
-    """
-    Returns a list of derivative symbols found in the given model graph.
-    """
-    #TODO: This should become part of cellmlmanip
-
-    return [v for v in graph if isinstance(v, sp.Derivative)]
-
-
-def get_state_symbols(graph):
-    """
-    Returns a list of state variables found in the given model graph.
-    """
-    #TODO: This should become part of cellmlmanip
-
-    return [v.args[0] for v in get_derivative_symbols(graph)]
-
-
-def get_free_variable_symbol(graph):
-    """
-    Returns the free variable of the given model graph.
-    """
-    #TODO: This should become part of cellmlmanip
-
-    for v in graph:
-        if graph.nodes[v].get('variable_type', '') == 'free':
-            return v
-
-    # This should be unreachable
-    raise ValueError('No free variable set in model.')  # pragma: no cover
-
-
 def get_value(graph, symbol):
     """
     Returns the evaluated value of the given symbol's RHS.
@@ -188,13 +156,13 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
     printer = cg.WebLabPrinter(symbol_name, derivative_name)
 
     # Create free variable name
-    free_name = symbol_name(get_free_variable_symbol(graph))
+    free_name = symbol_name(model.get_free_variable_symbol())
 
     # Create state information dicts
     state_info = []
-    for i, state in enumerate(get_state_symbols(graph)):
-        #TODO: Update cellmlmanip so this graph.nodes goes away
+    for i, state in enumerate(model.get_state_symbols()):
         initial_value = float(graph.nodes[state]['initial_value'])
+        #TODO: Update cellmlmanip so this graph.nodes goes away
         state_info.append({
             'index': i,
             'var_name': symbol_name(state),
@@ -248,7 +216,7 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
 
     # Create RHS equation information dicts
     rhs_equations = []
-    for eq in model.get_equations_for(get_derivative_symbols(graph)):
+    for eq in model.get_equations_for(model.get_derivative_symbols()):
         #TODO: Parameters should never appear as the left-hand side of an
         # equation (cellmlmanip should already have filtered these out).
         rhs_equations.append({
