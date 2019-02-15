@@ -100,23 +100,6 @@ def get_unique_names(graph):
     return symbols
 
 
-def get_value(graph, symbol):
-    """
-    Returns the evaluated value of the given symbol's RHS.
-    """
-    # TODO This should become part of cellmlmanip
-
-    # Find RHS
-    rhs = graph.nodes[symbol]['equation'].rhs
-
-    # Remove units
-    from sympy.physics.units import Quantity
-    rhs = rhs.subs({q: 1 for q in rhs.atoms(Quantity)}, simultaneous=True)
-
-    # Evaluate and return
-    return float(rhs.evalf())
-
-
 def create_weblab_model(path, class_name, model, outputs, parameters):
     """
     Takes a :class:`cellmlmanip.Model`, generates a ``.pyx`` model for use with
@@ -179,7 +162,7 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
             'index': i,
             'cmeta_id': parameter,
             'var_name': symbol_name(symbol),
-            'initial_value': get_value(graph, symbol),
+            'initial_value': model.get_value(symbol),
         })
 
     # Create map of parameter symbols to their indices
