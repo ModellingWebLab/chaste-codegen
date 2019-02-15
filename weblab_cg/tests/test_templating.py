@@ -1,11 +1,12 @@
 #
 # Tests templating functionality
 #
-import weblab_cg as cg
+import cellmlmanip
 import jinja2
 import logging
 import os
 import pytest
+import weblab_cg as cg
 
 
 # Show more logging output
@@ -32,7 +33,7 @@ def test_unique_name_generation():
     # Tests if unique variable names are generated correctly
 
     # Load cellml model, get unique names
-    model = cg.load_model(
+    model = cellmlmanip.load_model(
         os.path.join(cg.DATA_DIR, 'tests', 'conflicting_names.cellml'))
     graph = model.get_equation_graph()
 

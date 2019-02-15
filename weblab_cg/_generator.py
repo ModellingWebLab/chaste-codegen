@@ -45,23 +45,6 @@ def load_template(*name):
     return env.get_template(path)
 
 
-def load_model(path):
-    """
-    Loads a cellml model.
-    """
-    #TODO: This should become part of cellmlmanip
-
-    import cellmlmanip
-    import cellmlmanip.parser
-
-    model = cellmlmanip.parser.Parser(path).parse()
-    model.make_connections()
-    model.add_units_to_equations()
-    for e in model.equations:
-        model.check_left_right_units_equal(e)
-    return model
-
-
 def get_equations_for(graph, symbols):
     """
     Gets the equations from a cellmlmanip model to calculate the values of the

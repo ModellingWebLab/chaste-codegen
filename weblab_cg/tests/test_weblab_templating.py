@@ -1,10 +1,11 @@
 #
 # Tests templating functionality
 #
-import weblab_cg as cg
+import cellmlmanip
 import logging
 import os
 import re
+import weblab_cg as cg
 
 
 # Show more logging output
@@ -25,7 +26,7 @@ def test_generate_weblab_model(tmp_path):
         cg.DATA_DIR, 'tests',
         'hodgkin_huxley_squid_axon_model_1952_modified.cellml'
     )
-    model = cg.load_model(model)
+    model = cellmlmanip.load_model(model)
 
     # Select model outputs (as oxmeta names)
     outputs = [
