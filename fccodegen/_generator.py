@@ -306,12 +306,26 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
     # Each output is associated either with a symbol or a parameter.
     output_info = []
     for i, output in enumerate(outputs):
-        symbol = get_symbol_by_cmeta_id(graph, output)
+
+        # Allow special output value 'state_variable'
+        #TODO Replace this with a more generic implementation
+        if output == 'state_variable':
+            var_name = [{'index': x['index'], 'var_name': x['var_name']}
+                        for x in state_info]
+            parameter_index = None
+            length = len(state_info)
+        else:
+            symbol = get_symbol_by_cmeta_id(graph, output)
+            var_name = symbol_name(symbol)
+            parameter_index = parameter_symbols.get(symbol, None)
+            length = None
+
         output_info.append({
             'index': i,
             'cmeta_id': output,
-            'var_name': symbol_name(symbol),
-            'parameter_index': parameter_symbols.get(symbol, None),
+            'var_name': var_name,
+            'parameter_index': parameter_index,
+            'length': length,
         })
 
     # Create RHS equation information dicts
@@ -327,7 +341,8 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
 
     # Create output equation information dicts
     output_equations = []
-    output_symbols = [get_symbol_by_cmeta_id(graph, x) for x in outputs]
+    output_symbols = [get_symbol_by_cmeta_id(graph, x) for x in outputs
+                      if x != 'state_variable']
     for eq in get_equations_for(graph, output_symbols):
         output_equations.append({
             'lhs': printer.doprint(eq.lhs),

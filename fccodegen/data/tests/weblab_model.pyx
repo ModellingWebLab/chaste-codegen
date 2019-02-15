@@ -188,6 +188,7 @@ cdef class TestModel(CvodeSolver):
         self.outputNames.append('membrane_fast_sodium_current')
         self.outputNames.append('membrane_voltage')
         self.outputNames.append('time')
+        self.outputNames.append('state_variable')
 
         # Create and cache list of arrays, to avoid constant list/array
         # creation
@@ -195,7 +196,8 @@ cdef class TestModel(CvodeSolver):
         self._outputs.append(np.array(0.0))
         self._outputs.append(np.array(0.0))
         self._outputs.append(np.array(0.0))
-        # TODO Handle vector outputs
+        self._outputs.append(np.zeros(4))
+        # TODO Handle vector outputs other than state_variable
 
         self.state = self.initialState.copy()
         self.savedStates = {}
@@ -280,6 +282,10 @@ cdef class TestModel(CvodeSolver):
         outputs[0][()] = var_i_Na
         outputs[1][()] = var_V
         outputs[2][()] = var_time
+        outputs[3][0] = var_V
+        outputs[3][1] = var_m
+        outputs[3][2] = var_h
+        outputs[3][3] = var_n
         return outputs
 
     cpdef ResetState(self, name=None):

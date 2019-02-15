@@ -174,9 +174,13 @@ cdef class {{ class_name }}(CvodeSolver):
         # creation
         self._outputs = []
         {%- for output in outputs %}
+        {%- if output.length is none %}
         self._outputs.append(np.array(0.0))
+        {%- else %}
+        self._outputs.append(np.zeros({{ output.length }}))
+        {%- endif %}
         {%- endfor %}
-        # TODO Handle vector outputs
+        # TODO Handle vector outputs other than state_variable
 
         self.state = self.initialState.copy()
         self.savedStates = {}
@@ -262,7 +266,13 @@ cdef class {{ class_name }}(CvodeSolver):
         outputs = self._outputs
         {%- for output in outputs %}
         {%- if output.parameter_index is none %}
+        {%-   if output.length is none %}
         outputs[{{ output.index }}][()] = {{ output.var_name }}
+        {%-   else %}
+        {%-     for sub_output in output.var_name %}
+        outputs[{{ output.index }}][{{ sub_output.index }}] = {{ sub_output.var_name }}
+        {%-     endfor %}
+        {%-   endif %}
         {%- else %}
         outputs[{{ output.index }}][()] = parameters[{{ output.parameter_index }}]
         {%- endif %}
