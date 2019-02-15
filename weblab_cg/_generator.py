@@ -132,26 +132,6 @@ def get_free_variable_symbol(graph):
     raise ValueError('No free variable set in model.')  # pragma: no cover
 
 
-def get_symbol_by_cmeta_id(graph, cmeta_id):
-    """
-    Searches the given graph and returns the symbol for the variable with the
-    given cmeta_id.
-    """
-    #TODO: This should become part of cellmlmanip
-    #TODO: Either add an argument to allow derivative symbols to be fetched, or
-    #      create a separate method for them.
-
-    for v in graph:
-        if graph.nodes[v].get('cmeta:id', '') == cmeta_id:
-            return v
-
-    # Using cover pragma here: This should be in cellmlmanip, so not adding
-    # tests for it in weblab_cg :-)
-    raise KeyError(
-        'No variable with cmeta id "' + str(cmeta_id) + '" found.'
-    )   # pragma: no cover
-
-
 def get_value(graph, symbol):
     """
     Returns the evaluated value of the given symbol's RHS.
@@ -226,7 +206,7 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
     #TODO: Cmeta_id should be replaced by oxmeta annotation via RDF lookup
     parameter_info = []
     for i, parameter in enumerate(parameters):
-        symbol = get_symbol_by_cmeta_id(graph, parameter)
+        symbol = model.get_symbol_by_cmeta_id(parameter)
         parameter_info.append({
             'index': i,
             'cmeta_id': parameter,
@@ -237,7 +217,7 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
     # Create map of parameter symbols to their indices
     parameter_symbols = {}
     for i, parameter in enumerate(parameters):
-        symbol = get_symbol_by_cmeta_id(graph, parameter)
+        symbol = model.get_symbol_by_cmeta_id(parameter)
         parameter_symbols[symbol] = i
 
     # Create output information dicts
@@ -253,7 +233,7 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
             parameter_index = None
             length = len(state_info)
         else:
-            symbol = get_symbol_by_cmeta_id(graph, output)
+            symbol = model.get_symbol_by_cmeta_id(output)
             var_name = symbol_name(symbol)
             parameter_index = parameter_symbols.get(symbol, None)
             length = None
@@ -279,7 +259,7 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
 
     # Create output equation information dicts
     output_equations = []
-    output_symbols = [get_symbol_by_cmeta_id(graph, x) for x in outputs
+    output_symbols = [model.get_symbol_by_cmeta_id(x) for x in outputs
                       if x != 'state_variable']
     for eq in model.get_equations_for(output_symbols):
         output_equations.append({
