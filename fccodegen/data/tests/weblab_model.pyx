@@ -145,7 +145,7 @@ cdef class TestModel(CvodeSolver):
     # prevent garbage collection.
     cdef public object _module
 
-    # NOT SURE
+    # TODO: Not sure if needed
     cdef public object simEnv
 
     # Cached list of output values (single values or vectors e.g. the state) to
