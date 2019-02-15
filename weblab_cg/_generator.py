@@ -45,51 +45,6 @@ def load_template(*name):
     return env.get_template(path)
 
 
-def get_equations_for(graph, symbols):
-    """
-    Gets the equations from a cellmlmanip model to calculate the values of the
-    given symbols.
-    """
-    #TODO: This should become part of cellmlmanip, with a syntax like
-    # get_equations_for(variables), and then called with the derivatives to
-    # generate the RHS, or with the outputs to generate the output code.
-
-    # Get sorted symbols
-    #TODO: networkx is not a dependency of weblab_cg - only of cellmlmanip. If
-    #      this does _not_ get moved to cellmlmanip, it should become a dep.
-    #      here too.
-    import networkx as nx
-    sorted_symbols = nx.lexicographical_topological_sort(graph, key=str)
-
-    # Create set of symbols for which we require equations
-    required_symbols = set()
-    for output in symbols:
-        required_symbols.add(output)
-        required_symbols.update(nx.ancestors(graph, output))
-
-    # Create list of equations
-    from sympy.physics.units import Quantity
-    eqs = []
-    for symbol in sorted_symbols:
-        # Ingore symbols we don't need
-        if symbol not in required_symbols:
-            continue
-
-        # Get equation
-        eq = graph.nodes[symbol]['equation']
-
-        # Skip symbols that are not set with an equation
-        if eq is None:
-            continue
-
-        # Remove quantities (units)
-        eq = eq.subs({q: 1 for q in eq.atoms(Quantity)}, simultaneous=True)
-
-        eqs.append(eq)
-
-    return eqs
-
-
 def get_unique_names(graph):
     """
     Creates unique names for all symbols in a cellml model graph.
@@ -313,7 +268,7 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
 
     # Create RHS equation information dicts
     rhs_equations = []
-    for eq in get_equations_for(graph, get_derivative_symbols(graph)):
+    for eq in model.get_equations_for(get_derivative_symbols(graph)):
         #TODO: Parameters should never appear as the left-hand side of an
         # equation (cellmlmanip should already have filtered these out).
         rhs_equations.append({
@@ -326,7 +281,7 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
     output_equations = []
     output_symbols = [get_symbol_by_cmeta_id(graph, x) for x in outputs
                       if x != 'state_variable']
-    for eq in get_equations_for(graph, output_symbols):
+    for eq in model.get_equations_for(output_symbols):
         output_equations.append({
             'lhs': printer.doprint(eq.lhs),
             'rhs': printer.doprint(eq.rhs),
