@@ -32,6 +32,7 @@ def test_generate_weblab_model(tmp_path):
         'membrane_fast_sodium_current',
         'membrane_voltage',
         'time',
+        'state_variable',
     ]
 
     # Select model parameters (as oxmeta names)

@@ -145,6 +145,9 @@ cdef class TestModel(CvodeSolver):
     # prevent garbage collection.
     cdef public object _module
 
+    # TODO: Not sure if needed
+    cdef public object simEnv
+
     # Cached list of output values (single values or vectors e.g. the state) to
     # avoid recreating a list every time output is returned.
     cdef public object _outputs
@@ -185,6 +188,7 @@ cdef class TestModel(CvodeSolver):
         self.outputNames.append('membrane_fast_sodium_current')
         self.outputNames.append('membrane_voltage')
         self.outputNames.append('time')
+        self.outputNames.append('state_variable')
 
         # Create and cache list of arrays, to avoid constant list/array
         # creation
@@ -192,7 +196,8 @@ cdef class TestModel(CvodeSolver):
         self._outputs.append(np.array(0.0))
         self._outputs.append(np.array(0.0))
         self._outputs.append(np.array(0.0))
-        # TODO Handle vector outputs
+        self._outputs.append(np.zeros(4))
+        # TODO Handle vector outputs other than state_variable
 
         self.state = self.initialState.copy()
         self.savedStates = {}
@@ -261,10 +266,10 @@ cdef class TestModel(CvodeSolver):
         cdef double var_time = self.freeVariable
 
         # Unpack state variables
-        cdef double var_V = (<Sundials.N_VectorContent_Serial>y.content).data[0]
-        cdef double var_m = (<Sundials.N_VectorContent_Serial>y.content).data[1]
-        cdef double var_h = (<Sundials.N_VectorContent_Serial>y.content).data[2]
-        cdef double var_n = (<Sundials.N_VectorContent_Serial>y.content).data[3]
+        cdef double var_V = self.state[0]
+        cdef double var_m = self.state[1]
+        cdef double var_h = self.state[2]
+        cdef double var_n = self.state[3]
 
         # Mathematics
         cdef double var_E_R = -75.0
@@ -277,6 +282,10 @@ cdef class TestModel(CvodeSolver):
         outputs[0][()] = var_i_Na
         outputs[1][()] = var_V
         outputs[2][()] = var_time
+        outputs[3][0] = var_V
+        outputs[3][1] = var_m
+        outputs[3][2] = var_h
+        outputs[3][3] = var_n
         return outputs
 
     cpdef ResetState(self, name=None):

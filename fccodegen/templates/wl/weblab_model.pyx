@@ -123,6 +123,9 @@ cdef class {{ class_name }}(CvodeSolver):
     # prevent garbage collection.
     cdef public object _module
 
+    # TODO: Not sure if needed
+    cdef public object simEnv
+
     # Cached list of output values (single values or vectors e.g. the state) to
     # avoid recreating a list every time output is returned.
     cdef public object _outputs
@@ -171,9 +174,13 @@ cdef class {{ class_name }}(CvodeSolver):
         # creation
         self._outputs = []
         {%- for output in outputs %}
+        {%- if output.length is none %}
         self._outputs.append(np.array(0.0))
+        {%- else %}
+        self._outputs.append(np.zeros({{ output.length }}))
+        {%- endif %}
         {%- endfor %}
-        # TODO Handle vector outputs
+        # TODO Handle vector outputs other than state_variable
 
         self.state = self.initialState.copy()
         self.savedStates = {}
@@ -243,7 +250,7 @@ cdef class {{ class_name }}(CvodeSolver):
 
         # Unpack state variables
         {%- for state in states %}
-        cdef double {{state.var_name}} = (<Sundials.N_VectorContent_Serial>y.content).data[{{state.index}}]
+        cdef double {{state.var_name}} = self.state[{{state.index}}]
         {%- endfor %}
 
         # Mathematics
@@ -259,7 +266,13 @@ cdef class {{ class_name }}(CvodeSolver):
         outputs = self._outputs
         {%- for output in outputs %}
         {%- if output.parameter_index is none %}
+        {%-   if output.length is none %}
         outputs[{{ output.index }}][()] = {{ output.var_name }}
+        {%-   else %}
+        {%-     for sub_output in output.var_name %}
+        outputs[{{ output.index }}][{{ sub_output.index }}] = {{ sub_output.var_name }}
+        {%-     endfor %}
+        {%-   endif %}
         {%- else %}
         outputs[{{ output.index }}][()] = parameters[{{ output.parameter_index }}]
         {%- endif %}
