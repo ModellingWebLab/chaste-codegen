@@ -144,13 +144,11 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
     # Create state information dicts
     state_info = []
     for i, state in enumerate(model.get_state_symbols()):
-        initial_value = float(graph.nodes[state]['initial_value'])
-        #TODO: Update cellmlmanip so this graph.nodes goes away
         state_info.append({
             'index': i,
             'var_name': symbol_name(state),
             'deriv_name': derivative_name(state),
-            'initial_value': initial_value,
+            'initial_value': model.get_initial_value(state),
         })
 
     # Create parameter information dicts
