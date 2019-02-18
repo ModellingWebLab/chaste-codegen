@@ -45,9 +45,9 @@ def load_template(*name):
     return env.get_template(path)
 
 
-def get_unique_names(graph):
+def get_unique_names(model):
     """
-    Creates unique names for all symbols in a cellml model graph.
+    Creates unique names for all symbols in a CellML model.
     """
     # Component variable separator
     # Note that variables are free to use __ in their names too, it makes the
@@ -67,7 +67,7 @@ def get_unique_names(graph):
             name = root + str(i)
         return name
 
-    for v in graph:
+    for v in model.get_equation_graph():
         if isinstance(v, sp.Derivative):
             continue
 
@@ -120,11 +120,8 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
         parameters. All variables used as parameters must be literal constants.
 
     """
-    # Get equation graph
-    graph = model.get_equation_graph()
-
     # Get unique names for all symbols
-    unames = get_unique_names(graph)
+    unames = get_unique_names(model)
 
     # Symbol naming function
     def symbol_name(symbol):

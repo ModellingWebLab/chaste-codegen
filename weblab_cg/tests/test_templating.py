@@ -35,13 +35,12 @@ def test_unique_name_generation():
     # Load cellml model, get unique names
     model = cellmlmanip.load_model(
         os.path.join(cg.DATA_DIR, 'tests', 'conflicting_names.cellml'))
-    graph = model.get_equation_graph()
 
     # Test unique names
     from weblab_cg._generator import get_unique_names
-    unames = get_unique_names(graph)
+    unames = get_unique_names(model)
     assert len(unames) == 9
-    symbols = [v for v in graph]
+    symbols = [v for v in model.get_equation_graph()]
     symbols.sort(key=str)
 
     assert unames[symbols[0]] == 'time'         # env.time
