@@ -1,5 +1,5 @@
 #
-# Tests the basics of fccodegen
+# Tests the basics of weblab_cg
 #
 #import pytest
 import logging
@@ -10,14 +10,14 @@ logging.getLogger().setLevel(logging.INFO)
 
 
 def test_module_import():
-    import fccodegen    # noqa
+    import weblab_cg    # noqa
 
 
 def test_version():
     # Test the version() method
-    import fccodegen
+    import weblab_cg as cg
 
-    version = fccodegen.version()
+    version = cg.version()
     assert isinstance(version, tuple)
     assert len(version) == 3
     assert isinstance(version[0], int)
@@ -27,7 +27,7 @@ def test_version():
     assert version[1] >= 0
     assert version[2] >= 0
 
-    version = fccodegen.version(formatted=True)
+    version = weblab_cg.version(formatted=True)
     assert isinstance(version, str)
     assert len(version) >= 1
 

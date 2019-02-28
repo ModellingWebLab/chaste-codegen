@@ -39,6 +39,6 @@ def version(formatted=False):
     "codegen 1.0.0").
     """
     if formatted:
-        return 'fccodegen ' + __version__
+        return 'weblab_cg ' + __version__
     else:
         return __version_int__

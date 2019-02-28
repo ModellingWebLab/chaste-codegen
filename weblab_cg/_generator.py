@@ -2,7 +2,7 @@
 # Functions related to generating model code.
 # TODO: Find a better name/description/layout
 #
-import fccodegen as cg
+import weblab_cg as cg
 import jinja2
 import os
 import sympy as sp
@@ -22,7 +22,7 @@ def _jinja_environment():
         _environment = jinja2.Environment(
             # Automatic loading of templates stored in the module
             # This also enables template inheritance
-            loader=jinja2.PackageLoader('fccodegen', cg.TEMPLATE_SUBDIR),
+            loader=jinja2.PackageLoader('weblab_cg', cg.TEMPLATE_SUBDIR),
 
             # Keep a single trailing newline, if present
             keep_trailing_newline=True,
@@ -72,7 +72,7 @@ def get_equations_for(graph, symbols):
     # generate the RHS, or with the outputs to generate the output code.
 
     # Get sorted symbols
-    #TODO: networkx is not a dependency of fccodegen - only of cellmlmanip. If
+    #TODO: networkx is not a dependency of weblab_cg - only of cellmlmanip. If
     #      this does _not_ get moved to cellmlmanip, it should become a dep.
     #      here too.
     import networkx as nx
@@ -208,7 +208,7 @@ def get_symbol_by_cmeta_id(graph, cmeta_id):
             return v
 
     # Using cover pragma here: This should be in cellmlmanip, so not adding
-    # tests for it in fccodegen :-)
+    # tests for it in weblab_cg :-)
     raise KeyError(
         'No variable with cmeta id "' + str(cmeta_id) + '" found.'
     )   # pragma: no cover

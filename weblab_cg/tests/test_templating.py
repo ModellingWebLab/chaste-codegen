@@ -1,7 +1,7 @@
 #
 # Tests templating functionality
 #
-import fccodegen as cg
+import weblab_cg as cg
 import jinja2
 import logging
 import os
@@ -37,7 +37,7 @@ def test_unique_name_generation():
     graph = model.get_equation_graph()
 
     # Test unique names
-    from fccodegen._generator import get_unique_names
+    from weblab_cg._generator import get_unique_names
     unames = get_unique_names(graph)
     assert len(unames) == 9
     symbols = [v for v in graph]

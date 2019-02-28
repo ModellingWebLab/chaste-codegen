@@ -1,7 +1,7 @@
 #
 # Tests conversion of sympy expressions to weblab cython code.
 #
-import fccodegen as cg
+import weblab_cg as cg
 import logging
 import math
 import pytest

@@ -1,7 +1,7 @@
 #
 # Tests templating functionality
 #
-import fccodegen as cg
+import weblab_cg as cg
 import logging
 import os
 import re
