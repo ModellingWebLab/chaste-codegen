@@ -27,7 +27,7 @@ def test_version():
     assert version[1] >= 0
     assert version[2] >= 0
 
-    version = weblab_cg.version(formatted=True)
+    version = cg.version(formatted=True)
     assert isinstance(version, str)
     assert len(version) >= 1
 
