@@ -1,5 +1,5 @@
 #
-# fccodegen setuptools script
+# weblab_cg setuptools script
 #
 import os
 from setuptools import setup, find_packages
@@ -9,13 +9,13 @@ with open('README.md') as f:
     readme = f.read()
 
 # Load version number
-with open(os.path.join('fccodegen', 'version.txt'), 'r') as f:
+with open(os.path.join('weblab_cg', 'version.txt'), 'r') as f:
     version = f.read()
 
 # Go!
 setup(
     # Module name (lowercase)
-    name='fccodegen',
+    name='weblab_cg',
 
     version=version,
     description='Code generation for the Web Lab',
@@ -25,11 +25,11 @@ setup(
     # author_email='',
     maintainer='Web Lab team',
     maintainer_email='michael.clerx@cs.ox.ac.uk',
-    url='https://github.com/ModellingWebLab/fccodegen',
+    url='https://github.com/ModellingWebLab/weblab_cg',
 
     # Packages to include
     packages=find_packages(
-        include=('fccodegen', 'fccodegen.*')),
+        include=('weblab_cg', 'weblab_cg.*')),
 
     # Include non-python files (via MANIFEST.in)
     include_package_data=True,
