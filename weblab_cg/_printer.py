@@ -392,9 +392,5 @@ class WebLabPrinter(sympy.printing.printer.Printer):
 
     def _print_Symbol(self, expr):
         """ Handles sympy Symbol objects """
-        # Temporary dummy zero handling code
-        # See https://github.com/ModellingWebLab/cellmlmanip/issues/8
-        if expr.name == '0.0':
-            return '0.0'
         return self._symbol_function(expr)
 

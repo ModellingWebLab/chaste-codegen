@@ -45,71 +45,9 @@ def load_template(*name):
     return env.get_template(path)
 
 
-def load_model(path):
+def get_unique_names(model):
     """
-    Loads a cellml model.
-    """
-    #TODO: This should become part of cellmlmanip
-
-    import cellmlmanip
-    import cellmlmanip.parser
-
-    model = cellmlmanip.parser.Parser(path).parse()
-    model.make_connections()
-    model.add_units_to_equations()
-    for e in model.equations:
-        model.check_left_right_units_equal(e)
-    return model
-
-
-def get_equations_for(graph, symbols):
-    """
-    Gets the equations from a cellmlmanip model to calculate the values of the
-    given symbols.
-    """
-    #TODO: This should become part of cellmlmanip, with a syntax like
-    # get_equations_for(variables), and then called with the derivatives to
-    # generate the RHS, or with the outputs to generate the output code.
-
-    # Get sorted symbols
-    #TODO: networkx is not a dependency of weblab_cg - only of cellmlmanip. If
-    #      this does _not_ get moved to cellmlmanip, it should become a dep.
-    #      here too.
-    import networkx as nx
-    sorted_symbols = nx.lexicographical_topological_sort(graph, key=str)
-
-    # Create set of symbols for which we require equations
-    required_symbols = set()
-    for output in symbols:
-        required_symbols.add(output)
-        required_symbols.update(nx.ancestors(graph, output))
-
-    # Create list of equations
-    from sympy.physics.units import Quantity
-    eqs = []
-    for symbol in sorted_symbols:
-        # Ingore symbols we don't need
-        if symbol not in required_symbols:
-            continue
-
-        # Get equation
-        eq = graph.nodes[symbol]['equation']
-
-        # Skip symbols that are not set with an equation
-        if eq is None:
-            continue
-
-        # Remove quantities (units)
-        eq = eq.subs({q: 1 for q in eq.atoms(Quantity)}, simultaneous=True)
-
-        eqs.append(eq)
-
-    return eqs
-
-
-def get_unique_names(graph):
-    """
-    Creates unique names for all symbols in a cellml model graph.
+    Creates unique names for all symbols in a CellML model.
     """
     # Component variable separator
     # Note that variables are free to use __ in their names too, it makes the
@@ -129,7 +67,7 @@ def get_unique_names(graph):
             name = root + str(i)
         return name
 
-    for v in graph:
+    for v in model.get_equation_graph():
         if isinstance(v, sp.Derivative):
             continue
 
@@ -162,75 +100,6 @@ def get_unique_names(graph):
     return symbols
 
 
-def get_derivative_symbols(graph):
-    """
-    Returns a list of derivative symbols found in the given model graph.
-    """
-    #TODO: This should become part of cellmlmanip
-
-    return [v for v in graph if isinstance(v, sp.Derivative)]
-
-
-def get_state_symbols(graph):
-    """
-    Returns a list of state variables found in the given model graph.
-    """
-    #TODO: This should become part of cellmlmanip
-
-    return [v.args[0] for v in get_derivative_symbols(graph)]
-
-
-def get_free_variable_symbol(graph):
-    """
-    Returns the free variable of the given model graph.
-    """
-    #TODO: This should become part of cellmlmanip
-
-    for v in graph:
-        if graph.nodes[v].get('variable_type', '') == 'free':
-            return v
-
-    # This should be unreachable
-    raise ValueError('No free variable set in model.')  # pragma: no cover
-
-
-def get_symbol_by_cmeta_id(graph, cmeta_id):
-    """
-    Searches the given graph and returns the symbol for the variable with the
-    given cmeta_id.
-    """
-    #TODO: This should become part of cellmlmanip
-    #TODO: Either add an argument to allow derivative symbols to be fetched, or
-    #      create a separate method for them.
-
-    for v in graph:
-        if graph.nodes[v].get('cmeta:id', '') == cmeta_id:
-            return v
-
-    # Using cover pragma here: This should be in cellmlmanip, so not adding
-    # tests for it in weblab_cg :-)
-    raise KeyError(
-        'No variable with cmeta id "' + str(cmeta_id) + '" found.'
-    )   # pragma: no cover
-
-
-def get_value(graph, symbol):
-    """
-    Returns the evaluated value of the given symbol's RHS.
-    """
-    # TODO This should become part of cellmlmanip
-
-    # Find RHS
-    rhs = graph.nodes[symbol]['equation'].rhs
-
-    # Remove units
-    from sympy.physics.units import Quantity
-    rhs = rhs.subs({q: 1 for q in rhs.atoms(Quantity)}, simultaneous=True)
-
-    # Evaluate and return
-    return float(rhs.evalf())
-
-
 def create_weblab_model(path, class_name, model, outputs, parameters):
     """
     Takes a :class:`cellmlmanip.Model`, generates a ``.pyx`` model for use with
@@ -251,11 +120,8 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
         parameters. All variables used as parameters must be literal constants.
 
     """
-    # Get equation graph
-    graph = model.get_equation_graph()
-
     # Get unique names for all symbols
-    unames = get_unique_names(graph)
+    unames = get_unique_names(model)
 
     # Symbol naming function
     def symbol_name(symbol):
@@ -270,36 +136,34 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
     printer = cg.WebLabPrinter(symbol_name, derivative_name)
 
     # Create free variable name
-    free_name = symbol_name(get_free_variable_symbol(graph))
+    free_name = symbol_name(model.get_free_variable_symbol())
 
     # Create state information dicts
     state_info = []
-    for i, state in enumerate(get_state_symbols(graph)):
-        #TODO: Update cellmlmanip so this graph.nodes goes away
-        initial_value = float(graph.nodes[state]['initial_value'])
+    for i, state in enumerate(model.get_state_symbols()):
         state_info.append({
             'index': i,
             'var_name': symbol_name(state),
             'deriv_name': derivative_name(state),
-            'initial_value': initial_value,
+            'initial_value': model.get_initial_value(state),
         })
 
     # Create parameter information dicts
     #TODO: Cmeta_id should be replaced by oxmeta annotation via RDF lookup
     parameter_info = []
     for i, parameter in enumerate(parameters):
-        symbol = get_symbol_by_cmeta_id(graph, parameter)
+        symbol = model.get_symbol_by_cmeta_id(parameter)
         parameter_info.append({
             'index': i,
             'cmeta_id': parameter,
             'var_name': symbol_name(symbol),
-            'initial_value': get_value(graph, symbol),
+            'initial_value': model.get_value(symbol),
         })
 
     # Create map of parameter symbols to their indices
     parameter_symbols = {}
     for i, parameter in enumerate(parameters):
-        symbol = get_symbol_by_cmeta_id(graph, parameter)
+        symbol = model.get_symbol_by_cmeta_id(parameter)
         parameter_symbols[symbol] = i
 
     # Create output information dicts
@@ -315,7 +179,7 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
             parameter_index = None
             length = len(state_info)
         else:
-            symbol = get_symbol_by_cmeta_id(graph, output)
+            symbol = model.get_symbol_by_cmeta_id(output)
             var_name = symbol_name(symbol)
             parameter_index = parameter_symbols.get(symbol, None)
             length = None
@@ -330,7 +194,7 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
 
     # Create RHS equation information dicts
     rhs_equations = []
-    for eq in get_equations_for(graph, get_derivative_symbols(graph)):
+    for eq in model.get_equations_for(model.get_derivative_symbols()):
         #TODO: Parameters should never appear as the left-hand side of an
         # equation (cellmlmanip should already have filtered these out).
         rhs_equations.append({
@@ -341,9 +205,9 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
 
     # Create output equation information dicts
     output_equations = []
-    output_symbols = [get_symbol_by_cmeta_id(graph, x) for x in outputs
+    output_symbols = [model.get_symbol_by_cmeta_id(x) for x in outputs
                       if x != 'state_variable']
-    for eq in get_equations_for(graph, output_symbols):
+    for eq in model.get_equations_for(output_symbols):
         output_equations.append({
             'lhs': printer.doprint(eq.lhs),
             'rhs': printer.doprint(eq.rhs),
