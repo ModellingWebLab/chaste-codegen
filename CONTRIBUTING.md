@@ -1,8 +1,8 @@
-# Contributing to fccodegen
+# Contributing to weblab_cg
 
 ## Installation
 
-Users install `fccodegen` using pip.
+Users install `weblab_cg` using pip.
 For instructions on installing as a user, see [README.md](README.md)
 
 Developers should
@@ -31,11 +31,11 @@ Similarly, on CI testing anything not listed in the user requirements will cause
 
 **User requirements** are listed in `setup.py`.
 They are divided into base dependencies (listed in `install_requires`) and `test` dependencies (listed in `extras_require[test]`).
-Users install these requirements automatically when they `pip install fccodegen`.
+Users install these requirements automatically when they `pip install weblab_cg`.
 
 **Developer requirements** are listed in `base.in`, `test.in`, and `dev.in` (where `test` requires `base`, while `dev` requires `base` and `test`).
 These `.in` files are compiled into `.txt` files for `pip` using [pip-tools](https://pypi.org/project/pip-tools/).
-To compile them, use the Makefile in the `requirements` folder, by simply typing `make`.
+To compile thefm, use the Makefile in the `requirements` folder, by simply typing `make`.
 
 To install the developer requirements into your virtualenv:
 
