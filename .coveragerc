@@ -1,7 +1,7 @@
 [run]
-source = fccodegen
+source = weblab_cg
 omit = 
-    fccodegen/tests/*
+    weblab_cg/tests/*
 
 [report]
 exclude_lines =

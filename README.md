@@ -1,5 +1,5 @@
-[![travis](https://travis-ci.org/ModellingWebLab/fccodegen.svg?branch=master)](https://travis-ci.org/ModellingWebLab/fccodegen)
-[![codecov](https://codecov.io/gh/ModellingWebLab/fccodegen/branch/master/graph/badge.svg)](https://codecov.io/gh/ModellingWebLab/fccodegen)
+[![travis](https://travis-ci.org/ModellingWebLab/weblab_cg.svg?branch=master)](https://travis-ci.org/ModellingWebLab/weblab_cg)
+[![codecov](https://codecov.io/gh/ModellingWebLab/weblab_cg/branch/master/graph/badge.svg)](https://codecov.io/gh/ModellingWebLab/weblab_cg)
 
 # weblab_cg
 Code generation for the Web Lab
