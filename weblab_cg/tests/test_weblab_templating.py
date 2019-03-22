@@ -28,18 +28,19 @@ def test_generate_weblab_model(tmp_path):
     )
     model = cellmlmanip.load_model(model)
 
-    # Select model outputs (as oxmeta names)
+    # Select model outputs (as qualified names)
+    oxmeta = 'https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#'
     outputs = [
-        'membrane_fast_sodium_current',
-        'membrane_voltage',
-        'time',
+        (oxmeta, 'membrane_fast_sodium_current'),
+        (oxmeta, 'membrane_voltage'),
+        (oxmeta, 'time'),
         'state_variable',
     ]
 
-    # Select model parameters (as oxmeta names)
+    # Select model parameters (as qualified names)
     parameters = [
-        'membrane_fast_sodium_current_conductance',
-        'membrane_potassium_current_conductance',
+        (oxmeta, 'membrane_fast_sodium_current_conductance'),
+        (oxmeta, 'membrane_potassium_current_conductance'),
     ]
 
     # Create weblab model at path
@@ -84,14 +85,15 @@ def test_generate_weblab_model_for_graph_state(tmp_path):
     )
     model = cellmlmanip.load_model(model)
 
-    # Select model outputs (as oxmeta names)
+    # Select model outputs (as qualified names)
+    oxmeta = 'https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#'
     outputs = [
-        'time',
-        'membrane_voltage',
+        (oxmeta, 'time'),
+        (oxmeta, 'membrane_voltage'),
         'state_variable',
     ]
 
-    # Select model parameters (as oxmeta names)
+    # Select model parameters (as qualified names)
     parameters = []
 
     # Create weblab model at path

@@ -18,10 +18,10 @@ import shutil
 import sys
 
 import fc.simulations.model as Model
-import fc.utility.environment as Env
+import fc.environment as Env
 import fc.language.values as V
 from fc.sundials.solver cimport CvodeSolver
-from fc.utility.error_handling import ProtocolError
+from fc.error_handling import ProtocolError
 
 
 cdef int _EvaluateRhs(Sundials.realtype var_time,
@@ -116,10 +116,10 @@ cdef class TestModel(CvodeSolver):
     # From: fc.simulations.AbstractOdeModel
     cdef public object savedStates
 
-    # Maps oxmeta variable names to model variables (outputs, states,
+    # Maps qualified variable names to model variables (outputs, states,
     # parameters, or the free variable).
     # From: fc.simulations.AbstractOdeModel
-    # See: fc.utility.environment.ModelWrapperEnvironment
+    # See: fc.environment.ModelWrapperEnvironment
     cdef public object env
 
     # True if the solver needs to be reset due to a model change made in the
@@ -140,7 +140,7 @@ cdef class TestModel(CvodeSolver):
     cdef public object indentLevel
 
     # Link to generated module.
-    # Set in: fc.utility.protocol.Protocol
+    # Set in: fc.protocol.Protocol
     # Note: Nobody seems to ever access this variable. Seems this is just to
     # prevent garbage collection.
     cdef public object _module
@@ -162,8 +162,8 @@ cdef class TestModel(CvodeSolver):
         # State values
         self.state = np.zeros(4)
 
-        # Mapping from oxmeta names to state indices; only for states that have
-        # a variable name.
+        # Mapping from qualified names to state indices; only for states that
+        # have a variable name.
         self.stateVarMap = {}
 
         # Initial state
@@ -173,13 +173,13 @@ cdef class TestModel(CvodeSolver):
         self.initialState[2] = 0.6
         self.initialState[3] = 0.325
 
-        # Mapping of parameter oxmeta names to parameter array indices
+        # Mapping of parameter qualified names to parameter array indices
         self.parameterMap = {}
 
         # Initial parameter values
         self.parameters = np.zeros(0)
 
-        # Oxmeta names of output variables
+        # Local names of output variables
         self.outputNames = []
         self.outputNames.append('time')
         self.outputNames.append('membrane_voltage')
