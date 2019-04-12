@@ -175,8 +175,8 @@ cdef class TestModel(CvodeSolver):
 
         # Mapping of parameter qualified names to parameter array indices
         self.parameterMap = {}
-        self.parameterMap['https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_fast_sodium_current_conductance'] = 0
-        self.parameterMap['https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_potassium_current_conductance'] = 1
+        self.parameterMap['membrane_fast_sodium_current_conductance'] = 0
+        self.parameterMap['membrane_potassium_current_conductance'] = 1
 
         # Initial parameter values
         self.parameters = np.zeros(2)

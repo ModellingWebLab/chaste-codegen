@@ -122,6 +122,19 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
         must be literal constants.
 
     """
+    # TODO: Jon's comment on the outputs/parameters being annotations:
+    # IIRC the pycml code basically says you can use anything that's a valid
+    # input to create_rdf_node. So we might eventually want to avoid all the
+    # *parameter unpacking when passing around, but I don't think it's urgent.
+
+    # TODO: About the outputs:
+    # WL1 uses just the local names here, without the base URI part. What we
+    # should do eventually is update the ModelWrapperEnvironment so we can use
+    # a separate instance for each namespace defined by the protocol, and then
+    # we can use longer names here and let each environment wrap its respective
+    # subset. But until that happens, users just have to make sure not to use
+    # the same local name in different namespaces.
+
     # Get unique names for all symbols
     unames = get_unique_names(model)
 

@@ -155,7 +155,7 @@ cdef class {{ class_name }}(CvodeSolver):
         # Mapping of parameter qualified names to parameter array indices
         self.parameterMap = {}
         {%- for parameter in parameters %}
-        self.parameterMap['{{ parameter.annotation[0] + parameter.annotation[1] }}'] = {{ parameter.index }}
+        self.parameterMap['{{ parameter.annotation[1] }}'] = {{ parameter.index }}
         {%- endfor %}
 
         # Initial parameter values
