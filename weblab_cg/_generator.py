@@ -114,12 +114,27 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
     ``model``
         A :class:`cellmlmanip.Model` object.
     ``outputs``
-        An ordered list of cmeta ids for the variables to use as model outputs.
+        An ordered list of annotations ``(namespace_uri, local_name)`` for the
+        variables to use as model outputs.
     ``parameters``
-        An ordered list of cmeta ids for the variables to use as model
-        parameters. All variables used as parameters must be literal constants.
+        An ordered list of annotations ``(namespace_uri, local_name)`` for the
+        variables to use as model parameters. All variables used as parameters
+        must be literal constants.
 
     """
+    # TODO: Jon's comment on the outputs/parameters being annotations:
+    # IIRC the pycml code basically says you can use anything that's a valid
+    # input to create_rdf_node. So we might eventually want to avoid all the
+    # *parameter unpacking when passing around, but I don't think it's urgent.
+
+    # TODO: About the outputs:
+    # WL1 uses just the local names here, without the base URI part. What we
+    # should do eventually is update the ModelWrapperEnvironment so we can use
+    # a separate instance for each namespace defined by the protocol, and then
+    # we can use longer names here and let each environment wrap its respective
+    # subset. But until that happens, users just have to make sure not to use
+    # the same local name in different namespaces.
+
     # Get unique names for all symbols
     unames = get_unique_names(model)
 
@@ -149,13 +164,12 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
         })
 
     # Create parameter information dicts
-    #TODO: Cmeta_id should be replaced by oxmeta annotation via RDF lookup
     parameter_info = []
     for i, parameter in enumerate(parameters):
-        symbol = model.get_symbol_by_cmeta_id(parameter)
+        symbol = model.get_symbol_by_ontology_term(*parameter)
         parameter_info.append({
             'index': i,
-            'cmeta_id': parameter,
+            'annotation': parameter,
             'var_name': symbol_name(symbol),
             'initial_value': model.get_value(symbol),
         })
@@ -163,7 +177,7 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
     # Create map of parameter symbols to their indices
     parameter_symbols = {}
     for i, parameter in enumerate(parameters):
-        symbol = model.get_symbol_by_cmeta_id(parameter)
+        symbol = model.get_symbol_by_ontology_term(*parameter)
         parameter_symbols[symbol] = i
 
     # Create output information dicts
@@ -179,14 +193,14 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
             parameter_index = None
             length = len(state_info)
         else:
-            symbol = model.get_symbol_by_cmeta_id(output)
+            symbol = model.get_symbol_by_ontology_term(*output)
             var_name = symbol_name(symbol)
             parameter_index = parameter_symbols.get(symbol, None)
             length = None
 
         output_info.append({
             'index': i,
-            'cmeta_id': output,
+            'annotation': output,
             'var_name': var_name,
             'parameter_index': parameter_index,
             'length': length,
@@ -205,7 +219,7 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
 
     # Create output equation information dicts
     output_equations = []
-    output_symbols = [model.get_symbol_by_cmeta_id(x) for x in outputs
+    output_symbols = [model.get_symbol_by_ontology_term(*x) for x in outputs
                       if x != 'state_variable']
     for eq in model.get_equations_for(output_symbols):
         output_equations.append({
