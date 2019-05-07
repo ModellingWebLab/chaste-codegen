@@ -8,7 +8,6 @@
 #
 #
 cimport fc.sundials.sundials as Sundials
-
 cimport libc.math as math
 cimport numpy as np
 
@@ -17,11 +16,10 @@ import os
 import shutil
 import sys
 
-import fc.simulations.model as Model
-import fc.environment as Env
 import fc.language.values as V
-from fc.sundials.solver cimport CvodeSolver
+from fc.environment import ModelWrapperEnvironment
 from fc.error_handling import ProtocolError
+from fc.sundials.solver cimport CvodeSolver
 
 
 cdef int _evaluate_rhs(Sundials.realtype {{ free_variable }},
@@ -195,7 +193,7 @@ cdef class {{ class_name }}(CvodeSolver):
         #    len(self.parameters),
         #    <Sundials.realtype*>(<np.ndarray>self.parameters).data
         #)
-        self.env = Env.ModelWrapperEnvironment(self)
+        self.env = ModelWrapperEnvironment(self)
 
     #def __dealloc__(self):
     #    if self._parameters != NULL:
@@ -206,7 +204,7 @@ cdef class {{ class_name }}(CvodeSolver):
         Get a map from ontology prefix to the environment containing model
         variables annotated with that ontology.
 
-        See :meth:`fc.simulations.AbstractOdeModel.GetEnvironmentMap()`.
+        See :meth:`fc.simulations.AbstractOdeModel.get_environment_map()`.
         """
         # TODO Some part of this might need to be generated
         return {
@@ -298,9 +296,9 @@ cdef class {{ class_name }}(CvodeSolver):
     def save_state(self, name):
         """
         Save a copy of the current model state associated with the given name,
-        to be restored using :meth:`ResetState()`.
+        to be restored using :meth:`reset_state()`.
 
-        See :meth:`fc.simulations.AbstractOdeModel.SaveState()`.
+        See :meth:`fc.simulations.AbstractOdeModel.save_state()`.
         """
         self.saved_states[name] = self.state.copy()
 
