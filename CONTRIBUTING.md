@@ -35,7 +35,7 @@ Users install these requirements automatically when they `pip install weblab_cg`
 
 **Developer requirements** are listed in `base.in`, `test.in`, and `dev.in` (where `test` requires `base`, while `dev` requires `base` and `test`).
 These `.in` files are compiled into `.txt` files for `pip` using [pip-tools](https://pypi.org/project/pip-tools/).
-To compile thefm, use the Makefile in the `requirements` folder, by simply typing `make`.
+To compile them, use the Makefile in the `requirements` folder, by simply typing `make`.
 
 To install the developer requirements into your virtualenv:
 
