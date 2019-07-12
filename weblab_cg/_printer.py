@@ -3,11 +3,14 @@
 #
 # Should work with SymPy 1.1.1, but also later versions.
 #
-# Parts of this code are taken from:
+# ----------------------------------------------------------------------------
+#
+# Parts of this code were adapted from:
+#
 #  https://github.com/sympy/sympy/blob/master/sympy/printing/printer.py
 #  https://github.com/sympy/sympy/blob/master/sympy/printing/str.py
 #
-# Which comes with the following license:
+# Which came with the following license:
 #
 # Copyright (c) 2006-2018 SymPy Development Team
 #
@@ -42,12 +45,6 @@ import sympy.printing
 
 from sympy.printing.precedence import precedence
 
-#from sympy.core import S, Rational, Pow, Basic, Mul
-#from .printer import Printer
-#from sympy.printing.precedence import PRECEDENCE
-#import mpmath.libmp as mlib
-#from mpmath.libmp import prec_to_dps
-#from sympy.utilities import default_sort_key
 
 # List of functions handled by python's `math` module
 _math_functions = {
