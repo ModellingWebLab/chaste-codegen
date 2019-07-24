@@ -4,4 +4,4 @@
 # weblab_cg
 Code generation for the Web Lab
 
-Guidelines on installing / contributing to development of `weblab_cg` [are in the CONTRIBUTING.md file](CONTRIBUTING.md)
+Guidelines on installing / contributing to development of `weblab_cg` are in [CONTRIBUTING.md](CONTRIBUTING.md)
