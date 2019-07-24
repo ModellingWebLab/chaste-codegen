@@ -63,12 +63,12 @@ If not, you'll need to create a printer for the language you wish to export to, 
 
 **Templates**: These will contain all the static bits of your generated code (e.g. function names, headers), along with some [jinja syntax](http://jinja.pocoo.org/docs/2.10/templates/) specifying where the dynamical bits come in.
 
-***Unique variable names***: See `get_unique_names()` in `_generator.py` for an example of how to generate unique variable names.
+**Unique variable names**: See `get_unique_names()` in `_generator.py` for an example of how to generate unique variable names.
 It may be possible to use this method directly, or you may need to create your own method.
 
-***Bringing it all together***: See `create_weblab_model()` in `_generator.py` for an example.
+**Bringing it all together**: See `create_weblab_model()` in `_generator.py` for an example.
 
-***Adding your stuff to `weblab_cg`***: If you want to include your generator/templates/printers in `weblab_cg`, please create one or more PRs.
+**Adding your stuff to `weblab_cg`**: If you want to include your generator/templates/printers in `weblab_cg`, please create one or more PRs.
 (We'll probably need to update the code layout for this too, at some point!)
 
 
