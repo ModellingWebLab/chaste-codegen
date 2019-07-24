@@ -58,28 +58,17 @@ To generate models in your own syntax, you'll need the following ingredients:
 3. A method to generate unique names for model variables
 4. Some code to bring it all together
 
-### Printers
-
-Start by checking if a suitable printer already exists (see `_printer.py`).
+**Printers**: Start by checking if a suitable printer already exists (see `_printer.py`).
 If not, you'll need to create a printer for the language you wish to export to, probably by subclassing or copy-pasting an existing class in `_printer.py`.
 
-### Templates
+**Templates**: These will contain all the static bits of your generated code (e.g. function names, headers), along with some [jinja syntax](http://jinja.pocoo.org/docs/2.10/templates/) specifying where the dynamical bits come in.
 
-This will contain all the static bits of your generated code (e.g. function names, headers), along with some [jinja syntax](http://jinja.pocoo.org/docs/2.10/templates/) specifying where the dynamical bits come in.
+***Unique variable names***: See `get_unique_names()` in `_generator.py` for an example of how to generate unique variable names.
+It may be possible to use this method directly, or you may need to create your own method.
 
-### Unique variable names
+***Bringing it all together***: See `create_weblab_model()` in `_generator.py` for an example.
 
-See `_generator.py` for an example.
-It may be possible to use the method in `_generator.py` directly, or you may need to create your own method.
-
-### Bringing it all together
-
-See `create_weblab_model()` in `_generator.py` for an example.
-
-### Adding your stuff to `weblab_cg`
-
-If you want to include your generator/templates/printers in `weblab_cg`, please create one or more PRs.
-
+***Adding your stuff to `weblab_cg`***: If you want to include your generator/templates/printers in `weblab_cg`, please create one or more PRs.
 (We'll probably need to update the code layout for this too, at some point!)
 
 
