@@ -20,7 +20,7 @@ more-itertools==4.3.0     # via pytest
 mpmath==1.1.0             # via sympy
 networkx==2.3
 pint==0.9
-pip-tools==3.1.0
+pip-tools==4.0.0
 pluggy==0.8.0             # via pytest
 py==1.7.0                 # via pytest
 pycodestyle==2.4.0        # via flake8
@@ -33,4 +33,4 @@ six==1.11.0               # via isodate, more-itertools, pip-tools, pytest
 sympy==1.1.1
 
 # The following packages are considered to be unsafe in a requirements file:
-# setuptools==41.0.1        # via flake8, pytest
+# setuptools==41.1.0        # via flake8, pytest

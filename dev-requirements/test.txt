@@ -31,4 +31,4 @@ six==1.11.0               # via isodate, more-itertools, pytest
 sympy==1.1.1
 
 # The following packages are considered to be unsafe in a requirements file:
-# setuptools==41.0.1        # via flake8, pytest
+# setuptools==41.1.0        # via flake8, pytest

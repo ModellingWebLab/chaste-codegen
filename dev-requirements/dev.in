@@ -1,4 +1,4 @@
 -r base.in
 -r test.in
 
-pip-tools
+pip-tools>=4.0.0
