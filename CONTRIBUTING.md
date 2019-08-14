@@ -8,9 +8,8 @@ For instructions on installing as a user, see [README.md](README.md)
 Developers should
 
 1. Clone the repository
-2. Create a virtual environment, using e.g. virtualenv or conda. Make sure to use Python3 (e.g. `$ virtualenv venv -p python3`).
-2b If you are on windows you might need to install virtual env first with pip install virtualenv. Make sure your python3 installation is in your path
-3. Activate the environment (e.g. `$ source venv/bin/activate`)
+2. Create a virtual environment, using e.g. virtualenv or conda. Make sure to use Python3 (e.g. `$ virtualenv venv -p python3`). (If you are on windows you might need to install virtual env first with pip install virtualenv. Make sure your python3 installation is in your path)
+3. Activate the environment (e.g. `$ source venv/bin/activate`). (On on Windows, virtualenv creates a batch file \env\Scripts\activate.bat)
 4. Install the developer requirements into the virtual environment: `pip install -r dev-requirements/dev.txt`
 5. Run the tests: `$ python -m pytest`.
 
