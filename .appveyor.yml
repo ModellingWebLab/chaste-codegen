@@ -1,0 +1,21 @@
+branches:
+  only:
+    - master
+
+environment:
+
+  matrix:
+    - PYTHON: "C:\\Python36-x64"
+
+install:
+  - "%PYTHON%\\python.exe --version"
+  - "%PYTHON%\\python.exe -m pip install --upgrade pip setuptools wheel"
+  - "%PYTHON%\\python.exe -m pip install .[test]"
+  # Temporary cellmlmanip install, until it can be done with pip
+  - "%PYTHON%\\python.exe -m pip install -e git://github.com/ModellingWebLab/cellmlmanip.git#egg=cellmlmanip"
+
+build: off
+
+test_script:
+  - "%PYTHON%\\python.exe -m pytest weblab_cg"
+
