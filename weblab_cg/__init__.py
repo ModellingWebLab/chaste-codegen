@@ -2,6 +2,11 @@
 Main module for Web Lab code generation
 """
 
+# Configure logging
+import logging
+logging.basicConfig()
+del(logging)
+
 
 #
 # Load constants and version information
