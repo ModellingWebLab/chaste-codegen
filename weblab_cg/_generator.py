@@ -2,11 +2,13 @@
 # Functions related to generating model code.
 # TODO: Find a better name/description/layout
 #
-import weblab_cg as cg
 import jinja2
+import logging
 import os
+import posixpath
 import sympy as sp
 import time
+import weblab_cg as cg
 
 
 # Shared Jinja environment
@@ -36,10 +38,19 @@ def _jinja_environment():
 
 def load_template(*name):
     """
-    Returns a path to the given template
+    Loads a template from the local template directory.
+
+    Templates can be specified as a single filename, e.g.
+    ``load_template('temp.txt')``, or loaded from subdirectories using e.g.
+    ``load_template('subdir_1', 'subdir_2', 'file.txt')``.
+
     """
-    path = os.path.join(*name)
-    #TODO: Check absolute path is still in cg.TEMPLATE_SUBDIR
+    # Due to a Jinja2 convention, posixpaths must be used, regardless of the
+    # user's operating system!
+    path = posixpath.join(*name)
+    if os.path.sep != '/' and os.path.sep in path:  # pragma: no linux cover
+        log = logging.getLogger()
+        log.warning('Paths to templates must be specified as posix paths.')
 
     env = _jinja_environment()
     return env.get_template(path)
