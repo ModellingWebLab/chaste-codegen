@@ -5,7 +5,7 @@ import cellmlmanip
 import logging
 import os
 import re
-import weblab_cg as cg
+import chaste_cg as cg
 
 
 # Show more logging output
