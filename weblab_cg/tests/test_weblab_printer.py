@@ -64,7 +64,8 @@ class TestWebLabPrinter(object):
 
         # Derivative function
         def derivative_function(deriv):
-            a, b = deriv.args
+            a = deriv.expr
+            b = deriv.variables[0]
             return 'd' + a.name + '/' + 'd' + b.name.upper()
 
         q = cg.WebLabPrinter(derivative_function=derivative_function)
