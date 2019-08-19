@@ -64,7 +64,8 @@ class TestWebLabPrinter(object):
 
         # Derivative function
         def derivative_function(deriv):
-            a, b = deriv.args
+            a = deriv.expr
+            b = deriv.variables[0]
             return 'd' + a.name + '/' + 'd' + b.name.upper()
 
         q = cg.WebLabPrinter(derivative_function=derivative_function)
@@ -177,7 +178,8 @@ class TestWebLabPrinter(object):
         assert p.doprint(sp.Lt(x, y)) == 'x < y'
         assert p.doprint(sp.Ge(x, y)) == 'x >= y'
         assert p.doprint(sp.Le(x, y)) == 'x <= y'
-        assert p.doprint(sp.Eq(sp.Eq(x, 3), 12)) == '(x == 3) == 12'
+        e = sp.Eq(sp.Eq(x, 3), sp.Eq(y, 5))
+        assert p.doprint(e) == '(x == 3) == (y == 5)'
 
     def test_boolean_logic(self, p, x, y, z):
 
