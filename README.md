@@ -3,7 +3,7 @@
 
 # Code generation for the Web Lab
 
-The `weblab_cg` model takes [cellmlmanip](https://github.com/ModellingWebLab/cellmlmanip) models as input, and uses templates and `printers` to generate code.
+The `weblab_cg` module takes [cellmlmanip](https://github.com/ModellingWebLab/cellmlmanip) models as input, and uses templates and `printers` to generate code.
 
 A [printer](https://docs.sympy.org/latest/tutorial/printing.html) is an object that can convert Sympy equations (as used in `cellmlmanip`) to string equations.
 The [jinja2](http://jinja.pocoo.org/) templating engine is used.

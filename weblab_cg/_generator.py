@@ -155,7 +155,7 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
 
     # Derivative naming function
     def derivative_name(deriv):
-        var = deriv.args[0] if isinstance(deriv, sp.Derivative) else deriv
+        var = deriv.expr if isinstance(deriv, sp.Derivative) else deriv
         return 'd_dt_' + unames[var]
 
     # Create expression printer
