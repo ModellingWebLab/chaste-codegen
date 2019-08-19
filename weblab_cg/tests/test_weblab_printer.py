@@ -178,7 +178,8 @@ class TestWebLabPrinter(object):
         assert p.doprint(sp.Lt(x, y)) == 'x < y'
         assert p.doprint(sp.Ge(x, y)) == 'x >= y'
         assert p.doprint(sp.Le(x, y)) == 'x <= y'
-        assert p.doprint(sp.Eq(sp.Eq(x, 3), 12)) == '(x == 3) == 12'
+        e = sp.Eq(sp.Eq(x, 3), sp.Eq(y, 5))
+        assert p.doprint(e) == '(x == 3) == (y == 5)'
 
     def test_boolean_logic(self, p, x, y, z):
 
