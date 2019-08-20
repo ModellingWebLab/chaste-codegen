@@ -20,7 +20,7 @@ def test_generate_cpp_hpp(tmp_path):
         for model_file in files:
             if '.cellml' in model_file: #make sure we only process .cellml files
                 convert_model(tmp_path, model_folder, model_file)
-    assert 1 == 2
+    #assert 1 == 2
     
 def convert_model(tmp_path, model_folder, model_file):
     class_name=model_file.replace(".cellml", "")

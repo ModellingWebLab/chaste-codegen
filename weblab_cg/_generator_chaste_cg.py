@@ -1,13 +1,8 @@
 #
-# Functions related to generating model code.
-# TODO: Find a better name/description/layout
+# Functions related to generating model code for Chaste.
 #
-import jinja2
-import logging
 import os
-import posixpath
 import sympy as sp
-import time
 import weblab_cg as cg
 
  
@@ -31,6 +26,19 @@ def create_chaste_model(path, class_name, model, parameters):
 
     """
     # First steps to generate files with the correct file name.
-    path = os.path.join(path, class_name+".cpp")
+    path = os.path.join(path, class_name+".hpp")
     print(path)
-    outputs = []
+    #outputs = []
+
+    # Generate model
+    
+    #for beeler_reuter: use_cellml_default_stimulus = "boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();"
+    #for beeler_reuter: get_intracellular_calcium_concentration = "double GetIntracellularCalciumConcentration();"
+    template = cg.load_template('chaste', 'normal_model.hpp')
+    with open(path, 'w') as f:
+        f.write(template.render({
+            'model_name': class_name,        
+            'ucase_model_name': class_name.upper(),
+            'use_cellml_default_stimulus':'',
+            'get_intracellular_calcium_concentration':'',
+        }))
