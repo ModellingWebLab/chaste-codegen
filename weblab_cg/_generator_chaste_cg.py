@@ -3,10 +3,25 @@
 #
 import os
 import sympy as sp
+import enum
+import time
 import weblab_cg as cg
 
- 
-def create_chaste_model(path, class_name, model, parameters):
+class ChasteModelType(enum.Enum):
+    Normal = 1
+    Opt = 2
+    CvodeAnalyticJ = 3
+    CvodeNumericalJ = 4
+    BE=5
+  
+def mkdir_p(path):
+    """ Tries to create the path """
+    try:
+        os.makedirs(path)
+    except:
+        pass
+        
+def create_chaste_model(path, model_name, model, type=ChasteModelType.Normal):
     """
     Takes a :class:`cellmlmanip.Model`, generates a ``.cpp`` and ``.cpp`` model 
     for use with Chaste, and stores it at ``path``.
@@ -14,31 +29,64 @@ def create_chaste_model(path, class_name, model, parameters):
     Arguments
 
     ``path``
-        The path to store the generated model code at. (Just the path, excluding the file name as file name will be determined by the class_name)
-    ``class_name``
-        A name for the generated class.
+        The path to store the generated model code at. (Just the path, excluding the file name as file name will be determined by the model_name)
+    ``model_name``
+        A name for the generated model.
     ``model``
         A :class:`cellmlmanip.Model` object.
-    ``parameters``
-        An ordered list of annotations ``(namespace_uri, local_name)`` for the
-        variables to use as model parameters. All variables used as parameters
-        must be literal constants.
-
     """
     # First steps to generate files with the correct file name.
-    path = os.path.join(path, class_name+".hpp")
-    print(path)
-    #outputs = []
-
-    # Generate model
+    path = os.path.join(path, type.name)
     
-    #for beeler_reuter: use_cellml_default_stimulus = "boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();"
-    #for beeler_reuter: get_intracellular_calcium_concentration = "double GetIntracellularCalciumConcentration();"
+    #Make sure the folder exists for the type of model
+    mkdir_p(path)
+    
+    #Add file name (based on model name)
+    hhp_file_path = os.path.join(path, model_name+".hpp")
+
+    #Add file name (based on model name)
+    cpp_file_path = os.path.join(path, model_name+".cpp")
+
+    
+    # Check if the model has cytosolic_calcium_concentration, if so we need to add GetIntracellularCalciumConcentration, otherwise leave blank
+    try:
+        model.get_symbol_by_cmeta_id("cytosolic_calcium_concentration")
+        get_intracellular_calcium_concentration = True
+    except:
+        get_intracellular_calcium_concentration = False
+
+    
+    #Output a default cell stimulus from the metadata specification as long as the following metadata exists:
+    # * membrane_stimulus_current_amplitude
+    # * membrane_stimulus_current_duration
+    # * membrane_stimulus_current_period      
+    # Ensures that the amplitude of the generated RegularStimulus is negative.
+    try:
+        model.get_symbol_by_cmeta_id("membrane_stimulus_current_amplitude")
+        model.get_symbol_by_cmeta_id("membrane_stimulus_current_duration")
+        model.get_symbol_by_cmeta_id("membrane_stimulus_current_period")
+        use_cellml_default_stimulus = True
+    except:
+        use_cellml_default_stimulus = False
+        
+
+    # Generate hpp for model
     template = cg.load_template('chaste', 'normal_model.hpp')
-    with open(path, 'w') as f:
+    with open(hhp_file_path, 'w') as f:
         f.write(template.render({
-            'model_name': class_name,        
-            'ucase_model_name': class_name.upper(),
-            'use_cellml_default_stimulus':'',
-            'get_intracellular_calcium_concentration':'',
+            'ucase_model_name': model_name.upper(),
+            'model_name': model_name,
+            'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
+            'use_cellml_default_stimulus':use_cellml_default_stimulus,
+            'get_intracellular_calcium_concentration':get_intracellular_calcium_concentration,
         }))
+        
+    # Generate cpp for model
+    template = cg.load_template('chaste', 'normal_model.cpp')
+    with open(cpp_file_path, 'w') as f:
+        f.write(template.render({
+            'model_name': model_name,        
+            'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
+            'use_cellml_default_stimulus':use_cellml_default_stimulus,
+            'get_intracellular_calcium_concentration':get_intracellular_calcium_concentration,            
+        }))        
