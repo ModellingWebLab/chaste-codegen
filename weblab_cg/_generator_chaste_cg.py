@@ -79,7 +79,12 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
         pass
 
     extended_dependencies_vars_membrane_stimulus = model.get_equations_for(vars_membrane_stimulus_current.values())
-    print(extended_dependencies_vars_membrane_stimulus)
+    #todo: apply unit conversions
+    # * period     // millisecond
+    # * duration   // millisecond
+    # * amplitude  // uA_per_cm2
+    # * offset     // millisecond
+    # * end     // millisecond
 
     
     # Generate hpp for model
