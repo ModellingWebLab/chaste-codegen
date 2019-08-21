@@ -1,11 +1,14 @@
 #
 # Functions related to generating model code for Chaste.
 #
+import logging
 import os
 import sympy as sp
 import enum
 import time
 import weblab_cg as cg
+
+logging.getLogger().setLevel(logging.INFO)
 
 class ChasteModelType(enum.Enum):
     Normal = 1
@@ -21,7 +24,7 @@ def mkdir_p(path):
     except:
         pass
         
-def create_chaste_model(path, model_name, model, type=ChasteModelType.Normal):
+def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Normal):
     """
     Takes a :class:`cellmlmanip.Model`, generates a ``.cpp`` and ``.cpp`` model 
     for use with Chaste, and stores it at ``path``.
@@ -36,7 +39,7 @@ def create_chaste_model(path, model_name, model, type=ChasteModelType.Normal):
         A :class:`cellmlmanip.Model` object.
     """
     # First steps to generate files with the correct file name.
-    path = os.path.join(path, type.name)
+    path = os.path.join(path, model_type.name)
     
     #Make sure the folder exists for the type of model
     mkdir_p(path)
@@ -54,20 +57,24 @@ def create_chaste_model(path, model_name, model, type=ChasteModelType.Normal):
         get_intracellular_calcium_concentration = True
     except:
         get_intracellular_calcium_concentration = False
-
-    
+  
     #Output a default cell stimulus from the metadata specification as long as the following metadata exists:
     # * membrane_stimulus_current_amplitude
-    # * membrane_stimulus_current_duration
-    # * membrane_stimulus_current_period      
+    # * membrane_stimulus_current_period         
+    # * membrane_stimulus_current_duration 
+    # * optionally: offset and end
     # Ensures that the amplitude of the generated RegularStimulus is negative.
+    vars_membrane_stimulus_current = dict()
+    use_cellml_default_stimulus = False
     try:
-        model.get_symbol_by_cmeta_id("membrane_stimulus_current_amplitude")
-        model.get_symbol_by_cmeta_id("membrane_stimulus_current_duration")
-        model.get_symbol_by_cmeta_id("membrane_stimulus_current_period")
+        vars_membrane_stimulus_current['period'] = model.get_symbol_by_cmeta_id("membrane_stimulus_current_period")        
+        vars_membrane_stimulus_current['duration'] = model.get_symbol_by_cmeta_id("membrane_stimulus_current_duration")
+        vars_membrane_stimulus_current['amplitude'] = model.get_symbol_by_cmeta_id("membrane_stimulus_current_amplitude")        
         use_cellml_default_stimulus = True
+        vars_membrane_stimulus_current['offset'] = model.get_symbol_by_cmeta_id("membrane_stimulus_current_offset")
+        vars_membrane_stimulus_current['end'] = model.get_symbol_by_cmeta_id("membrane_stimulus_current_end")        
     except:
-        use_cellml_default_stimulus = False
+        pass
         
 
     # Generate hpp for model
@@ -80,7 +87,12 @@ def create_chaste_model(path, model_name, model, type=ChasteModelType.Normal):
             'use_cellml_default_stimulus':use_cellml_default_stimulus,
             'get_intracellular_calcium_concentration':get_intracellular_calcium_concentration,
         }))
-        
+    logging.warning('Protocol problem: ')
+    
+#    logging.warning(vars_membrane_stimulus_current)
+#    logging.warning(type(vars_membrane_stimulus_current['period']))
+#    logging.warning(vars_membrane_stimulus_current['period'].name)
+#    logging.warning(model.get_value(vars_membrane_stimulus_current['period']))
     # Generate cpp for model
     template = cg.load_template('chaste', 'normal_model.cpp')
     with open(cpp_file_path, 'w') as f:
