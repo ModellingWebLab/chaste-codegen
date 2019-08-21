@@ -14,17 +14,17 @@ logging.getLogger().setLevel(logging.DEBUG)
 def test_generate_normal_models(tmp_path):
     run_test_models(tmp_path, cg.ChasteModelType.Normal)
 
-def test_generate_opt_models(tmp_path):
-    run_test_models(tmp_path, cg.ChasteModelType.Opt, skip_missing_ref_models=True)
-
-def test_generate_cvode_analytic_j_models(tmp_path):
-    run_test_models(tmp_path, cg.ChasteModelType.CvodeAnalyticJ, skip_missing_ref_models=True)
-
-def test_generate_cvode_numerical_j_models(tmp_path):
-    run_test_models(tmp_path, cg.ChasteModelType.CvodeNumericalJ, skip_missing_ref_models=True)
-
-def test_generate_be_models(tmp_path):
-    run_test_models(tmp_path, cg.ChasteModelType.BE, skip_missing_ref_models=True)
+#def test_generate_opt_models(tmp_path):
+#    run_test_models(tmp_path, cg.ChasteModelType.Opt, skip_missing_ref_models=True)
+#
+#def test_generate_cvode_analytic_j_models(tmp_path):
+#    run_test_models(tmp_path, cg.ChasteModelType.CvodeAnalyticJ, skip_missing_ref_models=True)
+#
+#def test_generate_cvode_numerical_j_models(tmp_path):
+#    run_test_models(tmp_path, cg.ChasteModelType.CvodeNumericalJ, skip_missing_ref_models=True)
+#
+#def test_generate_be_models(tmp_path):
+#    run_test_models(tmp_path, cg.ChasteModelType.BE, skip_missing_ref_models=True)
 
 
 def run_test_models(tmp_path, model_type, skip_missing_ref_models=False):

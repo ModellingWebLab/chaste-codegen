@@ -66,17 +66,22 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
     # Ensures that the amplitude of the generated RegularStimulus is negative.
     vars_membrane_stimulus_current = dict()
     use_cellml_default_stimulus = False
+    print(vars_membrane_stimulus_current)
     try:
-        vars_membrane_stimulus_current['period'] = model.get_symbol_by_cmeta_id("membrane_stimulus_current_period")        
+        vars_membrane_stimulus_current['period'] = model.get_symbol_by_cmeta_id("membrane_stimulus_current_period")
         vars_membrane_stimulus_current['duration'] = model.get_symbol_by_cmeta_id("membrane_stimulus_current_duration")
-        vars_membrane_stimulus_current['amplitude'] = model.get_symbol_by_cmeta_id("membrane_stimulus_current_amplitude")        
+        vars_membrane_stimulus_current['amplitude'] = model.get_symbol_by_cmeta_id("membrane_stimulus_current_amplitude")
+        
         use_cellml_default_stimulus = True
         vars_membrane_stimulus_current['offset'] = model.get_symbol_by_cmeta_id("membrane_stimulus_current_offset")
         vars_membrane_stimulus_current['end'] = model.get_symbol_by_cmeta_id("membrane_stimulus_current_end")        
     except:
         pass
-        
 
+    extended_dependencies_vars_membrane_stimulus = model.get_equations_for(vars_membrane_stimulus_current.values())
+    print(extended_dependencies_vars_membrane_stimulus)
+
+    
     # Generate hpp for model
     template = cg.load_template('chaste', 'normal_model.hpp')
     with open(hhp_file_path, 'w') as f:
@@ -87,12 +92,6 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
             'use_cellml_default_stimulus':use_cellml_default_stimulus,
             'get_intracellular_calcium_concentration':get_intracellular_calcium_concentration,
         }))
-    logging.warning('Protocol problem: ')
-    
-#    logging.warning(vars_membrane_stimulus_current)
-#    logging.warning(type(vars_membrane_stimulus_current['period']))
-#    logging.warning(vars_membrane_stimulus_current['period'].name)
-#    logging.warning(model.get_value(vars_membrane_stimulus_current['period']))
     # Generate cpp for model
     template = cg.load_template('chaste', 'normal_model.cpp')
     with open(cpp_file_path, 'w') as f:
