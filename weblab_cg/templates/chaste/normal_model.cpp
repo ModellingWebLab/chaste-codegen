@@ -20,20 +20,28 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
-	{%- if use_cellml_default_stimulus %}
+	{%- if not cellml_default_stimulus_equations is none %}
 
     boost::shared_ptr<RegularStimulus> Dynamic{{model_name}}FromCellML::UseCellMLDefaultStimulus()
     {
-        // Use the default stimulus specified by CellML metadata
-        const double var_chaste_interface__stimulus_protocol__IstimStart = 10.0; // millisecond
-        const double var_chaste_interface__stimulus_protocol__IstimPeriod = 1000.0; // millisecond
-        const double var_chaste_interface__stimulus_protocol__IstimPulseDuration = 1.0; // millisecond
-        const double var_chaste_interface__stimulus_protocol__IstimAmplitude = 50.0; // uA_per_cm2
-        boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
-                -fabs(var_chaste_interface__stimulus_protocol__IstimAmplitude),
-                var_chaste_interface__stimulus_protocol__IstimPulseDuration,
-                var_chaste_interface__stimulus_protocol__IstimPeriod,
-                var_chaste_interface__stimulus_protocol__IstimStart
+        // Use the default stimulus specified by CellML metadata{% if cellml_default_stimulus_equations["offset"] is defined %}{%- for eq in cellml_default_stimulus_equations["offset"] %}
+		const double {{ eq.lhs }} = {{ eq.rhs }}; // millisecond
+		{%- endfor %}{% endif %}
+		{%- for eq in cellml_default_stimulus_equations["period"] %}
+		const double {{ eq.lhs }} = {{ eq.rhs }}; // millisecond
+		{%- endfor %}
+		{%- for eq in cellml_default_stimulus_equations["duration"] %}
+		const double {{ eq.lhs }} = {{ eq.rhs }}; // millisecond
+		{%- endfor %}
+		{%- for eq in cellml_default_stimulus_equations["amplitude"] %}
+		const double {{ eq.lhs }} = {{ eq.rhs }}; // uA_per_cm2
+		{%- endfor %}
+		{% if cellml_default_stimulus_equations["end"] is defined %}{%- for eq in cellml_default_stimulus_equations["end"] %}
+		const double {{ eq.lhs }} = {{ eq.rhs }};{%- endfor %}{% endif %}boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+                -fabs({{cellml_default_stimulus_equations["amplitude"][0].lhs}}),
+                {{cellml_default_stimulus_equations["duration"][0].lhs}},
+                {{cellml_default_stimulus_equations["period"][0].lhs}},
+				{% if cellml_default_stimulus_equations["offset"] is defined %}{{cellml_default_stimulus_equations["offset"][0].lhs}}{%- else %}0.0{%- endif %}
                 ));
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
@@ -41,7 +49,7 @@
 	{%- endif %}
 	{%- if get_intracellular_calcium_concentration %}
     
-    double Dynamic{{model_name}}FromCellML::GetIntracellularCalciumConcentration()
+    double Dynamic{{model_name}}FromCellML
     {
         return mStateVariables[1];
     }

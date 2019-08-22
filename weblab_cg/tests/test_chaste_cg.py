@@ -11,8 +11,9 @@ import weblab_cg as cg
 # Show more logging output
 logging.getLogger().setLevel(logging.DEBUG)
 
+
 def test_generate_normal_models(tmp_path):
-    run_test_models(tmp_path, cg.ChasteModelType.Normal)
+    run_test_models(tmp_path, cg.ChasteModelType.Normal, True)
 
 #def test_generate_opt_models(tmp_path):
 #    run_test_models(tmp_path, cg.ChasteModelType.Opt, skip_missing_ref_models=True)
@@ -59,7 +60,7 @@ def check_match_gengerated_chaste_model(gen_path, class_name, model_type, skip_m
     ``class_name``
         Class name for the generated model.
     """
-    #todo: other types of model, check cpp file
+    header_tag_regex = re.compile("(//!.*\n)")
 
     expected_hpp = os.path.join(cg.DATA_DIR, 'tests', 'chaste_cg', 'reference_models', model_type.name, class_name+'.hpp')
     expected_cpp = os.path.join(cg.DATA_DIR, 'tests', 'chaste_cg', 'reference_models', model_type.name, class_name+'.cpp')
@@ -70,23 +71,23 @@ def check_match_gengerated_chaste_model(gen_path, class_name, model_type, skip_m
         # Read expected output hpp from file
         with open(expected_hpp, 'r') as f:
             expected_hpp = f.read()
-            #ignore date stamp
-            expected_hpp = re.sub("//! on .*\n", "", expected_hpp)
+            #ignore date stamp and generator header tags
+            expected_hpp = header_tag_regex.sub("", expected_hpp)
             f.close()
 
         # Read expected output cpp from file    
         with open(expected_cpp, 'r') as f:
             expected_cpp = f.read()
             #ignore date stamp
-            expected_cpp = re.sub("//! on .*\n", "", expected_cpp)
+            expected_cpp = header_tag_regex.sub("", expected_cpp)            
             f.close()            
        
         # Read generated output hpp from file
         generated_hpp = os.path.join(gen_path, model_type.name, class_name + '.hpp')
         with open(generated_hpp, 'r') as f:
             generated_hpp = f.read()
-            #ignore date stamp
-            generated_hpp = re.sub("//! on .*\n", "", generated_hpp)
+            #ignore date stamp and generator header tags
+            generated_hpp = header_tag_regex.sub("", generated_hpp)
             f.close()
 
         # Read generated output cpp from file
@@ -94,7 +95,7 @@ def check_match_gengerated_chaste_model(gen_path, class_name, model_type, skip_m
         with open(generated_cpp, 'r') as f:
             generated_cpp = f.read()
             #ignore date stamp
-            generated_cpp = re.sub("//! on .*\n", "", generated_cpp)
+            generated_cpp = header_tag_regex.sub("", generated_cpp)
             f.close()
 
         # Now they should match

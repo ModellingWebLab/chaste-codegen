@@ -34,7 +34,7 @@ class Dynamic{{model_name}}FromCellML : public AbstractCardiacCell, public Abstr
     // 
     
 public:
-	{%- if use_cellml_default_stimulus %}
+	{%- if not cellml_default_stimulus_equations is none %}
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
 	{%- endif %}
 	{%- if get_intracellular_calcium_concentration %}
