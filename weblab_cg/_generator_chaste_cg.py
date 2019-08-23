@@ -88,7 +88,12 @@ def format_equation_list(printer, equations):
         })
     return formatted_equations
     
-
+def add_units_to_model(model):
+    try:
+        model.units.add_custom_unit('uA_per_cm2', [{'prefix': 'micro', 'units': 'ampere'}, {'exponent': '-2', 'prefix': 'centi', 'units': 'metre'}])
+    except:
+        pass #unit already exists
+            
 def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Normal):
     """
     Takes a :class:`cellmlmanip.Model`, generates a ``.cpp`` and ``.cpp`` model 
@@ -115,6 +120,24 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
     #Add file name (based on model name)
     cpp_file_path = os.path.join(path, model_name+".cpp")
 
+    # Add all neded units to the model (for conversion) if they don't yet exist
+    add_units_to_model(model)
+
+    # Set up printer to be able to write equations   
+    # Get unique names for all symbols
+    unames = get_unique_names(model)
+
+    # Symbol naming function
+    def symbol_name(symbol, prefix = "chaste_interface__"):
+        return 'var_' + prefix + unames[symbol]
+
+    # Derivative naming function
+    def derivative_name(deriv):
+        var = deriv.expr if isinstance(deriv, sp.Derivative) else deriv
+        return 'd_dt_' + unames[var]
+
+    printer = cg.WebLabPrinter(symbol_name, derivative_name)
+
     if model_type == ChasteModelType.Normal :
         # Check if the model has cytosolic_calcium_concentration, if so we need to add GetIntracellularCalciumConcentration, otherwise leave blank
         try:
@@ -122,21 +145,6 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
             get_intracellular_calcium_concentration = True
         except:
             get_intracellular_calcium_concentration = False
-      
-        #set up printer to be able to write equations
-        # Get unique names for all symbols
-        unames = get_unique_names(model)
-
-        # Symbol naming function
-        def symbol_name(symbol, prefix = "chaste_interface__"):
-            return 'var_' + prefix + unames[symbol]
-
-        # Derivative naming function
-        def derivative_name(deriv):
-            var = deriv.expr if isinstance(deriv, sp.Derivative) else deriv
-            return 'd_dt_' + unames[var]
-
-        printer = cg.WebLabPrinter(symbol_name, derivative_name)
 
         #Output a default cell stimulus from the metadata specification as long as the following metadata exists:
         # * membrane_stimulus_current_amplitude
@@ -158,12 +166,10 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
             cellml_default_stimulus_equations['period'] = format_equation_list(printer, model.get_equations_for([model.get_symbol_by_cmeta_id("membrane_stimulus_current_period")]) )
             cellml_default_stimulus_equations['duration'] =  format_equation_list(printer, model.get_equations_for([model.get_symbol_by_cmeta_id("membrane_stimulus_current_duration")]) )
 
-            model.units.add_custom_unit('uA_per_cm2', [{'prefix': 'micro', 'units': 'ampere'}, {'exponent': '-2', 'prefix': 'centi', 'units': 'metre'}])
             equations =  model.get_equations_for([model.get_symbol_by_cmeta_id("membrane_stimulus_current_amplitude")])
             units = model.units.summarise_units(equations[0].lhs)
-            source_unit_quantity = equations[0].lhs * units
-            factor = model.units.get_conversion_factor(source_unit_quantity, model.units.ureg.uA_per_cm2)
-            
+            factor = model.units.get_conversion_factor(1 * units, model.units.ureg.uA_per_cm2)
+            equations[0]=sp.relational.Equality(equations[0].lhs, factor * equations[0].rhs)
             cellml_default_stimulus_equations['amplitude'] =  format_equation_list(printer, equations )
            
         except:
