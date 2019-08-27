@@ -47,26 +47,28 @@
         return p_cellml_stim;
     }
 	{%- endif %}
-	{%- if get_intracellular_calcium_concentration %}
+	{%- if use_get_intracellular_calcium_concentration %}
     
-    double Dynamic{{model_name}}FromCellML
+    double Dynamic{{model_name}}FromCellML::GetIntracellularCalciumConcentration()
     {
-        return mStateVariables[1];
+        return mStateVariables[{{cytosolic_calcium_concentration_index}}];
     }
 	{%- endif %}
 	
     Dynamic{{model_name}}FromCellML::Dynamic{{model_name}}FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
-                4,
-                0,
+                {{state_vars|length}},
+                {{membrane_voltage_index}},
                 pIntracellularStimulus)
     {
         // Time units: millisecond
         // 
         this->mpSystemInfo = OdeSystemInformation<Dynamic{{model_name}}FromCellML>::Instance();
-        Init();
-
+        Init();{%- if not cellml_default_stimulus_equations is none %}
+		
+        // We have a default stimulus specified in the CellML file metadata
+        this->mHasDefaultStimulusFromCellML = true;{%- endif %}
     }
     
     Dynamic{{model_name}}FromCellML::~Dynamic{{model_name}}FromCellML()
@@ -110,7 +112,12 @@
         // Units: dimensionless; Initial value: 0.6
         double var_chaste_interface__potassium_channel_n_gate__n = rY[3];
         // Units: dimensionless; Initial value: 0.325
-        
+		//test
+		{%- for state_var in state_vars %}
+		double {{ state_var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
+		{{initial_value_comments_state_vars[loop.index0]}}
+		{%- endfor %}        
+		//end test
         
         // Mathematics
         double d_dt_chaste_interface__membrane__V;

@@ -37,7 +37,7 @@ public:
 	{%- if not cellml_default_stimulus_equations is none %}
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
 	{%- endif %}
-	{%- if get_intracellular_calcium_concentration %}
+	{%- if use_get_intracellular_calcium_concentration %}
     double GetIntracellularCalciumConcentration();
 	{%- endif %}
     Dynamic{{model_name}}FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
