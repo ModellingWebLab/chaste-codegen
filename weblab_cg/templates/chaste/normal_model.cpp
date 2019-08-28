@@ -81,14 +81,10 @@
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
         if (!pStateVariables) pStateVariables = &rGetStateVariables();
         const std::vector<double>& rY = *pStateVariables;
-        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
-        // Units: millivolt; Initial value: -75
-        double var_chaste_interface__sodium_channel_m_gate__m = rY[1];
-        // Units: dimensionless; Initial value: 0.05
-        double var_chaste_interface__sodium_channel_h_gate__h = rY[2];
-        // Units: dimensionless; Initial value: 0.6
-        double var_chaste_interface__potassium_channel_n_gate__n = rY[3];
-        // Units: dimensionless; Initial value: 0.325
+		{%- for state_var in state_vars %}
+		double {{ state_var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
+		{{initial_value_comments_state_vars[loop.index0]}}
+		{%- endfor %}
         
         const double var_sodium_channel__i_Na = 120.0 * pow(var_chaste_interface__sodium_channel_m_gate__m, 3.0) * var_chaste_interface__sodium_channel_h_gate__h * (var_chaste_interface__membrane__V - 40.0); // microA_per_cm2
         const double var_potassium_channel__i_K = 36.0 * pow(var_chaste_interface__potassium_channel_n_gate__n, 4.0) * (var_chaste_interface__membrane__V -  -87.0); // microA_per_cm2
@@ -104,20 +100,10 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
-        // Units: millivolt; Initial value: -75
-        double var_chaste_interface__sodium_channel_m_gate__m = rY[1];
-        // Units: dimensionless; Initial value: 0.05
-        double var_chaste_interface__sodium_channel_h_gate__h = rY[2];
-        // Units: dimensionless; Initial value: 0.6
-        double var_chaste_interface__potassium_channel_n_gate__n = rY[3];
-        // Units: dimensionless; Initial value: 0.325
-		//test
 		{%- for state_var in state_vars %}
 		double {{ state_var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
 		{{initial_value_comments_state_vars[loop.index0]}}
-		{%- endfor %}        
-		//end test
+		{%- endfor %}
         
         // Mathematics
         double d_dt_chaste_interface__membrane__V;

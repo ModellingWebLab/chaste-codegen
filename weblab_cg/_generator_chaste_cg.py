@@ -12,6 +12,7 @@ from functools import cmp_to_key
 logging.getLogger().setLevel(logging.INFO)
 MEMBRANE_VOLTAGE_INDEX = 0
 CYTOSOLIC_CALCIUM_CONCENTRATION = 1
+OXMETA = "https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata"
 
 class ChasteModelType(enum.Enum):
     """ Enum used to indicate what type of model we have """
@@ -27,13 +28,6 @@ def mkdir_p(path):
         os.makedirs(path)
     except:
         pass
-
-def get_model_variable(model, var_name):
-    try:
-        var = model.get_symbol_by_cmeta_id(var_name)
-    except:
-        var = model.get_symbol_by_ontology_term("https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata",var_name)
-    return var
 
 def get_unique_names(model):
     """
@@ -166,18 +160,13 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
     cpp_file_path = os.path.join(path, model_name+".cpp")
 
     # Add all neded units to the model (for conversion) if they don't yet exist
-    try:
-        model.units.add_custom_unit('uA_per_cm2', [{'prefix': 'micro', 'units': 'ampere'}, {'exponent': '-2', 'prefix': 'centi', 'units': 'metre'}])
-    except:
-        pass #unit already exists
-    try:
-        model.units.add_custom_unit('uA_per_uF', [{'prefix': 'micro', 'units': 'ampere'}, {'exponent': '-1', 'prefix': 'micro', 'units': 'farad'}])
-    except:
-        pass #unit already exists        
-    try:
-        model.units.add_custom_unit('ms', [{'prefix': 'milli', 'units': 'second'}])
-    except:
-        pass #unit already exists
+    model.units.add_preferred_custom_unit_name('uA_per_cm2', [{'prefix': 'micro', 'units': 'ampere'}, {'exponent': '-2', 'prefix': 'centi', 'units': 'metre'}])
+    model.units.add_preferred_custom_unit_name('uA_per_uF', [{'prefix': 'micro', 'units': 'ampere'}, {'exponent': '-1', 'prefix': 'micro', 'units': 'farad'}])
+    model.units.add_preferred_custom_unit_name('millisecond', [{'prefix': 'milli', 'units': 'second'}])
+    model.units.add_preferred_custom_unit_name('millimolar', [{'units': 'mole', 'prefix': 'milli'}, {'units': 'litre', 'exponent': '-1'}])
+    model.units.add_preferred_custom_unit_name('millivolt', [{'prefix': 'milli', 'units': 'volt'}])
+
+
 
     # Set up printer to be able to write equations   
     # Get unique names for all symbols
@@ -197,7 +186,7 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
     if model_type == ChasteModelType.Normal :
         # Check if the model has cytosolic_calcium_concentration, if so we need to add GetIntracellularCalciumConcentration, otherwise leave blank
         try:
-            get_model_variable(model, "cytosolic_calcium_concentration")
+            model.get_symbol_by_ontology_term(OXMETA, "cytosolic_calcium_concentration")
             use_get_intracellular_calcium_concentration = True
         except:
             use_get_intracellular_calcium_concentration = False
@@ -219,9 +208,9 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
             # * end     // millisecond
 
             #start, period, duration, amplitude
-            cellml_default_stimulus_equations['period'] = format_equation_list(printer, model.get_equations_for([get_model_variable(model, "membrane_stimulus_current_period")]) , model, model.units.ureg.ms)
-            cellml_default_stimulus_equations['duration'] =  format_equation_list(printer, model.get_equations_for([get_model_variable(model, "membrane_stimulus_current_duration")]) , model, model.units.ureg.ms)
-            cellml_default_stimulus_equations['amplitude'] =  format_equation_list(printer, model.get_equations_for([get_model_variable(model, "membrane_stimulus_current_amplitude")]) , model, model.units.ureg.uA_per_cm2, model.units.ureg.uA_per_uF, " * HeartConfig::Instance()->GetCapacitance()")
+            cellml_default_stimulus_equations['period'] = format_equation_list(printer, model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_period")]) , model, model.units.ureg.millisecond)
+            cellml_default_stimulus_equations['duration'] =  format_equation_list(printer, model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_duration")]) , model, model.units.ureg.millisecond)
+            cellml_default_stimulus_equations['amplitude'] =  format_equation_list(printer, model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_amplitude")]) , model, model.units.ureg.uA_per_cm2, model.units.ureg.uA_per_uF, " * HeartConfig::Instance()->GetCapacitance()")
            
         except:
             cellml_default_stimulus_equations = None
@@ -229,13 +218,13 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
 
         #optional default_stimulus_equation offset
         try:
-            cellml_default_stimulus_equations['offset'] =  format_equation_list(printer, model.get_equations_for([get_model_variable(model, "membrane_stimulus_current_offset")]) , model, model.units.ureg.ms)
+            cellml_default_stimulus_equations['offset'] =  format_equation_list(printer, model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_offset")]) , model, model.units.ureg.millisecond)
         except:
             pass #offset is optional
 
         #optional default_stimulus_equation end         
         try:
-            cellml_default_stimulus_equations['end'] =  format_equation_list(printer, model.get_equations_for([get_model_variable(model, "membrane_stimulus_current_end")]) , model, model.units.ureg.ms)
+            cellml_default_stimulus_equations['end'] =  format_equation_list(printer, model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_end")]) , model, model.units.ureg.millisecond)
         except:
             pass #end is optional
 
@@ -251,12 +240,13 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
             else:
                 return MEMBRANE_VOLTAGE_INDEX + CYTOSOLIC_CALCIUM_CONCENTRATION + 1
 
-        membrane_voltage_var = get_model_variable(model, "membrane_voltage")
+        membrane_voltage_var = model.get_symbol_by_ontology_term(OXMETA, "membrane_voltage")
         try:
-            cytosolic_calcium_concentration_var = get_model_variable(model, "cytosolic_calcium_concentration")
+            cytosolic_calcium_concentration_var = model.get_symbol_by_ontology_term(OXMETA, "cytosolic_calcium_concentration")
         except:
             cytosolic_calcium_concentration_var = None
             print("MODEL HAS NO cytosolic_calcium_concentration VARIABLE")
+
         state_vars = sorted(state_vars,key=lambda state_var: state_var_key_order(membrane_voltage_var, cytosolic_calcium_concentration_var, state_var))
 
         #Get the initial values and units as comment for the chanste output

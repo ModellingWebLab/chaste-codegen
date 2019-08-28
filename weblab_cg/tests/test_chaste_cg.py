@@ -60,7 +60,7 @@ def check_match_gengerated_chaste_model(gen_path, class_name, model_type, skip_m
     ``class_name``
         Class name for the generated model.
     """
-    header_tag_regex = re.compile("(//!.*\n)")
+    header_tag_regex = re.compile("(//.*\n)")
 
     expected_hpp = os.path.join(cg.DATA_DIR, 'tests', 'chaste_cg', 'reference_models', model_type.name, class_name+'.hpp')
     expected_cpp = os.path.join(cg.DATA_DIR, 'tests', 'chaste_cg', 'reference_models', model_type.name, class_name+'.cpp')

@@ -1,1 +1,3 @@
-{}
+{
+  "weblab_cg/tests/test_chaste_cg.py::test_generate_normal_models": true
+}
