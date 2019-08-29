@@ -7,8 +7,6 @@ import time
 import sympy as sp
 import enum
 import weblab_cg as cg
-import cellmlmanip
-from functools import cmp_to_key
 
 logging.getLogger().setLevel(logging.INFO)
 MEMBRANE_VOLTAGE_INDEX = 0
