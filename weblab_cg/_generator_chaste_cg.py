@@ -3,16 +3,17 @@
 #
 import logging
 import os
+import time
 import sympy as sp
 import enum
-import time
 import weblab_cg as cg
+import cellmlmanip
 from functools import cmp_to_key
 
 logging.getLogger().setLevel(logging.INFO)
 MEMBRANE_VOLTAGE_INDEX = 0
 CYTOSOLIC_CALCIUM_CONCENTRATION = 1
-OXMETA = "https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata"
+OXMETA = "https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#"
 
 class ChasteModelType(enum.Enum):
     """ Enum used to indicate what type of model we have """
@@ -174,8 +175,11 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
 
     # Symbol naming function
     def symbol_name(symbol, prefix = "chaste_interface__"):
-        return 'var_' + prefix + unames[symbol]
-
+        try:
+            return 'var_' + prefix + unames[symbol]
+        except:
+            return symbol.name
+            
     # Derivative naming function
     def derivative_name(deriv):
         var = deriv.expr if isinstance(deriv, sp.Derivative) else deriv
@@ -240,15 +244,20 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
             else:
                 return MEMBRANE_VOLTAGE_INDEX + CYTOSOLIC_CALCIUM_CONCENTRATION + 1
 
-        membrane_voltage_var = model.get_symbol_by_ontology_term(OXMETA, "membrane_voltage")
         try:
             cytosolic_calcium_concentration_var = model.get_symbol_by_ontology_term(OXMETA, "cytosolic_calcium_concentration")
         except:
             cytosolic_calcium_concentration_var = None
             print("MODEL HAS NO cytosolic_calcium_concentration VARIABLE")
 
-        state_vars = sorted(state_vars,key=lambda state_var: state_var_key_order(membrane_voltage_var, cytosolic_calcium_concentration_var, state_var))
+        membrane_voltage_var = model.get_symbol_by_ontology_term(OXMETA, "membrane_voltage")
+        membrane_stimulus_current_var = model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current")
+        membrane_stimulus_current_units = model.units.summarise_units(membrane_stimulus_current_var)
+        ionic_derivatives = [x for x in model.get_derivative_symbols() if x.args[0] == membrane_voltage_var]
+        equations_for_ionic_vars = model.get_equations_for(ionic_derivatives)
+        ionic_vars = [x for x in equations_for_ionic_vars if model.units.summarise_units(x.rhs) == membrane_stimulus_current_units]
 
+        state_vars = sorted(state_vars,key=lambda state_var: state_var_key_order(membrane_stimulus_current_var, cytosolic_calcium_concentration_var, state_var))
         #Get the initial values and units as comment for the chanste output
         initial_value_comments_state_vars = [get_initial_value_comment(model, var) for var in state_vars]
 
