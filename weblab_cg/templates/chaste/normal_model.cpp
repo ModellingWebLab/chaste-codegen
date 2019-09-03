@@ -85,10 +85,10 @@
 		double {{ state_var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
 		{{initial_value_comments_state_vars[loop.index0]}}
 		{%- endfor %}
-        
-        const double var_sodium_channel__i_Na = 120.0 * pow(var_chaste_interface__sodium_channel_m_gate__m, 3.0) * var_chaste_interface__sodium_channel_h_gate__h * (var_chaste_interface__membrane__V - 40.0); // microA_per_cm2
-        const double var_potassium_channel__i_K = 36.0 * pow(var_chaste_interface__potassium_channel_n_gate__n, 4.0) * (var_chaste_interface__membrane__V -  -87.0); // microA_per_cm2
-        const double var_leakage_current__i_L = 0.29999999999999999 * (var_chaste_interface__membrane__V -  -64.387); // microA_per_cm2
+
+        {%- for ionic_var in ionic_vars %}
+        const double {{ionic_var.lhs}} = {{ionic_var.rhs}}; // microA_per_cm2
+		{%- endfor %}
         const double var_chaste_interface__i_ionic = var_sodium_channel__i_Na + var_potassium_channel__i_K + var_leakage_current__i_L; // uA_per_cm2
         
         const double i_ionic = var_chaste_interface__i_ionic;

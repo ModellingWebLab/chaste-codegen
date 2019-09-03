@@ -126,9 +126,21 @@ def format_equation_list(printer, equations, model, units=None, secondary_units=
     return formatted_equations
 
 def get_initial_value_comment(model, symbol):
+    '''Create the comment for the cpp file that indicates the units and initial value for teh symbol'''
     initial_value = str(model.get_initial_value(symbol))
     unit_name = str(model.units.summarise_units(symbol))
     return "// Units: "+unit_name+"; Initial value: "+initial_value
+
+def replace_variables(model, equation):
+    '''Replace variables on the rhs with their values/equations'''
+    variables = model.get_equations_for([equation.lhs])
+    subs_dict = {}
+    for var in variables:
+        #if isinstance(var.rhs, sp.numbers.Float):
+        subs_dict[var.lhs]=var.rhs
+    if subs_dict:
+        equation = sp.Eq(equation.lhs, equation.rhs.subs(subs_dict))
+    return equation
 
 def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Normal):
     """
@@ -166,24 +178,15 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
     model.units.add_preferred_custom_unit_name('millivolt', [{'prefix': 'milli', 'units': 'volt'}])
 
 
-
     # Set up printer to be able to write equations   
     # Get unique names for all symbols
     unames = get_unique_names(model)
 
-    # Symbol naming function
-    def symbol_name(symbol, prefix = "chaste_interface__"):
-        try:
-            return 'var_' + prefix + unames[symbol]
-        except:
-            return symbol.name
-            
-    # Derivative naming function
-    def derivative_name(deriv):
-        var = deriv.expr if isinstance(deriv, sp.Derivative) else deriv
-        return 'd_dt_' + unames[var]
+    # Printer for printing chaste variable assignments
+    printer = cg.WebLabPrinter(lambda symbol: 'var_chaste_interface__' + unames[symbol] , lambda deriv: 'd_dt_' + (unames[deriv.expr] if isinstance(deriv, sp.Derivative) else unames[deriv]))
 
-    printer = cg.WebLabPrinter(symbol_name, derivative_name)
+    # Printer for ionic consts
+    ionic_printer = cg.WebLabPrinter(lambda symbol: 'var_' + unames[symbol] , lambda deriv: 'd_dt_' + (unames[deriv.expr] if isinstance(deriv, sp.Derivative) else unames[deriv]))
 
     if model_type == ChasteModelType.Normal :
         # Check if the model has cytosolic_calcium_concentration, if so we need to add GetIntracellularCalciumConcentration, otherwise leave blank
@@ -200,8 +203,10 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
         # * optionally: offset and end
         # Ensures that the amplitude of the generated RegularStimulus is negative.
         cellml_default_stimulus_equations = None
+        formatted_cellml_default_stimulus_equations = None
         try:
             cellml_default_stimulus_equations = dict()
+            formatted_cellml_default_stimulus_equations  = dict()
             #todo: apply unit conversions
             # * period     // millisecond
             # * duration   // millisecond
@@ -210,23 +215,31 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
             # * end     // millisecond
 
             #start, period, duration, amplitude
-            cellml_default_stimulus_equations['period'] = format_equation_list(printer, model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_period")]) , model, model.units.ureg.millisecond)
-            cellml_default_stimulus_equations['duration'] =  format_equation_list(printer, model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_duration")]) , model, model.units.ureg.millisecond)
-            cellml_default_stimulus_equations['amplitude'] =  format_equation_list(printer, model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_amplitude")]) , model, model.units.ureg.uA_per_cm2, model.units.ureg.uA_per_uF, " * HeartConfig::Instance()->GetCapacitance()")
+            cellml_default_stimulus_equations['period'] = model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_period")])
+            formatted_cellml_default_stimulus_equations['period'] = format_equation_list(printer, cellml_default_stimulus_equations['period'] , model, model.units.ureg.millisecond)
+
+            cellml_default_stimulus_equations['duration'] =  model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_duration")])
+            formatted_cellml_default_stimulus_equations['duration'] =  format_equation_list(printer, cellml_default_stimulus_equations['duration'] , model, model.units.ureg.millisecond)            
+            
+            cellml_default_stimulus_equations['amplitude'] =  model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_amplitude")])
+            formatted_cellml_default_stimulus_equations['amplitude'] =  format_equation_list(printer, cellml_default_stimulus_equations['amplitude'] , model, model.units.ureg.uA_per_cm2, model.units.ureg.uA_per_uF, " * HeartConfig::Instance()->GetCapacitance()")            
            
         except:
             cellml_default_stimulus_equations = None
+            formatted_cellml_default_stimulus_equations = None
             print("No default_stimulus_equations\n")
 
         #optional default_stimulus_equation offset
         try:
-            cellml_default_stimulus_equations['offset'] =  format_equation_list(printer, model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_offset")]) , model, model.units.ureg.millisecond)
+            cellml_default_stimulus_equations['offset'] =  model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_offset")])
+            formatted_cellml_default_stimulus_equations['offset'] = format_equation_list(printer, cellml_default_stimulus_equations['offset'] , model, model.units.ureg.millisecond)
         except:
             pass #offset is optional
 
         #optional default_stimulus_equation end         
         try:
-            cellml_default_stimulus_equations['end'] =  format_equation_list(printer, model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_end")]) , model, model.units.ureg.millisecond)
+            cellml_default_stimulus_equations['end'] =  model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_end")])
+            formatted_cellml_default_stimulus_equations['end'] = format_equation_list(printer, cellml_default_stimulus_equations['end'] , model, model.units.ureg.millisecond)
         except:
             pass #end is optional
 
@@ -248,17 +261,35 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
             cytosolic_calcium_concentration_var = None
             print("MODEL HAS NO cytosolic_calcium_concentration VARIABLE")
 
+        # Getting the equations for const definitions for GetIIonic
+        # Use an annotation on voltage to find V
         membrane_voltage_var = model.get_symbol_by_ontology_term(OXMETA, "membrane_voltage")
+        # Get stimulus current
         membrane_stimulus_current_var = model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current")
+        # Get stimulus current units
         membrane_stimulus_current_units = model.units.summarise_units(membrane_stimulus_current_var)
+        # use the RHS of the ODE defining V
         ionic_derivatives = [x for x in model.get_derivative_symbols() if x.args[0] == membrane_voltage_var]
-        equations_for_ionic_vars = model.get_equations_for(ionic_derivatives)
-        ionic_vars = [x for x in equations_for_ionic_vars if model.units.summarise_units(x.rhs) == membrane_stimulus_current_units]
+        # figure out the currents (by finding variables with the same units as the stimulus iirc) (without lexicographical_sort)
+        equations_for_ionic_vars = model.get_equations_for(ionic_derivatives, False)
 
-        state_vars = sorted(state_vars,key=lambda state_var: state_var_key_order(membrane_stimulus_current_var, cytosolic_calcium_concentration_var, state_var))
-        #Get the initial values and units as comment for the chanste output
+        # model.get_equations_for gets them back ordered topographicly we want them in reverse topographical order
+        equations_for_ionic_vars.reverse() 
+
+        # Only equations with teh same (lhs) units as the membrane_stimulus_current are needed.
+        # Also exclude the membrane_stimulus_current variable itself, and cellml_default_stimulus_equations (if he model has those)
+        ionic_vars = [replace_variables(model,x) 
+                        for x in equations_for_ionic_vars
+                            if x.lhs != membrane_stimulus_current_var 
+                                and (cellml_default_stimulus_equations is None or [x] not in cellml_default_stimulus_equations.values()) 
+                                and model.units.summarise_units(x.lhs) == membrane_stimulus_current_units]
+
+        formatted_ionic_vars = format_equation_list(ionic_printer, ionic_vars, model)
+        
+        # Get state variables
+        state_vars = sorted(state_vars,key=lambda state_var: state_var_key_order(membrane_voltage_var, cytosolic_calcium_concentration_var, state_var))
+        # Get the initial values and units as a comment for the chanste output
         initial_value_comments_state_vars = [get_initial_value_comment(model, var) for var in state_vars]
-
         #Format the state variables
         state_vars = [printer.doprint(var) for var in state_vars]
 
@@ -279,12 +310,13 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
             f.write(template.render({
                 'model_name': model_name,        
                 'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
-                'cellml_default_stimulus_equations':cellml_default_stimulus_equations,
+                'cellml_default_stimulus_equations':formatted_cellml_default_stimulus_equations,
                 'use_get_intracellular_calcium_concentration':use_get_intracellular_calcium_concentration,
-                'membrane_voltage_index':MEMBRANE_VOLTAGE_INDEX,
-                'cytosolic_calcium_concentration_index':CYTOSOLIC_CALCIUM_CONCENTRATION,
+                'membrane_voltage_index': MEMBRANE_VOLTAGE_INDEX,
+                'cytosolic_calcium_concentration_index': CYTOSOLIC_CALCIUM_CONCENTRATION,
                 'state_vars': state_vars,
-                'initial_value_comments_state_vars':initial_value_comments_state_vars,
+                'initial_value_comments_state_vars': initial_value_comments_state_vars,
+                'ionic_vars': formatted_ionic_vars,
             }))
 
     elif model_type == ChasteModelType.Opt:
