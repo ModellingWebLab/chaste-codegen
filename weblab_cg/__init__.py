@@ -38,3 +38,8 @@ from ._printer import (     # noqa
     WebLabPrinter,
 )
 
+
+from ._chaste_printer import (     # noqa
+    ChastePrinter,
+)
+

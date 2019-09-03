@@ -183,10 +183,10 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
     unames = get_unique_names(model)
 
     # Printer for printing chaste variable assignments
-    printer = cg.WebLabPrinter(lambda symbol: 'var_chaste_interface__' + unames[symbol] , lambda deriv: 'd_dt_' + (unames[deriv.expr] if isinstance(deriv, sp.Derivative) else unames[deriv]))
+    printer = cg.ChastePrinter(lambda symbol: 'var_chaste_interface__' + unames[symbol] , lambda deriv: 'd_dt_' + (unames[deriv.expr] if isinstance(deriv, sp.Derivative) else unames[deriv]))
 
     # Printer for ionic consts
-    ionic_printer = cg.WebLabPrinter(lambda symbol: 'var_' + unames[symbol] , lambda deriv: 'd_dt_' + (unames[deriv.expr] if isinstance(deriv, sp.Derivative) else unames[deriv]))
+    ionic_printer = cg.ChastePrinter(lambda symbol: 'var_' + unames[symbol] , lambda deriv: 'd_dt_' + (unames[deriv.expr] if isinstance(deriv, sp.Derivative) else unames[deriv]))
 
     if model_type == ChasteModelType.Normal :
         # Check if the model has cytosolic_calcium_concentration, if so we need to add GetIntracellularCalciumConcentration, otherwise leave blank

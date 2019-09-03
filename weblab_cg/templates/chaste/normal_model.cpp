@@ -83,10 +83,8 @@
         const std::vector<double>& rY = *pStateVariables;
 		{%- for state_var in state_vars %}
 		double {{ state_var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
-		{{initial_value_comments_state_vars[loop.index0]}}
-		{%- endfor %}
-
-        {%- for ionic_var in ionic_vars %}
+		{{initial_value_comments_state_vars[loop.index0]}}{%- endfor %}
+        {% for ionic_var in ionic_vars %}
         const double {{ionic_var.lhs}} = {{ionic_var.rhs}}; // microA_per_cm2
 		{%- endfor %}
         const double var_chaste_interface__i_ionic = var_sodium_channel__i_Na + var_potassium_channel__i_K + var_leakage_current__i_L; // uA_per_cm2
