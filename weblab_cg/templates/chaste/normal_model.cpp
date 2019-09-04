@@ -87,7 +87,7 @@
         {% for ionic_var in ionic_vars %}
         const double {{ionic_var.lhs}} = {{ionic_var.rhs}}; // microA_per_cm2
 		{%- endfor %}
-        const double var_chaste_interface__i_ionic = var_sodium_channel__i_Na + var_potassium_channel__i_K + var_leakage_current__i_L; // uA_per_cm2
+		const double var_chaste_interface__i_ionic ={% for ionic_var in ionic_vars %} {%- if ionic_conversion_factor != 1.0  %} ({{ionic_conversion_factor}} * {%- endif %} {{ionic_var.lhs}}{%- if ionic_conversion_factor != 1.0  %}){%- endif %} {%- if not loop.last %} +{% endif %}{%- endfor %}; // uA_per_cm2
         
         const double i_ionic = var_chaste_interface__i_ionic;
         EXCEPT_IF_NOT(!std::isnan(i_ionic));

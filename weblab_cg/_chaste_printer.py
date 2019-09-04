@@ -6,7 +6,7 @@ from sympy.printing.precedence import precedence
 
 class ChastePrinter(WebLabPrinter):
     """
-    Converts Sympy expressions to strings for use in Chaste code generation, based on the WeblabPrinter. 
+    Converts Sympy expressions to strings for use in Chaste code generation, based on the WeblabPrinter.
 
     To use, create a :class:`ChastePrinter` instance, and call its method
     :meth:`doprint()` with a Sympy expression argument.
@@ -21,10 +21,13 @@ class ChastePrinter(WebLabPrinter):
     """
 
     def _print_Pow(self, expr):
-        """ Handles Pow(), which includes all division """
-        # Square root or (only if communicative) 1/sqrt or ordinary devision 
-        if expr.exp is sympy.S.Half or (expr.is_commutative and (-expr.exp is sympy.S.Half or -expr.exp is sympy.S.One) ):
+        """ Handles Pow(), which includes all division
+        only ordinary power is different, the rest is handed back up to the parent class (WebLabPrinter) """
+        # Square root or ((only if communicative) 1/sqrt or ordinary devision )
+        if expr.exp is sympy.S.Half or (expr.is_commutative and
+                                        (-expr.exp is sympy.S.Half or -expr.exp is sympy.S.One)):
             return super()._print_Pow(expr)
         else:
+            # Ordinary power
             p = precedence(expr)
-            return 'pow('+self._bracket(expr.base, p) + ', ' + self._bracket(expr.exp, p)+')'
+            return 'pow(' + self._bracket(expr.base, p) + ', ' + self._bracket(expr.exp, p) + ')'
