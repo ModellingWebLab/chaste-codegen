@@ -1,16 +1,9 @@
 [run]
-source = weblab_cg
-omit = 
-    weblab_cg/tests/*
+omit =
+source = cellmlmanip
+branch = True
 
 [report]
 exclude_lines =
     pragma: no cover
-    pragma: no linux cover
-    pragma: no python 3 cover
-    def __repr__
-    raise AssertionError
     raise NotImplementedError
-    except ImportError:
-    if False:
-    if __name__ == .__main__.:
