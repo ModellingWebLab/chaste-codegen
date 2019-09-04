@@ -183,10 +183,10 @@ class WebLabPrinter(sympy.printing.printer.Printer):
         """ Handles Python floats """
         return str(expr)
         # Print short format if it doesn't change the value, else long format
-        #short = str(expr)
-        #if float(short) == expr:
+        # short = str(expr)
+        # if float(short) == expr:
         #    return short
-        #return '{: .17e}'.format(expr)
+        # return '{: .17e}'.format(expr)
 
     def _print_Float(self, expr):
         """ Handles Sympy Float objects """
@@ -206,7 +206,7 @@ class WebLabPrinter(sympy.printing.printer.Printer):
         args = self._bracket_args(expr.args, 0)
         return self._prefix + name + '(' + args + ')'
 
-    #def _print_Infinity(self, expr):
+    # def _print_Infinity(self, expr):
     #    return 'float(\'inf\')'
 
     def _print_int(self, expr):
@@ -294,10 +294,10 @@ class WebLabPrinter(sympy.printing.printer.Printer):
         b_str = ' * '.join(b_str)
         return a_str + ' / ' + (b_str if len(b) == 1 else '(' + b_str + ')')
 
-    #def _print_NaN(self, expr):
+    # def _print_NaN(self, expr):
     #    return 'float(\'nan\')'
 
-    #def _print_NegativeInfinity(self, expr):
+    # def _print_NegativeInfinity(self, expr):
     #    return 'float(\'-inf\')'
 
     def _print_Or(self, expr):
@@ -331,7 +331,7 @@ class WebLabPrinter(sympy.printing.printer.Printer):
                 other = self._print(e)
                 break
             # Sympy filters these out:
-            #elif isinstance(c, BooleanFalse):
+            # elif isinstance(c, BooleanFalse):
             #    continue
 
             # Add e-if-c-else-? statement
