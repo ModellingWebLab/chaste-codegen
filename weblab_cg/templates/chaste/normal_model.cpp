@@ -85,9 +85,9 @@
 		double {{ state_var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
 		{{initial_value_comments_state_vars[loop.index0]}}{%- endfor %}
         {% for ionic_var in ionic_vars %}
-        const double {{ionic_var.lhs}} = {{ionic_var.rhs}}; // microA_per_cm2
+        const double {{ionic_var.lhs}} = {{ionic_var.rhs}}; // {{membrane_stimulus_current_units}}
 		{%- endfor %}
-		const double var_chaste_interface__i_ionic ={% for ionic_var in ionic_vars %} {%- if ionic_conversion_factor != 1.0  %} ({{ionic_conversion_factor}} * {%- endif %} {{ionic_var.lhs}}{%- if ionic_conversion_factor != 1.0  %}){%- endif %} {%- if not loop.last %} +{% endif %}{%- endfor %}; // uA_per_cm2
+		const double var_chaste_interface__i_ionic = {% if use_capacitance_i_ionic %}({% endif %}{%- for ionic_var in ionic_vars %}{%- if ionic_conversion_factor != 1.0 %}({{ionic_conversion_factor}} * {% endif %}{{ionic_var.lhs}}{%- if ionic_conversion_factor != 1.0 %}){%- endif %}{%- if not loop.last %} + {% endif %}{%- endfor %}{%- if use_capacitance_i_ionic  %}) * HeartConfig::Instance()->GetCapacitance(){% endif %}; // uA_per_cm2
         
         const double i_ionic = var_chaste_interface__i_ionic;
         EXCEPT_IF_NOT(!std::isnan(i_ionic));

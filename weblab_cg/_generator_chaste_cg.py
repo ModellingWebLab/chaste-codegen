@@ -7,6 +7,7 @@ import time
 import sympy as sp
 import enum
 import weblab_cg as cg
+from pint import errors
 
 logging.getLogger().setLevel(logging.INFO)
 MEMBRANE_VOLTAGE_INDEX = 0
@@ -88,7 +89,7 @@ def get_unique_names(model):
     return symbols
 
 
-def format_equation_list(printer, equations, model, units=None, secondary_units=None, secondary_unit_rhs_multiplier=""):
+def format_equation_list(lhs_printer, rhs_printer, equations, model, units=None, secondary_units=None, secondary_unit_rhs_multiplier=""):
     """ Formats list of equations for printing to the chaset cpp.
     Arguments
 
@@ -112,22 +113,22 @@ def format_equation_list(printer, equations, model, units=None, secondary_units=
         if units is not None:
             try:
                 current_units = model.units.summarise_units(eq.lhs)
-                factor = model.units.get_conversion_factor(1 * current_units, units)
-                eq = sp.relational.Equality(eq.lhs, factor * eq.rhs)
-            except:
-                try:
-                    # var_chaste_interface__membrane__stim_amplitude might be in different units
-                    # and need multiplying with capacitance
-                    if secondary_units is not None:
-                        factor = model.units.get_conversion_factor(1 * current_units, secondary_units)
-                        eq = sp.relational.Equality(eq.lhs, factor * eq.rhs)
-                        rhs_multiplier = secondary_unit_rhs_multiplier
-                except:
-                    print("UNIT ERROR")
-        formatted_equations.append({
-            'lhs': printer.doprint(eq.lhs),
-            'rhs': printer.doprint(eq.rhs) + rhs_multiplier
-        })
+                if current_units != units:
+                    factor = model.units.get_conversion_factor(1 * current_units, units)
+                    eq = sp.relational.Equality(eq.lhs, factor * eq.rhs)
+            except errors.DimensionalityError:
+                # var_chaste_interface__membrane__stim_amplitude might be in different units
+                # and need multiplying with capacitance
+                if secondary_units is not None and current_units != secondary_units:
+                    factor = model.units.get_conversion_factor(1 * current_units, secondary_units)
+                    eq = sp.relational.Equality(eq.lhs, factor * eq.rhs)
+                rhs_multiplier = secondary_unit_rhs_multiplier
+        equation_to_append = {
+            'lhs': lhs_printer.doprint(eq.lhs),
+            'rhs': rhs_printer.doprint(eq.rhs) + rhs_multiplier
+        }
+        if equation_to_append not in formatted_equations:
+            formatted_equations.append(equation_to_append)
     return formatted_equations
 
 
@@ -140,7 +141,7 @@ def get_initial_value_comment(model, symbol):
 
 def replace_variables(model, equation):
     '''Replace variables on the rhs with their values/equations'''
-    variables = model.get_equations_for([equation.lhs])
+    variables = model.get_equations_for([equation.lhs], True)
     subs_dict = {}
     for var in variables:
         subs_dict[var.lhs] = var.rhs
@@ -164,6 +165,14 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
     ``model``
         A :class:`cellmlmanip.Model` object.
     """
+    # todo: apply unit conversions
+    # * period     // millisecond
+    # * duration   // millisecond
+    # * amplitude  // uA_per_cm2
+    # * offset     // millisecond
+    # * end     // millisecond
+    # Also: voltage, time
+
     # First steps to generate files with the correct file name.
     path = os.path.join(path, model_type.name)
 
@@ -206,7 +215,7 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
         try:
             model.get_symbol_by_ontology_term(OXMETA, "cytosolic_calcium_concentration")
             use_get_intracellular_calcium_concentration = True
-        except:
+        except KeyError:
             use_get_intracellular_calcium_concentration = False
 
         # Output a default cell stimulus from the metadata specification as long as the following metadata exists:
@@ -220,37 +229,32 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
         try:
             cellml_default_stimulus_equations = dict()
             formatted_cellml_default_stimulus_equations = dict()
-            # todo: apply unit conversions
-            # * period     // millisecond
-            # * duration   // millisecond
-            # * amplitude  // uA_per_cm2
-            # * offset     // millisecond
-            # * end     // millisecond
 
             # start, period, duration, amplitude
             cellml_default_stimulus_equations['period'] = \
                 model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_period")])
             formatted_cellml_default_stimulus_equations['period'] = \
-                format_equation_list(printer, cellml_default_stimulus_equations['period'],
+                format_equation_list(printer, printer, cellml_default_stimulus_equations['period'],
                                      model, model.units.ureg.millisecond)
 
             cellml_default_stimulus_equations['duration'] = \
                 model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA,
                                         "membrane_stimulus_current_duration")])
             formatted_cellml_default_stimulus_equations['duration'] = \
-                format_equation_list(printer, cellml_default_stimulus_equations['duration'],
+                format_equation_list(printer, printer, cellml_default_stimulus_equations['duration'],
                                      model, model.units.ureg.millisecond)
 
             cellml_default_stimulus_equations['amplitude'] = \
                 model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA,
                                         "membrane_stimulus_current_amplitude")])
             formatted_cellml_default_stimulus_equations['amplitude'] = \
-                format_equation_list(printer, cellml_default_stimulus_equations['amplitude'],
+                format_equation_list(printer, printer, cellml_default_stimulus_equations['amplitude'],
                                      model, model.units.ureg.uA_per_cm2, model.units.ureg.uA_per_uF,
                                      " * HeartConfig::Instance()->GetCapacitance()")
-        except:
+        except KeyError:
             cellml_default_stimulus_equations = None
             formatted_cellml_default_stimulus_equations = None
+            cellml_default_stimulus_equations = None
             print("No default_stimulus_equations\n")
 
         # optional default_stimulus_equation offset
@@ -258,9 +262,9 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
             cellml_default_stimulus_equations['offset'] = \
                 model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_offset")])
             formatted_cellml_default_stimulus_equations['offset'] = \
-                format_equation_list(printer, cellml_default_stimulus_equations['offset'],
+                format_equation_list(printer, printer, cellml_default_stimulus_equations['offset'],
                                      model, model.units.ureg.millisecond)
-        except:
+        except KeyError:
             pass  # offset is optional
 
         # optional default_stimulus_equation end
@@ -268,9 +272,9 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
             cellml_default_stimulus_equations['end'] = \
                 model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_end")])
             formatted_cellml_default_stimulus_equations['end'] = \
-                format_equation_list(printer, cellml_default_stimulus_equations['end'], model,
+                format_equation_list(printer, printer, cellml_default_stimulus_equations['end'], model,
                                      model.units.ureg.millisecond)
-        except:
+        except KeyError:
             pass  # end is optional
 
         # get state variables
@@ -288,7 +292,7 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
         try:
             cytosolic_calcium_concentration_var = \
                 model.get_symbol_by_ontology_term(OXMETA, "cytosolic_calcium_concentration")
-        except:
+        except KeyError:
             cytosolic_calcium_concentration_var = None
             print("MODEL HAS NO cytosolic_calcium_concentration VARIABLE")
 
@@ -318,11 +322,17 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
                       or [x] not in cellml_default_stimulus_equations.values())
                       and model.units.summarise_units(x.lhs) == membrane_stimulus_current_units]
 
-        formatted_ionic_vars = format_equation_list(ionic_printer, ionic_vars, model)
+        formatted_ionic_vars = format_equation_list(ionic_printer, printer, ionic_vars, model)
 
         # Get conversion factor for vars need a conversion factor
-        ionic_conversion_factor = \
-            model.units.get_conversion_factor(1 * membrane_stimulus_current_units, model.units.ureg.uA_per_cm2)
+        try:
+            ionic_conversion_factor = \
+                model.units.get_conversion_factor(1 * membrane_stimulus_current_units, model.units.ureg.uA_per_cm2)
+            use_capacitance_i_ionic = False
+        except errors.DimensionalityError:
+            ionic_conversion_factor = \
+                model.units.get_conversion_factor(1 * membrane_stimulus_current_units, model.units.ureg.uA_per_uF)
+            use_capacitance_i_ionic = True
 
         # Get state variables
         state_vars = sorted(state_vars,
@@ -357,7 +367,9 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
                 'state_vars': state_vars,
                 'initial_value_comments_state_vars': initial_value_comments_state_vars,
                 'ionic_vars': formatted_ionic_vars,
+                'membrane_stimulus_current_units': membrane_stimulus_current_units,                                
                 'ionic_conversion_factor': ionic_conversion_factor,
+                'use_capacitance_i_ionic': use_capacitance_i_ionic,
             }))
 
     elif model_type == ChasteModelType.Opt:

@@ -20,6 +20,12 @@ class ChastePrinter(WebLabPrinter):
 
     """
 
+    def __init__(self, symbol_function=None, derivative_function=None):
+        super().__init__(symbol_function, derivative_function)
+
+        # Do not use the math. prefix for functions, as chaste c++ files include an include for this
+        self._prefix = ''
+
     def _print_Pow(self, expr):
         """ Handles Pow(), which includes all division
         only ordinary power is different, the rest is handed back up to the parent class (WebLabPrinter) """
