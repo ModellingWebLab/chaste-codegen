@@ -197,7 +197,7 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
     for i, output in enumerate(outputs):
 
         # Allow special output value 'state_variable'
-        #TODO Replace this with a more generic implementation
+        # TODO Replace this with a more generic implementation
         if output == 'state_variable':
             var_name = [{'index': x['index'], 'var_name': x['var_name']}
                         for x in state_info]
@@ -220,7 +220,7 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
     # Create RHS equation information dicts
     rhs_equations = []
     for eq in model.get_equations_for(model.get_derivative_symbols()):
-        #TODO: Parameters should never appear as the left-hand side of an
+        # TODO: Parameters should never appear as the left-hand side of an
         # equation (cellmlmanip should already have filtered these out).
         rhs_equations.append({
             'lhs': printer.doprint(eq.lhs),
