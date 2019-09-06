@@ -1,5 +1,5 @@
-{% filter upper %}#ifndef {{class_name}}FROMCELLML_HPP_
-#define {{class_name}}FROMCELLML_HPP_{% endfilter %}
+#ifndef {% filter upper %}{{class_name}}FROMCELLML_HPP_{% endfilter %}
+#define {% filter upper %}{{class_name}}FROMCELLML_HPP_{% endfilter %}
 
 //! @file
 //! 
@@ -40,7 +40,7 @@ public:
 	{%- if use_get_intracellular_calcium_concentration %}
     double GetIntracellularCalciumConcentration();
 	{%- endif %}
-    {class_name}}FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    {{class_name}}FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~{{class_name}}FromCellML();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY);

@@ -151,7 +151,7 @@ def replace_variables(model, equation):
     return equation
 
 
-def create_chaste_model(path, model_name_from_file, class_name, model, model_type=ChasteModelType.Normal):
+def create_chaste_model(path, model_name_from_file, class_name, model, model_type=ChasteModelType.Normal, partial_evaluation = False):
     """
     Takes a :class:`cellmlmanip.Model`, generates a ``.cpp`` and ``.cpp`` model
     for use with Chaste, and stores it at ``path``.
@@ -304,6 +304,12 @@ def create_chaste_model(path, model_name_from_file, class_name, model, model_typ
         membrane_stimulus_current_var = model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current")
         # Get stimulus current units
         membrane_stimulus_current_units = model.units.summarise_units(membrane_stimulus_current_var)
+
+        # Get state variables
+        state_vars = sorted(state_vars,
+                            key=lambda state_var: state_var_key_order(membrane_voltage_var,
+                                                                      cytosolic_calcium_concentration_var, state_var))
+
         # use the RHS of the ODE defining V
         ionic_derivatives = [x for x in model.get_derivative_symbols() if x.args[0] == membrane_voltage_var]
         # figure out the currents (by finding variables with the same units
@@ -316,13 +322,36 @@ def create_chaste_model(path, model_name_from_file, class_name, model, model_typ
         # Only equations with teh same (lhs) units as the membrane_stimulus_current are needed.
         # Also exclude the membrane_stimulus_current variable itself,
         # and cellml_default_stimulus_equations (if he model has those)
-        ionic_vars = [replace_variables(model, x)
+        ionic_vars = [x
                       for x in equations_for_ionic_vars
                       if x.lhs != membrane_stimulus_current_var
                       and (cellml_default_stimulus_equations is None
                       or [x] not in cellml_default_stimulus_equations.values())
                       and model.units.summarise_units(x.lhs) == membrane_stimulus_current_units]
 
+        if partial_evaluation:
+            ionic_vars = [replace_variables(model, x) for x in ionic_vars]
+        else:
+            iv = []
+            used_symbols = []
+            for ionic_var in ionic_vars:
+                eq_symbols = model.get_symbols(ionic_var.rhs)
+                for symbol in eq_symbols:
+                    if symbol not in used_symbols and symbol not in state_vars:
+                        definitions = model.get_equations_for([symbol], True)
+                        used_symbols.append(symbol)
+                        pass
+                pass
+ #           for ionic_var in ionic_vars:
+ #               defining_equations = model.get_equations_for([ionic_var.lhs], True)
+ #               sybols_used = model.get_symbols(ionic_var)
+ #               for eq in defining_equations:
+ #                   if eq not in iv and eq.lhs in sybols_used and not eq.lhs in state_vars:
+ #                       iv.append(eq)
+ #               iv.append(ionic_var)
+ #           ionic_vars = iv
+
+        # Format the state ionic variables
         formatted_ionic_vars = format_equation_list(ionic_printer, printer, ionic_vars, model)
 
         # Get conversion factor for vars need a conversion factor
@@ -335,14 +364,17 @@ def create_chaste_model(path, model_name_from_file, class_name, model, model_typ
                 model.units.get_conversion_factor(1 * membrane_stimulus_current_units, model.units.ureg.uA_per_uF)
             use_capacitance_i_ionic = True
 
-        # Get state variables
-        state_vars = sorted(state_vars,
-                            key=lambda state_var: state_var_key_order(membrane_voltage_var,
-                                                                      cytosolic_calcium_concentration_var, state_var))
         # Get the initial values and units as a comment for the chanste output
-        initial_value_comments_state_vars = [get_initial_value_comment(model, var) for var in state_vars]
+        # Filter state vars that aren't used out for getIIonic
+        state_vars_used_ionic = set()
+        for ionic_var in ionic_vars:
+            state_vars_used_ionic= state_vars_used_ionic.union(model.get_symbols(ionic_var))
+
+        ionic_state_vars = [x for x in state_vars if x in state_vars_used_ionic]
+
+        initial_value_comments_ionic_state_vars = [get_initial_value_comment(model, var) for var in ionic_state_vars]
         # Format the state variables
-        state_vars = [printer.doprint(var) for var in state_vars]
+        ionic_state_vars = [printer.doprint(var) for var in ionic_state_vars]
 
         # Generate hpp for model
         template = cg.load_template('chaste', 'normal_model.hpp')
@@ -366,8 +398,8 @@ def create_chaste_model(path, model_name_from_file, class_name, model, model_typ
                 'use_get_intracellular_calcium_concentration': use_get_intracellular_calcium_concentration,
                 'membrane_voltage_index': MEMBRANE_VOLTAGE_INDEX,
                 'cytosolic_calcium_concentration_index': CYTOSOLIC_CALCIUM_CONCENTRATION,
-                'state_vars': state_vars,
-                'initial_value_comments_state_vars': initial_value_comments_state_vars,
+                'ionic_state_vars': ionic_state_vars,
+                'initial_value_comments_ionic_state_vars': initial_value_comments_ionic_state_vars,
                 'ionic_vars': formatted_ionic_vars,
                 'membrane_stimulus_current_units': membrane_stimulus_current_units,
                 'ionic_conversion_factor': ionic_conversion_factor,

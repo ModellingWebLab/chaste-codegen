@@ -27,7 +27,8 @@ def cellml_models():
                 class_name = 'Dynamic' + model_name_from_file
                 model_file = os.path.join(model_folder, model_file)
                 # Load cellml model and add it to the list of models
-                models.append({'model': cellmlmanip.load_model(model_file), 'model_name_from_file': model_name_from_file, 'class_name': class_name})
+                models.append({'model': cellmlmanip.load_model(model_file),
+                              'model_name_from_file': model_name_from_file, 'class_name': class_name})
     return models
 
 
@@ -59,10 +60,11 @@ def run_test_models(tmp_path, cellml_models, model_type, skip_missing_ref_models
     # Walk through all cellml files in the folder
     for model in cellml_models:
         # Generate chaste cpp and hpp file for the normal model
-        cg.create_chaste_model(tmp_path, model['class_name'], model['model_name_from_file'], model['model'], model_type)
+        cg.create_chaste_model(tmp_path, model['model_name_from_file'], model['class_name'], model['model'], model_type)
 
         # Check the generated and reference hpp and cpp match
-        check_match_gengerated_chaste_model(tmp_path, model['model_name_from_file'], model_type, skip_missing_ref_models)
+        check_match_gengerated_chaste_model(tmp_path, model['model_name_from_file'], model_type,
+                                            skip_missing_ref_models)
 
 
 def check_match_gengerated_chaste_model(gen_path, model_name_from_file, model_type, skip_missing_ref_models=False):
@@ -79,9 +81,11 @@ def check_match_gengerated_chaste_model(gen_path, model_name_from_file, model_ty
     header_tag_regex = re.compile("(//.*\n)")
 
     expected_hpp = \
-        os.path.join(cg.DATA_DIR, 'tests', 'chaste_cg', 'reference_models', model_type.name, model_name_from_file + '.hpp')
+        os.path.join(cg.DATA_DIR, 'tests', 'chaste_cg', 'reference_models',
+                     model_type.name, model_name_from_file + '.hpp')
     expected_cpp = \
-        os.path.join(cg.DATA_DIR, 'tests', 'chaste_cg', 'reference_models', model_type.name, model_name_from_file + '.cpp')
+        os.path.join(cg.DATA_DIR, 'tests', 'chaste_cg', 'reference_models',
+                     model_type.name, model_name_from_file + '.cpp')
     # Skip if reference model is missing and skip_missing_reference flasg is True
     if not os.path.isfile(expected_hpp) or not os.path.isfile(expected_cpp):
         assert skip_missing_ref_models
