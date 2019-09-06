@@ -1,11 +1,11 @@
-#ifndef DYNAMIC{{ucase_model_name}}FROMCELLML_HPP_
-#define DYNAMIC{{ucase_model_name}}FROMCELLML_HPP_
+{% filter upper %}#ifndef {{class_name}}FROMCELLML_HPP_
+#define {{class_name}}FROMCELLML_HPP_{% endfilter %}
 
 //! @file
 //! 
 //! This source file was generated from CellML.
 //! 
-//! Model: {{model_name}}
+//! Model: {{model_name_from_file}}
 //! 
 //! Processed by webalab_cg - CellML Tools in Python
 //!     (translators: , webalab_cg: , options: normal)
@@ -19,7 +19,7 @@
 #include "AbstractDynamicallyLoadableEntity.hpp"
 #include "AbstractStimulusFunction.hpp"
 
-class Dynamic{{model_name}}FromCellML : public AbstractCardiacCell, public AbstractDynamicallyLoadableEntity
+class {{class_name}}FromCellML : public AbstractCardiacCell, public AbstractDynamicallyLoadableEntity
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -40,8 +40,8 @@ public:
 	{%- if use_get_intracellular_calcium_concentration %}
     double GetIntracellularCalciumConcentration();
 	{%- endif %}
-    Dynamic{{model_name}}FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Dynamic{{model_name}}FromCellML();
+    {class_name}}FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~{{class_name}}FromCellML();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY);
 };
@@ -49,7 +49,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Dynamic{{model_name}}FromCellML)
+CHASTE_CLASS_EXPORT({{class_name}}FromCellML)
 
 namespace boost
 {
@@ -57,7 +57,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Dynamic{{model_name}}FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, const {{class_name}}FromCellML * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -67,17 +67,17 @@ namespace boost
         
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Dynamic{{model_name}}FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, {{class_name}}FromCellML * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Dynamic{{model_name}}FromCellML(p_solver, p_stimulus);
+            ::new(t){{class_name}}FromCellML(p_solver, p_stimulus);
         }
         
     }
     
 }
 
-#endif // DYNAMIC{{ucase_model_name}}FROMCELLML_HPP_
+#endif // {% filter upper %}{{class_name}}FROMCELLML_HPP_{% endfilter %}

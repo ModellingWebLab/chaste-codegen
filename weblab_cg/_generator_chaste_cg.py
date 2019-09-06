@@ -89,7 +89,8 @@ def get_unique_names(model):
     return symbols
 
 
-def format_equation_list(lhs_printer, rhs_printer, equations, model, units=None, secondary_units=None, secondary_unit_rhs_multiplier=""):
+def format_equation_list(lhs_printer, rhs_printer, equations, model,
+                         units=None, secondary_units=None, secondary_unit_rhs_multiplier=""):
     """ Formats list of equations for printing to the chaset cpp.
     Arguments
 
@@ -150,7 +151,7 @@ def replace_variables(model, equation):
     return equation
 
 
-def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Normal):
+def create_chaste_model(path, model_name_from_file, class_name, model, model_type=ChasteModelType.Normal):
     """
     Takes a :class:`cellmlmanip.Model`, generates a ``.cpp`` and ``.cpp`` model
     for use with Chaste, and stores it at ``path``.
@@ -180,10 +181,10 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
     mkdir_p(path)
 
     # Add file name (based on model name)
-    hhp_file_path = os.path.join(path, model_name + ".hpp")
+    hhp_file_path = os.path.join(path, model_name_from_file + ".hpp")
 
     # Add file name (based on model name)
-    cpp_file_path = os.path.join(path, model_name + ".cpp")
+    cpp_file_path = os.path.join(path, model_name_from_file + ".cpp")
 
     # Add all neded units to the model (for conversion) if they don't yet exist
     model.units.add_preferred_custom_unit_name('uA_per_cm2', [{'prefix': 'micro', 'units': 'ampere'},
@@ -347,8 +348,8 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
         template = cg.load_template('chaste', 'normal_model.hpp')
         with open(hhp_file_path, 'w') as f:
             f.write(template.render({
-                'ucase_model_name': model_name.upper(),
-                'model_name': model_name,
+                'model_name_from_file': model_name_from_file,
+                'class_name': class_name,
                 'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
                 'cellml_default_stimulus_equations': cellml_default_stimulus_equations,
                 'use_get_intracellular_calcium_concentration': use_get_intracellular_calcium_concentration,
@@ -358,7 +359,8 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
         template = cg.load_template('chaste', 'normal_model.cpp')
         with open(cpp_file_path, 'w') as f:
             f.write(template.render({
-                'model_name': model_name,
+                'model_name_from_file': model_name_from_file,
+                'class_name': class_name,
                 'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
                 'cellml_default_stimulus_equations': formatted_cellml_default_stimulus_equations,
                 'use_get_intracellular_calcium_concentration': use_get_intracellular_calcium_concentration,
@@ -367,7 +369,7 @@ def create_chaste_model(path, model_name, model, model_type=ChasteModelType.Norm
                 'state_vars': state_vars,
                 'initial_value_comments_state_vars': initial_value_comments_state_vars,
                 'ionic_vars': formatted_ionic_vars,
-                'membrane_stimulus_current_units': membrane_stimulus_current_units,                                
+                'membrane_stimulus_current_units': membrane_stimulus_current_units,
                 'ionic_conversion_factor': ionic_conversion_factor,
                 'use_capacitance_i_ionic': use_capacitance_i_ionic,
             }))

@@ -1,7 +1,7 @@
 #
 # Tests the basics of weblab_cg
 #
-#import pytest
+# import pytest
 import logging
 
 
