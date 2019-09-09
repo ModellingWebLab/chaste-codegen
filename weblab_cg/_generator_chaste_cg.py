@@ -89,7 +89,7 @@ def get_unique_names(model):
     return symbols
 
 
-def format_equation_list(lhs_printer, rhs_printer, equations, model,
+def format_equation_list(printer, equations, model,
                          units=None, secondary_units=None, secondary_unit_rhs_multiplier=""):
     """ Formats list of equations for printing to the chaset cpp.
     Arguments
@@ -125,8 +125,8 @@ def format_equation_list(lhs_printer, rhs_printer, equations, model,
                     eq = sp.relational.Equality(eq.lhs, factor * eq.rhs)
                 rhs_multiplier = secondary_unit_rhs_multiplier
         equation_to_append = {
-            'lhs': lhs_printer.doprint(eq.lhs),
-            'rhs': rhs_printer.doprint(eq.rhs) + rhs_multiplier
+            'lhs': printer.doprint(eq.lhs),
+            'rhs': printer.doprint(eq.rhs) + rhs_multiplier
         }
         if equation_to_append not in formatted_equations:
             formatted_equations.append(equation_to_append)
@@ -140,18 +140,7 @@ def get_initial_value_comment(model, symbol):
     return "// Units: " + unit_name + "; Initial value: " + initial_value
 
 
-def replace_variables(model, equation):
-    '''Replace variables on the rhs with their values/equations'''
-    variables = model.get_equations_for([equation.lhs], True)
-    subs_dict = {}
-    for var in variables:
-        subs_dict[var.lhs] = var.rhs
-    if subs_dict:
-        equation = sp.Eq(equation.lhs, equation.rhs.subs(subs_dict))
-    return equation
-
-
-def create_chaste_model(path, model_name_from_file, class_name, model, model_type=ChasteModelType.Normal, partial_evaluation = False):
+def create_chaste_model(path, model_name_from_file, class_name, model, model_type=ChasteModelType.Normal):
     """
     Takes a :class:`cellmlmanip.Model`, generates a ``.cpp`` and ``.cpp`` model
     for use with Chaste, and stores it at ``path``.
@@ -200,15 +189,13 @@ def create_chaste_model(path, model_name_from_file, class_name, model, model_typ
     # Get unique names for all symbols
     unames = get_unique_names(model)
 
+    # get state variables
+    state_vars = model.get_state_symbols()
+
     # Printer for printing chaste variable assignments
-    printer = cg.ChastePrinter(lambda symbol: 'var_chaste_interface__' + unames[symbol],
+    printer = cg.ChastePrinter(lambda symbol, stae_vars = state_vars: ('var_chaste_interface__' if symbol in state_vars else 'var_') + unames[symbol],
                                lambda deriv: 'd_dt_' + (unames[deriv.expr]
                                                         if isinstance(deriv, sp.Derivative) else unames[deriv]))
-
-    # Printer for ionic consts
-    ionic_printer = cg.ChastePrinter(lambda symbol: 'var_' + unames[symbol],
-                                     lambda deriv: 'd_dt_' + (unames[deriv.expr]
-                                                              if isinstance(deriv, sp.Derivative) else unames[deriv]))
 
     if model_type == ChasteModelType.Normal:
         # Check if the model has cytosolic_calcium_concentration,
@@ -233,23 +220,23 @@ def create_chaste_model(path, model_name_from_file, class_name, model, model_typ
 
             # start, period, duration, amplitude
             cellml_default_stimulus_equations['period'] = \
-                model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_period")])
+                model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_period")], False)
             formatted_cellml_default_stimulus_equations['period'] = \
-                format_equation_list(printer, printer, cellml_default_stimulus_equations['period'],
+                format_equation_list(printer, cellml_default_stimulus_equations['period'],
                                      model, model.units.ureg.millisecond)
 
             cellml_default_stimulus_equations['duration'] = \
                 model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA,
-                                        "membrane_stimulus_current_duration")])
+                                        "membrane_stimulus_current_duration")], False)
             formatted_cellml_default_stimulus_equations['duration'] = \
-                format_equation_list(printer, printer, cellml_default_stimulus_equations['duration'],
+                format_equation_list(printer, cellml_default_stimulus_equations['duration'],
                                      model, model.units.ureg.millisecond)
 
             cellml_default_stimulus_equations['amplitude'] = \
                 model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA,
-                                        "membrane_stimulus_current_amplitude")])
+                                        "membrane_stimulus_current_amplitude")], False)
             formatted_cellml_default_stimulus_equations['amplitude'] = \
-                format_equation_list(printer, printer, cellml_default_stimulus_equations['amplitude'],
+                format_equation_list(printer, cellml_default_stimulus_equations['amplitude'],
                                      model, model.units.ureg.uA_per_cm2, model.units.ureg.uA_per_uF,
                                      " * HeartConfig::Instance()->GetCapacitance()")
         except KeyError:
@@ -261,9 +248,9 @@ def create_chaste_model(path, model_name_from_file, class_name, model, model_typ
         # optional default_stimulus_equation offset
         try:
             cellml_default_stimulus_equations['offset'] = \
-                model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_offset")])
+                model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_offset")], False)
             formatted_cellml_default_stimulus_equations['offset'] = \
-                format_equation_list(printer, printer, cellml_default_stimulus_equations['offset'],
+                format_equation_list(printer, cellml_default_stimulus_equations['offset'],
                                      model, model.units.ureg.millisecond)
         except KeyError:
             pass  # offset is optional
@@ -271,15 +258,12 @@ def create_chaste_model(path, model_name_from_file, class_name, model, model_typ
         # optional default_stimulus_equation end
         try:
             cellml_default_stimulus_equations['end'] = \
-                model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_end")])
+                model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_end")], False)
             formatted_cellml_default_stimulus_equations['end'] = \
-                format_equation_list(printer, printer, cellml_default_stimulus_equations['end'], model,
+                format_equation_list(printer, cellml_default_stimulus_equations['end'], model,
                                      model.units.ureg.millisecond)
         except KeyError:
             pass  # end is optional
-
-        # get state variables
-        state_vars = model.get_state_symbols()
 
         # function used to order state variables in the same way as pycml does (for easy comparison)
         def state_var_key_order(membrane_voltage_var, cai_var, var):
@@ -329,30 +313,30 @@ def create_chaste_model(path, model_name_from_file, class_name, model, model_typ
                       or [x] not in cellml_default_stimulus_equations.values())
                       and model.units.summarise_units(x.lhs) == membrane_stimulus_current_units]
 
-        if partial_evaluation:
-            ionic_vars = [replace_variables(model, x) for x in ionic_vars]
-        else:
-            iv = []
-            used_symbols = []
-            for ionic_var in ionic_vars:
-                eq_symbols = model.get_symbols(ionic_var.rhs)
-                for symbol in eq_symbols:
-                    if symbol not in used_symbols and symbol not in state_vars:
-                        definitions = model.get_equations_for([symbol], True)
-                        used_symbols.append(symbol)
-                        pass
-                pass
- #           for ionic_var in ionic_vars:
- #               defining_equations = model.get_equations_for([ionic_var.lhs], True)
- #               sybols_used = model.get_symbols(ionic_var)
- #               for eq in defining_equations:
- #                   if eq not in iv and eq.lhs in sybols_used and not eq.lhs in state_vars:
- #                       iv.append(eq)
- #               iv.append(ionic_var)
- #           ionic_vars = iv
+        used_symbols = []
+        resulting_equations = []
+        for ionic_var in ionic_vars:
+            variable_eqs = model.get_equations_for([ionic_var.lhs], False)
+            subs_dict = {}
+            for var_eq in variable_eqs:
+                # Skip the main equation (it will get added after substitutions)
+                if var_eq != ionic_var:
+                    # Keep variables with annotation
+                    if var_eq.lhs not in used_symbols:
+                        if model.get_ontology_term_by_symbol(OXMETA, var_eq.lhs) is not None:
+                            resulting_equations.append(var_eq)
+                        else:
+                            subs_dict[var_eq.lhs] = var_eq.rhs
+                    # Keep track of used equations as they might come up multiple ionic vars but shouldn't be redefined
+                    used_symbols.append(var_eq.lhs)
+            if subs_dict:
+                ionic_var = sp.Eq(ionic_var.lhs, ionic_var.rhs.subs(subs_dict))
+                
+            resulting_equations.append(ionic_var)
+
 
         # Format the state ionic variables
-        formatted_ionic_vars = format_equation_list(ionic_printer, printer, ionic_vars, model)
+        formatted_ionic_vars = format_equation_list(printer, resulting_equations, model)
 
         # Get conversion factor for vars need a conversion factor
         try:
