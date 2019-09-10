@@ -132,13 +132,31 @@ def format_equation_list(printer, equations, model,
             formatted_equations.append(equation_to_append)
     return formatted_equations
 
+def get_extended_ionic_eqs(model, ionic_var_eq, used_symbols):
+    extended_equations_for_ionic_var = []
+    variable_eqs = model.get_equations_for([ionic_var_eq.lhs], False)
+    subs_dict = {}
+    for eq in reversed(variable_eqs):
+        # Skip the main equation (it will get added after substitutions)
+        if eq != ionic_var_eq:
+            # Keep variables with annotation
+            if eq.lhs not in used_symbols:
+                if model.has_ontology_annotation(eq.lhs, OXMETA):
+                    extended_equations_for_ionic_var.append(eq)
+                else:
+                    subs_dict[eq.lhs] = eq.rhs
+            # Keep track of used variables, as they might come up in multiple ionic vars but shouldn't be redefined
+            used_symbols.append(eq.lhs)
+    if subs_dict:
+        ionic_var_eq = sp.Eq(ionic_var_eq.lhs, ionic_var_eq.rhs.subs(subs_dict))
+    extended_equations_for_ionic_var.append(ionic_var_eq)
+    return extended_equations_for_ionic_var
 
 def get_initial_value_comment(model, symbol):
     '''Create the comment for the cpp file that indicates the units and initial value for teh symbol'''
     initial_value = str(model.get_initial_value(symbol))
     unit_name = str(model.units.summarise_units(symbol))
     return "// Units: " + unit_name + "; Initial value: " + initial_value
-
 
 def create_chaste_model(path, model_name_from_file, class_name, model, model_type=ChasteModelType.Normal):
     """
@@ -189,7 +207,7 @@ def create_chaste_model(path, model_name_from_file, class_name, model, model_typ
     # Get unique names for all symbols
     unames = get_unique_names(model)
 
-    # get state variables
+    # Get state variables
     state_vars = model.get_state_symbols()
 
     # Printer for printing chaste variable assignments
@@ -265,15 +283,6 @@ def create_chaste_model(path, model_name_from_file, class_name, model, model_typ
         except KeyError:
             pass  # end is optional
 
-        # function used to order state variables in the same way as pycml does (for easy comparison)
-        def state_var_key_order(membrane_voltage_var, cai_var, var):
-            if var == membrane_voltage_var:
-                return MEMBRANE_VOLTAGE_INDEX
-            elif var == cai_var:
-                return CYTOSOLIC_CALCIUM_CONCENTRATION
-            else:
-                return MEMBRANE_VOLTAGE_INDEX + CYTOSOLIC_CALCIUM_CONCENTRATION + 1
-
         try:
             cytosolic_calcium_concentration_var = \
                 model.get_symbol_by_ontology_term(OXMETA, "cytosolic_calcium_concentration")
@@ -289,11 +298,19 @@ def create_chaste_model(path, model_name_from_file, class_name, model, model_typ
         # Get stimulus current units
         membrane_stimulus_current_units = model.units.summarise_units(membrane_stimulus_current_var)
 
-        # Get state variables
-        state_vars = sorted(state_vars,
+        # function used to order state variables in the same way as pycml does (for easy comparison)
+        def state_var_key_order(membrane_voltage_var, cai_var, var):
+            if var == membrane_voltage_var:
+                return MEMBRANE_VOLTAGE_INDEX
+            elif var == cai_var:
+                return CYTOSOLIC_CALCIUM_CONCENTRATION
+            else:
+                return MEMBRANE_VOLTAGE_INDEX + CYTOSOLIC_CALCIUM_CONCENTRATION + 1
+
+        # Sort the state variables
+        state_vars = sorted(model.get_state_symbols(),
                             key=lambda state_var: state_var_key_order(membrane_voltage_var,
                                                                       cytosolic_calcium_concentration_var, state_var))
-
         # use the RHS of the ODE defining V
         ionic_derivatives = [x for x in model.get_derivative_symbols() if x.args[0] == membrane_voltage_var]
         # figure out the currents (by finding variables with the same units
@@ -306,37 +323,42 @@ def create_chaste_model(path, model_name_from_file, class_name, model, model_typ
         # Only equations with teh same (lhs) units as the membrane_stimulus_current are needed.
         # Also exclude the membrane_stimulus_current variable itself,
         # and cellml_default_stimulus_equations (if he model has those)
-        ionic_vars = [x
+        equations_for_ionic_vars = [x
                       for x in equations_for_ionic_vars
                       if x.lhs != membrane_stimulus_current_var
                       and (cellml_default_stimulus_equations is None
                       or [x] not in cellml_default_stimulus_equations.values())
                       and model.units.summarise_units(x.lhs) == membrane_stimulus_current_units]
 
+        # Once we have the ionic variables and their equations, we also need to add equtions that define symbols used in those
         used_symbols = []
-        resulting_equations = []
-        for ionic_var in ionic_vars:
-            variable_eqs = model.get_equations_for([ionic_var.lhs], False)
+        extended_equations_for_ionic_vars = []
+        for ionic_var_eq in equations_for_ionic_vars:
+            variable_eqs = model.get_equations_for([ionic_var_eq.lhs], True)
             subs_dict = {}
-            for var_eq in variable_eqs:
+            to_substitute=[]
+            for eq in variable_eqs:
                 # Skip the main equation (it will get added after substitutions)
-                if var_eq != ionic_var:
-                    # Keep variables with annotation
-                    if var_eq.lhs not in used_symbols:
-                        if model.get_ontology_term_by_symbol(OXMETA, var_eq.lhs) is not None:
-                            resulting_equations.append(var_eq)
-                        else:
-                            subs_dict[var_eq.lhs] = var_eq.rhs
-                    # Keep track of used equations as they might come up multiple ionic vars but shouldn't be redefined
-                    used_symbols.append(var_eq.lhs)
+                #if eq != ionic_var_eq:
+                # Keep variables with annotation
+                if model.has_ontology_annotation(eq.lhs, OXMETA) or (model.dummy_metadata[eq.lhs].is_connected and not model.dummy_metadata[eq.lhs].initial_value):
+                    if eq.lhs not in used_symbols:                        
+                        to_substitute.append(eq)
+                        # Keep track of used variables, as they might come up in multiple ionic vars but shouldn't be redefined                            
+                        used_symbols.append(eq.lhs)
+                else:
+                    subs_dict[eq.lhs] = eq.rhs
             if subs_dict:
-                ionic_var = sp.Eq(ionic_var.lhs, ionic_var.rhs.subs(subs_dict))
-                
-            resulting_equations.append(ionic_var)
-
+                for eq in to_substitute:
+                    extended_equations_for_ionic_vars.append(sp.Eq(eq.lhs, eq.rhs.subs(subs_dict)))
+                #ionic_var_eq = sp.Eq(ionic_var_eq.lhs, ionic_var_eq.rhs.subs(subs_dict))
+            #extended_equations_for_ionic_vars.append(ionic_var_eq)
 
         # Format the state ionic variables
-        formatted_ionic_vars = format_equation_list(printer, resulting_equations, model)
+        formatted_ionic_vars = format_equation_list(printer, extended_equations_for_ionic_vars, model)
+
+        # Get the comment statements indicating the units
+        unit_comments_ionic_vars = [str(model.units.summarise_units(eq.lhs)) for eq in extended_equations_for_ionic_vars]
 
         # Get conversion factor for vars need a conversion factor
         try:
@@ -350,11 +372,12 @@ def create_chaste_model(path, model_name_from_file, class_name, model, model_typ
 
         # Get the initial values and units as a comment for the chanste output
         # Filter state vars that aren't used out for getIIonic
-        state_vars_used_ionic = set()
-        for ionic_var in ionic_vars:
-            state_vars_used_ionic= state_vars_used_ionic.union(model.get_symbols(ionic_var))
+        vars_used_ionic = set()
+        for ionic_var in equations_for_ionic_vars:
+            vars_used_ionic= vars_used_ionic.union(model.get_symbols(ionic_var))
 
-        ionic_state_vars = [x for x in state_vars if x in state_vars_used_ionic]
+        # Keep only statevars that are actually used in ionic expressions, and preserve order
+        ionic_state_vars = [x for x in state_vars if x in vars_used_ionic]
 
         initial_value_comments_ionic_state_vars = [get_initial_value_comment(model, var) for var in ionic_state_vars]
         # Format the state variables
@@ -385,7 +408,7 @@ def create_chaste_model(path, model_name_from_file, class_name, model, model_typ
                 'ionic_state_vars': ionic_state_vars,
                 'initial_value_comments_ionic_state_vars': initial_value_comments_ionic_state_vars,
                 'ionic_vars': formatted_ionic_vars,
-                'membrane_stimulus_current_units': membrane_stimulus_current_units,
+                'unit_comments_ionic_vars': unit_comments_ionic_vars,
                 'ionic_conversion_factor': ionic_conversion_factor,
                 'use_capacitance_i_ionic': use_capacitance_i_ionic,
             }))
