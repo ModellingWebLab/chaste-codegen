@@ -17,7 +17,7 @@ logging.getLogger().setLevel(logging.DEBUG)
 def cellml_models():
     models = []
     # Get folder with test cellml files
-    model_folder = os.path.join(cg.DATA_DIR, 'tests', 'chaste_cg', 'cellml')
+    model_folder = os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'cellml')
 
     # Walk through all cellml files in the folder
     for root, dirs, files in os.walk(model_folder):
@@ -81,10 +81,10 @@ def check_match_gengerated_chaste_model(gen_path, model_name_from_file, model_ty
     header_tag_regex = re.compile("(//.*\n)")
 
     expected_hpp = \
-        os.path.join(cg.DATA_DIR, 'tests', 'chaste_cg', 'reference_models',
+        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models',
                      model_type.name, model_name_from_file + '.hpp')
     expected_cpp = \
-        os.path.join(cg.DATA_DIR, 'tests', 'chaste_cg', 'reference_models',
+        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models',
                      model_type.name, model_name_from_file + '.cpp')
     # Skip if reference model is missing and skip_missing_reference flasg is True
     if not os.path.isfile(expected_hpp) or not os.path.isfile(expected_cpp):
