@@ -25,23 +25,23 @@
     boost::shared_ptr<RegularStimulus> {{class_name}}FromCellML::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata{% if cellml_default_stimulus_equations["offset"] is defined %}{%- for eq in cellml_default_stimulus_equations["offset"] %}
-		const double {{ eq.lhs }} = {{ eq.rhs }}; // millisecond
+		const double {{ eq.lhs }} = {{ eq.rhs }}; // {{eq.units}}
 		{%- endfor %}{% endif %}
 		{%- for eq in cellml_default_stimulus_equations["period"] %}
-		const double {{ eq.lhs }} = {{ eq.rhs }}; // millisecond
+		const double {{ eq.lhs }} = {{ eq.rhs }}; // {{eq.units}}
 		{%- endfor %}
 		{%- for eq in cellml_default_stimulus_equations["duration"] %}
-		const double {{ eq.lhs }} = {{ eq.rhs }}; // millisecond
+		const double {{ eq.lhs }} = {{ eq.rhs }}; // {{eq.units}}
 		{%- endfor %}
 		{%- for eq in cellml_default_stimulus_equations["amplitude"] %}
-		const double {{ eq.lhs }} = {{ eq.rhs }}; // uA_per_cm2
+		const double {{ eq.lhs }} = {{ eq.rhs }}; // {{eq.units}}
 		{%- endfor %}
 		{% if cellml_default_stimulus_equations["end"] is defined %}{%- for eq in cellml_default_stimulus_equations["end"] %}
 		const double {{ eq.lhs }} = {{ eq.rhs }};{%- endfor %}{% endif %}boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
-                -fabs({{cellml_default_stimulus_equations["amplitude"][0].lhs}}),
-                {{cellml_default_stimulus_equations["duration"][0].lhs}},
-                {{cellml_default_stimulus_equations["period"][0].lhs}},
-				{% if cellml_default_stimulus_equations["offset"] is defined %}{{cellml_default_stimulus_equations["offset"][0].lhs}}{%- else %}0.0{%- endif %}
+                -fabs({{cellml_default_stimulus_equations["amplitude"][-1].lhs}}),
+                {{cellml_default_stimulus_equations["duration"][-1].lhs}},
+                {{cellml_default_stimulus_equations["period"][-1].lhs}},
+				{% if cellml_default_stimulus_equations["offset"] is defined %}{{cellml_default_stimulus_equations["offset"][-1].lhs}}{%- else %}0.0{%- endif %}
                 ));
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
@@ -58,7 +58,7 @@
     {{class_name}}FromCellML::{{class_name}}FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
-                {{ionic_state_vars|length}},
+                {{state_vars|length}},
                 {{membrane_voltage_index}},
                 pIntracellularStimulus)
     {
@@ -81,13 +81,16 @@
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
         if (!pStateVariables) pStateVariables = &rGetStateVariables();
         const std::vector<double>& rY = *pStateVariables;
-		{%- for state_var in ionic_state_vars %}
-		double {{ state_var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
-		{{initial_value_comments_ionic_state_vars[loop.index0]}}{%- endfor %}
+		{%- for state_var in state_vars %}
+		double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
+		// Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}{%- endfor %}
         {% for ionic_var in ionic_vars %}
-        const double {{ionic_var.lhs}} = {{ionic_var.rhs}}; // {{membrane_stimulus_current_units}}
+        const double {{ionic_var.lhs}} = {{ionic_var.rhs}}; // {{ionic_var.units}}
 		{%- endfor %}
-		const double var_chaste_interface__i_ionic = {% if use_capacitance_i_ionic %}({% endif %}{%- for ionic_var in ionic_vars %}{%- if ionic_conversion_factor != 1.0 %}({{ionic_conversion_factor}} * {% endif %}{{ionic_var.lhs}}{%- if ionic_conversion_factor != 1.0 %}){%- endif %}{%- if not loop.last %} + {% endif %}{%- endfor %}{%- if use_capacitance_i_ionic  %}) * HeartConfig::Instance()->GetCapacitance(){% endif %}; // uA_per_cm2
+        {%- for ionic_var in ionic_interface_vars %}
+        const double {{ionic_var.lhs}} = {{ionic_var.rhs}}; // {{ionic_var.units}}
+		{%- endfor %}
+		const double var_chaste_interface__i_ionic = {% if use_capacitance_i_ionic %}({% endif %}{%- for ionic_var in ionic_interface_vars %}{%- if ionic_var.conversion_factor != 1.0 %}({{ionic_var.conversion_factor}} * {% endif %}{{ionic_var.lhs}}{%- if ionic_var.conversion_factor != 1.0 %}){%- endif %}{%- if not loop.last %} + {% endif %}{%- endfor %}{%- if use_capacitance_i_ionic  %}) * HeartConfig::Instance()->GetCapacitance(){% endif %}; // uA_per_cm2
         
         const double i_ionic = var_chaste_interface__i_ionic;
         EXCEPT_IF_NOT(!std::isnan(i_ionic));
@@ -98,16 +101,13 @@
     {
         // Inputs:
         // Time units: millisecond
-		{%- for state_var in ionic_state_vars %}
-		double {{ state_var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
-		{{initial_value_comments_ionic_state_vars[loop.index0]}}
+		{%- for state_var in state_vars %}
+		double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
+		// Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
 		{%- endfor %}
         
         // Mathematics
-        double d_dt_chaste_interface__membrane__V;
-        const double d_dt_chaste_interface__sodium_channel_m_gate__m = ((( -0.10000000000000001 * (var_chaste_interface__membrane__V + 50.0)) / (exp((-(var_chaste_interface__membrane__V + 50.0)) * 0.10000000000000001) - 1.0)) * (1.0 - var_chaste_interface__sodium_channel_m_gate__m)) - ((4.0 * exp((-(var_chaste_interface__membrane__V + 75.0)) * 0.055555555555555552)) * var_chaste_interface__sodium_channel_m_gate__m); // per_millisecond
-        const double d_dt_chaste_interface__sodium_channel_h_gate__h = ((0.070000000000000007 * exp((-(var_chaste_interface__membrane__V + 75.0)) * 0.050000000000000003)) * (1.0 - var_chaste_interface__sodium_channel_h_gate__h)) - ((1.0 / (exp((-(var_chaste_interface__membrane__V + 45.0)) * 0.10000000000000001) + 1.0)) * var_chaste_interface__sodium_channel_h_gate__h); // per_millisecond
-        const double d_dt_chaste_interface__potassium_channel_n_gate__n = ((( -0.01 * (var_chaste_interface__membrane__V + 65.0)) / (exp((-(var_chaste_interface__membrane__V + 65.0)) * 0.10000000000000001) - 1.0)) * (1.0 - var_chaste_interface__potassium_channel_n_gate__n)) - ((0.125 * exp((var_chaste_interface__membrane__V + 75.0) * 0.012500000000000001)) * var_chaste_interface__potassium_channel_n_gate__n); // per_millisecond
+        //todo
         
         if (mSetVoltageDerivativeToZero)
         {
@@ -115,13 +115,14 @@
         }
         else
         {
-            const double var_membrane__Cm = 1.0; // microF_per_cm2
-            const double var_sodium_channel__i_Na = 120.0 * pow(var_chaste_interface__sodium_channel_m_gate__m, 3.0) * var_chaste_interface__sodium_channel_h_gate__h * (var_chaste_interface__membrane__V - 40.0); // microA_per_cm2
-            const double var_potassium_channel__i_K = 36.0 * pow(var_chaste_interface__potassium_channel_n_gate__n, 4.0) * (var_chaste_interface__membrane__V -  -87.0); // microA_per_cm2
-            const double var_leakage_current__i_L = 0.29999999999999999 * (var_chaste_interface__membrane__V -  -64.387); // microA_per_cm2
-            const double var_chaste_interface__membrane__i_Stim = GetIntracellularAreaStimulus(var_chaste_interface__environment__time);
-            d_dt_chaste_interface__membrane__V = (-(var_chaste_interface__membrane__i_Stim + var_sodium_channel__i_Na + var_potassium_channel__i_K + var_leakage_current__i_L)) / var_membrane__Cm; // 'millivolt per millisecond'
+            //todo
         }
+
+		{%- for state_var in state_vars %}
+        rDY[{{loop.index0}}] = 
+		double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
+		// Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
+		{%- endfor %}
         
         rDY[0] = d_dt_chaste_interface__membrane__V;
         rDY[1] = d_dt_chaste_interface__sodium_channel_m_gate__m;
@@ -132,31 +133,16 @@
 template<>
 void OdeSystemInformation<{{class_name}}FromCellML>::Initialise(void)
 {
-    this->mSystemName = "{{class_name}}";
-    this->mFreeVariableName = "environment__time";
-    this->mFreeVariableUnits = "millisecond";
+    this->mSystemName = "{{free_variable.system_name}}";
+    this->mFreeVariableName = "{{free_variable.name}}";
+    this->mFreeVariableUnits = "{{free_variable.units}}";
     
-    // rY[0]:
-    this->mVariableNames.push_back("membrane_voltage");
-    this->mVariableUnits.push_back("millivolt");
-    this->mInitialConditions.push_back(-75);
-
-    // rY[1]:
-    this->mVariableNames.push_back("sodium_channel_m_gate__m");
-    this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(0.05);
-
-    // rY[2]:
-    this->mVariableNames.push_back("sodium_channel_h_gate__h");
-    this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(0.6);
-
-    // rY[3]:
-    this->mVariableNames.push_back("potassium_channel_n_gate__n");
-    this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(0.325);
-
-    this->mInitialised = true;
+    {% for ode_info in ode_system_information %}// rY[{{loop.index0}}]:
+    this->mVariableNames.push_back("{{ode_info.name}}");
+    this->mVariableUnits.push_back("{{ode_info.units}}");
+    this->mInitialConditions.push_back({{ode_info.initial_value}});
+	
+	{% endfor %}this->mInitialised = true;
 }
 
 
