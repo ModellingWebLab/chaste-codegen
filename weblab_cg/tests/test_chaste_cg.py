@@ -12,6 +12,9 @@ import pytest
 # Show more logging output
 logging.getLogger().setLevel(logging.DEBUG)
 
+#c++ -> simpy
+#pow->Pow
+#ceil -> ceiling
 
 @pytest.fixture(scope="module")
 def cellml_models():

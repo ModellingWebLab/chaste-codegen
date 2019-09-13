@@ -76,13 +76,13 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
    
     # Printer for printing chaste state variable assignments
     var_chaste_interface_printer = cg.ChastePrinter(lambda symbol: 'var_chaste_interface_' + str(symbol).replace('$','__'),
-                               lambda deriv: 'd_dt_' + (str(deriv.expr)
-                                                        if isinstance(deriv, sp.Derivative) else str(deriv)))
+                               lambda deriv: 'd_dt_chaste_interface_' + (str(deriv.expr).replace('$','__')
+                                                        if isinstance(deriv, sp.Derivative) else str(deriv).replace('$','__')))
 
     # Printer for printing chaste regular variable assignments
     var_printer = cg.ChastePrinter(lambda symbol: 'var' + str(symbol).replace('$','__'),
-                               lambda deriv: 'd_dt_' + (str(deriv.expr)
-                                                        if isinstance(deriv, sp.Derivative) else str(deriv)))
+                               lambda deriv: 'd_dt' + (str(deriv.expr).replace('$','__')
+                                                        if isinstance(deriv, sp.Derivative) else str(deriv).replace('$','__')))
 
     # Printer for printing chaste regular variable assignments
     name_printer = cg.ChastePrinter(lambda symbol: str(symbol)[1:].replace('$','__'))
@@ -244,7 +244,7 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
         # as the stimulus iirc) (without lexicographical_sort)
         equations_for_ionic_vars = model.get_equations_for(ionic_derivatives, False)
 
-#        # model.get_equations_for gets them back ordered topographicly we want them in reverse topographical order
+        # model.get_equations_for gets them back ordered topographicly we want them in reverse topographical order
         equations_for_ionic_vars.reverse()
 
         # Only equations with the same (lhs) units as the membrane_stimulus_current are needed.
@@ -314,13 +314,6 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
                                          'units': str(model.units.summarise_units(ionic_interface_var.lhs)),
                                          'conversion_factor': model.units.get_conversion_factor(1 * model.units.summarise_units(ionic_interface_var.lhs), ionic_current_units)
                                         })
-       
-        # Format the state variables with the initial values and units
-        formatted_state_vars = [{'var': var_chaste_interface_printer.doprint(var),
-                                 'initial_value': str(model.get_initial_value(var)),
-                                 'units': str(model.units.summarise_units(var))} 
-                                 for var in state_vars]
-
         # Get the free variable for the model
         free_var = model.get_free_variable_symbol()
         free_variable = {'name': name_printer.doprint(free_var),
@@ -331,6 +324,38 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
                                    'initial_value': str(model.get_initial_value(var)),
                                     'units': str(model.units.summarise_units(var))}
                                     for var in state_vars]
+
+        # EvaluateYDerivatives
+        derivative_equations = model.get_equations_for([x for x in model.get_derivative_symbols() if x.args[0] in state_vars], False)
+
+        # Filter unused state vars for ionic variables
+        used_vars_ionic = set()
+        for ionic_var in extended_equations_for_ionic_vars:
+            used_vars_ionic = used_vars_ionic.union(model.get_symbols(ionic_var.rhs))
+
+        # Filter unused state vars for EvaluateYDerivatives
+        used_y_deriv = set()
+        for derivative_eq in derivative_equations:
+            used_y_deriv = used_vars_ionic.union(model.get_symbols(derivative_eq.rhs))
+
+        # Format the state variables used in getIonic with the initial values and units
+        ionic_index = 0
+        y_deriv_index = 0
+        formatted_state_vars=[]
+        for var in state_vars:
+            in_ionic = var in used_vars_ionic
+            in_y_deriv = var in used_y_deriv
+            formatted_state_vars.append({'var': var_chaste_interface_printer.doprint(var),
+                                         'initial_value': str(model.get_initial_value(var)),
+                                         'units': str(model.units.summarise_units(var)),
+                                         'in_ionic': var in used_vars_ionic,
+                                         'ionic_index': ionic_index,
+                                         'in_y_deriv': in_y_deriv,
+                                         'y_deriv_index': y_deriv_index})
+            if in_ionic:
+                ionic_index += 1
+            if in_y_deriv:
+                y_deriv_index += 1
 
         # Generate hpp for model
         template = cg.load_template('chaste', 'normal_model.hpp')

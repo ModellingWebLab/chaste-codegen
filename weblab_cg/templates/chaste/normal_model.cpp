@@ -82,7 +82,7 @@
         if (!pStateVariables) pStateVariables = &rGetStateVariables();
         const std::vector<double>& rY = *pStateVariables;
 		{%- for state_var in state_vars %}
-		double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
+		{% if state_var.in_ionic %}double {{ state_var.var }} = {% if state_var.ionic_index == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{state_var.ionic_index}}]);{%- else %}rY[{{state_var.ionic_index}}];{%- endif %}{%- endif %}
 		// Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}{%- endfor %}
         {% for ionic_var in ionic_vars %}
         const double {{ionic_var.lhs}} = {{ionic_var.rhs}}; // {{ionic_var.units}}
@@ -102,7 +102,7 @@
         // Inputs:
         // Time units: millisecond
 		{%- for state_var in state_vars %}
-		double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
+		{% if state_var.in_y_deriv %}double {{ state_var.var }} = {% if state_var.y_deriv_index == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{state_var.y_deriv_index}}]);{%- else %}rY[{{state_var.y_deriv_index}}];{%- endif %}{%- endif %}
 		// Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
 		{%- endfor %}
         
@@ -120,14 +120,9 @@
 
 		{%- for state_var in state_vars %}
         rDY[{{loop.index0}}] = 
-		double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
+		{% if state_var.in_y_deriv %}double {{ state_var.var }} = {% if state_var.y_deriv_index == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{state_var.y_deriv_index}}]);{%- else %}rY[{{state_var.y_deriv_index}}];{%- endif %}
 		// Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
-		{%- endfor %}
-        
-        rDY[0] = d_dt_chaste_interface__membrane__V;
-        rDY[1] = d_dt_chaste_interface__sodium_channel_m_gate__m;
-        rDY[2] = d_dt_chaste_interface__sodium_channel_h_gate__h;
-        rDY[3] = d_dt_chaste_interface__potassium_channel_n_gate__n;
+		{%- endfor %}{%- endfor %}
     }
     
 template<>
