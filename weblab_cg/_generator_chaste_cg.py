@@ -1,6 +1,18 @@
 #
 # Functions related to generating model code for Chaste.
 #
+
+# TODO: apply unit conversions
+# * period     // millisecond done, to check
+# * duration   // millisecond, to check
+# * amplitude  // uA_per_cm2, to check
+# * offset     // millisecond, to check
+# * end     // millisecond, to check
+# y derivatives msthematics
+# Unit conversion for state variables voltage, time, cytosolic_calcium_concentration state vars
+# capacitance in UseCellMLDefaultStimulus, using oxmeta see aslanidi_model_2009
+# GetIntracellularAreaStimulus with conversion & different time unit see jafri_rice_winslow_1998 (-), or aslanidi_model_2009
+
 import logging
 import os
 import time
@@ -38,14 +50,6 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
     ``model``
         A :class:`cellmlmanip.Model` object.
     """
-    # todo: apply unit conversions
-    # * period     // millisecond
-    # * duration   // millisecond
-    # * amplitude  // uA_per_cm2
-    # * offset     // millisecond
-    # * end     // millisecond
-    # Also: voltage, time
-
     # First steps to generate files with the correct file name.
     output_path = os.path.join(output_path, model_type.name)
 
@@ -234,30 +238,25 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
             else:
                 return MEMBRANE_VOLTAGE_INDEX + CYTOSOLIC_CALCIUM_CONCENTRATION + 1
 
-        # Sort the state variables
+        # Sort the state variables, to make sure they have similar order to pycml
         state_vars = sorted(model.get_state_symbols(),
                             key=lambda state_var: state_var_key_order(membrane_voltage_var,
                                                                       cytosolic_calcium_concentration_var, state_var))
         # use the RHS of the ODE defining V
         ionic_derivatives = [x for x in model.get_derivative_symbols() if x.args[0] == membrane_voltage_var]
         # figure out the currents (by finding variables with the same units
-        # as the stimulus iirc) (without lexicographical_sort)
-        equations_for_ionic_vars = model.get_equations_for(ionic_derivatives, False)
+        # as the stimulus iirc) (without lexicographical_sort
+        # Only equations with the same (lhs) units as the membrane_stimulus_current are keps.
+        # Also exclude the membrane_stimulus_current variable itself, and cellml_default_stimulus_equations (if he model has those)
+        equations_for_ionic_vars = [eq for eq in model.get_equations_for(ionic_derivatives, False)
+                                    if eq.lhs != membrane_stimulus_current_var
+                                    and (cellml_default_stimulus_equations is None
+                                    or [eq] not in cellml_default_stimulus_equations.values())
+                                    and model.units.summarise_units(eq.lhs) == membrane_stimulus_current_units]
 
-        # model.get_equations_for gets them back ordered topographicly we want them in reverse topographical order
+        # reverse toplological order is more similar (though not necessarily identical) to pycml
         equations_for_ionic_vars.reverse()
-
-        # Only equations with the same (lhs) units as the membrane_stimulus_current are needed.
-        # Also exclude the membrane_stimulus_current variable itself,
-        # and cellml_default_stimulus_equations (if he model has those)
-        equations_for_ionic_vars = [x
-                      for x in equations_for_ionic_vars
-                      if x.lhs != membrane_stimulus_current_var
-                      and (cellml_default_stimulus_equations is None
-                      or [x] not in cellml_default_stimulus_equations.values())
-                      and model.units.summarise_units(x.lhs) == membrane_stimulus_current_units]
-
-        # Once we have the ionic variables and their equations, we also need to add equtions that define symbols used in those
+        # Once we have the ionic variables and their equations, we also need to add helper equtions that link symbols used in those to state variables
         used_symbols = []
         extended_equations_for_ionic_vars = []
         for ionic_var_eq in equations_for_ionic_vars:
@@ -305,15 +304,12 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
             ionic_current_units =  model.units.ureg.uA_per_uF
             use_capacitance_i_ionic = True
 
-        ionic_interface_vars = [v.lhs for v in equations_for_ionic_vars]
-        formatted_ionic_interface_vars = []
-        for ionic_interface_var in equations_for_ionic_vars:
-            formatted_ionic_interface_vars.append({
-                                         'lhs': var_chaste_interface_printer.doprint(ionic_interface_var.lhs),
-                                         'rhs': var_printer.doprint(ionic_interface_var.lhs),
-                                         'units': str(model.units.summarise_units(ionic_interface_var.lhs)),
-                                         'conversion_factor': model.units.get_conversion_factor(1 * model.units.summarise_units(ionic_interface_var.lhs), ionic_current_units)
-                                        })
+        formatted_ionic_interface_vars = [{'lhs': var_chaste_interface_printer.doprint(eq.lhs),
+                                           'rhs': var_printer.doprint(eq.lhs),
+                                           'units': str(model.units.summarise_units(eq.lhs)),
+                                           'conversion_factor': model.units.get_conversion_factor(1 * model.units.summarise_units(eq.lhs), ionic_current_units)} 
+                                           for eq in equations_for_ionic_vars]
+
         # Get the free variable for the model
         free_var = model.get_free_variable_symbol()
         free_variable = {'name': name_printer.doprint(free_var),
@@ -326,7 +322,12 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
                                     for var in state_vars]
 
         # EvaluateYDerivatives
-        derivative_equations = model.get_equations_for([x for x in model.get_derivative_symbols() if x.args[0] in state_vars], False)
+        # Get derivatives for state variables in the same order as the state variables
+        y_derivatives = [deriv for state_var in state_vars for deriv in model.get_derivative_symbols() if deriv.args[0] == state_var]
+        derivative_equations = model.get_equations_for(y_derivatives, False)
+
+        # Format y_derivatives for writing to chaste output
+        format_y_derivatives = [var_chaste_interface_printer.doprint(deriv) for deriv in y_derivatives]
 
         # Filter unused state vars for ionic variables
         used_vars_ionic = set()
@@ -338,25 +339,25 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
         for derivative_eq in derivative_equations:
             used_y_deriv = used_vars_ionic.union(model.get_symbols(derivative_eq.rhs))
 
-        # Format the state variables used in getIonic with the initial values and units
-        ionic_index = 0
-        y_deriv_index = 0
+        # Format derivative_equations
+        formatted_derivative_equations = derivative_equations
+
+        # Format the state variables Keep order, add ones used in getIonic first
         formatted_state_vars=[]
         for var in state_vars:
-            in_ionic = var in used_vars_ionic
-            in_y_deriv = var in used_y_deriv
-            formatted_state_vars.append({'var': var_chaste_interface_printer.doprint(var),
-                                         'initial_value': str(model.get_initial_value(var)),
-                                         'units': str(model.units.summarise_units(var)),
-                                         'in_ionic': var in used_vars_ionic,
-                                         'ionic_index': ionic_index,
-                                         'in_y_deriv': in_y_deriv,
-                                         'y_deriv_index': y_deriv_index})
-            if in_ionic:
-                ionic_index += 1
-            if in_y_deriv:
-                y_deriv_index += 1
+            if var in used_vars_ionic:
+                formatted_state_vars.append({'var': var_chaste_interface_printer.doprint(var),
+                                             'initial_value': str(model.get_initial_value(var)),
+                                            'units': str(model.units.summarise_units(var)),
+                                            'in_ionic': True})
 
+        # Now add the ones used in y derivatives only
+        for var in state_vars:
+            if var not in used_vars_ionic and var in used_y_deriv:
+                formatted_state_vars.append({'var': var_chaste_interface_printer.doprint(var),
+                                             'initial_value': str(model.get_initial_value(var)),
+                                            'units': str(model.units.summarise_units(var)),
+                                            'in_ionic': False})
         # Generate hpp for model
         template = cg.load_template('chaste', 'normal_model.hpp')
         with open(hhp_file_path, 'w') as f:
@@ -382,6 +383,8 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
                 'state_vars': formatted_state_vars,
                 'ionic_vars': formatted_ionic_vars,
                 'ionic_interface_vars': formatted_ionic_interface_vars,
+                'y_derivative_equations': formatted_derivative_equations,
+                'y_derivatives': format_y_derivatives,
                 'use_capacitance_i_ionic': use_capacitance_i_ionic,
                 'free_variable': free_variable,
                 'ode_system_information': ode_system_information

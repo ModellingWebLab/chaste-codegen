@@ -82,7 +82,7 @@
         if (!pStateVariables) pStateVariables = &rGetStateVariables();
         const std::vector<double>& rY = *pStateVariables;
 		{%- for state_var in state_vars %}
-		{% if state_var.in_ionic %}double {{ state_var.var }} = {% if state_var.ionic_index == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{state_var.ionic_index}}]);{%- else %}rY[{{state_var.ionic_index}}];{%- endif %}{%- endif %}
+		{% if state_var.in_ionic %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}{%- endif %}
 		// Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}{%- endfor %}
         {% for ionic_var in ionic_vars %}
         const double {{ionic_var.lhs}} = {{ionic_var.rhs}}; // {{ionic_var.units}}
@@ -102,7 +102,7 @@
         // Inputs:
         // Time units: millisecond
 		{%- for state_var in state_vars %}
-		{% if state_var.in_y_deriv %}double {{ state_var.var }} = {% if state_var.y_deriv_index == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{state_var.y_deriv_index}}]);{%- else %}rY[{{state_var.y_deriv_index}}];{%- endif %}{%- endif %}
+		double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
 		// Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
 		{%- endfor %}
         
@@ -117,12 +117,9 @@
         {
             //todo
         }
-
-		{%- for state_var in state_vars %}
-        rDY[{{loop.index0}}] = 
-		{% if state_var.in_y_deriv %}double {{ state_var.var }} = {% if state_var.y_deriv_index == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{state_var.y_deriv_index}}]);{%- else %}rY[{{state_var.y_deriv_index}}];{%- endif %}
-		// Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
-		{%- endfor %}{%- endfor %}
+		{% for deriv in y_derivatives %}
+        rDY[{{loop.index0}}] = {{deriv}};
+		{%- endfor %}
     }
     
 template<>
