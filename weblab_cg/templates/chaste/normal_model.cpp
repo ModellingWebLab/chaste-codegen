@@ -108,7 +108,9 @@
         
         // Mathematics
         //todo
-        
+        {%- for deriv in y_derivative_equations %}
+        const double {{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}
+		{%- endfor %}
         if (mSetVoltageDerivativeToZero)
         {
             d_dt_chaste_interface__membrane__V = 0.0;

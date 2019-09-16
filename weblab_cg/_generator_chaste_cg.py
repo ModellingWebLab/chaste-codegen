@@ -111,13 +111,12 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
         """
         formatted_equations = []
         rhs_multiplier = ""
-        for equation in equations:
-            eq = equation
+        for eq in equations:
             factor = None
+            current_units = model.units.summarise_units(eq.lhs)
             if units is not None:
                 try:
                     # Try unit conversion -- ultimately this should be sorted in cellmlmanip?
-                    current_units = model.units.summarise_units(eq.lhs)
                     if current_units != units:
                         factor = model.units.get_conversion_factor(1 * current_units, units)
                 except errors.DimensionalityError:
@@ -133,11 +132,11 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
                 converter_var = sp.Dummy(eq.lhs.name + '_converter')
                 formatted_equations.append({'lhs': var_printer.doprint(eq.lhs),
                                             'rhs': var_printer.doprint(eq.rhs),
-                                            'units': str(model.units.summarise_units(eq.lhs))
+                                            'units': str(current_units)
                                             })                
                 formatted_equations.append({'lhs': var_chaste_interface_printer.doprint(converter_var),
                                             'rhs': var_printer.doprint(eq.lhs),
-                                            'units': str(model.units.summarise_units(eq.lhs))
+                                            'units': str(current_units)
                                             })
             if factor is not None:
                 rhs = var_chaste_interface_printer.doprint(factor) + ' * ' + var_chaste_interface_printer.doprint(converter_var)
@@ -145,7 +144,7 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
                 rhs = var_chaste_interface_printer.doprint(eq.rhs)
             formatted_equations.append({'lhs': var_chaste_interface_printer.doprint(eq.lhs),
                                         'rhs': rhs + rhs_multiplier,
-                                        'units': str(units)
+                                        'units': str(units if not units is None else current_units)
                                         })
         return formatted_equations
 
@@ -172,19 +171,19 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
 
             # start, period, duration, amplitude
             cellml_default_stimulus_equations['period'] = \
-                model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_period")], False)
+                model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_period")], True)
             formatted_cellml_default_stimulus_equations['period'] = \
                 format_equation_list(cellml_default_stimulus_equations['period'], model.units.ureg.millisecond)
 
             cellml_default_stimulus_equations['duration'] = \
                 model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA,
-                                        "membrane_stimulus_current_duration")], False)
+                                        "membrane_stimulus_current_duration")], True)
             formatted_cellml_default_stimulus_equations['duration'] = \
                 format_equation_list(cellml_default_stimulus_equations['duration'], model.units.ureg.millisecond)
 
             cellml_default_stimulus_equations['amplitude'] = \
                 model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA,
-                                        "membrane_stimulus_current_amplitude")], False)
+                                        "membrane_stimulus_current_amplitude")], True)
             formatted_cellml_default_stimulus_equations['amplitude'] = \
                 format_equation_list(cellml_default_stimulus_equations['amplitude'],
                                      model.units.ureg.uA_per_cm2, model.units.ureg.uA_per_uF,
@@ -198,7 +197,7 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
         # optional default_stimulus_equation offset
         try:
             cellml_default_stimulus_equations['offset'] = \
-                model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_offset")], False)
+                model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_offset")], True)
             formatted_cellml_default_stimulus_equations['offset'] = \
                 format_equation_list(cellml_default_stimulus_equations['offset'], model.units.ureg.millisecond)
         except KeyError:
@@ -207,7 +206,7 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
         # optional default_stimulus_equation end
         try:
             cellml_default_stimulus_equations['end'] = \
-                model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_end")], False)
+                model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_end")], True)
             formatted_cellml_default_stimulus_equations['end'] = \
                 format_equation_list(cellml_default_stimulus_equations['end'], model.units.ureg.millisecond)
         except KeyError:
@@ -248,7 +247,7 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
         # as the stimulus iirc) (without lexicographical_sort
         # Only equations with the same (lhs) units as the membrane_stimulus_current are keps.
         # Also exclude the membrane_stimulus_current variable itself, and cellml_default_stimulus_equations (if he model has those)
-        equations_for_ionic_vars = [eq for eq in model.get_equations_for(ionic_derivatives, False)
+        equations_for_ionic_vars = [eq for eq in model.get_equations_for(ionic_derivatives, True)
                                     if eq.lhs != membrane_stimulus_current_var
                                     and (cellml_default_stimulus_equations is None
                                     or [eq] not in cellml_default_stimulus_equations.values())
@@ -257,15 +256,10 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
         # reverse toplological order is more similar (though not necessarily identical) to pycml
         equations_for_ionic_vars.reverse()
         # Once we have the ionic variables and their equations, we also need to add helper equtions that link symbols used in those to state variables
+        # TODO: would not be needed if model.get_equations_for could preserve input order?
         used_symbols = []
-        extended_equations_for_ionic_vars = []
-        for ionic_var_eq in equations_for_ionic_vars:
-            variable_eqs = model.get_equations_for([ionic_var_eq.lhs], False)
-            for eq in variable_eqs:
-                if eq.lhs not in used_symbols:
-                    extended_equations_for_ionic_vars.append(eq)
-                    used_symbols.append(eq.lhs)
 
+        extended_equations_for_ionic_vars = model.get_equations_for([ionic_var_eq.lhs for ionic_var_eq in equations_for_ionic_vars], True)
         # Format the state ionic variables
         formatted_ionic_vars = []
         # Only write equations once
@@ -324,7 +318,7 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
         # EvaluateYDerivatives
         # Get derivatives for state variables in the same order as the state variables
         y_derivatives = [deriv for state_var in state_vars for deriv in model.get_derivative_symbols() if deriv.args[0] == state_var]
-        derivative_equations = model.get_equations_for(y_derivatives, False)
+        derivative_equations = model.get_equations_for(y_derivatives, True)
 
         # Format y_derivatives for writing to chaste output
         format_y_derivatives = [var_chaste_interface_printer.doprint(deriv) for deriv in y_derivatives]
@@ -340,7 +334,17 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
             used_y_deriv = used_vars_ionic.union(model.get_symbols(derivative_eq.rhs))
 
         # Format derivative_equations
-        formatted_derivative_equations = derivative_equations
+        # special treatment stimulus protocol
+        # special treatment membrane_v
+        formatted_derivative_equations = []
+        for deriv in y_derivatives:
+            equations = model.get_equations_for([deriv], True)
+            for eq in equations:
+                # exclude cellml_default_stimulus_equations
+                if eq not in [stim_eq[-1] for stim_eq in cellml_default_stimulus_equations.values()]:
+                    formatted_derivative_equations.append(eq)
+            pass
+        formatted_derivative_equations = format_equation_list(derivative_equations)
 
         # Format the state variables Keep order, add ones used in getIonic first
         formatted_state_vars=[]
