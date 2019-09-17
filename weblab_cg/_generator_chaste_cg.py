@@ -3,15 +3,15 @@
 #
 
 # TODO: apply unit conversions
+# y derivatives msthematics
+# Unit conversion for state variables voltage, time, cytosolic_calcium_concentration state vars
+# capacitance in UseCellMLDefaultStimulus, using oxmeta see aslanidi_model_2009
+# GetIntracellularAreaStimulus with conversion & different time unit see jafri_rice_winslow_1998 (-), or aslanidi_model_2009
 # * period     // millisecond done, to check
 # * duration   // millisecond, to check
 # * amplitude  // uA_per_cm2, to check
 # * offset     // millisecond, to check
 # * end     // millisecond, to check
-# y derivatives msthematics
-# Unit conversion for state variables voltage, time, cytosolic_calcium_concentration state vars
-# capacitance in UseCellMLDefaultStimulus, using oxmeta see aslanidi_model_2009
-# GetIntracellularAreaStimulus with conversion & different time unit see jafri_rice_winslow_1998 (-), or aslanidi_model_2009
 
 import logging
 import os
@@ -25,6 +25,19 @@ logging.getLogger().setLevel(logging.INFO)
 MEMBRANE_VOLTAGE_INDEX = 0
 CYTOSOLIC_CALCIUM_CONCENTRATION = 1
 OXMETA = "https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#"
+
+UNIT_DEFINITIONS = {'uA_per_cm2': [{'prefix': 'micro', 'units': 'ampere'}, {'exponent': '-2', 'prefix': 'centi', 'units': 'metre'}],
+         'uA_per_uF': [{'prefix': 'micro', 'units': 'ampere'}, {'exponent': '-1', 'prefix': 'micro', 'units': 'farad'}],
+         'millisecond': [{'prefix': 'milli', 'units': 'second'}],
+         'millimolar': [{'units': 'mole', 'prefix': 'milli'}, {'units': 'litre', 'exponent': '-1'}],
+         'millivolt': [{'prefix': 'milli', 'units': 'volt'}]}
+
+STIMULUS_CURRENT = "membrane_stimulus_current"
+STIMULUS_UNITS = {'membrane_stimulus_current_period': 'millisecond', 'membrane_stimulus_current_duration': 'millisecond', 
+                  'membrane_stimulus_current_amplitude': 'uA_per_cm2', 'membrane_stimulus_current_offset': 'millisecond',
+                  'membrane_stimulus_current_end': 'millisecond'}
+STIMULUS_SECONDARY_UNITS = {'membrane_stimulus_current_amplitude': 'uA_per_uF'}
+STIMULUS_RHS_MULTIPLIER = {'membrane_stimulus_current_amplitude': ' * HeartConfig::Instance()->GetCapacitance()'}
 
 
 class ChasteModelType(enum.Enum):
@@ -66,14 +79,8 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
     cpp_file_path = os.path.join(output_path, model_name_from_file + ".cpp")
 
     # Add all neded units to the model (for conversion) if they don't yet exist
-    model.units.add_preferred_custom_unit_name('uA_per_cm2', [{'prefix': 'micro', 'units': 'ampere'},
-                                                              {'exponent': '-2', 'prefix': 'centi', 'units': 'metre'}])
-    model.units.add_preferred_custom_unit_name('uA_per_uF', [{'prefix': 'micro', 'units': 'ampere'},
-                                                             {'exponent': '-1', 'prefix': 'micro', 'units': 'farad'}])
-    model.units.add_preferred_custom_unit_name('millisecond', [{'prefix': 'milli', 'units': 'second'}])
-    model.units.add_preferred_custom_unit_name('millimolar', [{'units': 'mole', 'prefix': 'milli'},
-                                                              {'units': 'litre', 'exponent': '-1'}])
-    model.units.add_preferred_custom_unit_name('millivolt', [{'prefix': 'milli', 'units': 'volt'}])
+    for unit_name in UNIT_DEFINITIONS:
+        model.units.add_preferred_custom_unit_name(unit_name, UNIT_DEFINITIONS[unit_name])
 
     # Get state variables
     state_vars = model.get_state_symbols()
@@ -157,60 +164,17 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
         except KeyError:
             use_get_intracellular_calcium_concentration = False
 
-        # Output a default cell stimulus from the metadata specification as long as the following metadata exists:
-        # * membrane_stimulus_current_amplitude
-        # * membrane_stimulus_current_period
-        # * membrane_stimulus_current_duration
-        # * optionally: offset and end
-        # Ensures that the amplitude of the generated RegularStimulus is negative.
-        cellml_default_stimulus_equations = None
-        formatted_cellml_default_stimulus_equations = None
-        try:
-            cellml_default_stimulus_equations = dict()
-            formatted_cellml_default_stimulus_equations = dict()
-
-            # start, period, duration, amplitude
-            cellml_default_stimulus_equations['period'] = \
-                model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_period")], True)
-            formatted_cellml_default_stimulus_equations['period'] = \
-                format_equation_list(cellml_default_stimulus_equations['period'], model.units.ureg.millisecond)
-
-            cellml_default_stimulus_equations['duration'] = \
-                model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA,
-                                        "membrane_stimulus_current_duration")], True)
-            formatted_cellml_default_stimulus_equations['duration'] = \
-                format_equation_list(cellml_default_stimulus_equations['duration'], model.units.ureg.millisecond)
-
-            cellml_default_stimulus_equations['amplitude'] = \
-                model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA,
-                                        "membrane_stimulus_current_amplitude")], True)
-            formatted_cellml_default_stimulus_equations['amplitude'] = \
-                format_equation_list(cellml_default_stimulus_equations['amplitude'],
-                                     model.units.ureg.uA_per_cm2, model.units.ureg.uA_per_uF,
-                                     " * HeartConfig::Instance()->GetCapacitance()")
-        except KeyError:
-            cellml_default_stimulus_equations = None
-            formatted_cellml_default_stimulus_equations = None
-            cellml_default_stimulus_equations = None
-            print("No default_stimulus_equations\n")
-
-        # optional default_stimulus_equation offset
-        try:
-            cellml_default_stimulus_equations['offset'] = \
-                model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_offset")], True)
-            formatted_cellml_default_stimulus_equations['offset'] = \
-                format_equation_list(cellml_default_stimulus_equations['offset'], model.units.ureg.millisecond)
-        except KeyError:
-            pass  # offset is optional
-
-        # optional default_stimulus_equation end
-        try:
-            cellml_default_stimulus_equations['end'] = \
-                model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current_end")], True)
-            formatted_cellml_default_stimulus_equations['end'] = \
-                format_equation_list(cellml_default_stimulus_equations['end'], model.units.ureg.millisecond)
-        except KeyError:
-            pass  # end is optional
+        # Output a default cell stimulus from the metadata specification as long as the metadata exists:
+        # Note the metadata and expected units are defined as constants above
+        # STIMULUS_CURRENT, STIMULUS_UNITS, STIMULUS_SECONDARY_UNITS, STIMULUS_RHS_MULTIPLIER = {'membrane_stimulus_current_amplitude': ' * HeartConfig::Instance()->GetCapacitance()'}
+        cellml_default_stimulus_equations = dict()
+        formatted_cellml_default_stimulus_equations = dict()
+        for eq in model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, STIMULUS_CURRENT)]):
+            key = model.get_ontology_terms_by_symbol(eq.lhs, OXMETA)[0] if len(model.get_ontology_terms_by_symbol(eq.lhs, OXMETA)) > 0 else eq.lhs
+            cellml_default_stimulus_equations[key] = eq
+            formatted_cellml_default_stimulus_equations[key] = format_equation_list([eq], units=getattr(model.units.ureg, STIMULUS_UNITS[key]) if key in STIMULUS_UNITS else None,
+            secondary_units=getattr(model.units.ureg, STIMULUS_SECONDARY_UNITS[key])  if key in STIMULUS_SECONDARY_UNITS else None,
+            secondary_unit_rhs_multiplier=STIMULUS_RHS_MULTIPLIER[key] if key in STIMULUS_RHS_MULTIPLIER else None)
 
         try:
             cytosolic_calcium_concentration_var = \
@@ -247,9 +211,9 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
         # as the stimulus iirc) (without lexicographical_sort
         # Only equations with the same (lhs) units as the membrane_stimulus_current are keps.
         # Also exclude the membrane_stimulus_current variable itself, and cellml_default_stimulus_equations (if he model has those)
-        equations_for_ionic_vars = [eq for eq in model.get_equations_for(ionic_derivatives, True)
+        equations_for_ionic_vars = [eq for eq in model.get_equations_for(ionic_derivatives, sort_by_input_symbols=True)
                                     if eq.lhs != membrane_stimulus_current_var
-                                    and (cellml_default_stimulus_equations is None
+                                    and (cellml_default_stimulus_equations
                                     or [eq] not in cellml_default_stimulus_equations.values())
                                     and model.units.summarise_units(eq.lhs) == membrane_stimulus_current_units]
 
@@ -259,7 +223,7 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
         # TODO: would not be needed if model.get_equations_for could preserve input order?
         used_symbols = []
 
-        extended_equations_for_ionic_vars = model.get_equations_for([ionic_var_eq.lhs for ionic_var_eq in equations_for_ionic_vars], True)
+        extended_equations_for_ionic_vars = model.get_equations_for([ionic_var_eq.lhs for ionic_var_eq in equations_for_ionic_vars], sort_by_input_symbols=True)
         # Format the state ionic variables
         formatted_ionic_vars = []
         # Only write equations once
@@ -318,10 +282,16 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
         # EvaluateYDerivatives
         # Get derivatives for state variables in the same order as the state variables
         y_derivatives = [deriv for state_var in state_vars for deriv in model.get_derivative_symbols() if deriv.args[0] == state_var]
-        derivative_equations = model.get_equations_for(y_derivatives, True)
+        # Get the equations for the derivatives, excluding cellml_default_stimulus_equations
+        derivative_equations = model.get_equations_for(y_derivatives, sort_by_input_symbols=True, excluded_symbols=cellml_default_stimulus_equations.values())
 
         # Format y_derivatives for writing to chaste output
         format_y_derivatives = [var_chaste_interface_printer.doprint(deriv) for deriv in y_derivatives]
+
+        # TODO: special treatment membrane_v
+        # TODO: linker variables??
+        formatted_derivative_equations = format_equation_list(derivative_equations)
+
 
         # Filter unused state vars for ionic variables
         used_vars_ionic = set()
@@ -332,19 +302,6 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
         used_y_deriv = set()
         for derivative_eq in derivative_equations:
             used_y_deriv = used_vars_ionic.union(model.get_symbols(derivative_eq.rhs))
-
-        # Format derivative_equations
-        # special treatment stimulus protocol
-        # special treatment membrane_v
-        formatted_derivative_equations = []
-        for deriv in y_derivatives:
-            equations = model.get_equations_for([deriv], True)
-            for eq in equations:
-                # exclude cellml_default_stimulus_equations
-                if eq not in [stim_eq[-1] for stim_eq in cellml_default_stimulus_equations.values()]:
-                    formatted_derivative_equations.append(eq)
-            pass
-        formatted_derivative_equations = format_equation_list(derivative_equations)
 
         # Format the state variables Keep order, add ones used in getIonic first
         formatted_state_vars=[]
