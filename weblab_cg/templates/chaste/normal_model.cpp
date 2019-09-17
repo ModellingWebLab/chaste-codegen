@@ -24,24 +24,24 @@
 
     boost::shared_ptr<RegularStimulus> {{class_name}}FromCellML::UseCellMLDefaultStimulus()
     {
-        // Use the default stimulus specified by CellML metadata{% if cellml_default_stimulus_equations["offset"] is defined %}{%- for eq in cellml_default_stimulus_equations["offset"] %}
+        // Use the default stimulus specified by CellML metadata{% if cellml_default_stimulus_equations["membrane_stimulus_current_offset"] is defined %}{%- for eq in cellml_default_stimulus_equations["membrane_stimulus_current_offset"] %}
 		const double {{ eq.lhs }} = {{ eq.rhs }}; // {{eq.units}}
 		{%- endfor %}{% endif %}
-		{%- for eq in cellml_default_stimulus_equations["period"] %}
+		{%- for eq in cellml_default_stimulus_equations["membrane_stimulus_current_period"] %}
 		const double {{ eq.lhs }} = {{ eq.rhs }}; // {{eq.units}}
 		{%- endfor %}
-		{%- for eq in cellml_default_stimulus_equations["duration"] %}
+		{%- for eq in cellml_default_stimulus_equations["membrane_stimulus_current_duration"] %}
 		const double {{ eq.lhs }} = {{ eq.rhs }}; // {{eq.units}}
 		{%- endfor %}
-		{%- for eq in cellml_default_stimulus_equations["amplitude"] %}
+		{%- for eq in cellml_default_stimulus_equations["membrane_stimulus_current_amplitude"] %}
 		const double {{ eq.lhs }} = {{ eq.rhs }}; // {{eq.units}}
 		{%- endfor %}
-		{% if cellml_default_stimulus_equations["end"] is defined %}{%- for eq in cellml_default_stimulus_equations["end"] %}
+		{% if cellml_default_stimulus_equations["membrane_stimulus_current_end"] is defined %}{%- for eq in cellml_default_stimulus_equations["membrane_stimulus_current_end"] %}
 		const double {{ eq.lhs }} = {{ eq.rhs }};{%- endfor %}{% endif %}boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
-                -fabs({{cellml_default_stimulus_equations["amplitude"][-1].lhs}}),
-                {{cellml_default_stimulus_equations["duration"][-1].lhs}},
-                {{cellml_default_stimulus_equations["period"][-1].lhs}},
-				{% if cellml_default_stimulus_equations["offset"] is defined %}{{cellml_default_stimulus_equations["offset"][-1].lhs}}{%- else %}0.0{%- endif %}
+                -fabs({{cellml_default_stimulus_equations["membrane_stimulus_current_amplitude"][-1].lhs}}),
+                {{cellml_default_stimulus_equations["membrane_stimulus_current_duration"][-1].lhs}},
+                {{cellml_default_stimulus_equations["membrane_stimulus_current_period"][-1].lhs}},
+				{% if cellml_default_stimulus_equations["membrane_stimulus_current_offset"] is defined %}{{cellml_default_stimulus_equations["membrane_stimulus_current_offset"][-1].lhs}}{%- else %}0.0{%- endif %}
                 ));
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
