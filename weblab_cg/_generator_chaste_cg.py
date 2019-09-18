@@ -164,15 +164,25 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
         except KeyError:
             use_get_intracellular_calcium_concentration = False
 
+        # Use an annotation on voltage to find V
+        membrane_voltage_var = model.get_symbol_by_ontology_term(OXMETA, "membrane_voltage")
+
+        # Get stimulus current
+        cellml_default_stimulus = dict()        
+        cellml_default_stimulus['membrane_stimulus_current'] = model.get_symbol_by_ontology_term(OXMETA, STIMULUS_CURRENT)
+        # Get stimulus current units
+        membrane_stimulus_current_units = model.units.summarise_units(cellml_default_stimulus['membrane_stimulus_current'])
+
+
         # Output a default cell stimulus from the metadata specification as long as the metadata exists:
         # Note the metadata and expected units are defined as constants above
         # STIMULUS_CURRENT, STIMULUS_UNITS, STIMULUS_SECONDARY_UNITS, STIMULUS_RHS_MULTIPLIER = {'membrane_stimulus_current_amplitude': ' * HeartConfig::Instance()->GetCapacitance()'}
-        cellml_default_stimulus_equations = dict()
-        formatted_cellml_default_stimulus_equations = dict()
+        formatted_cellml_default_stimulus = dict()
         for eq in model.get_equations_for([model.get_symbol_by_ontology_term(OXMETA, STIMULUS_CURRENT)]):
-            key = model.get_ontology_terms_by_symbol(eq.lhs, OXMETA)[0] if len(model.get_ontology_terms_by_symbol(eq.lhs, OXMETA)) > 0 else eq.lhs
-            cellml_default_stimulus_equations[key] = eq
-            formatted_cellml_default_stimulus_equations[key] = format_equation_list([eq], units=getattr(model.units.ureg, STIMULUS_UNITS[key]) if key in STIMULUS_UNITS else None,
+            ontology_terms = model.get_ontology_terms_by_symbol(eq.lhs, OXMETA)
+            key = ontology_terms[0] if len(ontology_terms) > 0 else eq.lhs
+            cellml_default_stimulus[key] = eq
+            formatted_cellml_default_stimulus[key] = format_equation_list([eq], units=getattr(model.units.ureg, STIMULUS_UNITS[key]) if key in STIMULUS_UNITS else None,
             secondary_units=getattr(model.units.ureg, STIMULUS_SECONDARY_UNITS[key])  if key in STIMULUS_SECONDARY_UNITS else None,
             secondary_unit_rhs_multiplier=STIMULUS_RHS_MULTIPLIER[key] if key in STIMULUS_RHS_MULTIPLIER else None)
 
@@ -182,15 +192,6 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
         except KeyError:
             cytosolic_calcium_concentration_var = None
             print("MODEL HAS NO cytosolic_calcium_concentration VARIABLE")
-
-        # Getting the equations for const definitions for GetIIonic
-        # Use an annotation on voltage to find V
-        membrane_voltage_var = model.get_symbol_by_ontology_term(OXMETA, "membrane_voltage")
-
-        # Get stimulus current
-        membrane_stimulus_current_var = model.get_symbol_by_ontology_term(OXMETA, "membrane_stimulus_current")
-        # Get stimulus current units
-        membrane_stimulus_current_units = model.units.summarise_units(membrane_stimulus_current_var)
 
         # function used to order state variables in the same way as pycml does (for easy comparison)
         def state_var_key_order(membrane_voltage_var, cai_var, var):
@@ -205,16 +206,17 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
         state_vars = sorted(model.get_state_symbols(),
                             key=lambda state_var: state_var_key_order(membrane_voltage_var,
                                                                       cytosolic_calcium_concentration_var, state_var))
+
+        # Getting the equations for const definitions for GetIIonic
         # use the RHS of the ODE defining V
         ionic_derivatives = [x for x in model.get_derivative_symbols() if x.args[0] == membrane_voltage_var]
         # figure out the currents (by finding variables with the same units
         # as the stimulus iirc) (without lexicographical_sort
-        # Only equations with the same (lhs) units as the membrane_stimulus_current are keps.
-        # Also exclude the membrane_stimulus_current variable itself, and cellml_default_stimulus_equations (if he model has those)
+        # Only equations with the same (lhs) units as the STIMULUS_CURRENTt are keps.
+        # Also exclude the membrane_stimulus_current variable itself, and cellml_default_stimulus equations (if he model has those)
         equations_for_ionic_vars = [eq for eq in model.get_equations_for(ionic_derivatives, sort_by_input_symbols=True)
-                                    if eq.lhs != membrane_stimulus_current_var
-                                    and (cellml_default_stimulus_equations
-                                    or [eq] not in cellml_default_stimulus_equations.values())
+                                    if ((not 'membrane_stimulus_current' in cellml_default_stimulus)
+                                    or (eq != cellml_default_stimulus['membrane_stimulus_current'] and eq not in cellml_default_stimulus.values()))
                                     and model.units.summarise_units(eq.lhs) == membrane_stimulus_current_units]
 
         # reverse toplological order is more similar (though not necessarily identical) to pycml
@@ -280,10 +282,10 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
                                     for var in state_vars]
 
         # EvaluateYDerivatives
-        # Get derivatives for state variables in the same order as the state variables
-        y_derivatives = [deriv for state_var in state_vars for deriv in model.get_derivative_symbols() if deriv.args[0] == state_var]
-        # Get the equations for the derivatives, excluding cellml_default_stimulus_equations
-        derivative_equations = model.get_equations_for(y_derivatives, sort_by_input_symbols=True, excluded_symbols=cellml_default_stimulus_equations.values())
+        # Get derivatives for state variables in the same order as the state variables. Exclude membrane_voltage variable as it's treated seperately
+        y_derivatives = [deriv for state_var in state_vars for deriv in model.get_derivative_symbols() if deriv.args[0] == state_var and deriv.args[0] != membrane_voltage_var]
+        # Get the equations for the derivatives, excluding cellml_default_stimulus equations
+        derivative_equations = model.get_equations_for(y_derivatives, sort_by_input_symbols=True, excluded_symbols=[x.lhs for x in cellml_default_stimulus.values()])
 
         # Format y_derivatives for writing to chaste output
         format_y_derivatives = [var_chaste_interface_printer.doprint(deriv) for deriv in y_derivatives]
@@ -326,7 +328,7 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
                 'model_name_from_file': model_name_from_file,
                 'class_name': class_name,
                 'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
-                'cellml_default_stimulus_equations': cellml_default_stimulus_equations,
+                'cellml_default_stimulus_equations': cellml_default_stimulus,
                 'use_get_intracellular_calcium_concentration': use_get_intracellular_calcium_concentration,
             }))
 
@@ -337,7 +339,7 @@ def create_chaste_model(output_path, model_name_from_file, class_name, model, mo
                 'model_name_from_file': model_name_from_file,
                 'class_name': class_name,
                 'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
-                'cellml_default_stimulus_equations': formatted_cellml_default_stimulus_equations,
+                'cellml_default_stimulus_equations': formatted_cellml_default_stimulus,
                 'use_get_intracellular_calcium_concentration': use_get_intracellular_calcium_concentration,
                 'membrane_voltage_index': MEMBRANE_VOLTAGE_INDEX,
                 'cytosolic_calcium_concentration_index': CYTOSOLIC_CALCIUM_CONCENTRATION,
