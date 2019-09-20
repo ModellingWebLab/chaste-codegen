@@ -30,7 +30,11 @@ from ._generator import (   # noqa
 )
 
 from ._generator_chaste_cg import (   # noqa
-    ChasteCodeGenerator,
+    NormalChasteModel,
+    OptChasteModel,
+    Analytic_jChasteModel,
+    Numerical_jChasteModel,
+    BEOptChasteModel,
 )
 
 from ._printer import (     # noqa

@@ -22,8 +22,8 @@ def temp_folder(tmpdir_factory):
     return temp_folder
 
 @pytest.fixture(scope="module")
-def chaste_generators(temp_folder, tmpdir_factory):
-    generators = []
+def chaste_models(temp_folder, tmpdir_factory):
+    models = []
     # Get folder with test cellml files
     model_folder = os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'cellml')
 
@@ -35,57 +35,64 @@ def chaste_generators(temp_folder, tmpdir_factory):
                 class_name = 'Dynamic' + model_name_from_file
                 model_file = os.path.join(model_folder, model_file)
                 # Load cellml model and add it to the list of models
-                generators.append(cg.ChasteCodeGenerator(cellmlmanip.load_model(model_file), os.path.join(temp_folder, 'Normal'), model_name_from_file, class_name))
-    return generators
+                models.append({'model': cellmlmanip.load_model(model_file),
+                               'model_name_from_file': model_name_from_file,
+                               'class_name': class_name})
+    return models
 
-def test_generate_normal_models(temp_folder, chaste_generators):
+def test_generate_normal_models(temp_folder, chaste_models):
     output_path = os.path.join(temp_folder, 'Normal')
-    for generator in chaste_generators:
-        generator.create_normal_model()
-        check_match_gengerated_chaste_hpp(output_path, generator.model_name_for_filename, 'Normal', skip_missing_ref_models=False)
+    for model in chaste_models:
+        chaste_model = cg.NormalChasteModel(model['model'], model['model_name_from_file'], model['class_name'])
+        chaste_model.write_chaste_code(output_path)
+
+        check_match_gengerated_chaste_hpp(output_path, model['model_name_from_file'], 'Normal', skip_missing_ref_models=False)
        
         #check_match_gengerated_chaste_cpp()
 
 @pytest.mark.skip(reason="Opt models not yet implemented")
 def test_generate_opt_models(temp_folder, chaste_generators):
     output_path = os.path.join(temp_folder, 'Opt')
-    for generator in chaste_generators:
-        generator.output_path = output_path
-        generator.create_opt_model()
-        check_match_gengerated_chaste_hpp(output_path, generator.model_name_for_filename, 'Opt', skip_missing_ref_models=False)
+    for model in chaste_models:
+        chaste_model = cg.OptChasteModel(model['model'], model['model_name_from_file'], model['class_name'])
+        chaste_model.write_chaste_code(output_path)
+
+        check_match_gengerated_chaste_hpp(output_path, model['model_name_from_file'], 'Opt', skip_missing_ref_models=False)
        
         #check_match_gengerated_chaste_cpp()
 
 @pytest.mark.skip(reason="Analytic_j models not yet implemented")
 def test_generate_cvode_analytic_j_models(temp_folder, chaste_generators):
     output_path = os.path.join(temp_folder, 'Analytic_j')
-    for generator in chaste_generators:
-        generator.output_path = output_path
-        generator.create_analytic_jmodel()
-        check_match_gengerated_chaste_hpp(output_path, generator.model_name_for_filename, 'Analytic_j', skip_missing_ref_models=False)
+    for model in chaste_models:
+        chaste_model = cg.Analytic_jChasteModel(model['model'], model['model_name_from_file'], model['class_name'])
+        chaste_model.write_chaste_code(output_path)
+
+        check_match_gengerated_chaste_hpp(output_path, model['model_name_from_file'], 'Analytic_j', skip_missing_ref_models=False)
        
         #check_match_gengerated_chaste_cpp()
 
 @pytest.mark.skip(reason="Numerical_j models not yet implemented")
 def test_generate_cvode_numerical_j_models(temp_folder, chaste_generators):
     output_path = os.path.join(temp_folder, 'Numerical_j')
-    for generator in chaste_generators:
-        generator.output_path = output_path
-        generator.create_numerical_j_model()
-        check_match_gengerated_chaste_hpp(output_path, generator.model_name_for_filename, 'Numerical_j', skip_missing_ref_models=False)
+    for model in chaste_models:
+        chaste_model = cg.Numerical_jChasteModel(model['model'], model['model_name_from_file'], model['class_name'])
+        chaste_model.write_chaste_code(output_path)
+
+        check_match_gengerated_chaste_hpp(output_path, model['model_name_from_file'], 'Numerical_j', skip_missing_ref_models=False)
        
         #check_match_gengerated_chaste_cpp()
 
 @pytest.mark.skip(reason="BE models not yet implemented")
 def test_generate_be_models(temp_folder, chaste_generators):
     output_path = os.path.join(temp_folder, 'BE')
-    for generator in chaste_generators:
-        generator.output_path = output_path
-        generator.create_be_model()
-        check_match_gengerated_chaste_hpp(output_path, generator.model_name_for_filename, 'BE', skip_missing_ref_models=False)
+    for model in chaste_models:
+        chaste_model = cg.BEChasteModel(model['model'], model['model_name_from_file'], model['class_name'])
+        chaste_model.write_chaste_code(output_path)
+
+        check_match_gengerated_chaste_hpp(output_path, model['model_name_from_file'], 'BE', skip_missing_ref_models=False)
        
         #check_match_gengerated_chaste_cpp()
-
 def check_match_gengerated_chaste_hpp(gen_path, model_name_from_file, model_type, skip_missing_ref_models=False):
     """
     Returns whether the generated and reference models are the same
