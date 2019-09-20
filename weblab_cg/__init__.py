@@ -30,8 +30,7 @@ from ._generator import (   # noqa
 )
 
 from ._generator_chaste_cg import (   # noqa
-    ChasteModelType,
-    create_chaste_model,
+    ChasteCodeGenerator,
 )
 
 from ._printer import (     # noqa

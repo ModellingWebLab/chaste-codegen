@@ -20,28 +20,28 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
-	{%- if not cellml_default_stimulus_equations is none %}
+	{%- if not default_stimulus_equations.membrane_stimulus_current is none %}
 
     boost::shared_ptr<RegularStimulus> {{class_name}}FromCellML::UseCellMLDefaultStimulus()
     {
-        // Use the default stimulus specified by CellML metadata{% if cellml_default_stimulus_equations["membrane_stimulus_current_offset"] is defined %}{%- for eq in cellml_default_stimulus_equations["membrane_stimulus_current_offset"] %}
+        // Use the default stimulus specified by CellML metadata{% if default_stimulus_equations["membrane_stimulus_current_offset"] is defined %}{%- for eq in default_stimulus_equations["membrane_stimulus_current_offset"] %}
 		const double {{ eq.lhs }} = {{ eq.rhs }}; // {{eq.units}}
 		{%- endfor %}{% endif %}
-		{%- for eq in cellml_default_stimulus_equations["membrane_stimulus_current_period"] %}
+		{%- for eq in default_stimulus_equations["membrane_stimulus_current_period"] %}
 		const double {{ eq.lhs }} = {{ eq.rhs }}; // {{eq.units}}
 		{%- endfor %}
-		{%- for eq in cellml_default_stimulus_equations["membrane_stimulus_current_duration"] %}
+		{%- for eq in default_stimulus_equations["membrane_stimulus_current_duration"] %}
 		const double {{ eq.lhs }} = {{ eq.rhs }}; // {{eq.units}}
 		{%- endfor %}
-		{%- for eq in cellml_default_stimulus_equations["membrane_stimulus_current_amplitude"] %}
+		{%- for eq in default_stimulus_equations["membrane_stimulus_current_amplitude"] %}
 		const double {{ eq.lhs }} = {{ eq.rhs }}; // {{eq.units}}
 		{%- endfor %}
-		{% if cellml_default_stimulus_equations["membrane_stimulus_current_end"] is defined %}{%- for eq in cellml_default_stimulus_equations["membrane_stimulus_current_end"] %}
+		{% if default_stimulus_equations["membrane_stimulus_current_end"] is defined %}{%- for eq in default_stimulus_equations["membrane_stimulus_current_end"] %}
 		const double {{ eq.lhs }} = {{ eq.rhs }};{%- endfor %}{% endif %}boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
-                -fabs({{cellml_default_stimulus_equations["membrane_stimulus_current_amplitude"][-1].lhs}}),
-                {{cellml_default_stimulus_equations["membrane_stimulus_current_duration"][-1].lhs}},
-                {{cellml_default_stimulus_equations["membrane_stimulus_current_period"][-1].lhs}},
-				{% if cellml_default_stimulus_equations["membrane_stimulus_current_offset"] is defined %}{{cellml_default_stimulus_equations["membrane_stimulus_current_offset"][-1].lhs}}{%- else %}0.0{%- endif %}
+                -fabs({{default_stimulus_equations["membrane_stimulus_current_amplitude"][-1].lhs}}),
+                {{default_stimulus_equations["membrane_stimulus_current_duration"][-1].lhs}},
+                {{default_stimulus_equations["membrane_stimulus_current_period"][-1].lhs}},
+				{% if default_stimulus_equations["membrane_stimulus_current_offset"] is defined %}{{default_stimulus_equations["membrane_stimulus_current_offset"][-1].lhs}}{%- else %}0.0{%- endif %}
                 ));
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
@@ -65,7 +65,7 @@
         // Time units: millisecond
         // 
         this->mpSystemInfo = OdeSystemInformation<{{class_name}}FromCellML>::Instance();
-        Init();{%- if not cellml_default_stimulus_equations is none %}
+        Init();{%- if not default_stimulus_equations.membrane_stimulus_current is none %}
 		
         // We have a default stimulus specified in the CellML file metadata
         this->mHasDefaultStimulusFromCellML = true;{%- endif %}
@@ -111,6 +111,7 @@
         {%- for deriv in y_derivative_equations %}
         const double {{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}
 		{%- endfor %}
+		
         if (mSetVoltageDerivativeToZero)
         {
             d_dt_chaste_interface__membrane__V = 0.0;
