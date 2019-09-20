@@ -80,11 +80,11 @@ class ChasteCodeGenerator(object):
         self._calc_derivative_equations()
         self._calc_use_get_intracellular_calcium_concentration()
 
-        self._format_derivative_equations()
-        self._format_y_derivatives()
-        self._format_equations_for_ionic_vars()
-        self._format_stimulus_currents()
         self._format_state_variables()
+        self._format_stimulus_currents()
+        self._format_equations_for_ionic_vars()
+        self._format_y_derivatives()
+        self._format_derivative_equations()
         self._format_system_info()
 
     @property
