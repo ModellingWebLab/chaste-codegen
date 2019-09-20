@@ -67,25 +67,10 @@ class ChasteCodeGenerator(object):
         self._logger = logging.getLogger(__name__)
         self._logger.setLevel(logging.INFO)        
 
-        # Initialise Printers for outputting chaste code
-        # Printer for printing chaste state variable assignments (var_chaste_interface prefix)
-        self._var_chaste_interface_printer = cg.ChastePrinter(lambda symbol: 'var_chaste_interface_' + str(symbol).replace('$','__'),
-                                                              lambda deriv: 'd_dt_chaste_interface_' + (str(deriv.expr).replace('$','__')
-                                                              if isinstance(deriv, sp.Derivative) else str(deriv).replace('$','__')))
+        self._add_printers()
+        self._add_units()
 
-        # Printer for printing chaste regular variable assignments (var_ prefix)
-        self._var_printer = cg.ChastePrinter(lambda symbol: 'var' + str(symbol).replace('$','__'),
-                                             lambda deriv: 'd_dt' + (str(deriv.expr).replace('$','__')
-                                             if isinstance(deriv, sp.Derivative) else str(deriv).replace('$','__')))
-
-        # Printer for printing chaste regular variable assignments without the var_ prefix
-        self._name_printer = cg.ChastePrinter(lambda symbol: str(symbol)[1:].replace('$','__'))
-
-        # Add all neded units to the model (for conversion) if they don't yet exist
-        for unit_name in self._UNIT_DEFINITIONS:
-            self._model.units.add_preferred_custom_unit_name(unit_name, self._UNIT_DEFINITIONS[unit_name])
-
-        self._membrane_voltage_var = model.get_symbol_by_ontology_term(self._OXMETA, "membrane_voltage")
+        self._calc_membrane_voltage_var()
         self._calc_cytosolic_calcium_concentration_var()
         self._calc_state_variables()
         self._calc_stimulus_currents()
@@ -166,6 +151,29 @@ class ChasteCodeGenerator(object):
 
     def create_be_model(self):
         raise NotImplementedError("This model type has not yet been implemented in this version!")
+
+    def _add_printers(self):
+        # Initialise Printers for outputting chaste code
+        # Printer for printing chaste state variable assignments (var_chaste_interface prefix)
+        self._var_chaste_interface_printer = cg.ChastePrinter(lambda symbol: 'var_chaste_interface_' + str(symbol).replace('$','__'),
+                                                              lambda deriv: 'd_dt_chaste_interface_' + (str(deriv.expr).replace('$','__')
+                                                              if isinstance(deriv, sp.Derivative) else str(deriv).replace('$','__')))
+
+        # Printer for printing chaste regular variable assignments (var_ prefix)
+        self._var_printer = cg.ChastePrinter(lambda symbol: 'var' + str(symbol).replace('$','__'),
+                                             lambda deriv: 'd_dt' + (str(deriv.expr).replace('$','__')
+                                             if isinstance(deriv, sp.Derivative) else str(deriv).replace('$','__')))
+
+        # Printer for printing chaste regular variable assignments without the var_ prefix
+        self._name_printer = cg.ChastePrinter(lambda symbol: str(symbol)[1:].replace('$','__'))
+
+    def _add_units(self):
+        # Add all neded units to the model (for conversion) if they don't yet exist
+        for unit_name in self._UNIT_DEFINITIONS:
+            self._model.units.add_preferred_custom_unit_name(unit_name, self._UNIT_DEFINITIONS[unit_name])
+
+    def _calc_membrane_voltage_var(self):
+        self._membrane_voltage_var = self._model.get_symbol_by_ontology_term(self._OXMETA, "membrane_voltage")
 
     def _calc_cytosolic_calcium_concentration_var(self):
         try:
