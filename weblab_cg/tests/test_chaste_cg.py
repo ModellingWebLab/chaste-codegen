@@ -15,14 +15,11 @@ logging.getLogger().setLevel(logging.DEBUG)
 #c++ -> simpy
 #pow->Pow
 #ceil -> ceiling
-
-@pytest.fixture(scope='module')
-def temp_folder(tmpdir_factory):
-    temp_folder = tmpdir_factory.mktemp('generated_chaste_models')
-    return temp_folder
+#sympify vs simplify
+# round floats? https://stackoverflow.com/questions/43804701/round-floats-within-an-expression
 
 @pytest.fixture(scope="module")
-def chaste_models(temp_folder, tmpdir_factory):
+def chaste_models():
     models = []
     # Get folder with test cellml files
     model_folder = os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'cellml')
@@ -40,57 +37,52 @@ def chaste_models(temp_folder, tmpdir_factory):
                                'class_name': class_name})
     return models
 
-def test_generate_normal_models(temp_folder, chaste_models):
-    output_path = os.path.join(temp_folder, 'Normal')
+def test_generate_normal_models(tmp_path, chaste_models):
     for model in chaste_models:
         chaste_model = cg.NormalChasteModel(model['model'], model['model_name_from_file'], model['class_name'])
-        chaste_model.write_chaste_code(output_path)
+        chaste_model.write_chaste_code(tmp_path)
 
-        check_match_gengerated_chaste_hpp(output_path, model['model_name_from_file'], 'Normal', skip_missing_ref_models=False)
+        check_match_gengerated_chaste_hpp(tmp_path, model['model_name_from_file'], 'Normal', skip_missing_ref_models=False)
        
         #check_match_gengerated_chaste_cpp()
 
 @pytest.mark.skip(reason="Opt models not yet implemented")
-def test_generate_opt_models(temp_folder, chaste_generators):
-    output_path = os.path.join(temp_folder, 'Opt')
+def test_generate_opt_models(tmp_path, chaste_generators):
     for model in chaste_models:
         chaste_model = cg.OptChasteModel(model['model'], model['model_name_from_file'], model['class_name'])
-        chaste_model.write_chaste_code(output_path)
+        chaste_model.write_chaste_code(tmp_path)
 
-        check_match_gengerated_chaste_hpp(output_path, model['model_name_from_file'], 'Opt', skip_missing_ref_models=False)
+        check_match_gengerated_chaste_hpp(tmp_path, model['model_name_from_file'], 'Opt', skip_missing_ref_models=False)
        
         #check_match_gengerated_chaste_cpp()
 
 @pytest.mark.skip(reason="Analytic_j models not yet implemented")
 def test_generate_cvode_analytic_j_models(temp_folder, chaste_generators):
-    output_path = os.path.join(temp_folder, 'Analytic_j')
     for model in chaste_models:
         chaste_model = cg.Analytic_jChasteModel(model['model'], model['model_name_from_file'], model['class_name'])
-        chaste_model.write_chaste_code(output_path)
+        chaste_model.write_chaste_code(tmp_path)
 
-        check_match_gengerated_chaste_hpp(output_path, model['model_name_from_file'], 'Analytic_j', skip_missing_ref_models=False)
+        check_match_gengerated_chaste_hpp(tmp_path, model['model_name_from_file'], 'Analytic_j', skip_missing_ref_models=False)
        
         #check_match_gengerated_chaste_cpp()
 
 @pytest.mark.skip(reason="Numerical_j models not yet implemented")
 def test_generate_cvode_numerical_j_models(temp_folder, chaste_generators):
-    output_path = os.path.join(temp_folder, 'Numerical_j')
     for model in chaste_models:
         chaste_model = cg.Numerical_jChasteModel(model['model'], model['model_name_from_file'], model['class_name'])
-        chaste_model.write_chaste_code(output_path)
+        chaste_model.write_chaste_code(tmp_path)
 
-        check_match_gengerated_chaste_hpp(output_path, model['model_name_from_file'], 'Numerical_j', skip_missing_ref_models=False)
+        check_match_gengerated_chaste_hpp(tmp_path, model['model_name_from_file'], 'Numerical_j', skip_missing_ref_models=False)
        
         #check_match_gengerated_chaste_cpp()
 
 @pytest.mark.skip(reason="BE models not yet implemented")
 def test_generate_be_models(temp_folder, chaste_generators):
-    output_path = os.path.join(temp_folder, 'BE')
     for model in chaste_models:
         chaste_model = cg.BEChasteModel(model['model'], model['model_name_from_file'], model['class_name'])
-        chaste_model.write_chaste_code(output_path)
+        chaste_model.write_chaste_code(tmp_path)
 
-        check_match_gengerated_chaste_hpp(output_path, model['model_name_from_file'], 'BE', skip_missing_ref_models=False)
+        check_match_gengerated_chaste_hpp(tmp_path, model['model_name_from_file'], 'BE', skip_missing_ref_models=False)
        
         #check_match_gengerated_chaste_cpp()
 def check_match_gengerated_chaste_hpp(gen_path, model_name_from_file, model_type, skip_missing_ref_models=False):

@@ -3,7 +3,7 @@
 #
 
 # TODO: apply unit conversions
-# y derivatives msthematics
+# y derivatives msthematics -> voltage var
 # Unit conversion for state variables voltage, time, cytosolic_calcium_concentration state vars
 # capacitance in UseCellMLDefaultStimulus, using oxmeta see aslanidi_model_2009
 # GetIntracellularAreaStimulus with conversion & different time unit see jafri_rice_winslow_1998 (-), or aslanidi_model_2009
@@ -76,18 +76,23 @@ class ChasteModel(object):
         self._y_derivatives_voltage = self._get_y_derivatives_voltage()
         self._y_derivatives_excl_voltage = self._get_y_derivatives_excl_voltage()
         self._y_derivatives = self._get_y_derivatives()
-        self._derivative_eqs_exlc_voltage = self._get__derivative_eqs_exlc_voltage()
-        self._derivative_eqs_voltage = self._get__derivative_eqs_voltage()
+        self._derivative_eqs_voltage = self._get_derivative_eqs_voltage()        
+        self._derivative_eqs_exlc_voltage = self._get_derivative_eqs_exlc_voltage()
+        self._derivative_equations = self._get_derivative_equations()
         self._use_get_intracellular_calcium_concentration = self._get_use_get_intracellular_calcium_concentration()
 
         self._add_printers()
-        self._format_state_variables()
-        self._format_stimulus_currents()
-        self._format_equations_for_ionic_vars()
-        self._format_y_derivatives()
-        self._format_derivative_equations()
+        self._formatted_state_vars = self._format_state_variables()
+        self._formatted_default_stimulus = self._format_stimulus_currents()
+        self._formatted_equations_for_ionic_vars = self._format_equations_for_ionic_vars()
+        self._formatted_extended_equations_for_ionic_vars =  self._format_extended_equations_for_ionic_vars()
+        self._formatted_y_derivatives = self._format_y_derivatives()
+        self._fomatted_derivative_eqs = self._format_derivative_equations()
         self._format_system_info()
 
+    def write_chaste_code(self, output_path):
+        raise NotImplementedError("Chatse models should not be written directly, instead use of of the specific model types!")
+    
     def _add_printers(self):
         # Initialise Printers for outputting chaste code
         # Printer for printing chaste state variable assignments (var_chaste_interface prefix)
@@ -96,8 +101,8 @@ class ChasteModel(object):
                                                               if isinstance(deriv, sp.Derivative) else str(deriv).replace('$','__')))
 
         # Printer for printing chaste regular variable assignments (var_ prefix)
-        self._var_printer = cg.ChastePrinter(lambda symbol: 'var' + str(symbol).replace('$','__'),
-                                             lambda deriv: 'd_dt' + (str(deriv.expr).replace('$','__')
+        self._var_printer = cg.ChastePrinter(lambda symbol, state_vars = self._state_vars: ('var_chaste_interface_' if symbol in state_vars else 'var')+ str(symbol).replace('$','__'),
+                                             lambda deriv: 'd_dt_chaste_interface_' + (str(deriv.expr).replace('$','__')
                                              if isinstance(deriv, sp.Derivative) else str(deriv).replace('$','__')))
 
         # Printer for printing chaste regular variable assignments without the var_ prefix
@@ -194,16 +199,21 @@ class ChasteModel(object):
         # Get derivatives for state variables in the same order as the state variables, buth excluding voltage and voltage only (voltage is treated seperately)
         return self._y_derivatives_voltage + self._y_derivatives_excl_voltage
 
-    def _get__derivative_eqs_exlc_voltage(self):       
-        # Get equations for the derivatives, excluding default_stimulus equations and y derivatives themselves (they will be treated seperately)
-        return [deriv for deriv in self._model.get_equations_for(self._y_derivatives_excl_voltage, sort_by_input_symbols=True) if not deriv.lhs in self._y_derivatives_excl_voltage]
+    def _get_derivative_eqs_voltage(self):
+        # Get equations for the derivatives for Voltage
+        # Sort the derivative equations to get the derivaives themselves last        
+        return sorted(self._model.get_equations_for(self._y_derivatives_voltage, sort_by_input_symbols=True),
+                      key=lambda deriv: isinstance(deriv.lhs, sp.Derivative))        
 
-    def _get__derivative_eqs_voltage(self):
-        # Get equations for the derivatives, excluding default_stimulus equations and y derivatives themselves (they will be treated seperately)
-        return [deriv for deriv in self._model.get_equations_for(self._y_derivatives_voltage, sort_by_input_symbols=True) if not deriv.lhs in self._y_derivatives_voltage]
+    def _get_derivative_eqs_exlc_voltage(self):       
+        # Get equations for the derivatives excluding voltage
+        # Sort the derivative equations to get the derivaives themselves last
+        return sorted(self._model.get_equations_for(self._y_derivatives_excl_voltage, sort_by_input_symbols=True),
+                      key=lambda deriv: isinstance(deriv.lhs, sp.Derivative))
 
-    def _get_derivative_equations(self):
-        return self._derivative_eqs_voltage + _derivative_eqs_exlc_voltage
+    def _get_derivative_equations(self, excl_stimulus_current=False):
+        return sorted(self._model.get_equations_for(self._y_derivatives, sort_by_input_symbols=True),
+                      key=lambda deriv: isinstance(deriv.lhs, sp.Derivative))        
 
     def _get_use_get_intracellular_calcium_concentration(self):
         # Check if the model has cytosolic_calcium_concentration,
@@ -214,56 +224,17 @@ class ChasteModel(object):
         except KeyError:
             return False
 
-    def _format_derivative_equations(self):
-        def format_deriv_eq(deriv, in_membrane_voltatge):
-            return {'lhs': self._var_printer.doprint(deriv.lhs),
-                    'rhs': self._var_printer.doprint(deriv.rhs),
-                    'units': str(self._model.units.summarise_units(deriv.lhs)),
-                    'in_membrane_voltatge': in_membrane_voltatge}
-        self._fomatted_derivative_eqs = [format_deriv_eq(deriv, False) for deriv in self._derivative_eqs_exlc_voltage]
-        self._fomatted_derivative_eqs.extend([format_deriv_eq(deriv, True) for deriv in self._derivative_eqs_voltage])       
-
-    def _format_y_derivatives(self):
-        # Format y_derivatives for writing to chaste output
-        self._formatted_y_derivatives = [self._var_chaste_interface_printer.doprint(deriv) for deriv in self._y_derivatives]
-
-    def _format_equations_for_ionic_vars(self):
-        self._formatted_equations_for_ionic_vars = [{'lhs': self._var_chaste_interface_printer.doprint(eq.lhs),
-                                                     'rhs': self._var_printer.doprint(eq.lhs),
-                                                     'units': str(self._model.units.summarise_units(eq.lhs)),
-                                                     'conversion_factor': self._model.units.get_conversion_factor(1 * self._model.units.summarise_units(eq.lhs), self._desired_ionic_current_units)} 
-                                                     for eq in self._equations_for_ionic_vars]
-                                                             
-        # Format the state ionic variables
-        self._formatted_extended_equations_for_ionic_vars = []
-        # Only write equations once
-        used_symbols = []
-        # Some symbols will need substituting while printing ionic variables
-        ionic_subs_dict = {}        
-        for eq_ionic in self._extended_equations_for_ionic_vars:
-            # Check if interface link vars are needed
-            for v in self._model.get_symbols(eq_ionic.rhs):
-                if v in self._state_vars:
-                    #used_symbols.append(v)
-                    # Link variable names start with the first bit of the equation they relate to (the component) followed by the variable name they are linking
-                    link_var_name = eq_ionic.lhs.name.split('$')[0] + '$' + v.name.split('$')[1]
-                    link_var = sp.Dummy(link_var_name)
-                    ionic_subs_dict[v] = link_var
-                    if link_var not in used_symbols:
-                        used_symbols.append(link_var)
-                        self._formatted_extended_equations_for_ionic_vars.append({
-                                             'lhs': self._var_printer.doprint(link_var),
-                                             'rhs': self._var_chaste_interface_printer.doprint(v),
-                                             'units': str(self._model.units.summarise_units(v))
-                                            })
-            self._formatted_extended_equations_for_ionic_vars.append({
-                                         'lhs': self._var_printer.doprint(eq_ionic.lhs),
-                                         'rhs': self._var_printer.doprint(eq_ionic.rhs.subs(ionic_subs_dict)),
-                                         'units': str(self._model.units.summarise_units(eq_ionic.lhs))
-                                        })
+    def _format_state_variables(self):
+        # Filter unused state vars for ionic variables
+        return [{'var': self._var_chaste_interface_printer.doprint(var),
+                 'initial_value': str(self._model.get_initial_value(var)),
+                 'units': str(self._model.units.summarise_units(var)),
+                 'in_ionic': var in self._get_symbols(self._extended_equations_for_ionic_vars),
+                 'in_y_deriv': var in self._get_symbols(self._model.get_equations_for(self._y_derivatives))} 
+                for var in self._state_vars]
 
     def _format_stimulus_currents(self):   
-        self._formatted_default_stimulus = dict()   
+        formatted_default_stimulus = dict()
         for key in self._default_stimulus:
             formatted_equations = []
             eq = self._default_stimulus[key]            
@@ -302,30 +273,31 @@ class ChasteModel(object):
                                         'rhs': rhs + rhs_multiplier,
                                         'units': str(units if not units is None else current_units)
                                         })
-            self._formatted_default_stimulus[key] = formatted_equations
+            formatted_default_stimulus[key] = formatted_equations
+        return formatted_default_stimulus
 
-    def _format_state_variables(self):
-        def format_state_var(var, in_ionic, in_y_deriv):
-            return {'var': self._var_chaste_interface_printer.doprint(var),
-                    'initial_value': str(self._model.get_initial_value(var)),
-                    'units': str(self._model.units.summarise_units(var)),
-                    'in_ionic': in_ionic,
-                    'in_y_deriv': in_y_deriv}
+    def _format_equations_for_ionic_vars(self):
+        return [{'lhs': self._var_chaste_interface_printer.doprint(eq.lhs),
+                 'rhs': self._var_printer.doprint(eq.lhs),
+                 'units': str(self._model.units.summarise_units(eq.lhs)),
+                 'conversion_factor': self._model.units.get_conversion_factor(1 * self._model.units.summarise_units(eq.lhs), self._desired_ionic_current_units)} 
+                for eq in self._equations_for_ionic_vars]
 
-        # Filter unused state vars for ionic variables
-        used_vars_ionic = self._get_symbols(self._extended_equations_for_ionic_vars)       
-        used_y_deriv = self._get_symbols(self._model.get_equations_for(self._y_derivatives))
+    def _format_extended_equations_for_ionic_vars(self):
+        # Format the state ionic variables
+        return [{'lhs': self._var_printer.doprint(eq.lhs), 'rhs': self._var_printer.doprint(eq.rhs), 'units': self._model.units.summarise_units(eq.lhs)} for eq in self._extended_equations_for_ionic_vars]
 
-        # Format the state variables Keep order, add ones used in getIonic first
-        self._formatted_state_vars=[]
-        for var in self._state_vars:
-            if var in used_vars_ionic:
-                self._formatted_state_vars.append(format_state_var(var, in_ionic=True, in_y_deriv=var in used_y_deriv))
+    def _format_y_derivatives(self):
+        # Format y_derivatives for writing to chaste output
+        return [self._var_chaste_interface_printer.doprint(deriv) for deriv in self._y_derivatives]
 
-        # Now add the ones used in y derivatives only
-        for var in self._state_vars:
-            if var not in used_vars_ionic and var in used_y_deriv:
-                self._formatted_state_vars.append(format_state_var(var, in_ionic=False, in_y_deriv=True))                
+    def _format_derivative_equations(self):
+        # exclude ionic currents
+        return [{'lhs': self._var_printer.doprint(eq.lhs), 
+                 'rhs': self._var_printer.doprint(eq.rhs),'units': self._model.units.summarise_units(eq.lhs), 
+                 'in_membrane_voltatge': eq not in self._derivative_eqs_exlc_voltage} 
+                 for eq in self._derivative_equations 
+                 if eq not in self._default_stimulus.values()]
 
     def _format_system_info(self):
         self._free_variable = {'name': self._name_printer.doprint(self._model.get_free_variable_symbol()),
@@ -341,9 +313,7 @@ class ChasteModel(object):
         for exp in exprs:
             symbols = symbols.union(self._model.get_symbols(exp.rhs))
         return symbols
-                
-    def write_chaste_code(self, output_path):
-        raise NotImplementedError("Chatse models should not be written directly, instead use of of the specific model types!")
+
 
 class NormalChasteModel(ChasteModel):
     def __init__(self, model, model_name_for_filename, class_name):
@@ -385,7 +355,7 @@ class NormalChasteModel(ChasteModel):
                 'state_vars': self._formatted_state_vars,
                 'ionic_interface_vars': self._formatted_equations_for_ionic_vars,
                 'ionic_vars': self._formatted_extended_equations_for_ionic_vars,
-                'y_derivative_equations': self._formatted_extended_equations_for_ionic_vars,
+                'y_derivative_equations': self._fomatted_derivative_eqs,
                 'y_derivatives': self._formatted_y_derivatives,
                 'use_capacitance_i_ionic': self._use_capacitance_i_ionic,
                 'free_variable': self._free_variable,

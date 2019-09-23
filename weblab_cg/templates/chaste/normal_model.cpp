@@ -102,14 +102,14 @@
         // Inputs:
         // Time units: millisecond
 		{%- for state_var in state_vars %}
-		double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
+		{% if state_var.in_y_deriv %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}{%- endif %}
 		// Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
 		{%- endfor %}
         
         // Mathematics
-        //todo
-        {%- for deriv in y_derivative_equations %}
-        const double {{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}
+        //todo membrane_voltatge capacitance?
+        {%- for deriv in y_derivative_equations %}{%- if not deriv.in_membrane_voltatge %}
+		const double {{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
 		{%- endfor %}
 		
         if (mSetVoltageDerivativeToZero)
@@ -118,7 +118,9 @@
         }
         else
         {
-            //todo
+        {%- for deriv in y_derivative_equations %}{% if deriv.in_membrane_voltatge %}
+			const double {{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
+		{%- endfor %}
         }
 		{% for deriv in y_derivatives %}
         rDY[{{loop.index0}}] = {{deriv}};
