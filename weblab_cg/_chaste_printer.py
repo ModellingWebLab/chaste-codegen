@@ -1,4 +1,4 @@
-from ._printer import WebLabPrinter
+from ._printer import WebLabPrinter, _math_functions
 import sympy
 
 from sympy.printing.precedence import precedence
@@ -25,6 +25,9 @@ class ChastePrinter(WebLabPrinter):
 
         # Do not use the math. prefix for functions, as chaste c++ files include an include for this
         self._prefix = ''
+
+        # Make sure we can output a call to GetIntracellularAreaStimulus
+        _math_functions.add('GetIntracellularAreaStimulus')
 
     def _print_Pow(self, expr):
         """ Handles Pow(), which includes all division

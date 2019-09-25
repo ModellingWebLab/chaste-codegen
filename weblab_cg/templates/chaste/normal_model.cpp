@@ -87,12 +87,9 @@
         {% for ionic_var in ionic_vars %}
         const double {{ionic_var.lhs}} = {{ionic_var.rhs}}; // {{ionic_var.units}}
 		{%- endfor %}
-        {%- for ionic_var in ionic_interface_vars %}
-        const double {{ionic_var.lhs}} = {{ionic_var.rhs}}; // {{ionic_var.units}}
-		{%- endfor %}
-		const double var_chaste_interface__i_ionic = {% if use_capacitance_i_ionic %}({% endif %}{%- for ionic_var in ionic_interface_vars %}{%- if ionic_var.conversion_factor != 1.0 %}({{ionic_var.conversion_factor}} * {% endif %}{{ionic_var.lhs}}{%- if ionic_var.conversion_factor != 1.0 %}){%- endif %}{%- if not loop.last %} + {% endif %}{%- endfor %}{%- if use_capacitance_i_ionic  %}) * HeartConfig::Instance()->GetCapacitance(){% endif %}; // uA_per_cm2
+		const double var_chaste_interface__i_ionic = {% if use_capacitance_i_ionic %}({% endif %}{%- for ionic_var in ionic_interface_vars %}{%- if ionic_var.conversion_factor != 1.0 %}({{ionic_var.conversion_factor}} * {% endif %}{{ionic_var.var}}{%- if ionic_var.conversion_factor != 1.0 %}){%- endif %}{%- if not loop.last %} + {% endif %}{%- endfor %}{%- if use_capacitance_i_ionic  %}) * HeartConfig::Instance()->GetCapacitance(){% endif %}; // uA_per_cm2
         
-        const double i_ionic = var_chaste_interface__i_ionic;
+		const double i_ionic = var_chaste_interface__i_ionic;
         EXCEPT_IF_NOT(!std::isnan(i_ionic));
         return i_ionic;
     }
@@ -108,19 +105,20 @@
         
         // Mathematics
         //todo membrane_voltatge capacitance?
+		{% for deriv in y_derivative_equations %}{%- if deriv.is_voltage%}double {{deriv.lhs}};{%- endif %}{%- endfor %}
         {%- for deriv in y_derivative_equations %}{%- if not deriv.in_membrane_voltatge %}
 		const double {{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
 		{%- endfor %}
 		
         if (mSetVoltageDerivativeToZero)
         {
-            d_dt_chaste_interface__membrane__V = 0.0;
+            {% for deriv in y_derivative_equations %}{%- if deriv.is_voltage%}{{deriv.lhs}} = 0.0;{%- endif %}{%- endfor %}
         }
         else
         {
-        {%- for deriv in y_derivative_equations %}{% if deriv.in_membrane_voltatge %}
-			const double {{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
-		{%- endfor %}
+			{%- for deriv in y_derivative_equations %}{% if deriv.in_membrane_voltatge %}
+			{% if not deriv.is_voltage%}const double {% endif %}{{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
+			{%- endfor %}
         }
 		{% for deriv in y_derivatives %}
         rDY[{{loop.index0}}] = {{deriv}};
