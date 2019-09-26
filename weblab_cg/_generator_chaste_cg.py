@@ -3,16 +3,15 @@
 #
 
 # TODO: apply unit conversions
-# y derivatives msthematics -> voltage var
+# Taking the questions separately:
+# Whether a negation is needed or not depends on the sign of the stimulus current. 
+# IIRC pycml fakes an evaluation of the stimulus current with all variables set to 1, and uses the sign of that to determine which convention the model uses,
+# and hence whether to negate.
 # Unit conversion for state variables voltage, time, cytosolic_calcium_concentration state vars
 # capacitance in UseCellMLDefaultStimulus, using oxmeta see aslanidi_model_2009
 # GetIntracellularAreaStimulus with conversion & different time unit
 #  see jafri_rice_winslow_1998 (-), or aslanidi_model_2009
-# * period     // millisecond done, to check
-# * duration   // millisecond, to check
-# * amplitude  // uA_per_cm2, to check
-# * offset     // millisecond, to check
-# * end     // millisecond, to check
+
 
 import logging
 import os

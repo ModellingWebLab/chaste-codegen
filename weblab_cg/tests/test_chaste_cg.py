@@ -9,8 +9,11 @@ import weblab_cg as cg
 import pytest
 import sympy
 
-#TODO: can linker vars be done more genericly?
-# see if we can reduce/delay the use of sympify (it's slow)
+#TODO: 
+# deal with stimulus current in wrong name
+# model -
+# model conversion vars
+# see generator
 
 # Show more logging output
 logging.getLogger().setLevel(logging.DEBUG)
