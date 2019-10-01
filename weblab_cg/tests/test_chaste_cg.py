@@ -174,8 +174,14 @@ class TestChasteCG(object):
                 eq[1] = sympy.sympify(eq[1])
             except SympifyError:
                 # This might be a C++ call with class members/pointer accessors?
-                eq[1] = eq[1].replace('()->', '_').replace('::', '_')
-                eq[1] = sympy.sympify(eq[1])
+                try:
+                    eq[1] = sympy.sympify(eq[1].replace('()->', '_').replace('::', '_'))
+                except SympifyError:
+                    # TODO: 
+                    # Could be conditional operator (<condition> ? <expression1> : <expression2>)
+                    # equivalent to <expression1> if <condition> else <expression2>
+                    eq[1] = sympy.sympify(eq[1])
+                    # TODO: don't forget to add to the printer
 
             equations.append(eq)
             index += 1

@@ -2,11 +2,10 @@
 # Functions related to generating model code for Chaste.
 #
 
-# TODO: apply unit conversions
-# Unit conversion for state variables voltage, time, cytosolic_calcium_concentration state vars
-# capacitance in UseCellMLDefaultStimulus, using oxmeta see aslanidi_model_2009
-# GetIntracellularAreaStimulus with conversion & different time unit
-#  see jafri_rice_winslow_1998 (-), or aslanidi_model_2009
+# TODO: printer should convert x if y else z into y ? x : z
+# see _print_Piecewise
+# TODO: apply unit conversions: state variables voltage, time, cytosolic_calcium_concentration state vars
+
 
 
 import logging
@@ -137,7 +136,7 @@ class ChasteModel(object):
 
     def _get_state_variables(self):
         # Sort the state variables, to make sure they have similar order to pycml
-        return sorted(self._model.get_state_symbols(),
+        return sorted(self._model.get_state_symbols(order_by_order_added=True),
                       key=lambda state_var: self._state_var_key_order(state_var))
 
     def _get_membrane_stimulus_current(self):
