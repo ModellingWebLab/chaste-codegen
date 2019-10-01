@@ -174,8 +174,7 @@ class TestChasteCG(object):
                 eq[1] = sympy.sympify(eq[1])
             except SympifyError:
                 # This might be a C++ call with class members/pointer accessors?
-                eq[1] = eq[1].replace('()->','_')
-                eq[1] = eq[1].replace('::','_')
+                eq[1] = eq[1].replace('()->', '_').replace('::', '_')
                 eq[1] = sympy.sympify(eq[1])
 
             equations.append(eq)
@@ -198,10 +197,6 @@ class TestChasteCG(object):
         if eq[0] == 'const double var_chaste_interface__i_ionic':
             return [eq[0], eq[1]]
         else:
-#            lhs_name = self._get_var_name(eq[0])
-#            lhs_dict = {v: k for k, v in subs_dict.items()}
-#            lhs = sympy.sympify(lhs_name).subs(lhs_dict)
-#            eq[0] = eq[0].replace(lhs_name, str(lhs))
             return [eq[0], eq[1].subs(subs_dict)]
 
     def _is_same_equation(self, eq1, eq2):
@@ -240,7 +235,6 @@ class TestChasteCG(object):
 
         # Remove linkiners for derivatives
         expected = [x for x in expected if x[0] not in [y[0] for y in remove]]
-
 
         exclude = []
         for converter in reversed(converter_vars):

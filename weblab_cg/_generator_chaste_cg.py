@@ -266,7 +266,8 @@ class ChasteModel(object):
                 formatted_default_stimulus[key] = []
                 factor = 1.0
                 rhs_multiplier = ''
-                units = getattr(self._model.units.ureg, self._STIMULUS_UNITS[key]) if key in self._STIMULUS_UNITS else None
+                units = getattr(self._model.units.ureg, self._STIMULUS_UNITS[key]
+                                ) if key in self._STIMULUS_UNITS else None
                 current_units = self._model.units.summarise_units(eq.lhs)
                 try:
                     # Try unit conversion -- ultimately this should be sorted in cellmlmanip?
@@ -277,40 +278,46 @@ class ChasteModel(object):
                     try:
                         secondary_units =\
                             getattr(self._model.units.ureg,
-                                    self._STIMULUS_SECONDARY_UNITS[key]) if key in self._STIMULUS_SECONDARY_UNITS else None                    
+                                    self._STIMULUS_SECONDARY_UNITS[key]
+                                    ) if key in self._STIMULUS_SECONDARY_UNITS else None
                         if secondary_units is not None and current_units != secondary_units:
                             factor = self._model.units.get_conversion_factor(1 * current_units, secondary_units)
                             # Just so we can get the correct comment in the output
                             units = secondary_units
                             rhs_multiplier = \
-                            self._STIMULUS_RHS_MULTIPLIER[key] if key in self._STIMULUS_RHS_MULTIPLIER else None
+                                self._STIMULUS_RHS_MULTIPLIER[key] if key in self._STIMULUS_RHS_MULTIPLIER else None
                     except errors.DimensionalityError:
                         tertiary_units =\
                             getattr(self._model.units.ureg,
-                                    self._STIMULUS_TERTIARY_UNITS[key]) if key in self._STIMULUS_SECONDARY_UNITS else None                    
-                        if tertiary_units is not None and current_units != secondary_units and self._membrane_capacitance is not None:
+                                    self._STIMULUS_TERTIARY_UNITS[key]
+                                    ) if key in self._STIMULUS_SECONDARY_UNITS else None
+                        if tertiary_units is not None and current_units != secondary_units \
+                                and self._membrane_capacitance is not None:
                             dividend_factor = self._model.units.get_conversion_factor(1 * current_units, tertiary_units)
 
                             devisor_key = 'membrane_capacitance'
-                            divisor_units = getattr(self._model.units.ureg, self._STIMULUS_UNITS[devisor_key]) if devisor_key in self._STIMULUS_UNITS else None
+                            divisor_units = \
+                                getattr(self._model.units.ureg, self._STIMULUS_UNITS[devisor_key]
+                                        ) if devisor_key in self._STIMULUS_UNITS else None
                             divisor_eq = self._membrane_capacitance
                             divisor_current_units = self._model.units.summarise_units(divisor_eq.lhs)
-                            divisor_factor = self._model.units.get_conversion_factor(1 * divisor_current_units, divisor_units)
+                            divisor_factor = \
+                                self._model.units.get_conversion_factor(1 * divisor_current_units, divisor_units)
 
-                            factor = dividend_factor/divisor_factor
+                            factor = dividend_factor / divisor_factor
                             # Just so we can get the correct comment in the output
 
                             # update the equation by deviding rhs by devisor
                             eq = sp.Eq(eq.lhs, eq.rhs / divisor_eq.lhs)
                             rhs_multiplier = \
-                            self._STIMULUS_RHS_MULTIPLIER[key] if key in self._STIMULUS_RHS_MULTIPLIER else None
+                                self._STIMULUS_RHS_MULTIPLIER[key] if key in self._STIMULUS_RHS_MULTIPLIER else None
                             formatted_default_stimulus[key].append({'lhs': self._printer.doprint(divisor_eq.lhs),
-                                                                        'rhs': self._printer.doprint(divisor_eq.rhs),
-                                                                        'units': str(divisor_current_units)})
+                                                                    'rhs': self._printer.doprint(divisor_eq.rhs),
+                                                                    'units': str(divisor_current_units)})
                 formatted_default_stimulus[key].append({'lhs': self._var_chaste_interface_printer.doprint(eq.lhs),
-                                            'rhs': self._printer.doprint(factor * eq.rhs) + rhs_multiplier,
-                                            'units': str(units if units is not None else current_units)
-                                            })
+                                                        'rhs': self._printer.doprint(factor * eq.rhs) + rhs_multiplier,
+                                                        'units': str(units if units is not None else current_units)
+                                                        })
         return formatted_default_stimulus
 
     def _format_equations_for_ionic_vars(self):
