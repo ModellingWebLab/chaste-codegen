@@ -24,20 +24,10 @@
 
     boost::shared_ptr<RegularStimulus> {{class_name}}FromCellML::UseCellMLDefaultStimulus()
     {
-        // Use the default stimulus specified by CellML metadata{% if default_stimulus_equations["membrane_stimulus_current_offset"] is defined %}{%- for eq in default_stimulus_equations["membrane_stimulus_current_offset"] %}
-		const double {{ eq.lhs }} = {{ eq.rhs }}; // {{eq.units}}
-		{%- endfor %}{% endif %}
-		{%- for eq in default_stimulus_equations["membrane_stimulus_current_period"] %}
-		const double {{ eq.lhs }} = {{ eq.rhs }}; // {{eq.units}}
-		{%- endfor %}
-		{%- for eq in default_stimulus_equations["membrane_stimulus_current_duration"] %}
-		const double {{ eq.lhs }} = {{ eq.rhs }}; // {{eq.units}}
-		{%- endfor %}
-		{%- for eq in default_stimulus_equations["membrane_stimulus_current_amplitude"] %}
-		const double {{ eq.lhs }} = {{ eq.rhs }}; // {{eq.units}}
-		{%- endfor %}
-		{% if default_stimulus_equations["membrane_stimulus_current_end"] is defined %}{%- for eq in default_stimulus_equations["membrane_stimulus_current_end"] %}
-		const double {{ eq.lhs }} = {{ eq.rhs }};{%- endfor %}{% endif %}boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+        // Use the default stimulus specified by CellML metadata
+		{% for key, value in default_stimulus_equations.items() %}
+		{%- for eq in value %}const double {{ eq.lhs }} = {{ eq.rhs }}; // {{eq.units}}
+		{% endfor %}{% endfor %}boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs({{default_stimulus_equations["membrane_stimulus_current_amplitude"][-1].lhs}}),
                 {{default_stimulus_equations["membrane_stimulus_current_duration"][-1].lhs}},
                 {{default_stimulus_equations["membrane_stimulus_current_period"][-1].lhs}},
@@ -81,10 +71,10 @@
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
         if (!pStateVariables) pStateVariables = &rGetStateVariables();
         const std::vector<double>& rY = *pStateVariables;
-		{%- for state_var in state_vars %}
-		{% if state_var.in_ionic %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}{%- endif %}
-		// Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}{%- endfor %}
-        {% for ionic_var in ionic_vars %}
+		{% for state_var in state_vars %}
+		{%- if state_var.in_ionic %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
+		// Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
+		{% endif %}{%- endfor %}{% for ionic_var in ionic_vars %}
         const double {{ionic_var.lhs}} = {{ionic_var.rhs}}; // {{ionic_var.units}}
 		{%- endfor %}
 		const double var_chaste_interface__i_ionic = {% if use_capacitance_i_ionic %}({% endif %}{%- for ionic_var in ionic_interface_vars %}{%- if ionic_var.conversion_factor != 1.0 %}({{ionic_var.conversion_factor}} * {% endif %}{{ionic_var.var}}{%- if ionic_var.conversion_factor != 1.0 %}){%- endif %}{%- if not loop.last %} + {% endif %}{%- endfor %}{%- if use_capacitance_i_ionic  %}) * HeartConfig::Instance()->GetCapacitance(){% endif %}; // uA_per_cm2
@@ -104,9 +94,9 @@
 		{%- endfor %}
         
         // Mathematics
-        //todo membrane_voltatge capacitance?
+        //todo membrane_voltage capacitance?
 		{% for deriv in y_derivative_equations %}{%- if deriv.is_voltage%}double {{deriv.lhs}};{%- endif %}{%- endfor %}
-        {%- for deriv in y_derivative_equations %}{%- if not deriv.in_membrane_voltatge %}
+        {%- for deriv in y_derivative_equations %}{%- if not deriv.in_membrane_voltage %}
 		const double {{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
 		{%- endfor %}
 		
@@ -116,7 +106,7 @@
         }
         else
         {
-			{%- for deriv in y_derivative_equations %}{% if deriv.in_membrane_voltatge %}
+			{%- for deriv in y_derivative_equations %}{% if deriv.in_membrane_voltage %}
 			{% if not deriv.is_voltage%}const double {% endif %}{{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
 			{%- endfor %}
         }
