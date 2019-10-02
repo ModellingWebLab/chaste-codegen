@@ -9,17 +9,19 @@ import weblab_cg as cg
 import pytest
 import sympy
 from sympy import SympifyError
+import pyparsing
 
 # Show more logging output
 logging.getLogger().setLevel(logging.DEBUG)
 
-COMMENTS_REGEX = re.compile(r'(//.*\n)')
-NUM_REGEX = re.compile(r'[-+]?[\d]+\.?[\d]*[Ee](?:[-+]?[\d]+)?|\d+\.\d+')
-DIGITS_REGEX = re.compile(r'\d+\.\d+')
-FLOAT_PRECISION = 14
-
-
 class TestChasteCG(object):
+    _COMMENTS_REGEX = re.compile(r'(//.*\n)')
+    _NUM_REGEX = re.compile(r'[-+]?[\d]+\.?[\d]*[Ee](?:[-+]?[\d]+)?|\d+\.\d+')
+    _DIGITS_REGEX = re.compile(r'\d+\.\d+')
+    _C_CONDITIONAL_REGEX = re.compile(r'(\(.+?\))[ ]*?\?[ ]*?(\(.+?\))[ ]*?\:[ ]*?(\(.+?\))')
+    _FLOAT_PRECISION = 14
+
+
     @pytest.fixture(scope="class")
     def chaste_models(self):
         # Get folder with test cellml files
@@ -103,7 +105,7 @@ class TestChasteCG(object):
         with open(expected_hpp, 'r') as f:
             expected_hpp = f.read()
             # Ignore comments
-            expected_hpp = COMMENTS_REGEX.sub("", expected_hpp)
+            expected_hpp = self._COMMENTS_REGEX.sub("", expected_hpp)
             f.close()
 
         # Read generated output hpp from file
@@ -111,7 +113,7 @@ class TestChasteCG(object):
         with open(generated_hpp, 'r') as f:
             generated_hpp = f.read()
             # Ignore comments
-            generated_hpp = COMMENTS_REGEX.sub("", generated_hpp)
+            generated_hpp = self._COMMENTS_REGEX.sub("", generated_hpp)
             f.close()
 
         # Now they should match
@@ -123,7 +125,7 @@ class TestChasteCG(object):
         lines = []
         with open(file_path, 'r') as f:
             for line in f.readlines():
-                line = COMMENTS_REGEX.sub("", line)  # Ignore comments
+                line = self._COMMENTS_REGEX.sub("", line)  # Ignore comments
                 line = line.rstrip()  # Remove traling whitespace
                 lines.append(line)
             f.close()
@@ -131,12 +133,12 @@ class TestChasteCG(object):
 
     def _numbers_with_float_precision(self, line):
         def format_numbers(m):
-            pattern = "{0:." + str(FLOAT_PRECISION - 1) + "f}"
+            pattern = "{0:." + str(self._FLOAT_PRECISION - 1) + "f}"
             return str(float(pattern.format(float(m.group(0)))))
 
         # pow->Pow ceil -> ceiling
         line = line.replace("Pow(", 'Pow(').replace("ceil(", 'ceiling(')
-        line = DIGITS_REGEX.sub(format_numbers, line)
+        line = self._DIGITS_REGEX.sub(format_numbers, line)
         return line
 
     def _same_with_number(self, line1, line2):
@@ -148,13 +150,13 @@ class TestChasteCG(object):
         line2 = self._numbers_with_float_precision(line2)
 
         # Get numbers out (both digits and scientific notation)
-        num1 = NUM_REGEX.findall(line1)
-        num2 = NUM_REGEX.findall(line2)
+        num1 = self._NUM_REGEX.findall(line1)
+        num2 = self._NUM_REGEX.findall(line2)
 
         # Remove numbers from lines to check if th text is the same
         # The escape ascii character is inserted to check placing of number is the same
-        line1 = NUM_REGEX.sub(chr(27), line1)
-        line2 = NUM_REGEX.sub(chr(27), line2)
+        line1 = self._NUM_REGEX.sub(chr(27), line1)
+        line2 = self._NUM_REGEX.sub(chr(27), line2)
         # Check lines are teh same without the numbers
         if line1 == line2:
             # check numbers are the same using sympy
@@ -165,23 +167,43 @@ class TestChasteCG(object):
                 return True
         return False
 
+    def _c_conditiona_to_python_type(self, c_conditional):
+        thecontent = pyparsing.Word(pyparsing.alphanums+'_'+'.') | '+' | '-' | '/' | '*' | '?' | ':' | '==' | '&&' | '||'
+        parens     = pyparsing.nestedExpr( '(', ')', content=thecontent)
+        x = parens.parseString('((a + b) + c)')
+        match = self._C_CONDITIONAL_REGEX.search(c_conditional)
+        if match is None:
+            return c_conditional
+        else:
+            condition = self._c_conditiona_to_python_type(match.group(1))
+            exp1 = self._c_conditiona_to_python_type(match.group(2))
+            exp2 = self._c_conditiona_to_python_type(match.group(3))
+            return exp1 + ' if ' +condition + ' else ' + exp2
+
+    def _to_equation(self, equation_str):
+        # pow->Pow ceil -> ceiling in sympy
+        equation_str = equation_str.replace("Pow(", 'Pow(').replace("ceil(", 'ceiling(')
+        try:
+            equation = sympy.sympify(equation_str)
+        except SympifyError:
+            # This might be a C++ call with class members/pointer accessors?
+            try:                
+                equation_str = equation_str.replace('()->', '_').replace('::', '_')
+                equation = sympy.sympify(equation_str)
+            except SympifyError:
+                # TODO: 
+                # Could be conditional operator (<condition> ? <expression1> : <expression2>)
+                # equivalent to <expression1> if <condition> else <expression2>
+                equation_str = self._c_conditiona_to_python_type(equation_str)
+                equation = sympy.sympify(equation_str)
+        return equation
+
     def _get_equation_list(self, model_lines, index):
         equations = []
         eq = model_lines[index].replace(';', '').strip().split("=", 1)
         while len(eq) == 2:
             eq[0] = eq[0].strip()
-            try:
-                eq[1] = sympy.sympify(eq[1])
-            except SympifyError:
-                # This might be a C++ call with class members/pointer accessors?
-                try:
-                    eq[1] = sympy.sympify(eq[1].replace('()->', '_').replace('::', '_'))
-                except SympifyError:
-                    # TODO: 
-                    # Could be conditional operator (<condition> ? <expression1> : <expression2>)
-                    # equivalent to <expression1> if <condition> else <expression2>
-                    eq[1] = sympy.sympify(eq[1])
-                    # TODO: don't forget to add to the printer
+            eq[1] = self._to_equation(eq[1])
 
             equations.append(eq)
             index += 1

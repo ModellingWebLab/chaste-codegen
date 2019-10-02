@@ -2,8 +2,6 @@
 # Functions related to generating model code for Chaste.
 #
 
-# TODO: printer should convert x if y else z into y ? x : z
-# see _print_Piecewise
 # TODO: apply unit conversions: state variables voltage, time, cytosolic_calcium_concentration state vars
 
 

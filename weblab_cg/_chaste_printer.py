@@ -29,6 +29,24 @@ class ChastePrinter(WebLabPrinter):
         # Make sure we can output a call to GetIntracellularAreaStimulus
         _math_functions.add('GetIntracellularAreaStimulus')
 
+    def _print_And(self, expr):
+        """ Handles logical And. """
+        my_prec = precedence(expr)
+        return ' && '.join([self._bracket(x, my_prec) for x in expr.args])
+
+    def _print_BooleanFalse(self, expr):
+        """ Handles False """
+        return 'false'
+
+    def _print_BooleanTrue(self, expr):
+        """ Handles True """
+        return 'true'
+
+    def _print_Or(self, expr):
+        """ Handles logical Or. """
+        my_prec = precedence(expr)
+        return ' || '.join([self._bracket(x, my_prec) for x in expr.args])
+
     def _print_Pow(self, expr):
         """ Handles Pow(), which includes all division
         only ordinary power is different, the rest is handed back up to the parent class (WebLabPrinter) """
@@ -40,3 +58,45 @@ class ChastePrinter(WebLabPrinter):
             # Ordinary power
             p = precedence(expr)
             return 'pow(' + self._bracket(expr.base, p) + ', ' + self._bracket(expr.exp, p) + ')'
+
+    def _print_Piecewise(self, expr):
+        """
+        Handles Piecewise functions.
+
+        Sympy's piecewise is defined as a list of tuples ``(expr, cond)`` and
+        evaluated by returning the first ``expr`` whose ``cond`` is true. If
+        none of the conditions hold a value error is raised.
+        """
+        from sympy.logic.boolalg import BooleanTrue
+
+        # Assign NaN if no conditions hold
+        # If a condition `True` is found, use its expression instead
+        other = 'float(\'nan\')'
+
+        parts = ['(']
+        brackets = 1
+        for e, c in expr.args:
+            # Check if boolean True (if found, stop evaluating further)
+            if isinstance(c, BooleanTrue):
+                other = self._print(e)
+                break
+            # Sympy filters these out:
+            # elif isinstance(c, BooleanFalse):
+            #    continue
+
+            # Add e-if-c-else-? statement
+            #parts.append('(')
+            #parts.append(self._print(e))
+            #parts.append(') if (')
+            #parts.append(self._print(c))
+            #parts.append(') else (')
+            # add c ? e :
+            parts.append('(')
+            parts.append(self._print(c))
+            parts.append(') ? (')
+            parts.append(self._print(e))
+            parts.append(') : (')            
+            brackets += 1
+        parts.append(other)
+        parts.append(')' * brackets)
+        return ''.join(parts)
