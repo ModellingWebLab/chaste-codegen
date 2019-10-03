@@ -9,7 +9,8 @@ import weblab_cg as cg
 import pytest
 import sympy
 from sympy import SympifyError
-import pyparsing
+#import pyparsing
+from pyparsing import *
 
 # Show more logging output
 logging.getLogger().setLevel(logging.DEBUG)
@@ -18,7 +19,7 @@ class TestChasteCG(object):
     _COMMENTS_REGEX = re.compile(r'(//.*\n)')
     _NUM_REGEX = re.compile(r'[-+]?[\d]+\.?[\d]*[Ee](?:[-+]?[\d]+)?|\d+\.\d+')
     _DIGITS_REGEX = re.compile(r'\d+\.\d+')
-    _C_CONDITIONAL_REGEX = re.compile(r'(\(.+?\))[ ]*?\?[ ]*?(\(.+?\))[ ]*?\:[ ]*?(\(.+?\))')
+    _C_CONDITIONAL_REGEX = re.compile(r'(.+?)[ ]*?\?[ ]*?(.+?)[ ]*?\:[ ]*?(.+?)')
     _FLOAT_PRECISION = 14
 
 
@@ -167,35 +168,22 @@ class TestChasteCG(object):
                 return True
         return False
 
-    def _c_conditiona_to_python_type(self, c_conditional):
-        thecontent = pyparsing.Word(pyparsing.alphanums+'_'+'.') | '+' | '-' | '/' | '*' | '?' | ':' | '==' | '&&' | '||'
-        parens     = pyparsing.nestedExpr( '(', ')', content=thecontent)
-        x = parens.parseString('((a + b) + c)')
-        match = self._C_CONDITIONAL_REGEX.search(c_conditional)
-        if match is None:
-            return c_conditional
-        else:
-            condition = self._c_conditiona_to_python_type(match.group(1))
-            exp1 = self._c_conditiona_to_python_type(match.group(2))
-            exp2 = self._c_conditiona_to_python_type(match.group(3))
-            return exp1 + ' if ' +condition + ' else ' + exp2
-
     def _to_equation(self, equation_str):
         # pow->Pow ceil -> ceiling in sympy
         equation_str = equation_str.replace("Pow(", 'Pow(').replace("ceil(", 'ceiling(')
+        # This might be a C++ call with class members/pointer accessors?
+        equation_str = equation_str.replace('()->', '_').replace('::', '_')
         try:
-            equation = sympy.sympify(equation_str)
+            equation = sympy.simplify(equation_str)
         except SympifyError:
-            # This might be a C++ call with class members/pointer accessors?
-            try:                
-                equation_str = equation_str.replace('()->', '_').replace('::', '_')
-                equation = sympy.sympify(equation_str)
-            except SympifyError:
-                # TODO: 
-                # Could be conditional operator (<condition> ? <expression1> : <expression2>)
-                # equivalent to <expression1> if <condition> else <expression2>
-                equation_str = self._c_conditiona_to_python_type(equation_str)
-                equation = sympy.sympify(equation_str)
+            # TODO: 
+            # Could be conditional operator (<condition> ? <expression1> : <expression2>)
+            # Or maybe I could just check:
+            #- do both have the same combination or ? and : operators
+            #- are the expressions in between the same
+            # or https://stackoverflow.com/questions/27527087/parsing-nested-ternary-expressions
+            # equivalent to <expression1> if <condition> else <expression2>
+            pass
         return equation
 
     def _get_equation_list(self, model_lines, index):
@@ -232,11 +220,9 @@ class TestChasteCG(object):
         if eq1 == eq2:
             return True
 
-        eq1 = sympy.simplify(eq1)
         eq1 = self._numbers_with_float_precision(str(eq1))
         eq1 = sympy.simplify(eq1)
 
-        eq2 = sympy.simplify(eq1)
         eq2 = self._numbers_with_float_precision(str(eq2))
         eq2 = sympy.simplify(eq1)
 
