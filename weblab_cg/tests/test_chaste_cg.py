@@ -9,8 +9,7 @@ import weblab_cg as cg
 import pytest
 import sympy
 from sympy import SympifyError
-#import pyparsing
-from pyparsing import *
+import pyparsing
 
 # Show more logging output
 logging.getLogger().setLevel(logging.DEBUG)
@@ -19,7 +18,6 @@ class TestChasteCG(object):
     _COMMENTS_REGEX = re.compile(r'(//.*\n)')
     _NUM_REGEX = re.compile(r'[-+]?[\d]+\.?[\d]*[Ee](?:[-+]?[\d]+)?|\d+\.\d+')
     _DIGITS_REGEX = re.compile(r'\d+\.\d+')
-    _C_CONDITIONAL_REGEX = re.compile(r'(.+?)[ ]*?\?[ ]*?(.+?)[ ]*?\:[ ]*?(.+?)')
     _FLOAT_PRECISION = 14
 
 
@@ -168,23 +166,61 @@ class TestChasteCG(object):
                 return True
         return False
 
+    def _get_expression(self, expr_parts):
+        # TODO:
+        # process list
+        # if element is list, recursively process list
+        # if len(element> >= 5 : proess recursively
+        # else if ? -> condition, ;-> expr, end -> expr
+        # else (not ? :)-> add expr
+        # if not conditional return expr
+        # else: repeat: find last expr and resolve
+        expression = ''
+        conditional_parts = []
+        if not isinstance(expr_parts, list) and not len(expr_parts) >=5:
+            return expr_parts
+        else:
+            for part in expr_parts:
+                if part == '?':
+                    conditional_parts.append(('condition',expression))
+                    expression = ''
+                elif part == ':':
+                    conditional_parts.append(('expression',expression))
+                    expression = ''
+                else:
+                    expression+=self._get_expression(part)
+            conditional_parts.append(('expression', expression))  # ends with expression
+
+            while len(conditional_parts) > 1:
+                #find last condition
+                for i in range(len(conditional_parts)-1, -1, -1):
+                    if conditional_parts[i][0] == 'condition':
+                        #resolve nex 2 must be expressions as this was the last condition
+                        exp1 = conditional_parts[i+1][1]
+                        exp2 = conditional_parts[i+2][1]
+                        conditional_parts[i] = ('expression', exp1 + ' if ' + conditional_parts[i][1] + ' else ' + exp2)
+                        conditional_parts.remove(conditional_parts[i+2])
+                        conditional_parts.remove(conditional_parts[i+1])
+                        break
+            expression_str = conditional_parts[0][1]
+            if isinstance(expr_parts, list):
+                expression_str = '(' + expression_str + ')'
+        return expression_str
+
     def _to_equation(self, equation_str):
         # pow->Pow ceil -> ceiling in sympy
         equation_str = equation_str.replace("Pow(", 'Pow(').replace("ceil(", 'ceiling(')
         # This might be a C++ call with class members/pointer accessors?
         equation_str = equation_str.replace('()->', '_').replace('::', '_')
+        equation_str = equation_str.replace('&&', ' and ').replace('||', ' or ')
         try:
-            equation = sympy.simplify(equation_str)
+            return sympy.simplify(equation_str)
         except SympifyError:
-            # TODO: 
-            # Could be conditional operator (<condition> ? <expression1> : <expression2>)
-            # Or maybe I could just check:
-            #- do both have the same combination or ? and : operators
-            #- are the expressions in between the same
-            # or https://stackoverflow.com/questions/27527087/parsing-nested-ternary-expressions
-            # equivalent to <expression1> if <condition> else <expression2>
-            pass
-        return equation
+            expression = pyparsing.Word(pyparsing.alphanums+'_'+'.') | '+' | '-' | '/' | '*' | '?' | ':' | '==' | '&&' | '||'
+            parens     = pyparsing.nestedExpr( '(', ')', content=expression)
+            parenthesis_expr = parens.parseString('('+equation_str+')').asList()
+            expr_str = self._get_expression(parenthesis_expr)
+            return sympy.simplify(expr_str)
 
     def _get_equation_list(self, model_lines, index):
         equations = []
