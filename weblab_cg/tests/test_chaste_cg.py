@@ -216,7 +216,8 @@ class TestChasteCG(object):
         try:
             return sympy.simplify(equation_str)
         except SympifyError:
-            expression = pyparsing.Word(pyparsing.alphanums+'_'+'.') | '+' | '-' | '/' | '*' | '?' | ':' | '==' | '&&' | '||'
+            #expression = pyparsing.Word(pyparsing.alphanums+'_'+'.') | '+' | '-' | '/' | '*' | '?' | ':' | '==' | '&&' | '||'
+            expression = pyparsing.Word(pyparsing.printables, excludeChars="()")
             parens     = pyparsing.nestedExpr( '(', ')', content=expression)
             parenthesis_expr = parens.parseString('('+equation_str+')').asList()
             expr_str = self._get_expression(parenthesis_expr)
@@ -262,7 +263,7 @@ class TestChasteCG(object):
         eq2 = self._numbers_with_float_precision(str(eq2))
         eq2 = sympy.simplify(eq1)
 
-        return eq1 == eq2
+        return sympy.simplify(eq1 - eq2) == 0.0
 
     def _check_equation_list(self, expected, generated):
         link_subs = dict()
