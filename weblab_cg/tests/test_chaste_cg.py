@@ -216,7 +216,6 @@ class TestChasteCG(object):
         try:
             return sympy.simplify(equation_str)
         except SympifyError:
-            #expression = pyparsing.Word(pyparsing.alphanums+'_'+'.') | '+' | '-' | '/' | '*' | '?' | ':' | '==' | '&&' | '||'
             expression = pyparsing.Word(pyparsing.printables, excludeChars="()")
             parens     = pyparsing.nestedExpr( '(', ')', content=expression)
             parenthesis_expr = parens.parseString('('+equation_str+')').asList()
