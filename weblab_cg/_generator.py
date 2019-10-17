@@ -78,7 +78,12 @@ def get_unique_names(model):
             name = root + str(i)
         return name
 
-    for v in model.get_equation_graph():
+    # Get sorted list of symbols for consistent output
+    sorted_symbols = [v for v in model.get_equation_graph()]
+    sorted_symbols.sort(key=str)
+
+    # Generate names
+    for v in sorted_symbols:
         if isinstance(v, sp.Derivative):
             continue
 
@@ -166,7 +171,7 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
 
     # Create state information dicts
     state_info = []
-    for i, state in enumerate(model.get_state_symbols()):
+    for i, state in enumerate(model.get_state_symbols(True)):
         state_info.append({
             'index': i,
             'var_name': symbol_name(state),
