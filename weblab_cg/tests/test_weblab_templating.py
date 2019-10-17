@@ -44,7 +44,7 @@ def test_generate_weblab_model(tmp_path):
     ]
 
     # Create weblab model at path
-    cg.create_weblab_model(path, class_name, model, outputs, parameters)
+    cg.create_weblab_model(str(path), class_name, model, outputs, parameters)
 
     # Read expected output from file
     expected = os.path.join(cg.DATA_DIR, 'tests', 'weblab_model.pyx')
