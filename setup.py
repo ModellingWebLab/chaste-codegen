@@ -34,6 +34,9 @@ setup(
     # Include non-python files (via MANIFEST.in)
     include_package_data=True,
 
+    # Required Python version
+    python_requires='>=3.5',
+
     # List of dependencies
     install_requires=[
         # cellmlmanip                # Add this in when cellmlmanip is ready
