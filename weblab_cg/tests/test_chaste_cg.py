@@ -266,13 +266,13 @@ class TestChasteCG(object):
 
     def _perform_eq_subs(self, eq, subs_dict):
         # keep var_chaste_interface__i_ionic as it's hardcoded in
-        if eq[0] == 'const double var_chaste_interface__i_ionic':
-            return [eq[0], eq[1]]
-        else:
-            eq1 = eq[1]
-            while eq1.subs(subs_dict) != eq1:
-                eq1 = eq1.subs(subs_dict)
-            return [eq[0], eq1]
+#        if eq[0] == 'const double var_chaste_interface__i_ionic':
+#            return [eq[0], eq[1]]
+#        else:
+        eq1 = eq[1]
+        while eq1.subs(subs_dict) != eq1:
+            eq1 = eq1.subs(subs_dict)
+        return [eq[0], eq1]
 
     def _is_same_equation(self, eq1, eq2):
         # If they are the same, no need for elaborate check
@@ -285,7 +285,13 @@ class TestChasteCG(object):
         eq2 = self._numbers_with_float_precision(str(eq2))
         eq2 = sympy.simplify(eq2)
 
-        return sympy.simplify(eq1 - eq2) == 0.0
+        if eq1 == eq2:
+            return True
+
+        if eq2 != 0.0:
+            return sympy.simplify(eq1 / eq2) == 1.0
+        else:
+            return False  # If equations were 0.0 they would have returned as equal above already
 
     def _check_equation_list(self, expected, generated):
         #link_subs = dict()
@@ -354,9 +360,11 @@ class TestChasteCG(object):
             # now the lhs of equations should be the same
             assert set([eq[0] for eq in expected]) == set([eq[0] for eq in generated])
 
-        # for all eq in eqs1 find in eq2 and check they are equal
-        for eq_comp in [(x[1], y[1]) for x in generated for y in expected if x[0] == y[0]]:
-            assert self._is_same_equation(eq_comp[0], eq_comp[1])
+        # Equations are equal
+        sorted_generated = sorted(generated, key=lambda eq: eq[0])
+        sorted_expected = sorted(expected, key=lambda eq: eq[0])
+        for i in range(len(sorted_generated)):
+            assert self._is_same_equation(sorted_generated[i][1], sorted_expected[i][1])
 
         # Check the order for generated: lhs doesn't apear in earlier rhs (could give c++ compile error)
         for i in range(len(generated) - 1, - 1, - 1):
