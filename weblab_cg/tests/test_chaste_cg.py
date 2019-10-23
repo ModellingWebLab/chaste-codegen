@@ -8,7 +8,7 @@ import re
 import weblab_cg as cg
 import pytest
 import sympy
-from sympy import SympifyError
+from sympy import SympifyError, Eq
 import pyparsing
 
 # Show more logging output
@@ -99,7 +99,6 @@ class TestChasteCG(object):
                          model_type, model_name_from_file + '.hpp')
 
         # Check reference model exists
-        assert os.path.isfile(expected_hpp)
         # Read expected output hpp from file
         with open(expected_hpp, 'r') as f:
             expected_hpp = f.read()
@@ -125,7 +124,7 @@ class TestChasteCG(object):
         with open(file_path, 'r') as f:
             for line in f.readlines():
                 line = self._COMMENTS_REGEX.sub("", line)  # Ignore comments
-                line = line.rstrip()  # Remove traling whitespace
+                line = line.rstrip().lstrip()  # Remove trailing and preceding whitespace
                 lines.append(line)
             f.close()
         return lines
@@ -181,26 +180,46 @@ class TestChasteCG(object):
             return expr_parts
         else:
             for part in expr_parts:
-                if part == '?':
-                    conditional_parts.append(('condition',expression))
+                if part == '==':
+                    conditional_parts.append(('expression',expression))
+                    conditional_parts.append(('==','=='))
+                    expression = ''                
+                elif part == '?':
+                    conditional_parts.append(('expression',expression))
+                    conditional_parts.append(('?','?'))
                     expression = ''
                 elif part == ':':
                     conditional_parts.append(('expression',expression))
+                    conditional_parts.append((':',':'))
                     expression = ''
                 else:
                     expression+=self._get_expression(part)
             conditional_parts.append(('expression', expression))  # ends with expression
 
+            # translate equals
+            has_equals = True
+            while has_equals:
+                has_equals = False
+                for i in range(len(conditional_parts)):
+                    if conditional_parts[i][0] == '==':
+                        has_equals = True
+                        exp1 = conditional_parts[i-1][1]
+                        exp2 = conditional_parts[i+1][1]
+                        conditional_parts[i-1] = 'Eq('+exp1+', '+exp2+')'
+                        del conditional_parts[i:i+2] 
+                        break
+
+            # translate conditionals
             while len(conditional_parts) > 1:
                 #find last condition
-                for i in range(len(conditional_parts)-1, -1, -1):
-                    if conditional_parts[i][0] == 'condition':
+               for i in range(len(conditional_parts)-1, -1, -1):
+                    if conditional_parts[i][0] == '?' and conditional_parts[i+2][0] == ':':
                         #resolve nex 2 must be expressions as this was the last condition
+                        cond = conditional_parts[i-1][1]
                         exp1 = conditional_parts[i+1][1]
-                        exp2 = conditional_parts[i+2][1]
-                        conditional_parts[i] = ('expression', exp1 + ' if ' + conditional_parts[i][1] + ' else ' + exp2)
-                        conditional_parts.remove(conditional_parts[i+2])
-                        conditional_parts.remove(conditional_parts[i+1])
+                        exp2 = conditional_parts[i+3][1]
+                        conditional_parts[i-1] = ('expression', exp1 + ' if ' + cond + ' else ' + exp2)
+                        del conditional_parts[i:]
                         break
             expression_str = conditional_parts[0][1]
             if isinstance(expr_parts, list):
@@ -212,7 +231,7 @@ class TestChasteCG(object):
         equation_str = equation_str.replace("Pow(", 'Pow(').replace("ceil(", 'ceiling(')
         # This might be a C++ call with class members/pointer accessors?
         equation_str = equation_str.replace('()->', '_').replace('::', '_')
-        equation_str = equation_str.replace('&&', ' and ').replace('||', ' or ')
+        equation_str = equation_str.replace('&&', '&').replace('||', '|')
         try:
             return sympy.simplify(equation_str)
         except SympifyError:
@@ -222,16 +241,17 @@ class TestChasteCG(object):
             expr_str = self._get_expression(parenthesis_expr)
             return sympy.simplify(expr_str)
 
-    def _get_equation_list(self, model_lines, index):
+    def _get_equation_list(self, model_lines, index):          
         equations = []
-        eq = model_lines[index].replace(';', '').strip().split("=", 1)
+        eq = model_lines[index].replace(';', '').split("=", 1)
         while len(eq) == 2:
-            eq[0] = eq[0].strip()
+            eq[0] = eq[0].rstrip().lstrip()  # Remove trailing and preceding whitespace
+            eq[1] = eq[1].rstrip().lstrip()  # Remove trailing and preceding whitespace
             eq[1] = self._to_equation(eq[1])
 
             equations.append(eq)
             index += 1
-            eq = model_lines[index].replace(';', '').strip().split("=", 1)
+            eq = model_lines[index].replace(';', '').split("=", 1)
         assert len(equations) > 0
         return index, equations
 
@@ -249,7 +269,10 @@ class TestChasteCG(object):
         if eq[0] == 'const double var_chaste_interface__i_ionic':
             return [eq[0], eq[1]]
         else:
-            return [eq[0], eq[1].subs(subs_dict)]
+            eq1 = eq[1]
+            while eq1.subs(subs_dict) != eq1:
+                eq1 = eq1.subs(subs_dict)
+            return [eq[0], eq1]
 
     def _is_same_equation(self, eq1, eq2):
         # If they are the same, no need for elaborate check
@@ -260,13 +283,15 @@ class TestChasteCG(object):
         eq1 = sympy.simplify(eq1)
 
         eq2 = self._numbers_with_float_precision(str(eq2))
-        eq2 = sympy.simplify(eq1)
+        eq2 = sympy.simplify(eq2)
 
         return sympy.simplify(eq1 - eq2) == 0.0
 
     def _check_equation_list(self, expected, generated):
-        link_subs = dict()
-
+        #link_subs = dict()
+        if not self._keep_subs:
+            self.link_subs = dict()
+        self._keep_subs = False
         # Resolve derivatives
         remove = []
         for i in reversed(range(len(expected))):
@@ -296,10 +321,10 @@ class TestChasteCG(object):
                             converter[1] = expected[i][1]
                             exclude.append(expected[i])
             var_name = self._get_var_name(converter[0])
-            link_subs[var_name] = converter[1]
+            self.link_subs[var_name] = converter[1]
 
         # Perform substitutions
-        expected = [self._perform_eq_subs(eq, link_subs)
+        expected = [self._perform_eq_subs(eq, self.link_subs)
                     for eq in expected if eq not in converter_vars + exclude]
 
         # The 2 sets of equations have the same left hand sides
@@ -317,17 +342,17 @@ class TestChasteCG(object):
             assert len(differing_expected) == len(differing_generated) == 1
             assert self._is_same_equation(differing_expected[0][1], differing_generated[0][1])
 
+            # update the expected dV/dt  with the differeing variable name
+            # so that the check for the set of equations succeeds
+            expected[-1][1] = expected[-1][1].subs({self._get_var_name(differing_expected[0][0]):
+                                                    self._get_var_name(differing_generated[0][0])})
+
             # update the expected name for this variable, so that the check for the set of equations succeeds
             expected_index = expected.index(differing_expected[0])
             expected[expected_index][0] = differing_generated[0][0]
 
             # now the lhs of equations should be the same
             assert set([eq[0] for eq in expected]) == set([eq[0] for eq in generated])
-
-            # update the expected dV/dt  with the differeing variable name
-            # so that the check for the set of equations succeeds
-            expected[-1][1] = expected[-1][1].subs({self._get_var_name(differing_expected[0][0]):
-                                                    self._get_var_name(differing_generated[0][0])})
 
         # for all eq in eqs1 find in eq2 and check they are equal
         for eq_comp in [(x[1], y[1]) for x in generated for y in expected if x[0] == y[0]]:
@@ -351,10 +376,12 @@ class TestChasteCG(object):
         generated_cpp = self._get_file_lines(generated_cpp_file)
 
         expected_i = generated_i = 0
+        self._keep_subs = False
         while expected_i < len(expected_cpp) and generated_i < len(generated_cpp):
             # If lines are the same (ignore indtation)
-            expected_line = expected_cpp[expected_i].strip()
-            generated_line = generated_cpp[generated_i].strip()
+            expected_line = expected_cpp[expected_i]
+            generated_line = generated_cpp[generated_i]
+            self._keep_subs = self._keep_subs or expected_line.strip() == 'if (mSetVoltageDerivativeToZero)'
             if self._same_with_number(expected_line, generated_line):
                 expected_i += 1
                 generated_i += 1

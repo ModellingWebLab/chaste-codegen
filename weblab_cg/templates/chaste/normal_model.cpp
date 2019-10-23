@@ -77,7 +77,6 @@
 		{% endif %}{%- endfor %}{% for ionic_var in ionic_vars %}
         const double {{ionic_var.lhs}} = {{ionic_var.rhs}}; // {{ionic_var.units}}
 		{%- endfor %}
-		const double var_chaste_interface__i_ionic = {% if use_capacitance_i_ionic %}({% endif %}{%- for ionic_var in ionic_interface_vars %}{%- if ionic_var.conversion_factor != 1.0 %}({{ionic_var.conversion_factor}} * {% endif %}{{ionic_var.var}}{%- if ionic_var.conversion_factor != 1.0 %}){%- endif %}{%- if not loop.last %} + {% endif %}{%- endfor %}{%- if use_capacitance_i_ionic  %}) * HeartConfig::Instance()->GetCapacitance(){% endif %}; // uA_per_cm2
         
 		const double i_ionic = var_chaste_interface__i_ionic;
         EXCEPT_IF_NOT(!std::isnan(i_ionic));
