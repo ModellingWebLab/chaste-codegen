@@ -93,7 +93,6 @@
 		{%- endfor %}
         
         // Mathematics
-        //todo membrane_voltage capacitance?
 		{% for deriv in y_derivative_equations %}{%- if deriv.is_voltage%}double {{deriv.lhs}};{%- endif %}{%- endfor %}
         {%- for deriv in y_derivative_equations %}{%- if not deriv.in_membrane_voltage %}
 		const double {{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}

@@ -259,20 +259,17 @@ class TestChasteCG(object):
         return c_dec.replace('const', '').replace('double', '').strip()
 
     def _is_deriv_decl(self, c_dec):
-        return self._get_var_name(c_dec).startswith('d_dt_chaste_interface__')
+        return self._get_var_name(c_dec).startswith('d_dt_chaste_interface__') or  self._get_var_name(c_dec).endswith('dt')
 
     def _is_converter(self, c_dec):
         return self._get_var_name(c_dec).endswith('_converter')
 
     def _perform_eq_subs(self, eq, subs_dict):
-        # keep var_chaste_interface__i_ionic as it's hardcoded in
-#        if eq[0] == 'const double var_chaste_interface__i_ionic':
-#            return [eq[0], eq[1]]
-#        else:
-        eq1 = eq[1]
-        while eq1.subs(subs_dict) != eq1:
-            eq1 = eq1.subs(subs_dict)
-        return [eq[0], eq1]
+        substituted_term = eq[1].subs(subs_dict)
+        while substituted_term != eq[1]:
+            eq[1] = substituted_term
+            substituted_term = eq[1].subs(subs_dict)
+        return [eq[0], eq[1]]
 
     def _is_same_equation(self, eq1, eq2):
         # If they are the same, no need for elaborate check
@@ -291,31 +288,33 @@ class TestChasteCG(object):
         if eq2 != 0.0:
             return sympy.simplify(eq1 / eq2) == 1.0
         else:
-            return False  # If equations were 0.0 they would have returned as equal above already
+            return eq1-eq2 == 0.0
 
     def _check_equation_list(self, expected, generated):
         #link_subs = dict()
         if not self._keep_subs:
             self.link_subs = dict()
+            self.link_subs_generated = dict()
         self._keep_subs = False
+        
         # Resolve derivatives
         remove = []
         for i in reversed(range(len(expected))):
             if self._is_deriv_decl(expected[i][0]):
                 if isinstance(expected[i][1], sympy.symbol.Symbol):
-                    # See if there is any linkers
+                    # See if there are any linkers
                     for j in reversed(range(len(expected))):
                         if self._get_var_name(expected[j][0]) == str(expected[i][1]):
                             expected[i][1] = expected[j][1]
                             remove.append(expected[j])
 
+        # Remove linkiners for derivatives
+        expected = [x for x in expected if x[0] not in [y[0] for y in remove]]
+
         # Resolve converter / linker variables in remaining equations
         converter_vars = [eq for eq in expected
                           if (self._is_converter(eq[0]) or isinstance(eq[1], sympy.symbol.Symbol))
                           and not self._is_deriv_decl(eq[0])]
-
-        # Remove linkiners for derivatives
-        expected = [x for x in expected if x[0] not in [y[0] for y in remove]]
 
         exclude = []
         for converter in reversed(converter_vars):
@@ -334,7 +333,45 @@ class TestChasteCG(object):
                     for eq in expected if eq not in converter_vars + exclude]
 
         # The 2 sets of equations have the same left hand sides
+        print("bla")
+##
+        remove = []
+        for i in reversed(range(len(generated))):
+            if self._is_deriv_decl(generated[i][0]):
+                if isinstance(generated[i][1], sympy.symbol.Symbol):
+                    # See if there are any linkers
+                    for j in reversed(range(len(generated))):
+                        if self._get_var_name(generated[j][0]) == str(generated[i][1]):
+                            generated[i][1] = generated[j][1]
+                            remove.append(generated[j])
+
+        # Remove linkiners for derivatives
+        generated = [x for x in generated if x[0] not in [y[0] for y in remove]]
+
+        # Resolve converter / linker variables in remaining equations
+        converter_vars = [eq for eq in generated
+                          if (self._is_converter(eq[0]) or isinstance(eq[1], sympy.symbol.Symbol))
+                          and not self._is_deriv_decl(eq[0])]
+
+        exclude = []
+        for converter in reversed(converter_vars):
+            # If rhs is symobol, see if there is an equation we can subs in
+            if isinstance(converter[1], sympy.symbol.Symbol):
+                if self._is_converter(converter[0]):
+                    for i in reversed(range(len(generated))):
+                        if str(converter[1]) == self._get_var_name(generated[i][0]):
+                            converter[1] = generated[i][1]
+                            exclude.append(generated[i])
+            var_name = self._get_var_name(converter[0])
+            self.link_subs_generated[var_name] = converter[1]
+
+        # Perform substitutions
+        generated = [self._perform_eq_subs(eq, self.link_subs_generated)
+                    for eq in generated if eq not in converter_vars + exclude]
+##
+        # The 2 sets of equations have the same left hand sides
         assert len(expected) == len(generated)
+
         # only exception could be name of stimulus current
         if set([eq[0] for eq in expected]) != set([eq[0] for eq in generated]):
             # The last one in the list should be dV/dt
@@ -358,12 +395,12 @@ class TestChasteCG(object):
             expected[expected_index][0] = differing_generated[0][0]
 
             # now the lhs of equations should be the same
-            assert set([eq[0] for eq in expected]) == set([eq[0] for eq in generated])
 
         # Equations are equal
         sorted_generated = sorted(generated, key=lambda eq: eq[0])
         sorted_expected = sorted(expected, key=lambda eq: eq[0])
         for i in range(len(sorted_generated)):
+            assert sorted_generated[i][0] == sorted_expected[i][0]
             assert self._is_same_equation(sorted_generated[i][1], sorted_expected[i][1])
 
         # Check the order for generated: lhs doesn't apear in earlier rhs (could give c++ compile error)
@@ -383,8 +420,21 @@ class TestChasteCG(object):
         expected_cpp = self._get_file_lines(expected_cpp_file)
         generated_cpp = self._get_file_lines(generated_cpp_file)
 
-        expected_i = generated_i = 0
         self._keep_subs = False
+
+        # Remove empty lines
+        expected_i = generated_i = 0
+        while expected_i < len(expected_cpp) and generated_i < len(generated_cpp):
+            if expected_cpp[expected_i] == '':
+                del expected_cpp[expected_i]
+            else:
+                expected_i += 1
+            if  generated_cpp[generated_i] == '':
+                del generated_cpp[generated_i]
+            else:
+                generated_i += 1
+
+        expected_i = generated_i = 0
         while expected_i < len(expected_cpp) and generated_i < len(generated_cpp):
             # If lines are the same (ignore indtation)
             expected_line = expected_cpp[expected_i]

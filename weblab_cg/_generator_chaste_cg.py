@@ -74,6 +74,7 @@ class ChasteModel(object):
         self._membrane_capacitance = self._get_membrane_capacitance()
         self._default_stimulus = self._get_stimulus_currents()
         self._desired_ionic_current_units, self._ionic_current_factor = self._get_stimulus_currents_desired_units()
+        self._ionic_derivs = self._get_ionic_derivs()
         self._equations_for_ionic_vars = self._get_equations_for_ionic_vars()
         self._extended_equations_for_ionic_vars = self._get_extended_equations_for_ionic_vars()
 
@@ -127,7 +128,7 @@ class ChasteModel(object):
 
     def _get_cytosolic_calcium_concentration_var(self):
         try:
-            return self._model.get_symbol_by_ontology_term(self._OXMETA, "cytosolic_calcium_concentration")
+            return 
         except KeyError:
             self._logger.debug(self._model.name + ' has no cytosolic_calcium_concentration')
             return None
@@ -185,19 +186,28 @@ class ChasteModel(object):
             self._use_capacitance_i_ionic = True
             return desired_units, factor
 
-    def _get_equations_for_ionic_vars(self):
+    def _get_ionic_derivs(self):
         # Getting the equations for const definitions for GetIIonic
         # use the RHS of the ODE defining V
-        ionic_derivatives = [x for x in self._model.get_derivative_symbols() if x.args[0] == self._membrane_voltage_var]
+        return [x for x in self._model.get_derivative_symbols() if x.args[0] == self._membrane_voltage_var]
+
+    def _get_equations_for_ionic_vars(self):
         # figure out the currents (by finding variables with the same units as the stimulus)
         # Only equations with the same (lhs) units as the STIMULUS_CURRENT are kept.
         # Also exclude membrane_stimulus_current variable itself, and default_stimulus equations (if he model has those)
-        equations_for_ionic_vars = [eq for eq in self._model.get_equations_for(ionic_derivatives)
-                                    if ((self._membrane_stimulus_current is None)
-                                    or (eq.lhs != self._membrane_stimulus_current
-                                        and eq not in self._default_stimulus.values()))
-                                    and self._model.units.summarise_units(eq.lhs) ==
-                                    self._membrane_stimulus_current_units]
+        # Manually recurse down the equation graph (bfs style) if no currents are found
+
+        equations_for_ionic_vars = []
+        equations = self._ionic_derivs
+        while len(equations_for_ionic_vars) == 0:
+            equations = self._model.get_equations_for(equations, recurse=False)
+            equations_for_ionic_vars = [eq for eq in equations
+                                        if ((self._membrane_stimulus_current is None)
+                                        or (eq.lhs != self._membrane_stimulus_current
+                                            and eq not in self._default_stimulus.values()))
+                                        and self._model.units.summarise_units(eq.lhs) ==
+                                        self._membrane_stimulus_current_units]
+
         # reverse topological order is more similar (though not necessarily identical) to pycml
         equations_for_ionic_vars.reverse()
         return equations_for_ionic_vars
@@ -368,6 +378,21 @@ class ChasteModel(object):
         # Format y_derivatives for writing to chaste output
         return [self._var_chaste_interface_printer.doprint(deriv) for deriv in self._y_derivatives]
 
+    def _get_factor_for_deriv(self, term):
+        factor = 1.0
+        current_units = self._model.units.summarise_units(term)
+        # Time in ms
+        if term == self._model.get_free_variable_symbol():
+            factor = self._model.units.get_conversion_factor(self._model.units.ureg.millisecond, from_unit=current_units)
+        # calcium in millimolar (cytosolic_calcium_concentration)
+        elif term == self._cytosolic_calcium_concentration_var:
+            factor = self._model.units.get_conversion_factor(self._model.units.ureg.millimolar, from_unit=current_units)
+        # voltage in mV
+        elif term == self._membrane_voltage_var:
+            factor = self._model.units.get_conversion_factor(self._model.units.ureg.millivolt, from_unit=current_units)
+
+        return factor
+
     def _format_derivative_equations(self):
         # exclude ionic currents
         equations = []
@@ -379,6 +404,7 @@ class ChasteModel(object):
         # loop through equations backwards as derivatives are last
         for i in range(len(d_eqs) - 1, - 1, - 1):
             is_voltage = False
+            factor = 1.0
             if isinstance(d_eqs[i].lhs, sp.Derivative):
                 # This is dV/dt
                 # Assign temporary values to variables in order to check the stimulus sign.
@@ -400,6 +426,10 @@ class ChasteModel(object):
                     subs_dict[self._membrane_stimulus_current] = 1  # stimulus current = 1
                     if d_eqs[i].rhs.subs(subs_dict) > 0.0:
                         stimulus_sign = '-'
+                # Convert voltage to mV, time to mS and calcium to millimolar
+                dividend_factor = self._get_factor_for_deriv(d_eqs[i].lhs.args[0])
+                divisor_factor = self._get_factor_for_deriv(d_eqs[i].lhs.args[1][0])
+                factor = dividend_factor / divisor_factor
             if d_eqs[i].lhs == self._membrane_stimulus_current:
                 d_eqs[i] = sp.Eq(d_eqs[i].lhs, 1 / self._ionic_current_factor *
                                  sp.sympify(stimulus_sign +
@@ -407,7 +437,7 @@ class ChasteModel(object):
 
             # Format the equation and put it at the front of the result list to keep order (we're looping backwards)
             equations.insert(0, {'lhs': self._printer.doprint(d_eqs[i].lhs),
-                                 'rhs': self._printer.doprint(d_eqs[i].rhs),
+                                 'rhs': self._printer.doprint(factor * d_eqs[i].rhs),
                                  'units': self._model.units.summarise_units(d_eqs[i].lhs),
                                  'in_membrane_voltage': d_eqs[i] not in self._derivative_eqs_exlc_voltage,
                                  'is_voltage': is_voltage})
