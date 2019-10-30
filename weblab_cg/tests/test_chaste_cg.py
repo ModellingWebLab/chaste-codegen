@@ -290,29 +290,23 @@ class TestChasteCG(object):
         else:
             return eq1-eq2 == 0.0
 
-    def _check_equation_list(self, expected, generated):
-        #link_subs = dict()
-        if not self._keep_subs:
-            self.link_subs = dict()
-            self.link_subs_generated = dict()
-        self._keep_subs = False
-        
+    def _resolve_linkers(self, equation_list, subs_dict):
         # Resolve derivatives
         remove = []
-        for i in reversed(range(len(expected))):
-            if self._is_deriv_decl(expected[i][0]):
-                if isinstance(expected[i][1], sympy.symbol.Symbol):
+        for i in reversed(range(len(equation_list))):
+            if self._is_deriv_decl(equation_list[i][0]):
+                if isinstance(equation_list[i][1], sympy.symbol.Symbol):
                     # See if there are any linkers
-                    for j in reversed(range(len(expected))):
-                        if self._get_var_name(expected[j][0]) == str(expected[i][1]):
-                            expected[i][1] = expected[j][1]
-                            remove.append(expected[j])
+                    for j in reversed(range(len(equation_list))):
+                        if self._get_var_name(equation_list[j][0]) == str(equation_list[i][1]):
+                            equation_list[i][1] = equation_list[j][1]
+                            remove.append(equation_list[j])
 
         # Remove linkiners for derivatives
-        expected = [x for x in expected if x[0] not in [y[0] for y in remove]]
+        equation_list = [x for x in equation_list if x[0] not in [y[0] for y in remove]]
 
         # Resolve converter / linker variables in remaining equations
-        converter_vars = [eq for eq in expected
+        converter_vars = [eq for eq in equation_list
                           if (self._is_converter(eq[0]) or isinstance(eq[1], sympy.symbol.Symbol))
                           and not self._is_deriv_decl(eq[0])]
 
@@ -321,54 +315,29 @@ class TestChasteCG(object):
             # If rhs is symobol, see if there is an equation we can subs in
             if isinstance(converter[1], sympy.symbol.Symbol):
                 if self._is_converter(converter[0]):
-                    for i in reversed(range(len(expected))):
-                        if str(converter[1]) == self._get_var_name(expected[i][0]):
-                            converter[1] = expected[i][1]
-                            exclude.append(expected[i])
+                    for i in reversed(range(len(equation_list))):
+                        if str(converter[1]) == self._get_var_name(equation_list[i][0]):
+                            converter[1] = equation_list[i][1]
+                            exclude.append(equation_list[i])
             var_name = self._get_var_name(converter[0])
-            self.link_subs[var_name] = converter[1]
+            subs_dict[var_name] = converter[1]
 
         # Perform substitutions
-        expected = [self._perform_eq_subs(eq, self.link_subs)
-                    for eq in expected if eq not in converter_vars + exclude]
+        equation_list = [self._perform_eq_subs(eq, subs_dict)
+                    for eq in equation_list if eq not in converter_vars + exclude]
 
-        # The 2 sets of equations have the same left hand sides
-        print("bla")
-##
-        remove = []
-        for i in reversed(range(len(generated))):
-            if self._is_deriv_decl(generated[i][0]):
-                if isinstance(generated[i][1], sympy.symbol.Symbol):
-                    # See if there are any linkers
-                    for j in reversed(range(len(generated))):
-                        if self._get_var_name(generated[j][0]) == str(generated[i][1]):
-                            generated[i][1] = generated[j][1]
-                            remove.append(generated[j])
+        return equation_list, subs_dict
 
-        # Remove linkiners for derivatives
-        generated = [x for x in generated if x[0] not in [y[0] for y in remove]]
+    def _check_equation_list(self, expected, generated):
+        if not self._keep_subs:
+            self.link_subs_expected = dict()
+            self.link_subs_generated = dict()
+        self._keep_subs = False
 
-        # Resolve converter / linker variables in remaining equations
-        converter_vars = [eq for eq in generated
-                          if (self._is_converter(eq[0]) or isinstance(eq[1], sympy.symbol.Symbol))
-                          and not self._is_deriv_decl(eq[0])]
+        # Resolve linkers and converter variables        
+        expected, self.link_subs_expected = self._resolve_linkers(expected, self.link_subs_expected)
+        generated, self.link_subs_generated = self._resolve_linkers(generated, self.link_subs_generated)
 
-        exclude = []
-        for converter in reversed(converter_vars):
-            # If rhs is symobol, see if there is an equation we can subs in
-            if isinstance(converter[1], sympy.symbol.Symbol):
-                if self._is_converter(converter[0]):
-                    for i in reversed(range(len(generated))):
-                        if str(converter[1]) == self._get_var_name(generated[i][0]):
-                            converter[1] = generated[i][1]
-                            exclude.append(generated[i])
-            var_name = self._get_var_name(converter[0])
-            self.link_subs_generated[var_name] = converter[1]
-
-        # Perform substitutions
-        generated = [self._perform_eq_subs(eq, self.link_subs_generated)
-                    for eq in generated if eq not in converter_vars + exclude]
-##
         # The 2 sets of equations have the same left hand sides
         assert len(expected) == len(generated)
 
@@ -403,13 +372,13 @@ class TestChasteCG(object):
             assert sorted_generated[i][0] == sorted_expected[i][0]
             assert self._is_same_equation(sorted_generated[i][1], sorted_expected[i][1])
 
-        # Check the order for generated: lhs doesn't apear in earlier rhs (could give c++ compile error)
-        for i in range(len(generated) - 1, - 1, - 1):
-            # check the equation doesn't appear on rhs beforehand
-            var = self._get_var_name(generated[i][0])
-            for j in range(i - 1, - 1, - 1):
-                assert (isinstance(generated[j][1], sympy.numbers.Float)
-                        or var not in [str(x) for x in generated[j][1].free_symbols])
+        # Check the order for generated: lhs doesn't appear in earlier rhs (could give c++ compile error)
+        rhs_symbols = set()
+        for i in range(len(generated)):
+            # Update symbold we have seen on the rhs so far
+            rhs_symbols.update([str(x) for x in generated[i][1].free_symbols])
+            # The lhs should not appear as otherwise it is being used before being defined
+            assert self._get_var_name(generated[i][0]) not in rhs_symbols
 
     def _check_match_gengerated_chaste_cpp(self, gen_path, model_name_from_file, model_type):
         expected_cpp_file = \
@@ -424,12 +393,12 @@ class TestChasteCG(object):
 
         # Remove empty lines
         expected_i = generated_i = 0
-        while expected_i < len(expected_cpp) and generated_i < len(generated_cpp):
-            if expected_cpp[expected_i] == '':
+        while expected_i < len(expected_cpp) or generated_i < len(generated_cpp):
+            if expected_i < len(expected_cpp) and expected_cpp[expected_i] == '':
                 del expected_cpp[expected_i]
             else:
                 expected_i += 1
-            if  generated_cpp[generated_i] == '':
+            if generated_i < len(generated_cpp) and generated_cpp[generated_i] == '':
                 del generated_cpp[generated_i]
             else:
                 generated_i += 1

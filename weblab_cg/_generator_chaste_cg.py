@@ -128,7 +128,7 @@ class ChasteModel(object):
 
     def _get_cytosolic_calcium_concentration_var(self):
         try:
-            return 
+            return self._model.get_symbol_by_ontology_term(self._OXMETA, "cytosolic_calcium_concentration")
         except KeyError:
             self._logger.debug(self._model.name + ' has no cytosolic_calcium_concentration')
             return None
