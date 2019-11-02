@@ -17,8 +17,10 @@ logging.getLogger().setLevel(logging.DEBUG)
 class TestChasteCG(object):
     _COMMENTS_REGEX = re.compile(r'(//.*\n)')
     _NUM_REGEX = re.compile(r'[-+]?[\d]+\.?[\d]*[Ee](?:[-+]?[\d]+)?|\d+\.\d+')
-    _DIGITS_REGEX = re.compile(r'\d+\.\d+')
-    _FLOAT_PRECISION = 14
+    #_DIGITS_REGEX = re.compile(r'\d+\.\d+')
+    _DIGITS_REGEX = re.compile(r'(?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?')
+    _FLOAT_PRECISION = 12
+    _TOLERANCE = 0.0000000001
 
 
     @pytest.fixture(scope="class")
@@ -131,21 +133,85 @@ class TestChasteCG(object):
 
     def _numbers_with_float_precision(self, line):
         def format_numbers(m):
-            pattern = "{0:." + str(self._FLOAT_PRECISION - 1) + "f}"
-            return str(float(pattern.format(float(m.group(0)))))
+            number = m.group(0)
+            count = 0
+            num_str = ""
+            i = 0
+            exponent=0
+            before_dot = 0
+            existing_exp = ""
+            seen_dot = False
+            # get the digits until float precision
+            while i < len(number) and count < self._FLOAT_PRECISION and not number[i].lower() =='e':
+                if number[i] != '.':
+                    count += 1
+                    if not seen_dot:
+                        before_dot += 1
+                else:
+                    seen_dot = True
+                num_str += number[i]
+                i += 1
+
+            if seen_dot and i < len(number) and number[i].isnumeric():
+                num_str += number[i]
+                num_str = str(round(float(num_str), self._FLOAT_PRECISION - before_dot))
+
+            # Count exponent factor to add
+            while i < len(number) and not number[i].lower() =='e':
+                seen_dot = seen_dot or number[i] == '.'
+                if not seen_dot:
+                    exponent += 1
+                i += 1
+            
+            # See if there was an exponent already
+            if i < len(number) and number[i].lower() =='e':
+                i += 1
+                while i < len(number):
+                    existing_exp += number[i]
+                    i += 1
+
+            # Add exponent to what w got from cut off
+            if existing_exp != "":
+                exponent += int(existing_exp)
+
+            if exponent !=0:
+                num_str += "e"+str(exponent)
+
+            return num_str
 
         # pow->Pow ceil -> ceiling
         line = line.replace("Pow(", 'Pow(').replace("ceil(", 'ceiling(')
         line = self._DIGITS_REGEX.sub(format_numbers, line)
         return line
 
+    def _is_same_equation(self, eq1, eq2):
+        def is_float(s):
+            try:
+                value = float(str(s))
+                return True
+            except ValueError:
+                return False
+
+        def is_same(eq1, eq2):
+            return (eq1 == eq2) or (sympy.simplify(eq1-eq2) == 0.0) or (eq2!=0.0 and (sympy.simplify(eq1 / eq2))==1.0) or (is_float(sympy.simplify(eq1-eq2)) and abs(sympy.simplify(eq1-eq2)) < self._TOLERANCE)
+
+        # If they are the same, no need for elaborate check
+        if eq1 == eq2:
+            return True
+
+        eq1 = sympy.sympify(eq1)
+        eq2 = sympy.sympify(eq2)
+        if is_same(eq1,eq2):
+            return True
+        else:
+            eq1 = sympy.sympify(self._numbers_with_float_precision(str(eq1)))
+            eq2 = sympy.sympify(self._numbers_with_float_precision(str(eq2)))
+            return is_same(eq1,eq2)
+
     def _same_with_number(self, line1, line2):
         # If they are the same, no need for elaborate check
         if line1 == line2:
             return True
-
-        line1 = self._numbers_with_float_precision(line1)
-        line2 = self._numbers_with_float_precision(line2)
 
         # Get numbers out (both digits and scientific notation)
         num1 = self._NUM_REGEX.findall(line1)
@@ -160,7 +226,7 @@ class TestChasteCG(object):
             # check numbers are the same using sympy
             if len(num1) == len(num2):
                 for i in range(len(num1)):
-                    if sympy.sympify(num1[i]) != sympy.sympify(num2[i]):
+                    if not self._is_same_equation(num1[i], num2[i]):
                         return False
                 return True
         return False
@@ -271,24 +337,6 @@ class TestChasteCG(object):
             substituted_term = eq[1].subs(subs_dict)
         return [eq[0], eq[1]]
 
-    def _is_same_equation(self, eq1, eq2):
-        # If they are the same, no need for elaborate check
-        if eq1 == eq2:
-            return True
-
-        eq1 = self._numbers_with_float_precision(str(eq1))
-        eq1 = sympy.simplify(eq1)
-
-        eq2 = self._numbers_with_float_precision(str(eq2))
-        eq2 = sympy.simplify(eq2)
-
-        if eq1 == eq2:
-            return True
-
-        if eq2 != 0.0:
-            return sympy.simplify(eq1 / eq2) == 1.0
-        else:
-            return eq1-eq2 == 0.0
 
     def _resolve_linkers(self, equation_list, subs_dict):
         # Resolve derivatives
@@ -319,6 +367,7 @@ class TestChasteCG(object):
                         if str(converter[1]) == self._get_var_name(equation_list[i][0]):
                             converter[1] = equation_list[i][1]
                             exclude.append(equation_list[i])
+                            subs_dict[self._get_var_name(equation_list[i][0])] = equation_list[i][1]
             var_name = self._get_var_name(converter[0])
             subs_dict[var_name] = converter[1]
 
@@ -343,34 +392,43 @@ class TestChasteCG(object):
 
         # only exception could be name of stimulus current
         if set([eq[0] for eq in expected]) != set([eq[0] for eq in generated]):
-            # The last one in the list should be dV/dt
-            # Check if it is a derivative
-            assert self._is_deriv_decl(expected[-1][0])
-            assert self._is_deriv_decl(generated[-1][0])
 
             # Find the 2 differing lhs. There should be 1 and they should have the same rhs:
             differing_expected = [eq for eq in expected if eq[0] not in [e[0] for e in generated]]
             differing_generated = [eq for eq in generated if eq[0] not in [e[0] for e in expected]]
-            assert len(differing_expected) == len(differing_generated) == 1
-            assert self._is_same_equation(differing_expected[0][1], differing_generated[0][1])
+            assert len(differing_expected) == len(differing_generated) 
 
-            # update the expected dV/dt  with the differeing variable name
-            # so that the check for the set of equations succeeds
-            expected[-1][1] = expected[-1][1].subs({self._get_var_name(differing_expected[0][0]):
-                                                    self._get_var_name(differing_generated[0][0])})
+            update_subs = dict()
+            # For each equation find one that has the same rhs
+            for i in range(len(differing_expected)):
+                found = False
+                for j in range(len(differing_generated)):
+                    found = self._is_same_equation(differing_expected[i][1], differing_generated[j][1])
+                    if found:
+                        break
+                assert found
+                # update the expected name for this variable, so that the check for the set of equations succeeds
+                update_subs[self._get_var_name(differing_expected[i][0])] = self._get_var_name(differing_generated[j][0])
+                expected_index = expected.index(differing_expected[i])
+                expected[expected_index][0] = differing_generated[j][0]
 
-            # update the expected name for this variable, so that the check for the set of equations succeeds
-            expected_index = expected.index(differing_expected[0])
-            expected[expected_index][0] = differing_generated[0][0]
+            # update the expected equations
+            expected = [self._perform_eq_subs(eq, update_subs) for eq in expected]
 
-            # now the lhs of equations should be the same
+            # Add to substitution dictionary for future use (if needed)
+            self.link_subs_expected.update(update_subs)
 
         # Equations are equal
+        generated_subs = {self._get_var_name(x[0]) : x[1] for x in generated}
+        expected_subs = {self._get_var_name(x[0]) : x[1] for x in expected}
         sorted_generated = sorted(generated, key=lambda eq: eq[0])
         sorted_expected = sorted(expected, key=lambda eq: eq[0])
         for i in range(len(sorted_generated)):
             assert sorted_generated[i][0] == sorted_expected[i][0]
-            assert self._is_same_equation(sorted_generated[i][1], sorted_expected[i][1])
+            if not self._is_same_equation(sorted_generated[i][1], sorted_expected[i][1]):
+                eq_gen = self._perform_eq_subs(sorted_generated[i], generated_subs)
+                eq_exp = self._perform_eq_subs(sorted_expected[i], expected_subs)
+                assert self._is_same_equation(eq_gen[1], eq_exp[1])
 
         # Check the order for generated: lhs doesn't appear in earlier rhs (could give c++ compile error)
         rhs_symbols = set()

@@ -2,7 +2,7 @@
 # Functions related to generating model code for Chaste.
 #
 
-# TODO: apply unit conversions: state variables voltage, time, cytosolic_calcium_concentration state vars
+# TODO: apply unit conversions to state variables voltage, time, cytosolic_calcium_concentration and update equations accordingly
 
 
 
@@ -58,6 +58,7 @@ class ChasteModel(object):
         """
         self._logger = logging.getLogger(__name__)
         self._logger.setLevel(logging.INFO)
+
 
         # Store parameters for future reference
         self._model = model
@@ -378,20 +379,19 @@ class ChasteModel(object):
         # Format y_derivatives for writing to chaste output
         return [self._var_chaste_interface_printer.doprint(deriv) for deriv in self._y_derivatives]
 
-    def _get_factor_for_deriv(self, term):
-        factor = 1.0
+    def _get_desired_units_for_deriv(self, term):
         current_units = self._model.units.summarise_units(term)
         # Time in ms
+        units = self._model.units.summarise_units(term)
         if term == self._model.get_free_variable_symbol():
-            factor = self._model.units.get_conversion_factor(self._model.units.ureg.millisecond, from_unit=current_units)
+            units = self._model.units.ureg.millisecond
         # calcium in millimolar (cytosolic_calcium_concentration)
         elif term == self._cytosolic_calcium_concentration_var:
-            factor = self._model.units.get_conversion_factor(self._model.units.ureg.millimolar, from_unit=current_units)
+            units = self._model.units.ureg.millimolar
         # voltage in mV
         elif term == self._membrane_voltage_var:
-            factor = self._model.units.get_conversion_factor(self._model.units.ureg.millivolt, from_unit=current_units)
-
-        return factor
+            units = self._model.units.ureg.millivolt
+        return units
 
     def _format_derivative_equations(self):
         # exclude ionic currents
@@ -405,6 +405,7 @@ class ChasteModel(object):
         for i in range(len(d_eqs) - 1, - 1, - 1):
             is_voltage = False
             factor = 1.0
+            units = self._model.units.summarise_units(d_eqs[i].lhs)
             if isinstance(d_eqs[i].lhs, sp.Derivative):
                 # This is dV/dt
                 # Assign temporary values to variables in order to check the stimulus sign.
@@ -427,20 +428,30 @@ class ChasteModel(object):
                     if d_eqs[i].rhs.subs(subs_dict) > 0.0:
                         stimulus_sign = '-'
                 # Convert voltage to mV, time to mS and calcium to millimolar
-                dividend_factor = self._get_factor_for_deriv(d_eqs[i].lhs.args[0])
-                divisor_factor = self._get_factor_for_deriv(d_eqs[i].lhs.args[1][0])
-                factor = dividend_factor / divisor_factor
+                dividend_unit = self._get_desired_units_for_deriv(d_eqs[i].lhs.args[0])
+                divisor_unit = self._get_desired_units_for_deriv(d_eqs[i].lhs.args[1][0])
+                units = dividend_unit / divisor_unit
+                factor = self._model.units.get_conversion_factor(units, from_unit=self._model.units.summarise_units(d_eqs[i].lhs))
             if d_eqs[i].lhs == self._membrane_stimulus_current:
                 d_eqs[i] = sp.Eq(d_eqs[i].lhs, 1 / self._ionic_current_factor *
                                  sp.sympify(stimulus_sign +
                                             'GetIntracellularAreaStimulus(_chaste_interface__environment__time)'))
 
             # Format the equation and put it at the front of the result list to keep order (we're looping backwards)
-            equations.insert(0, {'lhs': self._printer.doprint(d_eqs[i].lhs),
-                                 'rhs': self._printer.doprint(factor * d_eqs[i].rhs),
-                                 'units': self._model.units.summarise_units(d_eqs[i].lhs),
+            equations.insert(0, {'lhs': d_eqs[i].lhs,
+                                 'factor': factor,
+                                 'rhs': d_eqs[i].rhs,
+                                 'units': units,
                                  'in_membrane_voltage': d_eqs[i] not in self._derivative_eqs_exlc_voltage,
                                  'is_voltage': is_voltage})
+                                 
+        for i in range(len(equations)):
+            if equations[i]['factor']  != 1.0:
+                for j in range(i+1, len(equations)):
+                    equations[j]['rhs'] = equations[j]['rhs'].subs({equations[i]['lhs']: (1/equations[i]['factor'] * equations[i]['lhs'])})
+            equations[i]['rhs'] = self._printer.doprint(equations[i]['factor'] * equations[i]['rhs'])
+            equations[i]['lhs'] = self._printer.doprint(equations[i]['lhs'])
+
         return equations
 
     def _format_system_info(self):
