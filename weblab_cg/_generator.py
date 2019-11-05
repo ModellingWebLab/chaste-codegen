@@ -171,7 +171,7 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
 
     # Create state information dicts
     state_info = []
-    for i, state in enumerate(model.get_state_symbols(True)):
+    for i, state in enumerate(model.get_state_symbols()):
         state_info.append({
             'index': i,
             'var_name': symbol_name(state),
