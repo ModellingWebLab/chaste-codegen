@@ -85,7 +85,7 @@ class WebLabPrinter(sympy.printing.printer.Printer):
         'sinh',
         'tan',
         'tanh',
-    }    
+    }
 
     def __init__(self, symbol_function=None, derivative_function=None):
         super(WebLabPrinter, self).__init__(None)
