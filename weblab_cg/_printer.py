@@ -161,6 +161,13 @@ class WebLabPrinter(sympy.printing.printer.Printer):
         my_prec = precedence(expr)
         return ' and '.join([self._bracket(x, my_prec) for x in expr.args])
 
+    def _print_bool(self, expr):
+        """ Handles False """
+        if expr:
+            return self._print_BooleanTrue(expr)
+        else:
+            return self._print_BooleanFalse(expr)
+
     def _print_BooleanFalse(self, expr):
         """ Handles False """
         return 'False'
