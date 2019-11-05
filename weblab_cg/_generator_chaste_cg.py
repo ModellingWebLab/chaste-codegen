@@ -567,3 +567,19 @@ class NormalChasteModel(ChasteModel):
             'use_capacitance_i_ionic': self._use_capacitance_i_ionic,
             'free_variable': self._free_variable,
             'ode_system_information': self._ode_system_information})
+
+
+class OptChasteModel(ChasteModel):
+    pass
+
+
+class Analytic_jChasteModel(ChasteModel):
+    pass
+
+
+class Numerical_jChasteModel(ChasteModel):
+    pass
+
+
+class BEOptChasteModel(ChasteModel):
+    pass
