@@ -32,16 +32,18 @@ class TestChastePrinter(object):
     def test_and(self, printer, x, y):
         assert printer.doprint(sp.sympify('x & y')) == 'x && y'
 
-    def test_booleans(self, printer):
-        assert printer.doprint(True) == 'true'
-        assert printer.doprint(False) == 'false'
+    def test_booleans(self, printer, x):
+        assert printer.doprint(sp.Eq(x, x)) == printer.doprint(True) == 'true'
+        assert printer.doprint(sp.Ne(x, x)) == printer.doprint(False) == 'false'
 
-    def test_or(self, printer, x, y):
-        assert printer.doprint(sp.sympify('x | y')) == 'x || y'
+    def test_or(self, printer, x, y, z):
+        assert printer.doprint(sp.Or(sp.Eq(x, y), sp.Eq(x, z))) \
+            == printer.doprint(sp.Eq(x, y) | sp.Eq(x, z)) == 'x == y || x == z'
 
     def test_pow(self, printer, x, y):
         assert printer.doprint(sp.sympify('x ** y')) == 'pow(x, y)'
         assert printer.doprint(sp.sympify('Pow(x,y)')) == 'pow(x, y)'
+        assert printer.doprint(sp.sympify('x ** (1/2)')) == 'sqrt(x)'
 
     def test_piecewise_expressions(self, printer, x, y, z):
         # Piecewise expressions
