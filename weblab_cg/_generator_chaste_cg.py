@@ -26,6 +26,7 @@ class ChasteModel(object):
                          'uA_per_uF': [{'prefix': 'micro', 'units': 'ampere'},
                                        {'exponent': '-1', 'prefix': 'micro', 'units': 'farad'}],
                          'uA': [{'prefix': 'micro', 'units': 'ampere'}],
+                         'nanoA': [{'prefix': 'nano', 'units': 'ampere'}],
                          'uF': [{'prefix': 'micro', 'units': 'farad'}],
                          'millisecond': [{'prefix': 'milli', 'units': 'second'}],
                          'millimolar': [{'units': 'mole', 'prefix': 'milli'}, {'units': 'litre', 'exponent': '-1'}],
@@ -72,7 +73,7 @@ class ChasteModel(object):
         self._state_vars = self._get_state_variables()
         self._membrane_stimulus_current = self._get_membrane_stimulus_current()
         self._membrane_stimulus_current_units = self._get__membrane_stimulus_current_units()
-        self._membrane_capacitance = self._get_membrane_capacitance()
+        self._membrane_capacitance, self._membrane_capacitance_factor = self._get_membrane_capacitance()
         self._default_stimulus = self._get_stimulus_currents()
         self._desired_ionic_current_units, self._ionic_current_factor = self._get_stimulus_currents_desired_units()
         self._ionic_derivs = self._get_ionic_derivs()
@@ -157,9 +158,14 @@ class ChasteModel(object):
             # add membrane_capacitance if the model has it
             try:
                 membrane_capacitance = self._model.get_symbol_by_ontology_term(self._OXMETA, "membrane_capacitance")
-                return self._model.get_equations_for([membrane_capacitance])[-1]
+                current_units = self._model.units.summarise_units(membrane_capacitance)
+                desired_units = getattr(self._model.units.ureg, self._STIMULUS_UNITS['membrane_capacitance'])
+                factor = self._model.units.get_conversion_factor(desired_units, from_unit=current_units)
+                initial_value = self._model.get_initial_value(membrane_capacitance)
+                equation = sp.Eq(membrane_capacitance,initial_value)
+                return equation, factor
             except KeyError:
-                return None
+                return None, 1.0
 
     def _get_stimulus_currents(self):
         # Store the stimulus current
@@ -190,7 +196,7 @@ class ChasteModel(object):
     def _get_ionic_derivs(self):
         # Getting the equations for const definitions for GetIIonic
         # use the RHS of the ODE defining V
-        return [x for x in self._model.get_derivative_symbols() if x.args[0] == self._membrane_voltage_var]
+        return [x for x in self._model.get_derivative_symbols(order_by_order_added=True) if x.args[0] == self._membrane_voltage_var]
 
     def _get_equations_for_ionic_vars(self):
         # figure out the currents (by finding variables with the same units as the stimulus)
@@ -221,7 +227,7 @@ class ChasteModel(object):
 
     def _get_y_derivatives(self):
         # Get derivatives for voltage state variable
-        return sorted(self._model.get_derivative_symbols(),
+        return sorted(self._model.get_derivative_symbols(order_by_order_added=True),
                       key=lambda state_var: self._state_var_key_order(state_var))
 
     def _get_y_derivatives_voltage(self):
@@ -306,15 +312,11 @@ class ChasteModel(object):
                                 and self._membrane_capacitance is not None:
                             dividend_factor = self._model.units.get_conversion_factor(tertiary_units, from_unit=current_units)
 
-                            devisor_key = 'membrane_capacitance'
-                            divisor_units = \
-                                getattr(self._model.units.ureg, self._STIMULUS_UNITS[devisor_key]
-                                        ) if devisor_key in self._STIMULUS_UNITS else None
+                            #membrane_capacitance
                             divisor_eq = self._membrane_capacitance
+                            divisor_factor = self._membrane_capacitance_factor
                             divisor_current_units = self._model.units.summarise_units(divisor_eq.lhs)
-                            divisor_factor = \
-                                self._model.units.get_conversion_factor(divisor_units, from_unit=divisor_current_units)
-
+                            
                             factor = dividend_factor / divisor_factor
                             # Just so we can get the correct comment in the output
 
@@ -406,6 +408,7 @@ class ChasteModel(object):
             is_voltage = False
             factor = 1.0
             units = self._model.units.summarise_units(d_eqs[i].lhs)
+            rhs_divider = ''
             if isinstance(d_eqs[i].lhs, sp.Derivative):
                 # This is dV/dt
                 # Assign temporary values to variables in order to check the stimulus sign.
@@ -433,15 +436,24 @@ class ChasteModel(object):
                 units = dividend_unit / divisor_unit
                 factor = self._model.units.get_conversion_factor(units, from_unit=self._model.units.summarise_units(d_eqs[i].lhs))
             if d_eqs[i].lhs == self._membrane_stimulus_current:
-                d_eqs[i] = sp.Eq(d_eqs[i].lhs, 1 / self._ionic_current_factor *
-                                 sp.sympify(stimulus_sign +
-                                            'GetIntracellularAreaStimulus(_chaste_interface__environment__time)'))
+                factor = 1.0
+                if self._use_capacitance_i_ionic:
+                    stimulus_current_eq_rhs = 1 / self._membrane_capacitance_factor * sp.sympify(stimulus_sign +
+                                            'GetIntracellularAreaStimulus(_chaste_interface__environment__time)') \
+                                                * self._membrane_capacitance.lhs
+                    rhs_divider = '/ HeartConfig::Instance()->GetCapacitance()'
+                else:                
+                    stimulus_current_eq_rhs = 1 / self._ionic_current_factor * sp.sympify(stimulus_sign +
+                                            'GetIntracellularAreaStimulus(_chaste_interface__environment__time)')
+
+                d_eqs[i] = sp.Eq(d_eqs[i].lhs, stimulus_current_eq_rhs)
 
             # Format the equation and put it at the front of the result list to keep order (we're looping backwards)
             equations.insert(0, {'lhs': d_eqs[i].lhs,
                                  'factor': factor,
                                  'rhs': d_eqs[i].rhs,
                                  'units': units,
+                                 'rhs_divider': rhs_divider,
                                  'in_membrane_voltage': d_eqs[i] not in self._derivative_eqs_exlc_voltage,
                                  'is_voltage': is_voltage})
                                  
@@ -449,14 +461,14 @@ class ChasteModel(object):
             if equations[i]['factor']  != 1.0:
                 for j in range(i+1, len(equations)):
                     equations[j]['rhs'] = equations[j]['rhs'].subs({equations[i]['lhs']: (1/equations[i]['factor'] * equations[i]['lhs'])})
-            equations[i]['rhs'] = self._printer.doprint(equations[i]['factor'] * equations[i]['rhs'])
+            equations[i]['rhs'] = self._printer.doprint(equations[i]['factor'] * equations[i]['rhs']) + equations[i]['rhs_divider']
             equations[i]['lhs'] = self._printer.doprint(equations[i]['lhs'])
 
         return equations
 
     def _format_system_info(self):
         self._free_variable = {'name': self._name_printer.doprint(self._model.get_free_variable_symbol()),
-                               'units': self._model.units.summarise_units(self._model.get_free_variable_symbol()),
+                               'units': self._get_desired_units_for_deriv(self._model.get_free_variable_symbol()),
                                'system_name': self._model.name}
         self._ode_system_information = \
             [{'name': self._model.get_ontology_terms_by_symbol(var, self._OXMETA)[0]

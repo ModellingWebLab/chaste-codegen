@@ -16,11 +16,8 @@ logging.getLogger().setLevel(logging.DEBUG)
 
 class TestChasteCG(object):
     _COMMENTS_REGEX = re.compile(r'(//.*\n)')
-    _NUM_REGEX = re.compile(r'[-+]?[\d]+\.?[\d]*[Ee](?:[-+]?[\d]+)?|\d+\.\d+')
-    #_DIGITS_REGEX = re.compile(r'\d+\.\d+')
-    _DIGITS_REGEX = re.compile(r'(?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?')
+    _NUM_REGEX = re.compile(r'(?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?')
     _FLOAT_PRECISION = 12
-    _TOLERANCE = 0.0000000001
 
 
     @pytest.fixture(scope="class")
@@ -142,9 +139,9 @@ class TestChasteCG(object):
             existing_exp = ""
             seen_dot = False
             # get the digits until float precision
-            while i < len(number) and count < self._FLOAT_PRECISION and not number[i].lower() =='e':
+            while i < len(number) and count <= self._FLOAT_PRECISION and not number[i].lower() =='e':
+                count += 1  # We deliberately count the dot as for fractional numbers later on we add an extra digit so we can round
                 if number[i] != '.':
-                    count += 1
                     if not seen_dot:
                         before_dot += 1
                 else:
@@ -181,7 +178,7 @@ class TestChasteCG(object):
 
         # pow->Pow ceil -> ceiling
         line = line.replace("Pow(", 'Pow(').replace("ceil(", 'ceiling(')
-        line = self._DIGITS_REGEX.sub(format_numbers, line)
+        line = self._NUM_REGEX.sub(format_numbers, line)
         return line
 
     def _is_same_equation(self, eq1, eq2):
@@ -193,7 +190,7 @@ class TestChasteCG(object):
                 return False
 
         def is_same(eq1, eq2):
-            return (eq1 == eq2) or (sympy.simplify(eq1-eq2) == 0.0) or (eq2!=0.0 and (sympy.simplify(eq1 / eq2))==1.0) or (is_float(sympy.simplify(eq1-eq2)) and abs(sympy.simplify(eq1-eq2)) < self._TOLERANCE)
+            return (eq1 == eq2) or (sympy.simplify(eq1-eq2) == 0.0) or (eq2!=0.0 and (sympy.simplify(eq1 / eq2))==1.0)
 
         # If they are the same, no need for elaborate check
         if eq1 == eq2:
@@ -296,6 +293,7 @@ class TestChasteCG(object):
         # pow->Pow ceil -> ceiling in sympy
         equation_str = equation_str.replace("Pow(", 'Pow(').replace("ceil(", 'ceiling(')
         # This might be a C++ call with class members/pointer accessors?
+        equation_str = equation_str.replace('HeartConfig::Instance()->GetCapacitance()', 'HeartConfig_Instance_GetCapacitance')
         equation_str = equation_str.replace('()->', '_').replace('::', '_')
         equation_str = equation_str.replace('&&', '&').replace('||', '|')
         try:
@@ -381,6 +379,8 @@ class TestChasteCG(object):
         if not self._keep_subs:
             self.link_subs_expected = dict()
             self.link_subs_generated = dict()
+            self.generated_subs = dict()
+            self.expected_subs = dict()
         self._keep_subs = False
 
         # Resolve linkers and converter variables        
@@ -419,15 +419,15 @@ class TestChasteCG(object):
             self.link_subs_expected.update(update_subs)
 
         # Equations are equal
-        generated_subs = {self._get_var_name(x[0]) : x[1] for x in generated}
-        expected_subs = {self._get_var_name(x[0]) : x[1] for x in expected}
+        self.generated_subs.update({self._get_var_name(x[0]) : x[1] for x in generated})
+        self.expected_subs.update({self._get_var_name(x[0]) : x[1] for x in expected})
         sorted_generated = sorted(generated, key=lambda eq: eq[0])
         sorted_expected = sorted(expected, key=lambda eq: eq[0])
         for i in range(len(sorted_generated)):
             assert sorted_generated[i][0] == sorted_expected[i][0]
             if not self._is_same_equation(sorted_generated[i][1], sorted_expected[i][1]):
-                eq_gen = self._perform_eq_subs(sorted_generated[i], generated_subs)
-                eq_exp = self._perform_eq_subs(sorted_expected[i], expected_subs)
+                eq_gen = self._perform_eq_subs(sorted_generated[i], self.generated_subs)
+                eq_exp = self._perform_eq_subs(sorted_expected[i], self.expected_subs)
                 assert self._is_same_equation(eq_gen[1], eq_exp[1])
 
         # Check the order for generated: lhs doesn't appear in earlier rhs (could give c++ compile error)
