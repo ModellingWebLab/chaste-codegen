@@ -69,39 +69,19 @@ class TestChasteCG(object):
 
     @pytest.mark.skip(reason="Opt models not yet implemented")
     def test_generate_opt_models(self, tmp_path, chaste_models):
-        for model in chaste_models:
-            chaste_model = cg.OptChasteModel(model['model'], model['model_name_from_file'], model['class_name'])
-            chaste_model.generate_chaste_code()
-
-            self._check_match_gengerated_chaste_hpp(tmp_path, model['model_name_from_file'], 'Opt')
-            self._check_match_gengerated_chaste_cpp(tmp_path, model['model_name_from_file'], 'Opt')
+        pass
 
     @pytest.mark.skip(reason="Analytic_j models not yet implemented")
     def test_generate_cvode_analytic_j_models(self, tmp_path, chaste_models):
-        for model in chaste_models:
-            chaste_model = cg.Analytic_jChasteModel(model['model'], model['model_name_from_file'], model['class_name'])
-            chaste_model.generate_chaste_code()
-
-            self._check_match_gengerated_chaste_hpp(tmp_path, model['model_name_from_file'], 'Analytic_j')
-            self._check_match_gengerated_chaste_cpp(tmp_path, model['model_name_from_file'], 'Analytic_j')
+        pass
 
     @pytest.mark.skip(reason="Numerical_j models not yet implemented")
     def test_generate_cvode_numerical_j_models(self, tmp_path, chaste_models):
-        for model in chaste_models:
-            chaste_model = cg.Numerical_jChasteModel(model['model'], model['model_name_from_file'], model['class_name'])
-            chaste_model.generate_chaste_code()
-
-            self._check_match_gengerated_chaste_hpp(tmp_path, model['model_name_from_file'], 'Numerical_j')
-            self._check_match_gengerated_chaste_cpp(tmp_path, model['model_name_from_file'], 'Numerical_j')
+        pass
 
     @pytest.mark.skip(reason="BE models not yet implemented")
     def test_generate_be_models(self, tmp_path, chaste_models):
-        for model in chaste_models:
-            chaste_model = cg.BEChasteModel(model['model'], model['model_name_from_file'], model['class_name'])
-            chaste_model.generate_chaste_code()
-
-            self._check_match_gengerated_chaste_hpp(tmp_path, model['model_name_from_file'], 'BE')
-            self._check_match_gengerated_chaste_cpp(tmp_path, model['model_name_from_file'], 'BE')
+        pass
 
     def _check_match_gengerated_chaste_hpp(self, gen_path, model_name_from_file, model_type):
         """

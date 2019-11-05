@@ -21,7 +21,6 @@ class ChasteModel(object):
     It also holds relevant formatted equations and derivatives.
     Please Note: this calass cannot generate chaste code directly, instead use a subclass fo the model type
     """
-    # TODO: Better docstrings
     # TODO: Convert state vars if necessary
     # TODO: Can we do with just 1 printer?
     # TODO: script to call generator from command line
@@ -568,35 +567,3 @@ class NormalChasteModel(ChasteModel):
             'use_capacitance_i_ionic': self._use_capacitance_i_ionic,
             'free_variable': self._free_variable,
             'ode_system_information': self._ode_system_information})
-
-
-class OptChasteModel(ChasteModel):
-    def __init__(self, model, model_name_for_filename, class_name):
-        super().__init__(model, model_name_for_filename, class_name)
-
-    def generate_chaste_code(self, output_path):
-        raise NotImplementedError("TODO Not yet implemented!")
-
-
-class Analytic_jChasteModel(ChasteModel):
-    def __init__(self, model, model_name_for_filename, class_name):
-        super().__init__(model, model_name_for_filename, class_name)
-
-    def generate_chaste_code(self, output_path):
-        raise NotImplementedError("TODO Not yet implemented!")
-
-
-class Numerical_jChasteModel(ChasteModel):
-    def __init__(self, model, model_name_for_filename, class_name):
-        super().__init__(model, model_name_for_filename, class_name)
-
-    def generate_chaste_code(self, output_path):
-        raise NotImplementedError("TODO Not yet implemented!")
-
-
-class BEOptChasteModel(ChasteModel):
-    def __init__(self, model, model_name_for_filename, class_name):
-        super().__init__(model, model_name_for_filename, class_name)
-
-    def generate_chaste_code(self, output_path):
-        raise NotImplementedError("TODO Not yet implemented!")
