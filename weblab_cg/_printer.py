@@ -46,33 +46,6 @@ import sympy.printing
 from sympy.printing.precedence import precedence
 
 
-# List of functions handled by python's `math` module
-_math_functions = {
-    'acos',
-    'acosh',
-    'asin',
-    'asinh',
-    'atan',
-    'atan2',
-    'atanh',
-    'ceil',     # called ceiling in sympy
-    'cos',
-    'cosh',
-    'exp',
-    'expm1',
-    'factorial',
-    'floor',
-    'log',
-    'log10',
-    'log1p',
-    'log2',
-    'sin',
-    'sinh',
-    'tan',
-    'tanh',
-}
-
-
 class WebLabPrinter(sympy.printing.printer.Printer):
     """
     Converts Sympy expressions to strings for use in Web Lab Cython model code.
@@ -88,6 +61,31 @@ class WebLabPrinter(sympy.printing.printer.Printer):
         A function that converts derivatives to strings.
 
     """
+    # List of functions handled by python's `math` module
+    _math_functions = {
+        'acos',
+        'acosh',
+        'asin',
+        'asinh',
+        'atan',
+        'atan2',
+        'atanh',
+        'ceil',     # called ceiling in sympy
+        'cos',
+        'cosh',
+        'exp',
+        'expm1',
+        'factorial',
+        'floor',
+        'log',
+        'log10',
+        'log1p',
+        'log2',
+        'sin',
+        'sinh',
+        'tan',
+        'tanh',
+    }    
 
     def __init__(self, symbol_function=None, derivative_function=None):
         super(WebLabPrinter, self).__init__(None)
@@ -199,7 +197,7 @@ class WebLabPrinter(sympy.printing.printer.Printer):
         name = expr.func.__name__
         if name == 'ceiling':
             name = 'ceil'
-        if name not in _math_functions:
+        if name not in WebLabPrinter._math_functions:
             raise ValueError('Unsupported function: ' + str(name))
 
         # Convert arguments and return

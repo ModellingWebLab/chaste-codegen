@@ -39,7 +39,6 @@ from ._generator_chaste_cg import (   # noqa
 
 from ._printer import (     # noqa
     WebLabPrinter,
-    _math_functions,
 )
 
 

@@ -1,4 +1,4 @@
-from ._printer import WebLabPrinter, _math_functions
+from ._printer import WebLabPrinter
 import sympy
 
 from sympy.printing.precedence import precedence
@@ -27,7 +27,7 @@ class ChastePrinter(WebLabPrinter):
         self._prefix = ''
 
         # Make sure we can output a call to GetIntracellularAreaStimulus
-        _math_functions.add('GetIntracellularAreaStimulus')
+        WebLabPrinter._math_functions.add('GetIntracellularAreaStimulus')
 
     def _print_And(self, expr):
         """ Handles logical And. """
