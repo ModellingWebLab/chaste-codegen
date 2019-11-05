@@ -13,8 +13,8 @@ import pyparsing
 
 # Show more logging output
 logging.getLogger().setLevel(logging.DEBUG)
-
 # TODO: Better docstrings
+
 
 class TestChasteCG(object):
     _COMMENTS_REGEX = re.compile(r'(//.*\n)')
