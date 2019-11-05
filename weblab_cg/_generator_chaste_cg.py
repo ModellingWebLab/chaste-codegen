@@ -7,7 +7,6 @@
 
 
 import logging
-import os
 import time
 import sympy as sp
 import weblab_cg as cg
@@ -17,6 +16,17 @@ logging.getLogger().setLevel(logging.INFO)
 
 
 class ChasteModel(object):
+    """ Holds information about a cellml model for which chaste code is to be generated.
+
+    It also holds relevant formatted equations and derivatives.
+    Please Note: this calass cannot generate chaste code directly, instead use a subclass fo the model type
+    """
+    # TODO: Better docstrings
+    # TODO: Convert state vars if necessary
+    # TODO: Can we do with just 1 printer?
+    # TODO: script to call generator from command line
+    # TODO: Model types Opt, Analytic_j, Numerical_j, BE
+
     _MEMBRANE_VOLTAGE_INDEX = 0
     _CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX = 1
     _OXMETA = "https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#"
@@ -46,7 +56,7 @@ class ChasteModel(object):
     _STIMULUS_RHS_MULTIPLIER = {'membrane_stimulus_current_amplitude': ' * HeartConfig::Instance()->GetCapacitance()'}
 
     def __init__(self, model, model_name_for_filename, class_name):
-        """Initialise a ChasteModel instance
+        """ Initialise a ChasteModel instance
         Arguments
 
         ``model``
@@ -64,14 +74,17 @@ class ChasteModel(object):
         self._model = model
         self._model_name_for_filename = model_name_for_filename
         self._class_name = class_name
+        self.generated_hpp = ''
+        self.generated_cpp = ''
 
         self._add_units()
 
         self._membrane_voltage_var = self._get_membrane_voltage_var()
         self._cytosolic_calcium_concentration_var = self._get_cytosolic_calcium_concentration_var()
+        self._use_get_intracellular_calcium_concentration = self._get_use_get_intracellular_calcium_concentration()
         self._state_vars = self._get_state_variables()
         self._membrane_stimulus_current = self._get_membrane_stimulus_current()
-        self._membrane_stimulus_current_units = self._get__membrane_stimulus_current_units()
+        self._membrane_stimulus_current_units = self._get_membrane_stimulus_current_units()
         self._membrane_capacitance, self._membrane_capacitance_factor = self._get_membrane_capacitance()
         self._default_stimulus = self._get_stimulus_currents()
         self._desired_ionic_current_units, self._ionic_current_factor = self._get_stimulus_currents_desired_units()
@@ -85,7 +98,6 @@ class ChasteModel(object):
         self._derivative_eqs_voltage = self._get_derivative_eqs_voltage()
         self._derivative_eqs_exlc_voltage = self._get_derivative_eqs_exlc_voltage()
         self._derivative_equations = self._get_derivative_equations()
-        self._use_get_intracellular_calcium_concentration = self._get_use_get_intracellular_calcium_concentration()
 
         self._add_printers()
         self._formatted_state_vars = self._format_state_variables()
@@ -96,12 +108,14 @@ class ChasteModel(object):
         self._formatted_derivative_eqs = self._format_derivative_equations()
         self._format_system_info()
 
-    def write_chaste_code(self, output_path):
+    def generate_chaste_code(self):
+        """ Generate chaste code
+        Please Note: not implemented, use a subclass for the relevant model type
+        """
         raise NotImplementedError("Should not be called directly, use the specific model types instead!")
 
     def _add_printers(self):
-        # Initialise Printers for outputting chaste code
-        # Printer for printing chaste state variable assignments (var_chaste_interface prefix)
+        """ Initialises Printers for outputting chaste code. """
         self._var_chaste_interface_printer =\
             cg.ChastePrinter(lambda symbol: 'var_chaste_interface_' + str(symbol).replace('$', '__'),
                              lambda deriv: 'd_dt_chaste_interface_' + (str(deriv.expr).replace('$', '__')
@@ -120,7 +134,7 @@ class ChasteModel(object):
         self._name_printer = cg.ChastePrinter(lambda symbol: str(symbol)[1:].replace('$', '__'))
 
     def _add_units(self):
-        # Add all needed units to the model (for conversion) if they don't yet exist
+        """ Add needed units to the model to allow converting time, voltage and calcium in specific units."""
         for unit_name in self._UNIT_DEFINITIONS:
             try:
                 self._model.units.add_custom_unit(unit_name, self._UNIT_DEFINITIONS[unit_name])
@@ -128,34 +142,47 @@ class ChasteModel(object):
                 pass  # Unit already exists, but that is not a problem
 
     def _get_membrane_voltage_var(self):
+        """ Find the membrane_voltage variable"""
         return self._model.get_symbol_by_ontology_term(self._OXMETA, "membrane_voltage")
 
     def _get_cytosolic_calcium_concentration_var(self):
+        """ Find the cytosolic_calcium_concentration variable if it exists"""
         try:
             return self._model.get_symbol_by_ontology_term(self._OXMETA, "cytosolic_calcium_concentration")
         except KeyError:
             self._logger.debug(self._model.name + ' has no cytosolic_calcium_concentration')
             return None
 
+    def _get_use_get_intracellular_calcium_concentration(self):
+        """ Get wyether or not the model has cytosolic_calcium_concentration"""
+        try:
+            self._model.get_symbol_by_ontology_term(self._OXMETA, "cytosolic_calcium_concentration")
+            return True
+        except KeyError:
+            return False
+
     def _get_state_variables(self):
-        # Sort the state variables, to make sure they have similar order to pycml
+        """ Sort the state variables, in similar order to pycml to prevent breaking existing code"""
         return sorted(self._model.get_state_symbols(),
                       key=lambda state_var: self._state_var_key_order(state_var))
 
     def _get_membrane_stimulus_current(self):
+        """ Find the membrane_stimulus_current variable if it exists"""
         try:
             return self._model.get_symbol_by_ontology_term(self._OXMETA, self._STIMULUS_CURRENT)
         except KeyError:
             self._logger.debug(self._model.name + ' has no membrane_stimulus_current')
             return None
 
-    def _get__membrane_stimulus_current_units(self):
+    def _get_membrane_stimulus_current_units(self):
+        """ Find the units for the membrane_stimulus_current variable if it exists"""
         if self._membrane_stimulus_current is not None:
             return self._model.units.summarise_units(self._membrane_stimulus_current)
         else:
             return None
 
     def _get_membrane_capacitance(self):
+        """ Find membrane_capacitance if the model has it"""
         if self._membrane_stimulus_current is not None:
             # add membrane_capacitance if the model has it
             try:
@@ -170,9 +197,8 @@ class ChasteModel(object):
                 return None, 1.0
 
     def _get_stimulus_currents(self):
-        # Store the stimulus current
+        """ Store the stimulus currents in the model"""
         default_stimulus = dict()
-        # Get stimulus current units
         # Get remaining stimulus current variables If they have metadata use that as key, ortherwise use the name
         # Exclude _membrane_stimulus_current itself so we can treat it seperately
         for eq in self._model.get_equations_for([self._membrane_stimulus_current]):
@@ -183,7 +209,7 @@ class ChasteModel(object):
         return default_stimulus
 
     def _get_stimulus_currents_desired_units(self):
-        # Get stimulus current and set up dictionary to store in other stimulus current variables
+        """ Get a tuple: (units to convert membrane_stimulus_current, is  capacitance used in i_ionic)"""
         try:
             desired_units = getattr(self._model.units.ureg, self._STIMULUS_UNITS['membrane_stimulus_current'])
             factor = \
@@ -199,11 +225,12 @@ class ChasteModel(object):
             return desired_units, factor
 
     def _get_ionic_derivs(self):
-        # Getting the equations for const definitions for GetIIonic
+        """ Getting the derivative symbols that define V (self._membrane_voltage_var)"""
         # use the RHS of the ODE defining V
         return [x for x in self._model.get_derivative_symbols() if x.args[0] == self._membrane_voltage_var]
 
     def _get_equations_for_ionic_vars(self):
+        """ Get the equations defining the ionic derivatives"""
         # figure out the currents (by finding variables with the same units as the stimulus)
         # Only equations with the same (lhs) units as the STIMULUS_CURRENT are kept.
         # Also exclude membrane_stimulus_current variable itself, and default_stimulus equations (if model has those)
@@ -225,6 +252,7 @@ class ChasteModel(object):
         return equations_for_ionic_vars
 
     def _get_extended_equations_for_ionic_vars(self):
+        """ Get the equations defining the ionic derivatives and all dependant equations"""
         extended_equations_for_ionic_vars = \
             self._model.get_equations_for([ionic_var_eq.lhs for ionic_var_eq in self._equations_for_ionic_vars])
         if self._use_capacitance_i_ionic:
@@ -232,45 +260,39 @@ class ChasteModel(object):
         return extended_equations_for_ionic_vars
 
     def _get_y_derivatives(self):
-        # Get derivatives for voltage state variable
+        """ Get derivatives for voltage state variable"""
         return sorted(self._model.get_derivative_symbols(),
                       key=lambda state_var: self._state_var_key_order(state_var))
 
     def _get_y_derivatives_voltage(self):
-        # Get derivatives for voltage state variable
+        """ Get derivatives for V (self._membrane_voltage_var)"""
         return [deriv for deriv in self._y_derivatives if deriv.args[0] == self._membrane_voltage_var]
 
     def _get_y_derivatives_excl_voltage(self):
-        # Get derivatives for state variables in the same order, excluding voltage
+        """ Get derivatives for state variables, excluding V (self._membrane_voltage_var)"""
         return [deriv for state_var in self._state_vars for deriv in self._y_derivatives
                 if deriv.args[0] == state_var and deriv.args[0] != self._membrane_voltage_var]
 
     def _get_derivative_eqs_voltage(self):
-        # Get equations for the derivatives for Voltage
+        """ Get equations defining the derivatives for V (self._membrane_voltage_var)"""
         # Sort the derivative equations to get the derivaives themselves last
         return sorted(self._model.get_equations_for(self._y_derivatives_voltage),
                       key=lambda deriv: isinstance(deriv.lhs, sp.Derivative))
 
     def _get_derivative_eqs_exlc_voltage(self):
-        # Get equations for the derivatives excluding voltage
+        """ Get equations defining the derivatives excluding V (self._membrane_voltage_var)"""
         # Sort the derivative equations to get the derivaives themselves last
         return sorted(self._model.get_equations_for(self._y_derivatives_excl_voltage),
                       key=lambda deriv: isinstance(deriv.lhs, sp.Derivative))
 
-    def _get_derivative_equations(self, excl_stimulus_current=False):
+    def _get_derivative_equations(self):
+        """ Get equations defining the derivatives including  V (self._membrane_voltage_var)"""
+        # Sort the derivative equations to get the derivaives themselves last
         return sorted(self._model.get_equations_for(self._y_derivatives),
                       key=lambda deriv: isinstance(deriv.lhs, sp.Derivative))
 
-    def _get_use_get_intracellular_calcium_concentration(self):
-        # Check if the model has cytosolic_calcium_concentration,
-        # if so we need to add GetIntracellularCalciumConcentration, otherwise leave blank
-        try:
-            self._model.get_symbol_by_ontology_term(self._OXMETA, "cytosolic_calcium_concentration")
-            return True
-        except KeyError:
-            return False
-
     def _format_state_variables(self):
+        """ Get equations defining the derivatives including  V (self._membrane_voltage_var)"""
         # Filter unused state vars for ionic variables
         ionic_var_symbols = self._model.get_symbols_for(self._extended_equations_for_ionic_vars)
         y_deriv_symbols = self._model.get_symbols_for(self._derivative_equations)
@@ -282,6 +304,7 @@ class ChasteModel(object):
                 for var in self._state_vars]
 
     def _format_stimulus_currents(self):
+        """ Format stimulus_currents for outputting to chaste code"""
         formatted_default_stimulus = dict()
         for key, eq in self._default_stimulus.items():
             # exclude (equations for) variables that don't have annotation
@@ -341,6 +364,7 @@ class ChasteModel(object):
         return formatted_default_stimulus
 
     def _format_equations_for_ionic_vars(self):
+        """ Format equations ionic derivatives"""
         return [{'var': self._printer.doprint(eq.lhs),
                  'units': str(self._model.units.summarise_units(eq.lhs)),
                  'conversion_factor':
@@ -349,6 +373,7 @@ class ChasteModel(object):
                 for eq in self._equations_for_ionic_vars]
 
     def _format_extended_equations_for_ionic_vars(self):
+        """ Format equations and dependant equations ionic derivatives"""
         # Format the state ionic variables
         formated_extended_equations_for_ionic_vars = \
             [{'lhs': self._printer.doprint(eq.lhs), 'rhs': self._printer.doprint(eq.rhs),
@@ -388,10 +413,14 @@ class ChasteModel(object):
         return formated_extended_equations_for_ionic_vars
 
     def _format_y_derivatives(self):
-        # Format y_derivatives for writing to chaste output
+        """ Format y_derivatives for writing to chaste output"""
         return [self._var_chaste_interface_printer.doprint(deriv) for deriv in self._y_derivatives]
 
     def _get_desired_units(self, term):
+        """ Helper function to return units we should convert variables to, to work in chaste.
+
+        V in mV, time in ms and cytosolic_calcium_concentration in millimolar)
+        """
         current_units = self._model.units.summarise_units(term)
         # Time in ms
         units = current_units
@@ -406,6 +435,7 @@ class ChasteModel(object):
         return units
 
     def _format_derivative_equations(self):
+        """Format derivative equations for chaste output"""
         # exclude ionic currents
         equations = []
         d_eqs = [eq for eq in self._derivative_equations
@@ -478,6 +508,7 @@ class ChasteModel(object):
         return equations
 
     def _format_system_info(self):
+        """ Format general ode system info for chaste output"""
         self._free_variable = {'name': self._name_printer.doprint(self._model.get_free_variable_symbol()),
                                'units': self._get_desired_units(self._model.get_free_variable_symbol()),
                                'system_name': self._model.name}
@@ -489,8 +520,8 @@ class ChasteModel(object):
               'units': self._get_desired_units(var)}
              for var in self._state_vars]
 
-    # function used to order state variables in the same way as pycml does (for easy comparison)
     def _state_var_key_order(self, var):
+        """Returns a key to order state variables in the same way as pycml does"""
         if isinstance(var, sp.Derivative):
             var = var.args[0]
         if var == self._membrane_voltage_var:
@@ -502,57 +533,48 @@ class ChasteModel(object):
 
 
 class NormalChasteModel(ChasteModel):
+    """ Holds information specific for the Normal model type"""
+
     def __init__(self, model, model_name_for_filename, class_name):
         super().__init__(model, model_name_for_filename, class_name)
 
-    def write_chaste_code(self, output_path):
-        # Get full OS path to output models to and create it if it doesn't exist
-        output_path = os.path.join(output_path)
-        try:
-            os.makedirs(output_path)
-        except FileExistsError:
-            pass
-
-        hhp_file_path = os.path.join(output_path, self._model_name_for_filename + ".hpp")
-        cpp_file_path = os.path.join(output_path, self._model_name_for_filename + ".cpp")
+    def generate_chaste_code(self):
+        """ Generates and stores chaste code for the Normal model"""
 
         # Generate hpp for model
         template = cg.load_template('chaste', 'normal_model.hpp')
-        with open(hhp_file_path, 'w') as f:
-            f.write(template.render({
-                'model_name_from_file': self._model_name_for_filename,
-                'class_name': self._class_name,
-                'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
-                'default_stimulus_equations': self._formatted_default_stimulus,
-                'use_get_intracellular_calcium_concentration': self._use_get_intracellular_calcium_concentration,
-            }))
+        self.generated_hpp = template.render({
+            'model_name_from_file': self._model_name_for_filename,
+            'class_name': self._class_name,
+            'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
+            'default_stimulus_equations': self._formatted_default_stimulus,
+            'use_get_intracellular_calcium_concentration': self._use_get_intracellular_calcium_concentration})
 
+        # Generate cpp for model
         template = cg.load_template('chaste', 'normal_model.cpp')
-        with open(cpp_file_path, 'w') as f:
-            f.write(template.render({
-                'model_name_from_file': self._model_name_for_filename,
-                'class_name': self._class_name,
-                'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
-                'default_stimulus_equations': self._formatted_default_stimulus,
-                'use_get_intracellular_calcium_concentration': self._use_get_intracellular_calcium_concentration,
-                'membrane_voltage_index': self._MEMBRANE_VOLTAGE_INDEX,
-                'cytosolic_calcium_concentration_index': self._CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX,
-                'state_vars': self._formatted_state_vars,
-                'ionic_interface_vars': self._formatted_equations_for_ionic_vars,
-                'ionic_vars': self._formatted_extended_equations_for_ionic_vars,
-                'y_derivative_equations': self._formatted_derivative_eqs,
-                'y_derivatives': self._formatted_y_derivatives,
-                'use_capacitance_i_ionic': self._use_capacitance_i_ionic,
-                'free_variable': self._free_variable,
-                'ode_system_information': self._ode_system_information
-            }))
+        self.generated_cpp = template.render({
+            'model_name_from_file': self._model_name_for_filename,
+            'class_name': self._class_name,
+            'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
+            'default_stimulus_equations': self._formatted_default_stimulus,
+            'use_get_intracellular_calcium_concentration': self._use_get_intracellular_calcium_concentration,
+            'membrane_voltage_index': self._MEMBRANE_VOLTAGE_INDEX,
+            'cytosolic_calcium_concentration_index': self._CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX,
+            'state_vars': self._formatted_state_vars,
+            'ionic_interface_vars': self._formatted_equations_for_ionic_vars,
+            'ionic_vars': self._formatted_extended_equations_for_ionic_vars,
+            'y_derivative_equations': self._formatted_derivative_eqs,
+            'y_derivatives': self._formatted_y_derivatives,
+            'use_capacitance_i_ionic': self._use_capacitance_i_ionic,
+            'free_variable': self._free_variable,
+            'ode_system_information': self._ode_system_information})
 
 
 class OptChasteModel(ChasteModel):
     def __init__(self, model, model_name_for_filename, class_name):
         super().__init__(model, model_name_for_filename, class_name)
 
-    def write_chaste_code(self, output_path):
+    def generate_chaste_code(self, output_path):
         raise NotImplementedError("TODO Not yet implemented!")
 
 
@@ -560,7 +582,7 @@ class Analytic_jChasteModel(ChasteModel):
     def __init__(self, model, model_name_for_filename, class_name):
         super().__init__(model, model_name_for_filename, class_name)
 
-    def write_chaste_code(self, output_path):
+    def generate_chaste_code(self, output_path):
         raise NotImplementedError("TODO Not yet implemented!")
 
 
@@ -568,7 +590,7 @@ class Numerical_jChasteModel(ChasteModel):
     def __init__(self, model, model_name_for_filename, class_name):
         super().__init__(model, model_name_for_filename, class_name)
 
-    def write_chaste_code(self, output_path):
+    def generate_chaste_code(self, output_path):
         raise NotImplementedError("TODO Not yet implemented!")
 
 
@@ -576,5 +598,5 @@ class BEOptChasteModel(ChasteModel):
     def __init__(self, model, model_name_for_filename, class_name):
         super().__init__(model, model_name_for_filename, class_name)
 
-    def write_chaste_code(self, output_path):
+    def generate_chaste_code(self, output_path):
         raise NotImplementedError("TODO Not yet implemented!")

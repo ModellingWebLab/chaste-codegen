@@ -14,11 +14,20 @@ import pyparsing
 # Show more logging output
 logging.getLogger().setLevel(logging.DEBUG)
 
+# TODO: Better docstrings
 
 class TestChasteCG(object):
     _COMMENTS_REGEX = re.compile(r'(//.*\n)')
     _NUM_REGEX = re.compile(r'(?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?')
     _FLOAT_PRECISION = 12
+
+    def _make_dirs(self, output_path):
+        # Get full OS path to output models to and create it if it doesn't exist
+        output_path = os.path.join(str(output_path))
+        try:
+            os.makedirs(output_path)
+        except FileExistsError:
+            pass
 
     @pytest.fixture(scope="class")
     def chaste_models(self):
@@ -41,7 +50,19 @@ class TestChasteCG(object):
     def test_generate_normal_models(self, tmp_path, chaste_models):
         for model in chaste_models:
             chaste_model = cg.NormalChasteModel(model['model'], model['model_name_from_file'], model['class_name'])
-            chaste_model.write_chaste_code(tmp_path)
+            chaste_model.generate_chaste_code()
+
+            tmp_path = os.path.join(str(tmp_path), 'Normal')
+            self._make_dirs(tmp_path)
+
+            hhp_file_path = os.path.join(str(tmp_path), model['model_name_from_file'] + ".hpp")
+            cpp_file_path = os.path.join(str(tmp_path), model['model_name_from_file'] + ".cpp")
+
+            with open(hhp_file_path, 'w') as f:
+                f.write(chaste_model.generated_hpp)
+
+            with open(cpp_file_path, 'w') as f:
+                f.write(chaste_model.generated_cpp)
 
             self._check_match_gengerated_chaste_hpp(tmp_path, model['model_name_from_file'], 'Normal')
             self._check_match_gengerated_chaste_cpp(tmp_path, model['model_name_from_file'], 'Normal')
@@ -50,7 +71,7 @@ class TestChasteCG(object):
     def test_generate_opt_models(self, tmp_path, chaste_models):
         for model in chaste_models:
             chaste_model = cg.OptChasteModel(model['model'], model['model_name_from_file'], model['class_name'])
-            chaste_model.write_chaste_code(tmp_path)
+            chaste_model.generate_chaste_code()
 
             self._check_match_gengerated_chaste_hpp(tmp_path, model['model_name_from_file'], 'Opt')
             self._check_match_gengerated_chaste_cpp(tmp_path, model['model_name_from_file'], 'Opt')
@@ -59,7 +80,7 @@ class TestChasteCG(object):
     def test_generate_cvode_analytic_j_models(self, tmp_path, chaste_models):
         for model in chaste_models:
             chaste_model = cg.Analytic_jChasteModel(model['model'], model['model_name_from_file'], model['class_name'])
-            chaste_model.write_chaste_code(tmp_path)
+            chaste_model.generate_chaste_code()
 
             self._check_match_gengerated_chaste_hpp(tmp_path, model['model_name_from_file'], 'Analytic_j')
             self._check_match_gengerated_chaste_cpp(tmp_path, model['model_name_from_file'], 'Analytic_j')
@@ -68,7 +89,7 @@ class TestChasteCG(object):
     def test_generate_cvode_numerical_j_models(self, tmp_path, chaste_models):
         for model in chaste_models:
             chaste_model = cg.Numerical_jChasteModel(model['model'], model['model_name_from_file'], model['class_name'])
-            chaste_model.write_chaste_code(tmp_path)
+            chaste_model.generate_chaste_code()
 
             self._check_match_gengerated_chaste_hpp(tmp_path, model['model_name_from_file'], 'Numerical_j')
             self._check_match_gengerated_chaste_cpp(tmp_path, model['model_name_from_file'], 'Numerical_j')
@@ -77,7 +98,7 @@ class TestChasteCG(object):
     def test_generate_be_models(self, tmp_path, chaste_models):
         for model in chaste_models:
             chaste_model = cg.BEChasteModel(model['model'], model['model_name_from_file'], model['class_name'])
-            chaste_model.write_chaste_code(tmp_path)
+            chaste_model.generate_chaste_code()
 
             self._check_match_gengerated_chaste_hpp(tmp_path, model['model_name_from_file'], 'BE')
             self._check_match_gengerated_chaste_cpp(tmp_path, model['model_name_from_file'], 'BE')
@@ -98,6 +119,7 @@ class TestChasteCG(object):
                          model_type, model_name_from_file + '.hpp')
 
         # Check reference model exists
+        assert os.path.isfile(expected_hpp)
         # Read expected output hpp from file
         with open(expected_hpp, 'r') as f:
             expected_hpp = f.read()

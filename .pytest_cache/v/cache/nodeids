@@ -1,7 +1,25 @@
 [
+  "weblab_cg/tests/test_basics.py::test_module_import",
+  "weblab_cg/tests/test_basics.py::test_version",
+  "weblab_cg/tests/test_basics.py::test_cellmlmanip_import",
   "weblab_cg/tests/test_chaste_cg.py::TestChasteCG::test_generate_normal_models",
   "weblab_cg/tests/test_chaste_cg.py::TestChasteCG::test_generate_opt_models",
   "weblab_cg/tests/test_chaste_cg.py::TestChasteCG::test_generate_cvode_analytic_j_models",
   "weblab_cg/tests/test_chaste_cg.py::TestChasteCG::test_generate_cvode_numerical_j_models",
-  "weblab_cg/tests/test_chaste_cg.py::TestChasteCG::test_generate_be_models"
+  "weblab_cg/tests/test_chaste_cg.py::TestChasteCG::test_generate_be_models",
+  "weblab_cg/tests/test_templating.py::test_load_template",
+  "weblab_cg/tests/test_templating.py::test_missing_variable_raises_exception",
+  "weblab_cg/tests/test_templating.py::test_unique_name_generation",
+  "weblab_cg/tests/test_weblab_printer.py::TestWebLabPrinter::test_numbers",
+  "weblab_cg/tests/test_weblab_printer.py::TestWebLabPrinter::test_symbols",
+  "weblab_cg/tests/test_weblab_printer.py::TestWebLabPrinter::test_addition",
+  "weblab_cg/tests/test_weblab_printer.py::TestWebLabPrinter::test_multiplication",
+  "weblab_cg/tests/test_weblab_printer.py::TestWebLabPrinter::test_powers",
+  "weblab_cg/tests/test_weblab_printer.py::TestWebLabPrinter::test_trig_functions",
+  "weblab_cg/tests/test_weblab_printer.py::TestWebLabPrinter::test_conditions",
+  "weblab_cg/tests/test_weblab_printer.py::TestWebLabPrinter::test_boolean_logic",
+  "weblab_cg/tests/test_weblab_printer.py::TestWebLabPrinter::test_piecewise_expressions",
+  "weblab_cg/tests/test_weblab_printer.py::TestWebLabPrinter::test_long_expression",
+  "weblab_cg/tests/test_weblab_printer.py::TestWebLabPrinter::test_unsupported_sympy_items",
+  "weblab_cg/tests/test_weblab_templating.py::test_generate_weblab_model"
 ]
