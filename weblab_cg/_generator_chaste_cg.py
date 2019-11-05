@@ -2,8 +2,8 @@
 # Functions related to generating model code for Chaste.
 #
 
-# TODO: apply unit conversions to state variables voltage, time, cytosolic_calcium_concentration and update equations accordingly
-
+# TODO: apply unit conversions to state variables voltage, time, cytosolic_calcium_concentration
+# and update equations accordingly
 
 
 import logging
@@ -59,7 +59,6 @@ class ChasteModel(object):
         """
         self._logger = logging.getLogger(__name__)
         self._logger.setLevel(logging.INFO)
-
 
         # Store parameters for future reference
         self._model = model
@@ -123,7 +122,10 @@ class ChasteModel(object):
     def _add_units(self):
         # Add all needed units to the model (for conversion) if they don't yet exist
         for unit_name in self._UNIT_DEFINITIONS:
-            self._model.units.add_preferred_custom_unit_name(unit_name, self._UNIT_DEFINITIONS[unit_name])
+            try:
+                self._model.units.add_custom_unit(unit_name, self._UNIT_DEFINITIONS[unit_name])
+            except AssertionError:
+                pass  # Unit already exists, but that is not a problem
 
     def _get_membrane_voltage_var(self):
         return self._model.get_symbol_by_ontology_term(self._OXMETA, "membrane_voltage")
@@ -137,7 +139,7 @@ class ChasteModel(object):
 
     def _get_state_variables(self):
         # Sort the state variables, to make sure they have similar order to pycml
-        return sorted(self._model.get_state_symbols(order_by_order_added=True),
+        return sorted(self._model.get_state_symbols(),
                       key=lambda state_var: self._state_var_key_order(state_var))
 
     def _get_membrane_stimulus_current(self):
@@ -162,7 +164,7 @@ class ChasteModel(object):
                 desired_units = getattr(self._model.units.ureg, self._STIMULUS_UNITS['membrane_capacitance'])
                 factor = self._model.units.get_conversion_factor(desired_units, from_unit=current_units)
                 initial_value = self._model.get_initial_value(membrane_capacitance)
-                equation = sp.Eq(membrane_capacitance,initial_value)
+                equation = sp.Eq(membrane_capacitance, initial_value)
                 return equation, factor
             except KeyError:
                 return None, 1.0
@@ -184,24 +186,27 @@ class ChasteModel(object):
         # Get stimulus current and set up dictionary to store in other stimulus current variables
         try:
             desired_units = getattr(self._model.units.ureg, self._STIMULUS_UNITS['membrane_stimulus_current'])
-            factor = self._model.units.get_conversion_factor(desired_units, from_unit=self._membrane_stimulus_current_units)
+            factor = \
+                self._model.units.get_conversion_factor(desired_units, from_unit=self._membrane_stimulus_current_units)
             self._use_capacitance_i_ionic = False
             return desired_units, factor
         except errors.DimensionalityError:
-            desired_units = getattr(self._model.units.ureg, self._STIMULUS_SECONDARY_UNITS['membrane_stimulus_current'])
-            factor = self._model.units.get_conversion_factor(desired_units, from_unit=self._membrane_stimulus_current_units)
+            desired_units = \
+                getattr(self._model.units.ureg, self._STIMULUS_SECONDARY_UNITS['membrane_stimulus_current'])
+            factor = \
+                self._model.units.get_conversion_factor(desired_units, from_unit=self._membrane_stimulus_current_units)
             self._use_capacitance_i_ionic = True
             return desired_units, factor
 
     def _get_ionic_derivs(self):
         # Getting the equations for const definitions for GetIIonic
         # use the RHS of the ODE defining V
-        return [x for x in self._model.get_derivative_symbols(order_by_order_added=True) if x.args[0] == self._membrane_voltage_var]
+        return [x for x in self._model.get_derivative_symbols() if x.args[0] == self._membrane_voltage_var]
 
     def _get_equations_for_ionic_vars(self):
         # figure out the currents (by finding variables with the same units as the stimulus)
         # Only equations with the same (lhs) units as the STIMULUS_CURRENT are kept.
-        # Also exclude membrane_stimulus_current variable itself, and default_stimulus equations (if he model has those)
+        # Also exclude membrane_stimulus_current variable itself, and default_stimulus equations (if model has those)
         # Manually recurse down the equation graph (bfs style) if no currents are found
 
         equations_for_ionic_vars = []
@@ -210,24 +215,25 @@ class ChasteModel(object):
             equations = self._model.get_equations_for(equations, recurse=False)
             equations_for_ionic_vars = [eq for eq in equations
                                         if ((self._membrane_stimulus_current is None)
-                                        or (eq.lhs != self._membrane_stimulus_current
+                                            or (eq.lhs != self._membrane_stimulus_current
                                             and eq not in self._default_stimulus.values()))
                                         and self._model.units.summarise_units(eq.lhs) ==
                                         self._membrane_stimulus_current_units]
 
-        # reverse topological order is more similar (though not necessarily identical) to pycml
+        # Reverse topological order is more similar (though not necessarily identical) to pycml
         equations_for_ionic_vars.reverse()
         return equations_for_ionic_vars
 
     def _get_extended_equations_for_ionic_vars(self):
-        extended_equations_for_ionic_vars = self._model.get_equations_for([ionic_var_eq.lhs for ionic_var_eq in self._equations_for_ionic_vars])
+        extended_equations_for_ionic_vars = \
+            self._model.get_equations_for([ionic_var_eq.lhs for ionic_var_eq in self._equations_for_ionic_vars])
         if self._use_capacitance_i_ionic:
             extended_equations_for_ionic_vars.insert(0, self._membrane_capacitance)
         return extended_equations_for_ionic_vars
 
     def _get_y_derivatives(self):
         # Get derivatives for voltage state variable
-        return sorted(self._model.get_derivative_symbols(order_by_order_added=True),
+        return sorted(self._model.get_derivative_symbols(),
                       key=lambda state_var: self._state_var_key_order(state_var))
 
     def _get_y_derivatives_voltage(self):
@@ -310,13 +316,14 @@ class ChasteModel(object):
                                     ) if key in self._STIMULUS_SECONDARY_UNITS else None
                         if tertiary_units is not None and current_units != secondary_units \
                                 and self._membrane_capacitance is not None:
-                            dividend_factor = self._model.units.get_conversion_factor(tertiary_units, from_unit=current_units)
+                            dividend_factor = \
+                                self._model.units.get_conversion_factor(tertiary_units, from_unit=current_units)
 
-                            #membrane_capacitance
+                            # membrane_capacitance
                             divisor_eq = self._membrane_capacitance
                             divisor_factor = self._membrane_capacitance_factor
                             divisor_current_units = self._model.units.summarise_units(divisor_eq.lhs)
-                            
+
                             factor = dividend_factor / divisor_factor
                             # Just so we can get the correct comment in the output
 
@@ -337,17 +344,19 @@ class ChasteModel(object):
         return [{'var': self._printer.doprint(eq.lhs),
                  'units': str(self._model.units.summarise_units(eq.lhs)),
                  'conversion_factor':
-                     self._model.units.get_conversion_factor(self._desired_ionic_current_units, from_unit=self._model.units.summarise_units(eq.lhs))}
+                     self._model.units.get_conversion_factor(self._desired_ionic_current_units,
+                                                             from_unit=self._model.units.summarise_units(eq.lhs))}
                 for eq in self._equations_for_ionic_vars]
 
     def _format_extended_equations_for_ionic_vars(self):
         # Format the state ionic variables
-        formated_extended_equations_for_ionic_vars = [{'lhs': self._printer.doprint(eq.lhs), 'rhs': self._printer.doprint(eq.rhs),
-                 'units': self._model.units.summarise_units(eq.lhs)} for eq in self._extended_equations_for_ionic_vars]
+        formated_extended_equations_for_ionic_vars = \
+            [{'lhs': self._printer.doprint(eq.lhs), 'rhs': self._printer.doprint(eq.rhs),
+              'units': self._model.units.summarise_units(eq.lhs)} for eq in self._extended_equations_for_ionic_vars]
 
         ionic_rhs = '((' if self._use_capacitance_i_ionic else ''
         for i in range(len(self._formatted_equations_for_ionic_vars)):
-            if i !=0:
+            if i != 0:
                 ionic_rhs += ' + '
             if self._formatted_equations_for_ionic_vars[i]['conversion_factor'] != 1.0:
                 ionic_rhs += str(self._formatted_equations_for_ionic_vars[i]['conversion_factor']) + ' * '
@@ -356,14 +365,14 @@ class ChasteModel(object):
             ionic_rhs += ') / '
             current_units = self._model.units.summarise_units(self._membrane_capacitance.lhs)
             try:
-                units =  getattr(self._model.units.ureg, self._STIMULUS_UNITS['membrane_capacitance'])
+                units = getattr(self._model.units.ureg, self._STIMULUS_UNITS['membrane_capacitance'])
                 factor = self._model.units.get_conversion_factor(units, from_unit=current_units)
             except errors.DimensionalityError:
                 try:
-                    units =  getattr(self._model.units.ureg, self._STIMULUS_SECONDARY_UNITS['membrane_capacitance'])
+                    units = getattr(self._model.units.ureg, self._STIMULUS_SECONDARY_UNITS['membrane_capacitance'])
                     factor = self._model.units.get_conversion_factor(units, from_unit=current_units)
                 except errors.DimensionalityError:
-                    units =  getattr(self._model.units.ureg, self._STIMULUS_TERTIARY_UNITS['membrane_capacitance'])
+                    units = getattr(self._model.units.ureg, self._STIMULUS_TERTIARY_UNITS['membrane_capacitance'])
                     factor = self._model.units.get_conversion_factor(units, from_unit=current_units)
             if factor != 1.0:
                 ionic_rhs += '(' + str(factor) + ' * '
@@ -373,18 +382,19 @@ class ChasteModel(object):
             ionic_rhs += ')'
             ionic_rhs = str(sp.simplify(ionic_rhs))  # simplify
             ionic_rhs += ' * HeartConfig::Instance()->GetCapacitance()'
-        formated_extended_equations_for_ionic_vars.append({'lhs': self._var_chaste_interface_printer.doprint(sp.sympify('_i_ionic')), 'rhs': ionic_rhs,
-                                                           'units': 'uA_per_cm2'})
+        formated_extended_equations_for_ionic_vars.append(
+            {'lhs': self._var_chaste_interface_printer.doprint(sp.sympify('_i_ionic')),
+             'rhs': ionic_rhs, 'units': 'uA_per_cm2'})
         return formated_extended_equations_for_ionic_vars
 
     def _format_y_derivatives(self):
         # Format y_derivatives for writing to chaste output
         return [self._var_chaste_interface_printer.doprint(deriv) for deriv in self._y_derivatives]
 
-    def _get_desired_units_for_deriv(self, term):
+    def _get_desired_units(self, term):
         current_units = self._model.units.summarise_units(term)
         # Time in ms
-        units = self._model.units.summarise_units(term)
+        units = current_units
         if term == self._model.get_free_variable_symbol():
             units = self._model.units.ureg.millisecond
         # calcium in millimolar (cytosolic_calcium_concentration)
@@ -431,22 +441,21 @@ class ChasteModel(object):
                     if d_eqs[i].rhs.subs(subs_dict) > 0.0:
                         stimulus_sign = '-'
                 # Convert voltage to mV, time to mS and calcium to millimolar
-                dividend_unit = self._get_desired_units_for_deriv(d_eqs[i].lhs.args[0])
-                divisor_unit = self._get_desired_units_for_deriv(d_eqs[i].lhs.args[1][0])
+                dividend_unit = self._get_desired_units(d_eqs[i].lhs.args[0])
+                divisor_unit = self._get_desired_units(d_eqs[i].lhs.args[1][0])
                 units = dividend_unit / divisor_unit
-                factor = self._model.units.get_conversion_factor(units, from_unit=self._model.units.summarise_units(d_eqs[i].lhs))
+                units_from = self._model.units.summarise_units(d_eqs[i].lhs)
+                factor = self._model.units.get_conversion_factor(units, from_unit=units_from)
             if d_eqs[i].lhs == self._membrane_stimulus_current:
                 factor = 1.0
+                area = sp.sympify(stimulus_sign + 'GetIntracellularAreaStimulus(_chaste_interface__environment__time)')
                 if self._use_capacitance_i_ionic:
-                    stimulus_current_eq_rhs = 1 / self._membrane_capacitance_factor * sp.sympify(stimulus_sign +
-                                            'GetIntracellularAreaStimulus(_chaste_interface__environment__time)') \
-                                                * self._membrane_capacitance.lhs
+                    stim_current_eq_rhs = 1 / self._membrane_capacitance_factor * area * self._membrane_capacitance.lhs
                     rhs_divider = '/ HeartConfig::Instance()->GetCapacitance()'
-                else:                
-                    stimulus_current_eq_rhs = 1 / self._ionic_current_factor * sp.sympify(stimulus_sign +
-                                            'GetIntracellularAreaStimulus(_chaste_interface__environment__time)')
+                else:
+                    stim_current_eq_rhs = 1 / self._ionic_current_factor * area
 
-                d_eqs[i] = sp.Eq(d_eqs[i].lhs, stimulus_current_eq_rhs)
+                d_eqs[i] = sp.Eq(d_eqs[i].lhs, stim_current_eq_rhs)
 
             # Format the equation and put it at the front of the result list to keep order (we're looping backwards)
             equations.insert(0, {'lhs': d_eqs[i].lhs,
@@ -456,25 +465,28 @@ class ChasteModel(object):
                                  'rhs_divider': rhs_divider,
                                  'in_membrane_voltage': d_eqs[i] not in self._derivative_eqs_exlc_voltage,
                                  'is_voltage': is_voltage})
-                                 
+
         for i in range(len(equations)):
-            if equations[i]['factor']  != 1.0:
-                for j in range(i+1, len(equations)):
-                    equations[j]['rhs'] = equations[j]['rhs'].subs({equations[i]['lhs']: (1/equations[i]['factor'] * equations[i]['lhs'])})
-            equations[i]['rhs'] = self._printer.doprint(equations[i]['factor'] * equations[i]['rhs']) + equations[i]['rhs_divider']
+            if equations[i]['factor'] != 1.0:
+                for j in range(i + 1, len(equations)):
+                    equations[j]['rhs'] = equations[j]['rhs'].subs({equations[i]['lhs']:
+                                                                    (1 / equations[i]['factor'] * equations[i]['lhs'])})
+            equations[i]['rhs'] = \
+                self._printer.doprint(equations[i]['factor'] * equations[i]['rhs']) + equations[i]['rhs_divider']
             equations[i]['lhs'] = self._printer.doprint(equations[i]['lhs'])
 
         return equations
 
     def _format_system_info(self):
         self._free_variable = {'name': self._name_printer.doprint(self._model.get_free_variable_symbol()),
-                               'units': self._get_desired_units_for_deriv(self._model.get_free_variable_symbol()),
+                               'units': self._get_desired_units(self._model.get_free_variable_symbol()),
                                'system_name': self._model.name}
+
         self._ode_system_information = \
             [{'name': self._model.get_ontology_terms_by_symbol(var, self._OXMETA)[0]
               if self._model.has_ontology_annotation(var, self._OXMETA) else self._name_printer.doprint(var),
               'initial_value': str(self._model.get_initial_value(var)),
-              'units': str(self._model.units.summarise_units(var))}
+              'units': self._get_desired_units(var)}
              for var in self._state_vars]
 
     # function used to order state variables in the same way as pycml does (for easy comparison)
@@ -515,7 +527,6 @@ class NormalChasteModel(ChasteModel):
                 'use_get_intracellular_calcium_concentration': self._use_get_intracellular_calcium_concentration,
             }))
 
-        # Generate cpp for model
         template = cg.load_template('chaste', 'normal_model.cpp')
         with open(cpp_file_path, 'w') as f:
             f.write(template.render({

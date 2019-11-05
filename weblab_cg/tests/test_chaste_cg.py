@@ -8,17 +8,17 @@ import re
 import weblab_cg as cg
 import pytest
 import sympy
-from sympy import SympifyError, Eq
+from sympy import SympifyError
 import pyparsing
 
 # Show more logging output
 logging.getLogger().setLevel(logging.DEBUG)
 
+
 class TestChasteCG(object):
     _COMMENTS_REGEX = re.compile(r'(//.*\n)')
     _NUM_REGEX = re.compile(r'(?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?')
     _FLOAT_PRECISION = 12
-
 
     @pytest.fixture(scope="class")
     def chaste_models(self):
@@ -134,13 +134,13 @@ class TestChasteCG(object):
             count = 0
             num_str = ""
             i = 0
-            exponent=0
+            exponent = 0
             before_dot = 0
             existing_exp = ""
             seen_dot = False
             # get the digits until float precision
-            while i < len(number) and count <= self._FLOAT_PRECISION and not number[i].lower() =='e':
-                count += 1  # We deliberately count the dot as for fractional numbers later on we add an extra digit so we can round
+            while i < len(number) and count <= self._FLOAT_PRECISION and not number[i].lower() == 'e':
+                count += 1  # count the dot as for fractional numbers later we add an extra digit for rounding
                 if number[i] != '.':
                     if not seen_dot:
                         before_dot += 1
@@ -154,14 +154,14 @@ class TestChasteCG(object):
                 num_str = str(round(float(num_str), self._FLOAT_PRECISION - before_dot))
 
             # Count exponent factor to add
-            while i < len(number) and not number[i].lower() =='e':
+            while i < len(number) and not number[i].lower() == 'e':
                 seen_dot = seen_dot or number[i] == '.'
                 if not seen_dot:
                     exponent += 1
                 i += 1
-            
+
             # See if there was an exponent already
-            if i < len(number) and number[i].lower() =='e':
+            if i < len(number) and number[i].lower() == 'e':
                 i += 1
                 while i < len(number):
                     existing_exp += number[i]
@@ -171,8 +171,8 @@ class TestChasteCG(object):
             if existing_exp != "":
                 exponent += int(existing_exp)
 
-            if exponent !=0:
-                num_str += "e"+str(exponent)
+            if exponent != 0:
+                num_str += "e" + str(exponent)
 
             return num_str
 
@@ -184,13 +184,14 @@ class TestChasteCG(object):
     def _is_same_equation(self, eq1, eq2):
         def is_float(s):
             try:
-                value = float(str(s))
+                float(str(s))
                 return True
             except ValueError:
                 return False
 
         def is_same(eq1, eq2):
-            return (eq1 == eq2) or (sympy.simplify(eq1-eq2) == 0.0) or (eq2!=0.0 and (sympy.simplify(eq1 / eq2))==1.0)
+            return (eq1 == eq2) or (sympy.simplify(eq1 - eq2) == 0.0) \
+                or (eq2 != 0.0 and (sympy.simplify(eq1 / eq2)) == 1.0)
 
         # If they are the same, no need for elaborate check
         if eq1 == eq2:
@@ -198,12 +199,12 @@ class TestChasteCG(object):
 
         eq1 = sympy.sympify(eq1)
         eq2 = sympy.sympify(eq2)
-        if is_same(eq1,eq2):
+        if is_same(eq1, eq2):
             return True
         else:
             eq1 = sympy.sympify(self._numbers_with_float_precision(str(eq1)))
             eq2 = sympy.sympify(self._numbers_with_float_precision(str(eq2)))
-            return is_same(eq1,eq2)
+            return is_same(eq1, eq2)
 
     def _same_with_number(self, line1, line2):
         # If they are the same, no need for elaborate check
@@ -239,24 +240,24 @@ class TestChasteCG(object):
         # else: repeat: find last expr and resolve
         expression = ''
         conditional_parts = []
-        if not isinstance(expr_parts, list) and not len(expr_parts) >=5:
+        if not isinstance(expr_parts, list) and not len(expr_parts) >= 5:
             return expr_parts
         else:
             for part in expr_parts:
                 if part == '==':
-                    conditional_parts.append(('expression',expression))
-                    conditional_parts.append(('==','=='))
-                    expression = ''                
+                    conditional_parts.append(('expression', expression))
+                    conditional_parts.append(('==', '=='))
+                    expression = ''
                 elif part == '?':
-                    conditional_parts.append(('expression',expression))
-                    conditional_parts.append(('?','?'))
+                    conditional_parts.append(('expression', expression))
+                    conditional_parts.append(('?', '?'))
                     expression = ''
                 elif part == ':':
-                    conditional_parts.append(('expression',expression))
-                    conditional_parts.append((':',':'))
+                    conditional_parts.append(('expression', expression))
+                    conditional_parts.append((':', ':'))
                     expression = ''
                 else:
-                    expression+=self._get_expression(part)
+                    expression += self._get_expression(part)
             conditional_parts.append(('expression', expression))  # ends with expression
 
             # translate equals
@@ -266,22 +267,22 @@ class TestChasteCG(object):
                 for i in range(len(conditional_parts)):
                     if conditional_parts[i][0] == '==':
                         has_equals = True
-                        exp1 = conditional_parts[i-1][1]
-                        exp2 = conditional_parts[i+1][1]
-                        conditional_parts[i-1] = 'Eq('+exp1+', '+exp2+')'
-                        del conditional_parts[i:i+2] 
+                        exp1 = conditional_parts[i - 1][1]
+                        exp2 = conditional_parts[i + 1][1]
+                        conditional_parts[i - 1] = 'Eq(' + exp1 + ', ' + exp2 + ')'
+                        del conditional_parts[i:i + 2]
                         break
 
             # translate conditionals
             while len(conditional_parts) > 1:
-                #find last condition
-               for i in range(len(conditional_parts)-1, -1, -1):
-                    if conditional_parts[i][0] == '?' and conditional_parts[i+2][0] == ':':
-                        #resolve nex 2 must be expressions as this was the last condition
-                        cond = conditional_parts[i-1][1]
-                        exp1 = conditional_parts[i+1][1]
-                        exp2 = conditional_parts[i+3][1]
-                        conditional_parts[i-1] = ('expression', exp1 + ' if ' + cond + ' else ' + exp2)
+                # find last condition
+                for i in range(len(conditional_parts) - 1, - 1, - 1):
+                    if conditional_parts[i][0] == '?' and conditional_parts[i + 2][0] == ':':
+                        # resolve nex 2 must be expressions as this was the last condition
+                        cond = conditional_parts[i - 1][1]
+                        exp1 = conditional_parts[i + 1][1]
+                        exp2 = conditional_parts[i + 3][1]
+                        conditional_parts[i - 1] = ('expression', exp1 + ' if ' + cond + ' else ' + exp2)
                         del conditional_parts[i:]
                         break
             expression_str = conditional_parts[0][1]
@@ -293,19 +294,20 @@ class TestChasteCG(object):
         # pow->Pow ceil -> ceiling in sympy
         equation_str = equation_str.replace("Pow(", 'Pow(').replace("ceil(", 'ceiling(')
         # This might be a C++ call with class members/pointer accessors?
-        equation_str = equation_str.replace('HeartConfig::Instance()->GetCapacitance()', 'HeartConfig_Instance_GetCapacitance')
+        equation_str = \
+            equation_str.replace('HeartConfig::Instance()->GetCapacitance()', 'HeartConfig_Instance_GetCapacitance')
         equation_str = equation_str.replace('()->', '_').replace('::', '_')
         equation_str = equation_str.replace('&&', '&').replace('||', '|')
         try:
             return sympy.simplify(equation_str)
         except SympifyError:
             expression = pyparsing.Word(pyparsing.printables, excludeChars="()")
-            parens     = pyparsing.nestedExpr( '(', ')', content=expression)
-            parenthesis_expr = parens.parseString('('+equation_str+')').asList()
+            parens = pyparsing.nestedExpr('(', ')', content=expression)
+            parenthesis_expr = parens.parseString('(' + equation_str + ')').asList()
             expr_str = self._get_expression(parenthesis_expr)
             return sympy.simplify(expr_str)
 
-    def _get_equation_list(self, model_lines, index):          
+    def _get_equation_list(self, model_lines, index):
         equations = []
         eq = model_lines[index].replace(';', '').split("=", 1)
         while len(eq) == 2:
@@ -323,7 +325,8 @@ class TestChasteCG(object):
         return c_dec.replace('const', '').replace('double', '').strip()
 
     def _is_deriv_decl(self, c_dec):
-        return self._get_var_name(c_dec).startswith('d_dt_chaste_interface__') or  self._get_var_name(c_dec).endswith('dt')
+        return self._get_var_name(c_dec).startswith('d_dt_chaste_interface__') \
+            or self._get_var_name(c_dec).endswith('dt')
 
     def _is_converter(self, c_dec):
         return self._get_var_name(c_dec).endswith('_converter')
@@ -334,7 +337,6 @@ class TestChasteCG(object):
             eq[1] = substituted_term
             substituted_term = eq[1].subs(subs_dict)
         return [eq[0], eq[1]]
-
 
     def _resolve_linkers(self, equation_list, subs_dict):
         # Resolve derivatives
@@ -371,7 +373,7 @@ class TestChasteCG(object):
 
         # Perform substitutions
         equation_list = [self._perform_eq_subs(eq, subs_dict)
-                    for eq in equation_list if eq not in converter_vars + exclude]
+                         for eq in equation_list if eq not in converter_vars + exclude]
 
         return equation_list, subs_dict
 
@@ -383,7 +385,7 @@ class TestChasteCG(object):
             self.expected_subs = dict()
         self._keep_subs = False
 
-        # Resolve linkers and converter variables        
+        # Resolve linkers and converter variables
         expected, self.link_subs_expected = self._resolve_linkers(expected, self.link_subs_expected)
         generated, self.link_subs_generated = self._resolve_linkers(generated, self.link_subs_generated)
 
@@ -396,7 +398,7 @@ class TestChasteCG(object):
             # Find the 2 differing lhs. There should be 1 and they should have the same rhs:
             differing_expected = [eq for eq in expected if eq[0] not in [e[0] for e in generated]]
             differing_generated = [eq for eq in generated if eq[0] not in [e[0] for e in expected]]
-            assert len(differing_expected) == len(differing_generated) 
+            assert len(differing_expected) == len(differing_generated)
 
             update_subs = dict()
             # For each equation find one that has the same rhs
@@ -408,7 +410,8 @@ class TestChasteCG(object):
                         break
                 assert found
                 # update the expected name for this variable, so that the check for the set of equations succeeds
-                update_subs[self._get_var_name(differing_expected[i][0])] = self._get_var_name(differing_generated[j][0])
+                update_subs[self._get_var_name(differing_expected[i][0])] = \
+                    self._get_var_name(differing_generated[j][0])
                 expected_index = expected.index(differing_expected[i])
                 expected[expected_index][0] = differing_generated[j][0]
 
@@ -419,8 +422,8 @@ class TestChasteCG(object):
             self.link_subs_expected.update(update_subs)
 
         # Equations are equal
-        self.generated_subs.update({self._get_var_name(x[0]) : x[1] for x in generated})
-        self.expected_subs.update({self._get_var_name(x[0]) : x[1] for x in expected})
+        self.generated_subs.update({self._get_var_name(x[0]): x[1] for x in generated})
+        self.expected_subs.update({self._get_var_name(x[0]): x[1] for x in expected})
         sorted_generated = sorted(generated, key=lambda eq: eq[0])
         sorted_expected = sorted(expected, key=lambda eq: eq[0])
         for i in range(len(sorted_generated)):

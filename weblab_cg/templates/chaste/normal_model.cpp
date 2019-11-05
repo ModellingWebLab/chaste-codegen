@@ -20,7 +20,7 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
-	{%- if not default_stimulus_equations.membrane_stimulus_current is none %}
+	{%- if default_stimulus_equations.membrane_stimulus_current_duration is defined %}
 
     boost::shared_ptr<RegularStimulus> {{class_name}}FromCellML::UseCellMLDefaultStimulus()
     {
@@ -55,7 +55,7 @@
         // Time units: millisecond
         // 
         this->mpSystemInfo = OdeSystemInformation<{{class_name}}FromCellML>::Instance();
-        Init();{%- if not default_stimulus_equations.membrane_stimulus_current is none %}
+        Init();{%- if default_stimulus_equations.membrane_stimulus_current_duration is defined %}
 		
         // We have a default stimulus specified in the CellML file metadata
         this->mHasDefaultStimulusFromCellML = true;{%- endif %}

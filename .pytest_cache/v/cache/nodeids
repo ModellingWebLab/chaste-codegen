@@ -1,7 +1,7 @@
 [
-  "weblab_cg/tests/test_chaste_cg.py::test_generate_normal_models",
-  "weblab_cg/tests/test_chaste_cg.py::test_generate_opt_models",
-  "weblab_cg/tests/test_chaste_cg.py::test_generate_cvode_analytic_j_models",
-  "weblab_cg/tests/test_chaste_cg.py::test_generate_cvode_numerical_j_models",
-  "weblab_cg/tests/test_chaste_cg.py::test_generate_be_models"
+  "weblab_cg/tests/test_chaste_cg.py::TestChasteCG::test_generate_normal_models",
+  "weblab_cg/tests/test_chaste_cg.py::TestChasteCG::test_generate_opt_models",
+  "weblab_cg/tests/test_chaste_cg.py::TestChasteCG::test_generate_cvode_analytic_j_models",
+  "weblab_cg/tests/test_chaste_cg.py::TestChasteCG::test_generate_cvode_numerical_j_models",
+  "weblab_cg/tests/test_chaste_cg.py::TestChasteCG::test_generate_be_models"
 ]

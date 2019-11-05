@@ -80,22 +80,11 @@ class ChastePrinter(WebLabPrinter):
             if isinstance(c, BooleanTrue):
                 other = self._print(e)
                 break
-            # Sympy filters these out:
-            # elif isinstance(c, BooleanFalse):
-            #    continue
-
-            # Add e-if-c-else-? statement
-            #parts.append('(')
-            #parts.append(self._print(e))
-            #parts.append(') if (')
-            #parts.append(self._print(c))
-            #parts.append(') else (')
-            # add c ? e :
             parts.append('(')
             parts.append(self._print(c))
             parts.append(') ? (')
             parts.append(self._print(e))
-            parts.append(') : (')            
+            parts.append(') : (')
             brackets += 1
         parts.append(other)
         parts.append(')' * brackets)
