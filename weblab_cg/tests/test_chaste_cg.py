@@ -52,9 +52,6 @@ class TestChasteCG(object):
             chaste_model = cg.NormalChasteModel(model['model'], model['model_name_from_file'], model['class_name'])
             chaste_model.generate_chaste_code()
 
-            tmp_path = os.path.join(str(tmp_path), 'Normal')
-            self._make_dirs(tmp_path)
-
             hhp_file_path = os.path.join(str(tmp_path), model['model_name_from_file'] + ".hpp")
             cpp_file_path = os.path.join(str(tmp_path), model['model_name_from_file'] + ".cpp")
 
