@@ -125,7 +125,10 @@ void OdeSystemInformation<{{class_name}}FromCellML>::Initialise(void)
     this->mVariableUnits.push_back("{{ode_info.units}}");
     this->mInitialConditions.push_back({{ode_info.initial_value}});
 	
-	{% endfor %}this->mInitialised = true;
+	{% endfor %}{% for attr in named_attributes %}// rY[{{loop.index0}}]:
+	this->mAttributes["{{attr.name}}SuggestedForwardEulerTimestep"] = {{attr.value}};
+	{% endfor %}
+	this->mInitialised = true;
 }
 
 

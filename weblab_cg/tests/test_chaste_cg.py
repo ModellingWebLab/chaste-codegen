@@ -19,7 +19,7 @@ logging.getLogger().setLevel(logging.DEBUG)
 class TestChasteCG(object):
     _COMMENTS_REGEX = re.compile(r'(//.*\n)')
     _NUM_REGEX = re.compile(r'(?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?')
-    _FLOAT_PRECISION = 12
+    _FLOAT_PRECISION = 11
 
     def _make_dirs(self, output_path):
         # Get full OS path to output models to and create it if it doesn't exist
@@ -31,6 +31,7 @@ class TestChasteCG(object):
 
     @pytest.fixture(scope="class")
     def chaste_models(self):
+
         # Get folder with test cellml files
         model_folder = os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'cellml')
 
@@ -306,6 +307,40 @@ class TestChasteCG(object):
             expr_str = self._get_expression(parenthesis_expr)
             return sympy.simplify(expr_str)
 
+    def _get_pow_expression(self, expr_parts):
+        expression_str = ''
+        i = 0
+        if not isinstance(expr_parts, list):
+            return expr_parts
+        else:
+            while i < len(expr_parts):
+                if not isinstance(expr_parts[i], list) and expr_parts[i] == 'pow':
+                    assert isinstance(expr_parts[i + 1], list)
+                    base = ''
+                    exponent = ''
+                    for j in range(len(expr_parts[i + 1])):
+                        # Pattern: base , exp
+                        assert expr_parts[i + 1][-2].strip() == ','
+                        base = self._get_pow_expression(expr_parts[i + 1][:-2])
+                        exponent = self._get_pow_expression(expr_parts[i + 1][-1])
+                    expression_str += '((' + base + ')**(' + exponent + '))'
+                    i += 2
+                else:
+                    if isinstance(expr_parts[i], list):
+                        expression_str += '(' + self._get_pow_expression(expr_parts[i]) + ')'
+                    else:
+                        expression_str += self._get_pow_expression(expr_parts[i])
+                    i += 1
+        return expression_str
+
+    def _convert_pow(self, equation):
+        equation_str = str(equation).replace(' ', '').replace('pow(', ' pow(').replace(',', ' , ')
+        expression = pyparsing.Word(pyparsing.printables, excludeChars="()")
+        parens = pyparsing.nestedExpr('(', ')', content=expression)
+        parenthesis_expr = parens.parseString('(' + equation_str + ')').asList()
+        expr_str = self._get_pow_expression(parenthesis_expr)
+        return expr_str
+
     def _get_equation_list(self, model_lines, index):
         equations = []
         eq = model_lines[index].replace(';', '').split("=", 1)
@@ -388,7 +423,7 @@ class TestChasteCG(object):
         expected, self.link_subs_expected = self._resolve_linkers(expected, self.link_subs_expected)
         generated, self.link_subs_generated = self._resolve_linkers(generated, self.link_subs_generated)
 
-        # The 2 sets of equations have the same left hand sides
+        # The 2 sets of equations should now have the same amount of equations
         assert len(expected) == len(generated)
 
         # only exception could be name of stimulus current
@@ -430,9 +465,18 @@ class TestChasteCG(object):
             if not self._is_same_equation(sorted_generated[i][1], sorted_expected[i][1]):
                 eq_gen = self._perform_eq_subs(sorted_generated[i], self.generated_subs)
                 eq_exp = self._perform_eq_subs(sorted_expected[i], self.expected_subs)
-                assert self._is_same_equation(eq_gen[1], eq_exp[1])
+                if not self._is_same_equation(eq_gen[1], eq_exp[1]):
+                    eq1 = sympy.sympify(self._convert_pow(sorted_generated[i][1]))
+                    eq2 = sympy.sympify(self._convert_pow(sorted_expected[i][1]))
+                    if not self._is_same_equation(eq1, eq2):
+                        eq_gen = self._perform_eq_subs(sorted_generated[i], self.generated_subs)
+                        eq_exp = self._perform_eq_subs(sorted_expected[i], self.expected_subs)
+                        eq1 = sympy.sympify(self._convert_pow(eq_gen[1]))
+                        eq2 = sympy.sympify(self._convert_pow(eq_exp[1]))
+                        assert self._is_same_equation(eq1, eq2)
 
         # Check the order for generated: lhs doesn't appear in earlier rhs (could give c++ compile error)
+
         rhs_symbols = set()
         for i in range(len(generated)):
             # Update symbold we have seen on the rhs so far
