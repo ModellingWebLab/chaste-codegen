@@ -49,12 +49,13 @@ class TestChasteCG(object):
         return model_files
 
     def test_generate_normal_models(self, tmp_path, chaste_models):
+        tmp_path = str(tmp_path)
         for model in chaste_models:
             chaste_model = cg.NormalChasteModel(model['model'], model['model_name_from_file'], model['class_name'])
             chaste_model.generate_chaste_code()
 
-            hhp_file_path = os.path.join(str(tmp_path), model['model_name_from_file'] + ".hpp")
-            cpp_file_path = os.path.join(str(tmp_path), model['model_name_from_file'] + ".cpp")
+            hhp_file_path = os.path.join(tmp_path, model['model_name_from_file'] + ".hpp")
+            cpp_file_path = os.path.join(tmp_path, model['model_name_from_file'] + ".cpp")
 
             with open(hhp_file_path, 'w') as f:
                 f.write(chaste_model.generated_hpp)
@@ -106,7 +107,7 @@ class TestChasteCG(object):
             f.close()
 
         # Read generated output hpp from file
-        generated_hpp = os.path.join(str(gen_path), model_name_from_file + '.hpp')
+        generated_hpp = os.path.join(gen_path, model_name_from_file + '.hpp')
         with open(generated_hpp, 'r') as f:
             generated_hpp = f.read()
             # Ignore comments
@@ -488,7 +489,7 @@ class TestChasteCG(object):
         expected_cpp_file = \
             os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models',
                          model_type, model_name_from_file + '.cpp')
-        generated_cpp_file = os.path.join(gstr(gen_path), model_name_from_file + '.cpp')
+        generated_cpp_file = os.path.join(gen_path, model_name_from_file + '.cpp')
 
         expected_cpp = self._get_file_lines(expected_cpp_file)
         generated_cpp = self._get_file_lines(generated_cpp_file)
