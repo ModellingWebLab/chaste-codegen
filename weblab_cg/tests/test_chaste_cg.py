@@ -488,7 +488,7 @@ class TestChasteCG(object):
         expected_cpp_file = \
             os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models',
                          model_type, model_name_from_file + '.cpp')
-        generated_cpp_file = os.path.join(gen_path, model_name_from_file + '.cpp')
+        generated_cpp_file = os.path.join(gstr(gen_path), model_name_from_file + '.cpp')
 
         expected_cpp = self._get_file_lines(expected_cpp_file)
         generated_cpp = self._get_file_lines(generated_cpp_file)
