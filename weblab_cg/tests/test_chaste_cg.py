@@ -106,7 +106,7 @@ class TestChasteCG(object):
             f.close()
 
         # Read generated output hpp from file
-        generated_hpp = os.path.join(gen_path, model_name_from_file + '.hpp')
+        generated_hpp = os.path.join(str(gen_path), model_name_from_file + '.hpp')
         with open(generated_hpp, 'r') as f:
             generated_hpp = f.read()
             # Ignore comments
