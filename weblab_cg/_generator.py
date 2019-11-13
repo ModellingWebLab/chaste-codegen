@@ -180,7 +180,7 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
             'var_name': symbol_name(state),
             'deriv_name': derivative_name(state),
             'initial_value': model.get_initial_value(state),
-            'var_names': model.get_ontology_terms_by_symbol(state),
+            'var_names': model.get_ontology_terms_by_symbol(state, oxmeta),
         })
 
     # Create parameter information dicts
