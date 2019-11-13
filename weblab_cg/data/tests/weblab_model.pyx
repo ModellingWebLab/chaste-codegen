@@ -163,6 +163,7 @@ cdef class TestModel(CvodeSolver):
         # Mapping from qualified names to state indices; only for states that
         # have a variable name.
         self.state_var_map = {}
+        self.state_var_map['membrane_voltage'] = 0
 
         # Initial state
         self.initial_state = np.zeros(4)

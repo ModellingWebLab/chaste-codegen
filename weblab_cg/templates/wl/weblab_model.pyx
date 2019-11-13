@@ -142,6 +142,9 @@ cdef class {{ class_name }}(CvodeSolver):
         # have a variable name.
         self.state_var_map = {}
         {%- for state in states %}
+        {%- for name in state.var_names %}
+        self.state_var_map['{{ name }}'] = {{ state.index }}
+        {%- endfor %}
         {%- endfor %}
 
         # Initial state
