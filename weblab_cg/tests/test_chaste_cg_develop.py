@@ -55,6 +55,7 @@ class TestChasteCG(object):
                                             'reference_models': reference_models})
         return model_files
 
+    @pytest.mark.skip(reason="Test is a development tool")
     def test_generate_models(self, tmp_path, chaste_models):
         """ Check generation of Normal models against reference"""
         tmp_path = str(tmp_path)
