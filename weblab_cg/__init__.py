@@ -37,7 +37,7 @@ from ._generator_chaste_cg import (   # noqa
     BEOptChasteModel,
 )
 
-from ._printer import (     # noqa
+from ._weblab_printer import (     # noqa
     WebLabPrinter,
 )
 

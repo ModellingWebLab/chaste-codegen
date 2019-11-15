@@ -28,7 +28,8 @@ class ChasteModel(object):
 
     _MEMBRANE_VOLTAGE_INDEX = 0
     _CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX = 1
-    _OXMETA = "https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#"
+    _OXMETA = 'https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#'
+    _PYCMLMETA = 'https://chaste.comlab.ox.ac.uk/cellml/ns/pycml#'
 
     _UNIT_DEFINITIONS = {'uA_per_cm2': [{'prefix': 'micro', 'units': 'ampere'},
                                         {'exponent': '-2', 'prefix': 'centi', 'units': 'metre'}],
@@ -41,7 +42,6 @@ class ChasteModel(object):
                          'millimolar': [{'units': 'mole', 'prefix': 'milli'}, {'units': 'litre', 'exponent': '-1'}],
                          'millivolt': [{'prefix': 'milli', 'units': 'volt'}]}
 
-    _STIMULUS_CURRENT = "membrane_stimulus_current"
     _STIMULUS_UNITS = {'membrane_stimulus_current_period': 'millisecond',
                        'membrane_stimulus_current_duration': 'millisecond',
                        'membrane_stimulus_current_amplitude': 'uA_per_cm2',
@@ -80,6 +80,7 @@ class ChasteModel(object):
 
         self._add_units()
 
+        self._modifiable_parameters = self._get_modifiable_parameters()
         self._time_variable = self._model.get_free_variable_symbol()
         self._membrane_voltage_var = self._get_membrane_voltage_var()
         self._cytosolic_calcium_concentration_var = self._get_cytosolic_calcium_concentration_var()
@@ -88,8 +89,8 @@ class ChasteModel(object):
         self._membrane_stimulus_current = self._get_membrane_stimulus_current()
         self._membrane_stimulus_current_units = self._get_membrane_stimulus_current_units()
         self._membrane_capacitance, self._membrane_capacitance_factor = self._get_membrane_capacitance()
-        self._default_stimulus = self._get_stimulus_currents()
-        self._desired_ionic_current_units, self._ionic_current_factor = self._get_stimulus_currents_desired_units()
+        self._default_stimulus = self._get_stimulus()
+        self._desired_ionic_current_units, self._ionic_current_factor = self._get_stimulus_desired_units()
         self._ionic_derivs = self._get_ionic_derivs()
         self._equations_for_ionic_vars = self._get_equations_for_ionic_vars()
         self._extended_equations_for_ionic_vars = self._get_extended_equations_for_ionic_vars()
@@ -102,13 +103,14 @@ class ChasteModel(object):
         self._derivative_equations = self._get_derivative_equations()
 
         self._add_printers()
+        self._formatted_modifiable_parameters = self._format_modifiable_parameters()
         self._formatted_state_vars = self._format_state_variables()
         self._formatted_default_stimulus = self._format_stimulus_currents()
         self._formatted_equations_for_ionic_vars = self._format_equations_for_ionic_vars()
         self._formatted_extended_equations_for_ionic_vars = self._format_extended_equations_for_ionic_vars()
         self._formatted_y_derivatives = self._format_y_derivatives()
         self._formatted_derivative_eqs = self._format_derivative_equations()
-        self._free_variable, self._ode_system_information, self._named_attributes = self._format_system_info()
+        self._free_variable, self._ode_system_information, self._named_attributes = self._format_ode_system_info()
 
     def generate_chaste_code(self):
         """ Generate chaste code
@@ -143,6 +145,11 @@ class ChasteModel(object):
             except AssertionError:
                 pass  # Unit already exists, but that is not a problem
 
+    def _get_modifiable_parameters(self):
+        return sorted(self._model.get_symbols_by_rdf((self._PYCMLMETA,
+                                                     'modifiable-parameter'), 'yes'),
+                      key=lambda p: self._printer.doprint(p)[self._printer.doprint(p).rfind('_') + 1:])
+
     def _get_membrane_voltage_var(self):
         """ Find the membrane_voltage variable"""
         return self._model.get_symbol_by_ontology_term(self._OXMETA, "membrane_voltage")
@@ -171,7 +178,7 @@ class ChasteModel(object):
     def _get_membrane_stimulus_current(self):
         """ Find the membrane_stimulus_current variable if it exists"""
         try:
-            return self._model.get_symbol_by_ontology_term(self._OXMETA, self._STIMULUS_CURRENT)
+            return self._model.get_symbol_by_ontology_term(self._OXMETA, 'membrane_stimulus_current')
         except KeyError:
             self._logger.debug(self._model.name + ' has no membrane_stimulus_current')
             return None
@@ -195,10 +202,10 @@ class ChasteModel(object):
                 initial_value = self._model.get_initial_value(membrane_capacitance)
                 equation = sp.Eq(membrane_capacitance, initial_value)
                 return equation, factor
-            except KeyError:
+            except (KeyError, errors.DimensionalityError):
                 return None, 1.0
 
-    def _get_stimulus_currents(self):
+    def _get_stimulus(self):
         """ Store the stimulus currents in the model"""
         default_stimulus = dict()
         # Get remaining stimulus current variables If they have metadata use that as key, ortherwise use the name
@@ -210,7 +217,7 @@ class ChasteModel(object):
                 default_stimulus[key] = eq
         return default_stimulus
 
-    def _get_stimulus_currents_desired_units(self):
+    def _get_stimulus_desired_units(self):
         """ Get a tuple: (units to convert membrane_stimulus_current, is  capacitance used in i_ionic)"""
         try:
             desired_units = getattr(self._model.units.ureg, self._STIMULUS_UNITS['membrane_stimulus_current'])
@@ -302,6 +309,10 @@ class ChasteModel(object):
         # Sort the derivative equations to get the derivaives themselves last
         return sorted(self._model.get_equations_for(self._y_derivatives),
                       key=lambda deriv: isinstance(deriv.lhs, sp.Derivative))
+
+    def _format_modifiable_parameters(self):
+        return [{'units': self._model.units.summarise_units(param), 'name': self._printer.doprint(param)[4:],
+                'initial_value': self._model.get_initial_value(param)} for param in self._modifiable_parameters]
 
     def _format_state_variables(self):
         """ Get equations defining the derivatives including  V (self._membrane_voltage_var)"""
@@ -533,7 +544,7 @@ class ChasteModel(object):
 
         return equations
 
-    def _format_system_info(self):
+    def _format_ode_system_info(self):
         """ Format general ode system info for chaste output"""
         free_variable = {'name': self._name_printer.doprint(self._model.get_free_variable_symbol()),
                          'units': self._get_desired_units(self._model.get_free_variable_symbol()),
@@ -545,20 +556,16 @@ class ChasteModel(object):
               'units': self._get_desired_units(var)}
              for var in self._state_vars]
 
-        # mAttributes
-        attributes = dict()
-        for t in self._model.rdf:
-            if str(t[1]) == 'https://chaste.comlab.ox.ac.uk/cellml/ns/pycml#name':
-                if not str(t[0]) in attributes:
-                    attributes[str(t[0])] = dict()
-                attributes[str(t[0])]['name'] = str(t[2])
-            elif str(t[1]) == 'https://chaste.comlab.ox.ac.uk/cellml/ns/pycml#value':
-                if not str(t[0]) in attributes:
-                    attributes[str(t[0])] = dict()
-                attributes[str(t[0])]['value'] = str(t[2])
 
-        mAttributes = attributes.values()
-        return free_variable, system_info, mAttributes
+        named_attributes = []
+        named_attrs = self._model.get_rdf_annotations(subject=self._model.rdf_identity, predicate=(self._PYCMLMETA, 'named-attribute'))
+        for s, p, attr in named_attrs:
+            name = self._model.get_rdf_value(subject=attr, predicate=(self._PYCMLMETA, 'name'))
+            value = self._model.get_rdf_value(subject=attr, predicate=(self._PYCMLMETA, 'value'))
+            named_attributes.append({'name': name, 'value': value})
+
+        named_attributes = sorted(named_attributes, key=lambda a: a['name'])
+        return free_variable, system_info, named_attributes
 
     def _state_var_key_order(self, var):
         """Returns a key to order state variables in the same way as pycml does"""
@@ -608,6 +615,7 @@ class NormalChasteModel(ChasteModel):
             'use_capacitance_i_ionic': self._use_capacitance_i_ionic,
             'free_variable': self._free_variable,
             'ode_system_information': self._ode_system_information,
+            'modifiable_parameters': self._formatted_modifiable_parameters,
             'named_attributes': self._named_attributes})
 
 

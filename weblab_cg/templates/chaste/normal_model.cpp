@@ -4,7 +4,7 @@
 //! 
 //! Model: {{model_name_from_file}}
 //! 
-//! Processed by webalab_cg - CellML Tools in Python
+//! Processed by webalab_cg - CellML Tools in Python: https://github.com/ModellingWebLab/weblab-cg
 //!     (translators: , webalab_cg: , options: normal)
 //! on {{generation_date}}
 //! 
@@ -20,31 +20,31 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
-	{%- if default_stimulus_equations.membrane_stimulus_current_duration is defined %}
+    {%- if default_stimulus_equations.membrane_stimulus_current_duration is defined %}
 
     boost::shared_ptr<RegularStimulus> {{class_name}}FromCellML::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
-		{% for key, value in default_stimulus_equations.items() %}
-		{%- for eq in value %}const double {{ eq.lhs }} = {{ eq.rhs }}; // {{eq.units}}
-		{% endfor %}{% endfor %}boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+        {% for key, value in default_stimulus_equations.items() %}
+        {%- for eq in value %}const double {{ eq.lhs }} = {{ eq.rhs }}; // {{eq.units}}
+        {% endfor %}{% endfor %}boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs({{default_stimulus_equations["membrane_stimulus_current_amplitude"][-1].lhs}}),
                 {{default_stimulus_equations["membrane_stimulus_current_duration"][-1].lhs}},
                 {{default_stimulus_equations["membrane_stimulus_current_period"][-1].lhs}},
-				{% if default_stimulus_equations["membrane_stimulus_current_offset"] is defined %}{{default_stimulus_equations["membrane_stimulus_current_offset"][-1].lhs}}{%- else %}0.0{%- endif %}
+                {% if default_stimulus_equations["membrane_stimulus_current_offset"] is defined %}{{default_stimulus_equations["membrane_stimulus_current_offset"][-1].lhs}}{%- else %}0.0{%- endif %}
                 ));
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-	{%- endif %}
-	{%- if use_get_intracellular_calcium_concentration %}
+    {%- endif %}
+    {%- if use_get_intracellular_calcium_concentration %}
     
     double {{class_name}}FromCellML::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[{{cytosolic_calcium_concentration_index}}];
     }
-	{%- endif %}
-	
+    {%- endif %}
+    
     {{class_name}}FromCellML::{{class_name}}FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
@@ -56,7 +56,7 @@
         // 
         this->mpSystemInfo = OdeSystemInformation<{{class_name}}FromCellML>::Instance();
         Init();{%- if default_stimulus_equations.membrane_stimulus_current_duration is defined %}
-		
+        
         // We have a default stimulus specified in the CellML file metadata
         this->mHasDefaultStimulusFromCellML = true;{%- endif %}
     }
@@ -71,14 +71,14 @@
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
         if (!pStateVariables) pStateVariables = &rGetStateVariables();
         const std::vector<double>& rY = *pStateVariables;
-		{% for state_var in state_vars %}
-		{%- if state_var.in_ionic %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
-		// Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
-		{% endif %}{%- endfor %}{% for ionic_var in ionic_vars %}
+        {% for state_var in state_vars %}
+        {%- if state_var.in_ionic %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
+        // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
+        {% endif %}{%- endfor %}{% for ionic_var in ionic_vars %}
         const double {{ionic_var.lhs}} = {{ionic_var.rhs}}; // {{ionic_var.units}}
-		{%- endfor %}
+        {%- endfor %}
         
-		const double i_ionic = var_chaste_interface__i_ionic;
+        const double i_ionic = var_chaste_interface__i_ionic;
         EXCEPT_IF_NOT(!std::isnan(i_ionic));
         return i_ionic;
     }
@@ -87,30 +87,30 @@
     {
         // Inputs:
         // Time units: millisecond
-		{%- for state_var in state_vars %}
-		{% if state_var.in_y_deriv %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}{%- endif %}
-		// Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
-		{%- endfor %}
+        {%- for state_var in state_vars %}
+        {% if state_var.in_y_deriv %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}{%- endif %}
+        // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
+        {%- endfor %}
         
         // Mathematics
-		{% for deriv in y_derivative_equations %}{%- if deriv.is_voltage%}double {{deriv.lhs}};{%- endif %}{%- endfor %}
+        {% for deriv in y_derivative_equations %}{%- if deriv.is_voltage%}double {{deriv.lhs}};{%- endif %}{%- endfor %}
         {%- for deriv in y_derivative_equations %}{%- if not deriv.in_membrane_voltage %}
-		const double {{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
-		{%- endfor %}
-		
+        const double {{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
+        {%- endfor %}
+        
         if (mSetVoltageDerivativeToZero)
         {
             {% for deriv in y_derivative_equations %}{%- if deriv.is_voltage%}{{deriv.lhs}} = 0.0;{%- endif %}{%- endfor %}
         }
         else
         {
-			{%- for deriv in y_derivative_equations %}{% if deriv.in_membrane_voltage %}
-			{% if not deriv.is_voltage%}const double {% endif %}{{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
-			{%- endfor %}
+            {%- for deriv in y_derivative_equations %}{% if deriv.in_membrane_voltage %}
+            {% if not deriv.is_voltage%}const double {% endif %}{{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
+            {%- endfor %}
         }
-		{% for deriv in y_derivatives %}
+        {% for deriv in y_derivatives %}
         rDY[{{loop.index0}}] = {{deriv}};
-		{%- endfor %}
+        {%- endfor %}
     }
     
 template<>
@@ -124,11 +124,14 @@ void OdeSystemInformation<{{class_name}}FromCellML>::Initialise(void)
     this->mVariableNames.push_back("{{ode_info.name}}");
     this->mVariableUnits.push_back("{{ode_info.units}}");
     this->mInitialConditions.push_back({{ode_info.initial_value}});
-	
-	{% endfor %}{% for attr in named_attributes %}// rY[{{loop.index0}}]:
-	this->mAttributes["{{attr.name}}SuggestedForwardEulerTimestep"] = {{attr.value}};
-	{% endfor %}
-	this->mInitialised = true;
+    
+    {% endfor %}{% for param in modifiable_parameters %}// mParameters[{{loop.index0}}]:
+    this->mParameterNames.push_back("attr["name"]");
+    this->mParameterUnits.push_back("attr["units"]");
+    {% endfor %}{% for attr in named_attributes %}
+    this->mAttributes["{{attr.name}}SuggestedForwardEulerTimestep"] = {{attr.value}};
+    {% endfor %}
+    this->mInitialised = true;
 }
 
 
@@ -145,4 +148,3 @@ extern "C"
     }
     
 }
-

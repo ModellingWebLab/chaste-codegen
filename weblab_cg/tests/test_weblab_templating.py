@@ -23,7 +23,7 @@ def test_generate_weblab_model(tmp_path):
 
     # Load cellml model
     model = os.path.join(
-        cg.DATA_DIR, 'tests',
+        cg.DATA_DIR, 'tests', 'cellml',
         'hodgkin_huxley_squid_axon_model_1952_modified.cellml'
     )
     model = cellmlmanip.load_model(model)

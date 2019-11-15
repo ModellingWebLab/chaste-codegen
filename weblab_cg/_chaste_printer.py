@@ -1,10 +1,10 @@
-from ._printer import WebLabPrinter
+from ._printer import Printer
 import sympy
 
 from sympy.printing.precedence import precedence
 
 
-class ChastePrinter(WebLabPrinter):
+class ChastePrinter(Printer):
     """
     Converts Sympy expressions to strings for use in Chaste code generation, based on the WeblabPrinter.
 
@@ -27,7 +27,7 @@ class ChastePrinter(WebLabPrinter):
         self._prefix = ''
 
         # Make sure we can output a call to GetIntracellularAreaStimulus
-        WebLabPrinter._math_functions.add('GetIntracellularAreaStimulus')
+        Printer._custom_functions.add('GetIntracellularAreaStimulus')
 
     def _print_And(self, expr):
         """ Handles logical And. """
@@ -47,45 +47,19 @@ class ChastePrinter(WebLabPrinter):
         my_prec = precedence(expr)
         return ' || '.join([self._bracket(x, my_prec) for x in expr.args])
 
-    def _print_Pow(self, expr):
-        """ Handles Pow(), which includes all division
-        only ordinary power is different, the rest is handed back up to the parent class (WebLabPrinter) """
-        # Square root or ((only if communicative) 1/sqrt or ordinary devision )
-        if expr.exp is sympy.S.Half or (expr.is_commutative and
-                                        (-expr.exp is sympy.S.Half or -expr.exp is sympy.S.One)):
-            return super()._print_Pow(expr)
-        else:
-            # Ordinary power
-            p = precedence(expr)
-            return 'pow(' + self._bracket(expr.base, p) + ', ' + self._bracket(expr.exp, p) + ')'
+    def _print_ordinary_pow(self, expr):
+        """ Handles Pow(), hanles just ordinary powers without division "
 
-    def _print_Piecewise(self, expr):
-        """
-        Handles Piecewise functions.
+        for C++ printing we need to writea x**y as pow(x, y) with lowercase p"""
+        p = precedence(expr)
+        return 'pow(' + self._bracket(expr.base, p) + ', ' + self._bracket(expr.exp, p) + ')'
 
-        Sympy's piecewise is defined as a list of tuples ``(expr, cond)`` and
-        evaluated by returning the first ``expr`` whose ``cond`` is true. If
-        none of the conditions hold a value error is raised.
-        """
-        from sympy.logic.boolalg import BooleanTrue
+    def _print_ternary(self, cond, expr):
+        parts = ''
+        parts += '('
+        parts += self._print(cond)
+        parts += ') ? ('
+        parts += self._print(expr)
+        parts += ') : ('
+        return parts
 
-        # Assign NaN if no conditions hold
-        # If a condition `True` is found, use its expression instead
-        other = 'float(\'nan\')'
-
-        parts = ['(']
-        brackets = 1
-        for e, c in expr.args:
-            # Check if boolean True (if found, stop evaluating further)
-            if isinstance(c, BooleanTrue):
-                other = self._print(e)
-                break
-            parts.append('(')
-            parts.append(self._print(c))
-            parts.append(') ? (')
-            parts.append(self._print(e))
-            parts.append(') : (')
-            brackets += 1
-        parts.append(other)
-        parts.append(')' * brackets)
-        return ''.join(parts)

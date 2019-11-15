@@ -46,7 +46,7 @@ import sympy.printing
 from sympy.printing.precedence import precedence
 
 
-class WebLabPrinter(sympy.printing.printer.Printer):
+class Printer(sympy.printing.printer.Printer):
     """
     Converts Sympy expressions to strings for use in Web Lab Cython model code.
 
@@ -86,9 +86,12 @@ class WebLabPrinter(sympy.printing.printer.Printer):
         'tan',
         'tanh',
     }
+    
+    # List of custom defined functions we are allowed to output
+    _custom_functions = set()
 
     def __init__(self, symbol_function=None, derivative_function=None):
-        super(WebLabPrinter, self).__init__(None)
+        super(Printer, self).__init__(None)
 
         # Prefix for functions
         self._prefix = 'math.'
@@ -162,18 +165,18 @@ class WebLabPrinter(sympy.printing.printer.Printer):
         return ' and '.join([self._bracket(x, my_prec) for x in expr.args])
 
     def _print_bool(self, expr):
-        """ Handles False """
+        """ Handles Python bool (True/False) """
         if expr:
             return self._print_BooleanTrue(expr)
         else:
             return self._print_BooleanFalse(expr)
 
     def _print_BooleanFalse(self, expr):
-        """ Handles False """
+        """ Handles sympy False """
         return 'False'
 
     def _print_BooleanTrue(self, expr):
-        """ Handles True """
+        """ Handles sympy True """
         return 'True'
 
     def _print_Derivative(self, expr):
@@ -204,7 +207,7 @@ class WebLabPrinter(sympy.printing.printer.Printer):
         name = expr.func.__name__
         if name == 'ceiling':
             name = 'ceil'
-        if name not in WebLabPrinter._math_functions:
+        if name not in Printer._math_functions and name not in Printer._custom_functions:
             raise ValueError('Unsupported function: ' + str(name))
 
         # Convert arguments and return
@@ -314,6 +317,16 @@ class WebLabPrinter(sympy.printing.printer.Printer):
         """ Handles pi """
         return self._prefix + 'pi'
 
+    def _print_ternary(self, cond, expr):
+        parts = ''
+        parts += '('
+        parts += self._print(expr)
+        parts += ') if ('
+        parts += self._print(cond)
+        parts += ') else ('
+        return parts
+
+
     def _print_Piecewise(self, expr):
         """
         Handles Piecewise functions.
@@ -328,7 +341,7 @@ class WebLabPrinter(sympy.printing.printer.Printer):
         # If a condition `True` is found, use its expression instead
         other = 'float(\'nan\')'
 
-        parts = ['(']
+        parts = '('
         brackets = 1
         for e, c in expr.args:
             # Check if boolean True (if found, stop evaluating further)
@@ -340,15 +353,16 @@ class WebLabPrinter(sympy.printing.printer.Printer):
             #    continue
 
             # Add e-if-c-else-? statement
-            parts.append('(')
-            parts.append(self._print(e))
-            parts.append(') if (')
-            parts.append(self._print(c))
-            parts.append(') else (')
+            parts +=self._print_ternary(c, e)
             brackets += 1
-        parts.append(other)
-        parts.append(')' * brackets)
-        return ''.join(parts)
+        parts += other
+        parts += ')' * brackets
+        return parts
+
+    def _print_ordinary_pow(self, expr):
+        """ Handles Pow(), hanles just ordinary powers without division """
+        p = precedence(expr)
+        return self._bracket(expr.base, p) + '**' + self._bracket(expr.exp, p)
 
     def _print_Pow(self, expr):
         """ Handles Pow(), which includes all division """
@@ -371,7 +385,7 @@ class WebLabPrinter(sympy.printing.printer.Printer):
                 return '1 / ' + self._bracket(expr.base, p)
 
         # Ordinary power
-        return self._bracket(expr.base, p) + '**' + self._bracket(expr.exp, p)
+        return self._print_ordinary_pow(expr)
 
     def _print_Rational(self, expr):
         """ Handles rationals (int divisions, stored symbollicaly) """

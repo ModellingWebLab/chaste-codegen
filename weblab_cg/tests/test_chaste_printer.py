@@ -1,5 +1,5 @@
 #
-# Tests conversion of sympy expressions to weblab cython code.
+# Tests conversion of sympy expressions to C++ code for Chaste code generation.
 #
 import weblab_cg as cg
 import logging

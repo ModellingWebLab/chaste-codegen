@@ -240,4 +240,3 @@ class TestWebLabPrinter(object):
         e = sp.gamma(x)
         with pytest.raises(ValueError):
             p.doprint(e)
-
