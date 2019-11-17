@@ -86,7 +86,7 @@ class Printer(sympy.printing.printer.Printer):
         'tan',
         'tanh',
     }
-    
+
     # List of custom defined functions we are allowed to output
     _custom_functions = set()
 
@@ -326,7 +326,6 @@ class Printer(sympy.printing.printer.Printer):
         parts += ') else ('
         return parts
 
-
     def _print_Piecewise(self, expr):
         """
         Handles Piecewise functions.
@@ -353,7 +352,7 @@ class Printer(sympy.printing.printer.Printer):
             #    continue
 
             # Add e-if-c-else-? statement
-            parts +=self._print_ternary(c, e)
+            parts += self._print_ternary(c, e)
             brackets += 1
         parts += other
         parts += ')' * brackets

@@ -1,4 +1,3 @@
-import cellmlmanip
 import logging
 import os
 import re
@@ -7,13 +6,15 @@ import pytest
 import sympy
 from sympy import SympifyError
 import pyparsing
+from weblab_cg.tests.chaste_test_utils import load_chaste_models, get_file_lines, write_file
 
 # Show more logging output
 logging.getLogger().setLevel(logging.DEBUG)
 
+
 class TestChasteCG(object):
     """ Tests to help development of weblab_cg. This test compares symbolicly against pycml reference output
-    
+
     # TODO: Better docstrings"""
     _COMMENTS_REGEX = re.compile(r'(//.*\n)')
     _NUM_REGEX = re.compile(r'(?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?')
@@ -25,65 +26,30 @@ class TestChasteCG(object):
     @pytest.fixture(scope="class")
     def chaste_models(self):
         """ Load all models"""
-        # Get folder with test cellml files
-        model_folder = os.path.join(cg.DATA_DIR, 'tests', 'cellml')
+        return load_chaste_models(model_types=self.model_types(), reference_path_prefix=['chaste_reference_models', 'develop'])
 
-        # Walk through all cellml files in the folder
-        model_files = []
-        for root, dirs, files in os.walk(model_folder):
-            for model_file in files:
-                if model_file.endswith('.cellml'):  # make sure we only process .cellml files
-                    model_name_from_file = model_file.replace('.cellml', '')
-                    model_file = os.path.join(model_folder, model_file)
-                    reference_models = {}
-                    for model_type in self.model_types():
-                        expected_hpp_path = \
-                                os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'develop',
-                                             model_type, model_name_from_file + '.hpp')
-                        expected_cpp_path = \
-                                os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'develop',
-                                             model_type, model_name_from_file + '.cpp')
-                        # Skip cellml files without reference chaste code
-                        if os.path.isfile(expected_hpp_path) and os.path.isfile(expected_cpp_path):
-                            reference_models.update({model_type:{'expected_hpp_path': expected_hpp_path, 'expected_cpp_path':expected_cpp_path}})
-
-                    if len(reference_models) > 0:
-                        class_name = 'Dynamic' + model_name_from_file
-                        model_files.append({'model': cellmlmanip.load_model(model_file),
-                                            'model_name_from_file': model_name_from_file,
-                                            'class_name': class_name,
-                                            'reference_models': reference_models})
-        return model_files
-
-    @pytest.mark.skip(reason="Test is a development tool")
-    def test_generate_models(self, tmp_path, chaste_models):
+    def test_generate_chate_models_develop(self, tmp_path, chaste_models):
         """ Check generation of Normal models against reference"""
         tmp_path = str(tmp_path)
         for model in chaste_models:
             for model_type in model['reference_models'].keys():
-                # Generate chaste code                
+                # Generate chaste code
                 chaste_model = cg.NormalChasteModel(model['model'], model['model_name_from_file'], model['class_name'])
                 chaste_model.generate_chaste_code()
 
                 # Write generated files
-                hhp_gen_file_path = os.path.join(tmp_path, model['model_name_from_file'] + ".hpp")
-                cpp_gen_file_path = os.path.join(tmp_path, model['model_name_from_file'] + ".cpp")
-                with open(hhp_gen_file_path, 'w') as f:
-                    f.write(chaste_model.generated_hpp)
-                    f.close()
-
-                with open(cpp_gen_file_path, 'w') as f:
-                    f.write(chaste_model.generated_cpp)
-                    f.close()
-
+                hhp_gen_file_path = os.path.join(tmp_path, model_type, model['model_name_from_file'] + ".hpp")
+                cpp_gen_file_path = os.path.join(tmp_path, model_type, model['model_name_from_file'] + ".cpp")
+                write_file(hhp_gen_file_path, chaste_model.generated_hpp)
+                write_file(cpp_gen_file_path, chaste_model.generated_cpp)
 
                 # Load reference files
-                expected_hpp = self._get_file_lines(model['reference_models'][model_type]['expected_hpp_path'])
-                expected_cpp =  self._get_file_lines(model['reference_models'][model_type]['expected_cpp_path'])
+                expected_hpp = get_file_lines(model['reference_models'][model_type]['expected_hpp_path'], ignore_comments=True)
+                expected_cpp = get_file_lines(model['reference_models'][model_type]['expected_cpp_path'], ignore_comments=True)
 
                 # Load generated files
-                generated_hpp = self._get_file_lines(hhp_gen_file_path)
-                generated_cpp = self._get_file_lines(cpp_gen_file_path)
+                generated_hpp = get_file_lines(hhp_gen_file_path, ignore_comments=True)
+                generated_cpp = get_file_lines(cpp_gen_file_path, ignore_comments=True)
 
                 assert expected_hpp == generated_hpp
                 self._check_match_gengerated_chaste_cpp(generated_cpp, expected_cpp)
@@ -91,18 +57,6 @@ class TestChasteCG(object):
     def _check_match_gengerated_chaste_cpp(self, generated_cpp, expected_cpp):
 
         self._keep_subs = False
-
-        # Remove empty lines
-        expected_i = generated_i = 0
-        while expected_i < len(expected_cpp) or generated_i < len(generated_cpp):
-            if expected_i < len(expected_cpp) and expected_cpp[expected_i] == '':
-                del expected_cpp[expected_i]
-            else:
-                expected_i += 1
-            if generated_i < len(generated_cpp) and generated_cpp[generated_i] == '':
-                del generated_cpp[generated_i]
-            else:
-                generated_i += 1
 
         expected_i = generated_i = 0
         while expected_i < len(expected_cpp) and generated_i < len(generated_cpp):
@@ -122,18 +76,6 @@ class TestChasteCG(object):
                 self._check_equation_list(expected_eq, generated_eq)
         # Must have reached end of both files
         assert expected_i == len(expected_cpp) and generated_i == len(generated_cpp)
-
-    def _get_file_lines(self, file_path):
-        # Check file exists
-        assert os.path.isfile(file_path)
-        lines = []
-        with open(file_path, 'r') as f:
-            for line in f.readlines():
-                line = self._COMMENTS_REGEX.sub("", line)  # Ignore comments
-                line = line.rstrip().lstrip()  # Remove trailing and preceding whitespace
-                lines.append(line)
-            f.close()
-        return lines
 
     def _numbers_with_float_precision(self, line):
         def format_numbers(m):
@@ -289,7 +231,8 @@ class TestChasteCG(object):
                         cond = conditional_parts[i - 1][1]
                         exp1 = conditional_parts[i + 1][1]
                         exp2 = conditional_parts[i + 3][1]
-                        conditional_parts[i - 1] = ('expression', exp1 + ' if ' + cond + ' else ' + exp2)
+                        #conditional_parts[i - 1] = ('expression', exp1 + ' if ' + cond + ' else ' + exp2)
+                        conditional_parts[i - 1] = ('expression', 'Piecewise(((' + exp1 + '), (' + cond + ')), ((' + exp2 + '), True))')
                         del conditional_parts[i:]
                         break
             expression_str = conditional_parts[0][1]
@@ -305,6 +248,7 @@ class TestChasteCG(object):
             equation_str.replace('HeartConfig::Instance()->GetCapacitance()', 'HeartConfig_Instance_GetCapacitance')
         equation_str = equation_str.replace('()->', '_').replace('::', '_')
         equation_str = equation_str.replace('&&', '&').replace('||', '|')
+        equation_str = equation_str.replace('[', '____').replace(']', '____')
         try:
             return sympy.simplify(equation_str)
         except SympifyError:

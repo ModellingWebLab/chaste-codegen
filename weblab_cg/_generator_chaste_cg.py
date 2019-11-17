@@ -4,13 +4,12 @@
 
 # TODO: apply unit conversions to state variables voltage, time, cytosolic_calcium_concentration
 # and update equations accordingly
-
-
 import logging
 import time
 import sympy as sp
 import weblab_cg as cg
 from pint import errors
+
 
 logging.getLogger().setLevel(logging.INFO)
 
@@ -120,16 +119,18 @@ class ChasteModel(object):
 
     def _add_printers(self):
         """ Initialises Printers for outputting chaste code. """
+        # Print modifiable parameters as mParameters[index]
         self._var_chaste_interface_printer =\
-            cg.ChastePrinter(lambda symbol: 'var_chaste_interface_' + str(symbol).replace('$', '__'),
+            cg.ChastePrinter(lambda symbol: 'var_chaste_interface_' + str(symbol).replace('$', '__') if symbol not in self._modifiable_parameters else 'mParameters['+str(self._modifiable_parameters.index(symbol))+']',
                              lambda deriv: 'd_dt_chaste_interface_' + (str(deriv.expr).replace('$', '__')
                              if isinstance(deriv, sp.Derivative) else str(deriv).replace('$', '__')))
 
         # Printer for printing chaste regular variable assignments (var_ prefix)
+        # Print modifiable parameters as mParameters[index]
         self._printer = \
             cg.ChastePrinter(lambda symbol, state_vars=self._state_vars:
                              ('var_chaste_interface_' if symbol in state_vars else 'var')
-                             + str(symbol).replace('$', '__'),
+                             + str(symbol).replace('$', '__') if symbol not in self._modifiable_parameters else 'mParameters['+str(self._modifiable_parameters.index(symbol))+']',
                              lambda deriv: 'd_dt_chaste_interface_' +
                                            (str(deriv.expr).replace('$', '__')
                                             if isinstance(deriv, sp.Derivative) else str(deriv).replace('$', '__')))
@@ -146,9 +147,8 @@ class ChasteModel(object):
                 pass  # Unit already exists, but that is not a problem
 
     def _get_modifiable_parameters(self):
-        return sorted(self._model.get_symbols_by_rdf((self._PYCMLMETA,
-                                                     'modifiable-parameter'), 'yes'),
-                      key=lambda p: self._printer.doprint(p)[self._printer.doprint(p).rfind('_') + 1:])
+        return self._model.get_symbols_by_rdf((self._PYCMLMETA,
+                                              'modifiable-parameter'), 'yes')
 
     def _get_membrane_voltage_var(self):
         """ Find the membrane_voltage variable"""
@@ -264,7 +264,8 @@ class ChasteModel(object):
                                             or (eq.lhs != self._membrane_stimulus_current
                                             and eq not in self._default_stimulus.values()))
                                         and self._model.units.summarise_units(eq.lhs) ==
-                                        self._membrane_stimulus_current_units]
+                                        self._membrane_stimulus_current_units
+                                        and eq.lhs not in self._modifiable_parameters]
 
         # Reverse topological order is more similar (though not necessarily identical) to pycml
         equations_for_ionic_vars.reverse()
@@ -272,8 +273,9 @@ class ChasteModel(object):
 
     def _get_extended_equations_for_ionic_vars(self):
         """ Get the equations defining the ionic derivatives and all dependant equations"""
+        # Remove equations where lhs is a modifiable parameter
         extended_equations_for_ionic_vars = \
-            self._model.get_equations_for([ionic_var_eq.lhs for ionic_var_eq in self._equations_for_ionic_vars])
+            [eq for eq in self._model.get_equations_for([ionic_var_eq.lhs for ionic_var_eq in self._equations_for_ionic_vars]) if eq.lhs not in self._modifiable_parameters]
         if self._use_capacitance_i_ionic and self._membrane_capacitance is not None:
             extended_equations_for_ionic_vars.insert(0, self._membrane_capacitance)
         return extended_equations_for_ionic_vars
@@ -295,22 +297,28 @@ class ChasteModel(object):
     def _get_derivative_eqs_voltage(self):
         """ Get equations defining the derivatives for V (self._membrane_voltage_var)"""
         # Sort the derivative equations to get the derivaives themselves last
-        return sorted(self._model.get_equations_for(self._y_derivatives_voltage),
-                      key=lambda deriv: isinstance(deriv.lhs, sp.Derivative))
+        # Remove equations where lhs is a modifiable parameter
+        return [eq for eq in sorted(self._model.get_equations_for(self._y_derivatives_voltage),
+                      key=lambda deriv: isinstance(deriv.lhs, sp.Derivative)) if not eq.lhs in self._modifiable_parameters]
 
     def _get_derivative_eqs_exlc_voltage(self):
         """ Get equations defining the derivatives excluding V (self._membrane_voltage_var)"""
         # Sort the derivative equations to get the derivaives themselves last
-        return sorted(self._model.get_equations_for(self._y_derivatives_excl_voltage),
-                      key=lambda deriv: isinstance(deriv.lhs, sp.Derivative))
+        # Remove equations where lhs is a modifiable parameter
+        return [eq for eq in sorted(self._model.get_equations_for(self._y_derivatives_excl_voltage),
+                      key=lambda deriv: isinstance(deriv.lhs, sp.Derivative)) if not eq.lhs in self._modifiable_parameters]
 
     def _get_derivative_equations(self):
         """ Get equations defining the derivatives including  V (self._membrane_voltage_var)"""
         # Sort the derivative equations to get the derivaives themselves last
-        return sorted(self._model.get_equations_for(self._y_derivatives),
-                      key=lambda deriv: isinstance(deriv.lhs, sp.Derivative))
+        return [eq for eq in sorted(self._model.get_equations_for(self._y_derivatives),
+                      key=lambda deriv: isinstance(deriv.lhs, sp.Derivative)) if not eq.lhs in self._modifiable_parameters]
 
     def _format_modifiable_parameters(self):
+        self._modifiable_parameters = sorted(self._modifiable_parameters,
+                                             key=lambda p:
+                                             self._printer.doprint(p)[self._printer.doprint(p).rfind('_') + 1:])
+
         return [{'units': self._model.units.summarise_units(param), 'name': self._printer.doprint(param)[4:],
                 'initial_value': self._model.get_initial_value(param)} for param in self._modifiable_parameters]
 
@@ -548,7 +556,8 @@ class ChasteModel(object):
         """ Format general ode system info for chaste output"""
         free_variable = {'name': self._name_printer.doprint(self._model.get_free_variable_symbol()),
                          'units': self._get_desired_units(self._model.get_free_variable_symbol()),
-                         'system_name': self._model.name}
+                         'system_name': self._model.name,
+                         'var_name': self._var_chaste_interface_printer.doprint(self._model.get_free_variable_symbol())}
         system_info = \
             [{'name': self._model.get_ontology_terms_by_symbol(var, self._OXMETA)[0]
               if self._model.has_ontology_annotation(var, self._OXMETA) else self._name_printer.doprint(var),
@@ -556,9 +565,9 @@ class ChasteModel(object):
               'units': self._get_desired_units(var)}
              for var in self._state_vars]
 
-
         named_attributes = []
-        named_attrs = self._model.get_rdf_annotations(subject=self._model.rdf_identity, predicate=(self._PYCMLMETA, 'named-attribute'))
+        named_attrs = self._model.get_rdf_annotations(subject=self._model.rdf_identity,
+                                                      predicate=(self._PYCMLMETA, 'named-attribute'))
         for s, p, attr in named_attrs:
             name = self._model.get_rdf_value(subject=attr, predicate=(self._PYCMLMETA, 'name'))
             value = self._model.get_rdf_value(subject=attr, predicate=(self._PYCMLMETA, 'value'))
@@ -595,7 +604,8 @@ class NormalChasteModel(ChasteModel):
             'class_name': self._class_name,
             'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
             'default_stimulus_equations': self._formatted_default_stimulus,
-            'use_get_intracellular_calcium_concentration': self._use_get_intracellular_calcium_concentration})
+            'use_get_intracellular_calcium_concentration': self._use_get_intracellular_calcium_concentration,
+            'free_variable': self._free_variable})
 
         # Generate cpp for model
         template = cg.load_template('chaste', 'normal_model.cpp')

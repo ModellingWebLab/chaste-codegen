@@ -59,6 +59,8 @@
         
         // We have a default stimulus specified in the CellML file metadata
         this->mHasDefaultStimulusFromCellML = true;{%- endif %}
+        {% for param in modifiable_parameters %}
+        this->mParameters[{{loop.index0}}] = {{param["initial_value"]}}; // ({{param["name"]}}) [{{param["units"]}}]{%- endfor %}
     }
     
     {{class_name}}FromCellML::~{{class_name}}FromCellML()
@@ -126,12 +128,12 @@ void OdeSystemInformation<{{class_name}}FromCellML>::Initialise(void)
     this->mInitialConditions.push_back({{ode_info.initial_value}});
     
     {% endfor %}{% for param in modifiable_parameters %}// mParameters[{{loop.index0}}]:
-    this->mParameterNames.push_back("attr["name"]");
-    this->mParameterUnits.push_back("attr["units"]");
+    this->mParameterNames.push_back("{{param["name"]}}");
+    this->mParameterUnits.push_back("{{param["units"]}}");
+
     {% endfor %}{% for attr in named_attributes %}
-    this->mAttributes["{{attr.name}}SuggestedForwardEulerTimestep"] = {{attr.value}};
-    {% endfor %}
-    this->mInitialised = true;
+    this->mAttributes["{{attr["name"]}}"] = {{attr["value"]}};
+    {% endfor %}this->mInitialised = true;
 }
 
 

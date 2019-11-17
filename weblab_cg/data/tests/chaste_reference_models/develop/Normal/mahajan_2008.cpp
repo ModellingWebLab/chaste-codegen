@@ -62,9 +62,6 @@
         this->mParameters[0] = 1.0; // (IKr,ScaleFactorGkr) [dimensionless]
         this->mParameters[1] = 1.0; // (IKs,ScaleFactorGks) [dimensionless]
         this->mParameters[2] = 1.0; // (Ito,ScaleFactorIto) [dimensionless]
-        {% for param in modifiable_parameters %}
-        this->mParameters[{{loop.index0}}] = {{param["initial_value"]}}; // ({{param{"name"]}}) [{{param["units"]}}]
-        {% endfor %}
     }
     
     Dynamicmahajan_2008FromCellML::~Dynamicmahajan_2008FromCellML()
