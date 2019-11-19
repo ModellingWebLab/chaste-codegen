@@ -49,9 +49,9 @@ class TestChasteCG(object):
                 generated_cpp = get_file_lines(cpp_gen_file_path)
 
                 print('\n')
-                print(expected_cpp[20:25])
+                print(expected_cpp[20:30])
                 print('\n')
-                print(generated_cpp[20:25])
+                print(generated_cpp[20:30])
                 assert expected_hpp == generated_hpp
                 assert expected_cpp == generated_cpp
 
