@@ -60,7 +60,7 @@
         // We have a default stimulus specified in the CellML file metadata
         this->mHasDefaultStimulusFromCellML = true;{%- endif %}
         {% for param in modifiable_parameters %}
-        this->mParameters[{{loop.index0}}] = {{param["initial_value"]}}; // ({{param["name"]}}) [{{param["units"]}}]{%- endfor %}
+        this->mParameters[{{loop.index0}}] = {{param["initial_value"]}}; // ({{param["comment_name"]}}) [{{param["units"]}}]{%- endfor %}
     }
     
     {{class_name}}FromCellML::~{{class_name}}FromCellML()
@@ -85,7 +85,7 @@
         return i_ionic;
     }
     
-    void {{class_name}}FromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
+    void {{class_name}}FromCellML::EvaluateYDerivatives(double {{free_variable.var_name}}, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond

@@ -1,9 +1,3 @@
-#
-# Functions related to generating model code for Chaste.
-#
-
-# TODO: apply unit conversions to state variables voltage, time, cytosolic_calcium_concentration
-# and update equations accordingly
 import logging
 import time
 import sympy as sp
@@ -20,8 +14,8 @@ class ChasteModel(object):
     It also holds relevant formatted equations and derivatives.
     Please Note: this calass cannot generate chaste code directly, instead use a subclass fo the model type
     """
-    # TODO: Convert state vars if necessary
-    # TODO: Can we do with just 1 printer?
+    # TODO: variable conversion via cellmlmanip (Also convert state vars if necessary)
+    # TODO: look into explicit unit conversion rules vs hard coding? https://chaste.cs.ox.ac.uk/trac/wiki/FunctionalCuration/ProtocolSyntax#Modelinterface
     # TODO: script to call generator from command line
     # TODO: Model types Opt, Analytic_j, Numerical_j, BE
 
@@ -79,12 +73,18 @@ class ChasteModel(object):
 
         self._add_units()
 
+        self._in_interface = []
         self._modifiable_parameters = self._get_modifiable_parameters()
         self._time_variable = self._model.get_free_variable_symbol()
+        self._in_interface.append(self._time_variable)
+
         self._membrane_voltage_var = self._get_membrane_voltage_var()
         self._cytosolic_calcium_concentration_var = self._get_cytosolic_calcium_concentration_var()
         self._use_get_intracellular_calcium_concentration = self._get_use_get_intracellular_calcium_concentration()
         self._state_vars = self._get_state_variables()
+        self._in_interface.extend(self._state_vars)
+        self._state_var_conversion_factors, self._state_var_subs = self._get_state_var_conversion()
+
         self._membrane_stimulus_current = self._get_membrane_stimulus_current()
         self._membrane_stimulus_current_units = self._get_membrane_stimulus_current_units()
         self._membrane_capacitance, self._membrane_capacitance_factor = self._get_membrane_capacitance()
@@ -104,7 +104,7 @@ class ChasteModel(object):
         self._add_printers()
         self._formatted_modifiable_parameters = self._format_modifiable_parameters()
         self._formatted_state_vars = self._format_state_variables()
-        self._formatted_default_stimulus = self._format_stimulus_currents()
+        self._formatted_default_stimulus = self._format_default_stimulus()
         self._formatted_equations_for_ionic_vars = self._format_equations_for_ionic_vars()
         self._formatted_extended_equations_for_ionic_vars = self._format_extended_equations_for_ionic_vars()
         self._formatted_y_derivatives = self._format_y_derivatives()
@@ -119,23 +119,18 @@ class ChasteModel(object):
 
     def _add_printers(self):
         """ Initialises Printers for outputting chaste code. """
-        # Print modifiable parameters as mParameters[index]
-        self._var_chaste_interface_printer =\
-            cg.ChastePrinter(lambda symbol: 'var_chaste_interface_' + str(symbol).replace('$', '__') if symbol not in self._modifiable_parameters else 'mParameters['+str(self._modifiable_parameters.index(symbol))+']',
-                             lambda deriv: 'd_dt_chaste_interface_' + (str(deriv.expr).replace('$', '__')
-                             if isinstance(deriv, sp.Derivative) else str(deriv).replace('$', '__')))
-
         # Printer for printing chaste regular variable assignments (var_ prefix)
+        # Print variables in interface (state variables, time, lhs of default_stimulus eqs, i_ionic and lhs of y_derivatives) as var_chaste_interface
         # Print modifiable parameters as mParameters[index]
         self._printer = \
-            cg.ChastePrinter(lambda symbol, state_vars=self._state_vars:
-                             ('var_chaste_interface_' if symbol in state_vars else 'var')
+            cg.ChastePrinter(lambda symbol:
+                             ('var_chaste_interface_' if symbol in self._in_interface else 'var')
                              + str(symbol).replace('$', '__') if symbol not in self._modifiable_parameters else 'mParameters['+str(self._modifiable_parameters.index(symbol))+']',
                              lambda deriv: 'd_dt_chaste_interface_' +
                                            (str(deriv.expr).replace('$', '__')
                                             if isinstance(deriv, sp.Derivative) else str(deriv).replace('$', '__')))
 
-        # Printer for printing chaste regular variable assignments without the var_ prefix
+        # Printer for printing chaste regular variable assignments without the var_ prefix e.g. for ode system information
         self._name_printer = cg.ChastePrinter(lambda symbol: str(symbol)[1:].replace('$', '__'))
 
     def _add_units(self):
@@ -163,7 +158,7 @@ class ChasteModel(object):
             return None
 
     def _get_use_get_intracellular_calcium_concentration(self):
-        """ Get wyether or not the model has cytosolic_calcium_concentration"""
+        """ Get wether or not the model has cytosolic_calcium_concentration"""
         try:
             self._model.get_symbol_by_ontology_term(self._OXMETA, "cytosolic_calcium_concentration")
             return True
@@ -174,6 +169,19 @@ class ChasteModel(object):
         """ Sort the state variables, in similar order to pycml to prevent breaking existing code"""
         return sorted(self._model.get_state_symbols(),
                       key=lambda state_var: self._state_var_key_order(state_var))
+
+    def _get_state_var_conversion(self):
+        """ Get conversion factors and substitution dictionary for state variables in Chaste"""
+        def sv_conv(sv):
+            return round(self._model.units.get_conversion_factor(self._get_desired_units(sv), from_unit=self._model.units.summarise_units(sv)), 14)
+
+        state_var_factors = {sv: sv_conv(sv) for sv in self._state_vars if sv_conv(sv) != 1.0}
+        state_var_subs = {sv: 1/fac*sv for sv,fac in state_var_factors.items()}
+        return state_var_factors, state_var_subs
+
+    def _convert_rhs(self, eq):
+        """ Convert equation into chaste units by substituting in conversion_factor * state variable for converted state variables"""
+        return eq.subs(self._state_var_subs)
 
     def _get_membrane_stimulus_current(self):
         """ Find the membrane_stimulus_current variable if it exists"""
@@ -273,9 +281,9 @@ class ChasteModel(object):
 
     def _get_extended_equations_for_ionic_vars(self):
         """ Get the equations defining the ionic derivatives and all dependant equations"""
-        # Remove equations where lhs is a modifiable parameter
+        # Remove equations where lhs is a modifiable parameter or stimulus vars
         extended_equations_for_ionic_vars = \
-            [eq for eq in self._model.get_equations_for([ionic_var_eq.lhs for ionic_var_eq in self._equations_for_ionic_vars]) if eq.lhs not in self._modifiable_parameters]
+            [eq for eq in self._model.get_equations_for([ionic_var_eq.lhs for ionic_var_eq in self._equations_for_ionic_vars]) if eq.lhs not in self._modifiable_parameters and eq.lhs not in [st.lhs for st in self._default_stimulus.values()]]
         if self._use_capacitance_i_ionic and self._membrane_capacitance is not None:
             extended_equations_for_ionic_vars.insert(0, self._membrane_capacitance)
         return extended_equations_for_ionic_vars
@@ -315,11 +323,8 @@ class ChasteModel(object):
                       key=lambda deriv: isinstance(deriv.lhs, sp.Derivative)) if not eq.lhs in self._modifiable_parameters]
 
     def _format_modifiable_parameters(self):
-        self._modifiable_parameters = sorted(self._modifiable_parameters,
-                                             key=lambda p:
-                                             self._printer.doprint(p)[self._printer.doprint(p).rfind('_') + 1:])
 
-        return [{'units': self._model.units.summarise_units(param), 'name': self._printer.doprint(param)[4:],
+        return [{'units': self._model.units.summarise_units(param), 'comment_name': self._name_printer.doprint(param), 'name': str(param).split("$")[-1],
                 'initial_value': self._model.get_initial_value(param)} for param in self._modifiable_parameters]
 
     def _format_state_variables(self):
@@ -328,14 +333,14 @@ class ChasteModel(object):
         ionic_var_symbols = self._model.get_symbols_for(self._extended_equations_for_ionic_vars)
         y_deriv_symbols = self._model.get_symbols_for(self._derivative_equations)
         return [{'var': self._printer.doprint(var),
-                 'initial_value': str(self._model.get_initial_value(var)),
+                 'initial_value': str(self._model.get_initial_value(var) * self._state_var_conversion_factors[var]) if var in self._state_var_conversion_factors else str(self._model.get_initial_value(var)),
                  'units': str(self._model.units.summarise_units(var)),
                  'in_ionic': var in ionic_var_symbols,
                  'in_y_deriv': var in y_deriv_symbols}
                 for var in self._state_vars]
 
-    def _format_stimulus_currents(self):
-        """ Format stimulus_currents for outputting to chaste code"""
+    def _format_default_stimulus(self):
+        """ Format eqs for stimulus_current for outputting to chaste code"""
         formatted_default_stimulus = dict()
         for key, eq in self._default_stimulus.items():
             # exclude (equations for) variables that don't have annotation
@@ -389,7 +394,8 @@ class ChasteModel(object):
                                                                     'rhs': self._printer.doprint(divisor_eq.rhs),
                                                                     'units': str(divisor_current_units)})
                 rhs = eq.rhs if factor == 1.0 else factor * eq.rhs
-                formatted_default_stimulus[key].append({'lhs': self._var_chaste_interface_printer.doprint(eq.lhs),
+                self._in_interface.append(eq.lhs)
+                formatted_default_stimulus[key].append({'lhs': self._printer.doprint(eq.lhs),
                                                         'rhs': self._printer.doprint(rhs) + rhs_multiplier,
                                                         'units': str(units if units is not None else current_units)
                                                         })
@@ -406,9 +412,16 @@ class ChasteModel(object):
 
     def _format_extended_equations_for_ionic_vars(self):
         """ Format equations and dependant equations ionic derivatives"""
+
+        def print_rhs(eq):
+            """ Print the rhs, set _membrane_stimulus_current to 0.0"""
+            if eq.lhs != self._membrane_stimulus_current:
+                return self._printer.doprint(self._convert_rhs(eq.rhs))
+            else:
+                return 0.0
         # Format the state ionic variables
         formated_extended_equations_for_ionic_vars = \
-            [{'lhs': self._printer.doprint(eq.lhs), 'rhs': self._printer.doprint(eq.rhs),
+            [{'lhs': self._printer.doprint(eq.lhs), 'rhs': print_rhs(eq),
               'units': self._model.units.summarise_units(eq.lhs)} for eq in self._extended_equations_for_ionic_vars]
 
         ionic_rhs = '(' if self._use_capacitance_i_ionic else ''
@@ -441,23 +454,25 @@ class ChasteModel(object):
             ionic_rhs += ')'
             ionic_rhs = '(' + str(sp.simplify(ionic_rhs)) + ')'  # simplify
             ionic_rhs += ' * HeartConfig::Instance()->GetCapacitance()'
+        i_ionic = sp.sympify('_i_ionic')
+        self._in_interface.append(i_ionic)
         formated_extended_equations_for_ionic_vars.append(
-            {'lhs': self._var_chaste_interface_printer.doprint(sp.sympify('_i_ionic')),
+            {'lhs': self._printer.doprint(i_ionic),
              'rhs': ionic_rhs, 'units': 'uA_per_cm2'})
         return formated_extended_equations_for_ionic_vars
 
     def _format_y_derivatives(self):
         """ Format y_derivatives for writing to chaste output"""
-        return [self._var_chaste_interface_printer.doprint(deriv) for deriv in self._y_derivatives]
+        self._in_interface.extend(self._y_derivatives)
+        return [self._printer.doprint(deriv) for deriv in self._y_derivatives]
 
     def _get_desired_units(self, term):
         """ Helper function to return units we should convert variables to, to work in chaste.
 
         V in mV, time in ms and cytosolic_calcium_concentration in millimolar)
         """
-        current_units = self._model.units.summarise_units(term)
+        units = self._model.units.summarise_units(term)
         # Time in ms
-        units = current_units
         if term == self._time_variable:
             units = self._model.units.ureg.millisecond
         # calcium in millimolar (cytosolic_calcium_concentration)
@@ -476,7 +491,7 @@ class ChasteModel(object):
                  if eq not in self._default_stimulus.values()]
 
         subs_dict = {eq.lhs: eq.rhs for eq in d_eqs}
-        stimulus_sign = ''
+        negate_stimulus = False
         # loop through equations backwards as derivatives are last
         for i in range(len(d_eqs) - 1, - 1, - 1):
             is_voltage = False
@@ -502,8 +517,7 @@ class ChasteModel(object):
                         else:
                             subs_dict[s] = 1  # other variables = 1
                     subs_dict[self._membrane_stimulus_current] = 1  # stimulus current = 1
-                    if d_eqs[i].rhs.subs(subs_dict) > 0.0:
-                        stimulus_sign = '-'
+                    negate_stimulus = d_eqs[i].rhs.subs(subs_dict) > 0.0
                 # Convert voltage to mV, time to mS and calcium to millimolar
                 dividend_unit = self._get_desired_units(d_eqs[i].lhs.args[0])
                 divisor_unit = self._get_desired_units(d_eqs[i].lhs.args[1][0])
@@ -513,9 +527,10 @@ class ChasteModel(object):
             if d_eqs[i].lhs == self._membrane_stimulus_current:
                 factor = 1.0
                 # strip out var from time variable name as printing will add it back later
-                area = sp.sympify(stimulus_sign +
-                                  'GetIntracellularAreaStimulus(' +
-                                  self._var_chaste_interface_printer.doprint(self._time_variable)[3:] + ')')
+                GetIntracellularAreaStimulus = sp.Function('GetIntracellularAreaStimulus')
+                area = GetIntracellularAreaStimulus(self._time_variable)
+                if negate_stimulus:
+                    area = -area
 
                 if self._use_capacitance_i_ionic:
                     rhs_divider = '/ HeartConfig::Instance()->GetCapacitance()'
@@ -533,7 +548,7 @@ class ChasteModel(object):
             # Format the equation and put it at the front of the result list to keep order (we're looping backwards)
             equations.insert(0, {'lhs': d_eqs[i].lhs,
                                  'factor': factor,
-                                 'rhs': d_eqs[i].rhs,
+                                 'rhs': self._convert_rhs(d_eqs[i].rhs),
                                  'units': units,
                                  'rhs_divider': rhs_divider,
                                  'in_membrane_voltage': d_eqs[i] not in self._derivative_eqs_exlc_voltage,
@@ -554,14 +569,14 @@ class ChasteModel(object):
 
     def _format_ode_system_info(self):
         """ Format general ode system info for chaste output"""
-        free_variable = {'name': self._name_printer.doprint(self._model.get_free_variable_symbol()),
-                         'units': self._get_desired_units(self._model.get_free_variable_symbol()),
+        free_variable = {'name': self._name_printer.doprint(self._time_variable),
+                         'units': self._get_desired_units(self._time_variable),
                          'system_name': self._model.name,
-                         'var_name': self._var_chaste_interface_printer.doprint(self._model.get_free_variable_symbol())}
+                         'var_name': self._printer.doprint(self._time_variable)}
         system_info = \
             [{'name': self._model.get_ontology_terms_by_symbol(var, self._OXMETA)[0]
               if self._model.has_ontology_annotation(var, self._OXMETA) else self._name_printer.doprint(var),
-              'initial_value': str(self._model.get_initial_value(var)),
+              'initial_value': str(self._model.get_initial_value(var)) if not var in self._state_var_conversion_factors else str(self._state_var_conversion_factors[var] *self._model.get_initial_value(var)) ,
               'units': self._get_desired_units(var)}
              for var in self._state_vars]
 

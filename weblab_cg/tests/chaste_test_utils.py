@@ -42,16 +42,21 @@ def load_chaste_models(model_types=[], reference_path_prefix=['chaste_reference_
                                         'reference_models': reference_models})
     return model_files
 
-def get_file_lines(file_path, ignore_comments=False):
+def get_file_lines(file_name, remove_comments=False):
+    """ Load a file into a list of lines
+    
+    :param file_name: file name including path
+    :param remove_comments: indicates whether to remove all comments  starting with //
+    """
     # Check file exists
-    assert os.path.isfile(file_path)
+    assert os.path.isfile(file_name)
     lines = []
-    with open(file_path, 'r') as f:
+    with open(file_name, 'r') as f:
         for line in f.readlines():
             line = line.rstrip().lstrip()  # Remove trailing and preceding whitespace
-            line = TIMESTAMP_REGEX.sub("", line)  # Ignore timestamp
-            if ignore_comments:
-                line = COMMENTS_REGEX.sub("", line)  # Ignore comments
+            line = TIMESTAMP_REGEX.sub("", line)  # Remove timestamp
+            if remove_comments:
+                line = COMMENTS_REGEX.sub("", line)  # Remove comments
             lines.append(line)
         f.close()
 
@@ -66,16 +71,19 @@ def get_file_lines(file_path, ignore_comments=False):
 
     return lines
 
-def write_file(file_path, file_contents):
-    make_dir( os.path.dirname(file_path))
-    with open(file_path, 'w') as f:
-        f.write(file_contents)
-        f.close()
-
-def make_dir(output_path):
-    # Get full OS path to output models to and create it if it doesn't exist
-    output_path = os.path.join(str(output_path))
+def write_file(file_name, file_contents):
+    """ Write Load a file into a list of lines
+    
+    :param file_name: file name including path
+    :param file_contents: a str with the contents of the file to be written
+    """
+    # Make sure the folder we are writing in exists
     try:
-        os.makedirs(output_path)
+        os.makedirs(os.path.dirname(file_name))
     except FileExistsError:
         pass
+
+    # Write the file
+    file = open(file_name, 'w')
+    file.write(file_contents)
+    file.close()

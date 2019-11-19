@@ -6,6 +6,10 @@ import pytest
 import sympy
 from sympy import SympifyError
 import pyparsing
+import time
+from random import seed, random
+import sys
+import math
 from weblab_cg.tests.chaste_test_utils import load_chaste_models, get_file_lines, write_file
 
 # Show more logging output
@@ -44,12 +48,12 @@ class TestChasteCG(object):
                 write_file(cpp_gen_file_path, chaste_model.generated_cpp)
 
                 # Load reference files
-                expected_hpp = get_file_lines(model['reference_models'][model_type]['expected_hpp_path'], ignore_comments=True)
-                expected_cpp = get_file_lines(model['reference_models'][model_type]['expected_cpp_path'], ignore_comments=True)
+                expected_hpp = get_file_lines(model['reference_models'][model_type]['expected_hpp_path'], remove_comments=True)
+                expected_cpp = get_file_lines(model['reference_models'][model_type]['expected_cpp_path'], remove_comments=True)
 
                 # Load generated files
-                generated_hpp = get_file_lines(hhp_gen_file_path, ignore_comments=True)
-                generated_cpp = get_file_lines(cpp_gen_file_path, ignore_comments=True)
+                generated_hpp = get_file_lines(hhp_gen_file_path, remove_comments=True)
+                generated_cpp = get_file_lines(cpp_gen_file_path, remove_comments=True)
 
                 assert expected_hpp == generated_hpp
                 self._check_match_gengerated_chaste_cpp(generated_cpp, expected_cpp)
@@ -125,12 +129,10 @@ class TestChasteCG(object):
 
             return num_str
 
-        # pow->Pow ceil -> ceiling
-        line = line.replace("Pow(", 'Pow(').replace("ceil(", 'ceiling(')
         line = self._NUM_REGEX.sub(format_numbers, line)
         return line
 
-    def _is_same_equation(self, eq1, eq2):
+    def _is_same_equation(self, eq1, eq2, try_numeric=False):
         def is_float(s):
             try:
                 float(str(s))
@@ -145,15 +147,35 @@ class TestChasteCG(object):
         # If they are the same, no need for elaborate check
         if eq1 == eq2:
             return True
-
         eq1 = sympy.sympify(eq1)
         eq2 = sympy.sympify(eq2)
-        if is_same(eq1, eq2):
+
+        e1 = sympy.sympify(self._numbers_with_float_precision(str(eq1)))
+        e2 = sympy.sympify(self._numbers_with_float_precision(str(eq2)))
+        if is_same(e1, e2):
             return True
         else:
-            eq1 = sympy.sympify(self._numbers_with_float_precision(str(eq1)))
-            eq2 = sympy.sympify(self._numbers_with_float_precision(str(eq2)))
-            return is_same(eq1, eq2)
+            if is_same(eq1, eq2):
+                return True
+            if not try_numeric:
+                return False
+            same = True
+            if eq1.free_symbols != eq2.free_symbols: 
+                return False
+            seed(time.time_ns())
+            subs_dict = {}
+            for i in range(1000):
+                for symbol in eq1.free_symbols:
+                    random_val = random() * sys.float_info.max
+                    if (i % 2) == 0:
+                        random_val *= -1
+                    subs_dict.update({symbol: random_val})
+                    a = eq1.subs(subs_dict)
+                    b = eq2.subs(subs_dict)
+                same = same and  math.isclose(a, b)
+                if not same:
+                    break
+            return same
 
     def _same_with_number(self, line1, line2):
         # If they are the same, no need for elaborate check
@@ -242,7 +264,7 @@ class TestChasteCG(object):
 
     def _to_equation(self, equation_str):
         # pow->Pow ceil -> ceiling in sympy
-        equation_str = equation_str.replace("Pow(", 'Pow(').replace("ceil(", 'ceiling(')
+        equation_str = equation_str.replace("pow(", 'Pow(').replace("ceil(", 'ceiling(')
         # This might be a C++ call with class members/pointer accessors?
         equation_str = \
             equation_str.replace('HeartConfig::Instance()->GetCapacitance()', 'HeartConfig_Instance_GetCapacitance')
@@ -257,40 +279,6 @@ class TestChasteCG(object):
             parenthesis_expr = parens.parseString('(' + equation_str + ')').asList()
             expr_str = self._get_expression(parenthesis_expr)
             return sympy.simplify(expr_str)
-
-    def _get_pow_expression(self, expr_parts):
-        expression_str = ''
-        i = 0
-        if not isinstance(expr_parts, list):
-            return expr_parts
-        else:
-            while i < len(expr_parts):
-                if not isinstance(expr_parts[i], list) and expr_parts[i] == 'pow':
-                    assert isinstance(expr_parts[i + 1], list)
-                    base = ''
-                    exponent = ''
-                    for j in range(len(expr_parts[i + 1])):
-                        # Pattern: base , exp
-                        assert expr_parts[i + 1][-2].strip() == ','
-                        base = self._get_pow_expression(expr_parts[i + 1][:-2])
-                        exponent = self._get_pow_expression(expr_parts[i + 1][-1])
-                    expression_str += '((' + base + ')**(' + exponent + '))'
-                    i += 2
-                else:
-                    if isinstance(expr_parts[i], list):
-                        expression_str += '(' + self._get_pow_expression(expr_parts[i]) + ')'
-                    else:
-                        expression_str += self._get_pow_expression(expr_parts[i])
-                    i += 1
-        return expression_str
-
-    def _convert_pow(self, equation):
-        equation_str = str(equation).replace(' ', '').replace('pow(', ' pow(').replace(',', ' , ')
-        expression = pyparsing.Word(pyparsing.printables, excludeChars="()")
-        parens = pyparsing.nestedExpr('(', ')', content=expression)
-        parenthesis_expr = parens.parseString('(' + equation_str + ')').asList()
-        expr_str = self._get_pow_expression(parenthesis_expr)
-        return expr_str
 
     def _get_equation_list(self, model_lines, index):
         equations = []
@@ -340,19 +328,23 @@ class TestChasteCG(object):
 
         # Resolve converter / linker variables in remaining equations
         converter_vars = [eq for eq in equation_list
-                          if (self._is_converter(eq[0]) or isinstance(eq[1], sympy.symbol.Symbol))
+                          if (self._is_converter(eq[0]) or isinstance(eq[1], sympy.symbol.Symbol)or isinstance(eq[1]*-1, sympy.symbol.Symbol))
                           and not self._is_deriv_decl(eq[0])]
 
         exclude = []
         for converter in reversed(converter_vars):
             # If rhs is symobol, see if there is an equation we can subs in
-            if isinstance(converter[1], sympy.symbol.Symbol):
+            if isinstance(converter[1], sympy.symbol.Symbol) or isinstance(converter[1]*-1, sympy.symbol.Symbol):
                 if self._is_converter(converter[0]):
                     for i in reversed(range(len(equation_list))):
                         if str(converter[1]) == self._get_var_name(equation_list[i][0]):
                             converter[1] = equation_list[i][1]
                             exclude.append(equation_list[i])
                             subs_dict[self._get_var_name(equation_list[i][0])] = equation_list[i][1]
+                        elif str(converter[1]*-1) == self._get_var_name(equation_list[i][0]):
+                            converter[1] = -equation_list[i][1]
+                            exclude.append(equation_list[i])
+                            subs_dict[self._get_var_name(equation_list[i][0])] = -equation_list[i][1]
             var_name = self._get_var_name(converter[0])
             subs_dict[var_name] = converter[1]
 
@@ -374,9 +366,20 @@ class TestChasteCG(object):
         expected, self.link_subs_expected = self._resolve_linkers(expected, self.link_subs_expected)
         generated, self.link_subs_generated = self._resolve_linkers(generated, self.link_subs_generated)
 
-        # The 2 sets of equations should now have the same amount of equations
+        # if they aren't the same length it could be state_var conversions try and subs
+        # The 2 sets of equations should now have the same amount of equations if not we may have a state var conversion still
+        if len(expected) != len(generated):
+            differing_expected = [eq for eq in expected if eq[0] not in [e[0] for e in generated]]
+            for i in range(len(differing_expected)):
+                if len(differing_expected[i][1].args) == 2 and isinstance(differing_expected[i][1].args[0], sympy.numbers.Float) and isinstance(differing_expected[i][1].args[1], sympy.symbol.Symbol):
+                    conversion_subs = {self._get_var_name(differing_expected[i][0]): differing_expected[i][1] }
+                    expected_element_index = expected.index(differing_expected[i])
+                    new_expected = [[exp[0], exp[1].subs(conversion_subs)] for exp in expected]
+                    if expected != new_expected:
+                        expected = new_expected
+                        del expected[expected_element_index]
         assert len(expected) == len(generated)
-
+        
         # only exception could be name of stimulus current
         if set([eq[0] for eq in expected]) != set([eq[0] for eq in generated]):
 
@@ -416,15 +419,7 @@ class TestChasteCG(object):
             if not self._is_same_equation(sorted_generated[i][1], sorted_expected[i][1]):
                 eq_gen = self._perform_eq_subs(sorted_generated[i], self.generated_subs)
                 eq_exp = self._perform_eq_subs(sorted_expected[i], self.expected_subs)
-                if not self._is_same_equation(eq_gen[1], eq_exp[1]):
-                    eq1 = sympy.sympify(self._convert_pow(sorted_generated[i][1]))
-                    eq2 = sympy.sympify(self._convert_pow(sorted_expected[i][1]))
-                    if not self._is_same_equation(eq1, eq2):
-                        eq_gen = self._perform_eq_subs(sorted_generated[i], self.generated_subs)
-                        eq_exp = self._perform_eq_subs(sorted_expected[i], self.expected_subs)
-                        eq1 = sympy.sympify(self._convert_pow(eq_gen[1]))
-                        eq2 = sympy.sympify(self._convert_pow(eq_exp[1]))
-                        assert self._is_same_equation(eq1, eq2)
+                assert self._is_same_equation(eq_gen[1], eq_exp[1], try_numeric=True)
 
         # Check the order for generated: lhs doesn't appear in earlier rhs (could give c++ compile error)
 
@@ -435,12 +430,3 @@ class TestChasteCG(object):
             # The lhs should not appear as otherwise it is being used before being defined
             assert self._get_var_name(generated[i][0]) not in rhs_symbols
 
-    def _get_file_contents(self, file_path):
-        """ Returns the content of file at the location file_path"""
-        # Check reference model exists
-        assert os.path.isfile(file_path)
-        # Read expected output hpp from file
-        with open(file_path, 'r') as f:
-            expected_hpp = f.read()
-            f.close()
-        return expected_hpp
