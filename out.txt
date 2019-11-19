@@ -16,4 +16,4 @@ c:\users\uczmh2\desktop\venv_weblab-cg\lib\site-packages\jinja2\runtime.py:318
     from collections import Mapping
 
 -- Docs: https://docs.pytest.org/en/latest/warnings.html
-======================= 1 passed, 2 warnings in 32.36s ========================
+======================= 1 passed, 2 warnings in 46.30s ========================

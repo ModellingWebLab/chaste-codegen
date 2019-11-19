@@ -621,11 +621,11 @@ class NormalChasteModel(ChasteModel):
         self.generated_hpp = template.render({
             'model_name': self._model.name,
             'class_name': self.class_name,
+            'dynamically_loadable': self.dynamically_loadable,
             'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
             'default_stimulus_equations': self._formatted_default_stimulus,
             'use_get_intracellular_calcium_concentration': self._use_get_intracellular_calcium_concentration,
-            'free_variable': self._free_variable,
-            'dynamically_loadable': self.dynamically_loadable})
+            'free_variable': self._free_variable})
 
         # Generate cpp for model
         template = cg.load_template('chaste', 'normal_model.cpp')
@@ -633,6 +633,7 @@ class NormalChasteModel(ChasteModel):
             'model_name': self._model.name,
             'file_name': self.file_name,
             'class_name': self.class_name,
+            'dynamically_loadable': self.dynamically_loadable,
             'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
             'default_stimulus_equations': self._formatted_default_stimulus,
             'use_get_intracellular_calcium_concentration': self._use_get_intracellular_calcium_concentration,

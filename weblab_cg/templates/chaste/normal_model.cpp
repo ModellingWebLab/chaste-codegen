@@ -140,7 +140,7 @@ void OdeSystemInformation<{{class_name}}FromCellML>::Initialise(void)
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT({{class_name}}FromCellML)
-extern "C"
+{% if dynamically_loadable %}extern "C"
 {
     AbstractCardiacCellInterface* MakeCardiacCell(
             boost::shared_ptr<AbstractIvpOdeSolver> pSolver,
@@ -149,4 +149,4 @@ extern "C"
         return new {{class_name}}FromCellML(pSolver, pStimulus);
     }
     
-}
+}{%- endif %}
