@@ -13,7 +13,8 @@ import math
 from weblab_cg.tests.chaste_test_utils import load_chaste_models, get_file_lines, write_file
 
 # Show more logging output
-logging.getLogger().setLevel(logging.DEBUG)
+LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel(logging.DEBUG)
 
 
 class TestChasteCG(object):
@@ -30,13 +31,16 @@ class TestChasteCG(object):
     @pytest.fixture(scope="class")
     def chaste_models(self):
         """ Load all models"""
-        return load_chaste_models(model_types=self.model_types(), reference_path_prefix=['chaste_reference_models', 'develop'])
+        return load_chaste_models(model_types=self.model_types(),
+                                  ref_path_prefix=['chaste_reference_models', 'develop'], class_name_prefix='Dynamic')
 
+    @pytest.mark.skip(reason="This test is a development tool")
     def test_generate_chate_models_develop(self, tmp_path, chaste_models):
         """ Check generation of Normal models against reference"""
         tmp_path = str(tmp_path)
         for model in chaste_models:
             for model_type in model['reference_models'].keys():
+                LOGGER.info('Converting: ' + model_type + ' ' + model['class_name'] + '\n')
                 # Generate chaste code
                 chaste_model = cg.NormalChasteModel(model['model'], model['class_name'], model['model_name_from_file'])
                 chaste_model.dynamically_loadable = True
@@ -49,8 +53,10 @@ class TestChasteCG(object):
                 write_file(cpp_gen_file_path, chaste_model.generated_cpp)
 
                 # Load reference files
-                expected_hpp = get_file_lines(model['reference_models'][model_type]['expected_hpp_path'], remove_comments=True)
-                expected_cpp = get_file_lines(model['reference_models'][model_type]['expected_cpp_path'], remove_comments=True)
+                expected_hpp = \
+                    get_file_lines(model['reference_models'][model_type]['expected_hpp_path'], remove_comments=True)
+                expected_cpp = \
+                    get_file_lines(model['reference_models'][model_type]['expected_cpp_path'], remove_comments=True)
 
                 # Load generated files
                 generated_hpp = get_file_lines(hhp_gen_file_path, remove_comments=True)
@@ -60,7 +66,7 @@ class TestChasteCG(object):
                 self._check_match_gengerated_chaste_cpp(generated_cpp, expected_cpp)
 
     def _check_match_gengerated_chaste_cpp(self, generated_cpp, expected_cpp):
-
+        """ Check the generated cpp symbolicly"""
         self._keep_subs = False
 
         expected_i = generated_i = 0
@@ -83,6 +89,7 @@ class TestChasteCG(object):
         assert expected_i == len(expected_cpp) and generated_i == len(generated_cpp)
 
     def _numbers_with_float_precision(self, line):
+        """ Get numbers reduced to set float precision"""
         def format_numbers(m):
             number = m.group(0)
             count = 0
@@ -134,6 +141,7 @@ class TestChasteCG(object):
         return line
 
     def _is_same_equation(self, eq1, eq2, try_numeric=False):
+        """ Check if 2 sympy equations are the same"""
         def is_float(s):
             try:
                 float(str(s))
@@ -161,7 +169,7 @@ class TestChasteCG(object):
             if not try_numeric:
                 return False
             same = True
-            if eq1.free_symbols != eq2.free_symbols: 
+            if eq1.free_symbols != eq2.free_symbols:
                 return False
             seed(time.time())
             subs_dict = {}
@@ -173,12 +181,13 @@ class TestChasteCG(object):
                     subs_dict.update({symbol: random_val})
                     a = eq1.subs(subs_dict)
                     b = eq2.subs(subs_dict)
-                same = same and  math.isclose(a, b)
+                same = math.isclose(a, b)
                 if not same:
                     break
             return same
 
     def _same_with_number(self, line1, line2):
+        """ Compare strings comparing numbers pairwise with sympy"""
         # If they are the same, no need for elaborate check
         if line1 == line2:
             return True
@@ -202,7 +211,7 @@ class TestChasteCG(object):
         return False
 
     def _get_expression(self, expr_parts):
-        # TODO:
+        """ Return the expression, handling conditionals (cond?exp:exp). Given a list of nested expression parts"""
         # process list
         # if element is list, recursively process list
         # if len(element> >= 5 : proess recursively
@@ -254,8 +263,8 @@ class TestChasteCG(object):
                         cond = conditional_parts[i - 1][1]
                         exp1 = conditional_parts[i + 1][1]
                         exp2 = conditional_parts[i + 3][1]
-                        #conditional_parts[i - 1] = ('expression', exp1 + ' if ' + cond + ' else ' + exp2)
-                        conditional_parts[i - 1] = ('expression', 'Piecewise(((' + exp1 + '), (' + cond + ')), ((' + exp2 + '), True))')
+                        conditional_parts[i - 1] = \
+                            ('expression', 'Piecewise(((' + exp1 + '), (' + cond + ')), ((' + exp2 + '), True))')
                         del conditional_parts[i:]
                         break
             expression_str = conditional_parts[0][1]
@@ -264,6 +273,7 @@ class TestChasteCG(object):
         return expression_str
 
     def _to_equation(self, equation_str):
+        """ Do needed substitutions and parse brackets to handle conditionals (cond?exp:exp) """
         # pow->Pow ceil -> ceiling in sympy
         equation_str = equation_str.replace("pow(", 'Pow(').replace("ceil(", 'ceiling(')
         # This might be a C++ call with class members/pointer accessors?
@@ -282,6 +292,7 @@ class TestChasteCG(object):
             return sympy.simplify(expr_str)
 
     def _get_equation_list(self, model_lines, index):
+        """ Given a string list and starting index get list of equations (untill non-equation found)"""
         equations = []
         eq = model_lines[index].replace(';', '').split("=", 1)
         while len(eq) == 2:
@@ -296,16 +307,20 @@ class TestChasteCG(object):
         return index, equations
 
     def _get_var_name(self, c_dec):
+        """ Get the name of a variable, stripping off declaration"""
         return c_dec.replace('const', '').replace('double', '').strip()
 
     def _is_deriv_decl(self, c_dec):
+        """ Is the given variable name a derivative"""
         return self._get_var_name(c_dec).startswith('d_dt_chaste_interface__') \
             or self._get_var_name(c_dec).endswith('dt')
 
     def _is_converter(self, c_dec):
+        """ Is the given variable name a converter (ending in _converter)"""
         return self._get_var_name(c_dec).endswith('_converter')
 
     def _perform_eq_subs(self, eq, subs_dict):
+        """ Perform substitutions multiple times, untill nothing changes"""
         substituted_term = eq[1].subs(subs_dict)
         while substituted_term != eq[1]:
             eq[1] = substituted_term
@@ -313,6 +328,7 @@ class TestChasteCG(object):
         return [eq[0], eq[1]]
 
     def _resolve_linkers(self, equation_list, subs_dict):
+        """ Process linking variables, remove from the list and update all relevant equations"""
         # Resolve derivatives
         remove = []
         for i in reversed(range(len(equation_list))):
@@ -329,20 +345,20 @@ class TestChasteCG(object):
 
         # Resolve converter / linker variables in remaining equations
         converter_vars = [eq for eq in equation_list
-                          if (self._is_converter(eq[0]) or isinstance(eq[1], sympy.symbol.Symbol)or isinstance(eq[1]*-1, sympy.symbol.Symbol))
-                          and not self._is_deriv_decl(eq[0])]
+                          if (self._is_converter(eq[0]) or isinstance(eq[1], sympy.symbol.Symbol) or
+                              isinstance(eq[1] * -1, sympy.symbol.Symbol)) and not self._is_deriv_decl(eq[0])]
 
         exclude = []
         for converter in reversed(converter_vars):
             # If rhs is symobol, see if there is an equation we can subs in
-            if isinstance(converter[1], sympy.symbol.Symbol) or isinstance(converter[1]*-1, sympy.symbol.Symbol):
+            if isinstance(converter[1], sympy.symbol.Symbol) or isinstance(converter[1] * -1, sympy.symbol.Symbol):
                 if self._is_converter(converter[0]):
                     for i in reversed(range(len(equation_list))):
                         if str(converter[1]) == self._get_var_name(equation_list[i][0]):
                             converter[1] = equation_list[i][1]
                             exclude.append(equation_list[i])
                             subs_dict[self._get_var_name(equation_list[i][0])] = equation_list[i][1]
-                        elif str(converter[1]*-1) == self._get_var_name(equation_list[i][0]):
+                        elif str(converter[1] * -1) == self._get_var_name(equation_list[i][0]):
                             converter[1] = -equation_list[i][1]
                             exclude.append(equation_list[i])
                             subs_dict[self._get_var_name(equation_list[i][0])] = -equation_list[i][1]
@@ -356,6 +372,7 @@ class TestChasteCG(object):
         return equation_list, subs_dict
 
     def _check_equation_list(self, expected, generated):
+        """ Check expected and generated represent teh same equation"""
         if not self._keep_subs:
             self.link_subs_expected = dict()
             self.link_subs_generated = dict()
@@ -368,19 +385,22 @@ class TestChasteCG(object):
         generated, self.link_subs_generated = self._resolve_linkers(generated, self.link_subs_generated)
 
         # if they aren't the same length it could be state_var conversions try and subs
-        # The 2 sets of equations should now have the same amount of equations if not we may have a state var conversion still
+        # The 2 sets of equations should now have the same amount of equations
+        # If not we may have a state var conversion still
         if len(expected) != len(generated):
             differing_expected = [eq for eq in expected if eq[0] not in [e[0] for e in generated]]
             for i in range(len(differing_expected)):
-                if len(differing_expected[i][1].args) == 2 and isinstance(differing_expected[i][1].args[0], sympy.numbers.Float) and isinstance(differing_expected[i][1].args[1], sympy.symbol.Symbol):
-                    conversion_subs = {self._get_var_name(differing_expected[i][0]): differing_expected[i][1] }
+                if len(differing_expected[i][1].args) == 2 and \
+                        isinstance(differing_expected[i][1].args[0], sympy.numbers.Float) and \
+                        isinstance(differing_expected[i][1].args[1], sympy.symbol.Symbol):
+                    conversion_subs = {self._get_var_name(differing_expected[i][0]): differing_expected[i][1]}
                     expected_element_index = expected.index(differing_expected[i])
                     new_expected = [[exp[0], exp[1].subs(conversion_subs)] for exp in expected]
                     if expected != new_expected:
                         expected = new_expected
                         del expected[expected_element_index]
         assert len(expected) == len(generated)
-        
+
         # only exception could be name of stimulus current
         if set([eq[0] for eq in expected]) != set([eq[0] for eq in generated]):
 

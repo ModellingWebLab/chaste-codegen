@@ -7,7 +7,7 @@ TIMESTAMP_REGEX = re.compile(r'(//! on .*)')
 COMMENTS_REGEX = re.compile(r'(//.*)')
 
 
-def load_chaste_models(model_types=[], reference_path_prefix=['chaste_reference_models']):
+def load_chaste_models(model_types=[], ref_path_prefix=['chaste_reference_models'], class_name_prefix='TestManual'):
     """ Load all models"""
     # Get folder with test cellml files
     model_folder = os.path.join(cg.DATA_DIR, 'tests', 'cellml')
@@ -23,7 +23,7 @@ def load_chaste_models(model_types=[], reference_path_prefix=['chaste_reference_
                 for model_type in model_types:
                     expected_hpp_path = os.path.join(cg.DATA_DIR, 'tests')
                     expected_cpp_path = os.path.join(cg.DATA_DIR, 'tests')
-                    for pref in reference_path_prefix:
+                    for pref in ref_path_prefix:
                         expected_hpp_path = os.path.join(expected_hpp_path, pref)
                         expected_cpp_path = os.path.join(expected_cpp_path, pref)
                     expected_hpp_path = os.path.join(expected_hpp_path, model_type, model_name_from_file + '.hpp')
@@ -35,16 +35,17 @@ def load_chaste_models(model_types=[], reference_path_prefix=['chaste_reference_
                                                 'expected_cpp_path': expected_cpp_path}})
 
                 if len(reference_models) > 0:
-                    class_name = 'Dynamic' + model_name_from_file
+                    class_name = class_name_prefix + model_name_from_file
                     model_files.append({'model': cellmlmanip.load_model(model_file),
                                         'model_name_from_file': model_name_from_file,
                                         'class_name': class_name,
                                         'reference_models': reference_models})
     return model_files
 
+
 def get_file_lines(file_name, remove_comments=False):
     """ Load a file into a list of lines
-    
+
     :param file_name: file name including path
     :param remove_comments: indicates whether to remove all comments  starting with //
     """
@@ -62,8 +63,7 @@ def get_file_lines(file_name, remove_comments=False):
 
     # Remove empty lines
     i = 0
-    while i < len(lines): 
-        
+    while i < len(lines):
         if lines[i] == '':
             del lines[i]
         else:
@@ -71,9 +71,10 @@ def get_file_lines(file_name, remove_comments=False):
 
     return lines
 
+
 def write_file(file_name, file_contents):
     """ Write Load a file into a list of lines
-    
+
     :param file_name: file name including path
     :param file_contents: a str with the contents of the file to be written
     """
