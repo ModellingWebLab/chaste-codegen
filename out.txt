@@ -1,0 +1,19 @@
+============================= test session starts =============================
+platform win32 -- Python 3.7.4, pytest-5.1.0, py-1.8.0, pluggy-0.12.0
+rootdir: C:\Users\uczmh2\Desktop\venv_weblab-cg\weblab-cg
+plugins: cov-2.7.1
+collected 1 item
+
+weblab_cg\tests\test_chaste_cg.py .                                      [100%]
+
+============================== warnings summary ===============================
+c:\users\uczmh2\desktop\venv_weblab-cg\lib\site-packages\jinja2\utils.py:485
+  c:\users\uczmh2\desktop\venv_weblab-cg\lib\site-packages\jinja2\utils.py:485: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
+    from collections import MutableMapping
+
+c:\users\uczmh2\desktop\venv_weblab-cg\lib\site-packages\jinja2\runtime.py:318
+  c:\users\uczmh2\desktop\venv_weblab-cg\lib\site-packages\jinja2\runtime.py:318: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
+    from collections import Mapping
+
+-- Docs: https://docs.pytest.org/en/latest/warnings.html
+======================= 1 passed, 2 warnings in 13.78s ========================

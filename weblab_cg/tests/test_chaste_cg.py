@@ -33,7 +33,6 @@ class TestChasteCG(object):
                 chaste_model = cg.NormalChasteModel(model['model'], model['class_name'], model['model_name_from_file'])
                 chaste_model.dynamically_loadable = True
                 chaste_model.generate_chaste_code()
-                #TestManualaslanidi_model_2009FromCellML
 
                 # Write generated files
                 hhp_gen_file_path = os.path.join(tmp_path, model_type, chaste_model.file_name + ".hpp")
@@ -49,6 +48,10 @@ class TestChasteCG(object):
                 generated_hpp = get_file_lines(hhp_gen_file_path)
                 generated_cpp = get_file_lines(cpp_gen_file_path)
 
+                print('\n')
+                print(expected_cpp[20:25])
+                print('\n')
+                print(generated_cpp[20:25])
                 assert expected_hpp == generated_hpp
                 assert expected_cpp == generated_cpp
 

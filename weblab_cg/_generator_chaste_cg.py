@@ -403,7 +403,7 @@ class ChasteModel(object):
                                                         'rhs': self._printer.doprint(rhs) + rhs_multiplier,
                                                         'units': str(units if units is not None else current_units)
                                                         })
-        return formatted_default_stimulus
+        return formatted_default_stimulus # [formatted_default_stimulus[key] for key in sorted(formatted_default_stimulus.keys())]
 
     def _format_equations_for_ionic_vars(self):
         """ Format equations ionic derivatives"""
