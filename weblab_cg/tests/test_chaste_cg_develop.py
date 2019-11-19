@@ -162,7 +162,7 @@ class TestChasteCG(object):
             same = True
             if eq1.free_symbols != eq2.free_symbols: 
                 return False
-            seed(time.time_ns())
+            seed(time.time())
             subs_dict = {}
             for i in range(1000):
                 for symbol in eq1.free_symbols:

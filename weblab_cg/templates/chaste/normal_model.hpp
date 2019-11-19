@@ -5,7 +5,7 @@
 //! 
 //! This source file was generated from CellML.
 //! 
-//! Model: {{model_name_from_file}}
+//! Model: {{model_name}}
 //! 
 //! Processed by webalab_cg - CellML Tools in Python: https://github.com/ModellingWebLab/weblab-cg
 //!     (translators: , webalab_cg: , options: normal)
@@ -16,17 +16,17 @@
 #include "ChasteSerialization.hpp"
 #include <boost/serialization/base_object.hpp>
 #include "AbstractCardiacCell.hpp"
-#include "AbstractDynamicallyLoadableEntity.hpp"
+{% if dynamically_loadable %}#include "AbstractDynamicallyLoadableEntity.hpp"{%- endif %}
 #include "AbstractStimulusFunction.hpp"
 
-class {{class_name}}FromCellML : public AbstractCardiacCell, public AbstractDynamicallyLoadableEntity
+class {{class_name}}FromCellML : public AbstractCardiacCell{%- if dynamically_loadable %}, public AbstractDynamicallyLoadableEntity{%- endif %}
 {
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & archive, const unsigned int version)
     {
         archive & boost::serialization::base_object<AbstractCardiacCell >(*this);
-        archive & boost::serialization::base_object<AbstractDynamicallyLoadableEntity>(*this);
+        {% if dynamically_loadable %}archive & boost::serialization::base_object<AbstractDynamicallyLoadableEntity>(*this);{%- endif %}
     }
     
     // 

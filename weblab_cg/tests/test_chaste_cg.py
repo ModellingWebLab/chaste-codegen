@@ -30,12 +30,14 @@ class TestChasteCG(object):
         for model in chaste_models:
             for model_type in model['reference_models'].keys():
                 # Generate chaste code
-                chaste_model = cg.NormalChasteModel(model['model'], model['model_name_from_file'], model['class_name'])
+                chaste_model = cg.NormalChasteModel(model['model'], model['class_name'], model['model_name_from_file'])
+                chaste_model.dynamically_loadable = True
                 chaste_model.generate_chaste_code()
+                #TestManualaslanidi_model_2009FromCellML
 
                 # Write generated files
-                hhp_gen_file_path = os.path.join(tmp_path, model_type, model['model_name_from_file'] + ".hpp")
-                cpp_gen_file_path = os.path.join(tmp_path, model_type, model['model_name_from_file'] + ".cpp")
+                hhp_gen_file_path = os.path.join(tmp_path, model_type, chaste_model.file_name + ".hpp")
+                cpp_gen_file_path = os.path.join(tmp_path, model_type, chaste_model.file_name + ".cpp")
                 write_file(hhp_gen_file_path, chaste_model.generated_hpp)
                 write_file(cpp_gen_file_path, chaste_model.generated_cpp)
 
@@ -49,3 +51,12 @@ class TestChasteCG(object):
 
                 assert expected_hpp == generated_hpp
                 assert expected_cpp == generated_cpp
+
+                chaste_model.dynamically_loadable = False
+                chaste_model.class_name = chaste_model.class_name.replace('Dynamic', 'TestManual')
+                chaste_model.file_name = chaste_model.class_name
+                chaste_model.generate_chaste_code()
+                hhp_gen_file_path = os.path.join(tmp_path, model_type, chaste_model.file_name + ".hpp")
+                cpp_gen_file_path = os.path.join(tmp_path, model_type, chaste_model.file_name + ".cpp")
+                write_file(hhp_gen_file_path, chaste_model.generated_hpp)
+                write_file(cpp_gen_file_path, chaste_model.generated_cpp)

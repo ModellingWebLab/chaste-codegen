@@ -48,7 +48,7 @@ class ChasteModel(object):
                                 'membrane_stimulus_current': 'uA_per_uF'}
     _STIMULUS_RHS_MULTIPLIER = {'membrane_stimulus_current_amplitude': ' * HeartConfig::Instance()->GetCapacitance()'}
 
-    def __init__(self, model, model_name_for_filename, class_name):
+    def __init__(self, model, class_name, file_name):
         """ Initialise a ChasteModel instance
         Arguments
 
@@ -57,19 +57,23 @@ class ChasteModel(object):
         ``output_path``
             The path to store the generated model code at.
             (Just the path, excluding the file name as file name will be determined by the model_name)
-        ``model_name_for_filename``
-            The model name as you want it to appear in generated cpp and hpp files.
+        ``class_name``
+            The name of the class to be generated.
+        ``file_name``
+            The name you want to give your generated files WITHOUT the .hpp and .cpp extension (e.g. aslanidi_model_2009 which will lead to generating aslanidi_model_2009.cpp and aslanidi_model_2009.hpp)
         """
+        self.class_name = class_name
+        self.file_name = file_name
+        self.dynamically_loadable = False        
+        self.generated_hpp = ''
+        self.generated_cpp = ''
+
         self._logger = logging.getLogger(__name__)
         self._logger.setLevel(logging.INFO)
 
         # Store parameters for future reference
         self._model = model
 
-        self._model_name_for_filename = model_name_for_filename
-        self._class_name = class_name
-        self.generated_hpp = ''
-        self.generated_cpp = ''
 
         self._add_units()
 
@@ -606,8 +610,8 @@ class ChasteModel(object):
 class NormalChasteModel(ChasteModel):
     """ Holds information specific for the Normal model type"""
 
-    def __init__(self, model, model_name_for_filename, class_name):
-        super().__init__(model, model_name_for_filename, class_name)
+    def __init__(self, model, class_name, file_name):
+        super().__init__(model, class_name, file_name)
 
     def generate_chaste_code(self):
         """ Generates and stores chaste code for the Normal model"""
@@ -615,18 +619,20 @@ class NormalChasteModel(ChasteModel):
         # Generate hpp for model
         template = cg.load_template('chaste', 'normal_model.hpp')
         self.generated_hpp = template.render({
-            'model_name_from_file': self._model_name_for_filename,
-            'class_name': self._class_name,
+            'model_name': self._model.name,
+            'class_name': self.class_name,
             'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
             'default_stimulus_equations': self._formatted_default_stimulus,
             'use_get_intracellular_calcium_concentration': self._use_get_intracellular_calcium_concentration,
-            'free_variable': self._free_variable})
+            'free_variable': self._free_variable,
+            'dynamically_loadable': self.dynamically_loadable})
 
         # Generate cpp for model
         template = cg.load_template('chaste', 'normal_model.cpp')
         self.generated_cpp = template.render({
-            'model_name_from_file': self._model_name_for_filename,
-            'class_name': self._class_name,
+            'model_name': self._model.name,
+            'file_name': self.file_name,
+            'class_name': self.class_name,
             'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
             'default_stimulus_equations': self._formatted_default_stimulus,
             'use_get_intracellular_calcium_concentration': self._use_get_intracellular_calcium_concentration,
