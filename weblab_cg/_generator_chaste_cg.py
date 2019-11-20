@@ -293,32 +293,6 @@ class ChasteModel(object):
                 default_stimulus[key] = eq
         return default_stimulus
 
-    def _get_stimulus_desired_units(self):
-        """ Get a tuple: (units to convert membrane_stimulus_current, is  capacitance used in i_ionic)"""
-        try:
-            desired_units = getattr(self._model.units.ureg, self._STIMULUS_UNITS['membrane_stimulus_current'])
-            factor = \
-                self._model.units.get_conversion_factor(desired_units, from_unit=self._membrane_stimulus_current_units)
-            self._use_capacitance_i_ionic = False
-            return desired_units, factor
-        except errors.DimensionalityError:
-            try:
-                desired_units = \
-                    getattr(self._model.units.ureg, self._STIMULUS_SECONDARY_UNITS['membrane_stimulus_current'])
-                factor = \
-                    self._model.units.get_conversion_factor(desired_units,
-                                                            from_unit=self._membrane_stimulus_current_units)
-                self._use_capacitance_i_ionic = True
-                return desired_units, factor
-            except errors.DimensionalityError:
-                desired_units = \
-                    getattr(self._model.units.ureg, self._STIMULUS_TERTIARY_UNITS['membrane_stimulus_current'])
-                factor = \
-                    self._model.units.get_conversion_factor(desired_units,
-                                                            from_unit=self._membrane_stimulus_current_units)
-                self._use_capacitance_i_ionic = True
-                return desired_units, factor
-
     def _get_ionic_derivs(self):
         """ Getting the derivative symbols that define V (self._membrane_voltage_var)"""
         # use the RHS of the ODE defining V
