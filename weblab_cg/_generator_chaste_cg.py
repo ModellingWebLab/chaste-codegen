@@ -306,6 +306,7 @@ class ChasteModel(object):
                                         and self._model.units.summarise_units(eq.lhs) ==
                                         self._membrane_stimulus_current_units
                                         and eq.lhs not in self._modifiable_parameters]
+            equations = [eq.lhs for eq in equations]
 
         # Reverse topological order is more similar (though not necessarily identical) to pycml
         equations_for_ionic_vars.reverse()
