@@ -26,7 +26,7 @@ class TestChasteCG(object):
         """ Load all models"""
         return load_chaste_models(model_types=self.model_types())
 
-    def test_generate_chate_models(self, tmp_path, chaste_models):
+    def test_generate_chatse_models(self, tmp_path, chaste_models):
         """ Check generation of Normal models against reference"""
         tmp_path = str(tmp_path)
         for model in chaste_models:
@@ -53,7 +53,7 @@ class TestChasteCG(object):
                 assert expected_hpp == generated_hpp
                 assert expected_cpp == generated_cpp
 
-    def test_generate_dymaic_chate_model(self, tmp_path):
+    def test_generate_dymaic_chatse_model(self, tmp_path):
         tmp_path = str(tmp_path)
         LOGGER.info('Converting: Normal Dynamichodgkin_huxley_squid_axon_model_1952_modified\n')
         model_file = \

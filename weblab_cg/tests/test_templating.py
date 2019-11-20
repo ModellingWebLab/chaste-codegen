@@ -34,7 +34,7 @@ def test_unique_name_generation():
 
     # Load cellml model, get unique names
     model = cellmlmanip.load_model(
-        os.path.join(cg.DATA_DIR, 'tests', 'conflicting_names.cellml'))
+        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'conflicting_names.cellml'))
 
     # Test unique names
     from weblab_cg._generator import get_unique_names

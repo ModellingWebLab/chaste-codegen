@@ -380,7 +380,7 @@
         else
         {
             const double var_membrane__Cm = 5e-05; // nanoF
-            const double var_membrane__i_Stim = 1000.0 * var_membrane__Cm * GetIntracellularAreaStimulus(var_chaste_interface__environment__time)/ HeartConfig::Instance()->GetCapacitance(); // picoA
+            const double var_membrane__i_Stim = 1000.0000000000001 * var_membrane__Cm * GetIntracellularAreaStimulus(var_chaste_interface__environment__time)/ HeartConfig::Instance()->GetCapacitance(); // picoA
             d_dt_chaste_interface__membrane__V = -(0.001 * var_Ca_independent_transient_outward_K_current__i_sus + 0.001 * var_Ca_independent_transient_outward_K_current__i_to + 0.001 * var_L_type_Ca_channel__i_Ca_L + 0.001 * var_Na_Ca_ion_exchanger_current__i_NaCa + 0.001 * var_T_type_Ca_channel__i_Ca_T + 0.001 * var_background_currents__i_B_Ca + 0.001 * var_background_currents__i_B_Na + 0.001 * var_delayed_rectifier_K_current__i_Kr + 0.001 * var_delayed_rectifier_K_current__i_Ks + 0.001 * var_inward_rectifier__i_K1 + 0.001 * var_membrane__i_Stim + 0.001 * var_sarcolemmal_calcium_pump_current__i_CaP + 0.001 * var_sodium_current__i_Na + 0.001 * var_sodium_potassium_pump__i_p) / var_membrane__Cm; // millivolt / millisecond
         }
         

@@ -7,8 +7,7 @@ import sympy
 from sympy import SympifyError
 import pyparsing
 import time
-from random import seed, random
-import sys
+import random
 import math
 from weblab_cg.tests.chaste_test_utils import load_chaste_models, get_file_lines, write_file
 
@@ -34,8 +33,8 @@ class TestChasteCG(object):
         return load_chaste_models(model_types=self.model_types(),
                                   ref_path_prefix=['chaste_reference_models', 'develop'], class_name_prefix='Dynamic')
 
-    # @pytest.mark.skip(reason="This test is a development tool")
-    def test_generate_chate_models_develop(self, tmp_path, chaste_models):
+    #@pytest.mark.skip(reason="This test is a development tool")
+    def test_generate_chatse_models_develop(self, tmp_path, chaste_models):
         """ Check generation of Normal models against reference"""
         tmp_path = str(tmp_path)
         for model in chaste_models:
@@ -168,23 +167,19 @@ class TestChasteCG(object):
                 return True
             if not try_numeric:
                 return False
-            same = True
             if eq1.free_symbols != eq2.free_symbols:
                 return False
-            seed(time.time())
+            random.seed(time.time())
             subs_dict = {}
             for i in range(1000):
                 for symbol in eq1.free_symbols:
-                    random_val = random() * sys.float_info.max
-                    if (i % 2) == 0:
-                        random_val *= -1
+                    random_val = random.uniform(-1000, 1000)
                     subs_dict.update({symbol: random_val})
-                    a = eq1.subs(subs_dict)
-                    b = eq2.subs(subs_dict)
-                same = math.isclose(a, b)
-                if not same:
-                    break
-            return same
+                a = sympy.simplify(eq1.subs(subs_dict))
+                b = sympy.simplify(eq2.subs(subs_dict))
+                if not math.isclose(float(a), float(b)):
+                    return False
+            return True
 
     def _same_with_number(self, line1, line2):
         """ Compare strings comparing numbers pairwise with sympy"""
@@ -275,7 +270,7 @@ class TestChasteCG(object):
     def _to_equation(self, equation_str):
         """ Do needed substitutions and parse brackets to handle conditionals (cond?exp:exp) """
         # pow->Pow ceil -> ceiling in sympy
-        equation_str = equation_str.replace("pow(", 'Pow(').replace("ceil(", 'ceiling(')
+        equation_str = equation_str.replace("pow(", 'Pow(').replace("ceil(", 'ceiling(').replace('fabs(', 'Abs(')
         # This might be a C++ call with class members/pointer accessors?
         equation_str = \
             equation_str.replace('HeartConfig::Instance()->GetCapacitance()', 'HeartConfig_Instance_GetCapacitance')
@@ -440,7 +435,8 @@ class TestChasteCG(object):
             if not self._is_same_equation(sorted_generated[i][1], sorted_expected[i][1]):
                 eq_gen = self._perform_eq_subs(sorted_generated[i], self.generated_subs)
                 eq_exp = self._perform_eq_subs(sorted_expected[i], self.expected_subs)
-                assert self._is_same_equation(eq_gen[1], eq_exp[1], try_numeric=True)
+                same = self._is_same_equation(eq_gen[1], eq_exp[1], try_numeric=True)
+                assert same
 
         # Check the order for generated: lhs doesn't appear in earlier rhs (could give c++ compile error)
 
