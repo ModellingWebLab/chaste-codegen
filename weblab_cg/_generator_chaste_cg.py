@@ -45,7 +45,8 @@ class ChasteModel(object):
                        'membrane_stimulus_current': 'uA_per_cm2',
                        'membrane_capacitance': 'uF'}
     _STIMULUS_SECONDARY_UNITS = {'membrane_stimulus_current_amplitude': 'uA_per_uF',
-                                 'membrane_stimulus_current': 'uA'}
+                                 'membrane_stimulus_current': 'uA',
+                                 'membrane_capacitance': 'uF_per_mm2'}
     _STIMULUS_TERTIARY_UNITS = {'membrane_stimulus_current_amplitude': 'uA',
                                 'membrane_stimulus_current': 'uA_per_uF'}
     _STIMULUS_RHS_MULTIPLIER = {'membrane_stimulus_current_amplitude': ' * HeartConfig::Instance()->GetCapacitance()'}
@@ -240,18 +241,7 @@ class ChasteModel(object):
                         initial_value = self._model.get_initial_value(membrane_capacitance)
                         equation = sp.Eq(membrane_capacitance, initial_value)
                     except errors.DimensionalityError:
-                        try:
-                            membrane_capacitance = \
-                                self._model.get_symbol_by_ontology_term(self._OXMETA, "membrane_capacitance")
-                            current_units = self._model.units.summarise_units(membrane_capacitance)
-                            desired_units = \
-                                getattr(self._model.units.ureg, self._STIMULUS_TERTIARY_UNITS['membrane_capacitance'])
-                            capacitance_factor =\
-                                self._model.units.get_conversion_factor(desired_units, from_unit=current_units)
-                            initial_value = self._model.get_initial_value(membrane_capacitance)
-                            equation = sp.Eq(membrane_capacitance, initial_value)
-                        except (KeyError, errors.DimensionalityError):
-                            pass  # Can't convert membrane_capacitance for this model
+                        pass  # Can't convert membrane_capacitance for this model
             except KeyError:
                 pass  # no membrane_capacitance
             # get membrane_stimulus_current info
