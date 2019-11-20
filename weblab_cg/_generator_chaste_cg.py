@@ -75,6 +75,7 @@ class ChasteModel(object):
 
         # Store parameters for future reference
         self._model = model
+        self._is_self_excitatory = False
 
         self._add_units()
 
@@ -162,7 +163,7 @@ class ChasteModel(object):
         try:
             return self._model.get_symbol_by_ontology_term(self._OXMETA, "cytosolic_calcium_concentration")
         except KeyError:
-            self._logger.debug(self._model.name + ' has no cytosolic_calcium_concentration')
+            self._logger.info(self._model.name + ' has no cytosolic_calcium_concentration')
             return None
 
     def _get_use_get_intracellular_calcium_concentration(self):
@@ -197,7 +198,9 @@ class ChasteModel(object):
         try:
             return self._model.get_symbol_by_ontology_term(self._OXMETA, 'membrane_stimulus_current')
         except KeyError:
-            self._logger.debug(self._model.name + ' has no membrane_stimulus_current')
+            self._logger.info(self._model.name + ' has no membrane_stimulus_current')
+            self._is_self_excitatory = len(list(self._model.get_rdf_annotations(subject=self._model.rdf_identity,
+                                                predicate=(self._PYCMLMETA, 'is-self-excitatory'), object_='yes'))) > 0
             return None
 
     def _get_membrane_stimulus_current_units(self):
