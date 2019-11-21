@@ -23,7 +23,7 @@ def test_generate_weblab_model(tmp_path):
 
     # Load cellml model
     model = os.path.join(
-        cg.DATA_DIR, 'tests', 'cellml',
+        cg.DATA_DIR, 'tests',
         'hodgkin_huxley_squid_axon_model_1952_modified.cellml'
     )
     model = cellmlmanip.load_model(model)
@@ -67,3 +67,4 @@ def test_generate_weblab_model(tmp_path):
 
     # Now they should match
     assert generated == expected
+
