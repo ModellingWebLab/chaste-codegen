@@ -79,7 +79,7 @@ def get_unique_names(model):
         return name
 
     # Get sorted list of symbols for consistent output
-    sorted_symbols = [v for v in model.get_equation_graph()]
+    sorted_symbols = [v for v in model.graph_with_sympy_numbers]
     sorted_symbols.sort(key=str)
 
     # Generate names
