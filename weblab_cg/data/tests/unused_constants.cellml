@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<model name="generated_model" xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#">
+	<component name="x">
+		<variable initial_value="2.0" name="x_a" units="dimensionless"/>
+		<variable initial_value="1.0" name="y_z" units="dimensionless"/>
+	</component>
+	<component name="z">
+		<variable initial_value="3.0" name="z_a" units="dimensionless"/>
+	</component>
+	<component name="env">
+		<variable name="time" units="dimensionless"/>
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply>
+				<eq/>
+				<ci>time</ci>
+				<cn cellml:units="dimensionless">0.0</cn>
+			</apply>
+		</math>
+	</component>
+	<component name="x_y">
+		<variable initial_value="2.0" name="x_y_a" units="dimensionless"/>
+		<variable initial_value="2.0" name="x_y_z" units="dimensionless"/>
+	</component>
+</model>
