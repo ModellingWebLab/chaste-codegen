@@ -40,7 +40,7 @@ def test_unique_name_generation():
     from weblab_cg._generator import get_unique_names
     unames = get_unique_names(model)
     assert len(unames) == 9
-    symbols = [v for v in model.get_equation_graph()]
+    symbols = [v for v in model.graph]
     symbols.sort(key=str)
 
     assert unames[symbols[0]] == 'time'         # env.time
