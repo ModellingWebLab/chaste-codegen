@@ -142,7 +142,7 @@ class ChasteModel(object):
                                            (str(deriv.expr).replace('$', '__')
                                             if isinstance(deriv, sp.Derivative) else str(deriv).replace('$', '__')))
 
-        # Printer for printing regular variable names without var_ prefix e.g. for ode system information
+        # Printer for printing variable in comments e.g. for ode system information
         self._name_printer = cg.ChastePrinter(lambda symbol: str(symbol)[1:].replace('$', '__'))
 
     def _add_units(self):
@@ -360,7 +360,6 @@ class ChasteModel(object):
                                     isinstance(deriv.lhs, sp.Derivative)) if eq.lhs not in self._modifiable_parameters]
 
     def _format_modifiable_parameters(self):
-
         return [{'units': self._model.units.summarise_units(param),
                  'comment_name': self._name_printer.doprint(param), 'name': str(param).split("$")[-1],
                  'initial_value': self._model.get_initial_value(param)} for param in self._modifiable_parameters]
@@ -368,8 +367,8 @@ class ChasteModel(object):
     def _format_state_variables(self):
         """ Get equations defining the derivatives including  V (self._membrane_voltage_var)"""
         # Filter unused state vars for ionic variables
-        ionic_var_symbols = self._model.get_symbols_for(self._extended_equations_for_ionic_vars)
-        y_deriv_symbols = self._model.get_symbols_for(self._derivative_equations)
+        ionic_var_symbols = self._model.find_symbols_and_derivatives(self._extended_equations_for_ionic_vars)
+        y_deriv_symbols = self._model.find_symbols_and_derivatives(self._derivative_equations)
         return [{'var': self._printer.doprint(var),
                  'initial_value': str(self._model.get_initial_value(var) * self._state_var_conversion_factors[var])
                 if var in self._state_var_conversion_factors else str(self._model.get_initial_value(var)),
