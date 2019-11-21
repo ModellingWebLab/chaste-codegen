@@ -373,8 +373,6 @@ class ChasteModel(object):
         y_deriv_symbols = set()
         for eq in self._derivative_equations:
             y_deriv_symbols.update(eq.rhs.free_symbols)
-#        ionic_var_symbols = self._model.find_symbols_and_derivatives(self._extended_equations_for_ionic_vars)
-#        y_deriv_symbols = self._model.find_symbols_and_derivatives(self._derivative_equations)
         return [{'var': self._printer.doprint(var),
                  'initial_value': str(self._model.get_initial_value(var) * self._state_var_conversion_factors[var])
                 if var in self._state_var_conversion_factors else str(self._model.get_initial_value(var)),

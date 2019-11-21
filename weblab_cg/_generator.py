@@ -79,7 +79,7 @@ def get_unique_names(model):
         return name
 
     # Get sorted list of symbols for consistent output
-    sorted_symbols = [v for v in model.get_equation_graph()]
+    sorted_symbols = [v for v in model.graph_with_sympy_numbers]
     sorted_symbols.sort(key=str)
 
     # Generate names
@@ -151,6 +151,9 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
     # subset. But until that happens, users just have to make sure not to use
     # the same local name in different namespaces.
 
+    # Oxmeta namespace
+    oxmeta = 'https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata'
+
     # Get unique names for all symbols
     unames = get_unique_names(model)
 
@@ -177,6 +180,7 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
             'var_name': symbol_name(state),
             'deriv_name': derivative_name(state),
             'initial_value': model.get_initial_value(state),
+            'var_names': model.get_ontology_terms_by_symbol(state, oxmeta),
         })
 
     # Create parameter information dicts

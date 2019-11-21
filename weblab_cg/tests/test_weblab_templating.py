@@ -67,4 +67,3 @@ def test_generate_weblab_model(tmp_path):
 
     # Now they should match
     assert generated == expected
-
