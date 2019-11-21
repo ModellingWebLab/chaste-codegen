@@ -127,7 +127,7 @@ template<>
 void OdeSystemInformation<Dynamichodgkin_huxley_squid_axon_model_1952_modifiedFromCellML>::Initialise(void)
 {
     this->mSystemName = "hodgkin_huxley_squid_axon_model_1952_modified";
-    this->mFreeVariableName = "environment__time";
+    this->mFreeVariableName = "time";
     this->mFreeVariableUnits = "millisecond";
     
     // rY[0]:

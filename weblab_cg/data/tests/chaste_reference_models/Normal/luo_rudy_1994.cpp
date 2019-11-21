@@ -356,7 +356,7 @@ template<>
 void OdeSystemInformation<TestManualluo_rudy_1994FromCellML>::Initialise(void)
 {
     this->mSystemName = "luo_rudy_1994";
-    this->mFreeVariableName = "environment__time";
+    this->mFreeVariableName = "time";
     this->mFreeVariableUnits = "millisecond";
     
     // rY[0]:

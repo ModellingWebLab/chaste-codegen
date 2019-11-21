@@ -3,7 +3,6 @@ import time
 import sympy as sp
 import weblab_cg as cg
 from pint import errors
-import math
 
 
 logging.getLogger().setLevel(logging.INFO)
@@ -188,7 +187,7 @@ class ChasteModel(object):
             return round(self._model.units.get_conversion_factor(self._get_desired_units(sv),
                          from_unit=self._model.units.summarise_units(sv)), 14)
 
-        state_var_factors = {sv: sv_conv(sv) for sv in self._state_vars if not math.isclose(sv_conv(sv), 1.0)}
+        state_var_factors = {sv: sv_conv(sv) for sv in self._state_vars if sv_conv(sv) != 1.0}
         state_var_subs = {sv: 1 / fac * sv for sv, fac in state_var_factors.items()}
         return state_var_factors, state_var_subs
 
@@ -431,7 +430,7 @@ class ChasteModel(object):
                             formatted_default_stimulus[key].append({'lhs': self._printer.doprint(divisor_eq.lhs),
                                                                     'rhs': self._printer.doprint(divisor_eq.rhs),
                                                                     'units': str(divisor_current_units)})
-                rhs = eq.rhs if math.isclose(factor, 1.0) else factor * eq.rhs
+                rhs = eq.rhs if factor == 1.0 else factor * eq.rhs
                 self._in_interface.append(eq.lhs)
                 formatted_default_stimulus[key].append({'lhs': self._printer.doprint(eq.lhs),
                                                         'rhs': self._printer.doprint(rhs) + rhs_multiplier,
@@ -467,17 +466,17 @@ class ChasteModel(object):
         for i in range(len(self._formatted_equations_for_ionic_vars)):
             if i != 0:
                 ionic_rhs += ' + '
-            if not math.isclose(self._formatted_equations_for_ionic_vars[i]['conversion_factor'], 1.0):
+            if self._formatted_equations_for_ionic_vars[i]['conversion_factor'] != 1.0:
                 ionic_rhs += str(self._formatted_equations_for_ionic_vars[i]['conversion_factor']) + ' * '
             ionic_rhs += self._formatted_equations_for_ionic_vars[i]['var']
         if self._use_capacitance_i_ionic:
             if self._membrane_capacitance is not None:
                 ionic_rhs += ') / '
                 factor = self._membrane_capacitance_factor
-                if not math.isclose(factor, 1.0):
+                if factor != 1.0:
                     ionic_rhs += '(' + str(factor) + ' * '
                 ionic_rhs += self._printer.doprint(self._membrane_capacitance.lhs)
-                if not math.isclose(factor, 1.0):
+                if factor != 1.0:
                     ionic_rhs += ')'
             ionic_rhs += ')'
             ionic_rhs = '(' + str(sp.simplify(ionic_rhs)) + ')'  # simplify
@@ -565,12 +564,12 @@ class ChasteModel(object):
                 if self._use_capacitance_i_ionic and self._membrane_capacitance is not None:
                     stim_current_eq_rhs = area * self._membrane_capacitance.lhs
                     fac = self._membrane_capacitance_factor / self._membrane_stimulus_current_factor
-                    if not math.isclose(fac, 1.0):
+                    if fac != 1.0:
                         stim_current_eq_rhs *= fac
                 else:
                     stim_current_eq_rhs = area
                     fac = 1 / self._membrane_stimulus_current_factor
-                    if not math.isclose(fac, 1.0):
+                    if fac != 1.0:
                         stim_current_eq_rhs *= fac
 
                 d_eqs[i] = sp.Eq(d_eqs[i].lhs, sp.simplify(stim_current_eq_rhs))
@@ -585,13 +584,13 @@ class ChasteModel(object):
                                  'is_voltage': is_voltage})
 
         for i in range(len(equations)):
-            if not math.isclose(equations[i]['factor'], 1.0):
+            if equations[i]['factor'] != 1.0:
                 for j in range(i + 1, len(equations)):
                     equations[j]['rhs'] =\
                         equations[j]['rhs'].subs({equations[i]['lhs']:
                                                  (1 / equations[i]['factor'] * equations[i]['lhs'])})
         for i in range(len(equations)):
-            if not math.isclose(equations[i]['factor'], 1.0):
+            if equations[i]['factor'] != 1.0:
                 equations[i]['rhs'] = sp.simplify(equations[i]['factor'] * equations[i]['rhs'])
             equations[i]['rhs'] = \
                 self._printer.doprint(equations[i]['rhs']) + equations[i]['rhs_divider']
@@ -601,7 +600,9 @@ class ChasteModel(object):
 
     def _format_ode_system_info(self):
         """ Format general ode system info for chaste output"""
-        free_variable = {'name': self._name_printer.doprint(self._time_variable),
+        ontology_terms = self._model.get_ontology_terms_by_symbol(self._time_variable, namespace_uri=self._OXMETA)
+        name = ontology_terms[0] if len(ontology_terms) > 0 else self._name_printer.doprint(self._time_variable)
+        free_variable = {'name': name,
                          'units': self._get_desired_units(self._time_variable),
                          'system_name': self._model.name,
                          'var_name': self._printer.doprint(self._time_variable)}
