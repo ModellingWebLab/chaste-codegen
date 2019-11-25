@@ -59,7 +59,8 @@ class TestChasteCG(object):
         model_file = \
             os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'hodgkin_huxley_squid_axon_model_1952_modified.cellml')
         chaste_model = cellmlmanip.load_model(model_file)
-        chaste_model = cg.NormalChasteModel(chaste_model, 'Dynamichodgkin_huxley_squid_axon_model_1952_modifiedFromCellML',
+        chaste_model = cg.NormalChasteModel(chaste_model,
+                                            'Dynamichodgkin_huxley_squid_axon_model_1952_modifiedFromCellML',
                                             'dynamic_hodgkin_huxley_squid_axon_model_1952_modified')
         chaste_model.dynamically_loadable = True
         chaste_model.generate_chaste_code()

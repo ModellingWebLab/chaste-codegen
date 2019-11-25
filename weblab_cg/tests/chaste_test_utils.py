@@ -73,16 +73,13 @@ def get_file_lines(file_name, remove_comments=False):
 
 
 def write_file(file_name, file_contents):
-    """ Write a file into a list of lines
+    """ Write a file into the given file name
 
     :param file_name: file name including path
     :param file_contents: a str with the contents of the file to be written
     """
     # Make sure the folder we are writing in exists
-    try:
-        os.makedirs(os.path.dirname(file_name), exist_ok=True)
-    except FileExistsError:
-        pass
+    os.makedirs(os.path.dirname(file_name), exist_ok=True)
 
     # Write the file
     file = open(file_name, 'w')
