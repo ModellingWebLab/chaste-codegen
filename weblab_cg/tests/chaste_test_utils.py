@@ -38,7 +38,7 @@ def load_chaste_models(model_types=[], ref_path_prefix=['chaste_reference_models
                     class_name = class_name_prefix + model_name_from_file
                     model_files.append({'model': cellmlmanip.load_model(model_file),
                                         'model_name_from_file': model_name_from_file,
-                                        'class_name': class_name,
+                                        'class_name': class_name + 'FromCellML',
                                         'reference_models': reference_models})
     return model_files
 
@@ -73,14 +73,14 @@ def get_file_lines(file_name, remove_comments=False):
 
 
 def write_file(file_name, file_contents):
-    """ Write Load a file into a list of lines
+    """ Write a file into a list of lines
 
     :param file_name: file name including path
     :param file_contents: a str with the contents of the file to be written
     """
     # Make sure the folder we are writing in exists
     try:
-        os.makedirs(os.path.dirname(file_name))
+        os.makedirs(os.path.dirname(file_name), exist_ok=True)
     except FileExistsError:
         pass
 

@@ -127,6 +127,11 @@ class ChasteModel(object):
 
     def _add_printers(self):
         """ Initialises Printers for outputting chaste code. """
+        def get_symbol_name(s):
+            s_name = str(s).replace('$', '__')
+            if not s_name.startswith('_'):
+                s_name = '_' + s_name
+            return s_name
         # Printer for printing chaste regular variable assignments (var_ prefix)
         # Print variables in interface as var_chaste_interface
         # (state variables, time, lhs of default_stimulus eqs, i_ionic and lhs of y_derivatives)
@@ -134,15 +139,15 @@ class ChasteModel(object):
         self._printer = \
             cg.ChastePrinter(lambda symbol:
                              ('var_chaste_interface_'
-                              if symbol in self._in_interface else 'var') + str(symbol).replace('$', '__')
+                              if symbol in self._in_interface else 'var') + get_symbol_name(symbol)
                              if symbol not in self._modifiable_parameters
                              else 'mParameters[' + str(self._modifiable_parameters.index(symbol)) + ']',
                              lambda deriv: 'd_dt_chaste_interface_' +
-                                           (str(deriv.expr).replace('$', '__')
-                                            if isinstance(deriv, sp.Derivative) else str(deriv).replace('$', '__')))
+                                           (get_symbol_name(deriv.expr)
+                                            if isinstance(deriv, sp.Derivative) else get_symbol_name(deriv)))
 
         # Printer for printing variable in comments e.g. for ode system information
-        self._name_printer = cg.ChastePrinter(lambda symbol: str(symbol)[1:].replace('$', '__'))
+        self._name_printer = cg.ChastePrinter(lambda symbol: get_symbol_name(symbol)[1:])
 
     def _add_units(self):
         """ Add needed units to the model to allow converting time, voltage and calcium in specific units."""

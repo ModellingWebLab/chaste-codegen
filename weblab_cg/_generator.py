@@ -186,7 +186,6 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
     # Create parameter information dicts
     parameter_info = []
     for i, parameter in enumerate(parameters):
-        print(parameter)
         symbol = model.get_symbol_by_ontology_term(*parameter)
         parameter_info.append({
             'index': i,
@@ -264,4 +263,3 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
             'rhs_equations': rhs_equations,
             'states': state_info,
         }))
-
