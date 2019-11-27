@@ -107,9 +107,6 @@ class Printer(sympy.printing.printer.Printer):
         else:
             self._derivative_function = derivative_function
 
-    def _print_Abs(self, expr):
-        return self._prefix + 'fabs(' + self._print(expr.args[0]) + ')'
-
     def _bracket(self, expr, parent_precedence):
         """
         Converts ``expr`` to string, and adds parentheses around the result, if
