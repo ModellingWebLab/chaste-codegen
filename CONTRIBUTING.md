@@ -82,18 +82,16 @@ These docstrings can be fairly simple, but can also make use of [reStructuredTex
 
 ## Infrastructure & configuration files
 
-TODO
-
 
 ### Visual Studio Code Development Environment
 Visual Studio Code (not to be confused with Visual Studio) is a cross-platform free lightweight IDE from Microsoft.
 To use it for weblab_cg development you will need to install the [Python extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
 To be able to run and debug tests you will need to install the [pytest extension](https://code.visualstudio.com/docs/python/testing)
 In your settings you should also make it use he correct vritual environment. This can be done via the UI but it is a bit hit and miss. 
-However there is a settings file If you In the weblab_cg folder called `settings.json` this sits inside the .vscode folder (this should be in the weblab_cg folder if you have opened VS cod there). Note that .vscode is included in our .gitignore so any changes will not be tracked or saved.
+However there is a settings file in the .vscode folder in the weblab_cg folder called `settings.json` this sits inside the .vscode folder (this should be in the weblab_cg folder if you have opened VS cod there). Note that .vscode is included in our .gitignore so any changes will not be tracked or saved.
 Below is an example `settings.json` replace <python_path> with the folder that contains python.exe for your virtual environment (in windows it is in \Scripts and on linux in /bin 
 <project_path> is just the root folder of the weblab_cg code
-`{
+```{
 	"python.pythonPath" : "<python_path>",
 	"python.venvPath": "${workspaceFolder}",
     "python.venvFolders": [
@@ -104,4 +102,4 @@ Below is an example `settings.json` replace <python_path> with the folder that c
     "python.testing.nosetestsEnabled": false,
     "python.testing.pytestEnabled": true,
     "python.testing.pytestArgs": ["--rootdir=.", "--verbose"]
-}`
+}```

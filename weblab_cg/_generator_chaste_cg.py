@@ -2,10 +2,6 @@ import logging
 import time
 import sympy as sp
 import weblab_cg as cg
-from pint import errors
-
-
-logging.getLogger().setLevel(logging.INFO)
 
 
 class ChasteModel(object):
@@ -30,25 +26,37 @@ class ChasteModel(object):
                          'uA_per_uF': [{'prefix': 'micro', 'units': 'ampere'},
                                        {'exponent': '-1', 'prefix': 'micro', 'units': 'farad'}],
                          'uA': [{'prefix': 'micro', 'units': 'ampere'}],
-                         'nanoA': [{'prefix': 'nano', 'units': 'ampere'}],
                          'uF': [{'prefix': 'micro', 'units': 'farad'}],
+                         'uF_per_mm2': [{'prefix': 'micro', 'units': 'farad'}, {
+                             'units': 'metre', 'prefix': 'milli', 'exponent': '-2'}],
                          'millisecond': [{'prefix': 'milli', 'units': 'second'}],
                          'millimolar': [{'units': 'mole', 'prefix': 'milli'}, {'units': 'litre', 'exponent': '-1'}],
                          'millivolt': [{'prefix': 'milli', 'units': 'volt'}]}
 
-    _STIMULUS_UNITS = {'membrane_stimulus_current_period': 'millisecond',
-                       'membrane_stimulus_current_duration': 'millisecond',
-                       'membrane_stimulus_current_amplitude': 'uA_per_cm2',
-                       'membrane_stimulus_current_offset': 'millisecond',
-                       'membrane_stimulus_current_end': 'millisecond',
-                       'membrane_stimulus_current': 'uA_per_cm2',
-                       'membrane_capacitance': 'uF'}
-    _STIMULUS_SECONDARY_UNITS = {'membrane_stimulus_current_amplitude': 'uA_per_uF',
-                                 'membrane_stimulus_current': 'uA',
-                                 'membrane_capacitance': 'uF_per_mm2'}
-    _STIMULUS_TERTIARY_UNITS = {'membrane_stimulus_current_amplitude': 'uA',
-                                'membrane_stimulus_current': 'uA_per_uF'}
-    _STIMULUS_RHS_MULTIPLIER = {'membrane_stimulus_current_amplitude': ' * HeartConfig::Instance()->GetCapacitance()'}
+    _STIM_UNITS = {'membrane_stimulus_current': ['uA_per_cm2', 'uA', 'uA_per_uF'],
+                   'membrane_stimulus_current_period': ['millisecond'],
+                   'membrane_stimulus_current_duration': ['millisecond'],
+                   'membrane_stimulus_current_amplitude': ['uA_per_cm2', 'uA_per_uF', 'uA'],
+                   'membrane_stimulus_current_offset': ['millisecond'],
+                   'membrane_stimulus_current_end': ['millisecond'],
+                   'membrane_capacitance': ['uF', 'uF_per_mm2']}
+
+    _STIM_RHS_MULTIPLIER = {'membrane_stimulus_current_amplitude':
+                            {'uA_per_uF': ' * HeartConfig::Instance()->GetCapacitance()',
+                             'uA': ' * HeartConfig::Instance()->GetCapacitance()'}}
+    _STIM_CONVERSION_RULES = \
+        {'membrane_stimulus_current_amplitude':
+            {'uA':
+                lambda self,
+                current_units,
+                factor, eq:
+                (getattr(self._model.units.ureg, self._STIM_UNITS['membrane_stimulus_current_amplitude'][0]),
+                 factor / self._membrane_capacitance_factor,
+                 sp.Eq(eq.lhs, eq.rhs / self._membrane_capacitance.lhs),
+                 [{'lhs': self._printer.doprint(self._membrane_capacitance.lhs),
+                   'rhs': self._printer.doprint(self._membrane_capacitance.rhs),
+                   'units': str(self._model.units.summarise_units(self._membrane_capacitance.lhs))}]
+                 )}}
 
     def __init__(self, model, class_name, file_name):
         """ Initialise a ChasteModel instance
@@ -93,13 +101,12 @@ class ChasteModel(object):
         self._state_var_conversion_factors, self._state_var_subs = self._get_state_var_conversion()
 
         self._membrane_stimulus_current = self._get_membrane_stimulus_current()
-        self._membrane_stimulus_current_units = self._get_membrane_stimulus_current_units()
-        self._membrane_capacitance, self._membrane_capacitance_factor, self._membrane_stimulus_current_factor, \
-            self._desired_ionic_current_units, self._use_capacitance_i_ionic = self._get_membrane_capacitance()
+        self._membrane_capacitance, self._membrane_capacitance_factor = self._get_membrane_capacitance()
         self._default_stimulus = self._get_stimulus()
 
         self._ionic_derivs = self._get_ionic_derivs()
-        self._equations_for_ionic_vars = self._get_equations_for_ionic_vars()
+        self._equations_for_ionic_vars, self._desired_current_units, self._use_capacitance_i_ionic, \
+            self._membrane_stimulus_current_factor = self._get_equations_for_ionic_vars()
         self._extended_equations_for_ionic_vars = self._get_extended_equations_for_ionic_vars()
 
         self._y_derivatives = self._get_y_derivatives()
@@ -210,81 +217,38 @@ class ChasteModel(object):
                                                 predicate=(self._PYCMLMETA, 'is-self-excitatory'), object_='yes'))) > 0
             return None
 
-    def _get_membrane_stimulus_current_units(self):
-        """ Find the units for the membrane_stimulus_current variable if it exists"""
-        if self._membrane_stimulus_current is not None:
-            return self._model.units.summarise_units(self._membrane_stimulus_current)
-        else:
-            return None
-
     def _get_membrane_capacitance(self):
         """ Find membrane_capacitance if the model has it"""
-        equation, capacitance_factor, stimulus_current_factor, stim_desired_units, use_capacitance_i_ionic = \
-            None, 1.0, 1.0, None, False
-        if self._membrane_stimulus_current is not None:
-            # add membrane_capacitance if the model has it
-            try:
-                # add membrane_capacitance factor
-                membrane_capacitance = self._model.get_symbol_by_ontology_term(self._OXMETA, "membrane_capacitance")
-                try:
-                    current_units = self._model.units.summarise_units(membrane_capacitance)
-                    desired_units = getattr(self._model.units.ureg, self._STIMULUS_UNITS['membrane_capacitance'])
-                    capacitance_factor = \
-                        self._model.units.get_conversion_factor(desired_units, from_unit=current_units)
-                    initial_value = self._model.get_initial_value(membrane_capacitance)
-                    equation = sp.Eq(membrane_capacitance, initial_value)
-                except errors.DimensionalityError:
-                    try:
-                        membrane_capacitance = \
-                            self._model.get_symbol_by_ontology_term(self._OXMETA, "membrane_capacitance")
-                        current_units = self._model.units.summarise_units(membrane_capacitance)
-                        desired_units = \
-                            getattr(self._model.units.ureg, self._STIMULUS_SECONDARY_UNITS['membrane_capacitance'])
+        equation, capacitance_factor = None, 1.0
+        # add membrane_capacitance if the model has it
+        try:
+            # add membrane_capacitance factor
+            membrane_capacitance = self._model.get_symbol_by_ontology_term(self._OXMETA, "membrane_capacitance")
+            if membrane_capacitance is not None:
+                current_units = self._model.units.summarise_units(membrane_capacitance)
+                units_to_try = [getattr(self._model.units.ureg, u) for u in self._STIM_UNITS['membrane_capacitance']]
+                for desired_units in units_to_try:
+                    if current_units.dimensionality == desired_units.dimensionality:
                         capacitance_factor = \
                             self._model.units.get_conversion_factor(desired_units, from_unit=current_units)
                         initial_value = self._model.get_initial_value(membrane_capacitance)
                         equation = sp.Eq(membrane_capacitance, initial_value)
-                    except errors.DimensionalityError:
-                        pass  # Can't convert membrane_capacitance for this model
-            except KeyError:
-                pass  # no membrane_capacitance
-            # get membrane_stimulus_current info
-            try:
-                current_units = self._model.units.summarise_units(self._membrane_stimulus_current)
-                stim_desired_units = getattr(self._model.units.ureg, self._STIMULUS_UNITS['membrane_stimulus_current'])
-                stimulus_current_factor = \
-                    self._model.units.get_conversion_factor(stim_desired_units, from_unit=current_units)
-                use_capacitance_i_ionic = False
-            except errors.DimensionalityError:
-                try:
-                    current_units = self._model.units.summarise_units(self._membrane_stimulus_current)
-                    stim_desired_units = \
-                        getattr(self._model.units.ureg, self._STIMULUS_SECONDARY_UNITS['membrane_stimulus_current'])
-                    stimulus_current_factor = \
-                        self._model.units.get_conversion_factor(stim_desired_units, from_unit=current_units)
-                    use_capacitance_i_ionic = True
-                except errors.DimensionalityError:
-                    try:
-                        current_units = self._model.units.summarise_units(self._membrane_stimulus_current)
-                        stim_desired_units = \
-                            getattr(self._model.units.ureg, self._STIMULUS_TERTIARY_UNITS['membrane_stimulus_current'])
-                        stimulus_current_factor = \
-                            self._model.units.get_conversion_factor(stim_desired_units, from_unit=current_units)
-                        use_capacitance_i_ionic = True
-                    except (errors.DimensionalityError):
-                        pass  # Can't convert stimulus_current_factor for this model
-            return equation, capacitance_factor, stimulus_current_factor, stim_desired_units, use_capacitance_i_ionic
+                        break
+        except KeyError:
+            pass  # no membrane_capacitance
+        return equation, capacitance_factor
 
     def _get_stimulus(self):
         """ Store the stimulus currents in the model"""
         default_stimulus = dict()
-        # Get remaining stimulus current variables If they have metadata use that as key, ortherwise use the name
-        # Exclude _membrane_stimulus_current itself so we can treat it seperately
-        for eq in self._model.get_equations_for([self._membrane_stimulus_current]):
-            if eq.lhs != self._membrane_stimulus_current:
-                ontology_terms = self._model.get_ontology_terms_by_symbol(eq.lhs, self._OXMETA)
-                key = ontology_terms[0] if len(ontology_terms) > 0 else eq.lhs
-                default_stimulus[key] = eq
+        if self._membrane_stimulus_current is not None:
+            # Get remaining stimulus current variables If they have metadata use that as key, ortherwise use the name
+            # Exclude _membrane_stimulus_current itself so we can treat it seperately
+            for eq in self._model.get_equations_for([self._membrane_stimulus_current]):
+                if eq.lhs != self._membrane_stimulus_current:
+                    ontology_terms = self._model.get_ontology_terms_by_symbol(eq.lhs, self._OXMETA)
+                    key = ontology_terms[0] if len(ontology_terms) > 0 else eq.lhs
+                    default_stimulus[key] = eq
         return default_stimulus
 
     def _get_ionic_derivs(self):
@@ -298,23 +262,36 @@ class ChasteModel(object):
         # Only equations with the same (lhs) units as the STIMULUS_CURRENT are kept.
         # Also exclude membrane_stimulus_current variable itself, and default_stimulus equations (if model has those)
         # Manually recurse down the equation graph (bfs style) if no currents are found
+        equations_for_ionic_vars, desired_current_units, stimulus_current_factor = [], None, 1.0
+        units_to_try = [getattr(self._model.units.ureg, u) for u in self._STIM_UNITS['membrane_stimulus_current']]
+        if self._membrane_stimulus_current is not None:
+            membrane_stimulus_units = self._model.units.summarise_units(self._membrane_stimulus_current)
+            units_to_try = [u for u in units_to_try if u.dimensionality == membrane_stimulus_units.dimensionality]
 
-        equations_for_ionic_vars = []
-        equations = self._ionic_derivs
-        while len(equations_for_ionic_vars) == 0:
-            equations = self._model.get_equations_for(equations, recurse=False)
-            equations_for_ionic_vars = [eq for eq in equations
-                                        if ((self._membrane_stimulus_current is None)
-                                            or (eq.lhs != self._membrane_stimulus_current
-                                            and eq not in self._default_stimulus.values()))
-                                        and self._model.units.summarise_units(eq.lhs) ==
-                                        self._membrane_stimulus_current_units
-                                        and eq.lhs not in self._modifiable_parameters]
-            equations = [eq.lhs for eq in equations]
-
+        for units in units_to_try:
+            if len(equations_for_ionic_vars) > 0:
+                break
+            equations, old_equations = self._ionic_derivs, None
+            while len(equations_for_ionic_vars) == 0 and old_equations != equations:
+                old_equations = equations
+                equations = self._model.get_equations_for(equations, recurse=False)
+                equations_for_ionic_vars = [eq for eq in equations
+                                            if ((self._membrane_stimulus_current is None)
+                                                or (eq.lhs != self._membrane_stimulus_current
+                                                and eq not in self._default_stimulus.values()))
+                                            and self._model.units.summarise_units(eq.lhs).dimensionality
+                                            == units.dimensionality
+                                            and eq.lhs not in self._modifiable_parameters
+                                            and eq.lhs not in self._ionic_derivs]
+                equations = [eq.lhs for eq in equations]
+            desired_current_units = units
+        if self._membrane_stimulus_current is not None:
+            stimulus_current_factor = \
+                self._model.units.get_conversion_factor(desired_current_units, from_unit=membrane_stimulus_units)
         # Reverse topological order is more similar (though not necessarily identical) to pycml
         equations_for_ionic_vars.reverse()
-        return equations_for_ionic_vars
+        return equations_for_ionic_vars, desired_current_units, \
+            str(desired_current_units) != self._STIM_UNITS['membrane_stimulus_current'][0], stimulus_current_factor
 
     def _get_extended_equations_for_ionic_vars(self):
         """ Get the equations defining the ionic derivatives and all dependant equations"""
@@ -396,51 +373,27 @@ class ChasteModel(object):
                 formatted_default_stimulus[key] = []
                 factor = 1.0
                 rhs_multiplier = ''
-                units = getattr(self._model.units.ureg, self._STIMULUS_UNITS[key]
-                                ) if key in self._STIMULUS_UNITS else None
                 current_units = self._model.units.summarise_units(eq.lhs)
-                try:
-                    # Try unit conversion -- ultimately this should be sorted in cellmlmanip?
-                    if units is not None and current_units != units:
-                        factor = self._model.units.get_conversion_factor(units, from_unit=current_units)
-                except errors.DimensionalityError:
-                    # This is likely the amplitude
-                    try:
-                        secondary_units =\
-                            getattr(self._model.units.ureg,
-                                    self._STIMULUS_SECONDARY_UNITS[key]
-                                    ) if key in self._STIMULUS_SECONDARY_UNITS else None
-                        if secondary_units is not None and current_units != secondary_units:
-                            factor = self._model.units.get_conversion_factor(secondary_units, from_unit=current_units)
-                            # Just so we can get the correct comment in the output
-                            units = secondary_units
-                            rhs_multiplier = \
-                                self._STIMULUS_RHS_MULTIPLIER[key] if key in self._STIMULUS_RHS_MULTIPLIER else None
-                    except errors.DimensionalityError:
-                        tertiary_units =\
-                            getattr(self._model.units.ureg,
-                                    self._STIMULUS_TERTIARY_UNITS[key]
-                                    ) if key in self._STIMULUS_SECONDARY_UNITS else None
-                        if tertiary_units is not None and current_units != secondary_units \
-                                and self._membrane_capacitance is not None:
-                            dividend_factor = \
-                                self._model.units.get_conversion_factor(tertiary_units, from_unit=current_units)
+                units = None
+                if key in self._STIM_UNITS:
+                    units_to_try = [getattr(self._model.units.ureg, u) for u in self._STIM_UNITS[key]]
+                    rhs_multiplier = ''
+                    for i in range(len(units_to_try)):
+                        if units_to_try[i].dimensionality == current_units.dimensionality:
+                            units = units_to_try[i]
+                            factor = self._model.units.get_conversion_factor(units, from_unit=current_units)
+                            # Check if there is a rhs multiplier for this key and unit combo (e.g. for the amplitude:
+                            if key in self._STIM_RHS_MULTIPLIER and str(units) in self._STIM_RHS_MULTIPLIER[key]:
+                                rhs_multiplier = self._STIM_RHS_MULTIPLIER[key][str(units)]
+                            if key in self._STIM_CONVERSION_RULES and str(units) in self._STIM_CONVERSION_RULES[key]:
+                                additional_eqs = []
 
-                            # membrane_capacitance
-                            divisor_eq = self._membrane_capacitance
-                            divisor_factor = self._membrane_capacitance_factor
-                            divisor_current_units = self._model.units.summarise_units(divisor_eq.lhs)
-
-                            factor = dividend_factor / divisor_factor
-                            # Just so we can get the correct comment in the output
-
-                            # update the equation by deviding rhs by devisor
-                            eq = sp.Eq(eq.lhs, eq.rhs / divisor_eq.lhs)
-                            rhs_multiplier = \
-                                self._STIMULUS_RHS_MULTIPLIER[key] if key in self._STIMULUS_RHS_MULTIPLIER else None
-                            formatted_default_stimulus[key].append({'lhs': self._printer.doprint(divisor_eq.lhs),
-                                                                    'rhs': self._printer.doprint(divisor_eq.rhs),
-                                                                    'units': str(divisor_current_units)})
+                                # Apply conversion rules if we have any
+                                units, factor, eq, additional_eqs = \
+                                    self._STIM_CONVERSION_RULES['membrane_stimulus_current_amplitude']['uA'](
+                                        self, current_units, factor, eq)
+                                formatted_default_stimulus[key].extend(additional_eqs)
+                            break
                 rhs = eq.rhs if factor == 1.0 else factor * eq.rhs
                 self._in_interface.append(eq.lhs)
                 formatted_default_stimulus[key].append({'lhs': self._printer.doprint(eq.lhs),
@@ -454,7 +407,7 @@ class ChasteModel(object):
         return [{'var': self._printer.doprint(eq.lhs),
                  'units': str(self._model.units.summarise_units(eq.lhs)),
                  'conversion_factor':
-                     self._model.units.get_conversion_factor(self._desired_ionic_current_units,
+                     self._model.units.get_conversion_factor(self._desired_current_units,
                                                              from_unit=self._model.units.summarise_units(eq.lhs))}
                 for eq in self._equations_for_ionic_vars]
 
@@ -550,7 +503,8 @@ class ChasteModel(object):
                 if d_eqs[i].lhs.args[0] == self._membrane_voltage_var:
                     is_voltage = True
                     for s in d_eqs[i].rhs.free_symbols:
-                        if self._model.units.dimensionally_equivalent(self._membrane_stimulus_current, s):
+                        if self._desired_current_units.dimensionality == \
+                                self._model.units.summarise_units(s).dimensionality:
                             subs_dict[s] = 0  # other currents = 0
                         else:
                             subs_dict[s] = 1  # other variables = 1
