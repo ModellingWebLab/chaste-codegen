@@ -33,7 +33,7 @@ class TestChasteCG(object):
         return load_chaste_models(model_types=self.model_types(),
                                   ref_path_prefix=['chaste_reference_models', 'develop'], class_name_prefix='Dynamic')
 
-    @pytest.mark.skip(reason="This test is a development tool")
+    # @pytest.mark.skip(reason="This test is a development tool")
     def test_generate_chaste_models_develop(self, tmp_path, chaste_models):
         """ Check generation of Normal models against reference"""
         tmp_path = str(tmp_path)
@@ -350,6 +350,7 @@ class TestChasteCG(object):
                 if self._is_converter(converter[0]):
                     for i in reversed(range(len(equation_list))):
                         if str(converter[1]) == self._get_var_name(equation_list[i][0]):
+                            # remove if it's not used in anything else
                             converter[1] = equation_list[i][1]
                             exclude.append(equation_list[i])
                             subs_dict[self._get_var_name(equation_list[i][0])] = equation_list[i][1]
@@ -394,6 +395,23 @@ class TestChasteCG(object):
                     if expected != new_expected:
                         expected = new_expected
                         del expected[expected_element_index]
+
+        # Maybe converters not recognized as convertersin the expected?
+        if len(expected) != len(generated):
+            differing_generated = [eq for eq in generated if eq[0] not in [e[0] for e in expected]]
+            for i in range(len(differing_generated)):
+
+                delete = False
+                for j in range(len(generated)):
+                    if differing_generated[i] != generated[j]:
+                        old = generated[j][1]
+                        generated[j][1] = generated[j][1].subs({self._get_var_name(differing_generated[i][0]):
+                                                                differing_generated[i][1]})
+                        delete = delete or old != generated[j][1]
+                if delete:
+                    generated_element_index = generated.index(differing_generated[i])
+                    del generated[generated_element_index]
+
         assert len(expected) == len(generated)
 
         # only exception could be name of stimulus current
