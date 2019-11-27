@@ -396,7 +396,7 @@ class TestChasteCG(object):
                         expected = new_expected
                         del expected[expected_element_index]
 
-        # Maybe converters not recognized as convertersin the expected?
+        # Maybe converters not recognized as converters in the expected?
         if len(expected) != len(generated):
             differing_generated = [eq for eq in generated if eq[0] not in [e[0] for e in expected]]
             for i in range(len(differing_generated)):
