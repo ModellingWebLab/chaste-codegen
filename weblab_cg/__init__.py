@@ -29,7 +29,20 @@ from ._generator import (   # noqa
     load_template,
 )
 
-from ._printer import (     # noqa
+from ._generator_chaste_cg import (   # noqa
+    NormalChasteModel,
+    OptChasteModel,
+    Analytic_jChasteModel,
+    Numerical_jChasteModel,
+    BEOptChasteModel,
+)
+
+from ._weblab_printer import (     # noqa
     WebLabPrinter,
+)
+
+
+from ._chaste_printer import (     # noqa
+    ChastePrinter,
 )
 

@@ -263,4 +263,3 @@ def create_weblab_model(path, class_name, model, outputs, parameters):
             'rhs_equations': rhs_equations,
             'states': state_info,
         }))
-
