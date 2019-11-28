@@ -61,41 +61,14 @@ class Printer(sympy.printing.printer.Printer):
         A function that converts derivatives to strings.
 
     """
-    # Dictionary of functions handled by python's `math` module and their corresponding names to be generated
-    _math_functions = {
-        'Abs': 'abs',
-        'acos': 'math.acos',
-        'acosh': 'math.acosh',
-        'asin': 'math.asin',
-        'asinh': 'math.asinh',
-        'atan': 'math.atan',
-        'atan2': 'math.atan2',
-        'atanh': 'math.atanh',
-        'ceiling': 'math.ceil',
-        'cos': 'math.cos',
-        'cosh': 'math.cosh',
-        'exp': 'math.exp',
-        'expm1': 'math.expm1',
-        'factorial': 'math.factorial',
-        'floor': 'math.floor',
-        'log': 'math.log',
-        'log10': 'math.log10',
-        'log1p': 'math.log1p',
-        'log2': 'math.log2',
-        'sin': 'math.sin',
-        'sinh': 'math.sinh',
-        'tan': 'math.tan',
-        'tanh': 'math.tanh',
-    }
-
-    # Dictionary of custom defined functions we are allowed to output and their corresponding names to be generated
-    _custom_functions = dict()
+    # Dictionary of functions we can handle and their corresponding names to be generated
+    _function_names = {}
 
     def __init__(self, symbol_function=None, derivative_function=None):
         super(Printer, self).__init__(None)
 
         # Prefix for functions
-        self._prefix = 'math.'
+        self._prefix = ''
 
         # Symbol and derivative handling (default)
         if symbol_function is None:
@@ -206,13 +179,11 @@ class Printer(sympy.printing.printer.Printer):
 
         # Check if function is known to python math
         name = expr.func.__name__
-        function_name = {**Printer._math_functions, **Printer._custom_functions}
-
         # Convert arguments
         args = self._bracket_args(expr.args, 0)
 
-        if name in function_name:
-            name = function_name[name]
+        if name in self._function_names:
+            name = self._function_names[name]
         else:
             raise ValueError('Unsupported function: ' + str(name))
 
