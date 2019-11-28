@@ -63,32 +63,33 @@ class Printer(sympy.printing.printer.Printer):
     """
     # List of functions handled by python's `math` module
     _math_functions = {
-        'acos',
-        'acosh',
-        'asin',
-        'asinh',
-        'atan',
-        'atan2',
-        'atanh',
-        'ceil',     # called ceiling in sympy
-        'cos',
-        'cosh',
-        'exp',
-        'expm1',
-        'factorial',
-        'floor',
-        'log',
-        'log10',
-        'log1p',
-        'log2',
-        'sin',
-        'sinh',
-        'tan',
-        'tanh',
+        'Abs': 'fabs',
+        'acos': 'acos',
+        'acosh': 'acosh',
+        'asin': 'asin',
+        'asinh': 'asinh',
+        'atan': 'atan',
+        'atan2': 'atan2',
+        'atanh': 'atanh',
+        'ceiling': 'ceil',
+        'cos': 'cos',
+        'cosh': 'cosh',
+        'exp': 'exp',
+        'expm1': 'expm1',
+        'factorial': 'factorial',
+        'floor': 'floor',
+        'log': 'log',
+        'log10': 'log10',
+        'log1p': 'log1p',
+        'log2': 'log2',
+        'sin': 'sin',
+        'sinh': 'sinh',
+        'tan': 'tan',
+        'tanh': 'tanh',
     }
 
     # List of custom defined functions we are allowed to output
-    _custom_functions = set()
+    _custom_functions = dict()
 
     def __init__(self, symbol_function=None, derivative_function=None):
         super(Printer, self).__init__(None)
@@ -106,9 +107,6 @@ class Printer(sympy.printing.printer.Printer):
             self._derivative_function = lambda x: str(x)
         else:
             self._derivative_function = derivative_function
-
-    def _print_Abs(self, expr):
-        return self._prefix + 'fabs(' + self._print(expr.args[0]) + ')'
 
     def _bracket(self, expr, parent_precedence):
         """
@@ -208,9 +206,10 @@ class Printer(sympy.printing.printer.Printer):
 
         # Check if function is known to python math
         name = expr.func.__name__
-        if name == 'ceiling':
-            name = 'ceil'
-        if name not in Printer._math_functions and name not in Printer._custom_functions:
+        function_name = {**Printer._math_functions, **Printer._custom_functions}
+        if name in function_name:
+            name = function_name[name]
+        else:
             raise ValueError('Unsupported function: ' + str(name))
 
         # Convert arguments and return
