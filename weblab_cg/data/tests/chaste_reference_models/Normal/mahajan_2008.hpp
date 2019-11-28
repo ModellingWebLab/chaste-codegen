@@ -1,5 +1,5 @@
-#ifndef TESTMANUALMAHAJAN_2008FROMCELLML_HPP_
-#define TESTMANUALMAHAJAN_2008FROMCELLML_HPP_
+#ifndef CELLMAHAJAN_2008FROMCELLML_HPP_
+#define CELLMAHAJAN_2008FROMCELLML_HPP_
 
 //! @file
 //! 
@@ -19,7 +19,7 @@
 
 #include "AbstractStimulusFunction.hpp"
 
-class TestManualmahajan_2008FromCellML : public AbstractCardiacCell
+class Cellmahajan_2008FromCellML : public AbstractCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -36,8 +36,8 @@ class TestManualmahajan_2008FromCellML : public AbstractCardiacCell
 public:
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    TestManualmahajan_2008FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~TestManualmahajan_2008FromCellML();
+    Cellmahajan_2008FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellmahajan_2008FromCellML();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__Environment__time, const std::vector<double>& rY, std::vector<double>& rDY);
 };
@@ -45,7 +45,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(TestManualmahajan_2008FromCellML)
+CHASTE_CLASS_EXPORT(Cellmahajan_2008FromCellML)
 
 namespace boost
 {
@@ -53,7 +53,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const TestManualmahajan_2008FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, const Cellmahajan_2008FromCellML * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -63,17 +63,17 @@ namespace boost
         
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, TestManualmahajan_2008FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, Cellmahajan_2008FromCellML * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)TestManualmahajan_2008FromCellML(p_solver, p_stimulus);
+            ::new(t)Cellmahajan_2008FromCellML(p_solver, p_stimulus);
         }
         
     }
     
 }
 
-#endif // TESTMANUALMAHAJAN_2008FROMCELLML_HPP_
+#endif // CELLMAHAJAN_2008FROMCELLML_HPP_

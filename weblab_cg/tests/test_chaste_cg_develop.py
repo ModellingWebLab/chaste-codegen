@@ -33,7 +33,7 @@ class TestChasteCG(object):
         return load_chaste_models(model_types=self.model_types(),
                                   ref_path_prefix=['chaste_reference_models', 'develop'], class_name_prefix='Dynamic')
 
-    # @pytest.mark.skip(reason="This test is a development tool")
+    #@pytest.mark.skip(reason="This test is a development tool")
     def test_generate_chaste_models_develop(self, tmp_path, chaste_models):
         """ Check generation of Normal models against reference"""
         tmp_path = str(tmp_path)
@@ -158,28 +158,30 @@ class TestChasteCG(object):
         eq1 = sympy.sympify(eq1)
         eq2 = sympy.sympify(eq2)
 
+        #if is_same(eq1, eq2):
+            #return True
+
+        if eq1.free_symbols != eq2.free_symbols:
+            return False
+
         e1 = sympy.sympify(self._numbers_with_float_precision(str(eq1)))
         e2 = sympy.sympify(self._numbers_with_float_precision(str(eq2)))
         if is_same(e1, e2):
             return True
-        else:
-            if is_same(eq1, eq2):
-                return True
-            if not try_numeric:
+
+        if not try_numeric:
+            return False
+        random.seed(time.time())
+        subs_dict = {}
+        for i in range(1000):
+            for symbol in eq1.free_symbols:
+                random_val = random.uniform(-1000, 1000)
+                subs_dict.update({symbol: random_val})
+            a = sympy.simplify(eq1.subs(subs_dict))
+            b = sympy.simplify(eq2.subs(subs_dict))
+            if not math.isclose(float(a), float(b)):
                 return False
-            if eq1.free_symbols != eq2.free_symbols:
-                return False
-            random.seed(time.time())
-            subs_dict = {}
-            for i in range(1000):
-                for symbol in eq1.free_symbols:
-                    random_val = random.uniform(-1000, 1000)
-                    subs_dict.update({symbol: random_val})
-                a = sympy.simplify(eq1.subs(subs_dict))
-                b = sympy.simplify(eq2.subs(subs_dict))
-                if not math.isclose(float(a), float(b)):
-                    return False
-            return True
+        return True
 
     def _same_with_number(self, line1, line2):
         """ Compare strings comparing numbers pairwise with sympy"""
@@ -326,17 +328,17 @@ class TestChasteCG(object):
         """ Process linking variables, remove from the list and update all relevant equations"""
         # Resolve derivatives
         remove = []
-        for i in reversed(range(len(equation_list))):
-            if self._is_deriv_decl(equation_list[i][0]):
-                if isinstance(equation_list[i][1], sympy.symbol.Symbol):
+        for eq in reversed(equation_list):
+            if self._is_deriv_decl(eq[0]):
+                if isinstance(eq[1], sympy.symbol.Symbol):
                     # See if there are any linkers
-                    for j in reversed(range(len(equation_list))):
-                        if self._get_var_name(equation_list[j][0]) == str(equation_list[i][1]):
-                            equation_list[i][1] = equation_list[j][1]
-                            remove.append(equation_list[j])
+                    for linked_eq in reversed(equation_list):
+                        if self._get_var_name(linked_eq[0]) == str(eq[1]):
+                            eq[1] = linked_eq[1]
+                            remove.append(linked_eq[0])
 
         # Remove linkiners for derivatives
-        equation_list = [x for x in equation_list if x[0] not in [y[0] for y in remove]]
+        equation_list = [x for x in equation_list if x[0] not in remove]
 
         # Resolve converter / linker variables in remaining equations
         converter_vars = [eq for eq in equation_list
@@ -348,16 +350,16 @@ class TestChasteCG(object):
             # If rhs is symobol, see if there is an equation we can subs in
             if isinstance(converter[1], sympy.symbol.Symbol) or isinstance(converter[1] * -1, sympy.symbol.Symbol):
                 if self._is_converter(converter[0]):
-                    for i in reversed(range(len(equation_list))):
-                        if str(converter[1]) == self._get_var_name(equation_list[i][0]):
+                    for eq  in reversed(equation_list):
+                        if str(converter[1]) == self._get_var_name(eq[0]):
                             # remove if it's not used in anything else
-                            converter[1] = equation_list[i][1]
-                            exclude.append(equation_list[i])
-                            subs_dict[self._get_var_name(equation_list[i][0])] = equation_list[i][1]
-                        elif str(converter[1] * -1) == self._get_var_name(equation_list[i][0]):
-                            converter[1] = -equation_list[i][1]
-                            exclude.append(equation_list[i])
-                            subs_dict[self._get_var_name(equation_list[i][0])] = -equation_list[i][1]
+                            converter[1] = eq[1]
+                            exclude.append(eq)
+                            subs_dict[self._get_var_name(eq[0])] = eq[1]
+                        elif str(converter[1] * -1) == self._get_var_name(eq[0]):
+                            converter[1] = -eq[1]
+                            exclude.append(eq)
+                            subs_dict[self._get_var_name(eq[0])] = -eq[1]
             var_name = self._get_var_name(converter[0])
             subs_dict[var_name] = converter[1]
 
@@ -366,6 +368,11 @@ class TestChasteCG(object):
                          for eq in equation_list if eq not in converter_vars + exclude]
 
         return equation_list, subs_dict
+
+    def _different_eqs(self, expected, generated):
+        differing_expected = [eq for eq in expected if eq[0] not in [e[0] for e in generated]]
+        differing_generated = [eq for eq in generated if eq[0] not in [e[0] for e in expected]]
+        return differing_expected, differing_generated
 
     def _check_equation_list(self, expected, generated):
         """ Check expected and generated represent teh same equation"""
@@ -384,7 +391,7 @@ class TestChasteCG(object):
         # The 2 sets of equations should now have the same amount of equations
         # If not we may have a state var conversion still
         if len(expected) != len(generated):
-            differing_expected = [eq for eq in expected if eq[0] not in [e[0] for e in generated]]
+            differing_expected = self._different_eqs(expected, generated)[0]
             for i in range(len(differing_expected)):
                 if len(differing_expected[i][1].args) == 2 and \
                         isinstance(differing_expected[i][1].args[0], sympy.numbers.Float) and \
@@ -398,7 +405,7 @@ class TestChasteCG(object):
 
         # Maybe converters not recognized as converters in the expected?
         if len(expected) != len(generated):
-            differing_generated = [eq for eq in generated if eq[0] not in [e[0] for e in expected]]
+            differing_generated = self._different_eqs(expected, generated)[1]
             for i in range(len(differing_generated)):
 
                 delete = False
@@ -414,12 +421,12 @@ class TestChasteCG(object):
 
         assert len(expected) == len(generated)
 
+        # Variable names assigned to should match;
         # only exception could be name of stimulus current
         if set([eq[0] for eq in expected]) != set([eq[0] for eq in generated]):
 
             # Find the 2 differing lhs. There should be 1 and they should have the same rhs:
-            differing_expected = [eq for eq in expected if eq[0] not in [e[0] for e in generated]]
-            differing_generated = [eq for eq in generated if eq[0] not in [e[0] for e in expected]]
+            differing_expected, differing_generated = self._different_eqs(expected, generated)
             assert len(differing_expected) == len(differing_generated)
 
             update_subs = dict()

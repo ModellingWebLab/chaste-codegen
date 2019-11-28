@@ -21,12 +21,12 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
     
-    double TestManualdemir_model_1994FromCellML::GetIntracellularCalciumConcentration()
+    double Celldemir_model_1994FromCellML::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
     
-    TestManualdemir_model_1994FromCellML::TestManualdemir_model_1994FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Celldemir_model_1994FromCellML::Celldemir_model_1994FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 27,
@@ -35,16 +35,16 @@
     {
         // Time units: millisecond
         // 
-        this->mpSystemInfo = OdeSystemInformation<TestManualdemir_model_1994FromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Celldemir_model_1994FromCellML>::Instance();
         Init();
         
     }
     
-    TestManualdemir_model_1994FromCellML::~TestManualdemir_model_1994FromCellML()
+    Celldemir_model_1994FromCellML::~Celldemir_model_1994FromCellML()
     {
     }
     
-    double TestManualdemir_model_1994FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Celldemir_model_1994FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -134,7 +134,7 @@
         return i_ionic;
     }
     
-    void TestManualdemir_model_1994FromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Celldemir_model_1994FromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -366,7 +366,7 @@
     }
     
 template<>
-void OdeSystemInformation<TestManualdemir_model_1994FromCellML>::Initialise(void)
+void OdeSystemInformation<Celldemir_model_1994FromCellML>::Initialise(void)
 {
     this->mSystemName = "demir_model_1994";
     this->mFreeVariableName = "time";
@@ -513,4 +513,4 @@ void OdeSystemInformation<TestManualdemir_model_1994FromCellML>::Initialise(void
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(TestManualdemir_model_1994FromCellML)
+CHASTE_CLASS_EXPORT(Celldemir_model_1994FromCellML)

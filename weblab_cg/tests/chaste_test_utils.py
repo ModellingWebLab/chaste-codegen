@@ -7,7 +7,7 @@ TIMESTAMP_REGEX = re.compile(r'(//! on .*)')
 COMMENTS_REGEX = re.compile(r'(//.*)')
 
 
-def load_chaste_models(model_types=[], ref_path_prefix=['chaste_reference_models'], class_name_prefix='TestManual'):
+def load_chaste_models(model_types=[], ref_path_prefix=['chaste_reference_models'], class_name_prefix='Cell'):
     """ Load all models"""
     # Get folder with test cellml files
     model_folder = os.path.join(cg.DATA_DIR, 'tests', 'cellml')

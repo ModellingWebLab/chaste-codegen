@@ -307,7 +307,7 @@ class ChasteModel(object):
         return extended_equations_for_ionic_vars
 
     def _get_y_derivatives(self):
-        """ Get derivatives for voltage state variable"""
+        """ Get derivatives for state variables"""
         return sorted(self._model.get_derivative_symbols(),
                       key=lambda state_var: self._state_var_key_order(state_var))
 
@@ -489,6 +489,7 @@ class ChasteModel(object):
             factor = 1.0
             units = self._model.units.summarise_units(d_eqs[i].lhs)
             rhs_divider = ''
+            in_membrane_voltage = d_eqs[i] not in self._derivative_eqs_exlc_voltage
             if isinstance(d_eqs[i].lhs, sp.Derivative):
                 # This is dV/dt
                 # Assign temporary values to variables in order to check the stimulus sign.
@@ -545,7 +546,7 @@ class ChasteModel(object):
                                  'rhs': self._perform_state_var_conv(d_eqs[i].rhs),
                                  'units': units,
                                  'rhs_divider': rhs_divider,
-                                 'in_membrane_voltage': d_eqs[i] not in self._derivative_eqs_exlc_voltage,
+                                 'in_membrane_voltage': in_membrane_voltage,
                                  'is_voltage': is_voltage})
 
         for i in range(len(equations)):
