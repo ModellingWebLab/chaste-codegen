@@ -33,7 +33,7 @@ class TestChasteCG(object):
         return load_chaste_models(model_types=self.model_types(),
                                   ref_path_prefix=['chaste_reference_models', 'develop'], class_name_prefix='Dynamic')
 
-    @pytest.mark.skip(reason="This test is a development tool")
+    #@pytest.mark.skip(reason="This test is a development tool")
     def test_generate_chaste_models_develop(self, tmp_path, chaste_models):
         """ Check generation of Normal models against reference"""
         tmp_path = str(tmp_path)
@@ -369,6 +369,25 @@ class TestChasteCG(object):
 
         return equation_list, subs_dict
 
+    def _resolve_remaining_linkers(self, expected, generated):
+        differing_expected = self._different_eqs(generated, expected)[1]
+        for dif_exp in differing_expected:
+            delete = False
+            for j in range(len(expected)):
+                if dif_exp != expected[j]:
+                    old = expected[j][1]
+                    expected[j][1] = expected[j][1].subs({self._get_var_name(dif_exp[0]):
+                                                            dif_exp[1]})
+                    delete = delete or old != expected[j][1]
+                    for k in range(len(generated)):
+                        if expected[j][0] == generated[k][0]:
+                            generated[k][1] = generated[k][1].subs({self._get_var_name(dif_exp[0]):
+                                                                    dif_exp[1]})
+            if delete:
+                expected_element_index = expected.index(dif_exp)
+                del expected[expected_element_index]
+        return expected, generated
+
     def _different_eqs(self, expected, generated):
         differing_expected = [eq for eq in expected if eq[0] not in [e[0] for e in generated]]
         differing_generated = [eq for eq in generated if eq[0] not in [e[0] for e in expected]]
@@ -405,19 +424,9 @@ class TestChasteCG(object):
 
         # Maybe converters not recognized as converters in the expected?
         if len(expected) != len(generated):
-            differing_generated = self._different_eqs(expected, generated)[1]
-            for i in range(len(differing_generated)):
-
-                delete = False
-                for j in range(len(generated)):
-                    if differing_generated[i] != generated[j]:
-                        old = generated[j][1]
-                        generated[j][1] = generated[j][1].subs({self._get_var_name(differing_generated[i][0]):
-                                                                differing_generated[i][1]})
-                        delete = delete or old != generated[j][1]
-                if delete:
-                    generated_element_index = generated.index(differing_generated[i])
-                    del generated[generated_element_index]
+            (expected, generated) = self._resolve_remaining_linkers(expected, generated)
+        if len(expected) != len(generated):
+            (generated, expected) = self._resolve_remaining_linkers(generated, expected)
 
         assert len(expected) == len(generated)
 
