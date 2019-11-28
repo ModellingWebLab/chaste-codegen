@@ -16,6 +16,8 @@ class WebLabPrinter(Printer):
         'ceiling': 'math.ceil',
         'cos': 'math.cos',
         'cosh': 'math.cosh',
+        'sqrt': 'math.sqrt',
+        'e': 'math.e',
         'exp': 'math.exp',
         'expm1': 'math.expm1',
         'factorial': 'math.factorial',
@@ -24,16 +26,14 @@ class WebLabPrinter(Printer):
         'log10': 'math.log10',
         'log1p': 'math.log1p',
         'log2': 'math.log2',
+        'pi': 'math.pi',
         'sin': 'math.sin',
         'sinh': 'math.sinh',
         'sqrt': 'math.sqrt',
         'tan': 'math.tan',
-        'tanh': 'math.tanh',
+        'tanh': 'math.tanh'
     }
 
     def __init__(self, symbol_function=None, derivative_function=None):
         super().__init__(symbol_function, derivative_function)
-
-        # Prefix for functions
-        self._prefix = 'math.'
 

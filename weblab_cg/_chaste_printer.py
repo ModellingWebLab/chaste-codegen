@@ -29,6 +29,8 @@ class ChastePrinter(Printer):
         'ceiling': 'ceil',
         'cos': 'cos',
         'cosh': 'cosh',
+        'sqrt': 'sqrt',
+        'e': 'e',
         'exp': 'exp',
         'expm1': 'expm1',
         'factorial': 'factorial',
@@ -37,19 +39,18 @@ class ChastePrinter(Printer):
         'log10': 'log10',
         'log1p': 'log1p',
         'log2': 'log2',
+        'pi': 'M_PI',
         'sin': 'sin',
         'sinh': 'sinh',
         'sqrt': 'sqrt',
         'tan': 'tan',
         'tanh': 'tanh',
+
         'GetIntracellularAreaStimulus': 'GetIntracellularAreaStimulus'
     }
 
     def __init__(self, symbol_function=None, derivative_function=None):
         super().__init__(symbol_function, derivative_function)
-
-        # Do not use the math. prefix for functions, as chaste c++ files include an include for this
-        self._prefix = ''
 
     def _print_And(self, expr):
         """ Handles logical And. """

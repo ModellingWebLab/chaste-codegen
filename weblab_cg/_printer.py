@@ -62,13 +62,14 @@ class Printer(sympy.printing.printer.Printer):
 
     """
     # Dictionary of functions we can handle and their corresponding names to be generated
-    _function_names = {}
+    _function_names = {
+        'e': 'math.e',
+        'pi': 'math.pi',
+        'sqrt': 'math.sqrt'
+    }
 
     def __init__(self, symbol_function=None, derivative_function=None):
         super(Printer, self).__init__(None)
-
-        # Prefix for functions
-        self._prefix = 'math.'
 
         # Symbol and derivative handling (default)
         if symbol_function is None:
@@ -159,7 +160,7 @@ class Printer(sympy.printing.printer.Printer):
 
     def _print_Exp1(self, expr):
         """ Handles the sympy E object """
-        return self._prefix + 'e'
+        return self._function_names['e']
 
     def _print_float(self, expr):
         """ Handles Python floats """
@@ -290,7 +291,7 @@ class Printer(sympy.printing.printer.Printer):
 
     def _print_Pi(self, expr):
         """ Handles pi """
-        return self._prefix + 'pi'
+        return self._function_names['pi']
 
     def _print_ternary(self, cond, expr):
         parts = ''
@@ -344,15 +345,14 @@ class Printer(sympy.printing.printer.Printer):
 
         # Handle square root
         if expr.exp is sympy.S.Half:
-            return self._prefix + 'sqrt(' + self._print(expr.base) + ')'
+            return self._function_names['sqrt'] + '(' + self._print(expr.base) + ')'
 
         # Division, only if commutative (following sympy implementation)
         if expr.is_commutative:
             # 1 / sqrt()
             if -expr.exp is sympy.S.Half:
                 return (
-                    '1 / ' + self._prefix
-                    + 'sqrt(' + self._print(expr.base) + ')')
+                    '1 / ' + self._function_names['sqrt'] + '(' + self._print(expr.base) + ')')
 
             # Ordinary division
             if -expr.exp is sympy.S.One:
