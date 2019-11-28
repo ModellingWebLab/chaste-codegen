@@ -63,7 +63,7 @@ class Printer(sympy.printing.printer.Printer):
     """
     # Dictionary of functions handled by python's `math` module and their corresponding names to be generated
     _math_functions = {
-        'Abs': 'fabs',
+        'Abs': (lambda x: 'abs' if x.replace('-', '').isnumeric() else 'fabs'),
         'acos': 'acos',
         'acosh': 'acosh',
         'asin': 'asin',
@@ -207,13 +207,18 @@ class Printer(sympy.printing.printer.Printer):
         # Check if function is known to python math
         name = expr.func.__name__
         function_name = {**Printer._math_functions, **Printer._custom_functions}
+
+        # Convert arguments
+        args = self._bracket_args(expr.args, 0)
+
         if name in function_name:
-            name = function_name[name]
+            if callable(function_name[name]):
+                name = function_name[name](args)
+            else:
+                name = function_name[name]
         else:
             raise ValueError('Unsupported function: ' + str(name))
 
-        # Convert arguments and return
-        args = self._bracket_args(expr.args, 0)
         return self._prefix + name + '(' + args + ')'
 
     # def _print_Infinity(self, expr):

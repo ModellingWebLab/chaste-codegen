@@ -243,3 +243,5 @@ class TestWebLabPrinter(object):
 
     def test_abs(self, p, x, y):
         assert p.doprint(sp.Abs(x + y)) == 'math.fabs(x + y)'
+        assert p.doprint(sp.Abs(3.2, evaluate=False)) == 'math.fabs(3.2)'
+        assert p.doprint(sp.Abs(-3, evaluate=False)) == 'math.abs(-3)'
