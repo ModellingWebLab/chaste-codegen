@@ -27,9 +27,6 @@ class ChastePrinter(Printer):
         # Make sure we can output a call to GetIntracellularAreaStimulus
         Printer._custom_functions.add('GetIntracellularAreaStimulus')
 
-    def _print_Abs(self, expr):
-        return 'fabs(' + self._print(expr.args[0]) + ')'
-
     def _print_And(self, expr):
         """ Handles logical And. """
         my_prec = precedence(expr)

@@ -240,3 +240,6 @@ class TestWebLabPrinter(object):
         e = sp.gamma(x)
         with pytest.raises(ValueError):
             p.doprint(e)
+
+    def test_abs(self, p, x, y):
+        assert p.doprint(sp.Abs(x + y)) == 'math.fabs(x + y)'
