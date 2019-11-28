@@ -61,42 +61,43 @@ class Printer(sympy.printing.printer.Printer):
         A function that converts derivatives to strings.
 
     """
+    _PREFIX = 'math.'
+
     # Dictionary of functions handled by python's `math` module and their corresponding names to be generated
-    # or a lambda expression to generate the name
     _math_functions = {
-        'Abs': (lambda x: 'abs' if x.replace('-', '').isnumeric() else 'fabs'),
-        'acos': 'acos',
-        'acosh': 'acosh',
-        'asin': 'asin',
-        'asinh': 'asinh',
-        'atan': 'atan',
-        'atan2': 'atan2',
-        'atanh': 'atanh',
-        'ceiling': 'ceil',
-        'cos': 'cos',
-        'cosh': 'cosh',
-        'exp': 'exp',
-        'expm1': 'expm1',
-        'factorial': 'factorial',
-        'floor': 'floor',
-        'log': 'log',
-        'log10': 'log10',
-        'log1p': 'log1p',
-        'log2': 'log2',
-        'sin': 'sin',
-        'sinh': 'sinh',
-        'tan': 'tan',
-        'tanh': 'tanh',
+        'Abs': 'abs',
+        'acos': _PREFIX + 'acos',
+        'acosh': _PREFIX + 'acosh',
+        'asin': _PREFIX + 'asin',
+        'asinh': _PREFIX + 'asinh',
+        'atan': _PREFIX + 'atan',
+        'atan2': _PREFIX + 'atan2',
+        'atanh': _PREFIX + 'atanh',
+        'ceiling': _PREFIX + 'ceil',
+        'cos': _PREFIX + 'cos',
+        'cosh': _PREFIX + 'cosh',
+        'exp': _PREFIX + 'exp',
+        'expm1': _PREFIX + 'expm1',
+        'factorial': _PREFIX + 'factorial',
+        'floor': _PREFIX + 'floor',
+        'log': _PREFIX + 'log',
+        'log10': _PREFIX + 'log10',
+        'log1p': _PREFIX + 'log1p',
+        'log2': _PREFIX + 'log2',
+        'sin': _PREFIX + 'sin',
+        'sinh': _PREFIX + 'sinh',
+        'tan': _PREFIX + 'tan',
+        'tanh': _PREFIX + 'tanh',
     }
 
-    # List of custom defined functions we are allowed to output and their corresponding names to be generated
+    # Dictionary of custom defined functions we are allowed to output and their corresponding names to be generated
     _custom_functions = dict()
 
     def __init__(self, symbol_function=None, derivative_function=None):
         super(Printer, self).__init__(None)
 
         # Prefix for functions
-        self._prefix = 'math.'
+        self._prefix = Printer._PREFIX
 
         # Symbol and derivative handling (default)
         if symbol_function is None:
@@ -213,14 +214,11 @@ class Printer(sympy.printing.printer.Printer):
         args = self._bracket_args(expr.args, 0)
 
         if name in function_name:
-            if callable(function_name[name]):
-                name = function_name[name](args)
-            else:
-                name = function_name[name]
+            name = function_name[name]
         else:
             raise ValueError('Unsupported function: ' + str(name))
 
-        return self._prefix + name + '(' + args + ')'
+        return name + '(' + args + ')'
 
     # def _print_Infinity(self, expr):
     #    return 'float(\'inf\')'
