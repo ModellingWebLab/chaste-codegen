@@ -33,7 +33,7 @@ class TestChasteCG(object):
         return load_chaste_models(model_types=self.model_types(),
                                   ref_path_prefix=['chaste_reference_models', 'develop'], class_name_prefix='Dynamic')
 
-    #@pytest.mark.skip(reason="This test is a development tool")
+    @pytest.mark.skip(reason="This test is a development tool")
     def test_generate_chaste_models_develop(self, tmp_path, chaste_models):
         """ Check generation of Normal models against reference"""
         tmp_path = str(tmp_path)
@@ -157,9 +157,6 @@ class TestChasteCG(object):
             return True
         eq1 = sympy.sympify(eq1)
         eq2 = sympy.sympify(eq2)
-
-        #if is_same(eq1, eq2):
-            #return True
 
         if eq1.free_symbols != eq2.free_symbols:
             return False
@@ -350,7 +347,7 @@ class TestChasteCG(object):
             # If rhs is symobol, see if there is an equation we can subs in
             if isinstance(converter[1], sympy.symbol.Symbol) or isinstance(converter[1] * -1, sympy.symbol.Symbol):
                 if self._is_converter(converter[0]):
-                    for eq  in reversed(equation_list):
+                    for eq in reversed(equation_list):
                         if str(converter[1]) == self._get_var_name(eq[0]):
                             # remove if it's not used in anything else
                             converter[1] = eq[1]
@@ -377,7 +374,7 @@ class TestChasteCG(object):
                 if dif_exp != expected[j]:
                     old = expected[j][1]
                     expected[j][1] = expected[j][1].subs({self._get_var_name(dif_exp[0]):
-                                                            dif_exp[1]})
+                                                          dif_exp[1]})
                     delete = delete or old != expected[j][1]
                     for k in range(len(generated)):
                         if expected[j][0] == generated[k][0]:
