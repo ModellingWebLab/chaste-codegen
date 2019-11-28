@@ -39,6 +39,7 @@ class ChastePrinter(Printer):
         'log2': 'log2',
         'sin': 'sin',
         'sinh': 'sinh',
+        'sqrt': 'sqrt',
         'tan': 'tan',
         'tanh': 'tanh',
         'GetIntracellularAreaStimulus': 'GetIntracellularAreaStimulus'

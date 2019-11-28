@@ -68,7 +68,7 @@ class Printer(sympy.printing.printer.Printer):
         super(Printer, self).__init__(None)
 
         # Prefix for functions
-        self._prefix = ''
+        self._prefix = 'math.'
 
         # Symbol and derivative handling (default)
         if symbol_function is None:

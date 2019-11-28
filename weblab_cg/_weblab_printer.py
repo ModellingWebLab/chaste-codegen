@@ -26,6 +26,7 @@ class WebLabPrinter(Printer):
         'log2': 'math.log2',
         'sin': 'math.sin',
         'sinh': 'math.sinh',
+        'sqrt': 'math.sqrt',
         'tan': 'math.tan',
         'tanh': 'math.tanh',
     }
