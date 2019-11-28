@@ -61,33 +61,31 @@ class Printer(sympy.printing.printer.Printer):
         A function that converts derivatives to strings.
 
     """
-    _PREFIX = 'math.'
-
     # Dictionary of functions handled by python's `math` module and their corresponding names to be generated
     _math_functions = {
         'Abs': 'abs',
-        'acos': _PREFIX + 'acos',
-        'acosh': _PREFIX + 'acosh',
-        'asin': _PREFIX + 'asin',
-        'asinh': _PREFIX + 'asinh',
-        'atan': _PREFIX + 'atan',
-        'atan2': _PREFIX + 'atan2',
-        'atanh': _PREFIX + 'atanh',
-        'ceiling': _PREFIX + 'ceil',
-        'cos': _PREFIX + 'cos',
-        'cosh': _PREFIX + 'cosh',
-        'exp': _PREFIX + 'exp',
-        'expm1': _PREFIX + 'expm1',
-        'factorial': _PREFIX + 'factorial',
-        'floor': _PREFIX + 'floor',
-        'log': _PREFIX + 'log',
-        'log10': _PREFIX + 'log10',
-        'log1p': _PREFIX + 'log1p',
-        'log2': _PREFIX + 'log2',
-        'sin': _PREFIX + 'sin',
-        'sinh': _PREFIX + 'sinh',
-        'tan': _PREFIX + 'tan',
-        'tanh': _PREFIX + 'tanh',
+        'acos': 'math.acos',
+        'acosh': 'math.acosh',
+        'asin': 'math.asin',
+        'asinh': 'math.asinh',
+        'atan': 'math.atan',
+        'atan2': 'math.atan2',
+        'atanh': 'math.atanh',
+        'ceiling': 'math.ceil',
+        'cos': 'math.cos',
+        'cosh': 'math.cosh',
+        'exp': 'math.exp',
+        'expm1': 'math.expm1',
+        'factorial': 'math.factorial',
+        'floor': 'math.floor',
+        'log': 'math.log',
+        'log10': 'math.log10',
+        'log1p': 'math.log1p',
+        'log2': 'math.log2',
+        'sin': 'math.sin',
+        'sinh': 'math.sinh',
+        'tan': 'math.tan',
+        'tanh': 'math.tanh',
     }
 
     # Dictionary of custom defined functions we are allowed to output and their corresponding names to be generated
@@ -97,7 +95,7 @@ class Printer(sympy.printing.printer.Printer):
         super(Printer, self).__init__(None)
 
         # Prefix for functions
-        self._prefix = Printer._PREFIX
+        self._prefix = 'math.'
 
         # Symbol and derivative handling (default)
         if symbol_function is None:
