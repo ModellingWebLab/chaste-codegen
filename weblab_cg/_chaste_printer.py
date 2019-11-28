@@ -25,7 +25,7 @@ class ChastePrinter(Printer):
         self._prefix = ''
 
         # Make sure we can output a call to GetIntracellularAreaStimulus
-        Printer._custom_functions.add('GetIntracellularAreaStimulus')
+        Printer._custom_functions.update({'GetIntracellularAreaStimulus': 'GetIntracellularAreaStimulus'})
 
     def _print_And(self, expr):
         """ Handles logical And. """
