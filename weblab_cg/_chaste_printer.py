@@ -17,18 +17,40 @@ class ChastePrinter(Printer):
         A function that converts derivatives to strings.
 
     """
+    _function_names = {
+        'Abs': 'fabs',
+        'acos': 'acos',
+        'acosh': 'acosh',
+        'asin': 'asin',
+        'asinh': 'asinh',
+        'atan': 'atan',
+        'atan2': 'atan2',
+        'atanh': 'atanh',
+        'ceiling': 'ceil',
+        'cos': 'cos',
+        'cosh': 'cosh',
+        'sqrt': 'sqrt',
+        'e': 'e',
+        'exp': 'exp',
+        'expm1': 'expm1',
+        'factorial': 'factorial',
+        'floor': 'floor',
+        'log': 'log',
+        'log10': 'log10',
+        'log1p': 'log1p',
+        'log2': 'log2',
+        'pi': 'M_PI',
+        'sin': 'sin',
+        'sinh': 'sinh',
+        'sqrt': 'sqrt',
+        'tan': 'tan',
+        'tanh': 'tanh',
+
+        'GetIntracellularAreaStimulus': 'GetIntracellularAreaStimulus'
+    }
 
     def __init__(self, symbol_function=None, derivative_function=None):
         super().__init__(symbol_function, derivative_function)
-
-        # Do not use the math. prefix for functions, as chaste c++ files include an include for this
-        self._prefix = ''
-
-        # Make sure we can output a call to GetIntracellularAreaStimulus
-        Printer._custom_functions.add('GetIntracellularAreaStimulus')
-
-    def _print_Abs(self, expr):
-        return 'fabs(' + self._print(expr.args[0]) + ')'
 
     def _print_And(self, expr):
         """ Handles logical And. """
