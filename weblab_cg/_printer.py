@@ -61,7 +61,8 @@ class Printer(sympy.printing.printer.Printer):
         A function that converts derivatives to strings.
 
     """
-    # Dictionary of functions handled by python's `math` module and their corresponding names to be generated
+    # Dictionary of functions handled by python's `math` module and their corresponding names to be generated 
+    # or a lambda expression to generate the name
     _math_functions = {
         'Abs': (lambda x: 'abs' if x.replace('-', '').isnumeric() else 'fabs'),
         'acos': 'acos',
