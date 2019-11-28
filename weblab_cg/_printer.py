@@ -61,7 +61,7 @@ class Printer(sympy.printing.printer.Printer):
         A function that converts derivatives to strings.
 
     """
-    # List of functions handled by python's `math` module
+    # Dictionary of functions handled by python's `math` module and their corresponding names to be generated
     _math_functions = {
         'Abs': 'fabs',
         'acos': 'acos',
@@ -88,7 +88,7 @@ class Printer(sympy.printing.printer.Printer):
         'tanh': 'tanh',
     }
 
-    # List of custom defined functions we are allowed to output
+    # List of custom defined functions we are allowed to output and their corresponding names to be generated
     _custom_functions = dict()
 
     def __init__(self, symbol_function=None, derivative_function=None):
