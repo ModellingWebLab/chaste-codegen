@@ -61,40 +61,15 @@ class Printer(sympy.printing.printer.Printer):
         A function that converts derivatives to strings.
 
     """
-    # List of functions handled by python's `math` module
-    _math_functions = {
-        'acos',
-        'acosh',
-        'asin',
-        'asinh',
-        'atan',
-        'atan2',
-        'atanh',
-        'ceil',     # called ceiling in sympy
-        'cos',
-        'cosh',
-        'exp',
-        'expm1',
-        'factorial',
-        'floor',
-        'log',
-        'log10',
-        'log1p',
-        'log2',
-        'sin',
-        'sinh',
-        'tan',
-        'tanh',
+    # Dictionary of functions we can handle and their corresponding names to be generated
+    _function_names = {
+        'e': 'math.e',
+        'pi': 'math.pi',
+        'sqrt': 'math.sqrt'
     }
-
-    # List of custom defined functions we are allowed to output
-    _custom_functions = set()
 
     def __init__(self, symbol_function=None, derivative_function=None):
         super(Printer, self).__init__(None)
-
-        # Prefix for functions
-        self._prefix = 'math.'
 
         # Symbol and derivative handling (default)
         if symbol_function is None:
@@ -106,9 +81,6 @@ class Printer(sympy.printing.printer.Printer):
             self._derivative_function = lambda x: str(x)
         else:
             self._derivative_function = derivative_function
-
-    def _print_Abs(self, expr):
-        return self._prefix + 'fabs(' + self._print(expr.args[0]) + ')'
 
     def _bracket(self, expr, parent_precedence):
         """
@@ -188,7 +160,7 @@ class Printer(sympy.printing.printer.Printer):
 
     def _print_Exp1(self, expr):
         """ Handles the sympy E object """
-        return self._prefix + 'e'
+        return self._function_names['e']
 
     def _print_float(self, expr):
         """ Handles Python floats """
@@ -208,14 +180,15 @@ class Printer(sympy.printing.printer.Printer):
 
         # Check if function is known to python math
         name = expr.func.__name__
-        if name == 'ceiling':
-            name = 'ceil'
-        if name not in Printer._math_functions and name not in Printer._custom_functions:
+        # Convert arguments
+        args = self._bracket_args(expr.args, 0)
+
+        if name in self._function_names:
+            name = self._function_names[name]
+        else:
             raise ValueError('Unsupported function: ' + str(name))
 
-        # Convert arguments and return
-        args = self._bracket_args(expr.args, 0)
-        return self._prefix + name + '(' + args + ')'
+        return name + '(' + args + ')'
 
     # def _print_Infinity(self, expr):
     #    return 'float(\'inf\')'
@@ -318,7 +291,7 @@ class Printer(sympy.printing.printer.Printer):
 
     def _print_Pi(self, expr):
         """ Handles pi """
-        return self._prefix + 'pi'
+        return self._function_names['pi']
 
     def _print_ternary(self, cond, expr):
         parts = ''
@@ -372,15 +345,14 @@ class Printer(sympy.printing.printer.Printer):
 
         # Handle square root
         if expr.exp is sympy.S.Half:
-            return self._prefix + 'sqrt(' + self._print(expr.base) + ')'
+            return self._function_names['sqrt'] + '(' + self._print(expr.base) + ')'
 
         # Division, only if commutative (following sympy implementation)
         if expr.is_commutative:
             # 1 / sqrt()
             if -expr.exp is sympy.S.Half:
                 return (
-                    '1 / ' + self._prefix
-                    + 'sqrt(' + self._print(expr.base) + ')')
+                    '1 / ' + self._function_names['sqrt'] + '(' + self._print(expr.base) + ')')
 
             # Ordinary division
             if -expr.exp is sympy.S.One:
