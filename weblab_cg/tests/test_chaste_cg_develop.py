@@ -165,9 +165,9 @@ class TestChasteCG(object):
         e2 = sympy.sympify(self._numbers_with_float_precision(str(eq2)))
         if is_same(e1, e2):
             return True
-
         if not try_numeric:
             return False
+
         random.seed(time.time())
         subs_dict = {}
         for i in range(1000):
@@ -270,6 +270,7 @@ class TestChasteCG(object):
         """ Do needed substitutions and parse brackets to handle conditionals (cond?exp:exp) """
         # pow->Pow ceil -> ceiling in sympy
         equation_str = equation_str.replace("pow(", 'Pow(').replace("ceil(", 'ceiling(').replace('fabs(', 'Abs(')
+        equation_str = equation_str.replace('M_PI', '3.141592')
         # This might be a C++ call with class members/pointer accessors?
         equation_str = \
             equation_str.replace('HeartConfig::Instance()->GetCapacitance()', 'HeartConfig_Instance_GetCapacitance')
@@ -367,7 +368,7 @@ class TestChasteCG(object):
         return equation_list, subs_dict
 
     def _resolve_remaining_linkers(self, expected, generated):
-        differing_expected = self._different_eqs(generated, expected)[1]
+        differing_expected = self._different_eqs(expected, generated)
         for dif_exp in differing_expected:
             delete = False
             for j in range(len(expected)):
@@ -387,8 +388,7 @@ class TestChasteCG(object):
 
     def _different_eqs(self, expected, generated):
         differing_expected = [eq for eq in expected if eq[0] not in [e[0] for e in generated]]
-        differing_generated = [eq for eq in generated if eq[0] not in [e[0] for e in expected]]
-        return differing_expected, differing_generated
+        return differing_expected
 
     def _check_equation_list(self, expected, generated):
         """ Check expected and generated represent teh same equation"""
@@ -407,7 +407,7 @@ class TestChasteCG(object):
         # The 2 sets of equations should now have the same amount of equations
         # If not we may have a state var conversion still
         if len(expected) != len(generated):
-            differing_expected = self._different_eqs(expected, generated)[0]
+            differing_expected = self._different_eqs(expected, generated)
             for i in range(len(differing_expected)):
                 if len(differing_expected[i][1].args) == 2 and \
                         isinstance(differing_expected[i][1].args[0], sympy.numbers.Float) and \
@@ -432,7 +432,8 @@ class TestChasteCG(object):
         if set([eq[0] for eq in expected]) != set([eq[0] for eq in generated]):
 
             # Find the 2 differing lhs. There should be 1 and they should have the same rhs:
-            differing_expected, differing_generated = self._different_eqs(expected, generated)
+            differing_expected = self._different_eqs(expected, generated)
+            differing_generated = self._different_eqs(generated, expected)
             assert len(differing_expected) == len(differing_generated)
 
             update_subs = dict()
