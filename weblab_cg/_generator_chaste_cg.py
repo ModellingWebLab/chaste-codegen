@@ -2,7 +2,7 @@ import logging
 import time
 import sympy as sp
 import weblab_cg as cg
-
+from pint import errors
 
 class ChasteModel(object):
     """ Holds information about a cellml model for which chaste code is to be generated.
@@ -196,8 +196,11 @@ class ChasteModel(object):
     def _get_state_var_conversion(self):
         """ Get conversion factors and substitution dictionary for state variables in Chaste"""
         def sv_conv(sv):
-            return round(self._model.units.get_conversion_factor(self._get_desired_units(sv),
-                         from_unit=self._model.units.summarise_units(sv)), 14)
+            try:
+                return round(self._model.units.get_conversion_factor(self._get_desired_units(sv),
+                             from_unit=self._model.units.summarise_units(sv)), 14)
+            except errors.DimensionalityError:
+                return 1.0
 
         state_var_factors = {sv: sv_conv(sv) for sv in self._state_vars if sv_conv(sv) != 1.0}
         state_var_subs = {sv: 1 / fac * sv for sv, fac in state_var_factors.items()}
@@ -516,7 +519,10 @@ class ChasteModel(object):
                 divisor_unit = self._get_desired_units(d_eqs[i].lhs.args[1][0])
                 units = dividend_unit / divisor_unit
                 units_from = self._model.units.summarise_units(d_eqs[i].lhs)
-                factor = self._model.units.get_conversion_factor(units, from_unit=units_from)
+                try:
+                    factor = self._model.units.get_conversion_factor(units, from_unit=units_from)
+                except errors.DimensionalityError:
+                    factor = 1.0
             if d_eqs[i].lhs == self._membrane_stimulus_current:
                 factor = 1.0
                 # strip out var from time variable name as printing will add it back later

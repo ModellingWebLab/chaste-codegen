@@ -33,7 +33,7 @@ class TestChasteCG(object):
         return load_chaste_models(model_types=self.model_types(),
                                   ref_path_prefix=['chaste_reference_models', 'develop'], class_name_prefix='Dynamic')
 
-    @pytest.mark.skip(reason="This test is a development tool")
+    #@pytest.mark.skip(reason="This test is a development tool")
     def test_generate_chaste_models_develop(self, tmp_path, chaste_models):
         """ Check generation of Normal models against reference"""
         tmp_path = str(tmp_path)
@@ -270,7 +270,7 @@ class TestChasteCG(object):
         """ Do needed substitutions and parse brackets to handle conditionals (cond?exp:exp) """
         # pow->Pow ceil -> ceiling in sympy
         equation_str = equation_str.replace("pow(", 'Pow(').replace("ceil(", 'ceiling(').replace('fabs(', 'Abs(')
-        equation_str = equation_str.replace('M_PI', '3.141592')
+        equation_str = equation_str.replace('M_PI', 'pi')
         # This might be a C++ call with class members/pointer accessors?
         equation_str = \
             equation_str.replace('HeartConfig::Instance()->GetCapacitance()', 'HeartConfig_Instance_GetCapacitance')
