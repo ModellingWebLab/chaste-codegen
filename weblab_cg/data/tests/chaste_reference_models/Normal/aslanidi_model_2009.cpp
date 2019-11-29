@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> TestManualaslanidi_model_2009FromCellML::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellaslanidi_model_2009FromCellML::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_membrane__Cm = 5e-05; // nanoF
@@ -39,7 +39,7 @@
         return p_cellml_stim;
     }
     
-    TestManualaslanidi_model_2009FromCellML::TestManualaslanidi_model_2009FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellaslanidi_model_2009FromCellML::Cellaslanidi_model_2009FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 29,
@@ -48,7 +48,7 @@
     {
         // Time units: millisecond
         // 
-        this->mpSystemInfo = OdeSystemInformation<TestManualaslanidi_model_2009FromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellaslanidi_model_2009FromCellML>::Instance();
         Init();
         
         // We have a default stimulus specified in the CellML file metadata
@@ -56,11 +56,11 @@
         
     }
     
-    TestManualaslanidi_model_2009FromCellML::~TestManualaslanidi_model_2009FromCellML()
+    Cellaslanidi_model_2009FromCellML::~Cellaslanidi_model_2009FromCellML()
     {
     }
     
-    double TestManualaslanidi_model_2009FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellaslanidi_model_2009FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -159,7 +159,7 @@
         return i_ionic;
     }
     
-    void TestManualaslanidi_model_2009FromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Cellaslanidi_model_2009FromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -416,7 +416,7 @@
     }
     
 template<>
-void OdeSystemInformation<TestManualaslanidi_model_2009FromCellML>::Initialise(void)
+void OdeSystemInformation<Cellaslanidi_model_2009FromCellML>::Initialise(void)
 {
     this->mSystemName = "aslanidi_model_2009";
     this->mFreeVariableName = "environment__time";
@@ -573,4 +573,4 @@ void OdeSystemInformation<TestManualaslanidi_model_2009FromCellML>::Initialise(v
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(TestManualaslanidi_model_2009FromCellML)
+CHASTE_CLASS_EXPORT(Cellaslanidi_model_2009FromCellML)

@@ -1,5 +1,5 @@
-#ifndef TESTMANUALLUO_RUDY_1994FROMCELLML_HPP_
-#define TESTMANUALLUO_RUDY_1994FROMCELLML_HPP_
+#ifndef CELLLUO_RUDY_1994FROMCELLML_HPP_
+#define CELLLUO_RUDY_1994FROMCELLML_HPP_
 
 //! @file
 //! 
@@ -19,7 +19,7 @@
 
 #include "AbstractStimulusFunction.hpp"
 
-class TestManualluo_rudy_1994FromCellML : public AbstractCardiacCell
+class Cellluo_rudy_1994FromCellML : public AbstractCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -36,8 +36,8 @@ class TestManualluo_rudy_1994FromCellML : public AbstractCardiacCell
 public:
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    TestManualluo_rudy_1994FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~TestManualluo_rudy_1994FromCellML();
+    Cellluo_rudy_1994FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellluo_rudy_1994FromCellML();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY);
 };
@@ -45,7 +45,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(TestManualluo_rudy_1994FromCellML)
+CHASTE_CLASS_EXPORT(Cellluo_rudy_1994FromCellML)
 
 namespace boost
 {
@@ -53,7 +53,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const TestManualluo_rudy_1994FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, const Cellluo_rudy_1994FromCellML * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -63,17 +63,17 @@ namespace boost
         
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, TestManualluo_rudy_1994FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, Cellluo_rudy_1994FromCellML * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)TestManualluo_rudy_1994FromCellML(p_solver, p_stimulus);
+            ::new(t)Cellluo_rudy_1994FromCellML(p_solver, p_stimulus);
         }
         
     }
     
 }
 
-#endif // TESTMANUALLUO_RUDY_1994FROMCELLML_HPP_
+#endif // CELLLUO_RUDY_1994FROMCELLML_HPP_

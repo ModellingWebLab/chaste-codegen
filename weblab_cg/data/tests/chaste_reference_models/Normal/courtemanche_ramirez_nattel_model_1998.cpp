@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> TestManualcourtemanche_ramirez_nattel_model_1998FromCellML::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellcourtemanche_ramirez_nattel_model_1998FromCellML::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_membrane__Cm = 100.0; // picoF
@@ -39,7 +39,7 @@
         return p_cellml_stim;
     }
     
-    TestManualcourtemanche_ramirez_nattel_model_1998FromCellML::TestManualcourtemanche_ramirez_nattel_model_1998FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellcourtemanche_ramirez_nattel_model_1998FromCellML::Cellcourtemanche_ramirez_nattel_model_1998FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 21,
@@ -48,7 +48,7 @@
     {
         // Time units: millisecond
         // 
-        this->mpSystemInfo = OdeSystemInformation<TestManualcourtemanche_ramirez_nattel_model_1998FromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellcourtemanche_ramirez_nattel_model_1998FromCellML>::Instance();
         Init();
         
         // We have a default stimulus specified in the CellML file metadata
@@ -56,11 +56,11 @@
         
     }
     
-    TestManualcourtemanche_ramirez_nattel_model_1998FromCellML::~TestManualcourtemanche_ramirez_nattel_model_1998FromCellML()
+    Cellcourtemanche_ramirez_nattel_model_1998FromCellML::~Cellcourtemanche_ramirez_nattel_model_1998FromCellML()
     {
     }
     
-    double TestManualcourtemanche_ramirez_nattel_model_1998FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellcourtemanche_ramirez_nattel_model_1998FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -148,7 +148,7 @@
         return i_ionic;
     }
     
-    void TestManualcourtemanche_ramirez_nattel_model_1998FromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Cellcourtemanche_ramirez_nattel_model_1998FromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -367,7 +367,7 @@
     }
     
 template<>
-void OdeSystemInformation<TestManualcourtemanche_ramirez_nattel_model_1998FromCellML>::Initialise(void)
+void OdeSystemInformation<Cellcourtemanche_ramirez_nattel_model_1998FromCellML>::Initialise(void)
 {
     this->mSystemName = "courtemanche_ramirez_nattel_model_1998";
     this->mFreeVariableName = "environment__time";
@@ -484,4 +484,4 @@ void OdeSystemInformation<TestManualcourtemanche_ramirez_nattel_model_1998FromCe
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(TestManualcourtemanche_ramirez_nattel_model_1998FromCellML)
+CHASTE_CLASS_EXPORT(Cellcourtemanche_ramirez_nattel_model_1998FromCellML)

@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> TestManualbondarenko_model_2004_apexFromCellML::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellbondarenko_model_2004_apexFromCellML::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude = -80.0 * HeartConfig::Instance()->GetCapacitance(); // uA_per_uF
@@ -38,7 +38,7 @@
         return p_cellml_stim;
     }
     
-    TestManualbondarenko_model_2004_apexFromCellML::TestManualbondarenko_model_2004_apexFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellbondarenko_model_2004_apexFromCellML::Cellbondarenko_model_2004_apexFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 41,
@@ -47,7 +47,7 @@
     {
         // Time units: millisecond
         // 
-        this->mpSystemInfo = OdeSystemInformation<TestManualbondarenko_model_2004_apexFromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellbondarenko_model_2004_apexFromCellML>::Instance();
         Init();
         
         // We have a default stimulus specified in the CellML file metadata
@@ -55,11 +55,11 @@
         
     }
     
-    TestManualbondarenko_model_2004_apexFromCellML::~TestManualbondarenko_model_2004_apexFromCellML()
+    Cellbondarenko_model_2004_apexFromCellML::~Cellbondarenko_model_2004_apexFromCellML()
     {
     }
     
-    double TestManualbondarenko_model_2004_apexFromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellbondarenko_model_2004_apexFromCellML::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -156,7 +156,7 @@
         return i_ionic;
     }
     
-    void TestManualbondarenko_model_2004_apexFromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Cellbondarenko_model_2004_apexFromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -477,7 +477,7 @@
     }
     
 template<>
-void OdeSystemInformation<TestManualbondarenko_model_2004_apexFromCellML>::Initialise(void)
+void OdeSystemInformation<Cellbondarenko_model_2004_apexFromCellML>::Initialise(void)
 {
     this->mSystemName = "bondarenko_model_2004_apex";
     this->mFreeVariableName = "environment__time";
@@ -696,4 +696,4 @@ void OdeSystemInformation<TestManualbondarenko_model_2004_apexFromCellML>::Initi
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(TestManualbondarenko_model_2004_apexFromCellML)
+CHASTE_CLASS_EXPORT(Cellbondarenko_model_2004_apexFromCellML)
