@@ -64,6 +64,7 @@ class Printer(sympy.printing.printer.Printer):
     # Dictionary of functions we can handle and their corresponding names to be generated
     _function_names = {
         'e': 'math.e',
+        'nan': 'float(\'nan\')',
         'pi': 'math.pi',
         'sqrt': 'math.sqrt'
     }
@@ -314,7 +315,7 @@ class Printer(sympy.printing.printer.Printer):
 
         # Assign NaN if no conditions hold
         # If a condition `True` is found, use its expression instead
-        other = 'float(\'nan\')'
+        other = self._function_names['nan']
 
         parts = '('
         brackets = 1

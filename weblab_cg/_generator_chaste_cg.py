@@ -4,6 +4,7 @@ import sympy as sp
 import weblab_cg as cg
 from pint import errors
 
+
 class ChasteModel(object):
     """ Holds information about a cellml model for which chaste code is to be generated.
 

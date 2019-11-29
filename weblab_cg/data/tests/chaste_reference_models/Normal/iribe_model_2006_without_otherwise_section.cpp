@@ -206,7 +206,7 @@
         const double var_Force__g_01 = (2.0 - var_Force__SL_norm) * var_Force__g_XB; // per_second
         const double var_Force__g_12 = 2.0 * (2.0 - var_Force__SL_norm) * var_Force__g_XB; // per_second
         const double var_Force__g_23 = 3.0 * (2.0 - var_Force__SL_norm) * var_Force__g_XB; // per_second
-        const double var_Force__phi_SL = (((var_Force__SL >= 1.7) && (var_Force__SL <= 2.0)) ? (-0.42857142857142855 + 0.7142857142857143 * var_Force__SL) : (((var_Force__SL <= 2.2) && (var_Force__SL > 2.0)) ? (1.0) : (((var_Force__SL <= 2.3) && (var_Force__SL > 2.2)) ? (2.5714285714285716 - 0.7142857142857143 * var_Force__SL) : (float('nan'))))); // dimensionless
+        const double var_Force__phi_SL = (((var_Force__SL >= 1.7) && (var_Force__SL <= 2.0)) ? (-0.42857142857142855 + 0.7142857142857143 * var_Force__SL) : (((var_Force__SL <= 2.2) && (var_Force__SL > 2.0)) ? (1.0) : (((var_Force__SL <= 2.3) && (var_Force__SL > 2.2)) ? (2.5714285714285716 - 0.7142857142857143 * var_Force__SL) : (NAN)))); // dimensionless
         const double var_Force__sigma_paths = 6.0 * pow(var_Force__g_XB, 3) + 6.0 * pow(var_Force__g_XB, 2) * var_Force__f_01 + 1.0 * var_Force__f_01 * var_Force__f_12 * var_Force__f_23 + 3.0 * var_Force__f_01 * var_Force__f_12 * var_Force__g_XB; // dimensionless
         const double var_Force__P_1_max = 6.0 * pow(var_Force__g_XB, 2) * var_Force__f_01 / var_Force__sigma_paths; // dimensionless
         const double var_Force__P_2_max = 3.0 * var_Force__f_01 * var_Force__f_12 * var_Force__g_XB / var_Force__sigma_paths; // dimensionless
