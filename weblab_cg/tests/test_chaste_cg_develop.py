@@ -386,9 +386,9 @@ class TestChasteCG(object):
                 del expected[expected_element_index]
         return expected, generated
 
-    def _different_eqs(self, expected, generated):
-        differing_expected = [eq for eq in expected if eq[0] not in [e[0] for e in generated]]
-        return differing_expected
+    def _different_eqs(self, main_eqs, filter_eqs):
+        filter_lhss = [eq[0] for eq in filter_eqs]
+        return [eq for eq in main_eqs if eq[0] not in filter_lhss]
 
     def _check_equation_list(self, expected, generated):
         """ Check expected and generated represent teh same equation"""
