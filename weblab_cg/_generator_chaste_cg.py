@@ -2,7 +2,6 @@ import logging
 import time
 import sympy as sp
 import weblab_cg as cg
-from pint import errors
 from copy import deepcopy
 
 
@@ -50,7 +49,7 @@ class ChasteModel(object):
                    'membrane_capacitance': [{'units': 'uF'}, {'units': 'uF_per_mm2'}]}
 
     _STIM_RHS_MULTIPLIER = {'membrane_stimulus_current_amplitude':
-                            {'uA_per_uF': ' * ' +_HEARTCONFIG_GETCAPACITANCE,
+                            {'uA_per_uF': ' * ' + _HEARTCONFIG_GETCAPACITANCE,
                              'uA': ' * ' + _HEARTCONFIG_GETCAPACITANCE}}
     _STIM_CONVERSION_RULES = \
         {'membrane_stimulus_current_amplitude':
@@ -216,7 +215,7 @@ class ChasteModel(object):
             current_units = self._model.units.summarise_units(sv)
             factor = 1.0
             if desired_units.dimensionality == current_units.dimensionality:
-                    factor = round(self._model.units.get_conversion_factor(desired_units, from_unit=current_units), 14)
+                factor = round(self._model.units.get_conversion_factor(desired_units, from_unit=current_units), 14)
             return factor
 
         state_var_factors = {sv: sv_conv(sv) for sv in self._state_vars if sv_conv(sv) != 1.0}
@@ -623,7 +622,9 @@ class ChasteModel(object):
             var = var.args[0]
         if var == self._membrane_voltage_var:
             return self._MEMBRANE_VOLTAGE_INDEX
-        elif var == self._cytosolic_calcium_concentration_var:
+        elif var == self._cytosolic_calcium_concentration_var and \
+                self._model.units.summarise_units(self._cytosolic_calcium_concentration_var).dimensionality == \
+                self._model.units.ureg.millimolar.dimensionality:
             return self._CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX
         else:
             return self._MEMBRANE_VOLTAGE_INDEX + self._CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX + 1
@@ -660,7 +661,10 @@ class NormalChasteModel(ChasteModel):
             'default_stimulus_equations': self._formatted_default_stimulus,
             'use_get_intracellular_calcium_concentration': self._use_get_intracellular_calcium_concentration,
             'membrane_voltage_index': self._MEMBRANE_VOLTAGE_INDEX,
-            'cytosolic_calcium_concentration_index': self._CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX,
+            'cytosolic_calcium_concentration_index':
+                self._state_vars.index(self._cytosolic_calcium_concentration_var)
+                if self._cytosolic_calcium_concentration_var is not None
+                else self._CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX,
             'state_vars': self._formatted_state_vars,
             'ionic_interface_vars': self._formatted_equations_for_ionic_vars,
             'ionic_vars': self._formatted_extended_equations_for_ionic_vars,
