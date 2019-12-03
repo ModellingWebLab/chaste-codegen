@@ -23,6 +23,7 @@ class ChasteModel(object):
     _OXMETA = 'https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#'
     _PYCMLMETA = 'https://chaste.comlab.ox.ac.uk/cellml/ns/pycml#'
 
+    _HEARTCONFIG_GETCAPACITANCE = 'HeartConfig::Instance()->GetCapacitance()'
     _UNIT_DEFINITIONS = {'uA_per_cm2': [{'prefix': 'micro', 'units': 'ampere'},
                                         {'exponent': '-2', 'prefix': 'centi', 'units': 'metre'}],
                          'uA_per_uF': [{'prefix': 'micro', 'units': 'ampere'},
@@ -49,8 +50,8 @@ class ChasteModel(object):
                    'membrane_capacitance': [{'units': 'uF'}, {'units': 'uF_per_mm2'}]}
 
     _STIM_RHS_MULTIPLIER = {'membrane_stimulus_current_amplitude':
-                            {'uA_per_uF': ' * HeartConfig::Instance()->GetCapacitance()',
-                             'uA': ' * HeartConfig::Instance()->GetCapacitance()'}}
+                            {'uA_per_uF': ' * ' +_HEARTCONFIG_GETCAPACITANCE,
+                             'uA': ' * ' + _HEARTCONFIG_GETCAPACITANCE}}
     _STIM_CONVERSION_RULES = \
         {'membrane_stimulus_current_amplitude':
             {'uA':
@@ -211,11 +212,12 @@ class ChasteModel(object):
     def _get_state_var_conversion(self):
         """ Get conversion factors and substitution dictionary for state variables in Chaste"""
         def sv_conv(sv):
-            try:
-                return round(self._model.units.get_conversion_factor(self._get_desired_units(sv),
-                             from_unit=self._model.units.summarise_units(sv)), 14)
-            except errors.DimensionalityError:
-                return 1.0
+            desired_units = self._get_desired_units(sv)
+            current_units = self._model.units.summarise_units(sv)
+            factor = 1.0
+            if desired_units.dimensionality == current_units.dimensionality:
+                    factor = round(self._model.units.get_conversion_factor(desired_units, from_unit=current_units), 14)
+            return factor
 
         state_var_factors = {sv: sv_conv(sv) for sv in self._state_vars if sv_conv(sv) != 1.0}
         state_var_subs = {sv: 1 / fac * sv for sv, fac in state_var_factors.items()}
@@ -463,7 +465,7 @@ class ChasteModel(object):
 
         ionic_rhs = self._printer.doprint(sp.simplify(ionic_rhs))
         if self._current_unit_and_capacitance['use_heartconfig_capacitance']:
-            ionic_rhs = '(' + ionic_rhs + ') * HeartConfig::Instance()->GetCapacitance()'
+            ionic_rhs = '(' + ionic_rhs + ') * ' + self._HEARTCONFIG_GETCAPACITANCE
 
         i_ionic = sp.sympify('_i_ionic')
         self._in_interface.append(i_ionic)
@@ -549,7 +551,7 @@ class ChasteModel(object):
                     area = -area
 
                 if self._current_unit_and_capacitance['use_heartconfig_capacitance']:
-                    rhs_divider = '/ HeartConfig::Instance()->GetCapacitance()'
+                    rhs_divider = '/ ' + self._HEARTCONFIG_GETCAPACITANCE
                 if self._current_unit_and_capacitance['use_capacitance']:
                     stim_current_eq_rhs = area * self._membrane_capacitance.lhs
                     fac = self._membrane_capacitance_factor / self._membrane_stimulus_current_factor
