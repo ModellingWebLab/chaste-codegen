@@ -96,7 +96,7 @@
         const double var_sodium_current__i_Na = (-var_sodium_current__E_Na + var_chaste_interface__membrane__V) * (pow(var_chaste_interface__sodium_current_m_gate__m, 3.0) * var_sodium_current__g_Na * var_chaste_interface__sodium_current_h_gate__h * var_chaste_interface__sodium_current_j_gate__j + var_sodium_current__g_Nac); // uA_per_mm2
         const double var_time_dependent_outward_current__i_x1 = 0.0019727757115328517 * (-1.0 + 21.75840239619708 * exp(0.04 * var_chaste_interface__membrane__V)) * var_chaste_interface__time_dependent_outward_current_x1_gate__x1 * exp(-0.04 * var_chaste_interface__membrane__V); // uA_per_mm2
         const double var_time_independent_outward_current__i_K1 = 0.0007000000000000001 * (23.0 + var_chaste_interface__membrane__V) / (1.0 - 0.39851904108451414 * exp(-0.04 * var_chaste_interface__membrane__V)) + 0.014 * (-1.0 + 29.96410004739701 * exp(0.04 * var_chaste_interface__membrane__V)) / (8.331137487687693 * exp(0.04 * var_chaste_interface__membrane__V) + 69.4078518387552 * exp(0.08 * var_chaste_interface__membrane__V)); // uA_per_mm2
-        const double var_chaste_interface__i_ionic = 100.0 * var_time_independent_outward_current__i_K1 + 100.0 * var_time_dependent_outward_current__i_x1 + 100.0 * var_sodium_current__i_Na + 100.0 * var_slow_inward_current__i_s; // uA_per_cm2
+        const double var_chaste_interface__i_ionic = 100.0 * var_slow_inward_current__i_s + 100.0 * var_sodium_current__i_Na + 100.0 * var_time_dependent_outward_current__i_x1 + 100.0 * var_time_independent_outward_current__i_K1; // uA_per_cm2
         
         const double i_ionic = var_chaste_interface__i_ionic;
         EXCEPT_IF_NOT(!std::isnan(i_ionic));

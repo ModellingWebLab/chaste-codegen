@@ -270,7 +270,6 @@
         const double var_L_type_Ca_channel_f_gate__alpha_f = ((var_L_type_Ca_channel_f_gate__delta_f > fabs(var_L_type_Ca_channel_f_gate__E0_f)) ? (25.0) : (6.25 * var_L_type_Ca_channel_f_gate__E0_f / (-1.0 + exp(0.18181818181818182 * var_L_type_Ca_channel_f_gate__E0_f)))); // per_second
         const double var_L_type_Ca_channel_f_gate__beta_f = 12.0 / (1.0 + 0.002066666860480782 * exp(-0.18181818181818182 * var_chaste_interface__membrane__V)); // per_second
         const double var_calcium_release__SpeedRel = ((var_chaste_interface__membrane__V < -50.0) ? (5.0) : (1.0)); // dimensionless
-        const double var_calcium_release__VoltDep = 0.040762203978366204 * exp(0.08 * var_chaste_interface__membrane__V); // dimensionless
         const double var_calcium_release__ActRate = 500.0 * pow(var_calcium_release__RegBindSite, 2.0); // per_second
         const double var_fast_sodium_current_h_gate__alpha_h = 0.0016963647049293832 * exp(0.125 * var_fast_sodium_current__shift_INa_inact - 0.125 * var_chaste_interface__membrane__V); // per_second
         const double var_fast_sodium_current_h_gate__beta_h = 2000.0 / (1.0 + 0.17698699844730675 * exp(0.1 * var_fast_sodium_current__shift_INa_inact - 0.1 * var_chaste_interface__membrane__V)); // per_second

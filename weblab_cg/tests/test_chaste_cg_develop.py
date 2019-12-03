@@ -17,7 +17,7 @@ LOGGER.setLevel(logging.DEBUG)
 
 
 class TestChasteCG(object):
-    """ Tests to help development of weblab_cg. This test compares symbolicly against pycml reference output
+    """ Tests to help development of weblab_cg. This test compares symbolically against pycml reference output
 
     # TODO: Better docstrings"""
     _COMMENTS_REGEX = re.compile(r'(//.*\n)')
@@ -33,7 +33,7 @@ class TestChasteCG(object):
         return load_chaste_models(model_types=self.model_types(),
                                   ref_path_prefix=['chaste_reference_models', 'develop'], class_name_prefix='Dynamic')
 
-    #@pytest.mark.skip(reason="This test is a development tool")
+    @pytest.mark.skip(reason="This test is a development tool")
     def test_generate_chaste_models_develop(self, tmp_path, chaste_models):
         """ Check generation of Normal models against reference"""
         tmp_path = str(tmp_path)

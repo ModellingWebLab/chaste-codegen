@@ -86,4 +86,3 @@ class ChastePrinter(Printer):
         parts += self._print(expr)
         parts += ') : ('
         return parts
-
