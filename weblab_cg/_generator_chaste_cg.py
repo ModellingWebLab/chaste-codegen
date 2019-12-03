@@ -164,7 +164,7 @@ class ChasteModel(object):
         self._name_printer = cg.ChastePrinter(lambda symbol: get_symbol_name(symbol)[1:])
 
     def _add_units(self):
-        """ Add needed units to the model to allow converting time, voltage and calcium in specific units 
+        """ Add needed units to the model to allow converting time, voltage and calcium in specific units
             as well as units for converting membrane_stimulus_current."""
         for unit_name in self._UNIT_DEFINITIONS:
             try:
