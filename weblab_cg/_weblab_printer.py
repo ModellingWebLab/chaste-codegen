@@ -26,6 +26,7 @@ class WebLabPrinter(Printer):
         'log10': 'math.log10',
         'log1p': 'math.log1p',
         'log2': 'math.log2',
+        'nan': 'float(\'nan\')',
         'pi': 'math.pi',
         'sin': 'math.sin',
         'sinh': 'math.sinh',

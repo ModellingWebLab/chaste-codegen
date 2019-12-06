@@ -127,7 +127,7 @@
         const double var_sodium_potassium_pump__K_m_Na = 5.46; // millimolar
         const double var_sodium_potassium_pump__i_NaK_max = 0.2192; // nanoA
         const double var_sodium_potassium_pump__i_NaK = 1.6 * pow((var_chaste_interface__cleft_space_equations__K_c / (var_chaste_interface__cleft_space_equations__K_c + var_sodium_potassium_pump__K_m_K)), 2.0) * pow((var_chaste_interface__intracellular_concentrations_and_buffer_equations__Na_i / (var_chaste_interface__intracellular_concentrations_and_buffer_equations__Na_i + var_sodium_potassium_pump__K_m_Na)), 3.0) * var_sodium_potassium_pump__i_NaK_max / (1.5 + 0.22313016014842982 * exp(-0.025 * var_chaste_interface__membrane__V)); // nanoA
-        const double var_chaste_interface__i_ionic = (0.001*(var_L_type_Ca_channel__i_Ca_L + var_T_type_Ca_channel__i_Ca_T + var_calcium_pump_current__i_Ca_P + var_delayed_rectifying_potassium_current__i_K + var_hyperpolarisation_activated_current__i_f + var_linear_background_current__i_B + var_sodium_calcium_pump__i_NaCa + var_sodium_current__i_Na + var_sodium_potassium_pump__i_NaK)/var_membrane__Cm) * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
+        const double var_chaste_interface__i_ionic = (0.001 * (var_L_type_Ca_channel__i_Ca_L + var_T_type_Ca_channel__i_Ca_T + var_calcium_pump_current__i_Ca_P + var_delayed_rectifying_potassium_current__i_K + var_hyperpolarisation_activated_current__i_f + var_linear_background_current__i_B + var_sodium_calcium_pump__i_NaCa + var_sodium_current__i_Na + var_sodium_potassium_pump__i_NaK) / var_membrane__Cm) * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
         
         const double i_ionic = var_chaste_interface__i_ionic;
         EXCEPT_IF_NOT(!std::isnan(i_ionic));

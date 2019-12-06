@@ -39,6 +39,7 @@ class ChastePrinter(Printer):
         'log10': 'log10',
         'log1p': 'log1p',
         'log2': 'log2',
+        'nan': 'NAN',
         'pi': 'M_PI',
         'sin': 'sin',
         'sinh': 'sinh',
@@ -85,4 +86,3 @@ class ChastePrinter(Printer):
         parts += self._print(expr)
         parts += ') : ('
         return parts
-

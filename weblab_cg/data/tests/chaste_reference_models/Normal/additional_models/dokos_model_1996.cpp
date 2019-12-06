@@ -144,7 +144,7 @@
         const double var_sodium_potassium_pump__i_pmax = 0.226; // picoA
         const double var_sodium_potassium_pump__i_p = (1.0 - pow((-0.18957345971563982 + 0.004739336492890996 * var_chaste_interface__membrane__E), 2.0)) * var_chaste_interface__ion_concentrations__Ko * var_chaste_interface__ion_concentrations__Nai * var_sodium_potassium_pump__i_pmax / ((var_chaste_interface__ion_concentrations__Ko + var_sodium_potassium_pump__KmK) * (var_chaste_interface__ion_concentrations__Nai + var_sodium_potassium_pump__KmNa)); // picoA
         const double var_membrane__i_tot = var_L_type_calcium_current__i_CaL + var_T_type_calcium_current__i_CaT + var_background_potassium_current__i_bK + var_background_sodium_current__i_bNa + var_delayed_rectifying_potassium_current__i_K + var_fast_sodium_current__i_Na + var_hyperpolarising_activated_current__i_f + var_sodium_calcium_exchange_current__i_NaCa + var_sodium_potassium_pump__i_p; // picoA
-        const double var_chaste_interface__i_ionic = (0.001*var_membrane__i_tot/var_membrane__C) * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
+        const double var_chaste_interface__i_ionic = (0.001 * var_membrane__i_tot / var_membrane__C) * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
         
         const double i_ionic = var_chaste_interface__i_ionic;
         EXCEPT_IF_NOT(!std::isnan(i_ionic));

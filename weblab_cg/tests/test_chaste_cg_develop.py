@@ -17,7 +17,7 @@ LOGGER.setLevel(logging.DEBUG)
 
 
 class TestChasteCG(object):
-    """ Tests to help development of weblab_cg. This test compares symbolicly against pycml reference output
+    """ Tests to help development of weblab_cg. This test compares symbolically against pycml reference output
 
     # TODO: Better docstrings"""
     _COMMENTS_REGEX = re.compile(r'(//.*\n)')
@@ -270,7 +270,7 @@ class TestChasteCG(object):
         """ Do needed substitutions and parse brackets to handle conditionals (cond?exp:exp) """
         # pow->Pow ceil -> ceiling in sympy
         equation_str = equation_str.replace("pow(", 'Pow(').replace("ceil(", 'ceiling(').replace('fabs(', 'Abs(')
-        equation_str = equation_str.replace('M_PI', '3.141592')
+        equation_str = equation_str.replace('M_PI', 'pi')
         # This might be a C++ call with class members/pointer accessors?
         equation_str = \
             equation_str.replace('HeartConfig::Instance()->GetCapacitance()', 'HeartConfig_Instance_GetCapacitance')
