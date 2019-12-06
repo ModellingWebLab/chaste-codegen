@@ -12,6 +12,12 @@ LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 
 
+def pytest_configure(config):
+    config.addinivalue_line(
+        'markers', 'env(chaste): tests specific for chaste code gen, exclude these with pytest -m "not chaste"'
+    )
+
+
 def model_types():
     return ['Normal']
 
@@ -27,6 +33,7 @@ class TestChasteCG(object):
     TODO: unit conversion vvia cellmlmanip once implemented"""
     _TIMESTAMP_REGEX = re.compile(r'(//! on .*\n)')
 
+    @pytest.mark.chaste
     @pytest.mark.parametrize(('model'), chaste_models())
     def test_generate_chaste_model(self, tmp_path, model):
         """ Check generation of Normal models against reference"""
@@ -55,6 +62,7 @@ class TestChasteCG(object):
             assert expected_hpp == generated_hpp
             assert expected_cpp == generated_cpp
 
+    @pytest.mark.chaste
     def test_generate_dymaic_chaste_model(self, tmp_path):
         tmp_path = str(tmp_path)
         LOGGER.info('Converting: Normal Dynamichodgkin_huxley_squid_axon_model_1952_modified\n')
