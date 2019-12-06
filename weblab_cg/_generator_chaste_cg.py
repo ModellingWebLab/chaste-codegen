@@ -361,10 +361,7 @@ class ChasteModel(object):
 
     def _get_derivative_equations(self):
         """ Get equations defining the derivatives including  V (self._membrane_voltage_var)"""
-        # Sort the derivative equations to get the derivaives themselves last
-        return [eq for eq in
-                sorted(self._model.get_equations_for(self._y_derivatives), key=lambda deriv:
-                       isinstance(deriv.lhs, sp.Derivative)) if eq.lhs not in self._modifiable_parameters]
+        return self._model.get_equations_for(self._y_derivatives)
 
     def _format_modifiable_parameters(self):
         return [{'units': self._model.units.summarise_units(param),
@@ -537,8 +534,10 @@ class ChasteModel(object):
                 divisor_unit = self._get_desired_units(d_eqs[i].lhs.args[1][0])
                 units = dividend_unit / divisor_unit
                 units_from = self._model.units.summarise_units(d_eqs[i].lhs)
-                factor = self._model.units.get_conversion_factor(units, from_unit=units_from) \
-                    if units.dimensionality == units_from.dimensionality else 1.0
+                if units.dimensionality == units_from.dimensionality:
+                    factor = self._model.units.get_conversion_factor(units, from_unit=units_from)
+                else:
+                    factor = 1.0
 
             if d_eqs[i].lhs == self._membrane_stimulus_current:
                 factor = 1.0
