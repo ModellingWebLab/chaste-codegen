@@ -16,7 +16,7 @@ LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 
 
-class TestChasteCGDevelop(object):
+class TestChasteCG(object):
     """ Tests to help development of weblab_cg. This test compares symbolically against pycml reference output
 
     # TODO: Better docstrings"""
@@ -33,9 +33,6 @@ class TestChasteCGDevelop(object):
         return load_chaste_models(model_types=self.model_types(),
                                   ref_path_prefix=['chaste_reference_models', 'develop'], class_name_prefix='Dynamic')
 
-    @pytest.mark.chaste
-    @pytest.mark.skip(reason="This test is a development tool")
-    @pytest.mark.chaste
     def test_generate_chaste_models_develop(self, tmp_path, chaste_models):
         """ Check generation of Normal models against reference"""
         tmp_path = str(tmp_path)
@@ -480,4 +477,3 @@ class TestChasteCGDevelop(object):
             rhs_symbols.update([str(x) for x in generated[i][1].free_symbols])
             # The lhs should not appear as otherwise it is being used before being defined
             assert self._get_var_name(generated[i][0]) not in rhs_symbols
-
