@@ -51,6 +51,11 @@ class ChasteModel(object):
     _STIM_RHS_MULTIPLIER = {'membrane_stimulus_current_amplitude':
                             {'uA_per_uF': ' * ' + _HEARTCONFIG_GETCAPACITANCE,
                              'uA': ' * ' + _HEARTCONFIG_GETCAPACITANCE}}
+
+    _STIM_CONVERSION_RULES_ERR_CHECK = \
+        {'membrane_stimulus_current_amplitude':
+            {'uA': {'condition': lambda self: self._membrane_capacitance is not None, 'message': 'Membrane capacitance is required to be able to apply conversion to this stimulus current!'}
+            }}
     _STIM_CONVERSION_RULES = \
         {'membrane_stimulus_current_amplitude':
             {'uA':
@@ -102,7 +107,6 @@ class ChasteModel(object):
 
         self._membrane_voltage_var = self._get_membrane_voltage_var()
         self._cytosolic_calcium_concentration_var = self._get_cytosolic_calcium_concentration_var()
-        self._use_get_intracellular_calcium_concentration = self._get_use_get_intracellular_calcium_concentration()
         self._state_vars = self._get_state_variables()
         self._in_interface.extend(self._state_vars)
         self._state_var_conversion_factors, self._state_var_subs = self._get_state_var_conversion()
@@ -195,14 +199,6 @@ class ChasteModel(object):
             self._logger.info(self._model.name + ' has no cytosolic_calcium_concentration')
             return None
 
-    def _get_use_get_intracellular_calcium_concentration(self):
-        """ Get wether or not the model has cytosolic_calcium_concentration"""
-        try:
-            self._model.get_symbol_by_ontology_term(self._OXMETA, "cytosolic_calcium_concentration")
-            return True
-        except KeyError:
-            return False
-
     def _get_state_variables(self):
         """ Sort the state variables, in similar order to pycml to prevent breaking existing code"""
         return sorted(self._model.get_state_symbols(),
@@ -250,10 +246,12 @@ class ChasteModel(object):
                         capacitance_factor = \
                             self._model.units.get_conversion_factor(desired_units, from_unit=current_units)
                         initial_value = self._model.get_initial_value(membrane_capacitance)
-                        equation = sp.Eq(membrane_capacitance, initial_value)
+                        if initial_value is not None:
+                            equation = sp.Eq(membrane_capacitance, initial_value)
                         break
         except KeyError:
-            pass  # no membrane_capacitance
+            # no membrane_capacitance
+            pass
         return equation, capacitance_factor
 
     def _get_stimulus(self):
@@ -407,6 +405,7 @@ class ChasteModel(object):
                             if key in self._STIM_CONVERSION_RULES and str(units) in self._STIM_CONVERSION_RULES[key]:
                                 additional_eqs = []
 
+                                assert self._STIM_CONVERSION_RULES_ERR_CHECK[key][str(units)]['condition'](self), self._STIM_CONVERSION_RULES_ERR_CHECK[key][str(units)]['message']
                                 # Apply conversion rules if we have any
                                 units, factor, eq, additional_eqs = \
                                     self._STIM_CONVERSION_RULES[key][str(units)](
@@ -641,7 +640,7 @@ class NormalChasteModel(ChasteModel):
             'dynamically_loadable': self.dynamically_loadable,
             'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
             'default_stimulus_equations': self._formatted_default_stimulus,
-            'use_get_intracellular_calcium_concentration': self._use_get_intracellular_calcium_concentration,
+            'use_get_intracellular_calcium_concentration': self._cytosolic_calcium_concentration_var in self._state_vars,
             'free_variable': self._free_variable})
 
         # Generate cpp for model
@@ -653,11 +652,11 @@ class NormalChasteModel(ChasteModel):
             'dynamically_loadable': self.dynamically_loadable,
             'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
             'default_stimulus_equations': self._formatted_default_stimulus,
-            'use_get_intracellular_calcium_concentration': self._use_get_intracellular_calcium_concentration,
+            'use_get_intracellular_calcium_concentration': self._cytosolic_calcium_concentration_var in self._state_vars,
             'membrane_voltage_index': self._MEMBRANE_VOLTAGE_INDEX,
             'cytosolic_calcium_concentration_index':
                 self._state_vars.index(self._cytosolic_calcium_concentration_var)
-                if self._cytosolic_calcium_concentration_var is not None
+                if self._cytosolic_calcium_concentration_var in self._state_vars
                 else self._CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX,
             'state_vars': self._formatted_state_vars,
             'ionic_interface_vars': self._formatted_equations_for_ionic_vars,
