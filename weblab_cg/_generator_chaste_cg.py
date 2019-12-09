@@ -343,25 +343,21 @@ class ChasteModel(object):
 
     def _get_derivative_eqs_voltage(self):
         """ Get equations defining the derivatives for V (self._membrane_voltage_var)"""
-        # Sort the derivative equations to get the derivaives themselves last
         # Remove equations where lhs is a modifiable parameter
-        return [eq for eq in
-                sorted(self._model.get_equations_for(self._y_derivatives_voltage),
-                       key=lambda deriv:
-                       isinstance(deriv.lhs, sp.Derivative)) if eq.lhs not in self._modifiable_parameters]
+        return [eq for eq in self._model.get_equations_for(self._y_derivatives_voltage)
+                if eq.lhs not in self._modifiable_parameters]
 
     def _get_derivative_eqs_exlc_voltage(self):
         """ Get equations defining the derivatives excluding V (self._membrane_voltage_var)"""
-        # Sort the derivative equations to get the derivaives themselves last
         # Remove equations where lhs is a modifiable parameter
-        return [eq for eq in
-                sorted(self._model.get_equations_for(self._y_derivatives_excl_voltage),
-                       key=lambda deriv:
-                       isinstance(deriv.lhs, sp.Derivative)) if eq.lhs not in self._modifiable_parameters]
+        return [eq for eq in self._model.get_equations_for(self._y_derivatives_excl_voltage)
+                if eq.lhs not in self._modifiable_parameters]
 
     def _get_derivative_equations(self):
         """ Get equations defining the derivatives including  V (self._membrane_voltage_var)"""
-        return self._model.get_equations_for(self._y_derivatives)
+        # Remove equations where lhs is a modifiable parameter
+        return [eq for eq in self._model.get_equations_for(self._y_derivatives)
+                if eq.lhs not in self._modifiable_parameters]
 
     def _format_modifiable_parameters(self):
         return [{'units': self._model.units.summarise_units(param),

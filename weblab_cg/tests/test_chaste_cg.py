@@ -96,3 +96,4 @@ class TestChasteCG(object):
 
         assert expected_hpp == generated_hpp
         assert expected_cpp == generated_cpp
+
