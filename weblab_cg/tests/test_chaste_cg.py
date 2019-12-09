@@ -17,7 +17,7 @@ def pytest_configure(config):
     config.addinivalue_line(
         'markers', 'env(chaste): tests specific for chaste code gen, exclude these with pytest -m "not chaste"'
     )
-
+    
 def model_types():
     return ['Normal']
 
@@ -61,7 +61,7 @@ class TestChasteCG(object):
 
             assert expected_hpp == generated_hpp
             assert expected_cpp == generated_cpp
-            
+
     @pytest.mark.chaste
     def test_generate_dymaic_chaste_model(self, tmp_path):
         tmp_path = str(tmp_path)
