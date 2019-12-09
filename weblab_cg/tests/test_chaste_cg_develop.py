@@ -15,6 +15,7 @@ from weblab_cg.tests.chaste_test_utils import load_chaste_models, get_file_lines
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 
+
 def pytest_configure(config):
     """ Sets up pytest configuration programatically and adds pytest marks so we can use the, below."""
     config.addinivalue_line(
@@ -24,6 +25,7 @@ def pytest_configure(config):
 
 def model_types():
     return ['Normal']
+
 
 class TestChasteCG(object):
     """ Tests to help development of weblab_cg. This test compares symbolically against pycml reference output
