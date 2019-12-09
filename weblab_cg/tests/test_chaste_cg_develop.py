@@ -33,6 +33,7 @@ class TestChasteCG(object):
         return load_chaste_models(model_types=self.model_types(),
                                   ref_path_prefix=['chaste_reference_models', 'develop'], class_name_prefix='Dynamic')
 
+    @pytest.mark.chaste
     @pytest.mark.skip(reason="This test is a development tool")
     def test_generate_chaste_models_develop(self, tmp_path, chaste_models):
         """ Check generation of Normal models against reference"""
