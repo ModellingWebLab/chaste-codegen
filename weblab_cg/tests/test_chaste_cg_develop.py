@@ -43,7 +43,6 @@ class TestChasteCG(object):
                                   ref_path_prefix=['chaste_reference_models', 'develop'], class_name_prefix='Dynamic')
 
     @pytest.mark.chaste
-    @pytest.mark.parametrize(('model'), chaste_models()) 
     def test_generate_chaste_models_develop(self, tmp_path, chaste_models):
         """ Check generation of Normal models against reference"""
         tmp_path = str(tmp_path)
