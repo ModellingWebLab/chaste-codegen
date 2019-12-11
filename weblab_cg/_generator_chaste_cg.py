@@ -2,7 +2,6 @@ import logging
 import time
 import sympy as sp
 import weblab_cg as cg
-import cellmlmanip
 from copy import deepcopy
 
 
@@ -55,8 +54,10 @@ class ChasteModel(object):
 
     _STIM_CONVERSION_RULES_ERR_CHECK = \
         {'membrane_stimulus_current_amplitude':
-            {'uA': {'condition': lambda self: self._membrane_capacitance is not None, 'message': 'Membrane capacitance is required to be able to apply conversion to this stimulus current!'}
-            }}
+            {'uA':
+                {'condition': lambda self: self._membrane_capacitance is not None,
+                 'message': 'Membrane capacitance is required to be able to apply conversion to stimulus current!'}}
+         }
     _STIM_CONVERSION_RULES = \
         {'membrane_stimulus_current_amplitude':
             {'uA':
@@ -363,21 +364,18 @@ class ChasteModel(object):
             """ Get range-low and range-high annotation for to verify state variables. """
             if subject.cmeta_id is not None:
                 subject_id = '#' + subject.cmeta_id
-                range_annotation = list(self._model.get_rdf_annotations(subject=subject_id, predicate=(self._PYCMLMETA, annotation_tag)))
+                range_annotation = list(self._model.get_rdf_annotations(subject=subject_id,
+                                                                        predicate=(self._PYCMLMETA, annotation_tag)))
                 assert len(range_annotation) < 2, 'Expecting 0 or 1 range annotation'
-                if len (range_annotation) == 1:
+                if len(range_annotation) == 1:
                     return float(range_annotation[0][2])
             return ''
 
         def get_annotated_var_name(var):
             annotation_list = self._model.get_ontology_terms_by_symbol(var, namespace_uri=self._OXMETA)
-            if len(annotation_list) > 0:
-                return annotation_list[-1]
-            elif var.cmeta_id is not None:
-                return var.cmeta_id
-            else:
-                return self._printer.doprint(var)
-
+            if len(annotation_list) == 1:
+                return annotation_list[0]
+            return self._printer.doprint(var)
 
         # Filter unused state vars for ionic variables
         ionic_var_symbols = set()
@@ -392,16 +390,17 @@ class ChasteModel(object):
             [{'var': self._printer.doprint(var),
               'annotated_var_name': get_annotated_var_name(var),
               'initial_value': str(self._model.get_initial_value(var) * self._state_var_conversion_factors[var])
-               if var in self._state_var_conversion_factors else str(self._model.get_initial_value(var)),
-               'units': str(self._model.units.summarise_units(var)),
-               'in_ionic': var in ionic_var_symbols,
-               'in_y_deriv': var in y_deriv_symbols,
-               'range_low': get_range_annotation(var, 'range-low'),
-               'range_high': get_range_annotation(var, 'range-high')}
-               for var in self._state_vars]
+              if var in self._state_var_conversion_factors else str(self._model.get_initial_value(var)),
+              'units': str(self._model.units.summarise_units(var)),
+              'in_ionic': var in ionic_var_symbols,
+              'in_y_deriv': var in y_deriv_symbols,
+              'range_low': get_range_annotation(var, 'range-low'),
+              'range_high': get_range_annotation(var, 'range-high')}
+             for var in self._state_vars]
 
-        use_verify_state_variables = len([eq for eq in formatted_state_vars if eq['range_low'] !='' or eq['range_high'] != '']) > 0
-        return formatted_state_vars, use_verify_state_variables                  
+        use_verify_state_variables = \
+            len([eq for eq in formatted_state_vars if eq['range_low'] != '' or eq['range_high'] != '']) > 0
+        return formatted_state_vars, use_verify_state_variables
 
     def _format_default_stimulus(self):
         """ Format eqs for stimulus_current for outputting to chaste code"""
@@ -427,7 +426,8 @@ class ChasteModel(object):
                             if key in self._STIM_CONVERSION_RULES and str(units) in self._STIM_CONVERSION_RULES[key]:
                                 additional_eqs = []
 
-                                assert self._STIM_CONVERSION_RULES_ERR_CHECK[key][str(units)]['condition'](self), self._STIM_CONVERSION_RULES_ERR_CHECK[key][str(units)]['message']
+                                assert self._STIM_CONVERSION_RULES_ERR_CHECK[key][str(units)]['condition'](self), \
+                                    self._STIM_CONVERSION_RULES_ERR_CHECK[key][str(units)]['message']
                                 # Apply conversion rules if we have any
                                 units, factor, eq, additional_eqs = \
                                     self._STIM_CONVERSION_RULES[key][str(units)](
@@ -553,7 +553,7 @@ class ChasteModel(object):
                                 else:
                                     voltage_rhs = voltage_rhs.subs({symbols[0]: 1.0})  # other variables = 1
                         del symbols[0]
-                    voltage_rhs = voltage_rhs.subs({self._membrane_stimulus_current: 1.0}) # - stimulus current = 1
+                    voltage_rhs = voltage_rhs.subs({self._membrane_stimulus_current: 1.0})  # - stimulus current = 1
                     negate_stimulus = voltage_rhs > 0.0
                 # Convert voltage to mV, time to mS and calcium to millimolar
                 dividend_unit = self._get_desired_units(d_eqs[i].lhs.args[0])
@@ -659,6 +659,7 @@ class ChasteModel(object):
         """
         raise NotImplementedError("Should not be called directly, use the specific model types instead!")
 
+
 class NormalChasteModel(ChasteModel):
     """ Holds information specific for the Normal model type"""
 
@@ -676,7 +677,8 @@ class NormalChasteModel(ChasteModel):
             'dynamically_loadable': self.dynamically_loadable,
             'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
             'default_stimulus_equations': self._formatted_default_stimulus,
-            'use_get_intracellular_calcium_concentration': self._cytosolic_calcium_concentration_var in self._state_vars,
+            'use_get_intracellular_calcium_concentration':
+                self._cytosolic_calcium_concentration_var in self._state_vars,
             'free_variable': self._free_variable,
             'use_verify_state_variables': self._use_verify_state_variables})
 
@@ -689,7 +691,8 @@ class NormalChasteModel(ChasteModel):
             'dynamically_loadable': self.dynamically_loadable,
             'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
             'default_stimulus_equations': self._formatted_default_stimulus,
-            'use_get_intracellular_calcium_concentration': self._cytosolic_calcium_concentration_var in self._state_vars,
+            'use_get_intracellular_calcium_concentration':
+                self._cytosolic_calcium_concentration_var in self._state_vars,
             'membrane_voltage_index': self._MEMBRANE_VOLTAGE_INDEX,
             'cytosolic_calcium_concentration_index':
                 self._state_vars.index(self._cytosolic_calcium_concentration_var)
