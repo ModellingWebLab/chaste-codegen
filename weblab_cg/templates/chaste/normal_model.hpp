@@ -42,6 +42,9 @@ public:
     {%- endif %}
     {{class_name}}(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~{{class_name}}();
+    {%- if use_verify_state_variables %}
+    void VerifyStateVariables();
+    {%- endif %}
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double {{free_variable.var_name}}, const std::vector<double>& rY, std::vector<double>& rDY);
 };
