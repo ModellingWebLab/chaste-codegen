@@ -548,10 +548,11 @@ class ChasteModel(object):
                                 # For other variables see if we need o follow their definitions first
                                 if symbols[0] in [eq.lhs for eq in d_eqs]:
                                     rhs = [eq.rhs for eq in d_eqs if eq.lhs == symbols[0]][-1]
-                                    voltage_rhs = voltage_rhs.subs({symbols[0]: rhs})
-                                    symbols.extend(rhs.free_symbols)
-                                else:
-                                    voltage_rhs = voltage_rhs.subs({symbols[0]: 1.0})  # other variables = 1
+                                    if not isinstance(rhs, sp.numbers.Float):
+                                        voltage_rhs = voltage_rhs.subs({symbols[0]: rhs})  # Update definition
+                                        symbols.extend(rhs.free_symbols)
+                                    else:
+                                        voltage_rhs = voltage_rhs.subs({symbols[0]: 1.0})  # other variables = 1
                         del symbols[0]
                     voltage_rhs = voltage_rhs.subs({self._membrane_stimulus_current: 1.0})  # - stimulus current = 1
                     negate_stimulus = voltage_rhs > 0.0
