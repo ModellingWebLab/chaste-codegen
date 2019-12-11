@@ -110,4 +110,4 @@ class TestChasteCG(object):
                                                 'pandit_model_2001_epi_old_no_capacitance',
                                                 'pandit_model_2001_epi_old_no_capacitance')
         assert str(error.value) == \
-            'Membrane capacitance is required to be able to apply conversion to this stimulus current!'
+            'Membrane capacitance is required to be able to apply conversion to stimulus current!'
