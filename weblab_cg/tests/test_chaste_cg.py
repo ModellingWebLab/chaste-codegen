@@ -12,13 +12,6 @@ LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 
 
-def pytest_configure(config):
-    """ Sets up pytest configuration programatically and adds pytest marks so we can use the, below."""
-    config.addinivalue_line(
-        'markers', 'env(chaste): tests specific for chaste code gen, exclude these with pytest -m "not chaste"'
-    )
-
-
 def model_types():
     return ['Normal']
 
@@ -97,3 +90,17 @@ class TestChasteCG(object):
         assert expected_hpp == generated_hpp
         assert expected_cpp == generated_cpp
 
+    @pytest.mark.chaste
+    def test_missing_capacitance(self, tmp_path):
+        tmp_path = str(tmp_path)
+        LOGGER.info('Testing missing capacitance\n')
+        model_file = \
+            os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'pandit_model_2001_epi_old_no_capacitance.cellml')
+        chaste_model = cellmlmanip.load_model(model_file)
+
+        with pytest.raises(AssertionError) as error:
+            chaste_model = cg.NormalChasteModel(chaste_model,
+                                                'pandit_model_2001_epi_old_no_capacitance',
+                                                'pandit_model_2001_epi_old_no_capacitance')
+        assert str(error.value) == \
+            'Membrane capacitance is required to be able to apply conversion to stimulus current!'
