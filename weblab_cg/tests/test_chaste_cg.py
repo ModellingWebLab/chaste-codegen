@@ -12,13 +12,6 @@ LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 
 
-def pytest_configure(config):
-    """ Sets up pytest configuration programatically and adds pytest marks so we can use the, below."""
-    config.addinivalue_line(
-        'markers', 'env(chaste): tests specific for chaste code gen, exclude these with pytest -m "not chaste"'
-    )
-
-
 def model_types():
     return ['Normal']
 
