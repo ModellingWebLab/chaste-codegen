@@ -11,9 +11,9 @@ class ChasteModel(object):
     It also holds relevant formatted equations and derivatives.
     Please Note: this calass cannot generate chaste code directly, instead use a subclass fo the model type
     """
+    # TODO: implement modifiable-parameter bit of expose-annotated-variables (similar to derived quantities)
+    # TODO: implement and check options see https://chaste.cs.ox.ac.uk/trac/wiki/ChasteGuides/CodeGenerationFromCellML
     # TODO: variable conversion via cellmlmanip
-    # TODO: look into explicit unit conversion rules vs hard coding?
-    #       https://chaste.cs.ox.ac.uk/trac/wiki/FunctionalCuration/ProtocolSyntax#Modelinterface
     # TODO: script to call generator from command line
     # TODO: Model types Opt, Analytic_j, Numerical_j, BE
 
@@ -87,18 +87,20 @@ class ChasteModel(object):
             The name you want to give your generated files WITHOUT the .hpp and .cpp extension
             (e.g. aslanidi_model_2009 leads to aslanidi_model_2009.cpp and aslanidi_model_2009.hpp)
         """
+        # Store default options
         self.class_name = class_name
         self.file_name = file_name
         self.dynamically_loadable = False
+
         self.generated_hpp = ''
         self.generated_cpp = ''
+        self._is_self_excitatory = False
 
         self._logger = logging.getLogger(__name__)
         self._logger.setLevel(logging.INFO)
 
         # Store parameters for future reference
         self._model = model
-        self._is_self_excitatory = False
 
         self._stim_units = self._add_units()
 
@@ -129,6 +131,9 @@ class ChasteModel(object):
         self._derivative_eqs_exlc_voltage = self._get_derivative_eqs_exlc_voltage()
         self._derivative_equations = self._get_derivative_equations()
 
+        self._derived_quant_annotated = self._get_derived_quant_annotated()
+        self._derived_quant_exposed = self._get_derived_quant_exposed()
+
         self._add_printers()
         self._formatted_modifiable_parameters = self._format_modifiable_parameters()
         self._formatted_state_vars, self._use_verify_state_variables = self._format_state_variables()
@@ -138,6 +143,20 @@ class ChasteModel(object):
         self._formatted_y_derivatives = self._format_y_derivatives()
         self._formatted_derivative_eqs = self._format_derivative_equations()
         self._free_variable, self._ode_system_information, self._named_attributes = self._format_ode_system_info()
+        self.expose_annotated_variables = False  # Using property to initialise and format derived quantity equations
+
+    @property
+    def expose_annotated_variables(self):
+        return self._expose_annotated_variables
+
+    @expose_annotated_variables.setter
+    def expose_annotated_variables(self, value):
+        self._expose_annotated_variables = value
+        self._derived_quant = self._get_derived_quant()
+        self._formatted_derived_quant = self._format_derived_quant()
+        self._derived_qunat_eqs = self._get_derived_qunat_eqs()
+        self._formatted_qunat_eqs = self._format_derived_qunat_eqs()
+        self._update_formatted_state_vars_in_derived_quant()
 
     def _add_printers(self):
         """ Initialises Printers for outputting chaste code. """
@@ -353,7 +372,36 @@ class ChasteModel(object):
         return [eq for eq in self._model.get_equations_for(self._y_derivatives)
                 if eq.lhs not in self._modifiable_parameters]
 
+    def _get_derived_quant_annotated(self):
+        """ Get the variables annotated in the model as derived derived-quantity"""
+        return self._model.get_symbols_by_rdf((self._PYCMLMETA, 'derived-quantity'), 'yes')
+
+    def _get_derived_quant_exposed(self):
+        """ Get the variables in the model that have exposed annotation and are derived quantities
+            (irrespective of any derived-quantity tags"""
+        return [q for q in self._model.get_derived_quantities()
+                if self._model.has_ontology_annotation(q, self._OXMETA)
+                and not self._model.get_ontology_terms_by_symbol(q, self._OXMETA)[-1]
+                .startswith('membrane_stimulus_current')]
+
+    def _get_derived_quant(self):
+        """ Get all derived quantities
+
+            Note: the result depends on self._expose_annotated_variables to determine whether or not to include
+            variables exposed with oxford metadata that are derived quantities but are not annotated as such"""
+        if self._expose_annotated_variables:
+            # Combined and sorted in document order
+            return \
+                sorted(self._derived_quant_annotated + self._get_derived_quant_exposed(), key=lambda v: v.order_added)
+        else:
+            return self._derived_quant_annotated
+
+    def _get_derived_qunat_eqs(self):
+        """ Get the defining equations for derived quantities"""
+        return self._model.get_equations_for(self._derived_quant)
+
     def _format_modifiable_parameters(self):
+        """ Format the modifiable parameter for printing to chaste code"""
         return [{'units': self._model.units.summarise_units(param),
                  'comment_name': self._name_printer.doprint(param), 'name': str(param).split("$")[-1],
                  'initial_value': self._model.get_initial_value(param)} for param in self._modifiable_parameters]
@@ -377,11 +425,12 @@ class ChasteModel(object):
                 return annotation_list[0]
             return self._printer.doprint(var)
 
-        # Filter unused state vars for ionic variables
+        # Get all used symbols for eqs for ionic variables to be able to indicate if a state var is used
         ionic_var_symbols = set()
         for eq in self._extended_equations_for_ionic_vars:
             ionic_var_symbols.update(eq.rhs.free_symbols)
 
+        # Get all used symbols for y derivs to be able to indicate if a state var is used
         y_deriv_symbols = set()
         for eq in self._derivative_equations:
             y_deriv_symbols.update(eq.rhs.free_symbols)
@@ -389,11 +438,13 @@ class ChasteModel(object):
         formatted_state_vars = \
             [{'var': self._printer.doprint(var),
               'annotated_var_name': get_annotated_var_name(var),
+              'state_var': var,
               'initial_value': str(self._model.get_initial_value(var) * self._state_var_conversion_factors[var])
               if var in self._state_var_conversion_factors else str(self._model.get_initial_value(var)),
               'units': str(self._model.units.summarise_units(var)),
               'in_ionic': var in ionic_var_symbols,
               'in_y_deriv': var in y_deriv_symbols,
+              'in_derived_quant': False,
               'range_low': get_range_annotation(var, 'range-low'),
               'range_high': get_range_annotation(var, 'range-high')}
              for var in self._state_vars]
@@ -401,6 +452,16 @@ class ChasteModel(object):
         use_verify_state_variables = \
             len([eq for eq in formatted_state_vars if eq['range_low'] != '' or eq['range_high'] != '']) > 0
         return formatted_state_vars, use_verify_state_variables
+
+    def _update_formatted_state_vars_in_derived_quant(self):
+        """ Update formatted state vars with in_derived_quant updates, based on current settings"""
+        # Get all used symbols for eqs for derived quantities variables to be able to indicate if a state var is used
+        derived_quant_symbols = set()
+        for eq in self._derived_qunat_eqs:
+            derived_quant_symbols.update(eq.rhs.free_symbols)
+
+        for var in self._formatted_state_vars:
+            var['in_derived_quant'] = var['state_var'] in derived_quant_symbols
 
     def _format_default_stimulus(self):
         """ Format eqs for stimulus_current for outputting to chaste code"""
@@ -495,8 +556,7 @@ class ChasteModel(object):
     def _get_desired_units(self, term):
         """ Helper function to return units we should convert variables to, to work in chaste.
 
-        V in mV, time in ms and cytosolic_calcium_concentration in millimolar)
-        """
+            V in mV, time in ms and cytosolic_calcium_concentration in millimolar)"""
         units = self._model.units.summarise_units(term)
         # Time in ms
         if term == self._time_variable:
@@ -654,6 +714,16 @@ class ChasteModel(object):
         else:
             return self._MEMBRANE_VOLTAGE_INDEX + self._CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX + 1
 
+    def _format_derived_quant(self):
+        return[self._printer.doprint(quant) for quant in self._derived_quant]
+
+    def _format_derived_qunat_eqs(self):
+        """ Format equations for derivd quantites based on current settings"""
+        return [{'lhs': self._printer.doprint(eq.lhs),
+                 'rhs': self._printer.doprint(eq.rhs),
+                 'units': str(self._model.units.summarise_units(eq.lhs))}
+                for eq in self._derived_qunat_eqs]
+
     def generate_chaste_code(self):
         """ Generate chaste code
         Please Note: not implemented, use a subclass for the relevant model type
@@ -681,7 +751,8 @@ class NormalChasteModel(ChasteModel):
             'use_get_intracellular_calcium_concentration':
                 self._cytosolic_calcium_concentration_var in self._state_vars,
             'free_variable': self._free_variable,
-            'use_verify_state_variables': self._use_verify_state_variables})
+            'use_verify_state_variables': self._use_verify_state_variables,
+            'derived_quantities': self._formatted_derived_quant})
 
         # Generate cpp for model
         template = cg.load_template('chaste', 'normal_model.cpp')
@@ -709,7 +780,9 @@ class NormalChasteModel(ChasteModel):
             'ode_system_information': self._ode_system_information,
             'modifiable_parameters': self._formatted_modifiable_parameters,
             'named_attributes': self._named_attributes,
-            'use_verify_state_variables': self._use_verify_state_variables})
+            'use_verify_state_variables': self._use_verify_state_variables,
+            'derived_quantities': self._formatted_derived_quant,
+            'derived_quantity_equations': self._formatted_qunat_eqs})
 
 
 class OptChasteModel(ChasteModel):

@@ -104,3 +104,37 @@ class TestChasteCG(object):
                                                 'pandit_model_2001_epi_old_no_capacitance')
         assert str(error.value) == \
             'Membrane capacitance is required to be able to apply conversion to stimulus current!'
+
+    @pytest.mark.chaste
+    def test_expose_annotated_variables(self, tmp_path):
+        tmp_path = str(tmp_path)
+        LOGGER.info('Testing expose_annotated_variables option\n')
+        model_file = \
+            os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'matsuoka_model_2003.cellml')
+        chaste_model = cellmlmanip.load_model(model_file)
+
+        chaste_model = cg.NormalChasteModel(chaste_model,
+                                            'cellmatsuoka_model_2003FromCellML',
+                                            'expose_annotated_variables_cellmatsuoka_model_2003')
+        chaste_model.expose_annotated_variables = True
+        chaste_model.generate_chaste_code()
+        # Write generated file
+        hhp_gen_file_path = os.path.join(tmp_path, 'Normal', chaste_model.file_name + ".hpp")
+        cpp_gen_file_path = os.path.join(tmp_path, 'Normal', chaste_model.file_name + ".cpp")
+        write_file(hhp_gen_file_path, chaste_model.generated_hpp)
+        write_file(cpp_gen_file_path, chaste_model.generated_cpp)
+
+        # Load reference files
+        expected_hpp = \
+            os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'Normal', chaste_model.file_name + ".hpp")
+        expected_cpp = \
+            os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'Normal', chaste_model.file_name + ".cpp")
+        expected_hpp = get_file_lines(expected_hpp)
+        expected_cpp = get_file_lines(expected_cpp)
+
+        # Load generated files
+        generated_hpp = get_file_lines(hhp_gen_file_path)
+        generated_cpp = get_file_lines(cpp_gen_file_path)
+
+        assert expected_hpp == generated_hpp
+        assert expected_cpp == generated_cpp

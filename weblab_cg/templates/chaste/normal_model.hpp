@@ -47,6 +47,9 @@ public:
     {%- endif %}
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double {{free_variable.var_name}}, const std::vector<double>& rY, std::vector<double>& rDY);
+    {%- if derived_quantities|length > 0 %}
+    std::vector<double> ComputeDerivedQuantities(double {{free_variable.var_name}}, const std::vector<double> & rY);
+    {%- endif %}
 };
 
 
