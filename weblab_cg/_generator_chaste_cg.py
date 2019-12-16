@@ -154,8 +154,8 @@ class ChasteModel(object):
         self._expose_annotated_variables = value
         self._derived_quant = self._get_derived_quant()
         self._formatted_derived_quant = self._format_derived_quant()
-        self._derived_qunat_eqs = self._get_derived_qunat_eqs()
-        self._formatted_qunat_eqs = self._format_derived_qunat_eqs()
+        self._derived_quant_eqs = self._get_derived_quant_eqs()
+        self._formatted_quant_eqs = self._format_derived_quant_eqs()
         self._update_formatted_state_vars_in_derived_quant()
 
     def _add_printers(self):
@@ -394,9 +394,9 @@ class ChasteModel(object):
             return \
                 sorted(self._derived_quant_annotated + self._get_derived_quant_exposed(), key=lambda v: v.order_added)
         else:
-            return self._derived_quant_annotated
+            return self._derived_quant_annotated  # These are already sorted
 
-    def _get_derived_qunat_eqs(self):
+    def _get_derived_quant_eqs(self):
         """ Get the defining equations for derived quantities"""
         return self._model.get_equations_for(self._derived_quant)
 
@@ -457,7 +457,7 @@ class ChasteModel(object):
         """ Update formatted state vars with in_derived_quant updates, based on current settings"""
         # Get all used symbols for eqs for derived quantities variables to be able to indicate if a state var is used
         derived_quant_symbols = set()
-        for eq in self._derived_qunat_eqs:
+        for eq in self._derived_quant_eqs:
             derived_quant_symbols.update(eq.rhs.free_symbols)
 
         for var in self._formatted_state_vars:
@@ -717,12 +717,12 @@ class ChasteModel(object):
     def _format_derived_quant(self):
         return[self._printer.doprint(quant) for quant in self._derived_quant]
 
-    def _format_derived_qunat_eqs(self):
+    def _format_derived_quant_eqs(self):
         """ Format equations for derivd quantites based on current settings"""
         return [{'lhs': self._printer.doprint(eq.lhs),
                  'rhs': self._printer.doprint(eq.rhs),
                  'units': str(self._model.units.summarise_units(eq.lhs))}
-                for eq in self._derived_qunat_eqs]
+                for eq in self._derived_quant_eqs]
 
     def generate_chaste_code(self):
         """ Generate chaste code
@@ -782,7 +782,7 @@ class NormalChasteModel(ChasteModel):
             'named_attributes': self._named_attributes,
             'use_verify_state_variables': self._use_verify_state_variables,
             'derived_quantities': self._formatted_derived_quant,
-            'derived_quantity_equations': self._formatted_qunat_eqs})
+            'derived_quantity_equations': self._formatted_quant_eqs})
 
 
 class OptChasteModel(ChasteModel):
