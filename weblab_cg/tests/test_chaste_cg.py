@@ -66,6 +66,7 @@ class TestChasteCG(object):
         chaste_model = cg.NormalChasteModel(chaste_model,
                                             'Dynamichodgkin_huxley_squid_axon_model_1952_modifiedFromCellML',
                                             'dynamic_hodgkin_huxley_squid_axon_model_1952_modified')
+        assert chaste_model.expose_annotated_variables == False
         chaste_model.dynamically_loadable = True
         chaste_model.generate_chaste_code()
 
@@ -117,6 +118,7 @@ class TestChasteCG(object):
                                             'cellmatsuoka_model_2003FromCellML',
                                             'expose_annotated_variables_cellmatsuoka_model_2003')
         chaste_model.expose_annotated_variables = True
+        assert chaste_model.expose_annotated_variables == True
         chaste_model.generate_chaste_code()
         # Write generated file
         hhp_gen_file_path = os.path.join(tmp_path, 'Normal', chaste_model.file_name + ".hpp")
