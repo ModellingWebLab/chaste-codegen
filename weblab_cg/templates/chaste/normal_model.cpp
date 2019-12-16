@@ -87,9 +87,8 @@
         }
         {% endif %}{%- endfor %}
     }
-    {%- endif %}
-
-    double {{class_name}}::GetIIonic(const std::vector<double>* pStateVariables)
+    
+    {% endif %}double {{class_name}}::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -136,7 +135,29 @@
         rDY[{{loop.index0}}] = {{deriv}};
         {%- endfor %}
     }
-    
+    {%- if derived_quantities|length > 0 %}
+
+    std::vector<double> {{class_name}}::ComputeDerivedQuantities(double {{free_variable.var_name}}, const std::vector<double> & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        {% for state_var in state_vars %}
+        {%- if state_var.in_derived_quant %}double {{ state_var.var }} = rY[{{loop.index0}}];
+        // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
+        {% endif %}{%- endfor %}        
+        
+        // Mathematics
+        {%- for eq in derived_quantity_equations %}
+        const double {{eq.lhs}} = {{eq.rhs}}; // {{eq.units}}
+        {%- endfor %}
+        
+        std::vector<double> dqs({{derived_quantities|length}});
+        {%- for quant in derived_quantities %}
+        dqs[{{loop.index0}}] = {{quant}};
+        {%- endfor %}
+        return dqs;
+    }{% endif %}
+
 template<>
 void OdeSystemInformation<{{class_name}}>::Initialise(void)
 {

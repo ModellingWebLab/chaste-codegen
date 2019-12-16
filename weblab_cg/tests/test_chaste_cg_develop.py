@@ -162,9 +162,6 @@ class TestChasteCG(object):
         eq1 = sympy.sympify(eq1)
         eq2 = sympy.sympify(eq2)
 
-        if eq1.free_symbols != eq2.free_symbols:
-            return False
-
         e1 = sympy.sympify(self._numbers_with_float_precision(str(eq1)))
         e2 = sympy.sympify(self._numbers_with_float_precision(str(eq2)))
         if is_same(e1, e2):
@@ -175,7 +172,9 @@ class TestChasteCG(object):
         random.seed(time.time())
         subs_dict = {}
         for i in range(1000):
-            for symbol in eq1.free_symbols:
+            free_symbols = eq1.free_symbols
+            free_symbols.update(eq2.free_symbols)
+            for symbol in free_symbols:
                 random_val = random.uniform(-1000, 1000)
                 subs_dict.update({symbol: random_val})
             a = sympy.simplify(eq1.subs(subs_dict))
@@ -395,7 +394,7 @@ class TestChasteCG(object):
         return [eq for eq in main_eqs if eq[0] not in filter_lhss]
 
     def _check_equation_list(self, expected, generated):
-        """ Check expected and generated represent teh same equation"""
+        """ Check expected and generated represent the same equation"""
         if not self._keep_subs:
             self.link_subs_expected = dict()
             self.link_subs_generated = dict()
@@ -475,7 +474,6 @@ class TestChasteCG(object):
                 assert same
 
         # Check the order for generated: lhs doesn't appear in earlier rhs (could give c++ compile error)
-
         rhs_symbols = set()
         for i in range(len(generated)):
             # Update symbold we have seen on the rhs so far
