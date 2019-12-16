@@ -527,7 +527,7 @@ class ChasteModel(object):
             [{'lhs': self._printer.doprint(eq.lhs), 'rhs': print_rhs(eq),
               'units': self._model.units.summarise_units(eq.lhs)} for eq in self._extended_equations_for_ionic_vars]
 
-        ionic_rhs = sp.simplify(0.0)
+        ionic_rhs = sp.sympify(0.0, evaluate=False)
         for var, factor in [(eq['unformatted_lhs'], eq['conversion_factor'])
                             for eq in self._formatted_equations_for_ionic_vars]:
             ionic_rhs += (factor * var if factor != 1.0 else var)
@@ -537,11 +537,11 @@ class ChasteModel(object):
                 if self._membrane_capacitance_factor != 1.0 else self._membrane_capacitance.lhs
             ionic_rhs /= div
 
-        ionic_rhs = self._printer.doprint(sp.simplify(ionic_rhs))
+        ionic_rhs = self._printer.doprint(sp.sympify(ionic_rhs, evaluate=False))
         if self._current_unit_and_capacitance['use_heartconfig_capacitance']:
             ionic_rhs = '(' + ionic_rhs + ') * ' + self._HEARTCONFIG_GETCAPACITANCE
 
-        i_ionic = sp.sympify('_i_ionic')
+        i_ionic = sp.sympify('_i_ionic', evaluate=False)
         self._in_interface.append(i_ionic)
         formated_extended_equations_for_ionic_vars.append(
             {'lhs': self._printer.doprint(i_ionic),
@@ -647,7 +647,7 @@ class ChasteModel(object):
                     if fac != 1.0:
                         stim_current_eq_rhs *= fac
 
-                d_eqs[i] = sp.Eq(d_eqs[i].lhs, sp.simplify(stim_current_eq_rhs))
+                d_eqs[i] = sp.Eq(d_eqs[i].lhs, sp.sympify(stim_current_eq_rhs, evaluate=False))
 
             # Format the equation and put it at the front of the result list to keep order (we're looping backwards)
             equations.insert(0, {'lhs': d_eqs[i].lhs,
@@ -666,7 +666,7 @@ class ChasteModel(object):
                                                  (1 / equations[i]['factor'] * equations[i]['lhs'])})
         for i in range(len(equations)):
             if equations[i]['factor'] != 1.0:
-                equations[i]['rhs'] = sp.simplify(equations[i]['factor'] * equations[i]['rhs'])
+                equations[i]['rhs'] = sp.sympify(equations[i]['factor'] * equations[i]['rhs'], evaluate=False)
             equations[i]['rhs'] = \
                 self._printer.doprint(equations[i]['rhs']) + equations[i]['rhs_divider']
             equations[i]['lhs'] = self._printer.doprint(equations[i]['lhs'])

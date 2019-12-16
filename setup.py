@@ -41,7 +41,6 @@ setup(
     install_requires=[
         # cellmlmanip                # Add this in when cellmlmanip is ready
         'Jinja2>=2.10',
-        'sympy==1.4',
     ],
     extras_require={
         'test': [
