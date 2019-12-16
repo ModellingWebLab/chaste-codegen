@@ -415,7 +415,7 @@
         rDY[28] = d_dt_chaste_interface__Ca_handling_by_the_SR__F3;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Cellaslanidi_model_2009FromCellML>::Initialise(void)
 {
     this->mSystemName = "aslanidi_model_2009";

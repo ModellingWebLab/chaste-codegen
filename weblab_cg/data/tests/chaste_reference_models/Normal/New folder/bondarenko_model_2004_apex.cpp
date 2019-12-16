@@ -476,7 +476,7 @@
         rDY[40] = d_dt_chaste_interface__rapid_delayed_rectifier_potassium_current__I_K;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Cellbondarenko_model_2004_apexFromCellML>::Initialise(void)
 {
     this->mSystemName = "bondarenko_model_2004_apex";

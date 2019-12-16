@@ -491,7 +491,7 @@
         rDY[25] = d_dt_chaste_interface__Ca__trops;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Cellmahajan_2008FromCellML>::Initialise(void)
 {
     this->mSystemName = "mahajan_shiferaw_model_2008";

@@ -322,7 +322,7 @@
         rDY[16] = d_dt_chaste_interface__intracellular_calcium_concentration__Ca_Trop;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Cellnoble_model_1991FromCellML>::Initialise(void)
 {
     this->mSystemName = "noble_model_1991";

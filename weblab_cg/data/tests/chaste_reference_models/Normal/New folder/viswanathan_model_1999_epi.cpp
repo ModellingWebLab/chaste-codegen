@@ -465,7 +465,7 @@
         rDY[24] = d_dt_chaste_interface__ionic_concentrations__Ki;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Cellviswanathan_model_1999_epiFromCellML>::Initialise(void)
 {
     this->mSystemName = "viswanathan_model_1999_epi";

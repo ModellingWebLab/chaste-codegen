@@ -378,7 +378,7 @@
         rDY[20] = d_dt_chaste_interface__intracellular_calcium_concentration__Ca_Trop;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Cellespinosa_model_1998_normalFromCellML>::Initialise(void)
 {
     this->mSystemName = "espinosa_model_1998";

@@ -391,7 +391,7 @@
         rDY[28] = d_dt_chaste_interface__Ca_handling_by_the_SR__F2;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Cellnygren_atrial_model_1998FromCellML>::Initialise(void)
 {
     this->mSystemName = "nygren_atrial_model_1998";

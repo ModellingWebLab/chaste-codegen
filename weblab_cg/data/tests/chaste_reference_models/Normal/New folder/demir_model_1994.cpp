@@ -365,7 +365,7 @@
         rDY[26] = d_dt_chaste_interface__SR_Ca_uptake_and_release__F3;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Celldemir_model_1994FromCellML>::Initialise(void)
 {
     this->mSystemName = "demir_model_1994";

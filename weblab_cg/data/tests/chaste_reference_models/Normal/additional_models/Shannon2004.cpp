@@ -669,7 +669,7 @@
         rDY[38] = d_dt_chaste_interface__cytosolic_Ca_buffer__Ca_SRB;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<CellShannon2004FromCellML>::Initialise(void)
 {
     this->mSystemName = "shannon_2004";

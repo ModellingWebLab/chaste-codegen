@@ -628,7 +628,7 @@
         return dqs;
     }
     
-    template<>
+template<>
 void OdeSystemInformation<cellmatsuoka_model_2003FromCellML>::Initialise(void)
 {
     this->mSystemName = "matsuoka_model_2003";

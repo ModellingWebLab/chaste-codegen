@@ -621,7 +621,7 @@
         rDY[37] = d_dt_chaste_interface__cell__sCai;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Cellgrandi2010ssFromCellML>::Initialise(void)
 {
     this->mSystemName = "grandi2010";

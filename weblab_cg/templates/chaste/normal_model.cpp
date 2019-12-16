@@ -135,8 +135,8 @@
         rDY[{{loop.index0}}] = {{deriv}};
         {%- endfor %}
     }
+    {%- if derived_quantities|length > 0 %}
 
-    {% if derived_quantities|length > 0 %}
     std::vector<double> {{class_name}}::ComputeDerivedQuantities(double {{free_variable.var_name}}, const std::vector<double> & rY)
     {
         // Inputs:
@@ -156,9 +156,9 @@
         dqs[{{loop.index0}}] = {{quant}};
         {%- endfor %}
         return dqs;
-    }
-    
-    {% endif %}template<>
+    }{% endif %}
+
+template<>
 void OdeSystemInformation<{{class_name}}>::Initialise(void)
 {
     this->mSystemName = "{{free_variable.system_name}}";

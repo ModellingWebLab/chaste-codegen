@@ -365,7 +365,7 @@
         rDY[22] = d_dt_chaste_interface__Force__P_3;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Celliribe_model_2006_without_otherwise_sectionFromCellML>::Initialise(void)
 {
     this->mSystemName = "iribe_model_2006";

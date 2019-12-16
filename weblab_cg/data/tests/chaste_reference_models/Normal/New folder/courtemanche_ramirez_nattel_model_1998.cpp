@@ -366,7 +366,7 @@
         rDY[20] = d_dt_chaste_interface__intracellular_ion_concentrations__Ca_up;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Cellcourtemanche_ramirez_nattel_model_1998FromCellML>::Initialise(void)
 {
     this->mSystemName = "courtemanche_ramirez_nattel_model_1998";

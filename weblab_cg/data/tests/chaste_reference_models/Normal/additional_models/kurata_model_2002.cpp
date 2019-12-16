@@ -431,7 +431,7 @@
         rDY[26] = d_dt_chaste_interface__calcium_buffering__fCQ;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Cellkurata_model_2002FromCellML>::Initialise(void)
 {
     this->mSystemName = "kurata_model_2002";

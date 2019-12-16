@@ -492,7 +492,7 @@
         rDY[14] = d_dt_chaste_interface__hyperpolarisation_activated_current_y_gate__y;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Cellzhang_SAN_model_2000_allFromCellML>::Initialise(void)
 {
     this->mSystemName = "zhang_SAN_model_2000_all";

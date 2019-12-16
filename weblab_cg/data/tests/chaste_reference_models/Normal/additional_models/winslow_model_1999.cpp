@@ -438,7 +438,7 @@
         rDY[32] = d_dt_chaste_interface__intracellular_ion_concentrations__Ca_NSR;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Cellwinslow_model_1999FromCellML>::Initialise(void)
 {
     this->mSystemName = "winslow_model_1999";

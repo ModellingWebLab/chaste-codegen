@@ -123,7 +123,7 @@
         rDY[3] = d_dt_chaste_interface__potassium_channel_n_gate__n;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Dynamichodgkin_huxley_squid_axon_model_1952_modifiedFromCellML>::Initialise(void)
 {
     this->mSystemName = "hodgkin_huxley_squid_axon_model_1952_modified";

@@ -388,7 +388,7 @@
         rDY[20] = d_dt_chaste_interface__intracellular_calcium_concentration__Ca_Trop;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Cellsakmann_model_2000_epiFromCellML>::Initialise(void)
 {
     this->mSystemName = "sakmann_model_2000_epi";

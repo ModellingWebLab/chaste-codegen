@@ -109,4 +109,6 @@ ENV/
 
 # Visual Studio Code
 .vscode
+
+# Chaste_cg specific
 weblab_cg/data/tests/chaste_reference_models/develop/

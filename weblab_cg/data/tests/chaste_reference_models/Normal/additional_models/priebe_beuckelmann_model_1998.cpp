@@ -358,7 +358,7 @@
         rDY[21] = d_dt_chaste_interface__Ionic_concentrations__Ca_NSR;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Cellpriebe_beuckelmann_model_1998FromCellML>::Initialise(void)
 {
     this->mSystemName = "priebe_beuckelmann_model_1998";

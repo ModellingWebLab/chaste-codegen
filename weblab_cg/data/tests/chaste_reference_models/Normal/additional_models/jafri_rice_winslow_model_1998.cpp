@@ -428,7 +428,7 @@
         rDY[30] = d_dt_chaste_interface__ionic_concentrations__Ko;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Celljafri_rice_winslow_model_1998FromCellML>::Initialise(void)
 {
     this->mSystemName = "jafri_rice_winslow_1998";

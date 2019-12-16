@@ -336,7 +336,7 @@
         rDY[17] = d_dt_chaste_interface__ion_concentrations__Ko;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Celldokos_model_1996FromCellML>::Initialise(void)
 {
     this->mSystemName = "dokos_model_1996";

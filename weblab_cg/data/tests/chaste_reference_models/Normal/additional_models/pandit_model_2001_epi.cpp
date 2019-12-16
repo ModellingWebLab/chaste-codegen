@@ -397,7 +397,7 @@
         rDY[25] = d_dt_chaste_interface__intracellular_ion_concentrations__Ca_NSR;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Cellpandit_model_2001_epiFromCellML>::Initialise(void)
 {
     this->mSystemName = "pandit_model_2001_epi";

@@ -374,7 +374,7 @@
         rDY[19] = d_dt_chaste_interface__potassium_dynamics__K_i;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Cellstewart_zhang_model_2008_ssFromCellML>::Initialise(void)
 {
     this->mSystemName = "stewart_zhang_model_2008";

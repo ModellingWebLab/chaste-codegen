@@ -352,7 +352,7 @@
         rDY[11] = d_dt_chaste_interface__ionic_concentrations__Ca_NSR;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Cellluo_rudy_1994FromCellML>::Initialise(void)
 {
     this->mSystemName = "luo_rudy_1994";

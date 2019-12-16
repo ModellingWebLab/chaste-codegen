@@ -427,7 +427,7 @@
         rDY[26] = d_dt_chaste_interface__K__K_i;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Cellfink_noble_giles_model_2008FromCellML>::Initialise(void)
 {
     this->mSystemName = "fink_noble_giles_model_2008";

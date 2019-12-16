@@ -489,7 +489,7 @@
         rDY[28] = d_dt_chaste_interface__Ca__Ca_ss;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Cellhund_rudy_2004_aFromCellML>::Initialise(void)
 {
     this->mSystemName = "hund_rudy_2004";

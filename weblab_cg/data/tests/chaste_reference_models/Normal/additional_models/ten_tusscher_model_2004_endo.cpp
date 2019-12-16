@@ -335,7 +335,7 @@
         rDY[16] = d_dt_chaste_interface__potassium_dynamics__K_i;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Cellten_tusscher_model_2004_endoFromCellML>::Initialise(void)
 {
     this->mSystemName = "tentusscher_model_2004_endo";

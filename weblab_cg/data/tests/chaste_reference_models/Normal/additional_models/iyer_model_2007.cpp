@@ -879,7 +879,7 @@
         rDY[66] = d_dt_chaste_interface__IKs__O2ks;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Celliyer_model_2007FromCellML>::Initialise(void)
 {
     this->mSystemName = "iyer_model_2007";

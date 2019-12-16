@@ -633,7 +633,7 @@
         rDY[47] = d_dt_chaste_interface__CaMK_active__CaMK_trap;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Celldecker_2009FromCellML>::Initialise(void)
 {
     this->mSystemName = "decker_2009";

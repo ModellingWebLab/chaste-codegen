@@ -176,7 +176,7 @@
         rDY[7] = d_dt_chaste_interface__time_dependent_outward_current_x1_gate__x1;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellML>::Initialise(void)
 {
     this->mSystemName = "beeler_reuter_model_1977";

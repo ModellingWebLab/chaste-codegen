@@ -401,7 +401,7 @@
         rDY[17] = d_dt_chaste_interface__Ca__Over;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Celllivshitz_rudy_2007FromCellML>::Initialise(void)
 {
     this->mSystemName = "LivshitzRudy2007";

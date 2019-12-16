@@ -284,7 +284,7 @@
         rDY[13] = d_dt_chaste_interface__intracellular_potassium_concentration__Ki;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Cellnoble_SAN_model_1989FromCellML>::Initialise(void)
 {
     this->mSystemName = "Noble_SAN_model_1989";

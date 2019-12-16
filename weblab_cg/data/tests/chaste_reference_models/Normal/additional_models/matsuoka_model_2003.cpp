@@ -607,7 +607,7 @@
         rDY[36] = d_dt_chaste_interface__NL_model__X;
     }
 
-    template<>
+template<>
 void OdeSystemInformation<Cellmatsuoka_model_2003FromCellML>::Initialise(void)
 {
     this->mSystemName = "matsuoka_model_2003";
