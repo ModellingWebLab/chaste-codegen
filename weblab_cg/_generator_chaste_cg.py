@@ -166,7 +166,7 @@ class ChasteModel(object):
             s_name = str(s).replace('$', '__')
 
             # Deal with NumberDummy variables
-            if s_name[:1].isdigit() or len(s_name) >= 2 and s_name.startswith('-') and s_name[1].isdigit():
+            if isinstance(s, NumberDummy):
                 return s_name
 
             prefix = 'var_chaste_interface_' if interface else 'var'
