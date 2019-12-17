@@ -3,6 +3,7 @@ import time
 import sympy as sp
 import weblab_cg as cg
 from copy import deepcopy
+from cellmlmanip.model import NumberDummy
 
 
 class ChasteModel(object):
@@ -160,19 +161,25 @@ class ChasteModel(object):
 
     def _add_printers(self):
         """ Initialises Printers for outputting chaste code. """
-        def get_symbol_name(s):
+        def get_symbol_name(s, interface=False):
+            """Get the correct variable name based on the symbol and whether it should be in the chaste_interface."""
             s_name = str(s).replace('$', '__')
+
+            # Deal with NumberDummy variables
+            if isinstance(s, NumberDummy):
+                return s_name
+
+            prefix = 'var_chaste_interface_' if interface else 'var'
             if not s_name.startswith('_'):
                 s_name = '_' + s_name
-            return s_name
+            return prefix + s_name
         # Printer for printing chaste regular variable assignments (var_ prefix)
         # Print variables in interface as var_chaste_interface
         # (state variables, time, lhs of default_stimulus eqs, i_ionic and lhs of y_derivatives)
         # Print modifiable parameters as mParameters[index]
         self._printer = \
             cg.ChastePrinter(lambda symbol:
-                             ('var_chaste_interface_'
-                              if symbol in self._in_interface else 'var') + get_symbol_name(symbol)
+                             get_symbol_name(symbol, symbol in self._in_interface)
                              if symbol not in self._modifiable_parameters
                              else 'mParameters[' + str(self._modifiable_parameters.index(symbol)) + ']',
                              lambda deriv: 'd_dt_chaste_interface_' +
@@ -275,7 +282,7 @@ class ChasteModel(object):
         if self._membrane_stimulus_current is not None:
             # Get remaining stimulus current variables If they have metadata use that as key, ortherwise use the name
             # Exclude _membrane_stimulus_current itself so we can treat it seperately
-            for eq in self._model.get_equations_for([self._membrane_stimulus_current]):
+            for eq in self._model.get_equations_for([self._membrane_stimulus_current], strip_units=False):
                 if eq.lhs != self._membrane_stimulus_current:
                     ontology_terms = self._model.get_ontology_terms_by_symbol(eq.lhs, self._OXMETA)
                     key = ontology_terms[0] if len(ontology_terms) > 0 else eq.lhs
@@ -306,7 +313,7 @@ class ChasteModel(object):
             equations, old_equations = self._ionic_derivs, None
             while len(equations_for_ionic_vars) == 0 and old_equations != equations:
                 old_equations = equations
-                equations = self._model.get_equations_for(equations, recurse=False)
+                equations = self._model.get_equations_for(equations, recurse=False, strip_units=False)
                 equations_for_ionic_vars = [eq for eq in equations
                                             if ((self._membrane_stimulus_current is None)
                                                 or (eq.lhs != self._membrane_stimulus_current
@@ -332,7 +339,8 @@ class ChasteModel(object):
         # Remove equations where lhs is a modifiable parameter or stimulus vars
         extended_equations_for_ionic_vars = \
             [eq for eq in
-                self._model.get_equations_for([ionic_var_eq.lhs for ionic_var_eq in self._equations_for_ionic_vars])
+                self._model.get_equations_for([ionic_var_eq.lhs for ionic_var_eq in self._equations_for_ionic_vars],
+                                              strip_units=False)
                 if eq.lhs not in self._modifiable_parameters
                 and eq.lhs not in [st.lhs for st in self._default_stimulus.values()]]
         if self._current_unit_and_capacitance['use_capacitance'] \
@@ -357,19 +365,19 @@ class ChasteModel(object):
     def _get_derivative_eqs_voltage(self):
         """ Get equations defining the derivatives for V (self._membrane_voltage_var)"""
         # Remove equations where lhs is a modifiable parameter
-        return [eq for eq in self._model.get_equations_for(self._y_derivatives_voltage)
+        return [eq for eq in self._model.get_equations_for(self._y_derivatives_voltage, strip_units=False)
                 if eq.lhs not in self._modifiable_parameters]
 
     def _get_derivative_eqs_exlc_voltage(self):
         """ Get equations defining the derivatives excluding V (self._membrane_voltage_var)"""
         # Remove equations where lhs is a modifiable parameter
-        return [eq for eq in self._model.get_equations_for(self._y_derivatives_excl_voltage)
+        return [eq for eq in self._model.get_equations_for(self._y_derivatives_excl_voltage, strip_units=False)
                 if eq.lhs not in self._modifiable_parameters]
 
     def _get_derivative_equations(self):
         """ Get equations defining the derivatives including  V (self._membrane_voltage_var)"""
         # Remove equations where lhs is a modifiable parameter
-        return [eq for eq in self._model.get_equations_for(self._y_derivatives)
+        return [eq for eq in self._model.get_equations_for(self._y_derivatives, strip_units=False)
                 if eq.lhs not in self._modifiable_parameters]
 
     def _get_derived_quant_annotated(self):
@@ -398,7 +406,7 @@ class ChasteModel(object):
 
     def _get_derived_quant_eqs(self):
         """ Get the defining equations for derived quantities"""
-        return self._model.get_equations_for(self._derived_quant)
+        return self._model.get_equations_for(self._derived_quant, strip_units=False)
 
     def _format_modifiable_parameters(self):
         """ Format the modifiable parameter for printing to chaste code"""
@@ -599,23 +607,24 @@ class ChasteModel(object):
                     voltage_rhs = d_eqs[i].rhs
                     is_voltage = True
                     symbols = list(voltage_rhs.free_symbols)
-                    while len(symbols) > 0:
-                        if self._membrane_stimulus_current != symbols[0]:
+                    for symbol in symbols:
+                        if self._membrane_stimulus_current != symbol:
                             if self._current_unit_and_capacitance['units'].dimensionality == \
-                                    self._model.units.summarise_units(symbols[0]).dimensionality:
-                                voltage_rhs = voltage_rhs.subs({symbols[0]: 0.0})  # other currents = 0
+                                    self._model.units.summarise_units(symbol).dimensionality:
+                                voltage_rhs = voltage_rhs.subs({symbol: 0.0})  # other currents = 0
                             else:
                                 # For other variables see if we need o follow their definitions first
-                                if symbols[0] in [eq.lhs for eq in d_eqs]:
-                                    rhs = [eq.rhs for eq in d_eqs if eq.lhs == symbols[0]][-1]
+                                if symbol in [eq.lhs for eq in d_eqs]:
+                                    rhs = [eq.rhs for eq in d_eqs if eq.lhs == symbol][-1]
                                     if not isinstance(rhs, sp.numbers.Float):
-                                        voltage_rhs = voltage_rhs.subs({symbols[0]: rhs})  # Update definition
+                                        voltage_rhs = voltage_rhs.subs({symbol: rhs})  # Update definition
                                         symbols.extend(rhs.free_symbols)
                                     else:
                                         voltage_rhs = voltage_rhs.subs({symbols[0]: 1.0})  # other variables = 1
-                        del symbols[0]
                     voltage_rhs = voltage_rhs.subs({self._membrane_stimulus_current: 1.0})  # - stimulus current = 1
-                    negate_stimulus = voltage_rhs > 0.0
+                    # Deal with NumberDummy variables (as we haven't striped units this may still contain NumberDummys)
+                    subs_dict = {s: float(s) for s in voltage_rhs.free_symbols if isinstance(s, NumberDummy)}
+                    negate_stimulus = voltage_rhs.subs(subs_dict) > 0.0
                 # Convert voltage to mV, time to mS and calcium to millimolar
                 dividend_unit = self._get_desired_units(d_eqs[i].lhs.args[0])
                 divisor_unit = self._get_desired_units(d_eqs[i].lhs.args[1][0])
