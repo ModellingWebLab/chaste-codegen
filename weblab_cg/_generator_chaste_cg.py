@@ -661,9 +661,6 @@ class ChasteModel(object):
                 self._model.remove_equation(d_eqs[i])
                 # add eq self._membrane_stimulus_current = area to model
                 self._model.add_equation(sp.Eq(self._membrane_stimulus_current, area))
-                #self._membrane_stimulus_current.units = self._model.units.ureg.second
-                #self._membrane_stimulus_current.cmeta_id = 'bla'
-                #self._time_variable.cmeta_id = 'membrane_stimulus_current'
 
                 if self._current_unit_and_capacitance['use_heartconfig_capacitance']:
                     rhs_divider = '/ ' + self._HEARTCONFIG_GETCAPACITANCE
@@ -762,7 +759,8 @@ class ChasteModel(object):
                 return var.name.replace('$', '__')
 
     def _format_derived_quant(self):
-        return [{'units': 'uA_per_cm2' if quant == self._membrane_stimulus_current else self._model.units.summarise_units(quant),
+        return [{'units': 'uA_per_cm2'
+                if quant == self._membrane_stimulus_current else self._model.units.summarise_units(quant),
                  'var': self._printer.doprint(quant), 'name': self._get_var_display_name(quant)}
                 for quant in self._derived_quant]
 
@@ -770,7 +768,7 @@ class ChasteModel(object):
         """ Format equations for derivd quantites based on current settings"""
         return [{'lhs': self._printer.doprint(eq.lhs),
                  'rhs': self._printer.doprint(eq.rhs),
-                 'units': str(self._model.units.summarise_units(eq.lhs)) }
+                 'units': str(self._model.units.summarise_units(eq.lhs))}
                 for eq in self._derived_quant_eqs]
 
     def generate_chaste_code(self):
