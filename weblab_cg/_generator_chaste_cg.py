@@ -762,7 +762,7 @@ class ChasteModel(object):
                 return var.name.replace('$', '__')
 
     def _format_derived_quant(self):
-        return [{'units': self._model.units.summarise_units(quant),
+        return [{'units': 'uA_per_cm2' if quant == self._membrane_stimulus_current else self._model.units.summarise_units(quant),
                  'var': self._printer.doprint(quant), 'name': self._get_var_display_name(quant)}
                 for quant in self._derived_quant]
 
@@ -770,7 +770,7 @@ class ChasteModel(object):
         """ Format equations for derivd quantites based on current settings"""
         return [{'lhs': self._printer.doprint(eq.lhs),
                  'rhs': self._printer.doprint(eq.rhs),
-                 'units': str(self._model.units.summarise_units(eq.lhs))}
+                 'units': str(self._model.units.summarise_units(eq.lhs)) }
                 for eq in self._derived_quant_eqs]
 
     def generate_chaste_code(self):
