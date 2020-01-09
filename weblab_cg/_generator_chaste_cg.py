@@ -764,15 +764,15 @@ class ChasteModel(object):
         Looks for OXMETA ontology annotation tage first, then cmeta:id if present, or the name attribute if not.
         If there is an interface component, strip the name of it out of the display name.
         """
+        display_name = var.name
         if self._model.has_ontology_annotation(var, self._OXMETA):
-            return self._model.get_ontology_terms_by_symbol(var, self._OXMETA)[-1]
+            display_name = self._model.get_ontology_terms_by_symbol(var, self._OXMETA)[-1]
         elif var.cmeta_id:
-            return var.cmeta_id
+            display_name = var.cmeta_id
         else:
             if var in self._in_interface:
-                return var.name.split('$')[-1]
-            else:
-                return var.name.replace('$', '__')
+                display_name = var.name.split('$')[-1]
+        return display_name.replace('$', '__')
 
     def _format_derived_quant(self):
         return [{'units': self._model.units.summarise_units(quant),
