@@ -153,7 +153,7 @@
         
         std::vector<double> dqs({{derived_quantities|length}});
         {%- for quant in derived_quantities %}
-        dqs[{{loop.index0}}] = {{quant}};
+        dqs[{{loop.index0}}] = {{quant.var}};
         {%- endfor %}
         return dqs;
     }{% endif %}
@@ -174,9 +174,13 @@ void OdeSystemInformation<{{class_name}}>::Initialise(void)
     this->mParameterNames.push_back("{{param["name"]}}");
     this->mParameterUnits.push_back("{{param["units"]}}");
 
+    {% endfor %}{% for param in derived_quantities %}// Derived Quantity index [{{loop.index0}}]:
+    this->mParameterNames.push_back("{{param["name"]}}");
+    this->mParameterUnits.push_back("{{param["units"]}}");
+
     {% endfor %}{% for attr in named_attributes %}
     this->mAttributes["{{attr["name"]}}"] = {{attr["value"]}};
-    {% endfor %}this->mInitialised = true;
+    {% endfor %}this->mInitialised = true;    
 }
 
 

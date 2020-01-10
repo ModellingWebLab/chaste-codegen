@@ -85,3 +85,31 @@ def write_file(file_name, file_contents):
     file = open(file_name, 'w')
     file.write(file_contents)
     file.close()
+
+
+def compare_model_against_reference(model_type, chaste_model, tmp_path):
+    """ Check a model's generated files against given reference files
+    """
+    tmp_path = str(tmp_path)
+
+    # Write generated files
+    hhp_gen_file_path = os.path.join(tmp_path, model_type, chaste_model.file_name + ".hpp")
+    cpp_gen_file_path = os.path.join(tmp_path, model_type, chaste_model.file_name + ".cpp")
+    write_file(hhp_gen_file_path, chaste_model.generated_hpp)
+    write_file(cpp_gen_file_path, chaste_model.generated_cpp)
+
+    # Load reference files
+    # Get reference file locations
+    expected_hpp = \
+        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', model_type, chaste_model.file_name + ".hpp")
+    expected_cpp = \
+        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', model_type, chaste_model.file_name + ".cpp")
+    expected_hpp = get_file_lines(expected_hpp)
+    expected_cpp = get_file_lines(expected_cpp)
+
+    # Load generated files
+    generated_hpp = get_file_lines(hhp_gen_file_path)
+    generated_cpp = get_file_lines(cpp_gen_file_path)
+
+    assert expected_hpp == generated_hpp
+    assert expected_cpp == generated_cpp

@@ -73,7 +73,7 @@ class ChasteModel(object):
                    'units': str(self._model.units.summarise_units(self._membrane_capacitance.lhs))}]
                  )}}
 
-    def __init__(self, model, class_name, file_name):
+    def __init__(self, model, class_name, file_name, **kwargs):
         """ Initialise a ChasteModel instance
         Arguments
 
@@ -91,11 +91,13 @@ class ChasteModel(object):
         # Store default options
         self.class_name = class_name
         self.file_name = file_name
-        self.dynamically_loadable = False
-
         self.generated_hpp = ''
         self.generated_cpp = ''
+
         self._is_self_excitatory = False
+        self._dynamically_loadable = kwargs['dynamically_loadable'] if 'dynamically_loadable' in kwargs else False
+        self._expose_annotated_variables = kwargs['expose_annotated_variables'] \
+            if 'expose_annotated_variables' in kwargs else False
 
         self._logger = logging.getLogger(__name__)
         self._logger.setLevel(logging.INFO)
@@ -106,8 +108,9 @@ class ChasteModel(object):
         self._stim_units = self._add_units()
 
         self._in_interface = []
-        self._modifiable_parameters = self._get_modifiable_parameters()
+
         self._time_variable = self._model.get_free_variable_symbol()
+        self._modifiable_parameters = self._get_modifiable_parameters()
         self._in_interface.append(self._time_variable)
 
         self._membrane_voltage_var = self._get_membrane_voltage_var()
@@ -117,6 +120,7 @@ class ChasteModel(object):
         self._state_var_conversion_factors, self._state_var_subs = self._get_state_var_conversion()
 
         self._membrane_stimulus_current = self._get_membrane_stimulus_current()
+        self._original_membrane_stimulus_current = self._membrane_stimulus_current
         self._membrane_capacitance, self._membrane_capacitance_factor = self._get_membrane_capacitance()
         self._default_stimulus = self._get_stimulus()
 
@@ -128,12 +132,11 @@ class ChasteModel(object):
         self._y_derivatives = self._get_y_derivatives()
         self._y_derivatives_voltage = self._get_y_derivatives_voltage()
         self._y_derivatives_excl_voltage = self._get_y_derivatives_excl_voltage()
+        self._derivative_equations = self._get_derivative_equations()
         self._derivative_eqs_voltage = self._get_derivative_eqs_voltage()
         self._derivative_eqs_exlc_voltage = self._get_derivative_eqs_exlc_voltage()
-        self._derivative_equations = self._get_derivative_equations()
-
-        self._derived_quant_annotated = self._get_derived_quant_annotated()
-        self._derived_quant_exposed = self._get_derived_quant_exposed()
+        self._derived_quant = self._get_derived_quant()
+        self._derived_quant_eqs = self._get_derived_quant_eqs()
 
         self._add_printers()
         self._formatted_modifiable_parameters = self._format_modifiable_parameters()
@@ -144,20 +147,9 @@ class ChasteModel(object):
         self._formatted_y_derivatives = self._format_y_derivatives()
         self._formatted_derivative_eqs = self._format_derivative_equations()
         self._free_variable, self._ode_system_information, self._named_attributes = self._format_ode_system_info()
-        self.expose_annotated_variables = False  # Using property to initialise and format derived quantity equations
 
-    @property
-    def expose_annotated_variables(self):
-        return self._expose_annotated_variables
-
-    @expose_annotated_variables.setter
-    def expose_annotated_variables(self, value):
-        self._expose_annotated_variables = value
-        self._derived_quant = self._get_derived_quant()
         self._formatted_derived_quant = self._format_derived_quant()
-        self._derived_quant_eqs = self._get_derived_quant_eqs()
         self._formatted_quant_eqs = self._format_derived_quant_eqs()
-        self._update_formatted_state_vars_in_derived_quant()
 
     def _add_printers(self):
         """ Initialises Printers for outputting chaste code. """
@@ -205,9 +197,33 @@ class ChasteModel(object):
                 stim_units[key][i]['units'] = getattr(self._model.units.ureg, stim_units[key][i]['units'])
         return stim_units
 
+    def _get_modifiable_parameters_annotated(self):
+        """ Get the variables annotated in the model as modifiable parametery"""
+        return self._model.get_symbols_by_rdf((self._PYCMLMETA, 'modifiable-parameter'), 'yes')
+
+    def _get_modifiable_parameters_exposed(self):
+        """ Get the variables in the model that have exposed annotation and are modifiable parameters
+            (irrespective of any modifiable_parameters tags)"""
+        return [q for q in self._model.variables()
+                if self._model.has_ontology_annotation(q, self._OXMETA)
+                and not self._model.get_ontology_terms_by_symbol(q, self._OXMETA)[-1]
+                .startswith('membrane_stimulus_current')
+                and q not in self._model.get_derived_quantities()
+                and q not in self._model.get_state_symbols()
+                and not q == self._time_variable]
+
     def _get_modifiable_parameters(self):
-        return self._model.get_symbols_by_rdf((self._PYCMLMETA,
-                                              'modifiable-parameter'), 'yes')
+        """ Get all modifiable parameters
+
+            Note: the result depends on self._expose_annotated_variables to determine whether or not to include
+            variables exposed with oxford metadata that are derived quantities but are not annotated as such"""
+        if self._expose_annotated_variables:
+            # Combined and sorted in document order
+            return \
+                sorted(self._get_modifiable_parameters_annotated() + self._get_modifiable_parameters_exposed(),
+                       key=lambda v: self._get_var_display_name(v))
+        else:
+            return sorted(self._get_modifiable_parameters_annotated(), key=lambda v: self._get_var_display_name(v))
 
     def _get_membrane_voltage_var(self):
         """ Find the membrane_voltage variable"""
@@ -364,21 +380,111 @@ class ChasteModel(object):
 
     def _get_derivative_eqs_voltage(self):
         """ Get equations defining the derivatives for V (self._membrane_voltage_var)"""
-        # Remove equations where lhs is a modifiable parameter
+        # Remove equations where lhs is a modifiable parameter or default stimulus
         return [eq for eq in self._model.get_equations_for(self._y_derivatives_voltage, strip_units=False)
-                if eq.lhs not in self._modifiable_parameters]
+                if eq.lhs not in self._modifiable_parameters
+                and eq not in self._default_stimulus.values()]
 
     def _get_derivative_eqs_exlc_voltage(self):
         """ Get equations defining the derivatives excluding V (self._membrane_voltage_var)"""
-        # Remove equations where lhs is a modifiable parameter
+        # Remove equations where lhs is a modifiable parameter or default stimulus
         return [eq for eq in self._model.get_equations_for(self._y_derivatives_excl_voltage, strip_units=False)
-                if eq.lhs not in self._modifiable_parameters]
+                if eq.lhs not in self._modifiable_parameters
+                and eq not in self._default_stimulus.values()]
 
     def _get_derivative_equations(self):
-        """ Get equations defining the derivatives including  V (self._membrane_voltage_var)"""
-        # Remove equations where lhs is a modifiable parameter
-        return [eq for eq in self._model.get_equations_for(self._y_derivatives, strip_units=False)
-                if eq.lhs not in self._modifiable_parameters]
+        """ Get equations defining the derivatives including V (self._membrane_voltage_var)"""
+        def get_deriv_eqs():
+            """ Get equations defining the derivatives"""
+            # Remove equations where lhs is a modifiable parameter or default stimulus
+            return [eq for eq in self._model.get_equations_for(self._y_derivatives, strip_units=False)
+                    if eq.lhs not in self._modifiable_parameters
+                    and eq not in self._default_stimulus.values()]
+
+        d_eqs = get_deriv_eqs()
+        # If there is a _membrane_stimulus_current set, convert it.
+        if self._membrane_stimulus_current is not None:
+            negate_stimulus = False
+            # loop through equations backwards as derivatives are last
+            for i in range(len(d_eqs) - 1, - 1, - 1):
+                if isinstance(d_eqs[i].lhs, sp.Derivative):
+                    # This is dV/dt
+                    # Assign temporary values to variables in order to check the stimulus sign.
+                    # This will process defining expressions in a breadth first search until the stimulus
+                    # current is found.  Each variable that doesn't have its definitions processed will
+                    # be given a value as follows:
+                    # - stimulus current = 1
+                    # - other currents = 0
+                    # - other variables = 1
+                    # The stimulus current is then negated from the sign expected by Chaste if evaluating
+                    # dV/dt gives a positive value.
+                    if d_eqs[i].lhs.args[0] == self._membrane_voltage_var:
+                        voltage_rhs = d_eqs[i].rhs
+                        symbols = list(voltage_rhs.free_symbols)
+                        for symbol in symbols:
+                            if self._membrane_stimulus_current != symbol:
+                                if self._current_unit_and_capacitance['units'].dimensionality == \
+                                        self._model.units.summarise_units(symbol).dimensionality:
+                                    voltage_rhs = voltage_rhs.subs({symbol: 0.0})  # other currents = 0
+                                else:
+                                    # For other variables see if we need to follow their definitions first
+                                    rhs = None
+                                    if symbol in [eq.lhs for eq in d_eqs]:
+                                        rhs = [eq.rhs for eq in d_eqs if eq.lhs == symbol][-1]
+
+                                    if rhs is not None and not isinstance(rhs, sp.numbers.Float):
+                                        voltage_rhs = voltage_rhs.subs({symbol: rhs})  # Update definition
+                                        symbols.extend(rhs.free_symbols)
+                                    else:
+                                        voltage_rhs = voltage_rhs.subs({symbol: 1.0})  # other variables = 1
+                        voltage_rhs = voltage_rhs.subs({self._membrane_stimulus_current: 1.0})  # - stimulus current = 1
+                        # Deal with NumberDummy variables (we haven't striped units, this may contain NumberDummys)
+                        subs_dict = {s: float(s) for s in voltage_rhs.free_symbols if isinstance(s, NumberDummy)}
+                        negate_stimulus = voltage_rhs.subs(subs_dict) > 0.0
+
+            # Set GetIntracellularAreaStimulus calculaion
+            GetIntracellularAreaStimulus = sp.Function('GetIntracellularAreaStimulus')
+            area = GetIntracellularAreaStimulus(self._time_variable)
+            if negate_stimulus:
+                area = -area
+
+            # remove metadata tag
+            self._membrane_stimulus_current.cmeta_id = None
+            # add converter equation
+            converter_var = self._model.add_variable(name=self._membrane_stimulus_current.name + '_converter',
+                                                     units=self._model.units.ureg.uA_per_cm2,
+                                                     cmeta_id='membrane_stimulus_current')
+            # add new equation for converter_var
+            self._model.add_equation(sp.Eq(converter_var, area))
+
+            # determine capacitance stuff
+            stim_current_eq_rhs = converter_var
+            if self._current_unit_and_capacitance['use_capacitance']:
+                stim_current_eq_rhs *= self._membrane_capacitance.lhs
+                fac = self._membrane_capacitance_factor / self._membrane_stimulus_current_factor
+                if fac != 1.0:
+                    stim_current_eq_rhs *= fac
+            else:
+                fac = 1 / self._membrane_stimulus_current_factor
+                if fac != 1.0:
+                    stim_current_eq_rhs *= fac
+
+            # check if the results needs to be divided by heartconfig_capacitance and add if needed
+            if self._current_unit_and_capacitance['use_heartconfig_capacitance']:
+                capacitance = sp.Function('HeartConfig::Instance()->GetCapacitance')
+                stim_current_eq_rhs /= capacitance()
+
+            # Get stimulus defining equation
+            eq = [e for e in self._model.equations if e.lhs == self._membrane_stimulus_current][-1]
+            # remove old equation
+            self._model.remove_equation(eq)
+            # add eq self._membrane_stimulus_current = area to model
+            self._model.add_equation(sp.Eq(self._membrane_stimulus_current, sp.sympify(stim_current_eq_rhs)))
+
+            # update self._membrane_stimulus_current
+            self._membrane_stimulus_current = self._get_membrane_stimulus_current()
+
+        return get_deriv_eqs()
 
     def _get_derived_quant_annotated(self):
         """ Get the variables annotated in the model as derived derived-quantity"""
@@ -386,11 +492,12 @@ class ChasteModel(object):
 
     def _get_derived_quant_exposed(self):
         """ Get the variables in the model that have exposed annotation and are derived quantities
-            (irrespective of any derived-quantity tags"""
+            (irrespective of any derived-quantity tags)"""
         return [q for q in self._model.get_derived_quantities()
                 if self._model.has_ontology_annotation(q, self._OXMETA)
                 and not self._model.get_ontology_terms_by_symbol(q, self._OXMETA)[-1]
-                .startswith('membrane_stimulus_current')]
+                .startswith('membrane_stimulus_current')] + \
+               [self._membrane_stimulus_current]
 
     def _get_derived_quant(self):
         """ Get all derived quantities
@@ -400,9 +507,10 @@ class ChasteModel(object):
         if self._expose_annotated_variables:
             # Combined and sorted in document order
             return \
-                sorted(self._derived_quant_annotated + self._get_derived_quant_exposed(), key=lambda v: v.order_added)
+                sorted(self._get_derived_quant_annotated() + self._get_derived_quant_exposed(),
+                       key=lambda v: self._get_var_display_name(v))
         else:
-            return self._derived_quant_annotated  # These are already sorted
+            return self._get_derived_quant_annotated()  # These are already sorted
 
     def _get_derived_quant_eqs(self):
         """ Get the defining equations for derived quantities"""
@@ -411,7 +519,7 @@ class ChasteModel(object):
     def _format_modifiable_parameters(self):
         """ Format the modifiable parameter for printing to chaste code"""
         return [{'units': self._model.units.summarise_units(param),
-                 'comment_name': self._name_printer.doprint(param), 'name': str(param).split("$")[-1],
+                 'comment_name': self._name_printer.doprint(param), 'name': self._get_var_display_name(param),
                  'initial_value': self._model.get_initial_value(param)} for param in self._modifiable_parameters]
 
     def _format_state_variables(self):
@@ -427,12 +535,6 @@ class ChasteModel(object):
                     return float(range_annotation[0][2])
             return ''
 
-        def get_annotated_var_name(var):
-            annotation_list = self._model.get_ontology_terms_by_symbol(var, namespace_uri=self._OXMETA)
-            if len(annotation_list) == 1:
-                return annotation_list[0]
-            return self._printer.doprint(var)
-
         # Get all used symbols for eqs for ionic variables to be able to indicate if a state var is used
         ionic_var_symbols = set()
         for eq in self._extended_equations_for_ionic_vars:
@@ -443,16 +545,20 @@ class ChasteModel(object):
         for eq in self._derivative_equations:
             y_deriv_symbols.update(eq.rhs.free_symbols)
 
+        # Get all used symbols for eqs for derived quantities variables to be able to indicate if a state var is used
+        derived_quant_symbols = set()
+        for eq in self._derived_quant_eqs:
+            derived_quant_symbols.update(eq.rhs.free_symbols)
+
         formatted_state_vars = \
             [{'var': self._printer.doprint(var),
-              'annotated_var_name': get_annotated_var_name(var),
-              'state_var': var,
+              'annotated_var_name': self._get_var_display_name(var),
               'initial_value': str(self._model.get_initial_value(var) * self._state_var_conversion_factors[var])
               if var in self._state_var_conversion_factors else str(self._model.get_initial_value(var)),
               'units': str(self._model.units.summarise_units(var)),
               'in_ionic': var in ionic_var_symbols,
               'in_y_deriv': var in y_deriv_symbols,
-              'in_derived_quant': False,
+              'in_derived_quant': var in derived_quant_symbols,
               'range_low': get_range_annotation(var, 'range-low'),
               'range_high': get_range_annotation(var, 'range-high')}
              for var in self._state_vars]
@@ -460,16 +566,6 @@ class ChasteModel(object):
         use_verify_state_variables = \
             len([eq for eq in formatted_state_vars if eq['range_low'] != '' or eq['range_high'] != '']) > 0
         return formatted_state_vars, use_verify_state_variables
-
-    def _update_formatted_state_vars_in_derived_quant(self):
-        """ Update formatted state vars with in_derived_quant updates, based on current settings"""
-        # Get all used symbols for eqs for derived quantities variables to be able to indicate if a state var is used
-        derived_quant_symbols = set()
-        for eq in self._derived_quant_eqs:
-            derived_quant_symbols.update(eq.rhs.free_symbols)
-
-        for var in self._formatted_state_vars:
-            var['in_derived_quant'] = var['state_var'] in derived_quant_symbols
 
     def _format_default_stimulus(self):
         """ Format eqs for stimulus_current for outputting to chaste code"""
@@ -526,7 +622,7 @@ class ChasteModel(object):
 
         def print_rhs(eq):
             """ Print the rhs, set _membrane_stimulus_current to 0.0"""
-            if eq.lhs != self._membrane_stimulus_current:
+            if eq.lhs != self._membrane_stimulus_current and eq.lhs != self._original_membrane_stimulus_current:
                 return self._printer.doprint(self._perform_state_var_conv(eq.rhs))
             else:
                 return 0.0
@@ -580,107 +676,46 @@ class ChasteModel(object):
     def _format_derivative_equations(self):
         """Format derivative equations for chaste output"""
         # exclude ionic currents
-        equations = []
-        d_eqs = [eq for eq in self._derivative_equations
-                 if eq not in self._default_stimulus.values()]
+#        d_eqs = [{'lhs': self._printer.doprint(eqs.lhs),
+#                  'rhs': self._printer.doprint(self._perform_state_var_conv(eqs.rhs)),
+#                  'units': self._model.units.summarise_units(eqs.lhs),
+#                  'in_membrane_voltage': eqs not in self._derivative_eqs_exlc_voltage,
+#                  'is_voltage': isinstance(eqs.lhs, sp.Derivative) and eqs.lhs.args[0] == self._membrane_voltage_var}
+#                  for eqs in self._derivative_equations]
 
-        negate_stimulus = False
+        d_eqs = [{'factor': 1.0,
+                  'lhs': eqs.lhs,
+                  'rhs': self._perform_state_var_conv(eqs.rhs),
+                  'units': self._model.units.summarise_units(eqs.lhs),
+                  'in_membrane_voltage': eqs not in self._derivative_eqs_exlc_voltage,
+                  'is_voltage': isinstance(eqs.lhs, sp.Derivative) and eqs.lhs.args[0] == self._membrane_voltage_var}
+                 for eqs in self._derivative_equations]
+
         # loop through equations backwards as derivatives are last
         for i in range(len(d_eqs) - 1, - 1, - 1):
-            is_voltage = False
-            factor = 1.0
-            units = self._model.units.summarise_units(d_eqs[i].lhs)
-            rhs_divider = ''
-            in_membrane_voltage = d_eqs[i] not in self._derivative_eqs_exlc_voltage
-            if isinstance(d_eqs[i].lhs, sp.Derivative):
-                # This is dV/dt
-                # Assign temporary values to variables in order to check the stimulus sign.
-                # This will process defining expressions in a breadth first search until the stimulus
-                # current is found.  Each variable that doesn't have its definitions processed will
-                # be given a value as follows:
-                # - stimulus current = 1
-                # - other currents = 0
-                # - other variables = 1
-                # The stimulus current is then negated from the sign expected by Chaste if evaluating
-                # dV/dt gives a positive value.
-                if d_eqs[i].lhs.args[0] == self._membrane_voltage_var:
-                    voltage_rhs = d_eqs[i].rhs
-                    is_voltage = True
-                    symbols = list(voltage_rhs.free_symbols)
-                    for symbol in symbols:
-                        if self._membrane_stimulus_current != symbol:
-                            if self._current_unit_and_capacitance['units'].dimensionality == \
-                                    self._model.units.summarise_units(symbol).dimensionality:
-                                voltage_rhs = voltage_rhs.subs({symbol: 0.0})  # other currents = 0
-                            else:
-                                # For other variables see if we need o follow their definitions first
-                                if symbol in [eq.lhs for eq in d_eqs]:
-                                    rhs = [eq.rhs for eq in d_eqs if eq.lhs == symbol][-1]
-                                    if not isinstance(rhs, sp.numbers.Float):
-                                        voltage_rhs = voltage_rhs.subs({symbol: rhs})  # Update definition
-                                        symbols.extend(rhs.free_symbols)
-                                    else:
-                                        voltage_rhs = voltage_rhs.subs({symbols[0]: 1.0})  # other variables = 1
-                    voltage_rhs = voltage_rhs.subs({self._membrane_stimulus_current: 1.0})  # - stimulus current = 1
-                    # Deal with NumberDummy variables (as we haven't striped units this may still contain NumberDummys)
-                    subs_dict = {s: float(s) for s in voltage_rhs.free_symbols if isinstance(s, NumberDummy)}
-                    negate_stimulus = voltage_rhs.subs(subs_dict) > 0.0
+            if isinstance(d_eqs[i]['lhs'], sp.Derivative):
                 # Convert voltage to mV, time to mS and calcium to millimolar
-                dividend_unit = self._get_desired_units(d_eqs[i].lhs.args[0])
-                divisor_unit = self._get_desired_units(d_eqs[i].lhs.args[1][0])
+                dividend_unit = self._get_desired_units(d_eqs[i]['lhs'].args[0])
+                divisor_unit = self._get_desired_units(d_eqs[i]['lhs'].args[1][0])
                 units = dividend_unit / divisor_unit
-                units_from = self._model.units.summarise_units(d_eqs[i].lhs)
+                units_from = self._model.units.summarise_units(d_eqs[i]['lhs'])
                 if units.dimensionality == units_from.dimensionality:
                     factor = self._model.units.get_conversion_factor(units, from_unit=units_from)
-                else:
-                    factor = 1.0
+                    d_eqs[i]['factor'] = factor
 
-            if d_eqs[i].lhs == self._membrane_stimulus_current:
-                factor = 1.0
-                # strip out var from time variable name as printing will add it back later
-                GetIntracellularAreaStimulus = sp.Function('GetIntracellularAreaStimulus')
-                area = GetIntracellularAreaStimulus(self._time_variable)
-                if negate_stimulus:
-                    area = -area
+        for i in range(len(d_eqs)):
+            if d_eqs[i]['factor'] != 1.0:
+                for j in range(i + 1, len(d_eqs)):
+                    d_eqs[j]['rhs'] =\
+                        d_eqs[j]['rhs'].subs({d_eqs[i]['lhs']:
+                                              (1 / d_eqs[i]['factor'] * d_eqs[i]['lhs'])})
+        for i in range(len(d_eqs)):
+            if d_eqs[i]['factor'] != 1.0:
+                d_eqs[i]['rhs'] = sp.sympify(d_eqs[i]['factor'] * d_eqs[i]['rhs'], evaluate=False)
+            d_eqs[i]['rhs'] = self._printer.doprint(d_eqs[i]['rhs'])
+            d_eqs[i]['lhs'] = self._printer.doprint(d_eqs[i]['lhs'])
 
-                if self._current_unit_and_capacitance['use_heartconfig_capacitance']:
-                    rhs_divider = '/ ' + self._HEARTCONFIG_GETCAPACITANCE
-                if self._current_unit_and_capacitance['use_capacitance']:
-                    stim_current_eq_rhs = area * self._membrane_capacitance.lhs
-                    fac = self._membrane_capacitance_factor / self._membrane_stimulus_current_factor
-                    if fac != 1.0:
-                        stim_current_eq_rhs *= fac
-                else:
-                    stim_current_eq_rhs = area
-                    fac = 1 / self._membrane_stimulus_current_factor
-                    if fac != 1.0:
-                        stim_current_eq_rhs *= fac
-
-                d_eqs[i] = sp.Eq(d_eqs[i].lhs, sp.sympify(stim_current_eq_rhs, evaluate=False))
-
-            # Format the equation and put it at the front of the result list to keep order (we're looping backwards)
-            equations.insert(0, {'lhs': d_eqs[i].lhs,
-                                 'factor': factor,
-                                 'rhs': self._perform_state_var_conv(d_eqs[i].rhs),
-                                 'units': units,
-                                 'rhs_divider': rhs_divider,
-                                 'in_membrane_voltage': in_membrane_voltage,
-                                 'is_voltage': is_voltage})
-
-        for i in range(len(equations)):
-            if equations[i]['factor'] != 1.0:
-                for j in range(i + 1, len(equations)):
-                    equations[j]['rhs'] =\
-                        equations[j]['rhs'].subs({equations[i]['lhs']:
-                                                 (1 / equations[i]['factor'] * equations[i]['lhs'])})
-        for i in range(len(equations)):
-            if equations[i]['factor'] != 1.0:
-                equations[i]['rhs'] = sp.sympify(equations[i]['factor'] * equations[i]['rhs'], evaluate=False)
-            equations[i]['rhs'] = \
-                self._printer.doprint(equations[i]['rhs']) + equations[i]['rhs_divider']
-            equations[i]['lhs'] = self._printer.doprint(equations[i]['lhs'])
-
-        return equations
+        return d_eqs
 
     def _format_ode_system_info(self):
         """ Format general ode system info for chaste output"""
@@ -723,8 +758,26 @@ class ChasteModel(object):
         else:
             return self._MEMBRANE_VOLTAGE_INDEX + self._CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX + 1
 
+    def _get_var_display_name(self, var):
+        """Return a display name for the given variable.
+
+        Looks for OXMETA ontology annotation tage first, then cmeta:id if present, or the name attribute if not.
+        If there is an interface component, strip the name of it out of the display name.
+        """
+        display_name = var.name
+        if self._model.has_ontology_annotation(var, self._OXMETA):
+            display_name = self._model.get_ontology_terms_by_symbol(var, self._OXMETA)[-1]
+        elif var.cmeta_id:
+            display_name = var.cmeta_id
+        else:
+            if var in self._in_interface:
+                display_name = var.name.split('$')[-1]
+        return display_name.replace('$', '__')
+
     def _format_derived_quant(self):
-        return[self._printer.doprint(quant) for quant in self._derived_quant]
+        return [{'units': self._model.units.summarise_units(quant),
+                 'var': self._printer.doprint(quant), 'name': self._get_var_display_name(quant)}
+                for quant in self._derived_quant]
 
     def _format_derived_quant_eqs(self):
         """ Format equations for derivd quantites based on current settings"""
@@ -743,8 +796,8 @@ class ChasteModel(object):
 class NormalChasteModel(ChasteModel):
     """ Holds information specific for the Normal model type"""
 
-    def __init__(self, model, class_name, file_name):
-        super().__init__(model, class_name, file_name)
+    def __init__(self, model, class_name, file_name, **kwargs):
+        super().__init__(model, class_name, file_name, **kwargs)
 
     def generate_chaste_code(self):
         """ Generates and stores chaste code for the Normal model"""
@@ -754,7 +807,7 @@ class NormalChasteModel(ChasteModel):
         self.generated_hpp = template.render({
             'model_name': self._model.name,
             'class_name': self.class_name,
-            'dynamically_loadable': self.dynamically_loadable,
+            'dynamically_loadable': self._dynamically_loadable,
             'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
             'default_stimulus_equations': self._formatted_default_stimulus,
             'use_get_intracellular_calcium_concentration':
@@ -769,7 +822,7 @@ class NormalChasteModel(ChasteModel):
             'model_name': self._model.name,
             'file_name': self.file_name,
             'class_name': self.class_name,
-            'dynamically_loadable': self.dynamically_loadable,
+            'dynamically_loadable': self._dynamically_loadable,
             'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
             'default_stimulus_equations': self._formatted_default_stimulus,
             'use_get_intracellular_calcium_concentration':

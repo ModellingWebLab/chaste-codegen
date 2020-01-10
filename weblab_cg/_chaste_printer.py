@@ -47,7 +47,8 @@ class ChastePrinter(Printer):
         'tan': 'tan',
         'tanh': 'tanh',
 
-        'GetIntracellularAreaStimulus': 'GetIntracellularAreaStimulus'
+        'GetIntracellularAreaStimulus': 'GetIntracellularAreaStimulus',
+        'HeartConfig::Instance()->GetCapacitance': 'HeartConfig::Instance()->GetCapacitance'
     }
 
     def __init__(self, symbol_function=None, derivative_function=None):
