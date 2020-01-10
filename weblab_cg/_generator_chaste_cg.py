@@ -95,9 +95,8 @@ class ChasteModel(object):
         self.generated_cpp = ''
 
         self._is_self_excitatory = False
-        self._dynamically_loadable = kwargs['dynamically_loadable'] if 'dynamically_loadable' in kwargs else False
-        self._expose_annotated_variables = kwargs['expose_annotated_variables'] \
-            if 'expose_annotated_variables' in kwargs else False
+        self._dynamically_loadable = kwargs.get('dynamically_loadable', False)
+        self._expose_annotated_variables = kwargs.get('expose_annotated_variables', False)
 
         self._logger = logging.getLogger(__name__)
         self._logger.setLevel(logging.INFO)
@@ -216,9 +215,9 @@ class ChasteModel(object):
         """ Get all modifiable parameters
 
             Note: the result depends on self._expose_annotated_variables to determine whether or not to include
-            variables exposed with oxford metadata that are derived quantities but are not annotated as such"""
+            variables exposed with oxford metadata that are a modifiable parameter but are not annotated as such"""
         if self._expose_annotated_variables:
-            # Combined and sorted in document order
+            # Combined and sorted in display name order
             return \
                 sorted(self._get_modifiable_parameters_annotated() + self._get_modifiable_parameters_exposed(),
                        key=lambda v: self._get_var_display_name(v))
@@ -505,7 +504,7 @@ class ChasteModel(object):
             Note: the result depends on self._expose_annotated_variables to determine whether or not to include
             variables exposed with oxford metadata that are derived quantities but are not annotated as such"""
         if self._expose_annotated_variables:
-            # Combined and sorted in document order
+            # Combined and sorted in display name order
             return \
                 sorted(self._get_derived_quant_annotated() + self._get_derived_quant_exposed(),
                        key=lambda v: self._get_var_display_name(v))
@@ -676,13 +675,6 @@ class ChasteModel(object):
     def _format_derivative_equations(self):
         """Format derivative equations for chaste output"""
         # exclude ionic currents
-#        d_eqs = [{'lhs': self._printer.doprint(eqs.lhs),
-#                  'rhs': self._printer.doprint(self._perform_state_var_conv(eqs.rhs)),
-#                  'units': self._model.units.summarise_units(eqs.lhs),
-#                  'in_membrane_voltage': eqs not in self._derivative_eqs_exlc_voltage,
-#                  'is_voltage': isinstance(eqs.lhs, sp.Derivative) and eqs.lhs.args[0] == self._membrane_voltage_var}
-#                  for eqs in self._derivative_equations]
-
         d_eqs = [{'factor': 1.0,
                   'lhs': eqs.lhs,
                   'rhs': self._perform_state_var_conv(eqs.rhs),

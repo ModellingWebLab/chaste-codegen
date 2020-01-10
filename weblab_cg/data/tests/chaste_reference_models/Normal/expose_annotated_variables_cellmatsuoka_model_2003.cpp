@@ -834,7 +834,7 @@ void OdeSystemInformation<cellmatsuoka_model_2003FromCellML>::Initialise(void)
     this->mParameterNames.push_back("membrane_stimulus_current");
     this->mParameterUnits.push_back("uA_per_cm2");
 
-    this->mInitialised = true;    
+    this->mInitialised = true;
 }
 
 
