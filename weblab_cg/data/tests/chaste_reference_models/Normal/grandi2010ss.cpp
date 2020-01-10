@@ -819,7 +819,7 @@ void OdeSystemInformation<Cellgrandi2010ssFromCellML>::Initialise(void)
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(8.85230799863012e-05);
     
-    this->mInitialised = true;    
+    this->mInitialised = true;
 }
 
 

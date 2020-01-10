@@ -433,7 +433,7 @@ void OdeSystemInformation<Celldokos_model_1996FromCellML>::Initialise(void)
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(5.4243);
     
-    this->mInitialised = true;    
+    this->mInitialised = true;
 }
 
 

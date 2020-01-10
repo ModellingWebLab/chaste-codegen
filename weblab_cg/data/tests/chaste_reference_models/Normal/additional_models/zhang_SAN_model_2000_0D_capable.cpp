@@ -460,7 +460,7 @@ void OdeSystemInformation<Cellzhang_SAN_model_2000_0D_capableFromCellML>::Initia
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.03889291759);
     
-    this->mInitialised = true;    
+    this->mInitialised = true;
 }
 
 

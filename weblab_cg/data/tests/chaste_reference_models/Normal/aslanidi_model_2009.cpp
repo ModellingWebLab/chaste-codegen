@@ -568,7 +568,7 @@ void OdeSystemInformation<Cellaslanidi_model_2009FromCellML>::Initialise(void)
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.612697);
     
-    this->mInitialised = true;    
+    this->mInitialised = true;
 }
 
 

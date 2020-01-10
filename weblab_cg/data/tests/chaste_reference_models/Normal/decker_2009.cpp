@@ -881,7 +881,7 @@ void OdeSystemInformation<Celldecker_2009FromCellML>::Initialise(void)
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0018861341);
     
-    this->mInitialised = true;    
+    this->mInitialised = true;
 }
 
 

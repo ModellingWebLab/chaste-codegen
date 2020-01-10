@@ -499,7 +499,7 @@ void OdeSystemInformation<Celllivshitz_rudy_2007FromCellML>::Initialise(void)
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1e-12);
     
-    this->mInitialised = true;    
+    this->mInitialised = true;
 }
 
 

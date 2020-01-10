@@ -224,7 +224,7 @@ void OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellML>::Initialise(vo
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0001);
     
-    this->mInitialised = true;    
+    this->mInitialised = true;
 }
 
 

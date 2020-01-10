@@ -151,7 +151,7 @@ void OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromC
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.325);
     
-    this->mInitialised = true;    
+    this->mInitialised = true;
 }
 
 

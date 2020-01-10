@@ -479,7 +479,7 @@ void OdeSystemInformation<Cellcourtemanche_ramirez_nattel_model_1998FromCellML>:
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(1.488);
     
-    this->mInitialised = true;    
+    this->mInitialised = true;
 }
 
 

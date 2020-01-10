@@ -507,7 +507,7 @@ void OdeSystemInformation<Celldemir_model_1994FromCellML>::Initialise(void)
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.8859153);
     
-    this->mInitialised = true;    
+    this->mInitialised = true;
 }
 
 

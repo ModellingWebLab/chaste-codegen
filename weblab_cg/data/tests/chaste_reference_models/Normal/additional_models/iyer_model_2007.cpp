@@ -1224,7 +1224,7 @@ void OdeSystemInformation<Celliyer_model_2007FromCellML>::Initialise(void)
     
     
     this->mAttributes["SuggestedForwardEulerTimestep"] = 0.00001;
-    this->mInitialised = true;    
+    this->mInitialised = true;
 }
 
 

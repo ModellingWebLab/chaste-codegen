@@ -537,7 +537,7 @@ void OdeSystemInformation<Cellpandit_model_2001_epiFromCellML>::Initialise(void)
     
     
     this->mAttributes["SuggestedForwardEulerTimestep"] = 0.00001;
-    this->mInitialised = true;    
+    this->mInitialised = true;
 }
 
 

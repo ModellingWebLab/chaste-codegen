@@ -691,7 +691,7 @@ void OdeSystemInformation<Cellbondarenko_model_2004_apexFromCellML>::Initialise(
     
     
     this->mAttributes["SuggestedForwardEulerTimestep"] = 0.0002;
-    this->mInitialised = true;    
+    this->mInitialised = true;
 }
 
 

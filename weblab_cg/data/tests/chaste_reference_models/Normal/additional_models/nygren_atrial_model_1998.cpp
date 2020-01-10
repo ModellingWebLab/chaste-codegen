@@ -544,7 +544,7 @@ void OdeSystemInformation<Cellnygren_atrial_model_1998FromCellML>::Initialise(vo
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0028);
     
-    this->mInitialised = true;    
+    this->mInitialised = true;
 }
 
 

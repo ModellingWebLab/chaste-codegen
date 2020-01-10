@@ -479,7 +479,7 @@ void OdeSystemInformation<Cellpriebe_beuckelmann_model_1998FromCellML>::Initiali
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(2.5);
     
-    this->mInitialised = true;    
+    this->mInitialised = true;
 }
 
 

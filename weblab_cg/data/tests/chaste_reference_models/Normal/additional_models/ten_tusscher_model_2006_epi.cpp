@@ -482,7 +482,7 @@ void OdeSystemInformation<Cellten_tusscher_model_2006_epiFromCellML>::Initialise
     
     
     this->mAttributes["SuggestedForwardEulerTimestep"] = 0.001;
-    this->mInitialised = true;    
+    this->mInitialised = true;
 }
 
 

@@ -420,7 +420,7 @@ void OdeSystemInformation<Cellluo_rudy_1994FromCellML>::Initialise(void)
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(1.8);
     
-    this->mInitialised = true;    
+    this->mInitialised = true;
 }
 
 
