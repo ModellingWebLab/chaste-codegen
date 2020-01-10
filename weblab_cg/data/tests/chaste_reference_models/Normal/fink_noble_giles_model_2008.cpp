@@ -572,7 +572,7 @@ void OdeSystemInformation<Cellfink_noble_giles_model_2008FromCellML>::Initialise
     
     
     this->mAttributes["SuggestedForwardEulerTimestep"] = 0.001;
-    this->mInitialised = true;
+    this->mInitialised = true;    
 }
 
 

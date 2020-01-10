@@ -800,7 +800,7 @@ void OdeSystemInformation<Cellmatsuoka_model_2003FromCellML>::Initialise(void)
     this->mVariableUnits.push_back("micrometre");
     this->mInitialConditions.push_back(0.9573749975411884);
     
-    this->mInitialised = true;
+    this->mInitialised = true;    
 }
 
 

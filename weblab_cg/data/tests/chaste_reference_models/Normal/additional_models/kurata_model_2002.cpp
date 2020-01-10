@@ -573,7 +573,7 @@ void OdeSystemInformation<Cellkurata_model_2002FromCellML>::Initialise(void)
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.260317260703);
     
-    this->mInitialised = true;
+    this->mInitialised = true;    
 }
 
 

@@ -488,7 +488,7 @@ void OdeSystemInformation<Celliribe_model_2006_without_otherwise_sectionFromCell
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00015349);
     
-    this->mInitialised = true;
+    this->mInitialised = true;    
 }
 
 

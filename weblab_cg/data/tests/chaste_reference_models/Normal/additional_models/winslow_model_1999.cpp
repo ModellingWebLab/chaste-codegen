@@ -613,7 +613,7 @@ void OdeSystemInformation<Cellwinslow_model_1999FromCellML>::Initialise(void)
     
     
     this->mAttributes["SuggestedForwardEulerTimestep"] = 0.0001;
-    this->mInitialised = true;
+    this->mInitialised = true;    
 }
 
 

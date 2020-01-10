@@ -502,7 +502,7 @@ void OdeSystemInformation<Cellsakmann_model_2000_epiFromCellML>::Initialise(void
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.0012852);
     
-    this->mInitialised = true;
+    this->mInitialised = true;    
 }
 
 

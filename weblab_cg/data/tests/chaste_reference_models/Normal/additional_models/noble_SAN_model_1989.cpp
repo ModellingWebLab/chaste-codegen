@@ -361,7 +361,7 @@ void OdeSystemInformation<Cellnoble_SAN_model_1989FromCellML>::Initialise(void)
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(140.0);
     
-    this->mInitialised = true;
+    this->mInitialised = true;    
 }
 
 

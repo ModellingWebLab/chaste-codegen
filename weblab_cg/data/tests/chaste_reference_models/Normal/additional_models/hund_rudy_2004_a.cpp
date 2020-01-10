@@ -642,7 +642,7 @@ void OdeSystemInformation<Cellhund_rudy_2004_aFromCellML>::Initialise(void)
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(0.00012271265);
     
-    this->mInitialised = true;
+    this->mInitialised = true;    
 }
 
 

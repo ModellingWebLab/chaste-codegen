@@ -391,7 +391,7 @@ void OdeSystemInformation<Cellhilgemann_noble_model_1987FromCellML>::Initialise(
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.0015);
     
-    this->mInitialised = true;
+    this->mInitialised = true;    
 }
 
 

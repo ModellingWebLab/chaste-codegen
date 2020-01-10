@@ -641,7 +641,7 @@ void OdeSystemInformation<Cellmahajan_2008FromCellML>::Initialise(void)
     this->mParameterNames.push_back("ScaleFactorIto");
     this->mParameterUnits.push_back("dimensionless");
 
-    this->mInitialised = true;
+    this->mInitialised = true;    
 }
 
 

@@ -408,7 +408,7 @@ void OdeSystemInformation<Cellearm_noble_model_1990FromCellML>::Initialise(void)
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.0015);
     
-    this->mInitialised = true;
+    this->mInitialised = true;    
 }
 
 

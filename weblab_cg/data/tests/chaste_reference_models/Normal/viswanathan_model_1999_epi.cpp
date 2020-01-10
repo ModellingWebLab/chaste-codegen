@@ -598,7 +598,7 @@ void OdeSystemInformation<Cellviswanathan_model_1999_epiFromCellML>::Initialise(
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(137.6244);
     
-    this->mInitialised = true;
+    this->mInitialised = true;    
 }
 
 

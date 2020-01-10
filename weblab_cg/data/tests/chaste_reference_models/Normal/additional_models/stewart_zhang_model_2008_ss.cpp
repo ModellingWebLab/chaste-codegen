@@ -481,7 +481,7 @@ void OdeSystemInformation<Cellstewart_zhang_model_2008_ssFromCellML>::Initialise
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(136.781894160227);
     
-    this->mInitialised = true;
+    this->mInitialised = true;    
 }
 
 

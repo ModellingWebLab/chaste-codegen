@@ -593,7 +593,7 @@ void OdeSystemInformation<Celljafri_rice_winslow_model_1998FromCellML>::Initiali
     
     
     this->mAttributes["SuggestedForwardEulerTimestep"] = 0.0001;
-    this->mInitialised = true;
+    this->mInitialised = true;    
 }
 
 

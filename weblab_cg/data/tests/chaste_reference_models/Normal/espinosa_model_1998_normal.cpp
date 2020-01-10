@@ -492,7 +492,7 @@ void OdeSystemInformation<Cellespinosa_model_1998_normalFromCellML>::Initialise(
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.0017012);
     
-    this->mInitialised = true;
+    this->mInitialised = true;    
 }
 
 

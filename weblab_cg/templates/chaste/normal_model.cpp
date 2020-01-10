@@ -180,7 +180,7 @@ void OdeSystemInformation<{{class_name}}>::Initialise(void)
 
     {% endfor %}{% for attr in named_attributes %}
     this->mAttributes["{{attr["name"]}}"] = {{attr["value"]}};
-    {% endfor %}this->mInitialised = true;
+    {% endfor %}this->mInitialised = true;    
 }
 
 
