@@ -209,11 +209,7 @@ class ChasteModel(object):
         desired_units = self._model.units.ureg.millivolt
 
         # Convert if necessary
-        try:
-            return self._model.convert_variable(voltage, desired_units, DataDirectionFlow.INPUT)
-        except DimensionalityError:
-            # units can't be converted to millimolar (e.g. could be dimensionless)
-            return voltage
+        return self._model.convert_variable(voltage, desired_units, DataDirectionFlow.INPUT)
 
     def _get_cytosolic_calcium_concentration_var(self):
         """ Find the cytosolic_calcium_concentration variable if it exists"""
