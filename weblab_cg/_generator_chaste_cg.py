@@ -200,7 +200,7 @@ class ChasteModel(object):
     def _get_time_variable(self):
         time_variable = self._model.get_free_variable_symbol()
         desired_units = self._model.units.ureg.millisecond
-        assert time_variable.dimensionality == desired_units.dimensionality, \
+        assert time_variable.units.dimensionality == desired_units.dimensionality, \
             'Incorrect definition of time variable (units of time needs to be demensionally equivalent to second)'
         # If the variable is in units that can be converted to millimolar, perform conversion
         return self._model.convert_variable(time_variable, desired_units, DataDirectionFlow.INPUT)
@@ -209,7 +209,7 @@ class ChasteModel(object):
         """ Find the membrane_voltage variable"""
         voltage = self._model.get_symbol_by_ontology_term(self._OXMETA, "membrane_voltage")
         desired_units = self._model.units.ureg.millivolt
-        assert voltage.dimensionality == desired_units.dimensionality, \
+        assert voltage.units.dimensionality == desired_units.dimensionality, \
             'Incorrect definition of membrane_voltage variable '\
             '(units of membrane_voltage needs to be demensionally equivalent to Volt)'
         # Convert if necessary
