@@ -39,6 +39,7 @@ class TestChasteCG(object):
             # Comprare against referene
             compare_model_against_reference('Normal', chaste_model, tmp_path)
 
+    @pytest.mark.skip(reason="speed up debug")
     @pytest.mark.chaste
     def test_generate_dymaic_chaste_model(self, tmp_path):
         tmp_path = str(tmp_path)
@@ -55,6 +56,7 @@ class TestChasteCG(object):
         # Comprare against referene
         compare_model_against_reference('Normal', chaste_model, tmp_path)
 
+    @pytest.mark.skip(reason="speed up debug")
     @pytest.mark.chaste
     def test_expose_annotated_variables(self, tmp_path):
         tmp_path = str(tmp_path)
@@ -73,6 +75,7 @@ class TestChasteCG(object):
         # Comprare against referene
         compare_model_against_reference('Normal', chaste_model, tmp_path)
 
+    @pytest.mark.skip(reason="speed up debug")
     @pytest.mark.chaste
     def test_missing_capacitance(self, tmp_path):
         tmp_path = str(tmp_path)
