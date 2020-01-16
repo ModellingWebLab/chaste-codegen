@@ -225,7 +225,7 @@ class ChasteModel(object):
             self._logger.info(self._model.name + ' has no cytosolic_calcium_concentration')
             return None
 
-        # Convert if necessary            
+        # Convert if necessary
         desired_units = self._model.units.ureg.millimolar
         try:
             return self._model.convert_variable(cytosolic_calcium_concentration,
@@ -700,7 +700,7 @@ class ChasteModel(object):
 
     def _format_free_variable(self):
         """ Format free variable for chaste output"""
-        return {'name': self._get_var_display_name(self._time_variable),        
+        return {'name': self._get_var_display_name(self._time_variable),
                 'units': self._model.units.summarise_units(self._time_variable),
                 'system_name': self._model.name,
                 'var_name': self._printer.doprint(self._time_variable)}
