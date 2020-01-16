@@ -374,32 +374,32 @@ void OdeSystemInformation<Cellluo_rudy_1994FromCellML>::Initialise(void)
     this->mInitialConditions.push_back(0.00012);
     
     // rY[2]:
-    this->mVariableNames.push_back("var_fast_sodium_current_m_gate__m");
+    this->mVariableNames.push_back("fast_sodium_current_m_gate__m");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
     
     // rY[3]:
-    this->mVariableNames.push_back("var_fast_sodium_current_h_gate__h");
+    this->mVariableNames.push_back("fast_sodium_current_h_gate__h");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.0);
     
     // rY[4]:
-    this->mVariableNames.push_back("var_fast_sodium_current_j_gate__j");
+    this->mVariableNames.push_back("fast_sodium_current_j_gate__j");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.0);
     
     // rY[5]:
-    this->mVariableNames.push_back("var_L_type_Ca_channel_d_gate__d");
+    this->mVariableNames.push_back("L_type_Ca_channel_d_gate__d");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
     
     // rY[6]:
-    this->mVariableNames.push_back("var_L_type_Ca_channel_f_gate__f");
+    this->mVariableNames.push_back("L_type_Ca_channel_f_gate__f");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.0);
     
     // rY[7]:
-    this->mVariableNames.push_back("var_time_dependent_potassium_current_X_gate__X");
+    this->mVariableNames.push_back("time_dependent_potassium_current_X_gate__X");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
     

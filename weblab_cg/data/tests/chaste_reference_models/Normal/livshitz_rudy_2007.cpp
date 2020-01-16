@@ -440,27 +440,27 @@ void OdeSystemInformation<Celllivshitz_rudy_2007FromCellML>::Initialise(void)
     this->mInitialConditions.push_back(0.997404948824816);
     
     // rY[6]:
-    this->mVariableNames.push_back("var_IKr__xr");
+    this->mVariableNames.push_back("IKr__xr");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000162194715543637);
     
     // rY[7]:
-    this->mVariableNames.push_back("var_IKs__xs1");
+    this->mVariableNames.push_back("IKs__xs1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0285147332973946);
     
     // rY[8]:
-    this->mVariableNames.push_back("var_IKs__xs2");
+    this->mVariableNames.push_back("IKs__xs2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0764114040188678);
     
     // rY[9]:
-    this->mVariableNames.push_back("var_ICaT__b");
+    this->mVariableNames.push_back("ICaT__b");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000927461915392873);
     
     // rY[10]:
-    this->mVariableNames.push_back("var_ICaT__g");
+    this->mVariableNames.push_back("ICaT__g");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.952834331760863);
     
@@ -480,7 +480,7 @@ void OdeSystemInformation<Celllivshitz_rudy_2007FromCellML>::Initialise(void)
     this->mInitialConditions.push_back(139.730914103161);
     
     // rY[14]:
-    this->mVariableNames.push_back("var_Ca__Ca_T");
+    this->mVariableNames.push_back("Ca__Ca_T");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(0.0257059808595638);
     
@@ -490,12 +490,12 @@ void OdeSystemInformation<Celllivshitz_rudy_2007FromCellML>::Initialise(void)
     this->mInitialConditions.push_back(7.87371650296567);
     
     // rY[16]:
-    this->mVariableNames.push_back("var_Ca__Ca_NSR");
+    this->mVariableNames.push_back("Ca__Ca_NSR");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(2.71518235696672);
     
     // rY[17]:
-    this->mVariableNames.push_back("var_Ca__Over");
+    this->mVariableNames.push_back("Ca__Over");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1e-12);
     

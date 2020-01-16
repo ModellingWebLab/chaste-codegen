@@ -469,32 +469,32 @@ void OdeSystemInformation<Cellnygren_atrial_model_1998FromCellML>::Initialise(vo
     this->mInitialConditions.push_back(0.9986);
     
     // rY[8]:
-    this->mVariableNames.push_back("var_Ca_independent_transient_outward_K_current_r_gate__r");
+    this->mVariableNames.push_back("Ca_independent_transient_outward_K_current_r_gate__r");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0010678);
     
     // rY[9]:
-    this->mVariableNames.push_back("var_Ca_independent_transient_outward_K_current_s_gate__s");
+    this->mVariableNames.push_back("Ca_independent_transient_outward_K_current_s_gate__s");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.949);
     
     // rY[10]:
-    this->mVariableNames.push_back("var_sustained_outward_K_current_r_sus_gate__r_sus");
+    this->mVariableNames.push_back("sustained_outward_K_current_r_sus_gate__r_sus");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00015949);
     
     // rY[11]:
-    this->mVariableNames.push_back("var_sustained_outward_K_current_s_sus_gate__s_sus");
+    this->mVariableNames.push_back("sustained_outward_K_current_s_sus_gate__s_sus");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9912);
     
     // rY[12]:
-    this->mVariableNames.push_back("var_delayed_rectifier_K_currents_n_gate__n");
+    this->mVariableNames.push_back("delayed_rectifier_K_currents_n_gate__n");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0048357);
     
     // rY[13]:
-    this->mVariableNames.push_back("var_delayed_rectifier_K_currents_pa_gate__p_a");
+    this->mVariableNames.push_back("delayed_rectifier_K_currents_pa_gate__p_a");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0001);
     
@@ -514,22 +514,22 @@ void OdeSystemInformation<Cellnygren_atrial_model_1998FromCellML>::Initialise(vo
     this->mInitialConditions.push_back(7.2495e-05);
     
     // rY[17]:
-    this->mVariableNames.push_back("var_intracellular_Ca_buffering__O_C");
+    this->mVariableNames.push_back("intracellular_Ca_buffering__O_C");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0275);
     
     // rY[18]:
-    this->mVariableNames.push_back("var_intracellular_Ca_buffering__O_TC");
+    this->mVariableNames.push_back("intracellular_Ca_buffering__O_TC");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0133);
     
     // rY[19]:
-    this->mVariableNames.push_back("var_intracellular_Ca_buffering__O_TMgC");
+    this->mVariableNames.push_back("intracellular_Ca_buffering__O_TMgC");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.1961);
     
     // rY[20]:
-    this->mVariableNames.push_back("var_intracellular_Ca_buffering__O_TMgMg");
+    this->mVariableNames.push_back("intracellular_Ca_buffering__O_TMgMg");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.7094);
     
@@ -554,22 +554,22 @@ void OdeSystemInformation<Cellnygren_atrial_model_1998FromCellML>::Initialise(vo
     this->mInitialConditions.push_back(0.6465);
     
     // rY[25]:
-    this->mVariableNames.push_back("var_Ca_handling_by_the_SR__Ca_up");
+    this->mVariableNames.push_back("Ca_handling_by_the_SR__Ca_up");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.6646);
     
     // rY[26]:
-    this->mVariableNames.push_back("var_Ca_handling_by_the_SR__O_Calse");
+    this->mVariableNames.push_back("Ca_handling_by_the_SR__O_Calse");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.4369);
     
     // rY[27]:
-    this->mVariableNames.push_back("var_Ca_handling_by_the_SR__F1");
+    this->mVariableNames.push_back("Ca_handling_by_the_SR__F1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.4284);
     
     // rY[28]:
-    this->mVariableNames.push_back("var_Ca_handling_by_the_SR__F2");
+    this->mVariableNames.push_back("Ca_handling_by_the_SR__F2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0028);
     

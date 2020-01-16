@@ -372,47 +372,47 @@ void OdeSystemInformation<Celldokos_model_1996FromCellML>::Initialise(void)
     this->mInitialConditions.push_back(3.4e-05);
     
     // rY[2]:
-    this->mVariableNames.push_back("var_L_type_calcium_current_d_gate__dL");
+    this->mVariableNames.push_back("L_type_calcium_current_d_gate__dL");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0001);
     
     // rY[3]:
-    this->mVariableNames.push_back("var_L_type_calcium_current_f_gate__fL");
+    this->mVariableNames.push_back("L_type_calcium_current_f_gate__fL");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.1505);
     
     // rY[4]:
-    this->mVariableNames.push_back("var_L_type_calcium_current_f2_gate__fL2");
+    this->mVariableNames.push_back("L_type_calcium_current_f2_gate__fL2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.219);
     
     // rY[5]:
-    this->mVariableNames.push_back("var_T_type_calcium_current_d_gate__dT");
+    this->mVariableNames.push_back("T_type_calcium_current_d_gate__dT");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.001);
     
     // rY[6]:
-    this->mVariableNames.push_back("var_T_type_calcium_current_f_gate__fT");
+    this->mVariableNames.push_back("T_type_calcium_current_f_gate__fT");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.1328);
     
     // rY[7]:
-    this->mVariableNames.push_back("var_fast_sodium_current_m_gate__m");
+    this->mVariableNames.push_back("fast_sodium_current_m_gate__m");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0139);
     
     // rY[8]:
-    this->mVariableNames.push_back("var_fast_sodium_current_h_gate__h");
+    this->mVariableNames.push_back("fast_sodium_current_h_gate__h");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0087);
     
     // rY[9]:
-    this->mVariableNames.push_back("var_delayed_rectifying_potassium_current_x_gate__x");
+    this->mVariableNames.push_back("delayed_rectifying_potassium_current_x_gate__x");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.5682);
     
     // rY[10]:
-    this->mVariableNames.push_back("var_hyperpolarising_activated_current_y_gate__y");
+    this->mVariableNames.push_back("hyperpolarising_activated_current_y_gate__y");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0287);
     
@@ -422,12 +422,12 @@ void OdeSystemInformation<Celldokos_model_1996FromCellML>::Initialise(void)
     this->mInitialConditions.push_back(2.0004);
     
     // rY[12]:
-    this->mVariableNames.push_back("var_ion_concentrations__Caup");
+    this->mVariableNames.push_back("ion_concentrations__Caup");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.5832);
     
     // rY[13]:
-    this->mVariableNames.push_back("var_ion_concentrations__Carel");
+    this->mVariableNames.push_back("ion_concentrations__Carel");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.1101);
     

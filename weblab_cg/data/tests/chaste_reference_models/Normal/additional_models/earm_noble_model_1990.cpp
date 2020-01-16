@@ -365,12 +365,12 @@ void OdeSystemInformation<Cellearm_noble_model_1990FromCellML>::Initialise(void)
     this->mInitialConditions.push_back(0.015);
     
     // rY[4]:
-    this->mVariableNames.push_back("var_transient_outward_current_r_gate__r");
+    this->mVariableNames.push_back("transient_outward_current_r_gate__r");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
     
     // rY[5]:
-    this->mVariableNames.push_back("var_transient_outward_current_s_gate__s");
+    this->mVariableNames.push_back("transient_outward_current_s_gate__s");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.0);
     
@@ -385,12 +385,12 @@ void OdeSystemInformation<Cellearm_noble_model_1990FromCellML>::Initialise(void)
     this->mInitialConditions.push_back(0.785);
     
     // rY[8]:
-    this->mVariableNames.push_back("var_calcium_release__ActFrac");
+    this->mVariableNames.push_back("calcium_release__ActFrac");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
     
     // rY[9]:
-    this->mVariableNames.push_back("var_calcium_release__ProdFrac");
+    this->mVariableNames.push_back("calcium_release__ProdFrac");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
     
@@ -405,7 +405,7 @@ void OdeSystemInformation<Cellearm_noble_model_1990FromCellML>::Initialise(void)
     this->mInitialConditions.push_back(140.0);
     
     // rY[12]:
-    this->mVariableNames.push_back("var_intracellular_calcium_concentration__Ca_up");
+    this->mVariableNames.push_back("intracellular_calcium_concentration__Ca_up");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.3);
     
@@ -415,12 +415,12 @@ void OdeSystemInformation<Cellearm_noble_model_1990FromCellML>::Initialise(void)
     this->mInitialConditions.push_back(0.3);
     
     // rY[14]:
-    this->mVariableNames.push_back("var_intracellular_calcium_concentration__Ca_Calmod");
+    this->mVariableNames.push_back("intracellular_calcium_concentration__Ca_Calmod");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.0005);
     
     // rY[15]:
-    this->mVariableNames.push_back("var_intracellular_calcium_concentration__Ca_Trop");
+    this->mVariableNames.push_back("intracellular_calcium_concentration__Ca_Trop");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.0015);
     

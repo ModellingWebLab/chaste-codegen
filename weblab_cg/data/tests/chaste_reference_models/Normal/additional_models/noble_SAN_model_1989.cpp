@@ -316,37 +316,37 @@ void OdeSystemInformation<Cellnoble_SAN_model_1989FromCellML>::Initialise(void)
     this->mInitialConditions.push_back(5.6e-05);
     
     // rY[2]:
-    this->mVariableNames.push_back("var_hyperpolarising_activated_current_y_gate__y");
+    this->mVariableNames.push_back("hyperpolarising_activated_current_y_gate__y");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0822);
     
     // rY[3]:
-    this->mVariableNames.push_back("var_time_dependent_potassium_current_x_gate__x");
+    this->mVariableNames.push_back("time_dependent_potassium_current_x_gate__x");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.1231);
     
     // rY[4]:
-    this->mVariableNames.push_back("var_fast_sodium_current_m_gate__m");
+    this->mVariableNames.push_back("fast_sodium_current_m_gate__m");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0365);
     
     // rY[5]:
-    this->mVariableNames.push_back("var_fast_sodium_current_h_gate__h");
+    this->mVariableNames.push_back("fast_sodium_current_h_gate__h");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.1969);
     
     // rY[6]:
-    this->mVariableNames.push_back("var_second_inward_current_d_gate__d");
+    this->mVariableNames.push_back("second_inward_current_d_gate__d");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
     
     // rY[7]:
-    this->mVariableNames.push_back("var_second_inward_current_f_gate__f");
+    this->mVariableNames.push_back("second_inward_current_f_gate__f");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9997);
     
     // rY[8]:
-    this->mVariableNames.push_back("var_second_inward_current_f2_gate__f2");
+    this->mVariableNames.push_back("second_inward_current_f2_gate__f2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.5765);
     
@@ -356,17 +356,17 @@ void OdeSystemInformation<Cellnoble_SAN_model_1989FromCellML>::Initialise(void)
     this->mInitialConditions.push_back(7.5);
     
     // rY[10]:
-    this->mVariableNames.push_back("var_intracellular_calcium_concentration__Ca_up");
+    this->mVariableNames.push_back("intracellular_calcium_concentration__Ca_up");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(2.3909);
     
     // rY[11]:
-    this->mVariableNames.push_back("var_intracellular_calcium_concentration__Ca_rel");
+    this->mVariableNames.push_back("intracellular_calcium_concentration__Ca_rel");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.2207);
     
     // rY[12]:
-    this->mVariableNames.push_back("var_intracellular_calcium_concentration__p");
+    this->mVariableNames.push_back("intracellular_calcium_concentration__p");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.237);
     

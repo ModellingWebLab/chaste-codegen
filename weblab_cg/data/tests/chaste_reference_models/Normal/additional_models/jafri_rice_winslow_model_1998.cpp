@@ -433,7 +433,7 @@ template<>
 void OdeSystemInformation<Celljafri_rice_winslow_model_1998FromCellML>::Initialise(void)
 {
     this->mSystemName = "jafri_rice_winslow_1998";
-    this->mFreeVariableName = "var_environment__time";
+    this->mFreeVariableName = "environment__time";
     this->mFreeVariableUnits = "ms";
     
     // rY[0]:
@@ -442,152 +442,152 @@ void OdeSystemInformation<Celljafri_rice_winslow_model_1998FromCellML>::Initiali
     this->mInitialConditions.push_back(-84.1638);
     
     // rY[1]:
-    this->mVariableNames.push_back("var_fast_sodium_current_m_gate__m");
+    this->mVariableNames.push_back("fast_sodium_current_m_gate__m");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0328302);
     
     // rY[2]:
-    this->mVariableNames.push_back("var_fast_sodium_current_h_gate__h");
+    this->mVariableNames.push_back("fast_sodium_current_h_gate__h");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.988354);
     
     // rY[3]:
-    this->mVariableNames.push_back("var_fast_sodium_current_j_gate__j");
+    this->mVariableNames.push_back("fast_sodium_current_j_gate__j");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.99254);
     
     // rY[4]:
-    this->mVariableNames.push_back("var_L_type_Ca_channel__O");
+    this->mVariableNames.push_back("L_type_Ca_channel__O");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(9.84546e-21);
     
     // rY[5]:
-    this->mVariableNames.push_back("var_L_type_Ca_channel__O_Ca");
+    this->mVariableNames.push_back("L_type_Ca_channel__O_Ca");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
     
     // rY[6]:
-    this->mVariableNames.push_back("var_L_type_Ca_channel__C0");
+    this->mVariableNames.push_back("L_type_Ca_channel__C0");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.997208);
     
     // rY[7]:
-    this->mVariableNames.push_back("var_L_type_Ca_channel__C1");
+    this->mVariableNames.push_back("L_type_Ca_channel__C1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(6.38897e-05);
     
     // rY[8]:
-    this->mVariableNames.push_back("var_L_type_Ca_channel__C2");
+    this->mVariableNames.push_back("L_type_Ca_channel__C2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.535e-09);
     
     // rY[9]:
-    this->mVariableNames.push_back("var_L_type_Ca_channel__C3");
+    this->mVariableNames.push_back("L_type_Ca_channel__C3");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.63909e-14);
     
     // rY[10]:
-    this->mVariableNames.push_back("var_L_type_Ca_channel__C4");
+    this->mVariableNames.push_back("L_type_Ca_channel__C4");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(6.56337e-20);
     
     // rY[11]:
-    this->mVariableNames.push_back("var_L_type_Ca_channel__C_Ca0");
+    this->mVariableNames.push_back("L_type_Ca_channel__C_Ca0");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00272826);
     
     // rY[12]:
-    this->mVariableNames.push_back("var_L_type_Ca_channel__C_Ca1");
+    this->mVariableNames.push_back("L_type_Ca_channel__C_Ca1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(6.99215e-07);
     
     // rY[13]:
-    this->mVariableNames.push_back("var_L_type_Ca_channel__C_Ca2");
+    this->mVariableNames.push_back("L_type_Ca_channel__C_Ca2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(6.71989e-11);
     
     // rY[14]:
-    this->mVariableNames.push_back("var_L_type_Ca_channel__C_Ca3");
+    this->mVariableNames.push_back("L_type_Ca_channel__C_Ca3");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(2.87031e-15);
     
     // rY[15]:
-    this->mVariableNames.push_back("var_L_type_Ca_channel__C_Ca4");
+    this->mVariableNames.push_back("L_type_Ca_channel__C_Ca4");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(4.59752e-20);
     
     // rY[16]:
-    this->mVariableNames.push_back("var_L_type_Ca_channel_y_gate__y");
+    this->mVariableNames.push_back("L_type_Ca_channel_y_gate__y");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.998983);
     
     // rY[17]:
-    this->mVariableNames.push_back("var_time_dependent_potassium_current_X_gate__X");
+    this->mVariableNames.push_back("time_dependent_potassium_current_X_gate__X");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000928836);
     
     // rY[18]:
-    this->mVariableNames.push_back("var_calcium_subsystem__Cai");
+    this->mVariableNames.push_back("calcium_subsystem__Cai");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(9.94893e-11);
     
     // rY[19]:
-    this->mVariableNames.push_back("var_calcium_subsystem__Ca_SS");
+    this->mVariableNames.push_back("calcium_subsystem__Ca_SS");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(0.000136058);
     
     // rY[20]:
-    this->mVariableNames.push_back("var_calcium_subsystem__P_O1");
+    this->mVariableNames.push_back("calcium_subsystem__P_O1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00119168);
     
     // rY[21]:
-    this->mVariableNames.push_back("var_calcium_subsystem__P_O2");
+    this->mVariableNames.push_back("calcium_subsystem__P_O2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(6.30613e-09);
     
     // rY[22]:
-    this->mVariableNames.push_back("var_calcium_subsystem__P_C1");
+    this->mVariableNames.push_back("calcium_subsystem__P_C1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.762527);
     
     // rY[23]:
-    this->mVariableNames.push_back("var_calcium_subsystem__P_C2");
+    this->mVariableNames.push_back("calcium_subsystem__P_C2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.236283);
     
     // rY[24]:
-    this->mVariableNames.push_back("var_calcium_subsystem__Ca_JSR");
+    this->mVariableNames.push_back("calcium_subsystem__Ca_JSR");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(1.17504);
     
     // rY[25]:
-    this->mVariableNames.push_back("var_calcium_subsystem__Ca_NSR");
+    this->mVariableNames.push_back("calcium_subsystem__Ca_NSR");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(1.243891);
     
     // rY[26]:
-    this->mVariableNames.push_back("var_calcium_subsystem__HTRPNCa");
+    this->mVariableNames.push_back("calcium_subsystem__HTRPNCa");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(0.13598);
     
     // rY[27]:
-    this->mVariableNames.push_back("var_calcium_subsystem__LTRPNCa");
+    this->mVariableNames.push_back("calcium_subsystem__LTRPNCa");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(0.00635);
     
     // rY[28]:
-    this->mVariableNames.push_back("var_ionic_concentrations__Nai");
+    this->mVariableNames.push_back("ionic_concentrations__Nai");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(10.2042);
     
     // rY[29]:
-    this->mVariableNames.push_back("var_ionic_concentrations__Ki");
+    this->mVariableNames.push_back("ionic_concentrations__Ki");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(143.727);
     
     // rY[30]:
-    this->mVariableNames.push_back("var_ionic_concentrations__Ko");
+    this->mVariableNames.push_back("ionic_concentrations__Ko");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(5.4);
     

@@ -360,7 +360,7 @@ template<>
 void OdeSystemInformation<Cellten_tusscher_model_2004_epiFromCellML>::Initialise(void)
 {
     this->mSystemName = "tentusscher_model_2004_epi";
-    this->mFreeVariableName = "var_environment__time";
+    this->mFreeVariableName = "environment__time";
     this->mFreeVariableUnits = "millisecond";
     
     // rY[0]:
@@ -374,77 +374,77 @@ void OdeSystemInformation<Cellten_tusscher_model_2004_epiFromCellML>::Initialise
     this->mInitialConditions.push_back(6.62009903012691e-05);
     
     // rY[2]:
-    this->mVariableNames.push_back("var_rapid_time_dependent_potassium_current_Xr1_gate__Xr1");
+    this->mVariableNames.push_back("rapid_time_dependent_potassium_current_Xr1_gate__Xr1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000181047174425323);
     
     // rY[3]:
-    this->mVariableNames.push_back("var_rapid_time_dependent_potassium_current_Xr2_gate__Xr2");
+    this->mVariableNames.push_back("rapid_time_dependent_potassium_current_Xr2_gate__Xr2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.482496381200914);
     
     // rY[4]:
-    this->mVariableNames.push_back("var_slow_time_dependent_potassium_current_Xs_gate__Xs");
+    this->mVariableNames.push_back("slow_time_dependent_potassium_current_Xs_gate__Xs");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00299295753178171);
     
     // rY[5]:
-    this->mVariableNames.push_back("var_fast_sodium_current_m_gate__m");
+    this->mVariableNames.push_back("fast_sodium_current_m_gate__m");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00136056171664744);
     
     // rY[6]:
-    this->mVariableNames.push_back("var_fast_sodium_current_h_gate__h");
+    this->mVariableNames.push_back("fast_sodium_current_h_gate__h");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.773525259624882);
     
     // rY[7]:
-    this->mVariableNames.push_back("var_fast_sodium_current_j_gate__j");
+    this->mVariableNames.push_back("fast_sodium_current_j_gate__j");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.773447993775341);
     
     // rY[8]:
-    this->mVariableNames.push_back("var_L_type_Ca_current_d_gate__d");
+    this->mVariableNames.push_back("L_type_Ca_current_d_gate__d");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.95497279546125e-05);
     
     // rY[9]:
-    this->mVariableNames.push_back("var_L_type_Ca_current_f_gate__f");
+    this->mVariableNames.push_back("L_type_Ca_current_f_gate__f");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.999837031614191);
     
     // rY[10]:
-    this->mVariableNames.push_back("var_L_type_Ca_current_fCa_gate__fCa");
+    this->mVariableNames.push_back("L_type_Ca_current_fCa_gate__fCa");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.00617783424632);
     
     // rY[11]:
-    this->mVariableNames.push_back("var_transient_outward_current_s_gate__s");
+    this->mVariableNames.push_back("transient_outward_current_s_gate__s");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.999998263714768);
     
     // rY[12]:
-    this->mVariableNames.push_back("var_transient_outward_current_r_gate__r");
+    this->mVariableNames.push_back("transient_outward_current_r_gate__r");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(2.01549207399881e-08);
     
     // rY[13]:
-    this->mVariableNames.push_back("var_calcium_dynamics__Ca_SR");
+    this->mVariableNames.push_back("calcium_dynamics__Ca_SR");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.506875378939114);
     
     // rY[14]:
-    this->mVariableNames.push_back("var_calcium_dynamics__g");
+    this->mVariableNames.push_back("calcium_dynamics__g");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.999954183531273);
     
     // rY[15]:
-    this->mVariableNames.push_back("var_sodium_dynamics__Na_i");
+    this->mVariableNames.push_back("sodium_dynamics__Na_i");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(11.0366188978916);
     
     // rY[16]:
-    this->mVariableNames.push_back("var_potassium_dynamics__K_i");
+    this->mVariableNames.push_back("potassium_dynamics__K_i");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(138.549719318763);
     

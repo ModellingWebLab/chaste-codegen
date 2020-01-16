@@ -371,7 +371,7 @@ template<>
 void OdeSystemInformation<Cellcourtemanche_ramirez_nattel_model_1998FromCellML>::Initialise(void)
 {
     this->mSystemName = "courtemanche_ramirez_nattel_model_1998";
-    this->mFreeVariableName = "var_environment__time";
+    this->mFreeVariableName = "environment__time";
     this->mFreeVariableUnits = "millisecond";
     
     // rY[0]:
@@ -380,102 +380,102 @@ void OdeSystemInformation<Cellcourtemanche_ramirez_nattel_model_1998FromCellML>:
     this->mInitialConditions.push_back(-81.18);
     
     // rY[1]:
-    this->mVariableNames.push_back("var_fast_sodium_current_m_gate__m");
+    this->mVariableNames.push_back("fast_sodium_current_m_gate__m");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.002908);
     
     // rY[2]:
-    this->mVariableNames.push_back("var_fast_sodium_current_h_gate__h");
+    this->mVariableNames.push_back("fast_sodium_current_h_gate__h");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9649);
     
     // rY[3]:
-    this->mVariableNames.push_back("var_fast_sodium_current_j_gate__j");
+    this->mVariableNames.push_back("fast_sodium_current_j_gate__j");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9775);
     
     // rY[4]:
-    this->mVariableNames.push_back("var_transient_outward_K_current_oa_gate__oa");
+    this->mVariableNames.push_back("transient_outward_K_current_oa_gate__oa");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.03043);
     
     // rY[5]:
-    this->mVariableNames.push_back("var_transient_outward_K_current_oi_gate__oi");
+    this->mVariableNames.push_back("transient_outward_K_current_oi_gate__oi");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9992);
     
     // rY[6]:
-    this->mVariableNames.push_back("var_ultrarapid_delayed_rectifier_K_current_ua_gate__ua");
+    this->mVariableNames.push_back("ultrarapid_delayed_rectifier_K_current_ua_gate__ua");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.004966);
     
     // rY[7]:
-    this->mVariableNames.push_back("var_ultrarapid_delayed_rectifier_K_current_ui_gate__ui");
+    this->mVariableNames.push_back("ultrarapid_delayed_rectifier_K_current_ui_gate__ui");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9986);
     
     // rY[8]:
-    this->mVariableNames.push_back("var_rapid_delayed_rectifier_K_current_xr_gate__xr");
+    this->mVariableNames.push_back("rapid_delayed_rectifier_K_current_xr_gate__xr");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(3.296e-05);
     
     // rY[9]:
-    this->mVariableNames.push_back("var_slow_delayed_rectifier_K_current_xs_gate__xs");
+    this->mVariableNames.push_back("slow_delayed_rectifier_K_current_xs_gate__xs");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.01869);
     
     // rY[10]:
-    this->mVariableNames.push_back("var_L_type_Ca_channel_d_gate__d");
+    this->mVariableNames.push_back("L_type_Ca_channel_d_gate__d");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0001367);
     
     // rY[11]:
-    this->mVariableNames.push_back("var_L_type_Ca_channel_f_gate__f");
+    this->mVariableNames.push_back("L_type_Ca_channel_f_gate__f");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9996);
     
     // rY[12]:
-    this->mVariableNames.push_back("var_L_type_Ca_channel_f_Ca_gate__f_Ca");
+    this->mVariableNames.push_back("L_type_Ca_channel_f_Ca_gate__f_Ca");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.7755);
     
     // rY[13]:
-    this->mVariableNames.push_back("var_Ca_release_current_from_JSR_u_gate__u");
+    this->mVariableNames.push_back("Ca_release_current_from_JSR_u_gate__u");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(2.35e-112);
     
     // rY[14]:
-    this->mVariableNames.push_back("var_Ca_release_current_from_JSR_v_gate__v");
+    this->mVariableNames.push_back("Ca_release_current_from_JSR_v_gate__v");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.0);
     
     // rY[15]:
-    this->mVariableNames.push_back("var_Ca_release_current_from_JSR_w_gate__w");
+    this->mVariableNames.push_back("Ca_release_current_from_JSR_w_gate__w");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9992);
     
     // rY[16]:
-    this->mVariableNames.push_back("var_intracellular_ion_concentrations__Na_i");
+    this->mVariableNames.push_back("intracellular_ion_concentrations__Na_i");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(11.17);
     
     // rY[17]:
-    this->mVariableNames.push_back("var_intracellular_ion_concentrations__Ca_i");
+    this->mVariableNames.push_back("intracellular_ion_concentrations__Ca_i");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.0001013);
     
     // rY[18]:
-    this->mVariableNames.push_back("var_intracellular_ion_concentrations__K_i");
+    this->mVariableNames.push_back("intracellular_ion_concentrations__K_i");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(139.0);
     
     // rY[19]:
-    this->mVariableNames.push_back("var_intracellular_ion_concentrations__Ca_rel");
+    this->mVariableNames.push_back("intracellular_ion_concentrations__Ca_rel");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(1.488);
     
     // rY[20]:
-    this->mVariableNames.push_back("var_intracellular_ion_concentrations__Ca_up");
+    this->mVariableNames.push_back("intracellular_ion_concentrations__Ca_up");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(1.488);
     

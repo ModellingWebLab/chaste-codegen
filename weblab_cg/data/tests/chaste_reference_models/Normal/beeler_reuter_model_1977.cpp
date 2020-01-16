@@ -184,7 +184,7 @@ template<>
 void OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellML>::Initialise(void)
 {
     this->mSystemName = "beeler_reuter_model_1977";
-    this->mFreeVariableName = "var_environment__time";
+    this->mFreeVariableName = "environment__time";
     this->mFreeVariableUnits = "ms";
     
     // rY[0]:
@@ -198,32 +198,32 @@ void OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellML>::Initialise(vo
     this->mInitialConditions.push_back(0.0001);
     
     // rY[2]:
-    this->mVariableNames.push_back("var_sodium_current_m_gate__m");
+    this->mVariableNames.push_back("sodium_current_m_gate__m");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.011);
     
     // rY[3]:
-    this->mVariableNames.push_back("var_sodium_current_h_gate__h");
+    this->mVariableNames.push_back("sodium_current_h_gate__h");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.988);
     
     // rY[4]:
-    this->mVariableNames.push_back("var_sodium_current_j_gate__j");
+    this->mVariableNames.push_back("sodium_current_j_gate__j");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.975);
     
     // rY[5]:
-    this->mVariableNames.push_back("var_slow_inward_current_d_gate__d");
+    this->mVariableNames.push_back("slow_inward_current_d_gate__d");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.003);
     
     // rY[6]:
-    this->mVariableNames.push_back("var_slow_inward_current_f_gate__f");
+    this->mVariableNames.push_back("slow_inward_current_f_gate__f");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.994);
     
     // rY[7]:
-    this->mVariableNames.push_back("var_time_dependent_outward_current_x1_gate__x1");
+    this->mVariableNames.push_back("time_dependent_outward_current_x1_gate__x1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0001);
     

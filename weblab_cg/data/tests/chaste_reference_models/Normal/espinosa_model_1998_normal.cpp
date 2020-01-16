@@ -419,7 +419,7 @@ void OdeSystemInformation<Cellespinosa_model_1998_normalFromCellML>::Initialise(
     this->mInitialConditions.push_back(7.07933e-05);
     
     // rY[2]:
-    this->mVariableNames.push_back("var_time_dependent_potassium_current_x_gate__x");
+    this->mVariableNames.push_back("time_dependent_potassium_current_x_gate__x");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(2.3455e-06);
     
@@ -454,22 +454,22 @@ void OdeSystemInformation<Cellespinosa_model_1998_normalFromCellML>::Initialise(
     this->mInitialConditions.push_back(0.4387865);
     
     // rY[9]:
-    this->mVariableNames.push_back("var_transient_outward_current_s_gate__s");
+    this->mVariableNames.push_back("transient_outward_current_s_gate__s");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.954689);
     
     // rY[10]:
-    this->mVariableNames.push_back("var_transient_outward_current_r_gate__r");
+    this->mVariableNames.push_back("transient_outward_current_r_gate__r");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(2.4223e-05);
     
     // rY[11]:
-    this->mVariableNames.push_back("var_calcium_release__ActFrac");
+    this->mVariableNames.push_back("calcium_release__ActFrac");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0113161);
     
     // rY[12]:
-    this->mVariableNames.push_back("var_calcium_release__ProdFrac");
+    this->mVariableNames.push_back("calcium_release__ProdFrac");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9402563);
     
@@ -494,7 +494,7 @@ void OdeSystemInformation<Cellespinosa_model_1998_normalFromCellML>::Initialise(
     this->mInitialConditions.push_back(0.0008364);
     
     // rY[17]:
-    this->mVariableNames.push_back("var_intracellular_calcium_concentration__Ca_up");
+    this->mVariableNames.push_back("intracellular_calcium_concentration__Ca_up");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.479749);
     
@@ -504,12 +504,12 @@ void OdeSystemInformation<Cellespinosa_model_1998_normalFromCellML>::Initialise(
     this->mInitialConditions.push_back(0.43984);
     
     // rY[19]:
-    this->mVariableNames.push_back("var_intracellular_calcium_concentration__Ca_Calmod");
+    this->mVariableNames.push_back("intracellular_calcium_concentration__Ca_Calmod");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.0024448);
     
     // rY[20]:
-    this->mVariableNames.push_back("var_intracellular_calcium_concentration__Ca_Trop");
+    this->mVariableNames.push_back("intracellular_calcium_concentration__Ca_Trop");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.0017012);
     

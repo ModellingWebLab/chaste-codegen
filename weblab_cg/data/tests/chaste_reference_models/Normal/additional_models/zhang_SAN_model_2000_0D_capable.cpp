@@ -406,72 +406,72 @@ void OdeSystemInformation<Cellzhang_SAN_model_2000_0D_capableFromCellML>::Initia
     this->mInitialConditions.push_back(-39.013558536);
     
     // rY[1]:
-    this->mVariableNames.push_back("var_sodium_current_m_gate__m");
+    this->mVariableNames.push_back("sodium_current_m_gate__m");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.092361701692);
     
     // rY[2]:
-    this->mVariableNames.push_back("var_sodium_current_h_gate__h1");
+    this->mVariableNames.push_back("sodium_current_h_gate__h1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.015905380261);
     
     // rY[3]:
-    this->mVariableNames.push_back("var_sodium_current_h_gate__h2");
+    this->mVariableNames.push_back("sodium_current_h_gate__h2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.01445216109);
     
     // rY[4]:
-    this->mVariableNames.push_back("var_L_type_Ca_channel_d_gate__d_L");
+    this->mVariableNames.push_back("L_type_Ca_channel_d_gate__d_L");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.04804900895);
     
     // rY[5]:
-    this->mVariableNames.push_back("var_L_type_Ca_channel_f_gate__f_L");
+    this->mVariableNames.push_back("L_type_Ca_channel_f_gate__f_L");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.48779845203);
     
     // rY[6]:
-    this->mVariableNames.push_back("var_T_type_Ca_channel_d_gate__d_T");
+    this->mVariableNames.push_back("T_type_Ca_channel_d_gate__d_T");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.42074047435);
     
     // rY[7]:
-    this->mVariableNames.push_back("var_T_type_Ca_channel_f_gate__f_T");
+    this->mVariableNames.push_back("T_type_Ca_channel_f_gate__f_T");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.038968420558);
     
     // rY[8]:
-    this->mVariableNames.push_back("var_four_AP_sensitive_currents_q_gate__q");
+    this->mVariableNames.push_back("four_AP_sensitive_currents_q_gate__q");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.29760539675);
     
     // rY[9]:
-    this->mVariableNames.push_back("var_four_AP_sensitive_currents_r_gate__r");
+    this->mVariableNames.push_back("four_AP_sensitive_currents_r_gate__r");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.064402950262);
     
     // rY[10]:
-    this->mVariableNames.push_back("var_rapid_delayed_rectifying_potassium_current_P_af_gate__P_af");
+    this->mVariableNames.push_back("rapid_delayed_rectifying_potassium_current_P_af_gate__P_af");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.13034201158);
     
     // rY[11]:
-    this->mVariableNames.push_back("var_rapid_delayed_rectifying_potassium_current_P_as_gate__P_as");
+    this->mVariableNames.push_back("rapid_delayed_rectifying_potassium_current_P_as_gate__P_as");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.46960956028);
     
     // rY[12]:
-    this->mVariableNames.push_back("var_rapid_delayed_rectifying_potassium_current_P_i_gate__P_i");
+    this->mVariableNames.push_back("rapid_delayed_rectifying_potassium_current_P_i_gate__P_i");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.87993375273);
     
     // rY[13]:
-    this->mVariableNames.push_back("var_slow_delayed_rectifying_potassium_current_xs_gate__xs");
+    this->mVariableNames.push_back("slow_delayed_rectifying_potassium_current_xs_gate__xs");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.082293827208);
     
     // rY[14]:
-    this->mVariableNames.push_back("var_hyperpolarisation_activated_current_y_gate__y");
+    this->mVariableNames.push_back("hyperpolarisation_activated_current_y_gate__y");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.03889291759);
     

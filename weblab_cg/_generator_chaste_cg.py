@@ -176,10 +176,11 @@ class ChasteModel(object):
             display_name = self._model.get_ontology_terms_by_symbol(var, self._OXMETA)[-1]
         elif var.cmeta_id:
             display_name = var.cmeta_id
-        else:
-            if var in self._in_interface:
-                display_name = var.name.split('$')[-1]
-        return display_name.replace('$', '__')
+#        else:
+#            if var in self._in_interface:
+#                display_name = var.name.split('$')[-1]
+#        return display_name.replace('$', '__').replace('var_', '', 1)
+        return display_name.replace('$', '__').replace('var_chaste_interface_', '', 1).replace('var_', '', 1)
 
     def _add_units(self):
         """ Add needed units to the model to allow converting time, voltage and calcium in specific units
@@ -220,18 +221,18 @@ class ChasteModel(object):
         try:
             cytosolic_calcium_concentration = \
                 self._model.get_symbol_by_ontology_term(self._OXMETA, "cytosolic_calcium_concentration")
-            desired_units = self._model.units.ureg.millimolar
-
-            # Convert if necessary
-            try:
-                return self._model.convert_variable(cytosolic_calcium_concentration,
-                                                    desired_units, DataDirectionFlow.INPUT)
-            except DimensionalityError:
-                # units can't be converted to millimolar (e.g. could be dimensionless)
-                return cytosolic_calcium_concentration
         except KeyError:
             self._logger.info(self._model.name + ' has no cytosolic_calcium_concentration')
             return None
+
+        # Convert if necessary            
+        desired_units = self._model.units.ureg.millimolar
+        try:
+            return self._model.convert_variable(cytosolic_calcium_concentration,
+                                                desired_units, DataDirectionFlow.INPUT)
+        except DimensionalityError:
+            # units can't be converted to millimolar (e.g. could be dimensionless)
+            return cytosolic_calcium_concentration
 
     def _get_modifiable_parameters_annotated(self):
         """ Get the variables annotated in the model as modifiable parametery"""
@@ -699,17 +700,14 @@ class ChasteModel(object):
 
     def _format_free_variable(self):
         """ Format free variable for chaste output"""
-        ontology_terms = self._model.get_ontology_terms_by_symbol(self._time_variable, namespace_uri=self._OXMETA)
-        name = ontology_terms[0] if len(ontology_terms) > 0 else self._name_printer.doprint(self._time_variable)
-        return {'name': name,
+        return {'name': self._get_var_display_name(self._time_variable),        
                 'units': self._model.units.summarise_units(self._time_variable),
                 'system_name': self._model.name,
                 'var_name': self._printer.doprint(self._time_variable)}
 
     def _format_system_info(self):
         """ Format general ode system info for chaste output"""
-        return [{'name': self._model.get_ontology_terms_by_symbol(var, self._OXMETA)[0]
-                 if self._model.has_ontology_annotation(var, self._OXMETA) else self._name_printer.doprint(var),
+        return [{'name': self._get_var_display_name(var),
                  'initial_value': str(self._model.get_initial_value(var)),
                  'units': self._model.units.summarise_units(var)}
                 for var in self._state_vars]

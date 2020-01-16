@@ -410,52 +410,52 @@ void OdeSystemInformation<Celldemir_model_1994FromCellML>::Initialise(void)
     this->mInitialConditions.push_back(0.0003787018);
     
     // rY[2]:
-    this->mVariableNames.push_back("var_sodium_current_m_gate__m");
+    this->mVariableNames.push_back("sodium_current_m_gate__m");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.250113);
     
     // rY[3]:
-    this->mVariableNames.push_back("var_sodium_current_h_gate__h1");
+    this->mVariableNames.push_back("sodium_current_h_gate__h1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.001386897);
     
     // rY[4]:
-    this->mVariableNames.push_back("var_sodium_current_h_gate__h2");
+    this->mVariableNames.push_back("sodium_current_h_gate__h2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.002065463);
     
     // rY[5]:
-    this->mVariableNames.push_back("var_L_type_Ca_channel_d_gate__d_L");
+    this->mVariableNames.push_back("L_type_Ca_channel_d_gate__d_L");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.002572773);
     
     // rY[6]:
-    this->mVariableNames.push_back("var_L_type_Ca_channel_f_gate__f_L");
+    this->mVariableNames.push_back("L_type_Ca_channel_f_gate__f_L");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.98651);
     
     // rY[7]:
-    this->mVariableNames.push_back("var_T_type_Ca_channel_d_gate__d_T");
+    this->mVariableNames.push_back("T_type_Ca_channel_d_gate__d_T");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.02012114);
     
     // rY[8]:
-    this->mVariableNames.push_back("var_T_type_Ca_channel_f_gate__f_T");
+    this->mVariableNames.push_back("T_type_Ca_channel_f_gate__f_T");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.1945111);
     
     // rY[9]:
-    this->mVariableNames.push_back("var_delayed_rectifying_potassium_current_P_a_gate__P_a");
+    this->mVariableNames.push_back("delayed_rectifying_potassium_current_P_a_gate__P_a");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.02302278);
     
     // rY[10]:
-    this->mVariableNames.push_back("var_delayed_rectifying_potassium_current_P_i_gate__P_i");
+    this->mVariableNames.push_back("delayed_rectifying_potassium_current_P_i_gate__P_i");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.3777728);
     
     // rY[11]:
-    this->mVariableNames.push_back("var_hyperpolarisation_activated_current_y_gate__y");
+    this->mVariableNames.push_back("hyperpolarisation_activated_current_y_gate__y");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.09227776);
     
@@ -470,22 +470,22 @@ void OdeSystemInformation<Celldemir_model_1994FromCellML>::Initialise(void)
     this->mInitialConditions.push_back(140.7347);
     
     // rY[14]:
-    this->mVariableNames.push_back("var_intracellular_concentrations_and_buffer_equations__Ca_Calmod");
+    this->mVariableNames.push_back("intracellular_concentrations_and_buffer_equations__Ca_Calmod");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.1411678);
     
     // rY[15]:
-    this->mVariableNames.push_back("var_intracellular_concentrations_and_buffer_equations__Ca_Trop");
+    this->mVariableNames.push_back("intracellular_concentrations_and_buffer_equations__Ca_Trop");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.07331396);
     
     // rY[16]:
-    this->mVariableNames.push_back("var_intracellular_concentrations_and_buffer_equations__Ca_Mg_Trop");
+    this->mVariableNames.push_back("intracellular_concentrations_and_buffer_equations__Ca_Mg_Trop");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.7618549);
     
     // rY[17]:
-    this->mVariableNames.push_back("var_intracellular_concentrations_and_buffer_equations__Mg_Mg_Trop");
+    this->mVariableNames.push_back("intracellular_concentrations_and_buffer_equations__Mg_Mg_Trop");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.2097049);
     
@@ -505,32 +505,32 @@ void OdeSystemInformation<Celldemir_model_1994FromCellML>::Initialise(void)
     this->mInitialConditions.push_back(5.389014);
     
     // rY[21]:
-    this->mVariableNames.push_back("var_SR_Ca_uptake_and_release__Ca_up");
+    this->mVariableNames.push_back("SR_Ca_uptake_and_release__Ca_up");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(16.95311);
     
     // rY[22]:
-    this->mVariableNames.push_back("var_SR_Ca_uptake_and_release__Ca_rel");
+    this->mVariableNames.push_back("SR_Ca_uptake_and_release__Ca_rel");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(16.85024);
     
     // rY[23]:
-    this->mVariableNames.push_back("var_SR_Ca_uptake_and_release__Ca_Calse");
+    this->mVariableNames.push_back("SR_Ca_uptake_and_release__Ca_Calse");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9528726);
     
     // rY[24]:
-    this->mVariableNames.push_back("var_SR_Ca_uptake_and_release__F1");
+    this->mVariableNames.push_back("SR_Ca_uptake_and_release__F1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.1133251);
     
     // rY[25]:
-    this->mVariableNames.push_back("var_SR_Ca_uptake_and_release__F2");
+    this->mVariableNames.push_back("SR_Ca_uptake_and_release__F2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0007594214);
     
     // rY[26]:
-    this->mVariableNames.push_back("var_SR_Ca_uptake_and_release__F3");
+    this->mVariableNames.push_back("SR_Ca_uptake_and_release__F3");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.8859153);
     

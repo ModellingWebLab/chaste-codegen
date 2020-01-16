@@ -449,17 +449,17 @@ void OdeSystemInformation<Cellnoble_model_1998FromCellML>::Initialise(void)
     this->mInitialConditions.push_back(1.4e-05);
     
     // rY[2]:
-    this->mVariableNames.push_back("var_rapid_delayed_rectifier_potassium_current_xr1_gate__xr1");
+    this->mVariableNames.push_back("rapid_delayed_rectifier_potassium_current_xr1_gate__xr1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.03e-05);
     
     // rY[3]:
-    this->mVariableNames.push_back("var_rapid_delayed_rectifier_potassium_current_xr2_gate__xr2");
+    this->mVariableNames.push_back("rapid_delayed_rectifier_potassium_current_xr2_gate__xr2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(2e-07);
     
     // rY[4]:
-    this->mVariableNames.push_back("var_slow_delayed_rectifier_potassium_current_xs_gate__xs");
+    this->mVariableNames.push_back("slow_delayed_rectifier_potassium_current_xs_gate__xs");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.001302);
     
@@ -494,22 +494,22 @@ void OdeSystemInformation<Cellnoble_model_1998FromCellML>::Initialise(void)
     this->mInitialConditions.push_back(0.9651958);
     
     // rY[11]:
-    this->mVariableNames.push_back("var_transient_outward_current_s_gate__s");
+    this->mVariableNames.push_back("transient_outward_current_s_gate__s");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9948645);
     
     // rY[12]:
-    this->mVariableNames.push_back("var_transient_outward_current_r_gate__r");
+    this->mVariableNames.push_back("transient_outward_current_r_gate__r");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
     
     // rY[13]:
-    this->mVariableNames.push_back("var_calcium_release__ActFrac");
+    this->mVariableNames.push_back("calcium_release__ActFrac");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0042614);
     
     // rY[14]:
-    this->mVariableNames.push_back("var_calcium_release__ProdFrac");
+    this->mVariableNames.push_back("calcium_release__ProdFrac");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.4068154);
     
@@ -529,7 +529,7 @@ void OdeSystemInformation<Cellnoble_model_1998FromCellML>::Initialise(void)
     this->mInitialConditions.push_back(1.88e-05);
     
     // rY[18]:
-    this->mVariableNames.push_back("var_intracellular_calcium_concentration__Ca_up");
+    this->mVariableNames.push_back("intracellular_calcium_concentration__Ca_up");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.4531889);
     
@@ -539,12 +539,12 @@ void OdeSystemInformation<Cellnoble_model_1998FromCellML>::Initialise(void)
     this->mInitialConditions.push_back(0.4481927);
     
     // rY[20]:
-    this->mVariableNames.push_back("var_intracellular_calcium_concentration__Ca_Calmod");
+    this->mVariableNames.push_back("intracellular_calcium_concentration__Ca_Calmod");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.0005555);
     
     // rY[21]:
-    this->mVariableNames.push_back("var_intracellular_calcium_concentration__Ca_Trop");
+    this->mVariableNames.push_back("intracellular_calcium_concentration__Ca_Trop");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.0003542);
     

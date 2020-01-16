@@ -362,12 +362,12 @@ void OdeSystemInformation<Cellhilgemann_noble_model_1987FromCellML>::Initialise(
     this->mInitialConditions.push_back(0.785);
     
     // rY[6]:
-    this->mVariableNames.push_back("var_calcium_release__ActFrac");
+    this->mVariableNames.push_back("calcium_release__ActFrac");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
     
     // rY[7]:
-    this->mVariableNames.push_back("var_calcium_release__ProdFrac");
+    this->mVariableNames.push_back("calcium_release__ProdFrac");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
     
@@ -387,7 +387,7 @@ void OdeSystemInformation<Cellhilgemann_noble_model_1987FromCellML>::Initialise(
     this->mInitialConditions.push_back(140.0);
     
     // rY[11]:
-    this->mVariableNames.push_back("var_intracellular_calcium_concentration__Ca_up");
+    this->mVariableNames.push_back("intracellular_calcium_concentration__Ca_up");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.3);
     
@@ -397,12 +397,12 @@ void OdeSystemInformation<Cellhilgemann_noble_model_1987FromCellML>::Initialise(
     this->mInitialConditions.push_back(0.3);
     
     // rY[13]:
-    this->mVariableNames.push_back("var_intracellular_calcium_concentration__Ca_Calmod");
+    this->mVariableNames.push_back("intracellular_calcium_concentration__Ca_Calmod");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.0005);
     
     // rY[14]:
-    this->mVariableNames.push_back("var_intracellular_calcium_concentration__Ca_Trop");
+    this->mVariableNames.push_back("intracellular_calcium_concentration__Ca_Trop");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.0015);
     

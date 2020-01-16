@@ -429,62 +429,62 @@ void OdeSystemInformation<Cellsakmann_model_2000_epiFromCellML>::Initialise(void
     this->mInitialConditions.push_back(5.44e-05);
     
     // rY[2]:
-    this->mVariableNames.push_back("var_rapid_delayed_rectifier_potassium_current_xr_gate__xr");
+    this->mVariableNames.push_back("rapid_delayed_rectifier_potassium_current_xr_gate__xr");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.98e-05);
     
     // rY[3]:
-    this->mVariableNames.push_back("var_slow_delayed_rectifier_potassium_current_xs_gate__xs");
+    this->mVariableNames.push_back("slow_delayed_rectifier_potassium_current_xs_gate__xs");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0381477);
     
     // rY[4]:
-    this->mVariableNames.push_back("var_fast_sodium_current_m_gate__m");
+    this->mVariableNames.push_back("fast_sodium_current_m_gate__m");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0026891);
     
     // rY[5]:
-    this->mVariableNames.push_back("var_fast_sodium_current_h_gate__h");
+    this->mVariableNames.push_back("fast_sodium_current_h_gate__h");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9873107);
     
     // rY[6]:
-    this->mVariableNames.push_back("var_L_type_Ca_channel_d_gate__d");
+    this->mVariableNames.push_back("L_type_Ca_channel_d_gate__d");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000144);
     
     // rY[7]:
-    this->mVariableNames.push_back("var_L_type_Ca_channel_f_gate__f");
+    this->mVariableNames.push_back("L_type_Ca_channel_f_gate__f");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9999993);
     
     // rY[8]:
-    this->mVariableNames.push_back("var_L_type_Ca_channel_f2_gate__f2");
+    this->mVariableNames.push_back("L_type_Ca_channel_f2_gate__f2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.254433);
     
     // rY[9]:
-    this->mVariableNames.push_back("var_L_type_Ca_channel_f2ds_gate__f2ds");
+    this->mVariableNames.push_back("L_type_Ca_channel_f2ds_gate__f2ds");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9292189);
     
     // rY[10]:
-    this->mVariableNames.push_back("var_transient_outward_current_s_gate__s");
+    this->mVariableNames.push_back("transient_outward_current_s_gate__s");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.7352365);
     
     // rY[11]:
-    this->mVariableNames.push_back("var_transient_outward_current_r_gate__r");
+    this->mVariableNames.push_back("transient_outward_current_r_gate__r");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
     
     // rY[12]:
-    this->mVariableNames.push_back("var_calcium_release__ActFrac");
+    this->mVariableNames.push_back("calcium_release__ActFrac");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0101647);
     
     // rY[13]:
-    this->mVariableNames.push_back("var_calcium_release__ProdFrac");
+    this->mVariableNames.push_back("calcium_release__ProdFrac");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9584464);
     
@@ -504,22 +504,22 @@ void OdeSystemInformation<Cellsakmann_model_2000_epiFromCellML>::Initialise(void
     this->mInitialConditions.push_back(0.0018991);
     
     // rY[17]:
-    this->mVariableNames.push_back("var_intracellular_calcium_concentration__Ca_up");
+    this->mVariableNames.push_back("intracellular_calcium_concentration__Ca_up");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.7625025);
     
     // rY[18]:
-    this->mVariableNames.push_back("var_intracellular_calcium_concentration__Ca_rel");
+    this->mVariableNames.push_back("intracellular_calcium_concentration__Ca_rel");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.7368094);
     
     // rY[19]:
-    this->mVariableNames.push_back("var_intracellular_calcium_concentration__Ca_Calmod");
+    this->mVariableNames.push_back("intracellular_calcium_concentration__Ca_Calmod");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.0018544);
     
     // rY[20]:
-    this->mVariableNames.push_back("var_intracellular_calcium_concentration__Ca_Trop");
+    this->mVariableNames.push_back("intracellular_calcium_concentration__Ca_Trop");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.0012852);
     

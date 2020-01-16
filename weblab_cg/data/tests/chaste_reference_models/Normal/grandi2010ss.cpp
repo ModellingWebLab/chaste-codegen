@@ -626,7 +626,7 @@ template<>
 void OdeSystemInformation<Cellgrandi2010ssFromCellML>::Initialise(void)
 {
     this->mSystemName = "grandi2010";
-    this->mFreeVariableName = "var_cell__time";
+    this->mFreeVariableName = "cell__time";
     this->mFreeVariableUnits = "ms";
     
     // rY[0]:
@@ -635,182 +635,182 @@ void OdeSystemInformation<Cellgrandi2010ssFromCellML>::Initialise(void)
     this->mInitialConditions.push_back(-81.3842590704928);
     
     // rY[1]:
-    this->mVariableNames.push_back("var_cell__sm");
+    this->mVariableNames.push_back("cell__sm");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00384941567866232);
     
     // rY[2]:
-    this->mVariableNames.push_back("var_cell__sh");
+    this->mVariableNames.push_back("cell__sh");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.623723834301669);
     
     // rY[3]:
-    this->mVariableNames.push_back("var_cell__sj");
+    this->mVariableNames.push_back("cell__sj");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.622080736932815);
     
     // rY[4]:
-    this->mVariableNames.push_back("var_cell__sd");
+    this->mVariableNames.push_back("cell__sd");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(2.95884913218079e-06);
     
     // rY[5]:
-    this->mVariableNames.push_back("var_cell__sf");
+    this->mVariableNames.push_back("cell__sf");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.995094078386247);
     
     // rY[6]:
-    this->mVariableNames.push_back("var_cell__sfcaBj");
+    this->mVariableNames.push_back("cell__sfcaBj");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0246274349529557);
     
     // rY[7]:
-    this->mVariableNames.push_back("var_cell__sfcaBsl");
+    this->mVariableNames.push_back("cell__sfcaBsl");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0150911724206476);
     
     // rY[8]:
-    this->mVariableNames.push_back("var_cell__sxtos");
+    this->mVariableNames.push_back("cell__sxtos");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000442853722673121);
     
     // rY[9]:
-    this->mVariableNames.push_back("var_cell__sytos");
+    this->mVariableNames.push_back("cell__sytos");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.789013894749951);
     
     // rY[10]:
-    this->mVariableNames.push_back("var_cell__sxtof");
+    this->mVariableNames.push_back("cell__sxtof");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000442846429332686);
     
     // rY[11]:
-    this->mVariableNames.push_back("var_cell__sytof");
+    this->mVariableNames.push_back("cell__sytof");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.999995784674368);
     
     // rY[12]:
-    this->mVariableNames.push_back("var_cell__sxkr");
+    this->mVariableNames.push_back("cell__sxkr");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.020160578118589);
     
     // rY[13]:
-    this->mVariableNames.push_back("var_cell__sxks");
+    this->mVariableNames.push_back("cell__sxks");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00430143235332308);
     
     // rY[14]:
-    this->mVariableNames.push_back("var_cell__sRyRr");
+    this->mVariableNames.push_back("cell__sRyRr");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.893326456705696);
     
     // rY[15]:
-    this->mVariableNames.push_back("var_cell__sRyRo");
+    this->mVariableNames.push_back("cell__sRyRo");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(7.56436968249499e-07);
     
     // rY[16]:
-    this->mVariableNames.push_back("var_cell__sRyRi");
+    this->mVariableNames.push_back("cell__sRyRi");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(9.03266331737064e-08);
     
     // rY[17]:
-    this->mVariableNames.push_back("var_cell__sNaBj");
+    this->mVariableNames.push_back("cell__sNaBj");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(3.41097946062695);
     
     // rY[18]:
-    this->mVariableNames.push_back("var_cell__sNaBsl");
+    this->mVariableNames.push_back("cell__sNaBsl");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.744248540671373);
     
     // rY[19]:
-    this->mVariableNames.push_back("var_cell__sTnCL");
+    this->mVariableNames.push_back("cell__sTnCL");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00904644567707666);
     
     // rY[20]:
-    this->mVariableNames.push_back("var_cell__sTnCHc");
+    this->mVariableNames.push_back("cell__sTnCHc");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.1183943202639);
     
     // rY[21]:
-    this->mVariableNames.push_back("var_cell__sTnCHm");
+    this->mVariableNames.push_back("cell__sTnCHm");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0101423649465603);
     
     // rY[22]:
-    this->mVariableNames.push_back("var_cell__sCaM");
+    this->mVariableNames.push_back("cell__sCaM");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000299824763475116);
     
     // rY[23]:
-    this->mVariableNames.push_back("var_cell__sMyoc");
+    this->mVariableNames.push_back("cell__sMyoc");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00201443980536826);
     
     // rY[24]:
-    this->mVariableNames.push_back("var_cell__sMyom");
+    this->mVariableNames.push_back("cell__sMyom");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.137467597337588);
     
     // rY[25]:
-    this->mVariableNames.push_back("var_cell__sSRB");
+    this->mVariableNames.push_back("cell__sSRB");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00220110816535249);
     
     // rY[26]:
-    this->mVariableNames.push_back("var_cell__sSLLj");
+    this->mVariableNames.push_back("cell__sSLLj");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00739549938515031);
     
     // rY[27]:
-    this->mVariableNames.push_back("var_cell__sSLLsl");
+    this->mVariableNames.push_back("cell__sSLLsl");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00979616077807075);
     
     // rY[28]:
-    this->mVariableNames.push_back("var_cell__sSLHj");
+    this->mVariableNames.push_back("cell__sSLHj");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0735225248399363);
     
     // rY[29]:
-    this->mVariableNames.push_back("var_cell__sSLHsl");
+    this->mVariableNames.push_back("cell__sSLHsl");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.113642236788144);
     
     // rY[30]:
-    this->mVariableNames.push_back("var_cell__sCsqnb");
+    this->mVariableNames.push_back("cell__sCsqnb");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.20762712858574);
     
     // rY[31]:
-    this->mVariableNames.push_back("var_cell__sCa_sr");
+    this->mVariableNames.push_back("cell__sCa_sr");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.563755421404699);
     
     // rY[32]:
-    this->mVariableNames.push_back("var_cell__sNaj");
+    this->mVariableNames.push_back("cell__sNaj");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(8.21411036389602);
     
     // rY[33]:
-    this->mVariableNames.push_back("var_cell__sNasl");
+    this->mVariableNames.push_back("cell__sNasl");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(8.21322794157889);
     
     // rY[34]:
-    this->mVariableNames.push_back("var_cell__sNai");
+    this->mVariableNames.push_back("cell__sNai");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(8.21340895351653);
     
     // rY[35]:
-    this->mVariableNames.push_back("var_cell__sCaj");
+    this->mVariableNames.push_back("cell__sCaj");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000175648385857736);
     
     // rY[36]:
-    this->mVariableNames.push_back("var_cell__sCasl");
+    this->mVariableNames.push_back("cell__sCasl");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000105614570409386);
     

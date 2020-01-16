@@ -366,7 +366,7 @@ template<>
 void OdeSystemInformation<Cellpriebe_beuckelmann_model_1998FromCellML>::Initialise(void)
 {
     this->mSystemName = "priebe_beuckelmann_model_1998";
-    this->mFreeVariableName = "var_environment__time";
+    this->mFreeVariableName = "environment__time";
     this->mFreeVariableUnits = "ms";
     
     // rY[0]:
@@ -380,102 +380,102 @@ void OdeSystemInformation<Cellpriebe_beuckelmann_model_1998FromCellML>::Initiali
     this->mInitialConditions.push_back(0.0002);
     
     // rY[2]:
-    this->mVariableNames.push_back("var_INa_m_gate__m");
+    this->mVariableNames.push_back("INa_m_gate__m");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000585525582501575);
     
     // rY[3]:
-    this->mVariableNames.push_back("var_INa_h_gate__h");
+    this->mVariableNames.push_back("INa_h_gate__h");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.995865529216237);
     
     // rY[4]:
-    this->mVariableNames.push_back("var_INa_j_gate__j");
+    this->mVariableNames.push_back("INa_j_gate__j");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.997011204496203);
     
     // rY[5]:
-    this->mVariableNames.push_back("var_ICa_d_gate__d");
+    this->mVariableNames.push_back("ICa_d_gate__d");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(2.50653215966786e-10);
     
     // rY[6]:
-    this->mVariableNames.push_back("var_ICa_f_gate__f");
+    this->mVariableNames.push_back("ICa_f_gate__f");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.92130376850548);
     
     // rY[7]:
-    this->mVariableNames.push_back("var_Ito_r_gate__r");
+    this->mVariableNames.push_back("Ito_r_gate__r");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.75032478501027e-05);
     
     // rY[8]:
-    this->mVariableNames.push_back("var_Ito_t_gate__t");
+    this->mVariableNames.push_back("Ito_t_gate__t");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.999897251531651);
     
     // rY[9]:
-    this->mVariableNames.push_back("var_IKs_Xs_gate__Xs");
+    this->mVariableNames.push_back("IKs_Xs_gate__Xs");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00885658064818147);
     
     // rY[10]:
-    this->mVariableNames.push_back("var_IKr_Xr_gate__Xr");
+    this->mVariableNames.push_back("IKr_Xr_gate__Xr");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000215523048438941);
     
     // rY[11]:
-    this->mVariableNames.push_back("var_Irel__APtrack");
+    this->mVariableNames.push_back("Irel__APtrack");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(-1.372158997089e-136);
     
     // rY[12]:
-    this->mVariableNames.push_back("var_Irel__APtrack2");
+    this->mVariableNames.push_back("Irel__APtrack2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(-7.58517896402761e-136);
     
     // rY[13]:
-    this->mVariableNames.push_back("var_Irel__APtrack3");
+    this->mVariableNames.push_back("Irel__APtrack3");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(4.82035353592764e-05);
     
     // rY[14]:
-    this->mVariableNames.push_back("var_Irel__Cainfluxtrack");
+    this->mVariableNames.push_back("Irel__Cainfluxtrack");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(-7.71120176147331e-138);
     
     // rY[15]:
-    this->mVariableNames.push_back("var_Irel__OVRLDtrack");
+    this->mVariableNames.push_back("Irel__OVRLDtrack");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1e-06);
     
     // rY[16]:
-    this->mVariableNames.push_back("var_Irel__OVRLDtrack2");
+    this->mVariableNames.push_back("Irel__OVRLDtrack2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1e-06);
     
     // rY[17]:
-    this->mVariableNames.push_back("var_Irel__OVRLDtrack3");
+    this->mVariableNames.push_back("Irel__OVRLDtrack3");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1e-06);
     
     // rY[18]:
-    this->mVariableNames.push_back("var_Ionic_concentrations__Nai");
+    this->mVariableNames.push_back("Ionic_concentrations__Nai");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(10.0);
     
     // rY[19]:
-    this->mVariableNames.push_back("var_Ionic_concentrations__Ki");
+    this->mVariableNames.push_back("Ionic_concentrations__Ki");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(140.0);
     
     // rY[20]:
-    this->mVariableNames.push_back("var_Ionic_concentrations__Ca_JSR");
+    this->mVariableNames.push_back("Ionic_concentrations__Ca_JSR");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(2.5);
     
     // rY[21]:
-    this->mVariableNames.push_back("var_Ionic_concentrations__Ca_NSR");
+    this->mVariableNames.push_back("Ionic_concentrations__Ca_NSR");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(2.5);
     

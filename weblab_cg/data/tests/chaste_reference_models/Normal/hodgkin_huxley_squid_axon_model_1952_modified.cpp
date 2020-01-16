@@ -137,17 +137,17 @@ void OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromC
     this->mInitialConditions.push_back(-75.0);
     
     // rY[1]:
-    this->mVariableNames.push_back("var_sodium_channel_m_gate__m");
+    this->mVariableNames.push_back("sodium_channel_m_gate__m");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.05);
     
     // rY[2]:
-    this->mVariableNames.push_back("var_sodium_channel_h_gate__h");
+    this->mVariableNames.push_back("sodium_channel_h_gate__h");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.6);
     
     // rY[3]:
-    this->mVariableNames.push_back("var_potassium_channel_n_gate__n");
+    this->mVariableNames.push_back("potassium_channel_n_gate__n");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.325);
     

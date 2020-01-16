@@ -393,7 +393,7 @@ template<>
 void OdeSystemInformation<Celliribe_model_2006_without_otherwise_sectionFromCellML>::Initialise(void)
 {
     this->mSystemName = "iribe_model_2006";
-    this->mFreeVariableName = "var_environment__time_converted";
+    this->mFreeVariableName = "environment__time_converted";
     this->mFreeVariableUnits = "millisecond";
     
     // rY[0]:
@@ -417,17 +417,17 @@ void OdeSystemInformation<Celliribe_model_2006_without_otherwise_sectionFromCell
     this->mInitialConditions.push_back(0.99569);
     
     // rY[4]:
-    this->mVariableNames.push_back("var_time_dependent_rectifier_potassium_current_x_gate__x");
+    this->mVariableNames.push_back("time_dependent_rectifier_potassium_current_x_gate__x");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.051127);
     
     // rY[5]:
-    this->mVariableNames.push_back("var_transient_outward_current_s_gate__s");
+    this->mVariableNames.push_back("transient_outward_current_s_gate__s");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.95854);
     
     // rY[6]:
-    this->mVariableNames.push_back("var_transient_outward_current_r_gate__r");
+    this->mVariableNames.push_back("transient_outward_current_r_gate__r");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.5185e-08);
     
@@ -442,37 +442,37 @@ void OdeSystemInformation<Celliribe_model_2006_without_otherwise_sectionFromCell
     this->mInitialConditions.push_back(1.0);
     
     // rY[9]:
-    this->mVariableNames.push_back("var_CaMKII_factor__F_CaMK");
+    this->mVariableNames.push_back("CaMKII_factor__F_CaMK");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.028);
     
     // rY[10]:
-    this->mVariableNames.push_back("var_RyR__F_SRCa_RyR");
+    this->mVariableNames.push_back("RyR__F_SRCa_RyR");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.25089);
     
     // rY[11]:
-    this->mVariableNames.push_back("var_RyR__F_1");
+    this->mVariableNames.push_back("RyR__F_1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.5268);
     
     // rY[12]:
-    this->mVariableNames.push_back("var_RyR__F_2");
+    this->mVariableNames.push_back("RyR__F_2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(8.7508e-06);
     
     // rY[13]:
-    this->mVariableNames.push_back("var_calmodulin__Cmdn_Ca");
+    this->mVariableNames.push_back("calmodulin__Cmdn_Ca");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(3.9636e-06);
     
     // rY[14]:
-    this->mVariableNames.push_back("var_troponin__Trpn_Ca");
+    this->mVariableNames.push_back("troponin__Trpn_Ca");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.00027661);
     
     // rY[15]:
-    this->mVariableNames.push_back("var_SR_calcium_concentration__Ca_SR");
+    this->mVariableNames.push_back("SR_calcium_concentration__Ca_SR");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.24886);
     
@@ -487,27 +487,27 @@ void OdeSystemInformation<Celliribe_model_2006_without_otherwise_sectionFromCell
     this->mInitialConditions.push_back(138.22);
     
     // rY[18]:
-    this->mVariableNames.push_back("var_Force__N_0");
+    this->mVariableNames.push_back("Force__N_0");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.99917);
     
     // rY[19]:
-    this->mVariableNames.push_back("var_Force__P_0");
+    this->mVariableNames.push_back("Force__P_0");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(9.8593e-05);
     
     // rY[20]:
-    this->mVariableNames.push_back("var_Force__P_1");
+    this->mVariableNames.push_back("Force__P_1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00013331);
     
     // rY[21]:
-    this->mVariableNames.push_back("var_Force__P_2");
+    this->mVariableNames.push_back("Force__P_2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00023505);
     
     // rY[22]:
-    this->mVariableNames.push_back("var_Force__P_3");
+    this->mVariableNames.push_back("Force__P_3");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00015349);
     

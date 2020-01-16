@@ -481,7 +481,7 @@ template<>
 void OdeSystemInformation<Cellbondarenko_model_2004_apexFromCellML>::Initialise(void)
 {
     this->mSystemName = "bondarenko_model_2004_apex";
-    this->mFreeVariableName = "var_environment__time";
+    this->mFreeVariableName = "environment__time";
     this->mFreeVariableUnits = "millisecond";
     
     // rY[0]:
@@ -490,202 +490,202 @@ void OdeSystemInformation<Cellbondarenko_model_2004_apexFromCellML>::Initialise(
     this->mInitialConditions.push_back(-82.4202);
     
     // rY[1]:
-    this->mVariableNames.push_back("var_calcium_concentration__Cai");
+    this->mVariableNames.push_back("calcium_concentration__Cai");
     this->mVariableUnits.push_back("micromolar");
     this->mInitialConditions.push_back(0.115001);
     
     // rY[2]:
-    this->mVariableNames.push_back("var_calcium_concentration__Cass");
+    this->mVariableNames.push_back("calcium_concentration__Cass");
     this->mVariableUnits.push_back("micromolar");
     this->mInitialConditions.push_back(0.115001);
     
     // rY[3]:
-    this->mVariableNames.push_back("var_calcium_concentration__CaJSR");
+    this->mVariableNames.push_back("calcium_concentration__CaJSR");
     this->mVariableUnits.push_back("micromolar");
     this->mInitialConditions.push_back(1299.5);
     
     // rY[4]:
-    this->mVariableNames.push_back("var_calcium_concentration__CaNSR");
+    this->mVariableNames.push_back("calcium_concentration__CaNSR");
     this->mVariableUnits.push_back("micromolar");
     this->mInitialConditions.push_back(1299.5);
     
     // rY[5]:
-    this->mVariableNames.push_back("var_calcium_fluxes__P_RyR");
+    this->mVariableNames.push_back("calcium_fluxes__P_RyR");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
     
     // rY[6]:
-    this->mVariableNames.push_back("var_calcium_buffering__LTRPN_Ca");
+    this->mVariableNames.push_back("calcium_buffering__LTRPN_Ca");
     this->mVariableUnits.push_back("micromolar");
     this->mInitialConditions.push_back(11.2684);
     
     // rY[7]:
-    this->mVariableNames.push_back("var_calcium_buffering__HTRPN_Ca");
+    this->mVariableNames.push_back("calcium_buffering__HTRPN_Ca");
     this->mVariableUnits.push_back("micromolar");
     this->mInitialConditions.push_back(125.29);
     
     // rY[8]:
-    this->mVariableNames.push_back("var_ryanodine_receptors__P_O1");
+    this->mVariableNames.push_back("ryanodine_receptors__P_O1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.49102e-05);
     
     // rY[9]:
-    this->mVariableNames.push_back("var_ryanodine_receptors__P_O2");
+    this->mVariableNames.push_back("ryanodine_receptors__P_O2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(9.51726e-11);
     
     // rY[10]:
-    this->mVariableNames.push_back("var_ryanodine_receptors__P_C2");
+    this->mVariableNames.push_back("ryanodine_receptors__P_C2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00016774);
     
     // rY[11]:
-    this->mVariableNames.push_back("var_L_type_calcium_current__O");
+    this->mVariableNames.push_back("L_type_calcium_current__O");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(9.30308e-19);
     
     // rY[12]:
-    this->mVariableNames.push_back("var_L_type_calcium_current__C2");
+    this->mVariableNames.push_back("L_type_calcium_current__C2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000124216);
     
     // rY[13]:
-    this->mVariableNames.push_back("var_L_type_calcium_current__C3");
+    this->mVariableNames.push_back("L_type_calcium_current__C3");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(5.78679e-09);
     
     // rY[14]:
-    this->mVariableNames.push_back("var_L_type_calcium_current__C4");
+    this->mVariableNames.push_back("L_type_calcium_current__C4");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.19816e-13);
     
     // rY[15]:
-    this->mVariableNames.push_back("var_L_type_calcium_current__I1");
+    this->mVariableNames.push_back("L_type_calcium_current__I1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(4.97923e-19);
     
     // rY[16]:
-    this->mVariableNames.push_back("var_L_type_calcium_current__I2");
+    this->mVariableNames.push_back("L_type_calcium_current__I2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(3.45847e-14);
     
     // rY[17]:
-    this->mVariableNames.push_back("var_L_type_calcium_current__I3");
+    this->mVariableNames.push_back("L_type_calcium_current__I3");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.85106e-14);
     
     // rY[18]:
-    this->mVariableNames.push_back("var_sodium_concentration__Nai");
+    this->mVariableNames.push_back("sodium_concentration__Nai");
     this->mVariableUnits.push_back("micromolar");
     this->mInitialConditions.push_back(14237.1);
     
     // rY[19]:
-    this->mVariableNames.push_back("var_fast_sodium_current__O_Na");
+    this->mVariableNames.push_back("fast_sodium_current__O_Na");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(7.13483e-07);
     
     // rY[20]:
-    this->mVariableNames.push_back("var_fast_sodium_current__C_Na1");
+    this->mVariableNames.push_back("fast_sodium_current__C_Na1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000279132);
     
     // rY[21]:
-    this->mVariableNames.push_back("var_fast_sodium_current__C_Na2");
+    this->mVariableNames.push_back("fast_sodium_current__C_Na2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.020752);
     
     // rY[22]:
-    this->mVariableNames.push_back("var_fast_sodium_current__I1_Na");
+    this->mVariableNames.push_back("fast_sodium_current__I1_Na");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(6.73345e-07);
     
     // rY[23]:
-    this->mVariableNames.push_back("var_fast_sodium_current__I2_Na");
+    this->mVariableNames.push_back("fast_sodium_current__I2_Na");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.55787e-09);
     
     // rY[24]:
-    this->mVariableNames.push_back("var_fast_sodium_current__IF_Na");
+    this->mVariableNames.push_back("fast_sodium_current__IF_Na");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000153176);
     
     // rY[25]:
-    this->mVariableNames.push_back("var_fast_sodium_current__IC_Na2");
+    this->mVariableNames.push_back("fast_sodium_current__IC_Na2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0113879);
     
     // rY[26]:
-    this->mVariableNames.push_back("var_fast_sodium_current__IC_Na3");
+    this->mVariableNames.push_back("fast_sodium_current__IC_Na3");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.34278);
     
     // rY[27]:
-    this->mVariableNames.push_back("var_potassium_concentration__Ki");
+    this->mVariableNames.push_back("potassium_concentration__Ki");
     this->mVariableUnits.push_back("micromolar");
     this->mInitialConditions.push_back(143720.0);
     
     // rY[28]:
-    this->mVariableNames.push_back("var_fast_transient_outward_potassium_current__ato_f");
+    this->mVariableNames.push_back("fast_transient_outward_potassium_current__ato_f");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00265563);
     
     // rY[29]:
-    this->mVariableNames.push_back("var_fast_transient_outward_potassium_current__ito_f");
+    this->mVariableNames.push_back("fast_transient_outward_potassium_current__ito_f");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.999977);
     
     // rY[30]:
-    this->mVariableNames.push_back("var_slow_transient_outward_potassium_current__ato_s");
+    this->mVariableNames.push_back("slow_transient_outward_potassium_current__ato_s");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000417069);
     
     // rY[31]:
-    this->mVariableNames.push_back("var_slow_transient_outward_potassium_current__ito_s");
+    this->mVariableNames.push_back("slow_transient_outward_potassium_current__ito_s");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.998543);
     
     // rY[32]:
-    this->mVariableNames.push_back("var_slow_delayed_rectifier_potassium_current__nKs");
+    this->mVariableNames.push_back("slow_delayed_rectifier_potassium_current__nKs");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000262753);
     
     // rY[33]:
-    this->mVariableNames.push_back("var_ultra_rapidly_activating_delayed_rectifier_potassium_current__aur");
+    this->mVariableNames.push_back("ultra_rapidly_activating_delayed_rectifier_potassium_current__aur");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000417069);
     
     // rY[34]:
-    this->mVariableNames.push_back("var_ultra_rapidly_activating_delayed_rectifier_potassium_current__iur");
+    this->mVariableNames.push_back("ultra_rapidly_activating_delayed_rectifier_potassium_current__iur");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.998543);
     
     // rY[35]:
-    this->mVariableNames.push_back("var_non_inactivating_steady_state_potassium_current__aKss");
+    this->mVariableNames.push_back("non_inactivating_steady_state_potassium_current__aKss");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000417069);
     
     // rY[36]:
-    this->mVariableNames.push_back("var_non_inactivating_steady_state_potassium_current__iKss");
+    this->mVariableNames.push_back("non_inactivating_steady_state_potassium_current__iKss");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.0);
     
     // rY[37]:
-    this->mVariableNames.push_back("var_rapid_delayed_rectifier_potassium_current__O_K");
+    this->mVariableNames.push_back("rapid_delayed_rectifier_potassium_current__O_K");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000175298);
     
     // rY[38]:
-    this->mVariableNames.push_back("var_rapid_delayed_rectifier_potassium_current__C_K1");
+    this->mVariableNames.push_back("rapid_delayed_rectifier_potassium_current__C_K1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000992513);
     
     // rY[39]:
-    this->mVariableNames.push_back("var_rapid_delayed_rectifier_potassium_current__C_K2");
+    this->mVariableNames.push_back("rapid_delayed_rectifier_potassium_current__C_K2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000641229);
     
     // rY[40]:
-    this->mVariableNames.push_back("var_rapid_delayed_rectifier_potassium_current__I_K");
+    this->mVariableNames.push_back("rapid_delayed_rectifier_potassium_current__I_K");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(3.19129e-05);
     
