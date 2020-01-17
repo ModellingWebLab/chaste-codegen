@@ -111,9 +111,4 @@ class TestChasteCG(object):
             usage_expected = open(os.path.join(cg.DATA_DIR, 'tests', 'console_sctipt_usage.txt'), 'r').read()
             assert help_output.replace('\r', '') == usage_expected.replace('\r', '')
 
-    @pytest.mark.chaste
-    @mock.patch('argparse.ArgumentParser.parse_args',
-                return_value=argparse.Namespace(cellml_file='weblab_cg/data/tests/cellml/hodgkin_huxley_squid_axon_model_1952_modified.cellml',
-                                                translator_type='Chaste', outfile=None, class_name=None,
-                                                dynamically_loadable=False, expose_annotated_variables=False))
 
