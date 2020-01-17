@@ -49,5 +49,9 @@ setup(
             'flake8>=3',            # For code style checking
         ],
     },
+    entry_points={
+        'console_scripts': [
+            'translate = weblab_cg._translate:translate',
+        ],
+    },
 )
-
