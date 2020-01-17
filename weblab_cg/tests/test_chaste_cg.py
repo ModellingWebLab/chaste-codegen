@@ -1,10 +1,13 @@
+import sys
 import logging
 import os
 import re
 import weblab_cg as cg
 import pytest
-# import subprocess
+import argparse
+from unittest import mock
 import cellmlmanip
+from weblab_cg._translate import translate
 from weblab_cg.tests.chaste_test_utils import (
     load_chaste_models,
     compare_model_against_reference)  # ,
@@ -92,6 +95,32 @@ class TestChasteCG(object):
                                                 'pandit_model_2001_epi_old_no_capacitance')
         assert str(error.value) == \
             'Membrane capacitance is required to be able to apply conversion to stimulus current!'
+
+    @pytest.mark.chaste
+    def test_script_usage(self, capsys):
+        # https://groups.google.com/forum/#!topic/montrealpython/cvDmAWHCrNc
+        testargs = ["translate", "-h"]
+        with mock.patch.object(sys, 'argv', testargs):
+            try:
+                translate()
+            except SystemExit:
+                pass  # We expect this to print usage and exit
+            captured = capsys.readouterr()
+            # compare to expected
+            help_output = str(captured.out)
+            usage_expected = open(os.path.join(cg.DATA_DIR, 'tests', 'console_sctipt_usage.txt'), 'r').read()
+            assert help_output.replace('\r', '') == usage_expected.replace('\r', '')
+
+    @pytest.mark.chaste
+    @mock.patch('argparse.ArgumentParser.parse_args',
+                return_value=argparse.Namespace(cellml_file='weblab_cg/data/tests/cellml/hodgkin_huxley_squid_axon_model_1952_modified.cellml',
+                                                translator_type='Chaste', outfile=None, class_name=None,
+                                                dynamically_loadable=False, expose_annotated_variables=False))
+#    def test_console_script(self, tmp_path):
+#        res = translate()
+#        print(res)
+#        assert False
+#        pass
 
 #    @pytest.mark.chaste
 #    def test_console_script(self, tmp_path):

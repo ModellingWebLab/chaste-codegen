@@ -47,6 +47,7 @@ setup(
             'pytest>=3.9',          # For unit tests
             'pytest-cov>=2.5',      # For coverage checking
             'flake8>=3',            # For code style checking
+            'mock>=3.0.5',         # For mocking command line args etc.
         ],
     },
     entry_points={
