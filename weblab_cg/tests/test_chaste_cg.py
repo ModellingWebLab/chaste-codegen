@@ -101,11 +101,11 @@ class TestChasteCG(object):
         model_name = 'hodgkin_huxley_squid_axon_model_1952_modified'
         model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
         model_file = str(model_file)
-        assert os.path.isfile(model_file)        
+        assert os.path.isfile(model_file)
         outfile = os.path.join(tmp_path, 'hodgkin_huxley_squid_axon_model_1952_modified.cpp')
         outfile = str(outfile)
         # Convert a cellml file
-        subprocess.check_output(['translate', model_file, '-o', outfile])
+        subprocess.check_output(args=['translate', model_file, '-o', outfile])
         # Check output
         reference = os.path.join(reference_path, 'chaste_reference_models', 'Normal')
         compare_file_against_reference(os.path.join(reference, model_name + '.hpp'),
@@ -116,7 +116,7 @@ class TestChasteCG(object):
         # Check options: -c -t -o --dynamically-loadable
         outfile = os.path.join(tmp_path, 'output_class.c')
         outfile = str(outfile)
-        subprocess.check_output(['translate', model_file, '-c', 'Chaste_CG', '-t', 'Chaste', '-o', outfile,
+        subprocess.check_output(args=['translate', model_file, '-c', 'Chaste_CG', '-t', 'Chaste', '-o', outfile,
                                 '--dynamically-loadable'])
         # Check output
         compare_file_against_reference(os.path.join(reference, 'output_class.h'),
@@ -139,6 +139,6 @@ class TestChasteCG(object):
                                        os.path.join(tmp_path, model_name + '.cpp'))
 
         # Test usage
-        usage = subprocess.check_output(['translate', '-h']).decode("utf-8")
+        usage = subprocess.check_output(args=['translate', '-h']).decode("utf-8")
         usage_expected = open(os.path.join(reference_path, 'console_sctipt_usage.txt'), 'r').read()
         assert usage.replace('\r', '') == usage_expected.replace('\r', '')
