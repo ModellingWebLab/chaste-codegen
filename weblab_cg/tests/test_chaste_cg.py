@@ -95,6 +95,7 @@ class TestChasteCG(object):
 
     @pytest.mark.chaste
     def test_console_script(self, tmp_path):
+        tmp_path = str(tmp_path)        
         reference_path = os.path.join(cg.DATA_DIR, 'tests')
 
         model_name = 'hodgkin_huxley_squid_axon_model_1952_modified'
