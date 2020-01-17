@@ -95,14 +95,14 @@ class TestChasteCG(object):
 
     @pytest.mark.chaste
     def test_console_script(self, tmp_path):
-        tmp_path = str(tmp_path).replace('\\','/')
+        tmp_path = str(tmp_path).replace('\\', '/')
         reference_path = os.path.join(cg.DATA_DIR, 'tests')
 
         model_name = 'hodgkin_huxley_squid_axon_model_1952_modified'
         model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
-        model_file = str(model_file).replace('\\','/')
+        model_file = str(model_file).replace('\\', '/')
         # Convert a cellml file
-        subprocess.check_output(['translate', model_file], cwd=tmp_path, shell=True)
+        subprocess.check_output(['translate', model_file], cwd=tmp_path)
         # Check output
         reference = os.path.join(reference_path, 'chaste_reference_models', 'Normal')
         compare_file_against_reference(os.path.join(reference, model_name + '.hpp'),
@@ -112,9 +112,9 @@ class TestChasteCG(object):
 
         # Check options: -c -t -o --dynamically-loadable
         outfile = os.path.join(tmp_path, 'output_class.c')
-        outfile = str(outfile).replace('\\','/')
+        outfile = str(outfile).replace('\\', '/')
         subprocess.check_output(['translate', model_file, '-c', 'Chaste_CG', '-t', 'Chaste', '-o', outfile,
-                                '--dynamically-loadable'], shell=True)
+                                '--dynamically-loadable'])
         # Check output
         compare_file_against_reference(os.path.join(reference, 'output_class.h'),
                                        os.path.join(tmp_path, 'output_class.h'))
@@ -124,10 +124,10 @@ class TestChasteCG(object):
         # Check options: -o --expose-annotated-variables
         model_name = 'matsuoka_model_2003'
         model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
-        model_file = str(model_file).replace('\\','/')
+        model_file = str(model_file).replace('\\', '/')
         outfile = os.path.join(tmp_path, 'expose_annotated_variables_cellmatsuoka_model_2003.cpp')
-        outfile = str(outfile).replace('\\','/')
-        subprocess.check_output(['translate', model_file, '-o', outfile, '--expose-annotated-variables'], shell=True)
+        outfile = str(outfile).replace('\\', '/')
+        subprocess.check_output(['translate', model_file, '-o', outfile, '--expose-annotated-variables'])
         model_name = 'expose_annotated_variables_cellmatsuoka_model_2003'
         # Check output
         compare_file_against_reference(os.path.join(reference, model_name + '.hpp'),
@@ -136,6 +136,6 @@ class TestChasteCG(object):
                                        os.path.join(tmp_path, model_name + '.cpp'))
 
         # Test usage
-        usage = subprocess.check_output(['translate', '-h'], shell=True).decode("utf-8")
+        usage = subprocess.check_output(['translate', '-h']).decode("utf-8")
         usage_expected = open(os.path.join(reference_path, 'console_sctipt_usage.txt'), 'r').read()
         assert usage.replace('\r', '') == usage_expected.replace('\r', '')
