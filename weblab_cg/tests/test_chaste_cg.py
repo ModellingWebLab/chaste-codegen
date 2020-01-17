@@ -101,6 +101,7 @@ class TestChasteCG(object):
         model_name = 'hodgkin_huxley_squid_axon_model_1952_modified'
         model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
         model_file = str(model_file).replace('\\', '/')
+        assert model_file == ''
         # Convert a cellml file
         subprocess.check_output(['translate', model_file], cwd=tmp_path)
         # Check output
