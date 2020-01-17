@@ -101,10 +101,11 @@ class TestChasteCG(object):
         model_name = 'hodgkin_huxley_squid_axon_model_1952_modified'
         model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
         model_file = str(model_file)
+        assert os.path.isfile(model_file)        
         outfile = os.path.join(tmp_path, 'hodgkin_huxley_squid_axon_model_1952_modified.cpp')
         outfile = str(outfile)
         # Convert a cellml file
-        subprocess.check_output(['translate', model_file], '-o', outfile)
+        subprocess.check_output(['translate', model_file, '-o', outfile])
         # Check output
         reference = os.path.join(reference_path, 'chaste_reference_models', 'Normal')
         compare_file_against_reference(os.path.join(reference, model_name + '.hpp'),
