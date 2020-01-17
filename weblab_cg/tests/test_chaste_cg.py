@@ -3,13 +3,13 @@ import os
 import re
 import weblab_cg as cg
 import pytest
-#import subprocess
+# import subprocess
 import cellmlmanip
 from weblab_cg.tests.chaste_test_utils import (
     load_chaste_models,
-    compare_model_against_reference,
+    compare_model_against_reference)  # ,
 #    compare_file_against_reference
-)
+# )
 
 
 # Show more logging output
