@@ -123,12 +123,13 @@ class TestChasteCG(object):
 
     @pytest.mark.chaste
     def test_script_convert(self, capsys, tmp_path):
+        tmp_path = str(tmp_path)
         model_name = 'hodgkin_huxley_squid_axon_model_1952_modified'
         model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
         assert os.path.isfile(model_file)
         testargs = ["chaste_codegen", model_file]
         # Call commandline script
-        savedPath = os.getcwd()
+        savedPath = str(os.getcwd())
         os.chdir(tmp_path)
         with mock.patch.object(sys, 'argv', testargs):
             chaste_codegen()
@@ -142,6 +143,7 @@ class TestChasteCG(object):
 
     @pytest.mark.chaste
     def test_script_class_convtype_output_dll_loadable(self, capsys, tmp_path):
+        tmp_path = str(tmp_path)
         model_name = 'hodgkin_huxley_squid_axon_model_1952_modified'
         model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
         assert os.path.isfile(model_file)
@@ -160,6 +162,7 @@ class TestChasteCG(object):
 
     @pytest.mark.chaste
     def test_script_output_expose_annotated_variables(self, capsys, tmp_path):
+        tmp_path = str(tmp_path)
         # Check options: -o --expose-annotated-variables
         model_name = 'matsuoka_model_2003'
         model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
