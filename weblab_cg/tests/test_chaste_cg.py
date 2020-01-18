@@ -6,7 +6,7 @@ import weblab_cg as cg
 import pytest
 from unittest import mock
 import cellmlmanip
-from weblab_cg._commaind_line_script import chaste_codegen
+from weblab_cg._command_line_script import chaste_codegen
 from weblab_cg.tests.chaste_test_utils import (
     load_chaste_models,
     compare_model_against_reference,

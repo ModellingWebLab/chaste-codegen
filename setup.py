@@ -52,7 +52,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'chaste_codegen = weblab_cg._commaind_line_script:chaste_codegen',
+            'chaste_codegen = weblab_cg._command_line_script:chaste_codegen',
         ],
     },
 )
