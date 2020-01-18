@@ -753,6 +753,7 @@ class NormalChasteModel(ChasteModel):
         # Generate hpp for model
         template = cg.load_template('chaste', 'normal_model.hpp')
         self.generated_hpp = template.render({
+            'converter_version': cg.__version__,
             'model_name': self._model.name,
             'class_name': self.class_name,
             'dynamically_loadable': self._dynamically_loadable,
@@ -767,6 +768,7 @@ class NormalChasteModel(ChasteModel):
         # Generate cpp for model
         template = cg.load_template('chaste', 'normal_model.cpp')
         self.generated_cpp = template.render({
+            'converter_version': cg.__version__,
             'model_name': self._model.name,
             'file_name': self.file_name,
             'class_name': self.class_name,

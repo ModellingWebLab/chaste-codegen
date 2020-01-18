@@ -52,7 +52,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'translate = weblab_cg._translate:translate',
+            'chaste_codegen = weblab_cg._commaind_line_script:chaste_codegen',
         ],
     },
 )
