@@ -1,6 +1,6 @@
-usage: translate [-h] [-t TYPE] [-o OUTFILE] [-c CLASS_NAME] [-y]
-                 [--expose-annotated-variables]
-                 cellml_file
+usage: chaste_codegen [-h] [--version] [-t TYPE] [-o OUTFILE] [-c CLASS_NAME]
+                      [-y] [--expose-annotated-variables]
+                      cellml_file
 
 Chaste code generation for cellml.
 
@@ -9,6 +9,7 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
+  --version             show program's version number and exit
   -t TYPE, --translate-type TYPE
                         the type of code to output [default: Chaste]. Choices:
                         ['Chaste']

@@ -6,6 +6,7 @@ from weblab_cg._script_utils import write_file
 
 TIMESTAMP_REGEX = re.compile(r'(//! on .*)')
 COMMENTS_REGEX = re.compile(r'(//.*)')
+VERSION_REGEX = re.compile(r'(//! This source file was generated from CellML by chaste_codegen version .*)')
 
 
 def load_chaste_models(model_types=[], ref_path_prefix=['chaste_reference_models'], class_name_prefix='Cell'):
@@ -57,6 +58,7 @@ def get_file_lines(file_name, remove_comments=False):
         for line in f.readlines():
             line = line.rstrip().lstrip()  # Remove trailing and preceding whitespace
             line = TIMESTAMP_REGEX.sub("", line)  # Remove timestamp
+            line = VERSION_REGEX.sub("", line)  # Remove Version
             if remove_comments:
                 line = COMMENTS_REGEX.sub("", line)  # Remove comments
             lines.append(line)

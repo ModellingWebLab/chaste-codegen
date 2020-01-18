@@ -8,7 +8,7 @@ import weblab_cg as cg
 from weblab_cg._script_utils import write_file
 
 
-def translate():
+def chaste_codegen():
     # For now just one type of translator
     translators = ['Chaste']
     # Store extensions we can use and how to use them
@@ -20,6 +20,8 @@ def translate():
 
     # add options for command line interface
     parser = argparse.ArgumentParser(description='Chaste code generation for cellml.')
+    parser.add_argument('--version', action='version',
+                        version='%(prog)s {version}'.format(version=cg.__version__))
     parser.add_argument('cellml_file', metavar='cellml_file', help='The cellml file or URI to convert to chaste code')
     parser.add_argument('-t', '--translate-type', choices=translators,
                         default='Chaste', metavar='TYPE', dest='translator_type',

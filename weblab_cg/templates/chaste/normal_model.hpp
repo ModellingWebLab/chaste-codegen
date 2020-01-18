@@ -3,7 +3,7 @@
 
 //! @file
 //! 
-//! This source file was generated from CellML.
+//! This source file was generated from CellML by chaste_codegen version {{converter_version}}
 //! 
 //! Model: {{model_name}}
 //! 
