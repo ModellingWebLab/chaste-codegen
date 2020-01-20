@@ -1,4 +1,3 @@
-
 //! @file
 //! 
 //! This source file was generated from CellML by chaste_codegen version 0.0.1
