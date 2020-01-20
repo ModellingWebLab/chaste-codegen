@@ -1,2 +1,4 @@
 *.cpp linguist-generated
 *.hpp linguist-generated
+*.cellml linguist-generated
+*.txt linguist-generated
