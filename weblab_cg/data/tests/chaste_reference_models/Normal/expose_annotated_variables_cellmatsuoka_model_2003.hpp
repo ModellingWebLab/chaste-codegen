@@ -3,7 +3,7 @@
 
 //! @file
 //! 
-//! This source file was generated from CellML.
+//! This source file was generated from CellML by chaste_codegen version 0.0.1
 //! 
 //! Model: matsuoka_model_2003
 //! 
@@ -19,7 +19,7 @@
 
 #include "AbstractStimulusFunction.hpp"
 
-class cellmatsuoka_model_2003FromCellML : public AbstractCardiacCell
+class Cellmatsuoka_model_2003FromCellML : public AbstractCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -35,8 +35,8 @@ class cellmatsuoka_model_2003FromCellML : public AbstractCardiacCell
     
 public:
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
-    cellmatsuoka_model_2003FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~cellmatsuoka_model_2003FromCellML();
+    Cellmatsuoka_model_2003FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellmatsuoka_model_2003FromCellML();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY);
     std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY);
@@ -45,7 +45,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(cellmatsuoka_model_2003FromCellML)
+CHASTE_CLASS_EXPORT(Cellmatsuoka_model_2003FromCellML)
 
 namespace boost
 {
@@ -53,7 +53,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const cellmatsuoka_model_2003FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, const Cellmatsuoka_model_2003FromCellML * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -63,13 +63,13 @@ namespace boost
         
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, cellmatsuoka_model_2003FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, Cellmatsuoka_model_2003FromCellML * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)cellmatsuoka_model_2003FromCellML(p_solver, p_stimulus);
+            ::new(t)Cellmatsuoka_model_2003FromCellML(p_solver, p_stimulus);
         }
         
     }

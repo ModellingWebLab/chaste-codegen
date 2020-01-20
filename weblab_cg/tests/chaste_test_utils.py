@@ -2,9 +2,11 @@ import os
 import re
 import weblab_cg as cg
 import cellmlmanip
+from weblab_cg._script_utils import write_file
 
 TIMESTAMP_REGEX = re.compile(r'(//! on .*)')
 COMMENTS_REGEX = re.compile(r'(//.*)')
+VERSION_REGEX = re.compile(r'(//! This source file was generated from CellML by chaste_codegen version .*)')
 
 
 def load_chaste_models(model_types=[], ref_path_prefix=['chaste_reference_models'], class_name_prefix='Cell'):
@@ -56,6 +58,7 @@ def get_file_lines(file_name, remove_comments=False):
         for line in f.readlines():
             line = line.rstrip().lstrip()  # Remove trailing and preceding whitespace
             line = TIMESTAMP_REGEX.sub("", line)  # Remove timestamp
+            line = VERSION_REGEX.sub("", line)  # Remove Version
             if remove_comments:
                 line = COMMENTS_REGEX.sub("", line)  # Remove comments
             lines.append(line)
@@ -72,29 +75,14 @@ def get_file_lines(file_name, remove_comments=False):
     return lines
 
 
-def write_file(file_name, file_contents):
-    """ Write a file into the given file name
-
-    :param file_name: file name including path
-    :param file_contents: a str with the contents of the file to be written
-    """
-    # Make sure the folder we are writing in exists
-    os.makedirs(os.path.dirname(file_name), exist_ok=True)
-
-    # Write the file
-    file = open(file_name, 'w')
-    file.write(file_contents)
-    file.close()
-
-
 def compare_model_against_reference(model_type, chaste_model, tmp_path):
     """ Check a model's generated files against given reference files
     """
     tmp_path = str(tmp_path)
 
     # Write generated files
-    hhp_gen_file_path = os.path.join(tmp_path, model_type, chaste_model.file_name + ".hpp")
-    cpp_gen_file_path = os.path.join(tmp_path, model_type, chaste_model.file_name + ".cpp")
+    hhp_gen_file_path = os.path.join(tmp_path, chaste_model.file_name + ".hpp")
+    cpp_gen_file_path = os.path.join(tmp_path, chaste_model.file_name + ".cpp")
     write_file(hhp_gen_file_path, chaste_model.generated_hpp)
     write_file(cpp_gen_file_path, chaste_model.generated_cpp)
 
@@ -104,12 +92,16 @@ def compare_model_against_reference(model_type, chaste_model, tmp_path):
         os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', model_type, chaste_model.file_name + ".hpp")
     expected_cpp = \
         os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', model_type, chaste_model.file_name + ".cpp")
-    expected_hpp = get_file_lines(expected_hpp)
-    expected_cpp = get_file_lines(expected_cpp)
 
-    # Load generated files
-    generated_hpp = get_file_lines(hhp_gen_file_path)
-    generated_cpp = get_file_lines(cpp_gen_file_path)
+    # Compare converted files vs reference
+    compare_file_against_reference(hhp_gen_file_path, expected_hpp)
+    compare_file_against_reference(cpp_gen_file_path, expected_cpp)
 
-    assert expected_hpp == generated_hpp
-    assert expected_cpp == generated_cpp
+
+def compare_file_against_reference(file, reference):
+    """ Check a model's generated files against given reference files
+    """
+    # Load reference file
+    file = get_file_lines(file)
+    reference = get_file_lines(reference)
+    assert file == reference

@@ -1,2 +1,3 @@
-graft fccodegen/templates
-graft fccodegen/data
+include weblab_cg/version.txt
+graft weblab_cg/templates
+graft weblab_cg/data
