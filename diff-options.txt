@@ -1,1 +1,1 @@
---exclude=weblab_cg/data/tests
+--exclude=*.pyx
