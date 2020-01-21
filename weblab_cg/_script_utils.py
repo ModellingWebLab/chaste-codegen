@@ -10,7 +10,7 @@ def write_file(file_name, file_contents):
     # Make sure the folder we are writing in exists
     path = os.path.dirname(file_name)
     if path != '':
-        os.makedirs(os.path.dirname(file_name), exist_ok=True)
+        os.makedirs(path, exist_ok=True)
 
     # Write the file
     file = open(file_name, 'w')

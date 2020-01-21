@@ -74,28 +74,26 @@ class ChasteModel(object):
                    'units': str(self._model.units.summarise_units(self._membrane_capacitance.lhs))}]
                  )}}
 
-    def __init__(self, model, cls_name, file_name, _header_ext='.hpp', **kwargs):
+    def __init__(self, model, file_name, **kwargs):
         """ Initialise a ChasteModel instance
         Arguments
 
         ``model``
             A :class:`cellmlmanip.Model` object.
-        ``cls_name``
-            The name of the class to be generated.
         ``file_name``
             The name you want to give your generated files WITHOUT the .hpp and .cpp extension
             (e.g. aslanidi_model_2009 leads to aslanidi_model_2009.cpp and aslanidi_model_2009.hpp)
         """
         # Store default options
-        self.class_name = cls_name
         self.file_name = file_name
         self.generated_hpp = ''
         self.generated_cpp = ''
 
         self._is_self_excitatory = False
+        self.class_name = kwargs.get('class_name', 'ModelFromCellMl')
         self._dynamically_loadable = kwargs.get('dynamically_loadable', False)
         self._expose_annotated_variables = kwargs.get('expose_annotated_variables', False)
-        self._header_ext = _header_ext
+        self._header_ext = kwargs.get('header_ext', '.hpp')
 
         self._logger = logging.getLogger(__name__)
         self._logger.setLevel(logging.INFO)
@@ -174,10 +172,6 @@ class ChasteModel(object):
             display_name = self._model.get_ontology_terms_by_symbol(var, self._OXMETA)[-1]
         elif var.cmeta_id:
             display_name = var.cmeta_id
-#        else:
-#            if var in self._in_interface:
-#                display_name = var.name.split('$')[-1]
-#        return display_name.replace('$', '__').replace('var_', '', 1)
         return display_name.replace('$', '__').replace('var_chaste_interface_', '', 1).replace('var_', '', 1)
 
     def _add_units(self):
@@ -744,8 +738,8 @@ class ChasteModel(object):
 class NormalChasteModel(ChasteModel):
     """ Holds information specific for the Normal model type"""
 
-    def __init__(self, model, cls_name, file_name, _header_ext='.hpp', **kwargs):
-        super().__init__(model, cls_name, file_name, _header_ext=_header_ext, **kwargs)
+    def __init__(self, model, file_name, **kwargs):
+        super().__init__(model, file_name, **kwargs)
 
     def generate_chaste_code(self):
         """ Generates and stores chaste code for the Normal model"""

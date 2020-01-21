@@ -45,7 +45,8 @@ class TestChasteCG(object):
             for model_type in model['reference_models'].keys():
                 LOGGER.info('Converting: ' + model_type + ' ' + model['class_name'] + '\n')
                 # Generate chaste code
-                chaste_model = cg.NormalChasteModel(model['model'], model['class_name'], model['model_name_from_file'])
+                chaste_model = cg.NormalChasteModel(model['model'], model['model_name_from_file'],
+                                                    class_name=model['class_name'])
                 chaste_model.dynamically_loadable = True
                 chaste_model.generate_chaste_code()
 

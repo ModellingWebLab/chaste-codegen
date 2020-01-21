@@ -17,7 +17,7 @@ optional arguments:
                         use the input filename with a different extension]
                         NOTE: expects provided OUTFILE to have an extension
                         relevant to code being generated (e.g. for CHASTE/C++
-                        code: .cpp, .c, .hpp, or .c)
+                        code: .cpp, .c, .hpp, or .h)
 
 Generated code options:
   -c CLASS_NAME, --class-name CLASS_NAME

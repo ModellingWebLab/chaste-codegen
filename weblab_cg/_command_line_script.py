@@ -31,7 +31,7 @@ def chaste_codegen():
                         help='write program code to OUTFILE '
                              '[default action is to use the input filename with a different extension] '
                              'NOTE: expects provided OUTFILE to have an extension relevant to code being generated '
-                             '(e.g. for CHASTE/C++ code: .cpp, .c, .hpp, or .c)')
+                             '(e.g. for CHASTE/C++ code: .cpp, .c, .hpp, or .h)')
 
     group = parser.add_argument_group('Generated code options')
     group.add_argument('-c', '--class-name', default=None, dest='class_name',
@@ -64,13 +64,13 @@ def chaste_codegen():
 
     ext = extension_lookup[args.translator_type][outfile_extension]
     # generate code
-    chaste_model = model_type(model, args.class_name, outfile_base, _header_ext=ext[0], **vars(args))
+    chaste_model = model_type(model, outfile_base, header_ext=ext[0], **vars(args))
     chaste_model.generate_chaste_code()
 
     # Write generated files
-    hhp_gen_file_path = \
+    hpp_gen_file_path = \
         os.path.join(outfile_path, outfile_base + ext[0])
-    chp_gen_file_path = \
+    cpp_gen_file_path = \
         os.path.join(outfile_path, outfile_base + ext[1])
-    write_file(hhp_gen_file_path, chaste_model.generated_hpp)
-    write_file(chp_gen_file_path, chaste_model.generated_cpp)
+    write_file(hpp_gen_file_path, chaste_model.generated_hpp)
+    write_file(cpp_gen_file_path, chaste_model.generated_cpp)
