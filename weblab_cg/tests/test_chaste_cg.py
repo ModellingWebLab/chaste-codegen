@@ -86,3 +86,29 @@ class TestChasteCG(object):
                                                 class_name='pandit_model_2001_epi_old_no_capacitance')
         assert str(error.value) == \
             'Membrane capacitance is required to be able to apply conversion to stimulus current!'
+
+    @pytest.mark.chaste
+    def test_wrong_units_time(self, capsys, tmp_path):
+        tmp_path = str(tmp_path)
+        LOGGER.info('Testing wrong units for time\n')
+        model_file = \
+            os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'test_wrong_units_time_odes.cellml')
+        chaste_model = cellmlmanip.load_model(model_file)
+
+        with pytest.raises(AssertionError) as error:
+            chaste_model = cg.NormalChasteModel(chaste_model,
+                                                'test_wrong_units_time_odes',
+                                                class_name='test_wrong_units_time_odes')
+
+    @pytest.mark.chaste
+    def test_wrong_units_voltage(self, capsys, tmp_path):
+        tmp_path = str(tmp_path)
+        LOGGER.info('Testing wrong units for time\n')
+        model_file = \
+            os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'test_wrong_units_voltage.cellml')
+        chaste_model = cellmlmanip.load_model(model_file)
+
+        with pytest.raises(AssertionError) as error:
+            chaste_model = cg.NormalChasteModel(chaste_model,
+                                                'test_wrong_units_voltage',
+                                                class_name='test_wrong_units_voltage')

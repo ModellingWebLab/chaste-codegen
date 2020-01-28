@@ -205,7 +205,7 @@ class ChasteModel(object):
         except DimensionalityError:
             warning = 'Incorrect definition of time variable (time needs to be dimensionally equivalent to second)'
             self._logger.info(warning)
-            return time_variable
+            assert False, warning
 
     def _get_membrane_voltage_var(self):
         """ Find the membrane_voltage variable"""
@@ -216,9 +216,9 @@ class ChasteModel(object):
             return self._model.convert_variable(voltage, desired_units, DataDirectionFlow.INPUT)
         except DimensionalityError:
             warning = 'Incorrect definition of membrane_voltage variable '\
-                      '(units of membrane_voltage needs to be demensionally equivalent to Volt)'
+                      '(units of membrane_voltage needs to be dimensionally equivalent to Volt)'
             self._logger.info(warning)
-            return voltage
+            assert False, warning
 
     def _get_cytosolic_calcium_concentration_var(self):
         """ Find the cytosolic_calcium_concentration variable if it exists"""
