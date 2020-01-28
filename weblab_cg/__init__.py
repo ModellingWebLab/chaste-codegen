@@ -1,13 +1,13 @@
 """
 Main module for Web Lab code generation
 """
-
-# Configure logging
 import logging
-logging.basicConfig()
-del(logging)
 from cellmlmanip import transpiler
 import sympy
+
+# Configure logging
+logging.basicConfig()
+del(logging)
 
 # set cellmlmanip exp function
 setattr(sympy, '_exp', sympy.Function('_exp'))
