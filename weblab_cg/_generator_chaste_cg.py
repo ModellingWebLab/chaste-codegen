@@ -126,7 +126,6 @@ class ChasteModel(object):
         self._ionic_derivs = self._get_ionic_derivs()
         self._equations_for_ionic_vars, self._current_unit_and_capacitance, self._membrane_stimulus_current_factor = \
             self._get_equations_for_ionic_vars()
-        self._equations_for_ionic_vars = self._equations_for_ionic_vars
         self._extended_equations_for_ionic_vars = self._get_extended_equations_for_ionic_vars()
 
         self._y_derivatives = self._get_y_derivatives()
@@ -200,7 +199,7 @@ class ChasteModel(object):
         time_variable = self._model.get_free_variable_symbol()
         desired_units = self._model.units.ureg.millisecond
         try:
-            # If the variable is in units that can be converted to millimolar, perform conversion
+            # If the variable is in units that can be converted to millisecond, perform conversion
             return self._model.convert_variable(time_variable, desired_units, DataDirectionFlow.INPUT)
         except DimensionalityError:
             warning = 'Incorrect definition of time variable (time needs to be dimensionally equivalent to second)'
