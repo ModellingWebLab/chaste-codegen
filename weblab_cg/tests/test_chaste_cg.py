@@ -99,6 +99,8 @@ class TestChasteCG(object):
             chaste_model = cg.NormalChasteModel(chaste_model,
                                                 'test_wrong_units_time_odes',
                                                 class_name='test_wrong_units_time_odes')
+        warning = 'Incorrect definition of time variable (time needs to be dimensionally equivalent to second)'
+        assert str(error.value) == warning
 
     @pytest.mark.chaste
     def test_wrong_units_voltage(self, capsys, tmp_path):
@@ -112,3 +114,7 @@ class TestChasteCG(object):
             chaste_model = cg.NormalChasteModel(chaste_model,
                                                 'test_wrong_units_voltage',
                                                 class_name='test_wrong_units_voltage')
+        warning = \
+            'Incorrect definition of membrane_voltage variable '\
+            '(units of membrane_voltage needs to be dimensionally equivalent to Volt)'
+        assert str(error.value) == warning
