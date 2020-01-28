@@ -156,6 +156,7 @@ class ChasteModel(object):
         self._formatted_quant_eqs = self._format_derived_quant_eqs()
 
     def _get_equations_for(self, symbols, recurse=True):
+        """Returns equations excluding once where lhs is a modifiable parameter"""
         return [eq for eq in self._model.get_equations_for(symbols, recurse=recurse)
                 if eq.lhs not in self._modifiable_parameters]
 
