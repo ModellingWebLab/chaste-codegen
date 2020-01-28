@@ -1,12 +1,20 @@
 """
 Main module for Web Lab code generation
 """
+import logging
+from cellmlmanip import transpiler
+import sympy
 
 # Configure logging
-import logging
 logging.basicConfig()
 del(logging)
 
+# Set cellmlmanip to produce _exp instead of exp
+setattr(sympy, '_exp', sympy.Function('_exp'))
+transpiler.SIMPLE_MATHML_TO_SYMPY_NAMES['exp'] = '_exp'
+
+
+class ChasteModel(object):
 
 #
 # Load constants and version information

@@ -5,12 +5,6 @@ import weblab_cg as cg
 from copy import deepcopy
 from cellmlmanip.model import NumberDummy, DataDirectionFlow
 from pint import DimensionalityError
-from cellmlmanip import transpiler
-import sympy
-
-
-setattr(sympy, '_exp', sympy.Function('_exp'))
-transpiler.SIMPLE_MATHML_TO_SYMPY_NAMES['exp'] = '_exp'
 
 
 class ChasteModel(object):
