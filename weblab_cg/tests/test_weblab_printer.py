@@ -158,7 +158,7 @@ class TestWebLabPrinter(object):
         assert p.doprint(sp.ceiling(x)) == 'math.ceil(x)'
         assert p.doprint(sp.cos(x)) == 'math.cos(x)'
         assert p.doprint(sp.cosh(x)) == 'math.cosh(x)'
-        assert p.doprint(sp.exp(x)) == 'math.exp(x)'
+        assert p.doprint(sp._exp(x)) == 'math.exp(x)'
         assert p.doprint(sp.factorial(x)) == 'math.factorial(x)'
         assert p.doprint(sp.floor(x)) == 'math.floor(x)'
         assert p.doprint(sp.log(x)) == 'math.log(x)'
@@ -225,8 +225,8 @@ class TestWebLabPrinter(object):
 
         # Longer expressions
         assert (
-            p.doprint((x + y) / (2 + z / sp.exp(x - y))) ==
-            '(x + y) / (2 + z * math.exp(y - x))')
+            p.doprint((x + y) / (2 + z / sp._exp(x - y))) ==
+            '(x + y) / (2 + z / math.exp(x - y))')
         assert p.doprint((y + sp.sin(x))**-1) == '1 / (y + math.sin(x))'
 
     def test_unsupported_sympy_items(self, p, x):

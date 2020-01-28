@@ -31,7 +31,7 @@ class ChastePrinter(Printer):
         'cosh': 'cosh',
         'sqrt': 'sqrt',
         'e': 'e',
-        'exp': 'exp',
+        '_exp': 'exp',
         'expm1': 'expm1',
         'factorial': 'factorial',
         'floor': 'floor',

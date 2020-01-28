@@ -18,7 +18,7 @@ class WebLabPrinter(Printer):
         'cosh': 'math.cosh',
         'sqrt': 'math.sqrt',
         'e': 'math.e',
-        'exp': 'math.exp',
+        '_exp': 'math.exp',
         'expm1': 'math.expm1',
         'factorial': 'math.factorial',
         'floor': 'math.floor',
