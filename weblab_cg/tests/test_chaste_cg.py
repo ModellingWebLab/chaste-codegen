@@ -14,7 +14,7 @@ LOGGER.setLevel(logging.DEBUG)
 
 
 def model_types():
-    return ['Normal']
+    return ['Normal', 'Opt']
 
 
 def chaste_models():
@@ -37,6 +37,21 @@ class TestChasteCG(object):
             chaste_model.generate_chaste_code()
             # Comprare against referene
             compare_model_against_reference('Normal', chaste_model, tmp_path)
+
+    @pytest.mark.chaste
+    @pytest.mark.parametrize(('model'), chaste_models())
+    def test_Opt(self, tmp_path, model):
+        """ Check generation of Opt models against reference"""
+        # Note: currently only implemented partia eval
+        if 'Opt' in model['reference_models'].keys():
+            LOGGER.info('Converting: Normal: ' + model['class_name'] + '\n')
+            # Generate chaste code
+            chaste_model = cg.NormalChasteModel(model['model'], model['model_name_from_file'],
+                                                class_name=model['class_name'],
+                                                pe=True)
+            chaste_model.generate_chaste_code()
+            # Comprare against referene
+            compare_model_against_reference('Opt', chaste_model, tmp_path)
 
     @pytest.mark.chaste
     def test_dymaic_model(self, tmp_path):
@@ -118,19 +133,3 @@ class TestChasteCG(object):
             'Incorrect definition of membrane_voltage variable '\
             '(units of membrane_voltage needs to be dimensionally equivalent to Volt)'
         assert str(error.value) == warning
-
-    @pytest.mark.chaste
-    def test_partial_eval(self, tmp_path):
-        tmp_path = str(tmp_path)
-        LOGGER.info('Converting: Normal Dynamichodgkin_huxley_squid_axon_model_1952_modified\n')
-        model_file = \
-            os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'aslanidi_model_2009.cellml')
-        chaste_model = cellmlmanip.load_model(model_file)
-        chaste_model = cg.NormalChasteModel(chaste_model,
-                                            'pe_aslanidi_model_2009',
-                                            class_name='Cellaslanidi_model_2009FromCellML',
-                                            pe=True)
-        chaste_model.generate_chaste_code()
-
-        # Comprare against referene
-        compare_model_against_reference('Normal', chaste_model, tmp_path)
