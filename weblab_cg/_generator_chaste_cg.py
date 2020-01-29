@@ -490,6 +490,10 @@ class ChasteModel(object):
             [eq for eq in
                 self._get_equations_for([ionic_var_eq.lhs for ionic_var_eq in self._equations_for_ionic_vars])
                 if eq.lhs not in self._stimulus_params]
+
+        # set _membrane_stimulus_current to 0.0
+        extended_eqs = [eq if eq.lhs not in (self._membrane_stimulus_current, self._original_membrane_stimulus_current)
+                        else sp.Eq(eq.lhs, 0.0) for eq in extended_eqs]
         extended_eqs = self._partial_eval(extended_eqs, [eq.lhs for eq in self._equations_for_ionic_vars])
         return extended_eqs
 
@@ -724,15 +728,8 @@ class ChasteModel(object):
 
     def _format_extended_equations_for_ionic_vars(self):
         """ Format equations and dependant equations ionic derivatives"""
-
-        def print_rhs(eq):
-            """ Print the rhs, set _membrane_stimulus_current to 0.0"""
-            if eq.lhs != self._membrane_stimulus_current and eq.lhs != self._original_membrane_stimulus_current:
-                return self._printer.doprint(eq.rhs)
-            else:
-                return 0.0
         # Format the state ionic variables
-        return [{'lhs': self._printer.doprint(eq.lhs), 'rhs': print_rhs(eq),
+        return [{'lhs': self._printer.doprint(eq.lhs), 'rhs': self._printer.doprint(eq.rhs),
                  'units': self._model.units.summarise_units(eq.lhs)} for eq in self._extended_equations_for_ionic_vars]
 
     def _format_y_derivatives(self):
