@@ -68,9 +68,10 @@ class ChasteModel(object):
                 factor, eq:
                 (self._stim_units['membrane_stimulus_current_amplitude'][0]['units'],
                  factor / self._membrane_capacitance_factor,
-                 sp.Eq(eq.lhs, eq.rhs / self._membrane_capacitance.lhs * sp.Function(self._HEARTCONFIG_GETCAPACITANCE)()),
+                 sp.Eq(eq.lhs,
+                       eq.rhs / self._membrane_capacitance.lhs * sp.Function(self._HEARTCONFIG_GETCAPACITANCE)()),
                  [] if self._membrane_capacitance.lhs in self._modifiable_parameters else
-                      [self._membrane_capacitance]
+                    [self._membrane_capacitance]
                  ),
              'uA_per_uF':
                 lambda self,
@@ -79,13 +80,12 @@ class ChasteModel(object):
                 (current_units,
                  factor,
                  sp.Eq(eq.lhs, eq.rhs * sp.Function(self._HEARTCONFIG_GETCAPACITANCE)()),
-                 [])
-                    }}
+                 [])}}
     _STIM_METADATA_TAGS = \
         {'membrane_stimulus_current_amplitude': {'optional': False},
-        'membrane_stimulus_current_duration': {'optional': False},
-        'membrane_stimulus_current_period': {'optional': False},
-        'membrane_stimulus_current_offset': {'optional': True}}
+         'membrane_stimulus_current_duration': {'optional': False},
+         'membrane_stimulus_current_period': {'optional': False},
+         'membrane_stimulus_current_offset': {'optional': True}}
 
     def __init__(self, model, file_name, **kwargs):
         """ Initialise a ChasteModel instance
@@ -197,20 +197,22 @@ class ChasteModel(object):
         if not self._pe:
             return equations
 
-        evaluated_eqs = list(reversed(equations)) # count usage of variables on rhs of equations
+        evaluated_eqs = list(reversed(equations))
+        # count usage of variables on rhs of equations
         usage_count = dict()
-        for i in range(len(evaluated_eqs) -1 , -1, -1):
+        for i in range(len(evaluated_eqs) - 1, - 1, - 1):
             usage_count[evaluated_eqs[i].lhs] = 0
             for var in evaluated_eqs[i].rhs.atoms(VariableDummy):
                 usage_count[var] = usage_count[var] + 1 if var in usage_count else 1
 
         # subs in all constants and expressions only used once
         subs_dict = {}
-        for i in range(len(evaluated_eqs) -1 , -1, -1):
+        for i in range(len(evaluated_eqs) - 1, - 1, - 1):
             evaluated_eqs[i] = evaluated_eqs[i].subs(subs_dict)
-            if evaluated_eqs[i].lhs not in required_lhs and (isinstance(evaluated_eqs[i].rhs, sp.numbers.Float) or usage_count[evaluated_eqs[i].lhs] <= 1):
-                    subs_dict[evaluated_eqs[i].lhs] = evaluated_eqs[i].rhs
-                    del evaluated_eqs[i]
+            if evaluated_eqs[i].lhs not in required_lhs and \
+                    (isinstance(evaluated_eqs[i].rhs, sp.numbers.Float) or usage_count[evaluated_eqs[i].lhs] <= 1):
+                subs_dict[evaluated_eqs[i].lhs] = evaluated_eqs[i].rhs
+                del evaluated_eqs[i]
         # subs in all variables that only get used once
         return list(reversed(evaluated_eqs))
 
@@ -710,11 +712,11 @@ class ChasteModel(object):
 
     def _format_default_stimulus(self):
         """ Format eqs for stimulus_current for outputting to chaste code"""
-        default_stim ={'equations':
+        default_stim = {'equations':
                         [{'lhs': self._printer.doprint(eq.lhs),
                           'rhs': self._printer.doprint(eq.rhs),
                           'units': self._model.units.summarise_units(eq.lhs)}
-                          for eq in self._stimulus_equations]}
+                         for eq in self._stimulus_equations]}
         for param in self._stimulus_params:
             default_stim[self._get_var_display_name(param)] = self._printer.doprint(param)
 
