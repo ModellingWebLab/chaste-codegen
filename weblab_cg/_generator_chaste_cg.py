@@ -3,15 +3,16 @@ import time
 import sympy as sp
 import weblab_cg as cg
 from copy import deepcopy
-from cellmlmanip.model import NumberDummy, DataDirectionFlow
+from cellmlmanip.model import VariableDummy, DataDirectionFlow
 from pint import DimensionalityError
+from collections import OrderedDict
 
 
 class ChasteModel(object):
     """ Holds information about a cellml model for which chaste code is to be generated.
 
     It also holds relevant formatted equations and derivatives.
-    Please Note: this calass cannot generate chaste code directly, instead use a subclass fo the model type
+    Please Note: this calass cannot generate chaste code directly, instead use a subclass of the model type
     """
     # TODO: implement modifiable-parameter bit of expose-annotated-variables (similar to derived quantities)
     # TODO: implement and check options see https://chaste.cs.ox.ac.uk/trac/wiki/ChasteGuides/CodeGenerationFromCellML
@@ -50,15 +51,14 @@ class ChasteModel(object):
                    'membrane_stimulus_current_end': [{'units': 'millisecond'}],
                    'membrane_capacitance': [{'units': 'uF'}, {'units': 'uF_per_mm2'}]}
 
-    _STIM_RHS_MULTIPLIER = {'membrane_stimulus_current_amplitude':
-                            {'uA_per_uF': sp.Function(_HEARTCONFIG_GETCAPACITANCE)(),
-                             'uA': sp.Function(_HEARTCONFIG_GETCAPACITANCE)()}}
-
     _STIM_CONVERSION_RULES_ERR_CHECK = \
         {'membrane_stimulus_current_amplitude':
             {'uA':
                 {'condition': lambda self: self._membrane_capacitance is not None,
-                 'message': 'Membrane capacitance is required to be able to apply conversion to stimulus current!'}}
+                 'message': 'Membrane capacitance is required to be able to apply conversion to stimulus current!'},
+             'uA_per_uF':
+                {'condition': lambda self: True,
+                 'message': ''}}
          }
     _STIM_CONVERSION_RULES = \
         {'membrane_stimulus_current_amplitude':
@@ -68,12 +68,24 @@ class ChasteModel(object):
                 factor, eq:
                 (self._stim_units['membrane_stimulus_current_amplitude'][0]['units'],
                  factor / self._membrane_capacitance_factor,
-                 sp.Eq(eq.lhs, eq.rhs / self._membrane_capacitance.lhs),
+                 sp.Eq(eq.lhs, eq.rhs / self._membrane_capacitance.lhs * sp.Function(self._HEARTCONFIG_GETCAPACITANCE)()),
                  [] if self._membrane_capacitance.lhs in self._modifiable_parameters else
-                    [{'lhs': self._printer.doprint(self._membrane_capacitance.lhs),
-                      'rhs': self._printer.doprint(self._membrane_capacitance.rhs),
-                      'units': str(self._model.units.summarise_units(self._membrane_capacitance.lhs))}]
-                 )}}
+                      [self._membrane_capacitance]
+                 ),
+             'uA_per_uF':
+                lambda self,
+                current_units,
+                factor, eq:
+                (current_units,
+                 factor,
+                 sp.Eq(eq.lhs, eq.rhs * sp.Function(self._HEARTCONFIG_GETCAPACITANCE)()),
+                 [])
+                    }}
+    _STIM_METADATA_TAGS = \
+        {'membrane_stimulus_current_amplitude': {'optional': False},
+        'membrane_stimulus_current_duration': {'optional': False},
+        'membrane_stimulus_current_period': {'optional': False},
+        'membrane_stimulus_current_offset': {'optional': True}}
 
     def __init__(self, model, file_name, **kwargs):
         """ Initialise a ChasteModel instance
@@ -121,7 +133,8 @@ class ChasteModel(object):
         self._membrane_stimulus_current = self._get_membrane_stimulus_current()
         self._original_membrane_stimulus_current = self._membrane_stimulus_current
         self._membrane_capacitance, self._membrane_capacitance_factor = self._get_membrane_capacitance()
-        self._default_stimulus = self._get_stimulus()
+        self._stimulus_params, self._stimulus_equations = self._get_stimulus()
+        self._in_interface.extend(self._stimulus_params)
 
         self._ionic_derivs = self._get_ionic_derivs()
         self._equations_for_ionic_vars, self._current_unit_and_capacitance, self._membrane_stimulus_current_factor = \
@@ -178,6 +191,28 @@ class ChasteModel(object):
         elif var.cmeta_id:
             display_name = var.cmeta_id
         return display_name.replace('$', '__').replace('var_chaste_interface_', '', 1).replace('var_', '', 1)
+
+    def _partial_eval(self, equations, required_lhs):
+        # only do partial eval if pe option is set
+        if not self._pe:
+            return equations
+
+        evaluated_eqs = list(reversed(equations)) # count usage of variables on rhs of equations
+        usage_count = dict()
+        for i in range(len(evaluated_eqs) -1 , -1, -1):
+            usage_count[evaluated_eqs[i].lhs] = 0
+            for var in evaluated_eqs[i].rhs.atoms(VariableDummy):
+                usage_count[var] = usage_count[var] + 1 if var in usage_count else 1
+
+        # subs in all constants and expressions only used once
+        subs_dict = {}
+        for i in range(len(evaluated_eqs) -1 , -1, -1):
+            evaluated_eqs[i] = evaluated_eqs[i].subs(subs_dict)
+            if evaluated_eqs[i].lhs not in required_lhs and (isinstance(evaluated_eqs[i].rhs, sp.numbers.Float) or usage_count[evaluated_eqs[i].lhs] <= 1):
+                    subs_dict[evaluated_eqs[i].lhs] = evaluated_eqs[i].rhs
+                    del evaluated_eqs[i]
+        # subs in all variables that only get used once
+        return list(reversed(evaluated_eqs))
 
     def _add_units(self):
         """ Add needed units to the model to allow converting time, voltage and calcium in specific units
@@ -315,16 +350,55 @@ class ChasteModel(object):
 
     def _get_stimulus(self):
         """ Store the stimulus currents in the model"""
-        default_stimulus = dict()
-        if self._membrane_stimulus_current is not None:
-            # Get remaining stimulus current variables If they have metadata use that as key, ortherwise use the name
-            # Exclude _membrane_stimulus_current itself so we can treat it seperately
-            stim_eq = self._get_equations_for([self._membrane_stimulus_current])
-            for eq in stim_eq:
-                if eq.lhs != self._membrane_stimulus_current:
-                    key = self._get_var_display_name(eq.lhs)
-                    default_stimulus[key] = eq
-        return default_stimulus
+        # get stimulus parameters
+        has_stim = True
+        stim_param = []
+        for tag in self._STIM_METADATA_TAGS:
+            try:
+                stim_param.append(self._model.get_symbol_by_ontology_term(self._OXMETA, tag))
+            except KeyError:
+                has_stim = has_stim and self._STIM_METADATA_TAGS[tag]['optional']
+
+        # If we can't use the stimulus tags we can return now
+        if not has_stim:
+            return [], []
+
+        stim_eq = self._get_equations_for(stim_param)
+        return_stim_eqs = []
+        for eq in stim_eq:
+            key = self._get_var_display_name(eq.lhs)
+            factor = 1.0
+            if key in self._stim_units:
+                current_units = self._model.units.summarise_units(eq.lhs)
+                units = None
+                for units_to_try in [unit_dict['units'] for unit_dict in self._stim_units[key]]:
+                    if units_to_try.dimensionality == current_units.dimensionality:
+                        units = units_to_try
+                        factor = self._model.units.get_conversion_factor(units, from_unit=current_units)
+                        if factor != 1.0:
+                            warning = 'converting ' + str(key) + ' from ' + str(current_units) + ' to ' + str(units)
+                            self._logger.info(warning)
+                        # apply convrsion rule if we have one
+                        if key in self._STIM_CONVERSION_RULES and str(units) in self._STIM_CONVERSION_RULES[key]:
+                            warning = 'Converting ' + str(key) + ' from ' + str(units) + ' into chase units'
+                            self._logger.info(warning)
+                            # Error check to see if conversion is possible
+                            assert self._STIM_CONVERSION_RULES_ERR_CHECK[key][str(units)]['condition'](self), \
+                                self._STIM_CONVERSION_RULES_ERR_CHECK[key][str(units)]['message']
+                            # Apply conversion rule
+                            units, factor, eq, additional_eqs = \
+                                self._STIM_CONVERSION_RULES[key][str(units)](
+                                    self, current_units, factor, eq)
+                            return_stim_eqs.extend(additional_eqs)
+                            # update units of the converted variable
+                        eq.lhs.units = units
+            rhs = eq.rhs if factor == 1.0 else factor * eq.rhs
+            return_stim_eqs.append(sp.Eq(eq.lhs, rhs))
+        # remove duplicates
+        return_stim_eqs = list(OrderedDict.fromkeys(return_stim_eqs))
+        return_stim_eqs = self._partial_eval(return_stim_eqs, stim_param)
+
+        return stim_param, return_stim_eqs
 
     def _get_ionic_derivs(self):
         """ Getting the derivative symbols that define V (self._membrane_voltage_var)"""
@@ -354,7 +428,7 @@ class ChasteModel(object):
                 equations_for_ionic_vars = [eq for eq in equations
                                             if ((self._membrane_stimulus_current is None)
                                                 or (eq.lhs != self._membrane_stimulus_current
-                                                and eq not in self._default_stimulus.values()))
+                                                and eq.lhs not in self._stimulus_params))
                                             and self._model.units.summarise_units(eq.lhs).dimensionality
                                             == unit_cap['units'].dimensionality
                                             and eq.lhs not in self._ionic_derivs]
@@ -413,7 +487,8 @@ class ChasteModel(object):
         extended_eqs = \
             [eq for eq in
                 self._get_equations_for([ionic_var_eq.lhs for ionic_var_eq in self._equations_for_ionic_vars])
-                if eq.lhs not in [st.lhs for st in self._default_stimulus.values()]]
+                if eq.lhs not in self._stimulus_params]
+        extended_eqs = self._partial_eval(extended_eqs, [eq.lhs for eq in self._equations_for_ionic_vars])
         return extended_eqs
 
     def _get_y_derivatives(self):
@@ -427,7 +502,7 @@ class ChasteModel(object):
             """ Get equations defining the derivatives"""
             # Remove equations where lhs is a modifiable parameter or default stimulus
             return [eq for eq in self._get_equations_for(self._y_derivatives)
-                    if eq not in self._default_stimulus.values()]
+                    if eq.lhs not in self._stimulus_params]
 
         d_eqs = get_deriv_eqs()
         # If there is a _membrane_stimulus_current set, convert it.
@@ -466,9 +541,7 @@ class ChasteModel(object):
                                     else:
                                         voltage_rhs = voltage_rhs.subs({symbol: 1.0})  # other variables = 1
                         voltage_rhs = voltage_rhs.subs({self._membrane_stimulus_current: 1.0})  # - stimulus current = 1
-                        # Deal with NumberDummy variables (we haven't striped units, this may contain NumberDummys)
-                        subs_dict = {s: float(s) for s in voltage_rhs.free_symbols if isinstance(s, NumberDummy)}
-                        negate_stimulus = voltage_rhs.subs(subs_dict) > 0.0
+                        negate_stimulus = voltage_rhs > 0.0
 
             # Set GetIntracellularAreaStimulus calculaion
             GetIntracellularAreaStimulus = sp.Function('GetIntracellularAreaStimulus')
@@ -511,7 +584,7 @@ class ChasteModel(object):
             # update self._membrane_stimulus_current
             self._membrane_stimulus_current = self._get_membrane_stimulus_current()
 
-        return get_deriv_eqs()
+        return self._partial_eval(get_deriv_eqs(), self._y_derivatives)
 
     def _get_derivative_eqs_exlc_voltage(self):
         """ Get equations defining the derivatives excluding V (self._membrane_voltage_var)"""
@@ -562,10 +635,6 @@ class ChasteModel(object):
         def get_symbol_name(s, interface=False):
             """Get the correct variable name based on the symbol and whether it should be in the chaste_interface."""
             s_name = str(s).replace('$', '__')
-
-            # Deal with NumberDummy variables
-            if isinstance(s, NumberDummy):
-                return s_name
 
             prefix = 'var_chaste_interface_' if interface else 'var'
             if not s_name.startswith('_'):
@@ -641,50 +710,15 @@ class ChasteModel(object):
 
     def _format_default_stimulus(self):
         """ Format eqs for stimulus_current for outputting to chaste code"""
-        formatted_default_stimulus = dict()
-        for key, eq in self._default_stimulus.items():
-            # exclude (equations for) variables that don't have annotation
-            if self._model.has_ontology_annotation(eq.lhs, self._OXMETA):
-                formatted_default_stimulus[key] = []
-                factor = 1.0
-                rhs_multiplier = None
-                current_units = self._model.units.summarise_units(eq.lhs)
-                units = None
-                if key in self._stim_units:
-                    rhs_multiplier = None
-                    for units_to_try in [unit_dict['units'] for unit_dict in self._stim_units[key]]:
+        default_stim ={'equations':
+                        [{'lhs': self._printer.doprint(eq.lhs),
+                          'rhs': self._printer.doprint(eq.rhs),
+                          'units': self._model.units.summarise_units(eq.lhs)}
+                          for eq in self._stimulus_equations]}
+        for param in self._stimulus_params:
+            default_stim[self._get_var_display_name(param)] = self._printer.doprint(param)
 
-                        if units_to_try.dimensionality == current_units.dimensionality:
-                            units = units_to_try
-                            factor = self._model.units.get_conversion_factor(units, from_unit=current_units)
-                            if factor != 1.0:
-                                warning = 'converting ' + str(key) + ' from ' + str(current_units) + ' to ' + str(units)
-                                self._logger.info(warning)
-
-                            # Check if there is a rhs multiplier for this key and unit combo (e.g. for the amplitude:
-                            if key in self._STIM_RHS_MULTIPLIER and str(units) in self._STIM_RHS_MULTIPLIER[key]:
-                                rhs_multiplier = self._STIM_RHS_MULTIPLIER[key][str(units)]
-                            if key in self._STIM_CONVERSION_RULES and str(units) in self._STIM_CONVERSION_RULES[key]:
-                                additional_eqs = []
-                                warning = 'Converting ' + str(key) + ' from ' + str(units) + ' into chase units'
-                                self._logger.info(warning)
-                                assert self._STIM_CONVERSION_RULES_ERR_CHECK[key][str(units)]['condition'](self), \
-                                    self._STIM_CONVERSION_RULES_ERR_CHECK[key][str(units)]['message']
-                                # Apply conversion rules if we have any
-                                units, factor, eq, additional_eqs = \
-                                    self._STIM_CONVERSION_RULES[key][str(units)](
-                                        self, current_units, factor, eq)
-                                formatted_default_stimulus[key].extend(additional_eqs)
-                            break
-                rhs = eq.rhs if factor == 1.0 else factor * eq.rhs
-                self._in_interface.append(eq.lhs)
-                formatted_default_stimulus[key].append({'lhs': self._printer.doprint(eq.lhs),
-                                                        'rhs': self._printer.doprint(rhs)
-                                                        if rhs_multiplier is None
-                                                        else self._printer.doprint(rhs * rhs_multiplier),
-                                                        'units': str(units if units is not None else current_units)
-                                                        })
-        return formatted_default_stimulus
+        return default_stim
 
     def _format_extended_equations_for_ionic_vars(self):
         """ Format equations and dependant equations ionic derivatives"""

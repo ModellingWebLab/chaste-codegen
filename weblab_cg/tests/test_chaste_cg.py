@@ -118,3 +118,19 @@ class TestChasteCG(object):
             'Incorrect definition of membrane_voltage variable '\
             '(units of membrane_voltage needs to be dimensionally equivalent to Volt)'
         assert str(error.value) == warning
+
+    @pytest.mark.chaste
+    def test_partial_eval(self, tmp_path):
+        tmp_path = str(tmp_path)
+        LOGGER.info('Converting: Normal Dynamichodgkin_huxley_squid_axon_model_1952_modified\n')
+        model_file = \
+            os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'aslanidi_model_2009.cellml')
+        chaste_model = cellmlmanip.load_model(model_file)
+        chaste_model = cg.NormalChasteModel(chaste_model,
+                                            'pe_aslanidi_model_2009',
+                                            class_name='Cellaslanidi_model_2009FromCellML',
+                                            pe=True)
+        chaste_model.generate_chaste_code()
+
+        # Comprare against referene
+        compare_model_against_reference('Normal', chaste_model, tmp_path)

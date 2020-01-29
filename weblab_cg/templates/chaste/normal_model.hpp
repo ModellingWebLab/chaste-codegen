@@ -34,7 +34,7 @@ class {{class_name}} : public AbstractCardiacCell{%- if dynamically_loadable %},
     // 
     
 public:
-    {%- if default_stimulus_equations.membrane_stimulus_current_duration is defined %}
+    {%- if default_stimulus_equations["equations"]|length > 0 %}
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     {%- endif %}
     {%- if use_get_intracellular_calcium_concentration %}
