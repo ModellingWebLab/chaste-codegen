@@ -17,7 +17,7 @@ class ChasteModel(object):
     # TODO: implement and check options see https://chaste.cs.ox.ac.uk/trac/wiki/ChasteGuides/CodeGenerationFromCellML
     # TODO: variable conversion via cellmlmanip
     # TODO: script to call generator from command line
-    # TODO: Model types Opt, Analytic_j, Numerical_j, BE
+    # TODO: Model types Opt (lookup tables todo), Analytic_j, Numerical_j, BE
 
     _MEMBRANE_VOLTAGE_INDEX = 0  # default index for voltage in state vector
     _CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX = 1  # default index for cytosolic calcium concentration in state vector
