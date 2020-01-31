@@ -14,7 +14,7 @@ LOGGER.setLevel(logging.DEBUG)
 
 
 def model_types():
-    return ['Normal']
+    return ['Normal', 'Opt']
 
 
 def chaste_models():
@@ -37,6 +37,21 @@ class TestChasteCG(object):
             chaste_model.generate_chaste_code()
             # Comprare against referene
             compare_model_against_reference('Normal', chaste_model, tmp_path)
+
+    @pytest.mark.chaste
+    @pytest.mark.parametrize(('model'), chaste_models())
+    def test_Opt(self, tmp_path, model):
+        """ Check generation of Opt models against reference"""
+        # Note: currently only implemented partia eval
+        if 'Opt' in model['reference_models'].keys():
+            LOGGER.info('Converting: Opt: ' + model['class_name'] + '\n')
+            # Generate chaste code
+            chaste_model = cg.OptChasteModel(model['model'], model['model_name_from_file'],
+                                             class_name=model['class_name'],
+                                             pe=True)
+            chaste_model.generate_chaste_code()
+            # Comprare against referene
+            compare_model_against_reference('Opt', chaste_model, tmp_path)
 
     @pytest.mark.chaste
     def test_dymaic_model(self, tmp_path):

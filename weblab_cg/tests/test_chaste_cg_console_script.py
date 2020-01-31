@@ -18,6 +18,7 @@ class TestChasteCommandLineScript(object):
 
     @pytest.mark.chaste
     def test_script_help(self, capsys):
+        LOGGER.info('Testing help for command line script\n')
         testargs = ["chaste_codegen", "-h"]
         with mock.patch.object(sys, 'argv', testargs):
             try:
@@ -32,6 +33,7 @@ class TestChasteCommandLineScript(object):
 
     @pytest.mark.chaste
     def test_script_version(self, capsys):
+        LOGGER.info('Testing version for command line script\n')
         testargs = ["chaste_codegen", "--version"]
         with mock.patch.object(sys, 'argv', testargs):
             try:
@@ -45,6 +47,7 @@ class TestChasteCommandLineScript(object):
 
     @pytest.mark.chaste
     def test_script_convert(self, capsys, tmp_path):
+        LOGGER.info('Testing regular model conversion for command line script\n')
         tmp_path = str(tmp_path)
         model_name = 'hodgkin_huxley_squid_axon_model_1952_modified'
         model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
@@ -65,13 +68,14 @@ class TestChasteCommandLineScript(object):
 
     @pytest.mark.chaste
     def test_script_class_convtype_output_dll_loadable(self, capsys, tmp_path):
+        LOGGER.info('Testing model with options -t Chaste -c --dynamically-loadable and -o for command line script\n')
         tmp_path = str(tmp_path)
         model_name = 'hodgkin_huxley_squid_axon_model_1952_modified'
         model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
         assert os.path.isfile(model_file)
         outfile = os.path.join(tmp_path, 'output_class.c')
         # Call commandline script
-        testargs = ['translate', model_file, '-c', 'Chaste_CG', '-t', 'Chaste', '-o', outfile,
+        testargs = ['chaste_codegen', model_file, '-c', 'Chaste_CG', '-t', 'Chaste', '-o', outfile,
                     '--dynamically-loadable']
         with mock.patch.object(sys, 'argv', testargs):
             chaste_codegen()
@@ -84,6 +88,7 @@ class TestChasteCommandLineScript(object):
 
     @pytest.mark.chaste
     def test_script_output_expose_annotated_variables(self, capsys, tmp_path):
+        LOGGER.info('Testing model with options --expose-annotated-variables and -o for command line script\n')
         tmp_path = str(tmp_path)
         # Check options: -o --expose-annotated-variables
         model_name = 'matsuoka_model_2003'
@@ -92,7 +97,7 @@ class TestChasteCommandLineScript(object):
         outfile = os.path.join(tmp_path, 'expose_annotated_variables_cellmatsuoka_model_2003.cpp')
         outfile = str(outfile)
         # Call commandline script
-        testargs = ['translate', model_file, '-o', outfile, '--expose-annotated-variables']
+        testargs = ['chaste_codegen', model_file, '-o', outfile, '--expose-annotated-variables']
         with mock.patch.object(sys, 'argv', testargs):
             chaste_codegen()
         # Check output
@@ -102,3 +107,22 @@ class TestChasteCommandLineScript(object):
                                        os.path.join(tmp_path, model_name + '.hpp'))
         compare_file_against_reference(os.path.join(reference, model_name + '.cpp'),
                                        os.path.join(tmp_path, model_name + '.cpp'))
+
+    @pytest.mark.chaste
+    def test_script_opt(self, capsys, tmp_path):
+        LOGGER.info('Testing model with options -t ChasteOpt and -o for command line script\n')
+        tmp_path = str(tmp_path)
+        model_name = 'aslanidi_model_2009'
+        model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+        assert os.path.isfile(model_file)
+        outfile = os.path.join(tmp_path, 'aslanidi_model_2009.cpp')
+        # Call commandline script
+        testargs = ['chaste_codegen', model_file, '-t', 'ChasteOpt', '-o', outfile]
+        with mock.patch.object(sys, 'argv', testargs):
+            chaste_codegen()
+        # Check output
+        reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Opt')
+        compare_file_against_reference(os.path.join(reference, 'aslanidi_model_2009.hpp'),
+                                       os.path.join(tmp_path, 'aslanidi_model_2009.hpp'))
+        compare_file_against_reference(os.path.join(reference, 'aslanidi_model_2009.cpp'),
+                                       os.path.join(tmp_path, 'aslanidi_model_2009.cpp'))

@@ -20,23 +20,17 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
-    {%- if default_stimulus_equations.membrane_stimulus_current_duration is defined %}
+    {%- if default_stimulus_equations["equations"]|length > 0 %}
 
     boost::shared_ptr<RegularStimulus> {{class_name}}::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
-        {% for eq in default_stimulus_equations["membrane_stimulus_current_amplitude"] %}const double {{ eq.lhs }} = {{ eq.rhs }}; // {{eq.units}}
-        {% endfor %}
-        {%- for eq in default_stimulus_equations["membrane_stimulus_current_duration"] %}const double {{ eq.lhs }} = {{ eq.rhs }}; // {{eq.units}}
-        {% endfor %}
-        {%- for eq in default_stimulus_equations["membrane_stimulus_current_period"] %}const double {{ eq.lhs }} = {{ eq.rhs }}; // {{eq.units}}
-        {% endfor %}
-        {%- if default_stimulus_equations["membrane_stimulus_current_offset"] is defined %}{%- for eq in default_stimulus_equations["membrane_stimulus_current_offset"] %}const double {{ eq.lhs }} = {{ eq.rhs }}; // {{eq.units}}
-        {% endfor %}{%- endif %}boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
-                -fabs({{default_stimulus_equations["membrane_stimulus_current_amplitude"][-1].lhs}}),
-                {{default_stimulus_equations["membrane_stimulus_current_duration"][-1].lhs}},
-                {{default_stimulus_equations["membrane_stimulus_current_period"][-1].lhs}},
-                {% if default_stimulus_equations["membrane_stimulus_current_offset"] is defined %}{{default_stimulus_equations["membrane_stimulus_current_offset"][-1].lhs}}{%- else %}0.0{%- endif %}
+        {% for eq in default_stimulus_equations["equations"] %}const double {{ eq.lhs }} = {{ eq.rhs }}; // {{eq.units}}
+        {% endfor %}boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+                -fabs({{default_stimulus_equations["membrane_stimulus_current_amplitude"]}}),
+                {{default_stimulus_equations["membrane_stimulus_current_duration"]}},
+                {{default_stimulus_equations["membrane_stimulus_current_period"]}},
+                {% if default_stimulus_equations["membrane_stimulus_current_offset"] is defined %}{{default_stimulus_equations["membrane_stimulus_current_offset"]}}{%- else %}0.0{%- endif %}
                 ));
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
