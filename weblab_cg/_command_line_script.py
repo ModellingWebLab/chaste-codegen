@@ -6,13 +6,14 @@ import os
 import cellmlmanip
 import weblab_cg as cg
 from weblab_cg._script_utils import write_file
+from collections import OrderedDict
 
 
 def chaste_codegen():
     # Link names to classes for converting code
     translators = {'Chaste': cg.NormalChasteModel, 'ChasteOpt': cg.OptChasteModel}
     # Store extensions we can use and how to use them, based on extension of given outfile
-    extension_lookup = {'Chaste': dict(), 'ChasteOpt': dict()}
+    extension_lookup = OrderedDict({'Chaste': dict(), 'ChasteOpt': dict()})
     for key in ('.cpp', '.hpp', '.cellml', ''):
         extension_lookup['Chaste'][key] = ['.hpp', '.cpp']
         extension_lookup['ChasteOpt'][key] = ['.hpp', '.cpp']
