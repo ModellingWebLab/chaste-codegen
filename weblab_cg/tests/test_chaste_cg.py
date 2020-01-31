@@ -44,11 +44,11 @@ class TestChasteCG(object):
         """ Check generation of Opt models against reference"""
         # Note: currently only implemented partia eval
         if 'Opt' in model['reference_models'].keys():
-            LOGGER.info('Converting: Normal: ' + model['class_name'] + '\n')
+            LOGGER.info('Converting: Opt: ' + model['class_name'] + '\n')
             # Generate chaste code
-            chaste_model = cg.NormalChasteModel(model['model'], model['model_name_from_file'],
-                                                class_name=model['class_name'],
-                                                pe=True)
+            chaste_model = cg.OptChasteModel(model['model'], model['model_name_from_file'],
+                                             class_name=model['class_name'],
+                                             pe=True)
             chaste_model.generate_chaste_code()
             # Comprare against referene
             compare_model_against_reference('Opt', chaste_model, tmp_path)

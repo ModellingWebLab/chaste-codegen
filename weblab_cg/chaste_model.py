@@ -1,9 +1,8 @@
 import logging
-import time
 import sympy as sp
 import weblab_cg as cg
 from copy import deepcopy
-from cellmlmanip.model import VariableDummy, DataDirectionFlow
+from cellmlmanip.model import DataDirectionFlow
 from pint import DimensionalityError
 from collections import OrderedDict
 
@@ -20,12 +19,13 @@ class ChasteModel(object):
     # TODO: script to call generator from command line
     # TODO: Model types Opt, Analytic_j, Numerical_j, BE
 
-    _MEMBRANE_VOLTAGE_INDEX = 0
-    _CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX = 1
-    _OXMETA = 'https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#'
-    _PYCMLMETA = 'https://chaste.comlab.ox.ac.uk/cellml/ns/pycml#'
+    _MEMBRANE_VOLTAGE_INDEX = 0  # default index for voltage in state vector
+    _CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX = 1  # default index for voltage in state vector
+    _OXMETA = 'https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#'  # oxford metadata uri prefix
+    _PYCMLMETA = 'https://chaste.comlab.ox.ac.uk/cellml/ns/pycml#'  # pycml metadata uri
 
-    _HEARTCONFIG_GETCAPACITANCE = 'HeartConfig::Instance()->GetCapacitance'
+    _HEARTCONFIG_GETCAPACITANCE = 'HeartConfig::Instance()->GetCapacitance'  # call to get capacitance in Chaste
+    # Definitions of units required in the model. These will be added at the start so we can be sure they are defined
     _UNIT_DEFINITIONS = {'uA_per_cm2': [{'prefix': 'micro', 'units': 'ampere'},
                                         {'exponent': '-2', 'prefix': 'centi', 'units': 'metre'}],
                          'uA_per_uF': [{'prefix': 'micro', 'units': 'ampere'},
@@ -37,7 +37,9 @@ class ChasteModel(object):
                          'millisecond': [{'prefix': 'milli', 'units': 'second'}],
                          'millimolar': [{'units': 'mole', 'prefix': 'milli'}, {'units': 'litre', 'exponent': '-1'}],
                          'millivolt': [{'prefix': 'milli', 'units': 'volt'}]}
-
+    # _STIM_UNITS encodes units that are possible units to try and convert to.
+    # Indexed by metadata tag then by unit.
+    # For membrane_stimulus_current also encodes whether to use model capacitance and/or _HEARTCONFIG_GETCAPACITANCE
     _STIM_UNITS = {'membrane_stimulus_current':
                    [{'units': 'uA_per_cm2', 'use_capacitance': False, 'use_heartconfig_capacitance': False},
                     {'units': 'uA', 'use_capacitance': True, 'use_heartconfig_capacitance': True},
@@ -51,6 +53,9 @@ class ChasteModel(object):
                    'membrane_stimulus_current_end': [{'units': 'millisecond'}],
                    'membrane_capacitance': [{'units': 'uF'}, {'units': 'uF_per_mm2'}]}
 
+    # Indicates error checks that should be carried out as assert <condition>, <message>
+    # before conversion rules can be applied. There should be one for every conversion rule
+    # using same indexing (see below).
     _STIM_CONVERSION_RULES_ERR_CHECK = \
         {'membrane_stimulus_current_amplitude':
             {'uA':
@@ -60,6 +65,8 @@ class ChasteModel(object):
                 {'condition': lambda self: True,
                  'message': ''}}
          }
+    # Encodes conversion rules for membrane stimulus as lambda functions
+    # The dict is indexed first by metadata tag then by unit (dimensionally equivalent to) the current unit
     _STIM_CONVERSION_RULES = \
         {'membrane_stimulus_current_amplitude':
             {'uA':
@@ -81,6 +88,7 @@ class ChasteModel(object):
                  factor,
                  sp.Eq(eq.lhs, eq.rhs * sp.Function(self._HEARTCONFIG_GETCAPACITANCE)()),
                  [])}}
+    # Indicates which metadata tags variables used in calculating Chaste stimulus have and whether they are optional.
     _STIM_METADATA_TAGS = \
         {'membrane_stimulus_current_amplitude': {'optional': False},
          'membrane_stimulus_current_duration': {'optional': False},
@@ -111,7 +119,6 @@ class ChasteModel(object):
         self._dynamically_loadable = kwargs.get('dynamically_loadable', False)
         self._expose_annotated_variables = kwargs.get('expose_annotated_variables', False)
         self._header_ext = kwargs.get('header_ext', '.hpp')
-        self._pe = kwargs.get('pe', False)
 
         # Store parameters for future reference
         self._model = model
@@ -191,30 +198,6 @@ class ChasteModel(object):
         elif var.cmeta_id:
             display_name = var.cmeta_id
         return display_name.replace('$', '__').replace('var_chaste_interface_', '', 1).replace('var_', '', 1)
-
-    def _partial_eval(self, equations, required_lhs):
-        # only do partial eval if pe option is set
-        if not self._pe:
-            return equations
-
-        evaluated_eqs = list(reversed(equations))
-        # count usage of variables on rhs of equations
-        usage_count = dict()
-        for i in range(len(evaluated_eqs) - 1, - 1, - 1):
-            usage_count[evaluated_eqs[i].lhs] = 0
-            for var in evaluated_eqs[i].rhs.atoms(VariableDummy):
-                usage_count[var] = usage_count[var] + 1 if var in usage_count else 1
-
-        # subs in all constants and expressions only used once
-        subs_dict = {}
-        for i in range(len(evaluated_eqs) - 1, - 1, - 1):
-            evaluated_eqs[i] = evaluated_eqs[i].subs(subs_dict)
-            if evaluated_eqs[i].lhs not in required_lhs and \
-                    (isinstance(evaluated_eqs[i].rhs, sp.numbers.Float) or usage_count[evaluated_eqs[i].lhs] <= 1):
-                subs_dict[evaluated_eqs[i].lhs] = evaluated_eqs[i].rhs
-                del evaluated_eqs[i]
-        # subs in all variables that only get used once
-        return list(reversed(evaluated_eqs))
 
     def _add_units(self):
         """ Add needed units to the model to allow converting time, voltage and calcium in specific units
@@ -382,7 +365,7 @@ class ChasteModel(object):
                             self._logger.info(warning)
                         # apply convrsion rule if we have one
                         if key in self._STIM_CONVERSION_RULES and str(units) in self._STIM_CONVERSION_RULES[key]:
-                            warning = 'Converting ' + str(key) + ' from ' + str(units) + ' into chase units'
+                            warning = 'Converting ' + str(key) + ' from ' + str(units) + ' into Chaste units'
                             self._logger.info(warning)
                             # Error check to see if conversion is possible
                             assert self._STIM_CONVERSION_RULES_ERR_CHECK[key][str(units)]['condition'](self), \
@@ -398,8 +381,6 @@ class ChasteModel(object):
             return_stim_eqs.append(sp.Eq(eq.lhs, rhs))
         # remove duplicates
         return_stim_eqs = list(OrderedDict.fromkeys(return_stim_eqs))
-        return_stim_eqs = self._partial_eval(return_stim_eqs, stim_param)
-
         return stim_param, return_stim_eqs
 
     def _get_ionic_derivs(self):
@@ -465,7 +446,7 @@ class ChasteModel(object):
             factor = self._model.units.get_conversion_factor(self._current_unit_and_capacitance['units'],
                                                              from_unit=current_unit)
             if factor != 1.0:
-                warning = 'converting ' + str(var) + ' in GetIIonic current from ' + str(current_unit) + ' to ' +\
+                warning = 'converting ' + str(var.lhs) + ' in GetIIonic current from ' + str(current_unit) + ' to ' +\
                     str(self._current_unit_and_capacitance['units'])
                 self._logger.info(warning)
 
@@ -492,10 +473,8 @@ class ChasteModel(object):
                 if eq.lhs not in self._stimulus_params]
 
         # set _membrane_stimulus_current to 0.0
-        extended_eqs = [eq if eq.lhs not in (self._membrane_stimulus_current, self._original_membrane_stimulus_current)
-                        else sp.Eq(eq.lhs, 0.0) for eq in extended_eqs]
-        extended_eqs = self._partial_eval(extended_eqs, [eq.lhs for eq in self._equations_for_ionic_vars])
-        return extended_eqs
+        return [eq if eq.lhs not in (self._membrane_stimulus_current, self._original_membrane_stimulus_current)
+                else sp.Eq(eq.lhs, 0.0) for eq in extended_eqs]
 
     def _get_y_derivatives(self):
         """ Get derivatives for state variables"""
@@ -590,7 +569,7 @@ class ChasteModel(object):
             # update self._membrane_stimulus_current
             self._membrane_stimulus_current = self._get_membrane_stimulus_current()
 
-        return self._partial_eval(get_deriv_eqs(), self._y_derivatives)
+        return get_deriv_eqs()
 
     def _get_derivative_eqs_exlc_voltage(self):
         """ Get equations defining the derivatives excluding V (self._membrane_voltage_var)"""
@@ -790,75 +769,3 @@ class ChasteModel(object):
         Please Note: not implemented, use a subclass for the relevant model type
         """
         raise NotImplementedError("Should not be called directly, use the specific model types instead!")
-
-
-class NormalChasteModel(ChasteModel):
-    """ Holds information specific for the Normal model type"""
-
-    def __init__(self, model, file_name, **kwargs):
-        super().__init__(model, file_name, **kwargs)
-
-    def generate_chaste_code(self):
-        """ Generates and stores chaste code for the Normal model"""
-
-        # Generate hpp for model
-        template = cg.load_template('chaste', 'normal_model.hpp')
-        self.generated_hpp = template.render({
-            'converter_version': cg.__version__,
-            'model_name': self._model.name,
-            'class_name': self.class_name,
-            'dynamically_loadable': self._dynamically_loadable,
-            'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
-            'default_stimulus_equations': self._formatted_default_stimulus,
-            'use_get_intracellular_calcium_concentration':
-                self._cytosolic_calcium_concentration_var in self._state_vars,
-            'free_variable': self._free_variable,
-            'use_verify_state_variables': self._use_verify_state_variables,
-            'derived_quantities': self._formatted_derived_quant})
-
-        # Generate cpp for model
-        template = cg.load_template('chaste', 'normal_model.cpp')
-        self.generated_cpp = template.render({
-            'converter_version': cg.__version__,
-            'model_name': self._model.name,
-            'file_name': self.file_name,
-            'class_name': self.class_name,
-            'header_ext': self._header_ext,
-            'dynamically_loadable': self._dynamically_loadable,
-            'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
-            'default_stimulus_equations': self._formatted_default_stimulus,
-            'use_get_intracellular_calcium_concentration':
-                self._cytosolic_calcium_concentration_var in self._state_vars,
-            'membrane_voltage_index': self._MEMBRANE_VOLTAGE_INDEX,
-            'cytosolic_calcium_concentration_index':
-                self._state_vars.index(self._cytosolic_calcium_concentration_var)
-                if self._cytosolic_calcium_concentration_var in self._state_vars
-                else self._CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX,
-            'state_vars': self._formatted_state_vars,
-            'ionic_vars': self._formatted_extended_equations_for_ionic_vars,
-            'y_derivative_equations': self._formatted_derivative_eqs,
-            'y_derivatives': self._formatted_y_derivatives,
-            'use_capacitance_i_ionic': self._current_unit_and_capacitance['use_capacitance'],
-            'free_variable': self._free_variable,
-            'ode_system_information': self._ode_system_information,
-            'modifiable_parameters': self._formatted_modifiable_parameters,
-            'named_attributes': self._named_attributes,
-            'use_verify_state_variables': self._use_verify_state_variables,
-            'derived_quantities': self._formatted_derived_quant,
-            'derived_quantity_equations': self._formatted_quant_eqs})
-
-
-class OptChasteModel(ChasteModel):
-    pass
-
-
-class Analytic_jChasteModel(ChasteModel):
-    pass
-
-
-class Numerical_jChasteModel(ChasteModel):
-    pass
-
-
-class BEOptChasteModel(ChasteModel):
-    pass

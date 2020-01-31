@@ -34,13 +34,9 @@ from ._generator import (   # noqa
     load_template,
 )
 
-from ._generator_chaste_cg import (   # noqa
-    NormalChasteModel,
-    OptChasteModel,
-    Analytic_jChasteModel,
-    Numerical_jChasteModel,
-    BEOptChasteModel,
-)
+from .chaste_model import ChasteModel  # noqa
+from .normal_chaste_model import NormalChasteModel  # noqa
+from .opt_chaste_model import OptChasteModel  # noqa
 
 from ._weblab_printer import (     # noqa
     WebLabPrinter,
