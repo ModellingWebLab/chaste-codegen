@@ -4,6 +4,7 @@ import time
 
 class NormalChasteModel(cg.ChasteModel):
     """ Holds template and information specific for the Normal model type"""
+    # TODO:lookup tables
 
     def __init__(self, model, file_name, **kwargs):
         super().__init__(model, file_name, **kwargs)
