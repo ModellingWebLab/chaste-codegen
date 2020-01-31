@@ -4,7 +4,7 @@ import sympy as sp
 
 
 class OptChasteModel(cg.NormalChasteModel):
-    """ Holds template and information specific for the Optimised model type"""
+    """ Holds information specific for the Optimised model type. Builds on Normal model type"""
     def _partial_eval(self, equations, required_lhs):
         evaluated_eqs = []
         # count usage of variables on rhs of equations
@@ -26,16 +26,16 @@ class OptChasteModel(cg.NormalChasteModel):
         return evaluated_eqs
 
     def _get_stimulus(self):
-        """ Store the stimulus currents in the model"""
+        """ Get the partially evaluated stimulus currents in the model"""
         stim_param, return_stim_eqs = super()._get_stimulus()
         return stim_param, self._partial_eval(return_stim_eqs, stim_param)
 
     def _get_extended_equations_for_ionic_vars(self):
-        """ Get the equations defining the ionic derivatives and all dependant equations"""
+        """ Get the partially evaluated equations defining the ionic derivatives and all dependant equations"""
         return self._partial_eval(super()._get_extended_equations_for_ionic_vars(),
                                   [eq.lhs for eq in self._equations_for_ionic_vars])
 
     def _get_derivative_equations(self):
-        """ Get equations defining the derivatives including V (self._membrane_voltage_var)"""
+        """ Get partially evaluated equations defining the derivatives including V (self._membrane_voltage_var)"""
         return self._partial_eval(super()._get_derivative_equations(),
                                   self._y_derivatives)
