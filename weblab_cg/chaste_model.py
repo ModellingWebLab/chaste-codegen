@@ -20,7 +20,7 @@ class ChasteModel(object):
     # TODO: Model types Opt, Analytic_j, Numerical_j, BE
 
     _MEMBRANE_VOLTAGE_INDEX = 0  # default index for voltage in state vector
-    _CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX = 1  # default index for voltage in state vector
+    _CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX = 1  # default index for cytosolic calcium concentration in state vector
     _OXMETA = 'https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#'  # oxford metadata uri prefix
     _PYCMLMETA = 'https://chaste.comlab.ox.ac.uk/cellml/ns/pycml#'  # pycml metadata uri
 

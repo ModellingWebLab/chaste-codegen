@@ -11,15 +11,15 @@ from collections import OrderedDict
 
 def chaste_codegen():
     # Link names to classes for converting code
-    translators = {'Chaste': cg.NormalChasteModel, 'ChasteOpt': cg.OptChasteModel}
+    translators = OrderedDict({'Chaste': cg.NormalChasteModel, 'ChasteOpt': cg.OptChasteModel})
     # Store extensions we can use and how to use them, based on extension of given outfile
-    extension_lookup = OrderedDict({'Chaste': dict(), 'ChasteOpt': dict()})
+    extension_lookup = {'Chaste': dict(), 'ChasteOpt': dict()}
     for key in ('.cpp', '.hpp', '.cellml', ''):
         extension_lookup['Chaste'][key] = ['.hpp', '.cpp']
         extension_lookup['ChasteOpt'][key] = ['.hpp', '.cpp']
     for key in ('.c', '.h'):
         extension_lookup['Chaste'][key] = ['.h', '.c']
-        extension_lookup['ChasteOpt'][key] = ['.hpp', '.cpp']
+        extension_lookup['ChasteOpt'][key] = ['.h', '.c']
 
     # add options for command line interface
     parser = argparse.ArgumentParser(description='Chaste code generation for cellml.')
