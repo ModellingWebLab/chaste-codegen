@@ -29,21 +29,11 @@ from ._config import (   # noqa
 #
 # Load public classes and functions
 #
-from ._generator import (   # noqa
-    create_weblab_model,
-    load_template,
-)
-
 from .chaste_model import ChasteModel  # noqa
 from .normal_chaste_model import NormalChasteModel  # noqa
 from .opt_chaste_model import OptChasteModel  # noqa
 
-from ._weblab_printer import (     # noqa
-    WebLabPrinter,
-)
-
-
-from ._chaste_printer import (     # noqa
+from ._printer import (     # noqa
     ChastePrinter,
 )
 

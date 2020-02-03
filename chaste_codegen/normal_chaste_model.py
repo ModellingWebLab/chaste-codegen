@@ -13,7 +13,7 @@ class NormalChasteModel(cg.ChasteModel):
         """ Generates and stores chaste code for the Normal model"""
 
         # Generate hpp for model
-        template = cg.load_template('chaste', 'normal_model.hpp')
+        template = self.load_template('chaste', 'normal_model.hpp')
         self.generated_hpp = template.render({
             'converter_version': cg.__version__,
             'model_name': self._model.name,
@@ -28,7 +28,7 @@ class NormalChasteModel(cg.ChasteModel):
             'derived_quantities': self._formatted_derived_quant})
 
         # Generate cpp for model
-        template = cg.load_template('chaste', 'normal_model.cpp')
+        template = self.load_template('chaste', 'normal_model.cpp')
         self.generated_cpp = template.render({
             'converter_version': cg.__version__,
             'model_name': self._model.name,

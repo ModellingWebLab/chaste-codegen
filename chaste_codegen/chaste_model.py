@@ -1,5 +1,8 @@
 import logging
+import os
+import posixpath
 import sympy as sp
+import jinja2
 import chaste_codegen as cg
 from copy import deepcopy
 from cellmlmanip.model import DataDirectionFlow
@@ -94,6 +97,8 @@ class ChasteModel(object):
          'membrane_stimulus_current_duration': {'optional': False},
          'membrane_stimulus_current_period': {'optional': False},
          'membrane_stimulus_current_offset': {'optional': True}}
+
+    _jinja_environment = None  # Shared Jinja environment
 
     def __init__(self, model, file_name, **kwargs):
         """ Initialise a ChasteModel instance
@@ -774,6 +779,46 @@ class ChasteModel(object):
                  'rhs': self._printer.doprint(eq.rhs),
                  'units': str(self._model.units.summarise_units(eq.lhs))}
                 for eq in self._derived_quant_eqs]
+
+    def _get_jinja_environment(self):
+        """
+        Returns a shared Jinja environment to create templates from.
+        """
+        global _environment
+        if self._jinja_environment is None:
+            self._jinja_environment = jinja2.Environment(
+                # Automatic loading of templates stored in the module
+                # This also enables template inheritance
+                loader=jinja2.PackageLoader('chaste_codegen', cg.TEMPLATE_SUBDIR),
+
+                # Keep a single trailing newline, if present
+                keep_trailing_newline=True,
+
+                # Don't replace undefined template variables by an empty string
+                # but raise a jinja2.UndefinedError instead.
+                undefined=jinja2.StrictUndefined,
+            )
+        return self._jinja_environment
+
+
+    def load_template(self, *name):
+        """
+        Loads a template from the local template directory.
+
+        Templates can be specified as a single filename, e.g.
+        ``load_template('temp.txt')``, or loaded from subdirectories using e.g.
+        ``load_template('subdir_1', 'subdir_2', 'file.txt')``.
+
+        """
+        # Due to a Jinja2 convention, posixpaths must be used, regardless of the
+        # user's operating system!
+        path = posixpath.join(*name)
+        if os.path.sep != '/' and os.path.sep in path:  # pragma: no linux cover
+            log = logging.getLogger()
+            log.warning('Paths to templates must be specified as posix paths.')
+
+        env = self._get_jinja_environment()
+        return env.get_template(path)
 
     def generate_chaste_code(self):
         """ Generate chaste code
