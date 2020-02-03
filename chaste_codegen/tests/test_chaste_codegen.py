@@ -31,6 +31,7 @@ def chaste_opt_models():
     """ Load all Opt models"""
     return [model for model in get_models() if 'Opt' in model['reference_models'].keys()]
 
+
 def get_model(model_name):
     """ Load all Opt models"""
     model_list = [model for model in get_models() if model['model_name_from_file'] == model_name]
@@ -39,7 +40,7 @@ def get_model(model_name):
     else:
         model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
         return cellmlmanip.load_model(model_file)
-    
+
 
 class TestChasteCG(object):
     """ Tests chaste_codegen against reference models generated with chaste_codegen and tested in chaste."""
