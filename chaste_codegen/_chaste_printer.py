@@ -77,9 +77,9 @@ class ChastePrinter(Printer):
         return ' || '.join(['(' + self._bracket(x, my_prec) + ')' for x in expr.args])
 
     def _print_ordinary_pow(self, expr):
-        """ Handles Pow(), hanles just ordinary powers without division "
+        """ Handles Pow(), handles just ordinary powers without division.
 
-        for C++ printing we need to writea x**y as pow(x, y) with lowercase p"""
+        For C++ printing we need to write ``x**y`` as ``pow(x, y)`` with lowercase ``p``."""
         p = precedence(expr)
         return 'pow(' + self._bracket(expr.base, p) + ', ' + self._bracket(expr.exp, p) + ')'
 
