@@ -175,13 +175,13 @@ class ChasteModel(object):
 
     def _get_initial_value(self, var):
         """Returns the initial value of a variable if it has one, none otherwise"""
-        # Some vars (e.g. state vars) have an initial value parameter defined
-        initial_value = getattr(var, 'initial_value', None)
-        if initial_value is None:  # If there isn't an initial_value param look for a defining equation
-            eqs = self._model.get_equations_for([var])
-            # If there is a defining equation, there should be just 1 equation and it should be of the form var = value
-            if len(eqs) == 1 and isinstance(eqs[0].rhs, sp.numbers.Float):
-                initial_value = eqs[0].rhs
+        # state vars have an initial value parameter defined
+        if var in self._state_vars:
+            return getattr(var, 'initial_value', None)
+        eqs = self._model.get_equations_for([var])
+        # If there is a defining equation, there should be just 1 equation and it should be of the form var = value
+        if len(eqs) == 1 and isinstance(eqs[0].rhs, sp.numbers.Float):
+            initial_value = eqs[0].rhs
         return initial_value
 
     def _state_var_key_order(self, var):
