@@ -31,6 +31,15 @@ def chaste_opt_models():
     """ Load all Opt models"""
     return [model for model in get_models() if 'Opt' in model['reference_models'].keys()]
 
+def get_model(model_name):
+    """ Load all Opt models"""
+    model_list = [model for model in get_models() if model['model_name_from_file'] == model_name]
+    if len(model_list) == 1:
+        return model_list[0]['model']
+    else:
+        model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+        return cellmlmanip.load_model(model_file)
+    
 
 class TestChasteCG(object):
     """ Tests chaste_codegen against reference models generated with chaste_codegen and tested in chaste."""
@@ -64,9 +73,7 @@ class TestChasteCG(object):
     def test_dymaic_model(self, tmp_path):
         tmp_path = str(tmp_path)
         LOGGER.info('Converting: Normal Dynamichodgkin_huxley_squid_axon_model_1952_modified\n')
-        model_file = \
-            os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'hodgkin_huxley_squid_axon_model_1952_modified.cellml')
-        chaste_model = cellmlmanip.load_model(model_file)
+        chaste_model = get_model('hodgkin_huxley_squid_axon_model_1952_modified')
         chaste_model = cg.NormalChasteModel(chaste_model,
                                             'dynamic_hodgkin_huxley_squid_axon_model_1952_modified',
                                             class_name='Dynamichodgkin_huxley_squid_axon_model_1952_modifiedFromCellML',
@@ -80,9 +87,7 @@ class TestChasteCG(object):
     def test_expose_annotated_variables(self, tmp_path):
         tmp_path = str(tmp_path)
         LOGGER.info('Testing expose_annotated_variables option\n')
-        model_file = \
-            os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'matsuoka_model_2003.cellml')
-        chaste_model = cellmlmanip.load_model(model_file)
+        chaste_model = get_model('matsuoka_model_2003')
 
         chaste_model = cg.NormalChasteModel(chaste_model,
                                             'expose_annotated_variables_cellmatsuoka_model_2003',
@@ -98,9 +103,7 @@ class TestChasteCG(object):
     def test_missing_capacitance(self, tmp_path):
         tmp_path = str(tmp_path)
         LOGGER.info('Testing missing capacitance\n')
-        model_file = \
-            os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'pandit_model_2001_epi_old_no_capacitance.cellml')
-        chaste_model = cellmlmanip.load_model(model_file)
+        chaste_model = get_model('pandit_model_2001_epi_old_no_capacitance')
 
         with pytest.raises(AssertionError) as error:
             chaste_model = cg.NormalChasteModel(chaste_model,
@@ -113,9 +116,7 @@ class TestChasteCG(object):
     def test_wrong_units_time(self, capsys, tmp_path):
         tmp_path = str(tmp_path)
         LOGGER.info('Testing wrong units for time\n')
-        model_file = \
-            os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'test_wrong_units_time_odes.cellml')
-        chaste_model = cellmlmanip.load_model(model_file)
+        chaste_model = get_model('test_wrong_units_time_odes')
 
         with pytest.raises(AssertionError) as error:
             chaste_model = cg.NormalChasteModel(chaste_model,
@@ -128,9 +129,7 @@ class TestChasteCG(object):
     def test_wrong_units_voltage(self, capsys, tmp_path):
         tmp_path = str(tmp_path)
         LOGGER.info('Testing wrong units for time\n')
-        model_file = \
-            os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'test_wrong_units_voltage.cellml')
-        chaste_model = cellmlmanip.load_model(model_file)
+        chaste_model = get_model('test_wrong_units_voltage')
 
         with pytest.raises(AssertionError) as error:
             chaste_model = cg.NormalChasteModel(chaste_model,

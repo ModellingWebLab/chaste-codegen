@@ -780,6 +780,12 @@ class ChasteModel(object):
                  'units': str(self._model.units.summarise_units(eq.lhs))}
                 for eq in self._derived_quant_eqs]
 
+    def generate_chaste_code(self):
+        """ Generate chaste code
+        Please Note: not implemented, use a subclass for the relevant model type
+        """
+        raise NotImplementedError("Should not be called directly, use the specific model types instead!")
+
     def _get_jinja_environment(self):
         """
         Returns a shared Jinja environment to create templates from.
@@ -819,9 +825,5 @@ class ChasteModel(object):
         env = self._get_jinja_environment()
         return env.get_template(path)
 
-    def generate_chaste_code(self):
-        """ Generate chaste code
-        Please Note: not implemented, use a subclass for the relevant model type
-        """
-        raise NotImplementedError("Should not be called directly, use the specific model types instead!")
+
 
