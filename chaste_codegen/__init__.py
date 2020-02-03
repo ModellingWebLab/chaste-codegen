@@ -1,15 +1,16 @@
 """
-Main module for Web Lab code generation
+Main module for cardiac Chaste code generation
 """
 import logging
-from cellmlmanip import transpiler
 import sympy
+
+from cellmlmanip import transpiler
 
 # Configure logging
 logging.basicConfig()
 del(logging)
 
-# set cellmlmanip exp function
+# Set cellmlmanip exp function
 setattr(sympy, '_exp', sympy.Function('_exp'))
 transpiler.SIMPLE_MATHML_TO_SYMPY_NAMES['exp'] = '_exp'
 
@@ -27,23 +28,12 @@ from ._config import (   # noqa
 
 
 #
-# Load public classes and functions
+# Load and expose public classes and functions
 #
-from ._generator import (   # noqa
-    create_weblab_model,
-    load_template,
-)
+from ._load_template import load_template    # noqa
+from ._chaste_printer import ChastePrinter  # noqa
 
 from .chaste_model import ChasteModel  # noqa
 from .normal_chaste_model import NormalChasteModel  # noqa
 from .opt_chaste_model import OptChasteModel  # noqa
-
-from ._weblab_printer import (     # noqa
-    WebLabPrinter,
-)
-
-
-from ._chaste_printer import (     # noqa
-    ChastePrinter,
-)
 
