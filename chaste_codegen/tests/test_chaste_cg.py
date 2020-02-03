@@ -6,7 +6,6 @@ import cellmlmanip
 import chaste_codegen.tests.chaste_test_utils as test_utils
 
 
-
 # Show more logging output
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)

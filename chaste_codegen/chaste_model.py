@@ -800,7 +800,6 @@ class ChasteModel(object):
             )
         return self._jinja_environment
 
-
     def load_template(self, *name):
         """
         Loads a template from the local template directory.
@@ -825,3 +824,4 @@ class ChasteModel(object):
         Please Note: not implemented, use a subclass for the relevant model type
         """
         raise NotImplementedError("Should not be called directly, use the specific model types instead!")
+

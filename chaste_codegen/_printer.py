@@ -48,8 +48,8 @@ class ChastePrinter(Printer):
         'GetIntracellularAreaStimulus': 'GetIntracellularAreaStimulus',
         'HeartConfig::Instance()->GetCapacitance': 'HeartConfig::Instance()->GetCapacitance'
     }
-    
-     # Dictionary mapping Sympy literals to strings for output.
+
+    # Dictionary mapping Sympy literals to strings for output.
     _literal_names = {
         'e': 'e',
         'nan': 'NAN',
