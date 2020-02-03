@@ -8,6 +8,8 @@ TIMESTAMP_REGEX = re.compile(r'(//! on .*)')
 COMMENTS_REGEX = re.compile(r'(//.*)')
 VERSION_REGEX = re.compile(r'(//! This source file was generated from CellML by chaste_codegen version .*)')
 
+models = []
+
 
 def load_chaste_models(model_types=[], ref_path_prefix=['chaste_reference_models'], class_name_prefix='Cell'):
     """ Load all models"""
