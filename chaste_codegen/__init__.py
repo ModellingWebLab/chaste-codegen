@@ -1,5 +1,5 @@
 """
-Main module for Web Lab code generation
+Main module for cardiac Chaste code generation
 """
 import logging
 import sympy
