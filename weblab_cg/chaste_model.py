@@ -173,6 +173,17 @@ class ChasteModel(object):
         return [eq for eq in self._model.get_equations_for(symbols, recurse=recurse)
                 if eq.lhs not in self._modifiable_parameters]
 
+    def _get_initial_value(self, var):
+        """Returns the initial value of a variable if it has one, none otherwise"""
+        # Some vars (e.g. state vars) have an initial value parameter defined
+        initial_value = getattr(var, 'initial_value', None)
+        if initial_value is None:  # If there isn't an initial_value param look for a defining equation
+            eqs = self._model.get_equations_for([var])
+            # If there is a defining equation, there should be just 1 equation and it should be of the form var = value
+            if len(eqs) == 1 and isinstance(eqs[0].rhs, sp.numbers.Float):
+                initial_value = eqs[0].rhs
+        return initial_value
+
     def _state_var_key_order(self, var):
         """Returns a key to order state variables in the same way as pycml does"""
         if isinstance(var, sp.Derivative):
@@ -319,7 +330,7 @@ class ChasteModel(object):
                             warning = 'converting capacitance from ' + str(current_units) + ' to ' + str(desired_units)
                             self._logger.info(warning)
 
-                        initial_value = self._model.get_initial_value(membrane_capacitance)
+                        initial_value = self._get_initial_value(membrane_capacitance)
                         if initial_value is not None:
                             membrane_capacitance.initial_value = None
                             equation = sp.Eq(membrane_capacitance, initial_value)
@@ -643,12 +654,10 @@ class ChasteModel(object):
 
     def _format_modifiable_parameters(self):
         """ Format the modifiable parameter for printing to chaste code"""
-        def print_initial_value(var):
-            return self._printer.doprint(self._model.get_equations_for([var])[-1].rhs)
-
         return [{'units': self._model.units.summarise_units(param),
                  'comment_name': self._name_printer.doprint(param), 'name': self._get_var_display_name(param),
-                 'initial_value': print_initial_value(param)} for param in self._modifiable_parameters]
+                 'initial_value': self._printer.doprint(self._get_initial_value(param))}
+                for param in self._modifiable_parameters]
 
     def _format_state_variables(self):
         """ Get equations defining the derivatives including  V (self._membrane_voltage_var)"""
@@ -680,7 +689,7 @@ class ChasteModel(object):
         formatted_state_vars = \
             [{'var': self._printer.doprint(var),
               'annotated_var_name': self._get_var_display_name(var),
-              'initial_value': str(self._model.get_initial_value(var)),
+              'initial_value': str(self._get_initial_value(var)),
               'units': str(self._model.units.summarise_units(var)),
               'in_ionic': var in ionic_var_symbols,
               'in_y_deriv': var in y_deriv_symbols,
@@ -736,7 +745,7 @@ class ChasteModel(object):
     def _format_system_info(self):
         """ Format general ode system info for chaste output"""
         return [{'name': self._get_var_display_name(var),
-                 'initial_value': str(self._model.get_initial_value(var)),
+                 'initial_value': str(self._get_initial_value(var)),
                  'units': self._model.units.summarise_units(var)}
                 for var in self._state_vars]
 
