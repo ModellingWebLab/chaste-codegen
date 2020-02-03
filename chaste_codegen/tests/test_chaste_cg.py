@@ -3,9 +3,7 @@ import os
 import chaste_codegen as cg
 import pytest
 import cellmlmanip
-from chaste_codegen.tests.chaste_test_utils import (
-    load_chaste_models,
-    compare_model_against_reference)
+import chaste_codegen.tests.chaste_test_utils as test_utils
 
 
 # Show more logging output
@@ -17,41 +15,61 @@ def model_types():
     return ['Normal', 'Opt']
 
 
-def chaste_models():
-    """ Load all models"""
-    return load_chaste_models(model_types=model_types())
+def get_models():
+    """ Load all models if they haven't been loaded yet"""
+    # if len(test_utils.models) == 0:
+    test_utils.models = test_utils.load_chaste_models(model_types=model_types())
+    return test_utils.models
+
+
+def chaste_normal_models():
+    """ Load all Normal models"""
+    return [model for model in get_models() if 'Normal' in model['reference_models'].keys()]
+
+
+def chaste_opt_models():
+    """ Load all Opt models"""
+    return [model for model in get_models() if 'Opt' in model['reference_models'].keys()]
+
+
+def get_model(model_name):
+    """ Load all Opt models"""
+    model_list = [model for model in get_models() if model['model_name_from_file'] == model_name]
+    if len(model_list) == 1:
+        return model_list[0]['model']
+    else:
+        model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+        return cellmlmanip.load_model(model_file)
 
 
 class TestChasteCG(object):
     """ Tests chaste_codegen against reference models generated with chaste_codegen and tested in chaste."""
 
     @pytest.mark.chaste
-    @pytest.mark.parametrize(('model'), chaste_models())
+    @pytest.mark.parametrize(('model'), chaste_normal_models())
     def test_Normal(self, tmp_path, model):
         """ Check generation of Normal models against reference"""
-        if 'Normal' in model['reference_models'].keys():
-            LOGGER.info('Converting: Normal: ' + model['class_name'] + '\n')
-            # Generate chaste code
-            chaste_model = cg.NormalChasteModel(model['model'], model['model_name_from_file'],
-                                                class_name=model['class_name'])
-            chaste_model.generate_chaste_code()
-            # Comprare against referene
-            compare_model_against_reference('Normal', chaste_model, tmp_path)
+        LOGGER.info('Converting: Normal: ' + model['class_name'] + '\n')
+        # Generate chaste code
+        chaste_model = cg.NormalChasteModel(model['model'], model['model_name_from_file'],
+                                            class_name=model['class_name'])
+        chaste_model.generate_chaste_code()
+        # Comprare against referene
+        test_utils.compare_model_against_reference('Normal', chaste_model, tmp_path)
 
     @pytest.mark.chaste
-    @pytest.mark.parametrize(('model'), chaste_models())
+    @pytest.mark.parametrize(('model'), chaste_opt_models())
     def test_Opt(self, tmp_path, model):
         """ Check generation of Opt models against reference"""
         # Note: currently only implemented partia eval
-        if 'Opt' in model['reference_models'].keys():
-            LOGGER.info('Converting: Opt: ' + model['class_name'] + '\n')
-            # Generate chaste code
-            chaste_model = cg.OptChasteModel(model['model'], model['model_name_from_file'],
-                                             class_name=model['class_name'],
-                                             pe=True)
-            chaste_model.generate_chaste_code()
-            # Comprare against referene
-            compare_model_against_reference('Opt', chaste_model, tmp_path)
+        LOGGER.info('Converting: Opt: ' + model['class_name'] + '\n')
+        # Generate chaste code
+        chaste_model = cg.OptChasteModel(model['model'], model['model_name_from_file'],
+                                         class_name=model['class_name'],
+                                         pe=True)
+        chaste_model.generate_chaste_code()
+        # Comprare against referene
+        test_utils.compare_model_against_reference('Opt', chaste_model, tmp_path)
 
     @pytest.mark.chaste
     def test_dymaic_model(self, tmp_path):
@@ -67,7 +85,7 @@ class TestChasteCG(object):
         chaste_model.generate_chaste_code()
 
         # Comprare against referene
-        compare_model_against_reference('Normal', chaste_model, tmp_path)
+        test_utils.compare_model_against_reference('Normal', chaste_model, tmp_path)
 
     @pytest.mark.chaste
     def test_expose_annotated_variables(self, tmp_path):
@@ -85,7 +103,7 @@ class TestChasteCG(object):
         chaste_model.generate_chaste_code()
 
         # Comprare against referene
-        compare_model_against_reference('Normal', chaste_model, tmp_path)
+        test_utils.compare_model_against_reference('Normal', chaste_model, tmp_path)
 
     @pytest.mark.chaste
     def test_missing_capacitance(self, tmp_path):
