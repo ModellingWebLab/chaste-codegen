@@ -112,17 +112,17 @@ class TestChasteCommandLineScript(object):
     def test_script_opt(self, capsys, tmp_path):
         LOGGER.info('Testing model with options -t ChasteOpt and -o for command line script\n')
         tmp_path = str(tmp_path)
-        model_name = 'aslanidi_model_2009'
+        model_name = 'decker_2009'
         model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
         assert os.path.isfile(model_file)
-        outfile = os.path.join(tmp_path, 'aslanidi_model_2009.cpp')
+        outfile = os.path.join(tmp_path, 'decker_2009.cpp')
         # Call commandline script
         testargs = ['chaste_codegen', model_file, '-t', 'ChasteOpt', '-o', outfile]
         with mock.patch.object(sys, 'argv', testargs):
             chaste_codegen()
         # Check output
         reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Opt')
-        compare_file_against_reference(os.path.join(reference, 'aslanidi_model_2009.hpp'),
-                                       os.path.join(tmp_path, 'aslanidi_model_2009.hpp'))
-        compare_file_against_reference(os.path.join(reference, 'aslanidi_model_2009.cpp'),
-                                       os.path.join(tmp_path, 'aslanidi_model_2009.cpp'))
+        compare_file_against_reference(os.path.join(reference, 'decker_2009.hpp'),
+                                       os.path.join(tmp_path, 'decker_2009.hpp'))
+        compare_file_against_reference(os.path.join(reference, 'decker_2009.cpp'),
+                                       os.path.join(tmp_path, 'decker_2009.cpp'))
