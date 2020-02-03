@@ -11,7 +11,7 @@ from collections import OrderedDict
 
 def chaste_codegen():
     # Link names to classes for converting code
-    translators = OrderedDict({'Chaste': cg.NormalChasteModel, 'ChasteOpt': cg.OptChasteModel})
+    translators = OrderedDict([('Chaste', cg.NormalChasteModel), ('ChasteOpt', cg.OptChasteModel)])
     # Store extensions we can use and how to use them, based on extension of given outfile
     extension_lookup = {'Chaste': dict(), 'ChasteOpt': dict()}
     for key in ('.cpp', '.hpp', '.cellml', ''):
