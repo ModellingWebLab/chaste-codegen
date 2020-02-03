@@ -16,7 +16,7 @@ Please see [CONTRIBUTING.md](CONTRIBUTING.md) for the developer installation ins
 
 ## Using `chaste_codegen`
 
-To generate code for the Web Lab:
+To generate code for Chaste:
 
 ```
 # Select a path to write the output to
