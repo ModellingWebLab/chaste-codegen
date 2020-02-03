@@ -6,6 +6,7 @@ import cellmlmanip
 import chaste_codegen.tests.chaste_test_utils as test_utils
 
 
+
 # Show more logging output
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
@@ -17,8 +18,8 @@ def model_types():
 
 def get_models():
     """ Load all models if they haven't been loaded yet"""
-    if len(test_utils.models) == 0:
-        test_utils.models = test_utils.load_chaste_models(model_types=model_types())
+    # if len(test_utils.models) == 0:
+    test_utils.models = test_utils.load_chaste_models(model_types=model_types())
     return test_utils.models
 
 
