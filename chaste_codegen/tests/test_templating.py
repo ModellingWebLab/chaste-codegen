@@ -1,10 +1,8 @@
 #
 # Tests templating functionality
 #
-import cellmlmanip
 import jinja2
 import logging
-import os
 import pytest
 import chaste_codegen as cg
 
