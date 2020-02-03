@@ -176,13 +176,15 @@ class ChasteModel(object):
     def _get_initial_value(self, var):
         """Returns the initial value of a variable if it has one, none otherwise"""
         # state vars have an initial value parameter defined
+        initial_value = None
         if var in self._state_vars:
-            return getattr(var, 'initial_value', None)
-        eqs = self._model.get_equations_for([var])
-        # If there is a defining equation, there should be just 1 equation and it should be of the form var = value
-        if len(eqs) == 1 and isinstance(eqs[0].rhs, sp.numbers.Float):
-            return eqs[0].rhs
-        return None
+            initial_value = getattr(var, 'initial_value', None)
+        else:
+            eqs = self._model.get_equations_for([var])
+            # If there is a defining equation, there should be just 1 equation and it should be of the form var = value
+            if len(eqs) == 1 and isinstance(eqs[0].rhs, sp.numbers.Float):
+                initial_value = eqs[0].rhs
+        return initial_value
 
     def _state_var_key_order(self, var):
         """Returns a key to order state variables in the same way as pycml does"""
