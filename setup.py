@@ -1,5 +1,5 @@
 #
-# weblab_cg setuptools script
+# Chaste codegen setuptools script
 #
 import os
 from setuptools import setup, find_packages
@@ -9,27 +9,27 @@ with open('README.md') as f:
     readme = f.read()
 
 # Load version number
-with open(os.path.join('weblab_cg', 'version.txt'), 'r') as f:
+with open(os.path.join('chaste_codegen', 'version.txt'), 'r') as f:
     version = f.read()
 
 # Go!
 setup(
     # Module name (lowercase)
-    name='weblab_cg',
+    name='chaste_codegen',
 
     version=version,
-    description='Code generation for the Web Lab',
+    description='Code generation for cardiac Chaste',
     long_description=readme,
     license='BSD 3-clause license',
     # author='',
     # author_email='',
-    maintainer='Web Lab team',
-    maintainer_email='michael.clerx@cs.ox.ac.uk',
-    url='https://github.com/ModellingWebLab/weblab_cg',
+    maintainer='Maurice Hendrix',
+    maintainer_email='Maurice.Hendrix@nottingham.ac.uk',
+    url='https://github.com/ModellingWebLab/chaste-codegen',
 
     # Packages to include
     packages=find_packages(
-        include=('weblab_cg', 'weblab_cg.*')),
+        include=('chaste_codegen', 'chaste_codegen.*')),
 
     # Include non-python files (via MANIFEST.in)
     include_package_data=True,
@@ -52,7 +52,8 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'chaste_codegen = weblab_cg._command_line_script:chaste_codegen',
+            'chaste_codegen='
+            'chaste_codegen._command_line_script:chaste_codegen',
         ],
     },
 )

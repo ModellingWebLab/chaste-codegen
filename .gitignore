@@ -111,4 +111,4 @@ ENV/
 .vscode
 
 # Chaste_cg specific
-weblab_cg/data/tests/chaste_reference_models/develop/
+chaste_codegen/data/tests/chaste_reference_models/develop/
