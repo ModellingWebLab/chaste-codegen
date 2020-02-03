@@ -13,8 +13,6 @@ Developers should:
 4. Install the developer requirements into the virtual environment: `pip install -r dev-requirements/dev.txt`
 5. Run the tests: `$ python -m pytest`.
 
-
-
 ### Requirements
 
 There are two lists of requirements.
