@@ -74,13 +74,13 @@ class TestChasteCG(object):
     @pytest.mark.chaste
     def test_dymaic_model(self, tmp_path):
         tmp_path = str(tmp_path)
-        LOGGER.info('Converting: Normal Dynamichodgkin_huxley_squid_axon_model_1952_modified\n')
+        LOGGER.info('Converting: Normal Dynamic luo_rudy_1994\n')
         model_file = \
-            os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'hodgkin_huxley_squid_axon_model_1952_modified.cellml')
+            os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'luo_rudy_1994.cellml')
         chaste_model = cellmlmanip.load_model(model_file)
         chaste_model = cg.NormalChasteModel(chaste_model,
-                                            'dynamic_hodgkin_huxley_squid_axon_model_1952_modified',
-                                            class_name='Dynamichodgkin_huxley_squid_axon_model_1952_modifiedFromCellML',
+                                            'dynamic_luo_rudy_1994',
+                                            class_name='Dynamicluo_rudy_1994FromCellML',
                                             dynamically_loadable=True)
         chaste_model.generate_chaste_code()
 

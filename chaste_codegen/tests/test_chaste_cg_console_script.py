@@ -49,7 +49,7 @@ class TestChasteCommandLineScript(object):
     def test_script_convert(self, capsys, tmp_path):
         LOGGER.info('Testing regular model conversion for command line script\n')
         tmp_path = str(tmp_path)
-        model_name = 'hodgkin_huxley_squid_axon_model_1952_modified'
+        model_name = 'aslanidi_model_2009'
         model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
         assert os.path.isfile(model_file)
         testargs = ["chaste_codegen", model_file]
@@ -70,7 +70,7 @@ class TestChasteCommandLineScript(object):
     def test_script_class_convtype_output_dll_loadable(self, capsys, tmp_path):
         LOGGER.info('Testing model with options -t Chaste -c --dynamically-loadable and -o for command line script\n')
         tmp_path = str(tmp_path)
-        model_name = 'hodgkin_huxley_squid_axon_model_1952_modified'
+        model_name = 'aslanidi_model_2009'
         model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
         assert os.path.isfile(model_file)
         outfile = os.path.join(tmp_path, 'output_class.c')
@@ -112,17 +112,17 @@ class TestChasteCommandLineScript(object):
     def test_script_opt(self, capsys, tmp_path):
         LOGGER.info('Testing model with options -t ChasteOpt and -o for command line script\n')
         tmp_path = str(tmp_path)
-        model_name = 'aslanidi_model_2009'
+        model_name = 'livshitz_rudy_2007'
         model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
         assert os.path.isfile(model_file)
-        outfile = os.path.join(tmp_path, 'aslanidi_model_2009.cpp')
+        outfile = os.path.join(tmp_path, 'livshitz_rudy_2007.cpp')
         # Call commandline script
         testargs = ['chaste_codegen', model_file, '-t', 'ChasteOpt', '-o', outfile]
         with mock.patch.object(sys, 'argv', testargs):
             chaste_codegen()
         # Check output
         reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Opt')
-        compare_file_against_reference(os.path.join(reference, 'aslanidi_model_2009.hpp'),
-                                       os.path.join(tmp_path, 'aslanidi_model_2009.hpp'))
-        compare_file_against_reference(os.path.join(reference, 'aslanidi_model_2009.cpp'),
-                                       os.path.join(tmp_path, 'aslanidi_model_2009.cpp'))
+        compare_file_against_reference(os.path.join(reference, 'livshitz_rudy_2007.hpp'),
+                                       os.path.join(tmp_path, 'livshitz_rudy_2007.hpp'))
+        compare_file_against_reference(os.path.join(reference, 'livshitz_rudy_2007.cpp'),
+                                       os.path.join(tmp_path, 'livshitz_rudy_2007.cpp'))
