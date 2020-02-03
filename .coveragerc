@@ -1,7 +1,7 @@
 [run]
-source = weblab_cg
-omit = 
-    weblab_cg/tests/*
+source = chaste_codegen
+omit =
+    chaste_codegen/tests/*
 
 [report]
 exclude_lines =

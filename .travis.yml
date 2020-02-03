@@ -13,6 +13,6 @@ install:
 
 script:
     - python -m flake8
-    - python -m pytest --cov=weblab_cg weblab_cg
+    - python -m pytest --cov=chaste_codegen chaste_codegen
 after_success:
     - codecov

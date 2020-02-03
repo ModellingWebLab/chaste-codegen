@@ -1,9 +1,9 @@
-[![travis](https://travis-ci.org/ModellingWebLab/weblab-cg.svg?branch=master)](https://travis-ci.org/ModellingWebLab/weblab-cg)
-[![codecov](https://codecov.io/gh/ModellingWebLab/weblab_cg/branch/master/graph/badge.svg)](https://codecov.io/gh/ModellingWebLab/weblab_cg)
+[![travis](https://travis-ci.org/ModellingWebLab/chaste-codegen.svg?branch=master)](https://travis-ci.org/ModellingWebLab/chaste-codegen)
+[![codecov](https://codecov.io/gh/ModellingWebLab/chaste-codegen/branch/master/graph/badge.svg)](https://codecov.io/gh/ModellingWebLab/chaste-codegen)
 
-# Code generation for the Web Lab
+# Code generation for cardiac Chaste
 
-The `weblab_cg` module takes [cellmlmanip](https://github.com/ModellingWebLab/cellmlmanip) models as input, and uses templates and `printers` to generate code.
+The `chaste_codegen` module takes [cellmlmanip](https://github.com/ModellingWebLab/cellmlmanip) models as input, and uses templates and `printers` to generate code.
 
 A [printer](https://docs.sympy.org/latest/tutorial/printing.html) is an object that can convert Sympy equations (as used in `cellmlmanip`) to string equations.
 The [jinja2](http://jinja.pocoo.org/) templating engine is used.
@@ -14,7 +14,7 @@ The [jinja2](http://jinja.pocoo.org/) templating engine is used.
 Currently, there is no 'user' way of installing.
 Please see [CONTRIBUTING.md](CONTRIBUTING.md) for the developer installation instructions.
 
-## Using `weblab_cg`
+## Using `chaste_codegen`
 
 To generate code for the Web Lab:
 
@@ -49,7 +49,7 @@ parameters = [
 cg.create_weblab_model(path, class_name, model, outputs, parameters)
 ```
 
-## Extending `weblab_cg`
+## Extending `chaste_codegen`
 
 To generate models in your own syntax, you'll need the following ingredients:
 
@@ -68,10 +68,10 @@ It may be possible to use this method directly, or you may need to create your o
 
 **Bringing it all together**: See `create_weblab_model()` in `_generator.py` for an example.
 
-**Adding your stuff to `weblab_cg`**: If you want to include your generator/templates/printers in `weblab_cg`, please create one or more PRs.
+**Adding your stuff to `chaste_codegen`**: If you want to include your generator/templates/printers in `chaste_codegen`, please create one or more PRs.
 (We'll probably need to update the code layout for this too, at some point!)
 
 
 ## Contributing
 
-For guidelines on contributing to `weblab_cg`, please see [CONTRIBUTING.md](CONTRIBUTING.md).
+For guidelines on contributing to `chaste_codegen`, please see [CONTRIBUTING.md](CONTRIBUTING.md).
