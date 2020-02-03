@@ -1,10 +1,11 @@
-from ._printer import Printer
 from sympy.printing.precedence import precedence
+
+from cellmlmanip.printer import Printer
 
 
 class ChastePrinter(Printer):
     """
-    Converts Sympy expressions to strings for use in Chaste code generation, based on the WeblabPrinter.
+    Converts Sympy expressions to strings for use in Chaste code generation.
 
     To use, create a :class:`ChastePrinter` instance, and call its method
     :meth:`doprint()` with a Sympy expression argument.
@@ -30,7 +31,6 @@ class ChastePrinter(Printer):
         'cos': 'cos',
         'cosh': 'cosh',
         'sqrt': 'sqrt',
-        'e': 'e',
         '_exp': 'exp',
         'expm1': 'expm1',
         'factorial': 'factorial',
@@ -39,8 +39,6 @@ class ChastePrinter(Printer):
         'log10': 'log10',
         'log1p': 'log1p',
         'log2': 'log2',
-        'nan': 'NAN',
-        'pi': 'M_PI',
         'sin': 'sin',
         'sinh': 'sinh',
         'sqrt': 'sqrt',
@@ -49,6 +47,12 @@ class ChastePrinter(Printer):
 
         'GetIntracellularAreaStimulus': 'GetIntracellularAreaStimulus',
         'HeartConfig::Instance()->GetCapacitance': 'HeartConfig::Instance()->GetCapacitance'
+    }
+
+    _literal_names = {
+        'e': 'e',
+        'nan': 'NAN',
+        'pi': 'M_PI',
     }
 
     def __init__(self, symbol_function=None, derivative_function=None):
@@ -73,9 +77,9 @@ class ChastePrinter(Printer):
         return ' || '.join(['(' + self._bracket(x, my_prec) + ')' for x in expr.args])
 
     def _print_ordinary_pow(self, expr):
-        """ Handles Pow(), hanles just ordinary powers without division "
+        """ Handles Pow(), handles just ordinary powers without division.
 
-        for C++ printing we need to writea x**y as pow(x, y) with lowercase p"""
+        For C++ printing we need to write ``x**y`` as ``pow(x, y)`` with lowercase ``p``."""
         p = precedence(expr)
         return 'pow(' + self._bracket(expr.base, p) + ', ' + self._bracket(expr.exp, p) + ')'
 
