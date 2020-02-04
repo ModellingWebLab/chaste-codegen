@@ -55,8 +55,7 @@ def test_Cvode(tmp_path, model):
     LOGGER.info('Converting: Cvode: ' + class_name + '\n')
     # Generate chaste code
     chaste_model = cg.CvodeChasteModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
-                                       class_name=class_name,
-                                       pe=True)
+                                       class_name=class_name)
     chaste_model.generate_chaste_code()
     # Comprare against referene
     test_utils.compare_model_against_reference('Cvode', chaste_model, tmp_path, model['expected_hpp_path'],
@@ -87,8 +86,7 @@ def test_Opt(tmp_path, model):
     LOGGER.info('Converting: Opt: ' + class_name + '\n')
     # Generate chaste code
     chaste_model = cg.OptChasteModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
-                                     class_name=class_name,
-                                     pe=True)
+                                     class_name=class_name)
     chaste_model.generate_chaste_code()
     # Comprare against referene
     test_utils.compare_model_against_reference('Opt', chaste_model, tmp_path, model['expected_hpp_path'],
