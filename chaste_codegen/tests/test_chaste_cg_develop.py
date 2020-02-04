@@ -9,65 +9,54 @@ import pyparsing
 import time
 import random
 import math
-from chaste_codegen.tests.chaste_test_utils import load_chaste_models, get_file_lines, write_file
+import cellmlmanip
+import chaste_codegen.tests.chaste_test_utils as test_utils
 
 # Show more logging output
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 
 
-def model_types():
-    return ['Normal']
+def get_models():
+    """ Load all models if they haven't been loaded yet"""
+    return test_utils.load_chaste_models(model_types=['Normal', 'Opt'], reference_folder='develop')
 
-
+ 
 class TestChasteCG(object):
-    """ Tests to help development of chaste_codegen. This test compares symbolically against pycml reference output
-
-    # TODO: Better docstrings"""
-    _COMMENTS_REGEX = re.compile(r'(//.*\n)')
+    """ Tests to help development of chaste_codegen. This test compares symbolically against pycml reference output"""
     _NUM_REGEX = re.compile(r'(?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?')
     _FLOAT_PRECISION = 11
 
-    def model_types(self):
-        return ['Normal']
-
-    @pytest.fixture(scope="class")
-    def chaste_models(self):
-        """ Load all models"""
-        return load_chaste_models(model_types=self.model_types(),
-                                  ref_path_prefix=['chaste_reference_models', 'develop'], class_name_prefix='Dynamic')
-
-    @pytest.mark.chaste
-    def test_generate_chaste_models_develop(self, tmp_path, chaste_models):
+    @pytest.mark.parametrize(('model'), get_models())
+    def test_generate_chaste_models_develop(self, tmp_path, model):
         """ Check generation of Normal models against reference"""
         tmp_path = str(tmp_path)
-        for model in chaste_models:
-            for model_type in model['reference_models'].keys():
-                LOGGER.info('Converting: ' + model_type + ' ' + model['class_name'] + '\n')
-                # Generate chaste code
-                chaste_model = cg.NormalChasteModel(model['model'], model['model_name_from_file'],
-                                                    class_name=model['class_name'])
-                chaste_model.dynamically_loadable = True
-                chaste_model.generate_chaste_code()
+        class_name = 'Cell' + model['model_name_from_file'] + 'FromCellML'
+        LOGGER.info('Converting: ' + model['model_type'] + ' ' + class_name + '\n')
+        # Generate chaste code
+        chaste_model = cg.NormalChasteModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
+                                            class_name=class_name)
+        chaste_model.dynamically_loadable = True
+        chaste_model.generate_chaste_code()
 
-                # Write generated files
-                hhp_gen_file_path = os.path.join(tmp_path, model_type, chaste_model.file_name + ".hpp")
-                cpp_gen_file_path = os.path.join(tmp_path, model_type, chaste_model.file_name + ".cpp")
-                write_file(hhp_gen_file_path, chaste_model.generated_hpp)
-                write_file(cpp_gen_file_path, chaste_model.generated_cpp)
+        # Write generated files
+        hhp_gen_file_path = os.path.join(tmp_path, model_type, chaste_model.file_name + ".hpp")
+        cpp_gen_file_path = os.path.join(tmp_path, model_type, chaste_model.file_name + ".cpp")
+        test_utils.write_file(hhp_gen_file_path, chaste_model.generated_hpp)
+        test_utils.write_file(cpp_gen_file_path, chaste_model.generated_cpp)
 
-                # Load reference files
-                expected_hpp = \
-                    get_file_lines(model['reference_models'][model_type]['expected_hpp_path'], remove_comments=True)
-                expected_cpp = \
-                    get_file_lines(model['reference_models'][model_type]['expected_cpp_path'], remove_comments=True)
+        # Load reference files
+        expected_hpp = \
+            test_utils.get_file_lines(model['reference_models'][model_type]['expected_hpp_path'], remove_comments=True)
+        expected_cpp = \
+            test_utils.get_file_lines(model['reference_models'][model_type]['expected_cpp_path'], remove_comments=True)
 
-                # Load generated files
-                generated_hpp = get_file_lines(hhp_gen_file_path, remove_comments=True)
-                generated_cpp = get_file_lines(cpp_gen_file_path, remove_comments=True)
+        # Load generated files
+        generated_hpp = test_utils.get_file_lines(hhp_gen_file_path, remove_comments=True)
+        generated_cpp = test_utils.get_file_lines(cpp_gen_file_path, remove_comments=True)
 
-                assert expected_hpp == generated_hpp
-                self._check_match_gengerated_chaste_cpp(generated_cpp, expected_cpp)
+        assert expected_hpp == generated_hpp
+        self._check_match_gengerated_chaste_cpp(generated_cpp, expected_cpp)
 
     def _check_match_gengerated_chaste_cpp(self, generated_cpp, expected_cpp):
         """ Check the generated cpp symbolicly"""

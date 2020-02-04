@@ -322,6 +322,9 @@ class ChasteModel(object):
             membrane_capacitance = self._model.get_symbol_by_ontology_term(self._OXMETA, "membrane_capacitance")
             if membrane_capacitance is not None:
                 current_units = self._model.units.summarise_units(membrane_capacitance)
+                capacitance_eqs = [eq for eq in self._model.get_equations_for([membrane_capacitance]) if eq.lhs == membrane_capacitance]
+                assert len(capacitance_eqs) == 1, 'Expecting exactly 1 defining equation expected'
+                equation = capacitance_eqs[0]
                 for desired_units in [unit_dict['units'] for unit_dict in self._stim_units['membrane_capacitance']]:
                     if current_units.dimensionality == desired_units.dimensionality:
                         capacitance_factor = \
@@ -329,15 +332,6 @@ class ChasteModel(object):
                         if capacitance_factor != 1.0:
                             warning = 'converting capacitance from ' + str(current_units) + ' to ' + str(desired_units)
                             self._logger.info(warning)
-
-                        initial_value = self._get_initial_value(membrane_capacitance)
-                        if initial_value is not None:
-                            membrane_capacitance.initial_value = None
-                            equation = sp.Eq(membrane_capacitance, initial_value)
-                            # Add to the model
-                            self._model.add_equation(equation)
-                            assert len([eq for eq in self._model.equations if eq.lhs == membrane_capacitance]) == 1, \
-                                'Expecting 1 definition equation for membrane_capacitance'
                         break
         except KeyError:
             # no membrane_capacitance
