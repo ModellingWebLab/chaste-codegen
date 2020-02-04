@@ -30,10 +30,11 @@ from ._config import (   # noqa
 #
 # Load and expose public classes and functions
 #
-from ._load_template import load_template    # noqa
-from ._chaste_printer import ChastePrinter  # noqa
+from ._load_template import load_template
+from ._chaste_printer import ChastePrinter
 
-from .chaste_model import ChasteModel  # noqa
-from .normal_chaste_model import NormalChasteModel  # noqa
-from .opt_chaste_model import OptChasteModel  # noqa
+from .chaste_model import ChasteModel
+from .normal_chaste_model import NormalChasteModel
+from .opt_chaste_model import OptChasteModel
+from .cvode_chaste_model import CvodeChasteModel
 
