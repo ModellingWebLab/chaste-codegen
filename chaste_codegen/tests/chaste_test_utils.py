@@ -8,8 +8,9 @@ TIMESTAMP_REGEX = re.compile(r'(//! on .*)')
 COMMENTS_REGEX = re.compile(r'(//.*)')
 VERSION_REGEX = re.compile(r'(//! This source file was generated from CellML by chaste_codegen version .*)')
 
+models = None
 
-def load_chaste_models(model_types=[], ref_path_prefix=['chaste_reference_models'], class_name_prefix='Cell'):
+def load_chaste_models(model_types=[], reference_folder='chaste_reference_models'):
     """ Load all models"""
     # Get folder with test cellml files
     model_folder = os.path.join(cg.DATA_DIR, 'tests', 'cellml')
@@ -23,25 +24,18 @@ def load_chaste_models(model_types=[], ref_path_prefix=['chaste_reference_models
                 model_file = os.path.join(model_folder, model_file)
                 reference_models = {}
                 for model_type in model_types:
-                    expected_hpp_path = os.path.join(cg.DATA_DIR, 'tests')
-                    expected_cpp_path = os.path.join(cg.DATA_DIR, 'tests')
-                    for pref in ref_path_prefix:
-                        expected_hpp_path = os.path.join(expected_hpp_path, pref)
-                        expected_cpp_path = os.path.join(expected_cpp_path, pref)
+                    expected_hpp_path = os.path.join(cg.DATA_DIR, 'tests', reference_folder)
+                    expected_cpp_path = os.path.join(cg.DATA_DIR, 'tests', reference_folder)
                     expected_hpp_path = os.path.join(expected_hpp_path, model_type, model_name_from_file + '.hpp')
                     expected_cpp_path = os.path.join(expected_cpp_path, model_type, model_name_from_file + '.cpp')
 
                     # Skip cellml files without reference chaste code
                     if os.path.isfile(expected_hpp_path) and os.path.isfile(expected_cpp_path):
-                        reference_models.update({model_type: {'expected_hpp_path': expected_hpp_path,
-                                                'expected_cpp_path': expected_cpp_path}})
-
-                if len(reference_models) > 0:
-                    class_name = class_name_prefix + model_name_from_file
-                    model_files.append({'model': cellmlmanip.load_model(model_file),
-                                        'model_name_from_file': model_name_from_file,
-                                        'class_name': class_name + 'FromCellML',
-                                        'reference_models': reference_models})
+                        model_files.append({'model_type': model_type,
+                                            'expected_hpp_path': expected_hpp_path,
+                                            'expected_cpp_path': expected_cpp_path,
+                                            'model': model_file,
+                                            'model_name_from_file': model_name_from_file})
     return model_files
 
 
@@ -75,7 +69,7 @@ def get_file_lines(file_name, remove_comments=False):
     return lines
 
 
-def compare_model_against_reference(model_type, chaste_model, tmp_path):
+def compare_model_against_reference(model_type, chaste_model, tmp_path, expected_hpp_path, expected_cpp_path):
     """ Check a model's generated files against given reference files
     """
     tmp_path = str(tmp_path)
@@ -86,16 +80,9 @@ def compare_model_against_reference(model_type, chaste_model, tmp_path):
     write_file(hhp_gen_file_path, chaste_model.generated_hpp)
     write_file(cpp_gen_file_path, chaste_model.generated_cpp)
 
-    # Load reference files
-    # Get reference file locations
-    expected_hpp = \
-        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', model_type, chaste_model.file_name + ".hpp")
-    expected_cpp = \
-        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', model_type, chaste_model.file_name + ".cpp")
-
     # Compare converted files vs reference
-    compare_file_against_reference(hhp_gen_file_path, expected_hpp)
-    compare_file_against_reference(cpp_gen_file_path, expected_cpp)
+    compare_file_against_reference(hhp_gen_file_path, expected_hpp_path)
+    compare_file_against_reference(cpp_gen_file_path, expected_cpp_path)
 
 
 def compare_file_against_reference(file, reference):
