@@ -76,8 +76,8 @@ class TestChasteCG(object):
                                             class_name='Dynamicluo_rudy_1994FromCellML',
                                             dynamically_loadable=True)
         chaste_model.generate_chaste_code()
-        expected_hpp_path = os.path.join(tmp_path, 'tests', 'cellml', 'dynamic_luo_rudy_1994.hpp')
-        expected_cpp_path = os.path.join(tmp_path, 'tests', 'cellml', 'dynamic_luo_rudy_1994.cpp')
+        expected_hpp_path = os.path.join(tmp_path, 'dynamic_luo_rudy_1994.hpp')
+        expected_cpp_path = os.path.join(tmp_path, 'dynamic_luo_rudy_1994.cpp')
         # Comprare against referene
         test_utils.compare_model_against_reference('Normal', chaste_model, tmp_path, expected_hpp_path,
                                                    expected_cpp_path)
@@ -95,10 +95,8 @@ class TestChasteCG(object):
                                             expose_annotated_variables=True)
 
         chaste_model.generate_chaste_code()
-        expected_hpp_path = \
-            os.path.join(tmp_path, 'tests', 'cellml', 'expose_annotated_variables_cellaslanidi_model_2009.hpp')
-        expected_cpp_path = \
-            os.path.join(tmp_path, 'tests', 'cellml', 'expose_annotated_variables_cellaslanidi_model_2009.cpp')
+        expected_hpp_path = os.path.join(tmp_path, 'expose_annotated_variables_cellaslanidi_model_2009.hpp')
+        expected_cpp_path = os.path.join(tmp_path, 'expose_annotated_variables_cellaslanidi_model_2009.cpp')
         # Comprare against referene
         test_utils.compare_model_against_reference('Normal', chaste_model, tmp_path,
                                                    expected_hpp_path, expected_cpp_path)
