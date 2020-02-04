@@ -28,7 +28,6 @@ from ._chaste_printer import ChastePrinter  # noqa
 from .chaste_model import ChasteModel  # noqa
 from .normal_chaste_model import NormalChasteModel  # noqa
 from .opt_chaste_model import OptChasteModel  # noqa
-from .cvode_chaste_model import CvodeChasteModel  # noqa
 
 # Configure logging
 logging.basicConfig()
