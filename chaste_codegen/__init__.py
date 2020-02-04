@@ -22,13 +22,13 @@ from ._config import (   # noqa
 #
 # Load and expose public classes and functions
 #
-from ._load_template import load_templates  # noqa
-from ._chaste_printer import ChastePrinters  # noqa
+from ._load_template import load_template  # noqa
+from ._chaste_printer import ChastePrinter  # noqa
 
-from .chaste_model import ChasteModels  # noqa
-from .normal_chaste_model import NormalChasteModels  # noqa
-from .opt_chaste_model import OptChasteModels  # noqa
-from .cvode_chaste_model import CvodeChasteModels  # noqa
+from .chaste_model import ChasteModel  # noqa
+from .normal_chaste_model import NormalChasteModel  # noqa
+from .opt_chaste_model import OptChasteModel  # noqa
+from .cvode_chaste_model import CvodeChasteModel  # noqa
 
 # Configure logging
 logging.basicConfig()
