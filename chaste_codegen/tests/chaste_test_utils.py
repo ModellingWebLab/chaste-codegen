@@ -1,7 +1,6 @@
 import os
 import re
 import chaste_codegen as cg
-import cellmlmanip
 from chaste_codegen._script_utils import write_file
 
 TIMESTAMP_REGEX = re.compile(r'(//! on .*)')
@@ -9,6 +8,7 @@ COMMENTS_REGEX = re.compile(r'(//.*)')
 VERSION_REGEX = re.compile(r'(//! This source file was generated from CellML by chaste_codegen version .*)')
 
 models = None
+
 
 def load_chaste_models(model_types=[], reference_folder='chaste_reference_models'):
     """ Load all models"""
@@ -22,7 +22,6 @@ def load_chaste_models(model_types=[], reference_folder='chaste_reference_models
             if model_file.endswith('.cellml'):  # make sure we only process .cellml files
                 model_name_from_file = model_file.replace('.cellml', '')
                 model_file = os.path.join(model_folder, model_file)
-                reference_models = {}
                 for model_type in model_types:
                     expected_hpp_path = os.path.join(cg.DATA_DIR, 'tests', reference_folder)
                     expected_cpp_path = os.path.join(cg.DATA_DIR, 'tests', reference_folder)

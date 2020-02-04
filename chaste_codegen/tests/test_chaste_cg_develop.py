@@ -21,7 +21,7 @@ def get_models():
     """ Load all models if they haven't been loaded yet"""
     return test_utils.load_chaste_models(model_types=['Normal', 'Opt'], reference_folder='develop')
 
- 
+
 class TestChasteCG(object):
     """ Tests to help development of chaste_codegen. This test compares symbolically against pycml reference output"""
     _NUM_REGEX = re.compile(r'(?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?')
@@ -40,16 +40,16 @@ class TestChasteCG(object):
         chaste_model.generate_chaste_code()
 
         # Write generated files
-        hhp_gen_file_path = os.path.join(tmp_path, model_type, chaste_model.file_name + ".hpp")
-        cpp_gen_file_path = os.path.join(tmp_path, model_type, chaste_model.file_name + ".cpp")
+        hhp_gen_file_path = os.path.join(tmp_path, model['model_type'], chaste_model.file_name + ".hpp")
+        cpp_gen_file_path = os.path.join(tmp_path, model['model_type'], chaste_model.file_name + ".cpp")
         test_utils.write_file(hhp_gen_file_path, chaste_model.generated_hpp)
         test_utils.write_file(cpp_gen_file_path, chaste_model.generated_cpp)
 
         # Load reference files
         expected_hpp = \
-            test_utils.get_file_lines(model['reference_models'][model_type]['expected_hpp_path'], remove_comments=True)
+            test_utils.get_file_lines(model['expected_hpp_path'], remove_comments=True)
         expected_cpp = \
-            test_utils.get_file_lines(model['reference_models'][model_type]['expected_cpp_path'], remove_comments=True)
+            test_utils.get_file_lines(model['expected_cpp_path'], remove_comments=True)
 
         # Load generated files
         generated_hpp = test_utils.get_file_lines(hhp_gen_file_path, remove_comments=True)

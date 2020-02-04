@@ -31,6 +31,12 @@ def chaste_opt_models():
 class TestChasteCG(object):
     """ Tests chaste_codegen against reference models generated with chaste_codegen and tested in chaste."""
 
+    @pytest.mark.slow
+    def test_activate_all_models(self):
+        """ If we are running the long slow tests load all models from the cronjob_reference_models folder"""
+        test_utils.models = test_utils.load_chaste_models(model_types=['Normal', 'Opt'],
+                                                          reference_folder='cronjob_reference_models')
+
     @pytest.mark.parametrize(('model'), chaste_normal_models())
     def test_Normal(self, tmp_path, model):
         """ Check generation of Normal models against reference"""
@@ -41,7 +47,8 @@ class TestChasteCG(object):
                                             class_name=class_name)
         chaste_model.generate_chaste_code()
         # Comprare against referene
-        test_utils.compare_model_against_reference('Normal', chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+        test_utils.compare_model_against_reference('Normal', chaste_model, tmp_path, model['expected_hpp_path'],
+                                                   model['expected_cpp_path'])
 
     @pytest.mark.parametrize(('model'), chaste_opt_models())
     def test_Opt(self, tmp_path, model):
@@ -55,7 +62,8 @@ class TestChasteCG(object):
                                          pe=True)
         chaste_model.generate_chaste_code()
         # Comprare against referene
-        test_utils.compare_model_against_reference('Opt', chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+        test_utils.compare_model_against_reference('Opt', chaste_model, tmp_path, model['expected_hpp_path'],
+                                                   model['expected_cpp_path'])
 
     def test_dymaic_model(self, tmp_path):
         tmp_path = str(tmp_path)
@@ -68,9 +76,11 @@ class TestChasteCG(object):
                                             class_name='Dynamicluo_rudy_1994FromCellML',
                                             dynamically_loadable=True)
         chaste_model.generate_chaste_code()
-
+        expected_hpp_path = os.path.join(tmp_path, 'tests', 'cellml', 'dynamic_luo_rudy_1994.hpp')
+        expected_cpp_path = os.path.join(tmp_path, 'tests', 'cellml', 'dynamic_luo_rudy_1994.cpp')
         # Comprare against referene
-        test_utils.compare_model_against_reference('Normal', chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+        test_utils.compare_model_against_reference('Normal', chaste_model, tmp_path, expected_hpp_path,
+                                                   expected_cpp_path)
 
     def test_expose_annotated_variables(self, tmp_path):
         tmp_path = str(tmp_path)
@@ -85,9 +95,13 @@ class TestChasteCG(object):
                                             expose_annotated_variables=True)
 
         chaste_model.generate_chaste_code()
-
+        expected_hpp_path = \
+            os.path.join(tmp_path, 'tests', 'cellml', 'expose_annotated_variables_cellaslanidi_model_2009.hpp')
+        expected_cpp_path = \
+            os.path.join(tmp_path, 'tests', 'cellml', 'expose_annotated_variables_cellaslanidi_model_2009.cpp')
         # Comprare against referene
-        test_utils.compare_model_against_reference('Normal', chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+        test_utils.compare_model_against_reference('Normal', chaste_model, tmp_path,
+                                                   expected_hpp_path, expected_cpp_path)
 
     def test_missing_capacitance(self, tmp_path):
         tmp_path = str(tmp_path)

@@ -322,7 +322,8 @@ class ChasteModel(object):
             membrane_capacitance = self._model.get_symbol_by_ontology_term(self._OXMETA, "membrane_capacitance")
             if membrane_capacitance is not None:
                 current_units = self._model.units.summarise_units(membrane_capacitance)
-                capacitance_eqs = [eq for eq in self._model.get_equations_for([membrane_capacitance]) if eq.lhs == membrane_capacitance]
+                capacitance_eqs = [eq for eq in self._model.get_equations_for([membrane_capacitance])
+                                   if eq.lhs == membrane_capacitance]
                 assert len(capacitance_eqs) == 1, 'Expecting exactly 1 defining equation expected'
                 equation = capacitance_eqs[0]
                 for desired_units in [unit_dict['units'] for unit_dict in self._stim_units['membrane_capacitance']]:

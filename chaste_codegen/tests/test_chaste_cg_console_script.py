@@ -2,7 +2,6 @@ import sys
 import logging
 import os
 import chaste_codegen as cg
-import pytest
 from unittest import mock
 from chaste_codegen._command_line_script import chaste_codegen
 from chaste_codegen.tests.chaste_test_utils import compare_file_against_reference
