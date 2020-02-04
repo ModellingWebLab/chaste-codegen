@@ -91,17 +91,17 @@ class TestChasteCommandLineScript(object):
         LOGGER.info('Testing model with options --expose-annotated-variables and -o for command line script\n')
         tmp_path = str(tmp_path)
         # Check options: -o --expose-annotated-variables
-        model_name = 'matsuoka_model_2003'
+        model_name = 'aslanidi_model_2009'
         model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
         model_file = str(model_file)
-        outfile = os.path.join(tmp_path, 'expose_annotated_variables_cellmatsuoka_model_2003.cpp')
+        outfile = os.path.join(tmp_path, 'expose_annotated_variables_cellaslanidi_model_2009.cpp')
         outfile = str(outfile)
         # Call commandline script
         testargs = ['chaste_codegen', model_file, '-o', outfile, '--expose-annotated-variables']
         with mock.patch.object(sys, 'argv', testargs):
             chaste_codegen()
         # Check output
-        model_name = 'expose_annotated_variables_cellmatsuoka_model_2003'
+        model_name = 'expose_annotated_variables_cellaslanidi_model_2009'
         reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Normal')
         compare_file_against_reference(os.path.join(reference, model_name + '.hpp'),
                                        os.path.join(tmp_path, model_name + '.hpp'))

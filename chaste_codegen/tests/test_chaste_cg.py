@@ -92,12 +92,12 @@ class TestChasteCG(object):
         tmp_path = str(tmp_path)
         LOGGER.info('Testing expose_annotated_variables option\n')
         model_file = \
-            os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'matsuoka_model_2003.cellml')
+            os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'aslanidi_model_2009.cellml')
         chaste_model = cellmlmanip.load_model(model_file)
 
         chaste_model = cg.NormalChasteModel(chaste_model,
-                                            'expose_annotated_variables_cellmatsuoka_model_2003',
-                                            class_name='Cellmatsuoka_model_2003FromCellML',
+                                            'expose_annotated_variables_cellaslanidi_model_2009',
+                                            class_name='Cellaslanidi_model_2009FromCellML',
                                             expose_annotated_variables=True)
 
         chaste_model.generate_chaste_code()
