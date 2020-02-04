@@ -9,8 +9,10 @@ import chaste_codegen.tests.chaste_test_utils as test_utils
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 
+
 def pytest_addoption(parser):
     parser.addoption("--name", action="store")
+
 
 def get_models():
     """ Load all models if they haven't been loaded yet"""
@@ -43,6 +45,7 @@ def test_activate_all_models(request):
     test_utils.models = test_utils.load_chaste_models(model_types=['Normal', 'Opt', 'Cvode'],
                                                       reference_folder='cronjob_reference_models')
 
+
 @pytest.mark.cronjob
 @pytest.mark.parametrize(('model'), chaste_cvode_models())
 def test_Cvode(tmp_path, model):
@@ -52,12 +55,13 @@ def test_Cvode(tmp_path, model):
     LOGGER.info('Converting: Cvode: ' + class_name + '\n')
     # Generate chaste code
     chaste_model = cg.CvodeChasteModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
-                                     class_name=class_name,
-                                     pe=True)
+                                       class_name=class_name,
+                                       pe=True)
     chaste_model.generate_chaste_code()
     # Comprare against referene
     test_utils.compare_model_against_reference('Cvode', chaste_model, tmp_path, model['expected_hpp_path'],
                                                model['expected_cpp_path'])
+
 
 @pytest.mark.cronjob
 @pytest.mark.parametrize(('model'), chaste_normal_models())
@@ -72,6 +76,7 @@ def test_Normal(tmp_path, model):
     # Comprare against referene
     test_utils.compare_model_against_reference('Normal', chaste_model, tmp_path, model['expected_hpp_path'],
                                                model['expected_cpp_path'])
+
 
 @pytest.mark.cronjob
 @pytest.mark.parametrize(('model'), chaste_opt_models())
@@ -89,6 +94,7 @@ def test_Opt(tmp_path, model):
     test_utils.compare_model_against_reference('Opt', chaste_model, tmp_path, model['expected_hpp_path'],
                                                model['expected_cpp_path'])
 
+
 def test_dymaic_model(tmp_path):
     tmp_path = str(tmp_path)
     LOGGER.info('Converting: Normal Dynamic luo_rudy_1994\n')
@@ -105,6 +111,7 @@ def test_dymaic_model(tmp_path):
     # Comprare against referene
     test_utils.compare_model_against_reference('Normal', chaste_model, tmp_path, expected_hpp_path,
                                                expected_cpp_path)
+
 
 def test_expose_annotated_variables(tmp_path):
     tmp_path = str(tmp_path)
@@ -125,6 +132,7 @@ def test_expose_annotated_variables(tmp_path):
     test_utils.compare_model_against_reference('Normal', chaste_model, tmp_path,
                                                expected_hpp_path, expected_cpp_path)
 
+
 def test_missing_capacitance(tmp_path):
     tmp_path = str(tmp_path)
     LOGGER.info('Testing missing capacitance\n')
@@ -139,6 +147,7 @@ def test_missing_capacitance(tmp_path):
     assert str(error.value) == \
         'Membrane capacitance is required to be able to apply conversion to stimulus current!'
 
+
 def test_wrong_units_time(capsys, tmp_path):
     tmp_path = str(tmp_path)
     LOGGER.info('Testing wrong units for time\n')
@@ -152,6 +161,7 @@ def test_wrong_units_time(capsys, tmp_path):
                                             class_name='test_wrong_units_time_odes')
     warning = 'Incorrect definition of time variable (time needs to be dimensionally equivalent to second)'
     assert str(error.value) == warning
+
 
 def test_wrong_units_voltage(capsys, tmp_path):
     tmp_path = str(tmp_path)
