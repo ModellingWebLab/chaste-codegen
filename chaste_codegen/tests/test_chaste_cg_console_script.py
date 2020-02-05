@@ -23,7 +23,7 @@ def test_script_help(capsys):
         captured = capsys.readouterr()
         # compare to expected
         output = str(captured.out)
-        expected = open(os.path.join(cg.DATA_DIR, 'tests', 'console_sctipt_help.txt'), 'r').read()
+        expected = open(os.path.join(cg.DATA_DIR, 'tests', 'console_script_help.txt'), 'r').read()
         assert output == expected
 
 
@@ -59,7 +59,7 @@ def test_usage(capsys):
 
 def test_wrong_cvode_options(capsys):
     LOGGER.info('Testing illegal combination of options for jacobians on command line\n')
-    testargs = ["chaste_codegen", "--j", 'somefile.cellml']
+    testargs = ["chaste_codegen", "-j", 'somefile.cellml']
     with mock.patch.object(sys, 'argv', testargs):
         try:
             chaste_codegen()

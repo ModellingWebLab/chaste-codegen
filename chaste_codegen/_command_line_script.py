@@ -35,7 +35,7 @@ def chaste_codegen():
 
     group = parser.add_argument_group('Transformations', 'These options control which transformations '
                                       '(typically optimisations) are applied in the generated code')
-    group.add_argument('--j', '--use-analytic-jacobian', dest='use_analytic_jacobian', default=False,
+    group.add_argument('-j', '--use-analytic-jacobian', dest='use_analytic_jacobian', default=False,
                        action='store_true', help='use a symbolic Jacobian calculated by SymPy '
                        '(-j can only be used in combination with -t CVODE)')
 
