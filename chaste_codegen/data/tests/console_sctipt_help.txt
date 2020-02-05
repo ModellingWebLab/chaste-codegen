@@ -1,5 +1,5 @@
-usage: chaste_codegen [-h] [--version] [-t TYPE] [-o OUTFILE] [-c CLASS_NAME]
-                      [-y] [--expose-annotated-variables]
+usage: chaste_codegen [-h] [--version] [-t TYPE] [-o OUTFILE] [--j]
+                      [-c CLASS_NAME] [-y] [--expose-annotated-variables]
                       cellml_file
 
 Chaste code generation for cellml.
@@ -12,12 +12,20 @@ optional arguments:
   --version             show program's version number and exit
   -t TYPE, --translate-type TYPE
                         the type of code to output [default: Chaste]. Choices:
-                        ['Chaste', 'ChasteOpt']
+                        ['Chaste', 'ChasteOpt', 'CVODE']
   -o OUTFILE            write program code to OUTFILE [default action is to
                         use the input filename with a different extension]
                         NOTE: expects provided OUTFILE to have an extension
                         relevant to code being generated (e.g. for CHASTE/C++
                         code: .cpp, .c, .hpp, or .h)
+
+Transformations:
+  These options control which transformations (typically optimisations) are
+  applied in the generated code
+
+  --j, --use-analytic-jacobian
+                        use a symbolic Jacobian calculated by SymPy (-j can
+                        only be used in combination with -t CVODE)
 
 Generated code options:
   -c CLASS_NAME, --class-name CLASS_NAME
@@ -28,8 +36,7 @@ Chaste options:
 
   -y, --dll, --dynamically-loadable
                         add code to allow the model to be compiled to a shared
-                        library and dynamically loaded (only works if -t
-                        Chaste is used)
+                        library and dynamically loaded
   --expose-annotated-variables
                         expose all oxmeta-annotated variables for access via
                         the GetAnyVariable functionality
