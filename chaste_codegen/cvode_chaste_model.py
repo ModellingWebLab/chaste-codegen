@@ -3,14 +3,14 @@ import time
 
 
 class CvodeChasteModel(cg.ChasteModel):
-    """ Holds template and information specific for the Normal model type"""
+    """ Holds template and information specific for the CVODE model type"""
     # TODO:lookup tables
 
     def __init__(self, model, file_name, **kwargs):
         super().__init__(model, file_name, **kwargs)
 
     def generate_chaste_code(self):
-        """ Generates and stores chaste code for the Normal model"""
+        """ Generates and stores chaste code for the CVODE model"""
 
         # Generate hpp for model
         template = cg.load_template('cvode_model.hpp')
