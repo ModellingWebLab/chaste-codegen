@@ -1,3 +1,4 @@
+#ifdef CHASTE_CVODE
 //! @file
 //!
 //! This source file was generated from CellML by chaste_codegen version {{converter_version}}
@@ -20,6 +21,7 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+
     {%- if default_stimulus_equations["equations"]|length > 0 %}
 
     boost::shared_ptr<RegularStimulus> {{class_name}}::UseCellMLDefaultStimulus()
@@ -36,28 +38,31 @@
         return p_cellml_stim;
     }
     {%- endif %}
+    
     {%- if use_get_intracellular_calcium_concentration %}
 
     double {{class_name}}::GetIntracellularCalciumConcentration()
     {
-        return mStateVariables[{{cytosolic_calcium_concentration_index}}];
+        return NV_Ith_S(mStateVariables, {{cytosolic_calcium_concentration_index}});
     }
     {%- endif %}
-
-    {{class_name}}::{{class_name}}(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
-        : AbstractCardiacCell(
-                pSolver,
+    
+    {{class_name}}::{{class_name}}(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+        : AbstractCvodeCell(
+                pOdeSolver,
                 {{state_vars|length}},
                 {{membrane_voltage_index}},
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        //
+        // 
         this->mpSystemInfo = OdeSystemInformation<{{class_name}}>::Instance();
         Init();{%- if default_stimulus_equations.membrane_stimulus_current_duration is defined %}
 
         // We have a default stimulus specified in the CellML file metadata
-        this->mHasDefaultStimulusFromCellML = true;{%- endif %}
+        this->mHasDefaultStimulusFromCellML = true;{%- endif %}{%- if jacobian_equations|length > 0 %}
+        mUseAnalyticJacobian = true;
+        mHasAnalyticJacobian = true;{%- endif %}
         {% for param in modifiable_parameters %}
         this->mParameters[{{loop.index0}}] = {{param["initial_value"]}}; // ({{param["comment_name"]}}) [{{param["units"]}}]{%- endfor %}
     }
@@ -65,7 +70,7 @@
     {{class_name}}::~{{class_name}}()
     {
     }
-
+    
     {% if use_verify_state_variables %}
     void {{class_name}}::VerifyStateVariables()
     {
@@ -86,29 +91,35 @@
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
-        if (!pStateVariables) pStateVariables = &rGetStateVariables();
-        const std::vector<double>& rY = *pStateVariables;
+        N_Vector rY;
+        bool made_new_cvode_vector = false;
+        if (!pStateVariables)
+        {
+            rY = rGetStateVariables();
+        }
+        else
+        {
+            made_new_cvode_vector = true;
+            rY = MakeNVector(*pStateVariables);
+        }
         {% for state_var in state_vars %}
-        {%- if state_var.in_ionic %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
+        {%- if state_var.in_ionic %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, {{loop.index0}}));{%- else %}NV_Ith_S(rY, {{loop.index0}});{%- endif %}
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}{% for ionic_var in ionic_vars %}
         const double {{ionic_var.lhs}} = {{ionic_var.rhs}}; // {{ionic_var.units}}
         {%- endfor %}
 
         const double i_ionic = var_chaste_interface__i_ionic;
+        if (made_new_cvode_vector)
+        {
+            DeleteVector(rY);
+        }
         EXCEPT_IF_NOT(!std::isnan(i_ionic));
         return i_ionic;
     }
-
+    
     void {{class_name}}::EvaluateYDerivatives(double {{free_variable.var_name}}, const std::vector<double>& rY, std::vector<double>& rDY)
     {
-        // Inputs:
-        // Time units: millisecond
-        {%- for state_var in state_vars %}
-        {% if state_var.in_y_deriv %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}{%- endif %}
-        // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
-        {%- endfor %}
-
         // Mathematics
         {% for deriv in y_derivative_equations %}{%- if deriv.is_voltage%}double {{deriv.lhs}};{%- endif %}{%- endfor %}
         {%- for deriv in y_derivative_equations %}{%- if not deriv.in_membrane_voltage %}
@@ -127,6 +138,37 @@
         }
         {% for deriv in y_derivatives %}
         rDY[{{loop.index0}}] = {{deriv}};
+        {%- endfor %}
+    }
+    void {{class_name}}::EvaluateYDerivatives(double var_chaste_interface__Environment__time, const N_Vector rY, N_Vector rDY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        {%- for state_var in state_vars %}
+        {% if state_var.in_y_deriv %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, {{loop.index0}}));{%- else %}NV_Ith_S(rY, {{loop.index0}});{%- endif %}{%- endif %}
+        // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
+        {%- endfor %}
+        
+        
+        // Mathematics
+        // Mathematics
+        {% for deriv in y_derivative_equations %}{%- if deriv.is_voltage%}double {{deriv.lhs}};{%- endif %}{%- endfor %}
+        {%- for deriv in y_derivative_equations %}{%- if not deriv.in_membrane_voltage %}
+        const double {{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
+        {%- endfor %}
+
+        if (mSetVoltageDerivativeToZero)
+        {
+            {% for deriv in y_derivative_equations %}{%- if deriv.is_voltage%}{{deriv.lhs}} = 0.0;{%- endif %}{%- endfor %}
+        }
+        else
+        {
+            {%- for deriv in y_derivative_equations %}{% if deriv.in_membrane_voltage %}
+            {% if not deriv.is_voltage%}const double {% endif %}{{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
+            {%- endfor %}
+        }
+        {% for deriv in y_derivatives %}
+        NV_Ith_S(rDY,{{loop.index0}}) = {{deriv}};
         {%- endfor %}
     }
     {%- if derived_quantities|length > 0 %}
@@ -151,7 +193,7 @@
         {%- endfor %}
         return dqs;
     }{% endif %}
-
+    
 template<>
 void OdeSystemInformation<{{class_name}}>::Initialise(void)
 {
@@ -181,13 +223,4 @@ void OdeSystemInformation<{{class_name}}>::Initialise(void)
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT({{class_name}})
-{% if dynamically_loadable %}extern "C"
-{
-    AbstractCardiacCellInterface* MakeCardiacCell(
-            boost::shared_ptr<AbstractIvpOdeSolver> pSolver,
-            boost::shared_ptr<AbstractStimulusFunction> pStimulus)
-    {
-        return new {{class_name}}(pSolver, pStimulus);
-    }
-
-}{%- endif %}
+#endif // CHASTE_CVODE

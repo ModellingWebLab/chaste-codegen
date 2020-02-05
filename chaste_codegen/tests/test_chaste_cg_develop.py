@@ -19,7 +19,7 @@ LOGGER.setLevel(logging.DEBUG)
 
 def get_models():
     """ Load all models if they haven't been loaded yet"""
-    return test_utils.load_chaste_models(model_types=['Normal', 'Opt'], reference_folder='develop')
+    return test_utils.load_chaste_models(model_types=['Normal', 'Opt', 'Cvode'], reference_folder='develop')
 
 
 class TestChasteCG(object):
