@@ -117,29 +117,7 @@
         EXCEPT_IF_NOT(!std::isnan(i_ionic));
         return i_ionic;
     }
-    
-    void {{class_name}}::EvaluateYDerivatives(double {{free_variable.var_name}}, const std::vector<double>& rY, std::vector<double>& rDY)
-    {
-        // Mathematics
-        {% for deriv in y_derivative_equations %}{%- if deriv.is_voltage%}double {{deriv.lhs}};{%- endif %}{%- endfor %}
-        {%- for deriv in y_derivative_equations %}{%- if not deriv.in_membrane_voltage %}
-        const double {{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
-        {%- endfor %}
 
-        if (mSetVoltageDerivativeToZero)
-        {
-            {% for deriv in y_derivative_equations %}{%- if deriv.is_voltage%}{{deriv.lhs}} = 0.0;{%- endif %}{%- endfor %}
-        }
-        else
-        {
-            {%- for deriv in y_derivative_equations %}{% if deriv.in_membrane_voltage %}
-            {% if not deriv.is_voltage%}const double {% endif %}{{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
-            {%- endfor %}
-        }
-        {% for deriv in y_derivatives %}
-        rDY[{{loop.index0}}] = {{deriv}};
-        {%- endfor %}
-    }
     void {{class_name}}::EvaluateYDerivatives(double var_chaste_interface__Environment__time, const N_Vector rY, N_Vector rDY)
     {
         // Inputs:
@@ -150,7 +128,6 @@
         {%- endfor %}
         
         
-        // Mathematics
         // Mathematics
         {% for deriv in y_derivative_equations %}{%- if deriv.is_voltage%}double {{deriv.lhs}};{%- endif %}{%- endfor %}
         {%- for deriv in y_derivative_equations %}{%- if not deriv.in_membrane_voltage %}

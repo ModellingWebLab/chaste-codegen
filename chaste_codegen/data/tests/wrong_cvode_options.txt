@@ -1,0 +1,4 @@
+usage: chaste_codegen [-h] [--version] [-t TYPE] [-o OUTFILE] [-j]
+                      [-c CLASS_NAME] [-y] [--expose-annotated-variables]
+                      cellml_file
+chaste_codegen: error: -j can only be used in combination with -t CVODE

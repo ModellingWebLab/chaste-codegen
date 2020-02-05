@@ -31,6 +31,11 @@ def chaste_opt_models():
     return [model for model in get_models() if model['model_type'] == 'Opt']
 
 
+def chaste_cvode_models():
+    """ Load all Opt models"""
+    return [model for model in get_models() if model['model_type'] == 'Cvode']
+
+
 @pytest.mark.cronjob
 def test_activate_all_models(request):
     """ If we are running the long slow tests load all models from the cronjob_reference_models folder"""
@@ -39,6 +44,22 @@ def test_activate_all_models(request):
         pytest.skip('skipped on this platform: ')
     test_utils.models = test_utils.load_chaste_models(model_types=['Normal', 'Opt', 'Cvode'],
                                                       reference_folder='cronjob_reference_models')
+
+
+@pytest.mark.cronjob
+@pytest.mark.parametrize(('model'), chaste_cvode_models())
+def test_Cvode(tmp_path, model):
+    """ Check generation of Cvode models against reference"""
+    # Note: currently only implemented partia eval
+    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellML'
+    LOGGER.info('Converting: Cvode: ' + class_name + '\n')
+    # Generate chaste code
+    chaste_model = cg.CvodeChasteModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
+                                       class_name=class_name)
+    chaste_model.generate_chaste_code()
+    # Comprare against referene
+    test_utils.compare_model_against_reference('Cvode', chaste_model, tmp_path, model['expected_hpp_path'],
+                                               model['expected_cpp_path'])
 
 
 @pytest.mark.cronjob
