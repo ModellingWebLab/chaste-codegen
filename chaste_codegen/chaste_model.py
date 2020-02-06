@@ -478,7 +478,7 @@ class ChasteModel(object):
         while changed:
             new_eqs = self._get_equations_for([v.lhs for v in extended_eqs
                                               if v.lhs not in (self._membrane_stimulus_current,
-                                              self._original_membrane_stimulus_current)], recurse=False)
+                                               self._original_membrane_stimulus_current)], recurse=False)
             new_eqs = [eq for eq in new_eqs]
             changed = new_eqs != extended_eqs
             extended_eqs = new_eqs
