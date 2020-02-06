@@ -35,6 +35,21 @@ def test_Cvode(tmp_path, model):
                                                model['expected_cpp_path'])
 
 
+@pytest.mark.parametrize(('model'), chaste_cvode_models)
+def test_Cvode_jacobian(tmp_path, model):
+    """ Check generation of Cvode models against reference"""
+    # Note: currently only implemented partia eval
+    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellML'
+    LOGGER.info('Converting: Cvode: ' + class_name + '\n')
+    # Generate chaste code
+    chaste_model = cg.CvodeChasteModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
+                                       class_name=class_name, use_analytic_jacobian=True)
+    chaste_model.generate_chaste_code()
+    # Comprare against referene
+    test_utils.compare_model_against_reference('Cvode', chaste_model, tmp_path, model['expected_hpp_path'],
+                                               model['expected_cpp_path'])
+
+
 @pytest.mark.parametrize(('model'), chaste_normal_models)
 def test_Normal(tmp_path, model):
     """ Check generation of Normal models against reference"""

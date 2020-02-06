@@ -1,13 +1,26 @@
 import chaste_codegen as cg
+import sympy as sp
 import time
+from chaste_codegen._partial_eval import partial_eval
 
 
 class CvodeChasteModel(cg.ChasteModel):
     """ Holds template and information specific for the CVODE model type"""
-    # TODO:lookup tables
+    # TODO: jacobians sympy, followed by cse
 
     def __init__(self, model, file_name, **kwargs):
         super().__init__(model, file_name, **kwargs)
+        self._use_analytic_jacobian = kwargs.get('use_analytic_jacobian', False)  # store if jacobians are needed
+        self._jacobian_equations, self._jacobian_matrix = self._get_jacobian()
+
+    def _get_jacobian(self):
+        jacobian_equations, jacobian_matrix = [], []
+        if self._use_analytic_jacobian:
+            state_var_matrix = sp.Matrix(self._state_vars)
+            derivative_eqs = partial_eval(self._derivative_equations, self._y_derivatives, keep_multiple_usages=False)
+            derivative_eq_matrix = sp.Matrix([eq.rhs for eq in derivative_eqs])
+            jacobian_matrix = derivative_eq_matrix.jacobian(derivative_eq_matrix)
+        return jacobian_equations, jacobian_matrix
 
     def generate_chaste_code(self):
         """ Generates and stores chaste code for the CVODE model"""
