@@ -10,43 +10,57 @@ LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 
 
-def pytest_addoption(parser):
-    parser.addoption("--name", action="store")
-
-
-def get_models():
+def get_models(all_models=False):
     """ Load all models if they haven't been loaded yet"""
+    reference_folder = 'cronjob_reference_models' if all_models else 'chaste_reference_models'
     if not test_utils.models:
-        test_utils.models = test_utils.load_chaste_models(model_types=['Normal', 'Opt', 'Cvode'])
+        test_utils.models = test_utils.load_chaste_models(model_types=['Normal', 'Opt', 'Cvode'],
+                                                          reference_folder=reference_folder)
     return test_utils.models
 
 
-def chaste_normal_models():
+def chaste_normal_models(all_models=False):
     """ Load all Normal models"""
-    return [model for model in get_models() if model['model_type'] == 'Normal']
+    return [model for model in get_models(all_models=all_models) if model['model_type'] == 'Normal']
 
 
-def chaste_opt_models():
+def chaste_opt_models(all_models=False):
     """ Load all Opt models"""
-    return [model for model in get_models() if model['model_type'] == 'Opt']
+    return [model for model in get_models(all_models=all_models) if model['model_type'] == 'Opt']
 
 
-def chaste_cvode_models():
+def chaste_cvode_models(all_models=False):
     """ Load all Opt models"""
-    return [model for model in get_models() if model['model_type'] == 'Cvode']
+    return [model for model in get_models(all_models=all_models) if model['model_type'] == 'Cvode']
 
 
 @pytest.mark.cronjob
-def test_activate_all_models(request):
-    """ If we are running the long slow tests load all models from the cronjob_reference_models folder"""
-    # Skip if not explicitly set to run cronjob with -m cronjob
+@pytest.mark.parametrize(('model'), chaste_cvode_models(all_models=True))
+def test_Cvode_cronjob(tmp_path, model, request):
+    """ Check generation of Cvode models against reference"""
     if request.config.option.markexpr != 'cronjob':
-        pytest.skip('skipped on this platform: ')
-    test_utils.models = test_utils.load_chaste_models(model_types=['Normal', 'Opt', 'Cvode'],
-                                                      reference_folder='cronjob_reference_models')
+        pytest.skip('Skip if not explicitly set to run cronjob with -m cronjob')
+    test_Cvode(tmp_path, model)
 
 
 @pytest.mark.cronjob
+@pytest.mark.parametrize(('model'), chaste_normal_models(all_models=True))
+def test_Normal_cronjob(tmp_path, model, request):
+    """ Check generation of Normal models against reference"""
+    if request.config.option.markexpr != 'cronjob':
+        pytest.skip('Skip if not explicitly set to run cronjob with -m cronjob')
+    test_Normal(tmp_path, model)
+
+
+@pytest.mark.cronjob
+@pytest.mark.parametrize(('model'), chaste_opt_models(all_models=True))
+def test_Opt_cronjob(tmp_path, model, request):
+    """ Check generation of Opt models against reference"""
+    if request.config.option.markexpr != 'cronjob':
+        pytest.skip('Skip if not explicitly set to run cronjob with -m cronjob')
+    test_Opt(tmp_path, model)
+
+
 @pytest.mark.parametrize(('model'), chaste_cvode_models())
 def test_Cvode(tmp_path, model):
     """ Check generation of Cvode models against reference"""
@@ -62,7 +76,6 @@ def test_Cvode(tmp_path, model):
                                                model['expected_cpp_path'])
 
 
-@pytest.mark.cronjob
 @pytest.mark.parametrize(('model'), chaste_normal_models())
 def test_Normal(tmp_path, model):
     """ Check generation of Normal models against reference"""
@@ -77,7 +90,6 @@ def test_Normal(tmp_path, model):
                                                model['expected_cpp_path'])
 
 
-@pytest.mark.cronjob
 @pytest.mark.parametrize(('model'), chaste_opt_models())
 def test_Opt(tmp_path, model):
     """ Check generation of Opt models against reference"""
