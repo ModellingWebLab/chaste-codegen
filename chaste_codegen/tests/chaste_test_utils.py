@@ -7,9 +7,6 @@ TIMESTAMP_REGEX = re.compile(r'(//! on .*)')
 COMMENTS_REGEX = re.compile(r'(//.*)')
 VERSION_REGEX = re.compile(r'(//! This source file was generated from CellML by chaste_codegen version .*)')
 
-models = None
-
-
 def load_chaste_models(model_types=[], reference_folder='chaste_reference_models'):
     """ Load all models"""
     # Get folder with test cellml files

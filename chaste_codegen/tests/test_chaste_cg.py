@@ -10,32 +10,44 @@ LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 
 
-def get_models(all_models=False):
+def get_models(reference_folder = 'chaste_reference_models'):
     """ Load all models if they haven't been loaded yet"""
-    reference_folder = 'cronjob_reference_models' if all_models else 'chaste_reference_models'
-    if not test_utils.models:
-        test_utils.models = test_utils.load_chaste_models(model_types=['Normal', 'Opt', 'Cvode'],
-                                                          reference_folder=reference_folder)
-    return test_utils.models
+    return test_utils.load_chaste_models(model_types=['Normal', 'Opt', 'Cvode'],
+                                         reference_folder=reference_folder)
 
 
-def chaste_normal_models(all_models=False):
+def chaste_normal_models():
     """ Load all Normal models"""
-    return [model for model in get_models(all_models=all_models) if model['model_type'] == 'Normal']
+    return [model for model in get_models() if model['model_type'] == 'Normal']
 
 
-def chaste_opt_models(all_models=False):
+def chaste_opt_models():
     """ Load all Opt models"""
-    return [model for model in get_models(all_models=all_models) if model['model_type'] == 'Opt']
+    return [model for model in get_models() if model['model_type'] == 'Opt']
 
 
-def chaste_cvode_models(all_models=False):
+def chaste_cvode_models():
     """ Load all Opt models"""
-    return [model for model in get_models(all_models=all_models) if model['model_type'] == 'Cvode']
+    return [model for model in get_models() if model['model_type'] == 'Cvode']
+
+
+def chaste_all_normal_models():
+    """ Load all Normal models"""
+    return [model for model in get_models(reference_folder='cronjob_reference_models') if model['model_type'] == 'Normal']
+
+
+def chaste_all_opt_models():
+    """ Load all Opt models"""
+    return [model for model in get_models(reference_folder='cronjob_reference_models') if model['model_type'] == 'Opt']
+
+
+def chaste_all_cvode_models():
+    """ Load all Opt models"""
+    return [model for model in get_models(reference_folder='cronjob_reference_models') if model['model_type'] == 'Cvode']
 
 
 @pytest.mark.cronjob
-@pytest.mark.parametrize(('model'), chaste_cvode_models(all_models=True))
+@pytest.mark.parametrize(('model'), chaste_all_cvode_models(), scope='function')
 def test_Cvode_cronjob(tmp_path, model, request):
     """ Check generation of Cvode models against reference"""
     if request.config.option.markexpr != 'cronjob':
@@ -44,7 +56,7 @@ def test_Cvode_cronjob(tmp_path, model, request):
 
 
 @pytest.mark.cronjob
-@pytest.mark.parametrize(('model'), chaste_normal_models(all_models=True))
+@pytest.mark.parametrize(('model'), chaste_all_normal_models(), scope='function')
 def test_Normal_cronjob(tmp_path, model, request):
     """ Check generation of Normal models against reference"""
     if request.config.option.markexpr != 'cronjob':
@@ -53,7 +65,7 @@ def test_Normal_cronjob(tmp_path, model, request):
 
 
 @pytest.mark.cronjob
-@pytest.mark.parametrize(('model'), chaste_opt_models(all_models=True))
+@pytest.mark.parametrize(('model'), chaste_opt_models(), scope='function')
 def test_Opt_cronjob(tmp_path, model, request):
     """ Check generation of Opt models against reference"""
     if request.config.option.markexpr != 'cronjob':
