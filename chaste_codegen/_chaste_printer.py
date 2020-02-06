@@ -1,6 +1,6 @@
 from sympy.printing.precedence import precedence
-
 from cellmlmanip.printer import Printer
+import sympy as sp
 
 
 class ChastePrinter(Printer):
@@ -91,3 +91,7 @@ class ChastePrinter(Printer):
         parts += self._print(expr)
         parts += ') : ('
         return parts
+
+    def _print_float(self, expr):
+        """ Handles ``float``s. """
+        return sp.ccode(expr, standard='C99')

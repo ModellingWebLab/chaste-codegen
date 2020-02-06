@@ -473,10 +473,15 @@ class ChasteModel(object):
         self._equations_for_ionic_vars.append(i_ionic_eq)
 
         # Remove equations where lhs is a modifiable parameter or stimulus vars
-        extended_eqs = \
-            [eq for eq in
-                self._get_equations_for([ionic_var_eq.lhs for ionic_var_eq in self._equations_for_ionic_vars])
-                if eq.lhs not in self._stimulus_params]
+        extended_eqs = self._equations_for_ionic_vars
+        changed = True
+        while changed:
+            new_eqs = self._get_equations_for([v.lhs for v in extended_eqs
+                                              if v.lhs not in (self._membrane_stimulus_current,
+                                              self._original_membrane_stimulus_current)], recurse=False)
+            new_eqs = [eq for eq in new_eqs]
+            changed = new_eqs != extended_eqs
+            extended_eqs = new_eqs
 
         # set _membrane_stimulus_current to 0.0
         return [eq if eq.lhs not in (self._membrane_stimulus_current, self._original_membrane_stimulus_current)
