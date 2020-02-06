@@ -57,7 +57,7 @@ class TestChastePrinter(object):
 
     def test_abs(self, printer, x, y):
         assert printer.doprint(sp.Abs(x + y)) == 'fabs(x + y)'
-        assert printer.doprint(sp.Abs(3.2, evaluate=False)) == 'fabs(3.2)'
+        assert printer.doprint(sp.Abs(sp.Float('3.2', 17), evaluate=False)) == 'fabs(3.2000000000000002)'
         assert printer.doprint(sp.Abs(-3, evaluate=False)) == 'fabs(-3)'
 
     def test_trig_functions(self, printer, x):
@@ -84,7 +84,7 @@ class TestChastePrinter(object):
         # Number types
         assert printer.doprint(1) == '1'                  # int
         assert printer.doprint(1.2) == '1.2'              # float, short format
-        assert printer.doprint(math.pi) == '3.141592653589793'  # float, long format
+        assert printer.doprint(math.pi) == '3.1415926535897931'  # float, long format
         assert printer.doprint(1.436432635636e-123) == '1.436432635636e-123'
         assert printer.doprint(x - x) == '0'              # Zero
         assert printer.doprint(x / x) == '1'              # One
