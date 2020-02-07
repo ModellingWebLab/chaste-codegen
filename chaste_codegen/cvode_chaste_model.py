@@ -19,7 +19,7 @@ class CvodeChasteModel(cg.ChasteModel):
             state_var_matrix = sp.Matrix(self._state_vars)
             derivative_eqs = partial_eval(self._derivative_equations, self._y_derivatives, keep_multiple_usages=False)
             derivative_eq_matrix = sp.Matrix([eq.rhs for eq in derivative_eqs])
-            jacobian_matrix = derivative_eq_matrix.jacobian(derivative_eq_matrix)
+            jacobian_matrix = derivative_eq_matrix.jacobian(state_var_matrix)
         return jacobian_equations, jacobian_matrix
 
     def generate_chaste_code(self):
