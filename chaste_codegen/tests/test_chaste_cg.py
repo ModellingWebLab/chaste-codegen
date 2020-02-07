@@ -10,44 +10,17 @@ LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 
 
-def pytest_addoption(parser):
-    parser.addoption("--name", action="store")
-
-
-def get_models():
+def get_models(ref_folder='chaste_reference_models', type='Normal'):
     """ Load all models if they haven't been loaded yet"""
-    if not test_utils.models:
-        test_utils.models = test_utils.load_chaste_models(model_types=['Normal', 'Opt', 'Cvode'])
-    return test_utils.models
+    return test_utils.load_chaste_models(model_types=[type], reference_folder=ref_folder)
 
 
-def chaste_normal_models():
-    """ Load all Normal models"""
-    return [model for model in get_models() if model['model_type'] == 'Normal']
+chaste_normal_models = get_models(ref_folder='chaste_reference_models', type='Normal')
+chaste_opt_models = get_models(ref_folder='chaste_reference_models', type='Opt')
+chaste_cvode_models = get_models(ref_folder='chaste_reference_models', type='Cvode')
 
 
-def chaste_opt_models():
-    """ Load all Opt models"""
-    return [model for model in get_models() if model['model_type'] == 'Opt']
-
-
-def chaste_cvode_models():
-    """ Load all Opt models"""
-    return [model for model in get_models() if model['model_type'] == 'Cvode']
-
-
-@pytest.mark.cronjob
-def test_activate_all_models(request):
-    """ If we are running the long slow tests load all models from the cronjob_reference_models folder"""
-    # Skip if not explicitly set to run cronjob with -m cronjob
-    if request.config.option.markexpr != 'cronjob':
-        pytest.skip('skipped on this platform: ')
-    test_utils.models = test_utils.load_chaste_models(model_types=['Normal', 'Opt', 'Cvode'],
-                                                      reference_folder='cronjob_reference_models')
-
-
-@pytest.mark.cronjob
-@pytest.mark.parametrize(('model'), chaste_cvode_models())
+@pytest.mark.parametrize(('model'), chaste_cvode_models)
 def test_Cvode(tmp_path, model):
     """ Check generation of Cvode models against reference"""
     # Note: currently only implemented partia eval
@@ -62,8 +35,7 @@ def test_Cvode(tmp_path, model):
                                                model['expected_cpp_path'])
 
 
-@pytest.mark.cronjob
-@pytest.mark.parametrize(('model'), chaste_normal_models())
+@pytest.mark.parametrize(('model'), chaste_normal_models)
 def test_Normal(tmp_path, model):
     """ Check generation of Normal models against reference"""
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellML'
@@ -77,8 +49,7 @@ def test_Normal(tmp_path, model):
                                                model['expected_cpp_path'])
 
 
-@pytest.mark.cronjob
-@pytest.mark.parametrize(('model'), chaste_opt_models())
+@pytest.mark.parametrize(('model'), chaste_opt_models)
 def test_Opt(tmp_path, model):
     """ Check generation of Opt models against reference"""
     # Note: currently only implemented partia eval

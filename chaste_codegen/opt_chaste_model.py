@@ -17,7 +17,7 @@ class OptChasteModel(cg.NormalChasteModel):
         # subs in all constants and expressions only used once
         subs_dict = {}
         for eq in equations:
-            new_eq = eq.subs(subs_dict)
+            new_eq = eq.xreplace(subs_dict)
             if new_eq.lhs not in required_lhs and \
                     (isinstance(new_eq.rhs, sp.numbers.Float) or usage_count[new_eq.lhs] <= 1):
                 subs_dict[new_eq.lhs] = new_eq.rhs
