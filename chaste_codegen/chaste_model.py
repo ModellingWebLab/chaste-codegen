@@ -3,6 +3,7 @@ import sympy as sp
 import chaste_codegen as cg
 from copy import deepcopy
 from cellmlmanip.model import DataDirectionFlow
+from cellmlmanip.units import UnitStore
 from pint import DimensionalityError
 from collections import OrderedDict
 
@@ -32,7 +33,7 @@ class ChasteModel(object):
                          'uF': 'farad / 1e6',
                          'uF_per_mm2': 'farad / 1e6 / (meter * 1e-3)**2',
                          'millisecond': 'second / 1e3',
-                         'millimolar': 'millimole / litre',
+                         'millimolar': 'mole / 1e3 / litre',
                          'millivolt': 'volt / 1e3'}
     # _STIM_UNITS encodes units that are possible units to try and convert to.
     # Indexed by metadata tag then by unit.
@@ -191,7 +192,7 @@ class ChasteModel(object):
             return self._MEMBRANE_VOLTAGE_INDEX
         elif var == self._cytosolic_calcium_concentration_var and \
                 self._model.units.evaluate_units(self._cytosolic_calcium_concentration_var).dimensionality == \
-                self._model.units.get_unit('millimolar').dimensionality:
+                self._units.get_unit('millimolar').dimensionality:
             return self._CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX
         else:
             return self._MEMBRANE_VOLTAGE_INDEX + self._CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX + 1
@@ -210,22 +211,20 @@ class ChasteModel(object):
     def _add_units(self):
         """ Add needed units to the model to allow converting time, voltage and calcium in specific units
             as well as units for converting membrane_stimulus_current."""
-        for unit_name in self._UNIT_DEFINITIONS:
-            try:
-                self._model.units.add_unit(unit_name, self._UNIT_DEFINITIONS[unit_name])
-            except ValueError:
-                pass  # Unit already exists, but that is not a problem
+        self._units = UnitStore(self._model.units)
+        for unit_name, unit_defn in self._UNIT_DEFINITIONS.items():
+            self._units.add_unit(unit_name, unit_defn)
         # Now that we have the units in the model, we can populate the stim_units dictionary with units from this model
         # make sure we do not store units of the model statically as it would interfere with generating the next model
         stim_units = deepcopy(self._STIM_UNITS)
         for key in stim_units:
             for i in range(len(stim_units[key])):
-                stim_units[key][i]['units'] = self._model.units.get_unit(stim_units[key][i]['units'])
+                stim_units[key][i]['units'] = self._units.get_unit(stim_units[key][i]['units'])
         return stim_units
 
     def _get_time_variable(self):
         time_variable = self._model.get_free_variable_symbol()
-        desired_units = self._model.units.get_unit('millisecond')
+        desired_units = self._units.get_unit('millisecond')
         try:
             # If the variable is in units that can be converted to millisecond, perform conversion
             return self._model.convert_variable(time_variable, desired_units, DataDirectionFlow.INPUT)
@@ -237,7 +236,7 @@ class ChasteModel(object):
     def _get_membrane_voltage_var(self):
         """ Find the membrane_voltage variable"""
         voltage = self._model.get_symbol_by_ontology_term(self._OXMETA, "membrane_voltage")
-        desired_units = self._model.units.get_unit('millivolt')
+        desired_units = self._units.get_unit('millivolt')
         try:
             # Convert if necessary
             return self._model.convert_variable(voltage, desired_units, DataDirectionFlow.INPUT)
@@ -257,7 +256,7 @@ class ChasteModel(object):
             return None
 
         # Convert if necessary
-        desired_units = self._model.units.get_unit('millimolar')
+        desired_units = self._units.get_unit('millimolar')
         # units can't be converted to millimolar (e.g. could be dimensionless)
         try:
             return self._model.convert_variable(cytosolic_calcium_concentration,
@@ -438,7 +437,7 @@ class ChasteModel(object):
         """ Get the equations defining the ionic derivatives and all dependant equations"""
 
         # create the const double var_chaste_interface__i_ionic = .. equation
-        i_ionic_lhs = self._model.add_variable(name='_i_ionic', units=self._model.units.get_unit('uA_per_cm2'))
+        i_ionic_lhs = self._model.add_variable(name='_i_ionic', units=self._units.get_unit('uA_per_cm2'))
         i_ionic_rhs = sp.sympify(0.0, evaluate=False)
 
         # add i_ionic to interface for printing
@@ -476,7 +475,6 @@ class ChasteModel(object):
             new_eqs = self._get_equations_for([v.lhs for v in extended_eqs
                                               if v.lhs not in (self._membrane_stimulus_current,
                                                self._original_membrane_stimulus_current)], recurse=False)
-            new_eqs = [eq for eq in new_eqs]
             changed = new_eqs != extended_eqs
             extended_eqs = new_eqs
 
@@ -546,7 +544,7 @@ class ChasteModel(object):
             self._membrane_stimulus_current.cmeta_id = None
             # add converter equation
             converter_var = self._model.add_variable(name=self._membrane_stimulus_current.name + '_converter',
-                                                     units=self._model.units.get_unit('uA_per_cm2'),
+                                                     units=self._units.get_unit('uA_per_cm2'),
                                                      cmeta_id='membrane_stimulus_current')
             # add new equation for converter_var
             self._model.add_equation(sp.Eq(converter_var, area))
