@@ -64,7 +64,7 @@
         mUseAnalyticJacobian = true;
         mHasAnalyticJacobian = true;{%- endif %}
         {% for param in modifiable_parameters %}
-        this->mParameters[{{loop.index0}}] = {{param["initial_value"]}}; // ({{param["comment_name"]}}) [{{param["units"]}}]{%- endfor %}
+        NV_Ith_S(this->mParameters, {{loop.index0}}) = {{param["initial_value"]}}; // ({{param["comment_name"]}}) [{{param["units"]}}]{%- endfor %}
     }
 
     {{class_name}}::~{{class_name}}()
@@ -74,13 +74,22 @@
     {% if use_verify_state_variables %}
     void {{class_name}}::VerifyStateVariables()
     {
-        std::vector<double>& rY = rGetStateVariables();
+        /* We only expect CVODE to keep state variables to within its tolerances,
+         * not exactly the bounds prescribed to each variable that are checked here.
+         *
+         * For 99.99% of paces this->mAbsTol works,
+         * For 99.999% of paces 10*this->mAbsTol is fine,
+         * but unfortunately 100x seems to be required on rare occasions for upstrokes.
+         * This sounds bad, but is probably typically only 1e-5 or 1e-6.
+         */
+        const double tol = 100*this->mAbsTol;
+        N_Vector rY = rGetStateVariables();
         {% for state_var in state_vars %}
-        {%- if state_var.range_low != '' or  state_var.range_high != '' %}double {{ state_var.var }} = rY[{{loop.index0}}];
+        {%- if state_var.range_low != '' or  state_var.range_high != '' %}double {{ state_var.var }} = NV_Ith_S(rY,{{loop.index0}});
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}
         {% for state_var in state_vars %}
-        {%- if state_var.range_low != '' or  state_var.range_high != '' %}if ({%- if state_var.range_low != '' %}{{ state_var.var }} < {{ state_var.range_low }}{% endif %}{%- if state_var.range_low != '' and  state_var.range_high != '' %} || {% endif %}{%- if state_var.range_high != '' %}{{ state_var.var }} > {{ state_var.range_high }}{% endif %})
+        {%- if state_var.range_low != '' or  state_var.range_high != '' %}if ({%- if state_var.range_low != '' %}{{ state_var.var }} < {{ state_var.range_low }} - tol{% endif %}{%- if state_var.range_low != '' and  state_var.range_high != '' %} || {% endif %}{%- if state_var.range_high != '' %}{{ state_var.var }} > {{ state_var.range_high }} + tol{% endif %})
         {
             EXCEPTION(DumpState("State variable {{ state_var.annotated_var_name }} has gone out of range. Check numerical parameters, for example time and space stepsizes, and/or solver tolerances"));
         }
@@ -118,7 +127,7 @@
         return i_ionic;
     }
 
-    void {{class_name}}::EvaluateYDerivatives(double var_chaste_interface__Environment__time, const N_Vector rY, N_Vector rDY)
+    void {{class_name}}::EvaluateYDerivatives(double {{free_variable.var_name}}, const N_Vector rY, N_Vector rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -155,7 +164,7 @@
         // Inputs:
         // Time units: millisecond
         {% for state_var in state_vars %}
-        {%- if state_var.in_derived_quant %}double {{ state_var.var }} = rY[{{loop.index0}}];
+        {%- if state_var.in_derived_quant %}double {{ state_var.var }} = NV_Ith_S(rY,{{loop.index0}});
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}
 
@@ -170,7 +179,26 @@
         {%- endfor %}
         return dqs;
     }{% endif %}
-    
+
+    {%- if jacobian_equations|length > 0 %}
+
+    void {{class_name}}::EvaluateAnalyticJacobian(double {{free_variable.var_name}}, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3)
+    {
+        {% for state_var in state_vars %}
+        {%- if state_var.in_jacobian %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, {{loop.index0}}));{%- else %}NV_Ith_S(rY, {{loop.index0}});{%- endif %}
+        // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
+        {% endif %}{%- endfor %}
+
+        {% for equation in jacobian_equations %}
+        const double {{equation.lhs}} = {{equation.rhs}};
+        {%- endfor %}
+
+        // Matrix entries{% for entry in jacobian_entries %}
+        IJth(rJacobian, {{entry.i}}, {{entry.j}}) = {% if membrane_voltage_index == entry.i %}mSetVoltageDerivativeToZero ? 0.0 : ({{entry.entry}});{%- else %}{{entry.entry}};{%- endif %}
+        {%- endfor %}
+    }
+    {%- endif %}
+
 template<>
 void OdeSystemInformation<{{class_name}}>::Initialise(void)
 {
@@ -178,7 +206,7 @@ void OdeSystemInformation<{{class_name}}>::Initialise(void)
     this->mFreeVariableName = "{{free_variable.name}}";
     this->mFreeVariableUnits = "{{free_variable.units}}";
 
-    {% for ode_info in ode_system_information %}// rY[{{loop.index0}}]:
+    {% for ode_info in ode_system_information %}// NV_Ith_S(rY,{{loop.index0}}):
     this->mVariableNames.push_back("{{ode_info.name}}");
     this->mVariableUnits.push_back("{{ode_info.units}}");
     this->mInitialConditions.push_back({{ode_info.initial_value}});

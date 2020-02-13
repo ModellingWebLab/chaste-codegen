@@ -7,13 +7,16 @@ from cellmlmanip.model import NumberDummy
 
 class CvodeChasteModel(cg.ChasteModel):
     """ Holds template and information specific for the CVODE model type"""
-    # TODO: jacobians sympy, followed by cse
 
     def __init__(self, model, file_name, **kwargs):
         super().__init__(model, file_name, **kwargs)
         self._use_analytic_jacobian = kwargs.get('use_analytic_jacobian', False)  # store if jacobians are needed
         self._jacobian_equations, self._jacobian_matrix = self._get_jacobian()
-        self._formatted_jacobian_equations, self._formatted_jacobian_matrix = self._format_jacobian()
+        self._formatted_state_vars = self._update_state_vars()
+        self._formatted_jacobian_equations, self._formatted_jacobian_matrix_entries = self._format_jacobian()
+
+    def _print_modifiable_parameters(self, symbol):
+        return 'NV_Ith_S(mParameters, ' + str(self._modifiable_parameters.index(symbol)) + ')'
 
     def _get_jacobian(self):
         jacobian_equations, jacobian_matrix = [], []
@@ -25,8 +28,10 @@ class CvodeChasteModel(cg.ChasteModel):
             derivative_eqs = sorted(derivative_eqs, key=lambda d: self._state_vars.index(d.lhs.args[0]))
             # we're only interested in the rhs
             derivative_eqs = [eq.rhs for eq in derivative_eqs]
+            unit = self._model.units.get_unit('dimensionless')
             # Stick NumberDummies back in and replace _exp by the real exp, so we can do derivatives properly
             for i in range(len(derivative_eqs)):
+                derivative_eqs[i] = sp.piecewise_fold(derivative_eqs[i])
                 unit = self._model.units.get_unit('dimensionless')
                 subs_dict = {d: NumberDummy(d, unit) for d in derivative_eqs[i].atoms(sp.Float)}
                 derivative_eqs[i] = derivative_eqs[i].xreplace(subs_dict)
@@ -38,12 +43,32 @@ class CvodeChasteModel(cg.ChasteModel):
                 jacobian_matrix[i] = jacobian_matrix[i].subs({sp.exp: sp._exp})
                 subs_dict = {d: sp.Float(d.value, 17) for d in jacobian_matrix[i].atoms(NumberDummy)}
                 jacobian_matrix[i] = jacobian_matrix[i].xreplace(subs_dict)
-            jacobian_equations, jacobian_matrix = sp.cse(jacobian_matrix)
-        return jacobian_equations, jacobian_matrix
+            jacobian_equations, jacobian_matrix = sp.cse(jacobian_matrix, order='none')
+        return jacobian_equations, sp.Matrix(jacobian_matrix)
 
-    def _format_jacobian(self)
-        equations, matr = self._jacobian_equations, self._jacobian_matrix
-        return equations, matr
+    def _update_state_vars(self):
+        jacobian_symbols = set()
+        for eq in self._jacobian_equations:
+            jacobian_symbols.update(eq[1].free_symbols)
+        for en in self._jacobian_matrix:
+            jacobian_symbols.update(en.free_symbols)
+        formatted_state_vars = self._formatted_state_vars
+        for i in range(len(formatted_state_vars)):
+            formatted_state_vars[i]['in_jacobian'] = formatted_state_vars[i]['sympy_var'] in jacobian_symbols
+        return formatted_state_vars
+
+    def _format_jacobian(self):
+        assert isinstance(self._jacobian_matrix, sp.Matrix), 'Expecting a jacobian as a matrix'
+        equations = [{'lhs': self._printer.doprint(eq[0]), 'rhs': self._printer.doprint(eq[1])}
+                     for eq in self._jacobian_equations]
+        rows, cols = self._jacobian_matrix.shape
+        jacobian = []
+        for j in range(cols):
+            for i in range(rows):
+                matrix_entry = self._jacobian_matrix.row(i).col(j)[0]
+                if matrix_entry != 0:
+                    jacobian.append({'i': i, 'j': j, 'entry': self._printer.doprint(matrix_entry)})
+        return equations, jacobian
 
     def generate_chaste_code(self):
         """ Generates and stores chaste code for the CVODE model"""
@@ -62,7 +87,7 @@ class CvodeChasteModel(cg.ChasteModel):
             'free_variable': self._free_variable,
             'use_verify_state_variables': self._use_verify_state_variables,
             'derived_quantities': self._formatted_derived_quant,
-            'jacobian_equations': []})
+            'jacobian_equations': self._formatted_jacobian_equations})
 
         # Generate cpp for model
         template = cg.load_template('cvode_model.cpp')
@@ -94,4 +119,5 @@ class CvodeChasteModel(cg.ChasteModel):
             'use_verify_state_variables': self._use_verify_state_variables,
             'derived_quantities': self._formatted_derived_quant,
             'derived_quantity_equations': self._formatted_quant_eqs,
-            'jacobian_equations': []})
+            'jacobian_equations': self._formatted_jacobian_equations,
+            'jacobian_entries': self._formatted_jacobian_matrix_entries})

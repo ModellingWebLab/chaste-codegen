@@ -73,7 +73,8 @@ class ChasteModel(object):
                 (self._units.get_unit(self._STIM_UNITS['membrane_stimulus_current_amplitude'][0]['units']),
                  factor / self._membrane_capacitance_factor,
                  sp.Eq(eq.lhs,
-                       eq.rhs / self._membrane_capacitance.lhs * sp.Function(self._HEARTCONFIG_GETCAPACITANCE)()),
+                       eq.rhs / self._membrane_capacitance.lhs *
+                       sp.Function(self._HEARTCONFIG_GETCAPACITANCE, real=True)()),
                  [] if self._membrane_capacitance.lhs in self._modifiable_parameters else
                     [self._membrane_capacitance]
                  ),
@@ -83,7 +84,7 @@ class ChasteModel(object):
                 factor, eq:
                 (current_units,
                  factor,
-                 sp.Eq(eq.lhs, eq.rhs * sp.Function(self._HEARTCONFIG_GETCAPACITANCE)()),
+                 sp.Eq(eq.lhs, eq.rhs * sp.Function(self._HEARTCONFIG_GETCAPACITANCE, real=True)()),
                  [])}}
     # Indicates which metadata tags variables used in calculating Chaste stimulus have and whether they are optional.
     _STIM_METADATA_TAGS = \
@@ -228,7 +229,7 @@ class ChasteModel(object):
 
     def _get_membrane_voltage_var(self):
         """ Find the membrane_voltage variable"""
-        voltage = self._model.get_symbol_by_ontology_term(self._OXMETA, "membrane_voltage")
+        voltage = self._model.get_symbol_by_ontology_term((self._OXMETA, "membrane_voltage"))
         desired_units = self._units.get_unit('millivolt')
         try:
             # Convert if necessary
@@ -243,7 +244,7 @@ class ChasteModel(object):
         """ Find the cytosolic_calcium_concentration variable if it exists"""
         try:
             cytosolic_calcium_concentration = \
-                self._model.get_symbol_by_ontology_term(self._OXMETA, "cytosolic_calcium_concentration")
+                self._model.get_symbol_by_ontology_term((self._OXMETA, "cytosolic_calcium_concentration"))
         except KeyError:
             self._logger.info(self._model.name + ' has no cytosolic_calcium_concentration')
             return None
@@ -295,7 +296,7 @@ class ChasteModel(object):
     def _get_membrane_stimulus_current(self):
         """ Find the membrane_stimulus_current variable if it exists"""
         try:
-            return self._model.get_symbol_by_ontology_term(self._OXMETA, 'membrane_stimulus_current')
+            return self._model.get_symbol_by_ontology_term((self._OXMETA, 'membrane_stimulus_current'))
         except KeyError:
             self._logger.info(self._model.name + ' has no membrane_stimulus_current')
             self._is_self_excitatory = len(list(self._model.get_rdf_annotations(subject=self._model.rdf_identity,
@@ -308,7 +309,7 @@ class ChasteModel(object):
         # add membrane_capacitance if the model has it
         try:
             # add membrane_capacitance factor
-            membrane_capacitance = self._model.get_symbol_by_ontology_term(self._OXMETA, "membrane_capacitance")
+            membrane_capacitance = self._model.get_symbol_by_ontology_term((self._OXMETA, "membrane_capacitance"))
             if membrane_capacitance is not None:
                 current_units = self._model.units.evaluate_units(membrane_capacitance)
                 capacitance_eqs = [eq for eq in self._model.get_equations_for([membrane_capacitance])
@@ -336,7 +337,7 @@ class ChasteModel(object):
         stim_param = []
         for tag in self._STIM_METADATA_TAGS:
             try:
-                stim_param.append(self._model.get_symbol_by_ontology_term(self._OXMETA, tag))
+                stim_param.append(self._model.get_symbol_by_ontology_term((self._OXMETA, tag)))
             except KeyError:
                 has_stim = has_stim and self._STIM_METADATA_TAGS[tag]['optional']
 
@@ -459,7 +460,7 @@ class ChasteModel(object):
 
         # check if we need to convert using _HEARTCONFIG_GETCAPACITANCE
         if self._current_unit_and_capacitance['use_heartconfig_capacitance']:
-            i_ionic_rhs *= sp.Function(self._HEARTCONFIG_GETCAPACITANCE)()
+            i_ionic_rhs *= sp.Function(self._HEARTCONFIG_GETCAPACITANCE, real=True)()
 
         i_ionic_eq = sp.Eq(i_ionic_lhs, i_ionic_rhs)
         self._model.add_equation(i_ionic_eq)
@@ -532,7 +533,7 @@ class ChasteModel(object):
                         negate_stimulus = voltage_rhs > 0.0
 
             # Set GetIntracellularAreaStimulus calculaion
-            GetIntracellularAreaStimulus = sp.Function('GetIntracellularAreaStimulus')
+            GetIntracellularAreaStimulus = sp.Function('GetIntracellularAreaStimulus', real=True)
             area = GetIntracellularAreaStimulus(self._time_variable)
             if negate_stimulus:
                 area = -area
@@ -560,7 +561,7 @@ class ChasteModel(object):
 
             # check if the results needs to be divided by heartconfig_capacitance and add if needed
             if self._current_unit_and_capacitance['use_heartconfig_capacitance']:
-                stim_current_eq_rhs /= sp.Function(self._HEARTCONFIG_GETCAPACITANCE)()
+                stim_current_eq_rhs /= sp.Function(self._HEARTCONFIG_GETCAPACITANCE, real=True)()
 
             # Get stimulus defining equation
             eq = [e for e in self._model.equations if e.lhs == self._membrane_stimulus_current][-1]
@@ -636,13 +637,16 @@ class ChasteModel(object):
             cg.ChastePrinter(lambda symbol:
                              get_symbol_name(symbol, symbol in self._in_interface)
                              if symbol not in self._modifiable_parameters
-                             else 'mParameters[' + str(self._modifiable_parameters.index(symbol)) + ']',
+                             else self._print_modifiable_parameters(symbol),
                              lambda deriv: 'd_dt_chaste_interface_' +
                                            (get_symbol_name(deriv.expr)
                                             if isinstance(deriv, sp.Derivative) else get_symbol_name(deriv)))
 
         # Printer for printing variable in comments e.g. for ode system information
         self._name_printer = cg.ChastePrinter(lambda symbol: get_symbol_name(symbol))
+
+    def _print_modifiable_parameters(self, symbol):
+        return 'mParameters[' + str(self._modifiable_parameters.index(symbol)) + ']'
 
     def _format_modifiable_parameters(self):
         """ Format the modifiable parameter for printing to chaste code"""
@@ -687,7 +691,8 @@ class ChasteModel(object):
               'in_y_deriv': var in y_deriv_symbols,
               'in_derived_quant': var in derived_quant_symbols,
               'range_low': get_range_annotation(var, 'range-low'),
-              'range_high': get_range_annotation(var, 'range-high')}
+              'range_high': get_range_annotation(var, 'range-high'),
+              'sympy_var': var}
              for var in self._state_vars]
 
         use_verify_state_variables = \

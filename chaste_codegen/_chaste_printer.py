@@ -45,6 +45,7 @@ class ChastePrinter(Printer):
         'tan': 'tan',
         'tanh': 'tanh',
 
+        'sign': 'Signum',
         'GetIntracellularAreaStimulus': 'GetIntracellularAreaStimulus',
         'HeartConfig::Instance()->GetCapacitance': 'HeartConfig::Instance()->GetCapacitance'
     }

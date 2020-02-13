@@ -156,17 +156,36 @@ def test_script_opt(capsys, tmp_path):
 def test_script_cvode(capsys, tmp_path):
     LOGGER.info('Testing model with options -t ChasteOpt and -o for command line script\n')
     tmp_path = str(tmp_path)
-    model_name = 'hund_rudy_2004_a'
+    model_name = 'luo_rudy_1994'
     model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
     assert os.path.isfile(model_file)
-    outfile = os.path.join(tmp_path, 'hund_rudy_2004_a.cpp')
+    outfile = os.path.join(tmp_path, 'luo_rudy_1994.cpp')
     # Call commandline script
     testargs = ['chaste_codegen', model_file, '-t', 'CVODE', '-o', outfile]
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
     reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Cvode')
-    compare_file_against_reference(os.path.join(reference, 'hund_rudy_2004_a.hpp'),
-                                   os.path.join(tmp_path, 'hund_rudy_2004_a.hpp'))
-    compare_file_against_reference(os.path.join(reference, 'hund_rudy_2004_a.cpp'),
-                                   os.path.join(tmp_path, 'hund_rudy_2004_a.cpp'))
+    compare_file_against_reference(os.path.join(reference, 'luo_rudy_1994.hpp'),
+                                   os.path.join(tmp_path, 'luo_rudy_1994.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'luo_rudy_1994.cpp'),
+                                   os.path.join(tmp_path, 'luo_rudy_1994.cpp'))
+
+
+def test_script_cvode_jacobian(capsys, tmp_path):
+    LOGGER.info('Testing model with options -t ChasteOpt and -o for command line script\n')
+    tmp_path = str(tmp_path)
+    model_name = 'luo_rudy_1994'
+    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    outfile = os.path.join(tmp_path, 'luo_rudy_1994.cpp')
+    # Call commandline script
+    testargs = ['chaste_codegen', model_file, '-t', 'CVODE', '-o', outfile, '-j']
+    with mock.patch.object(sys, 'argv', testargs):
+        chaste_codegen()
+    # Check output
+    reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Cvode_with_jacobian')
+    compare_file_against_reference(os.path.join(reference, 'luo_rudy_1994.hpp'),
+                                   os.path.join(tmp_path, 'luo_rudy_1994.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'luo_rudy_1994.cpp'),
+                                   os.path.join(tmp_path, 'luo_rudy_1994.cpp'))

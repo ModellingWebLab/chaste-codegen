@@ -15,10 +15,12 @@ def partial_eval(equations, required_lhs, keep_multiple_usages=True):
     # subs in all constants and expressions only used once
     subs_dict = {}
     for eq in equations:
-        new_eq = eq.xreplace(subs_dict)
+        new_eq = sp.Eq(eq.lhs, sp.piecewise_fold(eq.rhs.xreplace(subs_dict)))
         if new_eq.lhs not in required_lhs and \
                 (not keep_multiple_usages or isinstance(new_eq.rhs, sp.numbers.Float) or usage_count[new_eq.lhs] <= 1):
             subs_dict[new_eq.lhs] = new_eq.rhs
         else:
+            if not keep_multiple_usages:
+                subs_dict[new_eq.lhs] = new_eq.rhs
             evaluated_eqs.append(new_eq)
     return evaluated_eqs
