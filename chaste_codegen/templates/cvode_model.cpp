@@ -159,7 +159,7 @@
     }
     {%- if derived_quantities|length > 0 %}
 
-    std::vector<double> {{class_name}}::ComputeDerivedQuantities(double {{free_variable.var_name}}, const std::vector<double> & rY)
+    N_Vector {{class_name}}::ComputeDerivedQuantities(double {{free_variable.var_name}}, const N_Vector & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -173,9 +173,9 @@
         const double {{eq.lhs}} = {{eq.rhs}}; // {{eq.units}}
         {%- endfor %}
 
-        std::vector<double> dqs({{derived_quantities|length}});
+        N_Vector dqs = N_VNew_Serial({{derived_quantities|length}});
         {%- for quant in derived_quantities %}
-        dqs[{{loop.index0}}] = {{quant.var}};
+        NV_Ith_S(dqs, {{loop.index0}}) = {{quant.var}};
         {%- endfor %}
         return dqs;
     }{% endif %}
