@@ -161,7 +161,7 @@ def test_script_cvode(capsys, tmp_path):
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'luo_rudy_1994.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', model_file, '-t', 'CVODE', '-o', outfile]
+    testargs = ['chaste_codegen', model_file, '-t', 'CVODE', '-o', outfile, '-c', 'Cellluo_rudy_1994FromCellMLCvode']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
@@ -180,7 +180,7 @@ def test_script_cvode_jacobian(capsys, tmp_path):
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'luo_rudy_1994.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', model_file, '-t', 'CVODE', '-o', outfile, '-j']
+    testargs = ['chaste_codegen', model_file, '-t', 'CVODE', '-o', outfile, '-j', '-c', 'Cellluo_rudy_1994FromCellMLCvode']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output

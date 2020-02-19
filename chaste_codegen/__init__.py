@@ -5,6 +5,7 @@ import logging
 import sympy
 
 from cellmlmanip import transpiler
+from ._exp import _exp
 
 #
 # Load constants and version information
@@ -35,5 +36,5 @@ logging.basicConfig()
 del(logging)
 
 # Set cellmlmanip exp function
-setattr(sympy, '_exp', sympy.Function('_exp'))
+setattr(sympy, '_exp', _exp)
 transpiler.SIMPLE_MATHML_TO_SYMPY_NAMES['exp'] = '_exp'
