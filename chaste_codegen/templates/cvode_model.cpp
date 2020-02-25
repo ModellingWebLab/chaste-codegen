@@ -118,7 +118,7 @@
         return i_ionic;
     }
 
-    void {{class_name}}::EvaluateYDerivatives(double var_chaste_interface__Environment__time, const N_Vector rY, N_Vector rDY)
+    void {{class_name}}::EvaluateYDerivatives(double {{free_variable.var_name}}, const N_Vector rY, N_Vector rDY)
     {
         // Inputs:
         // Time units: millisecond
