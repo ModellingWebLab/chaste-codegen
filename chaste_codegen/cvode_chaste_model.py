@@ -9,6 +9,9 @@ class CvodeChasteModel(cg.ChasteModel):
     def __init__(self, model, file_name, **kwargs):
         super().__init__(model, file_name, **kwargs)
 
+    def _print_modifiable_parameters(self, symbol):
+        return 'NV_Ith_S(mParameters, ' + str(self._modifiable_parameters.index(symbol)) + ')'
+
     def generate_chaste_code(self):
         """ Generates and stores chaste code for the CVODE model"""
 
