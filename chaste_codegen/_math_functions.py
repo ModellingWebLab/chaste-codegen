@@ -43,7 +43,7 @@ class _cos(_RealFunction):
         Returns the first derivative of this function.
         """
         assert argindex == 1
-        return -sp._sin(self.args[0])
+        return -_sin(self.args[0])
 
 
 class _sqrt(_RealFunction):
