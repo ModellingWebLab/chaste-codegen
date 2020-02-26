@@ -13,11 +13,8 @@ class ChasteModel(object):
     It also holds relevant formatted equations and derivatives.
     Please Note: this calass cannot generate chaste code directly, instead use a subclass of the model type
     """
-    # TODO: implement modifiable-parameter bit of expose-annotated-variables (similar to derived quantities)
     # TODO: implement and check options see https://chaste.cs.ox.ac.uk/trac/wiki/ChasteGuides/CodeGenerationFromCellML
-    # TODO: variable conversion via cellmlmanip
-    # TODO: script to call generator from command line
-    # TODO: Model types Opt (lookup tables todo), Analytic_j, Numerical_j, BE
+    # TODO: Model types Opt (lookup tables todo), BE
 
     _MEMBRANE_VOLTAGE_INDEX = 0  # default index for voltage in state vector
     _CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX = 1  # default index for cytosolic calcium concentration in state vector
@@ -415,7 +412,7 @@ class ChasteModel(object):
                                             == self._units.get_unit(unit_cap['units']).dimensionality
                                             and eq.lhs not in self._ionic_derivs]
                 equations = [eq.lhs for eq in equations]
-            desired_units_and_capacitance = unit_cap
+            desired_units_and_capacitance = unit_cap.copy()
         if self._membrane_stimulus_current is not None:
             stimulus_current_factor = \
                 self._model.units.get_conversion_factor(self._units.get_unit(desired_units_and_capacitance['units']),
