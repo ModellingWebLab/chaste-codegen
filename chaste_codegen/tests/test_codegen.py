@@ -60,10 +60,10 @@ def test_Normal(tmp_path, model):
     # Generate chaste code
     chaste_model = cg.NormalChasteModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
                                         class_name=class_name)
-#    chaste_model.generate_chaste_code()
-#    # Comprare against referene
-#    test_utils.compare_model_against_reference('Normal', chaste_model, tmp_path, model['expected_hpp_path'],
-#                                               model['expected_cpp_path'])
+    chaste_model.generate_chaste_code()
+    # Comprare against referene
+    test_utils.compare_model_against_reference('Normal', chaste_model, tmp_path, model['expected_hpp_path'],
+                                               model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_opt_models)
