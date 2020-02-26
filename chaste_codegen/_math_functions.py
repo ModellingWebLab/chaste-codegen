@@ -12,10 +12,8 @@ class _exp(_RealFunction):
         """
         Returns the first derivative of this function.
         """
-        if argindex == 1:
-            return self
-        else:
-            raise sp.function.ArgumentIndexError(self, argindex)
+        assert argindex == 1
+        return self
 
 
 class _abs(_RealFunction):
@@ -24,10 +22,8 @@ class _abs(_RealFunction):
         """
         Returns the first derivative of this function.
         """
-        if argindex == 1:
-            return sp.sign(self.args[0])
-        else:
-            raise sp.function.ArgumentIndexError(self, argindex)
+        assert argindex == 1
+        return sp.sign(self.args[0])
 
 
 class _acos(_RealFunction):
@@ -36,10 +32,8 @@ class _acos(_RealFunction):
         """
         Returns the first derivative of this function.
         """
-        if argindex == 1:
-            return -1 / _sqrt(1 - self.args[0]**2)
-        else:
-            raise sp.function.ArgumentIndexError(self, argindex)
+        assert argindex == 1
+        return -1 / _sqrt(1 - self.args[0]**2)
 
 
 class _cos(_RealFunction):
@@ -48,10 +42,8 @@ class _cos(_RealFunction):
         """
         Returns the first derivative of this function.
         """
-        if argindex == 1:
-            return -sp._sin(self.args[0])
-        else:
-            raise sp.function.ArgumentIndexError(self, argindex)
+        assert argindex == 1
+        return -sp._sin(self.args[0])
 
 
 class _sqrt(_RealFunction):
@@ -60,10 +52,8 @@ class _sqrt(_RealFunction):
         """
         Returns the first derivative of this function.
         """
-        if argindex == 1:
-            return 1 / (2 * _sqrt(self.args[0]))
-        else:
-            raise sp.function.ArgumentIndexError(self, argindex)
+        assert argindex == 1
+        return 1 / (2 * _sqrt(self.args[0]))
 
 
 class _sin(_RealFunction):
@@ -72,8 +62,6 @@ class _sin(_RealFunction):
         """
         Returns the first derivative of this function.
         """
-        if argindex == 1:
-            return (_cos(self.args[0]))
-        else:
-            raise sp.function.ArgumentIndexError(self, argindex)
+        assert argindex == 1
+        return (_cos(self.args[0]))
 
