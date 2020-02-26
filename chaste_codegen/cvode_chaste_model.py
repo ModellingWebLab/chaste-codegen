@@ -51,7 +51,7 @@ class CvodeChasteModel(cg.ChasteModel):
         jacobian = []
         for j in range(cols):
             for i in range(rows):
-                matrix_entry = self._jacobian_matrix.row(i).col(j)[0]
+                matrix_entry = self._jacobian_matrix[i, j]
                 if matrix_entry != 0:
                     jacobian.append({'i': i, 'j': j, 'entry': self._printer.doprint(matrix_entry)})
         return equations, jacobian
