@@ -18,13 +18,29 @@ def get_models(ref_folder='chaste_reference_models', type='Normal'):
 chaste_normal_models = get_models(ref_folder='chaste_reference_models', type='Normal')
 chaste_opt_models = get_models(ref_folder='chaste_reference_models', type='Opt')
 chaste_cvode_models = get_models(ref_folder='chaste_reference_models', type='Cvode')
+chaste_cvode_models_with_jacobians = get_models(ref_folder='chaste_reference_models', type='Cvode_with_jacobian')
+
+
+@pytest.mark.parametrize(('model'), chaste_cvode_models_with_jacobians)
+def test_Cvode_jacobian(tmp_path, model):
+    """ Check generation of Cvode models against reference"""
+    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLCvode'
+    LOGGER.info('Converting: Cvode: ' + class_name + ' with jacobian\n')
+    # Generate chaste code
+    chaste_model = cg.CvodeChasteModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
+                                       class_name=class_name, use_analytic_jacobian=True)
+    chaste_model.generate_chaste_code()
+    # Comprare against referene
+    test_utils.compare_model_against_reference('Cvode_with_jacobian', chaste_model,
+                                               tmp_path, model['expected_hpp_path'],
+                                               model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_cvode_models)
 def test_Cvode(tmp_path, model):
     """ Check generation of Cvode models against reference"""
     # Note: currently only implemented partia eval
-    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellML'
+    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLCvode'
     LOGGER.info('Converting: Cvode: ' + class_name + '\n')
     # Generate chaste code
     chaste_model = cg.CvodeChasteModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],

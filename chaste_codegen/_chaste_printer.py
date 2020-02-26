@@ -19,6 +19,13 @@ class ChastePrinter(Printer):
 
     """
     _function_names = {
+        '_abs': 'fabs',
+        '_acos': 'acos',
+        '_cos': 'cos',
+        '_exp': 'exp',
+        '_sqrt': 'sqrt',
+        '_sin': 'sin',
+
         'Abs': 'fabs',
         'acos': 'acos',
         'acosh': 'acosh',
@@ -30,8 +37,6 @@ class ChastePrinter(Printer):
         'ceiling': 'ceil',
         'cos': 'cos',
         'cosh': 'cosh',
-        'sqrt': 'sqrt',
-        '_exp': 'exp',
         'expm1': 'expm1',
         'factorial': 'factorial',
         'floor': 'floor',
@@ -45,6 +50,7 @@ class ChastePrinter(Printer):
         'tan': 'tan',
         'tanh': 'tanh',
 
+        'sign': 'Signum',
         'GetIntracellularAreaStimulus': 'GetIntracellularAreaStimulus',
         'HeartConfig::Instance()->GetCapacitance': 'HeartConfig::Instance()->GetCapacitance'
     }

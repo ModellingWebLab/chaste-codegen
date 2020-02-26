@@ -6,6 +6,7 @@ import logging
 import math
 import pytest
 import sympy as sp
+from chaste_codegen import _exp, _abs, _acos, _cos, _sqrt, _sin
 
 
 # Show more logging output
@@ -79,6 +80,14 @@ class TestChastePrinter(object):
         assert printer.doprint(sp.sinh(x)) == 'sinh(x)'
         assert printer.doprint(sp.tan(x)) == 'tan(x)'
         assert printer.doprint(sp.tanh(x)) == 'tanh(x)'
+
+    def test_custom_math_functions(self, printer, x):
+        assert printer.doprint(_acos(x)) == 'acos(x)'
+        assert printer.doprint(_cos(x)) == 'cos(x)'
+        assert printer.doprint(_exp(x)) == 'exp(x)'
+        assert printer.doprint(_sin(x)) == 'sin(x)'
+        assert printer.doprint(_sqrt(x)) == 'sqrt(x)'
+        assert printer.doprint(_abs(x)) == 'fabs(x)'
 
     def test_numbers(self, printer, x):
         # Number types

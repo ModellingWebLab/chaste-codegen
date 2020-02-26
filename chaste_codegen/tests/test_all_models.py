@@ -10,6 +10,7 @@ LOGGER.setLevel(logging.DEBUG)
 chaste_all_normal_models = get_models(ref_folder='cronjob_reference_models', type='Normal')
 chaste_all_opt_models = get_models(ref_folder='cronjob_reference_models', type='Opt')
 chaste_all_cvode_models = get_models(ref_folder='cronjob_reference_models', type='Cvode')
+chaste_all_cvode_models_jacobian = get_models(ref_folder='cronjob_reference_models', type='Cvode_with_jacobian')
 
 
 @pytest.mark.cronjob
@@ -41,3 +42,12 @@ def test_Cvode_cronjob(tmp_path, model, request):
     from chaste_codegen.tests.test_codegen import test_Cvode
     test_Cvode(tmp_path, model)
 
+
+@pytest.mark.cronjob
+@pytest.mark.parametrize(('model'), chaste_all_cvode_models_jacobian)
+def test_Cvode_jacobian_cronjob(tmp_path, model, request):
+    """ Check generation of Cvode models against reference"""
+    if request.config.option.markexpr != 'cronjob':
+        pytest.skip('Skip if not explicitly set to run cronjob with -m cronjob')
+    from chaste_codegen.tests.test_codegen import test_Cvode_jacobian
+    test_Cvode_jacobian(tmp_path, model)

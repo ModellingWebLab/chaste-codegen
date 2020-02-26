@@ -23,6 +23,7 @@ def load_chaste_models(model_types=[], reference_folder='chaste_reference_models
                 for model_type in model_types:
                     expected_hpp_path = os.path.join(cg.DATA_DIR, 'tests', reference_folder)
                     expected_cpp_path = os.path.join(cg.DATA_DIR, 'tests', reference_folder)
+
                     expected_hpp_path = os.path.join(expected_hpp_path, model_type, model_name_from_file + '.hpp')
                     expected_cpp_path = os.path.join(expected_cpp_path, model_type, model_name_from_file + '.cpp')
 

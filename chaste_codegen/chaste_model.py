@@ -5,6 +5,8 @@ from cellmlmanip.model import DataDirectionFlow
 from cellmlmanip.units import UnitStore
 from pint import DimensionalityError
 from collections import OrderedDict
+from sympy.codegen.rewriting import optims_c99, optimize, ReplaceOptim, Wild, log
+from sympy.codegen.cfunctions import log10
 
 
 class ChasteModel(object):
@@ -70,7 +72,8 @@ class ChasteModel(object):
                 (self._units.get_unit(self._STIM_UNITS['membrane_stimulus_current_amplitude'][0]['units']),
                  factor / self._membrane_capacitance_factor,
                  sp.Eq(eq.lhs,
-                       eq.rhs / self._membrane_capacitance.lhs * sp.Function(self._HEARTCONFIG_GETCAPACITANCE)()),
+                       eq.rhs / self._membrane_capacitance.lhs *
+                       sp.Function(self._HEARTCONFIG_GETCAPACITANCE, real=True)()),
                  [] if self._membrane_capacitance.lhs in self._modifiable_parameters else
                     [self._membrane_capacitance]
                  ),
@@ -80,7 +83,7 @@ class ChasteModel(object):
                 factor, eq:
                 (current_units,
                  factor,
-                 sp.Eq(eq.lhs, eq.rhs * sp.Function(self._HEARTCONFIG_GETCAPACITANCE)()),
+                 sp.Eq(eq.lhs, eq.rhs * sp.Function(self._HEARTCONFIG_GETCAPACITANCE, real=True)()),
                  [])}}
     # Indicates which metadata tags variables used in calculating Chaste stimulus have and whether they are optional.
     _STIM_METADATA_TAGS = \
@@ -88,6 +91,14 @@ class ChasteModel(object):
          'membrane_stimulus_current_duration': {'optional': False},
          'membrane_stimulus_current_period': {'optional': False},
          'membrane_stimulus_current_offset': {'optional': True}}
+
+    _V = Wild('V')
+    _W = Wild('W')
+    _LOG10_OPT = ReplaceOptim(_V * log(_W) / log(10), _V * log10(_W), cost_function=lambda expr: expr.count(
+        lambda e: (  # division & eval of transcendentals are expensive floating point operations...
+            e.is_Pow and e.exp.is_negative  # division
+            or (isinstance(e, (log, log10)) and not e.args[0].is_number))))
+    _OPTIMS = optims_c99 + (_LOG10_OPT, )
 
     def __init__(self, model, file_name, **kwargs):
         """ Initialise a ChasteModel instance
@@ -164,8 +175,9 @@ class ChasteModel(object):
 
     def _get_equations_for(self, symbols, recurse=True):
         """Returns equations excluding once where lhs is a modifiable parameter"""
-        return [eq for eq in self._model.get_equations_for(symbols, recurse=recurse)
-                if eq.lhs not in self._modifiable_parameters]
+        equations = [eq for eq in self._model.get_equations_for(symbols, recurse=recurse)
+                     if eq.lhs not in self._modifiable_parameters]
+        return [sp.Eq(eq.lhs, optimize(eq.rhs, self._OPTIMS)) for eq in equations]
 
     def _get_initial_value(self, var):
         """Returns the initial value of a variable if it has one, none otherwise"""
@@ -312,8 +324,8 @@ class ChasteModel(object):
                                    if eq.lhs == membrane_capacitance]
                 assert len(capacitance_eqs) == 1, 'Expecting exactly 1 defining equation expected'
                 equation = capacitance_eqs[0]
-                for desired_units in [unit_dict['units'] for unit_dict in self._STIM_UNITS['membrane_capacitance']]:
-                    desired_units = self._units.get_unit(desired_units)
+                for desired_unit_info in [unit_dict['units'] for unit_dict in self._STIM_UNITS['membrane_capacitance']]:
+                    desired_units = self._units.get_unit(desired_unit_info)
                     if current_units.dimensionality == desired_units.dimensionality:
                         capacitance_factor = \
                             self._model.units.get_conversion_factor(desired_units, from_unit=current_units)
@@ -456,7 +468,7 @@ class ChasteModel(object):
 
         # check if we need to convert using _HEARTCONFIG_GETCAPACITANCE
         if self._current_unit_and_capacitance['use_heartconfig_capacitance']:
-            i_ionic_rhs *= sp.Function(self._HEARTCONFIG_GETCAPACITANCE)()
+            i_ionic_rhs *= sp.Function(self._HEARTCONFIG_GETCAPACITANCE, real=True)()
 
         i_ionic_eq = sp.Eq(i_ionic_lhs, i_ionic_rhs)
         self._model.add_equation(i_ionic_eq)
@@ -633,13 +645,17 @@ class ChasteModel(object):
             cg.ChastePrinter(lambda symbol:
                              get_symbol_name(symbol, symbol in self._in_interface)
                              if symbol not in self._modifiable_parameters
-                             else 'mParameters[' + str(self._modifiable_parameters.index(symbol)) + ']',
+                             else self._print_modifiable_parameters(symbol),
                              lambda deriv: 'd_dt_chaste_interface_' +
                                            (get_symbol_name(deriv.expr)
                                             if isinstance(deriv, sp.Derivative) else get_symbol_name(deriv)))
 
         # Printer for printing variable in comments e.g. for ode system information
         self._name_printer = cg.ChastePrinter(lambda symbol: get_symbol_name(symbol))
+
+    def _print_modifiable_parameters(self, symbol):
+        """ Print modifiable parameters in the correct format for the model type"""
+        return 'mParameters[' + str(self._modifiable_parameters.index(symbol)) + ']'
 
     def _format_modifiable_parameters(self):
         """ Format the modifiable parameter for printing to chaste code"""
@@ -684,7 +700,8 @@ class ChasteModel(object):
               'in_y_deriv': var in y_deriv_symbols,
               'in_derived_quant': var in derived_quant_symbols,
               'range_low': get_range_annotation(var, 'range-low'),
-              'range_high': get_range_annotation(var, 'range-high')}
+              'range_high': get_range_annotation(var, 'range-high'),
+              'sympy_var': var}
              for var in self._state_vars]
 
         use_verify_state_variables = \
