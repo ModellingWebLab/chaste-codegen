@@ -24,7 +24,6 @@ chaste_cvode_models_with_jacobians = get_models(ref_folder='chaste_reference_mod
 @pytest.mark.parametrize(('model'), chaste_cvode_models_with_jacobians)
 def test_Cvode_jacobian(tmp_path, model):
     """ Check generation of Cvode models against reference"""
-    # Note: currently only implemented partia eval
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLCvode'
     LOGGER.info('Converting: Cvode: ' + class_name + ' with jacobian\n')
     # Generate chaste code
