@@ -22,6 +22,7 @@ class ChastePrinter(Printer):
         '_abs': 'fabs',
         '_acos': 'acos',
         '_cos': 'cos',
+        '_exp': 'exp',
         '_sqrt': 'sqrt',
         '_sin': 'sin',
 
@@ -36,7 +37,6 @@ class ChastePrinter(Printer):
         'ceiling': 'ceil',
         'cos': 'cos',
         'cosh': 'cosh',
-        '_exp': 'exp',
         'expm1': 'expm1',
         'factorial': 'factorial',
         'floor': 'floor',
