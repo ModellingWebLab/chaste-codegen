@@ -41,7 +41,6 @@ transpiler.SIMPLE_MATHML_TO_SYMPY_NAMES['exp'] = '_exp'
 
 setattr(sympy, '_abs', _abs)
 transpiler.SIMPLE_MATHML_TO_SYMPY_NAMES['abs'] = '_abs'
-transpiler.SIMPLE_MATHML_TO_SYMPY_NAMES['Abs'] = '_abs'
 
 setattr(sympy, '_acos', _acos)
 transpiler.SIMPLE_MATHML_TO_SYMPY_NAMES['acos'] = '_acos'
