@@ -15,11 +15,8 @@ class ChasteModel(object):
     It also holds relevant formatted equations and derivatives.
     Please Note: this calass cannot generate chaste code directly, instead use a subclass of the model type
     """
-    # TODO: implement modifiable-parameter bit of expose-annotated-variables (similar to derived quantities)
     # TODO: implement and check options see https://chaste.cs.ox.ac.uk/trac/wiki/ChasteGuides/CodeGenerationFromCellML
-    # TODO: variable conversion via cellmlmanip
-    # TODO: script to call generator from command line
-    # TODO: Model types Opt (lookup tables todo), Analytic_j, Numerical_j, BE
+    # TODO: Model types Opt (lookup tables todo), BE
 
     _MEMBRANE_VOLTAGE_INDEX = 0  # default index for voltage in state vector
     _CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX = 1  # default index for cytosolic calcium concentration in state vector
