@@ -49,10 +49,10 @@ public:
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double {{free_variable.var_name}}, const N_Vector rY, N_Vector rDY);
     {%- if derived_quantities|length > 0 %}
-    std::vector<double> ComputeDerivedQuantities(double {{free_variable.var_name}}, const std::vector<double> & rY);
+    N_Vector ComputeDerivedQuantities(double {{free_variable.var_name}}, const N_Vector & rY);
     {%- endif %}
     {%- if jacobian_equations|length > 0 %}
-    void EvaluateAnalyticJacobian(double var_chaste_interface__environment__time, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3);
+    void EvaluateAnalyticJacobian(double {{free_variable.var_name}}, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3);
     {%- endif %}
 };
 
