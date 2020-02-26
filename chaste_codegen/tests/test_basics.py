@@ -3,8 +3,6 @@
 #
 # import pytest
 import logging
-from chaste_codegen import _exp
-from sympy import Symbol
 
 
 # Show more logging output
@@ -37,12 +35,3 @@ def test_version():
 def test_cellmlmanip_import():
     # cellmlmanip should be available, via the setup scripts
     import cellmlmanip  # noqa
-
-
-def test__exp():
-    # cellmlmanip should be available, via the setup scripts
-    x = Symbol('x', real=True)
-    assert _exp(x).is_real
-    assert _exp(x).diff() == _exp(x)
-    expr = 5 * x + 6 + 25 * x ** 2
-    assert _exp(expr).diff() == expr.diff() * _exp(expr)

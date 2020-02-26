@@ -5,6 +5,8 @@ from cellmlmanip.model import DataDirectionFlow
 from cellmlmanip.units import UnitStore
 from pint import DimensionalityError
 from collections import OrderedDict
+from sympy.codegen.rewriting import optims_c99, optimize, ReplaceOptim, Wild, log
+from sympy.codegen.cfunctions import log10
 
 
 class ChasteModel(object):
@@ -93,6 +95,14 @@ class ChasteModel(object):
          'membrane_stimulus_current_period': {'optional': False},
          'membrane_stimulus_current_offset': {'optional': True}}
 
+    _V = Wild('V')
+    _W = Wild('W')
+    _LOG10_OPT = ReplaceOptim(_V * log(_W) / log(10), _V * log10(_W), cost_function=lambda expr: expr.count(
+        lambda e: (  # division & eval of transcendentals are expensive floating point operations...
+            e.is_Pow and e.exp.is_negative  # division
+            or (isinstance(e, (log, log10)) and not e.args[0].is_number))))
+    _OPTIMS = optims_c99 + (_LOG10_OPT, )
+
     def __init__(self, model, file_name, **kwargs):
         """ Initialise a ChasteModel instance
         Arguments
@@ -168,8 +178,9 @@ class ChasteModel(object):
 
     def _get_equations_for(self, symbols, recurse=True):
         """Returns equations excluding once where lhs is a modifiable parameter"""
-        return [eq for eq in self._model.get_equations_for(symbols, recurse=recurse)
-                if eq.lhs not in self._modifiable_parameters]
+        equations = [eq for eq in self._model.get_equations_for(symbols, recurse=recurse)
+                     if eq.lhs not in self._modifiable_parameters]
+        return [sp.Eq(eq.lhs, optimize(eq.rhs, self._OPTIMS)) for eq in equations]
 
     def _get_initial_value(self, var):
         """Returns the initial value of a variable if it has one, none otherwise"""
@@ -205,7 +216,7 @@ class ChasteModel(object):
         """
         display_name = var.cmeta_id if var.cmeta_id else var.name
         if self._model.has_ontology_annotation(var, self._OXMETA):
-            display_name = self._model.get_ontology_terms_by_symbol(var, self._OXMETA)[-1]
+            display_name = self._model.get_ontology_terms_by_variable(var, self._OXMETA)[-1]
         return display_name.replace('$', '__').replace('var_chaste_interface_', '', 1).replace('var_', '', 1)
 
     def _add_units(self):
@@ -217,7 +228,7 @@ class ChasteModel(object):
         return units
 
     def _get_time_variable(self):
-        time_variable = self._model.get_free_variable_symbol()
+        time_variable = self._model.get_free_variable()
         desired_units = self._units.get_unit('millisecond')
         try:
             # If the variable is in units that can be converted to millisecond, perform conversion
@@ -229,7 +240,7 @@ class ChasteModel(object):
 
     def _get_membrane_voltage_var(self):
         """ Find the membrane_voltage variable"""
-        voltage = self._model.get_symbol_by_ontology_term((self._OXMETA, "membrane_voltage"))
+        voltage = self._model.get_variable_by_ontology_term((self._OXMETA, "membrane_voltage"))
         desired_units = self._units.get_unit('millivolt')
         try:
             # Convert if necessary
@@ -244,7 +255,7 @@ class ChasteModel(object):
         """ Find the cytosolic_calcium_concentration variable if it exists"""
         try:
             cytosolic_calcium_concentration = \
-                self._model.get_symbol_by_ontology_term((self._OXMETA, "cytosolic_calcium_concentration"))
+                self._model.get_variable_by_ontology_term((self._OXMETA, "cytosolic_calcium_concentration"))
         except KeyError:
             self._logger.info(self._model.name + ' has no cytosolic_calcium_concentration')
             return None
@@ -262,17 +273,17 @@ class ChasteModel(object):
 
     def _get_modifiable_parameters_annotated(self):
         """ Get the variables annotated in the model as modifiable parametery"""
-        return self._model.get_symbols_by_rdf((self._PYCMLMETA, 'modifiable-parameter'), 'yes')
+        return self._model.get_variables_by_rdf((self._PYCMLMETA, 'modifiable-parameter'), 'yes')
 
     def _get_modifiable_parameters_exposed(self):
         """ Get the variables in the model that have exposed annotation and are modifiable parameters
             (irrespective of any modifiable_parameters tags)"""
         return [q for q in self._model.variables()
                 if self._model.has_ontology_annotation(q, self._OXMETA)
-                and not self._model.get_ontology_terms_by_symbol(q, self._OXMETA)[-1]
+                and not self._model.get_ontology_terms_by_variable(q, self._OXMETA)[-1]
                 .startswith('membrane_stimulus_current')
                 and q not in self._model.get_derived_quantities()
-                and q not in self._model.get_state_symbols()
+                and q not in self._model.get_state_variables()
                 and not q == self._time_variable]
 
     def _get_modifiable_parameters(self):
@@ -290,13 +301,13 @@ class ChasteModel(object):
 
     def _get_state_variables(self):
         """ Sort the state variables, in similar order to pycml to prevent breaking existing code"""
-        return sorted(self._model.get_state_symbols(),
+        return sorted(self._model.get_state_variables(),
                       key=lambda state_var: self._state_var_key_order(state_var))
 
     def _get_membrane_stimulus_current(self):
         """ Find the membrane_stimulus_current variable if it exists"""
         try:
-            return self._model.get_symbol_by_ontology_term((self._OXMETA, 'membrane_stimulus_current'))
+            return self._model.get_variable_by_ontology_term((self._OXMETA, 'membrane_stimulus_current'))
         except KeyError:
             self._logger.info(self._model.name + ' has no membrane_stimulus_current')
             self._is_self_excitatory = len(list(self._model.get_rdf_annotations(subject=self._model.rdf_identity,
@@ -309,15 +320,15 @@ class ChasteModel(object):
         # add membrane_capacitance if the model has it
         try:
             # add membrane_capacitance factor
-            membrane_capacitance = self._model.get_symbol_by_ontology_term((self._OXMETA, "membrane_capacitance"))
+            membrane_capacitance = self._model.get_variable_by_ontology_term((self._OXMETA, "membrane_capacitance"))
             if membrane_capacitance is not None:
                 current_units = self._model.units.evaluate_units(membrane_capacitance)
                 capacitance_eqs = [eq for eq in self._model.get_equations_for([membrane_capacitance])
                                    if eq.lhs == membrane_capacitance]
                 assert len(capacitance_eqs) == 1, 'Expecting exactly 1 defining equation expected'
                 equation = capacitance_eqs[0]
-                for desired_units in [unit_dict['units'] for unit_dict in self._STIM_UNITS['membrane_capacitance']]:
-                    desired_units = self._units.get_unit(desired_units)
+                for desired_unit_info in [unit_dict['units'] for unit_dict in self._STIM_UNITS['membrane_capacitance']]:
+                    desired_units = self._units.get_unit(desired_unit_info)
                     if current_units.dimensionality == desired_units.dimensionality:
                         capacitance_factor = \
                             self._model.units.get_conversion_factor(desired_units, from_unit=current_units)
@@ -337,7 +348,7 @@ class ChasteModel(object):
         stim_param = []
         for tag in self._STIM_METADATA_TAGS:
             try:
-                stim_param.append(self._model.get_symbol_by_ontology_term((self._OXMETA, tag)))
+                stim_param.append(self._model.get_variable_by_ontology_term((self._OXMETA, tag)))
             except KeyError:
                 has_stim = has_stim and self._STIM_METADATA_TAGS[tag]['optional']
 
@@ -385,7 +396,7 @@ class ChasteModel(object):
     def _get_ionic_derivs(self):
         """ Getting the derivative symbols that define V (self._membrane_voltage_var)"""
         # use the RHS of the ODE defining V
-        return [x for x in self._model.get_derivative_symbols() if x.args[0] == self._membrane_voltage_var]
+        return [x for x in self._model.get_derivatives() if x.args[0] == self._membrane_voltage_var]
 
     def _get_equations_for_ionic_vars(self):
         """ Get the equations defining the ionic derivatives"""
@@ -416,7 +427,7 @@ class ChasteModel(object):
                                             == self._units.get_unit(unit_cap['units']).dimensionality
                                             and eq.lhs not in self._ionic_derivs]
                 equations = [eq.lhs for eq in equations]
-            desired_units_and_capacitance = unit_cap
+            desired_units_and_capacitance = unit_cap.copy()
         if self._membrane_stimulus_current is not None:
             stimulus_current_factor = \
                 self._model.units.get_conversion_factor(self._units.get_unit(desired_units_and_capacitance['units']),
@@ -482,7 +493,7 @@ class ChasteModel(object):
 
     def _get_y_derivatives(self):
         """ Get derivatives for state variables"""
-        return sorted(self._model.get_derivative_symbols(),
+        return sorted(self._model.get_derivatives(),
                       key=lambda state_var: self._state_var_key_order(state_var))
 
     def _get_derivative_equations(self):
@@ -538,12 +549,12 @@ class ChasteModel(object):
             if negate_stimulus:
                 area = -area
 
-            # remove metadata tag
-            self._membrane_stimulus_current.cmeta_id = None
             # add converter equation
             converter_var = self._model.add_variable(name=self._membrane_stimulus_current.name + '_converter',
                                                      units=self._units.get_unit('uA_per_cm2'),
-                                                     cmeta_id='membrane_stimulus_current')
+                                                     cmeta_id=None)
+            # move metadata tag
+            self._model.transfer_cmeta_id(self._membrane_stimulus_current, converter_var)
             # add new equation for converter_var
             self._model.add_equation(sp.Eq(converter_var, area))
 
@@ -585,20 +596,20 @@ class ChasteModel(object):
             num_symbols = len(symbols)
             eqs = [eq for eq in self._derivative_equations if eq.lhs in symbols]
             for eq in eqs:
-                for s in self._model.find_symbols_and_derivatives([eq.rhs]):
+                for s in self._model.find_variables_and_derivatives([eq.rhs]):
                     symbols.add(s)
         return eqs
 
     def _get_derived_quant_annotated(self):
         """ Get the variables annotated in the model as derived derived-quantity"""
-        return self._model.get_symbols_by_rdf((self._PYCMLMETA, 'derived-quantity'), 'yes')
+        return self._model.get_variables_by_rdf((self._PYCMLMETA, 'derived-quantity'), 'yes')
 
     def _get_derived_quant_exposed(self):
         """ Get the variables in the model that have exposed annotation and are derived quantities
             (irrespective of any derived-quantity tags)"""
         return [q for q in self._model.get_derived_quantities()
                 if self._model.has_ontology_annotation(q, self._OXMETA)
-                and not self._model.get_ontology_terms_by_symbol(q, self._OXMETA)[-1]
+                and not self._model.get_ontology_terms_by_variable(q, self._OXMETA)[-1]
                 .startswith('membrane_stimulus_current')] + \
                [self._membrane_stimulus_current]
 
@@ -646,6 +657,7 @@ class ChasteModel(object):
         self._name_printer = cg.ChastePrinter(lambda symbol: get_symbol_name(symbol))
 
     def _print_modifiable_parameters(self, symbol):
+        """ Print modifiable parameters in the correct format for the model type"""
         return 'mParameters[' + str(self._modifiable_parameters.index(symbol)) + ']'
 
     def _format_modifiable_parameters(self):

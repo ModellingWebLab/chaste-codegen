@@ -1,6 +1,6 @@
 import logging
 import pytest
-from chaste_codegen.tests.test_chaste_cg import get_models
+from chaste_codegen.tests.test_codegen import get_models
 
 # Show more logging output
 LOGGER = logging.getLogger(__name__)
@@ -19,7 +19,7 @@ def test_Normal_cronjob(tmp_path, model, request):
     """ Check generation of Normal models against reference"""
     if request.config.option.markexpr != 'cronjob':
         pytest.skip('Skip if not explicitly set to run cronjob with -m cronjob')
-    from chaste_codegen.tests.test_chaste_cg import test_Normal
+    from chaste_codegen.tests.test_codegen import test_Normal
     test_Normal(tmp_path, model)
 
 
@@ -29,7 +29,7 @@ def test_Opt_cronjob(tmp_path, model, request):
     """ Check generation of Opt models against reference"""
     if request.config.option.markexpr != 'cronjob':
         pytest.skip('Skip if not explicitly set to run cronjob with -m cronjob')
-    from chaste_codegen.tests.test_chaste_cg import test_Opt
+    from chaste_codegen.tests.test_codegen import test_Opt
     test_Opt(tmp_path, model)
 
 
@@ -39,7 +39,7 @@ def test_Cvode_cronjob(tmp_path, model, request):
     """ Check generation of Cvode models against reference"""
     if request.config.option.markexpr != 'cronjob':
         pytest.skip('Skip if not explicitly set to run cronjob with -m cronjob')
-    from chaste_codegen.tests.test_chaste_cg import test_Cvode
+    from chaste_codegen.tests.test_codegen import test_Cvode
     test_Cvode(tmp_path, model)
 
 
@@ -49,5 +49,5 @@ def test_Cvode_jacobian_cronjob(tmp_path, model, request):
     """ Check generation of Cvode models against reference"""
     if request.config.option.markexpr != 'cronjob':
         pytest.skip('Skip if not explicitly set to run cronjob with -m cronjob')
-    from chaste_codegen.tests.test_chaste_cg import test_Cvode_jacobian
+    from chaste_codegen.tests.test_codegen import test_Cvode_jacobian
     test_Cvode_jacobian(tmp_path, model)
