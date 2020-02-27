@@ -2,9 +2,7 @@
 Main module for cardiac Chaste code generation
 """
 import logging
-import sympy
-
-from cellmlmanip import transpiler
+from cellmlmanip.transpiler import Transpiler
 from ._math_functions import _exp, _abs, _acos, _cos, _sqrt, _sin
 
 #
@@ -35,21 +33,10 @@ from .cvode_chaste_model import CvodeChasteModel  # noqa
 logging.basicConfig()
 del(logging)
 
-# Set cellmlmanip exp function
-setattr(sympy, '_exp', _exp)
-transpiler.SIMPLE_MATHML_TO_SYMPY_NAMES['exp'] = '_exp'
-
-setattr(sympy, '_abs', _abs)
-transpiler.SIMPLE_MATHML_TO_SYMPY_NAMES['abs'] = '_abs'
-
-setattr(sympy, '_acos', _acos)
-transpiler.SIMPLE_MATHML_TO_SYMPY_NAMES['acos'] = '_acos'
-
-setattr(sympy, '_cos', _cos)
-transpiler.SIMPLE_MATHML_TO_SYMPY_NAMES['cos'] = '_cos'
-
-setattr(sympy, '_sqrt', _sqrt)
-transpiler.SIMPLE_MATHML_TO_SYMPY_NAMES['sqrt'] = '_sqrt'
-
-setattr(sympy, '_sin', _sin)
-transpiler.SIMPLE_MATHML_TO_SYMPY_NAMES['sin'] = '_sin'
+# Set transpiler to prodcue our custom classes in order to avoid premature simplification/canonisation
+Transpiler.set_mathml_handler('exp', _exp)
+Transpiler.set_mathml_handler('abs', _abs)
+Transpiler.set_mathml_handler('acos', _acos)
+Transpiler.set_mathml_handler('cos', _cos)
+Transpiler.set_mathml_handler('sqrt', _sqrt)
+Transpiler.set_mathml_handler('sin', _sin)
