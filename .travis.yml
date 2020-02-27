@@ -15,4 +15,4 @@ script:
     - python -m flake8
     - if [[ $TRAVIS_EVENT_TYPE == "cron" ]] ; then python -m pytest -m cronjob --cov=chaste_codegen chaste_codegen ; else python -m pytest --cov=chaste_codegen chaste_codegen ; fi
 after_success:
-    - codecov
+    - codecov 
