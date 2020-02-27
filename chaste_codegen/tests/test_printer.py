@@ -69,7 +69,7 @@ class TestChastePrinter(object):
         assert printer.doprint(sp.atan(x)) == 'atan(x)'
         assert printer.doprint(sp.atanh(x)) == 'atanh(x)'
         assert printer.doprint(sp.ceiling(x)) == 'ceil(x)'
-        assert printer.doprint(sp.cosh(x)) == 'cosh(x)'      
+        assert printer.doprint(sp.cosh(x)) == 'cosh(x)'
         assert printer.doprint(sp.factorial(x)) == 'factorial(x)'
         assert printer.doprint(sp.floor(x)) == 'floor(x)'
         assert printer.doprint(sp.log(x)) == 'log(x)'
