@@ -156,20 +156,20 @@ def test_script_opt(capsys, tmp_path):
 def test_script_cvode(capsys, tmp_path):
     LOGGER.info('Testing model with options -t ChasteOpt and -o for command line script\n')
     tmp_path = str(tmp_path)
-    model_name = 'luo_rudy_1994'
+    model_name = 'mahajan_2008'
     model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
     assert os.path.isfile(model_file)
-    outfile = os.path.join(tmp_path, 'luo_rudy_1994.cpp')
+    outfile = os.path.join(tmp_path, 'mahajan_2008.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', model_file, '-t', 'CVODE', '-o', outfile, '-c', 'Cellluo_rudy_1994FromCellMLCvode']
+    testargs = ['chaste_codegen', model_file, '-t', 'CVODE', '-o', outfile, '-c', 'Cellmahajan_2008FromCellMLCvode']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
     reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Cvode')
-    compare_file_against_reference(os.path.join(reference, 'luo_rudy_1994.hpp'),
-                                   os.path.join(tmp_path, 'luo_rudy_1994.hpp'))
-    compare_file_against_reference(os.path.join(reference, 'luo_rudy_1994.cpp'),
-                                   os.path.join(tmp_path, 'luo_rudy_1994.cpp'))
+    compare_file_against_reference(os.path.join(reference, 'mahajan_2008.hpp'),
+                                   os.path.join(tmp_path, 'mahajan_2008.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'mahajan_2008.cpp'),
+                                   os.path.join(tmp_path, 'mahajan_2008.cpp'))
 
 
 def test_script_cvode_jacobian(capsys, tmp_path):
