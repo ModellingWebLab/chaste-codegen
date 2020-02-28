@@ -537,7 +537,7 @@ class ChasteModel(object):
                                         symbols.extend(rhs.free_symbols)
                                     else:
                                         voltage_rhs = voltage_rhs.replace(symbol, 1.0)  # other variables = 1
-                        voltage_rhs = voltage_rhs.replace(self._membrane_stimulus_current, 1.0)  # - stimulus current = 1
+                        voltage_rhs = voltage_rhs.replace(self._membrane_stimulus_current, 1.0)  # stimulus current = 1
                         negate_stimulus = voltage_rhs > 0.0
 
             # Set GetIntracellularAreaStimulus calculaion
