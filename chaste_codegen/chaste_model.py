@@ -173,9 +173,9 @@ class ChasteModel(object):
         self._formatted_derived_quant = self._format_derived_quant()
         self._formatted_quant_eqs = self._format_derived_quant_eqs()
 
-    def _get_equations_for(self, symbols, recurse=True):
+    def _get_equations_for(self, variables, recurse=True):
         """Returns equations excluding once where lhs is a modifiable parameter"""
-        equations = [eq for eq in self._model.get_equations_for(symbols, recurse=recurse)
+        equations = [eq for eq in self._model.get_equations_for(variables, recurse=recurse)
                      if eq.lhs not in self._modifiable_parameters]
         return [sp.Eq(eq.lhs, optimize(eq.rhs, self._OPTIMS)) for eq in equations]
 
@@ -391,7 +391,7 @@ class ChasteModel(object):
         return stim_param, return_stim_eqs
 
     def _get_ionic_derivs(self):
-        """ Getting the derivative symbols that define V (self._membrane_voltage_var)"""
+        """ Getting the derivatives that define V (self._membrane_voltage_var)"""
         # use the RHS of the ODE defining V
         return [x for x in self._model.get_derivatives() if x.args[0] == self._membrane_voltage_var]
 
@@ -520,23 +520,23 @@ class ChasteModel(object):
                     # dV/dt gives a positive value.
                     if d_eqs[i].lhs.args[0] == self._membrane_voltage_var:
                         voltage_rhs = d_eqs[i].rhs
-                        symbols = list(voltage_rhs.free_symbols)
-                        for symbol in symbols:
-                            if self._membrane_stimulus_current != symbol:
+                        variables = list(voltage_rhs.free_symbols)
+                        for variable in variables:
+                            if self._membrane_stimulus_current != variable:
                                 if self._units.get_unit(self._current_unit_and_capacitance['units']).dimensionality == \
-                                        self._model.units.evaluate_units(symbol).dimensionality:
-                                    voltage_rhs = voltage_rhs.subs({symbol: 0.0})  # other currents = 0
+                                        self._model.units.evaluate_units(variable).dimensionality:
+                                    voltage_rhs = voltage_rhs.subs({variable: 0.0})  # other currents = 0
                                 else:
                                     # For other variables see if we need to follow their definitions first
                                     rhs = None
-                                    if symbol in [eq.lhs for eq in d_eqs]:
-                                        rhs = [eq.rhs for eq in d_eqs if eq.lhs == symbol][-1]
+                                    if variable in [eq.lhs for eq in d_eqs]:
+                                        rhs = [eq.rhs for eq in d_eqs if eq.lhs == variable][-1]
 
                                     if rhs is not None and not isinstance(rhs, sp.numbers.Float):
-                                        voltage_rhs = voltage_rhs.subs({symbol: rhs})  # Update definition
-                                        symbols.extend(rhs.free_symbols)
+                                        voltage_rhs = voltage_rhs.subs({variable: rhs})  # Update definition
+                                        variables.extend(rhs.free_symbols)
                                     else:
-                                        voltage_rhs = voltage_rhs.subs({symbol: 1.0})  # other variables = 1
+                                        voltage_rhs = voltage_rhs.subs({variable: 1.0})  # other variables = 1
                         voltage_rhs = voltage_rhs.subs({self._membrane_stimulus_current: 1.0})  # - stimulus current = 1
                         negate_stimulus = voltage_rhs > 0.0
 
@@ -587,14 +587,14 @@ class ChasteModel(object):
         """ Get equations defining the derivatives excluding V (self._membrane_voltage_var)"""
         # stat with derivatives without voltage and add all equations used
         eqs = []
-        symbols = set([deriv for deriv in self._y_derivatives if deriv.args[0] != self._membrane_voltage_var])
-        num_symbols = -1
-        while num_symbols < len(symbols):
-            num_symbols = len(symbols)
-            eqs = [eq for eq in self._derivative_equations if eq.lhs in symbols]
+        derivatives = set([deriv for deriv in self._y_derivatives if deriv.args[0] != self._membrane_voltage_var])
+        num_derivatives = -1
+        while num_derivatives < len(derivatives):
+            num_derivatives = len(derivatives)
+            eqs = [eq for eq in self._derivative_equations if eq.lhs in derivatives]
             for eq in eqs:
                 for s in self._model.find_variables_and_derivatives([eq.rhs]):
-                    symbols.add(s)
+                    derivatives.add(s)
         return eqs
 
     def _get_derived_quant_annotated(self):
@@ -629,8 +629,8 @@ class ChasteModel(object):
 
     def _add_printers(self):
         """ Initialises Printers for outputting chaste code. """
-        def get_symbol_name(s, interface=False):
-            """Get the correct variable name based on the symbol and whether it should be in the chaste_interface."""
+        def get_variable_name(s, interface=False):
+            """Get the correct variable name based on the variable and whether it should be in the chaste_interface."""
             s_name = str(s).replace('$', '__')
 
             prefix = 'var_chaste_interface_' if interface else 'var'
@@ -642,20 +642,20 @@ class ChasteModel(object):
         # (state variables, time, lhs of default_stimulus eqs, i_ionic and lhs of y_derivatives)
         # Print modifiable parameters as mParameters[index]
         self._printer = \
-            cg.ChastePrinter(lambda symbol:
-                             get_symbol_name(symbol, symbol in self._in_interface)
-                             if symbol not in self._modifiable_parameters
-                             else self._print_modifiable_parameters(symbol),
+            cg.ChastePrinter(lambda variable:
+                             get_variable_name(variable, variable in self._in_interface)
+                             if variable not in self._modifiable_parameters
+                             else self._print_modifiable_parameters(variable),
                              lambda deriv: 'd_dt_chaste_interface_' +
-                                           (get_symbol_name(deriv.expr)
-                                            if isinstance(deriv, sp.Derivative) else get_symbol_name(deriv)))
+                                           (get_variable_name(deriv.expr)
+                                            if isinstance(deriv, sp.Derivative) else get_variable_name(deriv)))
 
         # Printer for printing variable in comments e.g. for ode system information
-        self._name_printer = cg.ChastePrinter(lambda symbol: get_symbol_name(symbol))
+        self._name_printer = cg.ChastePrinter(lambda variable: get_variable_name(variable))
 
-    def _print_modifiable_parameters(self, symbol):
+    def _print_modifiable_parameters(self, variable):
         """ Print modifiable parameters in the correct format for the model type"""
-        return 'mParameters[' + str(self._modifiable_parameters.index(symbol)) + ']'
+        return 'mParameters[' + str(self._modifiable_parameters.index(variable)) + ']'
 
     def _format_modifiable_parameters(self):
         """ Format the modifiable parameter for printing to chaste code"""
@@ -676,29 +676,29 @@ class ChasteModel(object):
                     return float(range_annotation[0][2])
             return ''
 
-        # Get all used symbols for eqs for ionic variables to be able to indicate if a state var is used
-        ionic_var_symbols = set()
+        # Get all used variables for eqs for ionic variables to be able to indicate if a state var is used
+        ionic_var_variables = set()
         for eq in self._extended_equations_for_ionic_vars:
-            ionic_var_symbols.update(eq.rhs.free_symbols)
+            ionic_var_variables.update(eq.rhs.free_symbols)
 
-        # Get all used symbols for y derivs to be able to indicate if a state var is used
-        y_deriv_symbols = set()
+        # Get all used variables for y derivs to be able to indicate if a state var is used
+        y_deriv_variables = set()
         for eq in self._derivative_equations:
-            y_deriv_symbols.update(eq.rhs.free_symbols)
+            y_deriv_variables.update(eq.rhs.free_symbols)
 
-        # Get all used symbols for eqs for derived quantities variables to be able to indicate if a state var is used
-        derived_quant_symbols = set()
+        # Get all used variables for eqs for derived quantities variables to be able to indicate if a state var is used
+        derived_quant_variables = set()
         for eq in self._derived_quant_eqs:
-            derived_quant_symbols.update(eq.rhs.free_symbols)
+            derived_quant_variables.update(eq.rhs.free_symbols)
 
         formatted_state_vars = \
             [{'var': self._printer.doprint(var),
               'annotated_var_name': self._get_var_display_name(var),
               'initial_value': str(self._get_initial_value(var)),
               'units': self._model.units.format(self._model.units.evaluate_units(var)),
-              'in_ionic': var in ionic_var_symbols,
-              'in_y_deriv': var in y_deriv_symbols,
-              'in_derived_quant': var in derived_quant_symbols,
+              'in_ionic': var in ionic_var_variables,
+              'in_y_deriv': var in y_deriv_variables,
+              'in_derived_quant': var in derived_quant_variables,
               'range_low': get_range_annotation(var, 'range-low'),
               'range_high': get_range_annotation(var, 'range-high'),
               'sympy_var': var}
