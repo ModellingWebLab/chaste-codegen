@@ -391,7 +391,7 @@ class ChasteModel(object):
         return stim_param, return_stim_eqs
 
     def _get_ionic_derivs(self):
-        """ Getting the derivative variables that define V (self._membrane_voltage_var)"""
+        """ Getting the derivatives that define V (self._membrane_voltage_var)"""
         # use the RHS of the ODE defining V
         return [x for x in self._model.get_derivatives() if x.args[0] == self._membrane_voltage_var]
 
@@ -587,14 +587,14 @@ class ChasteModel(object):
         """ Get equations defining the derivatives excluding V (self._membrane_voltage_var)"""
         # stat with derivatives without voltage and add all equations used
         eqs = []
-        variables = set([deriv for deriv in self._y_derivatives if deriv.args[0] != self._membrane_voltage_var])
-        num_variables = -1
-        while num_variables < len(variables):
-            num_variables = len(variables)
-            eqs = [eq for eq in self._derivative_equations if eq.lhs in variables]
+        derivatives = set([deriv for deriv in self._y_derivatives if deriv.args[0] != self._membrane_voltage_var])
+        num_derivatives = -1
+        while num_derivatives < len(derivatives):
+            num_derivatives = len(derivatives)
+            eqs = [eq for eq in self._derivative_equations if eq.lhs in derivatives]
             for eq in eqs:
                 for s in self._model.find_variables_and_derivatives([eq.rhs]):
-                    variables.add(s)
+                    derivatives.add(s)
         return eqs
 
     def _get_derived_quant_annotated(self):
