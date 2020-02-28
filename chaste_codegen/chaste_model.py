@@ -525,7 +525,7 @@ class ChasteModel(object):
                             if self._membrane_stimulus_current != symbol:
                                 if self._units.get_unit(self._current_unit_and_capacitance['units']).dimensionality == \
                                         self._model.units.evaluate_units(symbol).dimensionality:
-                                    voltage_rhs = voltage_rhs.subs({symbol: 0.0})  # other currents = 0
+                                    voltage_rhs = voltage_rhs.replace(symbol, 0.0)  # other currents = 0
                                 else:
                                     # For other variables see if we need to follow their definitions first
                                     rhs = None
@@ -533,11 +533,11 @@ class ChasteModel(object):
                                         rhs = [eq.rhs for eq in d_eqs if eq.lhs == symbol][-1]
 
                                     if rhs is not None and not isinstance(rhs, sp.numbers.Float):
-                                        voltage_rhs = voltage_rhs.subs({symbol: rhs})  # Update definition
+                                        voltage_rhs = voltage_rhs.replace(symbol, rhs)  # Update definition
                                         symbols.extend(rhs.free_symbols)
                                     else:
-                                        voltage_rhs = voltage_rhs.subs({symbol: 1.0})  # other variables = 1
-                        voltage_rhs = voltage_rhs.subs({self._membrane_stimulus_current: 1.0})  # - stimulus current = 1
+                                        voltage_rhs = voltage_rhs.replace(symbol, 1.0)  # other variables = 1
+                        voltage_rhs = voltage_rhs.replace(self._membrane_stimulus_current, 1.0)  # - stimulus current = 1
                         negate_stimulus = voltage_rhs > 0.0
 
             # Set GetIntracellularAreaStimulus calculaion
