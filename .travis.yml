@@ -16,3 +16,4 @@ script:
     - if [[ $TRAVIS_EVENT_TYPE == "cron" ]] ; then python -m pytest -m cronjob --cov=chaste_codegen chaste_codegen ; else python -m pytest -m "not cronjob" --cov=chaste_codegen chaste_codegen ; fi
 after_success:
     - codecov
+
