@@ -7,53 +7,47 @@ LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 
 
-chaste_all_normal_models = get_models(ref_folder='cronjob_reference_models', type='Normal')
-chaste_all_opt_models = get_models(ref_folder='cronjob_reference_models', type='Opt')
-chaste_all_cvode_models = get_models(ref_folder='cronjob_reference_models', type='Cvode')
-chaste_all_cvode_models_jacobian = get_models(ref_folder='cronjob_reference_models', type='Cvode_with_jacobian')
+chaste_all_normal_models = get_models(ref_folder='all_models_reference_models', type='Normal')
+chaste_all_opt_models = get_models(ref_folder='all_models_reference_models', type='Opt')
+chaste_all_cvode_models = get_models(ref_folder='all_models_reference_models', type='Cvode')
+chaste_all_cvode_models_jacobian = get_models(ref_folder='all_models_reference_models', type='Cvode_with_jacobian')
 
 
-@pytest.mark.cronjob
-@pytest.mark.normal
+@pytest.mark.all_models
 @pytest.mark.parametrize(('model'), chaste_all_normal_models)
-def test_Normal_cronjob(tmp_path, model, request):
+def test_Normal_all_models(tmp_path, model, request):
     """ Check generation of Normal models against reference"""
-    if request.config.option.markexpr != 'cronjob and normal' and\
-            request.config.option.markexpr != 'normal and cronjob':
-        pytest.skip('Skip if not explicitly set to run cronjob with -m "cronjob and normal"')
+    if request.config.option.markexpr != 'all_models':
+        pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
     from chaste_codegen.tests.test_codegen import test_Normal
     test_Normal(tmp_path, model)
 
 
-@pytest.mark.cronjob
-@pytest.mark.opt
+@pytest.mark.all_models
 @pytest.mark.parametrize(('model'), chaste_all_opt_models)
-def test_Opt_cronjob(tmp_path, model, request):
+def test_Opt_all_models(tmp_path, model, request):
     """ Check generation of Opt models against reference"""
-    if request.config.option.markexpr != 'cronjob and opt' and request.config.option.markexpr != 'opt and cronjob':
-        pytest.skip('Skip if not explicitly set to run cronjob with -m "cronjob and opt"')
+    if request.config.option.markexpr != 'all_models':
+        pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
     from chaste_codegen.tests.test_codegen import test_Opt
     test_Opt(tmp_path, model)
 
 
-@pytest.mark.cronjob
-@pytest.mark.cvode
+@pytest.mark.all_models
 @pytest.mark.parametrize(('model'), chaste_all_cvode_models)
-def test_Cvode_cronjob(tmp_path, model, request):
+def test_Cvode_all_models(tmp_path, model, request):
     """ Check generation of Cvode models against reference"""
-    if request.config.option.markexpr != 'cronjob and cvode' and request.config.option.markexpr != 'cvode and cronjob':
-        pytest.skip('Skip if not explicitly set to run cronjob with -m "cronjob and cvode"')
+    if request.config.option.markexpr != 'all_models':
+        pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
     from chaste_codegen.tests.test_codegen import test_Cvode
     test_Cvode(tmp_path, model)
 
 
-@pytest.mark.cronjob
-@pytest.mark.cvode_jacobian
+@pytest.mark.all_models
 @pytest.mark.parametrize(('model'), chaste_all_cvode_models_jacobian)
-def test_Cvode_jacobian_cronjob(tmp_path, model, request):
+def test_Cvode_jacobian_all_models(tmp_path, model, request):
     """ Check generation of Cvode models against reference"""
-    if request.config.option.markexpr != 'cronjob and cvode_jacobian' and\
-            request.config.option.markexpr != 'cvode_jacobian and cronjob':
-        pytest.skip('Skip if not explicitly set to run cronjob with -m "cronjob and cvode_jacobian"')
+    if request.config.option.markexpr != 'all_models':
+        pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
     from chaste_codegen.tests.test_codegen import test_Cvode_jacobian
     test_Cvode_jacobian(tmp_path, model)
