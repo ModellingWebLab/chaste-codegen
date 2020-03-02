@@ -10,9 +10,10 @@ install:
     - pip install codecov
     # Temporary cellmlmanip install, until it can be done with pip
     - pip install -e git://github.com/ModellingWebLab/cellmlmanip.git#egg=cellmlmanip
-
-script:
-    - python -m flake8
-    - if [[ $TRAVIS_EVENT_TYPE == "cron" ]] ; then python -m pytest -m cronjob --cov=chaste_codegen chaste_codegen ; else python -m pytest -m "not cronjob" --cov=chaste_codegen chaste_codegen ; fi
+jobs:
+    include:
+        - stage: test
+        script: - python -m flake8
+                - if [[ $TRAVIS_EVENT_TYPE == "cron" ]] ; then python -m pytest -m cronjob --cov=chaste_codegen chaste_codegen ; else python -m pytest -m "not cronjob" --cov=chaste_codegen chaste_codegen ; fi
 after_success:
     - codecov
