@@ -13,10 +13,10 @@ install:
 
 script:
     - python -m flake8
-    - if [[ $TRAVIS_EVENT_TYPE == "cron" ]] ; then python -m pytest -m "cronjob and cvode_jacobian"; fi
-    - if [[ $TRAVIS_EVENT_TYPE == "cron" ]] ; then python -m pytest -m "cronjob and cvode"; fi
-    - if [[ $TRAVIS_EVENT_TYPE == "cron" ]] ; then python -m pytest -m "cronjob and opt"; fi
-    - if [[ $TRAVIS_EVENT_TYPE == "cron" ]] ; then python -m pytest -m "cronjob and normal"; fi
+    - if [[ $TRAVIS_EVENT_TYPE != "cron" ]] ; then python -m pytest -m "cronjob and cvode_jacobian"; fi
+    - if [[ $TRAVIS_EVENT_TYPE != "cron" ]] ; then python -m pytest -m "cronjob and cvode"; fi
+    - if [[ $TRAVIS_EVENT_TYPE != "cron" ]] ; then python -m pytest -m "cronjob and opt"; fi
+    - if [[ $TRAVIS_EVENT_TYPE != "cron" ]] ; then python -m pytest -m "cronjob and normal"; fi
     - python -m pytest -m "not cronjob" --cov=chaste_codegen chaste_codegen
 after_success:
     - codecov
