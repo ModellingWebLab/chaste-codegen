@@ -10,29 +10,30 @@ class CvodeChasteModel(cg.ChasteModel):
     def __init__(self, model, file_name, **kwargs):
         super().__init__(model, file_name, **kwargs)
         self._use_analytic_jacobian = kwargs.get('use_analytic_jacobian', False)  # store if jacobians are needed
-        self._formatted_jacobian_equations = []
-        self._formatted_jacobian_matrix_entries = sp.Matrix()
         if self._use_analytic_jacobian:
+            # get deriv eqs and substitute in all variables other than state vars
+            self._derivative_equations = \
+                partial_eval(self._derivative_equations, self._y_derivatives, keep_multiple_usages=False)
             self._jacobian_equations, self._jacobian_matrix = self._get_jacobian()
             self._formatted_state_vars = self._update_state_vars()
             self._formatted_jacobian_equations, self._formatted_jacobian_matrix_entries = self._format_jacobian()
+        else:
+            self._formatted_jacobian_equations = []
+            self._formatted_jacobian_matrix_entries = sp.Matrix()
 
     def _print_modifiable_parameters(self, symbol):
         return 'NV_Ith_S(mParameters, ' + str(self._modifiable_parameters.index(symbol)) + ')'
 
     def _get_jacobian(self):
         jacobian_equations, jacobian_matrix = [], []
-        if self._use_analytic_jacobian:
-            state_var_matrix = sp.Matrix(self._state_vars)
-            # get deriv eqs and substitute in all variables other than state vars
-            derivative_eqs = partial_eval(self._derivative_equations, self._y_derivatives, keep_multiple_usages=False)
-            # sort by state var so both are in the same order
-            derivative_eqs = sorted(derivative_eqs, key=lambda d: self._state_vars.index(d.lhs.args[0]))
-            # we're only interested in the rhs
-            derivative_eqs = [eq.rhs for eq in derivative_eqs]
-            derivative_eq_matrix = sp.Matrix(derivative_eqs)
-            jacobian_matrix = derivative_eq_matrix.jacobian(state_var_matrix)
-            jacobian_equations, jacobian_matrix = sp.cse(jacobian_matrix, order='none')
+        state_var_matrix = sp.Matrix(self._state_vars)
+        # sort by state var
+        derivative_eqs = sorted(self._derivative_equations, key=lambda d: self._state_vars.index(d.lhs.args[0]))
+        # we're only interested in the rhs
+        derivative_eqs = [eq.rhs for eq in derivative_eqs]
+        derivative_eq_matrix = sp.Matrix(derivative_eqs)
+        jacobian_matrix = derivative_eq_matrix.jacobian(state_var_matrix)
+        jacobian_equations, jacobian_matrix = sp.cse(jacobian_matrix, order='none')
         return jacobian_equations, sp.Matrix(jacobian_matrix)
 
     def _update_state_vars(self):
@@ -61,7 +62,6 @@ class CvodeChasteModel(cg.ChasteModel):
 
     def generate_chaste_code(self):
         """ Generates and stores chaste code for the CVODE model"""
-
         # Generate hpp for model
         template = cg.load_template('cvode_model.hpp')
         self.generated_hpp = template.render({
