@@ -10,9 +10,12 @@ class CvodeChasteModel(cg.ChasteModel):
     def __init__(self, model, file_name, **kwargs):
         super().__init__(model, file_name, **kwargs)
         self._use_analytic_jacobian = kwargs.get('use_analytic_jacobian', False)  # store if jacobians are needed
-        self._jacobian_equations, self._jacobian_matrix = self._get_jacobian()
-        self._formatted_state_vars = self._update_state_vars()
-        self._formatted_jacobian_equations, self._formatted_jacobian_matrix_entries = self._format_jacobian()
+        self._formatted_jacobian_equations = []
+        self._formatted_jacobian_matrix_entries = sp.Matrix()
+        if self._use_analytic_jacobian:
+            self._jacobian_equations, self._jacobian_matrix = self._get_jacobian()
+            self._formatted_state_vars = self._update_state_vars()
+            self._formatted_jacobian_equations, self._formatted_jacobian_matrix_entries = self._format_jacobian()
 
     def _print_modifiable_parameters(self, symbol):
         return 'NV_Ith_S(mParameters, ' + str(self._modifiable_parameters.index(symbol)) + ')'
