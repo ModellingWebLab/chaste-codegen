@@ -30,7 +30,7 @@ def test_Cvode_jacobian(tmp_path, model):
     chaste_model = cg.CvodeChasteModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
                                        class_name=class_name, use_analytic_jacobian=True)
     chaste_model.generate_chaste_code()
-    # Comprare against referene
+    # Compare against referene
     test_utils.compare_model_against_reference('Cvode_with_jacobian', chaste_model,
                                                tmp_path, model['expected_hpp_path'],
                                                model['expected_cpp_path'])
@@ -46,7 +46,7 @@ def test_Cvode(tmp_path, model):
     chaste_model = cg.CvodeChasteModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
                                        class_name=class_name)
     chaste_model.generate_chaste_code()
-    # Comprare against referene
+    # Compare against referene
     test_utils.compare_model_against_reference('Cvode', chaste_model, tmp_path, model['expected_hpp_path'],
                                                model['expected_cpp_path'])
 
@@ -60,7 +60,7 @@ def test_Normal(tmp_path, model):
     chaste_model = cg.NormalChasteModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
                                         class_name=class_name)
     chaste_model.generate_chaste_code()
-    # Comprare against referene
+    # Compare against referene
     test_utils.compare_model_against_reference('Normal', chaste_model, tmp_path, model['expected_hpp_path'],
                                                model['expected_cpp_path'])
 
@@ -75,7 +75,7 @@ def test_Opt(tmp_path, model):
     chaste_model = cg.OptChasteModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
                                      class_name=class_name)
     chaste_model.generate_chaste_code()
-    # Comprare against referene
+    # Compare against referene
     test_utils.compare_model_against_reference('Opt', chaste_model, tmp_path, model['expected_hpp_path'],
                                                model['expected_cpp_path'])
 
@@ -95,7 +95,7 @@ def test_dymaic_model(tmp_path):
         os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'Normal', 'dynamic_luo_rudy_1994.hpp')
     expected_cpp_path = \
         os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'Normal', 'dynamic_luo_rudy_1994.cpp')
-    # Comprare against reference
+    # Compare against reference
     test_utils.compare_model_against_reference('Normal', chaste_model, tmp_path, expected_hpp_path,
                                                expected_cpp_path)
 
@@ -115,7 +115,7 @@ def test_dymaic_cvode(tmp_path):
         os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'Cvode', 'dynamic_luo_rudy_1994.hpp')
     expected_cpp_path = \
         os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'Cvode', 'dynamic_luo_rudy_1994.cpp')
-    # Comprare against reference
+    # Compare against reference
     test_utils.compare_model_against_reference('Cvode', chaste_model, tmp_path, expected_hpp_path,
                                                expected_cpp_path)
 
@@ -137,7 +137,7 @@ def test_expose_annotated_variables(tmp_path):
                                      'expose_annotated_variables_cellaslanidi_model_2009.hpp')
     expected_cpp_path = os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'Normal',
                                      'expose_annotated_variables_cellaslanidi_model_2009.cpp')
-    # Comprare against reference
+    # Compare against reference
     test_utils.compare_model_against_reference('Normal', chaste_model, tmp_path,
                                                expected_hpp_path, expected_cpp_path)
 
