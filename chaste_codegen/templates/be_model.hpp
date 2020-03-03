@@ -19,7 +19,7 @@
 {% if dynamically_loadable %}#include "AbstractDynamicallyLoadableEntity.hpp"{%- endif %}
 #include "AbstractStimulusFunction.hpp"
 
-class {{class_name}} : public AbstractBackwardEulerCardiacCell{%- if dynamically_loadable %}, public AbstractDynamicallyLoadableEntity{%- endif %}
+class {{class_name}} : public AbstractBackwardEulerCardiacCell<{{nonlinear_state_vars|length}}>{%- if dynamically_loadable %}, public AbstractDynamicallyLoadableEntity{%- endif %}
 {
     friend class boost::serialization::access;
     template<class Archive>

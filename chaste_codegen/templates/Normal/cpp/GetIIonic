@@ -1,0 +1,17 @@
+double {{class_name}}::GetIIonic(const std::vector<double>* pStateVariables)
+    {
+        // For state variable interpolation (SVI) we read in interpolated state variables,
+        // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
+        if (!pStateVariables) pStateVariables = &rGetStateVariables();
+        const std::vector<double>& rY = *pStateVariables;
+        {% for state_var in state_vars %}
+        {%- if state_var.in_ionic %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
+        // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
+        {% endif %}{%- endfor %}{% for ionic_var in ionic_vars %}
+        const double {{ionic_var.lhs}} = {{ionic_var.rhs}}; // {{ionic_var.units}}
+        {%- endfor %}
+
+        const double i_ionic = var_chaste_interface__i_ionic;
+        EXCEPT_IF_NOT(!std::isnan(i_ionic));
+        return i_ionic;
+    }
