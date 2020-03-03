@@ -92,4 +92,3 @@ namespace boost
 
 #endif // {% filter upper %}{{class_name}}_HPP_{% endfilter %}
 #endif // CHASTE_CVODE
-
