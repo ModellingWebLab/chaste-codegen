@@ -1,0 +1,35 @@
+
+// Needs to be included last
+#include "SerializationExportWrapper.hpp"
+CHASTE_CLASS_EXPORT({{class_name}})
+
+namespace boost
+{
+    namespace serialization
+    {
+        template<class Archive>
+        inline void save_construct_data(
+            Archive & ar, const {{class_name}} * t, const unsigned int fileVersion)
+        {
+            const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
+            const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
+            ar << p_solver;
+            ar << p_stimulus;
+        }
+
+        template<class Archive>
+        inline void load_construct_data(
+            Archive & ar, {{class_name}} * t, const unsigned int fileVersion)
+        {
+            boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
+            boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
+            ar >> p_solver;
+            ar >> p_stimulus;
+            ::new(t){{class_name}}(p_solver, p_stimulus);
+        }
+
+    }
+
+}
+
+#endif // {% filter upper %}{{class_name}}_HPP_{% endfilter %}

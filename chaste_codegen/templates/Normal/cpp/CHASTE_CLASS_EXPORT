@@ -1,0 +1,14 @@
+
+// Serialization for Boost >= 1.36
+#include "SerializationExportWrapperForCpp.hpp"
+CHASTE_CLASS_EXPORT({{class_name}})
+{% if dynamically_loadable %}extern "C"
+{
+    AbstractCardiacCellInterface* MakeCardiacCell(
+            boost::shared_ptr<AbstractIvpOdeSolver> pSolver,
+            boost::shared_ptr<AbstractStimulusFunction> pStimulus)
+    {
+        return new {{class_name}}(pSolver, pStimulus);
+    }
+
+}{%- endif %}

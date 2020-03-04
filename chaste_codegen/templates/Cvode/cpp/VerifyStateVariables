@@ -1,0 +1,27 @@
+    {% if use_verify_state_variables %}
+
+    void {{class_name}}::VerifyStateVariables()
+    {
+        /* We only expect CVODE to keep state variables to within its tolerances,
+         * not exactly the bounds prescribed to each variable that are checked here.
+         *
+         * For 99.99% of paces this->mAbsTol works,
+         * For 99.999% of paces 10*this->mAbsTol is fine,
+         * but unfortunately 100x seems to be required on rare occasions for upstrokes.
+         * This sounds bad, but is probably typically only 1e-5 or 1e-6.
+         */
+        const double tol = 100*this->mAbsTol;
+        N_Vector rY = rGetStateVariables();
+        {% for state_var in state_vars %}
+        {%- if state_var.range_low != '' or  state_var.range_high != '' %}double {{ state_var.var }} = NV_Ith_S(rY,{{loop.index0}});
+        // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
+        {% endif %}{%- endfor %}
+        {% for state_var in state_vars %}
+        {%- if state_var.range_low != '' or  state_var.range_high != '' %}if ({%- if state_var.range_low != '' %}{{ state_var.var }} < {{ state_var.range_low }} - tol{% endif %}{%- if state_var.range_low != '' and  state_var.range_high != '' %} || {% endif %}{%- if state_var.range_high != '' %}{{ state_var.var }} > {{ state_var.range_high }} + tol{% endif %})
+        {
+            EXCEPTION(DumpState("State variable {{ state_var.annotated_var_name }} has gone out of range. Check numerical parameters, for example time and space stepsizes, and/or solver tolerances"));
+        }
+        {% endif %}{%- endfor %}
+    }
+
+    {% endif %}

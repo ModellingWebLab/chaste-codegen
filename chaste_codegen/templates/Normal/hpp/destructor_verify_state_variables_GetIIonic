@@ -1,0 +1,5 @@
+    ~{{class_name}}();
+    {%- if use_verify_state_variables %}
+    void VerifyStateVariables();
+    {%- endif %}
+    double GetIIonic(const std::vector<double>* pStateVariables=NULL);

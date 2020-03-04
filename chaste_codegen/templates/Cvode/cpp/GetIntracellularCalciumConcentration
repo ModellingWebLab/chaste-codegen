@@ -1,0 +1,6 @@
+    {%- if use_get_intracellular_calcium_concentration %}
+    double {{class_name}}::GetIntracellularCalciumConcentration()
+    {
+        return NV_Ith_S(mStateVariables, {{cytosolic_calcium_concentration_index}});
+    }
+    {% endif %}
