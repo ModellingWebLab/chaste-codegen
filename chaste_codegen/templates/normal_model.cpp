@@ -8,4 +8,4 @@
 {% include "Normal/cpp/GetIIonic" %}
 {% include "Normal/cpp/EvaluateYDerivatives" %}{% include "Normal/cpp/ComputeDerivedQuantities" %}
 {% include "Normal/cpp/OdeSystemInformation" %}
-{% include "Sgared/cpp/CHASTE_CLASS_EXPORT" %}
+{% include "Shared/cpp/CHASTE_CLASS_EXPORT" %}
