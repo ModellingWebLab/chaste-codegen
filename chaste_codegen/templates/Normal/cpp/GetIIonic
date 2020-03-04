@@ -1,4 +1,4 @@
-double {{class_name}}::GetIIonic(const std::vector<double>* pStateVariables)
+    double {{class_name}}::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).

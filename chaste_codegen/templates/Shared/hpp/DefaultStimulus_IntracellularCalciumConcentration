@@ -1,0 +1,6 @@
+    {%- if default_stimulus_equations["equations"]|length > 0 %}
+    boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
+    {%- endif %}
+    {%- if use_get_intracellular_calcium_concentration %}
+    double GetIntracellularCalciumConcentration();
+    {%- endif %}

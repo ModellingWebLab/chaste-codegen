@@ -1,0 +1,18 @@
+    {% if use_verify_state_variables %}
+    
+    void {{class_name}}::VerifyStateVariables()
+    {
+        std::vector<double>& rY = rGetStateVariables();
+        {% for state_var in state_vars %}
+        {%- if state_var.range_low != '' or  state_var.range_high != '' %}double {{ state_var.var }} = rY[{{loop.index0}}];
+        // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
+        {% endif %}{%- endfor %}
+        {% for state_var in state_vars %}
+        {%- if state_var.range_low != '' or  state_var.range_high != '' %}if ({%- if state_var.range_low != '' %}{{ state_var.var }} < {{ state_var.range_low }}{% endif %}{%- if state_var.range_low != '' and  state_var.range_high != '' %} || {% endif %}{%- if state_var.range_high != '' %}{{ state_var.var }} > {{ state_var.range_high }}{% endif %})
+        {
+            EXCEPTION(DumpState("State variable {{ state_var.annotated_var_name }} has gone out of range. Check numerical parameters, for example time and space stepsizes, and/or solver tolerances"));
+        }
+        {% endif %}{%- endfor %}
+    }
+
+    {% endif %}

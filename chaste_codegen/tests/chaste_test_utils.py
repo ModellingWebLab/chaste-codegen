@@ -89,4 +89,5 @@ def compare_file_against_reference(file, reference):
     # Load reference file
     file = get_file_lines(file)
     reference = get_file_lines(reference)
+    max = len(file) if len(file) > len(reference) else len(reference)
     assert file == reference
