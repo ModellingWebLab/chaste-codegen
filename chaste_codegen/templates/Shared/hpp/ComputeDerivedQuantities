@@ -1,0 +1,3 @@
+    {%- if derived_quantities|length > 0 %}
+    std::vector<double> ComputeDerivedQuantities(double {{free_variable.var_name}}, const std::vector<double> & rY);
+    {%- endif %}

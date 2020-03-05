@@ -1,26 +1,65 @@
 import chaste_codegen as cg
 import time
+import sympy as sp
 
 
 class BeModel(cg.CvodeChasteModel):
-    """ Holds template and information specific for the CVODE model type"""
+    """ Holds template and information specific for the Backwards Euler model type"""
 
     def __init__(self, model, file_name, **kwargs):
         super().__init__(model, file_name, use_analytic_jacobian=True, **kwargs)
-        self._formatted_nonlinear_state_vars = self._format_nonlinear_state_vars()
 
     def _get_non_linear_state_vars(self):
         # get non-linear state var. A var is linear if it's equation doesn't contain variables other than V and itself
         non_linear_state_vars = [eq.lhs.args[0] for eq in self._derivative_equations
-                                 if not eq.lhs.args[0] == self._membrane_voltage_var and
+                                 if isinstance(eq.lhs, sp.Derivative) and
+                                 eq.lhs.args[0] != self._membrane_voltage_var and
                                  len(eq.rhs.free_symbols - set([eq.lhs.args[0], self._membrane_voltage_var])) != 0]
         return non_linear_state_vars
 
     def _format_nonlinear_state_vars(self):
-        formatted_vars = [s for s in self._formatted_state_vars if s['sympy_var'] in self._get_non_linear_state_vars()]
+        formatted_non_linear = \
+            [s for s in self._formatted_state_vars if s['sympy_var'] in self._get_non_linear_state_vars()]
         # order by dispay name
-        formatted_vars = sorted(formatted_vars, key=lambda d: self._get_var_display_name(d['sympy_var']))
-        return formatted_vars
+        formatted_non_linear = sorted(formatted_non_linear, key=lambda d: self._get_var_display_name(d['sympy_var']))
+
+        formatted_state_vars = self._formatted_state_vars
+        residual_equations = []
+        for i in range(len(formatted_state_vars)):
+            formatted_state_vars[i]['linear'] = formatted_state_vars[i] not in formatted_non_linear
+            if not formatted_state_vars[i]['linear']:
+                residual_equations.append({'residual_index': formatted_non_linear.index(formatted_state_vars[i]),
+                                           'state_var_index': i, 'var': self._formatted_y_derivatives[i]})
+
+        return formatted_state_vars, formatted_non_linear, residual_equations
+
+    def _get_jacobian(self):
+        self.__formatted_state_vars, self._formatted_nonlinear_state_vars, self._residual_equations = \
+            self._format_nonlinear_state_vars()
+        non_linear_state_vars = [v['sympy_var'] for v in self._formatted_nonlinear_state_vars]
+        state_var_matrix = sp.Matrix(non_linear_state_vars)
+        # get derivatives for non-linear state vars
+        derivative_eqs = [d for d in self._derivative_equations if d.lhs.args[0] in non_linear_state_vars]
+        # sort by state var
+        derivative_eqs = sorted(derivative_eqs, key=lambda d: non_linear_state_vars.index(d.lhs.args[0]))
+        # we're only interested in the rhs
+        derivative_eqs = [eq.rhs for eq in derivative_eqs]
+        derivative_eq_matrix = sp.Matrix(derivative_eqs)
+        jacobian_matrix = derivative_eq_matrix.jacobian(state_var_matrix)
+        jacobian_equations, jacobian_matrix = sp.cse(jacobian_matrix, order='none')
+        return jacobian_equations, sp.Matrix(jacobian_matrix)
+
+    def _format_jacobian(self):
+        assert isinstance(self._jacobian_matrix, sp.Matrix), 'Expecting a jacobian as a matrix'
+        equations = [{'lhs': self._printer.doprint(eq[0]), 'rhs': self._printer.doprint(eq[1])}
+                     for eq in self._jacobian_equations]
+        rows, cols = self._jacobian_matrix.shape
+        jacobian = []
+        for i in range(rows):
+            for j in range(cols):
+                matrix_entry = self._jacobian_matrix[i, j]
+                jacobian.append({'i': i, 'j': j, 'entry': self._printer.doprint(matrix_entry)})
+        return equations, jacobian
 
     def generate_chaste_code(self):
         """ Generates and stores chaste code for the BE model"""
@@ -72,4 +111,5 @@ class BeModel(cg.CvodeChasteModel):
             'derived_quantity_equations': self._formatted_quant_eqs,
             'jacobian_equations': self._formatted_jacobian_equations,
             'jacobian_entries': self._formatted_jacobian_matrix_entries,
-            'nonlinear_state_vars': self._formatted_nonlinear_state_vars})
+            'nonlinear_state_vars': self._formatted_nonlinear_state_vars,
+            'residual_equations': self._residual_equations})

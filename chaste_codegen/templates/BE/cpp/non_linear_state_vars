@@ -1,0 +1,3 @@
+        {%- for state_var in nonlinear_state_vars %}
+        double {{ state_var.var }} = rCurrentGuess[{{loop.index0}}];
+        {%- endfor %}
