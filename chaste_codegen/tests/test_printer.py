@@ -6,7 +6,7 @@ import logging
 import math
 import pytest
 import sympy as sp
-from chaste_codegen import _exp, _abs, _acos, _cos, _sqrt, _sin
+from chaste_codegen import exp_, abs_, acos_, cos_, sqrt_, sin_
 
 
 # Show more logging output
@@ -49,14 +49,14 @@ class TestChastePrinter(object):
         assert printer.doprint(sp.sympify('x ** (-1/2)')) == '1 / sqrt(x)'
         assert printer.doprint(1 / x) == '1 / x'
 
-    def test_piecewise_expressions(self, printer, x, y, z):
+    def test_piecewiseexp_ressions(self, printer, x, y, z):
         # Piecewise expressions
-        conditional_expr = sp.Piecewise((0, x > 0), (1, True))
-        assert printer.doprint(conditional_expr) == '((x > 0) ? (0) : (1))'
-        conditional_expr = sp.Piecewise((0, x > 0), (1, x > 1), (2, True))
-        assert printer.doprint(conditional_expr) == '((x > 0) ? (0) : ((x > 1) ? (1) : (2)))'
+        conditionalexp_r = sp.Piecewise((0, x > 0), (1, True))
+        assert printer.doprint(conditionalexp_r) == '((x > 0) ? (0) : (1))'
+        conditionalexp_r = sp.Piecewise((0, x > 0), (1, x > 1), (2, True))
+        assert printer.doprint(conditionalexp_r) == '((x > 0) ? (0) : ((x > 1) ? (1) : (2)))'
 
-    def test_abs(self, printer, x, y):
+    def testabs_(self, printer, x, y):
         assert printer.doprint(sp.Abs(x + y)) == 'fabs(x + y)'
         assert printer.doprint(sp.Abs(sp.Float('3.2', 17), evaluate=False)) == 'fabs(3.2000000000000002)'
         assert printer.doprint(sp.Abs(-3, evaluate=False)) == 'fabs(-3)'
@@ -82,12 +82,12 @@ class TestChastePrinter(object):
         assert printer.doprint(sp.tanh(x)) == 'tanh(x)'
 
     def test_custom_math_functions(self, printer, x):
-        assert printer.doprint(_acos(x)) == 'acos(x)'
-        assert printer.doprint(_cos(x)) == 'cos(x)'
-        assert printer.doprint(_exp(x)) == 'exp(x)'
-        assert printer.doprint(_sin(x)) == 'sin(x)'
-        assert printer.doprint(_sqrt(x)) == 'sqrt(x)'
-        assert printer.doprint(_abs(x)) == 'fabs(x)'
+        assert printer.doprint(acos_(x)) == 'acos(x)'
+        assert printer.doprint(cos_(x)) == 'cos(x)'
+        assert printer.doprint(exp_(x)) == 'exp(x)'
+        assert printer.doprint(sin_(x)) == 'sin(x)'
+        assert printer.doprint(sqrt_(x)) == 'sqrt(x)'
+        assert printer.doprint(abs_(x)) == 'fabs(x)'
 
     def test_numbers(self, printer, x):
         # Number types

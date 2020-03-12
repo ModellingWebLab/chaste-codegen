@@ -1,4 +1,4 @@
-{%- if jacobian_equations|length > 0 %}
+{%- if nonlinear_state_vars|length > 0 %}
     void {{class_name}}::ComputeJacobian(double {{free_variable.var_name}}, const double rCurrentGuess[{{nonlinear_state_vars|length}}], double rJacobian[{{nonlinear_state_vars|length}}][{{nonlinear_state_vars|length}}])
     {
         std::vector<double>& rY = rGetStateVariables();
@@ -10,6 +10,6 @@
         {% for equation in jacobian_equations %}const double {{equation.lhs}} = {{equation.rhs}};
         {% endfor %}
         // Matrix entries{% for entry in jacobian_entries %}
-        rJacobian[{{entry.i}}][{{entry.j}}] = {%- if entry.i == entry.j %} 1.0 {% endif -%}-(mDt * ({{entry.entry}}));
+        rJacobian[{{entry.i}}][{{entry.j}}] = {% if entry.i == entry.j %}1.0 {% endif -%}-(mDt * ({{entry.entry}}));
         {%- endfor %}
     }{% endif -%}

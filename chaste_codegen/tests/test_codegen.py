@@ -156,7 +156,7 @@ def test_dymaic_BE(tmp_path):
                                                expected_cpp_path)
 
 
-def test_expose_annotated_variables(tmp_path):
+def testexp_ose_annotated_variables(tmp_path):
     tmp_path = str(tmp_path)
     LOGGER.info('Testing expose_annotated_variables option\n')
     model_file = \

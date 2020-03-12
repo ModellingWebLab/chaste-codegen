@@ -3,7 +3,7 @@ Main module for cardiac Chaste code generation
 """
 import logging
 from cellmlmanip.transpiler import Transpiler
-from ._math_functions import _exp, _abs, _acos, _cos, _sqrt, _sin
+from ._math_functions import RealFunction, exp_, abs_, acos_, cos_, sqrt_, sin_
 
 #
 # Load constants and version information
@@ -35,9 +35,9 @@ logging.basicConfig()
 del(logging)
 
 # Set transpiler to prodcue our custom classes in order to avoid premature simplification/canonisation
-Transpiler.set_mathml_handler('exp', _exp)
-Transpiler.set_mathml_handler('abs', _abs)
-Transpiler.set_mathml_handler('acos', _acos)
-Transpiler.set_mathml_handler('cos', _cos)
-Transpiler.set_mathml_handler('sqrt', _sqrt)
-Transpiler.set_mathml_handler('sin', _sin)
+Transpiler.set_mathml_handler('exp', exp_)
+Transpiler.set_mathml_handler('abs', abs_)
+Transpiler.set_mathml_handler('acos', acos_)
+Transpiler.set_mathml_handler('cos', cos_)
+Transpiler.set_mathml_handler('sqrt', sqrt_)
+Transpiler.set_mathml_handler('sin', sin_)

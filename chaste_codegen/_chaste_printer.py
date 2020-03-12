@@ -19,12 +19,12 @@ class ChastePrinter(Printer):
 
     """
     _function_names = {
-        '_abs': 'fabs',
-        '_acos': 'acos',
-        '_cos': 'cos',
-        '_exp': 'exp',
-        '_sqrt': 'sqrt',
-        '_sin': 'sin',
+        'abs_': 'fabs',
+        'acos_': 'acos',
+        'cos_': 'cos',
+        'exp_': 'exp',
+        'sqrt_': 'sqrt',
+        'sin_': 'sin',
 
         'Abs': 'fabs',
         'acos': 'acos',

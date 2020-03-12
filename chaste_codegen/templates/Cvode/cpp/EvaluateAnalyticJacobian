@@ -1,6 +1,6 @@
 {%- if jacobian_equations|length > 0 %}
 
-    void {{class_name}}::EvaluateAnalyticJacobian(double {{free_variable.var_name}}, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3){% endif -%}
+    void {{class_name}}::EvaluateAnalyticJacobian(double {{free_variable.var_name}}, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3)
     {
         {% for state_var in state_vars %}
         {%- if state_var.in_jacobian %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, {{loop.index0}}));{%- else %}NV_Ith_S(rY, {{loop.index0}});{%- endif %}

@@ -1,12 +1,12 @@
 import sympy as sp
 
 
-class _RealFunction(sp.Function):
+class RealFunction(sp.Function):
     def _eval_is_real(self):
         return self.args[0].is_real
 
 
-class _exp(_RealFunction):
+class exp_(RealFunction):
 
     def fdiff(self, argindex=1):
         """
@@ -16,7 +16,7 @@ class _exp(_RealFunction):
         return self
 
 
-class _abs(_RealFunction):
+class abs_(RealFunction):
 
     def fdiff(self, argindex=1):
         """
@@ -26,42 +26,42 @@ class _abs(_RealFunction):
         return sp.sign(self.args[0])
 
 
-class _acos(_RealFunction):
+class acos_(RealFunction):
 
     def fdiff(self, argindex=1):
         """
         Returns the first derivative of this function.
         """
         assert argindex == 1
-        return -1 / _sqrt(1 - self.args[0]**2)
+        return -1 / sqrt_(1 - self.args[0]**2)
 
 
-class _cos(_RealFunction):
-
-    def fdiff(self, argindex=1):
-        """
-        Returns the first derivative of this function.
-        """
-        assert argindex == 1
-        return -_sin(self.args[0])
-
-
-class _sqrt(_RealFunction):
+class cos_(RealFunction):
 
     def fdiff(self, argindex=1):
         """
         Returns the first derivative of this function.
         """
         assert argindex == 1
-        return 1 / (2 * _sqrt(self.args[0]))
+        return -sin_(self.args[0])
 
 
-class _sin(_RealFunction):
+class sqrt_(RealFunction):
 
     def fdiff(self, argindex=1):
         """
         Returns the first derivative of this function.
         """
         assert argindex == 1
-        return (_cos(self.args[0]))
+        return 1 / (2 * sqrt_(self.args[0]))
+
+
+class sin_(RealFunction):
+
+    def fdiff(self, argindex=1):
+        """
+        Returns the first derivative of this function.
+        """
+        assert argindex == 1
+        return (cos_(self.args[0]))
 
