@@ -3,9 +3,12 @@
     {
         std::vector<double>& rY = rGetStateVariables();
         {% for state_var in state_vars %}
-        {%- if state_var.in_jacobian %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
+        {%- if state_var.in_y_deriv and state_var.linear and state_var.in_jacobian %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
-        {% endif %}{%- endfor %}{% include "BE/cpp/non_linear_state_vars" %}
+        {% endif %}{%- endfor %}
+        {%- for state_var in nonlinear_state_vars %}
+        {%- if state_var.in_jacobian %}double {{ state_var.var }} = rCurrentGuess[{{loop.index0}}];{% endif %}
+        {%- endfor %}
 
         {% for equation in jacobian_equations %}const double {{equation.lhs}} = {{equation.rhs}};
         {% endfor %}

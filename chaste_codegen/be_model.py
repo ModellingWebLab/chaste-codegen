@@ -2,17 +2,28 @@ import chaste_codegen as cg
 import time
 import sympy as sp
 from cellmlmanip.model import VariableDummy
+from chaste_codegen._partial_eval import partial_eval
 from enum import Enum
 from sympy.logic.boolalg import (BooleanTrue, BooleanFalse)
 from sympy.codegen.cfunctions import (log10, log2)
-import copy
 
 
-class BeModel(cg.CvodeChasteModel):
+
+#todo: Factor, partial eval or not?
+class BeModel(cg.ChasteModel):
     """ Holds template and information specific for the Backwards Euler model type"""
 
     def __init__(self, model, file_name, **kwargs):
         super().__init__(model, file_name, use_analytic_jacobian=True, **kwargs)
+            # get deriv eqs and substitute in all variables other than state vars
+        self._derivative_equations = \
+            partial_eval(self._derivative_equations, self._y_derivatives, keep_multiple_usages=False)
+        self._non_linear_state_vars = self._get_non_linear_state_vars()
+        self._jacobian_equations, self._jacobian_matrix = self._get_jacobian()
+        self._formatted_state_vars, self._formatted_nonlinear_state_vars, self._formatted_residual_equations, self._formatted_derivative_eqs = \
+            self._update_state_vars()
+        self._formatted_rearranged_linear_derivs = self._format_rearranged_linear_derivs()
+        self._formatted_jacobian_equations, self._formatted_jacobian_matrix_entries = self._format_jacobian()
 
     def _get_non_linear_state_vars(self):
 
@@ -96,30 +107,6 @@ class BeModel(cg.CvodeChasteModel):
                 eq.lhs.args[0] != self._membrane_voltage_var and
                 check_expr(eq.rhs, eq.lhs.args[0]) != KINDS.Linear]
 
-    def _format_nonlinear_state_vars(self):
-        non_linear_state_vars = self._get_non_linear_state_vars()
-        formatted_derivative_eqs = self._formatted_derivative_eqs
-        formatted_non_linear = \
-            [s for s in self._formatted_state_vars if s['sympy_var'] in non_linear_state_vars]
-
-        # order by name
-        formatted_non_linear = sorted(formatted_non_linear, key=lambda d: d['var'])
-
-        formatted_state_vars = self._formatted_state_vars
-        residual_equations = []
-        for i in range(len(formatted_state_vars)):
-            formatted_state_vars[i]['linear'] = formatted_state_vars[i] not in formatted_non_linear
-            if not formatted_state_vars[i]['linear']:
-                residual_equations.append({'residual_index': formatted_non_linear.index(formatted_state_vars[i]),
-                                           'state_var_index': i, 'var': self._formatted_y_derivatives[i]})
-
-        non_linear_derivs = [eq.lhs for eq in self._derivative_equations if isinstance(eq.lhs, sp.Derivative) and eq.lhs.args[0] in non_linear_state_vars]
-        non_linear_eqs = [self._printer.doprint(eq.lhs) for eq in self._model.get_equations_for(non_linear_derivs)]
-        for i in range(len(formatted_derivative_eqs)):
-            formatted_derivative_eqs[i]['linear'] = self._formatted_derivative_eqs[i]['lhs'] not in non_linear_eqs
-
-        return formatted_state_vars, non_linear_state_vars, formatted_non_linear, residual_equations, formatted_derivative_eqs
-
     def _format_rearranged_linear_derivs(self):
         def rearrange_expr(expr, var): #expr already in piecewise_fold form
             """Rearrange an expression into the form g + h*var."""
@@ -164,10 +151,6 @@ class BeModel(cg.CvodeChasteModel):
         return formatted_expr
 
     def _get_jacobian(self):
-        self._formatted_state_vars, self._non_linear_state_vars, self._formatted_nonlinear_state_vars, self._residual_equations, self._formatted_derivative_eqs = \
-            self._format_nonlinear_state_vars()
-        self._formatted_rearranged_linear_derivs = self._format_rearranged_linear_derivs()
-
         if len(self._non_linear_state_vars) == 0:
             return [], sp.Matrix([])
         state_var_matrix = sp.Matrix(self._non_linear_state_vars)
@@ -179,8 +162,53 @@ class BeModel(cg.CvodeChasteModel):
         derivative_eqs = [eq.rhs for eq in derivative_eqs]
         derivative_eq_matrix = sp.Matrix(derivative_eqs)
         jacobian_matrix = derivative_eq_matrix.jacobian(state_var_matrix)
+        # update state variables
         jacobian_equations, jacobian_matrix = sp.cse(jacobian_matrix, order='none')
         return jacobian_equations, sp.Matrix(jacobian_matrix)
+
+
+    def _update_state_vars(self):
+        formatted_state_vars = self._formatted_state_vars
+        residual_equations = []
+        formatted_derivative_eqs = self._formatted_derivative_eqs
+        jacobian_symbols = set()
+        residual_eq_symbols = set()
+
+        for eq in self._jacobian_equations:
+            jacobian_symbols.update(eq[1].free_symbols)
+        for eq in self._jacobian_matrix:
+            jacobian_symbols.update(eq.free_symbols)
+
+        non_linear_derivs = [eq.lhs for eq in self._derivative_equations if isinstance(eq.lhs, sp.Derivative) and eq.lhs.args[0] in self._non_linear_state_vars]
+        non_linear_eqs = self._model.get_equations_for(non_linear_derivs)
+        for eq in non_linear_eqs:
+            residual_eq_symbols.update(eq.rhs.free_symbols)
+        non_linear_eqs = [self._printer.doprint(eq.lhs) for eq in non_linear_eqs]
+        for i, d in enumerate(formatted_derivative_eqs):
+            formatted_derivative_eqs[i]['linear'] = d['lhs'] not in non_linear_eqs
+
+
+
+        formatted_nonlinear_state_vars = \
+            [s for s in formatted_state_vars if s['sympy_var'] in self._non_linear_state_vars]
+        # order by name
+        formatted_nonlinear_state_vars = sorted(formatted_nonlinear_state_vars, key=lambda d: d['var'])
+        for i, sv in enumerate(formatted_nonlinear_state_vars):
+            formatted_nonlinear_state_vars[i]['linear'] = False
+            formatted_nonlinear_state_vars[i]['in_jacobian'] = sv['sympy_var'] in jacobian_symbols
+            formatted_nonlinear_state_vars[i]['in_residual_eqs'] = sv['sympy_var'] in residual_eq_symbols
+
+        for i, sv in enumerate(formatted_state_vars):
+            formatted_state_vars[i]['linear'] = sv['sympy_var'] not in self._non_linear_state_vars
+            formatted_state_vars[i]['in_jacobian'] = sv['sympy_var'] in jacobian_symbols
+            formatted_state_vars[i]['in_residual_eqs'] = sv['sympy_var'] in residual_eq_symbols
+            if not formatted_state_vars[i]['linear']:
+                residual_equations.append({'residual_index': formatted_nonlinear_state_vars.index(sv),
+                                           'state_var_index': i, 'var': self._formatted_y_derivatives[i]})
+
+
+
+        return formatted_state_vars, formatted_nonlinear_state_vars, residual_equations, formatted_derivative_eqs
 
     def _format_jacobian(self):
         assert isinstance(self._jacobian_matrix, sp.Matrix), 'Expecting a jacobian as a matrix'
@@ -245,5 +273,5 @@ class BeModel(cg.CvodeChasteModel):
             'jacobian_equations': self._formatted_jacobian_equations,
             'jacobian_entries': self._formatted_jacobian_matrix_entries,
             'nonlinear_state_vars': self._formatted_nonlinear_state_vars,
-            'residual_equations': self._residual_equations,
+            'residual_equations': self._formatted_residual_equations,
             'linear_deriv_eqs': self._formatted_rearranged_linear_derivs})

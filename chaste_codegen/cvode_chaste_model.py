@@ -43,8 +43,8 @@ class CvodeChasteModel(cg.ChasteModel):
         for en in self._jacobian_matrix:
             jacobian_symbols.update(en.free_symbols)
         formatted_state_vars = self._formatted_state_vars
-        for i in range(len(formatted_state_vars)):
-            formatted_state_vars[i]['in_jacobian'] = formatted_state_vars[i]['sympy_var'] in jacobian_symbols
+        for i, sv in enumerate(formatted_state_vars):
+            formatted_state_vars[i]['in_jacobian'] = sv['sympy_var'] in jacobian_symbols
         return formatted_state_vars
 
     def _format_jacobian(self):
