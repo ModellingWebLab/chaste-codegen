@@ -102,10 +102,12 @@ class BeModel(cg.ChasteModel):
                 assert False, 'Not implemented expression type: ' + str(type(expr))           
             return result
 
-        return [eq.lhs.args[0] for eq in self._derivative_equations
-                if isinstance(eq.lhs, sp.Derivative) and
-                eq.lhs.args[0] != self._membrane_voltage_var and
-                check_expr(eq.rhs, eq.lhs.args[0]) != KINDS.Linear]
+        # return the state var part from the derivative equations where the rhs is not linear
+        return sorted([eq.lhs.args[0] for eq in self._derivative_equations
+                       if isinstance(eq.lhs, sp.Derivative) and
+                       eq.lhs.args[0] != self._membrane_voltage_var and
+                       check_expr(eq.rhs, eq.lhs.args[0]) != KINDS.Linear],
+                       key=lambda s: self._printer.doprint(s))
 
     def _format_rearranged_linear_derivs(self):
         def rearrange_expr(expr, var): #expr already in piecewise_fold form
@@ -137,7 +139,15 @@ class BeModel(cg.ChasteModel):
                 h = sp.Wild('h', exclude=[var])
                 g = sp.Wild('g', exclude=[var])
                 match = expr.expand().match(g + h*var)
-                gh = (match[g], match[h]) if match is not None else None
+#                if match is not None:
+#                    var_to_factor = list((match[g].free_symbols | match[h].free_symbols) - set([var]))
+#                    assert len(var_to_factor) <= 1
+#                    if len(var_to_factor) > 0:
+#                        try:
+#                            return (match[g].factor(var_to_factor[0]), match[h].factor(var_to_factor[0])) if match is not None else None
+#                        except sp.polys.polyerrors.PolynomialError:
+#                            pass
+                gh = (match[g].factor(), match[h].factor()) if match is not None else None
             return gh
 
         def print_rearrange_expr(expr, var):

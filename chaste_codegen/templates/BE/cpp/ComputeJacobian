@@ -6,13 +6,12 @@
         {%- if state_var.in_y_deriv and state_var.linear and state_var.in_jacobian %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}
-        {%- for state_var in nonlinear_state_vars %}
-        {%- if state_var.in_jacobian %}double {{ state_var.var }} = rCurrentGuess[{{loop.index0}}];{% endif %}
-        {%- endfor %}
-
+        {% for state_var in nonlinear_state_vars %}
+        {%- if state_var.in_jacobian %}double {{ state_var.var }} = rCurrentGuess[{{loop.index0}}];
+        {% endif %}{%- endfor %}
         {% for equation in jacobian_equations %}const double {{equation.lhs}} = {{equation.rhs}};
         {% endfor %}
-        // Matrix entries{% for entry in jacobian_entries %}
-        rJacobian[{{entry.i}}][{{entry.j}}] = {% if entry.i == entry.j %}1.0 {% endif -%}-(mDt * ({{entry.entry}}));
+        {% for entry in jacobian_entries %}
+        rJacobian[{{entry.i}}][{{entry.j}}] = {% if entry.i == entry.j and entry.entry != '0' %}1.0 - (mDt * ({{entry.entry}})){% endif -%}{% if entry.i == entry.j and entry.entry == '0' %}1.0{% endif -%}{% if entry.i != entry.j and entry.entry == '0' %}0.0{% endif -%}{% if entry.i != entry.j and entry.entry != '0' %}-(mDt * ({{entry.entry}})){% endif -%};
         {%- endfor %}
     }{% endif -%}

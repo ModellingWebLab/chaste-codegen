@@ -8,9 +8,6 @@
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}
 
-        {%- for deriv in y_derivative_equations %}{%- if deriv.linear %}
-        //const double {{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
-        {%- endfor %}
         {% for deriv in linear_deriv_eqs %}
         rY[{{deriv.state_var_index}}] = ({{deriv.var}} + (({{deriv.g}}) * mDt)) / (1.0 - (({{deriv.h}}) * mDt));
         {%- endfor %}
