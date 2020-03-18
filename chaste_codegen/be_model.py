@@ -112,7 +112,7 @@ class BeModel(cg.ChasteModel):
     def _format_rearranged_linear_derivs(self):
         def rearrange_expr(expr, var): #expr already in piecewise_fold form
             """Rearrange an expression into the form g + h*var."""
-            if isinstance(expr, sp.Piecewise,):
+            if isinstance(expr, sp.Piecewise):
                 # The tests have to move into both components of gh:
                 # "if C1 then (a1,b1) elif C2 then (a2,b2) else (a0,b0)"
                 # maps to "(if C1 then a1 elif C2 then a2 else a0,
@@ -139,19 +139,13 @@ class BeModel(cg.ChasteModel):
                 h = sp.Wild('h', exclude=[var])
                 g = sp.Wild('g', exclude=[var])
                 match = expr.expand().match(g + h*var)
-#                if match is not None:
-#                    var_to_factor = list((match[g].free_symbols | match[h].free_symbols) - set([var]))
-#                    assert len(var_to_factor) <= 1
-#                    if len(var_to_factor) > 0:
-#                        try:
-#                            return (match[g].factor(var_to_factor[0]), match[h].factor(var_to_factor[0])) if match is not None else None
-#                        except sp.polys.polyerrors.PolynomialError:
-#                            pass
-                gh = (match[g].factor(), match[h].factor()) if match is not None else None
+                gh = (match[g], match[h]) if match is not None else None
             return gh
 
         def print_rearrange_expr(expr, var):
             expr = sp.piecewise_fold(expr)
+            expr = expr.xreplace({cg.exp_:sp.exp, pow:sp.Pow, cg.abs_: sp.Abs, cg.acos_:sp.acos, cg.cos_: sp.cos, cg.sqrt_: sp.sqrt, cg.sin_: sp.sin})
+            exps = sp.simplify(expr)
             gh = rearrange_expr(expr, var)
             return {'state_var_index': self._state_vars.index(var), 'var': self._printer.doprint(var), 'g': self._printer.doprint(gh[0]) , 'h': self._printer.doprint(gh[1])}
 
