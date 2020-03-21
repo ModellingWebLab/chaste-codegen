@@ -25,88 +25,87 @@ class BeModel(cg.ChasteModel):
         self._formatted_rearranged_linear_derivs = self._format_rearranged_linear_derivs()
         self._formatted_jacobian_equations, self._formatted_jacobian_matrix_entries = self._format_jacobian()
 
-    def _get_non_linear_state_vars(self):
+    class KINDS(Enum):
+        none = 1
+        Linear = 2
+        Nonlinear = 3
 
-        class KINDS(Enum):
-            none = 1
-            Linear = 2
-            Nonlinear = 3
-
+    def _check_expr(self, expr, state_var):           
         def max_kind(state_var, operands):
-            result = KINDS.none
+            result = BeModel.KINDS.none
             for op in operands:
-                res = check_expr(op, state_var)
-                if res == KINDS.Nonlinear:
-                    return KINDS.Nonlinear
-                elif res == KINDS.Linear:
+                res = self._check_expr(op, state_var)
+                if res == BeModel.KINDS.Nonlinear:
+                    return BeModel.KINDS.Nonlinear
+                elif res == BeModel.KINDS.Linear:
                     result = res
-            return result
+            return result    
+        result = None
+        operands = expr.args
+        # No need to recurse as we're doing this with partially evaluated derivative equations!
+        if expr is state_var:
+            result = BeModel.KINDS.Linear
+        elif expr is self._membrane_voltage_var or len(expr.free_symbols) == 0 or isinstance(expr, sp.Function('GetIntracellularAreaStimulus', real=True)): # constant, V or GetIntracellularAreaStimulus(time)
+            result = BeModel.KINDS.none
+        elif expr in self._state_vars:
+            result = BeModel.KINDS.Nonlinear
 
-        def check_expr(expr, state_var):
-            result = None
-            operands = expr.args
-            # No need to recurse as we're doing this with partially evaluated derivative equations!
-            if expr is state_var:
-                result = KINDS.Linear
-            elif expr is self._membrane_voltage_var or len(expr.free_symbols) == 0 or isinstance(expr, sp.Function('GetIntracellularAreaStimulus', real=True)): # constant, V or GetIntracellularAreaStimulus(time)
-                result = KINDS.none
-            elif expr in self._state_vars:
-                result = KINDS.Nonlinear
-
-            elif isinstance(expr, sp.Piecewise):
-                # If any conditions have a dependence, then we're
-                # nonlinear.  Otherwise, all the pieces must be the same
-                # (and that's what we are) or we're nonlinear.
-                for cond in expr.args:
-                    if check_expr(cond[1], state_var) != KINDS.none:
-                        result = KINDS.Nonlinear
-                        break
-                else:
-                    # Conditions all OK
-                    for e in expr.args:
-                        res = check_expr(e[0], state_var)
-                        if result is not None and res != result:
-                            # We have a difference
-                            result = KINDS.Nonlinear
-                            break
-                        result = res
-            elif isinstance(expr, sp.Mul):
-                # Linear iff only 1 linear operand
-                result = KINDS.none
-                lin = 0
-                for op in operands:
-                    res = check_expr(op, state_var)
-                    if res == KINDS.Linear: lin += 1
-                    elif res == KINDS.Nonlinear: lin += 2
-                    if lin > 1:
-                        result = KINDS.Nonlinear
-                        break
-                    elif lin == 1:
-                        result = KINDS.Linear
-            elif isinstance(expr, sp.Add) or isinstance(expr, sp.boolalg.BooleanFunction) or isinstance(expr, sp.relational.Relational):
-                # Linear if any operand linear, and none non-linear
-                result = max_kind(state_var, operands)
-            elif isinstance(expr, sp.Pow):
-                if state_var not in expr.free_symbols:
-                    result = max_kind(state_var, operands)
-                elif len(expr.args) == 2 and expr.args[1] == -1: # x/y divide is represented as x * pow(y, -1)
-                    result = check_expr(expr.args[0], state_var) # Linear iff only numerator linear
-                else:
-                    result = KINDS.Nonlinear
-            elif isinstance(expr, sp.log) or isinstance(expr, log10) or isinstance(expr, log2) or isinstance(expr, cg.RealFunction) or isinstance(expr, sp.functions.elementary.trigonometric.TrigonometricFunction) or isinstance(expr, sp.functions.elementary.hyperbolic.HyperbolicFunction) or isinstance(expr, sp.functions.elementary.trigonometric.InverseTrigonometricFunction) or isinstance(expr, sp.functions.elementary.hyperbolic.InverseHyperbolicFunction):
-                if state_var not in expr.free_symbols:
-                    result = check_expr(expr.args[0], state_var)
-                else:
-                    result = KINDS.Nonlinear
+        elif isinstance(expr, sp.Piecewise):
+            # If any conditions have a dependence, then we're
+            # nonlinear.  Otherwise, all the pieces must be the same
+            # (and that's what we are) or we're nonlinear.
+            for cond in expr.args:
+                if self._check_expr(cond[1], state_var) != BeModel.KINDS.none:
+                    result = BeModel.KINDS.Nonlinear
+                    break
             else:
-                assert False, 'Not implemented expression type: ' + str(type(expr))           
-            return result
+                # Conditions all OK
+                for e in expr.args:
+                    res = self._check_expr(e[0], state_var)
+                    if result is not None and res != result:
+                        # We have a difference
+                        result = BeModel.KINDS.Nonlinear
+                        break
+                    result = res
+        elif isinstance(expr, sp.Mul):
+            # Linear iff only 1 linear operand
+            result = BeModel.KINDS.none
+            lin = 0
+            for op in operands:
+                res = self._check_expr(op, state_var)
+                if res == BeModel.KINDS.Linear: lin += 1
+                elif res == BeModel.KINDS.Nonlinear: lin += 2
+                if lin > 1:
+                    result = BeModel.KINDS.Nonlinear
+                    break
+                elif lin == 1:
+                    result = BeModel.KINDS.Linear
+        elif isinstance(expr, sp.Add) or isinstance(expr, sp.boolalg.BooleanFunction) or isinstance(expr, sp.relational.Relational):
+            # Linear if any operand linear, and none non-linear
+            result = max_kind(state_var, operands)
+        elif isinstance(expr, sp.Pow):
+            if state_var not in expr.free_symbols:
+                result = max_kind(state_var, operands)
+            elif len(expr.args) == 2 and expr.args[1] == -1: # x/y divide is represented as x * pow(y, -1)
+                result = self._check_expr(expr.args[0], state_var) # Linear iff only numerator linear
+            else:
+                result = BeModel.KINDS.Nonlinear
+        elif isinstance(expr, sp.log) or isinstance(expr, log10) or isinstance(expr, log2) or isinstance(expr, cg.RealFunction) or isinstance(expr, sp.functions.elementary.trigonometric.TrigonometricFunction) or isinstance(expr, sp.functions.elementary.hyperbolic.HyperbolicFunction) or isinstance(expr, sp.functions.elementary.trigonometric.InverseTrigonometricFunction) or isinstance(expr, sp.functions.elementary.hyperbolic.InverseHyperbolicFunction):
+            if state_var not in expr.free_symbols:
+                result = self._check_expr(expr.args[0], state_var)
+            else:
+                result = BeModel.KINDS.Nonlinear
+        else:
+            assert False, 'Not implemented expression type: ' + str(type(expr))
+        return result
+
+    def _get_non_linear_state_vars(self):
 
         # return the state var part from the derivative equations where the rhs is not linear
         return sorted([eq.lhs.args[0] for eq in self._derivative_equations
                        if isinstance(eq.lhs, sp.Derivative) and
                        eq.lhs.args[0] != self._membrane_voltage_var and
-                       check_expr(eq.rhs, eq.lhs.args[0]) != KINDS.Linear],
+                       self._check_expr(eq.rhs, eq.lhs.args[0]) != BeModel.KINDS.Linear],
                        key=lambda s: self._printer.doprint(s))
 
     def _format_rearranged_linear_derivs(self):
@@ -139,13 +138,130 @@ class BeModel(cg.ChasteModel):
                 h = sp.Wild('h', exclude=[var])
                 g = sp.Wild('g', exclude=[var])
                 match = expr.expand().match(g + h*var)
-                gh = (match[g], match[h]) if match is not None else None
+                gh = None
+                if match is not None:
+                    g = sp.simplify(match[g].xreplace({cg.exp_:sp.exp, pow:sp.Pow, cg.abs_: sp.Abs, cg.acos_:sp.acos, cg.cos_: sp.cos, cg.sqrt_: sp.sqrt, cg.sin_: sp.sin}))
+                    h = match[h]
+                    gh = (g, h)
+            return gh
+
+        def make_apply(operator, ghs, i, filter_none=True,
+                        retain_unary_minus=False):
+            """Construct a new apply expression for g or h.
+
+            ghs is an iterable of (g,h) pairs for operands.
+            
+            i indicates whether to construct g (0) or h (1).
+            
+            filter_none indicates the behaviour of 0 under this operator.
+            If True, it's an additive zero, otherwise it's a
+            multiplicative zero.
+            """
+            # Find g or h operands
+            ghs_i = [gh[i] for gh in ghs]
+            if not filter_none and None in ghs_i:
+                # Whole expr is None
+                new_expr = None
+            else:
+                ghs_i = [g for g in ghs_i if g is not None]
+                if ghs_i:
+                    if len(ghs_i) > 1 or retain_unary_minus:
+                        new_expr = operator(tuple(ghs_i))
+                    else:
+                        new_expr = ghs_i[0]
+                else:
+                    new_expr = None
+            return new_expr
+
+        def rearrange_expr2(expr, var):
+            """Rearrange an expression into the form g + h*var.
+
+            Performs a post-order traversal of this expression's tree,
+            and returns a pair (g, h)
+            """
+            ###cache _check_expr(self, expr, var)
+            ###cachelinear_split
+            gh = None
+            operands = expr.args
+            if isinstance(expr, VariableDummy):
+                # Variable
+                if var is expr: # linear
+                    gh = (None, var)
+                else:
+                    #if self._check_expr(self, expr, var) == BeModel.LINEAR_KINDS.none:
+                    # Just put the <ci> in g, but with full name
+                    gh = (var, None)
+            elif isinstance(expr, sp.Piecewise):
+                # The tests have to move into both components of gh:
+                # "if C1 then (a1,b1) elif C2 then (a2,b2) else (a0,b0)"
+                # maps to "(if C1 then a1 elif C2 then a2 else a0,
+                #           if C1 then b1 elif C2 then b2 else b0)"
+                # Note that no test is a function of var.
+                # First rearrange child expressions
+                cases = [p[0] for p in expr.args]
+
+                cases_ghs = [rearrange_expr2(c, var) for c in cases]
+                # Now construct the new expression
+                conds = [e[1] for e in expr.args]
+                def piecewise_branch(i):
+                    pieces_i = zip(map(lambda gh: gh[i], cases_ghs),
+                                conds)
+                    pieces_i = [p for p in pieces_i if p[0] is not None] # Remove cases that are None
+                    if pieces_i:
+                        new_expr = sp.Piecewise(*pieces_i)
+                    else:
+                        new_expr = None
+                    return new_expr
+                gh = (piecewise_branch(0), piecewise_branch(1))
+
+            elif isinstance(expr, sp.Add): # is represented via Add
+                # Just split the operation into each component
+                operand_ghs = [rearrange_expr2(op, var) for op in operands]
+                g = sp.Add(*tuple([op[0] for op in operand_ghs if op[0] is not None]))
+                h = sp.Add(*tuple([op[1] for op in operand_ghs if op[1] is not None]))
+                gh = (g, h)
+
+#            elif isinstance(expr, sp.Pow) and len(operands) == 2 and operands[1] == -1: #divide
+                # (a, b) / (c, 0) ==> (a,b) * Pow((c,0)-1)
+                # 1 / (a, b) = (1/a, 1/b)
+                # (a, b) / (c, 0) = (a/c, b/c)
+
+            elif isinstance(expr, sp.Mul):
+                # (a1,b1)*(a2,b2) = (a1*a2, b1*a2 or a1*b2 or None)
+                # Similarly for the nary case - at most one b_i is not None
+                operand_ghs = [rearrange_expr2(op, var) for op in operands]
+                g = sp.Mul(*tuple([op[0] for op in operand_ghs if op[0] is not None]))
+                #g = make_apply(sp.Mul, operand_ghs, 0, filter_none=False)
+                # Find non-None b_i, if any
+                for i, ab in enumerate(operand_ghs):
+                    if ab[1] is not None:
+                        operand_ghs[i] = (ab[1], None)
+                        # Clone the a_i to avoid objects having 2 parents
+                        for j, ab in enumerate(operand_ghs):
+                            if j != i:
+                                operand_ghs[j] = (operand_ghs[j][0], None)
+                        h = sp.Mul(*tuple([op[0] for op in operand_ghs if op[0] is not None]))
+                        break
+                else:
+                    h = None
+                gh = (g, h)
+#            else:
+#                # (a, None) op (b, None) = (a op b, None)
+#                operand_ghs = map(lambda op: self._rearrange_expr(op, var),
+#                                  operands)
+#                g = make_apply(operator, operand_ghs, 0, preserve=True)
+#                gh = (g, None)
+#            self._transfer_lut(expr, gh, var)
+            else:
+#            # Since this expression is linear, there can't be any
+#            # occurrence of var in it; all possible such cases are covered
+#            # above.  So just clone it into g.
+                gh = (expr, None)
             return gh
 
         def print_rearrange_expr(expr, var):
-            expr = sp.piecewise_fold(expr)
-            expr = expr.xreplace({cg.exp_:sp.exp, pow:sp.Pow, cg.abs_: sp.Abs, cg.acos_:sp.acos, cg.cos_: sp.cos, cg.sqrt_: sp.sqrt, cg.sin_: sp.sin})
-            exps = sp.simplify(expr)
+
+            #gh = rearrange_expr2(expr, var)
             gh = rearrange_expr(expr, var)
             return {'state_var_index': self._state_vars.index(var), 'var': self._printer.doprint(var), 'g': self._printer.doprint(gh[0]) , 'h': self._printer.doprint(gh[1])}
 

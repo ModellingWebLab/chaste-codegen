@@ -65,6 +65,21 @@ class ChastePrinter(Printer):
     def __init__(self, symbol_function=None, derivative_function=None):
         super().__init__(symbol_function, derivative_function)
 
+    def _print_Function(self, expr):
+        """ Handles function calls. """
+
+        # Check if function is known to python math
+        name = expr.func.__name__
+        # Convert arguments
+        args = self._bracket_args(expr.args, 0)
+
+        if name in self._function_names:
+            name = self._function_names[name]
+        else:
+            raise ValueError('Unsupported function: ' + str(name))
+
+        return '(' + name + '(' + args + '))' if name.startswith('exp') else name + '(' + args + ')'
+
     def _print_And(self, expr):
         """ Handles logical And. """
         my_prec = precedence(expr)
