@@ -22,7 +22,7 @@ class BeModel(cg.ChasteModel):
         self._jacobian_equations, self._jacobian_matrix = self._get_jacobian()
         self._formatted_state_vars, self._formatted_nonlinear_state_vars, self._formatted_residual_equations, self._formatted_derivative_eqs = \
             self._update_state_vars()
-        self._formatted_rearranged_linear_derivs = self._format_rearranged_linear_derivs()
+        self._formatted_rearranged_linear_derivs, self._formatted_linear_equations = self._format_rearranged_linear_derivs()
         self._formatted_jacobian_equations, self._formatted_jacobian_matrix_entries = self._format_jacobian()
 
     class KINDS(Enum):
@@ -140,38 +140,12 @@ class BeModel(cg.ChasteModel):
                 match = expr.expand().match(g + h*var)
                 gh = None
                 if match is not None:
-                    g = sp.simplify(match[g].xreplace({cg.exp_:sp.exp, pow:sp.Pow, cg.abs_: sp.Abs, cg.acos_:sp.acos, cg.cos_: sp.cos, cg.sqrt_: sp.sqrt, cg.sin_: sp.sin}))
+                    #g = sp.simplify(match[g].subs({cg.exp_:sp.exp})).factor()
+                    #g = match[g].subs({cg.exp_:sp.exp}).factor().simplify()
+                    g = match[g]
                     h = match[h]
                     gh = (g, h)
             return gh
-
-        def make_apply(operator, ghs, i, filter_none=True,
-                        retain_unary_minus=False):
-            """Construct a new apply expression for g or h.
-
-            ghs is an iterable of (g,h) pairs for operands.
-            
-            i indicates whether to construct g (0) or h (1).
-            
-            filter_none indicates the behaviour of 0 under this operator.
-            If True, it's an additive zero, otherwise it's a
-            multiplicative zero.
-            """
-            # Find g or h operands
-            ghs_i = [gh[i] for gh in ghs]
-            if not filter_none and None in ghs_i:
-                # Whole expr is None
-                new_expr = None
-            else:
-                ghs_i = [g for g in ghs_i if g is not None]
-                if ghs_i:
-                    if len(ghs_i) > 1 or retain_unary_minus:
-                        new_expr = operator(tuple(ghs_i))
-                    else:
-                        new_expr = ghs_i[0]
-                else:
-                    new_expr = None
-            return new_expr
 
         def rearrange_expr2(expr, var):
             """Rearrange an expression into the form g + h*var.
@@ -186,11 +160,24 @@ class BeModel(cg.ChasteModel):
             if isinstance(expr, VariableDummy):
                 # Variable
                 if var is expr: # linear
-                    gh = (None, var)
+                    #gh = (None, var)
+                    gh = (None, 1)
+                elif expr in [eq.lhs for eq in self._original_derivative_equations]:
+                    # ci_var is a linear function of var, so rearrange
+                    # its definition
+                    if not hasattr(expr, '_cml_linear_split'):
+                        ci_defn = [eq.rhs for eq in self._original_derivative_equations if eq.lhs == expr][0]
+                        gh = rearrange_expr2(ci_defn, var)
+                        if gh[0] == ci_defn:
+                            gh = (expr, gh[1])
+                        if gh[1] == ci_defn:
+                            gh = (gh[0], expr)
+                        expr._cml_linear_split = gh
+                    gh = expr._cml_linear_split
                 else:
                     #if self._check_expr(self, expr, var) == BeModel.LINEAR_KINDS.none:
                     # Just put the <ci> in g, but with full name
-                    gh = (var, None)
+                    gh = (expr, None)
             elif isinstance(expr, sp.Piecewise):
                 # The tests have to move into both components of gh:
                 # "if C1 then (a1,b1) elif C2 then (a2,b2) else (a0,b0)"
@@ -200,6 +187,7 @@ class BeModel(cg.ChasteModel):
                 # First rearrange child expressions
                 cases = [p[0] for p in expr.args]
 
+                #cases_ghs1 = [rearrange_expr(c, var) for c in cases]
                 cases_ghs = [rearrange_expr2(c, var) for c in cases]
                 # Now construct the new expression
                 conds = [e[1] for e in expr.args]
@@ -214,23 +202,55 @@ class BeModel(cg.ChasteModel):
                     return new_expr
                 gh = (piecewise_branch(0), piecewise_branch(1))
 
-            elif isinstance(expr, sp.Add): # is represented via Add
+            elif isinstance(expr, sp.Add): # - is represented via Add
                 # Just split the operation into each component
                 operand_ghs = [rearrange_expr2(op, var) for op in operands]
-                g = sp.Add(*tuple([op[0] for op in operand_ghs if op[0] is not None]))
-                h = sp.Add(*tuple([op[1] for op in operand_ghs if op[1] is not None]))
+                g = h = None
+                g_operands = [op[0] for op in operand_ghs if op[0] is not None]
+                h_operands = [op[1] for op in operand_ghs if op[1] is not None]
+                if len(g_operands) > 0:
+                    g = sp.Add(*tuple(g_operands))
+                if len(h_operands) > 0:
+                    h = sp.Add(*tuple(h_operands))
                 gh = (g, h)
 
-#            elif isinstance(expr, sp.Pow) and len(operands) == 2 and operands[1] == -1: #divide
-                # (a, b) / (c, 0) ==> (a,b) * Pow((c,0)-1)
+            elif isinstance(expr, sp.Mul) and any(isinstance(arg, sp.Pow) and arg.args[1] == -1 for arg in expr.args): #divide
                 # 1 / (a, b) = (1/a, 1/b)
                 # (a, b) / (c, 0) = (a/c, b/c)
+
+                # (a, b) / (c, 0) = (a/c, b/c)
+
+                # get numerators and denominators
+                numerator_args = []
+                denominator_args = []
+                for arg in expr.args:
+                    if isinstance(arg, sp.Pow) and arg.args[1] == -1:
+                        denominator_args.append(arg.args[0])
+                    else:
+                        numerator_args.append(arg)
+                
+                numer = rearrange_expr2(sp.Mul(*tuple(numerator_args)), var)
+                denom = rearrange_expr2(sp.Mul(*tuple(denominator_args)), var)
+                assert denom[1] is None
+                denom_g = denom[0]
+                g = h = None
+                if numer[0]:
+#                    g = mathml_apply.create_new(expr, operator, [numer[0], denom_g])
+                    g = numer[0] / denom_g
+                if numer[1]:
+                    h = numer[1] / denom_g
+#                        denom_g = self._clone(denom_g)
+#                    h = mathml_apply.create_new(expr, operator, [numer[1], denom_g])
+                gh = (g, h)                
 
             elif isinstance(expr, sp.Mul):
                 # (a1,b1)*(a2,b2) = (a1*a2, b1*a2 or a1*b2 or None)
                 # Similarly for the nary case - at most one b_i is not None
+                g = h = None
                 operand_ghs = [rearrange_expr2(op, var) for op in operands]
-                g = sp.Mul(*tuple([op[0] for op in operand_ghs if op[0] is not None]))
+                g_operands = [op[0] for op in operand_ghs]
+                if len(g_operands) > 0 and None not in  g_operands:
+                    g = sp.Mul(*tuple(g_operands))
                 #g = make_apply(sp.Mul, operand_ghs, 0, filter_none=False)
                 # Find non-None b_i, if any
                 for i, ab in enumerate(operand_ghs):
@@ -240,18 +260,13 @@ class BeModel(cg.ChasteModel):
                         for j, ab in enumerate(operand_ghs):
                             if j != i:
                                 operand_ghs[j] = (operand_ghs[j][0], None)
-                        h = sp.Mul(*tuple([op[0] for op in operand_ghs if op[0] is not None]))
+                                h_operands = [op[0] for op in operand_ghs if op[0] is not None]
+                        if len(h_operands) >0:
+                            h = sp.Mul(*tuple(h_operands))
                         break
                 else:
                     h = None
                 gh = (g, h)
-#            else:
-#                # (a, None) op (b, None) = (a op b, None)
-#                operand_ghs = map(lambda op: self._rearrange_expr(op, var),
-#                                  operands)
-#                g = make_apply(operator, operand_ghs, 0, preserve=True)
-#                gh = (g, None)
-#            self._transfer_lut(expr, gh, var)
             else:
 #            # Since this expression is linear, there can't be any
 #            # occurrence of var in it; all possible such cases are covered
@@ -265,10 +280,40 @@ class BeModel(cg.ChasteModel):
             gh = rearrange_expr(expr, var)
             return {'state_var_index': self._state_vars.index(var), 'var': self._printer.doprint(var), 'g': self._printer.doprint(gh[0]) , 'h': self._printer.doprint(gh[1])}
 
-        linear_derivs = [eq for eq in self._derivative_equations if isinstance(eq.lhs, sp.Derivative) and eq.lhs.args[0] not in self._non_linear_state_vars and not eq.lhs.args[0] == self._membrane_voltage_var]
-        linear_derivs = sorted(linear_derivs, key=lambda d: self._get_var_display_name(d.lhs.args[0]))
+        #linear_derivs = [eq for eq in self._derivative_equations if isinstance(eq.lhs, sp.Derivative) and eq.lhs.args[0] not in self._non_linear_state_vars and not eq.lhs.args[0] == self._membrane_voltage_var]
+
+        # get relevant equations
+        linear_sv = [d for d in self._y_derivatives if d.args[0] not in self._non_linear_state_vars and not d.args[0] == self._membrane_voltage_var]
+        linear_derivs_eqs = self._get_equations_for(linear_sv)
+
+        # fill in the equations containing state vars only
+        non_lin_sym = set(self._state_vars)
+        keep_derivs = []
+        for i, eq in enumerate(linear_derivs_eqs):
+            if isinstance(eq.lhs, sp.Derivative) or not (eq.rhs.free_symbols - set([self._membrane_voltage_var])).intersection(non_lin_sym):
+                keep_derivs.append(eq)
+            else:
+                non_lin_sym.add(eq.lhs)
+
+        linear_derivs_eqs = partial_eval(linear_derivs_eqs, [eq.lhs for eq in keep_derivs])
+        #linear_derivs = [eq for eq in self._original_derivative_equations if isinstance(eq.lhs, sp.Derivative) and eq.lhs.args[0] not in self._non_linear_state_vars and not eq.lhs.args[0] == self._membrane_voltage_var]
+        linear_derivs = sorted([eq for eq in linear_derivs_eqs if isinstance(eq.lhs, sp.Derivative)], key=lambda d: self._get_var_display_name(d.lhs.args[0]))
         formatted_expr =  [print_rearrange_expr(d.rhs, d.lhs.args[0]) for d in linear_derivs]
-        return formatted_expr
+
+        # remove eqs not used in others (e.g. derivatives)
+        used_vars = set()
+        for eq in linear_derivs_eqs:
+            used_vars.update(self._model.find_variables_and_derivatives([eq.rhs]))
+        linear_derivs_eqs = [eq for eq in linear_derivs_eqs if eq.lhs in used_vars]
+
+        formatted_eqs =[{'lhs': self._printer.doprint(eqs.lhs),
+                         'rhs': self._printer.doprint(eqs.rhs),
+                         'units': self._model.units.format(self._model.units.evaluate_units(eqs.lhs)),
+                         'in_eqs_excl_voltage': eqs in self._derivative_eqs_excl_voltage,
+                         'in_membrane_voltage': eqs in self._derivative_eqs_voltage,
+                         'is_voltage': isinstance(eqs.lhs, sp.Derivative) and eqs.lhs.args[0] == self._membrane_voltage_var}
+                        for eqs in linear_derivs_eqs]
+        return formatted_expr, formatted_eqs
 
     def _get_jacobian(self):
         if len(self._non_linear_state_vars) == 0:
@@ -394,4 +439,5 @@ class BeModel(cg.ChasteModel):
             'jacobian_entries': self._formatted_jacobian_matrix_entries,
             'nonlinear_state_vars': self._formatted_nonlinear_state_vars,
             'residual_equations': self._formatted_residual_equations,
-            'linear_deriv_eqs': self._formatted_rearranged_linear_derivs})
+            'linear_deriv_eqs': self._formatted_rearranged_linear_derivs,
+            'linear_equations': self._formatted_linear_equations})
