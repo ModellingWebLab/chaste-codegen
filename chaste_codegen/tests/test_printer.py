@@ -105,3 +105,9 @@ class TestChastePrinter(object):
         # Special numbers
         assert printer.doprint(sp.pi) == 'M_PI'
         assert printer.doprint(sp.E) == 'e'
+
+    def test_unsupported_function(self, printer, x):
+        f = sp.Function('f')
+        with pytest.raises(ValueError) as err:
+            printer.doprint(f(1))
+        assert str(err.value) == 'Unsupported function: f'
