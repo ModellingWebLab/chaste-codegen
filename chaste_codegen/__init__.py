@@ -3,7 +3,7 @@ Main module for cardiac Chaste code generation
 """
 import logging
 from cellmlmanip.transpiler import Transpiler
-from ._math_functions import RealFunction, exp_, abs_, acos_, cos_, sqrt_, sin_
+from ._math_functions import exp_, abs_, acos_, cos_, sqrt_, sin_
 
 #
 # Load constants and version information

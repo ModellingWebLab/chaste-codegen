@@ -98,8 +98,9 @@ class ChasteModel(object):
         lambda e: (  # division & eval of transcendentals are expensive floating point operations...
             e.is_Pow and e.exp.is_negative  # division
             or (isinstance(e, (log, log10)) and not e.args[0].is_number))))
-#    _POW_OPT ReplaceOptim(lambda p: p.is_Pow and (isinstance(p.exp, Float) or isinstance(p.exp, float)) and float(p.exp).is_integer(), lambda p: exp2(p.exp))
-    _POW_OPT = ReplaceOptim(lambda p: p.is_Pow and (isinstance(p.exp, sp.Float) or isinstance(p.exp, float)) and float(p.exp).is_integer(), lambda p: sp.Pow(p.base, int(float(p.exp))))
+    _POW_OPT = ReplaceOptim(lambda p: p.is_Pow and (isinstance(p.exp, sp.Float) or isinstance(p.exp, float))
+                            and float(p.exp).is_integer(),
+                            lambda p: sp.Pow(p.base, int(float(p.exp))))
     _OPTIMS = optims_c99 + (_LOG10_OPT, _POW_OPT, )
 
     def __init__(self, model, file_name, **kwargs):
