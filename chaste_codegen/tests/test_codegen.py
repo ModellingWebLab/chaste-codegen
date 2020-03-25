@@ -143,7 +143,7 @@ def test_dymaic_BE(tmp_path):
     model_file = \
         os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'luo_rudy_1994.cellml')
     chaste_model = cellmlmanip.load_model(model_file)
-    chaste_model = cg.CvodeChasteModel(chaste_model,
+    chaste_model = cg.BeModel(chaste_model,
                                        'dynamic_luo_rudy_1994',
                                        class_name='Dynamicluo_rudy_1994FromCellMLBackwardEuler',
                                        dynamically_loadable=True)
