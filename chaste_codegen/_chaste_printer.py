@@ -78,7 +78,7 @@ class ChastePrinter(Printer):
         else:
             raise ValueError('Unsupported function: ' + str(name))
 
-        return '(' + name + '(' + args + '))' if name.startswith('exp') else name + '(' + args + ')'
+        return name + '(' + args + ')'
 
     def _print_And(self, expr):
         """ Handles logical And. """

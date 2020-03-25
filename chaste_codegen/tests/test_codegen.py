@@ -138,19 +138,20 @@ def test_dymaic_cvode(tmp_path):
 
 
 def test_dymaic_BE(tmp_path):
-    """ Check generation of Cvode models against reference"""
-    LOGGER.info('Converting: BE: aslanidi_model_2009\n')
+    tmp_path = str(tmp_path)
+    LOGGER.info('Converting: BE Dynamic luo_rudy_1994\n')
     model_file = \
-        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'aslanidi_model_2009.cellml')
+        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'luo_rudy_1994.cellml')
     chaste_model = cellmlmanip.load_model(model_file)
-    chaste_model = cg.BeModel(chaste_model, 'dynamic_aslanidi_model_2009',
-                              class_name='Dynamicaslanidi_model_2009FromCellMLBackwardEuler',
-                              dynamically_loadable=True)
+    chaste_model = cg.CvodeChasteModel(chaste_model,
+                                       'dynamic_luo_rudy_1994',
+                                       class_name='Dynamicluo_rudy_1994FromCellMLBackwardEuler',
+                                       dynamically_loadable=True)
     chaste_model.generate_chaste_code()
     expected_hpp_path = \
-        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'BE', 'dynamic_aslanidi_model_2009.hpp')
+        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'BE', 'dynamic_luo_rudy_1994.hpp')
     expected_cpp_path = \
-        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'BE', 'dynamic_aslanidi_model_2009.cpp')
+        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'BE', 'dynamic_luo_rudy_1994.cpp')
     # Compare against reference
     test_utils.compare_model_against_reference('BE', chaste_model, tmp_path, expected_hpp_path,
                                                expected_cpp_path)
