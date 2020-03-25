@@ -159,23 +159,22 @@ class BeModel(cg.ChasteModel):
                     'g': self._printer.doprint(gh[0] if gh[0] is not None else 0.0),
                     'h': self._printer.doprint(gh[1] if gh[1] is not None else 0.0)}
 
-        # get relevant equations
+        # get linear state vars
         linear_sv = [d for d in self._y_derivatives if d.args[0] not in self._non_linear_state_vars
                      and not d.args[0] == self._membrane_voltage_var]
-        linear_derivs_eqs = self._get_equations_for(linear_sv)
 
         # fill in the equations containing state vars only
         non_lin_sym = set(self._state_vars)
-        keep_derivs = []
-        for i, eq in enumerate(linear_derivs_eqs):
-            if isinstance(eq.lhs, sp.Derivative) \
-                    or not (eq.rhs.free_symbols - set([self._membrane_voltage_var])).intersection(non_lin_sym):
-                keep_derivs.append(eq)
+        linear_derivs_eqs = []
+        subs_dict = {}
+        for eq in self._get_equations_for(linear_sv):
+            if isinstance(eq.lhs, sp.Derivative):
+                linear_derivs_eqs.append(sp.Eq(eq.lhs, eq.rhs.xreplace(subs_dict)))
+            elif not (eq.rhs.free_symbols - set([self._membrane_voltage_var])).intersection(non_lin_sym):
+                linear_derivs_eqs.append(eq)
             else:
                 non_lin_sym.add(eq.lhs)
-
-        # fill in the equations containing state vars only
-        linear_derivs_eqs = partial_eval(linear_derivs_eqs, [eq.lhs for eq in keep_derivs])
+                subs_dict[eq.lhs] = eq.rhs.xreplace(subs_dict)
 
         linear_derivs = sorted([eq for eq in linear_derivs_eqs if isinstance(eq.lhs, sp.Derivative)],
                                key=lambda d: self._get_var_display_name(d.lhs.args[0]))

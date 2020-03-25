@@ -21,6 +21,7 @@ from ._config import (   # noqa
 #
 # Load and expose public classes and functions
 #
+from ._math_functions import RealFunction  # noqa
 from ._load_template import load_template  # noqa
 from ._chaste_printer import ChastePrinter  # noqa
 
