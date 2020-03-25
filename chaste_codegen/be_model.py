@@ -102,8 +102,6 @@ class BeModel(cg.ChasteModel):
                 result = self._check_expr(expr.args[0], state_var)
             else:
                 result = BeModel.KINDS.Nonlinear
-        else:
-            assert False, 'Not implemented expression type: ' + str(type(expr))
         return result
 
     def _get_non_linear_state_vars(self):
@@ -197,8 +195,6 @@ class BeModel(cg.ChasteModel):
         return formatted_expr, formatted_eqs
 
     def _get_jacobian(self):
-        if len(self._non_linear_state_vars) == 0:
-            return [], sp.Matrix([])
         state_var_matrix = sp.Matrix(self._non_linear_state_vars)
         # get derivatives for non-linear state vars
         derivative_eqs = [d for d in self._derivative_equations if d.lhs.args[0] in self._non_linear_state_vars]
