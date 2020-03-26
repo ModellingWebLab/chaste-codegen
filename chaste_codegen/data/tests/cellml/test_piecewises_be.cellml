@@ -941,65 +941,9 @@ http://www.CellML.org/
     </component>
     <component name="fast_sodium_current_h_gate">
         <variable initial_value="0.1969" name="h" public_interface="out" units="dimensionless"/>
-        <variable name="alpha_h" units="per_second"/>
-        <variable name="beta_h" units="per_second"/>
         <variable name="V" public_interface="in" units="millivolt"/>
         <variable name="time" public_interface="in" units="second"/>
         <math xmlns="http://www.w3.org/1998/Math/MathML">
-            <apply>
-                <eq/>
-                <ci>alpha_h</ci>
-                <apply>
-                    <times/>
-                    <cn cellml:units="per_second">20</cn>
-                    <apply>
-                        <exp/>
-                        <apply>
-                            <times/>
-                            <apply>
-                                <minus/>
-                                <cn cellml:units="per_millivolt">0.125</cn>
-                            </apply>
-                            <apply>
-                                <plus/>
-                                <ci>V</ci>
-                                <cn cellml:units="millivolt">75</cn>
-                            </apply>
-                        </apply>
-                    </apply>
-                </apply>
-            </apply>
-            <apply>
-                <eq/>
-                <ci>beta_h</ci>
-                <apply>
-                    <divide/>
-                    <cn cellml:units="per_second">2000</cn>
-                    <apply>
-                        <plus/>
-                        <apply>
-                            <times/>
-                            <cn cellml:units="dimensionless">320</cn>
-                            <apply>
-                                <exp/>
-                                <apply>
-                                    <times/>
-                                    <apply>
-                                        <minus/>
-                                        <cn cellml:units="per_millivolt">0.1</cn>
-                                    </apply>
-                                    <apply>
-                                        <plus/>
-                                        <ci>V</ci>
-                                        <cn cellml:units="millivolt">75</cn>
-                                    </apply>
-                                </apply>
-                            </apply>
-                        </apply>
-                        <cn cellml:units="dimensionless">1</cn>
-                    </apply>
-                </apply>
-            </apply>
             <apply>
                 <eq/>
                 <apply>
@@ -1009,23 +953,23 @@ http://www.CellML.org/
                     </bvar>
                     <ci>h</ci>
                 </apply>
-                <apply>
-                    <minus/>
-                    <apply>
-                        <times/>
-                        <ci>alpha_h</ci>
+                <piecewise>
+                    <piece>
                         <apply>
-                            <minus/>
-                            <cn cellml:units="dimensionless">1</cn>
+                            <plus/>
+                            <ci>V</ci>
                             <ci>h</ci>
                         </apply>
-                    </apply>
-                    <apply>
-                        <times/>
-                        <ci>beta_h</ci>
+                        <apply>
+                            <gt/>
+                            <ci>V</ci>
+                            <cn cellml:units="millivolt">9999999</cn>
+                        </apply>
+                    </piece>
+                    <otherwise>
                         <ci>h</ci>
-                    </apply>
-                </apply>
+                    </otherwise>
+                </piecewise>
             </apply>
         </math>
     </component>
@@ -1617,43 +1561,19 @@ http://www.CellML.org/
                     </bvar>
                     <ci>f2</ci>
                 </apply>
-                <piecewise>
-                    <piece>
+                <apply>
+                    <minus/>
+                    <ci>alpha_f2</ci>
+                    <apply>
+                        <times/>
+                        <ci>f2</ci>
                         <apply>
                             <plus/>
                             <ci>alpha_f2</ci>
-                            <apply>
-                                <times/>
-                                <ci>f2</ci>
-                                <apply>
-                                    <plus/>
-                                    <ci>alpha_f2</ci>
-                                    <ci>beta_f2</ci>
-                                </apply>
-                            </apply>
+                            <ci>beta_f2</ci>
                         </apply>
-                        <apply>
-                            <gt/>
-                            <ci>V</ci>
-                            <cn cellml:units="millivolt">99999</cn>
-                        </apply>
-                    </piece>
-                    <otherwise>
-                        <apply>
-                            <minus/>
-                            <ci>alpha_f2</ci>
-                            <apply>
-                                <times/>
-                                <ci>f2</ci>
-                                <apply>
-                                    <plus/>
-                                    <ci>alpha_f2</ci>
-                                    <ci>beta_f2</ci>
-                                </apply>
-                            </apply>
-                        </apply>
-                    </otherwise>
-                </piecewise>
+                    </apply>
+                </apply>
             </apply>
         </math>
     </component>

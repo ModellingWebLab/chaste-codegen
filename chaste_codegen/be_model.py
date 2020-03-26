@@ -145,17 +145,16 @@ class BeModel(cg.ChasteModel):
                 match = expr.expand().match(g + h * var)
                 gh = None
                 if match is not None:
-                    g = match[g]
-                    h = match[h]
-                    gh = (g, h)
+                    gh = (match[g], match[h])
             return gh
 
         def print_rearrange_expr(expr, var):
+            expr = sp.piecewise_fold(expr)
             gh = rearrange_expr(expr, var)
             return {'state_var_index': self._state_vars.index(var),
                     'var': self._printer.doprint(var),
-                    'g': self._printer.doprint(gh[0] if gh[0] is not None else 0.0),
-                    'h': self._printer.doprint(gh[1] if gh[1] is not None else 0.0)}
+                    'g': self._printer.doprint(gh[0] if gh is not None and gh[0] is not None else 0.0),
+                    'h': self._printer.doprint(gh[1] if gh is not None and gh[1] is not None else 0.0)}
 
         # get linear state vars
         linear_sv = [d for d in self._y_derivatives if d.args[0] not in self._non_linear_state_vars
