@@ -132,10 +132,9 @@ class BeModel(cg.ChasteModel):
                 def piecewise_branch(i):
                     pieces_i = zip(map(lambda gh: gh[i], cases_ghs), conds)
                     pieces_i = [p for p in pieces_i if p[0] is not None]  # Remove cases that are None
+                    new_expr = None
                     if pieces_i:
                         new_expr = sp.Piecewise(*pieces_i)
-                    else:
-                        new_expr = None
                     return new_expr
                 gh = (piecewise_branch(0), piecewise_branch(1))
 
@@ -143,7 +142,7 @@ class BeModel(cg.ChasteModel):
                 h = sp.Wild('h', exclude=[var])
                 g = sp.Wild('g', exclude=[var])
                 match = expr.expand().match(g + h * var)
-                gh = None
+                gh = (None, None)
                 if match is not None:
                     gh = (match[g], match[h])
             return gh
