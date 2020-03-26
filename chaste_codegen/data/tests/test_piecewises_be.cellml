@@ -1617,43 +1617,19 @@ http://www.CellML.org/
                     </bvar>
                     <ci>f2</ci>
                 </apply>
-                <piecewise>
-                    <piece>
+                <apply>
+                    <minus/>
+                    <ci>alpha_f2</ci>
+                    <apply>
+                        <times/>
+                        <ci>f2</ci>
                         <apply>
                             <plus/>
                             <ci>alpha_f2</ci>
-                            <apply>
-                                <times/>
-                                <ci>f2</ci>
-                                <apply>
-                                    <plus/>
-                                    <ci>alpha_f2</ci>
-                                    <ci>beta_f2</ci>
-                                </apply>
-                            </apply>
+                            <ci>beta_f2</ci>
                         </apply>
-                        <apply>
-                            <gt/>
-                            <ci>V</ci>
-                            <cn cellml:units="millivolt">99999</cn>
-                        </apply>
-                    </piece>
-                    <otherwise>
-                        <apply>
-                            <minus/>
-                            <ci>alpha_f2</ci>
-                            <apply>
-                                <times/>
-                                <ci>f2</ci>
-                                <apply>
-                                    <plus/>
-                                    <ci>alpha_f2</ci>
-                                    <ci>beta_f2</ci>
-                                </apply>
-                            </apply>
-                        </apply>
-                    </otherwise>
-                </piecewise>
+                    </apply>
+                </apply>
             </apply>
         </math>
     </component>
