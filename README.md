@@ -24,7 +24,7 @@ For guidelines on contributing to `chaste_codegen`, please see [CONTRIBUTING.md]
 The tests contain a large amount of reference files. When reference files are updated it's a common practice to regenerate them all and (after testing with chaste). Often only a few will have changes.
 In order to hide reference files for which only the timestamps have changed, please set up your git environment as follows.
 ```
-git config --global filter.strip_gen_time.clean 'sed "s;^//! on .*;//! on (date omitted as unimportant);"'
+git config --global filter.strip_gen_time.clean "sed 's;^//! on .*;//! on (date omitted as unimportant);'"
 git config --global filter.strip_gen_time.smudge cat
 ```
 See https://git-scm.com/book/en/v2/Customizing-Git-Git-Attributes#_keyword_expansion for full details.
