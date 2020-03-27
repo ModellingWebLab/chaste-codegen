@@ -140,7 +140,7 @@ def test_dymaic_cvode(tmp_path):
                                                expected_cpp_path)
 
 
-def test_dymaic_BE(tmp_path):
+def test_dynamic_BE(tmp_path):
     tmp_path = str(tmp_path)
     LOGGER.info('Converting: BE Dynamic luo_rudy_1994\n')
     model_file = \
@@ -160,7 +160,7 @@ def test_dymaic_BE(tmp_path):
                                                expected_cpp_path)
 
 
-def testexp_ose_annotated_variables(tmp_path):
+def testexpose_annotated_variables(tmp_path):
     tmp_path = str(tmp_path)
     LOGGER.info('Testing expose_annotated_variables option\n')
     model_file = \

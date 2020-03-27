@@ -113,7 +113,7 @@ def test_script_class_convtype_output_dll_loadable(capsys, tmp_path):
                                    os.path.join(tmp_path, 'output_class.c'))
 
 
-def test_script_outputexp_ose_annotated_variables(capsys, tmp_path):
+def test_script_output_expose_annotated_variables(capsys, tmp_path):
     LOGGER.info('Testing model with options --expose-annotated-variables and -o for command line script\n')
     tmp_path = str(tmp_path)
     # Check options: -o --expose-annotated-variables
