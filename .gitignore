@@ -112,3 +112,6 @@ ENV/
 
 # Chaste_cg specific
 chaste_codegen/data/tests/chaste_reference_models/develop/
+
+#windows
+desktop.ini

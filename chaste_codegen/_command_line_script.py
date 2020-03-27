@@ -3,10 +3,12 @@
 ######################################################################
 import argparse
 import os
+from collections import OrderedDict
+
 import cellmlmanip
+
 import chaste_codegen as cg
 from chaste_codegen._script_utils import write_file
-from collections import OrderedDict
 
 
 def chaste_codegen():

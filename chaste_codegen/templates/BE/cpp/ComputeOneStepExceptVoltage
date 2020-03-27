@@ -1,0 +1,22 @@
+    
+    void {{class_name}}::ComputeOneStepExceptVoltage(double {{free_variable.var_name}})
+    {
+        // Time units: millisecond
+        std::vector<double>& rY = rGetStateVariables();
+        {% for state_var in state_vars %}
+        {%- if state_var.in_y_deriv and state_var.linear %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
+        // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
+        {% endif %}{%- endfor %}
+        {% for eq in linear_equations %}const double {{eq.lhs}} = {{eq.rhs}};
+        {% endfor %}
+        {% for deriv in linear_deriv_eqs %}
+        rY[{{deriv.state_var_index}}] = ({{deriv.var}} + (({{deriv.g}}) * mDt)) / (1.0 - (({{deriv.h}}) * mDt));
+        {%- endfor %}
+        {% if nonlinear_state_vars|length > 0 %}
+        double _guess[{{nonlinear_state_vars|length}}] = {{"{"}}{%- for state_var in nonlinear_state_vars %}{% if loop.index0 > 0 %},{% endif %}rY[{{state_var.state_var_index}}]{%- endfor %}{{"}"}};
+        CardiacNewtonSolver<{{nonlinear_state_vars|length}},{{class_name}}>* _p_solver = CardiacNewtonSolver<{{nonlinear_state_vars|length}},{{class_name}}>::Instance();
+        _p_solver->Solve(*this, {{free_variable.var_name}}, _guess);
+        {%- for state_var in nonlinear_state_vars %}
+        rY[{{ state_var.state_var_index }}] = _guess[{{loop.index0}}];
+        {%- endfor %}{% endif %}
+    }

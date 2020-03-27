@@ -10,7 +10,7 @@ class {{class_name}} : public AbstractCvodeCell{%- if dynamically_loadable %}, p
     void serialize(Archive & archive, const unsigned int version)
     {
         archive & boost::serialization::base_object<AbstractCvodeCell >(*this);
-        {% if dynamically_loadable %}archive & boost::serialization::base_object<AbstractDynamicallyLoadableEntity>(*this);{%- endif %}
+{% include "Shared/hpp/AbstractDynamicallyLoadableEntity" %}
     }
     
     // 

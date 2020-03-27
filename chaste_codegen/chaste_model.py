@@ -1,12 +1,20 @@
 import logging
+from collections import OrderedDict
+
 import sympy as sp
-import chaste_codegen as cg
 from cellmlmanip.model import DataDirectionFlow
 from cellmlmanip.units import UnitStore
 from pint import DimensionalityError
-from collections import OrderedDict
-from sympy.codegen.rewriting import optims_c99, optimize, ReplaceOptim, Wild, log
 from sympy.codegen.cfunctions import log10
+from sympy.codegen.rewriting import (
+    ReplaceOptim,
+    Wild,
+    log,
+    optimize,
+    optims_c99,
+)
+
+import chaste_codegen as cg
 
 
 class ChasteModel(object):
@@ -98,7 +106,10 @@ class ChasteModel(object):
         lambda e: (  # division & eval of transcendentals are expensive floating point operations...
             e.is_Pow and e.exp.is_negative  # division
             or (isinstance(e, (log, log10)) and not e.args[0].is_number))))
-    _OPTIMS = optims_c99 + (_LOG10_OPT, )
+    _POW_OPT = ReplaceOptim(lambda p: p.is_Pow and (isinstance(p.exp, sp.Float) or isinstance(p.exp, float))
+                            and float(p.exp).is_integer(),
+                            lambda p: sp.Pow(p.base, int(float(p.exp))))
+    _OPTIMS = optims_c99 + (_LOG10_OPT, _POW_OPT, )
 
     def __init__(self, model, file_name, **kwargs):
         """ Initialise a ChasteModel instance
@@ -122,7 +133,7 @@ class ChasteModel(object):
         self._is_self_excitatory = False
         self.class_name = kwargs.get('class_name', 'ModelFromCellMl')
         self._dynamically_loadable = kwargs.get('dynamically_loadable', False)
-        self._expose_annotated_variables = kwargs.get('expose_annotated_variables', False)
+        self.expose_annotated_variables = kwargs.get('expose_annotated_variables', False)
         self._header_ext = kwargs.get('header_ext', '.hpp')
 
         # Store parameters for future reference
@@ -155,7 +166,8 @@ class ChasteModel(object):
 
         self._y_derivatives = self._get_y_derivatives()
         self._derivative_equations = self._get_derivative_equations()
-        self._derivative_eqs_exlc_voltage = self._get_derivative_eqs_exlc_voltage()
+        self._derivative_eqs_excl_voltage = self._get_derivative_eqs_excl_voltage()
+        self._derivative_eqs_voltage = self._get_derivative_eqs_voltage()
         self._derived_quant = self._get_derived_quant()
         self._derived_quant_eqs = self._get_derived_quant_eqs()
 
@@ -286,9 +298,9 @@ class ChasteModel(object):
     def _get_modifiable_parameters(self):
         """ Get all modifiable parameters
 
-            Note: the result depends on self._expose_annotated_variables to determine whether or not to include
+            Note: the result depends on self.expose_annotated_variables to determine whether or not to include
             variables exposed with oxford metadata that are a modifiable parameter but are not annotated as such"""
-        if self._expose_annotated_variables:
+        if self.expose_annotated_variables:
             # Combined and sorted in display name order
             return \
                 sorted(self._get_modifiable_parameters_annotated() + self._get_modifiable_parameters_exposed(),
@@ -586,11 +598,25 @@ class ChasteModel(object):
 
         return get_deriv_eqs()
 
-    def _get_derivative_eqs_exlc_voltage(self):
+    def _get_derivative_eqs_excl_voltage(self):
         """ Get equations defining the derivatives excluding V (self._membrane_voltage_var)"""
         # stat with derivatives without voltage and add all equations used
         eqs = []
-        derivatives = set([deriv for deriv in self._y_derivatives if deriv.args[0] != self._membrane_voltage_var])
+        deriv_and_eqs = set([deriv for deriv in self._y_derivatives if deriv.args[0] != self._membrane_voltage_var])
+        num_derivatives = -1
+        while num_derivatives < len(deriv_and_eqs):
+            num_derivatives = len(deriv_and_eqs)
+            eqs = [eq for eq in self._derivative_equations if eq.lhs in deriv_and_eqs]
+            for eq in eqs:
+                for s in self._model.find_variables_and_derivatives([eq.rhs]):
+                    deriv_and_eqs.add(s)
+        return eqs
+
+    def _get_derivative_eqs_voltage(self):
+        """ Get equations defining the derivatives for V only (self._membrane_voltage_var)"""
+        # start with derivatives for V only and add all equations used
+        eqs = []
+        derivatives = set([deriv for deriv in self._y_derivatives if deriv.args[0] == self._membrane_voltage_var])
         num_derivatives = -1
         while num_derivatives < len(derivatives):
             num_derivatives = len(derivatives)
@@ -616,9 +642,9 @@ class ChasteModel(object):
     def _get_derived_quant(self):
         """ Get all derived quantities
 
-            Note: the result depends on self._expose_annotated_variables to determine whether or not to include
+            Note: the result depends on self.expose_annotated_variables to determine whether or not to include
             variables exposed with oxford metadata that are derived quantities but are not annotated as such"""
-        if self._expose_annotated_variables:
+        if self.expose_annotated_variables:
             # Combined and sorted in display name order
             return \
                 sorted(self._get_derived_quant_annotated() + self._get_derived_quant_exposed(),
@@ -689,6 +715,11 @@ class ChasteModel(object):
         for eq in self._derivative_equations:
             y_deriv_variables.update(eq.rhs.free_symbols)
 
+        # Get all used variables for y derivs to be able to indicate if a state var is used
+        voltage_deriv_variables = set()
+        for eq in self._derivative_eqs_voltage:
+            voltage_deriv_variables.update(eq.rhs.free_symbols)
+
         # Get all used variables for eqs for derived quantities variables to be able to indicate if a state var is used
         derived_quant_variables = set()
         for eq in self._derived_quant_eqs:
@@ -701,10 +732,12 @@ class ChasteModel(object):
               'units': self._model.units.format(self._model.units.evaluate_units(var)),
               'in_ionic': var in ionic_var_variables,
               'in_y_deriv': var in y_deriv_variables,
+              'in_voltage_deriv': var in voltage_deriv_variables,
               'in_derived_quant': var in derived_quant_variables,
               'range_low': get_range_annotation(var, 'range-low'),
               'range_high': get_range_annotation(var, 'range-high'),
-              'sympy_var': var}
+              'sympy_var': var,
+              'state_var_index': self._state_vars.index(var)}
              for var in self._state_vars]
 
         use_verify_state_variables = \
@@ -741,7 +774,8 @@ class ChasteModel(object):
         return [{'lhs': self._printer.doprint(eqs.lhs),
                  'rhs': self._printer.doprint(eqs.rhs),
                  'units': self._model.units.format(self._model.units.evaluate_units(eqs.lhs)),
-                 'in_membrane_voltage': eqs not in self._derivative_eqs_exlc_voltage,
+                 'in_eqs_excl_voltage': eqs in self._derivative_eqs_excl_voltage,
+                 'in_membrane_voltage': eqs in self._derivative_eqs_voltage,
                  'is_voltage': isinstance(eqs.lhs, sp.Derivative) and eqs.lhs.args[0] == self._membrane_voltage_var}
                 for eqs in self._derivative_equations]
 

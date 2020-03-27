@@ -1,7 +1,9 @@
 import os
 import re
+
 import chaste_codegen as cg
 from chaste_codegen._script_utils import write_file
+
 
 TIMESTAMP_REGEX = re.compile(r'(//! on .*)')
 COMMENTS_REGEX = re.compile(r'(//.*)')

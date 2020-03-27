@@ -1,6 +1,6 @@
-from sympy.printing.precedence import precedence
 from cellmlmanip.printer import Printer
 from sympy.printing.cxxcode import cxxcode
+from sympy.printing.precedence import precedence
 
 
 class ChastePrinter(Printer):
@@ -19,12 +19,12 @@ class ChastePrinter(Printer):
 
     """
     _function_names = {
-        '_abs': 'fabs',
-        '_acos': 'acos',
-        '_cos': 'cos',
-        '_exp': 'exp',
-        '_sqrt': 'sqrt',
-        '_sin': 'sin',
+        'abs_': 'fabs',
+        'acos_': 'acos',
+        'cos_': 'cos',
+        'exp_': 'exp',
+        'sqrt_': 'sqrt',
+        'sin_': 'sin',
 
         'Abs': 'fabs',
         'acos': 'acos',
@@ -64,6 +64,21 @@ class ChastePrinter(Printer):
 
     def __init__(self, symbol_function=None, derivative_function=None):
         super().__init__(symbol_function, derivative_function)
+
+    def _print_Function(self, expr):
+        """ Handles function calls. """
+
+        # Check if function is known to python math
+        name = expr.func.__name__
+        # Convert arguments
+        args = self._bracket_args(expr.args, 0)
+
+        if name in self._function_names:
+            name = self._function_names[name]
+        else:
+            raise ValueError('Unsupported function: ' + str(name))
+
+        return name + '(' + args + ')'
 
     def _print_And(self, expr):
         """ Handles logical And. """

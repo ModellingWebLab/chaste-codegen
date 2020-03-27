@@ -1,16 +1,19 @@
 import logging
+import math
 import os
+import random
 import re
-import chaste_codegen as cg
+import time
+
+import cellmlmanip
+import pyparsing
 import pytest
 import sympy
 from sympy import SympifyError
-import pyparsing
-import time
-import random
-import math
-import cellmlmanip
+
+import chaste_codegen as cg
 import chaste_codegen.tests.chaste_test_utils as test_utils
+
 
 # Show more logging output
 LOGGER = logging.getLogger(__name__)
@@ -90,7 +93,7 @@ class TestChasteCG(object):
             i = 0
             exponent = 0
             before_dot = 0
-            existing_exp = ""
+            existingexp_ = ""
             seen_dot = False
             # get the digits until float precision
             while i < len(number) and count <= self._FLOAT_PRECISION and not number[i].lower() == 'e':
@@ -118,12 +121,12 @@ class TestChasteCG(object):
             if i < len(number) and number[i].lower() == 'e':
                 i += 1
                 while i < len(number):
-                    existing_exp += number[i]
+                    existingexp_ += number[i]
                     i += 1
 
             # Add exponent to what w got from cut off
-            if existing_exp != "":
-                exponent += int(existing_exp)
+            if existingexp_ != "":
+                exponent += int(existingexp_)
 
             if exponent != 0:
                 num_str += "e" + str(exponent)
@@ -197,7 +200,7 @@ class TestChasteCG(object):
                 return True
         return False
 
-    def _get_expression(self, expr_parts):
+    def _getexp_ression(self, expr_parts):
         """ Return the expression, handling conditionals (cond?exp:exp). Given a list of nested expression parts"""
         # process list
         # if element is list, recursively process list
@@ -225,7 +228,7 @@ class TestChasteCG(object):
                     conditional_parts.append((':', ':'))
                     expression = ''
                 else:
-                    expression += self._get_expression(part)
+                    expression += self._getexp_ression(part)
             conditional_parts.append(('expression', expression))  # ends with expression
 
             # translate equals
@@ -275,8 +278,8 @@ class TestChasteCG(object):
         except SympifyError:
             expression = pyparsing.Word(pyparsing.printables, excludeChars="()")
             parens = pyparsing.nestedExpr('(', ')', content=expression)
-            parenthesis_expr = parens.parseString('(' + equation_str + ')').asList()
-            expr_str = self._get_expression(parenthesis_expr)
+            parenthesisexp_r = parens.parseString('(' + equation_str + ')').asList()
+            expr_str = self._getexp_ression(parenthesisexp_r)
             return sympy.simplify(expr_str)
 
     def _get_equation_list(self, model_lines, index):
@@ -361,21 +364,21 @@ class TestChasteCG(object):
         return equation_list, subs_dict
 
     def _resolve_remaining_linkers(self, expected, generated):
-        differing_expected = self._different_eqs(expected, generated)
-        for dif_exp in differing_expected:
+        differingexp_ected = self._different_eqs(expected, generated)
+        for difexp_ in differingexp_ected:
             delete = False
             for j in range(len(expected)):
-                if dif_exp != expected[j]:
+                if difexp_ != expected[j]:
                     old = expected[j][1]
-                    expected[j][1] = expected[j][1].subs({self._get_var_name(dif_exp[0]):
-                                                          dif_exp[1]})
+                    expected[j][1] = expected[j][1].subs({self._get_var_name(difexp_[0]):
+                                                          difexp_[1]})
                     delete = delete or old != expected[j][1]
                     for k in range(len(generated)):
                         if expected[j][0] == generated[k][0]:
-                            generated[k][1] = generated[k][1].subs({self._get_var_name(dif_exp[0]):
-                                                                    dif_exp[1]})
+                            generated[k][1] = generated[k][1].subs({self._get_var_name(difexp_[0]):
+                                                                    difexp_[1]})
             if delete:
-                expected_element_index = expected.index(dif_exp)
+                expected_element_index = expected.index(difexp_)
                 del expected[expected_element_index]
         return expected, generated
 
@@ -386,30 +389,30 @@ class TestChasteCG(object):
     def _check_equation_list(self, expected, generated):
         """ Check expected and generated represent the same equation"""
         if not self._keep_subs:
-            self.link_subs_expected = dict()
+            self.link_subsexp_ected = dict()
             self.link_subs_generated = dict()
             self.generated_subs = dict()
             self.expected_subs = dict()
         self._keep_subs = False
 
         # Resolve linkers and converter variables
-        expected, self.link_subs_expected = self._resolve_linkers(expected, self.link_subs_expected)
+        expected, self.link_subsexp_ected = self._resolve_linkers(expected, self.link_subsexp_ected)
         generated, self.link_subs_generated = self._resolve_linkers(generated, self.link_subs_generated)
 
         # if they aren't the same length it could be state_var conversions try and subs
         # The 2 sets of equations should now have the same amount of equations
         # If not we may have a state var conversion still
         if len(expected) != len(generated):
-            differing_expected = self._different_eqs(expected, generated)
-            for i in range(len(differing_expected)):
-                if len(differing_expected[i][1].args) == 2 and \
-                        isinstance(differing_expected[i][1].args[0], sympy.numbers.Float) and \
-                        isinstance(differing_expected[i][1].args[1], sympy.symbol.Symbol):
-                    conversion_subs = {self._get_var_name(differing_expected[i][0]): differing_expected[i][1]}
-                    expected_element_index = expected.index(differing_expected[i])
-                    new_expected = [[exp[0], exp[1].subs(conversion_subs)] for exp in expected]
-                    if expected != new_expected:
-                        expected = new_expected
+            differingexp_ected = self._different_eqs(expected, generated)
+            for i in range(len(differingexp_ected)):
+                if len(differingexp_ected[i][1].args) == 2 and \
+                        isinstance(differingexp_ected[i][1].args[0], sympy.numbers.Float) and \
+                        isinstance(differingexp_ected[i][1].args[1], sympy.symbol.Symbol):
+                    conversion_subs = {self._get_var_name(differingexp_ected[i][0]): differingexp_ected[i][1]}
+                    expected_element_index = expected.index(differingexp_ected[i])
+                    newexp_ected = [[exp[0], exp[1].subs(conversion_subs)] for exp in expected]
+                    if expected != newexp_ected:
+                        expected = newexp_ected
                         del expected[expected_element_index]
 
         # Maybe converters not recognized as converters in the expected?
@@ -425,42 +428,42 @@ class TestChasteCG(object):
         if set([eq[0] for eq in expected]) != set([eq[0] for eq in generated]):
 
             # Find the 2 differing lhs. There should be 1 and they should have the same rhs:
-            differing_expected = self._different_eqs(expected, generated)
+            differingexp_ected = self._different_eqs(expected, generated)
             differing_generated = self._different_eqs(generated, expected)
-            assert len(differing_expected) == len(differing_generated)
+            assert len(differingexp_ected) == len(differing_generated)
 
             update_subs = dict()
             # For each equation find one that has the same rhs
-            for i in range(len(differing_expected)):
+            for i in range(len(differingexp_ected)):
                 found = False
                 for j in range(len(differing_generated)):
-                    found = self._is_same_equation(differing_expected[i][1], differing_generated[j][1])
+                    found = self._is_same_equation(differingexp_ected[i][1], differing_generated[j][1])
                     if found:
                         break
                 assert found
                 # update the expected name for this variable, so that the check for the set of equations succeeds
-                update_subs[self._get_var_name(differing_expected[i][0])] = \
+                update_subs[self._get_var_name(differingexp_ected[i][0])] = \
                     self._get_var_name(differing_generated[j][0])
-                expected_index = expected.index(differing_expected[i])
+                expected_index = expected.index(differingexp_ected[i])
                 expected[expected_index][0] = differing_generated[j][0]
 
             # update the expected equations
             expected = [self._perform_eq_subs(eq, update_subs) for eq in expected]
 
             # Add to substitution dictionary for future use (if needed)
-            self.link_subs_expected.update(update_subs)
+            self.link_subsexp_ected.update(update_subs)
 
         # Equations are equal
         self.generated_subs.update({self._get_var_name(x[0]): x[1] for x in generated})
         self.expected_subs.update({self._get_var_name(x[0]): x[1] for x in expected})
         sorted_generated = sorted(generated, key=lambda eq: eq[0])
-        sorted_expected = sorted(expected, key=lambda eq: eq[0])
+        sortedexp_ected = sorted(expected, key=lambda eq: eq[0])
         for i in range(len(sorted_generated)):
-            assert sorted_generated[i][0] == sorted_expected[i][0]
-            if not self._is_same_equation(sorted_generated[i][1], sorted_expected[i][1]):
+            assert sorted_generated[i][0] == sortedexp_ected[i][0]
+            if not self._is_same_equation(sorted_generated[i][1], sortedexp_ected[i][1]):
                 eq_gen = self._perform_eq_subs(sorted_generated[i], self.generated_subs)
-                eq_exp = self._perform_eq_subs(sorted_expected[i], self.expected_subs)
-                same = self._is_same_equation(eq_gen[1], eq_exp[1], try_numeric=True)
+                eqexp_ = self._perform_eq_subs(sortedexp_ected[i], self.expected_subs)
+                same = self._is_same_equation(eq_gen[1], eqexp_[1], try_numeric=True)
                 assert same
 
         # Check the order for generated: lhs doesn't appear in earlier rhs (could give c++ compile error)

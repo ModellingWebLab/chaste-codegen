@@ -3,9 +3,18 @@
 #
 # import pytest
 import logging
+
 import pytest
-from chaste_codegen import _exp, _abs, _acos, _cos, _sqrt, _sin
 from sympy import Symbol, sign
+
+from chaste_codegen import (
+    abs_,
+    acos_,
+    cos_,
+    exp_,
+    sin_,
+    sqrt_,
+)
 
 
 # Show more logging output
@@ -22,38 +31,38 @@ def expr(x):
     return 5 * x + 6 + 25 * x ** 2
 
 
-def test__exp(x, expr):
+def test_exp_(x, expr):
     x = Symbol('x', real=True)
-    assert _exp(x).is_real
-    assert _exp(x).diff() == _exp(x)
-    assert _exp(expr).diff() == expr.diff() * _exp(expr)
+    assert exp_(x).is_real
+    assert exp_(x).diff() == exp_(x)
+    assert exp_(expr).diff() == expr.diff() * exp_(expr)
 
 
-def test__abs(x, expr):
-    assert _abs(x).is_real
-    assert _abs(x).diff() == sign(x)
-    assert _abs(expr).diff() == expr.diff() * sign(expr)
+def test_abs_(x, expr):
+    assert abs_(x).is_real
+    assert abs_(x).diff() == sign(x)
+    assert abs_(expr).diff() == expr.diff() * sign(expr)
 
 
-def test__acos(x, expr):
-    assert _acos(x).is_real
-    assert _acos(x).diff() == -1 / _sqrt(1 - x ** 2)
-    assert _acos(expr).diff() == expr.diff() * (-1 / _sqrt(1 - expr ** 2))
+def test_acos_(x, expr):
+    assert acos_(x).is_real
+    assert acos_(x).diff() == -1 / sqrt_(1 - x ** 2)
+    assert acos_(expr).diff() == expr.diff() * (-1 / sqrt_(1 - expr ** 2))
 
 
-def test__cos(x, expr):
-    assert _cos(x).is_real
-    assert _cos(x).diff() == -_sin(x)
-    assert _cos(expr).diff() == expr.diff() * - _sin(expr)
+def test_cos_(x, expr):
+    assert cos_(x).is_real
+    assert cos_(x).diff() == -sin_(x)
+    assert cos_(expr).diff() == expr.diff() * - sin_(expr)
 
 
-def test__sqrt(x, expr):
-    assert _sqrt(x).is_real
-    assert _sqrt(x).diff() == 1 / (2 * _sqrt(x))
-    assert _sqrt(expr).diff() == expr.diff() * 1 / (2 * _sqrt(expr))
+def test_sqrt_(x, expr):
+    assert sqrt_(x).is_real
+    assert sqrt_(x).diff() == 1 / (2 * sqrt_(x))
+    assert sqrt_(expr).diff() == expr.diff() * 1 / (2 * sqrt_(expr))
 
 
-def test__sin(x, expr):
-    assert _sin(x).is_real
-    assert _sin(x).diff() == _cos(x)
-    assert _sin(expr).diff() == expr.diff() * _cos(expr)
+def test_sin_(x, expr):
+    assert sin_(x).is_real
+    assert sin_(x).diff() == cos_(x)
+    assert sin_(expr).diff() == expr.diff() * cos_(expr)

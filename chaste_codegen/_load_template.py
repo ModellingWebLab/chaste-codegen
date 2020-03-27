@@ -1,10 +1,12 @@
 #
 # Methods to configure jinja2 and load templates.
 #
-import jinja2
 import logging
 import os
 import posixpath
+
+import jinja2
+
 import chaste_codegen as cg
 
 
@@ -51,4 +53,3 @@ def load_template(*name):
 
     env = _jinja_environment()
     return env.get_template(path)
-
