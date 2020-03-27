@@ -46,7 +46,7 @@ class CvodeChasteModel(ChasteModel):
         for en in self._jacobian_matrix:
             jacobian_symbols.update(en.free_symbols)
         formatted_state_vars = self._formatted_state_vars
-        for sv in enumerate(formatted_state_vars):
+        for sv in formatted_state_vars:
             sv['in_jacobian'] = sv['sympy_var'] in jacobian_symbols
         return formatted_state_vars
 
