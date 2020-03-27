@@ -602,14 +602,14 @@ class ChasteModel(object):
         """ Get equations defining the derivatives excluding V (self._membrane_voltage_var)"""
         # stat with derivatives without voltage and add all equations used
         eqs = []
-        derivatives = set([deriv for deriv in self._y_derivatives if deriv.args[0] != self._membrane_voltage_var])
+        deriv_and_eqs = set([deriv for deriv in self._y_derivatives if deriv.args[0] != self._membrane_voltage_var])
         num_derivatives = -1
-        while num_derivatives < len(derivatives):
-            num_derivatives = len(derivatives)
-            eqs = [eq for eq in self._derivative_equations if eq.lhs in derivatives]
+        while num_derivatives < len(deriv_and_eqs):
+            num_derivatives = len(deriv_and_eqs)
+            eqs = [eq for eq in self._derivative_equations if eq.lhs in deriv_and_eqs]
             for eq in eqs:
                 for s in self._model.find_variables_and_derivatives([eq.rhs]):
-                    derivatives.add(s)
+                    deriv_and_eqs.add(s)
         return eqs
 
     def _get_derivative_eqs_voltage(self):
@@ -630,7 +630,7 @@ class ChasteModel(object):
         """ Get the variables annotated in the model as derived derived-quantity"""
         return self._model.get_variables_by_rdf((self._PYCMLMETA, 'derived-quantity'), 'yes')
 
-    def _get_derived_quantexp_osed(self):
+    def _get_derived_quant_exposed(self):
         """ Get the variables in the model that have exposed annotation and are derived quantities
             (irrespective of any derived-quantity tags)"""
         return [q for q in self._model.get_derived_quantities()
@@ -647,7 +647,7 @@ class ChasteModel(object):
         if self.expose_annotated_variables:
             # Combined and sorted in display name order
             return \
-                sorted(self._get_derived_quant_annotated() + self._get_derived_quantexp_osed(),
+                sorted(self._get_derived_quant_annotated() + self._get_derived_quant_exposed(),
                        key=lambda v: self._get_var_display_name(v))
         else:
             return self._get_derived_quant_annotated()  # These are already sorted
