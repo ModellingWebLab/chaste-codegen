@@ -1,4 +1,3 @@
-import chaste_codegen as cg
 from chaste_codegen._partial_eval import partial_eval
 from chaste_codegen.normal_chaste_model import NormalChasteModel
 
