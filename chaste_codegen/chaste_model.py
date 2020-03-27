@@ -125,7 +125,7 @@ class ChasteModel(object):
         self._is_self_excitatory = False
         self.class_name = kwargs.get('class_name', 'ModelFromCellMl')
         self._dynamically_loadable = kwargs.get('dynamically_loadable', False)
-        self.exp_ose_annotated_variables = kwargs.get('expose_annotated_variables', False)
+        self.expose_annotated_variables = kwargs.get('expose_annotated_variables', False)
         self._header_ext = kwargs.get('header_ext', '.hpp')
 
         # Store parameters for future reference
@@ -276,7 +276,7 @@ class ChasteModel(object):
         """ Get the variables annotated in the model as modifiable parametery"""
         return self._model.get_variables_by_rdf((self._PYCMLMETA, 'modifiable-parameter'), 'yes')
 
-    def _get_modifiable_parametersexp_osed(self):
+    def _get_modifiable_parameters_exposed(self):
         """ Get the variables in the model that have exposed annotation and are modifiable parameters
             (irrespective of any modifiable_parameters tags)"""
         return [q for q in self._model.variables()
@@ -290,12 +290,12 @@ class ChasteModel(object):
     def _get_modifiable_parameters(self):
         """ Get all modifiable parameters
 
-            Note: the result depends on self.exp_ose_annotated_variables to determine whether or not to include
+            Note: the result depends on self.expose_annotated_variables to determine whether or not to include
             variables exposed with oxford metadata that are a modifiable parameter but are not annotated as such"""
-        if self.exp_ose_annotated_variables:
+        if self.expose_annotated_variables:
             # Combined and sorted in display name order
             return \
-                sorted(self._get_modifiable_parameters_annotated() + self._get_modifiable_parametersexp_osed(),
+                sorted(self._get_modifiable_parameters_annotated() + self._get_modifiable_parameters_exposed(),
                        key=lambda v: self._get_var_display_name(v))
         else:
             return sorted(self._get_modifiable_parameters_annotated(), key=lambda v: self._get_var_display_name(v))
@@ -606,7 +606,7 @@ class ChasteModel(object):
 
     def _get_derivative_eqs_voltage(self):
         """ Get equations defining the derivatives for V only (self._membrane_voltage_var)"""
-        # stat with derivatives for V only and add all equations used
+        # start with derivatives for V only and add all equations used
         eqs = []
         derivatives = set([deriv for deriv in self._y_derivatives if deriv.args[0] == self._membrane_voltage_var])
         num_derivatives = -1
@@ -634,9 +634,9 @@ class ChasteModel(object):
     def _get_derived_quant(self):
         """ Get all derived quantities
 
-            Note: the result depends on self.exp_ose_annotated_variables to determine whether or not to include
+            Note: the result depends on self.expose_annotated_variables to determine whether or not to include
             variables exposed with oxford metadata that are derived quantities but are not annotated as such"""
-        if self.exp_ose_annotated_variables:
+        if self.expose_annotated_variables:
             # Combined and sorted in display name order
             return \
                 sorted(self._get_derived_quant_annotated() + self._get_derived_quantexp_osed(),

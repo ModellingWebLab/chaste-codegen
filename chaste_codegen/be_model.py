@@ -3,7 +3,7 @@ import time
 import sympy as sp
 from chaste_codegen._partial_eval import partial_eval
 from enum import Enum
-from sympy.codegen.cfunctions import (log10, log2)
+from sympy.codegen.cfunctions import log2, log10
 
 
 class BeModel(cg.ChasteModel):
@@ -23,39 +23,39 @@ class BeModel(cg.ChasteModel):
         self._formatted_jacobian_equations, self._formatted_jacobian_matrix_entries = self._format_jacobian()
 
     class KINDS(Enum):
-        none = 1
-        Linear = 2
-        Nonlinear = 3
+        NONE = 1
+        LINEAR = 2
+        NONLINEAR = 3
 
     def _check_expr(self, expr, state_var):
         def max_kind(state_var, operands):
-            result = BeModel.KINDS.none
+            result = BeModel.KINDS.NONE
             for op in operands:
                 res = self._check_expr(op, state_var)
-                if res == BeModel.KINDS.Nonlinear:
-                    return BeModel.KINDS.Nonlinear
-                elif res == BeModel.KINDS.Linear:
+                if res == BeModel.KINDS.NONLINEAR:
+                    return BeModel.KINDS.NONLINEAR
+                elif res == BeModel.KINDS.LINEAR:
                     result = res
             return result
         result = None
         operands = expr.args
         # No need to recurse as we're doing this with partially evaluated derivative equations!
         if expr is state_var:
-            result = BeModel.KINDS.Linear
+            result = BeModel.KINDS.LINEAR
         elif expr is self._membrane_voltage_var or len(expr.free_symbols) == 0 or\
                 isinstance(expr, sp.Function('GetIntracellularAreaStimulus', real=True)):
             # constant, V or GetIntracellularAreaStimulus(time)
-            result = BeModel.KINDS.none
+            result = BeModel.KINDS.NONE
         elif expr in self._state_vars:
-            result = BeModel.KINDS.Nonlinear
+            result = BeModel.KINDS.NONLINEAR
 
         elif isinstance(expr, sp.Piecewise):
             # If any conditions have a dependence, then we're
-            # nonlinear.  Otherwise, all the pieces must be the same
-            # (and that's what we are) or we're nonlinear.
+            # NONLINEAR.  Otherwise, all the pieces must be the same
+            # (and that's what we are) or we're NONLINEAR.
             for cond in expr.args:
-                if self._check_expr(cond[1], state_var) != BeModel.KINDS.none:
-                    result = BeModel.KINDS.Nonlinear
+                if self._check_expr(cond[1], state_var) != BeModel.KINDS.NONE:
+                    result = BeModel.KINDS.NONLINEAR
                     break
             else:
                 # Conditions all OK
@@ -63,35 +63,35 @@ class BeModel(cg.ChasteModel):
                     res = self._check_expr(e[0], state_var)
                     if result is not None and res != result:
                         # We have a difference
-                        result = BeModel.KINDS.Nonlinear
+                        result = BeModel.KINDS.NONLINEAR
                         break
                     result = res
         elif isinstance(expr, sp.Mul):
-            # Linear iff only 1 linear operand
-            result = BeModel.KINDS.none
+            # LINEAR iff only 1 linear operand
+            result = BeModel.KINDS.NONE
             lin = 0
             for op in operands:
                 res = self._check_expr(op, state_var)
-                if res == BeModel.KINDS.Linear:
+                if res == BeModel.KINDS.LINEAR:
                     lin += 1
-                elif res == BeModel.KINDS.Nonlinear:
+                elif res == BeModel.KINDS.NONLINEAR:
                     lin += 2
                 if lin > 1:
-                    result = BeModel.KINDS.Nonlinear
+                    result = BeModel.KINDS.NONLINEAR
                     break
                 elif lin == 1:
-                    result = BeModel.KINDS.Linear
+                    result = BeModel.KINDS.LINEAR
         elif isinstance(expr, sp.Add) or isinstance(expr, sp.boolalg.BooleanFunction) or\
                 isinstance(expr, sp.relational.Relational):
-            # Linear if any operand linear, and none non-linear
+            # LINEAR if any operand linear, and NONE NONLINEAR
             result = max_kind(state_var, operands)
         elif isinstance(expr, sp.Pow):
             if state_var not in expr.free_symbols:
                 result = max_kind(state_var, operands)
             elif len(expr.args) == 2 and expr.args[1] == -1:  # x/y divide is represented as x * pow(y, -1)
-                result = self._check_expr(expr.args[0], state_var)  # Linear iff only numerator linear
+                result = self._check_expr(expr.args[0], state_var)  # LINEAR iff only numerator linear
             else:
-                result = BeModel.KINDS.Nonlinear
+                result = BeModel.KINDS.NONLINEAR
         elif isinstance(expr, sp.log) or isinstance(expr, log10) or isinstance(expr, log2) or\
                 isinstance(expr, cg.RealFunction) or\
                 isinstance(expr, sp.functions.elementary.trigonometric.TrigonometricFunction) or\
@@ -101,7 +101,7 @@ class BeModel(cg.ChasteModel):
             if state_var not in expr.free_symbols:
                 result = self._check_expr(expr.args[0], state_var)
             else:
-                result = BeModel.KINDS.Nonlinear
+                result = BeModel.KINDS.NONLINEAR
         return result
 
     def _get_non_linear_state_vars(self):
@@ -110,7 +110,7 @@ class BeModel(cg.ChasteModel):
         return sorted([eq.lhs.args[0] for eq in self._derivative_equations
                        if isinstance(eq.lhs, sp.Derivative) and
                        eq.lhs.args[0] != self._membrane_voltage_var and
-                       self._check_expr(eq.rhs, eq.lhs.args[0]) != BeModel.KINDS.Linear],
+                       self._check_expr(eq.rhs, eq.lhs.args[0]) != BeModel.KINDS.LINEAR],
                       key=lambda s: self._printer.doprint(s))
 
     def _format_rearranged_linear_derivs(self):
@@ -152,23 +152,33 @@ class BeModel(cg.ChasteModel):
             gh = rearrange_expr(expr, var)
             return {'state_var_index': self._state_vars.index(var),
                     'var': self._printer.doprint(var),
-                    'g': self._printer.doprint(gh[0] if gh is not None and gh[0] is not None else 0.0),
-                    'h': self._printer.doprint(gh[1] if gh is not None and gh[1] is not None else 0.0)}
+                    'g': self._printer.doprint(gh[0] if gh[0] is not None else 0.0),
+                    'h': self._printer.doprint(gh[1] if gh[1] is not None else 0.0)}
 
-        # get linear state vars
+        # get the state vars for which derivative is linear
         linear_sv = [d for d in self._y_derivatives if d.args[0] not in self._non_linear_state_vars
                      and not d.args[0] == self._membrane_voltage_var]
 
-        # fill in the equations containing state vars only
-        non_lin_sym = set(self._state_vars)
+        # The derivative equations contain variables defined in other equations alpha = ..., (e.g. dv/dt = alpha +..
+        # To be able to rearrange these in h +g*var form, we need to substitute the rhs definition for those variables
+        # This leads to some c++ floating point precision.
+        # However we know that the rhs definitions for which the rhs definition only contain V will wholly end up in h
+        # Leaving those variable in sees them as linear in the statevar and means they end up in h*var
+        # Therefore we will only substitute in definitions for equations we know contain state vars (other than V)
+        # This way we reduce the complexity of equations matched and reduce the chance of floating point errors
+        non_lin_sym = set(self._state_vars)  # state vars and lhs of equations containing state vars
         linear_derivs_eqs = []
         subs_dict = {}
         for eq in self._get_equations_for(linear_sv):
+            # Substitute variables into the derivative where their definition contains a statevar
             if isinstance(eq.lhs, sp.Derivative):
                 linear_derivs_eqs.append(sp.Eq(eq.lhs, eq.rhs.xreplace(subs_dict)))
             elif not (eq.rhs.free_symbols - set([self._membrane_voltage_var])).intersection(non_lin_sym):
+                # if the equation doesn't contain any statevars (except V)
+                # or other variables whose definition contains a statevar just add this equation to the list
                 linear_derivs_eqs.append(eq)
             else:
+                # if the rhs has a statevar (or a varible whose def has a statevar) add to dictionary for substitution
                 non_lin_sym.add(eq.lhs)
                 subs_dict[eq.lhs] = eq.rhs.xreplace(subs_dict)
 
@@ -176,7 +186,8 @@ class BeModel(cg.ChasteModel):
                                key=lambda d: self._get_var_display_name(d.lhs.args[0]))
         formatted_expr = [print_rearrange_expr(d.rhs, d.lhs.args[0]) for d in linear_derivs]
 
-        # remove eqs not used in others (e.g. derivatives)
+        # remove eqs for which the lhs doesn't appear in other equations (e.g. derivatives)
+        # to prevent unused variable comple errors
         used_vars = set()
         for eq in linear_derivs_eqs:
             used_vars.update(self._model.find_variables_and_derivatives([eq.rhs]))
@@ -193,6 +204,8 @@ class BeModel(cg.ChasteModel):
         return formatted_expr, formatted_eqs
 
     def _get_jacobian(self):
+        if len(self._non_linear_state_vars) == 0:
+            return [], sp.Matrix([])
         state_var_matrix = sp.Matrix(self._non_linear_state_vars)
         # get derivatives for non-linear state vars
         derivative_eqs = [d for d in self._derivative_equations if d.lhs.args[0] in self._non_linear_state_vars]
@@ -203,7 +216,7 @@ class BeModel(cg.ChasteModel):
         derivative_eq_matrix = sp.Matrix(derivative_eqs)
         jacobian_matrix = derivative_eq_matrix.jacobian(state_var_matrix)
         # update state variables
-        jacobian_equations, jacobian_matrix = sp.cse(jacobian_matrix, order='none')
+        jacobian_equations, jacobian_matrix = sp.cse(jacobian_matrix, order='NONE')
         return jacobian_equations, sp.Matrix(jacobian_matrix)
 
     def _update_state_vars(self):
@@ -224,23 +237,23 @@ class BeModel(cg.ChasteModel):
         for eq in non_linear_eqs:
             residual_eq_symbols.update(eq.rhs.free_symbols)
         non_linear_eqs = [self._printer.doprint(eq.lhs) for eq in non_linear_eqs]
-        for i, d in enumerate(formatted_derivative_eqs):
-            formatted_derivative_eqs[i]['linear'] = d['lhs'] not in non_linear_eqs
+        for d in formatted_derivative_eqs:
+            d['linear'] = d['lhs'] not in non_linear_eqs
 
         formatted_nonlinear_state_vars = \
             [s for s in formatted_state_vars if s['sympy_var'] in self._non_linear_state_vars]
         # order by name
         formatted_nonlinear_state_vars = sorted(formatted_nonlinear_state_vars, key=lambda d: d['var'])
-        for i, sv in enumerate(formatted_nonlinear_state_vars):
-            formatted_nonlinear_state_vars[i]['linear'] = False
-            formatted_nonlinear_state_vars[i]['in_jacobian'] = sv['sympy_var'] in jacobian_symbols
-            formatted_nonlinear_state_vars[i]['in_residual_eqs'] = sv['sympy_var'] in residual_eq_symbols
+        for sv in formatted_nonlinear_state_vars:
+            sv['linear'] = False
+            sv['in_jacobian'] = sv['sympy_var'] in jacobian_symbols
+            sv['in_residual_eqs'] = sv['sympy_var'] in residual_eq_symbols
 
         for i, sv in enumerate(formatted_state_vars):
-            formatted_state_vars[i]['linear'] = sv['sympy_var'] not in self._non_linear_state_vars
-            formatted_state_vars[i]['in_jacobian'] = sv['sympy_var'] in jacobian_symbols
-            formatted_state_vars[i]['in_residual_eqs'] = sv['sympy_var'] in residual_eq_symbols
-            if not formatted_state_vars[i]['linear']:
+            sv['linear'] = sv['sympy_var'] not in self._non_linear_state_vars
+            sv['in_jacobian'] = sv['sympy_var'] in jacobian_symbols
+            sv['in_residual_eqs'] = sv['sympy_var'] in residual_eq_symbols
+            if not sv['linear']:
                 residual_equations.append({'residual_index': formatted_nonlinear_state_vars.index(sv),
                                            'state_var_index': i, 'var': self._formatted_y_derivatives[i]})
 
