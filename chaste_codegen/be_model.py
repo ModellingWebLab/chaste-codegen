@@ -54,8 +54,8 @@ class BeModel(ChasteModel):
 
         elif isinstance(expr, sp.Piecewise):
             # If any conditions have a dependence, then we're
-            # NONLINEAR.  Otherwise, all the pieces must be the same
-            # (and that's what we are) or we're NONLINEAR.
+            # non-linear  Otherwise, all the pieces must be the same
+            # (and that's what we are) or we're non-linear.
             for cond in expr.args:
                 if self._check_expr(cond[1], state_var) != BeModel.KINDS.NONE:
                     result = BeModel.KINDS.NONLINEAR
@@ -70,7 +70,7 @@ class BeModel(ChasteModel):
                         break
                     result = res
         elif isinstance(expr, sp.Mul):
-            # LINEAR iff only 1 linear operand
+            # Linear iff only 1 linear operand
             result = BeModel.KINDS.NONE
             lin = 0
             for op in operands:
@@ -86,13 +86,13 @@ class BeModel(ChasteModel):
                     result = BeModel.KINDS.LINEAR
         elif isinstance(expr, sp.Add) or isinstance(expr, sp.boolalg.BooleanFunction) or\
                 isinstance(expr, sp.relational.Relational):
-            # LINEAR if any operand linear, and NONE NONLINEAR
+            # linear if any operand linear, and non-linear
             result = max_kind(state_var, operands)
         elif isinstance(expr, sp.Pow):
             if state_var not in expr.free_symbols:
                 result = max_kind(state_var, operands)
             elif len(expr.args) == 2 and expr.args[1] == -1:  # x/y divide is represented as x * pow(y, -1)
-                result = self._check_expr(expr.args[0], state_var)  # LINEAR iff only numerator linear
+                result = self._check_expr(expr.args[0], state_var)  # Linear iff only numerator linear
             else:
                 result = BeModel.KINDS.NONLINEAR
         elif isinstance(expr, sp.log) or isinstance(expr, log10) or isinstance(expr, log2) or\
@@ -219,7 +219,7 @@ class BeModel(ChasteModel):
         derivative_eq_matrix = sp.Matrix(derivative_eqs)
         jacobian_matrix = derivative_eq_matrix.jacobian(state_var_matrix)
         # update state variables
-        jacobian_equations, jacobian_matrix = sp.cse(jacobian_matrix, order='NONE')
+        jacobian_equations, jacobian_matrix = sp.cse(jacobian_matrix, order='none')
         return jacobian_equations, sp.Matrix(jacobian_matrix)
 
     def _update_state_vars(self):
