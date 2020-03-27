@@ -3,9 +3,18 @@
 #
 # import pytest
 import logging
+
 import pytest
-from chaste_codegen import exp_, abs_, acos_, cos_, sqrt_, sin_
 from sympy import Symbol, sign
+
+from chaste_codegen import (
+    abs_,
+    acos_,
+    cos_,
+    exp_,
+    sin_,
+    sqrt_,
+)
 
 
 # Show more logging output

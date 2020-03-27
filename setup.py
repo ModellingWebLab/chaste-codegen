@@ -2,7 +2,9 @@
 # Chaste codegen setuptools script
 #
 import os
-from setuptools import setup, find_packages
+
+from setuptools import find_packages, setup
+
 
 # Load text for description
 with open('README.md') as f:

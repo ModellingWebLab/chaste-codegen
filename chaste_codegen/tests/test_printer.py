@@ -1,12 +1,21 @@
 #
 # Tests conversion of sympy expressions to C++ code for Chaste code generation.
 #
-import chaste_codegen as cg
 import logging
 import math
+
 import pytest
 import sympy as sp
-from chaste_codegen import exp_, abs_, acos_, cos_, sqrt_, sin_
+
+import chaste_codegen as cg
+from chaste_codegen import (
+    abs_,
+    acos_,
+    cos_,
+    exp_,
+    sin_,
+    sqrt_,
+)
 
 
 # Show more logging output

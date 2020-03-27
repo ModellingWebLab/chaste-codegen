@@ -1,10 +1,13 @@
-import chaste_codegen as cg
-import sympy as sp
 import time
+
+import sympy as sp
+
+import chaste_codegen as cg
 from chaste_codegen._partial_eval import partial_eval
+from chaste_codegen.chaste_model import ChasteModel
 
 
-class CvodeChasteModel(cg.ChasteModel):
+class CvodeChasteModel(ChasteModel):
     """ Holds template and information specific for the CVODE model type"""
 
     def __init__(self, model, file_name, **kwargs):

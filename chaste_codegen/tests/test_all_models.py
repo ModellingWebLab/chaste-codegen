@@ -1,6 +1,9 @@
 import logging
+
 import pytest
+
 from chaste_codegen.tests.test_codegen import get_models
+
 
 # Show more logging output
 LOGGER = logging.getLogger(__name__)

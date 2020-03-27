@@ -2,10 +2,13 @@
 Constants and version information.
 """
 
+import inspect
 #
 # Get package location, find template directory
 #
-import os, inspect  # noqa
+import os  # noqa
+
+
 try:
     frame = inspect.currentframe()
     MODULE_DIR = os.path.dirname(inspect.getfile(frame))

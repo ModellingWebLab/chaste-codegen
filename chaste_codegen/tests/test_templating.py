@@ -1,9 +1,11 @@
 #
 # Tests templating functionality
 #
-import jinja2
 import logging
+
+import jinja2
 import pytest
+
 import chaste_codegen as cg
 
 
@@ -25,4 +27,3 @@ def test_missing_variable_raises_exception():
     template = cg.load_template('hello.txt')
     with pytest.raises(jinja2.UndefinedError):
         template.render()
-

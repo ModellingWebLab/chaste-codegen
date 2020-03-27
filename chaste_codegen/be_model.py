@@ -1,12 +1,15 @@
-import chaste_codegen as cg
 import time
-import sympy as sp
-from chaste_codegen._partial_eval import partial_eval
 from enum import Enum
+
+import sympy as sp
 from sympy.codegen.cfunctions import log2, log10
 
+import chaste_codegen as cg
+from chaste_codegen._partial_eval import partial_eval
+from chaste_codegen.chaste_model import ChasteModel
 
-class BeModel(cg.ChasteModel):
+
+class BeModel(ChasteModel):
     """ Holds template and information specific for the Backwards Euler model type"""
 
     def __init__(self, model, file_name, **kwargs):

@@ -1,6 +1,6 @@
-from sympy.printing.precedence import precedence
 from cellmlmanip.printer import Printer
 from sympy.printing.cxxcode import cxxcode
+from sympy.printing.precedence import precedence
 
 
 class ChastePrinter(Printer):

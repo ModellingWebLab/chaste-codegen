@@ -2,13 +2,16 @@
 Main module for cardiac Chaste code generation
 """
 import logging
-from cellmlmanip.transpiler import Transpiler
-from ._math_functions import exp_, abs_, acos_, cos_, sqrt_, sin_
 
+from cellmlmanip.transpiler import Transpiler
+
+from chaste_codegen.be_model import BeModel  # noqa
+
+from ._chaste_printer import ChastePrinter  # noqa
 #
 # Load constants and version information
 #
-from ._config import (   # noqa
+from ._config import (  # noqa
     DATA_DIR,
     MODULE_DIR,
     TEMPLATE_SUBDIR,
@@ -16,20 +19,24 @@ from ._config import (   # noqa
     __version_int__,
     version,
 )
-
-
+from ._load_template import load_template  # noqa
 #
 # Load and expose public classes and functions
 #
 from ._math_functions import RealFunction  # noqa
-from ._load_template import load_template  # noqa
-from ._chaste_printer import ChastePrinter  # noqa
-
+from ._math_functions import (
+    abs_,
+    acos_,
+    cos_,
+    exp_,
+    sin_,
+    sqrt_,
+)
 from .chaste_model import ChasteModel  # noqa
+from .cvode_chaste_model import CvodeChasteModel  # noqa
 from .normal_chaste_model import NormalChasteModel  # noqa
 from .opt_chaste_model import OptChasteModel  # noqa
-from .cvode_chaste_model import CvodeChasteModel  # noqa
-from .be_model import BeModel  # noqa
+
 
 # Configure logging
 logging.basicConfig()

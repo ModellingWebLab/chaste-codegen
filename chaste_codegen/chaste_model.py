@@ -1,12 +1,20 @@
 import logging
+from collections import OrderedDict
+
 import sympy as sp
-import chaste_codegen as cg
 from cellmlmanip.model import DataDirectionFlow
 from cellmlmanip.units import UnitStore
 from pint import DimensionalityError
-from collections import OrderedDict
-from sympy.codegen.rewriting import optims_c99, optimize, ReplaceOptim, Wild, log
 from sympy.codegen.cfunctions import log10
+from sympy.codegen.rewriting import (
+    ReplaceOptim,
+    Wild,
+    log,
+    optimize,
+    optims_c99,
+)
+
+import chaste_codegen as cg
 
 
 class ChasteModel(object):

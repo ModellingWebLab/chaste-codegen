@@ -1,16 +1,19 @@
 import logging
+import math
 import os
+import random
 import re
-import chaste_codegen as cg
+import time
+
+import cellmlmanip
+import pyparsing
 import pytest
 import sympy
 from sympy import SympifyError
-import pyparsing
-import time
-import random
-import math
-import cellmlmanip
+
+import chaste_codegen as cg
 import chaste_codegen.tests.chaste_test_utils as test_utils
+
 
 # Show more logging output
 LOGGER = logging.getLogger(__name__)

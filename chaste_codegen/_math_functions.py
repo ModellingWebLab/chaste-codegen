@@ -64,4 +64,3 @@ class sin_(RealFunction):
         """
         assert argindex == 1
         return (cos_(self.args[0]))
-

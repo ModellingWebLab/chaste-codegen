@@ -1,9 +1,12 @@
 import logging
 import os
-import chaste_codegen as cg
-import pytest
+
 import cellmlmanip
+import pytest
+
+import chaste_codegen as cg
 import chaste_codegen.tests.chaste_test_utils as test_utils
+
 
 # Show more logging output
 LOGGER = logging.getLogger(__name__)

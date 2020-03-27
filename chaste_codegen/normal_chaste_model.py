@@ -1,8 +1,10 @@
-import chaste_codegen as cg
 import time
 
+import chaste_codegen as cg
+from chaste_codegen.chaste_model import ChasteModel
 
-class NormalChasteModel(cg.ChasteModel):
+
+class NormalChasteModel(ChasteModel):
     """ Holds template and information specific for the Normal model type"""
 
     def __init__(self, model, file_name, **kwargs):

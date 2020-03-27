@@ -6,6 +6,7 @@
 {% include "Shared/cpp/destructor" %}
 {% include "Shared/cpp/VerifyStateVariables" %}
 {% include "Shared/cpp/GetIIonic" %}
-{% include "Normal/cpp/EvaluateYDerivatives" %}{% include "Shared/cpp/ComputeDerivedQuantities" %}
+{% include "Normal/cpp/EvaluateYDerivatives" %}
+{%- include "Shared/cpp/ComputeDerivedQuantities" %}
 {% include "Shared/cpp/OdeSystemInformation" %}
 {% include "Shared/cpp/CHASTE_CLASS_EXPORT" %}
