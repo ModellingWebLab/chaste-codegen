@@ -1,11 +1,12 @@
-#ifndef CELLVISWANATHAN_MODEL_1999_EPIFROMCELLML_HPP_
-#define CELLVISWANATHAN_MODEL_1999_EPIFROMCELLML_HPP_
+#ifdef CHASTE_CVODE
+#ifndef CELLNOBLE_NOBLE_SAN_MODEL_1984FROMCELLMLCVODE_HPP_
+#define CELLNOBLE_NOBLE_SAN_MODEL_1984FROMCELLMLCVODE_HPP_
 
 //! @file
 //!
 //! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
-//! Model: viswanathan_model_1999_epi
+//! Model: NN_SAN_model_1984
 //!
 //! Processed by chaste_codegen: https://github.com/ModellingWebLab/chaste-codegen
 //!     (translator: chaste_codegen)
@@ -17,36 +18,35 @@
 #include <boost/serialization/base_object.hpp>
 
 #include "AbstractStimulusFunction.hpp"
-#include "AbstractCardiacCell.hpp"
+#include "AbstractCvodeCell.hpp"
 
-class Cellviswanathan_model_1999_epiFromCellML : public AbstractCardiacCell
+class Cellnoble_noble_SAN_model_1984FromCellMLCvode : public AbstractCvodeCell
 {
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & archive, const unsigned int version)
     {
-        archive & boost::serialization::base_object<AbstractCardiacCell >(*this);
+        archive & boost::serialization::base_object<AbstractCvodeCell >(*this);
         
     }
-
-    //
+    
+    // 
     // Settable parameters and readable variables
-    //
-
+    // 
+    
 public:
 
-    boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    Cellviswanathan_model_1999_epiFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellviswanathan_model_1999_epiFromCellML();
+    Cellnoble_noble_SAN_model_1984FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellnoble_noble_SAN_model_1984FromCellMLCvode();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
-    void EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY);
-
+    void EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const N_Vector rY, N_Vector rDY);
+    void EvaluateAnalyticJacobian(double var_chaste_interface__environment__time_converted, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3);
 };
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellviswanathan_model_1999_epiFromCellML)
+CHASTE_CLASS_EXPORT(Cellnoble_noble_SAN_model_1984FromCellMLCvode)
 
 namespace boost
 {
@@ -54,7 +54,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellviswanathan_model_1999_epiFromCellML * t, const unsigned int fileVersion)
+            Archive & ar, const Cellnoble_noble_SAN_model_1984FromCellMLCvode * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -64,17 +64,18 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellviswanathan_model_1999_epiFromCellML * t, const unsigned int fileVersion)
+            Archive & ar, Cellnoble_noble_SAN_model_1984FromCellMLCvode * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellviswanathan_model_1999_epiFromCellML(p_solver, p_stimulus);
+            ::new(t)Cellnoble_noble_SAN_model_1984FromCellMLCvode(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLVISWANATHAN_MODEL_1999_EPIFROMCELLML_HPP_
+#endif // CELLNOBLE_NOBLE_SAN_MODEL_1984FROMCELLMLCVODE_HPP_
+#endif // CHASTE_CVODE

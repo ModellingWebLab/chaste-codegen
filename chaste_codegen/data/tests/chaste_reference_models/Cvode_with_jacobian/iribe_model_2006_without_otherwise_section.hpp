@@ -1,12 +1,12 @@
 #ifdef CHASTE_CVODE
-#ifndef CELLLUO_RUDY_1994FROMCELLMLCVODE_HPP_
-#define CELLLUO_RUDY_1994FROMCELLMLCVODE_HPP_
+#ifndef CELLIRIBE_MODEL_2006_WITHOUT_OTHERWISE_SECTIONFROMCELLMLCVODE_HPP_
+#define CELLIRIBE_MODEL_2006_WITHOUT_OTHERWISE_SECTIONFROMCELLMLCVODE_HPP_
 
 //! @file
 //!
 //! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
-//! Model: luo_rudy_1994
+//! Model: iribe_model_2006
 //!
 //! Processed by chaste_codegen: https://github.com/ModellingWebLab/chaste-codegen
 //!     (translator: chaste_codegen)
@@ -20,7 +20,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractCvodeCell.hpp"
 
-class Cellluo_rudy_1994FromCellMLCvode : public AbstractCvodeCell
+class Celliribe_model_2006_without_otherwise_sectionFromCellMLCvode : public AbstractCvodeCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -38,16 +38,16 @@ public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    Cellluo_rudy_1994FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellluo_rudy_1994FromCellMLCvode();
+    Celliribe_model_2006_without_otherwise_sectionFromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Celliribe_model_2006_without_otherwise_sectionFromCellMLCvode();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
-    void EvaluateYDerivatives(double var_chaste_interface__environment__time, const N_Vector rY, N_Vector rDY);
-    void EvaluateAnalyticJacobian(double var_chaste_interface__environment__time, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3);
+    void EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const N_Vector rY, N_Vector rDY);
+    void EvaluateAnalyticJacobian(double var_chaste_interface__environment__time_converted, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3);
 };
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellluo_rudy_1994FromCellMLCvode)
+CHASTE_CLASS_EXPORT(Celliribe_model_2006_without_otherwise_sectionFromCellMLCvode)
 
 namespace boost
 {
@@ -55,7 +55,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellluo_rudy_1994FromCellMLCvode * t, const unsigned int fileVersion)
+            Archive & ar, const Celliribe_model_2006_without_otherwise_sectionFromCellMLCvode * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -65,18 +65,18 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellluo_rudy_1994FromCellMLCvode * t, const unsigned int fileVersion)
+            Archive & ar, Celliribe_model_2006_without_otherwise_sectionFromCellMLCvode * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellluo_rudy_1994FromCellMLCvode(p_solver, p_stimulus);
+            ::new(t)Celliribe_model_2006_without_otherwise_sectionFromCellMLCvode(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLLUO_RUDY_1994FROMCELLMLCVODE_HPP_
+#endif // CELLIRIBE_MODEL_2006_WITHOUT_OTHERWISE_SECTIONFROMCELLMLCVODE_HPP_
 #endif // CHASTE_CVODE
