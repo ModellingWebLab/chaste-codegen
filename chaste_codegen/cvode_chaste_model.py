@@ -36,7 +36,7 @@ class CvodeChasteModel(ChasteModel):
         derivative_eqs = [eq.rhs for eq in derivative_eqs]
         derivative_eq_matrix = sp.Matrix(derivative_eqs)
         jacobian_matrix = derivative_eq_matrix.jacobian(state_var_matrix)
-        jacobian_equations, jacobian_matrix = sp.cse(jacobian_matrix, order='none')
+        jacobian_equations, jacobian_matrix = sp.cse(jacobian_matrix, order='canonical')
         return jacobian_equations, sp.Matrix(jacobian_matrix)
 
     def _update_state_vars(self):
