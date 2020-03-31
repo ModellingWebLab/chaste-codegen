@@ -51,6 +51,7 @@ def test_Cvode_jacobian(tmp_path, model):
     chaste_model = cg.CvodeChasteModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
                                        class_name=class_name, use_analytic_jacobian=True)
     chaste_model.generate_chaste_code()
+    # check if we are python 3.5 (< 3.6) and there is a different version of the reference
     expected_cpp_path = model['expected_cpp_path']
     assert sys.version_info.major == 3
     if sys.version_info.minor < 6 and os.path.isfile(expected_cpp_path + '_3.5'):
