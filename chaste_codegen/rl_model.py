@@ -4,6 +4,7 @@ import sympy as sp
 
 import chaste_codegen as cg
 from chaste_codegen._linearity_check import KINDS, check_expr
+from chaste_codegen._partial_eval import partial_eval
 from chaste_codegen.chaste_model import ChasteModel
 
 
@@ -12,6 +13,23 @@ class RlModel(ChasteModel):
 
     def __init__(self, model, file_name, **kwargs):
         super().__init__(model, file_name, use_analytic_jacobian=True, **kwargs)
+        self._derivative_equations = \
+            partial_eval(self._derivative_equations, self._y_derivatives, keep_multiple_usages=False)
+        self._rAlphaOrTau, self._rBetaOrInf = self._get_Alpha_Beta()
+
+    def _get_Alpha_Beta(self):
+        rAlphaOrTau, rBetaOrInf = [], []
+        
+        for deriv in self._y_derivatives:
+            eq = [e for e in self._derivative_equations if e.lhs == deriv][0]
+            if check_expr(eq.rhs, deriv.args[0], self._membrane_voltage_var,
+                                  self._state_vars) != KINDS.LINEAR]:
+                rAlphaOrTau.append(None)
+                rBetaOrInf.append(None)
+             else:
+                rAlphaOrTau.append(0)
+                rBetaOrInf.append(0)
+        return rAlphaOrTau, rBetaOrInf
 
     def generate_chaste_code(self):
         """ Generates and stores chaste code for the Normal model"""
