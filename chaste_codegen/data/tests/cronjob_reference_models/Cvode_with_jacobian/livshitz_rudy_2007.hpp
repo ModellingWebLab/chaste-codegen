@@ -1,12 +1,12 @@
 #ifdef CHASTE_CVODE
-#ifndef CELLIYER_MODEL_2004FROMCELLMLCVODE_HPP_
-#define CELLIYER_MODEL_2004FROMCELLMLCVODE_HPP_
+#ifndef CELLLIVSHITZ_RUDY_2007FROMCELLMLCVODE_HPP_
+#define CELLLIVSHITZ_RUDY_2007FROMCELLMLCVODE_HPP_
 
 //! @file
 //!
 //! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
-//! Model: iyer_model_2004
+//! Model: LivshitzRudy2007
 //!
 //! Processed by chaste_codegen: https://github.com/ModellingWebLab/chaste-codegen
 //!     (translator: chaste_codegen)
@@ -20,7 +20,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractCvodeCell.hpp"
 
-class Celliyer_model_2004FromCellMLCvode : public AbstractCvodeCell
+class Celllivshitz_rudy_2007FromCellMLCvode : public AbstractCvodeCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -36,16 +36,18 @@ class Celliyer_model_2004FromCellMLCvode : public AbstractCvodeCell
     
 public:
 
-    Celliyer_model_2004FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Celliyer_model_2004FromCellMLCvode();
+    boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
+    Celllivshitz_rudy_2007FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Celllivshitz_rudy_2007FromCellMLCvode();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
-    void EvaluateYDerivatives(double var_chaste_interface__environment__time, const N_Vector rY, N_Vector rDY);
-    void EvaluateAnalyticJacobian(double var_chaste_interface__environment__time, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3);
+    void EvaluateYDerivatives(double var_chaste_interface__Environment__time, const N_Vector rY, N_Vector rDY);
+    N_Vector ComputeDerivedQuantities(double var_chaste_interface__Environment__time, const N_Vector & rY);
+    void EvaluateAnalyticJacobian(double var_chaste_interface__Environment__time, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3);
 };
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Celliyer_model_2004FromCellMLCvode)
+CHASTE_CLASS_EXPORT(Celllivshitz_rudy_2007FromCellMLCvode)
 
 namespace boost
 {
@@ -53,7 +55,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Celliyer_model_2004FromCellMLCvode * t, const unsigned int fileVersion)
+            Archive & ar, const Celllivshitz_rudy_2007FromCellMLCvode * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -63,18 +65,18 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Celliyer_model_2004FromCellMLCvode * t, const unsigned int fileVersion)
+            Archive & ar, Celllivshitz_rudy_2007FromCellMLCvode * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Celliyer_model_2004FromCellMLCvode(p_solver, p_stimulus);
+            ::new(t)Celllivshitz_rudy_2007FromCellMLCvode(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLIYER_MODEL_2004FROMCELLMLCVODE_HPP_
+#endif // CELLLIVSHITZ_RUDY_2007FROMCELLMLCVODE_HPP_
 #endif // CHASTE_CVODE
