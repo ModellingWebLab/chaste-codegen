@@ -89,6 +89,8 @@ def compare_file_against_reference(file, reference):
     """ Check a model's generated files against given reference files
     """
     # Load reference file
+    print(file)
+    print(reference)
     file = get_file_lines(file)
     reference = get_file_lines(reference)
     assert file == reference

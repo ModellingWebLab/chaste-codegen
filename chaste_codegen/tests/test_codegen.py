@@ -1,5 +1,6 @@
 import logging
 import os
+import sys
 
 import cellmlmanip
 import pytest
@@ -50,10 +51,15 @@ def test_Cvode_jacobian(tmp_path, model):
     chaste_model = cg.CvodeChasteModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
                                        class_name=class_name, use_analytic_jacobian=True)
     chaste_model.generate_chaste_code()
+    expected_cpp_path = model['expected_cpp_path']
+    assert sys.version_info.major == 3
+    if sys.version_info.minor < 6 and os.path.isfile(expected_cpp_path + '_3.5'):
+        expected_cpp_path += '_3.5'
+
     # Compare against reference
     test_utils.compare_model_against_reference('Cvode_with_jacobian', chaste_model,
                                                tmp_path, model['expected_hpp_path'],
-                                               model['expected_cpp_path'])
+                                               expected_cpp_path)
 
 
 @pytest.mark.parametrize(('model'), chaste_cvode_models)
