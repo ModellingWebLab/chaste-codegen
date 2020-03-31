@@ -1,10 +1,9 @@
 import time
-from enum import Enum
 
 import sympy as sp
-from sympy.codegen.cfunctions import log2, log10
 
 import chaste_codegen as cg
+from chaste_codegen._linearity_check import KINDS, check_expr
 from chaste_codegen._partial_eval import partial_eval
 from chaste_codegen.chaste_model import ChasteModel
 
@@ -18,6 +17,7 @@ class BeModel(ChasteModel):
         self._derivative_equations = \
             partial_eval(self._derivative_equations, self._y_derivatives, keep_multiple_usages=False)
         self._non_linear_state_vars = self._get_non_linear_state_vars()
+
         self._jacobian_equations, self._jacobian_matrix = self._get_jacobian()
         self._formatted_state_vars, self._formatted_nonlinear_state_vars, self._formatted_residual_equations, \
             self._formatted_derivative_eqs = self._update_state_vars()
@@ -25,95 +25,14 @@ class BeModel(ChasteModel):
             self._format_rearranged_linear_derivs()
         self._formatted_jacobian_equations, self._formatted_jacobian_matrix_entries = self._format_jacobian()
 
-    class KINDS(Enum):
-        NONE = 1
-        LINEAR = 2
-        NONLINEAR = 3
-
-    def _check_expr(self, expr, state_var):
-        def max_kind(state_var, operands):
-            result = BeModel.KINDS.NONE
-            for op in operands:
-                res = self._check_expr(op, state_var)
-                if res == BeModel.KINDS.NONLINEAR:
-                    return BeModel.KINDS.NONLINEAR
-                elif res == BeModel.KINDS.LINEAR:
-                    result = res
-            return result
-        result = None
-        operands = expr.args
-        # No need to recurse as we're doing this with partially evaluated derivative equations!
-        if expr is state_var:
-            result = BeModel.KINDS.LINEAR
-        elif expr is self._membrane_voltage_var or len(expr.free_symbols) == 0 or\
-                isinstance(expr, sp.Function('GetIntracellularAreaStimulus', real=True)):
-            # constant, V or GetIntracellularAreaStimulus(time)
-            result = BeModel.KINDS.NONE
-        elif expr in self._state_vars:
-            result = BeModel.KINDS.NONLINEAR
-
-        elif isinstance(expr, sp.Piecewise):
-            # If any conditions have a dependence, then we're
-            # non-linear  Otherwise, all the pieces must be the same
-            # (and that's what we are) or we're non-linear.
-            for cond in expr.args:
-                if self._check_expr(cond[1], state_var) != BeModel.KINDS.NONE:
-                    result = BeModel.KINDS.NONLINEAR
-                    break
-            else:
-                # Conditions all OK
-                for e in expr.args:
-                    res = self._check_expr(e[0], state_var)
-                    if result is not None and res != result:
-                        # We have a difference
-                        result = BeModel.KINDS.NONLINEAR
-                        break
-                    result = res
-        elif isinstance(expr, sp.Mul):
-            # Linear iff only 1 linear operand
-            result = BeModel.KINDS.NONE
-            lin = 0
-            for op in operands:
-                res = self._check_expr(op, state_var)
-                if res == BeModel.KINDS.LINEAR:
-                    lin += 1
-                elif res == BeModel.KINDS.NONLINEAR:
-                    lin += 2
-                if lin > 1:
-                    result = BeModel.KINDS.NONLINEAR
-                    break
-                elif lin == 1:
-                    result = BeModel.KINDS.LINEAR
-        elif isinstance(expr, sp.Add) or isinstance(expr, sp.boolalg.BooleanFunction) or\
-                isinstance(expr, sp.relational.Relational):
-            # linear if any operand linear, and non-linear
-            result = max_kind(state_var, operands)
-        elif isinstance(expr, sp.Pow):
-            if state_var not in expr.free_symbols:
-                result = max_kind(state_var, operands)
-            elif len(expr.args) == 2 and expr.args[1] == -1:  # x/y divide is represented as x * pow(y, -1)
-                result = self._check_expr(expr.args[0], state_var)  # Linear iff only numerator linear
-            else:
-                result = BeModel.KINDS.NONLINEAR
-        elif isinstance(expr, sp.log) or isinstance(expr, log10) or isinstance(expr, log2) or\
-                isinstance(expr, cg.RealFunction) or\
-                isinstance(expr, sp.functions.elementary.trigonometric.TrigonometricFunction) or\
-                isinstance(expr, sp.functions.elementary.hyperbolic.HyperbolicFunction) or\
-                isinstance(expr, sp.functions.elementary.trigonometric.InverseTrigonometricFunction) or\
-                isinstance(expr, sp.functions.elementary.hyperbolic.InverseHyperbolicFunction):
-            if state_var not in expr.free_symbols:
-                result = self._check_expr(expr.args[0], state_var)
-            else:
-                result = BeModel.KINDS.NONLINEAR
-        return result
-
     def _get_non_linear_state_vars(self):
 
         # return the state var part from the derivative equations where the rhs is not linear
         return sorted([eq.lhs.args[0] for eq in self._derivative_equations
                        if isinstance(eq.lhs, sp.Derivative) and
                        eq.lhs.args[0] != self._membrane_voltage_var and
-                       self._check_expr(eq.rhs, eq.lhs.args[0]) != BeModel.KINDS.LINEAR],
+                       check_expr(eq.rhs, eq.lhs.args[0], self._membrane_voltage_var,
+                                  self._state_vars) != KINDS.LINEAR],
                       key=lambda s: self._printer.doprint(s))
 
     def _format_rearranged_linear_derivs(self):

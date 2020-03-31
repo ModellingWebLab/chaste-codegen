@@ -24,6 +24,23 @@ chaste_opt_models = get_models(ref_folder='chaste_reference_models', type='Opt')
 chaste_cvode_models = get_models(ref_folder='chaste_reference_models', type='Cvode')
 chaste_cvode_models_with_jacobians = get_models(ref_folder='chaste_reference_models', type='Cvode_with_jacobian')
 chaste_BE = get_models(ref_folder='chaste_reference_models', type='BE')
+chaste_RL = get_models(ref_folder='chaste_reference_models', type='RL')
+
+
+@pytest.mark.parametrize(('model'), chaste_RL)
+def test_RL(tmp_path, model):
+    """ Check generation of Cvode models against reference"""
+    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLRushLarsen'
+    LOGGER.info('Converting: RL: ' + class_name + '\n')
+    # Generate chaste code
+    chaste_model = cg.RlModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
+                              class_name=class_name)
+
+    chaste_model.generate_chaste_code()
+    # Compare against reference
+    test_utils.compare_model_against_reference('BE', chaste_model,
+                                               tmp_path, model['expected_hpp_path'],
+                                               model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_BE)
@@ -164,6 +181,26 @@ def test_dynamic_BE(tmp_path):
         os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'BE', 'dynamic_luo_rudy_1994.cpp')
     # Compare against reference
     test_utils.compare_model_against_reference('BE', chaste_model, tmp_path, expected_hpp_path,
+                                               expected_cpp_path)
+
+
+def test_dynamic_RL(tmp_path):
+    tmp_path = str(tmp_path)
+    LOGGER.info('Converting: RL Dynamic luo_rudy_1994\n')
+    model_file = \
+        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'luo_rudy_1994.cellml')
+    chaste_model = cellmlmanip.load_model(model_file)
+    chaste_model = cg.RlModel(chaste_model,
+                              'dynamic_luo_rudy_1994',
+                              class_name='Dynamicluo_rudy_1994FromCellMLRushLarsen',
+                              dynamically_loadable=True)
+    chaste_model.generate_chaste_code()
+    expected_hpp_path = \
+        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'RL', 'dynamic_luo_rudy_1994.hpp')
+    expected_cpp_path = \
+        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'RL', 'dynamic_luo_rudy_1994.cpp')
+    # Compare against reference
+    test_utils.compare_model_against_reference('RL', chaste_model, tmp_path, expected_hpp_path,
                                                expected_cpp_path)
 
 
