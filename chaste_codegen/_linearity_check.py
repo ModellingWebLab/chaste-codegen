@@ -89,3 +89,44 @@ def check_expr(expr, state_var, membrane_voltage_var, state_vars):
         else:
             result = KINDS.NONLINEAR
     return result
+
+def get_non_linear_state_vars(derivative_equations, membrane_voltage_var, state_vars, printer):
+    """Returns the state vars whos derivative expressions are nont linear"""
+    # return the state var part from the derivative equations where the rhs is not linear
+    return sorted([eq.lhs.args[0] for eq in derivative_equations
+                   if isinstance(eq.lhs, sp.Derivative) and
+                   eq.lhs.args[0] != membrane_voltage_var and
+                   check_expr(eq.rhs, eq.lhs.args[0], membrane_voltage_var, state_vars) != KINDS.LINEAR],
+                  key=lambda s: printer.doprint(s))
+
+def derives_eqs_partial_eval_non_linear(y_derivatives, non_linear_state_vars, membrane_voltage_var, state_vars, get_equations_for_func):
+    """Substitutes variables in the derivative equation fortheir definition if the definition is non-linear 
+    
+    The derivative equations contain variables defined in other equations alpha = ..., (e.g. dv/dt = alpha +..
+    To be able to rearrange these in h +g*var form (or alpha*(1-x) - beta*x or (inf-x)/tau),
+    we need to substitute the rhs definition for those variables. This leads to some c++ floating point precision.
+    However we know that the rhs definitions for which the rhs definition only contain V will wholly end up in h
+    Leaving those variable in sees them as linear in the statevar and means they end up in h*var
+    Therefore we will only substitute in definitions for equations we know contain state vars (other than V)
+    This way we reduce the complexity of equations matched and reduce the chance of floating point errors    
+    """
+    # get the state vars for which derivative is linear
+    linear_sv = [d for d in y_derivatives if d.args[0] not in non_linear_state_vars
+                 and not d.args[0] == membrane_voltage_var]
+
+    non_lin_sym = set(state_vars)  # state vars and lhs of equations containing state vars
+    linear_derivs_eqs = []
+    subs_dict = {}
+    for eq in get_equations_for_func(linear_sv):
+        # Substitute variables into the derivative where their definition contains a statevar
+        if isinstance(eq.lhs, sp.Derivative):
+            linear_derivs_eqs.append(sp.Eq(eq.lhs, eq.rhs.xreplace(subs_dict)))
+        elif not (eq.rhs.free_symbols - set([membrane_voltage_var])).intersection(non_lin_sym):
+            # if the equation doesn't contain any statevars (except V)
+            # or other variables whose definition contains a statevar just add this equation to the list
+            linear_derivs_eqs.append(eq)
+        else:
+            # if the rhs has a statevar (or a varible whose def has a statevar) add to dictionary for substitution
+            non_lin_sym.add(eq.lhs)
+            subs_dict[eq.lhs] = eq.rhs.xreplace(subs_dict)
+    return linear_derivs_eqs

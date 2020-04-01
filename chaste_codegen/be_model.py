@@ -3,7 +3,7 @@ import time
 import sympy as sp
 
 import chaste_codegen as cg
-from chaste_codegen._linearity_check import KINDS, check_expr
+from chaste_codegen._linearity_check import get_non_linear_state_vars, derives_eqs_partial_eval_non_linear
 from chaste_codegen._partial_eval import partial_eval
 from chaste_codegen.chaste_model import ChasteModel
 
@@ -16,7 +16,8 @@ class BeModel(ChasteModel):
         # get deriv eqs and substitute in all variables other than state vars
         self._derivative_equations = \
             partial_eval(self._derivative_equations, self._y_derivatives, keep_multiple_usages=False)
-        self._non_linear_state_vars = self._get_non_linear_state_vars()
+        self._non_linear_state_vars = \
+            get_non_linear_state_vars(self._derivative_equations, self._membrane_voltage_var, self._state_vars, self._printer)
 
         self._jacobian_equations, self._jacobian_matrix = self._get_jacobian()
         self._formatted_state_vars, self._formatted_nonlinear_state_vars, self._formatted_residual_equations, \
@@ -25,17 +26,8 @@ class BeModel(ChasteModel):
             self._format_rearranged_linear_derivs()
         self._formatted_jacobian_equations, self._formatted_jacobian_matrix_entries = self._format_jacobian()
 
-    def _get_non_linear_state_vars(self):
-
-        # return the state var part from the derivative equations where the rhs is not linear
-        return sorted([eq.lhs.args[0] for eq in self._derivative_equations
-                       if isinstance(eq.lhs, sp.Derivative) and
-                       eq.lhs.args[0] != self._membrane_voltage_var and
-                       check_expr(eq.rhs, eq.lhs.args[0], self._membrane_voltage_var,
-                                  self._state_vars) != KINDS.LINEAR],
-                      key=lambda s: self._printer.doprint(s))
-
     def _format_rearranged_linear_derivs(self):
+        """Formats the rearranged linear derivative expressions"""
         def rearrange_expr(expr, var):  # expr already in piecewise_fold form
             """Rearrange an expression into the form g + h*var."""
             if isinstance(expr, sp.Piecewise):
@@ -70,6 +62,7 @@ class BeModel(ChasteModel):
             return gh
 
         def print_rearrange_expr(expr, var):
+            """Print out the rearanged expression"""
             expr = sp.piecewise_fold(expr)
             gh = rearrange_expr(expr, var)
             return {'state_var_index': self._state_vars.index(var),
@@ -77,33 +70,10 @@ class BeModel(ChasteModel):
                     'g': self._printer.doprint(gh[0] if gh[0] is not None else 0.0),
                     'h': self._printer.doprint(gh[1] if gh[1] is not None else 0.0)}
 
-        # get the state vars for which derivative is linear
-        linear_sv = [d for d in self._y_derivatives if d.args[0] not in self._non_linear_state_vars
-                     and not d.args[0] == self._membrane_voltage_var]
+        # Substitute non-linear bits into derivative equations, so that we can pattern match
+        linear_derivs_eqs = derives_eqs_partial_eval_non_linear(self._y_derivatives, self._non_linear_state_vars, self._membrane_voltage_var, self._state_vars, self._get_equations_for)
 
-        # The derivative equations contain variables defined in other equations alpha = ..., (e.g. dv/dt = alpha +..
-        # To be able to rearrange these in h +g*var form, we need to substitute the rhs definition for those variables
-        # This leads to some c++ floating point precision.
-        # However we know that the rhs definitions for which the rhs definition only contain V will wholly end up in h
-        # Leaving those variable in sees them as linear in the statevar and means they end up in h*var
-        # Therefore we will only substitute in definitions for equations we know contain state vars (other than V)
-        # This way we reduce the complexity of equations matched and reduce the chance of floating point errors
-        non_lin_sym = set(self._state_vars)  # state vars and lhs of equations containing state vars
-        linear_derivs_eqs = []
-        subs_dict = {}
-        for eq in self._get_equations_for(linear_sv):
-            # Substitute variables into the derivative where their definition contains a statevar
-            if isinstance(eq.lhs, sp.Derivative):
-                linear_derivs_eqs.append(sp.Eq(eq.lhs, eq.rhs.xreplace(subs_dict)))
-            elif not (eq.rhs.free_symbols - set([self._membrane_voltage_var])).intersection(non_lin_sym):
-                # if the equation doesn't contain any statevars (except V)
-                # or other variables whose definition contains a statevar just add this equation to the list
-                linear_derivs_eqs.append(eq)
-            else:
-                # if the rhs has a statevar (or a varible whose def has a statevar) add to dictionary for substitution
-                non_lin_sym.add(eq.lhs)
-                subs_dict[eq.lhs] = eq.rhs.xreplace(subs_dict)
-
+        # sort the linear derivatives
         linear_derivs = sorted([eq for eq in linear_derivs_eqs if isinstance(eq.lhs, sp.Derivative)],
                                key=lambda d: self._get_var_display_name(d.lhs.args[0]))
         formatted_expr = [print_rearrange_expr(d.rhs, d.lhs.args[0]) for d in linear_derivs]
@@ -115,17 +85,10 @@ class BeModel(ChasteModel):
             used_vars.update(self._model.find_variables_and_derivatives([eq.rhs]))
         linear_derivs_eqs = [eq for eq in linear_derivs_eqs if eq.lhs in used_vars]
 
-        formatted_eqs = [{'lhs': self._printer.doprint(eqs.lhs),
-                          'rhs': self._printer.doprint(eqs.rhs),
-                          'units': self._model.units.format(self._model.units.evaluate_units(eqs.lhs)),
-                          'in_eqs_excl_voltage': eqs in self._derivative_eqs_excl_voltage,
-                          'in_membrane_voltage': eqs in self._derivative_eqs_voltage,
-                          'is_voltage': isinstance(eqs.lhs, sp.Derivative)
-                          and eqs.lhs.args[0] == self._membrane_voltage_var}
-                         for eqs in linear_derivs_eqs]
-        return formatted_expr, formatted_eqs
+        return formatted_expr, self._format_derivative_equations(linear_derivs_eqs)
 
     def _get_jacobian(self):
+        """"Get the jacobian for the non-linear state vars """
         if len(self._non_linear_state_vars) == 0:
             return [], sp.Matrix([])
         state_var_matrix = sp.Matrix(self._non_linear_state_vars)
@@ -142,6 +105,7 @@ class BeModel(ChasteModel):
         return jacobian_equations, sp.Matrix(jacobian_matrix)
 
     def _update_state_vars(self):
+        """Update the state vars, savings residual and jacobian info for outputing"""
         formatted_state_vars = self._formatted_state_vars
         residual_equations = []
         formatted_derivative_eqs = self._formatted_derivative_eqs
@@ -182,6 +146,7 @@ class BeModel(ChasteModel):
         return formatted_state_vars, formatted_nonlinear_state_vars, residual_equations, formatted_derivative_eqs
 
     def _format_jacobian(self):
+        """Format the jacobian for outputting"""
         assert isinstance(self._jacobian_matrix, sp.Matrix), 'Expecting a jacobian as a matrix'
         equations = [{'lhs': self._printer.doprint(eq[0]), 'rhs': self._printer.doprint(eq[1])}
                      for eq in self._jacobian_equations]
@@ -232,7 +197,6 @@ class BeModel(ChasteModel):
             'state_vars': self._formatted_state_vars,
             'ionic_vars': self._formatted_extended_equations_for_ionic_vars,
             'y_derivative_equations': self._formatted_derivative_eqs,
-            'y_derivatives': self._formatted_y_derivatives,
             'use_capacitance_i_ionic': self._current_unit_and_capacitance['use_capacitance'],
             'free_variable': self._free_variable,
             'ode_system_information': self._ode_system_information,

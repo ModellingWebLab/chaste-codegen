@@ -177,7 +177,7 @@ class ChasteModel(object):
         self._formatted_default_stimulus = self._format_default_stimulus()
         self._formatted_extended_equations_for_ionic_vars = self._format_extended_equations_for_ionic_vars()
         self._formatted_y_derivatives = self._format_y_derivatives()
-        self._formatted_derivative_eqs = self._format_derivative_equations()
+        self._formatted_derivative_eqs = self._format_derivative_equations(self._derivative_equations)
         self._free_variable = self._format_free_variable()
         self._ode_system_information = self._format_system_info()
         self._named_attributes = self._format_named_attributes()
@@ -768,7 +768,7 @@ class ChasteModel(object):
         self._in_interface.extend(self._y_derivatives)
         return [self._printer.doprint(deriv) for deriv in self._y_derivatives]
 
-    def _format_derivative_equations(self):
+    def _format_derivative_equations(self, derivative_equations):
         """Format derivative equations for chaste output"""
         # exclude ionic currents
         return [{'lhs': self._printer.doprint(eqs.lhs),
@@ -777,7 +777,7 @@ class ChasteModel(object):
                  'in_eqs_excl_voltage': eqs in self._derivative_eqs_excl_voltage,
                  'in_membrane_voltage': eqs in self._derivative_eqs_voltage,
                  'is_voltage': isinstance(eqs.lhs, sp.Derivative) and eqs.lhs.args[0] == self._membrane_voltage_var}
-                for eqs in self._derivative_equations]
+                for eqs in derivative_equations]
 
     def _format_free_variable(self):
         """ Format free variable for chaste output"""
