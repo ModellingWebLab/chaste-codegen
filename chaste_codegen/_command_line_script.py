@@ -14,7 +14,8 @@ from chaste_codegen._script_utils import write_file
 def chaste_codegen():
     # Link names to classes for converting code
     translators = OrderedDict([('Chaste', cg.NormalChasteModel), ('ChasteOpt', cg.OptChasteModel),
-                              ('CVODE', cg.CvodeChasteModel)])
+                              ('CVODE', cg.CvodeChasteModel), ('BckwardsEuler', cg.BeModel),
+                              ('RushLarsen', cg.RlModel)])
 
     # Store extensions we can use and how to use them, based on extension of given outfile
     extension_lookup = {'.cellml': ['.hpp', '.cpp'], '': ['.hpp', '.cpp'], '.cpp': ['.hpp', '.cpp'],

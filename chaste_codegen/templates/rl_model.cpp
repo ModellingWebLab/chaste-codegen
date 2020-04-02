@@ -8,5 +8,6 @@
 {% include "Shared/cpp/GetIIonic" %}
 {% include "RL/cpp/EvaluateEquations" %}
 {% include "RL/cpp/ComputeOneStepExceptVoltage" %}
+{%- include "Shared/cpp/ComputeDerivedQuantities" %}
 {% include "Shared/cpp/OdeSystemInformation" %}
 {% include "Shared/cpp/CHASTE_CLASS_EXPORT" %}

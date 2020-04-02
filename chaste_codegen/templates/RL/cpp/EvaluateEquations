@@ -1,0 +1,30 @@
+
+    void {{class_name}}::EvaluateEquations(double {{free_variable.var_name}}, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
+    {
+        std::vector<double>& rY = rGetStateVariables();
+        {%- for state_var in state_vars %}
+        {% if state_var.in_ab %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}{%- endif %}
+        // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
+        {%- endfor %}
+
+        // Mathematics
+        {% for deriv in derivative_alpha_beta_eqs %}{%- if deriv.is_voltage%}double {{deriv.lhs}};{%- endif %}{%- endfor %}
+        {%- for deriv in derivative_alpha_beta_eqs %}{%- if deriv.in_eqs_excl_voltage %}
+        const double {{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
+        {%- endfor %}
+
+        if (mSetVoltageDerivativeToZero)
+        {
+            {% for deriv in derivative_alpha_beta_eqs %}{%- if deriv.is_voltage%}{{deriv.lhs}} = 0.0;{%- endif %}{%- endfor %}
+        }
+        else
+        {
+            {%- for deriv in derivative_alpha_beta_eqs %}{% if not deriv.in_eqs_excl_voltage %}
+            {% if not deriv.is_voltage%}const double {% endif %}{{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
+            {%- endfor %}
+        }
+        {% for deriv in derivative_alpha_beta %}
+        {% if deriv.type=='non_linear'%}rDY[{{loop.index0}}] = {{deriv.deriv}};{% else %}rAlphaOrTau[{{loop.index0}}] = {{deriv.rAlphaOrTau}};
+        rBetaOrInf[{{loop.index0}}] = {{deriv.rBetaOrInf}};{%- endif %}
+        {%- endfor %}
+    }

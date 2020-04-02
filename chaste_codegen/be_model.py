@@ -3,7 +3,7 @@ import time
 import sympy as sp
 
 import chaste_codegen as cg
-from chaste_codegen._linearity_check import get_non_linear_state_vars, derives_eqs_partial_eval_non_linear
+from chaste_codegen._linearity_check import derives_eqs_partial_eval_non_linear, get_non_linear_state_vars
 from chaste_codegen._partial_eval import partial_eval
 from chaste_codegen.chaste_model import ChasteModel
 
@@ -12,12 +12,12 @@ class BeModel(ChasteModel):
     """ Holds template and information specific for the Backwards Euler model type"""
 
     def __init__(self, model, file_name, **kwargs):
-        super().__init__(model, file_name, use_analytic_jacobian=True, **kwargs)
+        super().__init__(model, file_name, **kwargs)
         # get deriv eqs and substitute in all variables other than state vars
         self._derivative_equations = \
             partial_eval(self._derivative_equations, self._y_derivatives, keep_multiple_usages=False)
-        self._non_linear_state_vars = \
-            get_non_linear_state_vars(self._derivative_equations, self._membrane_voltage_var, self._state_vars, self._printer)
+        self._non_linear_state_vars = get_non_linear_state_vars(self._derivative_equations, self._membrane_voltage_var,
+                                                                self._state_vars, self._printer)
 
         self._jacobian_equations, self._jacobian_matrix = self._get_jacobian()
         self._formatted_state_vars, self._formatted_nonlinear_state_vars, self._formatted_residual_equations, \
@@ -71,7 +71,9 @@ class BeModel(ChasteModel):
                     'h': self._printer.doprint(gh[1] if gh[1] is not None else 0.0)}
 
         # Substitute non-linear bits into derivative equations, so that we can pattern match
-        linear_derivs_eqs = derives_eqs_partial_eval_non_linear(self._y_derivatives, self._non_linear_state_vars, self._membrane_voltage_var, self._state_vars, self._get_equations_for)
+        linear_derivs_eqs = derives_eqs_partial_eval_non_linear(self._y_derivatives, self._non_linear_state_vars,
+                                                                self._membrane_voltage_var,
+                                                                self._state_vars, self._get_equations_for)
 
         # sort the linear derivatives
         linear_derivs = sorted([eq for eq in linear_derivs_eqs if isinstance(eq.lhs, sp.Derivative)],

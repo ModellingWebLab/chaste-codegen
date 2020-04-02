@@ -1,11 +1,11 @@
-#ifndef CELLKURATA_MODEL_2002FROMCELLMLRUSHLARSEN_HPP_
-#define CELLKURATA_MODEL_2002FROMCELLMLRUSHLARSEN_HPP_
+#ifndef DYNAMICLUO_RUDY_1994FROMCELLMLRUSHLARSEN_HPP_
+#define DYNAMICLUO_RUDY_1994FROMCELLMLRUSHLARSEN_HPP_
 
 //! @file
 //!
 //! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
-//! Model: kurata_model_2002
+//! Model: luo_rudy_1994
 //!
 //! Processed by chaste_codegen: https://github.com/ModellingWebLab/chaste-codegen
 //!     (translator: chaste_codegen)
@@ -15,26 +15,28 @@
 
 #include "ChasteSerialization.hpp"
 #include <boost/serialization/base_object.hpp>
-
+#include "AbstractDynamicallyLoadableEntity.hpp"
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractRushLarsenCardiacCell.hpp"
 
-class Cellkurata_model_2002FromCellMLRushLarsen : public AbstractRushLarsenCardiacCell
+class Dynamicluo_rudy_1994FromCellMLRushLarsen : public AbstractRushLarsenCardiacCell, public AbstractDynamicallyLoadableEntity
 {
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & archive, const unsigned int version)
     {
         archive & boost::serialization::base_object<AbstractRushLarsenCardiacCell >(*this);
-        
+        archive & boost::serialization::base_object<AbstractDynamicallyLoadableEntity>(*this);
     }
     //
     // Settable parameters and readable variables
     //
 public:
 
-    Cellkurata_model_2002FromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellkurata_model_2002FromCellMLRushLarsen();
+    boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
+    double GetIntracellularCalciumConcentration();
+    Dynamicluo_rudy_1994FromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Dynamicluo_rudy_1994FromCellMLRushLarsen();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateEquations(double var_chaste_interface__environment__time, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf);
     void ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf);
@@ -43,7 +45,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellkurata_model_2002FromCellMLRushLarsen)
+CHASTE_CLASS_EXPORT(Dynamicluo_rudy_1994FromCellMLRushLarsen)
 
 namespace boost
 {
@@ -51,7 +53,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellkurata_model_2002FromCellMLRushLarsen * t, const unsigned int fileVersion)
+            Archive & ar, const Dynamicluo_rudy_1994FromCellMLRushLarsen * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -61,17 +63,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellkurata_model_2002FromCellMLRushLarsen * t, const unsigned int fileVersion)
+            Archive & ar, Dynamicluo_rudy_1994FromCellMLRushLarsen * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellkurata_model_2002FromCellMLRushLarsen(p_solver, p_stimulus);
+            ::new(t)Dynamicluo_rudy_1994FromCellMLRushLarsen(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLKURATA_MODEL_2002FROMCELLMLRUSHLARSEN_HPP_
+#endif // DYNAMICLUO_RUDY_1994FROMCELLMLRUSHLARSEN_HPP_
