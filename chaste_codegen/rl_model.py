@@ -20,7 +20,6 @@ class RlModel(ChasteModel):
                                       self._state_vars, self._printer)
 
         self._derivative_alpha_beta, self._formatted_alpha_beta_eqs = self._get_formatted_alpha_beta()
-        pass
 
     def _get_formatted_alpha_beta(self):
         """Gets the information for rAlphaOrTau, rBetaOrInf and formatted equations"""
