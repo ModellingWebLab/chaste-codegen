@@ -19,7 +19,9 @@ class RlModel(ChasteModel):
             get_non_linear_state_vars(self._derivative_equations, self._membrane_voltage_var,
                                       self._state_vars, self._printer)
 
-        self._derivative_alpha_beta, self._formatted_alpha_beta_eqs = self._get_formatted_alpha_beta()
+        self._derivative_alpha_beta, self._formatted_alpha_beta_eqs, self._vars_in_derivative_alpha_beta = \
+            self._get_formatted_alpha_beta()
+        self._formatted_alpha_beta_eqs = self._format_alpha_beta_eqs()
 
     def _get_formatted_alpha_beta(self):
         """Gets the information for rAlphaOrTau, rBetaOrInf and formatted equations"""
@@ -43,7 +45,7 @@ class RlModel(ChasteModel):
                 i, t = match[inf], match[tau]
             return {'inf': i, 'tau': t}
 
-        derivative_alpha_beta, derivative_alpha_beta_eqs = [], set()
+        derivative_alpha_beta, vars_in_derivative_alpha_beta = [], set()
 
         # Substitute non-linear bits into derivative equations, so that we can pattern match
         linear_derivs_eqs = derives_eqs_partial_eval_non_linear(self._y_derivatives, self._non_linear_state_vars,
@@ -51,22 +53,28 @@ class RlModel(ChasteModel):
                                                                 self._get_equations_for)
 
         for deriv in self._y_derivatives:
-            if deriv.args[0] in self._non_linear_state_vars or deriv.args[0] is self._membrane_voltage_var:
-                derivative_alpha_beta.append({'type': 'non_linear', 'deriv': self._printer.doprint(deriv)})
-                derivative_alpha_beta_eqs.add(deriv)
-            else:
+            ab = {'alpha': None}
+            it = {'tau': None}
+            # get match if possible (deiv is linear)
+            if deriv.args[0] not in self._non_linear_state_vars and deriv.args[0] is not self._membrane_voltage_var:
                 eq = [e for e in linear_derivs_eqs if e.lhs == deriv][0]
                 ab = match_alpha_beta(eq.rhs, eq.lhs.args[0])
                 it = match_inf_tau(eq.rhs, eq.lhs.args[0])
+
+            # check if there was a match
+            if ab['alpha'] is not None or it['tau'] is not None:
+                eq = [e for e in linear_derivs_eqs if e.lhs == deriv][0]
                 rAlphaOrTau = ab['alpha'] if ab['alpha'] else it['tau']
-                rBetaOrInf = ab['beta'] if ab['alpha'] else it['inf']
+                rBetaOrInf = ab['beta'] if ab['beta'] else it['inf']
                 derivative_alpha_beta.append({'type': 'alphabeta' if ab['alpha'] else 'inftau',
                                               'rAlphaOrTau': self._printer.doprint(rAlphaOrTau),
                                               'rBetaOrInf': self._printer.doprint(rBetaOrInf)})
-                derivative_alpha_beta_eqs.update(rAlphaOrTau.free_symbols | rBetaOrInf.free_symbols)
+                vars_in_derivative_alpha_beta.update(rAlphaOrTau.free_symbols | rBetaOrInf.free_symbols)
+            else:
+                derivative_alpha_beta.append({'type': 'non_linear', 'deriv': self._printer.doprint(deriv)})
+                vars_in_derivative_alpha_beta.add(deriv)
 
-        deriv_eqs_EvaluateEquations = self._get_equations_for(derivative_alpha_beta_eqs)
-        formatted_eqs = self._format_derivative_equations(deriv_eqs_EvaluateEquations)
+        deriv_eqs_EvaluateEquations = self._get_equations_for(vars_in_derivative_alpha_beta)
 
         # Get all used variables for derivative eqs
         deriv_variables = set()
@@ -76,7 +84,10 @@ class RlModel(ChasteModel):
         for sv in self._formatted_state_vars:
             sv['in_ab'] = sv['sympy_var'] in deriv_variables
         # quicker way?
-        return derivative_alpha_beta, formatted_eqs
+        return derivative_alpha_beta, deriv_eqs_EvaluateEquations, vars_in_derivative_alpha_beta
+
+    def _format_alpha_beta_eqs(self):
+        return self._format_derivative_equations(self._formatted_alpha_beta_eqs)
 
     def generate_chaste_code(self):
         """ Generates and stores chaste code for the Normal model"""
