@@ -14,6 +14,6 @@ class RushLarsenOptModel(RushLarsenModel):
                             [eq.lhs for eq in self._equations_for_ionic_vars])
 
     def _format_alpha_beta_eqs(self):
-        self._formatted_alpha_beta_eqs = \
-            partial_eval(self._formatted_alpha_beta_eqs, self._vars_in_derivative_alpha_beta)
+        self._vars_for_template['derivative_alpha_beta_eqs'] = \
+            partial_eval(self._vars_for_template['derivative_alpha_beta_eqs'], self._vars_in_derivative_alpha_beta)
         return super()._format_alpha_beta_eqs()
