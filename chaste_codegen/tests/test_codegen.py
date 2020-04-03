@@ -38,7 +38,7 @@ def test_RL(tmp_path, model):
 
     chaste_model.generate_chaste_code()
     # Compare against reference
-    test_utils.compare_model_against_reference('BE', chaste_model,
+    test_utils.compare_model_against_reference('RL', chaste_model,
                                                tmp_path, model['expected_hpp_path'],
                                                model['expected_cpp_path'])
 
