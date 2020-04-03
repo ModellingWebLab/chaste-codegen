@@ -87,4 +87,5 @@ class RushLarsenModel(ChasteModel):
         return derivative_alpha_beta, deriv_eqs_EvaluateEquations, vars_in_derivative_alpha_beta
 
     def _format_alpha_beta_eqs(self):
-        return self._format_derivative_equations(self._vars_for_template['derivative_alpha_beta_eqs'])
+        return [eq for eq in self._vars_for_template['y_derivative_equations']
+                if eq['sympy_lhs'] in [e.lhs for e in self._vars_for_template['derivative_alpha_beta_eqs']]]

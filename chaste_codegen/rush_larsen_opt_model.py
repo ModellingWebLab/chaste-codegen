@@ -1,3 +1,5 @@
+import sympy as sp
+
 from chaste_codegen._partial_eval import partial_eval
 from chaste_codegen.rush_larsen_model import RushLarsenModel
 
