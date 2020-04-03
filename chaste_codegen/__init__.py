@@ -7,6 +7,7 @@ from cellmlmanip.transpiler import Transpiler
 
 from chaste_codegen.be_model import BeModel  # noqa
 from chaste_codegen.rl_model import RlModel  # noqa
+from chaste_codegen.rl_opt_model import RlOptModel  # noqa
 
 from ._chaste_printer import ChastePrinter  # noqa
 #

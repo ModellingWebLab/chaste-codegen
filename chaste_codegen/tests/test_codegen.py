@@ -25,6 +25,23 @@ chaste_cvode_models = get_models(ref_folder='chaste_reference_models', type='Cvo
 chaste_cvode_models_with_jacobians = get_models(ref_folder='chaste_reference_models', type='Cvode_with_jacobian')
 chaste_BE = get_models(ref_folder='chaste_reference_models', type='BE')
 chaste_RL = get_models(ref_folder='chaste_reference_models', type='RL')
+chaste_RLopt = get_models(ref_folder='chaste_reference_models', type='RLopt')
+
+
+@pytest.mark.parametrize(('model'), chaste_RLopt)
+def test_RLopt(tmp_path, model):
+    """ Check generation of Cvode models against reference"""
+    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLRushLarsen'
+    LOGGER.info('Converting: RLopt: ' + class_name + '\n')
+    # Generate chaste code
+    chaste_model = cg.RlOptModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
+                                 class_name=class_name)
+
+    chaste_model.generate_chaste_code()
+    # Compare against reference
+    test_utils.compare_model_against_reference('RLopt', chaste_model,
+                                               tmp_path, model['expected_hpp_path'],
+                                               model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_RL)
