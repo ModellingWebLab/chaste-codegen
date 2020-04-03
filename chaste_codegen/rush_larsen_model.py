@@ -22,7 +22,7 @@ class RushLarsenModel(ChasteModel):
         self._vars_for_template['derivative_alpha_beta'], self._vars_for_template['derivative_alpha_beta_eqs'], \
             self._vars_in_derivative_alpha_beta = self._get_formatted_alpha_beta()
         self._vars_for_template['derivative_alpha_beta_eqs'] = \
-            self._format_alpha_beta_eqs(self._vars_for_template['derivative_alpha_beta_eqs'])
+            self._format_derivative_equations(self._vars_for_template['derivative_alpha_beta_eqs'])
 
     def _get_formatted_alpha_beta(self):
         """Gets the information for r_alpha_or_tau, r_beta_or_inf in the c++ output and formatted equations"""
@@ -86,6 +86,3 @@ class RushLarsenModel(ChasteModel):
         for sv in self._formatted_state_vars:
             sv['in_ab'] = sv['sympy_var'] in deriv_variables
         return derivative_alpha_beta, deriv_eqs_EvaluateEquations, vars_in_derivative_alpha_beta
-
-    def _format_alpha_beta_eqs(self, eqs):
-        return self._format_derivative_equations(eqs)

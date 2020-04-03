@@ -127,6 +127,7 @@ class ChasteModel(object):
         self._logger.setLevel(logging.INFO)
 
         # Store default options
+        self.file_name = file_name
         self.generated_hpp = ''
         self.generated_cpp = ''
         self._hpp_template = ''
@@ -177,7 +178,7 @@ class ChasteModel(object):
         self._vars_for_template = \
             {'converter_version': cg.__version__,
              'model_name': self._model.name,
-             'file_name': file_name,
+             'file_name': self.file_name,
              'class_name': kwargs.get('class_name', 'ModelFromCellMl'),
              'header_ext': kwargs.get('header_ext', '.hpp'),
              'dynamically_loadable': kwargs.get('dynamically_loadable', False),
