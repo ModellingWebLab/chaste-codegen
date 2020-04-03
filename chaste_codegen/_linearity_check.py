@@ -101,8 +101,8 @@ def get_non_linear_state_vars(derivative_equations, membrane_voltage_var, state_
                   key=lambda s: printer.doprint(s))
 
 
-def derives_eqs_partial_eval_non_linear(y_derivatives, non_linear_state_vars, membrane_voltage_var, state_vars,
-                                        get_equations_for_func):
+def subst_deriv_eqs_non_linear_vars(y_derivatives, non_linear_state_vars, membrane_voltage_var, state_vars,
+                                    get_equations_for_func):
     """Substitutes variables in the derivative equation fortheir definition if the definition is non-linear
 
     The derivative equations contain variables defined in other equations alpha = ..., (e.g. dv/dt = alpha +..

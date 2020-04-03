@@ -24,7 +24,7 @@
             {%- endfor %}
         }
         {% for deriv in derivative_alpha_beta %}
-        {% if deriv.type=='non_linear'%}rDY[{{loop.index0}}] = {{deriv.deriv}};{% else %}rAlphaOrTau[{{loop.index0}}] = {{deriv.rAlphaOrTau}};
-        rBetaOrInf[{{loop.index0}}] = {{deriv.rBetaOrInf}};{%- endif %}
+        {% if deriv.type=='non_linear'%}rDY[{{loop.index0}}] = {{deriv.deriv}};{% else %}rAlphaOrTau[{{loop.index0}}] = {{deriv.r_alpha_or_tau}};
+        rBetaOrInf[{{loop.index0}}] = {{deriv.r_beta_or_inf}};{%- endif %}
         {%- endfor %}
     }

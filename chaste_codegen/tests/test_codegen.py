@@ -34,8 +34,8 @@ def test_RLopt(tmp_path, model):
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLRushLarsen'
     LOGGER.info('Converting: RLopt: ' + class_name + '\n')
     # Generate chaste code
-    chaste_model = cg.RlOptModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
-                                 class_name=class_name)
+    chaste_model = cg.RushLarsenOptModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
+                                         class_name=class_name)
 
     chaste_model.generate_chaste_code()
     # Compare against reference
@@ -50,8 +50,8 @@ def test_RL(tmp_path, model):
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLRushLarsen'
     LOGGER.info('Converting: RL: ' + class_name + '\n')
     # Generate chaste code
-    chaste_model = cg.RlModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
-                              class_name=class_name)
+    chaste_model = cg.RushLarsenModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
+                                      class_name=class_name)
 
     chaste_model.generate_chaste_code()
     # Compare against reference
@@ -66,8 +66,8 @@ def test_BE(tmp_path, model):
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLBackwardEuler'
     LOGGER.info('Converting: BE: ' + class_name + '\n')
     # Generate chaste code
-    chaste_model = cg.BeModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
-                              class_name=class_name)
+    chaste_model = cg.BackwardEulerModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
+                                         class_name=class_name)
 
     chaste_model.generate_chaste_code()
     # Compare against reference
@@ -187,10 +187,9 @@ def test_dynamic_BE(tmp_path):
     model_file = \
         os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'luo_rudy_1994.cellml')
     chaste_model = cellmlmanip.load_model(model_file)
-    chaste_model = cg.BeModel(chaste_model,
-                              'dynamic_luo_rudy_1994',
-                              class_name='Dynamicluo_rudy_1994FromCellMLBackwardEuler',
-                              dynamically_loadable=True)
+    chaste_model = cg.BackwardEulerModel(chaste_model, 'dynamic_luo_rudy_1994',
+                                         class_name='Dynamicluo_rudy_1994FromCellMLBackwardEuler',
+                                         dynamically_loadable=True)
     chaste_model.generate_chaste_code()
     expected_hpp_path = \
         os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'BE', 'dynamic_luo_rudy_1994.hpp')
@@ -207,10 +206,9 @@ def test_dynamic_RL(tmp_path):
     model_file = \
         os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'luo_rudy_1994.cellml')
     chaste_model = cellmlmanip.load_model(model_file)
-    chaste_model = cg.RlModel(chaste_model,
-                              'dynamic_luo_rudy_1994',
-                              class_name='Dynamicluo_rudy_1994FromCellMLRushLarsen',
-                              dynamically_loadable=True)
+    chaste_model = cg.RushLarsenModel(chaste_model, 'dynamic_luo_rudy_1994',
+                                      class_name='Dynamicluo_rudy_1994FromCellMLRushLarsen',
+                                      dynamically_loadable=True)
     chaste_model.generate_chaste_code()
     expected_hpp_path = \
         os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'RL', 'dynamic_luo_rudy_1994.hpp')

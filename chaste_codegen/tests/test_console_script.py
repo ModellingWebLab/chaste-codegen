@@ -212,7 +212,7 @@ def test_script_dynamic_BE(capsys, tmp_path):
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'dynamic_luo_rudy_1994.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', model_file, '-t', 'BckwardsEuler', '-o', outfile,
+    testargs = ['chaste_codegen', model_file, '-t', 'BackwardsEuler', '-o', outfile,
                 '-c', 'Dynamicluo_rudy_1994FromCellMLBackwardEuler', '--dynamically-loadable']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()

@@ -1,8 +1,8 @@
 from chaste_codegen._partial_eval import partial_eval
-from chaste_codegen.rl_model import RlModel
+from chaste_codegen.rush_larsen_model import RushLarsenModel
 
 
-class RlOptModel(RlModel):
+class RushLarsenOptModel(RushLarsenModel):
     """ Holds template and information specific for the RushLarsen model type"""
 
     def __init__(self, model, file_name, **kwargs):

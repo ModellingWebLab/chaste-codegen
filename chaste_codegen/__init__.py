@@ -5,9 +5,9 @@ import logging
 
 from cellmlmanip.transpiler import Transpiler
 
-from chaste_codegen.be_model import BeModel  # noqa
-from chaste_codegen.rl_model import RlModel  # noqa
-from chaste_codegen.rl_opt_model import RlOptModel  # noqa
+from chaste_codegen.backward_euler_model import BackwardEulerModel  # noqa
+from chaste_codegen.rush_larsen_model import RushLarsenModel  # noqa
+from chaste_codegen.rush_larsen_opt_model import RushLarsenOptModel  # noqa
 
 from ._chaste_printer import ChastePrinter  # noqa
 #

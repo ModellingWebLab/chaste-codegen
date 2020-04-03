@@ -1,4 +1,5 @@
 import logging
+import time
 from collections import OrderedDict
 
 import sympy as sp
@@ -126,15 +127,13 @@ class ChasteModel(object):
         self._logger.setLevel(logging.INFO)
 
         # Store default options
-        self.file_name = file_name
         self.generated_hpp = ''
         self.generated_cpp = ''
+        self._hpp_template = ''
+        self._cpp_template = ''
 
         self._is_self_excitatory = False
-        self.class_name = kwargs.get('class_name', 'ModelFromCellMl')
-        self._dynamically_loadable = kwargs.get('dynamically_loadable', False)
         self.expose_annotated_variables = kwargs.get('expose_annotated_variables', False)
-        self._header_ext = kwargs.get('header_ext', '.hpp')
 
         # Store parameters for future reference
         self._model = model
@@ -172,18 +171,38 @@ class ChasteModel(object):
         self._derived_quant_eqs = self._get_derived_quant_eqs()
 
         self._add_printers()
-        self._formatted_modifiable_parameters = self._format_modifiable_parameters()
         self._formatted_state_vars, self._use_verify_state_variables = self._format_state_variables()
-        self._formatted_default_stimulus = self._format_default_stimulus()
-        self._formatted_extended_equations_for_ionic_vars = self._format_extended_equations_for_ionic_vars()
-        self._formatted_y_derivatives = self._format_y_derivatives()
-        self._formatted_derivative_eqs = self._format_derivative_equations(self._derivative_equations)
-        self._free_variable = self._format_free_variable()
-        self._ode_system_information = self._format_system_info()
-        self._named_attributes = self._format_named_attributes()
 
-        self._formatted_derived_quant = self._format_derived_quant()
-        self._formatted_quant_eqs = self._format_derived_quant_eqs()
+        # dict of variables to pass to the jinja2 templates
+        self._vars_for_template = \
+            {'converter_version': cg.__version__,
+             'model_name': self._model.name,
+             'file_name': file_name,
+             'class_name': kwargs.get('class_name', 'ModelFromCellMl'),
+             'header_ext': kwargs.get('header_ext', '.hpp'),
+             'dynamically_loadable': kwargs.get('dynamically_loadable', False),
+             'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
+             'use_get_intracellular_calcium_concentration':
+                 self._cytosolic_calcium_concentration_var in self._state_vars,
+             'membrane_voltage_index': self._MEMBRANE_VOLTAGE_INDEX,
+             'cytosolic_calcium_concentration_index':
+                 self._state_vars.index(self._cytosolic_calcium_concentration_var)
+                 if self._cytosolic_calcium_concentration_var in self._state_vars
+                 else self._CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX,
+             'use_capacitance_i_ionic': self._current_unit_and_capacitance['use_capacitance'],
+
+             'modifiable_parameters': self._format_modifiable_parameters(),
+             'state_vars': self._formatted_state_vars,
+             'use_verify_state_variables': self._use_verify_state_variables,
+             'default_stimulus_equations': self._format_default_stimulus(),
+             'ionic_vars': self._format_extended_equations_for_ionic_vars(),
+             'y_derivatives': self._format_y_derivatives(),
+             'y_derivative_equations': self._format_derivative_equations(self._derivative_equations),
+             'free_variable': self._format_free_variable(),
+             'ode_system_information': self._format_system_info(),
+             'named_attributes': self._format_named_attributes(),
+             'derived_quantities': self._format_derived_quant(),
+             'derived_quantity_equations': self._format_derived_quant_eqs()}
 
     def _get_equations_for(self, variables, recurse=True):
         """Returns equations excluding once where lhs is a modifiable parameter"""
@@ -818,7 +837,12 @@ class ChasteModel(object):
                 for eq in self._derived_quant_eqs]
 
     def generate_chaste_code(self):
-        """ Generate chaste code
-        Please Note: not implemented, use a subclass for the relevant model type
-        """
-        raise NotImplementedError("Should not be called directly, use the specific model types instead!")
+        """ Generates and stores chaste code"""
+
+        # Generate hpp for model
+        template = cg.load_template(self._hpp_template)
+        self.generated_hpp = template.render(self._vars_for_template)
+
+        # Generate cpp for model
+        template = cg.load_template(self._cpp_template)
+        self.generated_cpp = template.render(self._vars_for_template)
