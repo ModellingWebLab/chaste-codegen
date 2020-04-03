@@ -1,0 +1,14 @@
+    void {{class_name}}::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
+    {
+        std::vector<double>& rY = rGetStateVariables();
+        {% for deriv in derivative_alpha_beta %}{% if loop.index0 != membrane_voltage_index %}
+        {% if deriv.type=='non_linear'%}rY[{{loop.index0}}] += mDt * rDY[{{loop.index0}}];
+        {%- elif deriv.type=='inftau'%}rY[{{loop.index0}}] = rBetaOrInf[{{loop.index0}}] + (rY[{{loop.index0}}] - rBetaOrInf[{{loop.index0}}])*exp(-mDt/rAlphaOrTau[{{loop.index0}}]);
+        {%- else%}{
+            const double tau_inv = rAlphaOrTau[{{loop.index0}}] + rBetaOrInf[{{loop.index0}}];
+            const double y_inf = rAlphaOrTau[{{loop.index0}}] / tau_inv;
+            rY[{{loop.index0}}] = y_inf + (rY[{{loop.index0}}] - y_inf)*exp(-mDt*tau_inv);
+        }
+        {%- endif %}{%- endif %}
+        {%- endfor %}
+    }

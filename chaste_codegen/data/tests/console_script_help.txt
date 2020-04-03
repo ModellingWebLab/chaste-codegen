@@ -12,7 +12,8 @@ optional arguments:
   --version             show program's version number and exit
   -t TYPE, --translate-type TYPE
                         the type of code to output [default: Chaste]. Choices:
-                        ['Chaste', 'ChasteOpt', 'CVODE']
+                        ['Chaste', 'ChasteOpt', 'CVODE', 'BackwardsEuler',
+                        'RushLarsen', 'RushLarsenOpt']
   -o OUTFILE            write program code to OUTFILE [default action is to
                         use the input filename with a different extension]
                         NOTE: expects provided OUTFILE to have an extension
