@@ -80,6 +80,7 @@ class RushLarsenModel(ChasteModel):
         return derivative_alpha_beta, deriv_eqs_EvaluateEquations, vars_in_derivative_alpha_beta
 
     def _update_state_vars(self):
+        """Updates formatting of state vars to make sure the correct ones are included in the output"""
         # Get all used variables for derivative eqs
         deriv_variables = set()
         for eq in self._vars_for_template['derivative_alpha_beta_eqs']:
@@ -89,6 +90,7 @@ class RushLarsenModel(ChasteModel):
             sv['in_ab'] = sv['sympy_var'] in deriv_variables
 
     def _format_alpha_beta_eqs(self):
+        """Formats the equations for the evaluateequations part (with alpha_beta or inf_tau)"""
         return [{'lhs': self._printer.doprint(eqs.lhs),
                  'rhs': self._printer.doprint(eqs.rhs),
                  'units': self._model.units.format(self._model.units.evaluate_units(eqs.lhs)),

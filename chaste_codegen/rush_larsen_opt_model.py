@@ -16,6 +16,7 @@ class RushLarsenOptModel(RushLarsenModel):
                             [eq.lhs for eq in self._equations_for_ionic_vars])
 
     def _update_state_vars(self):
+        """Updates formatting of state vars to make sure the correct ones are included in the output"""
         self._vars_for_template['derivative_alpha_beta_eqs'] = \
             partial_eval(self._vars_for_template['derivative_alpha_beta_eqs'], self._vars_in_derivative_alpha_beta,
                          keep_multiple_usages=False)
@@ -28,6 +29,7 @@ class RushLarsenOptModel(RushLarsenModel):
             sv['in_ab'] = sv['sympy_var'] in deriv_variables
 
     def _format_alpha_beta_eqs(self):
+        """Formats the equations for the evaluateequations part (with alpha_beta or inf_tau)"""
         return [{'lhs': self._printer.doprint(eqs.lhs),
                  'rhs': self._printer.doprint(eqs.rhs),
                  'units': self._model.units.format(self._model.units.evaluate_units(eqs.lhs)),
