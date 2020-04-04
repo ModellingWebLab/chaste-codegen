@@ -792,7 +792,6 @@ class ChasteModel(object):
         """Format derivative equations for chaste output"""
         # exclude ionic currents
         return [{'lhs': self._printer.doprint(eqs.lhs),
-                 'sympy_lhs': eqs.lhs,
                  'rhs': self._printer.doprint(eqs.rhs),
                  'units': self._model.units.format(self._model.units.evaluate_units(eqs.lhs)),
                  'in_eqs_excl_voltage': eqs in self._derivative_eqs_excl_voltage,
