@@ -16,7 +16,7 @@ void OdeSystemInformation<{{class_name}}>::Initialise(void)
     this->mParameterUnits.push_back("{{param["units"]}}");
 
     {% endfor %}{% for param in derived_quantities %}// Derived Quantity index [{{loop.index0}}]:
-     this->mDerivedQuantityNames.push_back("{{param["name"]}}");
+    this->mDerivedQuantityNames.push_back("{{param["name"]}}");
     this->mDerivedQuantityUnits.push_back("{{param["units"]}}");
 
     {% endfor %}{% for attr in named_attributes %}
