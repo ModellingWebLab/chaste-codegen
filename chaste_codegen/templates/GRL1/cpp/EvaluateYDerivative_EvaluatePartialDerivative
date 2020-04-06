@@ -1,0 +1,17 @@
+    {% for state_var in state_vars %}{% set statevarloop = loop %}
+    double {{class_name}}::::EvaluateYDerivative{{statevarloop.index0}}(double {{free_variable.var_name}}, std::vector<double>& rY)
+    {
+        {% for deriv in y_derivative_equations %}{%- if deriv.is_voltage and statevarloop.index0 == membrane_voltage_index%}double {{deriv.lhs}};{%- endif %}{%- endfor %}
+        {% for state_var in state_vars %}{%- if state_var.in_evaluate_y_derivative[statevarloop.index0] %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
+        // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
+        {% endif %}{%- endfor %}
+        
+        // Mathematics
+        {%- for deriv in y_derivative_equations %}{% if deriv.in_evaluate_y_derivative[statevarloop.index0] %}
+        {% if not deriv.is_voltage%}const double {% endif %}{{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
+        {%- endfor %}
+
+        return {% for deriv in y_derivatives %}{%- if loop.index0 == statevarloop.index0 %}{{deriv}};{%- endif %}{%- endfor %}
+    }
+
+    {%- endfor %}
