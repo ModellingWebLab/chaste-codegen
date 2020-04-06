@@ -20,8 +20,6 @@ class GeneralisedRushLarsenModelFirstOrder(ChasteModel):
             equations = self._get_equations_for([deriv])
             # Get all used variables
             used_eqs = set([eq.lhs for eq in equations])
-#            for eq in equations:
-#                used_vars.update(eq.rhs.free_symbols)
             for sv in self._formatted_state_vars:
                 sv.setdefault('in_evaluate_y_derivative', []).append(sv['sympy_var'] in used_eqs)
 
