@@ -614,8 +614,8 @@ void OdeSystemInformation<Cellaslanidi_model_2009FromCellML>::Initialise(void)
     this->mParameterUnits.push_back("nanoF");
 
     // Derived Quantity index [0]:
-    this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
-    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
+    this->mParameterNames.push_back("membrane_stimulus_current");
+    this->mParameterUnits.push_back("uA_per_cm2");
 
     this->mInitialised = true;
 }
