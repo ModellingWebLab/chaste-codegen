@@ -344,8 +344,8 @@ void OdeSystemInformation<Celllivshitz_rudy_2007FromCellML>::Initialise(void)
     this->mInitialConditions.push_back(1e-12);
 
     // Derived Quantity index [0]:
-    this->mParameterNames.push_back("cytosolic_calcium_concentration");
-    this->mParameterUnits.push_back("mM");
+    this->mDerivedQuantityNames.push_back("cytosolic_calcium_concentration");
+    this->mDerivedQuantityUnits.push_back("mM");
 
     this->mInitialised = true;
 }
