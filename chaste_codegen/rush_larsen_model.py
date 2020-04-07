@@ -22,7 +22,8 @@ class RushLarsenModel(ChasteModel):
         self._vars_for_template['derivative_alpha_beta'], self._vars_for_template['derivative_alpha_beta_eqs'], \
             self._vars_in_derivative_alpha_beta = self._get_formatted_alpha_beta()
         self._update_state_vars()
-        self._vars_for_template['derivative_alpha_beta_eqs'] = self._format_alpha_beta_eqs()
+        self._vars_for_template['derivative_alpha_beta_eqs'] = \
+            self._format_derivative_equations(self._vars_for_template['derivative_alpha_beta_eqs'])
 
     def _get_formatted_alpha_beta(self):
         """Gets the information for r_alpha_or_tau, r_beta_or_inf in the c++ output and formatted equations"""
@@ -88,12 +89,3 @@ class RushLarsenModel(ChasteModel):
 
         for sv in self._formatted_state_vars:
             sv['in_ab'] = sv['sympy_var'] in deriv_variables
-
-    def _format_alpha_beta_eqs(self):
-        """Formats the equations for the evaluateequations part (with alpha_beta or inf_tau)"""
-        return [{'lhs': self._printer.doprint(eqs.lhs),
-                 'rhs': self._printer.doprint(eqs.rhs),
-                 'units': self._model.units.format(self._model.units.evaluate_units(eqs.lhs)),
-                 'in_eqs_excl_voltage': eqs in self._derivative_eqs_excl_voltage,
-                 'is_voltage': isinstance(eqs.lhs, sp.Derivative) and eqs.lhs.args[0] == self._membrane_voltage_var}
-                for eqs in self._vars_for_template['derivative_alpha_beta_eqs']]
