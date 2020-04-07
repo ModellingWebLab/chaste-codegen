@@ -35,8 +35,8 @@ def test_GRL1(tmp_path, model):
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLGRL1'
     LOGGER.info('Converting: Generalised Rush Larsen: ' + class_name + '\n')
     # Generate chaste code
-    chaste_model = cg.GeneralisedRushLarsenModelFirstOrder(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
-                                         class_name=class_name)
+    chaste_model = cg.GeneralisedRushLarsenModelFirstOrder(cellmlmanip.load_model(model['model']),
+                                                           model['model_name_from_file'], class_name=class_name)
 
     chaste_model.generate_chaste_code()
     # Compare against reference
@@ -235,6 +235,7 @@ def test_dynamic_RL(tmp_path):
     test_utils.compare_model_against_reference('RL', chaste_model, tmp_path, expected_hpp_path,
                                                expected_cpp_path)
 
+
 def test_dynamic_GRL1(tmp_path):
     tmp_path = str(tmp_path)
     LOGGER.info('Converting: Generalised Rush Larsen 1st order Dynamic luo_rudy_1994\n')
@@ -242,8 +243,8 @@ def test_dynamic_GRL1(tmp_path):
         os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'luo_rudy_1994.cellml')
     chaste_model = cellmlmanip.load_model(model_file)
     chaste_model = cg.GeneralisedRushLarsenModelFirstOrder(chaste_model, 'dynamic_luo_rudy_1994',
-                                      class_name='Dynamicluo_rudy_1994FromCellMLGRL1',
-                                      dynamically_loadable=True)
+                                                           class_name='Dynamicluo_rudy_1994FromCellMLGRL1',
+                                                           dynamically_loadable=True)
     chaste_model.generate_chaste_code()
     expected_hpp_path = \
         os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'GRL1', 'dynamic_luo_rudy_1994.hpp')
@@ -252,6 +253,7 @@ def test_dynamic_GRL1(tmp_path):
     # Compare against reference
     test_utils.compare_model_against_reference('GRL1', chaste_model, tmp_path, expected_hpp_path,
                                                expected_cpp_path)
+
 
 def testexpose_annotated_variables(tmp_path):
     tmp_path = str(tmp_path)
