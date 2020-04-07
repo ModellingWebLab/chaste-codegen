@@ -21,7 +21,9 @@ class RushLarsenModel(ChasteModel):
 
         self._vars_for_template['derivative_alpha_beta'], self._vars_for_template['derivative_alpha_beta_eqs'], \
             self._vars_in_derivative_alpha_beta = self._get_formatted_alpha_beta()
-        self._vars_for_template['derivative_alpha_beta_eqs'] = self._format_alpha_beta_eqs()
+        self._update_state_vars()
+        self._vars_for_template['derivative_alpha_beta_eqs'] = \
+            self._format_derivative_equations(self._vars_for_template['derivative_alpha_beta_eqs'])
 
     def _get_formatted_alpha_beta(self):
         """Gets the information for r_alpha_or_tau, r_beta_or_inf in the c++ output and formatted equations"""
@@ -76,15 +78,14 @@ class RushLarsenModel(ChasteModel):
                 vars_in_derivative_alpha_beta.add(deriv)
 
         deriv_eqs_EvaluateEquations = self._get_equations_for(vars_in_derivative_alpha_beta)
+        return derivative_alpha_beta, deriv_eqs_EvaluateEquations, vars_in_derivative_alpha_beta
 
+    def _update_state_vars(self):
+        """Updates formatting of state vars to make sure the correct ones are included in the output"""
         # Get all used variables for derivative eqs
         deriv_variables = set()
-        for eq in deriv_eqs_EvaluateEquations:
+        for eq in self._vars_for_template['derivative_alpha_beta_eqs']:
             deriv_variables.update(eq.rhs.free_symbols)
 
         for sv in self._formatted_state_vars:
             sv['in_ab'] = sv['sympy_var'] in deriv_variables
-        return derivative_alpha_beta, deriv_eqs_EvaluateEquations, vars_in_derivative_alpha_beta
-
-    def _format_alpha_beta_eqs(self):
-        return self._format_derivative_equations(self._vars_for_template['derivative_alpha_beta_eqs'])
