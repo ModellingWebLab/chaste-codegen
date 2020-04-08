@@ -740,6 +740,11 @@ class ChasteModel(object):
         for eq in self._derivative_eqs_voltage:
             voltage_deriv_variables.update(eq.rhs.free_symbols)
 
+        # Get all used variables for derivatives_excl_voltage to be able to indicate if a state var is used
+        deriv_excl_voltage_variables = set()
+        for eq in self._derivative_eqs_excl_voltage:
+            deriv_excl_voltage_variables.update(eq.rhs.free_symbols)
+
         # Get all used variables for eqs for derived quantities variables to be able to indicate if a state var is used
         derived_quant_variables = set()
         for eq in self._derived_quant_eqs:
@@ -752,6 +757,7 @@ class ChasteModel(object):
               'units': self._model.units.format(self._model.units.evaluate_units(var)),
               'in_ionic': var in ionic_var_variables,
               'in_y_deriv': var in y_deriv_variables,
+              'in_deriv_excl_voltage': var in deriv_excl_voltage_variables,
               'in_voltage_deriv': var in voltage_deriv_variables,
               'in_derived_quant': var in derived_quant_variables,
               'range_low': get_range_annotation(var, 'range-low'),
@@ -793,6 +799,7 @@ class ChasteModel(object):
         # exclude ionic currents
         return [{'lhs': self._printer.doprint(eqs.lhs),
                  'rhs': self._printer.doprint(eqs.rhs),
+                 'sympy_lhs': eqs.lhs,
                  'units': self._model.units.format(self._model.units.evaluate_units(eqs.lhs)),
                  'in_eqs_excl_voltage': eqs in self._derivative_eqs_excl_voltage,
                  'in_membrane_voltage': eqs in self._derivative_eqs_voltage,
