@@ -3,7 +3,7 @@ import sympy as sp
 
 def get_jacobian(state_vars, derivative_equations):
     """Calculate the analytic jacobian
-    
+
     :param state_vars: set of state variables
     :param derivative_equations: set of equations defining derivatives
     :return: Common expressions, jacobian matrix.
@@ -26,7 +26,7 @@ def get_jacobian(state_vars, derivative_equations):
 
 def format_jacobian(jacobian_equations, jacobian_matrix, printer, swap_inner_outer_index=True, skip_0_entries=True):
     """Format the jacobian for outputting
-    
+
     :param jacobian_equations: list of common term equations (expects a list as per get_jacobian)
     :param jacobian_matrix: a jacobian matrix (expects a sympy.Matrix as per get_jacobian)
     :param printer: printer object to retreive outputtable version of variables and equations
