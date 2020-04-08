@@ -264,3 +264,23 @@ def test_script_RLopt(capsys, tmp_path):
                                    os.path.join(tmp_path, 'matsuoka_model_2003.hpp'))
     compare_file_against_reference(os.path.join(reference, 'matsuoka_model_2003.cpp'),
                                    os.path.join(tmp_path, 'matsuoka_model_2003.cpp'))
+
+def test_script_GRL1(capsys, tmp_path):
+    """Convert a RushLarsen model type"""
+    LOGGER.info('Testing model Generalised Rush Larsen,  for command line script\n')
+    tmp_path = str(tmp_path)
+    model_name = 'matsuoka_model_2003'
+    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    outfile = os.path.join(tmp_path, 'matsuoka_model_2003.cpp')
+    # Call commandline script
+    testargs = ['chaste_codegen', model_file, '-t', 'GeneralisedRushLarsen1', '-o', outfile,
+                '-c', 'Cellmatsuoka_model_2003FromCellMLRushLarsen']
+    with mock.patch.object(sys, 'argv', testargs):
+        chaste_codegen()
+    # Check output
+    reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'GRL1')
+    compare_file_against_reference(os.path.join(reference, 'matsuoka_model_2003.hpp'),
+                                   os.path.join(tmp_path, 'matsuoka_model_2003.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'matsuoka_model_2003.cpp'),
+                                   os.path.join(tmp_path, 'matsuoka_model_2003.cpp'))
