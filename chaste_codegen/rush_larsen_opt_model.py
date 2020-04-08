@@ -5,9 +5,6 @@ from chaste_codegen.rush_larsen_model import RushLarsenModel
 class RushLarsenOptModel(RushLarsenModel):
     """ Holds template and information specific for the RushLarsen model type"""
 
-    def __init__(self, model, file_name, **kwargs):
-        super().__init__(model, file_name, **kwargs)
-
     def _get_extended_equations_for_ionic_vars(self):
         """ Get the partially evaluated equations defining the ionic derivatives and all dependant equations"""
         return partial_eval(super()._get_extended_equations_for_ionic_vars(),
