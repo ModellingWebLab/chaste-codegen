@@ -1,5 +1,6 @@
 import sympy as sp
 
+from chaste_codegen._jacobian import format_jacobian, get_jacobian
 from chaste_codegen._linearity_check import get_non_linear_state_vars, subst_deriv_eqs_non_linear_vars
 from chaste_codegen._partial_eval import partial_eval
 from chaste_codegen.chaste_model import ChasteModel
@@ -18,7 +19,9 @@ class BackwardEulerModel(ChasteModel):
         self._non_linear_state_vars = get_non_linear_state_vars(self._derivative_equations, self._membrane_voltage_var,
                                                                 self._state_vars, self._printer)
 
-        self._jacobian_equations, self._jacobian_matrix = self._get_jacobian()
+        self._jacobian_equations, self._jacobian_matrix = \
+            get_jacobian(self._non_linear_state_vars,
+                         [d for d in self._derivative_equations if d.lhs.args[0] in self._non_linear_state_vars])
 
         self._vars_for_template['state_vars'], self._vars_for_template['nonlinear_state_vars'], \
             self._vars_for_template['residual_equations'], self._vars_for_template['y_derivative_equations'] = \
@@ -26,7 +29,8 @@ class BackwardEulerModel(ChasteModel):
         self._vars_for_template['linear_deriv_eqs'], self._vars_for_template['linear_equations'] = \
             self._format_rearranged_linear_derivs()
         self._vars_for_template['jacobian_equations'], self._vars_for_template['jacobian_entries'] = \
-            self._format_jacobian()
+            format_jacobian(self._jacobian_equations, self._jacobian_matrix, self._printer,
+                            swap_inner_outer_index=False, skip_0_entries=False)
 
     def _format_rearranged_linear_derivs(self):
         """Formats the rearranged linear derivative expressions"""
@@ -91,23 +95,6 @@ class BackwardEulerModel(ChasteModel):
 
         return formatted_expr, self._format_derivative_equations(linear_derivs_eqs)
 
-    def _get_jacobian(self):
-        """"Get the jacobian for the non-linear state vars """
-        if len(self._non_linear_state_vars) == 0:
-            return [], sp.Matrix([])
-        state_var_matrix = sp.Matrix(self._non_linear_state_vars)
-        # get derivatives for non-linear state vars
-        derivative_eqs = [d for d in self._derivative_equations if d.lhs.args[0] in self._non_linear_state_vars]
-        # sort by state var
-        derivative_eqs = sorted(derivative_eqs, key=lambda d: self._non_linear_state_vars.index(d.lhs.args[0]))
-        # we're only interested in the rhs
-        derivative_eqs = [eq.rhs for eq in derivative_eqs]
-        derivative_eq_matrix = sp.Matrix(derivative_eqs)
-        jacobian_matrix = derivative_eq_matrix.jacobian(state_var_matrix)
-        # update state variables
-        jacobian_equations, jacobian_matrix = sp.cse(jacobian_matrix, order='none')
-        return jacobian_equations, sp.Matrix(jacobian_matrix)
-
     def _update_state_vars(self):
         """Update the state vars, savings residual and jacobian info for outputing"""
         formatted_state_vars = self._vars_for_template['state_vars']
@@ -148,16 +135,3 @@ class BackwardEulerModel(ChasteModel):
                                            'state_var_index': i, 'var': self._vars_for_template['y_derivatives'][i]})
 
         return formatted_state_vars, formatted_nonlinear_state_vars, residual_equations, formatted_derivative_eqs
-
-    def _format_jacobian(self):
-        """Format the jacobian for outputting"""
-        assert isinstance(self._jacobian_matrix, sp.Matrix), 'Expecting a jacobian as a matrix'
-        equations = [{'lhs': self._printer.doprint(eq[0]), 'rhs': self._printer.doprint(eq[1])}
-                     for eq in self._jacobian_equations]
-        rows, cols = self._jacobian_matrix.shape
-        jacobian = []
-        for i in range(rows):
-            for j in range(cols):
-                matrix_entry = self._jacobian_matrix[i, j]
-                jacobian.append({'i': i, 'j': j, 'entry': self._printer.doprint(matrix_entry)})
-        return equations, jacobian
