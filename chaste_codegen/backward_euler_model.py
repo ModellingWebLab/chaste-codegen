@@ -30,7 +30,7 @@ class BackwardEulerModel(ChasteModel):
             self._format_rearranged_linear_derivs()
         self._vars_for_template['jacobian_equations'], self._vars_for_template['jacobian_entries'] = \
             format_jacobian(self._jacobian_equations, self._jacobian_matrix, self._printer,
-                            swap_inner_outer_loop=False, skip_0_entries=False)
+                            swap_inner_outer_index=False, skip_0_entries=False)
 
     def _format_rearranged_linear_derivs(self):
         """Formats the rearranged linear derivative expressions"""
