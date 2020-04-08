@@ -30,7 +30,7 @@
         {
             const double y_save = rY[{{statevarloop.index0}}];
             rY[{{statevarloop.index0}}] += delta;
-            const double temp = EvaluateYDerivative{{statevarloop.index0}}(var_chaste_interface__Environment__time, rY);
+            const double temp = EvaluateYDerivative{{statevarloop.index0}}({{free_variable.var_name}}, rY);
             partialF = (temp-mEvalF[{{statevarloop.index0}}])/delta;
             rY[{{statevarloop.index0}}] = y_save;
         }

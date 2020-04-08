@@ -16,7 +16,7 @@
         {%- endfor %}
 
         double evalF = {% for deriv in y_derivative_equations %}{%- if deriv.is_voltage%}{{deriv.lhs}};{%- endif %}{%- endfor %}
-        mEvalF[{{membrane_voltage_index}}] = d_dt_chaste_interface__cell__V;
+        mEvalF[{{membrane_voltage_index}}] = {% for deriv in y_derivative_equations %}{%- if deriv.is_voltage%}{{deriv.lhs}};{%- endif %}{%- endfor %}
         double partialF = EvaluatePartialDerivative{{membrane_voltage_index}}({{free_variable.var_name}}, rY, delta, true);
         if (fabs(partialF) < delta)
         {
