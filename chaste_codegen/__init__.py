@@ -6,7 +6,6 @@ import logging
 from cellmlmanip.transpiler import Transpiler
 
 from chaste_codegen.backward_euler_model import BackwardEulerModel  # noqa
-from chaste_codegen.generalised_rush_larsen_1_model import GeneralisedRushLarsenModelFirstOrder  # noqa
 from chaste_codegen.rush_larsen_model import RushLarsenModel  # noqa
 from chaste_codegen.rush_larsen_opt_model import RushLarsenOptModel  # noqa
 
