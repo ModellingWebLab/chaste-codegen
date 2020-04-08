@@ -34,9 +34,9 @@ def format_jacobian(jacobian_equations, jacobian_matrix, printer, swap_inner_out
                                    This swpas whether the 1st index is row or column.
     :param skip_0_entries: should entries in the jacobian matrixt that are 0 be skipped in the output?
     :return: Formatted common expressions, formattex jacobian matrix.
-             The formatted list of common expressions is of the form 
+             The formatted list of common expressions is of the form:
              [{'lhs': 'var_x1', 'rhs': <printed_expr>, 'sympy_lhs': x1}]
-             The jacobian Matrix is a list of the form: 
+             The jacobian Matrix is a list of the form:
              [{'i': i, 'j': 'entry': <printted jacobian matrix entry for index [i, j])}
     """
     assert isinstance(jacobian_matrix, sp.Matrix), 'Expecting a jacobian as a matrix'
