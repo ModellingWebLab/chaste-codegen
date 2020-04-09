@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellgrandi2010ssFromCellMLRushLarsen::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellgrandi2010ssFromCellMLGRL1::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__cell__stim_amplitude = -15.0 * HeartConfig::Instance()->GetCapacitance(); // uA_per_uF
@@ -39,19 +39,19 @@
     }
 
 
-    double Cellgrandi2010ssFromCellMLRushLarsen::GetIntracellularCalciumConcentration()
+    double Cellgrandi2010ssFromCellMLGRL1::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[37];
     }
-    Cellgrandi2010ssFromCellMLRushLarsen::Cellgrandi2010ssFromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
-        : AbstractRushLarsenCardiacCell(
-                38,
+    Cellgrandi2010ssFromCellMLGRL1::Cellgrandi2010ssFromCellMLGRL1(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+        : AbstractGeneralizedRushLarsenCardiacCell(
+           38,
                 0,
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
-        this->mpSystemInfo = OdeSystemInformation<Cellgrandi2010ssFromCellMLRushLarsen>::Instance();
+        //
+        this->mpSystemInfo = OdeSystemInformation<Cellgrandi2010ssFromCellMLGRL1>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -59,11 +59,11 @@
         
     }
 
-    Cellgrandi2010ssFromCellMLRushLarsen::~Cellgrandi2010ssFromCellMLRushLarsen()
+    Cellgrandi2010ssFromCellMLGRL1::~Cellgrandi2010ssFromCellMLGRL1()
     {
     }
     
-    double Cellgrandi2010ssFromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellgrandi2010ssFromCellMLGRL1::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -235,9 +235,196 @@
         return i_ionic;
     }
 
-    void Cellgrandi2010ssFromCellMLRushLarsen::EvaluateEquations(double var_chaste_interface__cell__time, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
+    void Cellgrandi2010ssFromCellMLGRL1::UpdateTransmembranePotential(double var_chaste_interface__cell__time)
     {
         std::vector<double>& rY = rGetStateVariables();
+        unsigned v_index = GetVoltageIndex();
+        const double delta = 1e-8;
+
+        double d_dt_chaste_interface_var_cell__sVm;
+        double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        // Units: millivolt; Initial value: -81.3842590704928
+        double var_chaste_interface__cell__sm = rY[1];
+        // Units: dimensionless; Initial value: 0.00384941567866232
+        double var_chaste_interface__cell__sh = rY[2];
+        // Units: dimensionless; Initial value: 0.623723834301669
+        double var_chaste_interface__cell__sj = rY[3];
+        // Units: dimensionless; Initial value: 0.622080736932815
+        double var_chaste_interface__cell__sd = rY[4];
+        // Units: dimensionless; Initial value: 2.95884913218079e-06
+        double var_chaste_interface__cell__sf = rY[5];
+        // Units: dimensionless; Initial value: 0.995094078386247
+        double var_chaste_interface__cell__sfcaBj = rY[6];
+        // Units: dimensionless; Initial value: 0.0246274349529557
+        double var_chaste_interface__cell__sfcaBsl = rY[7];
+        // Units: dimensionless; Initial value: 0.0150911724206476
+        double var_chaste_interface__cell__sxtos = rY[8];
+        // Units: dimensionless; Initial value: 0.000442853722673121
+        double var_chaste_interface__cell__sytos = rY[9];
+        // Units: dimensionless; Initial value: 0.789013894749951
+        double var_chaste_interface__cell__sxtof = rY[10];
+        // Units: dimensionless; Initial value: 0.000442846429332686
+        double var_chaste_interface__cell__sytof = rY[11];
+        // Units: dimensionless; Initial value: 0.999995784674368
+        double var_chaste_interface__cell__sxkr = rY[12];
+        // Units: dimensionless; Initial value: 0.020160578118589
+        double var_chaste_interface__cell__sxks = rY[13];
+        // Units: dimensionless; Initial value: 0.00430143235332308
+        double var_chaste_interface__cell__sNaj = rY[32];
+        // Units: dimensionless; Initial value: 8.21411036389602
+        double var_chaste_interface__cell__sNasl = rY[33];
+        // Units: dimensionless; Initial value: 8.21322794157889
+        double var_chaste_interface__cell__sNai = rY[34];
+        // Units: dimensionless; Initial value: 8.21340895351653
+        double var_chaste_interface__cell__sCaj = rY[35];
+        // Units: dimensionless; Initial value: 0.000175648385857736
+        double var_chaste_interface__cell__sCasl = rY[36];
+        // Units: dimensionless; Initial value: 0.000105614570409386
+        
+
+        // Mathematics
+        const double var_cell__Cao = 1.8; // dimensionless
+        const double var_cell__Cli = 15.0; // dimensionless
+        const double var_cell__Clo = 150.0; // dimensionless
+        const double var_cell__Fjunc = 0.11; // dimensionless
+        const double var_cell__Fjunc_CaL = 0.90000000000000002; // dimensionless
+        const double var_cell__Frdy = 96485.0; // dimensionless
+        const double var_cell__Fsl = 1.0 - var_cell__Fjunc; // dimensionless
+        const double var_cell__Fsl_CaL = 1.0 - var_cell__Fjunc_CaL; // dimensionless
+        const double var_cell__GCaB = 0.00055130000000000001; // dimensionless
+        const double var_cell__GClB = 0.0089999999999999993; // dimensionless
+        const double var_cell__GClCa = 0.0548125; // dimensionless
+        const double var_cell__GNa = 23.0; // dimensionless
+        const double var_cell__GNaB = 0.00059699999999999998; // dimensionless
+        const double var_cell__G_CaL_mult = 1.0; // dimensionless
+        const double var_cell__GtoFast = 0.1144; // dimensionless
+        const double var_cell__GtoSlow = 0.015599999999999999; // dimensionless
+        const double var_cell__IbarNCX = 4.5; // dimensionless
+        const double var_cell__IbarNaK = 1.8; // dimensionless
+        const double var_cell__IbarSLCaP = 0.067299999999999999; // dimensionless
+        const double var_cell__KdClCa = 0.10000000000000001; // dimensionless
+        const double var_cell__Kdact = 0.00014999999999999999; // dimensionless
+        const double var_cell__KmCai = 0.0035899999999999999; // dimensionless
+        const double var_cell__KmCao = 1.3; // dimensionless
+        const double var_cell__KmKo = 1.5; // dimensionless
+        const double var_cell__KmNai = 12.289999999999999; // dimensionless
+        const double var_cell__KmNaip = 11.0; // dimensionless
+        const double var_cell__KmNao = 87.5; // dimensionless
+        const double var_cell__KmPCa = 0.00050000000000000001; // dimensionless
+        const double var_cell__Ko = 5.4000000000000004; // dimensionless
+        const double var_cell__Nao = 140.0; // dimensionless
+        const double var_cell__Q10CaL = 1.8; // dimensionless
+        const double var_cell__Q10NCX = 1.5700000000000001; // dimensionless
+        const double var_cell__Q10SLCaP = 2.3500000000000001; // dimensionless
+        const double var_cell__R = 8314.0; // dimensionless
+        const double var_cell__Temp = 310.0; // dimensionless
+        const double var_cell__FoRT = var_cell__Frdy / (var_cell__R * var_cell__Temp); // dimensionless
+        const double var_cell__Qpow = -31.0 + 0.10000000000000001 * var_cell__Temp; // dimensionless
+        const double var_cell__ecl = 1.0 * log(var_cell__Cli / var_cell__Clo) / var_cell__FoRT; // dimensionless
+        const double var_cell__fcaCaMSL = 0.0; // dimensionless
+        const double var_cell__fcaCaj = 0.0; // dimensionless
+        const double var_cell__gkp = 0.002; // dimensionless
+        const double var_cell__gkr_mult = 1.0; // dimensionless
+        const double var_cell__gkr = 0.015061601901917734 * sqrt(var_cell__Ko) * var_cell__gkr_mult; // dimensionless
+        const double var_cell__gks_junc = 0.0035000000000000001; // dimensionless
+        const double var_cell__gks_sl = 0.0035000000000000001; // dimensionless
+        const double var_cell__ksat = 0.32000000000000001; // dimensionless
+        const double var_cell__nu = 0.27000000000000002; // dimensionless
+        const double var_cell__pCa = 0.00027 * var_cell__G_CaL_mult; // dimensionless
+        const double var_cell__pK = 1.35e-7 * var_cell__G_CaL_mult; // dimensionless
+        const double var_cell__pNa = 7.4999999999999993e-9 * var_cell__G_CaL_mult; // dimensionless
+        const double var_cell__pNaK = 0.018329999999999999; // dimensionless
+        const double var_cell__I_pca_junc = pow(var_cell__Q10SLCaP, var_cell__Qpow) * pow(var_chaste_interface__cell__sCaj, 1.6000000000000001) * var_cell__Fjunc * var_cell__IbarSLCaP / (pow(var_cell__KmPCa, 1.6000000000000001) + pow(var_chaste_interface__cell__sCaj, 1.6000000000000001)); // dimensionless
+        const double var_cell__Ka_junc = 1.0 / (1.0 + pow(var_cell__Kdact, 2) / pow(var_chaste_interface__cell__sCaj, 2)); // dimensionless
+        const double var_cell__eca_junc = 0.5 * log(var_cell__Cao / var_chaste_interface__cell__sCaj) / var_cell__FoRT; // dimensionless
+        const double var_cell__I_pca_sl = pow(var_cell__Q10SLCaP, var_cell__Qpow) * pow(var_chaste_interface__cell__sCasl, 1.6000000000000001) * var_cell__Fsl * var_cell__IbarSLCaP / (pow(var_cell__KmPCa, 1.6000000000000001) + pow(var_chaste_interface__cell__sCasl, 1.6000000000000001)); // dimensionless
+        const double var_cell__Ka_sl = 1.0 / (1.0 + pow(var_cell__Kdact, 2) / pow(var_chaste_interface__cell__sCasl, 2)); // dimensionless
+        const double var_cell__eca_sl = 0.5 * log(var_cell__Cao / var_chaste_interface__cell__sCasl) / var_cell__FoRT; // dimensionless
+        const double var_cell__sKi = 120.0; // dimensionless
+        const double var_cell__ek = 1.0 * log(var_cell__Ko / var_cell__sKi) / var_cell__FoRT; // dimensionless
+        const double var_cell__eks = 1.0 * log((var_cell__Nao * var_cell__pNaK + var_cell__Ko) / (var_cell__pNaK * var_chaste_interface__cell__sNai + var_cell__sKi)) / var_cell__FoRT; // dimensionless
+        const double var_cell__ena_junc = 1.0 * log(var_cell__Nao / var_chaste_interface__cell__sNaj) / var_cell__FoRT; // dimensionless
+        const double var_cell__s3_junc = pow(var_cell__Nao, 3) * var_chaste_interface__cell__sCaj + pow(var_chaste_interface__cell__sNaj, 3) * var_cell__Cao + pow(var_chaste_interface__cell__sNaj, 3) * var_cell__KmCao + pow(var_cell__KmNao, 3) * (1.0 + var_chaste_interface__cell__sCaj / var_cell__KmCai) * var_chaste_interface__cell__sCaj + pow(var_cell__Nao, 3) * (1.0 + pow(var_chaste_interface__cell__sNaj, 3) / pow(var_cell__KmNai, 3)) * var_cell__KmCai; // dimensionless
+        const double var_cell__ena_sl = 1.0 * log(var_cell__Nao / var_chaste_interface__cell__sNasl) / var_cell__FoRT; // dimensionless
+        const double var_cell__s3_sl = pow(var_cell__Nao, 3) * var_chaste_interface__cell__sCasl + pow(var_chaste_interface__cell__sNasl, 3) * var_cell__Cao + pow(var_chaste_interface__cell__sNasl, 3) * var_cell__KmCao + pow(var_cell__KmNao, 3) * (1.0 + var_chaste_interface__cell__sCasl / var_cell__KmCai) * var_chaste_interface__cell__sCasl + pow(var_cell__Nao, 3) * (1.0 + pow(var_chaste_interface__cell__sNasl, 3) / pow(var_cell__KmNai, 3)) * var_cell__KmCai; // dimensionless
+        const double var_cell__I_ClCa_junc = (-var_cell__ecl + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__GClCa / (1.0 + var_cell__KdClCa / var_chaste_interface__cell__sCaj); // dimensionless
+        const double var_cell__I_ClCa_sl = (-var_cell__ecl + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__GClCa / (1.0 + var_cell__KdClCa / var_chaste_interface__cell__sCasl); // dimensionless
+        const double var_cell__I_ClCa = var_cell__I_ClCa_junc + var_cell__I_ClCa_sl; // dimensionless
+        const double var_cell__I_Clbk = (-var_cell__ecl + var_chaste_interface__cell__sVm) * var_cell__GClB; // dimensionless
+        const double var_cell__I_Cl_tot = var_cell__I_ClCa + var_cell__I_Clbk; // dimensionless
+        const double var_cell__I_cabk_junc = (-var_cell__eca_junc + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__GCaB; // dimensionless
+        const double var_cell__I_cabk_sl = (-var_cell__eca_sl + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__GCaB; // dimensionless
+        const double var_cell__I_nabk_junc = (-var_cell__ena_junc + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__GNaB; // dimensionless
+        const double var_cell__I_nabk_sl = (-var_cell__ena_sl + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__GNaB; // dimensionless
+        const double var_cell__aki = 1.02 / (1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__sVm - 0.23849999999999999 * var_cell__ek)); // dimensionless
+        const double var_cell__bki = (0.49124000000000001 * exp(0.43983232 + 0.080320000000000003 * var_chaste_interface__cell__sVm - 0.080320000000000003 * var_cell__ek) + exp(-36.698642499999998 + 0.061749999999999999 * var_chaste_interface__cell__sVm - 0.061749999999999999 * var_cell__ek)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_cell__ek - 0.51429999999999998 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__ibarca_j = 4.0 * (-0.34100000000000003 * var_cell__Cao + 0.34100000000000003 * var_chaste_interface__cell__sCaj * exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__FoRT * var_cell__Frdy * var_cell__pCa * var_chaste_interface__cell__sVm / (-1.0 + exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__ibarca_sl = 4.0 * (-0.34100000000000003 * var_cell__Cao + 0.34100000000000003 * var_chaste_interface__cell__sCasl * exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__FoRT * var_cell__Frdy * var_cell__pCa * var_chaste_interface__cell__sVm / (-1.0 + exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__ibark = (-0.75 * var_cell__Ko + 0.75 * var_cell__sKi * exp(var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__FoRT * var_cell__Frdy * var_cell__pK * var_chaste_interface__cell__sVm / (-1.0 + exp(var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__ibarna_j = (-0.75 * var_cell__Nao + 0.75 * var_chaste_interface__cell__sNaj * exp(var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__FoRT * var_cell__Frdy * var_cell__pNa * var_chaste_interface__cell__sVm / (-1.0 + exp(var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__ibarna_sl = (-0.75 * var_cell__Nao + 0.75 * var_chaste_interface__cell__sNasl * exp(var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__FoRT * var_cell__Frdy * var_cell__pNa * var_chaste_interface__cell__sVm / (-1.0 + exp(var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__kiss = var_cell__aki / (var_cell__aki + var_cell__bki); // dimensionless
+        const double var_cell__I_ki = 0.15061601901917732 * sqrt(var_cell__Ko) * (-var_cell__ek + var_chaste_interface__cell__sVm) * var_cell__kiss; // dimensionless
+        const double var_cell__kp_kp = 1.0 / (1.0 + exp(7.4880000000000004 - 0.16722408026755853 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__I_kp_junc = (-var_cell__ek + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__gkp * var_cell__kp_kp; // dimensionless
+        const double var_cell__I_kp_sl = (-var_cell__ek + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__gkp * var_cell__kp_kp; // dimensionless
+        const double var_cell__I_kp = var_cell__I_kp_junc + var_cell__I_kp_sl; // dimensionless
+        const double var_cell__rkr = 1.0 / (1.0 + exp(3.0833333333333335 + 0.041666666666666664 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__s1_junc = pow(var_chaste_interface__cell__sNaj, 3) * var_cell__Cao * exp(var_cell__FoRT * var_cell__nu * var_chaste_interface__cell__sVm); // dimensionless
+        const double var_cell__s1_sl = pow(var_chaste_interface__cell__sNasl, 3) * var_cell__Cao * exp(var_cell__FoRT * var_cell__nu * var_chaste_interface__cell__sVm); // dimensionless
+        const double var_cell__s2_junc = pow(var_cell__Nao, 3) * var_chaste_interface__cell__sCaj * exp((-1.0 + var_cell__nu) * var_cell__FoRT * var_chaste_interface__cell__sVm); // dimensionless
+        const double var_cell__I_ncx_junc = pow(var_cell__Q10NCX, var_cell__Qpow) * (-var_cell__s2_junc + var_cell__s1_junc) * var_cell__Fjunc * var_cell__IbarNCX * var_cell__Ka_junc / ((1.0 + var_cell__ksat * exp((-1.0 + var_cell__nu) * var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__s3_junc); // dimensionless
+        const double var_cell__s2_sl = pow(var_cell__Nao, 3) * var_chaste_interface__cell__sCasl * exp((-1.0 + var_cell__nu) * var_cell__FoRT * var_chaste_interface__cell__sVm); // dimensionless
+        const double var_cell__I_ncx_sl = pow(var_cell__Q10NCX, var_cell__Qpow) * (-var_cell__s2_sl + var_cell__s1_sl) * var_cell__Fsl * var_cell__IbarNCX * var_cell__Ka_sl / ((1.0 + var_cell__ksat * exp((-1.0 + var_cell__nu) * var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__s3_sl); // dimensionless
+        const double var_cell__I_CaNa_junc = 0.45000000000000001 * pow(var_cell__Q10CaL, var_cell__Qpow) * (1.0 - var_chaste_interface__cell__sfcaBj + var_cell__fcaCaj) * var_cell__Fjunc_CaL * var_cell__ibarna_j * var_chaste_interface__cell__sd * var_chaste_interface__cell__sf; // dimensionless
+        const double var_cell__I_Ca_junc = 0.45000000000000001 * pow(var_cell__Q10CaL, var_cell__Qpow) * (1.0 - var_chaste_interface__cell__sfcaBj + var_cell__fcaCaj) * var_cell__Fjunc_CaL * var_cell__ibarca_j * var_chaste_interface__cell__sd * var_chaste_interface__cell__sf; // dimensionless
+        const double var_cell__I_Ca_tot_junc = -2.0 * var_cell__I_ncx_junc + var_cell__I_Ca_junc + var_cell__I_cabk_junc + var_cell__I_pca_junc; // dimensionless
+        const double var_cell__I_CaK = 0.45000000000000001 * pow(var_cell__Q10CaL, var_cell__Qpow) * ((1.0 - var_chaste_interface__cell__sfcaBj + var_cell__fcaCaj) * var_cell__Fjunc_CaL + (1.0 - var_chaste_interface__cell__sfcaBsl + var_cell__fcaCaMSL) * var_cell__Fsl_CaL) * var_cell__ibark * var_chaste_interface__cell__sd * var_chaste_interface__cell__sf; // dimensionless
+        const double var_cell__I_CaNa_sl = 0.45000000000000001 * pow(var_cell__Q10CaL, var_cell__Qpow) * (1.0 - var_chaste_interface__cell__sfcaBsl + var_cell__fcaCaMSL) * var_cell__Fsl_CaL * var_cell__ibarna_sl * var_chaste_interface__cell__sd * var_chaste_interface__cell__sf; // dimensionless
+        const double var_cell__I_Ca_sl = 0.45000000000000001 * pow(var_cell__Q10CaL, var_cell__Qpow) * (1.0 - var_chaste_interface__cell__sfcaBsl + var_cell__fcaCaMSL) * var_cell__Fsl_CaL * var_cell__ibarca_sl * var_chaste_interface__cell__sd * var_chaste_interface__cell__sf; // dimensionless
+        const double var_cell__I_Ca_tot_sl = -2.0 * var_cell__I_ncx_sl + var_cell__I_Ca_sl + var_cell__I_cabk_sl + var_cell__I_pca_sl; // dimensionless
+        const double var_cell__I_Ca_tot = var_cell__I_Ca_tot_junc + var_cell__I_Ca_tot_sl; // dimensionless
+        const double var_cell__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * var_cell__Nao); // dimensionless
+        const double var_cell__fnak = 1.0 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_cell__FoRT * var_chaste_interface__cell__sVm) + 0.036499999999999998 * var_cell__sigma * exp(-var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__I_nak_junc = 1.0 * var_cell__Fjunc * var_cell__IbarNaK * var_cell__Ko * var_cell__fnak / ((1.0 + pow(var_cell__KmNaip, 4) / pow(var_chaste_interface__cell__sNaj, 4)) * (var_cell__KmKo + var_cell__Ko)); // dimensionless
+        const double var_cell__I_nak_sl = 1.0 * var_cell__Fsl * var_cell__IbarNaK * var_cell__Ko * var_cell__fnak / ((1.0 + pow(var_cell__KmNaip, 4) / pow(var_chaste_interface__cell__sNasl, 4)) * (var_cell__KmKo + var_cell__Ko)); // dimensionless
+        const double var_cell__I_nak = var_cell__I_nak_junc + var_cell__I_nak_sl; // dimensionless
+        const double var_cell__I_Na_junc = pow(var_chaste_interface__cell__sm, 3) * (-var_cell__ena_junc + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__GNa * var_chaste_interface__cell__sh * var_chaste_interface__cell__sj; // dimensionless
+        const double var_cell__I_Na_sl = pow(var_chaste_interface__cell__sm, 3) * (-var_cell__ena_sl + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__GNa * var_chaste_interface__cell__sh * var_chaste_interface__cell__sj; // dimensionless
+        const double var_cell__I_Na_tot_junc = 3.0 * var_cell__I_nak_junc + 3.0 * var_cell__I_ncx_junc + var_cell__I_CaNa_junc + var_cell__I_Na_junc + var_cell__I_nabk_junc; // dimensionless
+        const double var_cell__I_Na_tot_sl = 3.0 * var_cell__I_nak_sl + 3.0 * var_cell__I_ncx_sl + var_cell__I_CaNa_sl + var_cell__I_Na_sl + var_cell__I_nabk_sl; // dimensionless
+        const double var_cell__I_Na_tot = var_cell__I_Na_tot_junc + var_cell__I_Na_tot_sl; // dimensionless
+        const double var_cell__I_kr = (-var_cell__ek + var_chaste_interface__cell__sVm) * var_cell__gkr * var_cell__rkr * var_chaste_interface__cell__sxkr; // dimensionless
+        const double var_cell__I_ks_junc = pow(var_chaste_interface__cell__sxks, 2) * (-var_cell__eks + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__gks_junc; // dimensionless
+        const double var_cell__I_ks_sl = pow(var_chaste_interface__cell__sxks, 2) * (-var_cell__eks + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__gks_sl; // dimensionless
+        const double var_cell__I_ks = var_cell__I_ks_junc + var_cell__I_ks_sl; // dimensionless
+        const double var_cell__I_tof = (-var_cell__ek + var_chaste_interface__cell__sVm) * var_cell__GtoFast * var_chaste_interface__cell__sxtof * var_chaste_interface__cell__sytof; // dimensionless
+        const double var_cell__I_tos = (-var_cell__ek + var_chaste_interface__cell__sVm) * var_cell__GtoSlow * var_chaste_interface__cell__sxtos * var_chaste_interface__cell__sytos; // dimensionless
+        const double var_cell__I_to = var_cell__I_tof + var_cell__I_tos; // dimensionless
+        const double var_cell__I_K_tot = -2.0 * var_cell__I_nak + var_cell__I_CaK + var_cell__I_ki + var_cell__I_kp + var_cell__I_kr + var_cell__I_ks + var_cell__I_to; // dimensionless
+        const double var_cell__I_tot = var_cell__I_Ca_tot + var_cell__I_Cl_tot + var_cell__I_K_tot + var_cell__I_Na_tot; // uA_per_uF
+        const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__cell__time); // uA_per_cm2
+        const double var_cell__i_Stim = var_cell__i_Stim_converter / HeartConfig::Instance()->GetCapacitance(); // uA_per_uF
+        d_dt_chaste_interface_var_cell__sVm = -var_cell__I_tot - var_cell__i_Stim; // millivolt / ms
+
+        double evalF = d_dt_chaste_interface_var_cell__sVm;
+        mEvalF[0] = d_dt_chaste_interface_var_cell__sVm;
+        double partialF = EvaluatePartialDerivative0(var_chaste_interface__cell__time, rY, delta, true);
+        if (fabs(partialF) < delta)
+        {
+            rY[v_index] += evalF*mDt;
+        }
+        else
+        {
+            rY[v_index] += (evalF/partialF)*(exp(partialF*mDt)-1.0);
+        }
+    }
+
+    void Cellgrandi2010ssFromCellMLGRL1::ComputeOneStepExceptVoltage(double var_chaste_interface__cell__time)
+    {
+        std::vector<double>& rY = rGetStateVariables();
+        const double delta = 1e-8;
+
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: millivolt; Initial value: -81.3842590704928
         double var_chaste_interface__cell__sm = rY[1];
@@ -314,9 +501,9 @@
         // Units: dimensionless; Initial value: 0.000105614570409386
         double var_chaste_interface__cell__sCai = rY[37];
         // Units: dimensionless; Initial value: 8.85230799863012e-05
-
+        
+        
         // Mathematics
-        double d_dt_chaste_interface_var_cell__sVm;
         const double var_cell__Bmax_CaM = 0.024; // dimensionless
         const double var_cell__Bmax_Naj = 7.5609999999999999; // dimensionless
         const double var_cell__Bmax_Nasl = 1.6499999999999999; // dimensionless
@@ -497,10 +684,15 @@
         const double var_cell__I_Na_tot_sl = 3.0 * var_cell__I_nak_sl + 3.0 * var_cell__I_ncx_sl + var_cell__I_CaNa_sl + var_cell__I_Na_sl + var_cell__I_nabk_sl; // dimensionless
         const double d_dt_chaste_interface_var_cell__sNasl = -d_dt_chaste_interface_var_cell__sNaBsl + (-var_chaste_interface__cell__sNasl + var_chaste_interface__cell__sNai) * var_cell__J_na_slmyo / var_cell__Vsl + (-var_chaste_interface__cell__sNasl + var_chaste_interface__cell__sNaj) * var_cell__J_na_juncsl / var_cell__Vsl - var_cell__Cmem * var_cell__I_Na_tot_sl / (var_cell__Frdy * var_cell__Vsl); // 1 / ms
         const double var_cell__taud = 28.571428571428569 * (1.0 - exp(-0.83333333333333337 - 0.16666666666666666 * var_chaste_interface__cell__sVm)) * var_cell__dss / (5.0 + var_chaste_interface__cell__sVm); // dimensionless
+        const double d_dt_chaste_interface_var_cell__sd = (-var_chaste_interface__cell__sd + var_cell__dss) / var_cell__taud; // 1 / ms
         const double var_cell__tauf = 1.0 / (0.02 + 0.019699999999999999 * exp(-0.23877882250000002 * pow((1 + 0.068965517241379309 * var_chaste_interface__cell__sVm), 2))); // dimensionless
+        const double d_dt_chaste_interface_var_cell__sf = (-var_chaste_interface__cell__sf + var_cell__fss) / var_cell__tauf; // 1 / ms
         const double var_cell__tauh = 1.0 / (var_cell__ah + var_cell__bh); // dimensionless
+        const double d_dt_chaste_interface_var_cell__sh = (-var_chaste_interface__cell__sh + var_cell__hss) / var_cell__tauh; // 1 / ms
         const double var_cell__tauj = 1.0 / (var_cell__aj + var_cell__bj); // dimensionless
+        const double d_dt_chaste_interface_var_cell__sj = (-var_chaste_interface__cell__sj + var_cell__jss) / var_cell__tauj; // 1 / ms
         const double var_cell__taum = 0.12920000000000001 * exp(-8.682389366752302 * pow((1 + 0.021838829438742085 * var_chaste_interface__cell__sVm), 2)) + 0.064869999999999997 * exp(-0.0089012876052174655 * pow((-1 + 0.2073398299813394 * var_chaste_interface__cell__sVm), 2)); // dimensionless
+        const double d_dt_chaste_interface_var_cell__sm = (-var_chaste_interface__cell__sm + var_cell__mss) / var_cell__taum; // 1 / ms
         const double var_cell__tauxr = 230.0 / (1.0 + exp(2.0 + 0.050000000000000003 * var_chaste_interface__cell__sVm)) + 3300.0 / ((1.0 + exp(1.2222222222222223 + 0.1111111111111111 * var_chaste_interface__cell__sVm)) * (1.0 + exp(-2.4444444444444446 - 0.1111111111111111 * var_chaste_interface__cell__sVm))); // dimensionless
         const double var_cell__tauxs = 990.10000000000002 / (1.0 + exp(-0.17252124645892353 - 0.070821529745042494 * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__tauxtof = 0.5 + 8.5 * exp(-0.81000000000000005 * pow((1 + 0.022222222222222223 * var_chaste_interface__cell__sVm), 2)); // dimensionless
@@ -508,162 +700,3086 @@
         const double var_cell__tauytof = 7.0 + 85.0 * exp(-7.2727272727272725 * pow((1 + 0.025000000000000001 * var_chaste_interface__cell__sVm), 2)); // dimensionless
         const double var_cell__tauytos = 30.0 + 800.0 / (1.0 + exp(6.0 + 0.10000000000000001 * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__xrss = 1.0 / (1.0 + exp(-2.0 - 0.20000000000000001 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double d_dt_chaste_interface_var_cell__sxkr = (-var_chaste_interface__cell__sxkr + var_cell__xrss) / var_cell__tauxr; // 1 / ms
         const double var_cell__xsss = 1.0 / (1.0 + exp(-0.26666666666666666 - 0.070175438596491224 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double d_dt_chaste_interface_var_cell__sxks = (-var_chaste_interface__cell__sxks + var_cell__xsss) / var_cell__tauxs; // 1 / ms
         const double var_cell__xtoss = 1.0 / (1.0 + exp(1.4615384615384615 - 0.076923076923076927 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double d_dt_chaste_interface_var_cell__sxtof = (-var_chaste_interface__cell__sxtof + var_cell__xtoss) / var_cell__tauxtof; // 1 / ms
+        const double d_dt_chaste_interface_var_cell__sxtos = (-var_chaste_interface__cell__sxtos + var_cell__xtoss) / var_cell__tauxtos; // 1 / ms
         const double var_cell__ytoss = 1.0 / (1.0 + exp(3.8999999999999999 + 0.20000000000000001 * var_chaste_interface__cell__sVm)); // dimensionless
-
-        if (mSetVoltageDerivativeToZero)
+        const double d_dt_chaste_interface_var_cell__sytof = (-var_chaste_interface__cell__sytof + var_cell__ytoss) / var_cell__tauytof; // 1 / ms
+        const double d_dt_chaste_interface_var_cell__sytos = (-var_chaste_interface__cell__sytos + var_cell__ytoss) / var_cell__tauytos; // 1 / ms
+        
+        mEvalF[1] = d_dt_chaste_interface_var_cell__sm;
+        mPartialF[1] = EvaluatePartialDerivative1(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[2] = d_dt_chaste_interface_var_cell__sh;
+        mPartialF[2] = EvaluatePartialDerivative2(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[3] = d_dt_chaste_interface_var_cell__sj;
+        mPartialF[3] = EvaluatePartialDerivative3(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[4] = d_dt_chaste_interface_var_cell__sd;
+        mPartialF[4] = EvaluatePartialDerivative4(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[5] = d_dt_chaste_interface_var_cell__sf;
+        mPartialF[5] = EvaluatePartialDerivative5(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[6] = d_dt_chaste_interface_var_cell__sfcaBj;
+        mPartialF[6] = EvaluatePartialDerivative6(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[7] = d_dt_chaste_interface_var_cell__sfcaBsl;
+        mPartialF[7] = EvaluatePartialDerivative7(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[8] = d_dt_chaste_interface_var_cell__sxtos;
+        mPartialF[8] = EvaluatePartialDerivative8(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[9] = d_dt_chaste_interface_var_cell__sytos;
+        mPartialF[9] = EvaluatePartialDerivative9(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[10] = d_dt_chaste_interface_var_cell__sxtof;
+        mPartialF[10] = EvaluatePartialDerivative10(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[11] = d_dt_chaste_interface_var_cell__sytof;
+        mPartialF[11] = EvaluatePartialDerivative11(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[12] = d_dt_chaste_interface_var_cell__sxkr;
+        mPartialF[12] = EvaluatePartialDerivative12(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[13] = d_dt_chaste_interface_var_cell__sxks;
+        mPartialF[13] = EvaluatePartialDerivative13(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[14] = d_dt_chaste_interface_var_cell__sRyRr;
+        mPartialF[14] = EvaluatePartialDerivative14(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[15] = d_dt_chaste_interface_var_cell__sRyRo;
+        mPartialF[15] = EvaluatePartialDerivative15(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[16] = d_dt_chaste_interface_var_cell__sRyRi;
+        mPartialF[16] = EvaluatePartialDerivative16(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[17] = d_dt_chaste_interface_var_cell__sNaBj;
+        mPartialF[17] = EvaluatePartialDerivative17(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[18] = d_dt_chaste_interface_var_cell__sNaBsl;
+        mPartialF[18] = EvaluatePartialDerivative18(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[19] = d_dt_chaste_interface_var_cell__sTnCL;
+        mPartialF[19] = EvaluatePartialDerivative19(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[20] = d_dt_chaste_interface_var_cell__sTnCHc;
+        mPartialF[20] = EvaluatePartialDerivative20(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[21] = d_dt_chaste_interface_var_cell__sTnCHm;
+        mPartialF[21] = EvaluatePartialDerivative21(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[22] = d_dt_chaste_interface_var_cell__sCaM;
+        mPartialF[22] = EvaluatePartialDerivative22(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[23] = d_dt_chaste_interface_var_cell__sMyoc;
+        mPartialF[23] = EvaluatePartialDerivative23(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[24] = d_dt_chaste_interface_var_cell__sMyom;
+        mPartialF[24] = EvaluatePartialDerivative24(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[25] = d_dt_chaste_interface_var_cell__sSRB;
+        mPartialF[25] = EvaluatePartialDerivative25(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[26] = d_dt_chaste_interface_var_cell__sSLLj;
+        mPartialF[26] = EvaluatePartialDerivative26(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[27] = d_dt_chaste_interface_var_cell__sSLLsl;
+        mPartialF[27] = EvaluatePartialDerivative27(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[28] = d_dt_chaste_interface_var_cell__sSLHj;
+        mPartialF[28] = EvaluatePartialDerivative28(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[29] = d_dt_chaste_interface_var_cell__sSLHsl;
+        mPartialF[29] = EvaluatePartialDerivative29(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[30] = d_dt_chaste_interface_var_cell__sCsqnb;
+        mPartialF[30] = EvaluatePartialDerivative30(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[31] = d_dt_chaste_interface_var_cell__sCa_sr;
+        mPartialF[31] = EvaluatePartialDerivative31(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[32] = d_dt_chaste_interface_var_cell__sNaj;
+        mPartialF[32] = EvaluatePartialDerivative32(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[33] = d_dt_chaste_interface_var_cell__sNasl;
+        mPartialF[33] = EvaluatePartialDerivative33(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[34] = d_dt_chaste_interface_var_cell__sNai;
+        mPartialF[34] = EvaluatePartialDerivative34(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[35] = d_dt_chaste_interface_var_cell__sCaj;
+        mPartialF[35] = EvaluatePartialDerivative35(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[36] = d_dt_chaste_interface_var_cell__sCasl;
+        mPartialF[36] = EvaluatePartialDerivative36(var_chaste_interface__cell__time, rY, delta);
+        mEvalF[37] = d_dt_chaste_interface_var_cell__sCai;
+        mPartialF[37] = EvaluatePartialDerivative37(var_chaste_interface__cell__time, rY, delta);
+        
         {
-            d_dt_chaste_interface_var_cell__sVm = 0.0;
+            if (fabs(mPartialF[1]) < delta){
+                rY[1] += mDt*d_dt_chaste_interface_var_cell__sm;
+            }
+            else
+            {
+                rY[1] += (d_dt_chaste_interface_var_cell__sm/mPartialF[1])*(exp(mPartialF[1]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[2]) < delta){
+                rY[2] += mDt*d_dt_chaste_interface_var_cell__sh;
+            }
+            else
+            {
+                rY[2] += (d_dt_chaste_interface_var_cell__sh/mPartialF[2])*(exp(mPartialF[2]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[3]) < delta){
+                rY[3] += mDt*d_dt_chaste_interface_var_cell__sj;
+            }
+            else
+            {
+                rY[3] += (d_dt_chaste_interface_var_cell__sj/mPartialF[3])*(exp(mPartialF[3]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[4]) < delta){
+                rY[4] += mDt*d_dt_chaste_interface_var_cell__sd;
+            }
+            else
+            {
+                rY[4] += (d_dt_chaste_interface_var_cell__sd/mPartialF[4])*(exp(mPartialF[4]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[5]) < delta){
+                rY[5] += mDt*d_dt_chaste_interface_var_cell__sf;
+            }
+            else
+            {
+                rY[5] += (d_dt_chaste_interface_var_cell__sf/mPartialF[5])*(exp(mPartialF[5]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[6]) < delta){
+                rY[6] += mDt*d_dt_chaste_interface_var_cell__sfcaBj;
+            }
+            else
+            {
+                rY[6] += (d_dt_chaste_interface_var_cell__sfcaBj/mPartialF[6])*(exp(mPartialF[6]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[7]) < delta){
+                rY[7] += mDt*d_dt_chaste_interface_var_cell__sfcaBsl;
+            }
+            else
+            {
+                rY[7] += (d_dt_chaste_interface_var_cell__sfcaBsl/mPartialF[7])*(exp(mPartialF[7]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[8]) < delta){
+                rY[8] += mDt*d_dt_chaste_interface_var_cell__sxtos;
+            }
+            else
+            {
+                rY[8] += (d_dt_chaste_interface_var_cell__sxtos/mPartialF[8])*(exp(mPartialF[8]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[9]) < delta){
+                rY[9] += mDt*d_dt_chaste_interface_var_cell__sytos;
+            }
+            else
+            {
+                rY[9] += (d_dt_chaste_interface_var_cell__sytos/mPartialF[9])*(exp(mPartialF[9]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[10]) < delta){
+                rY[10] += mDt*d_dt_chaste_interface_var_cell__sxtof;
+            }
+            else
+            {
+                rY[10] += (d_dt_chaste_interface_var_cell__sxtof/mPartialF[10])*(exp(mPartialF[10]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[11]) < delta){
+                rY[11] += mDt*d_dt_chaste_interface_var_cell__sytof;
+            }
+            else
+            {
+                rY[11] += (d_dt_chaste_interface_var_cell__sytof/mPartialF[11])*(exp(mPartialF[11]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[12]) < delta){
+                rY[12] += mDt*d_dt_chaste_interface_var_cell__sxkr;
+            }
+            else
+            {
+                rY[12] += (d_dt_chaste_interface_var_cell__sxkr/mPartialF[12])*(exp(mPartialF[12]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[13]) < delta){
+                rY[13] += mDt*d_dt_chaste_interface_var_cell__sxks;
+            }
+            else
+            {
+                rY[13] += (d_dt_chaste_interface_var_cell__sxks/mPartialF[13])*(exp(mPartialF[13]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[14]) < delta){
+                rY[14] += mDt*d_dt_chaste_interface_var_cell__sRyRr;
+            }
+            else
+            {
+                rY[14] += (d_dt_chaste_interface_var_cell__sRyRr/mPartialF[14])*(exp(mPartialF[14]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[15]) < delta){
+                rY[15] += mDt*d_dt_chaste_interface_var_cell__sRyRo;
+            }
+            else
+            {
+                rY[15] += (d_dt_chaste_interface_var_cell__sRyRo/mPartialF[15])*(exp(mPartialF[15]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[16]) < delta){
+                rY[16] += mDt*d_dt_chaste_interface_var_cell__sRyRi;
+            }
+            else
+            {
+                rY[16] += (d_dt_chaste_interface_var_cell__sRyRi/mPartialF[16])*(exp(mPartialF[16]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[17]) < delta){
+                rY[17] += mDt*d_dt_chaste_interface_var_cell__sNaBj;
+            }
+            else
+            {
+                rY[17] += (d_dt_chaste_interface_var_cell__sNaBj/mPartialF[17])*(exp(mPartialF[17]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[18]) < delta){
+                rY[18] += mDt*d_dt_chaste_interface_var_cell__sNaBsl;
+            }
+            else
+            {
+                rY[18] += (d_dt_chaste_interface_var_cell__sNaBsl/mPartialF[18])*(exp(mPartialF[18]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[19]) < delta){
+                rY[19] += mDt*d_dt_chaste_interface_var_cell__sTnCL;
+            }
+            else
+            {
+                rY[19] += (d_dt_chaste_interface_var_cell__sTnCL/mPartialF[19])*(exp(mPartialF[19]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[20]) < delta){
+                rY[20] += mDt*d_dt_chaste_interface_var_cell__sTnCHc;
+            }
+            else
+            {
+                rY[20] += (d_dt_chaste_interface_var_cell__sTnCHc/mPartialF[20])*(exp(mPartialF[20]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[21]) < delta){
+                rY[21] += mDt*d_dt_chaste_interface_var_cell__sTnCHm;
+            }
+            else
+            {
+                rY[21] += (d_dt_chaste_interface_var_cell__sTnCHm/mPartialF[21])*(exp(mPartialF[21]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[22]) < delta){
+                rY[22] += mDt*d_dt_chaste_interface_var_cell__sCaM;
+            }
+            else
+            {
+                rY[22] += (d_dt_chaste_interface_var_cell__sCaM/mPartialF[22])*(exp(mPartialF[22]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[23]) < delta){
+                rY[23] += mDt*d_dt_chaste_interface_var_cell__sMyoc;
+            }
+            else
+            {
+                rY[23] += (d_dt_chaste_interface_var_cell__sMyoc/mPartialF[23])*(exp(mPartialF[23]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[24]) < delta){
+                rY[24] += mDt*d_dt_chaste_interface_var_cell__sMyom;
+            }
+            else
+            {
+                rY[24] += (d_dt_chaste_interface_var_cell__sMyom/mPartialF[24])*(exp(mPartialF[24]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[25]) < delta){
+                rY[25] += mDt*d_dt_chaste_interface_var_cell__sSRB;
+            }
+            else
+            {
+                rY[25] += (d_dt_chaste_interface_var_cell__sSRB/mPartialF[25])*(exp(mPartialF[25]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[26]) < delta){
+                rY[26] += mDt*d_dt_chaste_interface_var_cell__sSLLj;
+            }
+            else
+            {
+                rY[26] += (d_dt_chaste_interface_var_cell__sSLLj/mPartialF[26])*(exp(mPartialF[26]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[27]) < delta){
+                rY[27] += mDt*d_dt_chaste_interface_var_cell__sSLLsl;
+            }
+            else
+            {
+                rY[27] += (d_dt_chaste_interface_var_cell__sSLLsl/mPartialF[27])*(exp(mPartialF[27]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[28]) < delta){
+                rY[28] += mDt*d_dt_chaste_interface_var_cell__sSLHj;
+            }
+            else
+            {
+                rY[28] += (d_dt_chaste_interface_var_cell__sSLHj/mPartialF[28])*(exp(mPartialF[28]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[29]) < delta){
+                rY[29] += mDt*d_dt_chaste_interface_var_cell__sSLHsl;
+            }
+            else
+            {
+                rY[29] += (d_dt_chaste_interface_var_cell__sSLHsl/mPartialF[29])*(exp(mPartialF[29]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[30]) < delta){
+                rY[30] += mDt*d_dt_chaste_interface_var_cell__sCsqnb;
+            }
+            else
+            {
+                rY[30] += (d_dt_chaste_interface_var_cell__sCsqnb/mPartialF[30])*(exp(mPartialF[30]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[31]) < delta){
+                rY[31] += mDt*d_dt_chaste_interface_var_cell__sCa_sr;
+            }
+            else
+            {
+                rY[31] += (d_dt_chaste_interface_var_cell__sCa_sr/mPartialF[31])*(exp(mPartialF[31]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[32]) < delta){
+                rY[32] += mDt*d_dt_chaste_interface_var_cell__sNaj;
+            }
+            else
+            {
+                rY[32] += (d_dt_chaste_interface_var_cell__sNaj/mPartialF[32])*(exp(mPartialF[32]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[33]) < delta){
+                rY[33] += mDt*d_dt_chaste_interface_var_cell__sNasl;
+            }
+            else
+            {
+                rY[33] += (d_dt_chaste_interface_var_cell__sNasl/mPartialF[33])*(exp(mPartialF[33]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[34]) < delta){
+                rY[34] += mDt*d_dt_chaste_interface_var_cell__sNai;
+            }
+            else
+            {
+                rY[34] += (d_dt_chaste_interface_var_cell__sNai/mPartialF[34])*(exp(mPartialF[34]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[35]) < delta){
+                rY[35] += mDt*d_dt_chaste_interface_var_cell__sCaj;
+            }
+            else
+            {
+                rY[35] += (d_dt_chaste_interface_var_cell__sCaj/mPartialF[35])*(exp(mPartialF[35]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[36]) < delta){
+                rY[36] += mDt*d_dt_chaste_interface_var_cell__sCasl;
+            }
+            else
+            {
+                rY[36] += (d_dt_chaste_interface_var_cell__sCasl/mPartialF[36])*(exp(mPartialF[36]*mDt)-1.0);
+            }
+            
+        }
+        {
+            if (fabs(mPartialF[37]) < delta){
+                rY[37] += mDt*d_dt_chaste_interface_var_cell__sCai;
+            }
+            else
+            {
+                rY[37] += (d_dt_chaste_interface_var_cell__sCai/mPartialF[37])*(exp(mPartialF[37]*mDt)-1.0);
+            }
+            
+        }        
+        
+    }
+   
+    
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative0(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        double d_dt_chaste_interface_var_cell__sVm;
+        double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        // Units: millivolt; Initial value: -81.3842590704928
+        double var_chaste_interface__cell__sm = rY[1];
+        // Units: dimensionless; Initial value: 0.00384941567866232
+        double var_chaste_interface__cell__sh = rY[2];
+        // Units: dimensionless; Initial value: 0.623723834301669
+        double var_chaste_interface__cell__sj = rY[3];
+        // Units: dimensionless; Initial value: 0.622080736932815
+        double var_chaste_interface__cell__sd = rY[4];
+        // Units: dimensionless; Initial value: 2.95884913218079e-06
+        double var_chaste_interface__cell__sf = rY[5];
+        // Units: dimensionless; Initial value: 0.995094078386247
+        double var_chaste_interface__cell__sfcaBj = rY[6];
+        // Units: dimensionless; Initial value: 0.0246274349529557
+        double var_chaste_interface__cell__sfcaBsl = rY[7];
+        // Units: dimensionless; Initial value: 0.0150911724206476
+        double var_chaste_interface__cell__sxtos = rY[8];
+        // Units: dimensionless; Initial value: 0.000442853722673121
+        double var_chaste_interface__cell__sytos = rY[9];
+        // Units: dimensionless; Initial value: 0.789013894749951
+        double var_chaste_interface__cell__sxtof = rY[10];
+        // Units: dimensionless; Initial value: 0.000442846429332686
+        double var_chaste_interface__cell__sytof = rY[11];
+        // Units: dimensionless; Initial value: 0.999995784674368
+        double var_chaste_interface__cell__sxkr = rY[12];
+        // Units: dimensionless; Initial value: 0.020160578118589
+        double var_chaste_interface__cell__sxks = rY[13];
+        // Units: dimensionless; Initial value: 0.00430143235332308
+        double var_chaste_interface__cell__sNaj = rY[32];
+        // Units: dimensionless; Initial value: 8.21411036389602
+        double var_chaste_interface__cell__sNasl = rY[33];
+        // Units: dimensionless; Initial value: 8.21322794157889
+        double var_chaste_interface__cell__sNai = rY[34];
+        // Units: dimensionless; Initial value: 8.21340895351653
+        double var_chaste_interface__cell__sCaj = rY[35];
+        // Units: dimensionless; Initial value: 0.000175648385857736
+        double var_chaste_interface__cell__sCasl = rY[36];
+        // Units: dimensionless; Initial value: 0.000105614570409386
+        
+        
+        // Mathematics
+        const double var_cell__Cao = 1.8; // dimensionless
+        const double var_cell__Cli = 15.0; // dimensionless
+        const double var_cell__Clo = 150.0; // dimensionless
+        const double var_cell__Fjunc = 0.11; // dimensionless
+        const double var_cell__Fjunc_CaL = 0.90000000000000002; // dimensionless
+        const double var_cell__Frdy = 96485.0; // dimensionless
+        const double var_cell__Fsl = 1.0 - var_cell__Fjunc; // dimensionless
+        const double var_cell__Fsl_CaL = 1.0 - var_cell__Fjunc_CaL; // dimensionless
+        const double var_cell__GCaB = 0.00055130000000000001; // dimensionless
+        const double var_cell__GClB = 0.0089999999999999993; // dimensionless
+        const double var_cell__GClCa = 0.0548125; // dimensionless
+        const double var_cell__GNa = 23.0; // dimensionless
+        const double var_cell__GNaB = 0.00059699999999999998; // dimensionless
+        const double var_cell__G_CaL_mult = 1.0; // dimensionless
+        const double var_cell__GtoFast = 0.1144; // dimensionless
+        const double var_cell__GtoSlow = 0.015599999999999999; // dimensionless
+        const double var_cell__IbarNCX = 4.5; // dimensionless
+        const double var_cell__IbarNaK = 1.8; // dimensionless
+        const double var_cell__IbarSLCaP = 0.067299999999999999; // dimensionless
+        const double var_cell__KdClCa = 0.10000000000000001; // dimensionless
+        const double var_cell__Kdact = 0.00014999999999999999; // dimensionless
+        const double var_cell__KmCai = 0.0035899999999999999; // dimensionless
+        const double var_cell__KmCao = 1.3; // dimensionless
+        const double var_cell__KmKo = 1.5; // dimensionless
+        const double var_cell__KmNai = 12.289999999999999; // dimensionless
+        const double var_cell__KmNaip = 11.0; // dimensionless
+        const double var_cell__KmNao = 87.5; // dimensionless
+        const double var_cell__KmPCa = 0.00050000000000000001; // dimensionless
+        const double var_cell__Ko = 5.4000000000000004; // dimensionless
+        const double var_cell__Nao = 140.0; // dimensionless
+        const double var_cell__Q10CaL = 1.8; // dimensionless
+        const double var_cell__Q10NCX = 1.5700000000000001; // dimensionless
+        const double var_cell__Q10SLCaP = 2.3500000000000001; // dimensionless
+        const double var_cell__R = 8314.0; // dimensionless
+        const double var_cell__Temp = 310.0; // dimensionless
+        const double var_cell__FoRT = var_cell__Frdy / (var_cell__R * var_cell__Temp); // dimensionless
+        const double var_cell__Qpow = -31.0 + 0.10000000000000001 * var_cell__Temp; // dimensionless
+        const double var_cell__ecl = 1.0 * log(var_cell__Cli / var_cell__Clo) / var_cell__FoRT; // dimensionless
+        const double var_cell__fcaCaMSL = 0.0; // dimensionless
+        const double var_cell__fcaCaj = 0.0; // dimensionless
+        const double var_cell__gkp = 0.002; // dimensionless
+        const double var_cell__gkr_mult = 1.0; // dimensionless
+        const double var_cell__gkr = 0.015061601901917734 * sqrt(var_cell__Ko) * var_cell__gkr_mult; // dimensionless
+        const double var_cell__gks_junc = 0.0035000000000000001; // dimensionless
+        const double var_cell__gks_sl = 0.0035000000000000001; // dimensionless
+        const double var_cell__ksat = 0.32000000000000001; // dimensionless
+        const double var_cell__nu = 0.27000000000000002; // dimensionless
+        const double var_cell__pCa = 0.00027 * var_cell__G_CaL_mult; // dimensionless
+        const double var_cell__pK = 1.35e-7 * var_cell__G_CaL_mult; // dimensionless
+        const double var_cell__pNa = 7.4999999999999993e-9 * var_cell__G_CaL_mult; // dimensionless
+        const double var_cell__pNaK = 0.018329999999999999; // dimensionless
+        const double var_cell__I_pca_junc = pow(var_cell__Q10SLCaP, var_cell__Qpow) * pow(var_chaste_interface__cell__sCaj, 1.6000000000000001) * var_cell__Fjunc * var_cell__IbarSLCaP / (pow(var_cell__KmPCa, 1.6000000000000001) + pow(var_chaste_interface__cell__sCaj, 1.6000000000000001)); // dimensionless
+        const double var_cell__Ka_junc = 1.0 / (1.0 + pow(var_cell__Kdact, 2) / pow(var_chaste_interface__cell__sCaj, 2)); // dimensionless
+        const double var_cell__eca_junc = 0.5 * log(var_cell__Cao / var_chaste_interface__cell__sCaj) / var_cell__FoRT; // dimensionless
+        const double var_cell__I_pca_sl = pow(var_cell__Q10SLCaP, var_cell__Qpow) * pow(var_chaste_interface__cell__sCasl, 1.6000000000000001) * var_cell__Fsl * var_cell__IbarSLCaP / (pow(var_cell__KmPCa, 1.6000000000000001) + pow(var_chaste_interface__cell__sCasl, 1.6000000000000001)); // dimensionless
+        const double var_cell__Ka_sl = 1.0 / (1.0 + pow(var_cell__Kdact, 2) / pow(var_chaste_interface__cell__sCasl, 2)); // dimensionless
+        const double var_cell__eca_sl = 0.5 * log(var_cell__Cao / var_chaste_interface__cell__sCasl) / var_cell__FoRT; // dimensionless
+        const double var_cell__sKi = 120.0; // dimensionless
+        const double var_cell__ek = 1.0 * log(var_cell__Ko / var_cell__sKi) / var_cell__FoRT; // dimensionless
+        const double var_cell__eks = 1.0 * log((var_cell__Nao * var_cell__pNaK + var_cell__Ko) / (var_cell__pNaK * var_chaste_interface__cell__sNai + var_cell__sKi)) / var_cell__FoRT; // dimensionless
+        const double var_cell__ena_junc = 1.0 * log(var_cell__Nao / var_chaste_interface__cell__sNaj) / var_cell__FoRT; // dimensionless
+        const double var_cell__s3_junc = pow(var_cell__Nao, 3) * var_chaste_interface__cell__sCaj + pow(var_chaste_interface__cell__sNaj, 3) * var_cell__Cao + pow(var_chaste_interface__cell__sNaj, 3) * var_cell__KmCao + pow(var_cell__KmNao, 3) * (1.0 + var_chaste_interface__cell__sCaj / var_cell__KmCai) * var_chaste_interface__cell__sCaj + pow(var_cell__Nao, 3) * (1.0 + pow(var_chaste_interface__cell__sNaj, 3) / pow(var_cell__KmNai, 3)) * var_cell__KmCai; // dimensionless
+        const double var_cell__ena_sl = 1.0 * log(var_cell__Nao / var_chaste_interface__cell__sNasl) / var_cell__FoRT; // dimensionless
+        const double var_cell__s3_sl = pow(var_cell__Nao, 3) * var_chaste_interface__cell__sCasl + pow(var_chaste_interface__cell__sNasl, 3) * var_cell__Cao + pow(var_chaste_interface__cell__sNasl, 3) * var_cell__KmCao + pow(var_cell__KmNao, 3) * (1.0 + var_chaste_interface__cell__sCasl / var_cell__KmCai) * var_chaste_interface__cell__sCasl + pow(var_cell__Nao, 3) * (1.0 + pow(var_chaste_interface__cell__sNasl, 3) / pow(var_cell__KmNai, 3)) * var_cell__KmCai; // dimensionless
+        const double var_cell__I_ClCa_junc = (-var_cell__ecl + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__GClCa / (1.0 + var_cell__KdClCa / var_chaste_interface__cell__sCaj); // dimensionless
+        const double var_cell__I_ClCa_sl = (-var_cell__ecl + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__GClCa / (1.0 + var_cell__KdClCa / var_chaste_interface__cell__sCasl); // dimensionless
+        const double var_cell__I_ClCa = var_cell__I_ClCa_junc + var_cell__I_ClCa_sl; // dimensionless
+        const double var_cell__I_Clbk = (-var_cell__ecl + var_chaste_interface__cell__sVm) * var_cell__GClB; // dimensionless
+        const double var_cell__I_Cl_tot = var_cell__I_ClCa + var_cell__I_Clbk; // dimensionless
+        const double var_cell__I_cabk_junc = (-var_cell__eca_junc + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__GCaB; // dimensionless
+        const double var_cell__I_cabk_sl = (-var_cell__eca_sl + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__GCaB; // dimensionless
+        const double var_cell__I_nabk_junc = (-var_cell__ena_junc + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__GNaB; // dimensionless
+        const double var_cell__I_nabk_sl = (-var_cell__ena_sl + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__GNaB; // dimensionless
+        const double var_cell__aki = 1.02 / (1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__sVm - 0.23849999999999999 * var_cell__ek)); // dimensionless
+        const double var_cell__bki = (0.49124000000000001 * exp(0.43983232 + 0.080320000000000003 * var_chaste_interface__cell__sVm - 0.080320000000000003 * var_cell__ek) + exp(-36.698642499999998 + 0.061749999999999999 * var_chaste_interface__cell__sVm - 0.061749999999999999 * var_cell__ek)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_cell__ek - 0.51429999999999998 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__ibarca_j = 4.0 * (-0.34100000000000003 * var_cell__Cao + 0.34100000000000003 * var_chaste_interface__cell__sCaj * exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__FoRT * var_cell__Frdy * var_cell__pCa * var_chaste_interface__cell__sVm / (-1.0 + exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__ibarca_sl = 4.0 * (-0.34100000000000003 * var_cell__Cao + 0.34100000000000003 * var_chaste_interface__cell__sCasl * exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__FoRT * var_cell__Frdy * var_cell__pCa * var_chaste_interface__cell__sVm / (-1.0 + exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__ibark = (-0.75 * var_cell__Ko + 0.75 * var_cell__sKi * exp(var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__FoRT * var_cell__Frdy * var_cell__pK * var_chaste_interface__cell__sVm / (-1.0 + exp(var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__ibarna_j = (-0.75 * var_cell__Nao + 0.75 * var_chaste_interface__cell__sNaj * exp(var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__FoRT * var_cell__Frdy * var_cell__pNa * var_chaste_interface__cell__sVm / (-1.0 + exp(var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__ibarna_sl = (-0.75 * var_cell__Nao + 0.75 * var_chaste_interface__cell__sNasl * exp(var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__FoRT * var_cell__Frdy * var_cell__pNa * var_chaste_interface__cell__sVm / (-1.0 + exp(var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__kiss = var_cell__aki / (var_cell__aki + var_cell__bki); // dimensionless
+        const double var_cell__I_ki = 0.15061601901917732 * sqrt(var_cell__Ko) * (-var_cell__ek + var_chaste_interface__cell__sVm) * var_cell__kiss; // dimensionless
+        const double var_cell__kp_kp = 1.0 / (1.0 + exp(7.4880000000000004 - 0.16722408026755853 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__I_kp_junc = (-var_cell__ek + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__gkp * var_cell__kp_kp; // dimensionless
+        const double var_cell__I_kp_sl = (-var_cell__ek + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__gkp * var_cell__kp_kp; // dimensionless
+        const double var_cell__I_kp = var_cell__I_kp_junc + var_cell__I_kp_sl; // dimensionless
+        const double var_cell__rkr = 1.0 / (1.0 + exp(3.0833333333333335 + 0.041666666666666664 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__s1_junc = pow(var_chaste_interface__cell__sNaj, 3) * var_cell__Cao * exp(var_cell__FoRT * var_cell__nu * var_chaste_interface__cell__sVm); // dimensionless
+        const double var_cell__s1_sl = pow(var_chaste_interface__cell__sNasl, 3) * var_cell__Cao * exp(var_cell__FoRT * var_cell__nu * var_chaste_interface__cell__sVm); // dimensionless
+        const double var_cell__s2_junc = pow(var_cell__Nao, 3) * var_chaste_interface__cell__sCaj * exp((-1.0 + var_cell__nu) * var_cell__FoRT * var_chaste_interface__cell__sVm); // dimensionless
+        const double var_cell__I_ncx_junc = pow(var_cell__Q10NCX, var_cell__Qpow) * (-var_cell__s2_junc + var_cell__s1_junc) * var_cell__Fjunc * var_cell__IbarNCX * var_cell__Ka_junc / ((1.0 + var_cell__ksat * exp((-1.0 + var_cell__nu) * var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__s3_junc); // dimensionless
+        const double var_cell__s2_sl = pow(var_cell__Nao, 3) * var_chaste_interface__cell__sCasl * exp((-1.0 + var_cell__nu) * var_cell__FoRT * var_chaste_interface__cell__sVm); // dimensionless
+        const double var_cell__I_ncx_sl = pow(var_cell__Q10NCX, var_cell__Qpow) * (-var_cell__s2_sl + var_cell__s1_sl) * var_cell__Fsl * var_cell__IbarNCX * var_cell__Ka_sl / ((1.0 + var_cell__ksat * exp((-1.0 + var_cell__nu) * var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__s3_sl); // dimensionless
+        const double var_cell__I_CaNa_junc = 0.45000000000000001 * pow(var_cell__Q10CaL, var_cell__Qpow) * (1.0 - var_chaste_interface__cell__sfcaBj + var_cell__fcaCaj) * var_cell__Fjunc_CaL * var_cell__ibarna_j * var_chaste_interface__cell__sd * var_chaste_interface__cell__sf; // dimensionless
+        const double var_cell__I_Ca_junc = 0.45000000000000001 * pow(var_cell__Q10CaL, var_cell__Qpow) * (1.0 - var_chaste_interface__cell__sfcaBj + var_cell__fcaCaj) * var_cell__Fjunc_CaL * var_cell__ibarca_j * var_chaste_interface__cell__sd * var_chaste_interface__cell__sf; // dimensionless
+        const double var_cell__I_Ca_tot_junc = -2.0 * var_cell__I_ncx_junc + var_cell__I_Ca_junc + var_cell__I_cabk_junc + var_cell__I_pca_junc; // dimensionless
+        const double var_cell__I_CaK = 0.45000000000000001 * pow(var_cell__Q10CaL, var_cell__Qpow) * ((1.0 - var_chaste_interface__cell__sfcaBj + var_cell__fcaCaj) * var_cell__Fjunc_CaL + (1.0 - var_chaste_interface__cell__sfcaBsl + var_cell__fcaCaMSL) * var_cell__Fsl_CaL) * var_cell__ibark * var_chaste_interface__cell__sd * var_chaste_interface__cell__sf; // dimensionless
+        const double var_cell__I_CaNa_sl = 0.45000000000000001 * pow(var_cell__Q10CaL, var_cell__Qpow) * (1.0 - var_chaste_interface__cell__sfcaBsl + var_cell__fcaCaMSL) * var_cell__Fsl_CaL * var_cell__ibarna_sl * var_chaste_interface__cell__sd * var_chaste_interface__cell__sf; // dimensionless
+        const double var_cell__I_Ca_sl = 0.45000000000000001 * pow(var_cell__Q10CaL, var_cell__Qpow) * (1.0 - var_chaste_interface__cell__sfcaBsl + var_cell__fcaCaMSL) * var_cell__Fsl_CaL * var_cell__ibarca_sl * var_chaste_interface__cell__sd * var_chaste_interface__cell__sf; // dimensionless
+        const double var_cell__I_Ca_tot_sl = -2.0 * var_cell__I_ncx_sl + var_cell__I_Ca_sl + var_cell__I_cabk_sl + var_cell__I_pca_sl; // dimensionless
+        const double var_cell__I_Ca_tot = var_cell__I_Ca_tot_junc + var_cell__I_Ca_tot_sl; // dimensionless
+        const double var_cell__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * var_cell__Nao); // dimensionless
+        const double var_cell__fnak = 1.0 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_cell__FoRT * var_chaste_interface__cell__sVm) + 0.036499999999999998 * var_cell__sigma * exp(-var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__I_nak_junc = 1.0 * var_cell__Fjunc * var_cell__IbarNaK * var_cell__Ko * var_cell__fnak / ((1.0 + pow(var_cell__KmNaip, 4) / pow(var_chaste_interface__cell__sNaj, 4)) * (var_cell__KmKo + var_cell__Ko)); // dimensionless
+        const double var_cell__I_nak_sl = 1.0 * var_cell__Fsl * var_cell__IbarNaK * var_cell__Ko * var_cell__fnak / ((1.0 + pow(var_cell__KmNaip, 4) / pow(var_chaste_interface__cell__sNasl, 4)) * (var_cell__KmKo + var_cell__Ko)); // dimensionless
+        const double var_cell__I_nak = var_cell__I_nak_junc + var_cell__I_nak_sl; // dimensionless
+        const double var_cell__I_Na_junc = pow(var_chaste_interface__cell__sm, 3) * (-var_cell__ena_junc + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__GNa * var_chaste_interface__cell__sh * var_chaste_interface__cell__sj; // dimensionless
+        const double var_cell__I_Na_sl = pow(var_chaste_interface__cell__sm, 3) * (-var_cell__ena_sl + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__GNa * var_chaste_interface__cell__sh * var_chaste_interface__cell__sj; // dimensionless
+        const double var_cell__I_Na_tot_junc = 3.0 * var_cell__I_nak_junc + 3.0 * var_cell__I_ncx_junc + var_cell__I_CaNa_junc + var_cell__I_Na_junc + var_cell__I_nabk_junc; // dimensionless
+        const double var_cell__I_Na_tot_sl = 3.0 * var_cell__I_nak_sl + 3.0 * var_cell__I_ncx_sl + var_cell__I_CaNa_sl + var_cell__I_Na_sl + var_cell__I_nabk_sl; // dimensionless
+        const double var_cell__I_Na_tot = var_cell__I_Na_tot_junc + var_cell__I_Na_tot_sl; // dimensionless
+        const double var_cell__I_kr = (-var_cell__ek + var_chaste_interface__cell__sVm) * var_cell__gkr * var_cell__rkr * var_chaste_interface__cell__sxkr; // dimensionless
+        const double var_cell__I_ks_junc = pow(var_chaste_interface__cell__sxks, 2) * (-var_cell__eks + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__gks_junc; // dimensionless
+        const double var_cell__I_ks_sl = pow(var_chaste_interface__cell__sxks, 2) * (-var_cell__eks + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__gks_sl; // dimensionless
+        const double var_cell__I_ks = var_cell__I_ks_junc + var_cell__I_ks_sl; // dimensionless
+        const double var_cell__I_tof = (-var_cell__ek + var_chaste_interface__cell__sVm) * var_cell__GtoFast * var_chaste_interface__cell__sxtof * var_chaste_interface__cell__sytof; // dimensionless
+        const double var_cell__I_tos = (-var_cell__ek + var_chaste_interface__cell__sVm) * var_cell__GtoSlow * var_chaste_interface__cell__sxtos * var_chaste_interface__cell__sytos; // dimensionless
+        const double var_cell__I_to = var_cell__I_tof + var_cell__I_tos; // dimensionless
+        const double var_cell__I_K_tot = -2.0 * var_cell__I_nak + var_cell__I_CaK + var_cell__I_ki + var_cell__I_kp + var_cell__I_kr + var_cell__I_ks + var_cell__I_to; // dimensionless
+        const double var_cell__I_tot = var_cell__I_Ca_tot + var_cell__I_Cl_tot + var_cell__I_K_tot + var_cell__I_Na_tot; // uA_per_uF
+        const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__cell__time); // uA_per_cm2
+        const double var_cell__i_Stim = var_cell__i_Stim_converter / HeartConfig::Instance()->GetCapacitance(); // uA_per_uF
+        d_dt_chaste_interface_var_cell__sVm = -var_cell__I_tot - var_cell__i_Stim; // millivolt / ms
+
+        return d_dt_chaste_interface_var_cell__sVm;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative0(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: millivolt; Initial value: -81.3842590704928
+            double var_chaste_interface__cell__sm = rY[1];
+            // Units: dimensionless; Initial value: 0.00384941567866232
+            double var_chaste_interface__cell__sh = rY[2];
+            // Units: dimensionless; Initial value: 0.623723834301669
+            double var_chaste_interface__cell__sj = rY[3];
+            // Units: dimensionless; Initial value: 0.622080736932815
+            double var_chaste_interface__cell__sd = rY[4];
+            // Units: dimensionless; Initial value: 2.95884913218079e-06
+            double var_chaste_interface__cell__sf = rY[5];
+            // Units: dimensionless; Initial value: 0.995094078386247
+            double var_chaste_interface__cell__sfcaBj = rY[6];
+            // Units: dimensionless; Initial value: 0.0246274349529557
+            double var_chaste_interface__cell__sfcaBsl = rY[7];
+            // Units: dimensionless; Initial value: 0.0150911724206476
+            double var_chaste_interface__cell__sxtos = rY[8];
+            // Units: dimensionless; Initial value: 0.000442853722673121
+            double var_chaste_interface__cell__sytos = rY[9];
+            // Units: dimensionless; Initial value: 0.789013894749951
+            double var_chaste_interface__cell__sxtof = rY[10];
+            // Units: dimensionless; Initial value: 0.000442846429332686
+            double var_chaste_interface__cell__sytof = rY[11];
+            // Units: dimensionless; Initial value: 0.999995784674368
+            double var_chaste_interface__cell__sxkr = rY[12];
+            // Units: dimensionless; Initial value: 0.020160578118589
+            double var_chaste_interface__cell__sxks = rY[13];
+            // Units: dimensionless; Initial value: 0.00430143235332308
+            double var_chaste_interface__cell__sNaj = rY[32];
+            // Units: dimensionless; Initial value: 8.21411036389602
+            double var_chaste_interface__cell__sNasl = rY[33];
+            // Units: dimensionless; Initial value: 8.21322794157889
+            double var_chaste_interface__cell__sCaj = rY[35];
+            // Units: dimensionless; Initial value: 0.000175648385857736
+            double var_chaste_interface__cell__sCasl = rY[36];
+            // Units: dimensionless; Initial value: 0.000105614570409386
+            
+            const double var_x0 = exp(7.4880000000000004 - 0.16722408026755853 * var_chaste_interface__cell__sVm);
+            const double var_x1 = 1.0 + var_x0;
+            const double var_x2 = pow(var_chaste_interface__cell__sxks, 2);
+            const double var_x3 = 1 / var_chaste_interface__cell__sCaj;
+            const double var_x4 = 1.0 + 0.10000000000000001 * var_x3;
+            const double var_x5 = 1 / var_chaste_interface__cell__sCasl;
+            const double var_x6 = 1.0 + 0.10000000000000001 * var_x5;
+            const double var_x7 = exp(3.0833333333333335 + 0.041666666666666664 * var_chaste_interface__cell__sVm);
+            const double var_x8 = 1.0 + var_x7;
+            const double var_x9 = 0.035000000000000003 / var_x8;
+            const double var_x10 = exp(5.6339521648111468 + 0.23849999999999999 * var_chaste_interface__cell__sVm);
+            const double var_x11 = 1.0 + var_x10;
+            const double var_x12 = 1 / var_x11;
+            const double var_x13 = exp(-45.047763776781437 - 0.51429999999999998 * var_chaste_interface__cell__sVm);
+            const double var_x14 = 1.0 + var_x13;
+            const double var_x15 = 1 / var_x14;
+            const double var_x16 = exp(7.0933355765099853 + 0.080320000000000003 * var_chaste_interface__cell__sVm);
+            const double var_x17 = exp(-31.583430521794174 + 0.061749999999999999 * var_chaste_interface__cell__sVm);
+            const double var_x18 = var_x17 + 0.49124000000000001 * var_x16;
+            const double var_x19 = var_x15 * var_x18;
+            const double var_x20 = 1 / (var_x19 + 1.02 * var_x12);
+            const double var_x21 = pow(var_chaste_interface__cell__sm, 3);
+            const double var_x22 = var_x21 * var_chaste_interface__cell__sj;
+            const double var_x23 = var_x22 * var_chaste_interface__cell__sh;
+            const double var_x24 = 82.837440942604388 + var_chaste_interface__cell__sVm;
+            const double var_x25 = pow(var_chaste_interface__cell__sNaj, (-4));
+            const double var_x26 = exp(-0.003743588350780262 * var_chaste_interface__cell__sVm);
+            const double var_x27 = exp(2.0802377414561666);
+            const double var_x28 = 0.037435883507802616 * var_chaste_interface__cell__sVm;
+            const double var_x29 = exp(-var_x28);
+            const double var_x30 = 1.0 + 0.1245 * var_x26 + 0.036499999999999998 * var_x29 * (-0.14285714285714285 + 0.14285714285714285 * var_x27);
+            const double var_x31 = (0.00046607674967214262 * var_x26 + 0.037435883507802616 * var_x29 * (-0.0052142857142857138 + 0.0052142857142857138 * var_x27)) / pow(var_x30, 2);
+            const double var_x32 = var_x31 / (1.0 + 14641.0 * var_x25);
+            const double var_x33 = pow(var_chaste_interface__cell__sNasl, (-4));
+            const double var_x34 = var_x31 / (1.0 + 14641.0 * var_x33);
+            const double var_x35 = var_x10 / pow(var_x11, 2);
+            const double var_x36 = exp(-0.027328194960695912 * var_chaste_interface__cell__sVm);
+            const double var_x37 = 74988.56697214958 * var_x36;
+            const double var_x38 = pow(var_chaste_interface__cell__sNaj, 3);
+            const double var_x39 = exp(0.010107688547106707 * var_chaste_interface__cell__sVm);
+            const double var_x40 = 0.018193839384792073 * var_x39;
+            const double var_x41 = 1.0 + 0.32000000000000001 * var_x36;
+            const double var_x42 = 1 / var_x41;
+            const double var_x43 = pow(var_chaste_interface__cell__sCaj, 2);
+            const double var_x44 = 1 / var_x43;
+            const double var_x45 = 1.0 + 2.2499999999999996e-8 * var_x44;
+            const double var_x46 = 1 / var_x45;
+            const double var_x47 = 2744000.0 * var_chaste_interface__cell__sCaj;
+            const double var_x48 = (1.0 + 278.55153203342621 * var_chaste_interface__cell__sCaj) * var_chaste_interface__cell__sCaj;
+            const double var_x49 = 1 / (9850.9599999999991 + var_x47 + 669921.875 * var_x48 + 8.4066800865219591 * var_x38);
+            const double var_x50 = var_x46 * var_x49;
+            const double var_x51 = var_x42 * var_x50;
+            const double var_x52 = var_x51 * (var_x37 * var_chaste_interface__cell__sCaj + var_x38 * var_x40);
+            const double var_x53 = pow(var_chaste_interface__cell__sNasl, 3);
+            const double var_x54 = pow(var_chaste_interface__cell__sCasl, (-2));
+            const double var_x55 = 1.0 + 2.2499999999999996e-8 * var_x54;
+            const double var_x56 = 1 / var_x55;
+            const double var_x57 = 2744000.0 * var_chaste_interface__cell__sCasl;
+            const double var_x58 = (1.0 + 278.55153203342621 * var_chaste_interface__cell__sCasl) * var_chaste_interface__cell__sCasl;
+            const double var_x59 = 1 / (9850.9599999999991 + var_x57 + 669921.875 * var_x58 + 8.4066800865219591 * var_x53);
+            const double var_x60 = var_x56 * var_x59;
+            const double var_x61 = var_x42 * var_x60;
+            const double var_x62 = var_x61 * (var_x37 * var_chaste_interface__cell__sCasl + var_x40 * var_x53);
+            const double var_x63 = 1.0 - var_chaste_interface__cell__sfcaBsl;
+            const double var_x64 = exp(var_x28);
+            const double var_x65 = -1.0 + var_x64;
+            const double var_x66 = 1 / var_x65;
+            const double var_x67 = var_chaste_interface__cell__sd * var_chaste_interface__cell__sf;
+            const double var_x68 = var_x66 * var_x67;
+            const double var_x69 = var_x63 * var_x68;
+            const double var_x70 = 0.75 * var_x64;
+            const double var_x71 = -105.0 + var_x70 * var_chaste_interface__cell__sNasl;
+            const double var_x72 = 1.2190504118344879e-6 * var_x71;
+            const double var_x73 = var_x69 * var_x72;
+            const double var_x74 = 1.0 - var_chaste_interface__cell__sfcaBj;
+            const double var_x75 = var_x68 * var_x74;
+            const double var_x76 = -105.0 + var_x70 * var_chaste_interface__cell__sNaj;
+            const double var_x77 = 1.0971453706510394e-5 * var_x76;
+            const double var_x78 = var_x75 * var_x77;
+            const double var_x79 = exp(0.074871767015605231 * var_chaste_interface__cell__sVm);
+            const double var_x80 = -1.0 + var_x79;
+            const double var_x81 = 1 / var_x80;
+            const double var_x82 = var_x67 * var_x81;
+            const double var_x83 = var_x74 * var_x82;
+            const double var_x84 = 0.34100000000000003 * var_x79;
+            const double var_x85 = -0.61380000000000001 + var_x84 * var_chaste_interface__cell__sCaj;
+            const double var_x86 = 1.5798893337374968 * var_x85;
+            const double var_x87 = var_x83 * var_x86;
+            const double var_x88 = 1.8 * var_x39;
+            const double var_x89 = var_x38 * var_x88 - var_x36 * var_x47;
+            const double var_x90 = var_x36 / pow(var_x41, 2);
+            const double var_x91 = var_x50 * var_x89 * var_x90;
+            const double var_x92 = var_x63 * var_x82;
+            const double var_x93 = -0.61380000000000001 + var_x84 * var_chaste_interface__cell__sCasl;
+            const double var_x94 = 0.17554325930416628 * var_x93;
+            const double var_x95 = var_x92 * var_x94;
+            const double var_x96 = -4.0500000000000007 + 90.0 * var_x64;
+            const double var_x97 = var_x68 * var_x96;
+            const double var_x98 = 1.0 - 0.099999999999999978 * var_chaste_interface__cell__sfcaBsl - 0.90000000000000002 * var_chaste_interface__cell__sfcaBj;
+            const double var_x99 = 0.0002194290741302079 * var_x98;
+            const double var_x100 = var_x53 * var_x88 - var_x36 * var_x57;
+            const double var_x101 = var_x100 * var_x60 * var_x90;
+            const double var_x102 = var_x68 * var_chaste_interface__cell__sVm;
+            const double var_x103 = var_x64 * var_x98;
+            const double var_x104 = var_x74 * var_x76;
+            const double var_x105 = var_x64 * var_chaste_interface__cell__sVm;
+            const double var_x106 = var_x67 / pow(var_x65, 2);
+            const double var_x107 = var_x105 * var_x106;
+            const double var_x108 = 4.1072606286817238e-7 * var_x104 * var_x107;
+            const double var_x109 = 4.5636229207574697e-8 * var_x107 * var_x63 * var_x71;
+            const double var_x110 = var_x79 * var_chaste_interface__cell__sVm;
+            const double var_x111 = var_x110 * var_x67 / pow(var_x80, 2);
+            const double var_x112 = 0.013143234011781513 * var_x111 * var_x63 * var_x93;
+            const double var_x113 = var_x74 * var_x85;
+            const double var_x114 = 0.11828910610603366 * var_x111 * var_x113;
+            const double var_x115 = var_x105 * var_x69;
+            const double var_x116 = 3.4227171905681023e-8 * var_x115 * var_chaste_interface__cell__sNasl;
+            const double var_x117 = var_x110 * var_x92;
+            const double var_x118 = 0.0044818427980174965 * var_x117 * var_chaste_interface__cell__sCasl;
+            const double var_x119 = var_x110 * var_x83;
+            const double var_x120 = 0.040336585182157478 * var_x119 * var_chaste_interface__cell__sCaj;
+            const double var_x121 = var_x105 * var_x75;
+            const double var_x122 = 3.0804454715112929e-7 * var_x121 * var_chaste_interface__cell__sNaj;
+            
+            partialF = -0.010148299999999999 + var_x108 + var_x109 + var_x112 + var_x114 - var_x116 - var_x118 - var_x120 - var_x122 - var_x73 - var_x78 - var_x87 - var_x95 - 23.0 * var_x23 - 0.002 / var_x1 - 0.0035000000000000001 * var_x2 - 0.495 * var_x52 - 0.15495652173913044 * var_x32 - 1.2537391304347827 * var_x34 - 0.006029375 / var_x4 - 4.0049999999999999 * var_x62 - 0.0043287860817742326 * var_x91 - 0.035023814661627878 * var_x101 - 0.048783124999999997 / var_x6 - var_x9 * var_chaste_interface__cell__sxkr - var_x97 * var_x99 - 0.1144 * var_chaste_interface__cell__sxtof * var_chaste_interface__cell__sytof - 0.015599999999999999 * var_chaste_interface__cell__sxtos * var_chaste_interface__cell__sytos - 0.35699999999999998 * var_x12 * var_x20 - 0.00073930691316271028 * var_x102 * var_x103 + 0.085144499999999998 * var_x20 * var_x24 * var_x35 - 0.00033444816053511704 * var_x0 * var_x24 / pow(var_x1, 2) + 8.2145212573634477e-6 * var_x103 * var_x106 * var_x96 * var_chaste_interface__cell__sVm + 0.0014583333333333334 * var_x24 * var_x7 * var_chaste_interface__cell__sxkr / pow(var_x8, 2) - 0.34313725490196073 * var_x12 * var_x24 * (0.24326999999999999 * var_x35 - var_x15 * (0.061749999999999999 * var_x17 + 0.039456396800000001 * var_x16) - 0.51429999999999998 * var_x13 * var_x18 / pow(var_x14, 2)) / pow((var_x12 + 0.98039215686274506 * var_x19), 2);
         }
         else
         {
-            const double var_cell__Cli = 15.0; // dimensionless
-            const double var_cell__Clo = 150.0; // dimensionless
-            const double var_cell__GClB = 0.0089999999999999993; // dimensionless
-            const double var_cell__GClCa = 0.0548125; // dimensionless
-            const double var_cell__GtoFast = 0.1144; // dimensionless
-            const double var_cell__GtoSlow = 0.015599999999999999; // dimensionless
-            const double var_cell__KdClCa = 0.10000000000000001; // dimensionless
-            const double var_cell__ecl = 1.0 * log(var_cell__Cli / var_cell__Clo) / var_cell__FoRT; // dimensionless
-            const double var_cell__gkp = 0.002; // dimensionless
-            const double var_cell__gkr_mult = 1.0; // dimensionless
-            const double var_cell__gkr = 0.015061601901917734 * sqrt(var_cell__Ko) * var_cell__gkr_mult; // dimensionless
-            const double var_cell__gks_junc = 0.0035000000000000001; // dimensionless
-            const double var_cell__gks_sl = 0.0035000000000000001; // dimensionless
-            const double var_cell__pK = 1.35e-7 * var_cell__G_CaL_mult; // dimensionless
-            const double var_cell__pNaK = 0.018329999999999999; // dimensionless
-            const double var_cell__sKi = 120.0; // dimensionless
-            const double var_cell__ek = 1.0 * log(var_cell__Ko / var_cell__sKi) / var_cell__FoRT; // dimensionless
-            const double var_cell__eks = 1.0 * log((var_cell__Nao * var_cell__pNaK + var_cell__Ko) / (var_cell__pNaK * var_chaste_interface__cell__sNai + var_cell__sKi)) / var_cell__FoRT; // dimensionless
-            const double var_cell__I_ClCa_junc = (-var_cell__ecl + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__GClCa / (1.0 + var_cell__KdClCa / var_chaste_interface__cell__sCaj); // dimensionless
-            const double var_cell__I_ClCa_sl = (-var_cell__ecl + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__GClCa / (1.0 + var_cell__KdClCa / var_chaste_interface__cell__sCasl); // dimensionless
-            const double var_cell__I_ClCa = var_cell__I_ClCa_junc + var_cell__I_ClCa_sl; // dimensionless
-            const double var_cell__I_Clbk = (-var_cell__ecl + var_chaste_interface__cell__sVm) * var_cell__GClB; // dimensionless
-            const double var_cell__I_Cl_tot = var_cell__I_ClCa + var_cell__I_Clbk; // dimensionless
-            const double var_cell__aki = 1.02 / (1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__sVm - 0.23849999999999999 * var_cell__ek)); // dimensionless
-            const double var_cell__bki = (0.49124000000000001 * exp(0.43983232 + 0.080320000000000003 * var_chaste_interface__cell__sVm - 0.080320000000000003 * var_cell__ek) + exp(-36.698642499999998 + 0.061749999999999999 * var_chaste_interface__cell__sVm - 0.061749999999999999 * var_cell__ek)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_cell__ek - 0.51429999999999998 * var_chaste_interface__cell__sVm)); // dimensionless
-            const double var_cell__ibark = (-0.75 * var_cell__Ko + 0.75 * var_cell__sKi * exp(var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__FoRT * var_cell__Frdy * var_cell__pK * var_chaste_interface__cell__sVm / (-1.0 + exp(var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
-            const double var_cell__kiss = var_cell__aki / (var_cell__aki + var_cell__bki); // dimensionless
-            const double var_cell__I_ki = 0.15061601901917732 * sqrt(var_cell__Ko) * (-var_cell__ek + var_chaste_interface__cell__sVm) * var_cell__kiss; // dimensionless
-            const double var_cell__kp_kp = 1.0 / (1.0 + exp(7.4880000000000004 - 0.16722408026755853 * var_chaste_interface__cell__sVm)); // dimensionless
-            const double var_cell__I_kp_junc = (-var_cell__ek + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__gkp * var_cell__kp_kp; // dimensionless
-            const double var_cell__I_kp_sl = (-var_cell__ek + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__gkp * var_cell__kp_kp; // dimensionless
-            const double var_cell__I_kp = var_cell__I_kp_junc + var_cell__I_kp_sl; // dimensionless
-            const double var_cell__rkr = 1.0 / (1.0 + exp(3.0833333333333335 + 0.041666666666666664 * var_chaste_interface__cell__sVm)); // dimensionless
-            const double var_cell__I_CaK = 0.45000000000000001 * pow(var_cell__Q10CaL, var_cell__Qpow) * ((1.0 - var_chaste_interface__cell__sfcaBj + var_cell__fcaCaj) * var_cell__Fjunc_CaL + (1.0 - var_chaste_interface__cell__sfcaBsl + var_cell__fcaCaMSL) * var_cell__Fsl_CaL) * var_cell__ibark * var_chaste_interface__cell__sd * var_chaste_interface__cell__sf; // dimensionless
-            const double var_cell__I_Ca_tot = var_cell__I_Ca_tot_junc + var_cell__I_Ca_tot_sl; // dimensionless
-            const double var_cell__I_nak = var_cell__I_nak_junc + var_cell__I_nak_sl; // dimensionless
-            const double var_cell__I_Na_tot = var_cell__I_Na_tot_junc + var_cell__I_Na_tot_sl; // dimensionless
-            const double var_cell__I_kr = (-var_cell__ek + var_chaste_interface__cell__sVm) * var_cell__gkr * var_cell__rkr * var_chaste_interface__cell__sxkr; // dimensionless
-            const double var_cell__I_ks_junc = pow(var_chaste_interface__cell__sxks, 2) * (-var_cell__eks + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__gks_junc; // dimensionless
-            const double var_cell__I_ks_sl = pow(var_chaste_interface__cell__sxks, 2) * (-var_cell__eks + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__gks_sl; // dimensionless
-            const double var_cell__I_ks = var_cell__I_ks_junc + var_cell__I_ks_sl; // dimensionless
-            const double var_cell__I_tof = (-var_cell__ek + var_chaste_interface__cell__sVm) * var_cell__GtoFast * var_chaste_interface__cell__sxtof * var_chaste_interface__cell__sytof; // dimensionless
-            const double var_cell__I_tos = (-var_cell__ek + var_chaste_interface__cell__sVm) * var_cell__GtoSlow * var_chaste_interface__cell__sxtos * var_chaste_interface__cell__sytos; // dimensionless
-            const double var_cell__I_to = var_cell__I_tof + var_cell__I_tos; // dimensionless
-            const double var_cell__I_K_tot = -2.0 * var_cell__I_nak + var_cell__I_CaK + var_cell__I_ki + var_cell__I_kp + var_cell__I_kr + var_cell__I_ks + var_cell__I_to; // dimensionless
-            const double var_cell__I_tot = var_cell__I_Ca_tot + var_cell__I_Cl_tot + var_cell__I_K_tot + var_cell__I_Na_tot; // uA_per_uF
-            const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__cell__time); // uA_per_cm2
-            const double var_cell__i_Stim = var_cell__i_Stim_converter / HeartConfig::Instance()->GetCapacitance(); // uA_per_uF
-            d_dt_chaste_interface_var_cell__sVm = -var_cell__I_tot - var_cell__i_Stim; // millivolt / ms
+            const double y_save = rY[0];
+            rY[0] += delta;
+            const double temp = EvaluateYDerivative0(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[0])/delta;
+            rY[0] = y_save;
         }
-        
-        rDY[0] = d_dt_chaste_interface_var_cell__sVm;
-        rAlphaOrTau[1] = var_cell__taum;
-        rBetaOrInf[1] = var_cell__mss;
-        rAlphaOrTau[2] = var_cell__tauh;
-        rBetaOrInf[2] = var_cell__hss;
-        rAlphaOrTau[3] = var_cell__tauj;
-        rBetaOrInf[3] = var_cell__jss;
-        rAlphaOrTau[4] = var_cell__taud;
-        rBetaOrInf[4] = var_cell__dss;
-        rAlphaOrTau[5] = var_cell__tauf;
-        rBetaOrInf[5] = var_cell__fss;
-        rDY[6] = d_dt_chaste_interface_var_cell__sfcaBj;
-        rDY[7] = d_dt_chaste_interface_var_cell__sfcaBsl;
-        rAlphaOrTau[8] = var_cell__tauxtos;
-        rBetaOrInf[8] = var_cell__xtoss;
-        rAlphaOrTau[9] = var_cell__tauytos;
-        rBetaOrInf[9] = var_cell__ytoss;
-        rAlphaOrTau[10] = var_cell__tauxtof;
-        rBetaOrInf[10] = var_cell__xtoss;
-        rAlphaOrTau[11] = var_cell__tauytof;
-        rBetaOrInf[11] = var_cell__ytoss;
-        rAlphaOrTau[12] = var_cell__tauxr;
-        rBetaOrInf[12] = var_cell__xrss;
-        rAlphaOrTau[13] = var_cell__tauxs;
-        rBetaOrInf[13] = var_cell__xsss;
-        rDY[14] = d_dt_chaste_interface_var_cell__sRyRr;
-        rDY[15] = d_dt_chaste_interface_var_cell__sRyRo;
-        rDY[16] = d_dt_chaste_interface_var_cell__sRyRi;
-        rDY[17] = d_dt_chaste_interface_var_cell__sNaBj;
-        rDY[18] = d_dt_chaste_interface_var_cell__sNaBsl;
-        rDY[19] = d_dt_chaste_interface_var_cell__sTnCL;
-        rDY[20] = d_dt_chaste_interface_var_cell__sTnCHc;
-        rDY[21] = d_dt_chaste_interface_var_cell__sTnCHm;
-        rDY[22] = d_dt_chaste_interface_var_cell__sCaM;
-        rDY[23] = d_dt_chaste_interface_var_cell__sMyoc;
-        rDY[24] = d_dt_chaste_interface_var_cell__sMyom;
-        rDY[25] = d_dt_chaste_interface_var_cell__sSRB;
-        rDY[26] = d_dt_chaste_interface_var_cell__sSLLj;
-        rDY[27] = d_dt_chaste_interface_var_cell__sSLLsl;
-        rDY[28] = d_dt_chaste_interface_var_cell__sSLHj;
-        rDY[29] = d_dt_chaste_interface_var_cell__sSLHsl;
-        rDY[30] = d_dt_chaste_interface_var_cell__sCsqnb;
-        rDY[31] = d_dt_chaste_interface_var_cell__sCa_sr;
-        rDY[32] = d_dt_chaste_interface_var_cell__sNaj;
-        rDY[33] = d_dt_chaste_interface_var_cell__sNasl;
-        rDY[34] = d_dt_chaste_interface_var_cell__sNai;
-        rDY[35] = d_dt_chaste_interface_var_cell__sCaj;
-        rDY[36] = d_dt_chaste_interface_var_cell__sCasl;
-        rDY[37] = d_dt_chaste_interface_var_cell__sCai;
+        return partialF;
     }
-    void Cellgrandi2010ssFromCellMLRushLarsen::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative1(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
-        std::vector<double>& rY = rGetStateVariables();
         
-        rY[1] = rBetaOrInf[1] + (rY[1] - rBetaOrInf[1])*exp(-mDt/rAlphaOrTau[1]);
-        rY[2] = rBetaOrInf[2] + (rY[2] - rBetaOrInf[2])*exp(-mDt/rAlphaOrTau[2]);
-        rY[3] = rBetaOrInf[3] + (rY[3] - rBetaOrInf[3])*exp(-mDt/rAlphaOrTau[3]);
-        rY[4] = rBetaOrInf[4] + (rY[4] - rBetaOrInf[4])*exp(-mDt/rAlphaOrTau[4]);
-        rY[5] = rBetaOrInf[5] + (rY[5] - rBetaOrInf[5])*exp(-mDt/rAlphaOrTau[5]);
-        rY[6] += mDt * rDY[6];
-        rY[7] += mDt * rDY[7];
-        rY[8] = rBetaOrInf[8] + (rY[8] - rBetaOrInf[8])*exp(-mDt/rAlphaOrTau[8]);
-        rY[9] = rBetaOrInf[9] + (rY[9] - rBetaOrInf[9])*exp(-mDt/rAlphaOrTau[9]);
-        rY[10] = rBetaOrInf[10] + (rY[10] - rBetaOrInf[10])*exp(-mDt/rAlphaOrTau[10]);
-        rY[11] = rBetaOrInf[11] + (rY[11] - rBetaOrInf[11])*exp(-mDt/rAlphaOrTau[11]);
-        rY[12] = rBetaOrInf[12] + (rY[12] - rBetaOrInf[12])*exp(-mDt/rAlphaOrTau[12]);
-        rY[13] = rBetaOrInf[13] + (rY[13] - rBetaOrInf[13])*exp(-mDt/rAlphaOrTau[13]);
-        rY[14] += mDt * rDY[14];
-        rY[15] += mDt * rDY[15];
-        rY[16] += mDt * rDY[16];
-        rY[17] += mDt * rDY[17];
-        rY[18] += mDt * rDY[18];
-        rY[19] += mDt * rDY[19];
-        rY[20] += mDt * rDY[20];
-        rY[21] += mDt * rDY[21];
-        rY[22] += mDt * rDY[22];
-        rY[23] += mDt * rDY[23];
-        rY[24] += mDt * rDY[24];
-        rY[25] += mDt * rDY[25];
-        rY[26] += mDt * rDY[26];
-        rY[27] += mDt * rDY[27];
-        rY[28] += mDt * rDY[28];
-        rY[29] += mDt * rDY[29];
-        rY[30] += mDt * rDY[30];
-        rY[31] += mDt * rDY[31];
-        rY[32] += mDt * rDY[32];
-        rY[33] += mDt * rDY[33];
-        rY[34] += mDt * rDY[34];
-        rY[35] += mDt * rDY[35];
-        rY[36] += mDt * rDY[36];
-        rY[37] += mDt * rDY[37];
+        double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        // Units: millivolt; Initial value: -81.3842590704928
+        double var_chaste_interface__cell__sm = rY[1];
+        // Units: dimensionless; Initial value: 0.00384941567866232
+        
+        
+        // Mathematics
+        const double var_cell__mss = 1.0 / pow((1.0 + exp(-6.2967884828349945 - 0.11074197120708749 * var_chaste_interface__cell__sVm)), 2); // dimensionless
+        const double var_cell__taum = 0.12920000000000001 * exp(-8.682389366752302 * pow((1 + 0.021838829438742085 * var_chaste_interface__cell__sVm), 2)) + 0.064869999999999997 * exp(-0.0089012876052174655 * pow((-1 + 0.2073398299813394 * var_chaste_interface__cell__sVm), 2)); // dimensionless
+        const double d_dt_chaste_interface_var_cell__sm = (-var_chaste_interface__cell__sm + var_cell__mss) / var_cell__taum; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sm;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative1(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: millivolt; Initial value: -81.3842590704928
+            
+            const double var_x184 = exp(-0.0089012876052174655 * pow((-1 + 0.2073398299813394 * var_chaste_interface__cell__sVm), 2));
+            const double var_x185 = exp(-8.682389366752302 * pow((1 + 0.021838829438742085 * var_chaste_interface__cell__sVm), 2));
+            const double var_x188 = 0.12920000000000001 * var_x185;
+            const double var_x189 = 0.064869999999999997 * var_x184;
+            const double var_x190 = 1 / (var_x188 + var_x189);
+            
+            partialF = -var_x190;
+        }
+        else
+        {
+            const double y_save = rY[1];
+            rY[1] += delta;
+            const double temp = EvaluateYDerivative1(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[1])/delta;
+            rY[1] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative2(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        // Units: millivolt; Initial value: -81.3842590704928
+        double var_chaste_interface__cell__sh = rY[2];
+        // Units: dimensionless; Initial value: 0.623723834301669
+        
+        
+        // Mathematics
+        const double var_cell__ah = ((var_chaste_interface__cell__sVm >= -40.0) ? (0.0) : (0.057000000000000002 * exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__cell__sVm))); // dimensionless
+        const double var_cell__bh = ((var_chaste_interface__cell__sVm >= -40.0) ? (5.9230769230769234 / (1.0 + exp(-0.96036036036036043 - 0.0900900900900901 * var_chaste_interface__cell__sVm))) : (310000.0 * exp(0.34849999999999998 * var_chaste_interface__cell__sVm) + 2.7000000000000002 * exp(0.079000000000000001 * var_chaste_interface__cell__sVm))); // dimensionless
+        const double var_cell__hss = 1.0 / pow((1.0 + exp(9.6298788694481825 + 0.13458950201884254 * var_chaste_interface__cell__sVm)), 2); // dimensionless
+        const double var_cell__tauh = 1.0 / (var_cell__ah + var_cell__bh); // dimensionless
+        const double d_dt_chaste_interface_var_cell__sh = (-var_chaste_interface__cell__sh + var_cell__hss) / var_cell__tauh; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sh;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative2(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: millivolt; Initial value: -81.3842590704928
+            
+            const double var_x194 = var_chaste_interface__cell__sVm >= -40.0;
+            const double var_x195 = exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__cell__sVm);
+            const double var_x196 = exp(-0.96036036036036043 - 0.0900900900900901 * var_chaste_interface__cell__sVm);
+            const double var_x197 = 1.0 + var_x196;
+            const double var_x198 = exp(0.34849999999999998 * var_chaste_interface__cell__sVm);
+            const double var_x199 = exp(0.079000000000000001 * var_chaste_interface__cell__sVm);
+            const double var_x200 = 1.0 * ((var_x194) ? (0.0) : (0.057000000000000002 * var_x195));
+            const double var_x201 = 1.0 * ((var_x194) ? (5.9230769230769234 / var_x197) : (310000.0 * var_x198 + 2.7000000000000002 * var_x199));
+            
+            partialF = -var_x200 - var_x201;
+        }
+        else
+        {
+            const double y_save = rY[2];
+            rY[2] += delta;
+            const double temp = EvaluateYDerivative2(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[2])/delta;
+            rY[2] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative3(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        // Units: millivolt; Initial value: -81.3842590704928
+        double var_chaste_interface__cell__sj = rY[3];
+        // Units: dimensionless; Initial value: 0.622080736932815
+        
+        
+        // Mathematics
+        const double var_cell__aj = ((var_chaste_interface__cell__sVm >= -40.0) ? (0.0) : ((37.780000000000001 + var_chaste_interface__cell__sVm) * (-25428.0 * exp(0.24440000000000001 * var_chaste_interface__cell__sVm) - 6.9480000000000002e-6 * exp(-0.043909999999999998 * var_chaste_interface__cell__sVm)) / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__sVm)))); // dimensionless
+        const double var_cell__bj = ((var_chaste_interface__cell__sVm >= -40.0) ? (0.59999999999999998 * exp(0.057000000000000002 * var_chaste_interface__cell__sVm) / (1.0 + exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__cell__sVm))) : (0.024240000000000001 * exp(-0.01052 * var_chaste_interface__cell__sVm) / (1.0 + exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__cell__sVm)))); // dimensionless
+        const double var_cell__jss = 1.0 / pow((1.0 + exp(9.6298788694481825 + 0.13458950201884254 * var_chaste_interface__cell__sVm)), 2); // dimensionless
+        const double var_cell__tauj = 1.0 / (var_cell__aj + var_cell__bj); // dimensionless
+        const double d_dt_chaste_interface_var_cell__sj = (-var_chaste_interface__cell__sj + var_cell__jss) / var_cell__tauj; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sj;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative3(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: millivolt; Initial value: -81.3842590704928
+            
+            const double var_x194 = var_chaste_interface__cell__sVm >= -40.0;
+            const double var_x203 = exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__sVm);
+            const double var_x204 = 1.0 + var_x203;
+            const double var_x205 = 1 / var_x204;
+            const double var_x206 = exp(0.24440000000000001 * var_chaste_interface__cell__sVm);
+            const double var_x207 = exp(-0.043909999999999998 * var_chaste_interface__cell__sVm);
+            const double var_x208 = -25428.0 * var_x206 - 6.9480000000000002e-6 * var_x207;
+            const double var_x209 = var_x205 * var_x208;
+            const double var_x210 = 37.780000000000001 + var_chaste_interface__cell__sVm;
+            const double var_x211 = exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__cell__sVm);
+            const double var_x212 = 1.0 + var_x211;
+            const double var_x213 = exp(0.057000000000000002 * var_chaste_interface__cell__sVm);
+            const double var_x214 = var_x213 / var_x212;
+            const double var_x215 = exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__cell__sVm);
+            const double var_x216 = 1.0 + var_x215;
+            const double var_x217 = exp(-0.01052 * var_chaste_interface__cell__sVm);
+            const double var_x218 = var_x217 / var_x216;
+            const double var_x219 = 1.0 * ((var_x194) ? (0.0) : (var_x209 * var_x210));
+            const double var_x220 = 1.0 * ((var_x194) ? (0.59999999999999998 * var_x214) : (0.024240000000000001 * var_x218));
+            
+            partialF = -var_x219 - var_x220;
+        }
+        else
+        {
+            const double y_save = rY[3];
+            rY[3] += delta;
+            const double temp = EvaluateYDerivative3(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[3])/delta;
+            rY[3] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative4(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        // Units: millivolt; Initial value: -81.3842590704928
+        double var_chaste_interface__cell__sd = rY[4];
+        // Units: dimensionless; Initial value: 2.95884913218079e-06
+        
+        
+        // Mathematics
+        const double var_cell__dss = 1.0 / (1.0 + exp(-0.83333333333333337 - 0.16666666666666666 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__taud = 28.571428571428569 * (1.0 - exp(-0.83333333333333337 - 0.16666666666666666 * var_chaste_interface__cell__sVm)) * var_cell__dss / (5.0 + var_chaste_interface__cell__sVm); // dimensionless
+        const double d_dt_chaste_interface_var_cell__sd = (-var_chaste_interface__cell__sd + var_cell__dss) / var_cell__taud; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sd;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative4(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: millivolt; Initial value: -81.3842590704928
+            
+            const double var_x221 = exp(-0.83333333333333337 - 0.16666666666666666 * var_chaste_interface__cell__sVm);
+            const double var_x222 = 1.0 - var_x221;
+            const double var_x223 = 1 / var_x222;
+            const double var_x224 = 1.0 + var_x221;
+            const double var_x228 = 0.035000000000000003 * var_x224;
+            const double var_x229 = 5.0 + var_chaste_interface__cell__sVm;
+            const double var_x230 = var_x223 * var_x229;
+            
+            partialF = -var_x228 * var_x230;
+        }
+        else
+        {
+            const double y_save = rY[4];
+            rY[4] += delta;
+            const double temp = EvaluateYDerivative4(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[4])/delta;
+            rY[4] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative5(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        // Units: millivolt; Initial value: -81.3842590704928
+        double var_chaste_interface__cell__sf = rY[5];
+        // Units: dimensionless; Initial value: 0.995094078386247
+        
+        
+        // Mathematics
+        const double var_cell__fss = 1.0 / (1.0 + exp(3.8888888888888888 + 0.1111111111111111 * var_chaste_interface__cell__sVm)) + 0.59999999999999998 / (1.0 + exp(2.5 - 0.050000000000000003 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__tauf = 1.0 / (0.02 + 0.019699999999999999 * exp(-0.23877882250000002 * pow((1 + 0.068965517241379309 * var_chaste_interface__cell__sVm), 2))); // dimensionless
+        const double d_dt_chaste_interface_var_cell__sf = (-var_chaste_interface__cell__sf + var_cell__fss) / var_cell__tauf; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sf;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative5(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: millivolt; Initial value: -81.3842590704928
+            
+            const double var_x233 = 0.019699999999999999 * exp(-0.23877882250000002 * pow((1 + 0.068965517241379309 * var_chaste_interface__cell__sVm), 2));
+            
+            partialF = -0.02 - var_x233;
+        }
+        else
+        {
+            const double y_save = rY[5];
+            rY[5] += delta;
+            const double temp = EvaluateYDerivative5(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[5])/delta;
+            rY[5] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative6(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sfcaBj = rY[6];
+        // Units: dimensionless; Initial value: 0.0246274349529557
+        double var_chaste_interface__cell__sCaj = rY[35];
+        // Units: dimensionless; Initial value: 0.000175648385857736
+        
+        
+        // Mathematics
+        const double d_dt_chaste_interface_var_cell__sfcaBj = -0.011900000000000001 * var_chaste_interface__cell__sfcaBj + 1.7 * (1.0 - var_chaste_interface__cell__sfcaBj) * var_chaste_interface__cell__sCaj; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sfcaBj;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative6(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sCaj = rY[35];
+            // Units: dimensionless; Initial value: 0.000175648385857736
+            
+            
+            partialF = -0.011900000000000001 - 1.7 * var_chaste_interface__cell__sCaj;
+        }
+        else
+        {
+            const double y_save = rY[6];
+            rY[6] += delta;
+            const double temp = EvaluateYDerivative6(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[6])/delta;
+            rY[6] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative7(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sfcaBsl = rY[7];
+        // Units: dimensionless; Initial value: 0.0150911724206476
+        double var_chaste_interface__cell__sCasl = rY[36];
+        // Units: dimensionless; Initial value: 0.000105614570409386
+        
+        
+        // Mathematics
+        const double d_dt_chaste_interface_var_cell__sfcaBsl = -0.011900000000000001 * var_chaste_interface__cell__sfcaBsl + 1.7 * (1.0 - var_chaste_interface__cell__sfcaBsl) * var_chaste_interface__cell__sCasl; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sfcaBsl;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative7(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sCasl = rY[36];
+            // Units: dimensionless; Initial value: 0.000105614570409386
+            
+            
+            partialF = -0.011900000000000001 - 1.7 * var_chaste_interface__cell__sCasl;
+        }
+        else
+        {
+            const double y_save = rY[7];
+            rY[7] += delta;
+            const double temp = EvaluateYDerivative7(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[7])/delta;
+            rY[7] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative8(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        // Units: millivolt; Initial value: -81.3842590704928
+        double var_chaste_interface__cell__sxtos = rY[8];
+        // Units: dimensionless; Initial value: 0.000442853722673121
+        
+        
+        // Mathematics
+        const double var_cell__tauxtos = 0.5 + 9.0 / (1.0 + exp(0.20000000000000001 + 0.066666666666666666 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__xtoss = 1.0 / (1.0 + exp(1.4615384615384615 - 0.076923076923076927 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double d_dt_chaste_interface_var_cell__sxtos = (-var_chaste_interface__cell__sxtos + var_cell__xtoss) / var_cell__tauxtos; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sxtos;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative8(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: millivolt; Initial value: -81.3842590704928
+            
+            const double var_x240 = exp(0.20000000000000001 + 0.066666666666666666 * var_chaste_interface__cell__sVm);
+            const double var_x241 = 1.0 + var_x240;
+            const double var_x242 = 1 / var_x241;
+            const double var_x243 = 1 / (0.5 + 9.0 * var_x242);
+            
+            partialF = -var_x243;
+        }
+        else
+        {
+            const double y_save = rY[8];
+            rY[8] += delta;
+            const double temp = EvaluateYDerivative8(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[8])/delta;
+            rY[8] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative9(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        // Units: millivolt; Initial value: -81.3842590704928
+        double var_chaste_interface__cell__sytos = rY[9];
+        // Units: dimensionless; Initial value: 0.789013894749951
+        
+        
+        // Mathematics
+        const double var_cell__tauytos = 30.0 + 800.0 / (1.0 + exp(6.0 + 0.10000000000000001 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__ytoss = 1.0 / (1.0 + exp(3.8999999999999999 + 0.20000000000000001 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double d_dt_chaste_interface_var_cell__sytos = (-var_chaste_interface__cell__sytos + var_cell__ytoss) / var_cell__tauytos; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sytos;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative9(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: millivolt; Initial value: -81.3842590704928
+            
+            const double var_x248 = exp(6.0 + 0.10000000000000001 * var_chaste_interface__cell__sVm);
+            const double var_x249 = 1.0 + var_x248;
+            const double var_x250 = 1 / var_x249;
+            const double var_x251 = 1 / (30.0 + 800.0 * var_x250);
+            
+            partialF = -var_x251;
+        }
+        else
+        {
+            const double y_save = rY[9];
+            rY[9] += delta;
+            const double temp = EvaluateYDerivative9(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[9])/delta;
+            rY[9] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative10(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        // Units: millivolt; Initial value: -81.3842590704928
+        double var_chaste_interface__cell__sxtof = rY[10];
+        // Units: dimensionless; Initial value: 0.000442846429332686
+        
+        
+        // Mathematics
+        const double var_cell__tauxtof = 0.5 + 8.5 * exp(-0.81000000000000005 * pow((1 + 0.022222222222222223 * var_chaste_interface__cell__sVm), 2)); // dimensionless
+        const double var_cell__xtoss = 1.0 / (1.0 + exp(1.4615384615384615 - 0.076923076923076927 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double d_dt_chaste_interface_var_cell__sxtof = (-var_chaste_interface__cell__sxtof + var_cell__xtoss) / var_cell__tauxtof; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sxtof;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative10(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: millivolt; Initial value: -81.3842590704928
+            
+            const double var_x257 = exp(-0.81000000000000005 * pow((1 + 0.022222222222222223 * var_chaste_interface__cell__sVm), 2));
+            const double var_x258 = 1 / (0.5 + 8.5 * var_x257);
+            
+            partialF = -var_x258;
+        }
+        else
+        {
+            const double y_save = rY[10];
+            rY[10] += delta;
+            const double temp = EvaluateYDerivative10(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[10])/delta;
+            rY[10] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative11(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        // Units: millivolt; Initial value: -81.3842590704928
+        double var_chaste_interface__cell__sytof = rY[11];
+        // Units: dimensionless; Initial value: 0.999995784674368
+        
+        
+        // Mathematics
+        const double var_cell__tauytof = 7.0 + 85.0 * exp(-7.2727272727272725 * pow((1 + 0.025000000000000001 * var_chaste_interface__cell__sVm), 2)); // dimensionless
+        const double var_cell__ytoss = 1.0 / (1.0 + exp(3.8999999999999999 + 0.20000000000000001 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double d_dt_chaste_interface_var_cell__sytof = (-var_chaste_interface__cell__sytof + var_cell__ytoss) / var_cell__tauytof; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sytof;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative11(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: millivolt; Initial value: -81.3842590704928
+            
+            const double var_x259 = exp(-7.2727272727272725 * pow((1 + 0.025000000000000001 * var_chaste_interface__cell__sVm), 2));
+            const double var_x260 = 1 / (7.0 + 85.0 * var_x259);
+            
+            partialF = -var_x260;
+        }
+        else
+        {
+            const double y_save = rY[11];
+            rY[11] += delta;
+            const double temp = EvaluateYDerivative11(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[11])/delta;
+            rY[11] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative12(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        // Units: millivolt; Initial value: -81.3842590704928
+        double var_chaste_interface__cell__sxkr = rY[12];
+        // Units: dimensionless; Initial value: 0.020160578118589
+        
+        
+        // Mathematics
+        const double var_cell__tauxr = 230.0 / (1.0 + exp(2.0 + 0.050000000000000003 * var_chaste_interface__cell__sVm)) + 3300.0 / ((1.0 + exp(1.2222222222222223 + 0.1111111111111111 * var_chaste_interface__cell__sVm)) * (1.0 + exp(-2.4444444444444446 - 0.1111111111111111 * var_chaste_interface__cell__sVm))); // dimensionless
+        const double var_cell__xrss = 1.0 / (1.0 + exp(-2.0 - 0.20000000000000001 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double d_dt_chaste_interface_var_cell__sxkr = (-var_chaste_interface__cell__sxkr + var_cell__xrss) / var_cell__tauxr; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sxkr;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative12(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: millivolt; Initial value: -81.3842590704928
+            
+            const double var_x234 = 0.050000000000000003 * var_chaste_interface__cell__sVm;
+            const double var_x237 = 0.1111111111111111 * var_chaste_interface__cell__sVm;
+            const double var_x261 = exp(2.0 + var_x234);
+            const double var_x262 = 1.0 + var_x261;
+            const double var_x263 = 1 / var_x262;
+            const double var_x264 = exp(1.2222222222222223 + var_x237);
+            const double var_x265 = 1.0 + var_x264;
+            const double var_x266 = 1 / var_x265;
+            const double var_x267 = exp(-2.4444444444444446 - var_x237);
+            const double var_x268 = 1.0 + var_x267;
+            const double var_x269 = 1 / var_x268;
+            const double var_x270 = var_x266 * var_x269;
+            const double var_x273 = 1 / (230.0 * var_x263 + 3300.0 * var_x270);
+            
+            partialF = -var_x273;
+        }
+        else
+        {
+            const double y_save = rY[12];
+            rY[12] += delta;
+            const double temp = EvaluateYDerivative12(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[12])/delta;
+            rY[12] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative13(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        // Units: millivolt; Initial value: -81.3842590704928
+        double var_chaste_interface__cell__sxks = rY[13];
+        // Units: dimensionless; Initial value: 0.00430143235332308
+        
+        
+        // Mathematics
+        const double var_cell__tauxs = 990.10000000000002 / (1.0 + exp(-0.17252124645892353 - 0.070821529745042494 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__xsss = 1.0 / (1.0 + exp(-0.26666666666666666 - 0.070175438596491224 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double d_dt_chaste_interface_var_cell__sxks = (-var_chaste_interface__cell__sxks + var_cell__xsss) / var_cell__tauxs; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sxks;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative13(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: millivolt; Initial value: -81.3842590704928
+            
+            const double var_x276 = exp(-0.17252124645892353 - 0.070821529745042494 * var_chaste_interface__cell__sVm);
+            const double var_x277 = 0.00100999899000101 * var_x276;
+            
+            partialF = -0.00100999899000101 - var_x277;
+        }
+        else
+        {
+            const double y_save = rY[13];
+            rY[13] += delta;
+            const double temp = EvaluateYDerivative13(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[13])/delta;
+            rY[13] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative14(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sRyRr = rY[14];
+        // Units: dimensionless; Initial value: 0.893326456705696
+        double var_chaste_interface__cell__sRyRo = rY[15];
+        // Units: dimensionless; Initial value: 7.56436968249499e-07
+        double var_chaste_interface__cell__sRyRi = rY[16];
+        // Units: dimensionless; Initial value: 9.03266331737064e-08
+        double var_chaste_interface__cell__sCa_sr = rY[31];
+        // Units: dimensionless; Initial value: 0.563755421404699
+        double var_chaste_interface__cell__sCaj = rY[35];
+        // Units: dimensionless; Initial value: 0.000175648385857736
+        
+        
+        // Mathematics
+        const double var_cell__MaxSR = 15.0; // dimensionless
+        const double var_cell__MinSR = 1.0; // dimensionless
+        const double var_cell__ec50SR = 0.45000000000000001; // dimensionless
+        const double var_cell__kiCa = 0.5; // dimensionless
+        const double var_cell__kim = 0.0050000000000000001; // dimensionless
+        const double var_cell__koCa = 10.0; // dimensionless
+        const double var_cell__kom = 0.059999999999999998; // dimensionless
+        const double var_cell__kCaSR = -(-var_cell__MinSR + var_cell__MaxSR) / (1.0 + pow((var_cell__ec50SR / var_chaste_interface__cell__sCa_sr), 2.5)) + var_cell__MaxSR; // dimensionless
+        const double var_cell__kiSRCa = var_cell__kCaSR * var_cell__kiCa; // dimensionless
+        const double var_cell__koSRCa = var_cell__koCa / var_cell__kCaSR; // dimensionless
+        const double var_cell__RI = 1.0 - var_chaste_interface__cell__sRyRi - var_chaste_interface__cell__sRyRo - var_chaste_interface__cell__sRyRr; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sRyRr = var_cell__RI * var_cell__kim + var_cell__kom * var_chaste_interface__cell__sRyRo - pow(var_chaste_interface__cell__sCaj, 2) * var_cell__koSRCa * var_chaste_interface__cell__sRyRr - var_cell__kiSRCa * var_chaste_interface__cell__sCaj * var_chaste_interface__cell__sRyRr; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sRyRr;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative14(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sCa_sr = rY[31];
+            // Units: dimensionless; Initial value: 0.563755421404699
+            double var_chaste_interface__cell__sCaj = rY[35];
+            // Units: dimensionless; Initial value: 0.000175648385857736
+            
+            const double var_x43 = pow(var_chaste_interface__cell__sCaj, 2);
+            const double var_x278 = 1 / var_chaste_interface__cell__sCa_sr;
+            const double var_x279 = pow(var_x278, 2.5);
+            const double var_x280 = 1.0 + 0.13584112963311223 * var_x279;
+            const double var_x281 = 1 / var_x280;
+            const double var_x282 = 7.0 * var_x281;
+            const double var_x283 = -7.5 + var_x282;
+            const double var_x284 = var_x283 * var_chaste_interface__cell__sCaj;
+            const double var_x285 = 1 / (15.0 - 14.0 * var_x281);
+            const double var_x286 = 10.0 * var_x285 * var_x43;
+            const double var_x287 = -var_x286;
+            
+            partialF = -0.0050000000000000001 + var_x284 + var_x287;
+        }
+        else
+        {
+            const double y_save = rY[14];
+            rY[14] += delta;
+            const double temp = EvaluateYDerivative14(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[14])/delta;
+            rY[14] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative15(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sRyRr = rY[14];
+        // Units: dimensionless; Initial value: 0.893326456705696
+        double var_chaste_interface__cell__sRyRo = rY[15];
+        // Units: dimensionless; Initial value: 7.56436968249499e-07
+        double var_chaste_interface__cell__sRyRi = rY[16];
+        // Units: dimensionless; Initial value: 9.03266331737064e-08
+        double var_chaste_interface__cell__sCa_sr = rY[31];
+        // Units: dimensionless; Initial value: 0.563755421404699
+        double var_chaste_interface__cell__sCaj = rY[35];
+        // Units: dimensionless; Initial value: 0.000175648385857736
+        
+        
+        // Mathematics
+        const double var_cell__MaxSR = 15.0; // dimensionless
+        const double var_cell__MinSR = 1.0; // dimensionless
+        const double var_cell__ec50SR = 0.45000000000000001; // dimensionless
+        const double var_cell__kiCa = 0.5; // dimensionless
+        const double var_cell__kim = 0.0050000000000000001; // dimensionless
+        const double var_cell__koCa = 10.0; // dimensionless
+        const double var_cell__kom = 0.059999999999999998; // dimensionless
+        const double var_cell__kCaSR = -(-var_cell__MinSR + var_cell__MaxSR) / (1.0 + pow((var_cell__ec50SR / var_chaste_interface__cell__sCa_sr), 2.5)) + var_cell__MaxSR; // dimensionless
+        const double var_cell__kiSRCa = var_cell__kCaSR * var_cell__kiCa; // dimensionless
+        const double var_cell__koSRCa = var_cell__koCa / var_cell__kCaSR; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sRyRo = var_cell__kim * var_chaste_interface__cell__sRyRi - var_cell__kom * var_chaste_interface__cell__sRyRo + pow(var_chaste_interface__cell__sCaj, 2) * var_cell__koSRCa * var_chaste_interface__cell__sRyRr - var_cell__kiSRCa * var_chaste_interface__cell__sCaj * var_chaste_interface__cell__sRyRo; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sRyRo;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative15(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sCa_sr = rY[31];
+            // Units: dimensionless; Initial value: 0.563755421404699
+            double var_chaste_interface__cell__sCaj = rY[35];
+            // Units: dimensionless; Initial value: 0.000175648385857736
+            
+            const double var_x278 = 1 / var_chaste_interface__cell__sCa_sr;
+            const double var_x279 = pow(var_x278, 2.5);
+            const double var_x280 = 1.0 + 0.13584112963311223 * var_x279;
+            const double var_x281 = 1 / var_x280;
+            const double var_x282 = 7.0 * var_x281;
+            const double var_x283 = -7.5 + var_x282;
+            const double var_x284 = var_x283 * var_chaste_interface__cell__sCaj;
+            
+            partialF = -0.059999999999999998 + var_x284;
+        }
+        else
+        {
+            const double y_save = rY[15];
+            rY[15] += delta;
+            const double temp = EvaluateYDerivative15(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[15])/delta;
+            rY[15] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative16(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sRyRr = rY[14];
+        // Units: dimensionless; Initial value: 0.893326456705696
+        double var_chaste_interface__cell__sRyRo = rY[15];
+        // Units: dimensionless; Initial value: 7.56436968249499e-07
+        double var_chaste_interface__cell__sRyRi = rY[16];
+        // Units: dimensionless; Initial value: 9.03266331737064e-08
+        double var_chaste_interface__cell__sCa_sr = rY[31];
+        // Units: dimensionless; Initial value: 0.563755421404699
+        double var_chaste_interface__cell__sCaj = rY[35];
+        // Units: dimensionless; Initial value: 0.000175648385857736
+        
+        
+        // Mathematics
+        const double var_cell__MaxSR = 15.0; // dimensionless
+        const double var_cell__MinSR = 1.0; // dimensionless
+        const double var_cell__ec50SR = 0.45000000000000001; // dimensionless
+        const double var_cell__kiCa = 0.5; // dimensionless
+        const double var_cell__kim = 0.0050000000000000001; // dimensionless
+        const double var_cell__koCa = 10.0; // dimensionless
+        const double var_cell__kom = 0.059999999999999998; // dimensionless
+        const double var_cell__kCaSR = -(-var_cell__MinSR + var_cell__MaxSR) / (1.0 + pow((var_cell__ec50SR / var_chaste_interface__cell__sCa_sr), 2.5)) + var_cell__MaxSR; // dimensionless
+        const double var_cell__kiSRCa = var_cell__kCaSR * var_cell__kiCa; // dimensionless
+        const double var_cell__koSRCa = var_cell__koCa / var_cell__kCaSR; // dimensionless
+        const double var_cell__RI = 1.0 - var_chaste_interface__cell__sRyRi - var_chaste_interface__cell__sRyRo - var_chaste_interface__cell__sRyRr; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sRyRi = -var_cell__kim * var_chaste_interface__cell__sRyRi - var_cell__kom * var_chaste_interface__cell__sRyRi + pow(var_chaste_interface__cell__sCaj, 2) * var_cell__RI * var_cell__koSRCa + var_cell__kiSRCa * var_chaste_interface__cell__sCaj * var_chaste_interface__cell__sRyRo; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sRyRi;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative16(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sCa_sr = rY[31];
+            // Units: dimensionless; Initial value: 0.563755421404699
+            double var_chaste_interface__cell__sCaj = rY[35];
+            // Units: dimensionless; Initial value: 0.000175648385857736
+            
+            const double var_x43 = pow(var_chaste_interface__cell__sCaj, 2);
+            const double var_x278 = 1 / var_chaste_interface__cell__sCa_sr;
+            const double var_x279 = pow(var_x278, 2.5);
+            const double var_x280 = 1.0 + 0.13584112963311223 * var_x279;
+            const double var_x281 = 1 / var_x280;
+            const double var_x285 = 1 / (15.0 - 14.0 * var_x281);
+            const double var_x286 = 10.0 * var_x285 * var_x43;
+            const double var_x287 = -var_x286;
+            
+            partialF = -0.065000000000000002 + var_x287;
+        }
+        else
+        {
+            const double y_save = rY[16];
+            rY[16] += delta;
+            const double temp = EvaluateYDerivative16(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[16])/delta;
+            rY[16] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative17(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sNaBj = rY[17];
+        // Units: dimensionless; Initial value: 3.41097946062695
+        double var_chaste_interface__cell__sNaj = rY[32];
+        // Units: dimensionless; Initial value: 8.21411036389602
+        
+        
+        // Mathematics
+        const double var_cell__Bmax_Naj = 7.5609999999999999; // dimensionless
+        const double var_cell__koff_na = 0.001; // dimensionless
+        const double var_cell__kon_na = 0.0001; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sNaBj = -var_cell__koff_na * var_chaste_interface__cell__sNaBj + (-var_chaste_interface__cell__sNaBj + var_cell__Bmax_Naj) * var_cell__kon_na * var_chaste_interface__cell__sNaj; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sNaBj;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative17(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sNaj = rY[32];
+            // Units: dimensionless; Initial value: 8.21411036389602
+            
+            const double var_x298 = 0.0001 * var_chaste_interface__cell__sNaj;
+            
+            partialF = -0.001 - var_x298;
+        }
+        else
+        {
+            const double y_save = rY[17];
+            rY[17] += delta;
+            const double temp = EvaluateYDerivative17(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[17])/delta;
+            rY[17] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative18(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sNaBsl = rY[18];
+        // Units: dimensionless; Initial value: 0.744248540671373
+        double var_chaste_interface__cell__sNasl = rY[33];
+        // Units: dimensionless; Initial value: 8.21322794157889
+        
+        
+        // Mathematics
+        const double var_cell__Bmax_Nasl = 1.6499999999999999; // dimensionless
+        const double var_cell__koff_na = 0.001; // dimensionless
+        const double var_cell__kon_na = 0.0001; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sNaBsl = -var_cell__koff_na * var_chaste_interface__cell__sNaBsl + (-var_chaste_interface__cell__sNaBsl + var_cell__Bmax_Nasl) * var_cell__kon_na * var_chaste_interface__cell__sNasl; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sNaBsl;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative18(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sNasl = rY[33];
+            // Units: dimensionless; Initial value: 8.21322794157889
+            
+            const double var_x300 = 0.0001 * var_chaste_interface__cell__sNasl;
+            
+            partialF = -0.001 - var_x300;
+        }
+        else
+        {
+            const double y_save = rY[18];
+            rY[18] += delta;
+            const double temp = EvaluateYDerivative18(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[18])/delta;
+            rY[18] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative19(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sTnCL = rY[19];
+        // Units: dimensionless; Initial value: 0.00904644567707666
+        double var_chaste_interface__cell__sCai = rY[37];
+        // Units: dimensionless; Initial value: 8.85230799863012e-05
+        
+        
+        // Mathematics
+        const double var_cell__Bmax_TnClow = 0.070000000000000007; // dimensionless
+        const double var_cell__koff_tncl = 0.019599999999999999; // dimensionless
+        const double var_cell__kon_tncl = 32.700000000000003; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sTnCL = -var_cell__koff_tncl * var_chaste_interface__cell__sTnCL + (-var_chaste_interface__cell__sTnCL + var_cell__Bmax_TnClow) * var_cell__kon_tncl * var_chaste_interface__cell__sCai; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sTnCL;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative19(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sCai = rY[37];
+            // Units: dimensionless; Initial value: 8.85230799863012e-05
+            
+            const double var_x302 = 32.700000000000003 * var_chaste_interface__cell__sCai;
+            
+            partialF = -0.019599999999999999 - var_x302;
+        }
+        else
+        {
+            const double y_save = rY[19];
+            rY[19] += delta;
+            const double temp = EvaluateYDerivative19(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[19])/delta;
+            rY[19] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative20(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sTnCHc = rY[20];
+        // Units: dimensionless; Initial value: 0.1183943202639
+        double var_chaste_interface__cell__sTnCHm = rY[21];
+        // Units: dimensionless; Initial value: 0.0101423649465603
+        double var_chaste_interface__cell__sCai = rY[37];
+        // Units: dimensionless; Initial value: 8.85230799863012e-05
+        
+        
+        // Mathematics
+        const double var_cell__Bmax_TnChigh = 0.14000000000000001; // dimensionless
+        const double var_cell__koff_tnchca = 3.1999999999999999e-5; // dimensionless
+        const double var_cell__kon_tnchca = 2.3700000000000001; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sTnCHc = -var_cell__koff_tnchca * var_chaste_interface__cell__sTnCHc + (-var_chaste_interface__cell__sTnCHc - var_chaste_interface__cell__sTnCHm + var_cell__Bmax_TnChigh) * var_cell__kon_tnchca * var_chaste_interface__cell__sCai; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sTnCHc;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative20(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sCai = rY[37];
+            // Units: dimensionless; Initial value: 8.85230799863012e-05
+            
+            const double var_x304 = 2.3700000000000001 * var_chaste_interface__cell__sCai;
+            const double var_x305 = -var_x304;
+            
+            partialF = -3.1999999999999999e-5 + var_x305;
+        }
+        else
+        {
+            const double y_save = rY[20];
+            rY[20] += delta;
+            const double temp = EvaluateYDerivative20(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[20])/delta;
+            rY[20] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative21(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sTnCHc = rY[20];
+        // Units: dimensionless; Initial value: 0.1183943202639
+        double var_chaste_interface__cell__sTnCHm = rY[21];
+        // Units: dimensionless; Initial value: 0.0101423649465603
+        
+        
+        // Mathematics
+        const double var_cell__Bmax_TnChigh = 0.14000000000000001; // dimensionless
+        const double var_cell__Mgi = 1.0; // dimensionless
+        const double var_cell__koff_tnchmg = 0.0033300000000000001; // dimensionless
+        const double var_cell__kon_tnchmg = 0.0030000000000000001; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sTnCHm = -var_cell__koff_tnchmg * var_chaste_interface__cell__sTnCHm + (-var_chaste_interface__cell__sTnCHc - var_chaste_interface__cell__sTnCHm + var_cell__Bmax_TnChigh) * var_cell__Mgi * var_cell__kon_tnchmg; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sTnCHm;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative21(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            
+            
+            partialF = -0.0063300000000000006;
+        }
+        else
+        {
+            const double y_save = rY[21];
+            rY[21] += delta;
+            const double temp = EvaluateYDerivative21(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[21])/delta;
+            rY[21] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative22(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sCaM = rY[22];
+        // Units: dimensionless; Initial value: 0.000299824763475116
+        double var_chaste_interface__cell__sCai = rY[37];
+        // Units: dimensionless; Initial value: 8.85230799863012e-05
+        
+        
+        // Mathematics
+        const double var_cell__Bmax_CaM = 0.024; // dimensionless
+        const double var_cell__koff_cam = 0.23799999999999999; // dimensionless
+        const double var_cell__kon_cam = 34.0; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sCaM = -var_cell__koff_cam * var_chaste_interface__cell__sCaM + (-var_chaste_interface__cell__sCaM + var_cell__Bmax_CaM) * var_cell__kon_cam * var_chaste_interface__cell__sCai; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sCaM;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative22(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sCai = rY[37];
+            // Units: dimensionless; Initial value: 8.85230799863012e-05
+            
+            const double var_x308 = 34.0 * var_chaste_interface__cell__sCai;
+            
+            partialF = -0.23799999999999999 - var_x308;
+        }
+        else
+        {
+            const double y_save = rY[22];
+            rY[22] += delta;
+            const double temp = EvaluateYDerivative22(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[22])/delta;
+            rY[22] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative23(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sMyoc = rY[23];
+        // Units: dimensionless; Initial value: 0.00201443980536826
+        double var_chaste_interface__cell__sMyom = rY[24];
+        // Units: dimensionless; Initial value: 0.137467597337588
+        double var_chaste_interface__cell__sCai = rY[37];
+        // Units: dimensionless; Initial value: 8.85230799863012e-05
+        
+        
+        // Mathematics
+        const double var_cell__Bmax_myosin = 0.14000000000000001; // dimensionless
+        const double var_cell__koff_myoca = 0.00046000000000000001; // dimensionless
+        const double var_cell__kon_myoca = 13.800000000000001; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sMyoc = -var_cell__koff_myoca * var_chaste_interface__cell__sMyoc + (-var_chaste_interface__cell__sMyoc - var_chaste_interface__cell__sMyom + var_cell__Bmax_myosin) * var_cell__kon_myoca * var_chaste_interface__cell__sCai; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sMyoc;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative23(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sCai = rY[37];
+            // Units: dimensionless; Initial value: 8.85230799863012e-05
+            
+            const double var_x310 = 13.800000000000001 * var_chaste_interface__cell__sCai;
+            const double var_x311 = -var_x310;
+            
+            partialF = -0.00046000000000000001 + var_x311;
+        }
+        else
+        {
+            const double y_save = rY[23];
+            rY[23] += delta;
+            const double temp = EvaluateYDerivative23(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[23])/delta;
+            rY[23] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative24(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sMyoc = rY[23];
+        // Units: dimensionless; Initial value: 0.00201443980536826
+        double var_chaste_interface__cell__sMyom = rY[24];
+        // Units: dimensionless; Initial value: 0.137467597337588
+        
+        
+        // Mathematics
+        const double var_cell__Bmax_myosin = 0.14000000000000001; // dimensionless
+        const double var_cell__Mgi = 1.0; // dimensionless
+        const double var_cell__koff_myomg = 5.7000000000000003e-5; // dimensionless
+        const double var_cell__kon_myomg = 0.015699999999999999; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sMyom = -var_cell__koff_myomg * var_chaste_interface__cell__sMyom + (-var_chaste_interface__cell__sMyoc - var_chaste_interface__cell__sMyom + var_cell__Bmax_myosin) * var_cell__Mgi * var_cell__kon_myomg; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sMyom;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative24(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            
+            
+            partialF = -0.015757;
+        }
+        else
+        {
+            const double y_save = rY[24];
+            rY[24] += delta;
+            const double temp = EvaluateYDerivative24(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[24])/delta;
+            rY[24] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative25(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sSRB = rY[25];
+        // Units: dimensionless; Initial value: 0.00220110816535249
+        double var_chaste_interface__cell__sCai = rY[37];
+        // Units: dimensionless; Initial value: 8.85230799863012e-05
+        
+        
+        // Mathematics
+        const double var_cell__Bmax_SR = 0.017100000000000001; // dimensionless
+        const double var_cell__koff_sr = 0.059999999999999998; // dimensionless
+        const double var_cell__kon_sr = 100.0; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sSRB = -var_cell__koff_sr * var_chaste_interface__cell__sSRB + (-var_chaste_interface__cell__sSRB + var_cell__Bmax_SR) * var_cell__kon_sr * var_chaste_interface__cell__sCai; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sSRB;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative25(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sCai = rY[37];
+            // Units: dimensionless; Initial value: 8.85230799863012e-05
+            
+            const double var_x314 = 100.0 * var_chaste_interface__cell__sCai;
+            
+            partialF = -0.059999999999999998 - var_x314;
+        }
+        else
+        {
+            const double y_save = rY[25];
+            rY[25] += delta;
+            const double temp = EvaluateYDerivative25(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[25])/delta;
+            rY[25] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative26(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sSLLj = rY[26];
+        // Units: dimensionless; Initial value: 0.00739549938515031
+        double var_chaste_interface__cell__sCaj = rY[35];
+        // Units: dimensionless; Initial value: 0.000175648385857736
+        
+        
+        // Mathematics
+        const double var_cell__cellLength = 100.0; // dimensionless
+        const double var_cell__cellRadius = 10.25; // dimensionless
+        const double var_cell__Vcell = 1.0000000000000001e-15 * M_PI * pow(var_cell__cellRadius, 2) * var_cell__cellLength; // dimensionless
+        const double var_cell__Vjunc = 0.00053900000000000009 * var_cell__Vcell; // dimensionless
+        const double var_cell__Vmyo = 0.65000000000000002 * var_cell__Vcell; // dimensionless
+        const double var_cell__Bmax_SLlowj = 0.00046000000000000001 * var_cell__Vmyo / var_cell__Vjunc; // dimensionless
+        const double var_cell__koff_sll = 1.3; // dimensionless
+        const double var_cell__kon_sll = 100.0; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sSLLj = -var_cell__koff_sll * var_chaste_interface__cell__sSLLj + (-var_chaste_interface__cell__sSLLj + var_cell__Bmax_SLlowj) * var_cell__kon_sll * var_chaste_interface__cell__sCaj; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sSLLj;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative26(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sCaj = rY[35];
+            // Units: dimensionless; Initial value: 0.000175648385857736
+            
+            const double var_x316 = 100.0 * var_chaste_interface__cell__sCaj;
+            const double var_x317 = -var_x316;
+            
+            partialF = -1.3 + var_x317;
+        }
+        else
+        {
+            const double y_save = rY[26];
+            rY[26] += delta;
+            const double temp = EvaluateYDerivative26(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[26])/delta;
+            rY[26] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative27(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sSLLsl = rY[27];
+        // Units: dimensionless; Initial value: 0.00979616077807075
+        double var_chaste_interface__cell__sCasl = rY[36];
+        // Units: dimensionless; Initial value: 0.000105614570409386
+        
+        
+        // Mathematics
+        const double var_cell__cellLength = 100.0; // dimensionless
+        const double var_cell__cellRadius = 10.25; // dimensionless
+        const double var_cell__Vcell = 1.0000000000000001e-15 * M_PI * pow(var_cell__cellRadius, 2) * var_cell__cellLength; // dimensionless
+        const double var_cell__Vmyo = 0.65000000000000002 * var_cell__Vcell; // dimensionless
+        const double var_cell__Vsl = 0.02 * var_cell__Vcell; // dimensionless
+        const double var_cell__Bmax_SLlowsl = 0.037400000000000003 * var_cell__Vmyo / var_cell__Vsl; // dimensionless
+        const double var_cell__koff_sll = 1.3; // dimensionless
+        const double var_cell__kon_sll = 100.0; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sSLLsl = -var_cell__koff_sll * var_chaste_interface__cell__sSLLsl + (-var_chaste_interface__cell__sSLLsl + var_cell__Bmax_SLlowsl) * var_cell__kon_sll * var_chaste_interface__cell__sCasl; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sSLLsl;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative27(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sCasl = rY[36];
+            // Units: dimensionless; Initial value: 0.000105614570409386
+            
+            const double var_x319 = 100.0 * var_chaste_interface__cell__sCasl;
+            const double var_x320 = -var_x319;
+            
+            partialF = -1.3 + var_x320;
+        }
+        else
+        {
+            const double y_save = rY[27];
+            rY[27] += delta;
+            const double temp = EvaluateYDerivative27(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[27])/delta;
+            rY[27] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative28(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sSLHj = rY[28];
+        // Units: dimensionless; Initial value: 0.0735225248399363
+        double var_chaste_interface__cell__sCaj = rY[35];
+        // Units: dimensionless; Initial value: 0.000175648385857736
+        
+        
+        // Mathematics
+        const double var_cell__cellLength = 100.0; // dimensionless
+        const double var_cell__cellRadius = 10.25; // dimensionless
+        const double var_cell__Vcell = 1.0000000000000001e-15 * M_PI * pow(var_cell__cellRadius, 2) * var_cell__cellLength; // dimensionless
+        const double var_cell__Vjunc = 0.00053900000000000009 * var_cell__Vcell; // dimensionless
+        const double var_cell__Vmyo = 0.65000000000000002 * var_cell__Vcell; // dimensionless
+        const double var_cell__Bmax_SLhighj = 0.000165 * var_cell__Vmyo / var_cell__Vjunc; // dimensionless
+        const double var_cell__koff_slh = 0.029999999999999999; // dimensionless
+        const double var_cell__kon_slh = 100.0; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sSLHj = -var_cell__koff_slh * var_chaste_interface__cell__sSLHj + (-var_chaste_interface__cell__sSLHj + var_cell__Bmax_SLhighj) * var_cell__kon_slh * var_chaste_interface__cell__sCaj; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sSLHj;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative28(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sCaj = rY[35];
+            // Units: dimensionless; Initial value: 0.000175648385857736
+            
+            const double var_x316 = 100.0 * var_chaste_interface__cell__sCaj;
+            const double var_x317 = -var_x316;
+            
+            partialF = -0.029999999999999999 + var_x317;
+        }
+        else
+        {
+            const double y_save = rY[28];
+            rY[28] += delta;
+            const double temp = EvaluateYDerivative28(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[28])/delta;
+            rY[28] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative29(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sSLHsl = rY[29];
+        // Units: dimensionless; Initial value: 0.113642236788144
+        double var_chaste_interface__cell__sCasl = rY[36];
+        // Units: dimensionless; Initial value: 0.000105614570409386
+        
+        
+        // Mathematics
+        const double var_cell__cellLength = 100.0; // dimensionless
+        const double var_cell__cellRadius = 10.25; // dimensionless
+        const double var_cell__Vcell = 1.0000000000000001e-15 * M_PI * pow(var_cell__cellRadius, 2) * var_cell__cellLength; // dimensionless
+        const double var_cell__Vmyo = 0.65000000000000002 * var_cell__Vcell; // dimensionless
+        const double var_cell__Vsl = 0.02 * var_cell__Vcell; // dimensionless
+        const double var_cell__Bmax_SLhighsl = 0.0134 * var_cell__Vmyo / var_cell__Vsl; // dimensionless
+        const double var_cell__koff_slh = 0.029999999999999999; // dimensionless
+        const double var_cell__kon_slh = 100.0; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sSLHsl = -var_cell__koff_slh * var_chaste_interface__cell__sSLHsl + (-var_chaste_interface__cell__sSLHsl + var_cell__Bmax_SLhighsl) * var_cell__kon_slh * var_chaste_interface__cell__sCasl; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sSLHsl;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative29(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sCasl = rY[36];
+            // Units: dimensionless; Initial value: 0.000105614570409386
+            
+            const double var_x319 = 100.0 * var_chaste_interface__cell__sCasl;
+            const double var_x320 = -var_x319;
+            
+            partialF = -0.029999999999999999 + var_x320;
+        }
+        else
+        {
+            const double y_save = rY[29];
+            rY[29] += delta;
+            const double temp = EvaluateYDerivative29(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[29])/delta;
+            rY[29] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative30(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sCsqnb = rY[30];
+        // Units: dimensionless; Initial value: 1.20762712858574
+        double var_chaste_interface__cell__sCa_sr = rY[31];
+        // Units: dimensionless; Initial value: 0.563755421404699
+        
+        
+        // Mathematics
+        const double var_cell__cellLength = 100.0; // dimensionless
+        const double var_cell__cellRadius = 10.25; // dimensionless
+        const double var_cell__Vcell = 1.0000000000000001e-15 * M_PI * pow(var_cell__cellRadius, 2) * var_cell__cellLength; // dimensionless
+        const double var_cell__Vmyo = 0.65000000000000002 * var_cell__Vcell; // dimensionless
+        const double var_cell__Vsr = 0.035000000000000003 * var_cell__Vcell; // dimensionless
+        const double var_cell__Bmax_Csqn = 0.14000000000000001 * var_cell__Vmyo / var_cell__Vsr; // dimensionless
+        const double var_cell__koff_csqn = 65.0; // dimensionless
+        const double var_cell__kon_csqn = 100.0; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sCsqnb = -var_cell__koff_csqn * var_chaste_interface__cell__sCsqnb + (-var_chaste_interface__cell__sCsqnb + var_cell__Bmax_Csqn) * var_cell__kon_csqn * var_chaste_interface__cell__sCa_sr; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sCsqnb;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative30(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sCa_sr = rY[31];
+            // Units: dimensionless; Initial value: 0.563755421404699
+            
+            const double var_x324 = 100.0 * var_chaste_interface__cell__sCa_sr;
+            
+            partialF = -65.0 - var_x324;
+        }
+        else
+        {
+            const double y_save = rY[30];
+            rY[30] += delta;
+            const double temp = EvaluateYDerivative30(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[30])/delta;
+            rY[30] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative31(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sRyRo = rY[15];
+        // Units: dimensionless; Initial value: 7.56436968249499e-07
+        double var_chaste_interface__cell__sCsqnb = rY[30];
+        // Units: dimensionless; Initial value: 1.20762712858574
+        double var_chaste_interface__cell__sCa_sr = rY[31];
+        // Units: dimensionless; Initial value: 0.563755421404699
+        double var_chaste_interface__cell__sCaj = rY[35];
+        // Units: dimensionless; Initial value: 0.000175648385857736
+        double var_chaste_interface__cell__sCai = rY[37];
+        // Units: dimensionless; Initial value: 8.85230799863012e-05
+        
+        
+        // Mathematics
+        const double var_cell__Kmf = 0.00024600000000000002; // dimensionless
+        const double var_cell__Kmr = 1.7; // dimensionless
+        const double var_cell__Q10SRCaP = 2.6000000000000001; // dimensionless
+        const double var_cell__Temp = 310.0; // dimensionless
+        const double var_cell__Qpow = -31.0 + 0.10000000000000001 * var_cell__Temp; // dimensionless
+        const double var_cell__Vmax_SRCaP = 0.0053114; // dimensionless
+        const double var_cell__cellLength = 100.0; // dimensionless
+        const double var_cell__cellRadius = 10.25; // dimensionless
+        const double var_cell__Vcell = 1.0000000000000001e-15 * M_PI * pow(var_cell__cellRadius, 2) * var_cell__cellLength; // dimensionless
+        const double var_cell__Vmyo = 0.65000000000000002 * var_cell__Vcell; // dimensionless
+        const double var_cell__Vsr = 0.035000000000000003 * var_cell__Vcell; // dimensionless
+        const double var_cell__Bmax_Csqn = 0.14000000000000001 * var_cell__Vmyo / var_cell__Vsr; // dimensionless
+        const double var_cell__hillSRCaP = 1.7869999999999999; // dimensionless
+        const double var_cell__koff_csqn = 65.0; // dimensionless
+        const double var_cell__kon_csqn = 100.0; // dimensionless
+        const double var_cell__ks = 25.0; // dimensionless
+        const double var_cell__J_serca = 1.0 * pow(var_cell__Q10SRCaP, var_cell__Qpow) * (pow((var_chaste_interface__cell__sCai / var_cell__Kmf), var_cell__hillSRCaP) - pow((var_chaste_interface__cell__sCa_sr / var_cell__Kmr), var_cell__hillSRCaP)) * var_cell__Vmax_SRCaP / (1.0 + pow((var_chaste_interface__cell__sCai / var_cell__Kmf), var_cell__hillSRCaP) + pow((var_chaste_interface__cell__sCa_sr / var_cell__Kmr), var_cell__hillSRCaP)); // dimensionless
+        const double var_cell__J_SRleak = 5.3480000000000003e-6 * var_chaste_interface__cell__sCa_sr - 5.3480000000000003e-6 * var_chaste_interface__cell__sCaj; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sCsqnb = -var_cell__koff_csqn * var_chaste_interface__cell__sCsqnb + (-var_chaste_interface__cell__sCsqnb + var_cell__Bmax_Csqn) * var_cell__kon_csqn * var_chaste_interface__cell__sCa_sr; // 1 / ms
+        const double var_cell__J_SRCarel = (-var_chaste_interface__cell__sCaj + var_chaste_interface__cell__sCa_sr) * var_cell__ks * var_chaste_interface__cell__sRyRo; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sCa_sr = -d_dt_chaste_interface_var_cell__sCsqnb - var_cell__J_SRCarel - var_cell__J_SRleak * var_cell__Vmyo / var_cell__Vsr + var_cell__J_serca; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sCa_sr;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative31(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sRyRo = rY[15];
+            // Units: dimensionless; Initial value: 7.56436968249499e-07
+            double var_chaste_interface__cell__sCsqnb = rY[30];
+            // Units: dimensionless; Initial value: 1.20762712858574
+            double var_chaste_interface__cell__sCa_sr = rY[31];
+            // Units: dimensionless; Initial value: 0.563755421404699
+            double var_chaste_interface__cell__sCai = rY[37];
+            // Units: dimensionless; Initial value: 8.85230799863012e-05
+            
+            const double var_x325 = 100.0 * var_chaste_interface__cell__sCsqnb;
+            const double var_x326 = 25.0 * var_chaste_interface__cell__sRyRo;
+            const double var_x327 = pow(var_chaste_interface__cell__sCa_sr, 1.7869999999999999);
+            const double var_x328 = 0.38742512113256738 * var_x327;
+            const double var_x329 = pow(var_chaste_interface__cell__sCai, 1.7869999999999999);
+            const double var_x330 = 2814485.1633595936 * var_x329;
+            const double var_x331 = 1 / (1.0 + var_x328 + var_x330);
+            const double var_x332 = pow(var_chaste_interface__cell__sCa_sr, 0.78699999999999992);
+            const double var_x333 = var_x331 * var_x332;
+            const double var_x334 = (var_x330 - var_x328) / pow((3.5530476870814998e-7 + var_x329 + 1.3765399305573384e-7 * var_x327), 2);
+            const double var_x335 = var_x332 * var_x334;
+            
+            partialF = -260.00009932 + var_x325 - var_x326 - 4.6421953480341129e-16 * var_x335 - 0.0036772346118413473 * var_x333;
+        }
+        else
+        {
+            const double y_save = rY[31];
+            rY[31] += delta;
+            const double temp = EvaluateYDerivative31(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[31])/delta;
+            rY[31] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative32(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        // Units: millivolt; Initial value: -81.3842590704928
+        double var_chaste_interface__cell__sm = rY[1];
+        // Units: dimensionless; Initial value: 0.00384941567866232
+        double var_chaste_interface__cell__sh = rY[2];
+        // Units: dimensionless; Initial value: 0.623723834301669
+        double var_chaste_interface__cell__sj = rY[3];
+        // Units: dimensionless; Initial value: 0.622080736932815
+        double var_chaste_interface__cell__sd = rY[4];
+        // Units: dimensionless; Initial value: 2.95884913218079e-06
+        double var_chaste_interface__cell__sf = rY[5];
+        // Units: dimensionless; Initial value: 0.995094078386247
+        double var_chaste_interface__cell__sfcaBj = rY[6];
+        // Units: dimensionless; Initial value: 0.0246274349529557
+        double var_chaste_interface__cell__sNaBj = rY[17];
+        // Units: dimensionless; Initial value: 3.41097946062695
+        double var_chaste_interface__cell__sNaj = rY[32];
+        // Units: dimensionless; Initial value: 8.21411036389602
+        double var_chaste_interface__cell__sNasl = rY[33];
+        // Units: dimensionless; Initial value: 8.21322794157889
+        double var_chaste_interface__cell__sCaj = rY[35];
+        // Units: dimensionless; Initial value: 0.000175648385857736
+        
+        
+        // Mathematics
+        const double var_cell__Bmax_Naj = 7.5609999999999999; // dimensionless
+        const double var_cell__Cao = 1.8; // dimensionless
+        const double var_cell__Cmem = 1.3809999999999999e-10; // dimensionless
+        const double var_cell__Fjunc = 0.11; // dimensionless
+        const double var_cell__Fjunc_CaL = 0.90000000000000002; // dimensionless
+        const double var_cell__Frdy = 96485.0; // dimensionless
+        const double var_cell__GNa = 23.0; // dimensionless
+        const double var_cell__GNaB = 0.00059699999999999998; // dimensionless
+        const double var_cell__G_CaL_mult = 1.0; // dimensionless
+        const double var_cell__IbarNCX = 4.5; // dimensionless
+        const double var_cell__IbarNaK = 1.8; // dimensionless
+        const double var_cell__J_na_juncsl = 1.8312782322060799e-14; // dimensionless
+        const double var_cell__Kdact = 0.00014999999999999999; // dimensionless
+        const double var_cell__KmCai = 0.0035899999999999999; // dimensionless
+        const double var_cell__KmCao = 1.3; // dimensionless
+        const double var_cell__KmKo = 1.5; // dimensionless
+        const double var_cell__KmNai = 12.289999999999999; // dimensionless
+        const double var_cell__KmNaip = 11.0; // dimensionless
+        const double var_cell__KmNao = 87.5; // dimensionless
+        const double var_cell__Ko = 5.4000000000000004; // dimensionless
+        const double var_cell__Nao = 140.0; // dimensionless
+        const double var_cell__Q10CaL = 1.8; // dimensionless
+        const double var_cell__Q10NCX = 1.5700000000000001; // dimensionless
+        const double var_cell__R = 8314.0; // dimensionless
+        const double var_cell__Temp = 310.0; // dimensionless
+        const double var_cell__FoRT = var_cell__Frdy / (var_cell__R * var_cell__Temp); // dimensionless
+        const double var_cell__Qpow = -31.0 + 0.10000000000000001 * var_cell__Temp; // dimensionless
+        const double var_cell__cellLength = 100.0; // dimensionless
+        const double var_cell__cellRadius = 10.25; // dimensionless
+        const double var_cell__Vcell = 1.0000000000000001e-15 * M_PI * pow(var_cell__cellRadius, 2) * var_cell__cellLength; // dimensionless
+        const double var_cell__Vjunc = 0.00053900000000000009 * var_cell__Vcell; // dimensionless
+        const double var_cell__fcaCaj = 0.0; // dimensionless
+        const double var_cell__koff_na = 0.001; // dimensionless
+        const double var_cell__kon_na = 0.0001; // dimensionless
+        const double var_cell__ksat = 0.32000000000000001; // dimensionless
+        const double var_cell__nu = 0.27000000000000002; // dimensionless
+        const double var_cell__pNa = 7.4999999999999993e-9 * var_cell__G_CaL_mult; // dimensionless
+        const double var_cell__Ka_junc = 1.0 / (1.0 + pow(var_cell__Kdact, 2) / pow(var_chaste_interface__cell__sCaj, 2)); // dimensionless
+        const double d_dt_chaste_interface_var_cell__sNaBj = -var_cell__koff_na * var_chaste_interface__cell__sNaBj + (-var_chaste_interface__cell__sNaBj + var_cell__Bmax_Naj) * var_cell__kon_na * var_chaste_interface__cell__sNaj; // 1 / ms
+        const double var_cell__ena_junc = 1.0 * log(var_cell__Nao / var_chaste_interface__cell__sNaj) / var_cell__FoRT; // dimensionless
+        const double var_cell__s3_junc = pow(var_cell__Nao, 3) * var_chaste_interface__cell__sCaj + pow(var_chaste_interface__cell__sNaj, 3) * var_cell__Cao + pow(var_chaste_interface__cell__sNaj, 3) * var_cell__KmCao + pow(var_cell__KmNao, 3) * (1.0 + var_chaste_interface__cell__sCaj / var_cell__KmCai) * var_chaste_interface__cell__sCaj + pow(var_cell__Nao, 3) * (1.0 + pow(var_chaste_interface__cell__sNaj, 3) / pow(var_cell__KmNai, 3)) * var_cell__KmCai; // dimensionless
+        const double var_cell__I_nabk_junc = (-var_cell__ena_junc + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__GNaB; // dimensionless
+        const double var_cell__ibarna_j = (-0.75 * var_cell__Nao + 0.75 * var_chaste_interface__cell__sNaj * exp(var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__FoRT * var_cell__Frdy * var_cell__pNa * var_chaste_interface__cell__sVm / (-1.0 + exp(var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__s1_junc = pow(var_chaste_interface__cell__sNaj, 3) * var_cell__Cao * exp(var_cell__FoRT * var_cell__nu * var_chaste_interface__cell__sVm); // dimensionless
+        const double var_cell__s2_junc = pow(var_cell__Nao, 3) * var_chaste_interface__cell__sCaj * exp((-1.0 + var_cell__nu) * var_cell__FoRT * var_chaste_interface__cell__sVm); // dimensionless
+        const double var_cell__I_ncx_junc = pow(var_cell__Q10NCX, var_cell__Qpow) * (-var_cell__s2_junc + var_cell__s1_junc) * var_cell__Fjunc * var_cell__IbarNCX * var_cell__Ka_junc / ((1.0 + var_cell__ksat * exp((-1.0 + var_cell__nu) * var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__s3_junc); // dimensionless
+        const double var_cell__I_CaNa_junc = 0.45000000000000001 * pow(var_cell__Q10CaL, var_cell__Qpow) * (1.0 - var_chaste_interface__cell__sfcaBj + var_cell__fcaCaj) * var_cell__Fjunc_CaL * var_cell__ibarna_j * var_chaste_interface__cell__sd * var_chaste_interface__cell__sf; // dimensionless
+        const double var_cell__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * var_cell__Nao); // dimensionless
+        const double var_cell__fnak = 1.0 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_cell__FoRT * var_chaste_interface__cell__sVm) + 0.036499999999999998 * var_cell__sigma * exp(-var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__I_nak_junc = 1.0 * var_cell__Fjunc * var_cell__IbarNaK * var_cell__Ko * var_cell__fnak / ((1.0 + pow(var_cell__KmNaip, 4) / pow(var_chaste_interface__cell__sNaj, 4)) * (var_cell__KmKo + var_cell__Ko)); // dimensionless
+        const double var_cell__I_Na_junc = pow(var_chaste_interface__cell__sm, 3) * (-var_cell__ena_junc + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__GNa * var_chaste_interface__cell__sh * var_chaste_interface__cell__sj; // dimensionless
+        const double var_cell__I_Na_tot_junc = 3.0 * var_cell__I_nak_junc + 3.0 * var_cell__I_ncx_junc + var_cell__I_CaNa_junc + var_cell__I_Na_junc + var_cell__I_nabk_junc; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sNaj = -d_dt_chaste_interface_var_cell__sNaBj + (-var_chaste_interface__cell__sNaj + var_chaste_interface__cell__sNasl) * var_cell__J_na_juncsl / var_cell__Vjunc - var_cell__Cmem * var_cell__I_Na_tot_junc / (var_cell__Frdy * var_cell__Vjunc); // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sNaj;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative32(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: millivolt; Initial value: -81.3842590704928
+            double var_chaste_interface__cell__sm = rY[1];
+            // Units: dimensionless; Initial value: 0.00384941567866232
+            double var_chaste_interface__cell__sh = rY[2];
+            // Units: dimensionless; Initial value: 0.623723834301669
+            double var_chaste_interface__cell__sj = rY[3];
+            // Units: dimensionless; Initial value: 0.622080736932815
+            double var_chaste_interface__cell__sd = rY[4];
+            // Units: dimensionless; Initial value: 2.95884913218079e-06
+            double var_chaste_interface__cell__sf = rY[5];
+            // Units: dimensionless; Initial value: 0.995094078386247
+            double var_chaste_interface__cell__sfcaBj = rY[6];
+            // Units: dimensionless; Initial value: 0.0246274349529557
+            double var_chaste_interface__cell__sNaBj = rY[17];
+            // Units: dimensionless; Initial value: 3.41097946062695
+            double var_chaste_interface__cell__sNaj = rY[32];
+            // Units: dimensionless; Initial value: 8.21411036389602
+            double var_chaste_interface__cell__sCaj = rY[35];
+            // Units: dimensionless; Initial value: 0.000175648385857736
+            
+            const double var_x21 = pow(var_chaste_interface__cell__sm, 3);
+            const double var_x22 = var_x21 * var_chaste_interface__cell__sj;
+            const double var_x23 = var_x22 * var_chaste_interface__cell__sh;
+            const double var_x25 = pow(var_chaste_interface__cell__sNaj, (-4));
+            const double var_x26 = exp(-0.003743588350780262 * var_chaste_interface__cell__sVm);
+            const double var_x27 = exp(2.0802377414561666);
+            const double var_x28 = 0.037435883507802616 * var_chaste_interface__cell__sVm;
+            const double var_x29 = exp(-var_x28);
+            const double var_x30 = 1.0 + 0.1245 * var_x26 + 0.036499999999999998 * var_x29 * (-0.14285714285714285 + 0.14285714285714285 * var_x27);
+            const double var_x36 = exp(-0.027328194960695912 * var_chaste_interface__cell__sVm);
+            const double var_x38 = pow(var_chaste_interface__cell__sNaj, 3);
+            const double var_x39 = exp(0.010107688547106707 * var_chaste_interface__cell__sVm);
+            const double var_x41 = 1.0 + 0.32000000000000001 * var_x36;
+            const double var_x42 = 1 / var_x41;
+            const double var_x43 = pow(var_chaste_interface__cell__sCaj, 2);
+            const double var_x44 = 1 / var_x43;
+            const double var_x45 = 1.0 + 2.2499999999999996e-8 * var_x44;
+            const double var_x46 = 1 / var_x45;
+            const double var_x47 = 2744000.0 * var_chaste_interface__cell__sCaj;
+            const double var_x48 = (1.0 + 278.55153203342621 * var_chaste_interface__cell__sCaj) * var_chaste_interface__cell__sCaj;
+            const double var_x49 = 1 / (9850.9599999999991 + var_x47 + 669921.875 * var_x48 + 8.4066800865219591 * var_x38);
+            const double var_x50 = var_x46 * var_x49;
+            const double var_x51 = var_x42 * var_x50;
+            const double var_x64 = exp(var_x28);
+            const double var_x65 = -1.0 + var_x64;
+            const double var_x66 = 1 / var_x65;
+            const double var_x67 = var_chaste_interface__cell__sd * var_chaste_interface__cell__sf;
+            const double var_x68 = var_x66 * var_x67;
+            const double var_x74 = 1.0 - var_chaste_interface__cell__sfcaBj;
+            const double var_x75 = var_x68 * var_x74;
+            const double var_x88 = 1.8 * var_x39;
+            const double var_x89 = var_x38 * var_x88 - var_x36 * var_x47;
+            const double var_x105 = var_x64 * var_chaste_interface__cell__sVm;
+            const double var_x121 = var_x105 * var_x75;
+            const double var_x127 = 1 / var_chaste_interface__cell__sNaj;
+            const double var_x148 = 0.001754199282790071 * var_x127;
+            const double var_x149 = 1 / var_x30;
+            const double var_x150 = var_x149 / (pow((6.8301345536507063e-5 + var_x25), 2) * pow(var_chaste_interface__cell__sNaj, 5));
+            const double var_x151 = 67.582216924910611 * var_x127 * var_x23;
+            const double var_x152 = pow(var_chaste_interface__cell__sNaj, 2);
+            const double var_x153 = var_x42 * var_x89;
+            const double var_x154 = var_x153 * var_x46 / pow((0.0035899999999999999 + 0.244140625 * var_x48 + 3.0636589236596063e-6 * var_x38 + var_chaste_interface__cell__sCaj), 2);
+            const double var_x155 = var_x152 * var_x154;
+            const double var_x156 = var_x152 * var_x39 * var_x51;
+            const double var_x157 = 8.228590279882795e-6 * var_x121;
+            const double var_x299 = 0.0001 * var_chaste_interface__cell__sNaBj;
+            const double var_x339 = 1 / M_PI;
+            const double var_x340 = 0.25275361828036119 * var_x339;
+            const double var_x348 = 3.2338348512952546 * var_x339;
+            
+            partialF = -0.0007561 + var_x299 - var_x348 - var_x340 * (var_x148 + var_x151 + var_x157 + 8.0190000000000001 * var_x156 + 0.0001270048672132754 * var_x150 - 4.973979775839485e-12 * var_x155);
+        }
+        else
+        {
+            const double y_save = rY[32];
+            rY[32] += delta;
+            const double temp = EvaluateYDerivative32(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[32])/delta;
+            rY[32] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative33(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        // Units: millivolt; Initial value: -81.3842590704928
+        double var_chaste_interface__cell__sm = rY[1];
+        // Units: dimensionless; Initial value: 0.00384941567866232
+        double var_chaste_interface__cell__sh = rY[2];
+        // Units: dimensionless; Initial value: 0.623723834301669
+        double var_chaste_interface__cell__sj = rY[3];
+        // Units: dimensionless; Initial value: 0.622080736932815
+        double var_chaste_interface__cell__sd = rY[4];
+        // Units: dimensionless; Initial value: 2.95884913218079e-06
+        double var_chaste_interface__cell__sf = rY[5];
+        // Units: dimensionless; Initial value: 0.995094078386247
+        double var_chaste_interface__cell__sfcaBsl = rY[7];
+        // Units: dimensionless; Initial value: 0.0150911724206476
+        double var_chaste_interface__cell__sNaBsl = rY[18];
+        // Units: dimensionless; Initial value: 0.744248540671373
+        double var_chaste_interface__cell__sNaj = rY[32];
+        // Units: dimensionless; Initial value: 8.21411036389602
+        double var_chaste_interface__cell__sNasl = rY[33];
+        // Units: dimensionless; Initial value: 8.21322794157889
+        double var_chaste_interface__cell__sNai = rY[34];
+        // Units: dimensionless; Initial value: 8.21340895351653
+        double var_chaste_interface__cell__sCasl = rY[36];
+        // Units: dimensionless; Initial value: 0.000105614570409386
+        
+        
+        // Mathematics
+        const double var_cell__Bmax_Nasl = 1.6499999999999999; // dimensionless
+        const double var_cell__Cao = 1.8; // dimensionless
+        const double var_cell__Cmem = 1.3809999999999999e-10; // dimensionless
+        const double var_cell__Fjunc = 0.11; // dimensionless
+        const double var_cell__Fjunc_CaL = 0.90000000000000002; // dimensionless
+        const double var_cell__Frdy = 96485.0; // dimensionless
+        const double var_cell__Fsl = 1.0 - var_cell__Fjunc; // dimensionless
+        const double var_cell__Fsl_CaL = 1.0 - var_cell__Fjunc_CaL; // dimensionless
+        const double var_cell__GNa = 23.0; // dimensionless
+        const double var_cell__GNaB = 0.00059699999999999998; // dimensionless
+        const double var_cell__G_CaL_mult = 1.0; // dimensionless
+        const double var_cell__IbarNCX = 4.5; // dimensionless
+        const double var_cell__IbarNaK = 1.8; // dimensionless
+        const double var_cell__J_na_juncsl = 1.8312782322060799e-14; // dimensionless
+        const double var_cell__J_na_slmyo = 1.6386279222197945e-12; // dimensionless
+        const double var_cell__Kdact = 0.00014999999999999999; // dimensionless
+        const double var_cell__KmCai = 0.0035899999999999999; // dimensionless
+        const double var_cell__KmCao = 1.3; // dimensionless
+        const double var_cell__KmKo = 1.5; // dimensionless
+        const double var_cell__KmNai = 12.289999999999999; // dimensionless
+        const double var_cell__KmNaip = 11.0; // dimensionless
+        const double var_cell__KmNao = 87.5; // dimensionless
+        const double var_cell__Ko = 5.4000000000000004; // dimensionless
+        const double var_cell__Nao = 140.0; // dimensionless
+        const double var_cell__Q10CaL = 1.8; // dimensionless
+        const double var_cell__Q10NCX = 1.5700000000000001; // dimensionless
+        const double var_cell__R = 8314.0; // dimensionless
+        const double var_cell__Temp = 310.0; // dimensionless
+        const double var_cell__FoRT = var_cell__Frdy / (var_cell__R * var_cell__Temp); // dimensionless
+        const double var_cell__Qpow = -31.0 + 0.10000000000000001 * var_cell__Temp; // dimensionless
+        const double var_cell__cellLength = 100.0; // dimensionless
+        const double var_cell__cellRadius = 10.25; // dimensionless
+        const double var_cell__Vcell = 1.0000000000000001e-15 * M_PI * pow(var_cell__cellRadius, 2) * var_cell__cellLength; // dimensionless
+        const double var_cell__Vsl = 0.02 * var_cell__Vcell; // dimensionless
+        const double var_cell__fcaCaMSL = 0.0; // dimensionless
+        const double var_cell__koff_na = 0.001; // dimensionless
+        const double var_cell__kon_na = 0.0001; // dimensionless
+        const double var_cell__ksat = 0.32000000000000001; // dimensionless
+        const double var_cell__nu = 0.27000000000000002; // dimensionless
+        const double var_cell__pNa = 7.4999999999999993e-9 * var_cell__G_CaL_mult; // dimensionless
+        const double var_cell__Ka_sl = 1.0 / (1.0 + pow(var_cell__Kdact, 2) / pow(var_chaste_interface__cell__sCasl, 2)); // dimensionless
+        const double d_dt_chaste_interface_var_cell__sNaBsl = -var_cell__koff_na * var_chaste_interface__cell__sNaBsl + (-var_chaste_interface__cell__sNaBsl + var_cell__Bmax_Nasl) * var_cell__kon_na * var_chaste_interface__cell__sNasl; // 1 / ms
+        const double var_cell__ena_sl = 1.0 * log(var_cell__Nao / var_chaste_interface__cell__sNasl) / var_cell__FoRT; // dimensionless
+        const double var_cell__s3_sl = pow(var_cell__Nao, 3) * var_chaste_interface__cell__sCasl + pow(var_chaste_interface__cell__sNasl, 3) * var_cell__Cao + pow(var_chaste_interface__cell__sNasl, 3) * var_cell__KmCao + pow(var_cell__KmNao, 3) * (1.0 + var_chaste_interface__cell__sCasl / var_cell__KmCai) * var_chaste_interface__cell__sCasl + pow(var_cell__Nao, 3) * (1.0 + pow(var_chaste_interface__cell__sNasl, 3) / pow(var_cell__KmNai, 3)) * var_cell__KmCai; // dimensionless
+        const double var_cell__I_nabk_sl = (-var_cell__ena_sl + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__GNaB; // dimensionless
+        const double var_cell__ibarna_sl = (-0.75 * var_cell__Nao + 0.75 * var_chaste_interface__cell__sNasl * exp(var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__FoRT * var_cell__Frdy * var_cell__pNa * var_chaste_interface__cell__sVm / (-1.0 + exp(var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__s1_sl = pow(var_chaste_interface__cell__sNasl, 3) * var_cell__Cao * exp(var_cell__FoRT * var_cell__nu * var_chaste_interface__cell__sVm); // dimensionless
+        const double var_cell__s2_sl = pow(var_cell__Nao, 3) * var_chaste_interface__cell__sCasl * exp((-1.0 + var_cell__nu) * var_cell__FoRT * var_chaste_interface__cell__sVm); // dimensionless
+        const double var_cell__I_ncx_sl = pow(var_cell__Q10NCX, var_cell__Qpow) * (-var_cell__s2_sl + var_cell__s1_sl) * var_cell__Fsl * var_cell__IbarNCX * var_cell__Ka_sl / ((1.0 + var_cell__ksat * exp((-1.0 + var_cell__nu) * var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__s3_sl); // dimensionless
+        const double var_cell__I_CaNa_sl = 0.45000000000000001 * pow(var_cell__Q10CaL, var_cell__Qpow) * (1.0 - var_chaste_interface__cell__sfcaBsl + var_cell__fcaCaMSL) * var_cell__Fsl_CaL * var_cell__ibarna_sl * var_chaste_interface__cell__sd * var_chaste_interface__cell__sf; // dimensionless
+        const double var_cell__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * var_cell__Nao); // dimensionless
+        const double var_cell__fnak = 1.0 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_cell__FoRT * var_chaste_interface__cell__sVm) + 0.036499999999999998 * var_cell__sigma * exp(-var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__I_nak_sl = 1.0 * var_cell__Fsl * var_cell__IbarNaK * var_cell__Ko * var_cell__fnak / ((1.0 + pow(var_cell__KmNaip, 4) / pow(var_chaste_interface__cell__sNasl, 4)) * (var_cell__KmKo + var_cell__Ko)); // dimensionless
+        const double var_cell__I_Na_sl = pow(var_chaste_interface__cell__sm, 3) * (-var_cell__ena_sl + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__GNa * var_chaste_interface__cell__sh * var_chaste_interface__cell__sj; // dimensionless
+        const double var_cell__I_Na_tot_sl = 3.0 * var_cell__I_nak_sl + 3.0 * var_cell__I_ncx_sl + var_cell__I_CaNa_sl + var_cell__I_Na_sl + var_cell__I_nabk_sl; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sNasl = -d_dt_chaste_interface_var_cell__sNaBsl + (-var_chaste_interface__cell__sNasl + var_chaste_interface__cell__sNai) * var_cell__J_na_slmyo / var_cell__Vsl + (-var_chaste_interface__cell__sNasl + var_chaste_interface__cell__sNaj) * var_cell__J_na_juncsl / var_cell__Vsl - var_cell__Cmem * var_cell__I_Na_tot_sl / (var_cell__Frdy * var_cell__Vsl); // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sNasl;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative33(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: millivolt; Initial value: -81.3842590704928
+            double var_chaste_interface__cell__sm = rY[1];
+            // Units: dimensionless; Initial value: 0.00384941567866232
+            double var_chaste_interface__cell__sh = rY[2];
+            // Units: dimensionless; Initial value: 0.623723834301669
+            double var_chaste_interface__cell__sj = rY[3];
+            // Units: dimensionless; Initial value: 0.622080736932815
+            double var_chaste_interface__cell__sd = rY[4];
+            // Units: dimensionless; Initial value: 2.95884913218079e-06
+            double var_chaste_interface__cell__sf = rY[5];
+            // Units: dimensionless; Initial value: 0.995094078386247
+            double var_chaste_interface__cell__sfcaBsl = rY[7];
+            // Units: dimensionless; Initial value: 0.0150911724206476
+            double var_chaste_interface__cell__sNaBsl = rY[18];
+            // Units: dimensionless; Initial value: 0.744248540671373
+            double var_chaste_interface__cell__sNasl = rY[33];
+            // Units: dimensionless; Initial value: 8.21322794157889
+            double var_chaste_interface__cell__sCasl = rY[36];
+            // Units: dimensionless; Initial value: 0.000105614570409386
+            
+            const double var_x21 = pow(var_chaste_interface__cell__sm, 3);
+            const double var_x22 = var_x21 * var_chaste_interface__cell__sj;
+            const double var_x23 = var_x22 * var_chaste_interface__cell__sh;
+            const double var_x26 = exp(-0.003743588350780262 * var_chaste_interface__cell__sVm);
+            const double var_x27 = exp(2.0802377414561666);
+            const double var_x28 = 0.037435883507802616 * var_chaste_interface__cell__sVm;
+            const double var_x29 = exp(-var_x28);
+            const double var_x30 = 1.0 + 0.1245 * var_x26 + 0.036499999999999998 * var_x29 * (-0.14285714285714285 + 0.14285714285714285 * var_x27);
+            const double var_x33 = pow(var_chaste_interface__cell__sNasl, (-4));
+            const double var_x36 = exp(-0.027328194960695912 * var_chaste_interface__cell__sVm);
+            const double var_x39 = exp(0.010107688547106707 * var_chaste_interface__cell__sVm);
+            const double var_x41 = 1.0 + 0.32000000000000001 * var_x36;
+            const double var_x42 = 1 / var_x41;
+            const double var_x53 = pow(var_chaste_interface__cell__sNasl, 3);
+            const double var_x54 = pow(var_chaste_interface__cell__sCasl, (-2));
+            const double var_x55 = 1.0 + 2.2499999999999996e-8 * var_x54;
+            const double var_x56 = 1 / var_x55;
+            const double var_x57 = 2744000.0 * var_chaste_interface__cell__sCasl;
+            const double var_x58 = (1.0 + 278.55153203342621 * var_chaste_interface__cell__sCasl) * var_chaste_interface__cell__sCasl;
+            const double var_x59 = 1 / (9850.9599999999991 + var_x57 + 669921.875 * var_x58 + 8.4066800865219591 * var_x53);
+            const double var_x60 = var_x56 * var_x59;
+            const double var_x61 = var_x42 * var_x60;
+            const double var_x63 = 1.0 - var_chaste_interface__cell__sfcaBsl;
+            const double var_x64 = exp(var_x28);
+            const double var_x65 = -1.0 + var_x64;
+            const double var_x66 = 1 / var_x65;
+            const double var_x67 = var_chaste_interface__cell__sd * var_chaste_interface__cell__sf;
+            const double var_x68 = var_x66 * var_x67;
+            const double var_x69 = var_x63 * var_x68;
+            const double var_x88 = 1.8 * var_x39;
+            const double var_x100 = var_x53 * var_x88 - var_x36 * var_x57;
+            const double var_x105 = var_x64 * var_chaste_interface__cell__sVm;
+            const double var_x115 = var_x105 * var_x69;
+            const double var_x123 = 1 / var_chaste_interface__cell__sNasl;
+            const double var_x149 = 1 / var_x30;
+            const double var_x158 = 0.014193066924392391 * var_x123;
+            const double var_x159 = var_x149 / (pow((6.8301345536507063e-5 + var_x33), 2) * pow(var_chaste_interface__cell__sNasl, 5));
+            const double var_x160 = 546.80157330154941 * var_x123 * var_x23;
+            const double var_x161 = pow(var_chaste_interface__cell__sNasl, 2);
+            const double var_x162 = var_x100 * var_x42;
+            const double var_x163 = var_x162 * var_x56 / pow((0.0035899999999999999 + 0.244140625 * var_x58 + 3.0636589236596063e-6 * var_x53 + var_chaste_interface__cell__sCasl), 2);
+            const double var_x164 = var_x161 * var_x163;
+            const double var_x165 = var_x161 * var_x39 * var_x61;
+            const double var_x166 = 9.1428780887586595e-7 * var_x115;
+            const double var_x301 = 0.0001 * var_chaste_interface__cell__sNaBsl;
+            const double var_x339 = 1 / M_PI;
+            const double var_x349 = 0.0068117100126557344 * var_x339;
+            
+            partialF = -0.000165 + var_x301 - 7.8855000811034159 * var_x339 - var_x349 * (var_x158 + var_x160 + var_x166 + 0.001027584834725592 * var_x159 + 64.881 * var_x165 - 4.0244018186337653e-11 * var_x164);
+        }
+        else
+        {
+            const double y_save = rY[33];
+            rY[33] += delta;
+            const double temp = EvaluateYDerivative33(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[33])/delta;
+            rY[33] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative34(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sNasl = rY[33];
+        // Units: dimensionless; Initial value: 8.21322794157889
+        double var_chaste_interface__cell__sNai = rY[34];
+        // Units: dimensionless; Initial value: 8.21340895351653
+        
+        
+        // Mathematics
+        const double var_cell__J_na_slmyo = 1.6386279222197945e-12; // dimensionless
+        const double var_cell__cellLength = 100.0; // dimensionless
+        const double var_cell__cellRadius = 10.25; // dimensionless
+        const double var_cell__Vcell = 1.0000000000000001e-15 * M_PI * pow(var_cell__cellRadius, 2) * var_cell__cellLength; // dimensionless
+        const double var_cell__Vmyo = 0.65000000000000002 * var_cell__Vcell; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sNai = (-var_chaste_interface__cell__sNai + var_chaste_interface__cell__sNasl) * var_cell__J_na_slmyo / var_cell__Vmyo; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sNai;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative34(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            
+            const double var_x339 = 1 / M_PI;
+            const double var_x353 = 0.23994917636495411 * var_x339;
+            
+            partialF = -var_x353;
+        }
+        else
+        {
+            const double y_save = rY[34];
+            rY[34] += delta;
+            const double temp = EvaluateYDerivative34(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[34])/delta;
+            rY[34] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative35(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        // Units: millivolt; Initial value: -81.3842590704928
+        double var_chaste_interface__cell__sd = rY[4];
+        // Units: dimensionless; Initial value: 2.95884913218079e-06
+        double var_chaste_interface__cell__sf = rY[5];
+        // Units: dimensionless; Initial value: 0.995094078386247
+        double var_chaste_interface__cell__sfcaBj = rY[6];
+        // Units: dimensionless; Initial value: 0.0246274349529557
+        double var_chaste_interface__cell__sRyRo = rY[15];
+        // Units: dimensionless; Initial value: 7.56436968249499e-07
+        double var_chaste_interface__cell__sSLLj = rY[26];
+        // Units: dimensionless; Initial value: 0.00739549938515031
+        double var_chaste_interface__cell__sSLHj = rY[28];
+        // Units: dimensionless; Initial value: 0.0735225248399363
+        double var_chaste_interface__cell__sCa_sr = rY[31];
+        // Units: dimensionless; Initial value: 0.563755421404699
+        double var_chaste_interface__cell__sNaj = rY[32];
+        // Units: dimensionless; Initial value: 8.21411036389602
+        double var_chaste_interface__cell__sCaj = rY[35];
+        // Units: dimensionless; Initial value: 0.000175648385857736
+        double var_chaste_interface__cell__sCasl = rY[36];
+        // Units: dimensionless; Initial value: 0.000105614570409386
+        
+        
+        // Mathematics
+        const double var_cell__Cao = 1.8; // dimensionless
+        const double var_cell__Cmem = 1.3809999999999999e-10; // dimensionless
+        const double var_cell__Fjunc = 0.11; // dimensionless
+        const double var_cell__Fjunc_CaL = 0.90000000000000002; // dimensionless
+        const double var_cell__Frdy = 96485.0; // dimensionless
+        const double var_cell__GCaB = 0.00055130000000000001; // dimensionless
+        const double var_cell__G_CaL_mult = 1.0; // dimensionless
+        const double var_cell__IbarNCX = 4.5; // dimensionless
+        const double var_cell__IbarSLCaP = 0.067299999999999999; // dimensionless
+        const double var_cell__J_ca_juncsl = 8.2413054227789685e-13; // dimensionless
+        const double var_cell__Kdact = 0.00014999999999999999; // dimensionless
+        const double var_cell__KmCai = 0.0035899999999999999; // dimensionless
+        const double var_cell__KmCao = 1.3; // dimensionless
+        const double var_cell__KmNai = 12.289999999999999; // dimensionless
+        const double var_cell__KmNao = 87.5; // dimensionless
+        const double var_cell__KmPCa = 0.00050000000000000001; // dimensionless
+        const double var_cell__Nao = 140.0; // dimensionless
+        const double var_cell__Q10CaL = 1.8; // dimensionless
+        const double var_cell__Q10NCX = 1.5700000000000001; // dimensionless
+        const double var_cell__Q10SLCaP = 2.3500000000000001; // dimensionless
+        const double var_cell__R = 8314.0; // dimensionless
+        const double var_cell__Temp = 310.0; // dimensionless
+        const double var_cell__FoRT = var_cell__Frdy / (var_cell__R * var_cell__Temp); // dimensionless
+        const double var_cell__Qpow = -31.0 + 0.10000000000000001 * var_cell__Temp; // dimensionless
+        const double var_cell__cellLength = 100.0; // dimensionless
+        const double var_cell__cellRadius = 10.25; // dimensionless
+        const double var_cell__Vcell = 1.0000000000000001e-15 * M_PI * pow(var_cell__cellRadius, 2) * var_cell__cellLength; // dimensionless
+        const double var_cell__Vjunc = 0.00053900000000000009 * var_cell__Vcell; // dimensionless
+        const double var_cell__Vmyo = 0.65000000000000002 * var_cell__Vcell; // dimensionless
+        const double var_cell__Bmax_SLhighj = 0.000165 * var_cell__Vmyo / var_cell__Vjunc; // dimensionless
+        const double var_cell__Bmax_SLlowj = 0.00046000000000000001 * var_cell__Vmyo / var_cell__Vjunc; // dimensionless
+        const double var_cell__Vsr = 0.035000000000000003 * var_cell__Vcell; // dimensionless
+        const double var_cell__fcaCaj = 0.0; // dimensionless
+        const double var_cell__koff_slh = 0.029999999999999999; // dimensionless
+        const double var_cell__koff_sll = 1.3; // dimensionless
+        const double var_cell__kon_slh = 100.0; // dimensionless
+        const double var_cell__kon_sll = 100.0; // dimensionless
+        const double var_cell__ks = 25.0; // dimensionless
+        const double var_cell__ksat = 0.32000000000000001; // dimensionless
+        const double var_cell__nu = 0.27000000000000002; // dimensionless
+        const double var_cell__pCa = 0.00027 * var_cell__G_CaL_mult; // dimensionless
+        const double var_cell__I_pca_junc = pow(var_cell__Q10SLCaP, var_cell__Qpow) * pow(var_chaste_interface__cell__sCaj, 1.6000000000000001) * var_cell__Fjunc * var_cell__IbarSLCaP / (pow(var_cell__KmPCa, 1.6000000000000001) + pow(var_chaste_interface__cell__sCaj, 1.6000000000000001)); // dimensionless
+        const double var_cell__J_SRleak = 5.3480000000000003e-6 * var_chaste_interface__cell__sCa_sr - 5.3480000000000003e-6 * var_chaste_interface__cell__sCaj; // dimensionless
+        const double var_cell__Ka_junc = 1.0 / (1.0 + pow(var_cell__Kdact, 2) / pow(var_chaste_interface__cell__sCaj, 2)); // dimensionless
+        const double var_cell__eca_junc = 0.5 * log(var_cell__Cao / var_chaste_interface__cell__sCaj) / var_cell__FoRT; // dimensionless
+        const double var_cell__s3_junc = pow(var_cell__Nao, 3) * var_chaste_interface__cell__sCaj + pow(var_chaste_interface__cell__sNaj, 3) * var_cell__Cao + pow(var_chaste_interface__cell__sNaj, 3) * var_cell__KmCao + pow(var_cell__KmNao, 3) * (1.0 + var_chaste_interface__cell__sCaj / var_cell__KmCai) * var_chaste_interface__cell__sCaj + pow(var_cell__Nao, 3) * (1.0 + pow(var_chaste_interface__cell__sNaj, 3) / pow(var_cell__KmNai, 3)) * var_cell__KmCai; // dimensionless
+        const double var_cell__J_SRCarel = (-var_chaste_interface__cell__sCaj + var_chaste_interface__cell__sCa_sr) * var_cell__ks * var_chaste_interface__cell__sRyRo; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sSLHj = -var_cell__koff_slh * var_chaste_interface__cell__sSLHj + (-var_chaste_interface__cell__sSLHj + var_cell__Bmax_SLhighj) * var_cell__kon_slh * var_chaste_interface__cell__sCaj; // 1 / ms
+        const double d_dt_chaste_interface_var_cell__sSLLj = -var_cell__koff_sll * var_chaste_interface__cell__sSLLj + (-var_chaste_interface__cell__sSLLj + var_cell__Bmax_SLlowj) * var_cell__kon_sll * var_chaste_interface__cell__sCaj; // 1 / ms
+        const double var_cell__J_CaB_junction = d_dt_chaste_interface_var_cell__sSLHj + d_dt_chaste_interface_var_cell__sSLLj; // dimensionless
+        const double var_cell__I_cabk_junc = (-var_cell__eca_junc + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__GCaB; // dimensionless
+        const double var_cell__ibarca_j = 4.0 * (-0.34100000000000003 * var_cell__Cao + 0.34100000000000003 * var_chaste_interface__cell__sCaj * exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__FoRT * var_cell__Frdy * var_cell__pCa * var_chaste_interface__cell__sVm / (-1.0 + exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__s1_junc = pow(var_chaste_interface__cell__sNaj, 3) * var_cell__Cao * exp(var_cell__FoRT * var_cell__nu * var_chaste_interface__cell__sVm); // dimensionless
+        const double var_cell__s2_junc = pow(var_cell__Nao, 3) * var_chaste_interface__cell__sCaj * exp((-1.0 + var_cell__nu) * var_cell__FoRT * var_chaste_interface__cell__sVm); // dimensionless
+        const double var_cell__I_ncx_junc = pow(var_cell__Q10NCX, var_cell__Qpow) * (-var_cell__s2_junc + var_cell__s1_junc) * var_cell__Fjunc * var_cell__IbarNCX * var_cell__Ka_junc / ((1.0 + var_cell__ksat * exp((-1.0 + var_cell__nu) * var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__s3_junc); // dimensionless
+        const double var_cell__I_Ca_junc = 0.45000000000000001 * pow(var_cell__Q10CaL, var_cell__Qpow) * (1.0 - var_chaste_interface__cell__sfcaBj + var_cell__fcaCaj) * var_cell__Fjunc_CaL * var_cell__ibarca_j * var_chaste_interface__cell__sd * var_chaste_interface__cell__sf; // dimensionless
+        const double var_cell__I_Ca_tot_junc = -2.0 * var_cell__I_ncx_junc + var_cell__I_Ca_junc + var_cell__I_cabk_junc + var_cell__I_pca_junc; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sCaj = -var_cell__J_CaB_junction + (-var_chaste_interface__cell__sCaj + var_chaste_interface__cell__sCasl) * var_cell__J_ca_juncsl / var_cell__Vjunc + var_cell__J_SRCarel * var_cell__Vsr / var_cell__Vjunc + var_cell__J_SRleak * var_cell__Vmyo / var_cell__Vjunc - 0.5 * var_cell__Cmem * var_cell__I_Ca_tot_junc / (var_cell__Frdy * var_cell__Vjunc); // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sCaj;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative35(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: millivolt; Initial value: -81.3842590704928
+            double var_chaste_interface__cell__sd = rY[4];
+            // Units: dimensionless; Initial value: 2.95884913218079e-06
+            double var_chaste_interface__cell__sf = rY[5];
+            // Units: dimensionless; Initial value: 0.995094078386247
+            double var_chaste_interface__cell__sfcaBj = rY[6];
+            // Units: dimensionless; Initial value: 0.0246274349529557
+            double var_chaste_interface__cell__sRyRo = rY[15];
+            // Units: dimensionless; Initial value: 7.56436968249499e-07
+            double var_chaste_interface__cell__sSLLj = rY[26];
+            // Units: dimensionless; Initial value: 0.00739549938515031
+            double var_chaste_interface__cell__sSLHj = rY[28];
+            // Units: dimensionless; Initial value: 0.0735225248399363
+            double var_chaste_interface__cell__sNaj = rY[32];
+            // Units: dimensionless; Initial value: 8.21411036389602
+            double var_chaste_interface__cell__sCaj = rY[35];
+            // Units: dimensionless; Initial value: 0.000175648385857736
+            
+            const double var_x3 = 1 / var_chaste_interface__cell__sCaj;
+            const double var_x36 = exp(-0.027328194960695912 * var_chaste_interface__cell__sVm);
+            const double var_x38 = pow(var_chaste_interface__cell__sNaj, 3);
+            const double var_x39 = exp(0.010107688547106707 * var_chaste_interface__cell__sVm);
+            const double var_x41 = 1.0 + 0.32000000000000001 * var_x36;
+            const double var_x42 = 1 / var_x41;
+            const double var_x43 = pow(var_chaste_interface__cell__sCaj, 2);
+            const double var_x44 = 1 / var_x43;
+            const double var_x45 = 1.0 + 2.2499999999999996e-8 * var_x44;
+            const double var_x46 = 1 / var_x45;
+            const double var_x47 = 2744000.0 * var_chaste_interface__cell__sCaj;
+            const double var_x48 = (1.0 + 278.55153203342621 * var_chaste_interface__cell__sCaj) * var_chaste_interface__cell__sCaj;
+            const double var_x49 = 1 / (9850.9599999999991 + var_x47 + 669921.875 * var_x48 + 8.4066800865219591 * var_x38);
+            const double var_x50 = var_x46 * var_x49;
+            const double var_x51 = var_x42 * var_x50;
+            const double var_x67 = var_chaste_interface__cell__sd * var_chaste_interface__cell__sf;
+            const double var_x74 = 1.0 - var_chaste_interface__cell__sfcaBj;
+            const double var_x79 = exp(0.074871767015605231 * var_chaste_interface__cell__sVm);
+            const double var_x80 = -1.0 + var_x79;
+            const double var_x81 = 1 / var_x80;
+            const double var_x82 = var_x67 * var_x81;
+            const double var_x83 = var_x74 * var_x82;
+            const double var_x88 = 1.8 * var_x39;
+            const double var_x89 = var_x38 * var_x88 - var_x36 * var_x47;
+            const double var_x110 = var_x79 * var_chaste_interface__cell__sVm;
+            const double var_x119 = var_x110 * var_x83;
+            const double var_x153 = var_x42 * var_x89;
+            const double var_x154 = var_x153 * var_x46 / pow((0.0035899999999999999 + 0.244140625 * var_x48 + 3.0636589236596063e-6 * var_x38 + var_chaste_interface__cell__sCaj), 2);
+            const double var_x167 = 0.00080995817805876559 * var_x3;
+            const double var_x168 = 5.2281977629563632e-6 + pow(var_chaste_interface__cell__sCaj, 1.6000000000000001);
+            const double var_x169 = 0.011844800000000001 * pow(var_chaste_interface__cell__sCaj, 2.2000000000000002) / pow(var_x168, 2);
+            const double var_x170 = 0.011844800000000001 * pow(var_chaste_interface__cell__sCaj, 0.60000000000000009) / var_x168;
+            const double var_x172 = var_x36 * var_x51;
+            const double var_x173 = var_x154 * (-3413921.875 - 373215529.24791086 * var_chaste_interface__cell__sCaj);
+            const double var_x174 = var_x153 * var_x49 / (pow(var_x45, 2) * pow(var_chaste_interface__cell__sCaj, 3));
+            const double var_x175 = 0.53874226280448645 * var_x119;
+            const double var_x318 = 100.0 * var_chaste_interface__cell__sSLLj;
+            const double var_x322 = 100.0 * var_chaste_interface__cell__sSLHj;
+            const double var_x339 = 1 / M_PI;
+            const double var_x354 = 0.1263768091401806 * var_x339;
+            const double var_x359 = 1623.3766233766235 * var_chaste_interface__cell__sRyRo;
+            const double var_x360 = 145.53234034920845 * var_x339;
+            
+            partialF = -75.377506864564012 + var_x318 + var_x322 - var_x359 - var_x360 - var_x354 * (var_x167 + var_x170 + var_x175 - var_x169 + 2716560.0 * var_x172 - 1.3148220554360853e-13 * var_x173 - 4.4549999999999992e-8 * var_x174);
+        }
+        else
+        {
+            const double y_save = rY[35];
+            rY[35] += delta;
+            const double temp = EvaluateYDerivative35(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[35])/delta;
+            rY[35] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative36(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        // Units: millivolt; Initial value: -81.3842590704928
+        double var_chaste_interface__cell__sd = rY[4];
+        // Units: dimensionless; Initial value: 2.95884913218079e-06
+        double var_chaste_interface__cell__sf = rY[5];
+        // Units: dimensionless; Initial value: 0.995094078386247
+        double var_chaste_interface__cell__sfcaBsl = rY[7];
+        // Units: dimensionless; Initial value: 0.0150911724206476
+        double var_chaste_interface__cell__sSLLsl = rY[27];
+        // Units: dimensionless; Initial value: 0.00979616077807075
+        double var_chaste_interface__cell__sSLHsl = rY[29];
+        // Units: dimensionless; Initial value: 0.113642236788144
+        double var_chaste_interface__cell__sNasl = rY[33];
+        // Units: dimensionless; Initial value: 8.21322794157889
+        double var_chaste_interface__cell__sCaj = rY[35];
+        // Units: dimensionless; Initial value: 0.000175648385857736
+        double var_chaste_interface__cell__sCasl = rY[36];
+        // Units: dimensionless; Initial value: 0.000105614570409386
+        double var_chaste_interface__cell__sCai = rY[37];
+        // Units: dimensionless; Initial value: 8.85230799863012e-05
+        
+        
+        // Mathematics
+        const double var_cell__Cao = 1.8; // dimensionless
+        const double var_cell__Cmem = 1.3809999999999999e-10; // dimensionless
+        const double var_cell__Fjunc = 0.11; // dimensionless
+        const double var_cell__Fjunc_CaL = 0.90000000000000002; // dimensionless
+        const double var_cell__Frdy = 96485.0; // dimensionless
+        const double var_cell__Fsl = 1.0 - var_cell__Fjunc; // dimensionless
+        const double var_cell__Fsl_CaL = 1.0 - var_cell__Fjunc_CaL; // dimensionless
+        const double var_cell__GCaB = 0.00055130000000000001; // dimensionless
+        const double var_cell__G_CaL_mult = 1.0; // dimensionless
+        const double var_cell__IbarNCX = 4.5; // dimensionless
+        const double var_cell__IbarSLCaP = 0.067299999999999999; // dimensionless
+        const double var_cell__J_ca_juncsl = 8.2413054227789685e-13; // dimensionless
+        const double var_cell__J_ca_slmyo = 3.7242560798480505e-12; // dimensionless
+        const double var_cell__Kdact = 0.00014999999999999999; // dimensionless
+        const double var_cell__KmCai = 0.0035899999999999999; // dimensionless
+        const double var_cell__KmCao = 1.3; // dimensionless
+        const double var_cell__KmNai = 12.289999999999999; // dimensionless
+        const double var_cell__KmNao = 87.5; // dimensionless
+        const double var_cell__KmPCa = 0.00050000000000000001; // dimensionless
+        const double var_cell__Nao = 140.0; // dimensionless
+        const double var_cell__Q10CaL = 1.8; // dimensionless
+        const double var_cell__Q10NCX = 1.5700000000000001; // dimensionless
+        const double var_cell__Q10SLCaP = 2.3500000000000001; // dimensionless
+        const double var_cell__R = 8314.0; // dimensionless
+        const double var_cell__Temp = 310.0; // dimensionless
+        const double var_cell__FoRT = var_cell__Frdy / (var_cell__R * var_cell__Temp); // dimensionless
+        const double var_cell__Qpow = -31.0 + 0.10000000000000001 * var_cell__Temp; // dimensionless
+        const double var_cell__cellLength = 100.0; // dimensionless
+        const double var_cell__cellRadius = 10.25; // dimensionless
+        const double var_cell__Vcell = 1.0000000000000001e-15 * M_PI * pow(var_cell__cellRadius, 2) * var_cell__cellLength; // dimensionless
+        const double var_cell__Vmyo = 0.65000000000000002 * var_cell__Vcell; // dimensionless
+        const double var_cell__Vsl = 0.02 * var_cell__Vcell; // dimensionless
+        const double var_cell__Bmax_SLhighsl = 0.0134 * var_cell__Vmyo / var_cell__Vsl; // dimensionless
+        const double var_cell__Bmax_SLlowsl = 0.037400000000000003 * var_cell__Vmyo / var_cell__Vsl; // dimensionless
+        const double var_cell__fcaCaMSL = 0.0; // dimensionless
+        const double var_cell__koff_slh = 0.029999999999999999; // dimensionless
+        const double var_cell__koff_sll = 1.3; // dimensionless
+        const double var_cell__kon_slh = 100.0; // dimensionless
+        const double var_cell__kon_sll = 100.0; // dimensionless
+        const double var_cell__ksat = 0.32000000000000001; // dimensionless
+        const double var_cell__nu = 0.27000000000000002; // dimensionless
+        const double var_cell__pCa = 0.00027 * var_cell__G_CaL_mult; // dimensionless
+        const double var_cell__I_pca_sl = pow(var_cell__Q10SLCaP, var_cell__Qpow) * pow(var_chaste_interface__cell__sCasl, 1.6000000000000001) * var_cell__Fsl * var_cell__IbarSLCaP / (pow(var_cell__KmPCa, 1.6000000000000001) + pow(var_chaste_interface__cell__sCasl, 1.6000000000000001)); // dimensionless
+        const double var_cell__Ka_sl = 1.0 / (1.0 + pow(var_cell__Kdact, 2) / pow(var_chaste_interface__cell__sCasl, 2)); // dimensionless
+        const double var_cell__eca_sl = 0.5 * log(var_cell__Cao / var_chaste_interface__cell__sCasl) / var_cell__FoRT; // dimensionless
+        const double var_cell__s3_sl = pow(var_cell__Nao, 3) * var_chaste_interface__cell__sCasl + pow(var_chaste_interface__cell__sNasl, 3) * var_cell__Cao + pow(var_chaste_interface__cell__sNasl, 3) * var_cell__KmCao + pow(var_cell__KmNao, 3) * (1.0 + var_chaste_interface__cell__sCasl / var_cell__KmCai) * var_chaste_interface__cell__sCasl + pow(var_cell__Nao, 3) * (1.0 + pow(var_chaste_interface__cell__sNasl, 3) / pow(var_cell__KmNai, 3)) * var_cell__KmCai; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sSLHsl = -var_cell__koff_slh * var_chaste_interface__cell__sSLHsl + (-var_chaste_interface__cell__sSLHsl + var_cell__Bmax_SLhighsl) * var_cell__kon_slh * var_chaste_interface__cell__sCasl; // 1 / ms
+        const double d_dt_chaste_interface_var_cell__sSLLsl = -var_cell__koff_sll * var_chaste_interface__cell__sSLLsl + (-var_chaste_interface__cell__sSLLsl + var_cell__Bmax_SLlowsl) * var_cell__kon_sll * var_chaste_interface__cell__sCasl; // 1 / ms
+        const double var_cell__J_CaB_sl = d_dt_chaste_interface_var_cell__sSLHsl + d_dt_chaste_interface_var_cell__sSLLsl; // dimensionless
+        const double var_cell__I_cabk_sl = (-var_cell__eca_sl + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__GCaB; // dimensionless
+        const double var_cell__ibarca_sl = 4.0 * (-0.34100000000000003 * var_cell__Cao + 0.34100000000000003 * var_chaste_interface__cell__sCasl * exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__FoRT * var_cell__Frdy * var_cell__pCa * var_chaste_interface__cell__sVm / (-1.0 + exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__s1_sl = pow(var_chaste_interface__cell__sNasl, 3) * var_cell__Cao * exp(var_cell__FoRT * var_cell__nu * var_chaste_interface__cell__sVm); // dimensionless
+        const double var_cell__s2_sl = pow(var_cell__Nao, 3) * var_chaste_interface__cell__sCasl * exp((-1.0 + var_cell__nu) * var_cell__FoRT * var_chaste_interface__cell__sVm); // dimensionless
+        const double var_cell__I_ncx_sl = pow(var_cell__Q10NCX, var_cell__Qpow) * (-var_cell__s2_sl + var_cell__s1_sl) * var_cell__Fsl * var_cell__IbarNCX * var_cell__Ka_sl / ((1.0 + var_cell__ksat * exp((-1.0 + var_cell__nu) * var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__s3_sl); // dimensionless
+        const double var_cell__I_Ca_sl = 0.45000000000000001 * pow(var_cell__Q10CaL, var_cell__Qpow) * (1.0 - var_chaste_interface__cell__sfcaBsl + var_cell__fcaCaMSL) * var_cell__Fsl_CaL * var_cell__ibarca_sl * var_chaste_interface__cell__sd * var_chaste_interface__cell__sf; // dimensionless
+        const double var_cell__I_Ca_tot_sl = -2.0 * var_cell__I_ncx_sl + var_cell__I_Ca_sl + var_cell__I_cabk_sl + var_cell__I_pca_sl; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sCasl = -var_cell__J_CaB_sl + (-var_chaste_interface__cell__sCasl + var_chaste_interface__cell__sCai) * var_cell__J_ca_slmyo / var_cell__Vsl + (-var_chaste_interface__cell__sCasl + var_chaste_interface__cell__sCaj) * var_cell__J_ca_juncsl / var_cell__Vsl - 0.5 * var_cell__Cmem * var_cell__I_Ca_tot_sl / (var_cell__Frdy * var_cell__Vsl); // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sCasl;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative36(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: millivolt; Initial value: -81.3842590704928
+            double var_chaste_interface__cell__sd = rY[4];
+            // Units: dimensionless; Initial value: 2.95884913218079e-06
+            double var_chaste_interface__cell__sf = rY[5];
+            // Units: dimensionless; Initial value: 0.995094078386247
+            double var_chaste_interface__cell__sfcaBsl = rY[7];
+            // Units: dimensionless; Initial value: 0.0150911724206476
+            double var_chaste_interface__cell__sSLLsl = rY[27];
+            // Units: dimensionless; Initial value: 0.00979616077807075
+            double var_chaste_interface__cell__sSLHsl = rY[29];
+            // Units: dimensionless; Initial value: 0.113642236788144
+            double var_chaste_interface__cell__sNasl = rY[33];
+            // Units: dimensionless; Initial value: 8.21322794157889
+            double var_chaste_interface__cell__sCasl = rY[36];
+            // Units: dimensionless; Initial value: 0.000105614570409386
+            
+            const double var_x5 = 1 / var_chaste_interface__cell__sCasl;
+            const double var_x36 = exp(-0.027328194960695912 * var_chaste_interface__cell__sVm);
+            const double var_x39 = exp(0.010107688547106707 * var_chaste_interface__cell__sVm);
+            const double var_x41 = 1.0 + 0.32000000000000001 * var_x36;
+            const double var_x42 = 1 / var_x41;
+            const double var_x53 = pow(var_chaste_interface__cell__sNasl, 3);
+            const double var_x54 = pow(var_chaste_interface__cell__sCasl, (-2));
+            const double var_x55 = 1.0 + 2.2499999999999996e-8 * var_x54;
+            const double var_x56 = 1 / var_x55;
+            const double var_x57 = 2744000.0 * var_chaste_interface__cell__sCasl;
+            const double var_x58 = (1.0 + 278.55153203342621 * var_chaste_interface__cell__sCasl) * var_chaste_interface__cell__sCasl;
+            const double var_x59 = 1 / (9850.9599999999991 + var_x57 + 669921.875 * var_x58 + 8.4066800865219591 * var_x53);
+            const double var_x60 = var_x56 * var_x59;
+            const double var_x61 = var_x42 * var_x60;
+            const double var_x63 = 1.0 - var_chaste_interface__cell__sfcaBsl;
+            const double var_x67 = var_chaste_interface__cell__sd * var_chaste_interface__cell__sf;
+            const double var_x79 = exp(0.074871767015605231 * var_chaste_interface__cell__sVm);
+            const double var_x80 = -1.0 + var_x79;
+            const double var_x81 = 1 / var_x80;
+            const double var_x82 = var_x67 * var_x81;
+            const double var_x88 = 1.8 * var_x39;
+            const double var_x92 = var_x63 * var_x82;
+            const double var_x100 = var_x53 * var_x88 - var_x36 * var_x57;
+            const double var_x110 = var_x79 * var_chaste_interface__cell__sVm;
+            const double var_x117 = var_x110 * var_x92;
+            const double var_x162 = var_x100 * var_x42;
+            const double var_x163 = var_x162 * var_x56 / pow((0.0035899999999999999 + 0.244140625 * var_x58 + 3.0636589236596063e-6 * var_x53 + var_chaste_interface__cell__sCasl), 2);
+            const double var_x176 = 0.0065532979861118307 * var_x5;
+            const double var_x177 = 5.2281977629563632e-6 + pow(var_chaste_interface__cell__sCasl, 1.6000000000000001);
+            const double var_x178 = 0.095835200000000009 * pow(var_chaste_interface__cell__sCasl, 2.2000000000000002) / pow(var_x177, 2);
+            const double var_x179 = 0.095835200000000009 * pow(var_chaste_interface__cell__sCasl, 0.60000000000000009) / var_x177;
+            const double var_x180 = var_x36 * var_x61;
+            const double var_x181 = var_x163 * (-3413921.875 - 373215529.24791086 * var_chaste_interface__cell__sCasl);
+            const double var_x182 = var_x162 * var_x59 / (pow(var_x55, 2) * pow(var_chaste_interface__cell__sCasl, 3));
+            const double var_x183 = 0.059860251422720709 * var_x117;
+            const double var_x321 = 100.0 * var_chaste_interface__cell__sSLLsl;
+            const double var_x323 = 100.0 * var_chaste_interface__cell__sSLHsl;
+            const double var_x339 = 1 / M_PI;
+            const double var_x361 = 0.0034058550063278672 * var_x339;
+            
+            partialF = -165.10000000000002 + var_x321 + var_x323 - 21.646099331949777 * var_x339 - var_x361 * (var_x176 + var_x179 + var_x183 - var_x178 + 21979440.0 * var_x180 - 1.0638105721255599e-12 * var_x181 - 3.6044999999999992e-7 * var_x182);
+        }
+        else
+        {
+            const double y_save = rY[36];
+            rY[36] += delta;
+            const double temp = EvaluateYDerivative36(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[36])/delta;
+            rY[36] = y_save;
+        }
+        return partialF;
+    }
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative37(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    {
+        
+        double var_chaste_interface__cell__sTnCL = rY[19];
+        // Units: dimensionless; Initial value: 0.00904644567707666
+        double var_chaste_interface__cell__sTnCHc = rY[20];
+        // Units: dimensionless; Initial value: 0.1183943202639
+        double var_chaste_interface__cell__sTnCHm = rY[21];
+        // Units: dimensionless; Initial value: 0.0101423649465603
+        double var_chaste_interface__cell__sCaM = rY[22];
+        // Units: dimensionless; Initial value: 0.000299824763475116
+        double var_chaste_interface__cell__sMyoc = rY[23];
+        // Units: dimensionless; Initial value: 0.00201443980536826
+        double var_chaste_interface__cell__sMyom = rY[24];
+        // Units: dimensionless; Initial value: 0.137467597337588
+        double var_chaste_interface__cell__sSRB = rY[25];
+        // Units: dimensionless; Initial value: 0.00220110816535249
+        double var_chaste_interface__cell__sCa_sr = rY[31];
+        // Units: dimensionless; Initial value: 0.563755421404699
+        double var_chaste_interface__cell__sCasl = rY[36];
+        // Units: dimensionless; Initial value: 0.000105614570409386
+        double var_chaste_interface__cell__sCai = rY[37];
+        // Units: dimensionless; Initial value: 8.85230799863012e-05
+        
+        
+        // Mathematics
+        const double var_cell__Bmax_CaM = 0.024; // dimensionless
+        const double var_cell__Bmax_SR = 0.017100000000000001; // dimensionless
+        const double var_cell__Bmax_TnChigh = 0.14000000000000001; // dimensionless
+        const double var_cell__Bmax_TnClow = 0.070000000000000007; // dimensionless
+        const double var_cell__Bmax_myosin = 0.14000000000000001; // dimensionless
+        const double var_cell__J_ca_slmyo = 3.7242560798480505e-12; // dimensionless
+        const double var_cell__Kmf = 0.00024600000000000002; // dimensionless
+        const double var_cell__Kmr = 1.7; // dimensionless
+        const double var_cell__Mgi = 1.0; // dimensionless
+        const double var_cell__Q10SRCaP = 2.6000000000000001; // dimensionless
+        const double var_cell__Temp = 310.0; // dimensionless
+        const double var_cell__Qpow = -31.0 + 0.10000000000000001 * var_cell__Temp; // dimensionless
+        const double var_cell__Vmax_SRCaP = 0.0053114; // dimensionless
+        const double var_cell__cellLength = 100.0; // dimensionless
+        const double var_cell__cellRadius = 10.25; // dimensionless
+        const double var_cell__Vcell = 1.0000000000000001e-15 * M_PI * pow(var_cell__cellRadius, 2) * var_cell__cellLength; // dimensionless
+        const double var_cell__Vmyo = 0.65000000000000002 * var_cell__Vcell; // dimensionless
+        const double var_cell__Vsr = 0.035000000000000003 * var_cell__Vcell; // dimensionless
+        const double var_cell__hillSRCaP = 1.7869999999999999; // dimensionless
+        const double var_cell__koff_cam = 0.23799999999999999; // dimensionless
+        const double var_cell__koff_myoca = 0.00046000000000000001; // dimensionless
+        const double var_cell__koff_myomg = 5.7000000000000003e-5; // dimensionless
+        const double var_cell__koff_sr = 0.059999999999999998; // dimensionless
+        const double var_cell__koff_tnchca = 3.1999999999999999e-5; // dimensionless
+        const double var_cell__koff_tnchmg = 0.0033300000000000001; // dimensionless
+        const double var_cell__koff_tncl = 0.019599999999999999; // dimensionless
+        const double var_cell__kon_cam = 34.0; // dimensionless
+        const double var_cell__kon_myoca = 13.800000000000001; // dimensionless
+        const double var_cell__kon_myomg = 0.015699999999999999; // dimensionless
+        const double var_cell__kon_sr = 100.0; // dimensionless
+        const double var_cell__kon_tnchca = 2.3700000000000001; // dimensionless
+        const double var_cell__kon_tnchmg = 0.0030000000000000001; // dimensionless
+        const double var_cell__kon_tncl = 32.700000000000003; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sCaM = -var_cell__koff_cam * var_chaste_interface__cell__sCaM + (-var_chaste_interface__cell__sCaM + var_cell__Bmax_CaM) * var_cell__kon_cam * var_chaste_interface__cell__sCai; // 1 / ms
+        const double var_cell__J_serca = 1.0 * pow(var_cell__Q10SRCaP, var_cell__Qpow) * (pow((var_chaste_interface__cell__sCai / var_cell__Kmf), var_cell__hillSRCaP) - pow((var_chaste_interface__cell__sCa_sr / var_cell__Kmr), var_cell__hillSRCaP)) * var_cell__Vmax_SRCaP / (1.0 + pow((var_chaste_interface__cell__sCai / var_cell__Kmf), var_cell__hillSRCaP) + pow((var_chaste_interface__cell__sCa_sr / var_cell__Kmr), var_cell__hillSRCaP)); // dimensionless
+        const double d_dt_chaste_interface_var_cell__sMyoc = -var_cell__koff_myoca * var_chaste_interface__cell__sMyoc + (-var_chaste_interface__cell__sMyoc - var_chaste_interface__cell__sMyom + var_cell__Bmax_myosin) * var_cell__kon_myoca * var_chaste_interface__cell__sCai; // 1 / ms
+        const double d_dt_chaste_interface_var_cell__sMyom = -var_cell__koff_myomg * var_chaste_interface__cell__sMyom + (-var_chaste_interface__cell__sMyoc - var_chaste_interface__cell__sMyom + var_cell__Bmax_myosin) * var_cell__Mgi * var_cell__kon_myomg; // 1 / ms
+        const double d_dt_chaste_interface_var_cell__sSRB = -var_cell__koff_sr * var_chaste_interface__cell__sSRB + (-var_chaste_interface__cell__sSRB + var_cell__Bmax_SR) * var_cell__kon_sr * var_chaste_interface__cell__sCai; // 1 / ms
+        const double d_dt_chaste_interface_var_cell__sTnCHc = -var_cell__koff_tnchca * var_chaste_interface__cell__sTnCHc + (-var_chaste_interface__cell__sTnCHc - var_chaste_interface__cell__sTnCHm + var_cell__Bmax_TnChigh) * var_cell__kon_tnchca * var_chaste_interface__cell__sCai; // 1 / ms
+        const double d_dt_chaste_interface_var_cell__sTnCHm = -var_cell__koff_tnchmg * var_chaste_interface__cell__sTnCHm + (-var_chaste_interface__cell__sTnCHc - var_chaste_interface__cell__sTnCHm + var_cell__Bmax_TnChigh) * var_cell__Mgi * var_cell__kon_tnchmg; // 1 / ms
+        const double d_dt_chaste_interface_var_cell__sTnCL = -var_cell__koff_tncl * var_chaste_interface__cell__sTnCL + (-var_chaste_interface__cell__sTnCL + var_cell__Bmax_TnClow) * var_cell__kon_tncl * var_chaste_interface__cell__sCai; // 1 / ms
+        const double var_cell__J_CaB_cytosol = d_dt_chaste_interface_var_cell__sCaM + d_dt_chaste_interface_var_cell__sMyoc + d_dt_chaste_interface_var_cell__sMyom + d_dt_chaste_interface_var_cell__sSRB + d_dt_chaste_interface_var_cell__sTnCHc + d_dt_chaste_interface_var_cell__sTnCHm + d_dt_chaste_interface_var_cell__sTnCL; // dimensionless
+        const double d_dt_chaste_interface_var_cell__sCai = -var_cell__J_CaB_cytosol + (-var_chaste_interface__cell__sCai + var_chaste_interface__cell__sCasl) * var_cell__J_ca_slmyo / var_cell__Vmyo - var_cell__J_serca * var_cell__Vsr / var_cell__Vmyo; // 1 / ms
+
+        return d_dt_chaste_interface_var_cell__sCai;
+    }
+
+    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative37(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__cell__sTnCL = rY[19];
+            // Units: dimensionless; Initial value: 0.00904644567707666
+            double var_chaste_interface__cell__sTnCHc = rY[20];
+            // Units: dimensionless; Initial value: 0.1183943202639
+            double var_chaste_interface__cell__sTnCHm = rY[21];
+            // Units: dimensionless; Initial value: 0.0101423649465603
+            double var_chaste_interface__cell__sCaM = rY[22];
+            // Units: dimensionless; Initial value: 0.000299824763475116
+            double var_chaste_interface__cell__sMyoc = rY[23];
+            // Units: dimensionless; Initial value: 0.00201443980536826
+            double var_chaste_interface__cell__sMyom = rY[24];
+            // Units: dimensionless; Initial value: 0.137467597337588
+            double var_chaste_interface__cell__sSRB = rY[25];
+            // Units: dimensionless; Initial value: 0.00220110816535249
+            double var_chaste_interface__cell__sCa_sr = rY[31];
+            // Units: dimensionless; Initial value: 0.563755421404699
+            double var_chaste_interface__cell__sCai = rY[37];
+            // Units: dimensionless; Initial value: 8.85230799863012e-05
+            
+            const double var_x303 = 32.700000000000003 * var_chaste_interface__cell__sTnCL;
+            const double var_x306 = 2.3700000000000001 * var_chaste_interface__cell__sTnCHc;
+            const double var_x307 = 2.3700000000000001 * var_chaste_interface__cell__sTnCHm;
+            const double var_x309 = 34.0 * var_chaste_interface__cell__sCaM;
+            const double var_x312 = 13.800000000000001 * var_chaste_interface__cell__sMyoc;
+            const double var_x313 = 13.800000000000001 * var_chaste_interface__cell__sMyom;
+            const double var_x315 = 100.0 * var_chaste_interface__cell__sSRB;
+            const double var_x327 = pow(var_chaste_interface__cell__sCa_sr, 1.7869999999999999);
+            const double var_x328 = 0.38742512113256738 * var_x327;
+            const double var_x329 = pow(var_chaste_interface__cell__sCai, 1.7869999999999999);
+            const double var_x330 = 2814485.1633595936 * var_x329;
+            const double var_x331 = 1 / (1.0 + var_x328 + var_x330);
+            const double var_x334 = (var_x330 - var_x328) / pow((3.5530476870814998e-7 + var_x329 + 1.3765399305573384e-7 * var_x327), 2);
+            const double var_x336 = pow(var_chaste_interface__cell__sCai, 0.78699999999999992);
+            const double var_x337 = var_x331 * var_x336;
+            const double var_x338 = var_x334 * var_x336;
+            const double var_x339 = 1 / M_PI;
+            const double var_x364 = 0.54535393106272634 * var_x339;
+            
+            partialF = -7.0788000000000011 + var_x303 + var_x306 + var_x307 + var_x309 + var_x312 + var_x313 + var_x315 - var_x364 + 1.8158889498609611e-10 * var_x338 - 1438.4249685909372 * var_x337;
+        }
+        else
+        {
+            const double y_save = rY[37];
+            rY[37] += delta;
+            const double temp = EvaluateYDerivative37(var_chaste_interface__cell__time, rY);
+            partialF = (temp-mEvalF[37])/delta;
+            rY[37] = y_save;
+        }
+        return partialF;
     }
 
 template<>
-void OdeSystemInformation<Cellgrandi2010ssFromCellMLRushLarsen>::Initialise(void)
+void OdeSystemInformation<Cellgrandi2010ssFromCellMLGRL1>::Initialise(void)
 {
     this->mSystemName = "grandi2010";
     this->mFreeVariableName = "cell__time";
@@ -864,4 +3980,4 @@ void OdeSystemInformation<Cellgrandi2010ssFromCellMLRushLarsen>::Initialise(void
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellgrandi2010ssFromCellMLRushLarsen)
+CHASTE_CLASS_EXPORT(Cellgrandi2010ssFromCellMLGRL1)

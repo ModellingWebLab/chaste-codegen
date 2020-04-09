@@ -44,7 +44,6 @@
         return mStateVariables[1];
     }
     Cellten_tusscher_model_2006_epiFromCellMLRushLarsen::Cellten_tusscher_model_2006_epiFromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
-    
         : AbstractRushLarsenCardiacCell(
                 19,
                 0,

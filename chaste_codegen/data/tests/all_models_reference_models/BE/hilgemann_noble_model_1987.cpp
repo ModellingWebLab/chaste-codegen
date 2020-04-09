@@ -380,8 +380,7 @@
         const double var_x81 = 120.0 * var_x25;
         const double var_x82 = 0.25 * var_chaste_interface__membrane__V;
         const double var_x83 = 0.012 / (1.0 + exp(-8.5 - var_x82));
-        const double var_x84 = var_x83 * (-1.0 - 119.0 * var_x29);
-        const double var_x85 = 34.0 + var_chaste_interface__membrane__V;
+        const double var_x84 = 34.0 + var_chaste_interface__membrane__V;
         
         
         rJacobian[0][0] = 1.0 - (mDt * (-0.059999999999999998 + var_x0 - 1.0 * var_x4));
@@ -504,7 +503,7 @@
         rJacobian[10][7] = 0.0;
         rJacobian[10][8] = 0.0;
         rJacobian[10][9] = 0.0;
-        rJacobian[10][10] = 1.0 - (mDt * (((fabs(var_x85) < 0.0001) ? (-0.025000000000000001 + var_x84) : (var_x84 - 0.0062500000000000003 * var_x85 / (-1.0 + exp(8.5 + var_x82))))));
+        rJacobian[10][10] = 1.0 - (mDt * (-0.001 * ((fabs(var_x84) < 0.0001) ? (25.0) : (6.25 * var_x84 / (-1.0 + exp(8.5 + var_x82)))) + var_x83 * (-1.0 - 119.0 * var_x29)));
     }
 
     void Cellhilgemann_noble_model_1987FromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted)

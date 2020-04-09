@@ -89,7 +89,7 @@
         
         
         
-        rJacobian[0][0] = 1.0 - (mDt * (((fabs(var_chaste_interface__membrane__V) < 0.0) ? (4.0 * var_chaste_interface__fast_sodium_current_m_gate2__m) : (0))));
+        rJacobian[0][0] = 1.0 - (mDt * (0.001 * ((fabs(var_chaste_interface__membrane__V) < 0.0) ? (4000.0 * var_chaste_interface__fast_sodium_current_m_gate2__m) : (0))));
         rJacobian[0][1] = 0.0;
         rJacobian[1][0] = 0.0;
         rJacobian[1][1] = 1.0;

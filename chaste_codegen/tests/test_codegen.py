@@ -27,6 +27,23 @@ chaste_BE = get_models(ref_folder='chaste_reference_models', type='BE')
 chaste_RL = get_models(ref_folder='chaste_reference_models', type='RL')
 chaste_RLopt = get_models(ref_folder='chaste_reference_models', type='RLopt')
 chaste_GRL1 = get_models(ref_folder='chaste_reference_models', type='GRL1')
+chaste_GRL1Opt = get_models(ref_folder='chaste_reference_models', type='GRL1Opt')
+
+
+@pytest.mark.parametrize(('model'), chaste_GRL1Opt)
+def test_GRL1Opt(tmp_path, model):
+    """ Check generation of Generalised Rush Larsen First order Opt models against reference"""
+    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLGRL1'
+    LOGGER.info('Converting: Generalised Rush Larsen: ' + class_name + '\n')
+    # Generate chaste code
+    chaste_model = cg.GeneralisedRushLarsenModelFirstOrderOpt(cellmlmanip.load_model(model['model']),
+                                                              model['model_name_from_file'], class_name=class_name)
+
+    chaste_model.generate_chaste_code()
+    # Compare against reference
+    test_utils.compare_model_against_reference('GRL1Opt', chaste_model,
+                                               tmp_path, model['expected_hpp_path'],
+                                               model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_GRL1)

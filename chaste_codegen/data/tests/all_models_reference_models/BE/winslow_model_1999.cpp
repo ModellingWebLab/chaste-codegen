@@ -411,7 +411,7 @@
         const double var_x30 = 48600000000.0 * var_x29 * var_chaste_interface__RyR_channel__P_C1;
         const double var_x31 = 4050000.0 * var_x29;
         const double var_x32 = 12150000.0 * pow(var_chaste_interface__intracellular_ion_concentrations__Ca_ss, 2.0) * var_chaste_interface__RyR_channel__P_O1;
-        const double var_x33 = -0.080000000000000002 * exp(-0.090909090909090912 * var_chaste_interface__membrane__V);
+        const double var_x33 = -80.0 * exp(-0.090909090909090912 * var_chaste_interface__membrane__V);
         const double var_x34 = var_chaste_interface__membrane__V >= -90.0;
         const double var_x35 = 47.130000000000003 + var_chaste_interface__membrane__V;
         const double var_x36 = 0.80000000000000004 + var_chaste_interface__intracellular_ion_concentrations__Ca_JSR;
@@ -869,7 +869,7 @@
         rJacobian[16][13] = 0.0;
         rJacobian[16][14] = 0.0;
         rJacobian[16][15] = 0.0;
-        rJacobian[16][16] = 1.0 - (mDt * ((((var_x34) && (fabs(var_x35) < 1.0000000000000001e-5)) ? (var_x33 - 1.0 / (-0.13565000000000002 - 0.0050000000000000001 * var_chaste_interface__membrane__V)) : ((var_x34) ? (var_x33 - 0.32000000000000001 * var_x35 / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__membrane__V))) : (0)))));
+        rJacobian[16][16] = 1.0 - (mDt * (0.001 * (((var_x34) && (fabs(var_x35) < 1.0000000000000001e-5)) ? (var_x33 - 1000.0 / (-0.13565000000000002 - 0.0050000000000000001 * var_chaste_interface__membrane__V)) : ((var_x34) ? (var_x33 - 320.0 * var_x35 / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__membrane__V))) : (0)))));
         rJacobian[16][17] = 0.0;
         rJacobian[16][18] = 0.0;
         rJacobian[16][19] = 0.0;

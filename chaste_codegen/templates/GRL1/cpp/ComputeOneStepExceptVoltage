@@ -16,7 +16,7 @@
 
         {%- for deriv in y_derivatives %}
         {% if loop.index0 != membrane_voltage_index %}mEvalF[{{loop.index0}}] = {{deriv}};
-        mPartialF[{{loop.index0}}] = EvaluatePartialDerivative1({{free_variable.var_name}}, rY, delta);{% endif %}{%- endfor %}
+        mPartialF[{{loop.index0}}] = EvaluatePartialDerivative{{loop.index0}}({{free_variable.var_name}}, rY, delta);{% endif %}{%- endfor %}
 
         {%- for deriv in y_derivatives %}
         {% if loop.index0 != membrane_voltage_index %}{
