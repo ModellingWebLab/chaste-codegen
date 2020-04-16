@@ -1,0 +1,3 @@
+*.* linguist-generated
+*.hpp filter=strip_gen_time
+*.cpp filter=strip_gen_time

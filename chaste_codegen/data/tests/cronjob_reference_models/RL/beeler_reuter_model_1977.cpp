@@ -44,7 +44,6 @@
         return mStateVariables[1];
     }
     Cellbeeler_reuter_model_1977FromCellMLRushLarsen::Cellbeeler_reuter_model_1977FromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
-    
         : AbstractRushLarsenCardiacCell(
                 8,
                 0,

@@ -26,13 +26,47 @@ chaste_cvode_models_with_jacobians = get_models(ref_folder='chaste_reference_mod
 chaste_BE = get_models(ref_folder='chaste_reference_models', type='BE')
 chaste_RL = get_models(ref_folder='chaste_reference_models', type='RL')
 chaste_RLopt = get_models(ref_folder='chaste_reference_models', type='RLopt')
+chaste_GRL1 = get_models(ref_folder='chaste_reference_models', type='GRL1')
+chaste_GRL1Opt = get_models(ref_folder='chaste_reference_models', type='GRL1Opt')
+
+
+@pytest.mark.parametrize(('model'), chaste_GRL1Opt)
+def test_GRL1Opt(tmp_path, model):
+    """ Check generation of Generalised Rush Larsen First order Opt models against reference"""
+    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLGRL1'
+    LOGGER.info('Converting: Generalised Rush Larsen: ' + class_name + '\n')
+    # Generate chaste code
+    chaste_model = cg.GeneralisedRushLarsenFirstOrderModelOpt(cellmlmanip.load_model(model['model']),
+                                                              model['model_name_from_file'], class_name=class_name)
+
+    chaste_model.generate_chaste_code()
+    # Compare against reference
+    test_utils.compare_model_against_reference('GRL1Opt', chaste_model,
+                                               tmp_path, model['expected_hpp_path'],
+                                               model['expected_cpp_path'])
+
+
+@pytest.mark.parametrize(('model'), chaste_GRL1)
+def test_GRL1(tmp_path, model):
+    """ Check generation of Generalised Rush Larsen First order models against reference"""
+    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLGRL1'
+    LOGGER.info('Converting: Generalised Rush Larsen: ' + class_name + '\n')
+    # Generate chaste code
+    chaste_model = cg.GeneralisedRushLarsenFirstOrderModel(cellmlmanip.load_model(model['model']),
+                                                           model['model_name_from_file'], class_name=class_name)
+
+    chaste_model.generate_chaste_code()
+    # Compare against reference
+    test_utils.compare_model_against_reference('GRL', chaste_model,
+                                               tmp_path, model['expected_hpp_path'],
+                                               model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_RLopt)
 def test_RLopt(tmp_path, model):
-    """ Check generation of Cvode models against reference"""
+    """ Check generation of Rush Larsen Opt models against reference"""
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLRushLarsen'
-    LOGGER.info('Converting: RLopt: ' + class_name + '\n')
+    LOGGER.info('Converting: RushLarsen Opt: ' + class_name + '\n')
     # Generate chaste code
     chaste_model = cg.RushLarsenOptModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
                                          class_name=class_name)
@@ -46,9 +80,9 @@ def test_RLopt(tmp_path, model):
 
 @pytest.mark.parametrize(('model'), chaste_RL)
 def test_RL(tmp_path, model):
-    """ Check generation of Cvode models against reference"""
+    """ Check generation of Rush Larsen models against reference"""
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLRushLarsen'
-    LOGGER.info('Converting: RL: ' + class_name + '\n')
+    LOGGER.info('Converting: RushLarsen: ' + class_name + '\n')
     # Generate chaste code
     chaste_model = cg.RushLarsenModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
                                       class_name=class_name)
@@ -216,6 +250,25 @@ def test_dynamic_RL(tmp_path):
         os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'RL', 'dynamic_luo_rudy_1994.cpp')
     # Compare against reference
     test_utils.compare_model_against_reference('RL', chaste_model, tmp_path, expected_hpp_path,
+                                               expected_cpp_path)
+
+
+def test_dynamic_GRL1(tmp_path):
+    tmp_path = str(tmp_path)
+    LOGGER.info('Converting: Generalised Rush Larsen 1st order Dynamic luo_rudy_1994\n')
+    model_file = \
+        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'luo_rudy_1994.cellml')
+    chaste_model = cellmlmanip.load_model(model_file)
+    chaste_model = cg.GeneralisedRushLarsenFirstOrderModel(chaste_model, 'dynamic_luo_rudy_1994',
+                                                           class_name='Dynamicluo_rudy_1994FromCellMLGRL1',
+                                                           dynamically_loadable=True)
+    chaste_model.generate_chaste_code()
+    expected_hpp_path = \
+        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'GRL1', 'dynamic_luo_rudy_1994.hpp')
+    expected_cpp_path = \
+        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'GRL1', 'dynamic_luo_rudy_1994.cpp')
+    # Compare against reference
+    test_utils.compare_model_against_reference('GRL1', chaste_model, tmp_path, expected_hpp_path,
                                                expected_cpp_path)
 
 

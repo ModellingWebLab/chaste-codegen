@@ -17,6 +17,8 @@ chaste_all_cvode_models_jacobian = get_models(ref_folder='cronjob_reference_mode
 chaste_all_BE = get_models(ref_folder='cronjob_reference_models', type='BE')
 chaste_all_RL = get_models(ref_folder='cronjob_reference_models', type='RL')
 chaste_all_RLopt = get_models(ref_folder='cronjob_reference_models', type='RLopt')
+chaste_all_GRL1 = get_models(ref_folder='cronjob_reference_models', type='GRL1')
+chaste_all_GRL1Opt = get_models(ref_folder='cronjob_reference_models', type='GRL1Opt')
 
 
 @pytest.mark.cronjob
@@ -72,7 +74,7 @@ def test_BE_all_cronjob(tmp_path, model, request):
 @pytest.mark.all_models
 @pytest.mark.parametrize(('model'), chaste_all_RL)
 def test_RL_all_cronjob(tmp_path, model, request):
-    """ Check generation of Cvode models against reference"""
+    """ Check generation of Rush Larsen models against reference"""
     if request.config.option.markexpr != 'all_models':
         pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
     from chaste_codegen.tests.test_codegen import test_RL
@@ -82,8 +84,28 @@ def test_RL_all_cronjob(tmp_path, model, request):
 @pytest.mark.all_models
 @pytest.mark.parametrize(('model'), chaste_all_RLopt)
 def test_RLopt_all_cronjob(tmp_path, model, request):
-    """ Check generation of Cvode models against reference"""
+    """ Check generation of Rush Larsen Opt models against reference"""
     if request.config.option.markexpr != 'all_models':
         pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
     from chaste_codegen.tests.test_codegen import test_RLopt
     test_RLopt(tmp_path, model)
+
+
+@pytest.mark.all_models
+@pytest.mark.parametrize(('model'), chaste_all_GRL1)
+def test_GRL1_all_cronjob(tmp_path, model, request):
+    """ Check generation of Generalised Rush Larsen First order models against reference"""
+    if request.config.option.markexpr != 'all_models':
+        pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
+    from chaste_codegen.tests.test_codegen import test_GRL1
+    test_GRL1(tmp_path, model)
+
+
+@pytest.mark.all_models
+@pytest.mark.parametrize(('model'), chaste_all_GRL1Opt)
+def test_GRL1Opt_all_cronjob(tmp_path, model, request):
+    """ Check generation of Generalised Rush Larsen First order optimised models against reference"""
+    if request.config.option.markexpr != 'all_models':
+        pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
+    from chaste_codegen.tests.test_codegen import test_GRL1Opt
+    test_GRL1Opt(tmp_path, model)

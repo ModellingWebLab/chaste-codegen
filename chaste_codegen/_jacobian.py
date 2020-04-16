@@ -29,7 +29,7 @@ def format_jacobian(jacobian_equations, jacobian_matrix, printer, swap_inner_out
 
     :param jacobian_equations: list of common term equations (expects a list as per get_jacobian)
     :param jacobian_matrix: a jacobian matrix (expects a sympy.Matrix as per get_jacobian)
-    :param printer: printer object to retreive outputtable version of variables and equations
+    :param printer: printer object to Retrieve outputtable version of variables and equations
     :param swap_inner_outer_index: swap inner and outer index so [j, i] instead of [i, j]  by swapping swap loops.
                                    This swpas whether the 1st index is row or column.
     :param skip_0_entries: should entries in the jacobian matrixt that are 0 be skipped in the output?
