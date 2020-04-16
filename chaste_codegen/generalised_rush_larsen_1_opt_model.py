@@ -1,8 +1,8 @@
 from chaste_codegen._partial_eval import partial_eval
-from chaste_codegen.generalised_rush_larsen_1_model import GeneralisedRushLarsenModelFirstOrder
+from chaste_codegen.generalised_rush_larsen_1_model import GeneralisedRushLarsenFirstOrderModel
 
 
-class GeneralisedRushLarsenModelFirstOrderOpt(GeneralisedRushLarsenModelFirstOrder):
+class GeneralisedRushLarsenFirstOrderModelOpt(GeneralisedRushLarsenFirstOrderModel):
     """ Holds template and information specific for the GeneralisedRushLarsenOpt model type"""
 
     def _get_extended_equations_for_ionic_vars(self):

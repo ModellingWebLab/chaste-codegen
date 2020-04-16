@@ -5,7 +5,7 @@ from chaste_codegen._partial_eval import partial_eval
 from chaste_codegen.chaste_model import ChasteModel
 
 
-class GeneralisedRushLarsenModelFirstOrder(ChasteModel):
+class GeneralisedRushLarsenFirstOrderModel(ChasteModel):
     """ Holds template and information specific for the GeneralisedRushLarsen model type"""
 
     def __init__(self, model, file_name, **kwargs):
@@ -18,7 +18,7 @@ class GeneralisedRushLarsenModelFirstOrder(ChasteModel):
         self._map_state_vars_and_eqs()
 
     def _get_jacobian(self):
-        """Retreive jacobian matrix"""
+        """Retrieve jacobian matrix"""
         derivative_eqs_for_jacobian = \
             partial_eval(self._derivative_equations, self._y_derivatives, keep_multiple_usages=False)
         return get_jacobian(self._state_vars, derivative_eqs_for_jacobian)

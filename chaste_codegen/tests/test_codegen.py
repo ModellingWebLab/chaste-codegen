@@ -36,7 +36,7 @@ def test_GRL1Opt(tmp_path, model):
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLGRL1'
     LOGGER.info('Converting: Generalised Rush Larsen: ' + class_name + '\n')
     # Generate chaste code
-    chaste_model = cg.GeneralisedRushLarsenModelFirstOrderOpt(cellmlmanip.load_model(model['model']),
+    chaste_model = cg.GeneralisedRushLarsenFirstOrderModelOpt(cellmlmanip.load_model(model['model']),
                                                               model['model_name_from_file'], class_name=class_name)
 
     chaste_model.generate_chaste_code()
@@ -52,7 +52,7 @@ def test_GRL1(tmp_path, model):
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLGRL1'
     LOGGER.info('Converting: Generalised Rush Larsen: ' + class_name + '\n')
     # Generate chaste code
-    chaste_model = cg.GeneralisedRushLarsenModelFirstOrder(cellmlmanip.load_model(model['model']),
+    chaste_model = cg.GeneralisedRushLarsenFirstOrderModel(cellmlmanip.load_model(model['model']),
                                                            model['model_name_from_file'], class_name=class_name)
 
     chaste_model.generate_chaste_code()
@@ -259,7 +259,7 @@ def test_dynamic_GRL1(tmp_path):
     model_file = \
         os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'luo_rudy_1994.cellml')
     chaste_model = cellmlmanip.load_model(model_file)
-    chaste_model = cg.GeneralisedRushLarsenModelFirstOrder(chaste_model, 'dynamic_luo_rudy_1994',
+    chaste_model = cg.GeneralisedRushLarsenFirstOrderModel(chaste_model, 'dynamic_luo_rudy_1994',
                                                            class_name='Dynamicluo_rudy_1994FromCellMLGRL1',
                                                            dynamically_loadable=True)
     chaste_model.generate_chaste_code()

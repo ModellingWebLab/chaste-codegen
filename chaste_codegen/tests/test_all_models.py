@@ -104,7 +104,7 @@ def test_GRL1_all_models(tmp_path, model, request):
 @pytest.mark.all_models
 @pytest.mark.parametrize(('model'), chaste_all_GRL1Opt)
 def test_GRL1Opt_all_models(tmp_path, model, request):
-    """ Check generation of Generalised Rush Larsen First Opt order models against reference"""
+    """ Check generation of Generalised Rush Larsen First order optimised models against reference"""
     if request.config.option.markexpr != 'all_models':
         pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
     from chaste_codegen.tests.test_codegen import test_GRL1Opt
