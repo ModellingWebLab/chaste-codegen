@@ -13,6 +13,14 @@ class KINDS(Enum):
 
 
 def check_expr(expr, state_var, membrane_voltage_var, state_vars):
+    """Check the kind of expression given (NONE, LINEAR or NONLINEAR)
+
+    :param expr: the expression to check
+    :param state_var: the state variable we're currently checking against for linearity
+    :param membrane_voltage_var: the variable representing Voltage
+    :param state_vars: the state variables in the model the expression comes from
+    :return: the kind of expr (NONE, LINEAR or NONLINEAR)
+    """
     def max_kind(state_var, operands):
         result = KINDS.NONE
         for op in operands:
