@@ -17,7 +17,9 @@ def chaste_codegen():
                               ('CVODE', cg.CvodeChasteModel), ('BackwardsEuler', cg.BackwardEulerModel),
                               ('RushLarsen', cg.RushLarsenModel), ('RushLarsenOpt', cg.RushLarsenOptModel),
                               ('GeneralisedRushLarsen1', cg.GeneralisedRushLarsenFirstOrderModel),
-                              ('GeneralisedRushLarsen1Opt', cg.GeneralisedRushLarsenFirstOrderModelOpt)])
+                              ('GeneralisedRushLarsen1Opt', cg.GeneralisedRushLarsenFirstOrderModelOpt),
+                              ('GeneralisedRushLarsen2', cg.GeneralisedRushLarsenSecondOrderModel),
+                              ('GeneralisedRushLarsen2Opt', cg.GeneralisedRushLarsenSecondOrderModelOpt)])
 
     # Store extensions we can use and how to use them, based on extension of given outfile
     extension_lookup = {'.cellml': ['.hpp', '.cpp'], '': ['.hpp', '.cpp'], '.cpp': ['.hpp', '.cpp'],
