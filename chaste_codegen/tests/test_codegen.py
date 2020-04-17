@@ -28,6 +28,40 @@ chaste_RL = get_models(ref_folder='chaste_reference_models', type='RL')
 chaste_RLopt = get_models(ref_folder='chaste_reference_models', type='RLopt')
 chaste_GRL1 = get_models(ref_folder='chaste_reference_models', type='GRL1')
 chaste_GRL1Opt = get_models(ref_folder='chaste_reference_models', type='GRL1Opt')
+chaste_GRL2 = get_models(ref_folder='chaste_reference_models', type='GRL2')
+chaste_GRL2Opt = get_models(ref_folder='chaste_reference_models', type='GRL2Opt')
+
+
+@pytest.mark.parametrize(('model'), chaste_GRL2Opt)
+def test_GRL2Opt(tmp_path, model):
+    """ Check generation of Generalised Rush Larsen Second order Opt models against reference"""
+    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLGRL2'
+    LOGGER.info('Converting: Generalised Rush Larsen: ' + class_name + '\n')
+    # Generate chaste code
+    chaste_model = cg.GeneralisedRushLarsenSecondOrderModelOpt(cellmlmanip.load_model(model['model']),
+                                                               model['model_name_from_file'], class_name=class_name)
+
+    chaste_model.generate_chaste_code()
+    # Compare against reference
+    test_utils.compare_model_against_reference('GRL2Opt', chaste_model,
+                                               tmp_path, model['expected_hpp_path'],
+                                               model['expected_cpp_path'])
+
+
+@pytest.mark.parametrize(('model'), chaste_GRL2)
+def test_GRL2(tmp_path, model):
+    """ Check generation of Generalised Rush Larsen Second order models against reference"""
+    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLGRL2'
+    LOGGER.info('Converting: Generalised Rush Larsen: ' + class_name + '\n')
+    # Generate chaste code
+    chaste_model = cg.GeneralisedRushLarsenSecondOrderModel(cellmlmanip.load_model(model['model']),
+                                                            model['model_name_from_file'], class_name=class_name)
+
+    chaste_model.generate_chaste_code()
+    # Compare against reference
+    test_utils.compare_model_against_reference('GRL', chaste_model,
+                                               tmp_path, model['expected_hpp_path'],
+                                               model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_GRL1Opt)
@@ -255,7 +289,7 @@ def test_dynamic_RL(tmp_path):
 
 def test_dynamic_GRL1(tmp_path):
     tmp_path = str(tmp_path)
-    LOGGER.info('Converting: Generalised Rush Larsen 1st order Dynamic luo_rudy_1994\n')
+    LOGGER.info('Converting: Generalised Rush Larsen First order Dynamic luo_rudy_1994\n')
     model_file = \
         os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'luo_rudy_1994.cellml')
     chaste_model = cellmlmanip.load_model(model_file)
@@ -269,6 +303,25 @@ def test_dynamic_GRL1(tmp_path):
         os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'GRL1', 'dynamic_luo_rudy_1994.cpp')
     # Compare against reference
     test_utils.compare_model_against_reference('GRL1', chaste_model, tmp_path, expected_hpp_path,
+                                               expected_cpp_path)
+
+
+def test_dynamic_GRL2(tmp_path):
+    tmp_path = str(tmp_path)
+    LOGGER.info('Converting: Generalised Rush Larsen Second order Dynamic luo_rudy_1994\n')
+    model_file = \
+        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'luo_rudy_1994.cellml')
+    chaste_model = cellmlmanip.load_model(model_file)
+    chaste_model = cg.GeneralisedRushLarsenSecondOrderModel(chaste_model, 'dynamic_luo_rudy_1994',
+                                                            class_name='Dynamicluo_rudy_1994FromCellMLGRL2',
+                                                            dynamically_loadable=True)
+    chaste_model.generate_chaste_code()
+    expected_hpp_path = \
+        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'GRL2', 'dynamic_luo_rudy_1994.hpp')
+    expected_cpp_path = \
+        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'GRL2', 'dynamic_luo_rudy_1994.cpp')
+    # Compare against reference
+    test_utils.compare_model_against_reference('GRL2', chaste_model, tmp_path, expected_hpp_path,
                                                expected_cpp_path)
 
 

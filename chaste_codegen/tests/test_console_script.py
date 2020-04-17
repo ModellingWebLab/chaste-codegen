@@ -306,3 +306,45 @@ def test_script_GRL1Opt(capsys, tmp_path):
                                    os.path.join(tmp_path, 'matsuoka_model_2003.hpp'))
     compare_file_against_reference(os.path.join(reference, 'matsuoka_model_2003.cpp'),
                                    os.path.join(tmp_path, 'matsuoka_model_2003.cpp'))
+
+
+def test_script_GRL2(capsys, tmp_path):
+    """Convert a Generalised RushLarsen First Order model type"""
+    LOGGER.info('Testing model Generalised RushLarsen First Order,  for command line script\n')
+    tmp_path = str(tmp_path)
+    model_name = 'luo_rudy_1994'
+    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    outfile = os.path.join(tmp_path, 'dynamic_luo_rudy_1994.cpp')
+    # Call commandline script
+    testargs = ['chaste_codegen', model_file, '-t', 'GeneralisedRushLarsen2', '-o', outfile,
+                '-c', 'Dynamicluo_rudy_1994FromCellMLGRL2', '--dynamically-loadable']
+    with mock.patch.object(sys, 'argv', testargs):
+        chaste_codegen()
+    # Check output
+    reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'GRL2')
+    compare_file_against_reference(os.path.join(reference, 'dynamic_luo_rudy_1994.hpp'),
+                                   os.path.join(tmp_path, 'dynamic_luo_rudy_1994.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'dynamic_luo_rudy_1994.cpp'),
+                                   os.path.join(tmp_path, 'dynamic_luo_rudy_1994.cpp'))
+
+
+def test_script_GRL2Opt(capsys, tmp_path):
+    """Convert a Generalised RushLarsen First Order Opt model type"""
+    LOGGER.info('Testing model Generalised RushLarsen First Order Opt ,  for command line script\n')
+    tmp_path = str(tmp_path)
+    model_name = 'viswanathan_model_1999_epi'
+    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    outfile = os.path.join(tmp_path, 'viswanathan_model_1999_epi.cpp')
+    # Call commandline script
+    testargs = ['chaste_codegen', model_file, '-t', 'GeneralisedRushLarsen2Opt', '-o', outfile,
+                '-c', 'Cellviswanathan_model_1999_epiFromCellMLGRL2']
+    with mock.patch.object(sys, 'argv', testargs):
+        chaste_codegen()
+    # Check output
+    reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'GRL2Opt')
+    compare_file_against_reference(os.path.join(reference, 'viswanathan_model_1999_epi.hpp'),
+                                   os.path.join(tmp_path, 'viswanathan_model_1999_epi.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'viswanathan_model_1999_epi.cpp'),
+                                   os.path.join(tmp_path, 'viswanathan_model_1999_epi.cpp'))

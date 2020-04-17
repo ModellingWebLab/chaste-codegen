@@ -19,6 +19,8 @@ chaste_all_RL = get_models(ref_folder='cronjob_reference_models', type='RL')
 chaste_all_RLopt = get_models(ref_folder='cronjob_reference_models', type='RLopt')
 chaste_all_GRL1 = get_models(ref_folder='cronjob_reference_models', type='GRL1')
 chaste_all_GRL1Opt = get_models(ref_folder='cronjob_reference_models', type='GRL1Opt')
+chaste_all_GRL2 = get_models(ref_folder='cronjob_reference_models', type='GRL2')
+chaste_all_GRL2Opt = get_models(ref_folder='cronjob_reference_models', type='GRL2Opt')
 
 
 @pytest.mark.cronjob
@@ -109,3 +111,23 @@ def test_GRL1Opt_all_cronjob(tmp_path, model, request):
         pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
     from chaste_codegen.tests.test_codegen import test_GRL1Opt
     test_GRL1Opt(tmp_path, model)
+
+
+@pytest.mark.all_models
+@pytest.mark.parametrize(('model'), chaste_all_GRL2)
+def test_GRL2_all_cronjob(tmp_path, model, request):
+    """ Check generation of Generalised Rush Larsen Second order models against reference"""
+    if request.config.option.markexpr != 'all_models':
+        pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
+    from chaste_codegen.tests.test_codegen import test_GRL2
+    test_GRL2(tmp_path, model)
+
+
+@pytest.mark.all_models
+@pytest.mark.parametrize(('model'), chaste_all_GRL2Opt)
+def test_GRL2Opt_all_cronjob(tmp_path, model, request):
+    """ Check generation of Generalised Rush Larsen Second order optimised models against reference"""
+    if request.config.option.markexpr != 'all_models':
+        pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
+    from chaste_codegen.tests.test_codegen import test_GRL2Opt
+    test_GRL2Opt(tmp_path, model)
