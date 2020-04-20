@@ -3,6 +3,13 @@ from cellmlmanip.model import VariableDummy
 
 
 def partial_eval(equations, required_lhs, keep_multiple_usages=True):
+    """Partially evaluate the list of equations given.
+
+    :param equations: the equations to partially evaluate
+    :param required_lhs: variables which which the defining equation is kept and not substituted
+    :param keep_multiple_usages: if a variable is used multiple times keep its defining equation
+    :return: the equations wit defining equations substituted in to create a minimal set of equations
+    """
     evaluated_eqs = []
     # count usage of variables on rhs of equations
     if keep_multiple_usages:
