@@ -360,7 +360,7 @@ class ChasteModel(object):
                     desired_units = self._units.get_unit(desired_unit_info)
                     if current_units.dimensionality == desired_units.dimensionality:
                         capacitance_factor = \
-                            self._model.units.get_conversion_factor(desired_units, from_unit=current_units)
+                            self._model.units.get_conversion_factor(from_unit=current_units, to_unit=desired_units)
                         if capacitance_factor != 1.0:
                             warning = 'converting capacitance from ' + str(current_units) + ' to ' + str(desired_units)
                             self._logger.info(warning)
@@ -396,7 +396,7 @@ class ChasteModel(object):
                 for units_to_try in [self._units.get_unit(unit_dict['units']) for unit_dict in self._STIM_UNITS[key]]:
                     if units_to_try.dimensionality == current_units.dimensionality:
                         units = units_to_try
-                        factor = self._model.units.get_conversion_factor(units, from_unit=current_units)
+                        factor = self._model.units.get_conversion_factor(from_unit=current_units, to_unit=units)
                         if factor != 1.0:
                             warning = 'converting ' + str(key) + ' from ' + str(current_units) + ' to ' + str(units)
                             self._logger.info(warning)
@@ -459,8 +459,9 @@ class ChasteModel(object):
             desired_units_and_capacitance = unit_cap.copy()
         if self._membrane_stimulus_current is not None:
             stimulus_current_factor = \
-                self._model.units.get_conversion_factor(self._units.get_unit(desired_units_and_capacitance['units']),
-                                                        from_unit=membrane_stimulus_units)
+                self._model.units.get_conversion_factor(from_unit=membrane_stimulus_units,
+                                                        to_unit=self._units.get_unit(
+                                                            desired_units_and_capacitance['units']))
             if stimulus_current_factor != 1.0:
                 warning = 'converting stimulus current from ' + str(membrane_stimulus_units) + ' to ' + \
                     str(desired_units_and_capacitance['units'])
@@ -484,7 +485,7 @@ class ChasteModel(object):
         for var in self._equations_for_ionic_vars:
             current_unit = self._model.units.evaluate_units(var.lhs)
             factor = self._model.units.get_conversion_factor(
-                self._units.get_unit(self._current_unit_and_capacitance['units']), from_unit=current_unit)
+                from_unit=current_unit, to_unit=self._units.get_unit(self._current_unit_and_capacitance['units']))
             if factor != 1.0:
                 warning = 'converting ' + str(var.lhs) + ' in GetIIonic current from ' + str(current_unit) + ' to ' +\
                     str(self._current_unit_and_capacitance['units'])
