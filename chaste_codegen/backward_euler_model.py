@@ -34,7 +34,7 @@ class BackwardEulerModel(ChasteModel):
 
     def _format_rearranged_linear_derivs(self):
         """Formats the rearranged linear derivative expressions
-        
+
         Rearranged in the form expr = g + h*var.
         """
         def rearrange_expr(expr, var):  # expr already in piecewise_fold form
