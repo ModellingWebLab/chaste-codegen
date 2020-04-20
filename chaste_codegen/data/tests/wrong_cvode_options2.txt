@@ -1,0 +1,6 @@
+(venv_weblab) C:\Users\uczmh2\Desktop\venv_weblab\chaste-codegen>chaste_codegen --use-data-clamp 1.txt
+usage: chaste_codegen [-h] [--version] [-t TYPE] [-o OUTFILE] [-j]
+                      [-c CLASS_NAME] [-y] [--expose-annotated-variables]
+                      [--use-data-clamp]
+                      cellml_file
+chaste_codegen: error: --use-data-clamp can only be used in combination with -t CVODE

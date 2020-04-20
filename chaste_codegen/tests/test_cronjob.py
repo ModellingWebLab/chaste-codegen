@@ -21,6 +21,7 @@ chaste_all_GRL1 = get_models(ref_folder='cronjob_reference_models', type='GRL1')
 chaste_all_GRL1Opt = get_models(ref_folder='cronjob_reference_models', type='GRL1Opt')
 chaste_all_GRL2 = get_models(ref_folder='cronjob_reference_models', type='GRL2')
 chaste_all_GRL2Opt = get_models(ref_folder='cronjob_reference_models', type='GRL2Opt')
+chaste_CVODE_DATA_CLAMP = get_models(ref_folder='cronjob_reference_models', type='CVODE_DATA_CLAMP')
 
 
 @pytest.mark.cronjob
@@ -131,3 +132,13 @@ def test_GRL2Opt_all_cronjob(tmp_path, model, request):
         pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
     from chaste_codegen.tests.test_codegen import test_GRL2Opt
     test_GRL2Opt(tmp_path, model)
+
+
+@pytest.mark.all_models
+@pytest.mark.parametrize(('model'), chaste_CVODE_DATA_CLAMP)
+def test_CVODE_DATA_CLAMP(tmp_path, model, request):
+    """ Check generation of CVODE Data Clamp models against reference"""
+    if request.config.option.markexpr != 'all_models':
+        pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
+    from chaste_codegen.tests.test_codegen import test_CVODE_DATA_CLAMP
+    test_CVODE_DATA_CLAMP(tmp_path, model)

@@ -9,6 +9,8 @@ class CvodeChasteModel(ChasteModel):
     """ Holds template and information specific for the CVODE model type"""
 
     def __init__(self, model, file_name, **kwargs):
+        self.use_data_clamp = kwargs.get('use_data_clamp', False)
+        kwargs['expose_annotated_variables'] = kwargs.get('expose_annotated_variables', False) or self.use_data_clamp
         super().__init__(model, file_name, **kwargs)
         self._hpp_template = 'cvode_model.hpp'
         self._cpp_template = 'cvode_model.cpp'

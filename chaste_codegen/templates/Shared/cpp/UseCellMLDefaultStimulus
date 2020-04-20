@@ -2,7 +2,7 @@
     boost::shared_ptr<RegularStimulus> {{class_name}}::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
-        {% for eq in default_stimulus_equations["equations"] %}const double {{ eq.lhs }} = {{ eq.rhs }}; // {{eq.units}}
+        {% for eq in default_stimulus_equations["equations"] %}{%- if not eq.lhs_modifiable %}const double {{ eq.lhs }} = {{ eq.rhs }}; // {{eq.units}}{%- endif %}
         {% endfor %}boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs({{default_stimulus_equations["membrane_stimulus_current_amplitude"]}}),
                 {{default_stimulus_equations["membrane_stimulus_current_duration"]}},

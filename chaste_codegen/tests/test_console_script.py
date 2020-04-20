@@ -77,6 +77,21 @@ def test_wrong_cvode_options(capsys):
         assert error == expected
 
 
+def test_wrong_cvode_options2(capsys):
+    """Test what happens when supplying wrong cvode options"""
+    LOGGER.info('Testing illegal combination of options for jacobians on command line\n')
+    testargs = ["chaste_codegen", "--use-data-clamp", 'somefile.cellml']
+    with mock.patch.object(sys, 'argv', testargs):
+        try:
+            chaste_codegen()
+        except SystemExit:
+            pass  # We expect this to print usage and exit
+        captured = capsys.readouterr()
+        # compare to expected
+        error = str(captured.err)
+        expected = open(os.path.join(cg.DATA_DIR, 'tests', 'wrong_cvode_options2.txt'), 'r').read()
+        assert error == expected
+
 def test_script_convert(capsys, tmp_path):
     """Convert a normal model via command line script"""
     LOGGER.info('Testing regular model conversion for command line script\n')
@@ -348,3 +363,23 @@ def test_script_GRL2Opt(capsys, tmp_path):
                                    os.path.join(tmp_path, 'viswanathan_model_1999_epi.hpp'))
     compare_file_against_reference(os.path.join(reference, 'viswanathan_model_1999_epi.cpp'),
                                    os.path.join(tmp_path, 'viswanathan_model_1999_epi.cpp'))
+
+def test_script_CVODE_DATA_CLAMP(capsys, tmp_path):
+    """Convert a CVODE with Data Clamp model type"""
+    LOGGER.info('Testing model CVODE with data clamp ,  for command line script\n')
+    tmp_path = str(tmp_path)
+    model_name = 'Shannon2004'
+    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    outfile = os.path.join(tmp_path, 'Shannon2004DataClamp.cpp')
+    # Call commandline script
+    testargs = ['chaste_codegen', model_file, '-t', 'CVODE', '-o', outfile,
+                '-c', 'CellShannon2004FromCellMLCvodeDataClamp', '--use-data-clamp']
+    with mock.patch.object(sys, 'argv', testargs):
+        chaste_codegen()
+    # Check output
+    reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'CVODE_DATA_CLAMP')
+    compare_file_against_reference(os.path.join(reference, 'Shannon2004DataClamp.hpp'),
+                                   os.path.join(tmp_path, 'Shannon2004DataClamp.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'Shannon2004DataClamp.cpp'),
+                                   os.path.join(tmp_path, 'Shannon2004DataClamp.cpp'))

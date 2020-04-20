@@ -57,12 +57,19 @@ def chaste_codegen():
     group.add_argument('--expose-annotated-variables', dest='expose_annotated_variables',
                        action='store_true', default=False,
                        help='expose all oxmeta-annotated variables for access via the GetAnyVariable functionality')
+    group.add_argument('--use-data-clamp', dest='use_data_clamp',
+                       action='store_true', default=False,
+                       help='[experimental] generate a data clamp subclass of CVODE cells'
+                            ' which contains data clamp currents for fitting experimental data (only works if -t CVODE'
+                            ' is used)')
 
     # process options
     args = parser.parse_args()
     # Check option combinations
     if args.use_analytic_jacobian and not args.translator_class == 'CVODE':
         parser.error('-j can only be used in combination with -t CVODE')
+    elif args.use_data_clamp and not args.translator_class == 'CVODE':
+        parser.error('--use-data-clamp can only be used in combination with -t CVODE')
 
     model = cellmlmanip.load_model(args.cellml_file)
     outfile = args.outfile if args.outfile is not None else os.path.basename(args.cellml_file)

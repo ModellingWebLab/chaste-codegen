@@ -205,10 +205,10 @@ class ChasteModel(object):
              'derived_quantities': self._format_derived_quant(),
              'derived_quantity_equations': self._format_derived_quant_eqs()}
 
-    def _get_equations_for(self, variables, recurse=True):
+    def _get_equations_for(self, variables, recurse=True, filter_modifiable_parameters_lhs=True):
         """Returns equations excluding once where lhs is a modifiable parameter"""
         equations = [eq for eq in self._model.get_equations_for(variables, recurse=recurse)
-                     if eq.lhs not in self._modifiable_parameters]
+                     if eq.lhs not in self._modifiable_parameters or not filter_modifiable_parameters_lhs]
         return [sp.Eq(eq.lhs, optimize(eq.rhs, self._OPTIMS)) for eq in equations]
 
     def _get_initial_value(self, var):
@@ -309,8 +309,7 @@ class ChasteModel(object):
             (irrespective of any modifiable_parameters tags)"""
         return [q for q in self._model.variables()
                 if self._model.has_ontology_annotation(q, self._OXMETA)
-                and not self._model.get_ontology_terms_by_variable(q, self._OXMETA)[-1]
-                .startswith('membrane_stimulus_current')
+                and not self._model.get_ontology_terms_by_variable(q, self._OXMETA)[-1] == 'membrane_stimulus_current'
                 and q not in self._model.get_derived_quantities()
                 and q not in self._model.get_state_variables()
                 and not q == self._time_variable]
@@ -385,7 +384,7 @@ class ChasteModel(object):
         if not has_stim:
             return [], []
 
-        stim_eq = self._get_equations_for(stim_param)
+        stim_eq = self._get_equations_for(stim_param, filter_modifiable_parameters_lhs=False)
         return_stim_eqs = []
         for eq in stim_eq:
             key = self._get_var_display_name(eq.lhs)
@@ -776,7 +775,8 @@ class ChasteModel(object):
         default_stim = {'equations':
                         [{'lhs': self._printer.doprint(eq.lhs),
                           'rhs': self._printer.doprint(eq.rhs),
-                          'units': self._model.units.format(self._model.units.evaluate_units(eq.lhs))}
+                          'units': self._model.units.format(self._model.units.evaluate_units(eq.lhs)),
+                          'lhs_modifiable': eq.lhs in self._modifiable_parameters}
                          for eq in self._stimulus_equations]}
         for param in self._stimulus_params:
             default_stim[self._get_var_display_name(param)] = self._printer.doprint(param)
