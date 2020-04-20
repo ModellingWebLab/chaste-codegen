@@ -218,6 +218,7 @@ class ChasteModel(object):
         if var in self._state_vars:
             initial_value = getattr(var, 'initial_value', None)
         else:
+            print(var)
             eqs = self._model.get_equations_for([var])
             # If there is a defining equation, there should be just 1 equation and it should be of the form var = value
             if len(eqs) == 1 and isinstance(eqs[0].rhs, sp.numbers.Float):
@@ -307,10 +308,16 @@ class ChasteModel(object):
     def _get_modifiable_parameters_exposed(self):
         """ Get the variables in the model that have exposed annotation and are modifiable parameters
             (irrespective of any modifiable_parameters tags)"""
+#        return [q for q in self._model.variables()
+#                if self._model.has_ontology_annotation(q, self._OXMETA)
+#                and not self._model.get_ontology_terms_by_variable(q, self._OXMETA)[-1]
+#                .startswith('membrane_stimulus_current')
+#                and q not in self._model.get_derived_quantities()
+#                and q not in self._model.get_state_variables()
+#                and not q == self._time_variable]
         return [q for q in self._model.variables()
                 if self._model.has_ontology_annotation(q, self._OXMETA)
-                and not self._model.get_ontology_terms_by_variable(q, self._OXMETA)[-1]
-                .startswith('membrane_stimulus_current')
+                and not self._model.get_ontology_terms_by_variable(q, self._OXMETA)[-1] == 'membrane_stimulus_current'
                 and q not in self._model.get_derived_quantities()
                 and q not in self._model.get_state_variables()
                 and not q == self._time_variable]
@@ -360,7 +367,7 @@ class ChasteModel(object):
                     desired_units = self._units.get_unit(desired_unit_info)
                     if current_units.dimensionality == desired_units.dimensionality:
                         capacitance_factor = \
-                            self._model.units.get_conversion_factor(desired_units, from_unit=current_units)
+                            self._model.units.get_conversion_factor(from_unit=current_units, to_unit=desired_units)
                         if capacitance_factor != 1.0:
                             warning = 'converting capacitance from ' + str(current_units) + ' to ' + str(desired_units)
                             self._logger.info(warning)
@@ -396,7 +403,7 @@ class ChasteModel(object):
                 for units_to_try in [self._units.get_unit(unit_dict['units']) for unit_dict in self._STIM_UNITS[key]]:
                     if units_to_try.dimensionality == current_units.dimensionality:
                         units = units_to_try
-                        factor = self._model.units.get_conversion_factor(units, from_unit=current_units)
+                        factor = self._model.units.get_conversion_factor(from_unit=current_units, to_unit=units)
                         if factor != 1.0:
                             warning = 'converting ' + str(key) + ' from ' + str(current_units) + ' to ' + str(units)
                             self._logger.info(warning)
@@ -459,8 +466,9 @@ class ChasteModel(object):
             desired_units_and_capacitance = unit_cap.copy()
         if self._membrane_stimulus_current is not None:
             stimulus_current_factor = \
-                self._model.units.get_conversion_factor(self._units.get_unit(desired_units_and_capacitance['units']),
-                                                        from_unit=membrane_stimulus_units)
+                self._model.units.get_conversion_factor(from_unit=membrane_stimulus_units,
+                                                        to_unit=self._units.get_unit(
+                                                            desired_units_and_capacitance['units']))
             if stimulus_current_factor != 1.0:
                 warning = 'converting stimulus current from ' + str(membrane_stimulus_units) + ' to ' + \
                     str(desired_units_and_capacitance['units'])
@@ -484,7 +492,7 @@ class ChasteModel(object):
         for var in self._equations_for_ionic_vars:
             current_unit = self._model.units.evaluate_units(var.lhs)
             factor = self._model.units.get_conversion_factor(
-                self._units.get_unit(self._current_unit_and_capacitance['units']), from_unit=current_unit)
+                from_unit=current_unit, to_unit=self._units.get_unit(self._current_unit_and_capacitance['units']))
             if factor != 1.0:
                 warning = 'converting ' + str(var.lhs) + ' in GetIIonic current from ' + str(current_unit) + ' to ' +\
                     str(self._current_unit_and_capacitance['units'])
