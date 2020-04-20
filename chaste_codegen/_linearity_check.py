@@ -16,9 +16,8 @@ def check_expr(expr, state_var, membrane_voltage_var, state_vars):
     """Check the kind of expression given (NONE, LINEAR or NONLINEAR)
 
     Determines whether it has a linear dependence on the dependent variable.
-    We also require it to not depend on any other state variable, except V
+    We also require it to not depend on any other state variable, except V.
 
-    except for V.
     :param expr: the expression to check
     :param state_var: the (dependant) state variable we're currently checking against for linearity
     :param membrane_voltage_var: the variable representing Voltage
