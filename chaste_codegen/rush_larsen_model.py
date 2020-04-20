@@ -26,7 +26,10 @@ class RushLarsenModel(ChasteModel):
             self._format_derivative_equations(self._vars_for_template['derivative_alpha_beta_eqs'])
 
     def _get_formatted_alpha_beta(self):
-        """Gets the information for r_alpha_or_tau, r_beta_or_inf in the c++ output and formatted equations"""
+        """Gets the information for r_alpha_or_tau, r_beta_or_inf in the c++ output and formatted equations
+        
+        Rearranges in the form (inf-x)/tau        
+        """
         def match_alpha_beta(expr, x):  # expr already in piecewise_fold form
             """Match alpha*(1-x) - beta*x"""
             a, b = None, None
