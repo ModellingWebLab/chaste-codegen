@@ -15,8 +15,12 @@ class KINDS(Enum):
 def check_expr(expr, state_var, membrane_voltage_var, state_vars):
     """Check the kind of expression given (NONE, LINEAR or NONLINEAR)
 
+    Determines whether it has a linear dependence on the dependent variable.
+    We also require it to not depend on any other state variable, except V
+
+    except for V.
     :param expr: the expression to check
-    :param state_var: the state variable we're currently checking against for linearity
+    :param state_var: the (dependant) state variable we're currently checking against for linearity
     :param membrane_voltage_var: the variable representing Voltage
     :param state_vars: the state variables in the model the expression comes from
     :return: the kind of expr (NONE, LINEAR or NONLINEAR)
@@ -114,7 +118,7 @@ def subst_deriv_eqs_non_linear_vars(y_derivatives, non_linear_state_vars, membra
     """Substitutes variables in the derivative equation fortheir definition if the definition is non-linear
 
     The derivative equations contain variables defined in other equations alpha = ..., (e.g. dv/dt = alpha +..
-    To be able to rearrange these in h +g*var form (or alpha*(1-x) - beta*x or (inf-x)/tau),
+    To be able to rearrange these in h + g*var form (or alpha*(1-x) - beta*x or (inf-x)/tau),
     we need to substitute the rhs definition for those variables. This leads to some c++ floating point precision.
     However we know that the rhs definitions for which the rhs definition only contain V will wholly end up in h
     Leaving those variable in sees them as linear in the statevar and means they end up in h*var
