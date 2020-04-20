@@ -54,20 +54,20 @@ def testexpose_annotated_variables2(tmp_path):
     test_utils.compare_model_against_reference('Normal', chaste_model, tmp_path,
                                                expected_hpp_path, expected_cpp_path)
                                                
-#@pytest.mark.parametrize(('model'), chaste_CVODE_DATA_CLAMP)
-#def test_CVODE_DATA_CLAMP(tmp_path, model):
-#    """ Check generation of CVODE with Data Clamp models against reference"""
-#    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLCvodeDataClamp'
-#    LOGGER.info('Converting: CVODE with Data Clamp: ' + class_name + '\n')
-#    # Generate chaste code
-#    chaste_model = cg.CvodeChasteModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
-#                                       class_name=class_name, use_data_clamp=True)
-#
-#    chaste_model.generate_chaste_code()
-#    # Compare against reference
-#    test_utils.compare_model_against_reference('CVODE_DATA_CLAMP', chaste_model,
-#                                               tmp_path, model['expected_hpp_path'],
-#                                               model['expected_cpp_path'])
+@pytest.mark.parametrize(('model'), chaste_CVODE_DATA_CLAMP)
+def test_CVODE_DATA_CLAMP(tmp_path, model):
+    """ Check generation of CVODE with Data Clamp models against reference"""
+    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLCvodeDataClamp'
+    LOGGER.info('Converting: CVODE with Data Clamp: ' + class_name + '\n')
+    # Generate chaste code
+    chaste_model = cg.CvodeChasteModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
+                                       class_name=class_name, use_data_clamp=True)
+
+    chaste_model.generate_chaste_code()
+    # Compare against reference
+    test_utils.compare_model_against_reference('CVODE_DATA_CLAMP', chaste_model,
+                                               tmp_path, model['expected_hpp_path'],
+                                               model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_GRL2Opt)
