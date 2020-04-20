@@ -218,7 +218,6 @@ class ChasteModel(object):
         if var in self._state_vars:
             initial_value = getattr(var, 'initial_value', None)
         else:
-            print(var)
             eqs = self._model.get_equations_for([var])
             # If there is a defining equation, there should be just 1 equation and it should be of the form var = value
             if len(eqs) == 1 and isinstance(eqs[0].rhs, sp.numbers.Float):
@@ -308,16 +307,10 @@ class ChasteModel(object):
     def _get_modifiable_parameters_exposed(self):
         """ Get the variables in the model that have exposed annotation and are modifiable parameters
             (irrespective of any modifiable_parameters tags)"""
-#        return [q for q in self._model.variables()
-#                if self._model.has_ontology_annotation(q, self._OXMETA)
-#                and not self._model.get_ontology_terms_by_variable(q, self._OXMETA)[-1]
-#                .startswith('membrane_stimulus_current')
-#                and q not in self._model.get_derived_quantities()
-#                and q not in self._model.get_state_variables()
-#                and not q == self._time_variable]
         return [q for q in self._model.variables()
                 if self._model.has_ontology_annotation(q, self._OXMETA)
-                and not self._model.get_ontology_terms_by_variable(q, self._OXMETA)[-1] == 'membrane_stimulus_current'
+                and not self._model.get_ontology_terms_by_variable(q, self._OXMETA)[-1]
+                .startswith('membrane_stimulus_current')
                 and q not in self._model.get_derived_quantities()
                 and q not in self._model.get_state_variables()
                 and not q == self._time_variable]
