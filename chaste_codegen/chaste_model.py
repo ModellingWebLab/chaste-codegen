@@ -3,9 +3,9 @@ import time
 from collections import OrderedDict
 
 import sympy as sp
-from networkx.exception import NetworkXError
 from cellmlmanip.model import DataDirectionFlow
 from cellmlmanip.units import UnitStore
+from networkx.exception import NetworkXError
 from pint import DimensionalityError
 from sympy.codegen.cfunctions import log10
 from sympy.codegen.rewriting import (
@@ -318,7 +318,7 @@ class ChasteModel(object):
 
     def _get_modifiable_parameters_annotated(self):
         """ Get the variables annotated in the model as modifiable parameter
-        
+
             Also include V and cytosolic_calcium_concentration_var if these are constant and not stae_vars
         """
         return self._model.get_variables_by_rdf((self._PYCMLMETA, 'modifiable-parameter'), 'yes') +\
@@ -343,10 +343,10 @@ class ChasteModel(object):
         if self.expose_annotated_variables:
             # Combined and sorted in display name order
             return \
-                sorted(self._get_modifiable_parameters_annotated() + self._get_modifiable_parameters_exposed(),
+                sorted(set(self._get_modifiable_parameters_annotated() + self._get_modifiable_parameters_exposed()),
                        key=lambda v: self._get_var_display_name(v))
         else:
-            return sorted(self._get_modifiable_parameters_annotated(), key=lambda v: self._get_var_display_name(v))
+            return sorted(set(self._get_modifiable_parameters_annotated()), key=lambda v: self._get_var_display_name(v))
 
     def _get_state_variables(self):
         """ Sort the state variables, in similar order to pycml to prevent breaking existing code"""
@@ -670,7 +670,7 @@ class ChasteModel(object):
 
     def _get_derived_quant_annotated(self):
         """ Get the variables annotated in the model as derived derived-quantity
-        
+
             Also include V and cytosolic_calcium_concentration_var if these are not constant and not stae_vars
         """
         return self._model.get_variables_by_rdf((self._PYCMLMETA, 'derived-quantity'), 'yes') +\
@@ -694,10 +694,10 @@ class ChasteModel(object):
         if self.expose_annotated_variables:
             # Combined and sorted in display name order
             return \
-                sorted(self._get_derived_quant_annotated() + self._get_derived_quant_exposed(),
+                sorted(set(self._get_derived_quant_annotated() + self._get_derived_quant_exposed()),
                        key=lambda v: self._get_var_display_name(v))
         else:
-            return self._get_derived_quant_annotated()  # These are already sorted
+            return set(self._get_derived_quant_annotated())  # These are already sorted
 
     def _get_derived_quant_eqs(self):
         """ Get the defining equations for derived quantities"""
