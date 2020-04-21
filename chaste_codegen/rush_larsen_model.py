@@ -55,7 +55,7 @@ class RushLarsenModel(ChasteModel):
         # Substitute non-linear bits into derivative equations, so that we can pattern match
         linear_derivs_eqs = subst_deriv_eqs_non_linear_vars(self._y_derivatives, self._non_linear_state_vars,
                                                             self._membrane_voltage_var, self._state_vars,
-                                                            self._get_equations_for)
+                                                            self.get_equations_for)
 
         for deriv in self._y_derivatives:
             ab = {'alpha': None}
@@ -80,7 +80,7 @@ class RushLarsenModel(ChasteModel):
                 derivative_alpha_beta.append({'type': 'non_linear', 'deriv': self._printer.doprint(deriv)})
                 vars_in_derivative_alpha_beta.add(deriv)
 
-        deriv_eqs_EvaluateEquations = self._get_equations_for(vars_in_derivative_alpha_beta)
+        deriv_eqs_EvaluateEquations = self.get_equations_for(vars_in_derivative_alpha_beta)
         return derivative_alpha_beta, deriv_eqs_EvaluateEquations, vars_in_derivative_alpha_beta
 
     def _update_state_vars(self):
