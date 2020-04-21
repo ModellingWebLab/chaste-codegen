@@ -5,7 +5,6 @@ from collections import OrderedDict
 import sympy as sp
 from cellmlmanip.model import DataDirectionFlow
 from cellmlmanip.units import UnitStore
-from networkx.exception import NetworkXError
 from pint import DimensionalityError
 from sympy.codegen.cfunctions import log10
 from sympy.codegen.rewriting import (
@@ -235,10 +234,7 @@ class ChasteModel(object):
 
     def _is_constant(self, var):
         """Returns whether the given var is defined as a constant or not"""
-        try:
-            return self._get_initial_value(var) is not None
-        except NetworkXError:
-            return False
+        return self._get_initial_value(var) is not None
 
     def _state_var_key_order(self, var):
         """Returns a key to order state variables in the same way as pycml does"""
