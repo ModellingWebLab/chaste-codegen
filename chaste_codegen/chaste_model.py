@@ -3,6 +3,7 @@ import time
 from collections import OrderedDict
 
 import sympy as sp
+from networkx.exception import NetworkXError
 from cellmlmanip.model import DataDirectionFlow
 from cellmlmanip.units import UnitStore
 from pint import DimensionalityError
@@ -232,6 +233,13 @@ class ChasteModel(object):
                 initial_value = eqs[0].rhs
         return initial_value
 
+    def _is_constant(self, var):
+        """Returns whether the given var is defined as a constant or not"""
+        try:
+            return self._get_initial_value(var) is not None
+        except NetworkXError:
+            return False
+
     def _state_var_key_order(self, var):
         """Returns a key to order state variables in the same way as pycml does"""
         if isinstance(var, sp.Derivative):
@@ -309,8 +317,13 @@ class ChasteModel(object):
             return cytosolic_calcium_concentration
 
     def _get_modifiable_parameters_annotated(self):
-        """ Get the variables annotated in the model as modifiable parametery"""
-        return self._model.get_variables_by_rdf((self._PYCMLMETA, 'modifiable-parameter'), 'yes')
+        """ Get the variables annotated in the model as modifiable parameter
+        
+            Also include V and cytosolic_calcium_concentration_var if these are constant and not stae_vars
+        """
+        return self._model.get_variables_by_rdf((self._PYCMLMETA, 'modifiable-parameter'), 'yes') +\
+            [p for p in (self._membrane_voltage_var, self._cytosolic_calcium_concentration_var)
+             if p is not None and p not in self._state_vars and self._is_constant(p)]
 
     def _get_modifiable_parameters_exposed(self):
         """ Get the variables in the model that have exposed annotation and are modifiable parameters
@@ -656,8 +669,13 @@ class ChasteModel(object):
         return eqs
 
     def _get_derived_quant_annotated(self):
-        """ Get the variables annotated in the model as derived derived-quantity"""
-        return self._model.get_variables_by_rdf((self._PYCMLMETA, 'derived-quantity'), 'yes')
+        """ Get the variables annotated in the model as derived derived-quantity
+        
+            Also include V and cytosolic_calcium_concentration_var if these are not constant and not stae_vars
+        """
+        return self._model.get_variables_by_rdf((self._PYCMLMETA, 'derived-quantity'), 'yes') +\
+            [p for p in (self._membrane_voltage_var, self._cytosolic_calcium_concentration_var)
+             if p is not None and p not in self._state_vars and not self._is_constant(p)]
 
     def _get_derived_quant_exposed(self):
         """ Get the variables in the model that have exposed annotation and are derived quantities

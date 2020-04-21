@@ -1,12 +1,12 @@
 #ifdef CHASTE_CVODE
-#ifndef CELLZHANG_SAN_MODEL_2000_ALLFROMCELLMLCVODE_HPP_
-#define CELLZHANG_SAN_MODEL_2000_ALLFROMCELLMLCVODE_HPP_
+#ifndef CELLZHANG_SAN_MODEL_2000_0D_CAPABLEFROMCELLMLCVODE_HPP_
+#define CELLZHANG_SAN_MODEL_2000_0D_CAPABLEFROMCELLMLCVODE_HPP_
 
 //! @file
 //!
 //! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
-//! Model: zhang_SAN_model_2000_all
+//! Model: zhang_SAN_model_2000_0D_capable
 //!
 //! Processed by chaste_codegen: https://github.com/ModellingWebLab/chaste-codegen
 //!     (translator: chaste_codegen)
@@ -20,7 +20,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractCvodeCell.hpp"
 
-class Cellzhang_SAN_model_2000_allFromCellMLCvode : public AbstractCvodeCell
+class Cellzhang_SAN_model_2000_0D_capableFromCellMLCvode : public AbstractCvodeCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -36,8 +36,8 @@ class Cellzhang_SAN_model_2000_allFromCellMLCvode : public AbstractCvodeCell
     
 public:
 
-    Cellzhang_SAN_model_2000_allFromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellzhang_SAN_model_2000_allFromCellMLCvode();
+    Cellzhang_SAN_model_2000_0D_capableFromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellzhang_SAN_model_2000_0D_capableFromCellMLCvode();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const N_Vector rY, N_Vector rDY);
     void EvaluateAnalyticJacobian(double var_chaste_interface__environment__time_converted, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3);
@@ -45,7 +45,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellzhang_SAN_model_2000_allFromCellMLCvode)
+CHASTE_CLASS_EXPORT(Cellzhang_SAN_model_2000_0D_capableFromCellMLCvode)
 
 namespace boost
 {
@@ -53,7 +53,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellzhang_SAN_model_2000_allFromCellMLCvode * t, const unsigned int fileVersion)
+            Archive & ar, const Cellzhang_SAN_model_2000_0D_capableFromCellMLCvode * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -63,18 +63,18 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellzhang_SAN_model_2000_allFromCellMLCvode * t, const unsigned int fileVersion)
+            Archive & ar, Cellzhang_SAN_model_2000_0D_capableFromCellMLCvode * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellzhang_SAN_model_2000_allFromCellMLCvode(p_solver, p_stimulus);
+            ::new(t)Cellzhang_SAN_model_2000_0D_capableFromCellMLCvode(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLZHANG_SAN_MODEL_2000_ALLFROMCELLMLCVODE_HPP_
+#endif // CELLZHANG_SAN_MODEL_2000_0D_CAPABLEFROMCELLMLCVODE_HPP_
 #endif // CHASTE_CVODE
