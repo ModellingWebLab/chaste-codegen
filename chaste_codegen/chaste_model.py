@@ -205,10 +205,18 @@ class ChasteModel(object):
              'derived_quantities': self._format_derived_quant(),
              'derived_quantity_equations': self._format_derived_quant_eqs()}
 
-    def _get_equations_for(self, variables, recurse=True):
-        """Returns equations excluding once where lhs is a modifiable parameter"""
+    def get_equations_for(self, variables, recurse=True, filter_modifiable_parameters_lhs=True):
+        """Returns equations excluding once where lhs is a modifiable parameter
+
+        :param variables: the variables to get defining equations for.
+        :param recurse: recurse and get defining equations for all variables in the defining equations?
+        :param filter_modifiable_parameters_lhs: remove equations where the lhs is a modifiable paramater?
+        :return: List of equations defining vars,
+                 with optimisations around using log10, and powers of whole numbers applied to rhs
+                 as well as modifiable parameters filtered out is required.
+        """
         equations = [eq for eq in self._model.get_equations_for(variables, recurse=recurse)
-                     if eq.lhs not in self._modifiable_parameters]
+                     if eq.lhs not in self._modifiable_parameters or not filter_modifiable_parameters_lhs]
         return [sp.Eq(eq.lhs, optimize(eq.rhs, self._OPTIMS)) for eq in equations]
 
     def _get_initial_value(self, var):
@@ -309,8 +317,7 @@ class ChasteModel(object):
             (irrespective of any modifiable_parameters tags)"""
         return [q for q in self._model.variables()
                 if self._model.has_ontology_annotation(q, self._OXMETA)
-                and not self._model.get_ontology_terms_by_variable(q, self._OXMETA)[-1]
-                .startswith('membrane_stimulus_current')
+                and not self._model.get_ontology_terms_by_variable(q, self._OXMETA)[-1] == 'membrane_stimulus_current'
                 and q not in self._model.get_derived_quantities()
                 and q not in self._model.get_state_variables()
                 and not q == self._time_variable]
@@ -385,7 +392,7 @@ class ChasteModel(object):
         if not has_stim:
             return [], []
 
-        stim_eq = self._get_equations_for(stim_param)
+        stim_eq = self.get_equations_for(stim_param, filter_modifiable_parameters_lhs=False)
         return_stim_eqs = []
         for eq in stim_eq:
             key = self._get_var_display_name(eq.lhs)
@@ -447,7 +454,7 @@ class ChasteModel(object):
             equations, old_equations = self._ionic_derivs, None
             while len(equations_for_ionic_vars) == 0 and old_equations != equations:
                 old_equations = equations
-                equations = self._get_equations_for(equations, recurse=False)
+                equations = self.get_equations_for(equations, recurse=False)
                 equations_for_ionic_vars = [eq for eq in equations
                                             if ((self._membrane_stimulus_current is None)
                                                 or (eq.lhs != self._membrane_stimulus_current
@@ -511,8 +518,9 @@ class ChasteModel(object):
         extended_eqs = self._equations_for_ionic_vars
         changed = True
         while changed:
-            new_eqs = self._get_equations_for([v.lhs for v in extended_eqs
-                                              if v.lhs not in (self._membrane_stimulus_current,
+            new_eqs = self.get_equations_for([v.lhs for v in extended_eqs
+                                              if v.lhs not in
+                                              (self._membrane_stimulus_current,
                                                self._original_membrane_stimulus_current)], recurse=False)
             changed = new_eqs != extended_eqs
             extended_eqs = new_eqs
@@ -531,7 +539,7 @@ class ChasteModel(object):
         def get_deriv_eqs():
             """ Get equations defining the derivatives"""
             # Remove equations where lhs is a modifiable parameter or default stimulus
-            return [eq for eq in self._get_equations_for(self._y_derivatives)
+            return [eq for eq in self.get_equations_for(self._y_derivatives)
                     if eq.lhs not in self._stimulus_params]
 
         d_eqs = get_deriv_eqs()
@@ -675,7 +683,7 @@ class ChasteModel(object):
 
     def _get_derived_quant_eqs(self):
         """ Get the defining equations for derived quantities"""
-        return self._get_equations_for(self._derived_quant)
+        return self.get_equations_for(self._derived_quant)
 
     def _add_printers(self):
         """ Initialises Printers for outputting chaste code. """
@@ -776,7 +784,8 @@ class ChasteModel(object):
         default_stim = {'equations':
                         [{'lhs': self._printer.doprint(eq.lhs),
                           'rhs': self._printer.doprint(eq.rhs),
-                          'units': self._model.units.format(self._model.units.evaluate_units(eq.lhs))}
+                          'units': self._model.units.format(self._model.units.evaluate_units(eq.lhs)),
+                          'lhs_modifiable': eq.lhs in self._modifiable_parameters}
                          for eq in self._stimulus_equations]}
         for param in self._stimulus_params:
             default_stim[self._get_var_display_name(param)] = self._printer.doprint(param)
