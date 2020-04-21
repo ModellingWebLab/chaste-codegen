@@ -207,12 +207,12 @@ class ChasteModel(object):
 
     def get_equations_for(self, variables, recurse=True, filter_modifiable_parameters_lhs=True):
         """Returns equations excluding once where lhs is a modifiable parameter
-        
+
         :param variables: the variables to get defining equations for.
         :param recurse: recurse and get defining equations for all variables in the defining equations?
         :param filter_modifiable_parameters_lhs: remove equations where the lhs is a modifiable paramater?
-        :return: List of equations defining vars, 
-                 with optimisations around using log10, and powers of whole numbers applied to rhs 
+        :return: List of equations defining vars,
+                 with optimisations around using log10, and powers of whole numbers applied to rhs
                  as well as modifiable parameters filtered out is required.
         """
         equations = [eq for eq in self._model.get_equations_for(variables, recurse=recurse)
@@ -519,7 +519,8 @@ class ChasteModel(object):
         changed = True
         while changed:
             new_eqs = self.get_equations_for([v.lhs for v in extended_eqs
-                                              if v.lhs not in (self._membrane_stimulus_current,
+                                              if v.lhs not in
+                                              (self._membrane_stimulus_current,
                                                self._original_membrane_stimulus_current)], recurse=False)
             changed = new_eqs != extended_eqs
             extended_eqs = new_eqs
