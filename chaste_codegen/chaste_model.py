@@ -265,16 +265,7 @@ class ChasteModel(object):
         display_name = var.cmeta_id if var.cmeta_id else var.name
         if self._model.has_ontology_annotation(var, self._OXMETA):
             display_name = self._model.get_ontology_terms_by_variable(var, self._OXMETA)[-1]
-        #return display_name.replace('$', '__').replace('var_chaste_interface_', '', 1).replace('var_', '', 1)
-        display_name = display_name.replace('$', '__').replace('var_chaste_interface_', '', 1).replace('var_', '', 1)
-
-        if display_name == "Na_buffer__Nai" or display_name == "cytosolic_sodium_concentration":
-            print('---\n')
-            print(var)
-            print(self._model.has_ontology_annotation(var, self._OXMETA))
-            print(self._model.get_ontology_terms_by_variable(var, self._OXMETA))
-            print('---\n')
-        return display_name
+        return display_name.replace('$', '__').replace('var_chaste_interface_', '', 1).replace('var_', '', 1)
 
     def _add_units(self):
         """ Add needed units to the model to allow converting time, voltage and calcium in specific units
