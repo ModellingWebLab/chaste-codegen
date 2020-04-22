@@ -39,6 +39,7 @@
         return p_cellml_stim;
     }
 
+
     Cellaslanidi_model_2009FromCellMLRushLarsen::Cellaslanidi_model_2009FromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractRushLarsenCardiacCell(
                 29,

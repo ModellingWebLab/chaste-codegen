@@ -38,7 +38,6 @@
         return p_cellml_stim;
     }
 
-
     double Cellluo_rudy_1994FromCellMLBackwardEuler::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];

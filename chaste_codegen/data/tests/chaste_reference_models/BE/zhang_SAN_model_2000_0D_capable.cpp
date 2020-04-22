@@ -23,6 +23,7 @@
 #include "CardiacNewtonSolver.hpp"
 
 
+
     Cellzhang_SAN_model_2000_0D_capableFromCellMLBackwardEuler::Cellzhang_SAN_model_2000_0D_capableFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<0>(
                 15,
@@ -34,6 +35,7 @@
         this->mpSystemInfo = OdeSystemInformation<Cellzhang_SAN_model_2000_0D_capableFromCellMLBackwardEuler>::Instance();
         Init();
         
+        this->mParameters[0] = 0.0001; // (var_ionic_concentrations__Ca_i) [millimolar]
     }
 
     Cellzhang_SAN_model_2000_0D_capableFromCellMLBackwardEuler::~Cellzhang_SAN_model_2000_0D_capableFromCellMLBackwardEuler()
@@ -93,7 +95,6 @@
         const double var_hyperpolarisation_activated_current__g_f_K_Periphery = 0.006875; // microS
         const double var_hyperpolarisation_activated_current__g_f_Na_Centre = 0.0005465; // microS
         const double var_hyperpolarisation_activated_current__g_f_Na_Periphery = 0.006875; // microS
-        const double var_ionic_concentrations__Ca_i = 0.0001; // millimolar
         const double var_ionic_concentrations__Ca_o = 2.0; // millimolar
         const double var_ionic_concentrations__K_i = 140.0; // millimolar
         const double var_ionic_concentrations__K_o = 5.4000000000000004; // millimolar
@@ -120,7 +121,7 @@
         const double var_persistent_calcium_current__i_Ca_p_max_Centre = 0.0; // nanoA
         const double var_persistent_calcium_current__i_Ca_p_max_Periphery = 0.0; // nanoA
         const double var_persistent_calcium_current__i_Ca_p_max = (-var_persistent_calcium_current__i_Ca_p_max_Centre + var_persistent_calcium_current__i_Ca_p_max_Periphery) * var_membrane__FCell + var_persistent_calcium_current__i_Ca_p_max_Centre; // nanoA
-        const double var_persistent_calcium_current__i_Ca_p = var_ionic_concentrations__Ca_i * var_persistent_calcium_current__i_Ca_p_max / (0.00040000000000000002 + var_ionic_concentrations__Ca_i); // nanoA
+        const double var_persistent_calcium_current__i_Ca_p = mParameters[0] * var_persistent_calcium_current__i_Ca_p_max / (0.00040000000000000002 + mParameters[0]); // nanoA
         const double var_potassium_background_current__g_b_K_Centre = 2.5236359999999998e-5; // microS
         const double var_potassium_background_current__g_b_K_Periphery = 8.1891999999999995e-5; // microS
         const double var_potassium_background_current__g_b_K = (-var_potassium_background_current__g_b_K_Centre + var_potassium_background_current__g_b_K_Periphery) * var_membrane__FCell + var_potassium_background_current__g_b_K_Centre; // microS
@@ -128,7 +129,7 @@
         const double var_rapid_delayed_rectifying_potassium_current__g_K_r_Periphery = 0.016; // microS
         const double var_rapid_delayed_rectifying_potassium_current__g_K_r = (-var_rapid_delayed_rectifying_potassium_current__g_K_r_Centre + var_rapid_delayed_rectifying_potassium_current__g_K_r_Periphery) * var_membrane__FCell + var_rapid_delayed_rectifying_potassium_current__g_K_r_Centre; // microS
         const double var_rapid_delayed_rectifying_potassium_current__P_a = 0.40000000000000002 * var_chaste_interface__rapid_delayed_rectifying_potassium_current_P_as_gate__P_as + 0.59999999999999998 * var_chaste_interface__rapid_delayed_rectifying_potassium_current_P_af_gate__P_af; // dimensionless
-        const double var_reversal_and_equilibrium_potentials__E_Ca = 0.5 * var_membrane__R * var_membrane__T * log(var_ionic_concentrations__Ca_o / var_ionic_concentrations__Ca_i) / var_membrane__F; // millivolt
+        const double var_reversal_and_equilibrium_potentials__E_Ca = 0.5 * var_membrane__R * var_membrane__T * log(var_ionic_concentrations__Ca_o / mParameters[0]) / var_membrane__F; // millivolt
         const double var_calcium_background_current__i_b_Ca = (-var_reversal_and_equilibrium_potentials__E_Ca + var_chaste_interface__membrane__V) * var_calcium_background_current__g_b_Ca; // nanoA
         const double var_reversal_and_equilibrium_potentials__E_K = var_membrane__R * var_membrane__T * log(var_ionic_concentrations__K_o / var_ionic_concentrations__K_i) / var_membrane__F; // millivolt
         const double var_four_AP_sensitive_currents__i_sus = (-var_reversal_and_equilibrium_potentials__E_K + var_chaste_interface__membrane__V) * var_four_AP_sensitive_currents__g_sus * var_chaste_interface__four_AP_sensitive_currents_r_gate__r; // nanoA
@@ -152,7 +153,7 @@
         const double var_sodium_calcium_exchanger__k_NaCa_Centre = 2.7228999999999998e-6; // nanoA
         const double var_sodium_calcium_exchanger__k_NaCa_Periphery = 8.8358400000000004e-6; // nanoA
         const double var_sodium_calcium_exchanger__k_NaCa = (-var_sodium_calcium_exchanger__k_NaCa_Centre + var_sodium_calcium_exchanger__k_NaCa_Periphery) * var_membrane__FCell + var_sodium_calcium_exchanger__k_NaCa_Centre; // nanoA
-        const double var_sodium_calcium_exchanger__i_NaCa = (pow(var_ionic_concentrations__Na_i, 3) * var_ionic_concentrations__Ca_o * exp(0.037429999999999998 * var_chaste_interface__membrane__V * var_sodium_calcium_exchanger__gamma_NaCa) - pow(var_ionic_concentrations__Na_o, 3) * var_ionic_concentrations__Ca_i * exp(0.037429999999999998 * (-1.0 + var_sodium_calcium_exchanger__gamma_NaCa) * var_chaste_interface__membrane__V)) * var_sodium_calcium_exchanger__k_NaCa / (1.0 + (pow(var_ionic_concentrations__Na_i, 3) * var_ionic_concentrations__Ca_o + pow(var_ionic_concentrations__Na_o, 3) * var_ionic_concentrations__Ca_i) * var_sodium_calcium_exchanger__d_NaCa); // nanoA
+        const double var_sodium_calcium_exchanger__i_NaCa = (pow(var_ionic_concentrations__Na_i, 3) * var_ionic_concentrations__Ca_o * exp(0.037429999999999998 * var_chaste_interface__membrane__V * var_sodium_calcium_exchanger__gamma_NaCa) - pow(var_ionic_concentrations__Na_o, 3) * mParameters[0] * exp(0.037429999999999998 * (-1.0 + var_sodium_calcium_exchanger__gamma_NaCa) * var_chaste_interface__membrane__V)) * var_sodium_calcium_exchanger__k_NaCa / (1.0 + (pow(var_ionic_concentrations__Na_i, 3) * var_ionic_concentrations__Ca_o + pow(var_ionic_concentrations__Na_o, 3) * mParameters[0]) * var_sodium_calcium_exchanger__d_NaCa); // nanoA
         const double var_sodium_current__g_Na_Centre = 0.0; // microlitre_per_second
         const double var_sodium_current__g_Na_Periphery = 1.204e-6; // microlitre_per_second
         const double var_sodium_current__g_Na = (-var_sodium_current__g_Na_Centre + var_sodium_current__g_Na_Periphery) * var_membrane__FCell + var_sodium_current__g_Na_Centre; // microlitre_per_second
@@ -225,7 +226,6 @@
         const double var_hyperpolarisation_activated_current__g_f_K_Periphery = 0.006875; // microS
         const double var_hyperpolarisation_activated_current__g_f_Na_Centre = 0.0005465; // microS
         const double var_hyperpolarisation_activated_current__g_f_Na_Periphery = 0.006875; // microS
-        const double var_ionic_concentrations__Ca_i = 0.0001; // millimolar
         const double var_ionic_concentrations__Ca_o = 2.0; // millimolar
         const double var_ionic_concentrations__K_i = 140.0; // millimolar
         const double var_ionic_concentrations__K_o = 5.4000000000000004; // millimolar
@@ -252,7 +252,7 @@
         const double var_persistent_calcium_current__i_Ca_p_max_Centre = 0.0; // nanoA
         const double var_persistent_calcium_current__i_Ca_p_max_Periphery = 0.0; // nanoA
         const double var_persistent_calcium_current__i_Ca_p_max = (-var_persistent_calcium_current__i_Ca_p_max_Centre + var_persistent_calcium_current__i_Ca_p_max_Periphery) * var_membrane__FCell + var_persistent_calcium_current__i_Ca_p_max_Centre; // nanoA
-        const double var_persistent_calcium_current__i_Ca_p = var_ionic_concentrations__Ca_i * var_persistent_calcium_current__i_Ca_p_max / (0.00040000000000000002 + var_ionic_concentrations__Ca_i); // nanoA
+        const double var_persistent_calcium_current__i_Ca_p = mParameters[0] * var_persistent_calcium_current__i_Ca_p_max / (0.00040000000000000002 + mParameters[0]); // nanoA
         const double var_potassium_background_current__g_b_K_Centre = 2.5236359999999998e-5; // microS
         const double var_potassium_background_current__g_b_K_Periphery = 8.1891999999999995e-5; // microS
         const double var_potassium_background_current__g_b_K = (-var_potassium_background_current__g_b_K_Centre + var_potassium_background_current__g_b_K_Periphery) * var_membrane__FCell + var_potassium_background_current__g_b_K_Centre; // microS
@@ -260,7 +260,7 @@
         const double var_rapid_delayed_rectifying_potassium_current__g_K_r_Periphery = 0.016; // microS
         const double var_rapid_delayed_rectifying_potassium_current__g_K_r = (-var_rapid_delayed_rectifying_potassium_current__g_K_r_Centre + var_rapid_delayed_rectifying_potassium_current__g_K_r_Periphery) * var_membrane__FCell + var_rapid_delayed_rectifying_potassium_current__g_K_r_Centre; // microS
         const double var_rapid_delayed_rectifying_potassium_current__P_a = 0.40000000000000002 * var_chaste_interface__rapid_delayed_rectifying_potassium_current_P_as_gate__P_as + 0.59999999999999998 * var_chaste_interface__rapid_delayed_rectifying_potassium_current_P_af_gate__P_af; // dimensionless
-        const double var_reversal_and_equilibrium_potentials__E_Ca = 0.5 * var_membrane__R * var_membrane__T * log(var_ionic_concentrations__Ca_o / var_ionic_concentrations__Ca_i) / var_membrane__F; // millivolt
+        const double var_reversal_and_equilibrium_potentials__E_Ca = 0.5 * var_membrane__R * var_membrane__T * log(var_ionic_concentrations__Ca_o / mParameters[0]) / var_membrane__F; // millivolt
         const double var_calcium_background_current__i_b_Ca = (-var_reversal_and_equilibrium_potentials__E_Ca + var_chaste_interface__membrane__V) * var_calcium_background_current__g_b_Ca; // nanoA
         const double var_reversal_and_equilibrium_potentials__E_K = var_membrane__R * var_membrane__T * log(var_ionic_concentrations__K_o / var_ionic_concentrations__K_i) / var_membrane__F; // millivolt
         const double var_four_AP_sensitive_currents__i_sus = (-var_reversal_and_equilibrium_potentials__E_K + var_chaste_interface__membrane__V) * var_four_AP_sensitive_currents__g_sus * var_chaste_interface__four_AP_sensitive_currents_r_gate__r; // nanoA
@@ -284,7 +284,7 @@
         const double var_sodium_calcium_exchanger__k_NaCa_Centre = 2.7228999999999998e-6; // nanoA
         const double var_sodium_calcium_exchanger__k_NaCa_Periphery = 8.8358400000000004e-6; // nanoA
         const double var_sodium_calcium_exchanger__k_NaCa = (-var_sodium_calcium_exchanger__k_NaCa_Centre + var_sodium_calcium_exchanger__k_NaCa_Periphery) * var_membrane__FCell + var_sodium_calcium_exchanger__k_NaCa_Centre; // nanoA
-        const double var_sodium_calcium_exchanger__i_NaCa = (pow(var_ionic_concentrations__Na_i, 3) * var_ionic_concentrations__Ca_o * exp(0.037429999999999998 * var_chaste_interface__membrane__V * var_sodium_calcium_exchanger__gamma_NaCa) - pow(var_ionic_concentrations__Na_o, 3) * var_ionic_concentrations__Ca_i * exp(0.037429999999999998 * (-1.0 + var_sodium_calcium_exchanger__gamma_NaCa) * var_chaste_interface__membrane__V)) * var_sodium_calcium_exchanger__k_NaCa / (1.0 + (pow(var_ionic_concentrations__Na_i, 3) * var_ionic_concentrations__Ca_o + pow(var_ionic_concentrations__Na_o, 3) * var_ionic_concentrations__Ca_i) * var_sodium_calcium_exchanger__d_NaCa); // nanoA
+        const double var_sodium_calcium_exchanger__i_NaCa = (pow(var_ionic_concentrations__Na_i, 3) * var_ionic_concentrations__Ca_o * exp(0.037429999999999998 * var_chaste_interface__membrane__V * var_sodium_calcium_exchanger__gamma_NaCa) - pow(var_ionic_concentrations__Na_o, 3) * mParameters[0] * exp(0.037429999999999998 * (-1.0 + var_sodium_calcium_exchanger__gamma_NaCa) * var_chaste_interface__membrane__V)) * var_sodium_calcium_exchanger__k_NaCa / (1.0 + (pow(var_ionic_concentrations__Na_i, 3) * var_ionic_concentrations__Ca_o + pow(var_ionic_concentrations__Na_o, 3) * mParameters[0]) * var_sodium_calcium_exchanger__d_NaCa); // nanoA
         const double var_sodium_current__g_Na_Centre = 0.0; // microlitre_per_second
         const double var_sodium_current__g_Na_Periphery = 1.204e-6; // microlitre_per_second
         const double var_sodium_current__g_Na = (-var_sodium_current__g_Na_Centre + var_sodium_current__g_Na_Periphery) * var_membrane__FCell + var_sodium_current__g_Na_Centre; // microlitre_per_second
@@ -477,6 +477,10 @@ void OdeSystemInformation<Cellzhang_SAN_model_2000_0D_capableFromCellMLBackwardE
     this->mVariableNames.push_back("hyperpolarisation_activated_current_y_gate__y");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.03889291759);
+
+    // mParameters[0]:
+    this->mParameterNames.push_back("cytosolic_calcium_concentration");
+    this->mParameterUnits.push_back("millimolar");
 
     this->mInitialised = true;
 }

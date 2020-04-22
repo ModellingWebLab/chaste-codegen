@@ -39,6 +39,7 @@
         return p_cellml_stim;
     }
 
+
     Cellmatsuoka_model_2003FromCellMLGRL1::Cellmatsuoka_model_2003FromCellMLGRL1(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractGeneralizedRushLarsenCardiacCell(
            37,
@@ -3501,6 +3502,26 @@
         return partialF;
     }
 
+    std::vector<double> Cellmatsuoka_model_2003FromCellMLGRL1::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        double var_chaste_interface__internal_ion_concentrations__Ca_Total = rY[3];
+        // Units: millimolar; Initial value: 0.00040180173572968586
+        
+
+        // Mathematics
+        const double var_internal_ion_concentrations__CMDN_max = 0.050000000000000003; // millimolar
+        const double var_internal_ion_concentrations__K_mCMDN = 0.0023800000000000002; // millimolar
+        const double var_internal_ion_concentrations__b1 = -var_chaste_interface__internal_ion_concentrations__Ca_Total + var_internal_ion_concentrations__CMDN_max + var_internal_ion_concentrations__K_mCMDN; // millimolar
+        const double var_internal_ion_concentrations__c1 = var_chaste_interface__internal_ion_concentrations__Ca_Total * var_internal_ion_concentrations__K_mCMDN; // millimolar2
+        const double var_internal_ion_concentrations__Cai = 1.0 * sqrt(0.25 * pow(var_internal_ion_concentrations__b1, 2) + var_internal_ion_concentrations__c1) - 0.5 * var_internal_ion_concentrations__b1; // millimolar
+
+        std::vector<double> dqs(1);
+        dqs[0] = var_internal_ion_concentrations__Cai;
+        return dqs;
+    }
+
 template<>
 void OdeSystemInformation<Cellmatsuoka_model_2003FromCellMLGRL1>::Initialise(void)
 {
@@ -3692,6 +3713,10 @@ void OdeSystemInformation<Cellmatsuoka_model_2003FromCellMLGRL1>::Initialise(voi
     this->mVariableNames.push_back("NL_model__X");
     this->mVariableUnits.push_back("micrometre");
     this->mInitialConditions.push_back(0.9573749975411884);
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("cytosolic_calcium_concentration");
+    this->mDerivedQuantityUnits.push_back("millimolar");
 
     this->mInitialised = true;
 }

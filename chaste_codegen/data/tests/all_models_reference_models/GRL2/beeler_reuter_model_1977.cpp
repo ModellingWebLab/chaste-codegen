@@ -38,7 +38,6 @@
         return p_cellml_stim;
     }
 
-
     double Cellbeeler_reuter_model_1977FromCellMLGRL2::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
@@ -275,7 +274,6 @@
         }
         
         
-
         y_save = rY[1];
         rY[1] = mYInit[1];
         mEvalF[1] = EvaluateYDerivative1(var_chaste_interface__environment__time, rY);
@@ -283,7 +281,6 @@
         rY[1] = y_save;
         
         
-
         y_save = rY[2];
         rY[2] = mYInit[2];
         mEvalF[2] = EvaluateYDerivative2(var_chaste_interface__environment__time, rY);
@@ -291,7 +288,6 @@
         rY[2] = y_save;
         
         
-
         y_save = rY[3];
         rY[3] = mYInit[3];
         mEvalF[3] = EvaluateYDerivative3(var_chaste_interface__environment__time, rY);
@@ -299,7 +295,6 @@
         rY[3] = y_save;
         
         
-
         y_save = rY[4];
         rY[4] = mYInit[4];
         mEvalF[4] = EvaluateYDerivative4(var_chaste_interface__environment__time, rY);
@@ -307,7 +302,6 @@
         rY[4] = y_save;
         
         
-
         y_save = rY[5];
         rY[5] = mYInit[5];
         mEvalF[5] = EvaluateYDerivative5(var_chaste_interface__environment__time, rY);
@@ -315,7 +309,6 @@
         rY[5] = y_save;
         
         
-
         y_save = rY[6];
         rY[6] = mYInit[6];
         mEvalF[6] = EvaluateYDerivative6(var_chaste_interface__environment__time, rY);
@@ -323,7 +316,6 @@
         rY[6] = y_save;
         
         
-
         y_save = rY[7];
         rY[7] = mYInit[7];
         mEvalF[7] = EvaluateYDerivative7(var_chaste_interface__environment__time, rY);

@@ -22,6 +22,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
+
     Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL2::Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL2(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractGeneralizedRushLarsenCardiacCell(
            4,
@@ -208,7 +209,6 @@
         }
         
         
-
         y_save = rY[1];
         rY[1] = mYInit[1];
         mEvalF[1] = EvaluateYDerivative1(var_chaste_interface__environment__time, rY);
@@ -216,7 +216,6 @@
         rY[1] = y_save;
         
         
-
         y_save = rY[2];
         rY[2] = mYInit[2];
         mEvalF[2] = EvaluateYDerivative2(var_chaste_interface__environment__time, rY);
@@ -224,7 +223,6 @@
         rY[2] = y_save;
         
         
-
         y_save = rY[3];
         rY[3] = mYInit[3];
         mEvalF[3] = EvaluateYDerivative3(var_chaste_interface__environment__time, rY);

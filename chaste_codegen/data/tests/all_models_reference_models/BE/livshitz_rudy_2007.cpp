@@ -39,6 +39,7 @@
         return p_cellml_stim;
     }
 
+
     Celllivshitz_rudy_2007FromCellMLBackwardEuler::Celllivshitz_rudy_2007FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<7>(
                 18,

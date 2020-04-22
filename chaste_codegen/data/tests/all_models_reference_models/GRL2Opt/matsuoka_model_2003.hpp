@@ -115,6 +115,7 @@ public:
     double EvaluateYDerivative36(double var_chaste_interface__environment__time, std::vector<double>& rY);
     double EvaluatePartialDerivative36(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical=false);
 
+    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY);
 };
 
 // Needs to be included last

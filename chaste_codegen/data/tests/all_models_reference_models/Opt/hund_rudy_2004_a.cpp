@@ -38,7 +38,6 @@
         return p_cellml_stim;
     }
 
-
     double Cellhund_rudy_2004_aFromCellML::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];

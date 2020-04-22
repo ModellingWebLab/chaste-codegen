@@ -38,7 +38,6 @@
         return p_cellml_stim;
     }
 
-
     double Cellten_tusscher_model_2006_epiFromCellMLGRL2::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
@@ -537,7 +536,6 @@
         }
         
         
-
         y_save = rY[1];
         rY[1] = mYInit[1];
         mEvalF[1] = EvaluateYDerivative1(var_chaste_interface__environment__time, rY);
@@ -545,7 +543,6 @@
         rY[1] = y_save;
         
         
-
         y_save = rY[2];
         rY[2] = mYInit[2];
         mEvalF[2] = EvaluateYDerivative2(var_chaste_interface__environment__time, rY);
@@ -553,7 +550,6 @@
         rY[2] = y_save;
         
         
-
         y_save = rY[3];
         rY[3] = mYInit[3];
         mEvalF[3] = EvaluateYDerivative3(var_chaste_interface__environment__time, rY);
@@ -561,7 +557,6 @@
         rY[3] = y_save;
         
         
-
         y_save = rY[4];
         rY[4] = mYInit[4];
         mEvalF[4] = EvaluateYDerivative4(var_chaste_interface__environment__time, rY);
@@ -569,7 +564,6 @@
         rY[4] = y_save;
         
         
-
         y_save = rY[5];
         rY[5] = mYInit[5];
         mEvalF[5] = EvaluateYDerivative5(var_chaste_interface__environment__time, rY);
@@ -577,7 +571,6 @@
         rY[5] = y_save;
         
         
-
         y_save = rY[6];
         rY[6] = mYInit[6];
         mEvalF[6] = EvaluateYDerivative6(var_chaste_interface__environment__time, rY);
@@ -585,7 +578,6 @@
         rY[6] = y_save;
         
         
-
         y_save = rY[7];
         rY[7] = mYInit[7];
         mEvalF[7] = EvaluateYDerivative7(var_chaste_interface__environment__time, rY);
@@ -593,7 +585,6 @@
         rY[7] = y_save;
         
         
-
         y_save = rY[8];
         rY[8] = mYInit[8];
         mEvalF[8] = EvaluateYDerivative8(var_chaste_interface__environment__time, rY);
@@ -601,7 +592,6 @@
         rY[8] = y_save;
         
         
-
         y_save = rY[9];
         rY[9] = mYInit[9];
         mEvalF[9] = EvaluateYDerivative9(var_chaste_interface__environment__time, rY);
@@ -609,7 +599,6 @@
         rY[9] = y_save;
         
         
-
         y_save = rY[10];
         rY[10] = mYInit[10];
         mEvalF[10] = EvaluateYDerivative10(var_chaste_interface__environment__time, rY);
@@ -617,7 +606,6 @@
         rY[10] = y_save;
         
         
-
         y_save = rY[11];
         rY[11] = mYInit[11];
         mEvalF[11] = EvaluateYDerivative11(var_chaste_interface__environment__time, rY);
@@ -625,7 +613,6 @@
         rY[11] = y_save;
         
         
-
         y_save = rY[12];
         rY[12] = mYInit[12];
         mEvalF[12] = EvaluateYDerivative12(var_chaste_interface__environment__time, rY);
@@ -633,7 +620,6 @@
         rY[12] = y_save;
         
         
-
         y_save = rY[13];
         rY[13] = mYInit[13];
         mEvalF[13] = EvaluateYDerivative13(var_chaste_interface__environment__time, rY);
@@ -641,7 +627,6 @@
         rY[13] = y_save;
         
         
-
         y_save = rY[14];
         rY[14] = mYInit[14];
         mEvalF[14] = EvaluateYDerivative14(var_chaste_interface__environment__time, rY);
@@ -649,7 +634,6 @@
         rY[14] = y_save;
         
         
-
         y_save = rY[15];
         rY[15] = mYInit[15];
         mEvalF[15] = EvaluateYDerivative15(var_chaste_interface__environment__time, rY);
@@ -657,7 +641,6 @@
         rY[15] = y_save;
         
         
-
         y_save = rY[16];
         rY[16] = mYInit[16];
         mEvalF[16] = EvaluateYDerivative16(var_chaste_interface__environment__time, rY);
@@ -665,7 +648,6 @@
         rY[16] = y_save;
         
         
-
         y_save = rY[17];
         rY[17] = mYInit[17];
         mEvalF[17] = EvaluateYDerivative17(var_chaste_interface__environment__time, rY);
@@ -673,7 +655,6 @@
         rY[17] = y_save;
         
         
-
         y_save = rY[18];
         rY[18] = mYInit[18];
         mEvalF[18] = EvaluateYDerivative18(var_chaste_interface__environment__time, rY);

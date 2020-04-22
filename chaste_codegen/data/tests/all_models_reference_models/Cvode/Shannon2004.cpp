@@ -39,6 +39,7 @@
         return p_cellml_stim;
     }
 
+
     double CellShannon2004FromCellMLCvode::GetIntracellularCalciumConcentration()
     {
         return NV_Ith_S(mStateVariables, 1);
@@ -808,7 +809,7 @@ void OdeSystemInformation<CellShannon2004FromCellMLCvode>::Initialise(void)
     this->mInitialConditions.push_back(3.539892);
 
     // NV_Ith_S(rY,23):
-    this->mVariableNames.push_back("Na_buffer__Nai");
+    this->mVariableNames.push_back("cytosolic_sodium_concentration");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(8.80853);
 

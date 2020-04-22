@@ -38,6 +38,7 @@
         return p_cellml_stim;
     }
 
+
     Cellbondarenko_model_2004_apexFromCellMLGRL1::Cellbondarenko_model_2004_apexFromCellMLGRL1(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractGeneralizedRushLarsenCardiacCell(
            41,

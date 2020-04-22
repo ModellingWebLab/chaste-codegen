@@ -39,6 +39,7 @@
         return p_cellml_stim;
     }
 
+
     double Cellbeeler_reuter_model_1977FromCellMLCvode::GetIntracellularCalciumConcentration()
     {
         return NV_Ith_S(mStateVariables, 1);

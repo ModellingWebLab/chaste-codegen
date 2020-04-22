@@ -40,6 +40,7 @@
         return p_cellml_stim;
     }
 
+
     double Cellnygren_atrial_model_1998FromCellMLCvode::GetIntracellularCalciumConcentration()
     {
         return NV_Ith_S(mStateVariables, 1);

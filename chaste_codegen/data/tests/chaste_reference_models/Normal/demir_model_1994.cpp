@@ -22,7 +22,6 @@
 #include "MathsCustomFunctions.hpp"
 
 
-
     double Celldemir_model_1994FromCellML::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];

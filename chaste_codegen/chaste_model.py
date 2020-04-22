@@ -4,6 +4,7 @@ from collections import OrderedDict
 
 import sympy as sp
 from cellmlmanip.model import DataDirectionFlow
+from cellmlmanip.rdf import create_rdf_node
 from cellmlmanip.units import UnitStore
 from pint import DimensionalityError
 from sympy.codegen.cfunctions import log10
@@ -144,10 +145,17 @@ class ChasteModel(object):
         self._in_interface = []
 
         self._time_variable = self._get_time_variable()
+        self._state_vars = self._model.get_state_variables()
+
         self._membrane_voltage_var = self._get_membrane_voltage_var()
         self._cytosolic_calcium_concentration_var = self._get_cytosolic_calcium_concentration_var()
 
-        self._state_vars = self._get_state_variables()
+        # Sort the state variables, in similar order to pycml to prevent breaking existing code.
+        # V and cytosolic_calcium_concentration need to be set for the sorting
+        # Conversions of V or cytosolic_calcium_concentration could have changed the state vars so a new call is needed
+        self._state_vars = sorted(self._model.get_state_variables(),
+                                  key=lambda state_var: self._state_var_key_order(state_var))
+
         self._in_interface.extend(self._state_vars)
 
         self._modifiable_parameters = self._get_modifiable_parameters()
@@ -232,6 +240,10 @@ class ChasteModel(object):
                 initial_value = eqs[0].rhs
         return initial_value
 
+    def _is_constant(self, var):
+        """Returns whether the given var is defined as a constant or not"""
+        return self._get_initial_value(var) is not None
+
     def _state_var_key_order(self, var):
         """Returns a key to order state variables in the same way as pycml does"""
         if isinstance(var, sp.Derivative):
@@ -275,16 +287,27 @@ class ChasteModel(object):
             self._logger.info(warning)
             assert False, warning
 
+    def _annotate_if_not_statevar(self, var):
+        """ If it is not a state var, annotates var as modifiable parameter or derived quantity as appropriate"""
+        if var not in self._state_vars:
+            if self._is_constant(var):
+                self._model.rdf.add((var.rdf_identity, create_rdf_node((self._PYCMLMETA, 'modifiable-parameter')),
+                                     create_rdf_node('yes')))
+            else:  # not constant
+                self._model.rdf.add((var.rdf_identity, create_rdf_node((self._PYCMLMETA, 'derived-quantity')),
+                                    create_rdf_node('yes')))
+
     def _get_membrane_voltage_var(self):
         """ Find the membrane_voltage variable"""
         voltage = self._model.get_variable_by_ontology_term((self._OXMETA, "membrane_voltage"))
         desired_units = self._units.get_unit('millivolt')
+        self._annotate_if_not_statevar(voltage)  # If V is not state var annotate as appropriate.
         try:
             # Convert if necessary
             return self._model.convert_variable(voltage, desired_units, DataDirectionFlow.INPUT)
         except DimensionalityError:
             warning = 'Incorrect definition of membrane_voltage variable '\
-                      '(units of membrane_voltage needs to be dimensionally equivalent to Volt)'
+                      '(units of membrane_voltage need to be dimensionally equivalent to Volt)'
             self._logger.info(warning)
             assert False, warning
 
@@ -293,6 +316,8 @@ class ChasteModel(object):
         try:
             cytosolic_calcium_concentration = \
                 self._model.get_variable_by_ontology_term((self._OXMETA, "cytosolic_calcium_concentration"))
+            self._annotate_if_not_statevar(cytosolic_calcium_concentration)  # If not state var annotate as appropriate
+
         except KeyError:
             self._logger.info(self._model.name + ' has no cytosolic_calcium_concentration')
             return None
@@ -319,7 +344,7 @@ class ChasteModel(object):
                 if self._model.has_ontology_annotation(q, self._OXMETA)
                 and not self._model.get_ontology_terms_by_variable(q, self._OXMETA)[-1] == 'membrane_stimulus_current'
                 and q not in self._model.get_derived_quantities()
-                and q not in self._model.get_state_variables()
+                and q not in self._state_vars
                 and not q == self._time_variable]
 
     def _get_modifiable_parameters(self):
@@ -330,15 +355,10 @@ class ChasteModel(object):
         if self.expose_annotated_variables:
             # Combined and sorted in display name order
             return \
-                sorted(self._get_modifiable_parameters_annotated() + self._get_modifiable_parameters_exposed(),
+                sorted(set(self._get_modifiable_parameters_annotated() + self._get_modifiable_parameters_exposed()),
                        key=lambda v: self._get_var_display_name(v))
         else:
             return sorted(self._get_modifiable_parameters_annotated(), key=lambda v: self._get_var_display_name(v))
-
-    def _get_state_variables(self):
-        """ Sort the state variables, in similar order to pycml to prevent breaking existing code"""
-        return sorted(self._model.get_state_variables(),
-                      key=lambda state_var: self._state_var_key_order(state_var))
 
     def _get_membrane_stimulus_current(self):
         """ Find the membrane_stimulus_current variable if it exists"""
@@ -663,10 +683,7 @@ class ChasteModel(object):
         """ Get the variables in the model that have exposed annotation and are derived quantities
             (irrespective of any derived-quantity tags)"""
         return [q for q in self._model.get_derived_quantities()
-                if self._model.has_ontology_annotation(q, self._OXMETA)
-                and not self._model.get_ontology_terms_by_variable(q, self._OXMETA)[-1]
-                .startswith('membrane_stimulus_current')] + \
-               [self._membrane_stimulus_current]
+                if self._model.has_ontology_annotation(q, self._OXMETA)] + [self._membrane_stimulus_current]
 
     def _get_derived_quant(self):
         """ Get all derived quantities
@@ -676,7 +693,7 @@ class ChasteModel(object):
         if self.expose_annotated_variables:
             # Combined and sorted in display name order
             return \
-                sorted(self._get_derived_quant_annotated() + self._get_derived_quant_exposed(),
+                sorted(set(self._get_derived_quant_annotated() + self._get_derived_quant_exposed()),
                        key=lambda v: self._get_var_display_name(v))
         else:
             return self._get_derived_quant_annotated()  # These are already sorted

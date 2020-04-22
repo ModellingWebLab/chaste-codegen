@@ -428,5 +428,5 @@ def test_wrong_units_voltage(capsys, tmp_path):
                                             class_name='test_wrong_units_voltage')
     warning = \
         'Incorrect definition of membrane_voltage variable '\
-        '(units of membrane_voltage needs to be dimensionally equivalent to Volt)'
+        '(units of membrane_voltage need to be dimensionally equivalent to Volt)'
     assert str(error.value) == warning

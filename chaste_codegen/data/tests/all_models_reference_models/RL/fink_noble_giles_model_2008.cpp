@@ -38,6 +38,7 @@
         return p_cellml_stim;
     }
 
+
     Cellfink_noble_giles_model_2008FromCellMLRushLarsen::Cellfink_noble_giles_model_2008FromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractRushLarsenCardiacCell(
                 27,
