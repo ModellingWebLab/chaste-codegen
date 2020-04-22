@@ -287,20 +287,21 @@ class ChasteModel(object):
             self._logger.info(warning)
             assert False, warning
 
+    def _annotate_if_not_statevar(self, var):
+        """ If it is not a state var, annotates var as modifiable parameter or derived quantity as appropriate"""
+        if var not in self._state_vars:
+            if self._is_constant(var):
+                self._model.rdf.add((var.rdf_identity, create_rdf_node((self._PYCMLMETA, 'modifiable-parameter')),
+                                     create_rdf_node('yes')))
+            else:  # not constant
+                self._model.rdf.add((var.rdf_identity, create_rdf_node((self._PYCMLMETA, 'derived-quantity')),
+                                    create_rdf_node('yes')))
+
     def _get_membrane_voltage_var(self):
         """ Find the membrane_voltage variable"""
         voltage = self._model.get_variable_by_ontology_term((self._OXMETA, "membrane_voltage"))
         desired_units = self._units.get_unit('millivolt')
-        # If V is not a state var add annotation as modifiable parameter or derived quantity as appropriate.
-        if voltage not in self._state_vars:
-            if self._is_constant(voltage):
-                self._model.rdf.add((voltage.rdf_identity,
-                                     create_rdf_node((self._PYCMLMETA, 'modifiable-parameter')),
-                                     create_rdf_node('yes')))
-            else:  # not constant
-                self._model.rdf.add((voltage.rdf_identity,
-                                    create_rdf_node((self._PYCMLMETA, 'derived-quantity')),
-                                    create_rdf_node('yes')))
+        self._annotate_if_not_statevar(voltage)  # If V is not state var annotate as appropriate.
         try:
             # Convert if necessary
             return self._model.convert_variable(voltage, desired_units, DataDirectionFlow.INPUT)
@@ -315,17 +316,8 @@ class ChasteModel(object):
         try:
             cytosolic_calcium_concentration = \
                 self._model.get_variable_by_ontology_term((self._OXMETA, "cytosolic_calcium_concentration"))
-            # If cytosolic_calcium_concentration is not a state var
-            # add annotation as modifiable parameter or derived quantity as appropriate.
-            if cytosolic_calcium_concentration not in self._state_vars:
-                if self._is_constant(cytosolic_calcium_concentration):
-                    self._model.rdf.add((cytosolic_calcium_concentration.rdf_identity,
-                                         create_rdf_node((self._PYCMLMETA, 'modifiable-parameter')),
-                                         create_rdf_node('yes')))
-                else:  # not constant
-                    self._model.rdf.add((cytosolic_calcium_concentration.rdf_identity,
-                                        create_rdf_node((self._PYCMLMETA, 'derived-quantity')),
-                                        create_rdf_node('yes')))
+            self._annotate_if_not_statevar(cytosolic_calcium_concentration)  # If not state var annotate as appropriate
+
         except KeyError:
             self._logger.info(self._model.name + ' has no cytosolic_calcium_concentration')
             return None
