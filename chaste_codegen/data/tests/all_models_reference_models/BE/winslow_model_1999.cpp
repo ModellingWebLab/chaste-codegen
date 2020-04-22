@@ -39,6 +39,7 @@
         return p_cellml_stim;
     }
 
+
     Cellwinslow_model_1999FromCellMLBackwardEuler::Cellwinslow_model_1999FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<25>(
                 33,

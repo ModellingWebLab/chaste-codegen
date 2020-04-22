@@ -23,6 +23,7 @@
 #include "CardiacNewtonSolver.hpp"
 
 
+
     Cellzhang_SAN_model_2000_allFromCellMLBackwardEuler::Cellzhang_SAN_model_2000_allFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<0>(
                 15,

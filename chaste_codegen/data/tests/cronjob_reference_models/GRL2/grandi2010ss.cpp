@@ -38,7 +38,6 @@
         return p_cellml_stim;
     }
 
-
     double Cellgrandi2010ssFromCellMLGRL2::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[37];
@@ -878,7 +877,6 @@
         }
         
         
-
         y_save = rY[1];
         rY[1] = mYInit[1];
         mEvalF[1] = EvaluateYDerivative1(var_chaste_interface__cell__time, rY);
@@ -886,7 +884,6 @@
         rY[1] = y_save;
         
         
-
         y_save = rY[2];
         rY[2] = mYInit[2];
         mEvalF[2] = EvaluateYDerivative2(var_chaste_interface__cell__time, rY);
@@ -894,7 +891,6 @@
         rY[2] = y_save;
         
         
-
         y_save = rY[3];
         rY[3] = mYInit[3];
         mEvalF[3] = EvaluateYDerivative3(var_chaste_interface__cell__time, rY);
@@ -902,7 +898,6 @@
         rY[3] = y_save;
         
         
-
         y_save = rY[4];
         rY[4] = mYInit[4];
         mEvalF[4] = EvaluateYDerivative4(var_chaste_interface__cell__time, rY);
@@ -910,7 +905,6 @@
         rY[4] = y_save;
         
         
-
         y_save = rY[5];
         rY[5] = mYInit[5];
         mEvalF[5] = EvaluateYDerivative5(var_chaste_interface__cell__time, rY);
@@ -918,7 +912,6 @@
         rY[5] = y_save;
         
         
-
         y_save = rY[6];
         rY[6] = mYInit[6];
         mEvalF[6] = EvaluateYDerivative6(var_chaste_interface__cell__time, rY);
@@ -926,7 +919,6 @@
         rY[6] = y_save;
         
         
-
         y_save = rY[7];
         rY[7] = mYInit[7];
         mEvalF[7] = EvaluateYDerivative7(var_chaste_interface__cell__time, rY);
@@ -934,7 +926,6 @@
         rY[7] = y_save;
         
         
-
         y_save = rY[8];
         rY[8] = mYInit[8];
         mEvalF[8] = EvaluateYDerivative8(var_chaste_interface__cell__time, rY);
@@ -942,7 +933,6 @@
         rY[8] = y_save;
         
         
-
         y_save = rY[9];
         rY[9] = mYInit[9];
         mEvalF[9] = EvaluateYDerivative9(var_chaste_interface__cell__time, rY);
@@ -950,7 +940,6 @@
         rY[9] = y_save;
         
         
-
         y_save = rY[10];
         rY[10] = mYInit[10];
         mEvalF[10] = EvaluateYDerivative10(var_chaste_interface__cell__time, rY);
@@ -958,7 +947,6 @@
         rY[10] = y_save;
         
         
-
         y_save = rY[11];
         rY[11] = mYInit[11];
         mEvalF[11] = EvaluateYDerivative11(var_chaste_interface__cell__time, rY);
@@ -966,7 +954,6 @@
         rY[11] = y_save;
         
         
-
         y_save = rY[12];
         rY[12] = mYInit[12];
         mEvalF[12] = EvaluateYDerivative12(var_chaste_interface__cell__time, rY);
@@ -974,7 +961,6 @@
         rY[12] = y_save;
         
         
-
         y_save = rY[13];
         rY[13] = mYInit[13];
         mEvalF[13] = EvaluateYDerivative13(var_chaste_interface__cell__time, rY);
@@ -982,7 +968,6 @@
         rY[13] = y_save;
         
         
-
         y_save = rY[14];
         rY[14] = mYInit[14];
         mEvalF[14] = EvaluateYDerivative14(var_chaste_interface__cell__time, rY);
@@ -990,7 +975,6 @@
         rY[14] = y_save;
         
         
-
         y_save = rY[15];
         rY[15] = mYInit[15];
         mEvalF[15] = EvaluateYDerivative15(var_chaste_interface__cell__time, rY);
@@ -998,7 +982,6 @@
         rY[15] = y_save;
         
         
-
         y_save = rY[16];
         rY[16] = mYInit[16];
         mEvalF[16] = EvaluateYDerivative16(var_chaste_interface__cell__time, rY);
@@ -1006,7 +989,6 @@
         rY[16] = y_save;
         
         
-
         y_save = rY[17];
         rY[17] = mYInit[17];
         mEvalF[17] = EvaluateYDerivative17(var_chaste_interface__cell__time, rY);
@@ -1014,7 +996,6 @@
         rY[17] = y_save;
         
         
-
         y_save = rY[18];
         rY[18] = mYInit[18];
         mEvalF[18] = EvaluateYDerivative18(var_chaste_interface__cell__time, rY);
@@ -1022,7 +1003,6 @@
         rY[18] = y_save;
         
         
-
         y_save = rY[19];
         rY[19] = mYInit[19];
         mEvalF[19] = EvaluateYDerivative19(var_chaste_interface__cell__time, rY);
@@ -1030,7 +1010,6 @@
         rY[19] = y_save;
         
         
-
         y_save = rY[20];
         rY[20] = mYInit[20];
         mEvalF[20] = EvaluateYDerivative20(var_chaste_interface__cell__time, rY);
@@ -1038,7 +1017,6 @@
         rY[20] = y_save;
         
         
-
         y_save = rY[21];
         rY[21] = mYInit[21];
         mEvalF[21] = EvaluateYDerivative21(var_chaste_interface__cell__time, rY);
@@ -1046,7 +1024,6 @@
         rY[21] = y_save;
         
         
-
         y_save = rY[22];
         rY[22] = mYInit[22];
         mEvalF[22] = EvaluateYDerivative22(var_chaste_interface__cell__time, rY);
@@ -1054,7 +1031,6 @@
         rY[22] = y_save;
         
         
-
         y_save = rY[23];
         rY[23] = mYInit[23];
         mEvalF[23] = EvaluateYDerivative23(var_chaste_interface__cell__time, rY);
@@ -1062,7 +1038,6 @@
         rY[23] = y_save;
         
         
-
         y_save = rY[24];
         rY[24] = mYInit[24];
         mEvalF[24] = EvaluateYDerivative24(var_chaste_interface__cell__time, rY);
@@ -1070,7 +1045,6 @@
         rY[24] = y_save;
         
         
-
         y_save = rY[25];
         rY[25] = mYInit[25];
         mEvalF[25] = EvaluateYDerivative25(var_chaste_interface__cell__time, rY);
@@ -1078,7 +1052,6 @@
         rY[25] = y_save;
         
         
-
         y_save = rY[26];
         rY[26] = mYInit[26];
         mEvalF[26] = EvaluateYDerivative26(var_chaste_interface__cell__time, rY);
@@ -1086,7 +1059,6 @@
         rY[26] = y_save;
         
         
-
         y_save = rY[27];
         rY[27] = mYInit[27];
         mEvalF[27] = EvaluateYDerivative27(var_chaste_interface__cell__time, rY);
@@ -1094,7 +1066,6 @@
         rY[27] = y_save;
         
         
-
         y_save = rY[28];
         rY[28] = mYInit[28];
         mEvalF[28] = EvaluateYDerivative28(var_chaste_interface__cell__time, rY);
@@ -1102,7 +1073,6 @@
         rY[28] = y_save;
         
         
-
         y_save = rY[29];
         rY[29] = mYInit[29];
         mEvalF[29] = EvaluateYDerivative29(var_chaste_interface__cell__time, rY);
@@ -1110,7 +1080,6 @@
         rY[29] = y_save;
         
         
-
         y_save = rY[30];
         rY[30] = mYInit[30];
         mEvalF[30] = EvaluateYDerivative30(var_chaste_interface__cell__time, rY);
@@ -1118,7 +1087,6 @@
         rY[30] = y_save;
         
         
-
         y_save = rY[31];
         rY[31] = mYInit[31];
         mEvalF[31] = EvaluateYDerivative31(var_chaste_interface__cell__time, rY);
@@ -1126,7 +1094,6 @@
         rY[31] = y_save;
         
         
-
         y_save = rY[32];
         rY[32] = mYInit[32];
         mEvalF[32] = EvaluateYDerivative32(var_chaste_interface__cell__time, rY);
@@ -1134,7 +1101,6 @@
         rY[32] = y_save;
         
         
-
         y_save = rY[33];
         rY[33] = mYInit[33];
         mEvalF[33] = EvaluateYDerivative33(var_chaste_interface__cell__time, rY);
@@ -1142,7 +1108,6 @@
         rY[33] = y_save;
         
         
-
         y_save = rY[34];
         rY[34] = mYInit[34];
         mEvalF[34] = EvaluateYDerivative34(var_chaste_interface__cell__time, rY);
@@ -1150,7 +1115,6 @@
         rY[34] = y_save;
         
         
-
         y_save = rY[35];
         rY[35] = mYInit[35];
         mEvalF[35] = EvaluateYDerivative35(var_chaste_interface__cell__time, rY);
@@ -1158,7 +1122,6 @@
         rY[35] = y_save;
         
         
-
         y_save = rY[36];
         rY[36] = mYInit[36];
         mEvalF[36] = EvaluateYDerivative36(var_chaste_interface__cell__time, rY);
@@ -1166,7 +1129,6 @@
         rY[36] = y_save;
         
         
-
         y_save = rY[37];
         rY[37] = mYInit[37];
         mEvalF[37] = EvaluateYDerivative37(var_chaste_interface__cell__time, rY);

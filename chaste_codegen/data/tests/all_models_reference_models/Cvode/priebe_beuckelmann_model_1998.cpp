@@ -39,6 +39,7 @@
         return p_cellml_stim;
     }
 
+
     double Cellpriebe_beuckelmann_model_1998FromCellMLCvode::GetIntracellularCalciumConcentration()
     {
         return NV_Ith_S(mStateVariables, 1);

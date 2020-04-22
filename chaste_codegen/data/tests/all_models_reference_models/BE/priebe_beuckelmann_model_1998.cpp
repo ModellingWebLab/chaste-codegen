@@ -39,7 +39,6 @@
         return p_cellml_stim;
     }
 
-
     double Cellpriebe_beuckelmann_model_1998FromCellMLBackwardEuler::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];

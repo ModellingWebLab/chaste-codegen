@@ -40,7 +40,6 @@
         return p_cellml_stim;
     }
 
-
     double Cellhilgemann_noble_model_1987FromCellMLBackwardEuler::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];

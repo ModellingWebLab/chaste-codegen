@@ -39,7 +39,6 @@
         return p_cellml_stim;
     }
 
-
     double Cellearm_noble_model_1990FromCellMLGRL1::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];

@@ -38,6 +38,7 @@
         return p_cellml_stim;
     }
 
+
     double Cellluo_rudy_1994FromCellMLCvode::GetIntracellularCalciumConcentration()
     {
         return NV_Ith_S(mStateVariables, 1);

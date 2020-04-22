@@ -22,7 +22,6 @@
 #include "MathsCustomFunctions.hpp"
 
 
-
     double Cellnoble_SAN_model_1989FromCellMLGRL2::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
@@ -438,7 +437,6 @@
         }
         
         
-
         y_save = rY[1];
         rY[1] = mYInit[1];
         mEvalF[1] = EvaluateYDerivative1(var_chaste_interface__environment__time_converted, rY);
@@ -446,7 +444,6 @@
         rY[1] = y_save;
         
         
-
         y_save = rY[2];
         rY[2] = mYInit[2];
         mEvalF[2] = EvaluateYDerivative2(var_chaste_interface__environment__time_converted, rY);
@@ -454,7 +451,6 @@
         rY[2] = y_save;
         
         
-
         y_save = rY[3];
         rY[3] = mYInit[3];
         mEvalF[3] = EvaluateYDerivative3(var_chaste_interface__environment__time_converted, rY);
@@ -462,7 +458,6 @@
         rY[3] = y_save;
         
         
-
         y_save = rY[4];
         rY[4] = mYInit[4];
         mEvalF[4] = EvaluateYDerivative4(var_chaste_interface__environment__time_converted, rY);
@@ -470,7 +465,6 @@
         rY[4] = y_save;
         
         
-
         y_save = rY[5];
         rY[5] = mYInit[5];
         mEvalF[5] = EvaluateYDerivative5(var_chaste_interface__environment__time_converted, rY);
@@ -478,7 +472,6 @@
         rY[5] = y_save;
         
         
-
         y_save = rY[6];
         rY[6] = mYInit[6];
         mEvalF[6] = EvaluateYDerivative6(var_chaste_interface__environment__time_converted, rY);
@@ -486,7 +479,6 @@
         rY[6] = y_save;
         
         
-
         y_save = rY[7];
         rY[7] = mYInit[7];
         mEvalF[7] = EvaluateYDerivative7(var_chaste_interface__environment__time_converted, rY);
@@ -494,7 +486,6 @@
         rY[7] = y_save;
         
         
-
         y_save = rY[8];
         rY[8] = mYInit[8];
         mEvalF[8] = EvaluateYDerivative8(var_chaste_interface__environment__time_converted, rY);
@@ -502,7 +493,6 @@
         rY[8] = y_save;
         
         
-
         y_save = rY[9];
         rY[9] = mYInit[9];
         mEvalF[9] = EvaluateYDerivative9(var_chaste_interface__environment__time_converted, rY);
@@ -510,7 +500,6 @@
         rY[9] = y_save;
         
         
-
         y_save = rY[10];
         rY[10] = mYInit[10];
         mEvalF[10] = EvaluateYDerivative10(var_chaste_interface__environment__time_converted, rY);
@@ -518,7 +507,6 @@
         rY[10] = y_save;
         
         
-
         y_save = rY[11];
         rY[11] = mYInit[11];
         mEvalF[11] = EvaluateYDerivative11(var_chaste_interface__environment__time_converted, rY);
@@ -526,7 +514,6 @@
         rY[11] = y_save;
         
         
-
         y_save = rY[12];
         rY[12] = mYInit[12];
         mEvalF[12] = EvaluateYDerivative12(var_chaste_interface__environment__time_converted, rY);
@@ -534,7 +521,6 @@
         rY[12] = y_save;
         
         
-
         y_save = rY[13];
         rY[13] = mYInit[13];
         mEvalF[13] = EvaluateYDerivative13(var_chaste_interface__environment__time_converted, rY);

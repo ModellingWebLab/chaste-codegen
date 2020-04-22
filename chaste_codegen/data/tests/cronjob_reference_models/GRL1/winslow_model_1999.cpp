@@ -38,6 +38,7 @@
         return p_cellml_stim;
     }
 
+
     Cellwinslow_model_1999FromCellMLGRL1::Cellwinslow_model_1999FromCellMLGRL1(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractGeneralizedRushLarsenCardiacCell(
            33,

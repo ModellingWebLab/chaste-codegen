@@ -39,6 +39,7 @@
         return p_cellml_stim;
     }
 
+
     Cellfink_noble_giles_model_2008FromCellMLBackwardEuler::Cellfink_noble_giles_model_2008FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<17>(
                 27,

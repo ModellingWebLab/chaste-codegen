@@ -1,11 +1,12 @@
-#ifndef CELLZHANG_SAN_MODEL_2000_0D_CAPABLEFROMCELLML_HPP_
-#define CELLZHANG_SAN_MODEL_2000_0D_CAPABLEFROMCELLML_HPP_
+#ifdef CHASTE_CVODE
+#ifndef CELLSHANNON2004FROMCELLMLCVODE_HPP_
+#define CELLSHANNON2004FROMCELLMLCVODE_HPP_
 
 //! @file
 //!
 //! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
-//! Model: zhang_SAN_model_2000_0D_capable
+//! Model: shannon_2004
 //!
 //! Processed by chaste_codegen: https://github.com/ModellingWebLab/chaste-codegen
 //!     (translator: chaste_codegen)
@@ -17,34 +18,36 @@
 #include <boost/serialization/base_object.hpp>
 
 #include "AbstractStimulusFunction.hpp"
-#include "AbstractCardiacCell.hpp"
+#include "AbstractCvodeCell.hpp"
 
-class Cellzhang_SAN_model_2000_0D_capableFromCellML : public AbstractCardiacCell
+class CellShannon2004FromCellMLCvode : public AbstractCvodeCell
 {
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & archive, const unsigned int version)
     {
-        archive & boost::serialization::base_object<AbstractCardiacCell >(*this);
+        archive & boost::serialization::base_object<AbstractCvodeCell >(*this);
         
     }
-
-    //
+    
+    // 
     // Settable parameters and readable variables
-    //
-
+    // 
+    
 public:
 
-    Cellzhang_SAN_model_2000_0D_capableFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellzhang_SAN_model_2000_0D_capableFromCellML();
+    boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
+    double GetIntracellularCalciumConcentration();
+    CellShannon2004FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~CellShannon2004FromCellMLCvode();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
-    void EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY);
-
+    void EvaluateYDerivatives(double var_chaste_interface__environment__time, const N_Vector rY, N_Vector rDY);
+    void EvaluateAnalyticJacobian(double var_chaste_interface__environment__time, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3);
 };
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellzhang_SAN_model_2000_0D_capableFromCellML)
+CHASTE_CLASS_EXPORT(CellShannon2004FromCellMLCvode)
 
 namespace boost
 {
@@ -52,7 +55,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellzhang_SAN_model_2000_0D_capableFromCellML * t, const unsigned int fileVersion)
+            Archive & ar, const CellShannon2004FromCellMLCvode * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -62,17 +65,18 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellzhang_SAN_model_2000_0D_capableFromCellML * t, const unsigned int fileVersion)
+            Archive & ar, CellShannon2004FromCellMLCvode * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellzhang_SAN_model_2000_0D_capableFromCellML(p_solver, p_stimulus);
+            ::new(t)CellShannon2004FromCellMLCvode(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLZHANG_SAN_MODEL_2000_0D_CAPABLEFROMCELLML_HPP_
+#endif // CELLSHANNON2004FROMCELLMLCVODE_HPP_
+#endif // CHASTE_CVODE

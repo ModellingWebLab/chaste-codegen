@@ -40,6 +40,7 @@
         return p_cellml_stim;
     }
 
+
     Cellnoble_model_1991FromCellMLBackwardEuler::Cellnoble_model_1991FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<9>(
                 17,

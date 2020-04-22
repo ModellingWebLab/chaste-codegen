@@ -4,6 +4,7 @@ from collections import OrderedDict
 
 import sympy as sp
 from cellmlmanip.model import DataDirectionFlow
+from cellmlmanip.rdf import create_rdf_node
 from cellmlmanip.units import UnitStore
 from pint import DimensionalityError
 from sympy.codegen.cfunctions import log10
@@ -144,10 +145,16 @@ class ChasteModel(object):
         self._in_interface = []
 
         self._time_variable = self._get_time_variable()
+        self._state_vars = self._model.get_state_variables()
+
         self._membrane_voltage_var = self._get_membrane_voltage_var()
         self._cytosolic_calcium_concentration_var = self._get_cytosolic_calcium_concentration_var()
 
-        self._state_vars = self._get_state_variables()
+        # Sort the state variables, in similar order to pycml to prevent breaking existing code.
+        # V and cytosolic_calcium_concentration need to be set for the soering
+        self._state_vars = sorted(self._model.get_state_variables(),
+                                  key=lambda state_var: self._state_var_key_order(state_var))
+
         self._in_interface.extend(self._state_vars)
 
         self._modifiable_parameters = self._get_modifiable_parameters()
@@ -258,7 +265,16 @@ class ChasteModel(object):
         display_name = var.cmeta_id if var.cmeta_id else var.name
         if self._model.has_ontology_annotation(var, self._OXMETA):
             display_name = self._model.get_ontology_terms_by_variable(var, self._OXMETA)[-1]
-        return display_name.replace('$', '__').replace('var_chaste_interface_', '', 1).replace('var_', '', 1)
+        #return display_name.replace('$', '__').replace('var_chaste_interface_', '', 1).replace('var_', '', 1)
+        display_name = display_name.replace('$', '__').replace('var_chaste_interface_', '', 1).replace('var_', '', 1)
+
+        if display_name == "Na_buffer__Nai" or display_name == "cytosolic_sodium_concentration":
+            print('---\n')
+            print(var)
+            print(self._model.has_ontology_annotation(var, self._OXMETA))
+            print(self._model.get_ontology_terms_by_variable(var, self._OXMETA))
+            print('---\n')
+        return display_name
 
     def _add_units(self):
         """ Add needed units to the model to allow converting time, voltage and calcium in specific units
@@ -297,6 +313,17 @@ class ChasteModel(object):
         try:
             cytosolic_calcium_concentration = \
                 self._model.get_variable_by_ontology_term((self._OXMETA, "cytosolic_calcium_concentration"))
+            # If cytosolic_calcium_concentration is not a state var
+            # add annotation as modifiable parameter or derived quantity as appropriate.
+            if cytosolic_calcium_concentration not in self._state_vars:
+                if self._is_constant(cytosolic_calcium_concentration):
+                    self._model.rdf.add((cytosolic_calcium_concentration.rdf_identity,
+                                         create_rdf_node((self._PYCMLMETA, 'modifiable-parameter')),
+                                         create_rdf_node('yes')))
+                else:  # not constant
+                    self._model.rdf.add((cytosolic_calcium_concentration.rdf_identity,
+                                        create_rdf_node((self._PYCMLMETA, 'derived-quantity')),
+                                        create_rdf_node('yes')))
         except KeyError:
             self._logger.info(self._model.name + ' has no cytosolic_calcium_concentration')
             return None
@@ -313,13 +340,8 @@ class ChasteModel(object):
             return cytosolic_calcium_concentration
 
     def _get_modifiable_parameters_annotated(self):
-        """ Get the variables annotated in the model as modifiable parameter
-
-            Also include V and cytosolic_calcium_concentration_var if these are constant and not stae_vars
-        """
-        return self._model.get_variables_by_rdf((self._PYCMLMETA, 'modifiable-parameter'), 'yes') +\
-            [p for p in (self._membrane_voltage_var, self._cytosolic_calcium_concentration_var)
-             if p is not None and p not in self._state_vars and self._is_constant(p)]
+        """ Get the variables annotated in the model as modifiable parametery"""
+        return self._model.get_variables_by_rdf((self._PYCMLMETA, 'modifiable-parameter'), 'yes')
 
     def _get_modifiable_parameters_exposed(self):
         """ Get the variables in the model that have exposed annotation and are modifiable parameters
@@ -328,7 +350,7 @@ class ChasteModel(object):
                 if self._model.has_ontology_annotation(q, self._OXMETA)
                 and not self._model.get_ontology_terms_by_variable(q, self._OXMETA)[-1] == 'membrane_stimulus_current'
                 and q not in self._model.get_derived_quantities()
-                and q not in self._model.get_state_variables()
+                and q not in self._state_vars
                 and not q == self._time_variable]
 
     def _get_modifiable_parameters(self):
@@ -342,12 +364,7 @@ class ChasteModel(object):
                 sorted(set(self._get_modifiable_parameters_annotated() + self._get_modifiable_parameters_exposed()),
                        key=lambda v: self._get_var_display_name(v))
         else:
-            return sorted(set(self._get_modifiable_parameters_annotated()), key=lambda v: self._get_var_display_name(v))
-
-    def _get_state_variables(self):
-        """ Sort the state variables, in similar order to pycml to prevent breaking existing code"""
-        return sorted(self._model.get_state_variables(),
-                      key=lambda state_var: self._state_var_key_order(state_var))
+            return sorted(self._get_modifiable_parameters_annotated(), key=lambda v: self._get_var_display_name(v))
 
     def _get_membrane_stimulus_current(self):
         """ Find the membrane_stimulus_current variable if it exists"""
@@ -665,22 +682,15 @@ class ChasteModel(object):
         return eqs
 
     def _get_derived_quant_annotated(self):
-        """ Get the variables annotated in the model as derived derived-quantity
-
-            Also include V and cytosolic_calcium_concentration_var if these are not constant and not stae_vars
-        """
-        return self._model.get_variables_by_rdf((self._PYCMLMETA, 'derived-quantity'), 'yes') +\
-            [p for p in (self._membrane_voltage_var, self._cytosolic_calcium_concentration_var)
-             if p is not None and p not in self._state_vars and not self._is_constant(p)]
+        """ Get the variables annotated in the model as derived derived-quantity"""
+        return self._model.get_variables_by_rdf((self._PYCMLMETA, 'derived-quantity'), 'yes')
 
     def _get_derived_quant_exposed(self):
         """ Get the variables in the model that have exposed annotation and are derived quantities
             (irrespective of any derived-quantity tags)"""
         return [q for q in self._model.get_derived_quantities()
                 if self._model.has_ontology_annotation(q, self._OXMETA)
-                and not self._model.get_ontology_terms_by_variable(q, self._OXMETA)[-1]
-                .startswith('membrane_stimulus_current')] + \
-               [self._membrane_stimulus_current]
+                and q not in self._get_modifiable_parameters] + [self._membrane_stimulus_current]
 
     def _get_derived_quant(self):
         """ Get all derived quantities
@@ -693,7 +703,7 @@ class ChasteModel(object):
                 sorted(set(self._get_derived_quant_annotated() + self._get_derived_quant_exposed()),
                        key=lambda v: self._get_var_display_name(v))
         else:
-            return set(self._get_derived_quant_annotated())  # These are already sorted
+            return self._get_derived_quant_annotated()  # These are already sorted
 
     def _get_derived_quant_eqs(self):
         """ Get the defining equations for derived quantities"""

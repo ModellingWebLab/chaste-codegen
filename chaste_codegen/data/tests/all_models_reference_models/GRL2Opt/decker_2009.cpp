@@ -38,7 +38,6 @@
         return p_cellml_stim;
     }
 
-
     double Celldecker_2009FromCellMLGRL2::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];

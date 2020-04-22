@@ -39,6 +39,7 @@
         return p_cellml_stim;
     }
 
+
     Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler::Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<25>(
                 31,
