@@ -22,7 +22,6 @@
 #include "MathsCustomFunctions.hpp"
 
 
-
     double Cellnoble_noble_SAN_model_1984FromCellML::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];

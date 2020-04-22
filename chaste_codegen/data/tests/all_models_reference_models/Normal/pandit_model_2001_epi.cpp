@@ -39,6 +39,7 @@
         return p_cellml_stim;
     }
 
+
     Cellpandit_model_2001_epiFromCellML::Cellpandit_model_2001_epiFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,

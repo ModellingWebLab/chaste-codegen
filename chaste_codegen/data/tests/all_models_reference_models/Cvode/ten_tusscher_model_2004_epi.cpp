@@ -39,6 +39,7 @@
         return p_cellml_stim;
     }
 
+
     double Cellten_tusscher_model_2004_epiFromCellMLCvode::GetIntracellularCalciumConcentration()
     {
         return NV_Ith_S(mStateVariables, 1);

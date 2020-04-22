@@ -40,6 +40,7 @@
         return p_cellml_stim;
     }
 
+
     Cellcourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler::Cellcourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<8>(
                 21,

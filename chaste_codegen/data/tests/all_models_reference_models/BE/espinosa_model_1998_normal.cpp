@@ -40,7 +40,6 @@
         return p_cellml_stim;
     }
 
-
     double Cellespinosa_model_1998_normalFromCellMLBackwardEuler::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];

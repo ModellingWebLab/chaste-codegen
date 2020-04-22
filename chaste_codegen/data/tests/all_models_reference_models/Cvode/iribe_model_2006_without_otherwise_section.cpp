@@ -40,6 +40,7 @@
         return p_cellml_stim;
     }
 
+
     double Celliribe_model_2006_without_otherwise_sectionFromCellMLCvode::GetIntracellularCalciumConcentration()
     {
         return NV_Ith_S(mStateVariables, 1);

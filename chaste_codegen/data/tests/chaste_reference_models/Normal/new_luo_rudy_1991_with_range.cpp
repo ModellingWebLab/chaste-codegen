@@ -38,7 +38,6 @@
         return p_cellml_stim;
     }
 
-
     double Cellnew_luo_rudy_1991_with_rangeFromCellML::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];

@@ -38,6 +38,7 @@
         return p_cellml_stim;
     }
 
+
     Celllivshitz_rudy_2007FromCellMLGRL1::Celllivshitz_rudy_2007FromCellMLGRL1(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractGeneralizedRushLarsenCardiacCell(
            18,

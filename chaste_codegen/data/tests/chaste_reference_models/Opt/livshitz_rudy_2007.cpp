@@ -38,6 +38,7 @@
         return p_cellml_stim;
     }
 
+
     Celllivshitz_rudy_2007FromCellML::Celllivshitz_rudy_2007FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,

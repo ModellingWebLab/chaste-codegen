@@ -22,7 +22,6 @@
 #include "MathsCustomFunctions.hpp"
 
 
-
     double Celldokos_model_1996FromCellMLGRL2::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];

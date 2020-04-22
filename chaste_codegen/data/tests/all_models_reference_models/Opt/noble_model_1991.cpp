@@ -38,6 +38,7 @@
         return p_cellml_stim;
     }
 
+
     Cellnoble_model_1991FromCellML::Cellnoble_model_1991FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,

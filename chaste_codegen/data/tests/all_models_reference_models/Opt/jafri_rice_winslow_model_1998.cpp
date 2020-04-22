@@ -38,6 +38,7 @@
         return p_cellml_stim;
     }
 
+
     Celljafri_rice_winslow_model_1998FromCellML::Celljafri_rice_winslow_model_1998FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,

@@ -38,7 +38,6 @@
         return p_cellml_stim;
     }
 
-
     double Celliribe_model_2006_without_otherwise_sectionFromCellML::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
