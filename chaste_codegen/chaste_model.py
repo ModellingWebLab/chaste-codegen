@@ -151,7 +151,8 @@ class ChasteModel(object):
         self._cytosolic_calcium_concentration_var = self._get_cytosolic_calcium_concentration_var()
 
         # Sort the state variables, in similar order to pycml to prevent breaking existing code.
-        # V and cytosolic_calcium_concentration need to be set for the soering
+        # V and cytosolic_calcium_concentration need to be set for the sorting
+        # Conversions of V or cytosolic_calcium_concentration could have changed the state vars so a new call is needed
         self._state_vars = sorted(self._model.get_state_variables(),
                                   key=lambda state_var: self._state_var_key_order(state_var))
 
@@ -290,12 +291,22 @@ class ChasteModel(object):
         """ Find the membrane_voltage variable"""
         voltage = self._model.get_variable_by_ontology_term((self._OXMETA, "membrane_voltage"))
         desired_units = self._units.get_unit('millivolt')
+        # If V is not a state var add annotation as modifiable parameter or derived quantity as appropriate.
+        if voltage not in self._state_vars:
+            if self._is_constant(voltage):
+                self._model.rdf.add((voltage.rdf_identity,
+                                     create_rdf_node((self._PYCMLMETA, 'modifiable-parameter')),
+                                     create_rdf_node('yes')))
+            else:  # not constant
+                self._model.rdf.add((voltage.rdf_identity,
+                                    create_rdf_node((self._PYCMLMETA, 'derived-quantity')),
+                                    create_rdf_node('yes')))
         try:
             # Convert if necessary
             return self._model.convert_variable(voltage, desired_units, DataDirectionFlow.INPUT)
         except DimensionalityError:
             warning = 'Incorrect definition of membrane_voltage variable '\
-                      '(units of membrane_voltage needs to be dimensionally equivalent to Volt)'
+                      '(units of membrane_voltage need to be dimensionally equivalent to Volt)'
             self._logger.info(warning)
             assert False, warning
 
@@ -680,8 +691,7 @@ class ChasteModel(object):
         """ Get the variables in the model that have exposed annotation and are derived quantities
             (irrespective of any derived-quantity tags)"""
         return [q for q in self._model.get_derived_quantities()
-                if self._model.has_ontology_annotation(q, self._OXMETA)
-                and q not in self._get_modifiable_parameters] + [self._membrane_stimulus_current]
+                if self._model.has_ontology_annotation(q, self._OXMETA)] + [self._membrane_stimulus_current]
 
     def _get_derived_quant(self):
         """ Get all derived quantities
