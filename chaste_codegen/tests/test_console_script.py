@@ -13,21 +13,6 @@ LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 
 
-def test_script_help(capsys):
-    """Test help message"""
-    LOGGER.info('Testing help for command line script\n')
-    testargs = ["chaste_codegen", "-h"]
-    with mock.patch.object(sys, 'argv', testargs):
-        try:
-            chaste_codegen()
-        except SystemExit:
-            pass  # We expect this to print usage and exit
-        captured = capsys.readouterr()
-        # compare to expected
-        output = str(captured.out)
-        expected = open(os.path.join(cg.DATA_DIR, 'tests', 'console_script_help.txt'), 'r').read()
-        assert output == expected
-
 
 def test_script_version(capsys):
     """Test version number message"""
