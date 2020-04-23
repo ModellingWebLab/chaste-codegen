@@ -1,3 +1,4 @@
+#ifdef CHASTE_CVODE
 //! @file
 //!
 //! This source file was generated from CellML by chaste_codegen version 0.0.1
@@ -21,7 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellgrandi2010ssFromCellML::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellgrandi2010ssFromCellMLCvodeDataClamp::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__cell__stim_amplitude = -15.0 * HeartConfig::Instance()->GetCapacitance(); // uA_per_uF
@@ -38,75 +39,85 @@
         return p_cellml_stim;
     }
 
-
-    double Cellgrandi2010ssFromCellML::GetIntracellularCalciumConcentration()
+    double Cellgrandi2010ssFromCellMLCvodeDataClamp::GetIntracellularCalciumConcentration()
     {
-        return mStateVariables[37];
+        return NV_Ith_S(mStateVariables, 37);
     }
-    Cellgrandi2010ssFromCellML::Cellgrandi2010ssFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
-        : AbstractCardiacCell(
-                pSolver,
+       
+    Cellgrandi2010ssFromCellMLCvodeDataClamp::Cellgrandi2010ssFromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+        : AbstractCvodeCellWithDataClamp(
+                pOdeSolver,
                 38,
                 0,
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        //
-        this->mpSystemInfo = OdeSystemInformation<Cellgrandi2010ssFromCellML>::Instance();
+        // 
+        this->mpSystemInfo = OdeSystemInformation<Cellgrandi2010ssFromCellMLCvodeDataClamp>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
         this->mHasDefaultStimulusFromCellML = true;
         
+        NV_Ith_S(this->mParameters, 0) = 0.0; // (var_membrane_data_clamp_current_conductance) [dimensionless]
     }
 
-    Cellgrandi2010ssFromCellML::~Cellgrandi2010ssFromCellML()
+    Cellgrandi2010ssFromCellMLCvodeDataClamp::~Cellgrandi2010ssFromCellMLCvodeDataClamp()
     {
     }
     
-    double Cellgrandi2010ssFromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellgrandi2010ssFromCellMLCvodeDataClamp::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
-        if (!pStateVariables) pStateVariables = &rGetStateVariables();
-        const std::vector<double>& rY = *pStateVariables;
-        double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        N_Vector rY;
+        bool made_new_cvode_vector = false;
+        if (!pStateVariables)
+        {
+            rY = rGetStateVariables();
+        }
+        else
+        {
+            made_new_cvode_vector = true;
+            rY = MakeNVector(*pStateVariables);
+        }
+        double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
         // Units: millivolt; Initial value: -81.3842590704928
-        double var_chaste_interface__cell__sm = rY[1];
+        double var_chaste_interface__cell__sm = NV_Ith_S(rY, 1);
         // Units: dimensionless; Initial value: 0.00384941567866232
-        double var_chaste_interface__cell__sh = rY[2];
+        double var_chaste_interface__cell__sh = NV_Ith_S(rY, 2);
         // Units: dimensionless; Initial value: 0.623723834301669
-        double var_chaste_interface__cell__sj = rY[3];
+        double var_chaste_interface__cell__sj = NV_Ith_S(rY, 3);
         // Units: dimensionless; Initial value: 0.622080736932815
-        double var_chaste_interface__cell__sd = rY[4];
+        double var_chaste_interface__cell__sd = NV_Ith_S(rY, 4);
         // Units: dimensionless; Initial value: 2.95884913218079e-06
-        double var_chaste_interface__cell__sf = rY[5];
+        double var_chaste_interface__cell__sf = NV_Ith_S(rY, 5);
         // Units: dimensionless; Initial value: 0.995094078386247
-        double var_chaste_interface__cell__sfcaBj = rY[6];
+        double var_chaste_interface__cell__sfcaBj = NV_Ith_S(rY, 6);
         // Units: dimensionless; Initial value: 0.0246274349529557
-        double var_chaste_interface__cell__sfcaBsl = rY[7];
+        double var_chaste_interface__cell__sfcaBsl = NV_Ith_S(rY, 7);
         // Units: dimensionless; Initial value: 0.0150911724206476
-        double var_chaste_interface__cell__sxtos = rY[8];
+        double var_chaste_interface__cell__sxtos = NV_Ith_S(rY, 8);
         // Units: dimensionless; Initial value: 0.000442853722673121
-        double var_chaste_interface__cell__sytos = rY[9];
+        double var_chaste_interface__cell__sytos = NV_Ith_S(rY, 9);
         // Units: dimensionless; Initial value: 0.789013894749951
-        double var_chaste_interface__cell__sxtof = rY[10];
+        double var_chaste_interface__cell__sxtof = NV_Ith_S(rY, 10);
         // Units: dimensionless; Initial value: 0.000442846429332686
-        double var_chaste_interface__cell__sytof = rY[11];
+        double var_chaste_interface__cell__sytof = NV_Ith_S(rY, 11);
         // Units: dimensionless; Initial value: 0.999995784674368
-        double var_chaste_interface__cell__sxkr = rY[12];
+        double var_chaste_interface__cell__sxkr = NV_Ith_S(rY, 12);
         // Units: dimensionless; Initial value: 0.020160578118589
-        double var_chaste_interface__cell__sxks = rY[13];
+        double var_chaste_interface__cell__sxks = NV_Ith_S(rY, 13);
         // Units: dimensionless; Initial value: 0.00430143235332308
-        double var_chaste_interface__cell__sNaj = rY[32];
+        double var_chaste_interface__cell__sNaj = NV_Ith_S(rY, 32);
         // Units: dimensionless; Initial value: 8.21411036389602
-        double var_chaste_interface__cell__sNasl = rY[33];
+        double var_chaste_interface__cell__sNasl = NV_Ith_S(rY, 33);
         // Units: dimensionless; Initial value: 8.21322794157889
-        double var_chaste_interface__cell__sNai = rY[34];
+        double var_chaste_interface__cell__sNai = NV_Ith_S(rY, 34);
         // Units: dimensionless; Initial value: 8.21340895351653
-        double var_chaste_interface__cell__sCaj = rY[35];
+        double var_chaste_interface__cell__sCaj = NV_Ith_S(rY, 35);
         // Units: dimensionless; Initial value: 0.000175648385857736
-        double var_chaste_interface__cell__sCasl = rY[36];
+        double var_chaste_interface__cell__sCasl = NV_Ith_S(rY, 36);
         // Units: dimensionless; Initial value: 0.000105614570409386
         
         const double var_cell__Cao = 1.8; // dimensionless
@@ -232,91 +243,96 @@
         const double var_chaste_interface__i_ionic = HeartConfig::Instance()->GetCapacitance() * var_cell__I_tot; // uA_per_cm2
 
         const double i_ionic = var_chaste_interface__i_ionic;
+        if (made_new_cvode_vector)
+        {
+            DeleteVector(rY);
+        }
         EXCEPT_IF_NOT(!std::isnan(i_ionic));
         return i_ionic;
     }
 
-    void Cellgrandi2010ssFromCellML::EvaluateYDerivatives(double var_chaste_interface__cell__time, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Cellgrandi2010ssFromCellMLCvodeDataClamp::EvaluateYDerivatives(double var_chaste_interface__cell__time, const N_Vector rY, N_Vector rDY)
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
         // Units: millivolt; Initial value: -81.3842590704928
-        double var_chaste_interface__cell__sm = rY[1];
+        double var_chaste_interface__cell__sm = NV_Ith_S(rY, 1);
         // Units: dimensionless; Initial value: 0.00384941567866232
-        double var_chaste_interface__cell__sh = rY[2];
+        double var_chaste_interface__cell__sh = NV_Ith_S(rY, 2);
         // Units: dimensionless; Initial value: 0.623723834301669
-        double var_chaste_interface__cell__sj = rY[3];
+        double var_chaste_interface__cell__sj = NV_Ith_S(rY, 3);
         // Units: dimensionless; Initial value: 0.622080736932815
-        double var_chaste_interface__cell__sd = rY[4];
+        double var_chaste_interface__cell__sd = NV_Ith_S(rY, 4);
         // Units: dimensionless; Initial value: 2.95884913218079e-06
-        double var_chaste_interface__cell__sf = rY[5];
+        double var_chaste_interface__cell__sf = NV_Ith_S(rY, 5);
         // Units: dimensionless; Initial value: 0.995094078386247
-        double var_chaste_interface__cell__sfcaBj = rY[6];
+        double var_chaste_interface__cell__sfcaBj = NV_Ith_S(rY, 6);
         // Units: dimensionless; Initial value: 0.0246274349529557
-        double var_chaste_interface__cell__sfcaBsl = rY[7];
+        double var_chaste_interface__cell__sfcaBsl = NV_Ith_S(rY, 7);
         // Units: dimensionless; Initial value: 0.0150911724206476
-        double var_chaste_interface__cell__sxtos = rY[8];
+        double var_chaste_interface__cell__sxtos = NV_Ith_S(rY, 8);
         // Units: dimensionless; Initial value: 0.000442853722673121
-        double var_chaste_interface__cell__sytos = rY[9];
+        double var_chaste_interface__cell__sytos = NV_Ith_S(rY, 9);
         // Units: dimensionless; Initial value: 0.789013894749951
-        double var_chaste_interface__cell__sxtof = rY[10];
+        double var_chaste_interface__cell__sxtof = NV_Ith_S(rY, 10);
         // Units: dimensionless; Initial value: 0.000442846429332686
-        double var_chaste_interface__cell__sytof = rY[11];
+        double var_chaste_interface__cell__sytof = NV_Ith_S(rY, 11);
         // Units: dimensionless; Initial value: 0.999995784674368
-        double var_chaste_interface__cell__sxkr = rY[12];
+        double var_chaste_interface__cell__sxkr = NV_Ith_S(rY, 12);
         // Units: dimensionless; Initial value: 0.020160578118589
-        double var_chaste_interface__cell__sxks = rY[13];
+        double var_chaste_interface__cell__sxks = NV_Ith_S(rY, 13);
         // Units: dimensionless; Initial value: 0.00430143235332308
-        double var_chaste_interface__cell__sRyRr = rY[14];
+        double var_chaste_interface__cell__sRyRr = NV_Ith_S(rY, 14);
         // Units: dimensionless; Initial value: 0.893326456705696
-        double var_chaste_interface__cell__sRyRo = rY[15];
+        double var_chaste_interface__cell__sRyRo = NV_Ith_S(rY, 15);
         // Units: dimensionless; Initial value: 7.56436968249499e-07
-        double var_chaste_interface__cell__sRyRi = rY[16];
+        double var_chaste_interface__cell__sRyRi = NV_Ith_S(rY, 16);
         // Units: dimensionless; Initial value: 9.03266331737064e-08
-        double var_chaste_interface__cell__sNaBj = rY[17];
+        double var_chaste_interface__cell__sNaBj = NV_Ith_S(rY, 17);
         // Units: dimensionless; Initial value: 3.41097946062695
-        double var_chaste_interface__cell__sNaBsl = rY[18];
+        double var_chaste_interface__cell__sNaBsl = NV_Ith_S(rY, 18);
         // Units: dimensionless; Initial value: 0.744248540671373
-        double var_chaste_interface__cell__sTnCL = rY[19];
+        double var_chaste_interface__cell__sTnCL = NV_Ith_S(rY, 19);
         // Units: dimensionless; Initial value: 0.00904644567707666
-        double var_chaste_interface__cell__sTnCHc = rY[20];
+        double var_chaste_interface__cell__sTnCHc = NV_Ith_S(rY, 20);
         // Units: dimensionless; Initial value: 0.1183943202639
-        double var_chaste_interface__cell__sTnCHm = rY[21];
+        double var_chaste_interface__cell__sTnCHm = NV_Ith_S(rY, 21);
         // Units: dimensionless; Initial value: 0.0101423649465603
-        double var_chaste_interface__cell__sCaM = rY[22];
+        double var_chaste_interface__cell__sCaM = NV_Ith_S(rY, 22);
         // Units: dimensionless; Initial value: 0.000299824763475116
-        double var_chaste_interface__cell__sMyoc = rY[23];
+        double var_chaste_interface__cell__sMyoc = NV_Ith_S(rY, 23);
         // Units: dimensionless; Initial value: 0.00201443980536826
-        double var_chaste_interface__cell__sMyom = rY[24];
+        double var_chaste_interface__cell__sMyom = NV_Ith_S(rY, 24);
         // Units: dimensionless; Initial value: 0.137467597337588
-        double var_chaste_interface__cell__sSRB = rY[25];
+        double var_chaste_interface__cell__sSRB = NV_Ith_S(rY, 25);
         // Units: dimensionless; Initial value: 0.00220110816535249
-        double var_chaste_interface__cell__sSLLj = rY[26];
+        double var_chaste_interface__cell__sSLLj = NV_Ith_S(rY, 26);
         // Units: dimensionless; Initial value: 0.00739549938515031
-        double var_chaste_interface__cell__sSLLsl = rY[27];
+        double var_chaste_interface__cell__sSLLsl = NV_Ith_S(rY, 27);
         // Units: dimensionless; Initial value: 0.00979616077807075
-        double var_chaste_interface__cell__sSLHj = rY[28];
+        double var_chaste_interface__cell__sSLHj = NV_Ith_S(rY, 28);
         // Units: dimensionless; Initial value: 0.0735225248399363
-        double var_chaste_interface__cell__sSLHsl = rY[29];
+        double var_chaste_interface__cell__sSLHsl = NV_Ith_S(rY, 29);
         // Units: dimensionless; Initial value: 0.113642236788144
-        double var_chaste_interface__cell__sCsqnb = rY[30];
+        double var_chaste_interface__cell__sCsqnb = NV_Ith_S(rY, 30);
         // Units: dimensionless; Initial value: 1.20762712858574
-        double var_chaste_interface__cell__sCa_sr = rY[31];
+        double var_chaste_interface__cell__sCa_sr = NV_Ith_S(rY, 31);
         // Units: dimensionless; Initial value: 0.563755421404699
-        double var_chaste_interface__cell__sNaj = rY[32];
+        double var_chaste_interface__cell__sNaj = NV_Ith_S(rY, 32);
         // Units: dimensionless; Initial value: 8.21411036389602
-        double var_chaste_interface__cell__sNasl = rY[33];
+        double var_chaste_interface__cell__sNasl = NV_Ith_S(rY, 33);
         // Units: dimensionless; Initial value: 8.21322794157889
-        double var_chaste_interface__cell__sNai = rY[34];
+        double var_chaste_interface__cell__sNai = NV_Ith_S(rY, 34);
         // Units: dimensionless; Initial value: 8.21340895351653
-        double var_chaste_interface__cell__sCaj = rY[35];
+        double var_chaste_interface__cell__sCaj = NV_Ith_S(rY, 35);
         // Units: dimensionless; Initial value: 0.000175648385857736
-        double var_chaste_interface__cell__sCasl = rY[36];
+        double var_chaste_interface__cell__sCasl = NV_Ith_S(rY, 36);
         // Units: dimensionless; Initial value: 0.000105614570409386
-        double var_chaste_interface__cell__sCai = rY[37];
+        double var_chaste_interface__cell__sCai = NV_Ith_S(rY, 37);
         // Units: dimensionless; Initial value: 8.85230799863012e-05
-
+        
+        
         // Mathematics
         double d_dt_chaste_interface_var_cell__sVm;
         const double var_cell__Bmax_CaM = 0.024; // dimensionless
@@ -530,8 +546,7 @@
             d_dt_chaste_interface_var_cell__sVm = 0.0;
         }
         else
-        {
-            const double var_cell__Cli = 15.0; // dimensionless
+        {const double var_cell__Cli = 15.0; // dimensionless
             const double var_cell__Clo = 150.0; // dimensionless
             const double var_cell__GClB = 0.0089999999999999993; // dimensionless
             const double var_cell__GClCa = 0.0548125; // dimensionless
@@ -579,249 +594,289 @@
             const double var_cell__I_tot = var_cell__I_Ca_tot + var_cell__I_Cl_tot + var_cell__I_K_tot + var_cell__I_Na_tot; // uA_per_uF
             const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__cell__time); // uA_per_cm2
             const double var_cell__i_Stim = var_cell__i_Stim_converter / HeartConfig::Instance()->GetCapacitance(); // uA_per_uF
-            d_dt_chaste_interface_var_cell__sVm = -var_cell__I_tot - var_cell__i_Stim; // millivolt / ms
+            
+            // Special handling of data clamp current here (see #2708)
+            // (we want to save expense of calling the interpolation method if possible.)
+            double var_chaste_interface__membrane_data_clamp_current = 0.0;
+            if (mDataClampIsOn)
+            {
+                var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__cell__time) + var_chaste_interface__cell__sVm) * NV_Ith_S(mParameters, 0); // uA_per_cm2
+            }
+            d_dt_chaste_interface_var_cell__sVm = -var_cell__I_tot - var_cell__i_Stim - var_chaste_interface__membrane_data_clamp_current; // millivolt / ms
+            
         }
         
-        rDY[0] = d_dt_chaste_interface_var_cell__sVm;
-        rDY[1] = d_dt_chaste_interface_var_cell__sm;
-        rDY[2] = d_dt_chaste_interface_var_cell__sh;
-        rDY[3] = d_dt_chaste_interface_var_cell__sj;
-        rDY[4] = d_dt_chaste_interface_var_cell__sd;
-        rDY[5] = d_dt_chaste_interface_var_cell__sf;
-        rDY[6] = d_dt_chaste_interface_var_cell__sfcaBj;
-        rDY[7] = d_dt_chaste_interface_var_cell__sfcaBsl;
-        rDY[8] = d_dt_chaste_interface_var_cell__sxtos;
-        rDY[9] = d_dt_chaste_interface_var_cell__sytos;
-        rDY[10] = d_dt_chaste_interface_var_cell__sxtof;
-        rDY[11] = d_dt_chaste_interface_var_cell__sytof;
-        rDY[12] = d_dt_chaste_interface_var_cell__sxkr;
-        rDY[13] = d_dt_chaste_interface_var_cell__sxks;
-        rDY[14] = d_dt_chaste_interface_var_cell__sRyRr;
-        rDY[15] = d_dt_chaste_interface_var_cell__sRyRo;
-        rDY[16] = d_dt_chaste_interface_var_cell__sRyRi;
-        rDY[17] = d_dt_chaste_interface_var_cell__sNaBj;
-        rDY[18] = d_dt_chaste_interface_var_cell__sNaBsl;
-        rDY[19] = d_dt_chaste_interface_var_cell__sTnCL;
-        rDY[20] = d_dt_chaste_interface_var_cell__sTnCHc;
-        rDY[21] = d_dt_chaste_interface_var_cell__sTnCHm;
-        rDY[22] = d_dt_chaste_interface_var_cell__sCaM;
-        rDY[23] = d_dt_chaste_interface_var_cell__sMyoc;
-        rDY[24] = d_dt_chaste_interface_var_cell__sMyom;
-        rDY[25] = d_dt_chaste_interface_var_cell__sSRB;
-        rDY[26] = d_dt_chaste_interface_var_cell__sSLLj;
-        rDY[27] = d_dt_chaste_interface_var_cell__sSLLsl;
-        rDY[28] = d_dt_chaste_interface_var_cell__sSLHj;
-        rDY[29] = d_dt_chaste_interface_var_cell__sSLHsl;
-        rDY[30] = d_dt_chaste_interface_var_cell__sCsqnb;
-        rDY[31] = d_dt_chaste_interface_var_cell__sCa_sr;
-        rDY[32] = d_dt_chaste_interface_var_cell__sNaj;
-        rDY[33] = d_dt_chaste_interface_var_cell__sNasl;
-        rDY[34] = d_dt_chaste_interface_var_cell__sNai;
-        rDY[35] = d_dt_chaste_interface_var_cell__sCaj;
-        rDY[36] = d_dt_chaste_interface_var_cell__sCasl;
-        rDY[37] = d_dt_chaste_interface_var_cell__sCai;
+        NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_cell__sVm;
+        NV_Ith_S(rDY,1) = d_dt_chaste_interface_var_cell__sm;
+        NV_Ith_S(rDY,2) = d_dt_chaste_interface_var_cell__sh;
+        NV_Ith_S(rDY,3) = d_dt_chaste_interface_var_cell__sj;
+        NV_Ith_S(rDY,4) = d_dt_chaste_interface_var_cell__sd;
+        NV_Ith_S(rDY,5) = d_dt_chaste_interface_var_cell__sf;
+        NV_Ith_S(rDY,6) = d_dt_chaste_interface_var_cell__sfcaBj;
+        NV_Ith_S(rDY,7) = d_dt_chaste_interface_var_cell__sfcaBsl;
+        NV_Ith_S(rDY,8) = d_dt_chaste_interface_var_cell__sxtos;
+        NV_Ith_S(rDY,9) = d_dt_chaste_interface_var_cell__sytos;
+        NV_Ith_S(rDY,10) = d_dt_chaste_interface_var_cell__sxtof;
+        NV_Ith_S(rDY,11) = d_dt_chaste_interface_var_cell__sytof;
+        NV_Ith_S(rDY,12) = d_dt_chaste_interface_var_cell__sxkr;
+        NV_Ith_S(rDY,13) = d_dt_chaste_interface_var_cell__sxks;
+        NV_Ith_S(rDY,14) = d_dt_chaste_interface_var_cell__sRyRr;
+        NV_Ith_S(rDY,15) = d_dt_chaste_interface_var_cell__sRyRo;
+        NV_Ith_S(rDY,16) = d_dt_chaste_interface_var_cell__sRyRi;
+        NV_Ith_S(rDY,17) = d_dt_chaste_interface_var_cell__sNaBj;
+        NV_Ith_S(rDY,18) = d_dt_chaste_interface_var_cell__sNaBsl;
+        NV_Ith_S(rDY,19) = d_dt_chaste_interface_var_cell__sTnCL;
+        NV_Ith_S(rDY,20) = d_dt_chaste_interface_var_cell__sTnCHc;
+        NV_Ith_S(rDY,21) = d_dt_chaste_interface_var_cell__sTnCHm;
+        NV_Ith_S(rDY,22) = d_dt_chaste_interface_var_cell__sCaM;
+        NV_Ith_S(rDY,23) = d_dt_chaste_interface_var_cell__sMyoc;
+        NV_Ith_S(rDY,24) = d_dt_chaste_interface_var_cell__sMyom;
+        NV_Ith_S(rDY,25) = d_dt_chaste_interface_var_cell__sSRB;
+        NV_Ith_S(rDY,26) = d_dt_chaste_interface_var_cell__sSLLj;
+        NV_Ith_S(rDY,27) = d_dt_chaste_interface_var_cell__sSLLsl;
+        NV_Ith_S(rDY,28) = d_dt_chaste_interface_var_cell__sSLHj;
+        NV_Ith_S(rDY,29) = d_dt_chaste_interface_var_cell__sSLHsl;
+        NV_Ith_S(rDY,30) = d_dt_chaste_interface_var_cell__sCsqnb;
+        NV_Ith_S(rDY,31) = d_dt_chaste_interface_var_cell__sCa_sr;
+        NV_Ith_S(rDY,32) = d_dt_chaste_interface_var_cell__sNaj;
+        NV_Ith_S(rDY,33) = d_dt_chaste_interface_var_cell__sNasl;
+        NV_Ith_S(rDY,34) = d_dt_chaste_interface_var_cell__sNai;
+        NV_Ith_S(rDY,35) = d_dt_chaste_interface_var_cell__sCaj;
+        NV_Ith_S(rDY,36) = d_dt_chaste_interface_var_cell__sCasl;
+        NV_Ith_S(rDY,37) = d_dt_chaste_interface_var_cell__sCai;
+    }
+
+    N_Vector Cellgrandi2010ssFromCellMLCvodeDataClamp::ComputeDerivedQuantities(double var_chaste_interface__cell__time, const N_Vector & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        double var_chaste_interface__cell__sVm = NV_Ith_S(rY,0);
+        // Units: millivolt; Initial value: -81.3842590704928
+        
+
+        // Mathematics
+        // Special handling of data clamp current here (see #2708)
+        // (we want to save expense of calling the interpolation method if possible.)
+        double var_chaste_interface__membrane_data_clamp_current = 0.0;
+        if (mDataClampIsOn)
+        {
+            var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__cell__time) + var_chaste_interface__cell__sVm) * NV_Ith_S(mParameters, 0); // uA_per_cm2
+        }
+        
+        N_Vector dqs = N_VNew_Serial(1);
+        NV_Ith_S(dqs, 0) = var_chaste_interface__membrane_data_clamp_current;
+        return dqs;
     }
 
 template<>
-void OdeSystemInformation<Cellgrandi2010ssFromCellML>::Initialise(void)
+void OdeSystemInformation<Cellgrandi2010ssFromCellMLCvodeDataClamp>::Initialise(void)
 {
     this->mSystemName = "grandi2010";
     this->mFreeVariableName = "cell__time";
     this->mFreeVariableUnits = "ms";
 
-    // rY[0]:
+    // NV_Ith_S(rY,0):
     this->mVariableNames.push_back("membrane_voltage");
     this->mVariableUnits.push_back("millivolt");
     this->mInitialConditions.push_back(-81.3842590704928);
 
-    // rY[1]:
+    // NV_Ith_S(rY,1):
     this->mVariableNames.push_back("cell__sm");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00384941567866232);
 
-    // rY[2]:
+    // NV_Ith_S(rY,2):
     this->mVariableNames.push_back("cell__sh");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.623723834301669);
 
-    // rY[3]:
+    // NV_Ith_S(rY,3):
     this->mVariableNames.push_back("cell__sj");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.622080736932815);
 
-    // rY[4]:
+    // NV_Ith_S(rY,4):
     this->mVariableNames.push_back("cell__sd");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(2.95884913218079e-06);
 
-    // rY[5]:
+    // NV_Ith_S(rY,5):
     this->mVariableNames.push_back("cell__sf");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.995094078386247);
 
-    // rY[6]:
+    // NV_Ith_S(rY,6):
     this->mVariableNames.push_back("cell__sfcaBj");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0246274349529557);
 
-    // rY[7]:
+    // NV_Ith_S(rY,7):
     this->mVariableNames.push_back("cell__sfcaBsl");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0150911724206476);
 
-    // rY[8]:
+    // NV_Ith_S(rY,8):
     this->mVariableNames.push_back("cell__sxtos");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000442853722673121);
 
-    // rY[9]:
+    // NV_Ith_S(rY,9):
     this->mVariableNames.push_back("cell__sytos");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.789013894749951);
 
-    // rY[10]:
+    // NV_Ith_S(rY,10):
     this->mVariableNames.push_back("cell__sxtof");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000442846429332686);
 
-    // rY[11]:
+    // NV_Ith_S(rY,11):
     this->mVariableNames.push_back("cell__sytof");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.999995784674368);
 
-    // rY[12]:
+    // NV_Ith_S(rY,12):
     this->mVariableNames.push_back("cell__sxkr");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.020160578118589);
 
-    // rY[13]:
+    // NV_Ith_S(rY,13):
     this->mVariableNames.push_back("cell__sxks");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00430143235332308);
 
-    // rY[14]:
+    // NV_Ith_S(rY,14):
     this->mVariableNames.push_back("cell__sRyRr");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.893326456705696);
 
-    // rY[15]:
+    // NV_Ith_S(rY,15):
     this->mVariableNames.push_back("cell__sRyRo");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(7.56436968249499e-07);
 
-    // rY[16]:
+    // NV_Ith_S(rY,16):
     this->mVariableNames.push_back("cell__sRyRi");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(9.03266331737064e-08);
 
-    // rY[17]:
+    // NV_Ith_S(rY,17):
     this->mVariableNames.push_back("cell__sNaBj");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(3.41097946062695);
 
-    // rY[18]:
+    // NV_Ith_S(rY,18):
     this->mVariableNames.push_back("cell__sNaBsl");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.744248540671373);
 
-    // rY[19]:
+    // NV_Ith_S(rY,19):
     this->mVariableNames.push_back("cell__sTnCL");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00904644567707666);
 
-    // rY[20]:
+    // NV_Ith_S(rY,20):
     this->mVariableNames.push_back("cell__sTnCHc");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.1183943202639);
 
-    // rY[21]:
+    // NV_Ith_S(rY,21):
     this->mVariableNames.push_back("cell__sTnCHm");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0101423649465603);
 
-    // rY[22]:
+    // NV_Ith_S(rY,22):
     this->mVariableNames.push_back("cell__sCaM");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000299824763475116);
 
-    // rY[23]:
+    // NV_Ith_S(rY,23):
     this->mVariableNames.push_back("cell__sMyoc");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00201443980536826);
 
-    // rY[24]:
+    // NV_Ith_S(rY,24):
     this->mVariableNames.push_back("cell__sMyom");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.137467597337588);
 
-    // rY[25]:
+    // NV_Ith_S(rY,25):
     this->mVariableNames.push_back("cell__sSRB");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00220110816535249);
 
-    // rY[26]:
+    // NV_Ith_S(rY,26):
     this->mVariableNames.push_back("cell__sSLLj");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00739549938515031);
 
-    // rY[27]:
+    // NV_Ith_S(rY,27):
     this->mVariableNames.push_back("cell__sSLLsl");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00979616077807075);
 
-    // rY[28]:
+    // NV_Ith_S(rY,28):
     this->mVariableNames.push_back("cell__sSLHj");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0735225248399363);
 
-    // rY[29]:
+    // NV_Ith_S(rY,29):
     this->mVariableNames.push_back("cell__sSLHsl");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.113642236788144);
 
-    // rY[30]:
+    // NV_Ith_S(rY,30):
     this->mVariableNames.push_back("cell__sCsqnb");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.20762712858574);
 
-    // rY[31]:
+    // NV_Ith_S(rY,31):
     this->mVariableNames.push_back("cell__sCa_sr");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.563755421404699);
 
-    // rY[32]:
+    // NV_Ith_S(rY,32):
     this->mVariableNames.push_back("cell__sNaj");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(8.21411036389602);
 
-    // rY[33]:
+    // NV_Ith_S(rY,33):
     this->mVariableNames.push_back("cell__sNasl");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(8.21322794157889);
 
-    // rY[34]:
+    // NV_Ith_S(rY,34):
     this->mVariableNames.push_back("cell__sNai");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(8.21340895351653);
 
-    // rY[35]:
+    // NV_Ith_S(rY,35):
     this->mVariableNames.push_back("cell__sCaj");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000175648385857736);
 
-    // rY[36]:
+    // NV_Ith_S(rY,36):
     this->mVariableNames.push_back("cell__sCasl");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000105614570409386);
 
-    // rY[37]:
+    // NV_Ith_S(rY,37):
     this->mVariableNames.push_back("cytosolic_calcium_concentration");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(8.85230799863012e-05);
+
+    // mParameters[0]:
+    this->mParameterNames.push_back("membrane_data_clamp_current_conductance");
+    this->mParameterUnits.push_back("dimensionless");
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("membrane_data_clamp_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     this->mInitialised = true;
 }
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellgrandi2010ssFromCellML)
+CHASTE_CLASS_EXPORT(Cellgrandi2010ssFromCellMLCvodeDataClamp)
+#endif // CHASTE_CVODE

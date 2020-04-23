@@ -13,7 +13,7 @@ optional arguments:
   -t TYPE, --translate-type TYPE
                         the type of code to output [default: Chaste]. Choices:
                         ['Chaste', 'ChasteOpt', 'CVODE', 'BackwardsEuler',
-                        'RushLarsen', 'RushLarsenOpt',
+                        'CVODEWithDataClamp', 'RushLarsen', 'RushLarsenOpt',
                         'GeneralisedRushLarsen1', 'GeneralisedRushLarsen1Opt',
                         'GeneralisedRushLarsen2', 'GeneralisedRushLarsen2Opt']
   -o OUTFILE            write program code to OUTFILE [default action is to

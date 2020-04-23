@@ -33,35 +33,14 @@ chaste_GRL2Opt = get_models(ref_folder='chaste_reference_models', type='GRL2Opt'
 chaste_CVODE_DATA_CLAMP = get_models(ref_folder='chaste_reference_models', type='CVODE_DATA_CLAMP')
 
 
-def testexpose_annotated_variables2(tmp_path):
-    tmp_path = str(tmp_path)
-    LOGGER.info('Testing expose_annotated_variables option\n')
-    model_file = \
-        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'aslanidi_model_2009.cellml')
-    chaste_model = cellmlmanip.load_model(model_file)
-
-    chaste_model = cg.NormalChasteModel(chaste_model,
-                                        'expose_annotated_variables_cellaslanidi_model_2009',
-                                        class_name='Cellaslanidi_model_2009FromCellML',
-                                        expose_annotated_variables=True)
-
-    chaste_model.generate_chaste_code()
-    expected_hpp_path = os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'Normal',
-                                     'expose_annotated_variables_cellaslanidi_model_2009.hpp')
-    expected_cpp_path = os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'Normal',
-                                     'expose_annotated_variables_cellaslanidi_model_2009.cpp')
-    # Compare against reference
-    test_utils.compare_model_against_reference('Normal', chaste_model, tmp_path,
-                                               expected_hpp_path, expected_cpp_path)
-                                               
 @pytest.mark.parametrize(('model'), chaste_CVODE_DATA_CLAMP)
 def test_CVODE_DATA_CLAMP(tmp_path, model):
     """ Check generation of CVODE with Data Clamp models against reference"""
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLCvodeDataClamp'
     LOGGER.info('Converting: CVODE with Data Clamp: ' + class_name + '\n')
     # Generate chaste code
-    chaste_model = cg.CvodeChasteModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
-                                       class_name=class_name, use_data_clamp=True)
+    chaste_model = cg.CvodeWithDataClampeModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
+                                               class_name=class_name)
 
     chaste_model.generate_chaste_code()
     # Compare against reference

@@ -1,5 +1,6 @@
-#ifndef CELLNOBLE_SAN_MODEL_1989FROMCELLML_HPP_
-#define CELLNOBLE_SAN_MODEL_1989FROMCELLML_HPP_
+#ifdef CHASTE_CVODE
+#ifndef CELLNOBLE_SAN_MODEL_1989FROMCELLMLCVODEDATACLAMP_HPP_
+#define CELLNOBLE_SAN_MODEL_1989FROMCELLMLCVODEDATACLAMP_HPP_
 
 //! @file
 //!
@@ -17,35 +18,34 @@
 #include <boost/serialization/base_object.hpp>
 
 #include "AbstractStimulusFunction.hpp"
-#include "AbstractCardiacCell.hpp"
+#include "AbstractCvodeCellWithDataClamp.hpp"
 
-class Cellnoble_SAN_model_1989FromCellML : public AbstractCardiacCell
+class Cellnoble_SAN_model_1989FromCellMLCvodeDataClamp : public AbstractCvodeCellWithDataClamp
 {
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & archive, const unsigned int version)
     {
-        archive & boost::serialization::base_object<AbstractCardiacCell >(*this);
+        archive & boost::serialization::base_object<AbstractCvodeCellWithDataClamp >(*this);
         
     }
-
-    //
+    // 
     // Settable parameters and readable variables
-    //
-
+    // 
+    
 public:
 
     double GetIntracellularCalciumConcentration();
-    Cellnoble_SAN_model_1989FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellnoble_SAN_model_1989FromCellML();
+    Cellnoble_SAN_model_1989FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellnoble_SAN_model_1989FromCellMLCvodeDataClamp();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
-    void EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY);
-
+    void EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const N_Vector rY, N_Vector rDY);
+    N_Vector ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const N_Vector & rY);
 };
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellnoble_SAN_model_1989FromCellML)
+CHASTE_CLASS_EXPORT(Cellnoble_SAN_model_1989FromCellMLCvodeDataClamp)
 
 namespace boost
 {
@@ -53,7 +53,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellnoble_SAN_model_1989FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, const Cellnoble_SAN_model_1989FromCellMLCvodeDataClamp * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -63,17 +63,18 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellnoble_SAN_model_1989FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, Cellnoble_SAN_model_1989FromCellMLCvodeDataClamp * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellnoble_SAN_model_1989FromCellML(p_solver, p_stimulus);
+            ::new(t)Cellnoble_SAN_model_1989FromCellMLCvodeDataClamp(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLNOBLE_SAN_MODEL_1989FROMCELLML_HPP_
+#endif // CELLNOBLE_SAN_MODEL_1989FROMCELLMLCVODEDATACLAMP_HPP_
+#endif // CHASTE_CVODE

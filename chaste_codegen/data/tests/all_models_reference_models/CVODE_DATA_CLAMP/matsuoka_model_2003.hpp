@@ -1,5 +1,6 @@
-#ifndef CELLMATSUOKA_MODEL_2003FROMCELLML_HPP_
-#define CELLMATSUOKA_MODEL_2003FROMCELLML_HPP_
+#ifdef CHASTE_CVODE
+#ifndef CELLMATSUOKA_MODEL_2003FROMCELLMLCVODEDATACLAMP_HPP_
+#define CELLMATSUOKA_MODEL_2003FROMCELLMLCVODEDATACLAMP_HPP_
 
 //! @file
 //!
@@ -17,35 +18,34 @@
 #include <boost/serialization/base_object.hpp>
 
 #include "AbstractStimulusFunction.hpp"
-#include "AbstractCardiacCell.hpp"
+#include "AbstractCvodeCellWithDataClamp.hpp"
 
-class Cellmatsuoka_model_2003FromCellML : public AbstractCardiacCell
+class Cellmatsuoka_model_2003FromCellMLCvodeDataClamp : public AbstractCvodeCellWithDataClamp
 {
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & archive, const unsigned int version)
     {
-        archive & boost::serialization::base_object<AbstractCardiacCell >(*this);
+        archive & boost::serialization::base_object<AbstractCvodeCellWithDataClamp >(*this);
         
     }
-
-    //
+    // 
     // Settable parameters and readable variables
-    //
-
+    // 
+    
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
-    Cellmatsuoka_model_2003FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellmatsuoka_model_2003FromCellML();
+    Cellmatsuoka_model_2003FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellmatsuoka_model_2003FromCellMLCvodeDataClamp();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
-    void EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY);
-
+    void EvaluateYDerivatives(double var_chaste_interface__environment__time, const N_Vector rY, N_Vector rDY);
+    N_Vector ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY);
 };
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellmatsuoka_model_2003FromCellML)
+CHASTE_CLASS_EXPORT(Cellmatsuoka_model_2003FromCellMLCvodeDataClamp)
 
 namespace boost
 {
@@ -53,7 +53,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellmatsuoka_model_2003FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, const Cellmatsuoka_model_2003FromCellMLCvodeDataClamp * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -63,17 +63,18 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellmatsuoka_model_2003FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, Cellmatsuoka_model_2003FromCellMLCvodeDataClamp * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellmatsuoka_model_2003FromCellML(p_solver, p_stimulus);
+            ::new(t)Cellmatsuoka_model_2003FromCellMLCvodeDataClamp(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLMATSUOKA_MODEL_2003FROMCELLML_HPP_
+#endif // CELLMATSUOKA_MODEL_2003FROMCELLMLCVODEDATACLAMP_HPP_
+#endif // CHASTE_CVODE

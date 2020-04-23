@@ -1,5 +1,6 @@
-#ifndef CELLVISWANATHAN_MODEL_1999_EPIFROMCELLML_HPP_
-#define CELLVISWANATHAN_MODEL_1999_EPIFROMCELLML_HPP_
+#ifdef CHASTE_CVODE
+#ifndef CELLVISWANATHAN_MODEL_1999_EPIFROMCELLMLCVODEDATACLAMP_HPP_
+#define CELLVISWANATHAN_MODEL_1999_EPIFROMCELLMLCVODEDATACLAMP_HPP_
 
 //! @file
 //!
@@ -17,36 +18,35 @@
 #include <boost/serialization/base_object.hpp>
 
 #include "AbstractStimulusFunction.hpp"
-#include "AbstractCardiacCell.hpp"
+#include "AbstractCvodeCellWithDataClamp.hpp"
 
-class Cellviswanathan_model_1999_epiFromCellML : public AbstractCardiacCell
+class Cellviswanathan_model_1999_epiFromCellMLCvodeDataClamp : public AbstractCvodeCellWithDataClamp
 {
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & archive, const unsigned int version)
     {
-        archive & boost::serialization::base_object<AbstractCardiacCell >(*this);
+        archive & boost::serialization::base_object<AbstractCvodeCellWithDataClamp >(*this);
         
     }
-
-    //
+    // 
     // Settable parameters and readable variables
-    //
-
+    // 
+    
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    Cellviswanathan_model_1999_epiFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellviswanathan_model_1999_epiFromCellML();
+    Cellviswanathan_model_1999_epiFromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellviswanathan_model_1999_epiFromCellMLCvodeDataClamp();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
-    void EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY);
-
+    void EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const N_Vector rY, N_Vector rDY);
+    N_Vector ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const N_Vector & rY);
 };
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellviswanathan_model_1999_epiFromCellML)
+CHASTE_CLASS_EXPORT(Cellviswanathan_model_1999_epiFromCellMLCvodeDataClamp)
 
 namespace boost
 {
@@ -54,7 +54,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellviswanathan_model_1999_epiFromCellML * t, const unsigned int fileVersion)
+            Archive & ar, const Cellviswanathan_model_1999_epiFromCellMLCvodeDataClamp * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -64,17 +64,18 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellviswanathan_model_1999_epiFromCellML * t, const unsigned int fileVersion)
+            Archive & ar, Cellviswanathan_model_1999_epiFromCellMLCvodeDataClamp * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellviswanathan_model_1999_epiFromCellML(p_solver, p_stimulus);
+            ::new(t)Cellviswanathan_model_1999_epiFromCellMLCvodeDataClamp(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLVISWANATHAN_MODEL_1999_EPIFROMCELLML_HPP_
+#endif // CELLVISWANATHAN_MODEL_1999_EPIFROMCELLMLCVODEDATACLAMP_HPP_
+#endif // CHASTE_CVODE

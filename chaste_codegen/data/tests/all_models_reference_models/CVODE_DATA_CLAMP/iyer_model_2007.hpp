@@ -1,5 +1,6 @@
-#ifndef CELLIYER_MODEL_2007FROMCELLML_HPP_
-#define CELLIYER_MODEL_2007FROMCELLML_HPP_
+#ifdef CHASTE_CVODE
+#ifndef CELLIYER_MODEL_2007FROMCELLMLCVODEDATACLAMP_HPP_
+#define CELLIYER_MODEL_2007FROMCELLMLCVODEDATACLAMP_HPP_
 
 //! @file
 //!
@@ -17,34 +18,33 @@
 #include <boost/serialization/base_object.hpp>
 
 #include "AbstractStimulusFunction.hpp"
-#include "AbstractCardiacCell.hpp"
+#include "AbstractCvodeCellWithDataClamp.hpp"
 
-class Celliyer_model_2007FromCellML : public AbstractCardiacCell
+class Celliyer_model_2007FromCellMLCvodeDataClamp : public AbstractCvodeCellWithDataClamp
 {
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & archive, const unsigned int version)
     {
-        archive & boost::serialization::base_object<AbstractCardiacCell >(*this);
+        archive & boost::serialization::base_object<AbstractCvodeCellWithDataClamp >(*this);
         
     }
-
-    //
+    // 
     // Settable parameters and readable variables
-    //
-
+    // 
+    
 public:
 
-    Celliyer_model_2007FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Celliyer_model_2007FromCellML();
+    Celliyer_model_2007FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Celliyer_model_2007FromCellMLCvodeDataClamp();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
-    void EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY);
-
+    void EvaluateYDerivatives(double var_chaste_interface__environment__time, const N_Vector rY, N_Vector rDY);
+    N_Vector ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY);
 };
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Celliyer_model_2007FromCellML)
+CHASTE_CLASS_EXPORT(Celliyer_model_2007FromCellMLCvodeDataClamp)
 
 namespace boost
 {
@@ -52,7 +52,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Celliyer_model_2007FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, const Celliyer_model_2007FromCellMLCvodeDataClamp * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -62,17 +62,18 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Celliyer_model_2007FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, Celliyer_model_2007FromCellMLCvodeDataClamp * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Celliyer_model_2007FromCellML(p_solver, p_stimulus);
+            ::new(t)Celliyer_model_2007FromCellMLCvodeDataClamp(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLIYER_MODEL_2007FROMCELLML_HPP_
+#endif // CELLIYER_MODEL_2007FROMCELLMLCVODEDATACLAMP_HPP_
+#endif // CHASTE_CVODE

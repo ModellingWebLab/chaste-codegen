@@ -1,5 +1,6 @@
-#ifndef CELLKURATA_MODEL_2002FROMCELLML_HPP_
-#define CELLKURATA_MODEL_2002FROMCELLML_HPP_
+#ifdef CHASTE_CVODE
+#ifndef CELLKURATA_MODEL_2002FROMCELLMLCVODEDATACLAMP_HPP_
+#define CELLKURATA_MODEL_2002FROMCELLMLCVODEDATACLAMP_HPP_
 
 //! @file
 //!
@@ -17,34 +18,33 @@
 #include <boost/serialization/base_object.hpp>
 
 #include "AbstractStimulusFunction.hpp"
-#include "AbstractCardiacCell.hpp"
+#include "AbstractCvodeCellWithDataClamp.hpp"
 
-class Cellkurata_model_2002FromCellML : public AbstractCardiacCell
+class Cellkurata_model_2002FromCellMLCvodeDataClamp : public AbstractCvodeCellWithDataClamp
 {
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & archive, const unsigned int version)
     {
-        archive & boost::serialization::base_object<AbstractCardiacCell >(*this);
+        archive & boost::serialization::base_object<AbstractCvodeCellWithDataClamp >(*this);
         
     }
-
-    //
+    // 
     // Settable parameters and readable variables
-    //
-
+    // 
+    
 public:
 
-    Cellkurata_model_2002FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellkurata_model_2002FromCellML();
+    Cellkurata_model_2002FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellkurata_model_2002FromCellMLCvodeDataClamp();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
-    void EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY);
-
+    void EvaluateYDerivatives(double var_chaste_interface__environment__time, const N_Vector rY, N_Vector rDY);
+    N_Vector ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY);
 };
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellkurata_model_2002FromCellML)
+CHASTE_CLASS_EXPORT(Cellkurata_model_2002FromCellMLCvodeDataClamp)
 
 namespace boost
 {
@@ -52,7 +52,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellkurata_model_2002FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, const Cellkurata_model_2002FromCellMLCvodeDataClamp * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -62,17 +62,18 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellkurata_model_2002FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, Cellkurata_model_2002FromCellMLCvodeDataClamp * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellkurata_model_2002FromCellML(p_solver, p_stimulus);
+            ::new(t)Cellkurata_model_2002FromCellMLCvodeDataClamp(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLKURATA_MODEL_2002FROMCELLML_HPP_
+#endif // CELLKURATA_MODEL_2002FROMCELLMLCVODEDATACLAMP_HPP_
+#endif // CHASTE_CVODE

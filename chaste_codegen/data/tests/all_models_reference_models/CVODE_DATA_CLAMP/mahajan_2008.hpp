@@ -1,5 +1,6 @@
-#ifndef CELLMAHAJAN_2008FROMCELLML_HPP_
-#define CELLMAHAJAN_2008FROMCELLML_HPP_
+#ifdef CHASTE_CVODE
+#ifndef CELLMAHAJAN_2008FROMCELLMLCVODEDATACLAMP_HPP_
+#define CELLMAHAJAN_2008FROMCELLMLCVODEDATACLAMP_HPP_
 
 //! @file
 //!
@@ -17,36 +18,35 @@
 #include <boost/serialization/base_object.hpp>
 
 #include "AbstractStimulusFunction.hpp"
-#include "AbstractCardiacCell.hpp"
+#include "AbstractCvodeCellWithDataClamp.hpp"
 
-class Cellmahajan_2008FromCellML : public AbstractCardiacCell
+class Cellmahajan_2008FromCellMLCvodeDataClamp : public AbstractCvodeCellWithDataClamp
 {
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & archive, const unsigned int version)
     {
-        archive & boost::serialization::base_object<AbstractCardiacCell >(*this);
+        archive & boost::serialization::base_object<AbstractCvodeCellWithDataClamp >(*this);
         
     }
-
-    //
+    // 
     // Settable parameters and readable variables
-    //
-
+    // 
+    
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    Cellmahajan_2008FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellmahajan_2008FromCellML();
+    Cellmahajan_2008FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellmahajan_2008FromCellMLCvodeDataClamp();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
-    void EvaluateYDerivatives(double var_chaste_interface__Environment__time, const std::vector<double>& rY, std::vector<double>& rDY);
-
+    void EvaluateYDerivatives(double var_chaste_interface__Environment__time, const N_Vector rY, N_Vector rDY);
+    N_Vector ComputeDerivedQuantities(double var_chaste_interface__Environment__time, const N_Vector & rY);
 };
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellmahajan_2008FromCellML)
+CHASTE_CLASS_EXPORT(Cellmahajan_2008FromCellMLCvodeDataClamp)
 
 namespace boost
 {
@@ -54,7 +54,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellmahajan_2008FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, const Cellmahajan_2008FromCellMLCvodeDataClamp * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -64,17 +64,18 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellmahajan_2008FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, Cellmahajan_2008FromCellMLCvodeDataClamp * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellmahajan_2008FromCellML(p_solver, p_stimulus);
+            ::new(t)Cellmahajan_2008FromCellMLCvodeDataClamp(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLMAHAJAN_2008FROMCELLML_HPP_
+#endif // CELLMAHAJAN_2008FROMCELLMLCVODEDATACLAMP_HPP_
+#endif // CHASTE_CVODE

@@ -1,3 +1,4 @@
+#ifdef CHASTE_CVODE
 //! @file
 //!
 //! This source file was generated from CellML by chaste_codegen version 0.0.1
@@ -21,7 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellnoble_model_1991FromCellML::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellnoble_model_1991FromCellMLCvodeDataClamp::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_membrane__Cm = 9.5000000000000005e-5; // microF
@@ -38,55 +39,65 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-
-    Cellnoble_model_1991FromCellML::Cellnoble_model_1991FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
-        : AbstractCardiacCell(
-                pSolver,
+   
+    Cellnoble_model_1991FromCellMLCvodeDataClamp::Cellnoble_model_1991FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+        : AbstractCvodeCellWithDataClamp(
+                pOdeSolver,
                 17,
                 0,
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        //
-        this->mpSystemInfo = OdeSystemInformation<Cellnoble_model_1991FromCellML>::Instance();
+        // 
+        this->mpSystemInfo = OdeSystemInformation<Cellnoble_model_1991FromCellMLCvodeDataClamp>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
         this->mHasDefaultStimulusFromCellML = true;
         
+        NV_Ith_S(this->mParameters, 0) = 0.0; // (var_membrane_data_clamp_current_conductance) [dimensionless]
     }
 
-    Cellnoble_model_1991FromCellML::~Cellnoble_model_1991FromCellML()
+    Cellnoble_model_1991FromCellMLCvodeDataClamp::~Cellnoble_model_1991FromCellMLCvodeDataClamp()
     {
     }
     
-    double Cellnoble_model_1991FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellnoble_model_1991FromCellMLCvodeDataClamp::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
-        if (!pStateVariables) pStateVariables = &rGetStateVariables();
-        const std::vector<double>& rY = *pStateVariables;
-        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        N_Vector rY;
+        bool made_new_cvode_vector = false;
+        if (!pStateVariables)
+        {
+            rY = rGetStateVariables();
+        }
+        else
+        {
+            made_new_cvode_vector = true;
+            rY = MakeNVector(*pStateVariables);
+        }
+        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
         // Units: millivolt; Initial value: -93.0
-        double var_chaste_interface__time_dependent_potassium_current_x_gate__x = rY[1];
+        double var_chaste_interface__time_dependent_potassium_current_x_gate__x = NV_Ith_S(rY, 1);
         // Units: dimensionless; Initial value: 0.001
-        double var_chaste_interface__fast_sodium_current_m_gate__m = rY[2];
+        double var_chaste_interface__fast_sodium_current_m_gate__m = NV_Ith_S(rY, 2);
         // Units: dimensionless; Initial value: 0.000105
-        double var_chaste_interface__fast_sodium_current_h_gate__h = rY[3];
+        double var_chaste_interface__fast_sodium_current_h_gate__h = NV_Ith_S(rY, 3);
         // Units: dimensionless; Initial value: 0.99816539
-        double var_chaste_interface__L_type_Ca_channel_d_gate__d = rY[4];
+        double var_chaste_interface__L_type_Ca_channel_d_gate__d = NV_Ith_S(rY, 4);
         // Units: dimensionless; Initial value: 0.0
-        double var_chaste_interface__L_type_Ca_channel_f_gate__f = rY[5];
+        double var_chaste_interface__L_type_Ca_channel_f_gate__f = NV_Ith_S(rY, 5);
         // Units: dimensionless; Initial value: 1.0
-        double var_chaste_interface__transient_outward_current_s_gate__s = rY[6];
+        double var_chaste_interface__transient_outward_current_s_gate__s = NV_Ith_S(rY, 6);
         // Units: dimensionless; Initial value: 1.0
-        double var_chaste_interface__transient_outward_current_r_gate__r = rY[7];
+        double var_chaste_interface__transient_outward_current_r_gate__r = NV_Ith_S(rY, 7);
         // Units: dimensionless; Initial value: 0.0
-        double var_chaste_interface__intracellular_sodium_concentration__Na_i = rY[10];
+        double var_chaste_interface__intracellular_sodium_concentration__Na_i = NV_Ith_S(rY, 10);
         // Units: millimolar; Initial value: 5.0
-        double var_chaste_interface__intracellular_potassium_concentration__K_i = rY[11];
+        double var_chaste_interface__intracellular_potassium_concentration__K_i = NV_Ith_S(rY, 11);
         // Units: millimolar; Initial value: 140.0
-        double var_chaste_interface__intracellular_calcium_concentration__Ca_i = rY[12];
+        double var_chaste_interface__intracellular_calcium_concentration__Ca_i = NV_Ith_S(rY, 12);
         // Units: millimolar; Initial value: 7.63e-06
         
         const double var_L_type_Ca_channel__P_CaK = 0.002; // dimensionless
@@ -135,49 +146,54 @@
         const double var_chaste_interface__i_ionic = (0.001 * var_L_type_Ca_channel__i_Ca_L_Ca + 0.001 * var_L_type_Ca_channel__i_Ca_L_K + 0.001 * var_L_type_Ca_channel__i_Ca_L_Na + 0.001 * var_calcium_background_current__i_b_Ca + 0.001 * var_fast_sodium_current__i_Na + 0.001 * var_potassium_background_current__i_b_K + 0.001 * var_sodium_background_current__i_b_Na + 0.001 * var_sodium_calcium_exchanger__i_NaCa + 0.001 * var_sodium_potassium_pump__i_NaK + 0.001 * var_time_dependent_potassium_current__i_K + 0.001 * var_time_independent_potassium_current__i_K1 + 0.001 * var_transient_outward_current__i_to) * HeartConfig::Instance()->GetCapacitance() / var_membrane__Cm; // uA_per_cm2
 
         const double i_ionic = var_chaste_interface__i_ionic;
+        if (made_new_cvode_vector)
+        {
+            DeleteVector(rY);
+        }
         EXCEPT_IF_NOT(!std::isnan(i_ionic));
         return i_ionic;
     }
 
-    void Cellnoble_model_1991FromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Cellnoble_model_1991FromCellMLCvodeDataClamp::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const N_Vector rY, N_Vector rDY)
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
         // Units: millivolt; Initial value: -93.0
-        double var_chaste_interface__time_dependent_potassium_current_x_gate__x = rY[1];
+        double var_chaste_interface__time_dependent_potassium_current_x_gate__x = NV_Ith_S(rY, 1);
         // Units: dimensionless; Initial value: 0.001
-        double var_chaste_interface__fast_sodium_current_m_gate__m = rY[2];
+        double var_chaste_interface__fast_sodium_current_m_gate__m = NV_Ith_S(rY, 2);
         // Units: dimensionless; Initial value: 0.000105
-        double var_chaste_interface__fast_sodium_current_h_gate__h = rY[3];
+        double var_chaste_interface__fast_sodium_current_h_gate__h = NV_Ith_S(rY, 3);
         // Units: dimensionless; Initial value: 0.99816539
-        double var_chaste_interface__L_type_Ca_channel_d_gate__d = rY[4];
+        double var_chaste_interface__L_type_Ca_channel_d_gate__d = NV_Ith_S(rY, 4);
         // Units: dimensionless; Initial value: 0.0
-        double var_chaste_interface__L_type_Ca_channel_f_gate__f = rY[5];
+        double var_chaste_interface__L_type_Ca_channel_f_gate__f = NV_Ith_S(rY, 5);
         // Units: dimensionless; Initial value: 1.0
-        double var_chaste_interface__transient_outward_current_s_gate__s = rY[6];
+        double var_chaste_interface__transient_outward_current_s_gate__s = NV_Ith_S(rY, 6);
         // Units: dimensionless; Initial value: 1.0
-        double var_chaste_interface__transient_outward_current_r_gate__r = rY[7];
+        double var_chaste_interface__transient_outward_current_r_gate__r = NV_Ith_S(rY, 7);
         // Units: dimensionless; Initial value: 0.0
-        double var_chaste_interface__calcium_release__ActFrac = rY[8];
+        double var_chaste_interface__calcium_release__ActFrac = NV_Ith_S(rY, 8);
         // Units: dimensionless; Initial value: 0.0
-        double var_chaste_interface__calcium_release__ProdFrac = rY[9];
+        double var_chaste_interface__calcium_release__ProdFrac = NV_Ith_S(rY, 9);
         // Units: dimensionless; Initial value: 0.0
-        double var_chaste_interface__intracellular_sodium_concentration__Na_i = rY[10];
+        double var_chaste_interface__intracellular_sodium_concentration__Na_i = NV_Ith_S(rY, 10);
         // Units: millimolar; Initial value: 5.0
-        double var_chaste_interface__intracellular_potassium_concentration__K_i = rY[11];
+        double var_chaste_interface__intracellular_potassium_concentration__K_i = NV_Ith_S(rY, 11);
         // Units: millimolar; Initial value: 140.0
-        double var_chaste_interface__intracellular_calcium_concentration__Ca_i = rY[12];
+        double var_chaste_interface__intracellular_calcium_concentration__Ca_i = NV_Ith_S(rY, 12);
         // Units: millimolar; Initial value: 7.63e-06
-        double var_chaste_interface__intracellular_calcium_concentration__Ca_up = rY[13];
+        double var_chaste_interface__intracellular_calcium_concentration__Ca_up = NV_Ith_S(rY, 13);
         // Units: millimolar; Initial value: 0.3013
-        double var_chaste_interface__intracellular_calcium_concentration__Ca_rel = rY[14];
+        double var_chaste_interface__intracellular_calcium_concentration__Ca_rel = NV_Ith_S(rY, 14);
         // Units: millimolar; Initial value: 0.2989
-        double var_chaste_interface__intracellular_calcium_concentration__Ca_Calmod = rY[15];
+        double var_chaste_interface__intracellular_calcium_concentration__Ca_Calmod = NV_Ith_S(rY, 15);
         // Units: millimolar; Initial value: 0.0003
-        double var_chaste_interface__intracellular_calcium_concentration__Ca_Trop = rY[16];
+        double var_chaste_interface__intracellular_calcium_concentration__Ca_Trop = NV_Ith_S(rY, 16);
         // Units: millimolar; Initial value: 0.0002
-
+        
+        
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
         const double var_L_type_Ca_channel__P_CaK = 0.002; // dimensionless
@@ -313,128 +329,167 @@
             d_dt_chaste_interface_var_membrane__V = 0.0;
         }
         else
-        {
-            const double var_membrane__Cm = 9.5000000000000005e-5; // microF
+        {const double var_membrane__Cm = 9.5000000000000005e-5; // microF
             const double var_membrane__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
             const double var_membrane__i_Stim = 1000.0 * var_membrane__Cm * var_membrane__i_Stim_converter / HeartConfig::Instance()->GetCapacitance(); // nanoA
             const double var_membrane__V_orig_deriv = -1.0 * (var_L_type_Ca_channel__i_Ca_L_Ca + var_L_type_Ca_channel__i_Ca_L_K + var_L_type_Ca_channel__i_Ca_L_Na + var_calcium_background_current__i_b_Ca + var_fast_sodium_current__i_Na + var_membrane__i_Stim + var_potassium_background_current__i_b_K + var_sodium_background_current__i_b_Na + var_sodium_calcium_exchanger__i_NaCa + var_sodium_potassium_pump__i_NaK + var_time_dependent_potassium_current__i_K + var_time_independent_potassium_current__i_K1 + var_transient_outward_current__i_to) / var_membrane__Cm; // millivolt / second
+            
+            // Special handling of data clamp current here (see #2708)
+            // (we want to save expense of calling the interpolation method if possible.)
+            double var_chaste_interface__membrane_data_clamp_current = 0.0;
+            if (mDataClampIsOn)
+            {
+                var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time_converted) + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 0); // uA_per_cm2
+            }
             d_dt_chaste_interface_var_membrane__V = 0.001 * var_membrane__V_orig_deriv; // millivolt / millisecond
+            
         }
         
-        rDY[0] = d_dt_chaste_interface_var_membrane__V;
-        rDY[1] = d_dt_chaste_interface_var_time_dependent_potassium_current_x_gate__x;
-        rDY[2] = d_dt_chaste_interface_var_fast_sodium_current_m_gate__m;
-        rDY[3] = d_dt_chaste_interface_var_fast_sodium_current_h_gate__h;
-        rDY[4] = d_dt_chaste_interface_var_L_type_Ca_channel_d_gate__d;
-        rDY[5] = d_dt_chaste_interface_var_L_type_Ca_channel_f_gate__f;
-        rDY[6] = d_dt_chaste_interface_var_transient_outward_current_s_gate__s;
-        rDY[7] = d_dt_chaste_interface_var_transient_outward_current_r_gate__r;
-        rDY[8] = d_dt_chaste_interface_var_calcium_release__ActFrac;
-        rDY[9] = d_dt_chaste_interface_var_calcium_release__ProdFrac;
-        rDY[10] = d_dt_chaste_interface_var_intracellular_sodium_concentration__Na_i;
-        rDY[11] = d_dt_chaste_interface_var_intracellular_potassium_concentration__K_i;
-        rDY[12] = d_dt_chaste_interface_var_intracellular_calcium_concentration__Ca_i;
-        rDY[13] = d_dt_chaste_interface_var_intracellular_calcium_concentration__Ca_up;
-        rDY[14] = d_dt_chaste_interface_var_intracellular_calcium_concentration__Ca_rel;
-        rDY[15] = d_dt_chaste_interface_var_intracellular_calcium_concentration__Ca_Calmod;
-        rDY[16] = d_dt_chaste_interface_var_intracellular_calcium_concentration__Ca_Trop;
+        NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_membrane__V;
+        NV_Ith_S(rDY,1) = d_dt_chaste_interface_var_time_dependent_potassium_current_x_gate__x;
+        NV_Ith_S(rDY,2) = d_dt_chaste_interface_var_fast_sodium_current_m_gate__m;
+        NV_Ith_S(rDY,3) = d_dt_chaste_interface_var_fast_sodium_current_h_gate__h;
+        NV_Ith_S(rDY,4) = d_dt_chaste_interface_var_L_type_Ca_channel_d_gate__d;
+        NV_Ith_S(rDY,5) = d_dt_chaste_interface_var_L_type_Ca_channel_f_gate__f;
+        NV_Ith_S(rDY,6) = d_dt_chaste_interface_var_transient_outward_current_s_gate__s;
+        NV_Ith_S(rDY,7) = d_dt_chaste_interface_var_transient_outward_current_r_gate__r;
+        NV_Ith_S(rDY,8) = d_dt_chaste_interface_var_calcium_release__ActFrac;
+        NV_Ith_S(rDY,9) = d_dt_chaste_interface_var_calcium_release__ProdFrac;
+        NV_Ith_S(rDY,10) = d_dt_chaste_interface_var_intracellular_sodium_concentration__Na_i;
+        NV_Ith_S(rDY,11) = d_dt_chaste_interface_var_intracellular_potassium_concentration__K_i;
+        NV_Ith_S(rDY,12) = d_dt_chaste_interface_var_intracellular_calcium_concentration__Ca_i;
+        NV_Ith_S(rDY,13) = d_dt_chaste_interface_var_intracellular_calcium_concentration__Ca_up;
+        NV_Ith_S(rDY,14) = d_dt_chaste_interface_var_intracellular_calcium_concentration__Ca_rel;
+        NV_Ith_S(rDY,15) = d_dt_chaste_interface_var_intracellular_calcium_concentration__Ca_Calmod;
+        NV_Ith_S(rDY,16) = d_dt_chaste_interface_var_intracellular_calcium_concentration__Ca_Trop;
+    }
+
+    N_Vector Cellnoble_model_1991FromCellMLCvodeDataClamp::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const N_Vector & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        double var_chaste_interface__membrane__V = NV_Ith_S(rY,0);
+        // Units: millivolt; Initial value: -93.0
+        
+
+        // Mathematics
+        // Special handling of data clamp current here (see #2708)
+        // (we want to save expense of calling the interpolation method if possible.)
+        double var_chaste_interface__membrane_data_clamp_current = 0.0;
+        if (mDataClampIsOn)
+        {
+            var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time_converted) + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 0); // uA_per_cm2
+        }
+        
+        N_Vector dqs = N_VNew_Serial(1);
+        NV_Ith_S(dqs, 0) = var_chaste_interface__membrane_data_clamp_current;
+        return dqs;
     }
 
 template<>
-void OdeSystemInformation<Cellnoble_model_1991FromCellML>::Initialise(void)
+void OdeSystemInformation<Cellnoble_model_1991FromCellMLCvodeDataClamp>::Initialise(void)
 {
     this->mSystemName = "noble_model_1991";
     this->mFreeVariableName = "environment__time_converted";
     this->mFreeVariableUnits = "millisecond";
 
-    // rY[0]:
+    // NV_Ith_S(rY,0):
     this->mVariableNames.push_back("membrane_voltage");
     this->mVariableUnits.push_back("millivolt");
     this->mInitialConditions.push_back(-93.0);
 
-    // rY[1]:
+    // NV_Ith_S(rY,1):
     this->mVariableNames.push_back("time_dependent_potassium_current_x_gate__x");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.001);
 
-    // rY[2]:
+    // NV_Ith_S(rY,2):
     this->mVariableNames.push_back("fast_sodium_current_m_gate__m");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000105);
 
-    // rY[3]:
+    // NV_Ith_S(rY,3):
     this->mVariableNames.push_back("fast_sodium_current_h_gate__h");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.99816539);
 
-    // rY[4]:
+    // NV_Ith_S(rY,4):
     this->mVariableNames.push_back("L_type_Ca_channel_d_gate__d");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
 
-    // rY[5]:
+    // NV_Ith_S(rY,5):
     this->mVariableNames.push_back("L_type_Ca_channel_f_gate__f");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.0);
 
-    // rY[6]:
+    // NV_Ith_S(rY,6):
     this->mVariableNames.push_back("transient_outward_current_s_gate__s");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.0);
 
-    // rY[7]:
+    // NV_Ith_S(rY,7):
     this->mVariableNames.push_back("transient_outward_current_r_gate__r");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
 
-    // rY[8]:
+    // NV_Ith_S(rY,8):
     this->mVariableNames.push_back("calcium_release__ActFrac");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
 
-    // rY[9]:
+    // NV_Ith_S(rY,9):
     this->mVariableNames.push_back("calcium_release__ProdFrac");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
 
-    // rY[10]:
+    // NV_Ith_S(rY,10):
     this->mVariableNames.push_back("intracellular_sodium_concentration__Na_i");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(5.0);
 
-    // rY[11]:
+    // NV_Ith_S(rY,11):
     this->mVariableNames.push_back("intracellular_potassium_concentration__K_i");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(140.0);
 
-    // rY[12]:
+    // NV_Ith_S(rY,12):
     this->mVariableNames.push_back("intracellular_calcium_concentration__Ca_i");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(7.63e-06);
 
-    // rY[13]:
+    // NV_Ith_S(rY,13):
     this->mVariableNames.push_back("intracellular_calcium_concentration__Ca_up");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.3013);
 
-    // rY[14]:
+    // NV_Ith_S(rY,14):
     this->mVariableNames.push_back("intracellular_calcium_concentration__Ca_rel");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.2989);
 
-    // rY[15]:
+    // NV_Ith_S(rY,15):
     this->mVariableNames.push_back("intracellular_calcium_concentration__Ca_Calmod");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.0003);
 
-    // rY[16]:
+    // NV_Ith_S(rY,16):
     this->mVariableNames.push_back("intracellular_calcium_concentration__Ca_Trop");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.0002);
+
+    // mParameters[0]:
+    this->mParameterNames.push_back("membrane_data_clamp_current_conductance");
+    this->mParameterUnits.push_back("dimensionless");
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("membrane_data_clamp_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     this->mInitialised = true;
 }
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellnoble_model_1991FromCellML)
+CHASTE_CLASS_EXPORT(Cellnoble_model_1991FromCellMLCvodeDataClamp)
+#endif // CHASTE_CVODE
