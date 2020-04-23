@@ -31,15 +31,9 @@ class CvodeWithDataClampeModel(CvodeChasteModel):
         self._membrane_data_clamp_current_eq = sp.Eq(self._membrane_data_clamp_current, clamp_current)
         self._model.add_equation(self._membrane_data_clamp_current_eq)
 
+        # Add membrane_data_clamp_conductance to modifiable parameters
         modifiable_parameters.append(self._membrane_data_clamp_current_conductance)
         return modifiable_parameters
-
-    def _get_derived_quant(self):
-        """ Get all derived quantities, adds membrane_data_clamp_current and its defining equation"""
-        derived_quant = super()._get_derived_quant()
-
-        derived_quant.append(self._membrane_data_clamp_current)
-        return derived_quant
 
     def _get_derivative_equations(self):
         """ Get equations defining the derivatives including V and add in membrane_data_clamp_current"""
@@ -63,12 +57,20 @@ class CvodeWithDataClampeModel(CvodeChasteModel):
 
         return derivative_equations
 
+    def _get_derived_quant(self):
+        """ Get all derived quantities, adds membrane_data_clamp_current and its defining equation"""
+        derived_quant = super()._get_derived_quant()
+
+        # Add membrane_data_clamp_current to modifiable parameters
+        # (this was set in _get_modifiable_parameters as it's also needed in _get_derivative_equations)
+        derived_quant.append(self._membrane_data_clamp_current)
+        return derived_quant
+
     def _format_derivative_equations(self, derivative_equations):
         """Format derivative equations for chaste output and add is_data_clamp_current flag"""
         formatted_eqs = super()._format_derivative_equations(derivative_equations)
         for eq in formatted_eqs:
             eq['is_data_clamp_current'] = eq['sympy_lhs'] == self._membrane_data_clamp_current
-
         return formatted_eqs
 
     def _format_derived_quant_eqs(self):
@@ -76,5 +78,4 @@ class CvodeWithDataClampeModel(CvodeChasteModel):
         formatted_eqs = super()._format_derived_quant_eqs()
         for eq in formatted_eqs:
             eq['is_data_clamp_current'] = eq['sympy_lhs'] == self._membrane_data_clamp_current
-
         return formatted_eqs
