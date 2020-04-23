@@ -160,7 +160,7 @@ class ChasteModel(object):
 
         self._modifiable_parameters = self._get_modifiable_parameters()
         self._in_interface.append(self._time_variable)
-        
+
         # get capacitance and update stimulus current
         self._membrane_stimulus_current = self._get_membrane_stimulus_current()
         self._original_membrane_stimulus_current = self._membrane_stimulus_current
