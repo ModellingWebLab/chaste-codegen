@@ -159,10 +159,9 @@ class ChasteModel(object):
         self._in_interface.extend(self._state_vars)
 
         self._modifiable_parameters = self._get_modifiable_parameters()
-        self._derived_quant = self._get_derived_quant()
-        self._derived_quant_eqs = self._get_derived_quant_eqs()
         self._in_interface.append(self._time_variable)
-
+        
+        # get capacitance and update stimulus current
         self._membrane_stimulus_current = self._get_membrane_stimulus_current()
         self._original_membrane_stimulus_current = self._membrane_stimulus_current
         self._membrane_capacitance, self._membrane_capacitance_factor = self._get_membrane_capacitance()
@@ -178,6 +177,9 @@ class ChasteModel(object):
         self._derivative_equations = self._get_derivative_equations()
         self._derivative_eqs_excl_voltage = self._get_derivative_eqs_excl_voltage()
         self._derivative_eqs_voltage = self._get_derivative_eqs_voltage()
+
+        self._derived_quant = self._get_derived_quant()
+        self._derived_quant_eqs = self._get_derived_quant_eqs()
 
         self._add_printers()
         self._formatted_state_vars, self._use_verify_state_variables = self._format_state_variables()
@@ -224,7 +226,7 @@ class ChasteModel(object):
                  as well as modifiable parameters filtered out is required.
         """
         equations = [eq for eq in self._model.get_equations_for(variables, recurse=recurse)
-                     if eq.lhs not in self._modifiable_parameters or not filter_modifiable_parameters_lhs]
+                     if not filter_modifiable_parameters_lhs or eq.lhs not in self._modifiable_parameters]
         return [sp.Eq(eq.lhs, optimize(eq.rhs, self._OPTIMS)) for eq in equations]
 
     def _get_initial_value(self, var):
