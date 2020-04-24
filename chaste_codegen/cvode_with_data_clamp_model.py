@@ -43,11 +43,9 @@ class CvodeWithDataClampModel(CvodeChasteModel):
             """Finds ionic_var on the rhs of eq, recursing through defining equations if necessary"""
             if ionic_var in eq.rhs.free_symbols:
                 return derivative_equations.index(eq)
-            elif len(eq.rhs.free_symbols) == 0:
-                return None
             else:
+                found_eq = None
                 for var in eq.rhs.free_symbols:
-                    found_eq = None
                     def_eq = [e for e in derivative_equations if e.lhs == var]
                     if len(def_eq) == 1:
                         found_eq = find_ionic_var(def_eq[0], ionic_var, derivative_equations)
@@ -56,6 +54,7 @@ class CvodeWithDataClampModel(CvodeChasteModel):
                 return found_eq
 
         derivative_equations = super()._get_derivative_equations()
+        
         # piggy-backs on the analysis that finds ionic currents, in order to add in data clamp currents
         # Find dv/dt
         current_index = None
