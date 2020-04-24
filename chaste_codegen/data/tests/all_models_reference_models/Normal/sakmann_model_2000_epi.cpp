@@ -39,7 +39,6 @@
         return p_cellml_stim;
     }
 
-
     double Cellsakmann_model_2000_epiFromCellML::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];

@@ -5,14 +5,6 @@ import logging
 
 from cellmlmanip.transpiler import Transpiler
 
-from chaste_codegen.backward_euler_model import BackwardEulerModel  # noqa
-from chaste_codegen.generalised_rush_larsen_1_model import GeneralisedRushLarsenFirstOrderModel  # noqa
-from chaste_codegen.generalised_rush_larsen_1_opt_model import GeneralisedRushLarsenFirstOrderModelOpt  # noqa
-from chaste_codegen.generalised_rush_larsen_2_model import GeneralisedRushLarsenSecondOrderModel  # noqa
-from chaste_codegen.generalised_rush_larsen_2_opt_model import GeneralisedRushLarsenSecondOrderModelOpt  # noqa
-from chaste_codegen.rush_larsen_model import RushLarsenModel  # noqa
-from chaste_codegen.rush_larsen_opt_model import RushLarsenOptModel  # noqa
-
 from ._chaste_printer import ChastePrinter  # noqa
 #
 # Load constants and version information
@@ -38,10 +30,18 @@ from ._math_functions import (
     sin_,
     sqrt_,
 )
+from .backward_euler_model import BackwardEulerModel  # noqa
 from .chaste_model import ChasteModel  # noqa
 from .cvode_chaste_model import CvodeChasteModel  # noqa
+from .cvode_with_data_clamp_model import CvodeWithDataClampeModel  # noqa
+from .generalised_rush_larsen_1_model import GeneralisedRushLarsenFirstOrderModel  # noqa
+from .generalised_rush_larsen_1_opt_model import GeneralisedRushLarsenFirstOrderModelOpt  # noqa
+from .generalised_rush_larsen_2_model import GeneralisedRushLarsenSecondOrderModel  # noqa
+from .generalised_rush_larsen_2_opt_model import GeneralisedRushLarsenSecondOrderModelOpt  # noqa
 from .normal_chaste_model import NormalChasteModel  # noqa
 from .opt_chaste_model import OptChasteModel  # noqa
+from .rush_larsen_model import RushLarsenModel  # noqa
+from .rush_larsen_opt_model import RushLarsenOptModel  # noqa
 
 
 # Configure logging

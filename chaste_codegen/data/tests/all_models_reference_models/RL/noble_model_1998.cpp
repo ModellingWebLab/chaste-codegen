@@ -39,7 +39,6 @@
         return p_cellml_stim;
     }
 
-
     double Cellnoble_model_1998FromCellMLRushLarsen::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];

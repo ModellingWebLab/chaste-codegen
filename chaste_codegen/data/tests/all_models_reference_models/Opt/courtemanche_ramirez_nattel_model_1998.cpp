@@ -38,6 +38,7 @@
         return p_cellml_stim;
     }
 
+
     Cellcourtemanche_ramirez_nattel_model_1998FromCellML::Cellcourtemanche_ramirez_nattel_model_1998FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,

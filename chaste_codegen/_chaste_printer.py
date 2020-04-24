@@ -53,7 +53,8 @@ class ChastePrinter(Printer):
 
         'sign': 'Signum',
         'GetIntracellularAreaStimulus': 'GetIntracellularAreaStimulus',
-        'HeartConfig::Instance()->GetCapacitance': 'HeartConfig::Instance()->GetCapacitance'
+        'HeartConfig::Instance()->GetCapacitance': 'HeartConfig::Instance()->GetCapacitance',
+        'GetExperimentalVoltageAtTimeT': 'GetExperimentalVoltageAtTimeT'
     }
 
     _literal_names = {

@@ -40,6 +40,7 @@
         return p_cellml_stim;
     }
 
+
     Cellpandit_model_2001_epiFromCellMLBackwardEuler::Cellpandit_model_2001_epiFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<13>(
                 26,

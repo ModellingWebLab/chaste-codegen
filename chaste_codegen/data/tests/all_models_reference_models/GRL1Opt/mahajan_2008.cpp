@@ -38,7 +38,6 @@
         return p_cellml_stim;
     }
 
-
     double Cellmahajan_2008FromCellMLGRL1::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];

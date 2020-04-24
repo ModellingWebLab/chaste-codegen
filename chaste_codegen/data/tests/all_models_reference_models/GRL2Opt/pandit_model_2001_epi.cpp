@@ -39,6 +39,7 @@
         return p_cellml_stim;
     }
 
+
     Cellpandit_model_2001_epiFromCellMLGRL2::Cellpandit_model_2001_epiFromCellMLGRL2(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractGeneralizedRushLarsenCardiacCell(
            26,

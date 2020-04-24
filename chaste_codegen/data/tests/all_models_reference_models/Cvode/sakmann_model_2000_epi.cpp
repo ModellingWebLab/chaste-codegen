@@ -40,6 +40,7 @@
         return p_cellml_stim;
     }
 
+
     double Cellsakmann_model_2000_epiFromCellMLCvode::GetIntracellularCalciumConcentration()
     {
         return NV_Ith_S(mStateVariables, 1);

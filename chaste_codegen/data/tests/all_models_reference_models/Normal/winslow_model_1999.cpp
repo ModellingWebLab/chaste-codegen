@@ -38,6 +38,7 @@
         return p_cellml_stim;
     }
 
+
     Cellwinslow_model_1999FromCellML::Cellwinslow_model_1999FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,

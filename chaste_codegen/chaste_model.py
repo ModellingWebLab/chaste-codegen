@@ -226,7 +226,7 @@ class ChasteModel(object):
                  as well as modifiable parameters filtered out is required.
         """
         equations = [eq for eq in self._model.get_equations_for(variables, recurse=recurse)
-                     if eq.lhs not in self._modifiable_parameters or not filter_modifiable_parameters_lhs]
+                     if not filter_modifiable_parameters_lhs or eq.lhs not in self._modifiable_parameters]
         return [sp.Eq(eq.lhs, optimize(eq.rhs, self._OPTIMS)) for eq in equations]
 
     def _get_initial_value(self, var):
@@ -309,7 +309,7 @@ class ChasteModel(object):
             return self._model.convert_variable(voltage, desired_units, DataDirectionFlow.INPUT)
         except DimensionalityError:
             warning = 'Incorrect definition of membrane_voltage variable '\
-                      '(units of membrane_voltage needs to be dimensionally equivalent to Volt)'
+                      '(units of membrane_voltage need to be dimensionally equivalent to Volt)'
             self._logger.info(warning)
             assert False, warning
 
@@ -685,8 +685,8 @@ class ChasteModel(object):
         """ Get the variables in the model that have exposed annotation and are derived quantities
             (irrespective of any derived-quantity tags)"""
         return [q for q in self._model.get_derived_quantities()
-                if self._model.has_ontology_annotation(q, self._OXMETA)] +\                                                             
-               [self._membrane_stimulus_current]
+                if self._model.has_ontology_annotation(q, self._OXMETA)] +\
+               [self._membrane_stimulus_current] if self._membrane_stimulus_current is not None else []
 
     def _get_derived_quant(self):
         """ Get all derived quantities
@@ -827,14 +827,14 @@ class ChasteModel(object):
     def _format_derivative_equations(self, derivative_equations):
         """Format derivative equations for chaste output"""
         # exclude ionic currents
-        return [{'lhs': self._printer.doprint(eqs.lhs),
-                 'rhs': self._printer.doprint(eqs.rhs),
-                 'sympy_lhs': eqs.lhs,
-                 'units': self._model.units.format(self._model.units.evaluate_units(eqs.lhs)),
-                 'in_eqs_excl_voltage': eqs in self._derivative_eqs_excl_voltage,
-                 'in_membrane_voltage': eqs in self._derivative_eqs_voltage,
-                 'is_voltage': isinstance(eqs.lhs, sp.Derivative) and eqs.lhs.args[0] == self._membrane_voltage_var}
-                for eqs in derivative_equations]
+        return [{'lhs': self._printer.doprint(eq.lhs),
+                 'rhs': self._printer.doprint(eq.rhs),
+                 'sympy_lhs': eq.lhs,
+                 'units': self._model.units.format(self._model.units.evaluate_units(eq.lhs)),
+                 'in_eqs_excl_voltage': eq in self._derivative_eqs_excl_voltage,
+                 'in_membrane_voltage': eq in self._derivative_eqs_voltage,
+                 'is_voltage': isinstance(eq.lhs, sp.Derivative) and eq.lhs.args[0] == self._membrane_voltage_var}
+                for eq in derivative_equations]
 
     def _format_free_variable(self):
         """ Format free variable for chaste output"""
@@ -868,9 +868,10 @@ class ChasteModel(object):
                 for quant in self._derived_quant]
 
     def _format_derived_quant_eqs(self):
-        """ Format equations for derivd quantites based on current settings"""
+        """ Format equations for derived quantities based on current settings"""
         return [{'lhs': self._printer.doprint(eq.lhs),
                  'rhs': self._printer.doprint(eq.rhs),
+                 'sympy_lhs': eq.lhs,
                  'units': self._model.units.format(str(self._model.units.evaluate_units(eq.lhs)))}
                 for eq in self._derived_quant_eqs]
 

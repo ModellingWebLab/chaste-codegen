@@ -21,6 +21,7 @@ chaste_all_GRL1 = get_models(ref_folder='cronjob_reference_models', type='GRL1')
 chaste_all_GRL1Opt = get_models(ref_folder='cronjob_reference_models', type='GRL1Opt')
 chaste_all_GRL2 = get_models(ref_folder='cronjob_reference_models', type='GRL2')
 chaste_all_GRL2Opt = get_models(ref_folder='cronjob_reference_models', type='GRL2Opt')
+chaste_CVODE_DATA_CLAMP = get_models(ref_folder='cronjob_reference_models', type='CVODE_DATA_CLAMP')
 
 
 @pytest.mark.cronjob
@@ -63,71 +64,81 @@ def test_Cvode_jacobian_cronjob(tmp_path, model, request):
     test_Cvode_jacobian(tmp_path, model)
 
 
-@pytest.mark.all_models
+@pytest.mark.cronjob
 @pytest.mark.parametrize(('model'), chaste_all_BE)
 def test_BE_all_cronjob(tmp_path, model, request):
     """ Check generation of Cvode models against reference"""
-    if request.config.option.markexpr != 'all_models':
-        pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
+    if request.config.option.markexpr != 'cronjob':
+        pytest.skip('Skip if not explicitly set to run cronjob with -m cronjob')
     from chaste_codegen.tests.test_codegen import test_BE
     test_BE(tmp_path, model)
 
 
-@pytest.mark.all_models
+@pytest.mark.cronjob
 @pytest.mark.parametrize(('model'), chaste_all_RL)
 def test_RL_all_cronjob(tmp_path, model, request):
     """ Check generation of Rush Larsen models against reference"""
-    if request.config.option.markexpr != 'all_models':
-        pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
+    if request.config.option.markexpr != 'cronjob':
+        pytest.skip('Skip if not explicitly set to run cronjob with -m cronjob')
     from chaste_codegen.tests.test_codegen import test_RL
     test_RL(tmp_path, model)
 
 
-@pytest.mark.all_models
+@pytest.mark.cronjob
 @pytest.mark.parametrize(('model'), chaste_all_RLopt)
 def test_RLopt_all_cronjob(tmp_path, model, request):
     """ Check generation of Rush Larsen Opt models against reference"""
-    if request.config.option.markexpr != 'all_models':
-        pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
+    if request.config.option.markexpr != 'cronjob':
+        pytest.skip('Skip if not explicitly set to run cronjob with -m cronjob')
     from chaste_codegen.tests.test_codegen import test_RLopt
     test_RLopt(tmp_path, model)
 
 
-@pytest.mark.all_models
+@pytest.mark.cronjob
 @pytest.mark.parametrize(('model'), chaste_all_GRL1)
 def test_GRL1_all_cronjob(tmp_path, model, request):
     """ Check generation of Generalised Rush Larsen First order models against reference"""
-    if request.config.option.markexpr != 'all_models':
-        pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
+    if request.config.option.markexpr != 'cronjob':
+        pytest.skip('Skip if not explicitly set to run cronjob with -m cronjob')
     from chaste_codegen.tests.test_codegen import test_GRL1
     test_GRL1(tmp_path, model)
 
 
-@pytest.mark.all_models
+@pytest.mark.cronjob
 @pytest.mark.parametrize(('model'), chaste_all_GRL1Opt)
 def test_GRL1Opt_all_cronjob(tmp_path, model, request):
     """ Check generation of Generalised Rush Larsen First order optimised models against reference"""
-    if request.config.option.markexpr != 'all_models':
-        pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
+    if request.config.option.markexpr != 'cronjob':
+        pytest.skip('Skip if not explicitly set to run cronjob with -m cronjob')
     from chaste_codegen.tests.test_codegen import test_GRL1Opt
     test_GRL1Opt(tmp_path, model)
 
 
-@pytest.mark.all_models
+@pytest.mark.cronjob
 @pytest.mark.parametrize(('model'), chaste_all_GRL2)
 def test_GRL2_all_cronjob(tmp_path, model, request):
     """ Check generation of Generalised Rush Larsen Second order models against reference"""
-    if request.config.option.markexpr != 'all_models':
-        pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
+    if request.config.option.markexpr != 'cronjob':
+        pytest.skip('Skip if not explicitly set to run cronjob with -m cronjob')
     from chaste_codegen.tests.test_codegen import test_GRL2
     test_GRL2(tmp_path, model)
 
 
-@pytest.mark.all_models
+@pytest.mark.cronjob
 @pytest.mark.parametrize(('model'), chaste_all_GRL2Opt)
 def test_GRL2Opt_all_cronjob(tmp_path, model, request):
     """ Check generation of Generalised Rush Larsen Second order optimised models against reference"""
-    if request.config.option.markexpr != 'all_models':
-        pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
+    if request.config.option.markexpr != 'cronjob':
+        pytest.skip('Skip if not explicitly set to run cronjob with -m cronjob')
     from chaste_codegen.tests.test_codegen import test_GRL2Opt
     test_GRL2Opt(tmp_path, model)
+
+
+@pytest.mark.cronjob
+@pytest.mark.parametrize(('model'), chaste_CVODE_DATA_CLAMP)
+def test_CVODE_DATA_CLAMP(tmp_path, model, request):
+    """ Check generation of CVODE Data Clamp models against reference"""
+    if request.config.option.markexpr != 'cronjob':
+        pytest.skip('Skip if not explicitly set to run cronjob with -m cronjob')
+    from chaste_codegen.tests.test_codegen import test_CVODE_DATA_CLAMP
+    test_CVODE_DATA_CLAMP(tmp_path, model)

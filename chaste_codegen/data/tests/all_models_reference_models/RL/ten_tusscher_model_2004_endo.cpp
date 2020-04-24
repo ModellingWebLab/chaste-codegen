@@ -22,7 +22,6 @@
 #include "MathsCustomFunctions.hpp"
 
 
-
     double Cellten_tusscher_model_2004_endoFromCellMLRushLarsen::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];

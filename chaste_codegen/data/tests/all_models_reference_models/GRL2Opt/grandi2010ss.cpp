@@ -38,7 +38,6 @@
         return p_cellml_stim;
     }
 
-
     double Cellgrandi2010ssFromCellMLGRL2::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[37];

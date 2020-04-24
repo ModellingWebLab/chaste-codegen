@@ -30,6 +30,23 @@ chaste_GRL1 = get_models(ref_folder='chaste_reference_models', type='GRL1')
 chaste_GRL1Opt = get_models(ref_folder='chaste_reference_models', type='GRL1Opt')
 chaste_GRL2 = get_models(ref_folder='chaste_reference_models', type='GRL2')
 chaste_GRL2Opt = get_models(ref_folder='chaste_reference_models', type='GRL2Opt')
+chaste_CVODE_DATA_CLAMP = get_models(ref_folder='chaste_reference_models', type='CVODE_DATA_CLAMP')
+
+
+@pytest.mark.parametrize(('model'), chaste_CVODE_DATA_CLAMP)
+def test_CVODE_DATA_CLAMP(tmp_path, model):
+    """ Check generation of CVODE with Data Clamp models against reference"""
+    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLCvodeDataClamp'
+    LOGGER.info('Converting: CVODE with Data Clamp: ' + class_name + '\n')
+    # Generate chaste code
+    chaste_model = cg.CvodeWithDataClampeModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
+                                               class_name=class_name)
+
+    chaste_model.generate_chaste_code()
+    # Compare against reference
+    test_utils.compare_model_against_reference('CVODE_DATA_CLAMP', chaste_model,
+                                               tmp_path, model['expected_hpp_path'],
+                                               model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_GRL2Opt)
@@ -130,7 +147,7 @@ def test_RL(tmp_path, model):
 
 @pytest.mark.parametrize(('model'), chaste_BE)
 def test_BE(tmp_path, model):
-    """ Check generation of Cvode models against reference"""
+    """ Check generation of Backwards Euler models against reference"""
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLBackwardEuler'
     LOGGER.info('Converting: BE: ' + class_name + '\n')
     # Generate chaste code
@@ -390,5 +407,5 @@ def test_wrong_units_voltage(capsys, tmp_path):
                                             class_name='test_wrong_units_voltage')
     warning = \
         'Incorrect definition of membrane_voltage variable '\
-        '(units of membrane_voltage needs to be dimensionally equivalent to Volt)'
+        '(units of membrane_voltage need to be dimensionally equivalent to Volt)'
     assert str(error.value) == warning
