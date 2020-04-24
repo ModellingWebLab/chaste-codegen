@@ -13,7 +13,6 @@ LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 
 
-
 def test_script_version(capsys):
     """Test version number message"""
     LOGGER.info('Testing version for command line script\n')
