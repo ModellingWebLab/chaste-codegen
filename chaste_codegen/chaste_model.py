@@ -685,8 +685,7 @@ class ChasteModel(object):
         """ Get the variables in the model that have exposed annotation and are derived quantities
             (irrespective of any derived-quantity tags)"""
         return [q for q in self._model.get_derived_quantities()
-                if self._model.has_ontology_annotation(q, self._OXMETA)] +\                                                             
-               [self._membrane_stimulus_current]
+                if self._model.has_ontology_annotation(q, self._OXMETA)] + [self._membrane_stimulus_current]
 
     def _get_derived_quant(self):
         """ Get all derived quantities
