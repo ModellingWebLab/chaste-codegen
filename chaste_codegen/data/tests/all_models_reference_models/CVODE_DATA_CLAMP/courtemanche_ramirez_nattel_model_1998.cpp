@@ -357,7 +357,7 @@
         {const double var_membrane__i_st_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
             const double var_membrane__i_st = var_membrane__Cm * var_membrane__i_st_converter / HeartConfig::Instance()->GetCapacitance(); // picoA
             
-            // Special handling of data clamp current here (see #2708)
+            // Special handling of data clamp current here
             // (we want to save expense of calling the interpolation method if possible.)
             double var_chaste_interface__membrane_data_clamp_current = 0.0;
             if (mDataClampIsOn)

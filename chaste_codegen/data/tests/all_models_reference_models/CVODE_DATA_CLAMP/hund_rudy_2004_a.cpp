@@ -472,7 +472,7 @@
         else
         {const double var_cell__caiont = -2.0 * var_INaCa__INaCa + var_ICaL__ICaL + var_ICab__ICab + var_IpCa__IpCa; // uA_per_uF
             
-            // Special handling of data clamp current here (see #2708)
+            // Special handling of data clamp current here
             // (we want to save expense of calling the interpolation method if possible.)
             double var_chaste_interface__membrane_data_clamp_current = 0.0;
             if (mDataClampIsOn)

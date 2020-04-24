@@ -45,7 +45,7 @@
     }
        
     DynamicShannon2004FromCellMLCvodeDataClamp::DynamicShannon2004FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
-        : AbstractCvodeCell(
+        : AbstractCvodeCellWithDataClamp(
                 pOdeSolver,
                 39,
                 0,
@@ -59,6 +59,7 @@
         // We have a default stimulus specified in the CellML file metadata
         this->mHasDefaultStimulusFromCellML = true;
         
+        NV_Ith_S(this->mParameters, 0) = 0.0; // (var_membrane_data_clamp_current_conductance) [dimensionless]
     }
 
     DynamicShannon2004FromCellMLCvodeDataClamp::~DynamicShannon2004FromCellMLCvodeDataClamp()
@@ -588,8 +589,7 @@
             d_dt_chaste_interface_var_cell__V = 0.0;
         }
         else
-        {
-            const double var_ICaL__PK = 2.7000000000000001e-7; // litre_per_farad_millisecond
+        {const double var_ICaL__PK = 2.7000000000000001e-7; // litre_per_farad_millisecond
             const double var_ICaL__gamma_Ki = 0.75; // dimensionless
             const double var_ICaL__gamma_Ko = 0.75; // dimensionless
             const double var_ICl_Ca__Fx_Cl_SL = 0.89000000000000001; // dimensionless
@@ -641,7 +641,16 @@
             const double var_Itos__i_tos = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * (0.5 * var_chaste_interface__Itos_R_gate__R_tos + var_chaste_interface__Itos_Y_gate__Y_tos) * var_Itos__G_tos * var_chaste_interface__Itos_X_gate__X_tos; // microA_per_microF
             const double var_INa__i_Na = var_INa__i_Na_SL + var_INa__i_Na_jct; // microA_per_microF
             const double var_INab__i_Nab = var_INab__i_Nab_SL + var_INab__i_Nab_jct; // microA_per_microF
-            d_dt_chaste_interface_var_cell__V = -var_ICaL__i_CaL - var_ICab__i_Cab - var_ICap__i_Cap - var_ICl_Ca__i_Cl_Ca - var_IClb__i_Clb - var_IK1__i_K1 - var_IKp__i_Kp - var_IKr__i_Kr - var_IKs__i_Ks - var_INa__i_Na - var_INaCa__i_NaCa - var_INaK__i_NaK - var_INab__i_Nab - var_Itof__i_tof - var_Itos__i_tos - var_cell__i_Stim; // millivolt / millisecond
+            
+            // Special handling of data clamp current here
+            // (we want to save expense of calling the interpolation method if possible.)
+            double var_chaste_interface__membrane_data_clamp_current = 0.0;
+            if (mDataClampIsOn)
+            {
+                var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time) + var_chaste_interface__cell__V) * NV_Ith_S(mParameters, 0); // uA_per_cm2
+            }
+            d_dt_chaste_interface_var_cell__V = -var_ICaL__i_CaL - var_ICab__i_Cab - var_ICap__i_Cap - var_ICl_Ca__i_Cl_Ca - var_IClb__i_Clb - var_IK1__i_K1 - var_IKp__i_Kp - var_IKr__i_Kr - var_IKs__i_Ks - var_INa__i_Na - var_INaCa__i_NaCa - var_INaK__i_NaK - var_INab__i_Nab - var_Itof__i_tof - var_Itos__i_tos - var_cell__i_Stim - var_chaste_interface__membrane_data_clamp_current; // millivolt / millisecond
+            
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_cell__V;
@@ -683,6 +692,28 @@
         NV_Ith_S(rDY,36) = d_dt_chaste_interface_var_cytosolic_Ca_buffer__Ca_Myosin;
         NV_Ith_S(rDY,37) = d_dt_chaste_interface_var_cytosolic_Ca_buffer__Mg_Myosin;
         NV_Ith_S(rDY,38) = d_dt_chaste_interface_var_cytosolic_Ca_buffer__Ca_SRB;
+    }
+
+    N_Vector DynamicShannon2004FromCellMLCvodeDataClamp::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        double var_chaste_interface__cell__V = NV_Ith_S(rY,0);
+        // Units: millivolt; Initial value: -85.56885
+        
+
+        // Mathematics
+        // Special handling of data clamp current here (see #2708)
+        // (we want to save expense of calling the interpolation method if possible.)
+        double var_chaste_interface__membrane_data_clamp_current = 0.0;
+        if (mDataClampIsOn)
+        {
+            var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time) + var_chaste_interface__cell__V) * NV_Ith_S(mParameters, 0); // uA_per_cm2
+        }
+        
+        N_Vector dqs = N_VNew_Serial(1);
+        NV_Ith_S(dqs, 0) = var_chaste_interface__membrane_data_clamp_current;
+        return dqs;
     }
 
 template<>
@@ -886,6 +917,14 @@ void OdeSystemInformation<DynamicShannon2004FromCellMLCvodeDataClamp>::Initialis
     this->mVariableNames.push_back("cytosolic_Ca_buffer__Ca_SRB");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.002143165);
+
+    // mParameters[0]:
+    this->mParameterNames.push_back("membrane_data_clamp_current_conductance");
+    this->mParameterUnits.push_back("dimensionless");
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("membrane_data_clamp_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     this->mInitialised = true;
 }

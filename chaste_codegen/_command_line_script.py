@@ -13,10 +13,13 @@ from chaste_codegen._script_utils import write_file
 
 def chaste_codegen():
     # Link names to classes for converting code
-    translators = OrderedDict([('Chaste', cg.NormalChasteModel), ('ChasteOpt', cg.OptChasteModel),
-                              ('CVODE', cg.CvodeChasteModel), ('BackwardsEuler', cg.BackwardEulerModel),
-                              ('CVODEWithDataClamp', cg.CvodeWithDataClampeModel),
-                              ('BackwardsEuler', cg.BackwardEulerModel), ('RushLarsen', cg.RushLarsenModel),
+    translators = OrderedDict([('Chaste', cg.NormalChasteModel),
+                               ('ChasteOpt', cg.OptChasteModel),
+                              ('CVODE', cg.CvodeChasteModel),
+                              ('BackwardsEuler', cg.BackwardEulerModel),
+                              ('CVODEWithDataClamp', cg.CvodeWithDataClampModel),
+                              ('BackwardsEuler', cg.BackwardEulerModel),
+                              ('RushLarsen', cg.RushLarsenModel),
                               ('RushLarsenOpt', cg.RushLarsenOptModel),
                               ('GeneralisedRushLarsen1', cg.GeneralisedRushLarsenFirstOrderModel),
                               ('GeneralisedRushLarsen1Opt', cg.GeneralisedRushLarsenFirstOrderModelOpt),

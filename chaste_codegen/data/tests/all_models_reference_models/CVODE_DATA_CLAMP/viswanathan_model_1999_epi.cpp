@@ -477,7 +477,7 @@
         else
         {const double var_membrane__V_orig_deriv = var_membrane__dVdt; // millivolt / second
             
-            // Special handling of data clamp current here (see #2708)
+            // Special handling of data clamp current here
             // (we want to save expense of calling the interpolation method if possible.)
             double var_chaste_interface__membrane_data_clamp_current = 0.0;
             if (mDataClampIsOn)

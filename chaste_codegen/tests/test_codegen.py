@@ -39,8 +39,8 @@ def test_CVODE_DATA_CLAMP(tmp_path, model):
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLCvodeDataClamp'
     LOGGER.info('Converting: CVODE with Data Clamp: ' + class_name + '\n')
     # Generate chaste code
-    chaste_model = cg.CvodeWithDataClampeModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
-                                               class_name=class_name)
+    chaste_model = cg.CvodeWithDataClampModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
+                                              class_name=class_name)
 
     chaste_model.generate_chaste_code()
     # Compare against reference

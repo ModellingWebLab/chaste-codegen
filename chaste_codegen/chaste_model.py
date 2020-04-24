@@ -142,7 +142,8 @@ class ChasteModel(object):
 
         self._units = self._add_units()
 
-        self._in_interface = []
+        # in_interface may have already been set by child class
+        self._in_interface = getattr(self, '_in_interface', [])
 
         self._time_variable = self._get_time_variable()
         self._state_vars = self._model.get_state_variables()
@@ -242,10 +243,6 @@ class ChasteModel(object):
                 initial_value = eqs[0].rhs
         return initial_value
 
-    def _is_constant(self, var):
-        """Returns whether the given var is defined as a constant or not"""
-        return self._get_initial_value(var) is not None
-
     def _state_var_key_order(self, var):
         """Returns a key to order state variables in the same way as pycml does"""
         if isinstance(var, sp.Derivative):
@@ -292,7 +289,7 @@ class ChasteModel(object):
     def _annotate_if_not_statevar(self, var):
         """ If it is not a state var, annotates var as modifiable parameter or derived quantity as appropriate"""
         if var not in self._state_vars:
-            if self._is_constant(var):
+            if self._model.is_constant(var):
                 self._model.rdf.add((var.rdf_identity, create_rdf_node((self._PYCMLMETA, 'modifiable-parameter')),
                                      create_rdf_node('yes')))
             else:  # not constant

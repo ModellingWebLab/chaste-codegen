@@ -425,15 +425,15 @@
         {const double var_membrane__Cm = 5.0000000000000002e-5; // nanoF
             const double var_membrane__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
             const double var_membrane__i_Stim = 1000.0000000000001 * var_membrane__Cm * var_membrane__i_Stim_converter / HeartConfig::Instance()->GetCapacitance(); // picoA
-            const double var_membrane__V_orig_deriv = -1.0 * (var_Ca_independent_transient_outward_K_current__i_sus + var_Ca_independent_transient_outward_K_current__i_to + var_L_type_Ca_channel__i_Ca_L + var_Na_Ca_ion_exchanger_current__i_NaCa + var_T_type_Ca_channel__i_Ca_T + var_background_currents__i_B_Ca + var_background_currents__i_B_Na + var_delayed_rectifier_K_current__i_Kr + var_delayed_rectifier_K_current__i_Ks + var_inward_rectifier__i_K1 + var_membrane__i_Stim + var_sarcolemmal_calcium_pump_current__i_CaP + var_sodium_current__i_Na + var_sodium_potassium_pump__i_p) / var_membrane__Cm; // millivolt / second
             
-            // Special handling of data clamp current here (see #2708)
+            // Special handling of data clamp current here
             // (we want to save expense of calling the interpolation method if possible.)
             double var_chaste_interface__membrane_data_clamp_current = 0.0;
             if (mDataClampIsOn)
             {
                 var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time_converted) + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 0); // uA_per_cm2
             }
+            const double var_membrane__V_orig_deriv = -1.0 * (var_Ca_independent_transient_outward_K_current__i_sus + var_Ca_independent_transient_outward_K_current__i_to + var_L_type_Ca_channel__i_Ca_L + var_Na_Ca_ion_exchanger_current__i_NaCa + var_T_type_Ca_channel__i_Ca_T + var_background_currents__i_B_Ca + var_background_currents__i_B_Na + var_delayed_rectifier_K_current__i_Kr + var_delayed_rectifier_K_current__i_Ks + var_inward_rectifier__i_K1 + var_membrane__i_Stim + var_chaste_interface__membrane_data_clamp_current + var_sarcolemmal_calcium_pump_current__i_CaP + var_sodium_current__i_Na + var_sodium_potassium_pump__i_p) / var_membrane__Cm; // millivolt / second
             d_dt_chaste_interface_var_membrane__V = 0.001 * var_membrane__V_orig_deriv; // millivolt / millisecond
             
         }

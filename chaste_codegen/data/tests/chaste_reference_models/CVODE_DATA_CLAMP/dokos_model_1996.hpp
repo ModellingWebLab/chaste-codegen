@@ -1,12 +1,12 @@
 #ifdef CHASTE_CVODE
-#ifndef DYNAMICSHANNON2004FROMCELLMLCVODEDATACLAMP_HPP_
-#define DYNAMICSHANNON2004FROMCELLMLCVODEDATACLAMP_HPP_
+#ifndef CELLDOKOS_MODEL_1996FROMCELLMLCVODEDATACLAMP_HPP_
+#define CELLDOKOS_MODEL_1996FROMCELLMLCVODEDATACLAMP_HPP_
 
 //! @file
 //!
 //! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
-//! Model: shannon_2004
+//! Model: dokos_model_1996
 //!
 //! Processed by chaste_codegen: https://github.com/ModellingWebLab/chaste-codegen
 //!     (translator: chaste_codegen)
@@ -16,18 +16,18 @@
 
 #include "ChasteSerialization.hpp"
 #include <boost/serialization/base_object.hpp>
-#include "AbstractDynamicallyLoadableEntity.hpp"
+
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractCvodeCellWithDataClamp.hpp"
 
-class DynamicShannon2004FromCellMLCvodeDataClamp : public AbstractCvodeCellWithDataClamp, public AbstractDynamicallyLoadableEntity
+class Celldokos_model_1996FromCellMLCvodeDataClamp : public AbstractCvodeCellWithDataClamp
 {
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & archive, const unsigned int version)
     {
         archive & boost::serialization::base_object<AbstractCvodeCellWithDataClamp >(*this);
-        archive & boost::serialization::base_object<AbstractDynamicallyLoadableEntity>(*this);
+        
     }
     // 
     // Settable parameters and readable variables
@@ -35,18 +35,17 @@ class DynamicShannon2004FromCellMLCvodeDataClamp : public AbstractCvodeCellWithD
     
 public:
 
-    boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    DynamicShannon2004FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~DynamicShannon2004FromCellMLCvodeDataClamp();
+    Celldokos_model_1996FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Celldokos_model_1996FromCellMLCvodeDataClamp();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
-    void EvaluateYDerivatives(double var_chaste_interface__environment__time, const N_Vector rY, N_Vector rDY);
-    N_Vector ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY);
+    void EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const N_Vector rY, N_Vector rDY);
+    N_Vector ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const N_Vector & rY);
 };
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(DynamicShannon2004FromCellMLCvodeDataClamp)
+CHASTE_CLASS_EXPORT(Celldokos_model_1996FromCellMLCvodeDataClamp)
 
 namespace boost
 {
@@ -54,7 +53,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const DynamicShannon2004FromCellMLCvodeDataClamp * t, const unsigned int fileVersion)
+            Archive & ar, const Celldokos_model_1996FromCellMLCvodeDataClamp * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -64,18 +63,18 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, DynamicShannon2004FromCellMLCvodeDataClamp * t, const unsigned int fileVersion)
+            Archive & ar, Celldokos_model_1996FromCellMLCvodeDataClamp * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)DynamicShannon2004FromCellMLCvodeDataClamp(p_solver, p_stimulus);
+            ::new(t)Celldokos_model_1996FromCellMLCvodeDataClamp(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // DYNAMICSHANNON2004FROMCELLMLCVODEDATACLAMP_HPP_
+#endif // CELLDOKOS_MODEL_1996FROMCELLMLCVODEDATACLAMP_HPP_
 #endif // CHASTE_CVODE

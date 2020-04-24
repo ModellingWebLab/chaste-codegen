@@ -13,6 +13,22 @@ LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 
 
+def test_script_help(capsys):
+    """Test help message"""
+    LOGGER.info('Testing help for command line script\n')
+    testargs = ["chaste_codegen", "-h"]
+    with mock.patch.object(sys, 'argv', testargs):
+        try:
+            chaste_codegen()
+        except SystemExit:
+            pass  # We expect this to print usage and exit
+        captured = capsys.readouterr()
+        # compare to expected
+        output = str(captured.out)
+        expected = open(os.path.join(cg.DATA_DIR, 'tests', 'console_script_help.txt'), 'r').read()
+        assert output == expected
+
+
 def test_script_version(capsys):
     """Test version number message"""
     LOGGER.info('Testing version for command line script\n')
@@ -343,7 +359,7 @@ def test_script_CVODE_DATA_CLAMP(capsys, tmp_path):
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'dynamic_Shannon2004.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', model_file, '-t', 'CVODE', '-o', outfile, '--dynamically-loadable',
+    testargs = ['chaste_codegen', model_file, '-t', 'CVODEWithDataClamp', '-o', outfile, '--dynamically-loadable',
                 '-c', 'DynamicShannon2004FromCellMLCvodeDataClamp']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
