@@ -54,7 +54,7 @@ class CvodeWithDataClampModel(CvodeChasteModel):
                 return found_eq
 
         derivative_equations = super()._get_derivative_equations()
-        
+
         # piggy-backs on the analysis that finds ionic currents, in order to add in data clamp currents
         # Find dv/dt
         current_index = None
