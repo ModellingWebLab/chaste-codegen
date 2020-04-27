@@ -1,4 +1,6 @@
 #include "ChasteSerialization.hpp"
 #include <boost/serialization/base_object.hpp>
+{% if use_modifiers %}#include "AbstractCardiacCellWithModifiers.hpp"
+#include "AbstractModifier.hpp"{%- endif %}
 {% if dynamically_loadable %}#include "AbstractDynamicallyLoadableEntity.hpp"{%- endif %}
 #include "AbstractStimulusFunction.hpp"

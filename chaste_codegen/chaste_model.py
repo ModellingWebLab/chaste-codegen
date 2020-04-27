@@ -135,7 +135,9 @@ class ChasteModel(object):
         self._cpp_template = ''
 
         self._is_self_excitatory = False
-        self.expose_annotated_variables = kwargs.get('expose_annotated_variables', False)
+        self.use_modifiers = kwargs.get('use_modifiers', False)
+        # expose_annotated_variables needs to be one if use_modifiers is used
+        self.expose_annotated_variables = kwargs.get('expose_annotated_variables', False) or self.use_modifiers
 
         # Store parameters for future reference
         self._model = model
@@ -193,6 +195,7 @@ class ChasteModel(object):
              'class_name': kwargs.get('class_name', 'ModelFromCellMl'),
              'header_ext': kwargs.get('header_ext', '.hpp'),
              'dynamically_loadable': kwargs.get('dynamically_loadable', False),
+             'use_modifiers': self.use_modifiers,
              'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
              'use_get_intracellular_calcium_concentration':
                  self._cytosolic_calcium_concentration_var in self._state_vars,

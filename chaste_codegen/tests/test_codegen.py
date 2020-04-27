@@ -14,6 +14,25 @@ LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 
 
+def test_CVODE_DATA_CLAMP_modifiers  (tmp_path):
+    tmp_path = str(tmp_path)
+    LOGGER.info('Converting: cvode with data clamp and modifiers Shannon2004\n')
+    model_file = \
+        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'Shannon2004.cellml')
+    chaste_model = cellmlmanip.load_model(model_file)
+    chaste_model = cg.GeneralisedRushLarsenSecondOrderModel(chaste_model, 'Shannon2004_with_modifiers',
+                                                            class_name='CellShannon2004FromCellMLCvodeDataClamp',
+                                                            use_modifiers=True)
+    chaste_model.generate_chaste_code()
+    expected_hpp_path = \
+        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'CVODEWithDataClamp', 'Shannon2004_with_modifiers.hpp')
+    expected_cpp_path = \
+        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'CVODEWithDataClamp', 'Shannon2004_with_modifiers.cpp')
+    # Compare against reference
+    test_utils.compare_model_against_reference('CVODEWithDataClamp', chaste_model, tmp_path, expected_hpp_path,
+                                               expected_cpp_path)
+
+
 def get_models(ref_folder='chaste_reference_models', type='Normal'):
     """ Load all models if they haven't been loaded yet"""
     return test_utils.load_chaste_models(model_types=[type], reference_folder=ref_folder)
