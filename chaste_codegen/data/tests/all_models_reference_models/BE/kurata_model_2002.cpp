@@ -23,6 +23,7 @@
 #include "CardiacNewtonSolver.hpp"
 
 
+
     Cellkurata_model_2002FromCellMLBackwardEuler::Cellkurata_model_2002FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<13>(
                 27,

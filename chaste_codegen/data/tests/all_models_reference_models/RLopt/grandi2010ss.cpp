@@ -38,7 +38,6 @@
         return p_cellml_stim;
     }
 
-
     double Cellgrandi2010ssFromCellMLRushLarsen::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[37];

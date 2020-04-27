@@ -39,6 +39,7 @@
         return p_cellml_stim;
     }
 
+
     Cellcourtemanche_ramirez_nattel_model_1998FromCellMLGRL2::Cellcourtemanche_ramirez_nattel_model_1998FromCellMLGRL2(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractGeneralizedRushLarsenCardiacCell(
            21,

@@ -38,7 +38,6 @@
         return p_cellml_stim;
     }
 
-
     double Cellten_tusscher_model_2006_epiFromCellMLRushLarsen::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];

@@ -38,7 +38,6 @@
         return p_cellml_stim;
     }
 
-
     double Cellviswanathan_model_1999_epiFromCellMLGRL1::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];

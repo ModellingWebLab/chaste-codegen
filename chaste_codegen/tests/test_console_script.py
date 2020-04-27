@@ -348,3 +348,24 @@ def test_script_GRL2Opt(capsys, tmp_path):
                                    os.path.join(tmp_path, 'viswanathan_model_1999_epi.hpp'))
     compare_file_against_reference(os.path.join(reference, 'viswanathan_model_1999_epi.cpp'),
                                    os.path.join(tmp_path, 'viswanathan_model_1999_epi.cpp'))
+
+
+def test_script_CVODE_DATA_CLAMP(capsys, tmp_path):
+    """Convert a CVODE with Data Clamp model type"""
+    LOGGER.info('Testing model CVODE with data clamp ,  for command line script\n')
+    tmp_path = str(tmp_path)
+    model_name = 'Shannon2004'
+    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    outfile = os.path.join(tmp_path, 'dynamic_Shannon2004.cpp')
+    # Call commandline script
+    testargs = ['chaste_codegen', model_file, '-t', 'CVODEWithDataClamp', '-o', outfile, '--dynamically-loadable',
+                '-c', 'DynamicShannon2004FromCellMLCvodeDataClamp']
+    with mock.patch.object(sys, 'argv', testargs):
+        chaste_codegen()
+    # Check output
+    reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'CVODE_DATA_CLAMP')
+    compare_file_against_reference(os.path.join(reference, 'dynamic_Shannon2004.hpp'),
+                                   os.path.join(tmp_path, 'dynamic_Shannon2004.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'dynamic_Shannon2004.cpp'),
+                                   os.path.join(tmp_path, 'dynamic_Shannon2004.cpp'))

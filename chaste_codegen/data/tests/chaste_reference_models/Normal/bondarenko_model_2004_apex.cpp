@@ -38,6 +38,7 @@
         return p_cellml_stim;
     }
 
+
     Cellbondarenko_model_2004_apexFromCellML::Cellbondarenko_model_2004_apexFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,

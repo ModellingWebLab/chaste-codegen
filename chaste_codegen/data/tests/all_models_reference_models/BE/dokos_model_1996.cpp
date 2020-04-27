@@ -23,7 +23,6 @@
 #include "CardiacNewtonSolver.hpp"
 
 
-
     double Celldokos_model_1996FromCellMLBackwardEuler::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];

@@ -22,7 +22,6 @@
 #include "MathsCustomFunctions.hpp"
 
 
-
     double Cellstewart_zhang_model_2008_ssFromCellML::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];

@@ -38,6 +38,7 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
+
    
     Cellfink_noble_giles_model_2008FromCellMLCvode::Cellfink_noble_giles_model_2008FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(

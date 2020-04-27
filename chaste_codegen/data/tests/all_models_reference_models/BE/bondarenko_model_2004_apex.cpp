@@ -39,6 +39,7 @@
         return p_cellml_stim;
     }
 
+
     Cellbondarenko_model_2004_apexFromCellMLBackwardEuler::Cellbondarenko_model_2004_apexFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<32>(
                 41,

@@ -39,6 +39,7 @@
         return p_cellml_stim;
     }
 
+
     Cellaslanidi_model_2009FromCellML::Cellaslanidi_model_2009FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,

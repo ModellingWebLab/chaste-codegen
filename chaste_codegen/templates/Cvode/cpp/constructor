@@ -1,6 +1,6 @@
    
     {{class_name}}::{{class_name}}(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
-        : AbstractCvodeCell(
+        : {{base_class}}(
                 pOdeSolver,
                 {{state_vars|length}},
                 {{membrane_voltage_index}},

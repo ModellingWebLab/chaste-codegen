@@ -38,6 +38,7 @@
         return p_cellml_stim;
     }
 
+
     Cellfink_noble_giles_model_2008FromCellML::Cellfink_noble_giles_model_2008FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
