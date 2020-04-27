@@ -3,7 +3,7 @@
 {% include "Shared/cpp/includes" %}
 {% include "Shared/cpp/UseCellMLDefaultStimulus" %}
 {% include "Cvode/cpp/GetIntracellularCalciumConcentration" %}
-{%- include "cvode_with_data_clamp/cpp/constructor" %}
+{% with %}{% set base_class = "AbstractCvodeCellWithDataClamp" %}{%- include "Cvode/cpp/constructor" %}{% endwith %}
 {% include "Shared/cpp/destructor" %}
 {% include "Cvode/cpp/VerifyStateVariables" %}
 {% include "Cvode/cpp/GetIIonic" %}
