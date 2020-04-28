@@ -12,5 +12,8 @@ class {{class_name}} : public {{base_class}}{%- if dynamically_loadable %}, publ
     //
     // Settable parameters and readable variables
     //
+    {% for mod in modifiers %}
+    boost::shared_ptr<AbstractModifier> {{mod.modifier}};
+    {%- endfor %}
 
 public:

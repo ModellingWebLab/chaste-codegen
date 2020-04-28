@@ -14,7 +14,7 @@ LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 
 
-def test_CVODE_DATA_CLAMP_modifiers  (tmp_path):
+def test_CVODE_DATA_CLAMP_modifiers(tmp_path):
     tmp_path = str(tmp_path)
     LOGGER.info('Converting: cvode with data clamp and modifiers Shannon2004\n')
     model_file = \
@@ -24,10 +24,10 @@ def test_CVODE_DATA_CLAMP_modifiers  (tmp_path):
                                                             class_name='CellShannon2004FromCellMLCvodeDataClamp',
                                                             use_modifiers=True)
     chaste_model.generate_chaste_code()
-    expected_hpp_path = \
-        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'CVODEWithDataClamp', 'Shannon2004_with_modifiers.hpp')
-    expected_cpp_path = \
-        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'CVODEWithDataClamp', 'Shannon2004_with_modifiers.cpp')
+    expected_hpp_path = os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'CVODEWithDataClamp',
+                                     'Shannon2004_with_modifiers.hpp')
+    expected_cpp_path = os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'CVODEWithDataClamp',
+                                     'Shannon2004_with_modifiers.cpp')
     # Compare against reference
     test_utils.compare_model_against_reference('CVODEWithDataClamp', chaste_model, tmp_path, expected_hpp_path,
                                                expected_cpp_path)

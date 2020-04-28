@@ -161,6 +161,7 @@ class ChasteModel(object):
 
         self._in_interface.extend(self._state_vars)
 
+        self._modifiers = self._get_modifiers()
         self._modifiable_parameters = self._get_modifiable_parameters()
         self._in_interface.append(self._time_variable)
 
@@ -195,7 +196,7 @@ class ChasteModel(object):
              'class_name': kwargs.get('class_name', 'ModelFromCellMl'),
              'header_ext': kwargs.get('header_ext', '.hpp'),
              'dynamically_loadable': kwargs.get('dynamically_loadable', False),
-             'use_modifiers': self.use_modifiers,
+             'modifiers': self._format_modifiers(),
              'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
              'use_get_intracellular_calcium_concentration':
                  self._cytosolic_calcium_concentration_var in self._state_vars,
@@ -324,8 +325,19 @@ class ChasteModel(object):
             self._logger.info(warning)
             return cytosolic_calcium_concentration
 
+    def _get_modifiers(self):
+        """ Get the variables that can be used as modifiers, if us_modifiers is switched on.
+
+        These are all variables (including stat vars) except the stimulus current and time (the free variable)"""
+        if not self.use_modifiers:
+            return []
+        modifiers = [m for m in self._model.variables() if self._model.has_ontology_annotation(m, self._OXMETA)
+                     and not self._model.get_ontology_terms_by_variable(m, self._OXMETA)[-1].
+                     startswith('membrane_stimulus_current') and not m == self._time_variable]
+        return sorted(modifiers, key=lambda m: self._model.get_display_name(m, self._OXMETA))
+
     def _get_modifiable_parameters_annotated(self):
-        """ Get the variables annotated in the model as modifiable parametery"""
+        """ Get the variables annotated in the model as modifiable parameter"""
         return self._model.get_variables_by_rdf((self._PYCMLMETA, 'modifiable-parameter'), 'yes')
 
     def _get_modifiable_parameters_exposed(self):
@@ -721,10 +733,21 @@ class ChasteModel(object):
         # Printer for printing variable in comments e.g. for ode system information
         self._name_printer = cg.ChastePrinter(lambda variable: get_variable_name(variable))
 
-    def _print_modifiable_parameters(self, variable):
+    def _print_modifiable_parameters(self, lhs, rhs):
         """ Print modifiable parameters in the correct format for the model type"""
-        return 'mParameters[' + str(self._modifiable_parameters.index(variable)) + ']'
+        if lhs in self._modifiers:
+            return self._format_modifier(lhs) + '->Calc(' + self._printer.doprint(rhs) + ')'
+        return rhs
 
+    def _format_modifier(self, var):
+        return 'mp_' + self._name_printer.doprint(var) + '_modifier'
+
+    def _format_modifiers(self):
+        """ Format the modifiers for printing to chaste code"""
+        return [{'name': self._name_printer.doprint(param),
+                 'modifier': self._format_modifier(param),
+                for param in self._modifiers]
+    
     def _format_modifiable_parameters(self):
         """ Format the modifiable parameter for printing to chaste code"""
         return [{'units': self._model.units.format(self._model.units.evaluate_units(param)),
