@@ -24,16 +24,19 @@
     boost::shared_ptr<RegularStimulus> Cellaslanidi_model_2009FromCellML::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
+        const double var_chaste_interface__membrane__stim_amplitude = -0.02 * HeartConfig::Instance()->GetCapacitance() / mParameters[0]; // uA_per_cm2
+        const double var_chaste_interface__membrane__stim_duration = 0.20000000000000001; // millisecond
+        const double var_chaste_interface__membrane__stim_period = 500.0; // millisecond
+        const double var_chaste_interface__membrane__stim_start = 10.0; // millisecond
         boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
-                -fabs(mParameters[1]),
-                mParameters[2],
-                mParameters[4],
-                mParameters[3]
+                -fabs(var_chaste_interface__membrane__stim_amplitude),
+                var_chaste_interface__membrane__stim_duration,
+                var_chaste_interface__membrane__stim_period,
+                var_chaste_interface__membrane__stim_start
                 ));
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-
 
     Cellaslanidi_model_2009FromCellML::Cellaslanidi_model_2009FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
@@ -51,10 +54,6 @@
         this->mHasDefaultStimulusFromCellML = true;
         
         this->mParameters[0] = 5.0000000000000002e-5; // (var_membrane__Cm) [nanoF]
-        this->mParameters[1] = -20.0; // (var_membrane__stim_amplitude) [uA_per_cm2]
-        this->mParameters[2] = 0.00020000000000000001; // (var_membrane__stim_duration) [millisecond]
-        this->mParameters[3] = 0.01; // (var_membrane__stim_start) [millisecond]
-        this->mParameters[4] = 0.5; // (var_membrane__stim_period) [millisecond]
     }
 
     Cellaslanidi_model_2009FromCellML::~Cellaslanidi_model_2009FromCellML()
@@ -613,22 +612,6 @@ void OdeSystemInformation<Cellaslanidi_model_2009FromCellML>::Initialise(void)
     // mParameters[0]:
     this->mParameterNames.push_back("membrane_capacitance");
     this->mParameterUnits.push_back("nanoF");
-
-    // mParameters[1]:
-    this->mParameterNames.push_back("membrane_stimulus_current_amplitude");
-    this->mParameterUnits.push_back("uA_per_cm2");
-
-    // mParameters[2]:
-    this->mParameterNames.push_back("membrane_stimulus_current_duration");
-    this->mParameterUnits.push_back("millisecond");
-
-    // mParameters[3]:
-    this->mParameterNames.push_back("membrane_stimulus_current_offset");
-    this->mParameterUnits.push_back("millisecond");
-
-    // mParameters[4]:
-    this->mParameterNames.push_back("membrane_stimulus_current_period");
-    this->mParameterUnits.push_back("millisecond");
 
     // Derived Quantity index [0]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
