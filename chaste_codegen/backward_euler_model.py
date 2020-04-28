@@ -86,7 +86,7 @@ class BackwardEulerModel(ChasteModel):
 
         # sort the linear derivatives
         linear_derivs = sorted([eq for eq in linear_derivs_eqs if isinstance(eq.lhs, sp.Derivative)],
-                               key=lambda d: self._get_var_display_name(d.lhs.args[0]))
+                               key=lambda d: self._model.get_display_name(d.lhs.args[0], self._OXMETA))
         formatted_expr = [print_rearrange_expr(d.rhs, d.lhs.args[0]) for d in linear_derivs]
 
         # remove eqs for which the lhs doesn't appear in other equations (e.g. derivatives)

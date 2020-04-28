@@ -347,9 +347,10 @@ class ChasteModel(object):
             # Combined and sorted in display name order
             return \
                 sorted(set(self._get_modifiable_parameters_annotated() + self._get_modifiable_parameters_exposed()),
-                       key=lambda v: self._get_var_display_name(v))
+                       key=lambda v: self._model.get_display_name(v, self._OXMETA))
         else:
-            return sorted(self._get_modifiable_parameters_annotated(), key=lambda v: self._get_var_display_name(v))
+            return sorted(self._get_modifiable_parameters_annotated(),
+                          key=lambda v: self._model.get_display_name(v, self._OXMETA))
 
     def _get_membrane_stimulus_current(self):
         """ Find the membrane_stimulus_current variable if it exists"""
@@ -406,7 +407,7 @@ class ChasteModel(object):
         stim_eq = self.get_equations_for(stim_param, filter_modifiable_parameters_lhs=False)
         return_stim_eqs = []
         for eq in stim_eq:
-            key = self._get_var_display_name(eq.lhs)
+            key = self._model.get_display_name(eq.lhs, self._OXMETA)
             factor = 1.0
             if key in self._STIM_UNITS:
                 current_units = self._model.units.evaluate_units(eq.lhs)
@@ -686,7 +687,7 @@ class ChasteModel(object):
             # Combined and sorted in display name order
             return \
                 sorted(set(self._get_derived_quant_annotated() + self._get_derived_quant_exposed()),
-                       key=lambda v: self._get_var_display_name(v))
+                       key=lambda v: self._model.get_display_name(v, self._OXMETA))
         else:
             return self._get_derived_quant_annotated()  # These are already sorted
 
@@ -727,7 +728,8 @@ class ChasteModel(object):
     def _format_modifiable_parameters(self):
         """ Format the modifiable parameter for printing to chaste code"""
         return [{'units': self._model.units.format(self._model.units.evaluate_units(param)),
-                 'comment_name': self._name_printer.doprint(param), 'name': self._get_var_display_name(param),
+                 'comment_name': self._name_printer.doprint(param),
+                 'name': self._model.get_display_name(param, self._OXMETA),
                  'initial_value': self._printer.doprint(self._get_initial_value(param))}
                 for param in self._modifiable_parameters]
 
@@ -770,7 +772,7 @@ class ChasteModel(object):
 
         formatted_state_vars = \
             [{'var': self._printer.doprint(var),
-              'annotated_var_name': self._get_var_display_name(var),
+              'annotated_var_name': self._model.get_display_name(var, self._OXMETA),
               'initial_value': str(self._get_initial_value(var)),
               'units': self._model.units.format(self._model.units.evaluate_units(var)),
               'in_ionic': var in ionic_var_variables,
@@ -797,7 +799,7 @@ class ChasteModel(object):
                           'lhs_modifiable': eq.lhs in self._modifiable_parameters}
                          for eq in self._stimulus_equations]}
         for param in self._stimulus_params:
-            default_stim[self._get_var_display_name(param)] = self._printer.doprint(param)
+            default_stim[self._model.get_display_name(param, self._OXMETA)] = self._printer.doprint(param)
 
         return default_stim
 
@@ -827,14 +829,14 @@ class ChasteModel(object):
 
     def _format_free_variable(self):
         """ Format free variable for chaste output"""
-        return {'name': self._get_var_display_name(self._time_variable),
+        return {'name': self._model.get_display_name(self._time_variable, self._OXMETA),
                 'units': self._model.units.format(self._model.units.evaluate_units(self._time_variable)),
                 'system_name': self._model.name,
                 'var_name': self._printer.doprint(self._time_variable)}
 
     def _format_system_info(self):
         """ Format general ode system info for chaste output"""
-        return [{'name': self._get_var_display_name(var),
+        return [{'name': self._model.get_display_name(var, self._OXMETA),
                  'initial_value': str(self._get_initial_value(var)),
                  'units': self._model.units.format(self._model.units.evaluate_units(var))}
                 for var in self._state_vars]
@@ -853,7 +855,8 @@ class ChasteModel(object):
 
     def _format_derived_quant(self):
         return [{'units': self._model.units.format(self._model.units.evaluate_units(quant)),
-                 'var': self._printer.doprint(quant), 'name': self._get_var_display_name(quant)}
+                 'var': self._printer.doprint(quant),
+                 'name': self._model.get_display_name(quant, self._OXMETA)}
                 for quant in self._derived_quant]
 
     def _format_derived_quant_eqs(self):
