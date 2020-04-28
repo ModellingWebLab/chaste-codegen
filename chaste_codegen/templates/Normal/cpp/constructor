@@ -12,6 +12,5 @@
 
         // We have a default stimulus specified in the CellML file metadata
         this->mHasDefaultStimulusFromCellML = true;{%- endif %}
-        {% for param in modifiable_parameters %}
-        this->mParameters[{{loop.index0}}] = {{param["initial_value"]}}; // ({{param["comment_name"]}}) [{{param["units"]}}]{%- endfor %}
+{% include "Shared/cpp/parameters" %}
     }
