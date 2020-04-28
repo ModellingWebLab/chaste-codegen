@@ -15,6 +15,5 @@
         this->mHasDefaultStimulusFromCellML = true;{%- endif %}{%- if jacobian_equations|length > 0 %}
         mUseAnalyticJacobian = true;
         mHasAnalyticJacobian = true;{%- endif %}
-        {% for param in modifiable_parameters %}
-        NV_Ith_S(this->mParameters, {{loop.index0}}) = {{param["initial_value"]}}; // ({{param["comment_name"]}}) [{{param["units"]}}]{%- endfor %}
+{% with %}{% set is_cvode = True %}{% include "Shared/cpp/parameters" %}{% endwith %}
     }
