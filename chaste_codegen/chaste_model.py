@@ -328,7 +328,8 @@ class ChasteModel(object):
     def _get_modifiers(self):
         """ Get the variables that can be used as modifiers, if us_modifiers is switched on.
 
-        These are all variables (including stat vars) except the stimulus current and time (the free variable)"""
+        These are all variables with annotation (including stat vars)
+        except the stimulus current and time (the free variable)"""
         if not self.use_modifiers:
             return []
         modifiers = [m for m in self._model.variables() if self._model.has_ontology_annotation(m, self._OXMETA)
@@ -733,19 +734,23 @@ class ChasteModel(object):
         # Printer for printing variable in comments e.g. for ode system information
         self._name_printer = cg.ChastePrinter(lambda variable: get_variable_name(variable))
 
-    def _print_modifiable_parameters(self, lhs, rhs):
+    def _print_rhs_with_modifiers(self, eq):
         """ Print modifiable parameters in the correct format for the model type"""
-        if lhs in self._modifiers:
-            return self._format_modifier(lhs) + '->Calc(' + self._printer.doprint(rhs) + ')'
-        return rhs
+        if eq.lhs in self._modifiers:
+            return self._format_modifier(eq.lhs) + '->Calc(' + self._printer.doprint(eq.rhs) + ', '+ self._printer.doprint(self._time_variable) +')'
+        return self._printer.doprint(eq.rhs)
+
+    def _print_modifiable_parameters(self, variable):
+        """ Print modifiable parameters in the correct format for the model type"""
+        return 'mParameters[' + str(self._modifiable_parameters.index(variable)) + ']'
 
     def _format_modifier(self, var):
-        return 'mp_' + self._name_printer.doprint(var) + '_modifier'
+        return 'mp_' + self._model.get_display_name(var) + '_modifier'
 
     def _format_modifiers(self):
         """ Format the modifiers for printing to chaste code"""
-        return [{'name': self._name_printer.doprint(param),
-                 'modifier': self._format_modifier(param),
+        return [{'name': self._model.get_display_name(param),
+                 'modifier': self._format_modifier(param)}
                 for param in self._modifiers]
     
     def _format_modifiable_parameters(self):
@@ -817,7 +822,7 @@ class ChasteModel(object):
         """ Format eqs for stimulus_current for outputting to chaste code"""
         default_stim = {'equations':
                         [{'lhs': self._printer.doprint(eq.lhs),
-                          'rhs': self._printer.doprint(eq.rhs),
+                          'rhs': self._print_rhs_with_modifiers(eq),
                           'units': self._model.units.format(self._model.units.evaluate_units(eq.lhs)),
                           'lhs_modifiable': eq.lhs in self._modifiable_parameters}
                          for eq in self._stimulus_equations]}
@@ -829,7 +834,7 @@ class ChasteModel(object):
     def _format_extended_equations_for_ionic_vars(self):
         """ Format equations and dependant equations ionic derivatives"""
         # Format the state ionic variables
-        return [{'lhs': self._printer.doprint(eq.lhs), 'rhs': self._printer.doprint(eq.rhs),
+        return [{'lhs': self._printer.doprint(eq.lhs), 'rhs': self._print_rhs_with_modifiers(eq),
                  'units': self._model.units.format(self._model.units.evaluate_units(eq.lhs))}
                 for eq in self._extended_equations_for_ionic_vars]
 
@@ -842,7 +847,7 @@ class ChasteModel(object):
         """Format derivative equations for chaste output"""
         # exclude ionic currents
         return [{'lhs': self._printer.doprint(eq.lhs),
-                 'rhs': self._printer.doprint(eq.rhs),
+                 'rhs': self._print_rhs_with_modifiers(eq),
                  'sympy_lhs': eq.lhs,
                  'units': self._model.units.format(self._model.units.evaluate_units(eq.lhs)),
                  'in_eqs_excl_voltage': eq in self._derivative_eqs_excl_voltage,
@@ -885,7 +890,7 @@ class ChasteModel(object):
     def _format_derived_quant_eqs(self):
         """ Format equations for derived quantities based on current settings"""
         return [{'lhs': self._printer.doprint(eq.lhs),
-                 'rhs': self._printer.doprint(eq.rhs),
+                 'rhs': self._print_rhs_with_modifiers(eq),
                  'sympy_lhs': eq.lhs,
                  'units': self._model.units.format(str(self._model.units.evaluate_units(eq.lhs)))}
                 for eq in self._derived_quant_eqs]
