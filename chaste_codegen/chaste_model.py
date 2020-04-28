@@ -346,7 +346,7 @@ class ChasteModel(object):
             (irrespective of any modifiable_parameters tags)"""
         return [q for q in self._model.variables()
                 if self._model.has_ontology_annotation(q, self._OXMETA)
-                and not self._model.get_ontology_terms_by_variable(q, self._OXMETA)[-1] == 'membrane_stimulus_current'
+                and not self._model.get_ontology_terms_by_variable(q, self._OXMETA)[-1].startswith('membrane_stimulus_current')
                 and q not in self._model.get_derived_quantities()
                 and q not in self._state_vars
                 and not q == self._time_variable]
