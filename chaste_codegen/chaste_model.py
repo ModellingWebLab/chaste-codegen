@@ -259,17 +259,6 @@ class ChasteModel(object):
         else:
             return self._MEMBRANE_VOLTAGE_INDEX + self._CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX + 1
 
-    def _get_var_display_name(self, var):
-        """Return a display name for the given variable.
-
-        Looks for OXMETA ontology annotation tage first, then cmeta:id if present, or the name attribute if not.
-        If there is an interface component, strip the name of it out of the display name.
-        """
-        display_name = var.cmeta_id if var.cmeta_id else var.name
-        if self._model.has_ontology_annotation(var, self._OXMETA):
-            display_name = self._model.get_ontology_terms_by_variable(var, self._OXMETA)[-1]
-        return display_name.replace('$', '__').replace('var_chaste_interface_', '', 1).replace('var_', '', 1)
-
     def _add_units(self):
         """ Add needed units to the model to allow converting time, voltage and calcium in specific units
             as well as units for converting membrane_stimulus_current."""
