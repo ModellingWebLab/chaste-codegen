@@ -729,7 +729,8 @@
         // Units: millimolar; Initial value: 0.0001031812
         double var_chaste_interface__Ca_buffer__Ca_jct = NV_Ith_S(rY,26);
         // Units: millimolar; Initial value: 0.0001737475
-        
+
+        // Mathematics
         const double var_ICaL__Fx_ICaL_SL = 0.10000000000000001; // dimensionless
         const double var_ICaL__Fx_ICaL_jct = 0.90000000000000002; // dimensionless
         const double var_ICaL__PK = 2.7000000000000001e-7; // litre_per_farad_millisecond
@@ -770,7 +771,6 @@
         const double var_ICaL_f_gate__tau_f = 1.0 / (0.02 + 0.019699999999999999 * exp(-0.23877882250000002 * pow((1 + 0.068965517241379309 * var_chaste_interface__cell__V), 2))); // millisecond
         const double var_IKr_Rr_gate__Rr = 1.0 / (1.0 + exp(1.4732142857142858 + 0.044642857142857144 * var_chaste_interface__cell__V)); // dimensionless
         const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
-        // Mathematics
         // Special handling of data clamp current here (see #2708)
         // (we want to save expense of calling the interpolation method if possible.)
         double var_chaste_interface__membrane_data_clamp_current = 0.0;

@@ -8,8 +8,8 @@
         {%- if state_var.in_derived_quant %}double {{ state_var.var }} = NV_Ith_S(rY,{{loop.index0}});
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}
-        {%- for eq in derived_quantity_equations %}{%- if eq.is_data_clamp_current %}
         // Mathematics
+        {%- for eq in derived_quantity_equations %}{%- if eq.is_data_clamp_current %}
         // Special handling of data clamp current here (see #2708)
         // (we want to save expense of calling the interpolation method if possible.)
         double {{ eq.lhs }} = 0.0;
