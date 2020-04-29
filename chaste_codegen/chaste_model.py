@@ -324,15 +324,14 @@ class ChasteModel(object):
         """ Get all modifiable parameters, either annotated as such or with other annotation.
 
         Stimulus currents are ignored and the result is sorted by display name"""
-        mp_tagged = self._model.get_variables_by_rdf((self._PYCMLMETA, 'modifiable-parameter'), 'yes')
+        tagged = self._model.get_variables_by_rdf((self._PYCMLMETA, 'modifiable-parameter'), 'yes')
         annotated = [q for q in self._model.variables()
                      if self._model.has_ontology_annotation(q, self._OXMETA)]
 
-        currents = [var for var in annotated
-                    if self._model.get_ontology_terms_by_variable(var, self._OXMETA)[-1]
+        currents = [var for var in annotated if self._model.get_ontology_terms_by_variable(var, self._OXMETA)[-1]
                     .startswith('membrane_stimulus_current')]
 
-        parameters = set(mp_tagged + annotated) -\
+        parameters = set(tagged + annotated) -\
             set(currents + self._model.get_derived_quantities() + self._state_vars + [self._time_variable])
         return sorted(parameters, key=lambda v: self._model.get_display_name(v, self._OXMETA))
 
@@ -655,11 +654,11 @@ class ChasteModel(object):
         """ Get all derived quantities
 
         Stimulus currents are ignored and the result is sorted by display name"""
-        dq_tagged = self._model.get_variables_by_rdf((self._PYCMLMETA, 'derived-quantity'), 'yes')
+        tagged = self._model.get_variables_by_rdf((self._PYCMLMETA, 'derived-quantity'), 'yes')
         annotated = [q for q in self._model.get_derived_quantities()
                      if self._model.has_ontology_annotation(q, self._OXMETA)]
 
-        return sorted(set(dq_tagged + annotated +
+        return sorted(set(tagged + annotated +
                           [self._membrane_stimulus_current] if self._membrane_stimulus_current is not None else []),
                       key=lambda v: self._model.get_display_name(v, self._OXMETA))
 
