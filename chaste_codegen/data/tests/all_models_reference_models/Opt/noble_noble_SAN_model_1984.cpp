@@ -21,7 +21,6 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-
     double Cellnoble_noble_SAN_model_1984FromCellML::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
@@ -38,6 +37,7 @@
         this->mpSystemInfo = OdeSystemInformation<Cellnoble_noble_SAN_model_1984FromCellML>::Instance();
         Init();
         
+        this->mParameters[0] = 0.0060000000000000001; // (var_membrane__C) [microF]
     }
 
     Cellnoble_noble_SAN_model_1984FromCellML::~Cellnoble_noble_SAN_model_1984FromCellML()
@@ -86,7 +86,7 @@
         const double var_sodium_potassium_pump__i_p = 50.0 * var_chaste_interface__extracellular_potassium_concentration__Kc * var_chaste_interface__intracellular_sodium_concentration__Nai / ((1.0 + var_chaste_interface__extracellular_potassium_concentration__Kc) * (40.0 + var_chaste_interface__intracellular_sodium_concentration__Nai)); // nanoA
         const double var_time_dependent_potassium_current__i_K = (0.14285714285714285 * var_chaste_interface__intracellular_potassium_concentration__Ki - 0.14285714285714285 * var_chaste_interface__extracellular_potassium_concentration__Kc * exp(-0.037433890822745473 * var_chaste_interface__membrane__V)) * var_chaste_interface__time_dependent_potassium_current_x_gate__x; // nanoA
         const double var_time_independent_potassium_current__i_K1 = 0.75 * (-var_hyperpolarising_activated_current__E_K + var_chaste_interface__membrane__V) * var_chaste_interface__extracellular_potassium_concentration__Kc / ((1.0 + exp(0.74867781645490938 + 0.074867781645490947 * var_chaste_interface__membrane__V - 0.074867781645490947 * var_hyperpolarising_activated_current__E_K)) * (10.0 + var_chaste_interface__extracellular_potassium_concentration__Kc)); // nanoA
-        const double var_chaste_interface__i_ionic = 166.66666666666666 * (0.001 * var_Na_Ca_exchanger__i_NaCa + 0.001 * var_calcium_background_current__i_Ca_b + 0.001 * var_fast_sodium_current__i_Na + 0.001 * var_hyperpolarising_activated_current__i_f + 0.001 * var_second_inward_current__i_si + 0.001 * var_sodium_background_current__i_Na_b + 0.001 * var_sodium_potassium_pump__i_p + 0.001 * var_time_dependent_potassium_current__i_K + 0.001 * var_time_independent_potassium_current__i_K1) * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
+        const double var_chaste_interface__i_ionic = (0.001 * var_Na_Ca_exchanger__i_NaCa + 0.001 * var_calcium_background_current__i_Ca_b + 0.001 * var_fast_sodium_current__i_Na + 0.001 * var_hyperpolarising_activated_current__i_f + 0.001 * var_second_inward_current__i_si + 0.001 * var_sodium_background_current__i_Na_b + 0.001 * var_sodium_potassium_pump__i_p + 0.001 * var_time_dependent_potassium_current__i_K + 0.001 * var_time_independent_potassium_current__i_K1) * HeartConfig::Instance()->GetCapacitance() / mParameters[0]; // uA_per_cm2
 
         const double i_ionic = var_chaste_interface__i_ionic;
         EXCEPT_IF_NOT(!std::isnan(i_ionic));
@@ -173,7 +173,7 @@
         }
         else
         {
-            d_dt_chaste_interface_var_membrane__V = -0.16666666666666666 * var_Na_Ca_exchanger__i_NaCa - 0.16666666666666666 * var_calcium_background_current__i_Ca_b - 0.16666666666666666 * var_fast_sodium_current__i_Na - 0.16666666666666666 * var_hyperpolarising_activated_current__i_fK - 0.16666666666666666 * var_hyperpolarising_activated_current__i_fNa - 0.16666666666666666 * var_second_inward_current__i_siCa - 0.16666666666666666 * var_second_inward_current__i_siK - 0.16666666666666666 * var_second_inward_current__i_siNa - 0.16666666666666666 * var_sodium_background_current__i_Na_b - 0.16666666666666666 * var_sodium_potassium_pump__i_p - 0.16666666666666666 * var_time_dependent_potassium_current__i_K - 0.16666666666666666 * var_time_independent_potassium_current__i_K1; // millivolt / millisecond
+            d_dt_chaste_interface_var_membrane__V = 0.001 * (-var_Na_Ca_exchanger__i_NaCa - var_calcium_background_current__i_Ca_b - var_fast_sodium_current__i_Na - var_hyperpolarising_activated_current__i_fK - var_hyperpolarising_activated_current__i_fNa - var_second_inward_current__i_siCa - var_second_inward_current__i_siK - var_second_inward_current__i_siNa - var_sodium_background_current__i_Na_b - var_sodium_potassium_pump__i_p - var_time_dependent_potassium_current__i_K - var_time_independent_potassium_current__i_K1) / mParameters[0]; // millivolt / millisecond
         }
         
         rDY[0] = d_dt_chaste_interface_var_membrane__V;
@@ -274,6 +274,10 @@ void OdeSystemInformation<Cellnoble_noble_SAN_model_1984FromCellML>::Initialise(
     this->mVariableNames.push_back("intracellular_potassium_concentration__Ki");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(140.0);
+
+    // mParameters[0]:
+    this->mParameterNames.push_back("membrane_capacitance");
+    this->mParameterUnits.push_back("microF");
 
     this->mInitialised = true;
 }

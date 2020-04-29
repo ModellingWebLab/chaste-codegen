@@ -28,11 +28,11 @@ class Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler : public AbstractBa
         archive & boost::serialization::base_object<AbstractBackwardEulerCardiacCell<7> >(*this);
         
     }
-    
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     double GetIntracellularCalciumConcentration();

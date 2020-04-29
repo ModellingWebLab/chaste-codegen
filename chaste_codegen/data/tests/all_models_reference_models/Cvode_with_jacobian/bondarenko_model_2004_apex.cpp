@@ -495,6 +495,20 @@
         NV_Ith_S(rDY,40) = d_dt_chaste_interface_var_rapid_delayed_rectifier_potassium_current__I_K;
     }
 
+    N_Vector Cellbondarenko_model_2004_apexFromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+        const double var_membrane__i_stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
+
+        N_Vector dqs = N_VNew_Serial(1);
+        NV_Ith_S(dqs, 0) = var_membrane__i_stim_converter;
+        return dqs;
+    }
+
     void Cellbondarenko_model_2004_apexFromCellMLCvode::EvaluateAnalyticJacobian(double var_chaste_interface__environment__time, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3)
     {
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
@@ -1288,6 +1302,10 @@ void OdeSystemInformation<Cellbondarenko_model_2004_apexFromCellMLCvode>::Initia
     this->mVariableNames.push_back("rapid_delayed_rectifier_potassium_current__I_K");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(3.19129e-05);
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     
     this->mAttributes["SuggestedForwardEulerTimestep"] = 0.0002;

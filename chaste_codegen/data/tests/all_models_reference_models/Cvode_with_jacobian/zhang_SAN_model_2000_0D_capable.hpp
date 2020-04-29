@@ -29,11 +29,11 @@ class Cellzhang_SAN_model_2000_0D_capableFromCellMLCvode : public AbstractCvodeC
         archive & boost::serialization::base_object<AbstractCvodeCell >(*this);
         
     }
-    
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     Cellzhang_SAN_model_2000_0D_capableFromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);

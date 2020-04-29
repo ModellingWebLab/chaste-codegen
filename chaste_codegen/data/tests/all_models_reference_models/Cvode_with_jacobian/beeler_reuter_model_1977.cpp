@@ -39,12 +39,12 @@
         return p_cellml_stim;
     }
 
-
     double Cellbeeler_reuter_model_1977FromCellMLCvode::GetIntracellularCalciumConcentration()
     {
         return NV_Ith_S(mStateVariables, 1);
     }
-       
+    
+   
     Cellbeeler_reuter_model_1977FromCellMLCvode::Cellbeeler_reuter_model_1977FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -196,6 +196,20 @@
         NV_Ith_S(rDY,5) = d_dt_chaste_interface_var_slow_inward_current_d_gate__d;
         NV_Ith_S(rDY,6) = d_dt_chaste_interface_var_slow_inward_current_f_gate__f;
         NV_Ith_S(rDY,7) = d_dt_chaste_interface_var_time_dependent_outward_current_x1_gate__x1;
+    }
+
+    N_Vector Cellbeeler_reuter_model_1977FromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+        const double var_stimulus_protocol__Istim_converter = -GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
+
+        N_Vector dqs = N_VNew_Serial(1);
+        NV_Ith_S(dqs, 0) = var_stimulus_protocol__Istim_converter;
+        return dqs;
     }
 
     void Cellbeeler_reuter_model_1977FromCellMLCvode::EvaluateAnalyticJacobian(double var_chaste_interface__environment__time, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3)
@@ -356,6 +370,10 @@ void OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLCvode>::Initiali
     this->mVariableNames.push_back("time_dependent_outward_current_x1_gate__x1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0001);
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     this->mInitialised = true;
 }

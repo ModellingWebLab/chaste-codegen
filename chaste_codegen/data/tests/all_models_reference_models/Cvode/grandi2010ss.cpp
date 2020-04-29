@@ -39,12 +39,12 @@
         return p_cellml_stim;
     }
 
-
     double Cellgrandi2010ssFromCellMLCvode::GetIntracellularCalciumConcentration()
     {
         return NV_Ith_S(mStateVariables, 37);
     }
-       
+    
+   
     Cellgrandi2010ssFromCellMLCvode::Cellgrandi2010ssFromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -60,6 +60,9 @@
         // We have a default stimulus specified in the CellML file metadata
         this->mHasDefaultStimulusFromCellML = true;
         
+        NV_Ith_S(this->mParameters, 0) = 1.0; // (var_cell__G_CaL_mult) [dimensionless]
+        NV_Ith_S(this->mParameters, 1) = 23.0; // (var_cell__GNa) [dimensionless]
+        NV_Ith_S(this->mParameters, 2) = 1.0; // (var_cell__gkr_mult) [dimensionless]
     }
 
     Cellgrandi2010ssFromCellMLCvode::~Cellgrandi2010ssFromCellMLCvode()
@@ -131,9 +134,7 @@
         const double var_cell__GCaB = 0.00055130000000000001; // dimensionless
         const double var_cell__GClB = 0.0089999999999999993; // dimensionless
         const double var_cell__GClCa = 0.0548125; // dimensionless
-        const double var_cell__GNa = 23.0; // dimensionless
         const double var_cell__GNaB = 0.00059699999999999998; // dimensionless
-        const double var_cell__G_CaL_mult = 1.0; // dimensionless
         const double var_cell__GtoFast = 0.1144; // dimensionless
         const double var_cell__GtoSlow = 0.015599999999999999; // dimensionless
         const double var_cell__IbarNCX = 4.5; // dimensionless
@@ -161,15 +162,14 @@
         const double var_cell__fcaCaMSL = 0.0; // dimensionless
         const double var_cell__fcaCaj = 0.0; // dimensionless
         const double var_cell__gkp = 0.002; // dimensionless
-        const double var_cell__gkr_mult = 1.0; // dimensionless
-        const double var_cell__gkr = 0.015061601901917734 * sqrt(var_cell__Ko) * var_cell__gkr_mult; // dimensionless
+        const double var_cell__gkr = 0.015061601901917734 * sqrt(var_cell__Ko) * NV_Ith_S(mParameters, 2); // dimensionless
         const double var_cell__gks_junc = 0.0035000000000000001; // dimensionless
         const double var_cell__gks_sl = 0.0035000000000000001; // dimensionless
         const double var_cell__ksat = 0.32000000000000001; // dimensionless
         const double var_cell__nu = 0.27000000000000002; // dimensionless
-        const double var_cell__pCa = 0.00027 * var_cell__G_CaL_mult; // dimensionless
-        const double var_cell__pK = 1.35e-7 * var_cell__G_CaL_mult; // dimensionless
-        const double var_cell__pNa = 7.4999999999999993e-9 * var_cell__G_CaL_mult; // dimensionless
+        const double var_cell__pCa = 0.00027 * NV_Ith_S(mParameters, 0); // dimensionless
+        const double var_cell__pK = 1.35e-7 * NV_Ith_S(mParameters, 0); // dimensionless
+        const double var_cell__pNa = 7.4999999999999993e-9 * NV_Ith_S(mParameters, 0); // dimensionless
         const double var_cell__pNaK = 0.018329999999999999; // dimensionless
         const double var_cell__I_pca_junc = pow(var_cell__Q10SLCaP, var_cell__Qpow) * pow(var_chaste_interface__cell__sCaj, 1.6000000000000001) * var_cell__Fjunc * var_cell__IbarSLCaP / (pow(var_cell__KmPCa, 1.6000000000000001) + pow(var_chaste_interface__cell__sCaj, 1.6000000000000001)); // dimensionless
         const double var_cell__Ka_junc = 1.0 / (1.0 + pow(var_cell__Kdact, 2) / pow(var_chaste_interface__cell__sCaj, 2)); // dimensionless
@@ -226,8 +226,8 @@
         const double var_cell__I_nak_junc = 1.0 * var_cell__Fjunc * var_cell__IbarNaK * var_cell__Ko * var_cell__fnak / ((1.0 + pow(var_cell__KmNaip, 4) / pow(var_chaste_interface__cell__sNaj, 4)) * (var_cell__KmKo + var_cell__Ko)); // dimensionless
         const double var_cell__I_nak_sl = 1.0 * var_cell__Fsl * var_cell__IbarNaK * var_cell__Ko * var_cell__fnak / ((1.0 + pow(var_cell__KmNaip, 4) / pow(var_chaste_interface__cell__sNasl, 4)) * (var_cell__KmKo + var_cell__Ko)); // dimensionless
         const double var_cell__I_nak = var_cell__I_nak_junc + var_cell__I_nak_sl; // dimensionless
-        const double var_cell__I_Na_junc = pow(var_chaste_interface__cell__sm, 3) * (-var_cell__ena_junc + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__GNa * var_chaste_interface__cell__sh * var_chaste_interface__cell__sj; // dimensionless
-        const double var_cell__I_Na_sl = pow(var_chaste_interface__cell__sm, 3) * (-var_cell__ena_sl + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__GNa * var_chaste_interface__cell__sh * var_chaste_interface__cell__sj; // dimensionless
+        const double var_cell__I_Na_junc = pow(var_chaste_interface__cell__sm, 3) * (-var_cell__ena_junc + var_chaste_interface__cell__sVm) * var_cell__Fjunc * NV_Ith_S(mParameters, 1) * var_chaste_interface__cell__sh * var_chaste_interface__cell__sj; // dimensionless
+        const double var_cell__I_Na_sl = pow(var_chaste_interface__cell__sm, 3) * (-var_cell__ena_sl + var_chaste_interface__cell__sVm) * var_cell__Fsl * NV_Ith_S(mParameters, 1) * var_chaste_interface__cell__sh * var_chaste_interface__cell__sj; // dimensionless
         const double var_cell__I_Na_tot_junc = 3.0 * var_cell__I_nak_junc + 3.0 * var_cell__I_ncx_junc + var_cell__I_CaNa_junc + var_cell__I_Na_junc + var_cell__I_nabk_junc; // dimensionless
         const double var_cell__I_Na_tot_sl = 3.0 * var_cell__I_nak_sl + 3.0 * var_cell__I_ncx_sl + var_cell__I_CaNa_sl + var_cell__I_Na_sl + var_cell__I_nabk_sl; // dimensionless
         const double var_cell__I_Na_tot = var_cell__I_Na_tot_junc + var_cell__I_Na_tot_sl; // dimensionless
@@ -350,9 +350,7 @@
         const double var_cell__Fsl = 1.0 - var_cell__Fjunc; // dimensionless
         const double var_cell__Fsl_CaL = 1.0 - var_cell__Fjunc_CaL; // dimensionless
         const double var_cell__GCaB = 0.00055130000000000001; // dimensionless
-        const double var_cell__GNa = 23.0; // dimensionless
         const double var_cell__GNaB = 0.00059699999999999998; // dimensionless
-        const double var_cell__G_CaL_mult = 1.0; // dimensionless
         const double var_cell__IbarNCX = 4.5; // dimensionless
         const double var_cell__IbarNaK = 1.8; // dimensionless
         const double var_cell__IbarSLCaP = 0.067299999999999999; // dimensionless
@@ -429,8 +427,8 @@
         const double var_cell__ks = 25.0; // dimensionless
         const double var_cell__ksat = 0.32000000000000001; // dimensionless
         const double var_cell__nu = 0.27000000000000002; // dimensionless
-        const double var_cell__pCa = 0.00027 * var_cell__G_CaL_mult; // dimensionless
-        const double var_cell__pNa = 7.4999999999999993e-9 * var_cell__G_CaL_mult; // dimensionless
+        const double var_cell__pCa = 0.00027 * NV_Ith_S(mParameters, 0); // dimensionless
+        const double var_cell__pNa = 7.4999999999999993e-9 * NV_Ith_S(mParameters, 0); // dimensionless
         const double var_cell__kCaSR = -(-var_cell__MinSR + var_cell__MaxSR) / (1.0 + pow((var_cell__ec50SR / var_chaste_interface__cell__sCa_sr), 2.5)) + var_cell__MaxSR; // dimensionless
         const double var_cell__kiSRCa = var_cell__kCaSR * var_cell__kiCa; // dimensionless
         const double var_cell__koSRCa = var_cell__koCa / var_cell__kCaSR; // dimensionless
@@ -508,8 +506,8 @@
         const double var_cell__fnak = 1.0 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_cell__FoRT * var_chaste_interface__cell__sVm) + 0.036499999999999998 * var_cell__sigma * exp(-var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__I_nak_junc = 1.0 * var_cell__Fjunc * var_cell__IbarNaK * var_cell__Ko * var_cell__fnak / ((1.0 + pow(var_cell__KmNaip, 4) / pow(var_chaste_interface__cell__sNaj, 4)) * (var_cell__KmKo + var_cell__Ko)); // dimensionless
         const double var_cell__I_nak_sl = 1.0 * var_cell__Fsl * var_cell__IbarNaK * var_cell__Ko * var_cell__fnak / ((1.0 + pow(var_cell__KmNaip, 4) / pow(var_chaste_interface__cell__sNasl, 4)) * (var_cell__KmKo + var_cell__Ko)); // dimensionless
-        const double var_cell__I_Na_junc = pow(var_chaste_interface__cell__sm, 3) * (-var_cell__ena_junc + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__GNa * var_chaste_interface__cell__sh * var_chaste_interface__cell__sj; // dimensionless
-        const double var_cell__I_Na_sl = pow(var_chaste_interface__cell__sm, 3) * (-var_cell__ena_sl + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__GNa * var_chaste_interface__cell__sh * var_chaste_interface__cell__sj; // dimensionless
+        const double var_cell__I_Na_junc = pow(var_chaste_interface__cell__sm, 3) * (-var_cell__ena_junc + var_chaste_interface__cell__sVm) * var_cell__Fjunc * NV_Ith_S(mParameters, 1) * var_chaste_interface__cell__sh * var_chaste_interface__cell__sj; // dimensionless
+        const double var_cell__I_Na_sl = pow(var_chaste_interface__cell__sm, 3) * (-var_cell__ena_sl + var_chaste_interface__cell__sVm) * var_cell__Fsl * NV_Ith_S(mParameters, 1) * var_chaste_interface__cell__sh * var_chaste_interface__cell__sj; // dimensionless
         const double var_cell__I_Na_tot_junc = 3.0 * var_cell__I_nak_junc + 3.0 * var_cell__I_ncx_junc + var_cell__I_CaNa_junc + var_cell__I_Na_junc + var_cell__I_nabk_junc; // dimensionless
         const double d_dt_chaste_interface_var_cell__sNaj = -d_dt_chaste_interface_var_cell__sNaBj + (-var_chaste_interface__cell__sNaj + var_chaste_interface__cell__sNasl) * var_cell__J_na_juncsl / var_cell__Vjunc - var_cell__Cmem * var_cell__I_Na_tot_junc / (var_cell__Frdy * var_cell__Vjunc); // 1 / ms
         const double var_cell__I_Na_tot_sl = 3.0 * var_cell__I_nak_sl + 3.0 * var_cell__I_ncx_sl + var_cell__I_CaNa_sl + var_cell__I_Na_sl + var_cell__I_nabk_sl; // dimensionless
@@ -556,11 +554,10 @@
             const double var_cell__KdClCa = 0.10000000000000001; // dimensionless
             const double var_cell__ecl = 1.0 * log(var_cell__Cli / var_cell__Clo) / var_cell__FoRT; // dimensionless
             const double var_cell__gkp = 0.002; // dimensionless
-            const double var_cell__gkr_mult = 1.0; // dimensionless
-            const double var_cell__gkr = 0.015061601901917734 * sqrt(var_cell__Ko) * var_cell__gkr_mult; // dimensionless
+            const double var_cell__gkr = 0.015061601901917734 * sqrt(var_cell__Ko) * NV_Ith_S(mParameters, 2); // dimensionless
             const double var_cell__gks_junc = 0.0035000000000000001; // dimensionless
             const double var_cell__gks_sl = 0.0035000000000000001; // dimensionless
-            const double var_cell__pK = 1.35e-7 * var_cell__G_CaL_mult; // dimensionless
+            const double var_cell__pK = 1.35e-7 * NV_Ith_S(mParameters, 0); // dimensionless
             const double var_cell__pNaK = 0.018329999999999999; // dimensionless
             const double var_cell__sKi = 120.0; // dimensionless
             const double var_cell__ek = 1.0 * log(var_cell__Ko / var_cell__sKi) / var_cell__FoRT; // dimensionless
@@ -636,6 +633,20 @@
         NV_Ith_S(rDY,35) = d_dt_chaste_interface_var_cell__sCaj;
         NV_Ith_S(rDY,36) = d_dt_chaste_interface_var_cell__sCasl;
         NV_Ith_S(rDY,37) = d_dt_chaste_interface_var_cell__sCai;
+    }
+
+    N_Vector Cellgrandi2010ssFromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__cell__time, const N_Vector & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+        const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__cell__time); // uA_per_cm2
+
+        N_Vector dqs = N_VNew_Serial(1);
+        NV_Ith_S(dqs, 0) = var_cell__i_Stim_converter;
+        return dqs;
     }
 
 template<>
@@ -834,6 +845,22 @@ void OdeSystemInformation<Cellgrandi2010ssFromCellMLCvode>::Initialise(void)
     this->mVariableNames.push_back("cytosolic_calcium_concentration");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(8.85230799863012e-05);
+
+    // mParameters[0]:
+    this->mParameterNames.push_back("membrane_L_type_calcium_current_conductance");
+    this->mParameterUnits.push_back("dimensionless");
+
+    // mParameters[1]:
+    this->mParameterNames.push_back("membrane_fast_sodium_current_conductance");
+    this->mParameterUnits.push_back("dimensionless");
+
+    // mParameters[2]:
+    this->mParameterNames.push_back("membrane_rapid_delayed_rectifier_potassium_current_conductance");
+    this->mParameterUnits.push_back("dimensionless");
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     this->mInitialised = true;
 }

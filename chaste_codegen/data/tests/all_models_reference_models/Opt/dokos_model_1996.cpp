@@ -21,7 +21,6 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-
     double Celldokos_model_1996FromCellML::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
@@ -38,6 +37,7 @@
         this->mpSystemInfo = OdeSystemInformation<Celldokos_model_1996FromCellML>::Instance();
         Init();
         
+        this->mParameters[0] = 3.1999999999999999e-5; // (var_membrane__C) [nanoF]
     }
 
     Celldokos_model_1996FromCellML::~Celldokos_model_1996FromCellML()
@@ -96,7 +96,7 @@
         const double var_sodium_calcium_exchange_current__k41 = exp(-0.0080763619450073352 * var_chaste_interface__membrane__E); // dimensionless
         const double var_sodium_calcium_exchange_current__k43 = var_chaste_interface__ion_concentrations__Nai / (26.440000000000001 + var_chaste_interface__ion_concentrations__Nai); // dimensionless
         const double var_membrane__i_tot = 0.00024000000000000001 * var_chaste_interface__membrane__E - 0.00024000000000000001 * var_reversal_potentials__E_Na + 4.0 * (((var_sodium_calcium_exchange_current__k12 + var_sodium_calcium_exchange_current__k14) * var_sodium_calcium_exchange_current__k32 * var_sodium_calcium_exchange_current__k43 + (var_sodium_calcium_exchange_current__k32 + var_sodium_calcium_exchange_current__k34) * var_sodium_calcium_exchange_current__k12 * var_sodium_calcium_exchange_current__k41) * var_sodium_calcium_exchange_current__k21 - ((var_sodium_calcium_exchange_current__k21 + var_sodium_calcium_exchange_current__k23) * var_sodium_calcium_exchange_current__k34 * var_sodium_calcium_exchange_current__k41 + (var_sodium_calcium_exchange_current__k41 + var_sodium_calcium_exchange_current__k43) * var_sodium_calcium_exchange_current__k21 * var_sodium_calcium_exchange_current__k32) * var_sodium_calcium_exchange_current__k12) / ((var_sodium_calcium_exchange_current__k12 + var_sodium_calcium_exchange_current__k14) * var_sodium_calcium_exchange_current__k23 * var_sodium_calcium_exchange_current__k34 + (var_sodium_calcium_exchange_current__k12 + var_sodium_calcium_exchange_current__k14) * var_sodium_calcium_exchange_current__k32 * var_sodium_calcium_exchange_current__k43 + (var_sodium_calcium_exchange_current__k21 + var_sodium_calcium_exchange_current__k23) * var_sodium_calcium_exchange_current__k14 * var_sodium_calcium_exchange_current__k43 + (var_sodium_calcium_exchange_current__k21 + var_sodium_calcium_exchange_current__k23) * var_sodium_calcium_exchange_current__k34 * var_sodium_calcium_exchange_current__k41 + (var_sodium_calcium_exchange_current__k32 + var_sodium_calcium_exchange_current__k34) * var_sodium_calcium_exchange_current__k12 * var_sodium_calcium_exchange_current__k41 + (var_sodium_calcium_exchange_current__k32 + var_sodium_calcium_exchange_current__k34) * var_sodium_calcium_exchange_current__k14 * var_sodium_calcium_exchange_current__k21 + (var_sodium_calcium_exchange_current__k41 + var_sodium_calcium_exchange_current__k43) * var_sodium_calcium_exchange_current__k12 * var_sodium_calcium_exchange_current__k23 + (var_sodium_calcium_exchange_current__k41 + var_sodium_calcium_exchange_current__k43) * var_sodium_calcium_exchange_current__k21 * var_sodium_calcium_exchange_current__k32) + 6.9999999999999994e-5 * pow(var_chaste_interface__ion_concentrations__Ko, 0.40999999999999998) * (-var_chaste_interface__ion_concentrations__Ko * exp(-0.037433890822745473 * var_chaste_interface__membrane__E) + var_chaste_interface__ion_concentrations__Ki) + 0.25 * pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * (-var_reversal_potentials__E_Na + var_chaste_interface__membrane__E) * var_chaste_interface__fast_sodium_current_h_gate__h + 0.00025999999999999998 * pow(var_chaste_interface__ion_concentrations__Ko, 0.58999999999999997) * (-var_chaste_interface__ion_concentrations__Ko * exp(-0.037433890822745473 * var_chaste_interface__membrane__E) + var_chaste_interface__ion_concentrations__Ki) * var_chaste_interface__delayed_rectifying_potassium_current_x_gate__x + 0.085000000000000006 * (75.0 - var_reversal_potentials__E_Ca + var_chaste_interface__membrane__E) * var_chaste_interface__T_type_calcium_current_d_gate__dT * var_chaste_interface__T_type_calcium_current_f_gate__fT + 9.0999999999999993e-6 * pow(var_chaste_interface__ion_concentrations__Ko, 0.58999999999999997) * (-var_chaste_interface__ion_concentrations__Nao * exp(-0.037433890822745473 * var_chaste_interface__membrane__E) + var_chaste_interface__ion_concentrations__Nai) * var_chaste_interface__delayed_rectifying_potassium_current_x_gate__x + 0.0080999999999999996 * pow(var_chaste_interface__ion_concentrations__Ko, 1.8300000000000001) * (-var_reversal_potentials__E_Na + var_chaste_interface__membrane__E) * var_chaste_interface__hyperpolarising_activated_current_y_gate__y / (71.36612580598495 + pow(var_chaste_interface__ion_concentrations__Ko, 1.8300000000000001)) + 0.40000000000000002 * (75.0 - var_reversal_potentials__E_Ca + var_chaste_interface__membrane__E) * var_chaste_interface__L_type_calcium_current_d_gate__dL * var_chaste_interface__L_type_calcium_current_f2_gate__fL2 * var_chaste_interface__L_type_calcium_current_f_gate__fL + 0.0135 * pow(var_chaste_interface__ion_concentrations__Ko, 1.8300000000000001) * (-26.713760659695652 * log(var_chaste_interface__ion_concentrations__Ko / var_chaste_interface__ion_concentrations__Ki) + var_chaste_interface__membrane__E) * var_chaste_interface__hyperpolarising_activated_current_y_gate__y / (71.36612580598495 + pow(var_chaste_interface__ion_concentrations__Ko, 1.8300000000000001)) + 0.22600000000000001 * (1.0 - 0.035938096628557313 * pow((-1 + 0.025000000000000001 * var_chaste_interface__membrane__E), 2)) * var_chaste_interface__ion_concentrations__Ko * var_chaste_interface__ion_concentrations__Nai / ((1.0 + var_chaste_interface__ion_concentrations__Ko) * (40.0 + var_chaste_interface__ion_concentrations__Nai)); // picoA
-        const double var_chaste_interface__i_ionic = 31.250000000000004 * HeartConfig::Instance()->GetCapacitance() * var_membrane__i_tot; // uA_per_cm2
+        const double var_chaste_interface__i_ionic = 0.001 * HeartConfig::Instance()->GetCapacitance() * var_membrane__i_tot / mParameters[0]; // uA_per_cm2
 
         const double i_ionic = var_chaste_interface__i_ionic;
         EXCEPT_IF_NOT(!std::isnan(i_ionic));
@@ -196,7 +196,7 @@
         }
         else
         {
-            d_dt_chaste_interface_var_membrane__E = -31.250000000000004 * var_L_type_calcium_current__i_CaL - 31.250000000000004 * var_T_type_calcium_current__i_CaT - 31.250000000000004 * var_background_potassium_current__i_bK - 31.250000000000004 * var_background_sodium_current__i_bNa - 31.250000000000004 * var_delayed_rectifying_potassium_current__i_KK - 31.250000000000004 * var_delayed_rectifying_potassium_current__i_KNa - 31.250000000000004 * var_fast_sodium_current__i_Na - 31.250000000000004 * var_hyperpolarising_activated_current__i_fK - 31.250000000000004 * var_hyperpolarising_activated_current__i_fNa - 31.250000000000004 * var_sodium_calcium_exchange_current__i_NaCa - 31.250000000000004 * var_sodium_potassium_pump__i_p; // millivolt / millisecond
+            d_dt_chaste_interface_var_membrane__E = -0.001 * (var_L_type_calcium_current__i_CaL + var_T_type_calcium_current__i_CaT + var_background_potassium_current__i_bK + var_background_sodium_current__i_bNa + var_delayed_rectifying_potassium_current__i_KK + var_delayed_rectifying_potassium_current__i_KNa + var_fast_sodium_current__i_Na + var_hyperpolarising_activated_current__i_fK + var_hyperpolarising_activated_current__i_fNa + var_sodium_calcium_exchange_current__i_NaCa + var_sodium_potassium_pump__i_p) / mParameters[0]; // millivolt / millisecond
         }
         
         rDY[0] = d_dt_chaste_interface_var_membrane__E;
@@ -315,6 +315,10 @@ void OdeSystemInformation<Celldokos_model_1996FromCellML>::Initialise(void)
     this->mVariableNames.push_back("ion_concentrations__Ko");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(5.4243);
+
+    // mParameters[0]:
+    this->mParameterNames.push_back("membrane_capacitance");
+    this->mParameterUnits.push_back("nanoF");
 
     this->mInitialised = true;
 }

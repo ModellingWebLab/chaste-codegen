@@ -38,7 +38,6 @@
         return p_cellml_stim;
     }
 
-
     Cellwinslow_model_1999FromCellML::Cellwinslow_model_1999FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
@@ -276,6 +275,20 @@
         rDY[32] = d_dt_chaste_interface_var_intracellular_ion_concentrations__Ca_NSR;
     }
 
+    std::vector<double> Cellwinslow_model_1999FromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+        const double var_membrane__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
+
+        std::vector<double> dqs(1);
+        dqs[0] = var_membrane__i_Stim_converter;
+        return dqs;
+    }
+
 template<>
 void OdeSystemInformation<Cellwinslow_model_1999FromCellML>::Initialise(void)
 {
@@ -447,6 +460,10 @@ void OdeSystemInformation<Cellwinslow_model_1999FromCellML>::Initialise(void)
     this->mVariableNames.push_back("intracellular_ion_concentrations__Ca_NSR");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.257);
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     
     this->mAttributes["SuggestedForwardEulerTimestep"] = 0.0001;

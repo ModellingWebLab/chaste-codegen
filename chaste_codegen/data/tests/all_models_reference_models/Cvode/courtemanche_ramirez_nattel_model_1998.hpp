@@ -29,11 +29,11 @@ class Cellcourtemanche_ramirez_nattel_model_1998FromCellMLCvode : public Abstrac
         archive & boost::serialization::base_object<AbstractCvodeCell >(*this);
         
     }
-    
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
@@ -41,6 +41,7 @@ public:
     ~Cellcourtemanche_ramirez_nattel_model_1998FromCellMLCvode();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time, const N_Vector rY, N_Vector rDY);
+    N_Vector ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY);
 };
 
 // Needs to be included last

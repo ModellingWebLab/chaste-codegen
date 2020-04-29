@@ -883,6 +883,20 @@
         NV_Ith_S(rDY,66) = d_dt_chaste_interface_var_IKs__O2ks;
     }
 
+    N_Vector Celliyer_model_2004FromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+        const double var_I_stimulus__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
+
+        N_Vector dqs = N_VNew_Serial(1);
+        NV_Ith_S(dqs, 0) = var_I_stimulus__i_Stim_converter;
+        return dqs;
+    }
+
     void Celliyer_model_2004FromCellMLCvode::EvaluateAnalyticJacobian(double var_chaste_interface__environment__time, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3)
     {
         double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
@@ -2054,6 +2068,10 @@ void OdeSystemInformation<Celliyer_model_2004FromCellMLCvode>::Initialise(void)
     this->mVariableNames.push_back("IKs__O2ks");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.298547822e-05);
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     
     this->mAttributes["SuggestedForwardEulerTimestep"] = 0.00001;

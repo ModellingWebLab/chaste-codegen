@@ -28,9 +28,11 @@ class Celllivshitz_rudy_2007FromCellMLRushLarsen : public AbstractRushLarsenCard
         archive & boost::serialization::base_object<AbstractRushLarsenCardiacCell >(*this);
         
     }
+
     //
     // Settable parameters and readable variables
     //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

@@ -37,7 +37,6 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-
     double Cellbeeler_reuter_model_1977FromCellMLRushLarsen::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
@@ -193,6 +192,20 @@
         }
     }
 
+    std::vector<double> Cellbeeler_reuter_model_1977FromCellMLRushLarsen::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+        const double var_stimulus_protocol__Istim_converter = -GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
+
+        std::vector<double> dqs(1);
+        dqs[0] = var_stimulus_protocol__Istim_converter;
+        return dqs;
+    }
+
 template<>
 void OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLRushLarsen>::Initialise(void)
 {
@@ -239,6 +252,10 @@ void OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLRushLarsen>::Ini
     this->mVariableNames.push_back("time_dependent_outward_current_x1_gate__x1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0001);
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     this->mInitialised = true;
 }

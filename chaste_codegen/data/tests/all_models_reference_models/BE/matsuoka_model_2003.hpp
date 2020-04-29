@@ -28,11 +28,11 @@ class Cellmatsuoka_model_2003FromCellMLBackwardEuler : public AbstractBackwardEu
         archive & boost::serialization::base_object<AbstractBackwardEulerCardiacCell<25> >(*this);
         
     }
-    
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
