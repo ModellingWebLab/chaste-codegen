@@ -22,7 +22,6 @@
 #include "MathsCustomFunctions.hpp"
 
 
-
     Celltest_V_not_state_mparamFromCellML::Celltest_V_not_state_mparamFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
@@ -35,7 +34,6 @@
         this->mpSystemInfo = OdeSystemInformation<Celltest_V_not_state_mparamFromCellML>::Instance();
         Init();
         
-        this->mParameters[0] = -75000.0; // (var_membrane__V_converted) [millivolt]
     }
 
     Celltest_V_not_state_mparamFromCellML::~Celltest_V_not_state_mparamFromCellML()
@@ -90,10 +88,6 @@ void OdeSystemInformation<Celltest_V_not_state_mparamFromCellML>::Initialise(voi
     this->mVariableNames.push_back("membrane__V1");
     this->mVariableUnits.push_back("volt");
     this->mInitialConditions.push_back(-69.1865);
-
-    // mParameters[0]:
-    this->mParameterNames.push_back("membrane_voltage");
-    this->mParameterUnits.push_back("millivolt");
 
     this->mInitialised = true;
 }

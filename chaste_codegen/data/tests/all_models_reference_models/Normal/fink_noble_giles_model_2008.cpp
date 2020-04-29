@@ -38,7 +38,6 @@
         return p_cellml_stim;
     }
 
-
     Cellfink_noble_giles_model_2008FromCellML::Cellfink_noble_giles_model_2008FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
@@ -429,6 +428,20 @@
         rDY[26] = d_dt_chaste_interface_var_K__K_i;
     }
 
+    std::vector<double> Cellfink_noble_giles_model_2008FromCellML::ComputeDerivedQuantities(double var_chaste_interface__Environment__time, const std::vector<double> & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+        const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__Environment__time); // uA_per_cm2
+
+        std::vector<double> dqs(1);
+        dqs[0] = var_cell__i_Stim_converter;
+        return dqs;
+    }
+
 template<>
 void OdeSystemInformation<Cellfink_noble_giles_model_2008FromCellML>::Initialise(void)
 {
@@ -570,6 +583,10 @@ void OdeSystemInformation<Cellfink_noble_giles_model_2008FromCellML>::Initialise
     this->mVariableNames.push_back("K__K_i");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(141.0167);
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     
     this->mAttributes["SuggestedForwardEulerTimestep"] = 0.001;

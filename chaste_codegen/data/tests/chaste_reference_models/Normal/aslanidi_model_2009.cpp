@@ -24,8 +24,7 @@
     boost::shared_ptr<RegularStimulus> Cellaslanidi_model_2009FromCellML::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
-        const double var_membrane__Cm = 5.0000000000000002e-5; // nanoF
-        const double var_chaste_interface__membrane__stim_amplitude = -0.02 * HeartConfig::Instance()->GetCapacitance() / var_membrane__Cm; // uA_per_cm2
+        const double var_chaste_interface__membrane__stim_amplitude = -0.02 * HeartConfig::Instance()->GetCapacitance() / mParameters[0]; // uA_per_cm2
         const double var_chaste_interface__membrane__stim_duration = 0.20000000000000001; // millisecond
         const double var_chaste_interface__membrane__stim_period = 500.0; // millisecond
         const double var_chaste_interface__membrane__stim_start = 10.0; // millisecond
@@ -38,7 +37,6 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-
 
     Cellaslanidi_model_2009FromCellML::Cellaslanidi_model_2009FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
@@ -55,6 +53,7 @@
         // We have a default stimulus specified in the CellML file metadata
         this->mHasDefaultStimulusFromCellML = true;
         
+        this->mParameters[0] = 5.0000000000000002e-5; // (var_membrane__Cm) [nanoF]
     }
 
     Cellaslanidi_model_2009FromCellML::~Cellaslanidi_model_2009FromCellML()
@@ -126,7 +125,6 @@
         const double var_inward_rectifier__g_K1 = 0.0050800000000000003; // nanoS
         const double var_inward_rectifier__shiftK1 = -3.6000000000000001; // millivolt
         const double var_inward_rectifier__steepK1 = 1.393; // dimensionless
-        const double var_membrane__Cm = 5.0000000000000002e-5; // nanoF
         const double var_membrane__F = 96487.0; // coulomb_per_mole
         const double var_membrane__R = 8314.0; // millijoule_per_mole_kelvin
         const double var_membrane__T = 308.0; // kelvin
@@ -153,7 +151,7 @@
         const double var_sodium_potassium_pump__k_NaK_K = 1.0; // millimolar
         const double var_sodium_potassium_pump__k_NaK_Na = 11.0; // millimolar
         const double var_sodium_potassium_pump__i_p = 1.6000000000000001 * pow(var_chaste_interface__intracellular_ion_concentrations__Na_i, 1.5) * var_chaste_interface__cleft_space_ion_concentrations__K_c * var_sodium_potassium_pump__i_NaK_max / ((1.5 + exp(-1.5 - 0.025000000000000001 * var_chaste_interface__membrane__V)) * (pow(var_chaste_interface__intracellular_ion_concentrations__Na_i, 1.5) + pow(var_sodium_potassium_pump__k_NaK_Na, 1.5)) * (var_chaste_interface__cleft_space_ion_concentrations__K_c + var_sodium_potassium_pump__k_NaK_K)); // picoA
-        const double var_chaste_interface__i_ionic = 1000.0 * (9.9999999999999995e-7 * var_Ca_independent_transient_outward_K_current__i_sus + 9.9999999999999995e-7 * var_Ca_independent_transient_outward_K_current__i_to + 9.9999999999999995e-7 * var_L_type_Ca_channel__i_Ca_L + 9.9999999999999995e-7 * var_Na_Ca_ion_exchanger_current__i_NaCa + 9.9999999999999995e-7 * var_T_type_Ca_channel__i_Ca_T + 9.9999999999999995e-7 * var_background_currents__i_B_Ca + 9.9999999999999995e-7 * var_background_currents__i_B_Na + 9.9999999999999995e-7 * var_delayed_rectifier_K_current__i_Kr + 9.9999999999999995e-7 * var_delayed_rectifier_K_current__i_Ks + 9.9999999999999995e-7 * var_inward_rectifier__i_K1 + 9.9999999999999995e-7 * var_sarcolemmal_calcium_pump_current__i_CaP + 9.9999999999999995e-7 * var_sodium_current__i_Na + 9.9999999999999995e-7 * var_sodium_potassium_pump__i_p) * HeartConfig::Instance()->GetCapacitance() / var_membrane__Cm; // uA_per_cm2
+        const double var_chaste_interface__i_ionic = 1000.0 * (9.9999999999999995e-7 * var_Ca_independent_transient_outward_K_current__i_sus + 9.9999999999999995e-7 * var_Ca_independent_transient_outward_K_current__i_to + 9.9999999999999995e-7 * var_L_type_Ca_channel__i_Ca_L + 9.9999999999999995e-7 * var_Na_Ca_ion_exchanger_current__i_NaCa + 9.9999999999999995e-7 * var_T_type_Ca_channel__i_Ca_T + 9.9999999999999995e-7 * var_background_currents__i_B_Ca + 9.9999999999999995e-7 * var_background_currents__i_B_Na + 9.9999999999999995e-7 * var_delayed_rectifier_K_current__i_Kr + 9.9999999999999995e-7 * var_delayed_rectifier_K_current__i_Ks + 9.9999999999999995e-7 * var_inward_rectifier__i_K1 + 9.9999999999999995e-7 * var_sarcolemmal_calcium_pump_current__i_CaP + 9.9999999999999995e-7 * var_sodium_current__i_Na + 9.9999999999999995e-7 * var_sodium_potassium_pump__i_p) * HeartConfig::Instance()->GetCapacitance() / mParameters[0]; // uA_per_cm2
 
         const double i_ionic = var_chaste_interface__i_ionic;
         EXCEPT_IF_NOT(!std::isnan(i_ionic));
@@ -408,10 +406,9 @@
         }
         else
         {
-            const double var_membrane__Cm = 5.0000000000000002e-5; // nanoF
             const double var_membrane__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
-            const double var_membrane__i_Stim = 1000.0000000000001 * var_membrane__Cm * var_membrane__i_Stim_converter / HeartConfig::Instance()->GetCapacitance(); // picoA
-            const double var_membrane__V_orig_deriv = -1.0 * (var_Ca_independent_transient_outward_K_current__i_sus + var_Ca_independent_transient_outward_K_current__i_to + var_L_type_Ca_channel__i_Ca_L + var_Na_Ca_ion_exchanger_current__i_NaCa + var_T_type_Ca_channel__i_Ca_T + var_background_currents__i_B_Ca + var_background_currents__i_B_Na + var_delayed_rectifier_K_current__i_Kr + var_delayed_rectifier_K_current__i_Ks + var_inward_rectifier__i_K1 + var_membrane__i_Stim + var_sarcolemmal_calcium_pump_current__i_CaP + var_sodium_current__i_Na + var_sodium_potassium_pump__i_p) / var_membrane__Cm; // millivolt / second
+            const double var_membrane__i_Stim = 1000.0000000000001 * mParameters[0] * var_membrane__i_Stim_converter / HeartConfig::Instance()->GetCapacitance(); // picoA
+            const double var_membrane__V_orig_deriv = -1.0 * (var_Ca_independent_transient_outward_K_current__i_sus + var_Ca_independent_transient_outward_K_current__i_to + var_L_type_Ca_channel__i_Ca_L + var_Na_Ca_ion_exchanger_current__i_NaCa + var_T_type_Ca_channel__i_Ca_T + var_background_currents__i_B_Ca + var_background_currents__i_B_Na + var_delayed_rectifier_K_current__i_Kr + var_delayed_rectifier_K_current__i_Ks + var_inward_rectifier__i_K1 + var_membrane__i_Stim + var_sarcolemmal_calcium_pump_current__i_CaP + var_sodium_current__i_Na + var_sodium_potassium_pump__i_p) / mParameters[0]; // millivolt / second
             d_dt_chaste_interface_var_membrane__V = 0.001 * var_membrane__V_orig_deriv; // millivolt / millisecond
         }
         
@@ -444,6 +441,20 @@
         rDY[26] = d_dt_chaste_interface_var_Ca_handling_by_the_SR__F1;
         rDY[27] = d_dt_chaste_interface_var_Ca_handling_by_the_SR__F2;
         rDY[28] = d_dt_chaste_interface_var_Ca_handling_by_the_SR__F3;
+    }
+
+    std::vector<double> Cellaslanidi_model_2009FromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+        const double var_membrane__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
+
+        std::vector<double> dqs(1);
+        dqs[0] = var_membrane__i_Stim_converter;
+        return dqs;
     }
 
 template<>
@@ -597,6 +608,14 @@ void OdeSystemInformation<Cellaslanidi_model_2009FromCellML>::Initialise(void)
     this->mVariableNames.push_back("Ca_handling_by_the_SR__F3");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.612697);
+
+    // mParameters[0]:
+    this->mParameterNames.push_back("membrane_capacitance");
+    this->mParameterUnits.push_back("nanoF");
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     this->mInitialised = true;
 }

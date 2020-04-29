@@ -28,11 +28,11 @@ class Celllivshitz_rudy_2007FromCellMLBackwardEuler : public AbstractBackwardEul
         archive & boost::serialization::base_object<AbstractBackwardEulerCardiacCell<7> >(*this);
         
     }
-    
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

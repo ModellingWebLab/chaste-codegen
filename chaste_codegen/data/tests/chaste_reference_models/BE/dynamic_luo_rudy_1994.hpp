@@ -28,11 +28,11 @@ class Dynamicluo_rudy_1994FromCellMLBackwardEuler : public AbstractBackwardEuler
         archive & boost::serialization::base_object<AbstractBackwardEulerCardiacCell<5> >(*this);
         archive & boost::serialization::base_object<AbstractDynamicallyLoadableEntity>(*this);
     }
-    
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
@@ -44,6 +44,7 @@ public:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time);
     void ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time);
 
+    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY);
 };
 
 // Needs to be included last

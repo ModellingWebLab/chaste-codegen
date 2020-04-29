@@ -38,15 +38,14 @@
         return p_cellml_stim;
     }
 
-
     Cellwinslow_model_1999FromCellMLGRL2::Cellwinslow_model_1999FromCellMLGRL2(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractGeneralizedRushLarsenCardiacCell(
-           33,
+                33,
                 0,
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        //
+        // 
         this->mpSystemInfo = OdeSystemInformation<Cellwinslow_model_1999FromCellMLGRL2>::Instance();
         Init();
 
@@ -2790,6 +2789,20 @@
         return partialF;
     }
 
+    std::vector<double> Cellwinslow_model_1999FromCellMLGRL2::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+        const double var_membrane__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
+
+        std::vector<double> dqs(1);
+        dqs[0] = var_membrane__i_Stim_converter;
+        return dqs;
+    }
+
 template<>
 void OdeSystemInformation<Cellwinslow_model_1999FromCellMLGRL2>::Initialise(void)
 {
@@ -2961,6 +2974,10 @@ void OdeSystemInformation<Cellwinslow_model_1999FromCellMLGRL2>::Initialise(void
     this->mVariableNames.push_back("intracellular_ion_concentrations__Ca_NSR");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.257);
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     
     this->mAttributes["SuggestedForwardEulerTimestep"] = 0.0001;

@@ -38,7 +38,6 @@
         return p_cellml_stim;
     }
 
-
     Cellbondarenko_model_2004_apexFromCellMLRushLarsen::Cellbondarenko_model_2004_apexFromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractRushLarsenCardiacCell(
                 41,
@@ -369,6 +368,20 @@
         rY[40] += mDt * rDY[40];
     }
 
+    std::vector<double> Cellbondarenko_model_2004_apexFromCellMLRushLarsen::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+        const double var_membrane__i_stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
+
+        std::vector<double> dqs(1);
+        dqs[0] = var_membrane__i_stim_converter;
+        return dqs;
+    }
+
 template<>
 void OdeSystemInformation<Cellbondarenko_model_2004_apexFromCellMLRushLarsen>::Initialise(void)
 {
@@ -580,6 +593,10 @@ void OdeSystemInformation<Cellbondarenko_model_2004_apexFromCellMLRushLarsen>::I
     this->mVariableNames.push_back("rapid_delayed_rectifier_potassium_current__I_K");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(3.19129e-05);
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     
     this->mAttributes["SuggestedForwardEulerTimestep"] = 0.0002;

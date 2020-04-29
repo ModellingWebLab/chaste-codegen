@@ -59,9 +59,6 @@ def chaste_codegen():
     group.add_argument('-y', '--dll', '--dynamically-loadable', dest='dynamically_loadable',
                        action='store_true', default=False,
                        help='add code to allow the model to be compiled to a shared library and dynamically loaded ')
-    group.add_argument('--expose-annotated-variables', dest='expose_annotated_variables',
-                       action='store_true', default=False,
-                       help='expose all oxmeta-annotated variables for access via the GetAnyVariable functionality')
 
     # process options
     args = parser.parse_args()

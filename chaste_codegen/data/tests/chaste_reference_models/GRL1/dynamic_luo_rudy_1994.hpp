@@ -28,9 +28,11 @@ class Dynamicluo_rudy_1994FromCellMLGRL1 : public AbstractGeneralizedRushLarsenC
         archive & boost::serialization::base_object<AbstractGeneralizedRushLarsenCardiacCell >(*this);
         archive & boost::serialization::base_object<AbstractDynamicallyLoadableEntity>(*this);
     }
+
     //
     // Settable parameters and readable variables
     //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
@@ -66,6 +68,7 @@ public:
     double EvaluateYDerivative11(double var_chaste_interface__environment__time, std::vector<double>& rY);
     double EvaluatePartialDerivative11(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical=false);
 
+    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY);
 };
 
 // Needs to be included last

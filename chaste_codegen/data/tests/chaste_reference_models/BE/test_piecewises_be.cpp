@@ -23,7 +23,6 @@
 #include "CardiacNewtonSolver.hpp"
 
 
-
     Celltest_piecewises_beFromCellMLBackwardEuler::Celltest_piecewises_beFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<2>(
                 4,

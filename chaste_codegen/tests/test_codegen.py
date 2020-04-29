@@ -342,52 +342,6 @@ def test_dynamic_GRL2(tmp_path):
                                                expected_cpp_path)
 
 
-def testexpose_annotated_variables(tmp_path):
-    tmp_path = str(tmp_path)
-    LOGGER.info('Testing expose_annotated_variables option\n')
-    model_file = \
-        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'aslanidi_model_2009.cellml')
-    chaste_model = cellmlmanip.load_model(model_file)
-
-    chaste_model = cg.NormalChasteModel(chaste_model,
-                                        'expose_annotated_variables_cellaslanidi_model_2009',
-                                        class_name='Cellaslanidi_model_2009FromCellML',
-                                        expose_annotated_variables=True)
-
-    chaste_model.generate_chaste_code()
-    expected_hpp_path = os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'Normal',
-                                     'expose_annotated_variables_cellaslanidi_model_2009.hpp')
-    expected_cpp_path = os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'Normal',
-                                     'expose_annotated_variables_cellaslanidi_model_2009.cpp')
-    # Compare against reference
-    test_utils.compare_model_against_reference('Normal', chaste_model, tmp_path,
-                                               expected_hpp_path, expected_cpp_path)
-
-
-def testexpose_annotated_variables2(tmp_path):
-    # mahajan_2008 has modifiable parameters tags
-    # the modified version also has one on membrane_stimulus_current_offset
-    tmp_path = str(tmp_path)
-    LOGGER.info('Testing expose_annotated_variables option\n')
-    model_file = \
-        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'mahajan_2008_modified_stimulus_current_metadata.cellml')
-    chaste_model = cellmlmanip.load_model(model_file)
-
-    chaste_model = cg.NormalChasteModel(chaste_model,
-                                        'expose_annotated_variables_cellmahajan_2008',
-                                        class_name='Cellmahajan_2008FromCellML',
-                                        expose_annotated_variables=True)
-
-    chaste_model.generate_chaste_code()
-    expected_hpp_path = os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'Normal',
-                                     'expose_annotated_variables_cellmahajan_2008.hpp')
-    expected_cpp_path = os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'Normal',
-                                     'expose_annotated_variables_cellmahajan_2008.cpp')
-    # Compare against reference
-    test_utils.compare_model_against_reference('Normal', chaste_model, tmp_path,
-                                               expected_hpp_path, expected_cpp_path)
-
-
 def test_missing_capacitance(tmp_path):
     tmp_path = str(tmp_path)
     LOGGER.info('Testing missing capacitance\n')

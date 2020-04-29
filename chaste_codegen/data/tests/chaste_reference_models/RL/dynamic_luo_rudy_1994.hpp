@@ -28,9 +28,11 @@ class Dynamicluo_rudy_1994FromCellMLRushLarsen : public AbstractRushLarsenCardia
         archive & boost::serialization::base_object<AbstractRushLarsenCardiacCell >(*this);
         archive & boost::serialization::base_object<AbstractDynamicallyLoadableEntity>(*this);
     }
+
     //
     // Settable parameters and readable variables
     //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
@@ -41,6 +43,7 @@ public:
     void EvaluateEquations(double var_chaste_interface__environment__time, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf);
     void ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf);
 
+    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY);
 };
 
 // Needs to be included last
