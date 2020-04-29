@@ -28,9 +28,11 @@ class Cellstewart_zhang_model_2008_ssFromCellMLGRL1 : public AbstractGeneralized
         archive & boost::serialization::base_object<AbstractGeneralizedRushLarsenCardiacCell >(*this);
         
     }
+
     //
     // Settable parameters and readable variables
     //
+
 public:
 
     double GetIntracellularCalciumConcentration();

@@ -29,10 +29,11 @@ class Cellbondarenko_model_2004_apexFromCellMLCvodeDataClamp : public AbstractCv
         archive & boost::serialization::base_object<AbstractCvodeCellWithDataClamp >(*this);
         
     }
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

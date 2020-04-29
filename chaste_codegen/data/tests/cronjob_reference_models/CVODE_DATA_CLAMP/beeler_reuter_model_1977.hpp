@@ -29,10 +29,11 @@ class Cellbeeler_reuter_model_1977FromCellMLCvodeDataClamp : public AbstractCvod
         archive & boost::serialization::base_object<AbstractCvodeCellWithDataClamp >(*this);
         
     }
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

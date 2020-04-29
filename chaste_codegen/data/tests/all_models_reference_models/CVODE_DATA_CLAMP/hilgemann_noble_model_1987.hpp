@@ -29,10 +29,11 @@ class Cellhilgemann_noble_model_1987FromCellMLCvodeDataClamp : public AbstractCv
         archive & boost::serialization::base_object<AbstractCvodeCellWithDataClamp >(*this);
         
     }
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

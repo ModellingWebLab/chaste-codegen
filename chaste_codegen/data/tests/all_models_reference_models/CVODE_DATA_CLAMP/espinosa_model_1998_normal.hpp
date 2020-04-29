@@ -29,10 +29,11 @@ class Cellespinosa_model_1998_normalFromCellMLCvodeDataClamp : public AbstractCv
         archive & boost::serialization::base_object<AbstractCvodeCellWithDataClamp >(*this);
         
     }
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

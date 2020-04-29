@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
    
     Cellzhang_SAN_model_2000_0D_capableFromCellMLCvodeDataClamp::Cellzhang_SAN_model_2000_0D_capableFromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCellWithDataClamp(
@@ -419,7 +420,6 @@
         double var_chaste_interface__membrane__V = NV_Ith_S(rY,0);
         // Units: millivolt; Initial value: -39.013558536
         
-
         // Mathematics
         // Special handling of data clamp current here (see #2708)
         // (we want to save expense of calling the interpolation method if possible.)
@@ -428,7 +428,7 @@
         {
             var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time_converted) + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 1); // uA_per_cm2
         }
-        
+
         N_Vector dqs = N_VNew_Serial(1);
         NV_Ith_S(dqs, 0) = var_chaste_interface__membrane_data_clamp_current;
         return dqs;

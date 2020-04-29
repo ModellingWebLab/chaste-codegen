@@ -38,6 +38,7 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
+
    
     Cellfink_noble_giles_model_2008FromCellMLCvodeDataClamp::Cellfink_noble_giles_model_2008FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCellWithDataClamp(
@@ -459,8 +460,8 @@
         double var_chaste_interface__cell__V = NV_Ith_S(rY,0);
         // Units: millivolt; Initial value: -86.45
         
-
         // Mathematics
+        const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__Environment__time); // uA_per_cm2
         // Special handling of data clamp current here (see #2708)
         // (we want to save expense of calling the interpolation method if possible.)
         double var_chaste_interface__membrane_data_clamp_current = 0.0;
@@ -468,9 +469,10 @@
         {
             var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__Environment__time) + var_chaste_interface__cell__V) * NV_Ith_S(mParameters, 0); // uA_per_cm2
         }
-        
-        N_Vector dqs = N_VNew_Serial(1);
-        NV_Ith_S(dqs, 0) = var_chaste_interface__membrane_data_clamp_current;
+
+        N_Vector dqs = N_VNew_Serial(2);
+        NV_Ith_S(dqs, 0) = var_cell__i_Stim_converter;
+        NV_Ith_S(dqs, 1) = var_chaste_interface__membrane_data_clamp_current;
         return dqs;
     }
 
@@ -621,6 +623,10 @@ void OdeSystemInformation<Cellfink_noble_giles_model_2008FromCellMLCvodeDataClam
     this->mParameterUnits.push_back("dimensionless");
 
     // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
+
+    // Derived Quantity index [1]:
     this->mDerivedQuantityNames.push_back("membrane_data_clamp_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 

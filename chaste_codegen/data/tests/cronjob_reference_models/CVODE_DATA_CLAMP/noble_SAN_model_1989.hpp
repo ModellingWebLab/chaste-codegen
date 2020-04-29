@@ -29,10 +29,11 @@ class Cellnoble_SAN_model_1989FromCellMLCvodeDataClamp : public AbstractCvodeCel
         archive & boost::serialization::base_object<AbstractCvodeCellWithDataClamp >(*this);
         
     }
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     double GetIntracellularCalciumConcentration();

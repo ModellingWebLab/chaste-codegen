@@ -29,10 +29,11 @@ class Cellstewart_zhang_model_2008_ssFromCellMLCvodeDataClamp : public AbstractC
         archive & boost::serialization::base_object<AbstractCvodeCellWithDataClamp >(*this);
         
     }
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     double GetIntracellularCalciumConcentration();

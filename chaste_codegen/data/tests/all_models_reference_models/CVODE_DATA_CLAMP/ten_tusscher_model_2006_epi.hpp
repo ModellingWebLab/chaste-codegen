@@ -29,10 +29,11 @@ class Cellten_tusscher_model_2006_epiFromCellMLCvodeDataClamp : public AbstractC
         archive & boost::serialization::base_object<AbstractCvodeCellWithDataClamp >(*this);
         
     }
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

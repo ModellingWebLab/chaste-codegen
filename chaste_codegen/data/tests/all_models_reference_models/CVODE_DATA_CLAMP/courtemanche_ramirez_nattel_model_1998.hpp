@@ -29,10 +29,11 @@ class Cellcourtemanche_ramirez_nattel_model_1998FromCellMLCvodeDataClamp : publi
         archive & boost::serialization::base_object<AbstractCvodeCellWithDataClamp >(*this);
         
     }
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

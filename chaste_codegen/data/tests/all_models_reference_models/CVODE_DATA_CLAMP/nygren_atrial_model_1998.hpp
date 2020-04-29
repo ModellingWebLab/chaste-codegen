@@ -29,10 +29,11 @@ class Cellnygren_atrial_model_1998FromCellMLCvodeDataClamp : public AbstractCvod
         archive & boost::serialization::base_object<AbstractCvodeCellWithDataClamp >(*this);
         
     }
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

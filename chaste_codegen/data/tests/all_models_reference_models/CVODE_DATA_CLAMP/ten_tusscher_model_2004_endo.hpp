@@ -29,10 +29,11 @@ class Cellten_tusscher_model_2004_endoFromCellMLCvodeDataClamp : public Abstract
         archive & boost::serialization::base_object<AbstractCvodeCellWithDataClamp >(*this);
         
     }
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     double GetIntracellularCalciumConcentration();

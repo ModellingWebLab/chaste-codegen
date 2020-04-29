@@ -28,9 +28,11 @@ class Cellwinslow_model_1999FromCellMLGRL2 : public AbstractGeneralizedRushLarse
         archive & boost::serialization::base_object<AbstractGeneralizedRushLarsenCardiacCell >(*this);
         
     }
+
     //
     // Settable parameters and readable variables
     //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
@@ -107,6 +109,7 @@ public:
     double EvaluateYDerivative32(double var_chaste_interface__environment__time_converted, std::vector<double>& rY);
     double EvaluatePartialDerivative32(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical=false);
 
+    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY);
 };
 
 // Needs to be included last
