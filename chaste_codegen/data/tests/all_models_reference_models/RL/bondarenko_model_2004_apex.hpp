@@ -1,11 +1,11 @@
-#ifndef CELLIYER_MODEL_2007FROMCELLMLRUSHLARSEN_HPP_
-#define CELLIYER_MODEL_2007FROMCELLMLRUSHLARSEN_HPP_
+#ifndef CELLBONDARENKO_MODEL_2004_APEXFROMCELLMLRUSHLARSEN_HPP_
+#define CELLBONDARENKO_MODEL_2004_APEXFROMCELLMLRUSHLARSEN_HPP_
 
 //! @file
 //!
 //! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
-//! Model: iyer_model_2007
+//! Model: bondarenko_model_2004_apex
 //!
 //! Processed by chaste_codegen: https://github.com/ModellingWebLab/chaste-codegen
 //!     (translator: chaste_codegen)
@@ -19,7 +19,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractRushLarsenCardiacCell.hpp"
 
-class Celliyer_model_2007FromCellMLRushLarsen : public AbstractRushLarsenCardiacCell
+class Cellbondarenko_model_2004_apexFromCellMLRushLarsen : public AbstractRushLarsenCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -35,8 +35,9 @@ class Celliyer_model_2007FromCellMLRushLarsen : public AbstractRushLarsenCardiac
 
 public:
 
-    Celliyer_model_2007FromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Celliyer_model_2007FromCellMLRushLarsen();
+    boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
+    Cellbondarenko_model_2004_apexFromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellbondarenko_model_2004_apexFromCellMLRushLarsen();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateEquations(double var_chaste_interface__environment__time, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf);
     void ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf);
@@ -46,7 +47,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Celliyer_model_2007FromCellMLRushLarsen)
+CHASTE_CLASS_EXPORT(Cellbondarenko_model_2004_apexFromCellMLRushLarsen)
 
 namespace boost
 {
@@ -54,7 +55,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Celliyer_model_2007FromCellMLRushLarsen * t, const unsigned int fileVersion)
+            Archive & ar, const Cellbondarenko_model_2004_apexFromCellMLRushLarsen * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -64,17 +65,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Celliyer_model_2007FromCellMLRushLarsen * t, const unsigned int fileVersion)
+            Archive & ar, Cellbondarenko_model_2004_apexFromCellMLRushLarsen * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Celliyer_model_2007FromCellMLRushLarsen(p_solver, p_stimulus);
+            ::new(t)Cellbondarenko_model_2004_apexFromCellMLRushLarsen(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLIYER_MODEL_2007FROMCELLMLRUSHLARSEN_HPP_
+#endif // CELLBONDARENKO_MODEL_2004_APEXFROMCELLMLRUSHLARSEN_HPP_

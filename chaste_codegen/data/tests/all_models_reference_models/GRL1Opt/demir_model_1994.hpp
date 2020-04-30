@@ -28,9 +28,11 @@ class Celldemir_model_1994FromCellMLGRL1 : public AbstractGeneralizedRushLarsenC
         archive & boost::serialization::base_object<AbstractGeneralizedRushLarsenCardiacCell >(*this);
         
     }
+
     //
     // Settable parameters and readable variables
     //
+
 public:
 
     double GetIntracellularCalciumConcentration();

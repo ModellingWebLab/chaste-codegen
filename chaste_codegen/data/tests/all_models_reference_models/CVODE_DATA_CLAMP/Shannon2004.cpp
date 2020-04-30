@@ -68,12 +68,12 @@
         NV_Ith_S(this->mParameters, 5) = 5.4000000000000004; // (var_model_parameters__Ko) [millimolar]
         NV_Ith_S(this->mParameters, 6) = 140.0; // (var_model_parameters__Nao) [millimolar]
         NV_Ith_S(this->mParameters, 7) = 0.00054000000000000001; // (var_ICaL__PCa) [litre_per_farad_millisecond]
-        NV_Ith_S(this->mParameters, 8) = 16.0; // (var_INa__G_INa) [milliS_per_microF]
-        NV_Ith_S(this->mParameters, 9) = 0.029999999999999999; // (var_IKr__G_IKr_const) [milliS_per_microF]
-        NV_Ith_S(this->mParameters, 10) = 0.070000000000000007; // (var_IKs__G_Ks_Max) [milliS_per_microF]
-        NV_Ith_S(this->mParameters, 11) = 9.0; // (var_INaCa__V_max) [microA_per_microF]
-        NV_Ith_S(this->mParameters, 12) = 0.059999999999999998; // (var_Itos__G_tos) [milliS_per_microF]
-        NV_Ith_S(this->mParameters, 13) = 0.0; // (var_membrane_data_clamp_current_conductance) [dimensionless]
+        NV_Ith_S(this->mParameters, 8) = 0.0; // (var_membrane_data_clamp_current_conductance) [dimensionless]
+        NV_Ith_S(this->mParameters, 9) = 16.0; // (var_INa__G_INa) [milliS_per_microF]
+        NV_Ith_S(this->mParameters, 10) = 0.029999999999999999; // (var_IKr__G_IKr_const) [milliS_per_microF]
+        NV_Ith_S(this->mParameters, 11) = 0.070000000000000007; // (var_IKs__G_Ks_Max) [milliS_per_microF]
+        NV_Ith_S(this->mParameters, 12) = 9.0; // (var_INaCa__V_max) [microA_per_microF]
+        NV_Ith_S(this->mParameters, 13) = 0.059999999999999998; // (var_Itos__G_tos) [milliS_per_microF]
     }
 
     CellShannon2004FromCellMLCvodeDataClamp::~CellShannon2004FromCellMLCvodeDataClamp()
@@ -167,9 +167,9 @@
         const double var_IKs__Fx_Ks_SL = 0.89000000000000001; // dimensionless
         const double var_IKs__Fx_Ks_jct = 0.11; // dimensionless
         const double var_IKs__pCa_SL = 3.0 - log10(var_chaste_interface__Ca_buffer__Ca_SL); // dimensionless
-        const double var_IKs__G_Ks_SL = (0.057000000000000002 + 0.19 / (1.0 + exp(-12.0 + 1.6666666666666667 * var_IKs__pCa_SL))) * NV_Ith_S(mParameters, 10); // milliS_per_microF
+        const double var_IKs__G_Ks_SL = (0.057000000000000002 + 0.19 / (1.0 + exp(-12.0 + 1.6666666666666667 * var_IKs__pCa_SL))) * NV_Ith_S(mParameters, 11); // milliS_per_microF
         const double var_IKs__pCa_jct = 3.0 - log10(var_chaste_interface__Ca_buffer__Ca_jct); // dimensionless
-        const double var_IKs__G_Ks_jct = (0.057000000000000002 + 0.19 / (1.0 + exp(-12.0 + 1.6666666666666667 * var_IKs__pCa_jct))) * NV_Ith_S(mParameters, 10); // milliS_per_microF
+        const double var_IKs__G_Ks_jct = (0.057000000000000002 + 0.19 / (1.0 + exp(-12.0 + 1.6666666666666667 * var_IKs__pCa_jct))) * NV_Ith_S(mParameters, 11); // milliS_per_microF
         const double var_IKs__pKNa = 0.018329999999999999; // dimensionless
         const double var_INa__Fx_Na_SL = 0.89000000000000001; // dimensionless
         const double var_INa__Fx_Na_jct = 0.11; // dimensionless
@@ -202,7 +202,7 @@
         const double var_model_parameters__Clo = 150.0; // millimolar
         const double var_model_parameters__F = 96485.0; // coulomb_per_mole
         const double var_IK1__G_K1 = 0.3872983346207417 * sqrt(NV_Ith_S(mParameters, 5)); // milliS_per_microF
-        const double var_IKr__G_IKr = 0.43033148291193518 * sqrt(NV_Ith_S(mParameters, 5)) * NV_Ith_S(mParameters, 9); // milliS_per_microF
+        const double var_IKr__G_IKr = 0.43033148291193518 * sqrt(NV_Ith_S(mParameters, 5)) * NV_Ith_S(mParameters, 10); // milliS_per_microF
         const double var_INaK__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * NV_Ith_S(mParameters, 6)); // dimensionless
         const double var_model_parameters__R = 8314.2999999999993; // joule_per_kilomole_kelvin
         const double var_model_parameters__T = 310.0; // kelvin
@@ -224,9 +224,9 @@
         const double var_IKs__i_Ks = var_IKs__i_Ks_SL + var_IKs__i_Ks_jct; // microA_per_microF
         const double var_INaCa__Q_NCX = pow(var_INaCa__Q10_NCX, (-31.0 + 0.10000000000000001 * var_model_parameters__T)); // dimensionless
         const double var_INaCa__temp_SL = (pow(var_chaste_interface__Na_buffer__Na_SL, var_INaCa__HNa) * NV_Ith_S(mParameters, 4) * exp(var_INaCa__eta * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T)) - pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_SL * exp((-1.0 + var_INaCa__eta) * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))) / (1.0 + var_INaCa__ksat * exp((-1.0 + var_INaCa__eta) * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // millimolar4
-        const double var_INaCa__i_NaCa_SL = var_INaCa__Fx_NCX_SL * var_INaCa__Ka_SL * var_INaCa__Q_NCX * NV_Ith_S(mParameters, 11) * var_INaCa__temp_SL / (pow(var_chaste_interface__Na_buffer__Na_SL, var_INaCa__HNa) * var_INaCa__K_mCao + pow(var_chaste_interface__Na_buffer__Na_SL, var_INaCa__HNa) * NV_Ith_S(mParameters, 4) + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_SL + pow(var_INaCa__K_mNao, var_INaCa__HNa) * (1.0 + var_chaste_interface__Ca_buffer__Ca_SL / var_INaCa__K_mCai) * var_chaste_interface__Ca_buffer__Ca_SL + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * (1.0 + pow((var_chaste_interface__Na_buffer__Na_SL / var_INaCa__K_mNai), var_INaCa__HNa)) * var_INaCa__K_mCai); // microA_per_microF
+        const double var_INaCa__i_NaCa_SL = var_INaCa__Fx_NCX_SL * var_INaCa__Ka_SL * var_INaCa__Q_NCX * NV_Ith_S(mParameters, 12) * var_INaCa__temp_SL / (pow(var_chaste_interface__Na_buffer__Na_SL, var_INaCa__HNa) * var_INaCa__K_mCao + pow(var_chaste_interface__Na_buffer__Na_SL, var_INaCa__HNa) * NV_Ith_S(mParameters, 4) + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_SL + pow(var_INaCa__K_mNao, var_INaCa__HNa) * (1.0 + var_chaste_interface__Ca_buffer__Ca_SL / var_INaCa__K_mCai) * var_chaste_interface__Ca_buffer__Ca_SL + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * (1.0 + pow((var_chaste_interface__Na_buffer__Na_SL / var_INaCa__K_mNai), var_INaCa__HNa)) * var_INaCa__K_mCai); // microA_per_microF
         const double var_INaCa__temp_jct = (pow(var_chaste_interface__Na_buffer__Na_jct, var_INaCa__HNa) * NV_Ith_S(mParameters, 4) * exp(var_INaCa__eta * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T)) - pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_jct * exp((-1.0 + var_INaCa__eta) * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))) / (1.0 + var_INaCa__ksat * exp((-1.0 + var_INaCa__eta) * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // millimolar4
-        const double var_INaCa__i_NaCa_jct = var_INaCa__Fx_NCX_jct * var_INaCa__Ka_jct * var_INaCa__Q_NCX * NV_Ith_S(mParameters, 11) * var_INaCa__temp_jct / (pow(var_chaste_interface__Na_buffer__Na_jct, var_INaCa__HNa) * var_INaCa__K_mCao + pow(var_chaste_interface__Na_buffer__Na_jct, var_INaCa__HNa) * NV_Ith_S(mParameters, 4) + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_jct + pow(var_INaCa__K_mNao, var_INaCa__HNa) * (1.0 + var_chaste_interface__Ca_buffer__Ca_jct / var_INaCa__K_mCai) * var_chaste_interface__Ca_buffer__Ca_jct + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * (1.0 + pow((var_chaste_interface__Na_buffer__Na_jct / var_INaCa__K_mNai), var_INaCa__HNa)) * var_INaCa__K_mCai); // microA_per_microF
+        const double var_INaCa__i_NaCa_jct = var_INaCa__Fx_NCX_jct * var_INaCa__Ka_jct * var_INaCa__Q_NCX * NV_Ith_S(mParameters, 12) * var_INaCa__temp_jct / (pow(var_chaste_interface__Na_buffer__Na_jct, var_INaCa__HNa) * var_INaCa__K_mCao + pow(var_chaste_interface__Na_buffer__Na_jct, var_INaCa__HNa) * NV_Ith_S(mParameters, 4) + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_jct + pow(var_INaCa__K_mNao, var_INaCa__HNa) * (1.0 + var_chaste_interface__Ca_buffer__Ca_jct / var_INaCa__K_mCai) * var_chaste_interface__Ca_buffer__Ca_jct + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * (1.0 + pow((var_chaste_interface__Na_buffer__Na_jct / var_INaCa__K_mNai), var_INaCa__HNa)) * var_INaCa__K_mCai); // microA_per_microF
         const double var_INaCa__i_NaCa = var_INaCa__i_NaCa_SL + var_INaCa__i_NaCa_jct; // microA_per_microF
         const double var_INaK__f_NaK = 1.0 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T)) + 0.036499999999999998 * var_INaK__sigma * exp(-var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // dimensionless
         const double var_INaK__i_NaK_SL = var_INaK__Fx_NaK_SL * var_INaK__I_NaK_max * var_INaK__f_NaK * NV_Ith_S(mParameters, 5) / ((1.0 + pow((var_INaK__Km_Nai / var_chaste_interface__Na_buffer__Na_SL), var_INaK__H_NaK)) * (var_INaK__Km_Ko + NV_Ith_S(mParameters, 5))); // microA_per_microF
@@ -248,12 +248,12 @@
         const double var_IKp__i_Kp = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_IKp__g_Kp / (1.0 + exp(7.4880000000000004 - 0.16722408026755853 * var_chaste_interface__cell__V)); // microA_per_microF
         const double var_IKr__i_Kr = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_IKr__G_IKr * var_IKr_Rr_gate__Rr * var_chaste_interface__IKr_Xr_gate__Xr; // microA_per_microF
         const double var_Itof__i_tof = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_Itof__G_tof * var_chaste_interface__Itof_X_gate__X_tof * var_chaste_interface__Itof_Y_gate__Y_tof; // microA_per_microF
-        const double var_Itos__i_tos = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * (0.5 * var_chaste_interface__Itos_R_gate__R_tos + var_chaste_interface__Itos_Y_gate__Y_tos) * NV_Ith_S(mParameters, 12) * var_chaste_interface__Itos_X_gate__X_tos; // microA_per_microF
+        const double var_Itos__i_tos = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * (0.5 * var_chaste_interface__Itos_R_gate__R_tos + var_chaste_interface__Itos_Y_gate__Y_tos) * NV_Ith_S(mParameters, 13) * var_chaste_interface__Itos_X_gate__X_tos; // microA_per_microF
         const double var_reversal_potentials__E_Na_SL = var_model_parameters__R * var_model_parameters__T * log(NV_Ith_S(mParameters, 6) / var_chaste_interface__Na_buffer__Na_SL) / var_model_parameters__F; // millivolt
-        const double var_INa__i_Na_SL = (-var_reversal_potentials__E_Na_SL + var_chaste_interface__cell__V) * var_INa__Fx_Na_SL * NV_Ith_S(mParameters, 8) * var_INa__openProb; // microA_per_microF
+        const double var_INa__i_Na_SL = (-var_reversal_potentials__E_Na_SL + var_chaste_interface__cell__V) * var_INa__Fx_Na_SL * NV_Ith_S(mParameters, 9) * var_INa__openProb; // microA_per_microF
         const double var_INab__i_Nab_SL = (-var_reversal_potentials__E_Na_SL + var_chaste_interface__cell__V) * var_INab__Fx_NaBk_SL * var_INab__G_NaBk; // microA_per_microF
         const double var_reversal_potentials__E_Na_jct = var_model_parameters__R * var_model_parameters__T * log(NV_Ith_S(mParameters, 6) / var_chaste_interface__Na_buffer__Na_jct) / var_model_parameters__F; // millivolt
-        const double var_INa__i_Na_jct = (-var_reversal_potentials__E_Na_jct + var_chaste_interface__cell__V) * var_INa__Fx_Na_jct * NV_Ith_S(mParameters, 8) * var_INa__openProb; // microA_per_microF
+        const double var_INa__i_Na_jct = (-var_reversal_potentials__E_Na_jct + var_chaste_interface__cell__V) * var_INa__Fx_Na_jct * NV_Ith_S(mParameters, 9) * var_INa__openProb; // microA_per_microF
         const double var_INa__i_Na = var_INa__i_Na_SL + var_INa__i_Na_jct; // microA_per_microF
         const double var_INab__i_Nab_jct = (-var_reversal_potentials__E_Na_jct + var_chaste_interface__cell__V) * var_INab__Fx_NaBk_jct * var_INab__G_NaBk; // microA_per_microF
         const double var_INab__i_Nab = var_INab__i_Nab_SL + var_INab__i_Nab_jct; // microA_per_microF
@@ -532,9 +532,9 @@
         const double var_ICap__i_Cap_jct = var_ICap__Fx_SLCaP_jct * var_ICap__Q_SLCaP * var_ICap__V_maxAF / (1.0 + pow((var_ICap__Km / var_chaste_interface__Ca_buffer__Ca_jct), var_ICap__H)); // microA_per_microF
         const double var_INaCa__Q_NCX = pow(var_INaCa__Q10_NCX, (-31.0 + 0.10000000000000001 * var_model_parameters__T)); // dimensionless
         const double var_INaCa__temp_SL = (pow(var_chaste_interface__Na_buffer__Na_SL, var_INaCa__HNa) * NV_Ith_S(mParameters, 4) * exp(var_INaCa__eta * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T)) - pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_SL * exp((-1.0 + var_INaCa__eta) * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))) / (1.0 + var_INaCa__ksat * exp((-1.0 + var_INaCa__eta) * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // millimolar4
-        const double var_INaCa__i_NaCa_SL = var_INaCa__Fx_NCX_SL * var_INaCa__Ka_SL * var_INaCa__Q_NCX * NV_Ith_S(mParameters, 11) * var_INaCa__temp_SL / (pow(var_chaste_interface__Na_buffer__Na_SL, var_INaCa__HNa) * var_INaCa__K_mCao + pow(var_chaste_interface__Na_buffer__Na_SL, var_INaCa__HNa) * NV_Ith_S(mParameters, 4) + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_SL + pow(var_INaCa__K_mNao, var_INaCa__HNa) * (1.0 + var_chaste_interface__Ca_buffer__Ca_SL / var_INaCa__K_mCai) * var_chaste_interface__Ca_buffer__Ca_SL + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * (1.0 + pow((var_chaste_interface__Na_buffer__Na_SL / var_INaCa__K_mNai), var_INaCa__HNa)) * var_INaCa__K_mCai); // microA_per_microF
+        const double var_INaCa__i_NaCa_SL = var_INaCa__Fx_NCX_SL * var_INaCa__Ka_SL * var_INaCa__Q_NCX * NV_Ith_S(mParameters, 12) * var_INaCa__temp_SL / (pow(var_chaste_interface__Na_buffer__Na_SL, var_INaCa__HNa) * var_INaCa__K_mCao + pow(var_chaste_interface__Na_buffer__Na_SL, var_INaCa__HNa) * NV_Ith_S(mParameters, 4) + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_SL + pow(var_INaCa__K_mNao, var_INaCa__HNa) * (1.0 + var_chaste_interface__Ca_buffer__Ca_SL / var_INaCa__K_mCai) * var_chaste_interface__Ca_buffer__Ca_SL + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * (1.0 + pow((var_chaste_interface__Na_buffer__Na_SL / var_INaCa__K_mNai), var_INaCa__HNa)) * var_INaCa__K_mCai); // microA_per_microF
         const double var_INaCa__temp_jct = (pow(var_chaste_interface__Na_buffer__Na_jct, var_INaCa__HNa) * NV_Ith_S(mParameters, 4) * exp(var_INaCa__eta * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T)) - pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_jct * exp((-1.0 + var_INaCa__eta) * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))) / (1.0 + var_INaCa__ksat * exp((-1.0 + var_INaCa__eta) * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // millimolar4
-        const double var_INaCa__i_NaCa_jct = var_INaCa__Fx_NCX_jct * var_INaCa__Ka_jct * var_INaCa__Q_NCX * NV_Ith_S(mParameters, 11) * var_INaCa__temp_jct / (pow(var_chaste_interface__Na_buffer__Na_jct, var_INaCa__HNa) * var_INaCa__K_mCao + pow(var_chaste_interface__Na_buffer__Na_jct, var_INaCa__HNa) * NV_Ith_S(mParameters, 4) + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_jct + pow(var_INaCa__K_mNao, var_INaCa__HNa) * (1.0 + var_chaste_interface__Ca_buffer__Ca_jct / var_INaCa__K_mCai) * var_chaste_interface__Ca_buffer__Ca_jct + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * (1.0 + pow((var_chaste_interface__Na_buffer__Na_jct / var_INaCa__K_mNai), var_INaCa__HNa)) * var_INaCa__K_mCai); // microA_per_microF
+        const double var_INaCa__i_NaCa_jct = var_INaCa__Fx_NCX_jct * var_INaCa__Ka_jct * var_INaCa__Q_NCX * NV_Ith_S(mParameters, 12) * var_INaCa__temp_jct / (pow(var_chaste_interface__Na_buffer__Na_jct, var_INaCa__HNa) * var_INaCa__K_mCao + pow(var_chaste_interface__Na_buffer__Na_jct, var_INaCa__HNa) * NV_Ith_S(mParameters, 4) + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_jct + pow(var_INaCa__K_mNao, var_INaCa__HNa) * (1.0 + var_chaste_interface__Ca_buffer__Ca_jct / var_INaCa__K_mCai) * var_chaste_interface__Ca_buffer__Ca_jct + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * (1.0 + pow((var_chaste_interface__Na_buffer__Na_jct / var_INaCa__K_mNai), var_INaCa__HNa)) * var_INaCa__K_mCai); // microA_per_microF
         const double var_INaK__f_NaK = 1.0 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T)) + 0.036499999999999998 * var_INaK__sigma * exp(-var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // dimensionless
         const double var_INaK__i_NaK_SL = var_INaK__Fx_NaK_SL * var_INaK__I_NaK_max * var_INaK__f_NaK * NV_Ith_S(mParameters, 5) / ((1.0 + pow((var_INaK__Km_Nai / var_chaste_interface__Na_buffer__Na_SL), var_INaK__H_NaK)) * (var_INaK__Km_Ko + NV_Ith_S(mParameters, 5))); // microA_per_microF
         const double var_INaK__i_NaK_jct = var_INaK__Fx_NaK_jct * var_INaK__I_NaK_max * var_INaK__f_NaK * NV_Ith_S(mParameters, 5) / ((1.0 + pow((var_INaK__Km_Nai / var_chaste_interface__Na_buffer__Na_jct), var_INaK__H_NaK)) * (var_INaK__Km_Ko + NV_Ith_S(mParameters, 5))); // microA_per_microF
@@ -571,11 +571,11 @@
         const double var_Ca_buffer__i_Ca_jct_tot = -2.0 * var_INaCa__i_NaCa_jct + var_ICaL__i_CaL_Ca_jct + var_ICab__i_Cab_jct + var_ICap__i_Cap_jct; // microA_per_microF
         const double d_dt_chaste_interface_var_Ca_buffer__Ca_jct = -1.0 * var_Ca_buffer__dCa_jct_tot_bound - var_ion_diffusion__J_Ca_jct_SL / var_model_parameters__Vol_jct + var_Jleak_SR__j_leak_SR * var_model_parameters__Vol_myo / var_model_parameters__Vol_jct + var_Jrel_SR__j_rel_SR * var_model_parameters__Vol_SR / var_model_parameters__Vol_jct - 0.5 * var_Ca_buffer__i_Ca_jct_tot * var_model_parameters__Cm / (var_model_parameters__F * var_model_parameters__Vol_jct); // millimolar / millisecond
         const double var_reversal_potentials__E_Na_SL = var_model_parameters__R * var_model_parameters__T * log(NV_Ith_S(mParameters, 6) / var_chaste_interface__Na_buffer__Na_SL) / var_model_parameters__F; // millivolt
-        const double var_INa__i_Na_SL = (-var_reversal_potentials__E_Na_SL + var_chaste_interface__cell__V) * var_INa__Fx_Na_SL * NV_Ith_S(mParameters, 8) * var_INa__openProb; // microA_per_microF
+        const double var_INa__i_Na_SL = (-var_reversal_potentials__E_Na_SL + var_chaste_interface__cell__V) * var_INa__Fx_Na_SL * NV_Ith_S(mParameters, 9) * var_INa__openProb; // microA_per_microF
         const double var_INab__i_Nab_SL = (-var_reversal_potentials__E_Na_SL + var_chaste_interface__cell__V) * var_INab__Fx_NaBk_SL * var_INab__G_NaBk; // microA_per_microF
         const double d_dt_chaste_interface_var_Na_buffer__Na_SL = -var_Na_buffer__dNa_SL_buf + (-var_ion_diffusion__J_Na_SL_myo + var_ion_diffusion__J_Na_jct_SL) / var_model_parameters__Vol_SL - (3.0 * var_INaCa__i_NaCa_SL + 3.0 * var_INaK__i_NaK_SL + var_ICaL__i_CaL_Na_SL + var_INa__i_Na_SL + var_INab__i_Nab_SL) * var_model_parameters__Cm / (var_model_parameters__F * var_model_parameters__Vol_SL); // millimolar / millisecond
         const double var_reversal_potentials__E_Na_jct = var_model_parameters__R * var_model_parameters__T * log(NV_Ith_S(mParameters, 6) / var_chaste_interface__Na_buffer__Na_jct) / var_model_parameters__F; // millivolt
-        const double var_INa__i_Na_jct = (-var_reversal_potentials__E_Na_jct + var_chaste_interface__cell__V) * var_INa__Fx_Na_jct * NV_Ith_S(mParameters, 8) * var_INa__openProb; // microA_per_microF
+        const double var_INa__i_Na_jct = (-var_reversal_potentials__E_Na_jct + var_chaste_interface__cell__V) * var_INa__Fx_Na_jct * NV_Ith_S(mParameters, 9) * var_INa__openProb; // microA_per_microF
         const double var_INab__i_Nab_jct = (-var_reversal_potentials__E_Na_jct + var_chaste_interface__cell__V) * var_INab__Fx_NaBk_jct * var_INab__G_NaBk; // microA_per_microF
         const double d_dt_chaste_interface_var_Na_buffer__Na_jct = -var_Na_buffer__dNa_jct_buf - var_ion_diffusion__J_Na_jct_SL / var_model_parameters__Vol_jct - (3.0 * var_INaCa__i_NaCa_jct + 3.0 * var_INaK__i_NaK_jct + var_ICaL__i_CaL_Na_jct + var_INa__i_Na_jct + var_INab__i_Nab_jct) * var_model_parameters__Cm / (var_model_parameters__F * var_model_parameters__Vol_jct); // millimolar / millisecond
 
@@ -596,9 +596,9 @@
             const double var_IKs__Fx_Ks_SL = 0.89000000000000001; // dimensionless
             const double var_IKs__Fx_Ks_jct = 0.11; // dimensionless
             const double var_IKs__pCa_SL = 3.0 - log10(var_chaste_interface__Ca_buffer__Ca_SL); // dimensionless
-            const double var_IKs__G_Ks_SL = (0.057000000000000002 + 0.19 / (1.0 + exp(-12.0 + 1.6666666666666667 * var_IKs__pCa_SL))) * NV_Ith_S(mParameters, 10); // milliS_per_microF
+            const double var_IKs__G_Ks_SL = (0.057000000000000002 + 0.19 / (1.0 + exp(-12.0 + 1.6666666666666667 * var_IKs__pCa_SL))) * NV_Ith_S(mParameters, 11); // milliS_per_microF
             const double var_IKs__pCa_jct = 3.0 - log10(var_chaste_interface__Ca_buffer__Ca_jct); // dimensionless
-            const double var_IKs__G_Ks_jct = (0.057000000000000002 + 0.19 / (1.0 + exp(-12.0 + 1.6666666666666667 * var_IKs__pCa_jct))) * NV_Ith_S(mParameters, 10); // milliS_per_microF
+            const double var_IKs__G_Ks_jct = (0.057000000000000002 + 0.19 / (1.0 + exp(-12.0 + 1.6666666666666667 * var_IKs__pCa_jct))) * NV_Ith_S(mParameters, 11); // milliS_per_microF
             const double var_IKs__pKNa = 0.018329999999999999; // dimensionless
             const double var_Itof__G_tof = 0.02; // milliS_per_microF
             const double var_IKr_Rr_gate__Rr = 1.0 / (1.0 + exp(1.4732142857142858 + 0.044642857142857144 * var_chaste_interface__cell__V)); // dimensionless
@@ -607,7 +607,7 @@
             const double var_model_parameters__Cli = 15.0; // millimolar
             const double var_model_parameters__Clo = 150.0; // millimolar
             const double var_IK1__G_K1 = 0.3872983346207417 * sqrt(NV_Ith_S(mParameters, 5)); // milliS_per_microF
-            const double var_IKr__G_IKr = 0.43033148291193518 * sqrt(NV_Ith_S(mParameters, 5)) * NV_Ith_S(mParameters, 9); // milliS_per_microF
+            const double var_IKr__G_IKr = 0.43033148291193518 * sqrt(NV_Ith_S(mParameters, 5)) * NV_Ith_S(mParameters, 10); // milliS_per_microF
             const double var_ICaL__i_CaL_K = (var_ICaL__Fx_ICaL_SL * var_ICaL_fCa_gate__fCa_SL + var_ICaL__Fx_ICaL_jct * var_ICaL_fCa_gate__fCa_jct) * (-var_ICaL__gamma_Ko * NV_Ith_S(mParameters, 5) + var_ICaL__gamma_Ki * NV_Ith_S(mParameters, 3) * exp(var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))) * var_ICaL__PK * var_ICaL__temp / (-1.0 + exp(var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // microA_per_microF
             const double var_ICaL__i_CaL = var_ICaL__i_CaL_Ca_SL + var_ICaL__i_CaL_Ca_jct + var_ICaL__i_CaL_K + var_ICaL__i_CaL_Na_SL + var_ICaL__i_CaL_Na_jct; // microA_per_microF
             const double var_ICap__i_Cap = var_ICap__i_Cap_SL + var_ICap__i_Cap_jct; // microA_per_microF
@@ -629,7 +629,7 @@
             const double var_IKp__i_Kp = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_IKp__g_Kp / (1.0 + exp(7.4880000000000004 - 0.16722408026755853 * var_chaste_interface__cell__V)); // microA_per_microF
             const double var_IKr__i_Kr = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_IKr__G_IKr * var_IKr_Rr_gate__Rr * var_chaste_interface__IKr_Xr_gate__Xr; // microA_per_microF
             const double var_Itof__i_tof = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_Itof__G_tof * var_chaste_interface__Itof_X_gate__X_tof * var_chaste_interface__Itof_Y_gate__Y_tof; // microA_per_microF
-            const double var_Itos__i_tos = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * (0.5 * var_chaste_interface__Itos_R_gate__R_tos + var_chaste_interface__Itos_Y_gate__Y_tos) * NV_Ith_S(mParameters, 12) * var_chaste_interface__Itos_X_gate__X_tos; // microA_per_microF
+            const double var_Itos__i_tos = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * (0.5 * var_chaste_interface__Itos_R_gate__R_tos + var_chaste_interface__Itos_Y_gate__Y_tos) * NV_Ith_S(mParameters, 13) * var_chaste_interface__Itos_X_gate__X_tos; // microA_per_microF
             const double var_INa__i_Na = var_INa__i_Na_SL + var_INa__i_Na_jct; // microA_per_microF
             const double var_INab__i_Nab = var_INab__i_Nab_SL + var_INab__i_Nab_jct; // microA_per_microF
             
@@ -638,7 +638,7 @@
             double var_chaste_interface__membrane_data_clamp_current = 0.0;
             if (mDataClampIsOn)
             {
-                var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time) + var_chaste_interface__cell__V) * NV_Ith_S(mParameters, 13); // uA_per_cm2
+                var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time) + var_chaste_interface__cell__V) * NV_Ith_S(mParameters, 8); // uA_per_cm2
             }
             d_dt_chaste_interface_var_cell__V = -var_ICaL__i_CaL - var_ICab__i_Cab - var_ICap__i_Cap - var_ICl_Ca__i_Cl_Ca - var_IClb__i_Clb - var_IK1__i_K1 - var_IKp__i_Kp - var_IKr__i_Kr - var_IKs__i_Ks - var_INa__i_Na - var_INaCa__i_NaCa - var_INaK__i_NaK - var_INab__i_Nab - var_Itof__i_tof - var_Itos__i_tos - var_cell__i_Stim - var_chaste_interface__membrane_data_clamp_current; // millivolt / millisecond
             
@@ -747,9 +747,9 @@
         const double var_IKs__Fx_Ks_SL = 0.89000000000000001; // dimensionless
         const double var_IKs__Fx_Ks_jct = 0.11; // dimensionless
         const double var_IKs__pCa_SL = 3.0 - log10(var_chaste_interface__Ca_buffer__Ca_SL); // dimensionless
-        const double var_IKs__G_Ks_SL = (0.057000000000000002 + 0.19 / (1.0 + exp(-12.0 + 1.6666666666666667 * var_IKs__pCa_SL))) * NV_Ith_S(mParameters, 10); // milliS_per_microF
+        const double var_IKs__G_Ks_SL = (0.057000000000000002 + 0.19 / (1.0 + exp(-12.0 + 1.6666666666666667 * var_IKs__pCa_SL))) * NV_Ith_S(mParameters, 11); // milliS_per_microF
         const double var_IKs__pCa_jct = 3.0 - log10(var_chaste_interface__Ca_buffer__Ca_jct); // dimensionless
-        const double var_IKs__G_Ks_jct = (0.057000000000000002 + 0.19 / (1.0 + exp(-12.0 + 1.6666666666666667 * var_IKs__pCa_jct))) * NV_Ith_S(mParameters, 10); // milliS_per_microF
+        const double var_IKs__G_Ks_jct = (0.057000000000000002 + 0.19 / (1.0 + exp(-12.0 + 1.6666666666666667 * var_IKs__pCa_jct))) * NV_Ith_S(mParameters, 11); // milliS_per_microF
         const double var_IKs__pKNa = 0.018329999999999999; // dimensionless
         const double var_INa__Fx_Na_SL = 0.89000000000000001; // dimensionless
         const double var_INa__Fx_Na_jct = 0.11; // dimensionless
@@ -776,11 +776,11 @@
         double var_chaste_interface__membrane_data_clamp_current = 0.0;
         if (mDataClampIsOn)
         {
-            var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time) + var_chaste_interface__cell__V) * NV_Ith_S(mParameters, 13); // uA_per_cm2
+            var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time) + var_chaste_interface__cell__V) * NV_Ith_S(mParameters, 8); // uA_per_cm2
         }
         const double var_model_parameters__F = 96485.0; // coulomb_per_mole
         const double var_IK1__G_K1 = 0.3872983346207417 * sqrt(NV_Ith_S(mParameters, 5)); // milliS_per_microF
-        const double var_IKr__G_IKr = 0.43033148291193518 * sqrt(NV_Ith_S(mParameters, 5)) * NV_Ith_S(mParameters, 9); // milliS_per_microF
+        const double var_IKr__G_IKr = 0.43033148291193518 * sqrt(NV_Ith_S(mParameters, 5)) * NV_Ith_S(mParameters, 10); // milliS_per_microF
         const double var_model_parameters__R = 8314.2999999999993; // joule_per_kilomole_kelvin
         const double var_model_parameters__T = 310.0; // kelvin
         const double var_ICaL__Q_CaL = pow(var_ICaL__Q10_CaL, (-31.0 + 0.10000000000000001 * var_model_parameters__T)); // dimensionless
@@ -797,9 +797,9 @@
         const double var_IKs__i_Ks = var_IKs__i_Ks_SL + var_IKs__i_Ks_jct; // microA_per_microF
         const double var_INaCa__Q_NCX = pow(var_INaCa__Q10_NCX, (-31.0 + 0.10000000000000001 * var_model_parameters__T)); // dimensionless
         const double var_INaCa__temp_SL = (pow(var_chaste_interface__Na_buffer__Na_SL, var_INaCa__HNa) * NV_Ith_S(mParameters, 4) * exp(var_INaCa__eta * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T)) - pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_SL * exp((-1.0 + var_INaCa__eta) * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))) / (1.0 + var_INaCa__ksat * exp((-1.0 + var_INaCa__eta) * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // millimolar4
-        const double var_INaCa__i_NaCa_SL = var_INaCa__Fx_NCX_SL * var_INaCa__Ka_SL * var_INaCa__Q_NCX * NV_Ith_S(mParameters, 11) * var_INaCa__temp_SL / (pow(var_chaste_interface__Na_buffer__Na_SL, var_INaCa__HNa) * var_INaCa__K_mCao + pow(var_chaste_interface__Na_buffer__Na_SL, var_INaCa__HNa) * NV_Ith_S(mParameters, 4) + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_SL + pow(var_INaCa__K_mNao, var_INaCa__HNa) * (1.0 + var_chaste_interface__Ca_buffer__Ca_SL / var_INaCa__K_mCai) * var_chaste_interface__Ca_buffer__Ca_SL + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * (1.0 + pow((var_chaste_interface__Na_buffer__Na_SL / var_INaCa__K_mNai), var_INaCa__HNa)) * var_INaCa__K_mCai); // microA_per_microF
+        const double var_INaCa__i_NaCa_SL = var_INaCa__Fx_NCX_SL * var_INaCa__Ka_SL * var_INaCa__Q_NCX * NV_Ith_S(mParameters, 12) * var_INaCa__temp_SL / (pow(var_chaste_interface__Na_buffer__Na_SL, var_INaCa__HNa) * var_INaCa__K_mCao + pow(var_chaste_interface__Na_buffer__Na_SL, var_INaCa__HNa) * NV_Ith_S(mParameters, 4) + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_SL + pow(var_INaCa__K_mNao, var_INaCa__HNa) * (1.0 + var_chaste_interface__Ca_buffer__Ca_SL / var_INaCa__K_mCai) * var_chaste_interface__Ca_buffer__Ca_SL + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * (1.0 + pow((var_chaste_interface__Na_buffer__Na_SL / var_INaCa__K_mNai), var_INaCa__HNa)) * var_INaCa__K_mCai); // microA_per_microF
         const double var_INaCa__temp_jct = (pow(var_chaste_interface__Na_buffer__Na_jct, var_INaCa__HNa) * NV_Ith_S(mParameters, 4) * exp(var_INaCa__eta * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T)) - pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_jct * exp((-1.0 + var_INaCa__eta) * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))) / (1.0 + var_INaCa__ksat * exp((-1.0 + var_INaCa__eta) * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // millimolar4
-        const double var_INaCa__i_NaCa_jct = var_INaCa__Fx_NCX_jct * var_INaCa__Ka_jct * var_INaCa__Q_NCX * NV_Ith_S(mParameters, 11) * var_INaCa__temp_jct / (pow(var_chaste_interface__Na_buffer__Na_jct, var_INaCa__HNa) * var_INaCa__K_mCao + pow(var_chaste_interface__Na_buffer__Na_jct, var_INaCa__HNa) * NV_Ith_S(mParameters, 4) + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_jct + pow(var_INaCa__K_mNao, var_INaCa__HNa) * (1.0 + var_chaste_interface__Ca_buffer__Ca_jct / var_INaCa__K_mCai) * var_chaste_interface__Ca_buffer__Ca_jct + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * (1.0 + pow((var_chaste_interface__Na_buffer__Na_jct / var_INaCa__K_mNai), var_INaCa__HNa)) * var_INaCa__K_mCai); // microA_per_microF
+        const double var_INaCa__i_NaCa_jct = var_INaCa__Fx_NCX_jct * var_INaCa__Ka_jct * var_INaCa__Q_NCX * NV_Ith_S(mParameters, 12) * var_INaCa__temp_jct / (pow(var_chaste_interface__Na_buffer__Na_jct, var_INaCa__HNa) * var_INaCa__K_mCao + pow(var_chaste_interface__Na_buffer__Na_jct, var_INaCa__HNa) * NV_Ith_S(mParameters, 4) + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_jct + pow(var_INaCa__K_mNao, var_INaCa__HNa) * (1.0 + var_chaste_interface__Ca_buffer__Ca_jct / var_INaCa__K_mCai) * var_chaste_interface__Ca_buffer__Ca_jct + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * (1.0 + pow((var_chaste_interface__Na_buffer__Na_jct / var_INaCa__K_mNai), var_INaCa__HNa)) * var_INaCa__K_mCai); // microA_per_microF
         const double var_INaCa__i_NaCa = var_INaCa__i_NaCa_SL + var_INaCa__i_NaCa_jct; // microA_per_microF
         const double var_reversal_potentials__E_K = var_model_parameters__R * var_model_parameters__T * log(NV_Ith_S(mParameters, 5) / NV_Ith_S(mParameters, 3)) / var_model_parameters__F; // millivolt
         const double var_IK1_K1_gate__alpha_K1 = 1.02 / (1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__V - 0.23849999999999999 * var_reversal_potentials__E_K)); // per_millisecond
@@ -807,11 +807,11 @@
         const double var_IK1_K1_gate__K1_infinity = var_IK1_K1_gate__alpha_K1 / (var_IK1_K1_gate__alpha_K1 + var_IK1_K1_gate__beta_K1); // dimensionless
         const double var_IK1__i_K1 = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_IK1__G_K1 * var_IK1_K1_gate__K1_infinity; // microA_per_microF
         const double var_IKr__i_Kr = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_IKr__G_IKr * var_IKr_Rr_gate__Rr * var_chaste_interface__IKr_Xr_gate__Xr; // microA_per_microF
-        const double var_Itos__i_tos = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * (0.5 * var_chaste_interface__Itos_R_gate__R_tos + var_chaste_interface__Itos_Y_gate__Y_tos) * NV_Ith_S(mParameters, 12) * var_chaste_interface__Itos_X_gate__X_tos; // microA_per_microF
+        const double var_Itos__i_tos = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * (0.5 * var_chaste_interface__Itos_R_gate__R_tos + var_chaste_interface__Itos_Y_gate__Y_tos) * NV_Ith_S(mParameters, 13) * var_chaste_interface__Itos_X_gate__X_tos; // microA_per_microF
         const double var_reversal_potentials__E_Na_SL = var_model_parameters__R * var_model_parameters__T * log(NV_Ith_S(mParameters, 6) / var_chaste_interface__Na_buffer__Na_SL) / var_model_parameters__F; // millivolt
-        const double var_INa__i_Na_SL = (-var_reversal_potentials__E_Na_SL + var_chaste_interface__cell__V) * var_INa__Fx_Na_SL * NV_Ith_S(mParameters, 8) * var_INa__openProb; // microA_per_microF
+        const double var_INa__i_Na_SL = (-var_reversal_potentials__E_Na_SL + var_chaste_interface__cell__V) * var_INa__Fx_Na_SL * NV_Ith_S(mParameters, 9) * var_INa__openProb; // microA_per_microF
         const double var_reversal_potentials__E_Na_jct = var_model_parameters__R * var_model_parameters__T * log(NV_Ith_S(mParameters, 6) / var_chaste_interface__Na_buffer__Na_jct) / var_model_parameters__F; // millivolt
-        const double var_INa__i_Na_jct = (-var_reversal_potentials__E_Na_jct + var_chaste_interface__cell__V) * var_INa__Fx_Na_jct * NV_Ith_S(mParameters, 8) * var_INa__openProb; // microA_per_microF
+        const double var_INa__i_Na_jct = (-var_reversal_potentials__E_Na_jct + var_chaste_interface__cell__V) * var_INa__Fx_Na_jct * NV_Ith_S(mParameters, 9) * var_INa__openProb; // microA_per_microF
         const double var_INa__i_Na = var_INa__i_Na_SL + var_INa__i_Na_jct; // microA_per_microF
 
         N_Vector dqs = N_VNew_Serial(12);
@@ -819,14 +819,14 @@
         NV_Ith_S(dqs, 1) = var_ICaL__i_CaL;
         NV_Ith_S(dqs, 2) = var_ICaL_fCa_gate__fCa_SL;
         NV_Ith_S(dqs, 3) = var_ICaL_f_gate__tau_f;
-        NV_Ith_S(dqs, 4) = var_INa__i_Na;
-        NV_Ith_S(dqs, 5) = var_IK1__i_K1;
-        NV_Ith_S(dqs, 6) = var_IKr__i_Kr;
-        NV_Ith_S(dqs, 7) = var_IKs__i_Ks;
-        NV_Ith_S(dqs, 8) = var_INaCa__i_NaCa;
-        NV_Ith_S(dqs, 9) = var_cell__i_Stim_converter;
-        NV_Ith_S(dqs, 10) = var_Itos__i_tos;
-        NV_Ith_S(dqs, 11) = var_chaste_interface__membrane_data_clamp_current;
+        NV_Ith_S(dqs, 4) = var_chaste_interface__membrane_data_clamp_current;
+        NV_Ith_S(dqs, 5) = var_INa__i_Na;
+        NV_Ith_S(dqs, 6) = var_IK1__i_K1;
+        NV_Ith_S(dqs, 7) = var_IKr__i_Kr;
+        NV_Ith_S(dqs, 8) = var_IKs__i_Ks;
+        NV_Ith_S(dqs, 9) = var_INaCa__i_NaCa;
+        NV_Ith_S(dqs, 10) = var_cell__i_Stim_converter;
+        NV_Ith_S(dqs, 11) = var_Itos__i_tos;
         return dqs;
     }
 
@@ -1065,28 +1065,28 @@ void OdeSystemInformation<CellShannon2004FromCellMLCvodeDataClamp>::Initialise(v
     this->mParameterUnits.push_back("litre_per_farad_millisecond");
 
     // mParameters[8]:
+    this->mParameterNames.push_back("membrane_data_clamp_current_conductance");
+    this->mParameterUnits.push_back("dimensionless");
+
+    // mParameters[9]:
     this->mParameterNames.push_back("membrane_fast_sodium_current_conductance");
     this->mParameterUnits.push_back("milliS_per_microF");
 
-    // mParameters[9]:
+    // mParameters[10]:
     this->mParameterNames.push_back("membrane_rapid_delayed_rectifier_potassium_current_conductance");
     this->mParameterUnits.push_back("milliS_per_microF");
 
-    // mParameters[10]:
+    // mParameters[11]:
     this->mParameterNames.push_back("membrane_slow_delayed_rectifier_potassium_current_conductance");
     this->mParameterUnits.push_back("milliS_per_microF");
 
-    // mParameters[11]:
+    // mParameters[12]:
     this->mParameterNames.push_back("membrane_sodium_calcium_exchanger_current_conductance");
     this->mParameterUnits.push_back("microA_per_microF");
 
-    // mParameters[12]:
+    // mParameters[13]:
     this->mParameterNames.push_back("membrane_transient_outward_current_conductance");
     this->mParameterUnits.push_back("milliS_per_microF");
-
-    // mParameters[13]:
-    this->mParameterNames.push_back("membrane_data_clamp_current_conductance");
-    this->mParameterUnits.push_back("dimensionless");
 
     // Derived Quantity index [0]:
     this->mDerivedQuantityNames.push_back("SR_release_current");
@@ -1105,36 +1105,36 @@ void OdeSystemInformation<CellShannon2004FromCellMLCvodeDataClamp>::Initialise(v
     this->mDerivedQuantityUnits.push_back("millisecond");
 
     // Derived Quantity index [4]:
+    this->mDerivedQuantityNames.push_back("membrane_data_clamp_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
+
+    // Derived Quantity index [5]:
     this->mDerivedQuantityNames.push_back("membrane_fast_sodium_current");
     this->mDerivedQuantityUnits.push_back("microA_per_microF");
 
-    // Derived Quantity index [5]:
+    // Derived Quantity index [6]:
     this->mDerivedQuantityNames.push_back("membrane_inward_rectifier_potassium_current");
     this->mDerivedQuantityUnits.push_back("microA_per_microF");
 
-    // Derived Quantity index [6]:
+    // Derived Quantity index [7]:
     this->mDerivedQuantityNames.push_back("membrane_rapid_delayed_rectifier_potassium_current");
     this->mDerivedQuantityUnits.push_back("microA_per_microF");
 
-    // Derived Quantity index [7]:
+    // Derived Quantity index [8]:
     this->mDerivedQuantityNames.push_back("membrane_slow_delayed_rectifier_potassium_current");
     this->mDerivedQuantityUnits.push_back("microA_per_microF");
 
-    // Derived Quantity index [8]:
+    // Derived Quantity index [9]:
     this->mDerivedQuantityNames.push_back("membrane_sodium_calcium_exchanger_current");
     this->mDerivedQuantityUnits.push_back("microA_per_microF");
 
-    // Derived Quantity index [9]:
+    // Derived Quantity index [10]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
-    // Derived Quantity index [10]:
+    // Derived Quantity index [11]:
     this->mDerivedQuantityNames.push_back("membrane_transient_outward_current");
     this->mDerivedQuantityUnits.push_back("microA_per_microF");
-
-    // Derived Quantity index [11]:
-    this->mDerivedQuantityNames.push_back("membrane_data_clamp_current");
-    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     this->mInitialised = true;
 }

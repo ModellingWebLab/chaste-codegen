@@ -28,9 +28,11 @@ class Cellten_tusscher_model_2006_epiFromCellMLGRL1 : public AbstractGeneralized
         archive & boost::serialization::base_object<AbstractGeneralizedRushLarsenCardiacCell >(*this);
         
     }
+
     //
     // Settable parameters and readable variables
     //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
@@ -80,6 +82,7 @@ public:
     double EvaluateYDerivative18(double var_chaste_interface__environment__time, std::vector<double>& rY);
     double EvaluatePartialDerivative18(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical=false);
 
+    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY);
 };
 
 // Needs to be included last

@@ -657,8 +657,8 @@
 
         N_Vector dqs = N_VNew_Serial(3);
         NV_Ith_S(dqs, 0) = var_internal_ion_concentrations__Cai;
-        NV_Ith_S(dqs, 1) = var_membrane__i_ext_converter;
-        NV_Ith_S(dqs, 2) = var_chaste_interface__membrane_data_clamp_current;
+        NV_Ith_S(dqs, 1) = var_chaste_interface__membrane_data_clamp_current;
+        NV_Ith_S(dqs, 2) = var_membrane__i_ext_converter;
         return dqs;
     }
 
@@ -867,11 +867,11 @@ void OdeSystemInformation<Cellmatsuoka_model_2003FromCellMLCvodeDataClamp>::Init
     this->mDerivedQuantityUnits.push_back("millimolar");
 
     // Derived Quantity index [1]:
-    this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
+    this->mDerivedQuantityNames.push_back("membrane_data_clamp_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     // Derived Quantity index [2]:
-    this->mDerivedQuantityNames.push_back("membrane_data_clamp_current");
+    this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     this->mInitialised = true;
