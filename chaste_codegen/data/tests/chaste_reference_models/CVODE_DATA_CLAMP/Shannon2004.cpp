@@ -729,7 +729,7 @@
         // Units: millimolar; Initial value: 0.0001031812
         double var_chaste_interface__Ca_buffer__Ca_jct = NV_Ith_S(rY,26);
         // Units: millimolar; Initial value: 0.0001737475
-
+        
         // Mathematics
         const double var_ICaL__Fx_ICaL_SL = 0.10000000000000001; // dimensionless
         const double var_ICaL__Fx_ICaL_jct = 0.90000000000000002; // dimensionless
