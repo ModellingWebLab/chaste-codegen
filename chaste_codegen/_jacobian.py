@@ -11,7 +11,7 @@ def get_jacobian(state_vars, derivative_equations):
              The jacobian Matrix is an sympy.Matrix
     """
     jacobian_equations, jacobian_matrix = [], sp.Matrix([])
-    if len(state_vars > 0:
+    if len(state_vars) > 0:
         jacobian_equations, jacobian_matrix = [], []
         state_var_matrix = sp.Matrix(state_vars)
         # sort by state var
