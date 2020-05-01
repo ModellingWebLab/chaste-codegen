@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1
+//! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
 //! Model: shannon_2004
 //!
@@ -27,8 +27,8 @@
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__cell__stim_amplitude = 9.5 * HeartConfig::Instance()->GetCapacitance(); // microA_per_microF
         const double var_chaste_interface__cell__stim_duration = 5.0; // millisecond
-        const double var_chaste_interface__cell__stim_period = 1000; // millisecond
-        const double var_chaste_interface__cell__stim_start = 100; // millisecond
+        const double var_chaste_interface__cell__stim_period = 1000.0; // millisecond
+        const double var_chaste_interface__cell__stim_start = 100.0; // millisecond
         boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__cell__stim_amplitude),
                 var_chaste_interface__cell__stim_duration,
@@ -58,17 +58,17 @@
         
         this->mParameters[0] = 5.3480000000000003e-6; // (var_Jleak_SR__KSRleak) [per_millisecond]
         this->mParameters[1] = 25.0; // (var_Jrel_SR__ks) [per_millisecond]
-        this->mParameters[2] = 0053114; // (var_Jpump_SR__V_max) [millimolar_per_millisecond]
+        this->mParameters[2] = 0.0053114; // (var_Jpump_SR__V_max) [millimolar_per_millisecond]
         this->mParameters[3] = 135.0; // (var_model_parameters__Ki) [millimolar]
         this->mParameters[4] = 1.8; // (var_model_parameters__Cao) [millimolar]
         this->mParameters[5] = 5.4000000000000004; // (var_model_parameters__Ko) [millimolar]
-        this->mParameters[6] = 140; // (var_model_parameters__Nao) [millimolar]
-        this->mParameters[7] = 00054000000000000001; // (var_ICaL__PCa) [litre_per_farad_millisecond]
+        this->mParameters[6] = 140.0; // (var_model_parameters__Nao) [millimolar]
+        this->mParameters[7] = 0.00054000000000000001; // (var_ICaL__PCa) [litre_per_farad_millisecond]
         this->mParameters[8] = 16.0; // (var_INa__G_INa) [milliS_per_microF]
-        this->mParameters[9] = 029999999999999999; // (var_IKr__G_IKr_const) [milliS_per_microF]
-        this->mParameters[10] = 070000000000000007; // (var_IKs__G_Ks_Max) [milliS_per_microF]
+        this->mParameters[9] = 0.029999999999999999; // (var_IKr__G_IKr_const) [milliS_per_microF]
+        this->mParameters[10] = 0.070000000000000007; // (var_IKs__G_Ks_Max) [milliS_per_microF]
         this->mParameters[11] = 9.0; // (var_INaCa__V_max) [microA_per_microF]
-        this->mParameters[12] = 059999999999999998; // (var_Itos__G_tos) [milliS_per_microF]
+        this->mParameters[12] = 0.059999999999999998; // (var_Itos__G_tos) [milliS_per_microF]
     }
 
     CellShannon2004FromCellMLBackwardEuler::~CellShannon2004FromCellMLBackwardEuler()
@@ -88,19 +88,19 @@
         double var_chaste_interface__INa_j_gate__j = rY[3];
         // Units: dimensionless; Initial value: 0.991562
         double var_chaste_interface__INa_m_gate__m = rY[4];
-        // Units: dimensionless; Initial value: 001405627
+        // Units: dimensionless; Initial value: 0.001405627
         double var_chaste_interface__IKr_Xr_gate__Xr = rY[5];
-        // Units: dimensionless; Initial value: 008641386
+        // Units: dimensionless; Initial value: 0.008641386
         double var_chaste_interface__IKs_Xs_gate__Xs = rY[6];
-        // Units: dimensionless; Initial value: 005412034
+        // Units: dimensionless; Initial value: 0.005412034
         double var_chaste_interface__Itos_X_gate__X_tos = rY[7];
-        // Units: dimensionless; Initial value: 004051574
+        // Units: dimensionless; Initial value: 0.004051574
         double var_chaste_interface__Itos_Y_gate__Y_tos = rY[8];
         // Units: dimensionless; Initial value: 0.9945511
         double var_chaste_interface__Itos_R_gate__R_tos = rY[9];
         // Units: dimensionless; Initial value: 0.9946
         double var_chaste_interface__Itof_X_gate__X_tof = rY[10];
-        // Units: dimensionless; Initial value: 004051574
+        // Units: dimensionless; Initial value: 0.004051574
         double var_chaste_interface__Itof_Y_gate__Y_tof = rY[11];
         // Units: dimensionless; Initial value: 0.9945511
         double var_chaste_interface__ICaL_d_gate__d = rY[12];
@@ -108,9 +108,9 @@
         double var_chaste_interface__ICaL_f_gate__f = rY[13];
         // Units: dimensionless; Initial value: 1.000681
         double var_chaste_interface__ICaL_fCa_gate__fCaB_SL = rY[14];
-        // Units: dimensionless; Initial value: 01452605
+        // Units: dimensionless; Initial value: 0.01452605
         double var_chaste_interface__ICaL_fCa_gate__fCaB_jct = rY[15];
-        // Units: dimensionless; Initial value: 02421991
+        // Units: dimensionless; Initial value: 0.02421991
         double var_chaste_interface__Na_buffer__Na_SL = rY[19];
         // Units: millimolar; Initial value: 8.80733
         double var_chaste_interface__Na_buffer__Na_jct = rY[20];
@@ -118,9 +118,9 @@
         double var_chaste_interface__Na_buffer__Nai = rY[23];
         // Units: millimolar; Initial value: 8.80853
         double var_chaste_interface__Ca_buffer__Ca_SL = rY[25];
-        // Units: millimolar; Initial value: 0001031812
+        // Units: millimolar; Initial value: 0.0001031812
         double var_chaste_interface__Ca_buffer__Ca_jct = rY[26];
-        // Units: millimolar; Initial value: 0001737475
+        // Units: millimolar; Initial value: 0.0001737475
         
         const double var_ICaL__Fx_ICaL_SL = 0.10000000000000001; // dimensionless
         const double var_ICaL__Fx_ICaL_jct = 0.90000000000000002; // dimensionless
@@ -137,36 +137,36 @@
         const double var_ICaL_fCa_gate__fCa_jct = 1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_jct; // dimensionless
         const double var_ICab__Fx_CaBk_SL = 0.89000000000000001; // dimensionless
         const double var_ICab__Fx_CaBk_jct = 0.11; // dimensionless
-        const double var_ICab__G_CaBk = 00025129999999999998; // milliS_per_microF
+        const double var_ICab__G_CaBk = 0.00025129999999999998; // milliS_per_microF
         const double var_ICap__Fx_SLCaP_SL = 0.89000000000000001; // dimensionless
         const double var_ICap__Fx_SLCaP_jct = 0.11; // dimensionless
         const double var_ICap__H = 1.6000000000000001; // dimensionless
-        const double var_ICap__Km = 00050000000000000001; // millimolar
+        const double var_ICap__Km = 0.00050000000000000001; // millimolar
         const double var_ICap__Q10_SLCaP = 2.3500000000000001; // dimensionless
-        const double var_ICap__V_maxAF = 067299999999999999; // microA_per_microF
+        const double var_ICap__V_maxAF = 0.067299999999999999; // microA_per_microF
         const double var_ICl_Ca__Fx_Cl_SL = 0.89000000000000001; // dimensionless
         const double var_ICl_Ca__Fx_Cl_jct = 0.11; // dimensionless
         const double var_ICl_Ca__G_Cl = 0.109625; // milliS_per_microF
         const double var_ICl_Ca__Kd_ClCa = 0.10000000000000001; // millimolar
-        const double var_IClb__G_ClBk = 0089999999999999993; // milliS_per_microF
-        const double var_IKp__g_Kp = 001; // milliS_per_microF
+        const double var_IClb__G_ClBk = 0.0089999999999999993; // milliS_per_microF
+        const double var_IKp__g_Kp = 0.001; // milliS_per_microF
         const double var_IKs__Fx_Ks_SL = 0.89000000000000001; // dimensionless
         const double var_IKs__Fx_Ks_jct = 0.11; // dimensionless
         const double var_IKs__pCa_SL = 3.0 - log10(var_chaste_interface__Ca_buffer__Ca_SL); // dimensionless
-        const double var_IKs__G_Ks_SL = (057000000000000002 + 0.19 / (1.0 + exp(-12.0 + 1.6666666666666667 * var_IKs__pCa_SL))) * mParameters[10]; // milliS_per_microF
+        const double var_IKs__G_Ks_SL = (0.057000000000000002 + 0.19 / (1.0 + exp(-12.0 + 1.6666666666666667 * var_IKs__pCa_SL))) * mParameters[10]; // milliS_per_microF
         const double var_IKs__pCa_jct = 3.0 - log10(var_chaste_interface__Ca_buffer__Ca_jct); // dimensionless
-        const double var_IKs__G_Ks_jct = (057000000000000002 + 0.19 / (1.0 + exp(-12.0 + 1.6666666666666667 * var_IKs__pCa_jct))) * mParameters[10]; // milliS_per_microF
-        const double var_IKs__pKNa = 018329999999999999; // dimensionless
+        const double var_IKs__G_Ks_jct = (0.057000000000000002 + 0.19 / (1.0 + exp(-12.0 + 1.6666666666666667 * var_IKs__pCa_jct))) * mParameters[10]; // milliS_per_microF
+        const double var_IKs__pKNa = 0.018329999999999999; // dimensionless
         const double var_INa__Fx_Na_SL = 0.89000000000000001; // dimensionless
         const double var_INa__Fx_Na_jct = 0.11; // dimensionless
         const double var_INaCa__Fx_NCX_SL = 0.89000000000000001; // dimensionless
         const double var_INaCa__Fx_NCX_jct = 0.11; // dimensionless
         const double var_INaCa__HNa = 3.0; // dimensionless
-        const double var_INaCa__K_mCai = 0035899999999999999; // millimolar
+        const double var_INaCa__K_mCai = 0.0035899999999999999; // millimolar
         const double var_INaCa__K_mCao = 1.3; // millimolar
         const double var_INaCa__K_mNai = 12.289999999999999; // millimolar
         const double var_INaCa__K_mNao = 87.5; // millimolar
-        const double var_INaCa__Kd_act = 00025599999999999999; // millimolar
+        const double var_INaCa__Kd_act = 0.00025599999999999999; // millimolar
         const double var_INaCa__Ka_SL = 1.0 / (1.0 + pow(var_INaCa__Kd_act, 3) / pow(var_chaste_interface__Ca_buffer__Ca_SL, 3)); // dimensionless
         const double var_INaCa__Ka_jct = 1.0 / (1.0 + pow(var_INaCa__Kd_act, 3) / pow(var_chaste_interface__Ca_buffer__Ca_jct, 3)); // dimensionless
         const double var_INaCa__Q10_NCX = 1.5700000000000001; // dimensionless
@@ -181,17 +181,17 @@
         const double var_INa__openProb = pow(var_chaste_interface__INa_m_gate__m, 3) * var_chaste_interface__INa_h_gate__h * var_chaste_interface__INa_j_gate__j; // dimensionless
         const double var_INab__Fx_NaBk_SL = 0.89000000000000001; // dimensionless
         const double var_INab__Fx_NaBk_jct = 0.11; // dimensionless
-        const double var_INab__G_NaBk = 00029700000000000001; // milliS_per_microF
-        const double var_Itof__G_tof = 02; // milliS_per_microF
-        const double var_IKr_Rr_gate__Rr = 1.0 / (1.0 + exp(1.4732142857142858 + 044642857142857144 * var_chaste_interface__cell__V)); // dimensionless
+        const double var_INab__G_NaBk = 0.00029700000000000001; // milliS_per_microF
+        const double var_Itof__G_tof = 0.02; // milliS_per_microF
+        const double var_IKr_Rr_gate__Rr = 1.0 / (1.0 + exp(1.4732142857142858 + 0.044642857142857144 * var_chaste_interface__cell__V)); // dimensionless
         const double var_model_parameters__Cli = 15.0; // millimolar
-        const double var_model_parameters__Clo = 150; // millimolar
+        const double var_model_parameters__Clo = 150.0; // millimolar
         const double var_model_parameters__F = 96485.0; // coulomb_per_mole
         const double var_IK1__G_K1 = 0.3872983346207417 * sqrt(mParameters[5]); // milliS_per_microF
         const double var_IKr__G_IKr = 0.43033148291193518 * sqrt(mParameters[5]) * mParameters[9]; // milliS_per_microF
-        const double var_INaK__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(01485884101040119 * mParameters[6]); // dimensionless
+        const double var_INaK__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * mParameters[6]); // dimensionless
         const double var_model_parameters__R = 8314.2999999999993; // joule_per_kilomole_kelvin
-        const double var_model_parameters__T = 310; // kelvin
+        const double var_model_parameters__T = 310.0; // kelvin
         const double var_ICaL__Q_CaL = pow(var_ICaL__Q10_CaL, (-31.0 + 0.10000000000000001 * var_model_parameters__T)); // dimensionless
         const double var_ICaL__temp = 0.45000000000000001 * pow(var_model_parameters__F, 2) * var_ICaL__Q_CaL * var_chaste_interface__ICaL_d_gate__d * var_chaste_interface__ICaL_f_gate__f * var_chaste_interface__cell__V / (var_model_parameters__R * var_model_parameters__T); // coulomb_per_mole
         const double var_ICaL__i_CaL_Ca_SL = 4.0 * (-var_ICaL__gamma_Cao * mParameters[4] + var_chaste_interface__Ca_buffer__Ca_SL * var_ICaL__gamma_Cai * exp(2.0 * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))) * var_ICaL__Fx_ICaL_SL * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL / (-1.0 + exp(2.0 * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // microA_per_microF
@@ -214,7 +214,7 @@
         const double var_INaCa__temp_jct = (pow(var_chaste_interface__Na_buffer__Na_jct, var_INaCa__HNa) * mParameters[4] * exp(var_INaCa__eta * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T)) - pow(mParameters[6], var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_jct * exp((-1.0 + var_INaCa__eta) * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))) / (1.0 + var_INaCa__ksat * exp((-1.0 + var_INaCa__eta) * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // millimolar4
         const double var_INaCa__i_NaCa_jct = var_INaCa__Fx_NCX_jct * var_INaCa__Ka_jct * var_INaCa__Q_NCX * mParameters[11] * var_INaCa__temp_jct / (pow(var_chaste_interface__Na_buffer__Na_jct, var_INaCa__HNa) * var_INaCa__K_mCao + pow(var_chaste_interface__Na_buffer__Na_jct, var_INaCa__HNa) * mParameters[4] + pow(mParameters[6], var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_jct + pow(var_INaCa__K_mNao, var_INaCa__HNa) * (1.0 + var_chaste_interface__Ca_buffer__Ca_jct / var_INaCa__K_mCai) * var_chaste_interface__Ca_buffer__Ca_jct + pow(mParameters[6], var_INaCa__HNa) * (1.0 + pow((var_chaste_interface__Na_buffer__Na_jct / var_INaCa__K_mNai), var_INaCa__HNa)) * var_INaCa__K_mCai); // microA_per_microF
         const double var_INaCa__i_NaCa = var_INaCa__i_NaCa_SL + var_INaCa__i_NaCa_jct; // microA_per_microF
-        const double var_INaK__f_NaK = 1.0 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T)) + 036499999999999998 * var_INaK__sigma * exp(-var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // dimensionless
+        const double var_INaK__f_NaK = 1.0 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T)) + 0.036499999999999998 * var_INaK__sigma * exp(-var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // dimensionless
         const double var_INaK__i_NaK_SL = var_INaK__Fx_NaK_SL * var_INaK__I_NaK_max * var_INaK__f_NaK * mParameters[5] / ((1.0 + pow((var_INaK__Km_Nai / var_chaste_interface__Na_buffer__Na_SL), var_INaK__H_NaK)) * (var_INaK__Km_Ko + mParameters[5])); // microA_per_microF
         const double var_INaK__i_NaK_jct = var_INaK__Fx_NaK_jct * var_INaK__I_NaK_max * var_INaK__f_NaK * mParameters[5] / ((1.0 + pow((var_INaK__Km_Nai / var_chaste_interface__Na_buffer__Na_jct), var_INaK__H_NaK)) * (var_INaK__Km_Ko + mParameters[5])); // microA_per_microF
         const double var_INaK__i_NaK = var_INaK__i_NaK_SL + var_INaK__i_NaK_jct; // microA_per_microF
@@ -228,7 +228,7 @@
         const double var_IClb__i_Clb = (-var_reversal_potentials__E_Cl + var_chaste_interface__cell__V) * var_IClb__G_ClBk; // microA_per_microF
         const double var_reversal_potentials__E_K = var_model_parameters__R * var_model_parameters__T * log(mParameters[5] / mParameters[3]) / var_model_parameters__F; // millivolt
         const double var_IK1_K1_gate__alpha_K1 = 1.02 / (1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__V - 0.23849999999999999 * var_reversal_potentials__E_K)); // per_millisecond
-        const double var_IK1_K1_gate__beta_K1 = (1.0 * exp(-36.698642499999998 + 061749999999999999 * var_chaste_interface__cell__V - 061749999999999999 * var_reversal_potentials__E_K) + 0.49124000000000001 * exp(0.43983232 + 080320000000000003 * var_chaste_interface__cell__V - 080320000000000003 * var_reversal_potentials__E_K)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_reversal_potentials__E_K - 0.51429999999999998 * var_chaste_interface__cell__V)); // per_millisecond
+        const double var_IK1_K1_gate__beta_K1 = (1.0 * exp(-36.698642499999998 + 0.061749999999999999 * var_chaste_interface__cell__V - 0.061749999999999999 * var_reversal_potentials__E_K) + 0.49124000000000001 * exp(0.43983232 + 0.080320000000000003 * var_chaste_interface__cell__V - 0.080320000000000003 * var_reversal_potentials__E_K)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_reversal_potentials__E_K - 0.51429999999999998 * var_chaste_interface__cell__V)); // per_millisecond
         const double var_IK1_K1_gate__K1_infinity = var_IK1_K1_gate__alpha_K1 / (var_IK1_K1_gate__alpha_K1 + var_IK1_K1_gate__beta_K1); // dimensionless
         const double var_IK1__i_K1 = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_IK1__G_K1 * var_IK1_K1_gate__K1_infinity; // microA_per_microF
         const double var_IKp__i_Kp = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_IKp__g_Kp / (1.0 + exp(7.4880000000000004 - 0.16722408026755853 * var_chaste_interface__cell__V)); // microA_per_microF
@@ -260,7 +260,7 @@
         double var_chaste_interface__INa_j_gate__j = rY[3];
         // Units: dimensionless; Initial value: 0.991562
         double var_chaste_interface__INa_m_gate__m = rY[4];
-        // Units: dimensionless; Initial value: 001405627
+        // Units: dimensionless; Initial value: 0.001405627
         double var_chaste_interface__ICaL_d_gate__d = rY[12];
         // Units: dimensionless; Initial value: 7.175662e-06
         double var_chaste_interface__ICaL_f_gate__f = rY[13];
@@ -296,15 +296,15 @@
         
         //output_equations
         const double var_Ca_buffer__Bmax_Calsequestrin = 0.14000000000000001; // millimolar
-        const double var_Ca_buffer__Bmax_SLB_SL = 037400000000000003; // millimolar
-        const double var_Ca_buffer__Bmax_SLB_jct = 0045999999999999999; // millimolar
-        const double var_Ca_buffer__Bmax_SLHigh_SL = 0134; // millimolar
-        const double var_Ca_buffer__Bmax_SLHigh_jct = 00165; // millimolar
+        const double var_Ca_buffer__Bmax_SLB_SL = 0.037400000000000003; // millimolar
+        const double var_Ca_buffer__Bmax_SLB_jct = 0.0045999999999999999; // millimolar
+        const double var_Ca_buffer__Bmax_SLHigh_SL = 0.0134; // millimolar
+        const double var_Ca_buffer__Bmax_SLHigh_jct = 0.00165; // millimolar
         const double var_Ca_buffer__koff_Calsequestrin = 65.0; // per_millisecond
         const double var_Ca_buffer__koff_SLB = 1.3; // per_millisecond
-        const double var_Ca_buffer__koff_SLHigh = 029999999999999999; // per_millisecond
-        const double var_Ca_buffer__kon_Calsequestrin = 100; // per_millimolar_per_millisecond
-        const double var_Ca_buffer__kon_SL = 100; // per_millimolar_per_millisecond
+        const double var_Ca_buffer__koff_SLHigh = 0.029999999999999999; // per_millisecond
+        const double var_Ca_buffer__kon_Calsequestrin = 100.0; // per_millimolar_per_millisecond
+        const double var_Ca_buffer__kon_SL = 100.0; // per_millimolar_per_millisecond
         const double var_ICaL__Fx_ICaL_SL = 0.10000000000000001; // dimensionless
         const double var_ICaL__Fx_ICaL_jct = 0.90000000000000002; // dimensionless
         const double var_ICaL__PNa = 1.4999999999999999e-8; // litre_per_farad_millisecond
@@ -313,29 +313,29 @@
         const double var_ICaL__gamma_Cao = 0.34100000000000003; // dimensionless
         const double var_ICaL__gamma_Nai = 0.75; // dimensionless
         const double var_ICaL__gamma_Nao = 0.75; // dimensionless
-        const double d_dt_chaste_interface_var_ICaL_fCa_gate__fCaB_SL = -011900000000000001 * var_chaste_interface__ICaL_fCa_gate__fCaB_SL + 1.7 * (1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_SL) * var_chaste_interface__Ca_buffer__Ca_SL; // 1 / millisecond
-        const double d_dt_chaste_interface_var_ICaL_fCa_gate__fCaB_jct = -011900000000000001 * var_chaste_interface__ICaL_fCa_gate__fCaB_jct + 1.7 * (1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_jct) * var_chaste_interface__Ca_buffer__Ca_jct; // 1 / millisecond
+        const double d_dt_chaste_interface_var_ICaL_fCa_gate__fCaB_SL = -0.011900000000000001 * var_chaste_interface__ICaL_fCa_gate__fCaB_SL + 1.7 * (1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_SL) * var_chaste_interface__Ca_buffer__Ca_SL; // 1 / millisecond
+        const double d_dt_chaste_interface_var_ICaL_fCa_gate__fCaB_jct = -0.011900000000000001 * var_chaste_interface__ICaL_fCa_gate__fCaB_jct + 1.7 * (1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_jct) * var_chaste_interface__Ca_buffer__Ca_jct; // 1 / millisecond
         const double var_ICaL_fCa_gate__fCa_SL = 1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_SL; // dimensionless
         const double var_ICaL_fCa_gate__fCa_jct = 1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_jct; // dimensionless
         const double var_ICab__Fx_CaBk_SL = 0.89000000000000001; // dimensionless
         const double var_ICab__Fx_CaBk_jct = 0.11; // dimensionless
-        const double var_ICab__G_CaBk = 00025129999999999998; // milliS_per_microF
+        const double var_ICab__G_CaBk = 0.00025129999999999998; // milliS_per_microF
         const double var_ICap__Fx_SLCaP_SL = 0.89000000000000001; // dimensionless
         const double var_ICap__Fx_SLCaP_jct = 0.11; // dimensionless
         const double var_ICap__H = 1.6000000000000001; // dimensionless
-        const double var_ICap__Km = 00050000000000000001; // millimolar
+        const double var_ICap__Km = 0.00050000000000000001; // millimolar
         const double var_ICap__Q10_SLCaP = 2.3500000000000001; // dimensionless
-        const double var_ICap__V_maxAF = 067299999999999999; // microA_per_microF
+        const double var_ICap__V_maxAF = 0.067299999999999999; // microA_per_microF
         const double var_INa__Fx_Na_SL = 0.89000000000000001; // dimensionless
         const double var_INa__Fx_Na_jct = 0.11; // dimensionless
         const double var_INaCa__Fx_NCX_SL = 0.89000000000000001; // dimensionless
         const double var_INaCa__Fx_NCX_jct = 0.11; // dimensionless
         const double var_INaCa__HNa = 3.0; // dimensionless
-        const double var_INaCa__K_mCai = 0035899999999999999; // millimolar
+        const double var_INaCa__K_mCai = 0.0035899999999999999; // millimolar
         const double var_INaCa__K_mCao = 1.3; // millimolar
         const double var_INaCa__K_mNai = 12.289999999999999; // millimolar
         const double var_INaCa__K_mNao = 87.5; // millimolar
-        const double var_INaCa__Kd_act = 00025599999999999999; // millimolar
+        const double var_INaCa__Kd_act = 0.00025599999999999999; // millimolar
         const double var_INaCa__Ka_SL = 1.0 / (1.0 + pow(var_INaCa__Kd_act, 3) / pow(var_chaste_interface__Ca_buffer__Ca_SL, 3)); // dimensionless
         const double var_INaCa__Ka_jct = 1.0 / (1.0 + pow(var_INaCa__Kd_act, 3) / pow(var_chaste_interface__Ca_buffer__Ca_jct, 3)); // dimensionless
         const double var_INaCa__Q10_NCX = 1.5700000000000001; // dimensionless
@@ -350,10 +350,10 @@
         const double var_INa__openProb = pow(var_chaste_interface__INa_m_gate__m, 3) * var_chaste_interface__INa_h_gate__h * var_chaste_interface__INa_j_gate__j; // dimensionless
         const double var_INab__Fx_NaBk_SL = 0.89000000000000001; // dimensionless
         const double var_INab__Fx_NaBk_jct = 0.11; // dimensionless
-        const double var_INab__G_NaBk = 00029700000000000001; // milliS_per_microF
+        const double var_INab__G_NaBk = 0.00029700000000000001; // milliS_per_microF
         const double var_Jleak_SR__j_leak_SR = (-var_chaste_interface__Ca_buffer__Ca_jct + var_chaste_interface__Ca_buffer__Ca_SR) * mParameters[0]; // millimolar_per_millisecond
         const double var_Jpump_SR__H = 1.7869999999999999; // dimensionless
-        const double var_Jpump_SR__Kmf = 00024600000000000002; // millimolar
+        const double var_Jpump_SR__Kmf = 0.00024600000000000002; // millimolar
         const double var_Jpump_SR__Kmr = 1.7; // millimolar
         const double var_Jpump_SR__Q10_SRCaP = 2.6000000000000001; // dimensionless
         const double var_Jrel_SR__EC50_SR = 0.45000000000000001; // millimolar
@@ -364,44 +364,44 @@
         const double var_Jrel_SR__kCaSR = -(-var_Jrel_SR__Min_SR + var_Jrel_SR__Max_SR) / (1.0 + pow((var_Jrel_SR__EC50_SR / var_chaste_interface__Ca_buffer__Ca_SR), var_Jrel_SR__HSR)) + var_Jrel_SR__Max_SR; // dimensionless
         const double var_Jrel_SR__kiCa = 0.5; // per_millimolar_per_millisecond
         const double var_Jrel_SR__kiSRCa = var_Jrel_SR__kCaSR * var_Jrel_SR__kiCa; // per_millimolar_per_millisecond
-        const double var_Jrel_SR__kim = 0050000000000000001; // per_millisecond
-        const double var_Jrel_SR__koCa = 10; // per_millimolar2_per_millisecond
+        const double var_Jrel_SR__kim = 0.0050000000000000001; // per_millisecond
+        const double var_Jrel_SR__koCa = 10.0; // per_millimolar2_per_millisecond
         const double var_Jrel_SR__koSRCa = var_Jrel_SR__koCa / var_Jrel_SR__kCaSR; // per_millimolar2_per_millisecond
-        const double var_Jrel_SR__kom = 059999999999999998; // per_millisecond
+        const double var_Jrel_SR__kom = 0.059999999999999998; // per_millisecond
         const double d_dt_chaste_interface_var_Jrel_SR__I = -var_chaste_interface__Jrel_SR__I * var_Jrel_SR__kim - var_chaste_interface__Jrel_SR__I * var_Jrel_SR__kom + pow(var_chaste_interface__Ca_buffer__Ca_jct, 2) * var_Jrel_SR__RI * var_Jrel_SR__koSRCa + var_chaste_interface__Ca_buffer__Ca_jct * var_chaste_interface__Jrel_SR__O * var_Jrel_SR__kiSRCa; // 1 / millisecond
         const double d_dt_chaste_interface_var_Jrel_SR__O = var_chaste_interface__Jrel_SR__I * var_Jrel_SR__kim - var_chaste_interface__Jrel_SR__O * var_Jrel_SR__kom + pow(var_chaste_interface__Ca_buffer__Ca_jct, 2) * var_chaste_interface__Jrel_SR__R * var_Jrel_SR__koSRCa - var_chaste_interface__Ca_buffer__Ca_jct * var_chaste_interface__Jrel_SR__O * var_Jrel_SR__kiSRCa; // 1 / millisecond
         const double d_dt_chaste_interface_var_Jrel_SR__R = var_chaste_interface__Jrel_SR__O * var_Jrel_SR__kom + var_Jrel_SR__RI * var_Jrel_SR__kim - pow(var_chaste_interface__Ca_buffer__Ca_jct, 2) * var_chaste_interface__Jrel_SR__R * var_Jrel_SR__koSRCa - var_chaste_interface__Ca_buffer__Ca_jct * var_chaste_interface__Jrel_SR__R * var_Jrel_SR__kiSRCa; // 1 / millisecond
         const double var_Jrel_SR__j_rel_SR = (-var_chaste_interface__Ca_buffer__Ca_jct + var_chaste_interface__Ca_buffer__Ca_SR) * var_chaste_interface__Jrel_SR__O * mParameters[1]; // millimolar_per_millisecond
         const double var_Na_buffer__Bmax_SL = 1.6499999999999999; // millimolar
         const double var_Na_buffer__Bmax_jct = 7.5609999999999999; // millimolar
-        const double var_Na_buffer__koff = 001; // per_millisecond
-        const double var_Na_buffer__kon = 0001; // per_millimolar_per_millisecond
+        const double var_Na_buffer__koff = 0.001; // per_millisecond
+        const double var_Na_buffer__kon = 0.0001; // per_millimolar_per_millisecond
         const double var_Na_buffer__dNa_SL_buf = -var_chaste_interface__Na_buffer__Na_SL_buf * var_Na_buffer__koff + (-var_chaste_interface__Na_buffer__Na_SL_buf + var_Na_buffer__Bmax_SL) * var_chaste_interface__Na_buffer__Na_SL * var_Na_buffer__kon; // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_Na_buffer__Na_SL_buf = var_Na_buffer__dNa_SL_buf; // millimolar / millisecond
         const double var_Na_buffer__dNa_jct_buf = -var_chaste_interface__Na_buffer__Na_jct_buf * var_Na_buffer__koff + (-var_chaste_interface__Na_buffer__Na_jct_buf + var_Na_buffer__Bmax_jct) * var_chaste_interface__Na_buffer__Na_jct * var_Na_buffer__kon; // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_Na_buffer__Na_jct_buf = var_Na_buffer__dNa_jct_buf; // millimolar / millisecond
-        const double var_cytosolic_Ca_buffer__Bmax_Calmodulin = 024; // millimolar
+        const double var_cytosolic_Ca_buffer__Bmax_Calmodulin = 0.024; // millimolar
         const double var_cytosolic_Ca_buffer__Bmax_Myosin_Ca = 0.14000000000000001; // millimolar
         const double var_cytosolic_Ca_buffer__Bmax_Myosin_Mg = 0.14000000000000001; // millimolar
-        const double var_cytosolic_Ca_buffer__Bmax_SRB = 017100000000000001; // millimolar
-        const double var_cytosolic_Ca_buffer__Bmax_TroponinC = 070000000000000007; // millimolar
+        const double var_cytosolic_Ca_buffer__Bmax_SRB = 0.017100000000000001; // millimolar
+        const double var_cytosolic_Ca_buffer__Bmax_TroponinC = 0.070000000000000007; // millimolar
         const double var_cytosolic_Ca_buffer__Bmax_TroponinC_Ca_Mg_Ca = 0.14000000000000001; // millimolar
         const double var_cytosolic_Ca_buffer__Bmax_TroponinC_Ca_Mg_Mg = 0.14000000000000001; // millimolar
         const double var_cytosolic_Ca_buffer__koff_Calmodulin = 0.23799999999999999; // per_millisecond
-        const double var_cytosolic_Ca_buffer__koff_Myosin_Ca = 00046000000000000001; // per_millisecond
+        const double var_cytosolic_Ca_buffer__koff_Myosin_Ca = 0.00046000000000000001; // per_millisecond
         const double var_cytosolic_Ca_buffer__koff_Myosin_Mg = 5.7000000000000003e-5; // per_millisecond
-        const double var_cytosolic_Ca_buffer__koff_SRB = 059999999999999998; // per_millisecond
-        const double var_cytosolic_Ca_buffer__koff_TroponinC = 019599999999999999; // per_millisecond
+        const double var_cytosolic_Ca_buffer__koff_SRB = 0.059999999999999998; // per_millisecond
+        const double var_cytosolic_Ca_buffer__koff_TroponinC = 0.019599999999999999; // per_millisecond
         const double var_cytosolic_Ca_buffer__koff_TroponinC_Ca_Mg_Ca = 3.1999999999999999e-5; // per_millisecond
-        const double var_cytosolic_Ca_buffer__koff_TroponinC_Ca_Mg_Mg = 0033300000000000001; // per_millisecond
+        const double var_cytosolic_Ca_buffer__koff_TroponinC_Ca_Mg_Mg = 0.0033300000000000001; // per_millisecond
         const double var_cytosolic_Ca_buffer__kon_Calmodulin = 34.0; // per_millimolar_per_millisecond
         const double var_cytosolic_Ca_buffer__dCa_Calmodulin = -var_chaste_interface__cytosolic_Ca_buffer__Ca_Calmodulin * var_cytosolic_Ca_buffer__koff_Calmodulin + (-var_chaste_interface__cytosolic_Ca_buffer__Ca_Calmodulin + var_cytosolic_Ca_buffer__Bmax_Calmodulin) * var_chaste_interface__Ca_buffer__Cai * var_cytosolic_Ca_buffer__kon_Calmodulin; // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_cytosolic_Ca_buffer__Ca_Calmodulin = var_cytosolic_Ca_buffer__dCa_Calmodulin; // millimolar / millisecond
         const double var_cytosolic_Ca_buffer__kon_Myosin_Ca = 13.800000000000001; // per_millimolar_per_millisecond
         const double var_cytosolic_Ca_buffer__dCa_Myosin = -var_chaste_interface__cytosolic_Ca_buffer__Ca_Myosin * var_cytosolic_Ca_buffer__koff_Myosin_Ca + (-var_chaste_interface__cytosolic_Ca_buffer__Ca_Myosin - var_chaste_interface__cytosolic_Ca_buffer__Mg_Myosin + var_cytosolic_Ca_buffer__Bmax_Myosin_Ca) * var_chaste_interface__Ca_buffer__Cai * var_cytosolic_Ca_buffer__kon_Myosin_Ca; // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_cytosolic_Ca_buffer__Ca_Myosin = var_cytosolic_Ca_buffer__dCa_Myosin; // millimolar / millisecond
-        const double var_cytosolic_Ca_buffer__kon_Myosin_Mg = 015699999999999999; // per_millimolar_per_millisecond
-        const double var_cytosolic_Ca_buffer__kon_SRB = 100; // per_millimolar_per_millisecond
+        const double var_cytosolic_Ca_buffer__kon_Myosin_Mg = 0.015699999999999999; // per_millimolar_per_millisecond
+        const double var_cytosolic_Ca_buffer__kon_SRB = 100.0; // per_millimolar_per_millisecond
         const double var_cytosolic_Ca_buffer__dCa_SRB = -var_chaste_interface__cytosolic_Ca_buffer__Ca_SRB * var_cytosolic_Ca_buffer__koff_SRB + (-var_chaste_interface__cytosolic_Ca_buffer__Ca_SRB + var_cytosolic_Ca_buffer__Bmax_SRB) * var_chaste_interface__Ca_buffer__Cai * var_cytosolic_Ca_buffer__kon_SRB; // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_cytosolic_Ca_buffer__Ca_SRB = var_cytosolic_Ca_buffer__dCa_SRB; // millimolar / millisecond
         const double var_cytosolic_Ca_buffer__kon_TroponinC = 32.700000000000003; // per_millimolar_per_millisecond
@@ -410,7 +410,7 @@
         const double var_cytosolic_Ca_buffer__kon_TroponinC_Ca_Mg_Ca = 2.3700000000000001; // per_millimolar_per_millisecond
         const double var_cytosolic_Ca_buffer__dCa_TroponinC_Ca_Mg = -var_chaste_interface__cytosolic_Ca_buffer__Ca_TroponinC_Ca_Mg * var_cytosolic_Ca_buffer__koff_TroponinC_Ca_Mg_Ca + (-var_chaste_interface__cytosolic_Ca_buffer__Ca_TroponinC_Ca_Mg - var_chaste_interface__cytosolic_Ca_buffer__Mg_TroponinC_Ca_Mg + var_cytosolic_Ca_buffer__Bmax_TroponinC_Ca_Mg_Ca) * var_chaste_interface__Ca_buffer__Cai * var_cytosolic_Ca_buffer__kon_TroponinC_Ca_Mg_Ca; // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_cytosolic_Ca_buffer__Ca_TroponinC_Ca_Mg = var_cytosolic_Ca_buffer__dCa_TroponinC_Ca_Mg; // millimolar / millisecond
-        const double var_cytosolic_Ca_buffer__kon_TroponinC_Ca_Mg_Mg = 0030000000000000001; // per_millimolar_per_millisecond
+        const double var_cytosolic_Ca_buffer__kon_TroponinC_Ca_Mg_Mg = 0.0030000000000000001; // per_millimolar_per_millisecond
         const double var_ion_diffusion__J_Ca_SL_myo = 3.7243000000000002e-12 * var_chaste_interface__Ca_buffer__Ca_SL - 3.7243000000000002e-12 * var_chaste_interface__Ca_buffer__Cai; // millimole_per_millisecond
         const double var_ion_diffusion__J_Ca_jct_SL = 8.2413000000000004e-13 * var_chaste_interface__Ca_buffer__Ca_jct - 8.2413000000000004e-13 * var_chaste_interface__Ca_buffer__Ca_SL; // millimole_per_millisecond
         const double var_ion_diffusion__J_Na_SL_myo = 1.6385999999999999e-12 * var_chaste_interface__Na_buffer__Na_SL - 1.6385999999999999e-12 * var_chaste_interface__Na_buffer__Nai; // millimole_per_millisecond
@@ -423,9 +423,9 @@
         const double var_cytosolic_Ca_buffer__dMg_TroponinC_Ca_Mg = -var_chaste_interface__cytosolic_Ca_buffer__Mg_TroponinC_Ca_Mg * var_cytosolic_Ca_buffer__koff_TroponinC_Ca_Mg_Mg + (-var_chaste_interface__cytosolic_Ca_buffer__Ca_TroponinC_Ca_Mg - var_chaste_interface__cytosolic_Ca_buffer__Mg_TroponinC_Ca_Mg + var_cytosolic_Ca_buffer__Bmax_TroponinC_Ca_Mg_Mg) * var_cytosolic_Ca_buffer__kon_TroponinC_Ca_Mg_Mg * var_model_parameters__Mgi; // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_cytosolic_Ca_buffer__Mg_TroponinC_Ca_Mg = var_cytosolic_Ca_buffer__dMg_TroponinC_Ca_Mg; // millimolar / millisecond
         const double var_cytosolic_Ca_buffer__dCa_cytosol_tot_bound = var_cytosolic_Ca_buffer__dCa_Calmodulin + var_cytosolic_Ca_buffer__dCa_Myosin + var_cytosolic_Ca_buffer__dCa_SRB + var_cytosolic_Ca_buffer__dCa_TroponinC + var_cytosolic_Ca_buffer__dCa_TroponinC_Ca_Mg + var_cytosolic_Ca_buffer__dMg_Myosin + var_cytosolic_Ca_buffer__dMg_TroponinC_Ca_Mg; // millimolar_per_millisecond
-        const double var_INaK__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(01485884101040119 * mParameters[6]); // dimensionless
+        const double var_INaK__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * mParameters[6]); // dimensionless
         const double var_model_parameters__R = 8314.2999999999993; // joule_per_kilomole_kelvin
-        const double var_model_parameters__T = 310; // kelvin
+        const double var_model_parameters__T = 310.0; // kelvin
         const double var_ICaL__Q_CaL = pow(var_ICaL__Q10_CaL, (-31.0 + 0.10000000000000001 * var_model_parameters__T)); // dimensionless
         const double var_ICaL__temp = 0.45000000000000001 * pow(var_model_parameters__F, 2) * var_ICaL__Q_CaL * var_chaste_interface__ICaL_d_gate__d * var_chaste_interface__ICaL_f_gate__f * var_chaste_interface__cell__V / (var_model_parameters__R * var_model_parameters__T); // coulomb_per_mole
         const double var_ICaL__i_CaL_Ca_SL = 4.0 * (-var_ICaL__gamma_Cao * mParameters[4] + var_chaste_interface__Ca_buffer__Ca_SL * var_ICaL__gamma_Cai * exp(2.0 * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))) * var_ICaL__Fx_ICaL_SL * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL / (-1.0 + exp(2.0 * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // microA_per_microF
@@ -440,17 +440,17 @@
         const double var_INaCa__i_NaCa_SL = var_INaCa__Fx_NCX_SL * var_INaCa__Ka_SL * var_INaCa__Q_NCX * mParameters[11] * var_INaCa__temp_SL / (pow(var_chaste_interface__Na_buffer__Na_SL, var_INaCa__HNa) * var_INaCa__K_mCao + pow(var_chaste_interface__Na_buffer__Na_SL, var_INaCa__HNa) * mParameters[4] + pow(mParameters[6], var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_SL + pow(var_INaCa__K_mNao, var_INaCa__HNa) * (1.0 + var_chaste_interface__Ca_buffer__Ca_SL / var_INaCa__K_mCai) * var_chaste_interface__Ca_buffer__Ca_SL + pow(mParameters[6], var_INaCa__HNa) * (1.0 + pow((var_chaste_interface__Na_buffer__Na_SL / var_INaCa__K_mNai), var_INaCa__HNa)) * var_INaCa__K_mCai); // microA_per_microF
         const double var_INaCa__temp_jct = (pow(var_chaste_interface__Na_buffer__Na_jct, var_INaCa__HNa) * mParameters[4] * exp(var_INaCa__eta * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T)) - pow(mParameters[6], var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_jct * exp((-1.0 + var_INaCa__eta) * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))) / (1.0 + var_INaCa__ksat * exp((-1.0 + var_INaCa__eta) * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // millimolar4
         const double var_INaCa__i_NaCa_jct = var_INaCa__Fx_NCX_jct * var_INaCa__Ka_jct * var_INaCa__Q_NCX * mParameters[11] * var_INaCa__temp_jct / (pow(var_chaste_interface__Na_buffer__Na_jct, var_INaCa__HNa) * var_INaCa__K_mCao + pow(var_chaste_interface__Na_buffer__Na_jct, var_INaCa__HNa) * mParameters[4] + pow(mParameters[6], var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_jct + pow(var_INaCa__K_mNao, var_INaCa__HNa) * (1.0 + var_chaste_interface__Ca_buffer__Ca_jct / var_INaCa__K_mCai) * var_chaste_interface__Ca_buffer__Ca_jct + pow(mParameters[6], var_INaCa__HNa) * (1.0 + pow((var_chaste_interface__Na_buffer__Na_jct / var_INaCa__K_mNai), var_INaCa__HNa)) * var_INaCa__K_mCai); // microA_per_microF
-        const double var_INaK__f_NaK = 1.0 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T)) + 036499999999999998 * var_INaK__sigma * exp(-var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // dimensionless
+        const double var_INaK__f_NaK = 1.0 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T)) + 0.036499999999999998 * var_INaK__sigma * exp(-var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // dimensionless
         const double var_INaK__i_NaK_SL = var_INaK__Fx_NaK_SL * var_INaK__I_NaK_max * var_INaK__f_NaK * mParameters[5] / ((1.0 + pow((var_INaK__Km_Nai / var_chaste_interface__Na_buffer__Na_SL), var_INaK__H_NaK)) * (var_INaK__Km_Ko + mParameters[5])); // microA_per_microF
         const double var_INaK__i_NaK_jct = var_INaK__Fx_NaK_jct * var_INaK__I_NaK_max * var_INaK__f_NaK * mParameters[5] / ((1.0 + pow((var_INaK__Km_Nai / var_chaste_interface__Na_buffer__Na_jct), var_INaK__H_NaK)) * (var_INaK__Km_Ko + mParameters[5])); // microA_per_microF
         const double var_Jpump_SR__Q_SRCaP = pow(var_Jpump_SR__Q10_SRCaP, (-31.0 + 0.10000000000000001 * var_model_parameters__T)); // dimensionless
         const double var_Jpump_SR__j_pump_SR = (pow((var_chaste_interface__Ca_buffer__Cai / var_Jpump_SR__Kmf), var_Jpump_SR__H) - pow((var_chaste_interface__Ca_buffer__Ca_SR / var_Jpump_SR__Kmr), var_Jpump_SR__H)) * var_Jpump_SR__Q_SRCaP * mParameters[2] / (1.0 + pow((var_chaste_interface__Ca_buffer__Cai / var_Jpump_SR__Kmf), var_Jpump_SR__H) + pow((var_chaste_interface__Ca_buffer__Ca_SR / var_Jpump_SR__Kmr), var_Jpump_SR__H)); // millimolar_per_millisecond
-        const double var_model_parameters__cell_length = 100; // micrometre
+        const double var_model_parameters__cell_length = 100.0; // micrometre
         const double var_model_parameters__cell_radius = 10.25; // micrometre
         const double var_model_parameters__Vol_Cell = 3.1415926540000002e-15 * pow(var_model_parameters__cell_radius, 2) * var_model_parameters__cell_length; // liter
-        const double var_model_parameters__Vol_SL = 02 * var_model_parameters__Vol_Cell; // liter
-        const double var_model_parameters__Vol_SR = 035000000000000003 * var_model_parameters__Vol_Cell; // liter
-        const double var_model_parameters__Vol_jct = 00053900000000000009 * var_model_parameters__Vol_Cell; // liter
+        const double var_model_parameters__Vol_SL = 0.02 * var_model_parameters__Vol_Cell; // liter
+        const double var_model_parameters__Vol_SR = 0.035000000000000003 * var_model_parameters__Vol_Cell; // liter
+        const double var_model_parameters__Vol_jct = 0.00053900000000000009 * var_model_parameters__Vol_Cell; // liter
         const double var_model_parameters__Vol_myo = 0.65000000000000002 * var_model_parameters__Vol_Cell; // liter
         const double var_Ca_buffer__dCa_SLB_SL = -var_chaste_interface__Ca_buffer__Ca_SLB_SL * var_Ca_buffer__koff_SLB + (-var_chaste_interface__Ca_buffer__Ca_SLB_SL + var_Ca_buffer__Bmax_SLB_SL * var_model_parameters__Vol_myo / var_model_parameters__Vol_SL) * var_chaste_interface__Ca_buffer__Ca_SL * var_Ca_buffer__kon_SL; // millimolar_per_millisecond
         const double var_Ca_buffer__dCa_SLB_jct = -var_chaste_interface__Ca_buffer__Ca_SLB_jct * var_Ca_buffer__koff_SLB + (-var_chaste_interface__Ca_buffer__Ca_SLB_jct + 0.10000000000000001 * var_Ca_buffer__Bmax_SLB_jct * var_model_parameters__Vol_myo / var_model_parameters__Vol_jct) * var_chaste_interface__Ca_buffer__Ca_jct * var_Ca_buffer__kon_SL; // millimolar_per_millisecond
@@ -522,7 +522,7 @@
         double var_chaste_interface__INa_j_gate__j = rY[3];
         // Units: dimensionless; Initial value: 0.991562
         double var_chaste_interface__INa_m_gate__m = rY[4];
-        // Units: dimensionless; Initial value: 001405627
+        // Units: dimensionless; Initial value: 0.001405627
         double var_chaste_interface__ICaL_d_gate__d = rY[12];
         // Units: dimensionless; Initial value: 7.175662e-06
         double var_chaste_interface__ICaL_f_gate__f = rY[13];
@@ -554,10 +554,10 @@
         double var_chaste_interface__cytosolic_Ca_buffer__Mg_Myosin = rCurrentGuess[24];
         double var_chaste_interface__cytosolic_Ca_buffer__Mg_TroponinC_Ca_Mg = rCurrentGuess[25];
         
-        const double var_x0 = 100 * var_chaste_interface__Ca_buffer__Ca_SR;
-        const double var_x1 = 100 * var_chaste_interface__Ca_buffer__Ca_Calsequestrin;
-        const double var_x2 = 100 * var_chaste_interface__Ca_buffer__Ca_SLB_SL;
-        const double var_x3 = 100 * var_chaste_interface__Ca_buffer__Ca_SLHigh_SL;
+        const double var_x0 = 100.0 * var_chaste_interface__Ca_buffer__Ca_SR;
+        const double var_x1 = 100.0 * var_chaste_interface__Ca_buffer__Ca_Calsequestrin;
+        const double var_x2 = 100.0 * var_chaste_interface__Ca_buffer__Ca_SLB_SL;
+        const double var_x3 = 100.0 * var_chaste_interface__Ca_buffer__Ca_SLHigh_SL;
         const double var_x4 = 1 / var_chaste_interface__Ca_buffer__Ca_SL;
         const double var_x5 = pow(var_x4, 1.6000000000000001);
         const double var_x6 = pow(mParameters[6], 3.0);
@@ -567,26 +567,26 @@
         const double var_x10 = 1 / var_x9;
         const double var_x11 = pow(var_chaste_interface__Na_buffer__Na_SL, 3.0);
         const double var_x12 = (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_SL) * var_chaste_interface__Ca_buffer__Ca_SL;
-        const double var_x13 = var_x6 * (1.0 + 00053869674493876331 * var_x11);
+        const double var_x13 = var_x6 * (1.0 + 0.00053869674493876331 * var_x11);
         const double var_x14 = var_x11 * mParameters[4];
         const double var_x15 = var_x6 * var_chaste_interface__Ca_buffer__Ca_SL;
-        const double var_x16 = exp(013102086455787599 * var_chaste_interface__cell__V);
-        const double var_x17 = exp(-024332446275034118 * var_chaste_interface__cell__V);
+        const double var_x16 = exp(0.013102086455787599 * var_chaste_interface__cell__V);
+        const double var_x17 = exp(-0.024332446275034118 * var_chaste_interface__cell__V);
         const double var_x18 = mParameters[11] / (1.0 + 0.27000000000000002 * var_x17);
         const double var_x19 = var_x18 * (var_x14 * var_x16 - var_x15 * var_x17);
         const double var_x20 = var_x10 * var_x19 / pow((var_x12 + 1.9405247813411081e-6 * var_x11 + 5.3588338192419823e-9 * var_x13 + 1.4927113702623908e-6 * var_x14 + 1.4927113702623908e-6 * var_x15), 2);
         const double var_x21 = 4.2997971421026984e-15 * var_x20;
-        const double var_x22 = 1 / (var_x14 + var_x15 + 669921.875 * var_x12 + 1.3 * var_x11 + 0035899999999999999 * var_x13);
+        const double var_x22 = 1 / (var_x14 + var_x15 + 669921.875 * var_x12 + 1.3 * var_x11 + 0.0035899999999999999 * var_x13);
         const double var_x23 = var_x19 * var_x22 / (pow(var_x9, 2) * pow(var_chaste_interface__Ca_buffer__Ca_SL, 4));
         const double var_x24 = var_x17 * var_x18 * var_x6;
         const double var_x25 = var_x10 * var_x22;
         const double var_x26 = var_x24 * var_x25;
         const double var_x27 = 1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_SL;
-        const double var_x28 = exp(07486906546164343 * var_chaste_interface__cell__V);
+        const double var_x28 = exp(0.07486906546164343 * var_chaste_interface__cell__V);
         const double var_x29 = var_chaste_interface__ICaL_d_gate__d * var_chaste_interface__ICaL_f_gate__f * var_chaste_interface__cell__V;
         const double var_x30 = var_x29 * mParameters[7] / (-1.0 + var_x28);
         const double var_x31 = var_x28 * var_x30;
-        const double var_x32 = 100 * var_chaste_interface__Ca_buffer__Ca_SL;
+        const double var_x32 = 100.0 * var_chaste_interface__Ca_buffer__Ca_SL;
         const double var_x33 = -0.34100000000000003 * mParameters[4];
         const double var_x34 = 0.34100000000000003 * var_x28;
         const double var_x35 = pow(var_chaste_interface__Na_buffer__Na_SL, 2.0);
@@ -596,10 +596,10 @@
         const double var_x39 = var_x16 * var_x18 * mParameters[4];
         const double var_x40 = var_x25 * var_x35 * var_x39;
         const double var_x41 = -var_x32;
-        const double var_x42 = 100 * var_chaste_interface__Ca_buffer__Ca_jct;
+        const double var_x42 = 100.0 * var_chaste_interface__Ca_buffer__Ca_jct;
         const double var_x43 = -var_x42;
-        const double var_x44 = 100 * var_chaste_interface__Ca_buffer__Ca_SLB_jct;
-        const double var_x45 = 100 * var_chaste_interface__Ca_buffer__Ca_SLHigh_jct;
+        const double var_x44 = 100.0 * var_chaste_interface__Ca_buffer__Ca_SLB_jct;
+        const double var_x45 = 100.0 * var_chaste_interface__Ca_buffer__Ca_SLHigh_jct;
         const double var_x46 = 18.571428571428569 * mParameters[0];
         const double var_x47 = var_chaste_interface__Jrel_SR__O * mParameters[1];
         const double var_x48 = pow(var_chaste_interface__Ca_buffer__Ca_SR, 0.78699999999999992);
@@ -623,8 +623,8 @@
         const double var_x66 = var_x65 * mParameters[4];
         const double var_x67 = var_x6 * var_chaste_interface__Ca_buffer__Ca_jct;
         const double var_x68 = (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_jct) * var_chaste_interface__Ca_buffer__Ca_jct;
-        const double var_x69 = var_x6 * (1.0 + 00053869674493876331 * var_x65);
-        const double var_x70 = 1 / (var_x66 + var_x67 + 669921.875 * var_x68 + 1.3 * var_x65 + 0035899999999999999 * var_x69);
+        const double var_x69 = var_x6 * (1.0 + 0.00053869674493876331 * var_x65);
+        const double var_x70 = 1 / (var_x66 + var_x67 + 669921.875 * var_x68 + 1.3 * var_x65 + 0.0035899999999999999 * var_x69);
         const double var_x71 = var_x18 * (var_x16 * var_x66 - var_x17 * var_x67);
         const double var_x72 = var_x70 * var_x71 / (pow(var_x64, 2) * pow(var_chaste_interface__Ca_buffer__Ca_jct, 4));
         const double var_x73 = var_x7 - 373215529.24791086 * var_chaste_interface__Ca_buffer__Ca_jct;
@@ -638,7 +638,7 @@
         const double var_x81 = -3.9000000000000004 * var_x80 - var_x36 * var_x80 - var_x37 * var_x80;
         const double var_x82 = var_x39 * var_x77 * var_x80;
         const double var_x83 = 34.0 * var_chaste_interface__cytosolic_Ca_buffer__Ca_Calmodulin;
-        const double var_x84 = 100 * var_chaste_interface__cytosolic_Ca_buffer__Ca_SRB;
+        const double var_x84 = 100.0 * var_chaste_interface__cytosolic_Ca_buffer__Ca_SRB;
         const double var_x85 = 32.700000000000003 * var_chaste_interface__cytosolic_Ca_buffer__Ca_TroponinC;
         const double var_x86 = 2.3700000000000001 * var_chaste_interface__cytosolic_Ca_buffer__Ca_TroponinC_Ca_Mg;
         const double var_x87 = 2.3700000000000001 * var_chaste_interface__cytosolic_Ca_buffer__Mg_TroponinC_Ca_Mg;
@@ -646,7 +646,7 @@
         const double var_x89 = 13.800000000000001 * var_chaste_interface__cytosolic_Ca_buffer__Mg_Myosin;
         const double var_x90 = 34.0 * var_chaste_interface__Ca_buffer__Cai;
         const double var_x91 = 13.800000000000001 * var_chaste_interface__Ca_buffer__Cai;
-        const double var_x92 = 100 * var_chaste_interface__Ca_buffer__Cai;
+        const double var_x92 = 100.0 * var_chaste_interface__Ca_buffer__Cai;
         const double var_x93 = 32.700000000000003 * var_chaste_interface__Ca_buffer__Cai;
         const double var_x94 = 2.3700000000000001 * var_chaste_interface__Ca_buffer__Cai;
         const double var_x95 = 1 / var_chaste_interface__Ca_buffer__Ca_SR;
@@ -662,8 +662,8 @@
         const double var_x105 = 7.0 * var_x103;
         const double var_x106 = 7.5 - var_x105;
         const double var_x107 = 1 / (15.0 - 14.0 * var_x103);
-        const double var_x108 = 20 * var_x107 * var_chaste_interface__Ca_buffer__Ca_jct;
-        const double var_x109 = 10 * var_x102 * var_x107;
+        const double var_x108 = 20.0 * var_x107 * var_chaste_interface__Ca_buffer__Ca_jct;
+        const double var_x109 = 10.0 * var_x102 * var_x107;
         const double var_x110 = -var_x109;
         const double var_x111 = var_x104 * var_chaste_interface__Jrel_SR__R;
         const double var_x112 = -7.5 + var_x105;
@@ -671,702 +671,702 @@
         const double var_x114 = var_x112 * var_chaste_interface__Ca_buffer__Ca_jct;
         const double var_x115 = 1.2899391426308094e-14 * var_x20;
         const double var_x116 = -0.75 * mParameters[6];
-        const double var_x117 = 037434532730821715 * var_chaste_interface__cell__V;
+        const double var_x117 = 0.037434532730821715 * var_chaste_interface__cell__V;
         const double var_x118 = exp(var_x117);
         const double var_x119 = 0.75 * var_x118;
         const double var_x120 = var_x29 / (-1.0 + var_x118);
-        const double var_x121 = 0001 * var_chaste_interface__Na_buffer__Na_SL_buf;
+        const double var_x121 = 0.0001 * var_chaste_interface__Na_buffer__Na_SL_buf;
         const double var_x122 = 1 / var_chaste_interface__Na_buffer__Na_SL;
         const double var_x123 = pow(var_chaste_interface__INa_m_gate__m, 3) * mParameters[8] * var_chaste_interface__INa_h_gate__h * var_chaste_interface__INa_j_gate__j;
         const double var_x124 = var_x118 * var_x120;
         const double var_x125 = pow(var_x122, 4.0);
-        const double var_x126 = mParameters[5] / ((1.5 + mParameters[5]) * (1.0 + 0.1245 * exp(-0037434532730821718 * var_chaste_interface__cell__V) + 036499999999999998 * (-0.14285714285714285 + 0.14285714285714285 * exp(01485884101040119 * mParameters[6])) * exp(-var_x117)));
-        const double var_x127 = 0001 * var_chaste_interface__Na_buffer__Na_SL;
+        const double var_x126 = mParameters[5] / ((1.5 + mParameters[5]) * (1.0 + 0.1245 * exp(-0.0037434532730821718 * var_chaste_interface__cell__V) + 0.036499999999999998 * (-0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * mParameters[6])) * exp(-var_x117)));
+        const double var_x127 = 0.0001 * var_chaste_interface__Na_buffer__Na_SL;
         const double var_x128 = 5.9157951966558558e-14 * var_x75;
-        const double var_x129 = 0001 * var_chaste_interface__Na_buffer__Na_jct_buf;
+        const double var_x129 = 0.0001 * var_chaste_interface__Na_buffer__Na_jct_buf;
         const double var_x130 = 1 / var_chaste_interface__Na_buffer__Na_jct;
         const double var_x131 = pow(var_x130, 4.0);
-        const double var_x132 = 0001 * var_chaste_interface__Na_buffer__Na_jct;
+        const double var_x132 = 0.0001 * var_chaste_interface__Na_buffer__Na_jct;
         const double var_x133 = -var_x91;
         const double var_x134 = -var_x94;
         
         
         rJacobian[0][0] = 1.0 - (mDt * (-65.0 - var_x0));
-        rJacobian[0][1] = 0;
-        rJacobian[0][2] = 0;
-        rJacobian[0][3] = 0;
-        rJacobian[0][4] = 0;
-        rJacobian[0][5] = 0;
-        rJacobian[0][6] = -(mDt * (260 - var_x1));
-        rJacobian[0][7] = 0;
-        rJacobian[0][8] = 0;
-        rJacobian[0][9] = 0;
-        rJacobian[0][10] = 0;
-        rJacobian[0][11] = 0;
-        rJacobian[0][12] = 0;
-        rJacobian[0][13] = 0;
-        rJacobian[0][14] = 0;
-        rJacobian[0][15] = 0;
-        rJacobian[0][16] = 0;
-        rJacobian[0][17] = 0;
-        rJacobian[0][18] = 0;
-        rJacobian[0][19] = 0;
-        rJacobian[0][20] = 0;
-        rJacobian[0][21] = 0;
-        rJacobian[0][22] = 0;
-        rJacobian[0][23] = 0;
-        rJacobian[0][24] = 0;
-        rJacobian[0][25] = 0;
-        rJacobian[1][0] = 0;
-        rJacobian[1][1] = 1.0 - (mDt * (-171.99023312516786 + var_x2 + var_x3 + 9.7126432122478125e-14 * var_x23 - 3.2385929460103637e-6 * var_x4 - 0019297288283204664 * var_x26 + var_x21 * var_x8 - 0.24034516191273925 * var_x27 * var_x31 - 5.4319197230928918e-10 * var_x4 * var_x5 / pow((1.0 + 5.2281977629563632e-6 * var_x5), 2)));
+        rJacobian[0][1] = 0.0;
+        rJacobian[0][2] = 0.0;
+        rJacobian[0][3] = 0.0;
+        rJacobian[0][4] = 0.0;
+        rJacobian[0][5] = 0.0;
+        rJacobian[0][6] = -(mDt * (260.0 - var_x1));
+        rJacobian[0][7] = 0.0;
+        rJacobian[0][8] = 0.0;
+        rJacobian[0][9] = 0.0;
+        rJacobian[0][10] = 0.0;
+        rJacobian[0][11] = 0.0;
+        rJacobian[0][12] = 0.0;
+        rJacobian[0][13] = 0.0;
+        rJacobian[0][14] = 0.0;
+        rJacobian[0][15] = 0.0;
+        rJacobian[0][16] = 0.0;
+        rJacobian[0][17] = 0.0;
+        rJacobian[0][18] = 0.0;
+        rJacobian[0][19] = 0.0;
+        rJacobian[0][20] = 0.0;
+        rJacobian[0][21] = 0.0;
+        rJacobian[0][22] = 0.0;
+        rJacobian[0][23] = 0.0;
+        rJacobian[0][24] = 0.0;
+        rJacobian[0][25] = 0.0;
+        rJacobian[1][0] = 0.0;
+        rJacobian[1][1] = 1.0 - (mDt * (-171.99023312516786 + var_x2 + var_x3 + 9.7126432122478125e-14 * var_x23 - 3.2385929460103637e-6 * var_x4 - 0.0019297288283204664 * var_x26 + var_x21 * var_x8 - 0.24034516191273925 * var_x27 * var_x31 - 5.4319197230928918e-10 * var_x4 * var_x5 / pow((1.0 + 5.2281977629563632e-6 * var_x5), 2)));
         rJacobian[1][2] = -(mDt * (1.3 + var_x32));
-        rJacobian[1][3] = 0;
-        rJacobian[1][4] = -(mDt * (029999999999999999 + var_x32));
-        rJacobian[1][5] = 0;
-        rJacobian[1][6] = 0;
+        rJacobian[1][3] = 0.0;
+        rJacobian[1][4] = -(mDt * (0.029999999999999999 + var_x32));
+        rJacobian[1][5] = 0.0;
+        rJacobian[1][6] = 0.0;
         rJacobian[1][7] = -(mDt * (1.2484412919281114));
         rJacobian[1][8] = -(mDt * (5.6417918332397381));
         rJacobian[1][9] = -(mDt * (0.70482452173823817 * var_x30 * (var_x33 + var_x34 * var_chaste_interface__Ca_buffer__Ca_SL)));
-        rJacobian[1][10] = 0;
-        rJacobian[1][11] = 0;
-        rJacobian[1][12] = 0;
-        rJacobian[1][13] = 0;
-        rJacobian[1][14] = -(mDt * (0057891864849613991 * var_x40 + var_x21 * var_x38));
-        rJacobian[1][15] = 0;
-        rJacobian[1][16] = 0;
-        rJacobian[1][17] = 0;
-        rJacobian[1][18] = 0;
-        rJacobian[1][19] = 0;
-        rJacobian[1][20] = 0;
-        rJacobian[1][21] = 0;
-        rJacobian[1][22] = 0;
-        rJacobian[1][23] = 0;
-        rJacobian[1][24] = 0;
-        rJacobian[1][25] = 0;
-        rJacobian[2][0] = 0;
+        rJacobian[1][10] = 0.0;
+        rJacobian[1][11] = 0.0;
+        rJacobian[1][12] = 0.0;
+        rJacobian[1][13] = 0.0;
+        rJacobian[1][14] = -(mDt * (0.0057891864849613991 * var_x40 + var_x21 * var_x38));
+        rJacobian[1][15] = 0.0;
+        rJacobian[1][16] = 0.0;
+        rJacobian[1][17] = 0.0;
+        rJacobian[1][18] = 0.0;
+        rJacobian[1][19] = 0.0;
+        rJacobian[1][20] = 0.0;
+        rJacobian[1][21] = 0.0;
+        rJacobian[1][22] = 0.0;
+        rJacobian[1][23] = 0.0;
+        rJacobian[1][24] = 0.0;
+        rJacobian[1][25] = 0.0;
+        rJacobian[2][0] = 0.0;
         rJacobian[2][1] = -(mDt * (121.55000000000001 - var_x2));
         rJacobian[2][2] = 1.0 - (mDt * (-1.3 + var_x41));
-        rJacobian[2][3] = 0;
-        rJacobian[2][4] = 0;
-        rJacobian[2][5] = 0;
-        rJacobian[2][6] = 0;
-        rJacobian[2][7] = 0;
-        rJacobian[2][8] = 0;
-        rJacobian[2][9] = 0;
-        rJacobian[2][10] = 0;
-        rJacobian[2][11] = 0;
-        rJacobian[2][12] = 0;
-        rJacobian[2][13] = 0;
-        rJacobian[2][14] = 0;
-        rJacobian[2][15] = 0;
-        rJacobian[2][16] = 0;
-        rJacobian[2][17] = 0;
-        rJacobian[2][18] = 0;
-        rJacobian[2][19] = 0;
-        rJacobian[2][20] = 0;
-        rJacobian[2][21] = 0;
-        rJacobian[2][22] = 0;
-        rJacobian[2][23] = 0;
-        rJacobian[2][24] = 0;
-        rJacobian[2][25] = 0;
-        rJacobian[3][0] = 0;
-        rJacobian[3][1] = 0;
-        rJacobian[3][2] = 0;
+        rJacobian[2][3] = 0.0;
+        rJacobian[2][4] = 0.0;
+        rJacobian[2][5] = 0.0;
+        rJacobian[2][6] = 0.0;
+        rJacobian[2][7] = 0.0;
+        rJacobian[2][8] = 0.0;
+        rJacobian[2][9] = 0.0;
+        rJacobian[2][10] = 0.0;
+        rJacobian[2][11] = 0.0;
+        rJacobian[2][12] = 0.0;
+        rJacobian[2][13] = 0.0;
+        rJacobian[2][14] = 0.0;
+        rJacobian[2][15] = 0.0;
+        rJacobian[2][16] = 0.0;
+        rJacobian[2][17] = 0.0;
+        rJacobian[2][18] = 0.0;
+        rJacobian[2][19] = 0.0;
+        rJacobian[2][20] = 0.0;
+        rJacobian[2][21] = 0.0;
+        rJacobian[2][22] = 0.0;
+        rJacobian[2][23] = 0.0;
+        rJacobian[2][24] = 0.0;
+        rJacobian[2][25] = 0.0;
+        rJacobian[3][0] = 0.0;
+        rJacobian[3][1] = 0.0;
+        rJacobian[3][2] = 0.0;
         rJacobian[3][3] = 1.0 - (mDt * (-1.3 + var_x43));
-        rJacobian[3][4] = 0;
-        rJacobian[3][5] = 0;
-        rJacobian[3][6] = 0;
+        rJacobian[3][4] = 0.0;
+        rJacobian[3][5] = 0.0;
+        rJacobian[3][6] = 0.0;
         rJacobian[3][7] = -(mDt * (55.473098330241186 - var_x44));
-        rJacobian[3][8] = 0;
-        rJacobian[3][9] = 0;
-        rJacobian[3][10] = 0;
-        rJacobian[3][11] = 0;
-        rJacobian[3][12] = 0;
-        rJacobian[3][13] = 0;
-        rJacobian[3][14] = 0;
-        rJacobian[3][15] = 0;
-        rJacobian[3][16] = 0;
-        rJacobian[3][17] = 0;
-        rJacobian[3][18] = 0;
-        rJacobian[3][19] = 0;
-        rJacobian[3][20] = 0;
-        rJacobian[3][21] = 0;
-        rJacobian[3][22] = 0;
-        rJacobian[3][23] = 0;
-        rJacobian[3][24] = 0;
-        rJacobian[3][25] = 0;
-        rJacobian[4][0] = 0;
+        rJacobian[3][8] = 0.0;
+        rJacobian[3][9] = 0.0;
+        rJacobian[3][10] = 0.0;
+        rJacobian[3][11] = 0.0;
+        rJacobian[3][12] = 0.0;
+        rJacobian[3][13] = 0.0;
+        rJacobian[3][14] = 0.0;
+        rJacobian[3][15] = 0.0;
+        rJacobian[3][16] = 0.0;
+        rJacobian[3][17] = 0.0;
+        rJacobian[3][18] = 0.0;
+        rJacobian[3][19] = 0.0;
+        rJacobian[3][20] = 0.0;
+        rJacobian[3][21] = 0.0;
+        rJacobian[3][22] = 0.0;
+        rJacobian[3][23] = 0.0;
+        rJacobian[3][24] = 0.0;
+        rJacobian[3][25] = 0.0;
+        rJacobian[4][0] = 0.0;
         rJacobian[4][1] = -(mDt * (43.550000000000004 - var_x3));
-        rJacobian[4][2] = 0;
-        rJacobian[4][3] = 0;
-        rJacobian[4][4] = 1.0 - (mDt * (-029999999999999999 + var_x41));
-        rJacobian[4][5] = 0;
-        rJacobian[4][6] = 0;
-        rJacobian[4][7] = 0;
-        rJacobian[4][8] = 0;
-        rJacobian[4][9] = 0;
-        rJacobian[4][10] = 0;
-        rJacobian[4][11] = 0;
-        rJacobian[4][12] = 0;
-        rJacobian[4][13] = 0;
-        rJacobian[4][14] = 0;
-        rJacobian[4][15] = 0;
-        rJacobian[4][16] = 0;
-        rJacobian[4][17] = 0;
-        rJacobian[4][18] = 0;
-        rJacobian[4][19] = 0;
-        rJacobian[4][20] = 0;
-        rJacobian[4][21] = 0;
-        rJacobian[4][22] = 0;
-        rJacobian[4][23] = 0;
-        rJacobian[4][24] = 0;
-        rJacobian[4][25] = 0;
-        rJacobian[5][0] = 0;
-        rJacobian[5][1] = 0;
-        rJacobian[5][2] = 0;
-        rJacobian[5][3] = 0;
-        rJacobian[5][4] = 0;
-        rJacobian[5][5] = 1.0 - (mDt * (-029999999999999999 + var_x43));
-        rJacobian[5][6] = 0;
+        rJacobian[4][2] = 0.0;
+        rJacobian[4][3] = 0.0;
+        rJacobian[4][4] = 1.0 - (mDt * (-0.029999999999999999 + var_x41));
+        rJacobian[4][5] = 0.0;
+        rJacobian[4][6] = 0.0;
+        rJacobian[4][7] = 0.0;
+        rJacobian[4][8] = 0.0;
+        rJacobian[4][9] = 0.0;
+        rJacobian[4][10] = 0.0;
+        rJacobian[4][11] = 0.0;
+        rJacobian[4][12] = 0.0;
+        rJacobian[4][13] = 0.0;
+        rJacobian[4][14] = 0.0;
+        rJacobian[4][15] = 0.0;
+        rJacobian[4][16] = 0.0;
+        rJacobian[4][17] = 0.0;
+        rJacobian[4][18] = 0.0;
+        rJacobian[4][19] = 0.0;
+        rJacobian[4][20] = 0.0;
+        rJacobian[4][21] = 0.0;
+        rJacobian[4][22] = 0.0;
+        rJacobian[4][23] = 0.0;
+        rJacobian[4][24] = 0.0;
+        rJacobian[4][25] = 0.0;
+        rJacobian[5][0] = 0.0;
+        rJacobian[5][1] = 0.0;
+        rJacobian[5][2] = 0.0;
+        rJacobian[5][3] = 0.0;
+        rJacobian[5][4] = 0.0;
+        rJacobian[5][5] = 1.0 - (mDt * (-0.029999999999999999 + var_x43));
+        rJacobian[5][6] = 0.0;
         rJacobian[5][7] = -(mDt * (19.897959183673468 - var_x45));
-        rJacobian[5][8] = 0;
-        rJacobian[5][9] = 0;
-        rJacobian[5][10] = 0;
-        rJacobian[5][11] = 0;
-        rJacobian[5][12] = 0;
-        rJacobian[5][13] = 0;
-        rJacobian[5][14] = 0;
-        rJacobian[5][15] = 0;
-        rJacobian[5][16] = 0;
-        rJacobian[5][17] = 0;
-        rJacobian[5][18] = 0;
-        rJacobian[5][19] = 0;
-        rJacobian[5][20] = 0;
-        rJacobian[5][21] = 0;
-        rJacobian[5][22] = 0;
-        rJacobian[5][23] = 0;
-        rJacobian[5][24] = 0;
-        rJacobian[5][25] = 0;
+        rJacobian[5][8] = 0.0;
+        rJacobian[5][9] = 0.0;
+        rJacobian[5][10] = 0.0;
+        rJacobian[5][11] = 0.0;
+        rJacobian[5][12] = 0.0;
+        rJacobian[5][13] = 0.0;
+        rJacobian[5][14] = 0.0;
+        rJacobian[5][15] = 0.0;
+        rJacobian[5][16] = 0.0;
+        rJacobian[5][17] = 0.0;
+        rJacobian[5][18] = 0.0;
+        rJacobian[5][19] = 0.0;
+        rJacobian[5][20] = 0.0;
+        rJacobian[5][21] = 0.0;
+        rJacobian[5][22] = 0.0;
+        rJacobian[5][23] = 0.0;
+        rJacobian[5][24] = 0.0;
+        rJacobian[5][25] = 0.0;
         rJacobian[6][0] = -(mDt * (65.0 + var_x0));
-        rJacobian[6][1] = 0;
-        rJacobian[6][2] = 0;
-        rJacobian[6][3] = 0;
-        rJacobian[6][4] = 0;
-        rJacobian[6][5] = 0;
-        rJacobian[6][6] = 1.0 - (mDt * (-260 + var_x1 - var_x46 - var_x47 - 0.69232869146389786 * var_x54 - 8.7400597733819945e-14 * var_x56));
+        rJacobian[6][1] = 0.0;
+        rJacobian[6][2] = 0.0;
+        rJacobian[6][3] = 0.0;
+        rJacobian[6][4] = 0.0;
+        rJacobian[6][5] = 0.0;
+        rJacobian[6][6] = 1.0 - (mDt * (-260.0 + var_x1 - var_x46 - var_x47 - 0.69232869146389786 * var_x54 - 8.7400597733819945e-14 * var_x56));
         rJacobian[6][7] = -(mDt * (var_x46 + var_x47));
         rJacobian[6][8] = -(mDt * (5029484.9869235931 * var_x58 - 6.3492962168146398e-7 * var_x59));
-        rJacobian[6][9] = 0;
-        rJacobian[6][10] = 0;
-        rJacobian[6][11] = 0;
+        rJacobian[6][9] = 0.0;
+        rJacobian[6][10] = 0.0;
+        rJacobian[6][11] = 0.0;
         rJacobian[6][12] = -(mDt * ((-var_chaste_interface__Ca_buffer__Ca_SR + var_chaste_interface__Ca_buffer__Ca_jct) * mParameters[1]));
-        rJacobian[6][13] = 0;
-        rJacobian[6][14] = 0;
-        rJacobian[6][15] = 0;
-        rJacobian[6][16] = 0;
-        rJacobian[6][17] = 0;
-        rJacobian[6][18] = 0;
-        rJacobian[6][19] = 0;
-        rJacobian[6][20] = 0;
-        rJacobian[6][21] = 0;
-        rJacobian[6][22] = 0;
-        rJacobian[6][23] = 0;
-        rJacobian[6][24] = 0;
-        rJacobian[6][25] = 0;
-        rJacobian[7][0] = 0;
+        rJacobian[6][13] = 0.0;
+        rJacobian[6][14] = 0.0;
+        rJacobian[6][15] = 0.0;
+        rJacobian[6][16] = 0.0;
+        rJacobian[6][17] = 0.0;
+        rJacobian[6][18] = 0.0;
+        rJacobian[6][19] = 0.0;
+        rJacobian[6][20] = 0.0;
+        rJacobian[6][21] = 0.0;
+        rJacobian[6][22] = 0.0;
+        rJacobian[6][23] = 0.0;
+        rJacobian[6][24] = 0.0;
+        rJacobian[6][25] = 0.0;
+        rJacobian[7][0] = 0.0;
         rJacobian[7][1] = -(mDt * (46.324352205124718));
-        rJacobian[7][2] = 0;
+        rJacobian[7][2] = 0.0;
         rJacobian[7][3] = -(mDt * (1.3 + var_x42));
-        rJacobian[7][4] = 0;
-        rJacobian[7][5] = -(mDt * (029999999999999999 + var_x42));
+        rJacobian[7][4] = 0.0;
+        rJacobian[7][5] = -(mDt * (0.029999999999999999 + var_x42));
         rJacobian[7][6] = -(mDt * (var_x60 + var_x61));
-        rJacobian[7][7] = 1.0 - (mDt * (-121.69540971903938 + var_x44 + var_x45 - var_x60 - var_x61 + 4.4543192901847336e-13 * var_x72 - 1.4852524402707469e-5 * var_x62 - 0088499373002543739 * var_x78 + var_x73 * var_x76 - 80.263690434680996 * var_x31 * var_x79 - 2.4911349337733966e-9 * var_x62 * var_x63 / pow((1.0 + 5.2281977629563632e-6 * var_x63), 2)));
-        rJacobian[7][8] = 0;
-        rJacobian[7][9] = 0;
+        rJacobian[7][7] = 1.0 - (mDt * (-121.69540971903938 + var_x44 + var_x45 - var_x60 - var_x61 + 4.4543192901847336e-13 * var_x72 - 1.4852524402707469e-5 * var_x62 - 0.0088499373002543739 * var_x78 + var_x73 * var_x76 - 80.263690434680996 * var_x31 * var_x79 - 2.4911349337733966e-9 * var_x62 * var_x63 / pow((1.0 + 5.2281977629563632e-6 * var_x63), 2)));
+        rJacobian[7][8] = 0.0;
+        rJacobian[7][9] = 0.0;
         rJacobian[7][10] = -(mDt * (235.37739130404984 * var_x30 * (var_x33 + var_x34 * var_chaste_interface__Ca_buffer__Ca_jct)));
-        rJacobian[7][11] = 0;
+        rJacobian[7][11] = 0.0;
         rJacobian[7][12] = -(mDt * ((64.935064935064929 * var_chaste_interface__Ca_buffer__Ca_SR - 64.935064935064929 * var_chaste_interface__Ca_buffer__Ca_jct) * mParameters[1]));
-        rJacobian[7][13] = 0;
-        rJacobian[7][14] = 0;
-        rJacobian[7][15] = 0;
-        rJacobian[7][16] = -(mDt * (02654981190076312 * var_x82 + var_x76 * var_x81));
-        rJacobian[7][17] = 0;
-        rJacobian[7][18] = 0;
-        rJacobian[7][19] = 0;
-        rJacobian[7][20] = 0;
-        rJacobian[7][21] = 0;
-        rJacobian[7][22] = 0;
-        rJacobian[7][23] = 0;
-        rJacobian[7][24] = 0;
-        rJacobian[7][25] = 0;
-        rJacobian[8][0] = 0;
+        rJacobian[7][13] = 0.0;
+        rJacobian[7][14] = 0.0;
+        rJacobian[7][15] = 0.0;
+        rJacobian[7][16] = -(mDt * (0.02654981190076312 * var_x82 + var_x76 * var_x81));
+        rJacobian[7][17] = 0.0;
+        rJacobian[7][18] = 0.0;
+        rJacobian[7][19] = 0.0;
+        rJacobian[7][20] = 0.0;
+        rJacobian[7][21] = 0.0;
+        rJacobian[7][22] = 0.0;
+        rJacobian[7][23] = 0.0;
+        rJacobian[7][24] = 0.0;
+        rJacobian[7][25] = 0.0;
+        rJacobian[8][0] = 0.0;
         rJacobian[8][1] = -(mDt * (0.17359359486891501));
-        rJacobian[8][2] = 0;
-        rJacobian[8][3] = 0;
-        rJacobian[8][4] = 0;
-        rJacobian[8][5] = 0;
-        rJacobian[8][6] = -(mDt * (037279237232671424 * var_x54 + 4.7061860318210743e-15 * var_x56));
-        rJacobian[8][7] = 0;
+        rJacobian[8][2] = 0.0;
+        rJacobian[8][3] = 0.0;
+        rJacobian[8][4] = 0.0;
+        rJacobian[8][5] = 0.0;
+        rJacobian[8][6] = -(mDt * (0.037279237232671424 * var_x54 + 4.7061860318210743e-15 * var_x56));
+        rJacobian[8][7] = 0.0;
         rJacobian[8][8] = 1.0 - (mDt * (-7.2523935948689155 + var_x83 + var_x84 + var_x85 + var_x86 + var_x87 + var_x88 + var_x89 + 3.4188518090540365e-8 * var_x59 - 270818.42237280885 * var_x58));
-        rJacobian[8][9] = 0;
-        rJacobian[8][10] = 0;
-        rJacobian[8][11] = 0;
-        rJacobian[8][12] = 0;
-        rJacobian[8][13] = 0;
-        rJacobian[8][14] = 0;
-        rJacobian[8][15] = 0;
-        rJacobian[8][16] = 0;
-        rJacobian[8][17] = 0;
-        rJacobian[8][18] = 0;
+        rJacobian[8][9] = 0.0;
+        rJacobian[8][10] = 0.0;
+        rJacobian[8][11] = 0.0;
+        rJacobian[8][12] = 0.0;
+        rJacobian[8][13] = 0.0;
+        rJacobian[8][14] = 0.0;
+        rJacobian[8][15] = 0.0;
+        rJacobian[8][16] = 0.0;
+        rJacobian[8][17] = 0.0;
+        rJacobian[8][18] = 0.0;
         rJacobian[8][19] = -(mDt * (0.23799999999999999 + var_x90));
-        rJacobian[8][20] = -(mDt * (016159999999999997 + var_x91));
-        rJacobian[8][21] = -(mDt * (059999999999999998 + var_x92));
-        rJacobian[8][22] = -(mDt * (019599999999999999 + var_x93));
-        rJacobian[8][23] = -(mDt * (003032 + var_x94));
-        rJacobian[8][24] = -(mDt * (015757 + var_x91));
-        rJacobian[8][25] = -(mDt * (0063300000000000006 + var_x94));
-        rJacobian[9][0] = 0;
+        rJacobian[8][20] = -(mDt * (0.016159999999999997 + var_x91));
+        rJacobian[8][21] = -(mDt * (0.059999999999999998 + var_x92));
+        rJacobian[8][22] = -(mDt * (0.019599999999999999 + var_x93));
+        rJacobian[8][23] = -(mDt * (0.003032 + var_x94));
+        rJacobian[8][24] = -(mDt * (0.015757 + var_x91));
+        rJacobian[8][25] = -(mDt * (0.0063300000000000006 + var_x94));
+        rJacobian[9][0] = 0.0;
         rJacobian[9][1] = -(mDt * (1.7 - 1.7 * var_chaste_interface__ICaL_fCa_gate__fCaB_SL));
-        rJacobian[9][2] = 0;
-        rJacobian[9][3] = 0;
-        rJacobian[9][4] = 0;
-        rJacobian[9][5] = 0;
-        rJacobian[9][6] = 0;
-        rJacobian[9][7] = 0;
-        rJacobian[9][8] = 0;
-        rJacobian[9][9] = 1.0 - (mDt * (-011900000000000001 - 1.7 * var_chaste_interface__Ca_buffer__Ca_SL));
-        rJacobian[9][10] = 0;
-        rJacobian[9][11] = 0;
-        rJacobian[9][12] = 0;
-        rJacobian[9][13] = 0;
-        rJacobian[9][14] = 0;
-        rJacobian[9][15] = 0;
-        rJacobian[9][16] = 0;
-        rJacobian[9][17] = 0;
-        rJacobian[9][18] = 0;
-        rJacobian[9][19] = 0;
-        rJacobian[9][20] = 0;
-        rJacobian[9][21] = 0;
-        rJacobian[9][22] = 0;
-        rJacobian[9][23] = 0;
-        rJacobian[9][24] = 0;
-        rJacobian[9][25] = 0;
-        rJacobian[10][0] = 0;
-        rJacobian[10][1] = 0;
-        rJacobian[10][2] = 0;
-        rJacobian[10][3] = 0;
-        rJacobian[10][4] = 0;
-        rJacobian[10][5] = 0;
-        rJacobian[10][6] = 0;
+        rJacobian[9][2] = 0.0;
+        rJacobian[9][3] = 0.0;
+        rJacobian[9][4] = 0.0;
+        rJacobian[9][5] = 0.0;
+        rJacobian[9][6] = 0.0;
+        rJacobian[9][7] = 0.0;
+        rJacobian[9][8] = 0.0;
+        rJacobian[9][9] = 1.0 - (mDt * (-0.011900000000000001 - 1.7 * var_chaste_interface__Ca_buffer__Ca_SL));
+        rJacobian[9][10] = 0.0;
+        rJacobian[9][11] = 0.0;
+        rJacobian[9][12] = 0.0;
+        rJacobian[9][13] = 0.0;
+        rJacobian[9][14] = 0.0;
+        rJacobian[9][15] = 0.0;
+        rJacobian[9][16] = 0.0;
+        rJacobian[9][17] = 0.0;
+        rJacobian[9][18] = 0.0;
+        rJacobian[9][19] = 0.0;
+        rJacobian[9][20] = 0.0;
+        rJacobian[9][21] = 0.0;
+        rJacobian[9][22] = 0.0;
+        rJacobian[9][23] = 0.0;
+        rJacobian[9][24] = 0.0;
+        rJacobian[9][25] = 0.0;
+        rJacobian[10][0] = 0.0;
+        rJacobian[10][1] = 0.0;
+        rJacobian[10][2] = 0.0;
+        rJacobian[10][3] = 0.0;
+        rJacobian[10][4] = 0.0;
+        rJacobian[10][5] = 0.0;
+        rJacobian[10][6] = 0.0;
         rJacobian[10][7] = -(mDt * (1.7 - 1.7 * var_chaste_interface__ICaL_fCa_gate__fCaB_jct));
-        rJacobian[10][8] = 0;
-        rJacobian[10][9] = 0;
-        rJacobian[10][10] = 1.0 - (mDt * (-011900000000000001 - 1.7 * var_chaste_interface__Ca_buffer__Ca_jct));
-        rJacobian[10][11] = 0;
-        rJacobian[10][12] = 0;
-        rJacobian[10][13] = 0;
-        rJacobian[10][14] = 0;
-        rJacobian[10][15] = 0;
-        rJacobian[10][16] = 0;
-        rJacobian[10][17] = 0;
-        rJacobian[10][18] = 0;
-        rJacobian[10][19] = 0;
-        rJacobian[10][20] = 0;
-        rJacobian[10][21] = 0;
-        rJacobian[10][22] = 0;
-        rJacobian[10][23] = 0;
-        rJacobian[10][24] = 0;
-        rJacobian[10][25] = 0;
-        rJacobian[11][0] = 0;
-        rJacobian[11][1] = 0;
-        rJacobian[11][2] = 0;
-        rJacobian[11][3] = 0;
-        rJacobian[11][4] = 0;
-        rJacobian[11][5] = 0;
+        rJacobian[10][8] = 0.0;
+        rJacobian[10][9] = 0.0;
+        rJacobian[10][10] = 1.0 - (mDt * (-0.011900000000000001 - 1.7 * var_chaste_interface__Ca_buffer__Ca_jct));
+        rJacobian[10][11] = 0.0;
+        rJacobian[10][12] = 0.0;
+        rJacobian[10][13] = 0.0;
+        rJacobian[10][14] = 0.0;
+        rJacobian[10][15] = 0.0;
+        rJacobian[10][16] = 0.0;
+        rJacobian[10][17] = 0.0;
+        rJacobian[10][18] = 0.0;
+        rJacobian[10][19] = 0.0;
+        rJacobian[10][20] = 0.0;
+        rJacobian[10][21] = 0.0;
+        rJacobian[10][22] = 0.0;
+        rJacobian[10][23] = 0.0;
+        rJacobian[10][24] = 0.0;
+        rJacobian[10][25] = 0.0;
+        rJacobian[11][0] = 0.0;
+        rJacobian[11][1] = 0.0;
+        rJacobian[11][2] = 0.0;
+        rJacobian[11][3] = 0.0;
+        rJacobian[11][4] = 0.0;
+        rJacobian[11][5] = 0.0;
         rJacobian[11][6] = -(mDt * (-var_x100 + var_x101 * var_x104));
         rJacobian[11][7] = -(mDt * (var_x101 * var_x108 + var_x106 * var_chaste_interface__Jrel_SR__O));
-        rJacobian[11][8] = 0;
-        rJacobian[11][9] = 0;
-        rJacobian[11][10] = 0;
-        rJacobian[11][11] = 1.0 - (mDt * (-065000000000000002 + var_x110));
+        rJacobian[11][8] = 0.0;
+        rJacobian[11][9] = 0.0;
+        rJacobian[11][10] = 0.0;
+        rJacobian[11][11] = 1.0 - (mDt * (-0.065000000000000002 + var_x110));
         rJacobian[11][12] = -(mDt * (var_x110 + var_x106 * var_chaste_interface__Ca_buffer__Ca_jct));
         rJacobian[11][13] = -(mDt * (var_x110));
-        rJacobian[11][14] = 0;
-        rJacobian[11][15] = 0;
-        rJacobian[11][16] = 0;
-        rJacobian[11][17] = 0;
-        rJacobian[11][18] = 0;
-        rJacobian[11][19] = 0;
-        rJacobian[11][20] = 0;
-        rJacobian[11][21] = 0;
-        rJacobian[11][22] = 0;
-        rJacobian[11][23] = 0;
-        rJacobian[11][24] = 0;
-        rJacobian[11][25] = 0;
-        rJacobian[12][0] = 0;
-        rJacobian[12][1] = 0;
-        rJacobian[12][2] = 0;
-        rJacobian[12][3] = 0;
-        rJacobian[12][4] = 0;
-        rJacobian[12][5] = 0;
+        rJacobian[11][14] = 0.0;
+        rJacobian[11][15] = 0.0;
+        rJacobian[11][16] = 0.0;
+        rJacobian[11][17] = 0.0;
+        rJacobian[11][18] = 0.0;
+        rJacobian[11][19] = 0.0;
+        rJacobian[11][20] = 0.0;
+        rJacobian[11][21] = 0.0;
+        rJacobian[11][22] = 0.0;
+        rJacobian[11][23] = 0.0;
+        rJacobian[11][24] = 0.0;
+        rJacobian[11][25] = 0.0;
+        rJacobian[12][0] = 0.0;
+        rJacobian[12][1] = 0.0;
+        rJacobian[12][2] = 0.0;
+        rJacobian[12][3] = 0.0;
+        rJacobian[12][4] = 0.0;
+        rJacobian[12][5] = 0.0;
         rJacobian[12][6] = -(mDt * (var_x100 + var_x111));
         rJacobian[12][7] = -(mDt * (var_x113 + var_x112 * var_chaste_interface__Jrel_SR__O));
-        rJacobian[12][8] = 0;
-        rJacobian[12][9] = 0;
-        rJacobian[12][10] = 0;
-        rJacobian[12][11] = -(mDt * (0050000000000000001));
-        rJacobian[12][12] = 1.0 - (mDt * (-059999999999999998 + var_x114));
+        rJacobian[12][8] = 0.0;
+        rJacobian[12][9] = 0.0;
+        rJacobian[12][10] = 0.0;
+        rJacobian[12][11] = -(mDt * (0.0050000000000000001));
+        rJacobian[12][12] = 1.0 - (mDt * (-0.059999999999999998 + var_x114));
         rJacobian[12][13] = -(mDt * (var_x109));
-        rJacobian[12][14] = 0;
-        rJacobian[12][15] = 0;
-        rJacobian[12][16] = 0;
-        rJacobian[12][17] = 0;
-        rJacobian[12][18] = 0;
-        rJacobian[12][19] = 0;
-        rJacobian[12][20] = 0;
-        rJacobian[12][21] = 0;
-        rJacobian[12][22] = 0;
-        rJacobian[12][23] = 0;
-        rJacobian[12][24] = 0;
-        rJacobian[12][25] = 0;
-        rJacobian[13][0] = 0;
-        rJacobian[13][1] = 0;
-        rJacobian[13][2] = 0;
-        rJacobian[13][3] = 0;
-        rJacobian[13][4] = 0;
-        rJacobian[13][5] = 0;
+        rJacobian[12][14] = 0.0;
+        rJacobian[12][15] = 0.0;
+        rJacobian[12][16] = 0.0;
+        rJacobian[12][17] = 0.0;
+        rJacobian[12][18] = 0.0;
+        rJacobian[12][19] = 0.0;
+        rJacobian[12][20] = 0.0;
+        rJacobian[12][21] = 0.0;
+        rJacobian[12][22] = 0.0;
+        rJacobian[12][23] = 0.0;
+        rJacobian[12][24] = 0.0;
+        rJacobian[12][25] = 0.0;
+        rJacobian[13][0] = 0.0;
+        rJacobian[13][1] = 0.0;
+        rJacobian[13][2] = 0.0;
+        rJacobian[13][3] = 0.0;
+        rJacobian[13][4] = 0.0;
+        rJacobian[13][5] = 0.0;
         rJacobian[13][6] = -(mDt * (-var_x111 + var_x99 * var_chaste_interface__Jrel_SR__R));
         rJacobian[13][7] = -(mDt * (-var_x113 + var_x112 * var_chaste_interface__Jrel_SR__R));
-        rJacobian[13][8] = 0;
-        rJacobian[13][9] = 0;
-        rJacobian[13][10] = 0;
-        rJacobian[13][11] = -(mDt * (-0050000000000000001));
-        rJacobian[13][12] = -(mDt * (055));
-        rJacobian[13][13] = 1.0 - (mDt * (-0050000000000000001 + var_x110 + var_x114));
-        rJacobian[13][14] = 0;
-        rJacobian[13][15] = 0;
-        rJacobian[13][16] = 0;
-        rJacobian[13][17] = 0;
-        rJacobian[13][18] = 0;
-        rJacobian[13][19] = 0;
-        rJacobian[13][20] = 0;
-        rJacobian[13][21] = 0;
-        rJacobian[13][22] = 0;
-        rJacobian[13][23] = 0;
-        rJacobian[13][24] = 0;
-        rJacobian[13][25] = 0;
-        rJacobian[14][0] = 0;
-        rJacobian[14][1] = -(mDt * (0057891864849613991 * var_x26 - 2.9137929636743439e-13 * var_x23 - var_x115 * var_x8));
-        rJacobian[14][2] = 0;
-        rJacobian[14][3] = 0;
-        rJacobian[14][4] = 0;
-        rJacobian[14][5] = 0;
-        rJacobian[14][6] = 0;
-        rJacobian[14][7] = 0;
-        rJacobian[14][8] = 0;
+        rJacobian[13][8] = 0.0;
+        rJacobian[13][9] = 0.0;
+        rJacobian[13][10] = 0.0;
+        rJacobian[13][11] = -(mDt * (-0.0050000000000000001));
+        rJacobian[13][12] = -(mDt * (0.055));
+        rJacobian[13][13] = 1.0 - (mDt * (-0.0050000000000000001 + var_x110 + var_x114));
+        rJacobian[13][14] = 0.0;
+        rJacobian[13][15] = 0.0;
+        rJacobian[13][16] = 0.0;
+        rJacobian[13][17] = 0.0;
+        rJacobian[13][18] = 0.0;
+        rJacobian[13][19] = 0.0;
+        rJacobian[13][20] = 0.0;
+        rJacobian[13][21] = 0.0;
+        rJacobian[13][22] = 0.0;
+        rJacobian[13][23] = 0.0;
+        rJacobian[13][24] = 0.0;
+        rJacobian[13][25] = 0.0;
+        rJacobian[14][0] = 0.0;
+        rJacobian[14][1] = -(mDt * (0.0057891864849613991 * var_x26 - 2.9137929636743439e-13 * var_x23 - var_x115 * var_x8));
+        rJacobian[14][2] = 0.0;
+        rJacobian[14][3] = 0.0;
+        rJacobian[14][4] = 0.0;
+        rJacobian[14][5] = 0.0;
+        rJacobian[14][6] = 0.0;
+        rJacobian[14][7] = 0.0;
+        rJacobian[14][8] = 0.0;
         rJacobian[14][9] = -(mDt * (5.2861839130367859e-9 * var_x120 * (var_x116 + var_x119 * var_chaste_interface__Na_buffer__Na_SL)));
-        rJacobian[14][10] = 0;
-        rJacobian[14][11] = 0;
-        rJacobian[14][12] = 0;
-        rJacobian[14][13] = 0;
-        rJacobian[14][14] = 1.0 - (mDt * (-2.5101556644976917 + var_x121 - 017367559454884197 * var_x40 - 1.5310180739595352e-5 * var_x122 - var_x115 * var_x38 - 3.9646379347775894e-9 * var_x124 * var_x27 - 051549430099647651 * var_x122 * var_x123 - 3.0164820906368501e-6 * var_x122 * var_x125 * var_x126 / pow((6.8301345536507063e-5 + var_x125), 2)));
-        rJacobian[14][15] = -(mDt * (001 + var_x127));
-        rJacobian[14][16] = -(mDt * (02774162496096429));
-        rJacobian[14][17] = 0;
+        rJacobian[14][10] = 0.0;
+        rJacobian[14][11] = 0.0;
+        rJacobian[14][12] = 0.0;
+        rJacobian[14][13] = 0.0;
+        rJacobian[14][14] = 1.0 - (mDt * (-2.5101556644976917 + var_x121 - 0.017367559454884197 * var_x40 - 1.5310180739595352e-5 * var_x122 - var_x115 * var_x38 - 3.9646379347775894e-9 * var_x124 * var_x27 - 0.051549430099647651 * var_x122 * var_x123 - 3.0164820906368501e-6 * var_x122 * var_x125 * var_x126 / pow((6.8301345536507063e-5 + var_x125), 2)));
+        rJacobian[14][15] = -(mDt * (0.001 + var_x127));
+        rJacobian[14][16] = -(mDt * (0.02774162496096429));
+        rJacobian[14][17] = 0.0;
         rJacobian[14][18] = -(mDt * (2.4822490395367272));
-        rJacobian[14][19] = 0;
-        rJacobian[14][20] = 0;
-        rJacobian[14][21] = 0;
-        rJacobian[14][22] = 0;
-        rJacobian[14][23] = 0;
-        rJacobian[14][24] = 0;
-        rJacobian[14][25] = 0;
-        rJacobian[15][0] = 0;
-        rJacobian[15][1] = 0;
-        rJacobian[15][2] = 0;
-        rJacobian[15][3] = 0;
-        rJacobian[15][4] = 0;
-        rJacobian[15][5] = 0;
-        rJacobian[15][6] = 0;
-        rJacobian[15][7] = 0;
-        rJacobian[15][8] = 0;
-        rJacobian[15][9] = 0;
-        rJacobian[15][10] = 0;
-        rJacobian[15][11] = 0;
-        rJacobian[15][12] = 0;
-        rJacobian[15][13] = 0;
-        rJacobian[15][14] = -(mDt * (000165 - var_x121));
-        rJacobian[15][15] = 1.0 - (mDt * (-001 - var_x127));
-        rJacobian[15][16] = 0;
-        rJacobian[15][17] = 0;
-        rJacobian[15][18] = 0;
-        rJacobian[15][19] = 0;
-        rJacobian[15][20] = 0;
-        rJacobian[15][21] = 0;
-        rJacobian[15][22] = 0;
-        rJacobian[15][23] = 0;
-        rJacobian[15][24] = 0;
-        rJacobian[15][25] = 0;
-        rJacobian[16][0] = 0;
-        rJacobian[16][1] = 0;
-        rJacobian[16][2] = 0;
-        rJacobian[16][3] = 0;
-        rJacobian[16][4] = 0;
-        rJacobian[16][5] = 0;
-        rJacobian[16][6] = 0;
-        rJacobian[16][7] = -(mDt * (02654981190076312 * var_x78 - 1.3362957870554202e-12 * var_x72 - var_x128 * var_x73));
-        rJacobian[16][8] = 0;
-        rJacobian[16][9] = 0;
+        rJacobian[14][19] = 0.0;
+        rJacobian[14][20] = 0.0;
+        rJacobian[14][21] = 0.0;
+        rJacobian[14][22] = 0.0;
+        rJacobian[14][23] = 0.0;
+        rJacobian[14][24] = 0.0;
+        rJacobian[14][25] = 0.0;
+        rJacobian[15][0] = 0.0;
+        rJacobian[15][1] = 0.0;
+        rJacobian[15][2] = 0.0;
+        rJacobian[15][3] = 0.0;
+        rJacobian[15][4] = 0.0;
+        rJacobian[15][5] = 0.0;
+        rJacobian[15][6] = 0.0;
+        rJacobian[15][7] = 0.0;
+        rJacobian[15][8] = 0.0;
+        rJacobian[15][9] = 0.0;
+        rJacobian[15][10] = 0.0;
+        rJacobian[15][11] = 0.0;
+        rJacobian[15][12] = 0.0;
+        rJacobian[15][13] = 0.0;
+        rJacobian[15][14] = -(mDt * (0.000165 - var_x121));
+        rJacobian[15][15] = 1.0 - (mDt * (-0.001 - var_x127));
+        rJacobian[15][16] = 0.0;
+        rJacobian[15][17] = 0.0;
+        rJacobian[15][18] = 0.0;
+        rJacobian[15][19] = 0.0;
+        rJacobian[15][20] = 0.0;
+        rJacobian[15][21] = 0.0;
+        rJacobian[15][22] = 0.0;
+        rJacobian[15][23] = 0.0;
+        rJacobian[15][24] = 0.0;
+        rJacobian[15][25] = 0.0;
+        rJacobian[16][0] = 0.0;
+        rJacobian[16][1] = 0.0;
+        rJacobian[16][2] = 0.0;
+        rJacobian[16][3] = 0.0;
+        rJacobian[16][4] = 0.0;
+        rJacobian[16][5] = 0.0;
+        rJacobian[16][6] = 0.0;
+        rJacobian[16][7] = -(mDt * (0.02654981190076312 * var_x78 - 1.3362957870554202e-12 * var_x72 - var_x128 * var_x73));
+        rJacobian[16][8] = 0.0;
+        rJacobian[16][9] = 0.0;
         rJacobian[16][10] = -(mDt * (1.7653304347803737e-6 * var_x120 * (var_x116 + var_x119 * var_chaste_interface__Na_buffer__Na_jct)));
-        rJacobian[16][11] = 0;
-        rJacobian[16][12] = 0;
-        rJacobian[16][13] = 0;
+        rJacobian[16][11] = 0.0;
+        rJacobian[16][12] = 0.0;
+        rJacobian[16][13] = 0.0;
         rJacobian[16][14] = -(mDt * (1.0293738389968197));
-        rJacobian[16][15] = 0;
-        rJacobian[16][16] = 1.0 - (mDt * (-1.0301299389968197 + var_x129 - 7.0214082731462295e-5 * var_x130 - 079649435702289356 * var_x82 - var_x128 * var_x81 - 1.3239978260852802e-6 * var_x124 * var_x79 - 0.2364110529678865 * var_x123 * var_x130 - 1.3833900897210959e-5 * var_x126 * var_x130 * var_x131 / pow((6.8301345536507063e-5 + var_x131), 2)));
-        rJacobian[16][17] = -(mDt * (001 + var_x132));
-        rJacobian[16][18] = 0;
-        rJacobian[16][19] = 0;
-        rJacobian[16][20] = 0;
-        rJacobian[16][21] = 0;
-        rJacobian[16][22] = 0;
-        rJacobian[16][23] = 0;
-        rJacobian[16][24] = 0;
-        rJacobian[16][25] = 0;
-        rJacobian[17][0] = 0;
-        rJacobian[17][1] = 0;
-        rJacobian[17][2] = 0;
-        rJacobian[17][3] = 0;
-        rJacobian[17][4] = 0;
-        rJacobian[17][5] = 0;
-        rJacobian[17][6] = 0;
-        rJacobian[17][7] = 0;
-        rJacobian[17][8] = 0;
-        rJacobian[17][9] = 0;
-        rJacobian[17][10] = 0;
-        rJacobian[17][11] = 0;
-        rJacobian[17][12] = 0;
-        rJacobian[17][13] = 0;
-        rJacobian[17][14] = 0;
-        rJacobian[17][15] = 0;
-        rJacobian[17][16] = -(mDt * (0007561 - var_x129));
-        rJacobian[17][17] = 1.0 - (mDt * (-001 - var_x132));
-        rJacobian[17][18] = 0;
-        rJacobian[17][19] = 0;
-        rJacobian[17][20] = 0;
-        rJacobian[17][21] = 0;
-        rJacobian[17][22] = 0;
-        rJacobian[17][23] = 0;
-        rJacobian[17][24] = 0;
-        rJacobian[17][25] = 0;
-        rJacobian[18][0] = 0;
-        rJacobian[18][1] = 0;
-        rJacobian[18][2] = 0;
-        rJacobian[18][3] = 0;
-        rJacobian[18][4] = 0;
-        rJacobian[18][5] = 0;
-        rJacobian[18][6] = 0;
-        rJacobian[18][7] = 0;
-        rJacobian[18][8] = 0;
-        rJacobian[18][9] = 0;
-        rJacobian[18][10] = 0;
-        rJacobian[18][11] = 0;
-        rJacobian[18][12] = 0;
-        rJacobian[18][13] = 0;
-        rJacobian[18][14] = -(mDt * (076376893524206985));
-        rJacobian[18][15] = 0;
-        rJacobian[18][16] = 0;
-        rJacobian[18][17] = 0;
-        rJacobian[18][18] = 1.0 - (mDt * (-076376893524206985));
-        rJacobian[18][19] = 0;
-        rJacobian[18][20] = 0;
-        rJacobian[18][21] = 0;
-        rJacobian[18][22] = 0;
-        rJacobian[18][23] = 0;
-        rJacobian[18][24] = 0;
-        rJacobian[18][25] = 0;
-        rJacobian[19][0] = 0;
-        rJacobian[19][1] = 0;
-        rJacobian[19][2] = 0;
-        rJacobian[19][3] = 0;
-        rJacobian[19][4] = 0;
-        rJacobian[19][5] = 0;
-        rJacobian[19][6] = 0;
-        rJacobian[19][7] = 0;
+        rJacobian[16][15] = 0.0;
+        rJacobian[16][16] = 1.0 - (mDt * (-1.0301299389968197 + var_x129 - 7.0214082731462295e-5 * var_x130 - 0.079649435702289356 * var_x82 - var_x128 * var_x81 - 1.3239978260852802e-6 * var_x124 * var_x79 - 0.2364110529678865 * var_x123 * var_x130 - 1.3833900897210959e-5 * var_x126 * var_x130 * var_x131 / pow((6.8301345536507063e-5 + var_x131), 2)));
+        rJacobian[16][17] = -(mDt * (0.001 + var_x132));
+        rJacobian[16][18] = 0.0;
+        rJacobian[16][19] = 0.0;
+        rJacobian[16][20] = 0.0;
+        rJacobian[16][21] = 0.0;
+        rJacobian[16][22] = 0.0;
+        rJacobian[16][23] = 0.0;
+        rJacobian[16][24] = 0.0;
+        rJacobian[16][25] = 0.0;
+        rJacobian[17][0] = 0.0;
+        rJacobian[17][1] = 0.0;
+        rJacobian[17][2] = 0.0;
+        rJacobian[17][3] = 0.0;
+        rJacobian[17][4] = 0.0;
+        rJacobian[17][5] = 0.0;
+        rJacobian[17][6] = 0.0;
+        rJacobian[17][7] = 0.0;
+        rJacobian[17][8] = 0.0;
+        rJacobian[17][9] = 0.0;
+        rJacobian[17][10] = 0.0;
+        rJacobian[17][11] = 0.0;
+        rJacobian[17][12] = 0.0;
+        rJacobian[17][13] = 0.0;
+        rJacobian[17][14] = 0.0;
+        rJacobian[17][15] = 0.0;
+        rJacobian[17][16] = -(mDt * (0.0007561 - var_x129));
+        rJacobian[17][17] = 1.0 - (mDt * (-0.001 - var_x132));
+        rJacobian[17][18] = 0.0;
+        rJacobian[17][19] = 0.0;
+        rJacobian[17][20] = 0.0;
+        rJacobian[17][21] = 0.0;
+        rJacobian[17][22] = 0.0;
+        rJacobian[17][23] = 0.0;
+        rJacobian[17][24] = 0.0;
+        rJacobian[17][25] = 0.0;
+        rJacobian[18][0] = 0.0;
+        rJacobian[18][1] = 0.0;
+        rJacobian[18][2] = 0.0;
+        rJacobian[18][3] = 0.0;
+        rJacobian[18][4] = 0.0;
+        rJacobian[18][5] = 0.0;
+        rJacobian[18][6] = 0.0;
+        rJacobian[18][7] = 0.0;
+        rJacobian[18][8] = 0.0;
+        rJacobian[18][9] = 0.0;
+        rJacobian[18][10] = 0.0;
+        rJacobian[18][11] = 0.0;
+        rJacobian[18][12] = 0.0;
+        rJacobian[18][13] = 0.0;
+        rJacobian[18][14] = -(mDt * (0.076376893524206985));
+        rJacobian[18][15] = 0.0;
+        rJacobian[18][16] = 0.0;
+        rJacobian[18][17] = 0.0;
+        rJacobian[18][18] = 1.0 - (mDt * (-0.076376893524206985));
+        rJacobian[18][19] = 0.0;
+        rJacobian[18][20] = 0.0;
+        rJacobian[18][21] = 0.0;
+        rJacobian[18][22] = 0.0;
+        rJacobian[18][23] = 0.0;
+        rJacobian[18][24] = 0.0;
+        rJacobian[18][25] = 0.0;
+        rJacobian[19][0] = 0.0;
+        rJacobian[19][1] = 0.0;
+        rJacobian[19][2] = 0.0;
+        rJacobian[19][3] = 0.0;
+        rJacobian[19][4] = 0.0;
+        rJacobian[19][5] = 0.0;
+        rJacobian[19][6] = 0.0;
+        rJacobian[19][7] = 0.0;
         rJacobian[19][8] = -(mDt * (0.81600000000000006 - var_x83));
-        rJacobian[19][9] = 0;
-        rJacobian[19][10] = 0;
-        rJacobian[19][11] = 0;
-        rJacobian[19][12] = 0;
-        rJacobian[19][13] = 0;
-        rJacobian[19][14] = 0;
-        rJacobian[19][15] = 0;
-        rJacobian[19][16] = 0;
-        rJacobian[19][17] = 0;
-        rJacobian[19][18] = 0;
+        rJacobian[19][9] = 0.0;
+        rJacobian[19][10] = 0.0;
+        rJacobian[19][11] = 0.0;
+        rJacobian[19][12] = 0.0;
+        rJacobian[19][13] = 0.0;
+        rJacobian[19][14] = 0.0;
+        rJacobian[19][15] = 0.0;
+        rJacobian[19][16] = 0.0;
+        rJacobian[19][17] = 0.0;
+        rJacobian[19][18] = 0.0;
         rJacobian[19][19] = 1.0 - (mDt * (-0.23799999999999999 - var_x90));
-        rJacobian[19][20] = 0;
-        rJacobian[19][21] = 0;
-        rJacobian[19][22] = 0;
-        rJacobian[19][23] = 0;
-        rJacobian[19][24] = 0;
-        rJacobian[19][25] = 0;
-        rJacobian[20][0] = 0;
-        rJacobian[20][1] = 0;
-        rJacobian[20][2] = 0;
-        rJacobian[20][3] = 0;
-        rJacobian[20][4] = 0;
-        rJacobian[20][5] = 0;
-        rJacobian[20][6] = 0;
-        rJacobian[20][7] = 0;
+        rJacobian[19][20] = 0.0;
+        rJacobian[19][21] = 0.0;
+        rJacobian[19][22] = 0.0;
+        rJacobian[19][23] = 0.0;
+        rJacobian[19][24] = 0.0;
+        rJacobian[19][25] = 0.0;
+        rJacobian[20][0] = 0.0;
+        rJacobian[20][1] = 0.0;
+        rJacobian[20][2] = 0.0;
+        rJacobian[20][3] = 0.0;
+        rJacobian[20][4] = 0.0;
+        rJacobian[20][5] = 0.0;
+        rJacobian[20][6] = 0.0;
+        rJacobian[20][7] = 0.0;
         rJacobian[20][8] = -(mDt * (1.9320000000000004 - var_x88 - var_x89));
-        rJacobian[20][9] = 0;
-        rJacobian[20][10] = 0;
-        rJacobian[20][11] = 0;
-        rJacobian[20][12] = 0;
-        rJacobian[20][13] = 0;
-        rJacobian[20][14] = 0;
-        rJacobian[20][15] = 0;
-        rJacobian[20][16] = 0;
-        rJacobian[20][17] = 0;
-        rJacobian[20][18] = 0;
-        rJacobian[20][19] = 0;
-        rJacobian[20][20] = 1.0 - (mDt * (-00046000000000000001 + var_x133));
-        rJacobian[20][21] = 0;
-        rJacobian[20][22] = 0;
-        rJacobian[20][23] = 0;
+        rJacobian[20][9] = 0.0;
+        rJacobian[20][10] = 0.0;
+        rJacobian[20][11] = 0.0;
+        rJacobian[20][12] = 0.0;
+        rJacobian[20][13] = 0.0;
+        rJacobian[20][14] = 0.0;
+        rJacobian[20][15] = 0.0;
+        rJacobian[20][16] = 0.0;
+        rJacobian[20][17] = 0.0;
+        rJacobian[20][18] = 0.0;
+        rJacobian[20][19] = 0.0;
+        rJacobian[20][20] = 1.0 - (mDt * (-0.00046000000000000001 + var_x133));
+        rJacobian[20][21] = 0.0;
+        rJacobian[20][22] = 0.0;
+        rJacobian[20][23] = 0.0;
         rJacobian[20][24] = -(mDt * (var_x133));
-        rJacobian[20][25] = 0;
-        rJacobian[21][0] = 0;
-        rJacobian[21][1] = 0;
-        rJacobian[21][2] = 0;
-        rJacobian[21][3] = 0;
-        rJacobian[21][4] = 0;
-        rJacobian[21][5] = 0;
-        rJacobian[21][6] = 0;
-        rJacobian[21][7] = 0;
+        rJacobian[20][25] = 0.0;
+        rJacobian[21][0] = 0.0;
+        rJacobian[21][1] = 0.0;
+        rJacobian[21][2] = 0.0;
+        rJacobian[21][3] = 0.0;
+        rJacobian[21][4] = 0.0;
+        rJacobian[21][5] = 0.0;
+        rJacobian[21][6] = 0.0;
+        rJacobian[21][7] = 0.0;
         rJacobian[21][8] = -(mDt * (1.71 - var_x84));
-        rJacobian[21][9] = 0;
-        rJacobian[21][10] = 0;
-        rJacobian[21][11] = 0;
-        rJacobian[21][12] = 0;
-        rJacobian[21][13] = 0;
-        rJacobian[21][14] = 0;
-        rJacobian[21][15] = 0;
-        rJacobian[21][16] = 0;
-        rJacobian[21][17] = 0;
-        rJacobian[21][18] = 0;
-        rJacobian[21][19] = 0;
-        rJacobian[21][20] = 0;
-        rJacobian[21][21] = 1.0 - (mDt * (-059999999999999998 - var_x92));
-        rJacobian[21][22] = 0;
-        rJacobian[21][23] = 0;
-        rJacobian[21][24] = 0;
-        rJacobian[21][25] = 0;
-        rJacobian[22][0] = 0;
-        rJacobian[22][1] = 0;
-        rJacobian[22][2] = 0;
-        rJacobian[22][3] = 0;
-        rJacobian[22][4] = 0;
-        rJacobian[22][5] = 0;
-        rJacobian[22][6] = 0;
-        rJacobian[22][7] = 0;
+        rJacobian[21][9] = 0.0;
+        rJacobian[21][10] = 0.0;
+        rJacobian[21][11] = 0.0;
+        rJacobian[21][12] = 0.0;
+        rJacobian[21][13] = 0.0;
+        rJacobian[21][14] = 0.0;
+        rJacobian[21][15] = 0.0;
+        rJacobian[21][16] = 0.0;
+        rJacobian[21][17] = 0.0;
+        rJacobian[21][18] = 0.0;
+        rJacobian[21][19] = 0.0;
+        rJacobian[21][20] = 0.0;
+        rJacobian[21][21] = 1.0 - (mDt * (-0.059999999999999998 - var_x92));
+        rJacobian[21][22] = 0.0;
+        rJacobian[21][23] = 0.0;
+        rJacobian[21][24] = 0.0;
+        rJacobian[21][25] = 0.0;
+        rJacobian[22][0] = 0.0;
+        rJacobian[22][1] = 0.0;
+        rJacobian[22][2] = 0.0;
+        rJacobian[22][3] = 0.0;
+        rJacobian[22][4] = 0.0;
+        rJacobian[22][5] = 0.0;
+        rJacobian[22][6] = 0.0;
+        rJacobian[22][7] = 0.0;
         rJacobian[22][8] = -(mDt * (2.2890000000000006 - var_x85));
-        rJacobian[22][9] = 0;
-        rJacobian[22][10] = 0;
-        rJacobian[22][11] = 0;
-        rJacobian[22][12] = 0;
-        rJacobian[22][13] = 0;
-        rJacobian[22][14] = 0;
-        rJacobian[22][15] = 0;
-        rJacobian[22][16] = 0;
-        rJacobian[22][17] = 0;
-        rJacobian[22][18] = 0;
-        rJacobian[22][19] = 0;
-        rJacobian[22][20] = 0;
-        rJacobian[22][21] = 0;
-        rJacobian[22][22] = 1.0 - (mDt * (-019599999999999999 - var_x93));
-        rJacobian[22][23] = 0;
-        rJacobian[22][24] = 0;
-        rJacobian[22][25] = 0;
-        rJacobian[23][0] = 0;
-        rJacobian[23][1] = 0;
-        rJacobian[23][2] = 0;
-        rJacobian[23][3] = 0;
-        rJacobian[23][4] = 0;
-        rJacobian[23][5] = 0;
-        rJacobian[23][6] = 0;
-        rJacobian[23][7] = 0;
+        rJacobian[22][9] = 0.0;
+        rJacobian[22][10] = 0.0;
+        rJacobian[22][11] = 0.0;
+        rJacobian[22][12] = 0.0;
+        rJacobian[22][13] = 0.0;
+        rJacobian[22][14] = 0.0;
+        rJacobian[22][15] = 0.0;
+        rJacobian[22][16] = 0.0;
+        rJacobian[22][17] = 0.0;
+        rJacobian[22][18] = 0.0;
+        rJacobian[22][19] = 0.0;
+        rJacobian[22][20] = 0.0;
+        rJacobian[22][21] = 0.0;
+        rJacobian[22][22] = 1.0 - (mDt * (-0.019599999999999999 - var_x93));
+        rJacobian[22][23] = 0.0;
+        rJacobian[22][24] = 0.0;
+        rJacobian[22][25] = 0.0;
+        rJacobian[23][0] = 0.0;
+        rJacobian[23][1] = 0.0;
+        rJacobian[23][2] = 0.0;
+        rJacobian[23][3] = 0.0;
+        rJacobian[23][4] = 0.0;
+        rJacobian[23][5] = 0.0;
+        rJacobian[23][6] = 0.0;
+        rJacobian[23][7] = 0.0;
         rJacobian[23][8] = -(mDt * (0.33180000000000004 - var_x86 - var_x87));
-        rJacobian[23][9] = 0;
-        rJacobian[23][10] = 0;
-        rJacobian[23][11] = 0;
-        rJacobian[23][12] = 0;
-        rJacobian[23][13] = 0;
-        rJacobian[23][14] = 0;
-        rJacobian[23][15] = 0;
-        rJacobian[23][16] = 0;
-        rJacobian[23][17] = 0;
-        rJacobian[23][18] = 0;
-        rJacobian[23][19] = 0;
-        rJacobian[23][20] = 0;
-        rJacobian[23][21] = 0;
-        rJacobian[23][22] = 0;
+        rJacobian[23][9] = 0.0;
+        rJacobian[23][10] = 0.0;
+        rJacobian[23][11] = 0.0;
+        rJacobian[23][12] = 0.0;
+        rJacobian[23][13] = 0.0;
+        rJacobian[23][14] = 0.0;
+        rJacobian[23][15] = 0.0;
+        rJacobian[23][16] = 0.0;
+        rJacobian[23][17] = 0.0;
+        rJacobian[23][18] = 0.0;
+        rJacobian[23][19] = 0.0;
+        rJacobian[23][20] = 0.0;
+        rJacobian[23][21] = 0.0;
+        rJacobian[23][22] = 0.0;
         rJacobian[23][23] = 1.0 - (mDt * (-3.1999999999999999e-5 + var_x134));
-        rJacobian[23][24] = 0;
+        rJacobian[23][24] = 0.0;
         rJacobian[23][25] = -(mDt * (var_x134));
-        rJacobian[24][0] = 0;
-        rJacobian[24][1] = 0;
-        rJacobian[24][2] = 0;
-        rJacobian[24][3] = 0;
-        rJacobian[24][4] = 0;
-        rJacobian[24][5] = 0;
-        rJacobian[24][6] = 0;
-        rJacobian[24][7] = 0;
-        rJacobian[24][8] = 0;
-        rJacobian[24][9] = 0;
-        rJacobian[24][10] = 0;
-        rJacobian[24][11] = 0;
-        rJacobian[24][12] = 0;
-        rJacobian[24][13] = 0;
-        rJacobian[24][14] = 0;
-        rJacobian[24][15] = 0;
-        rJacobian[24][16] = 0;
-        rJacobian[24][17] = 0;
-        rJacobian[24][18] = 0;
-        rJacobian[24][19] = 0;
-        rJacobian[24][20] = -(mDt * (-015699999999999999));
-        rJacobian[24][21] = 0;
-        rJacobian[24][22] = 0;
-        rJacobian[24][23] = 0;
-        rJacobian[24][24] = 1.0 - (mDt * (-015757));
-        rJacobian[24][25] = 0;
-        rJacobian[25][0] = 0;
-        rJacobian[25][1] = 0;
-        rJacobian[25][2] = 0;
-        rJacobian[25][3] = 0;
-        rJacobian[25][4] = 0;
-        rJacobian[25][5] = 0;
-        rJacobian[25][6] = 0;
-        rJacobian[25][7] = 0;
-        rJacobian[25][8] = 0;
-        rJacobian[25][9] = 0;
-        rJacobian[25][10] = 0;
-        rJacobian[25][11] = 0;
-        rJacobian[25][12] = 0;
-        rJacobian[25][13] = 0;
-        rJacobian[25][14] = 0;
-        rJacobian[25][15] = 0;
-        rJacobian[25][16] = 0;
-        rJacobian[25][17] = 0;
-        rJacobian[25][18] = 0;
-        rJacobian[25][19] = 0;
-        rJacobian[25][20] = 0;
-        rJacobian[25][21] = 0;
-        rJacobian[25][22] = 0;
-        rJacobian[25][23] = -(mDt * (-0030000000000000001));
-        rJacobian[25][24] = 0;
-        rJacobian[25][25] = 1.0 - (mDt * (-0063300000000000006));
+        rJacobian[24][0] = 0.0;
+        rJacobian[24][1] = 0.0;
+        rJacobian[24][2] = 0.0;
+        rJacobian[24][3] = 0.0;
+        rJacobian[24][4] = 0.0;
+        rJacobian[24][5] = 0.0;
+        rJacobian[24][6] = 0.0;
+        rJacobian[24][7] = 0.0;
+        rJacobian[24][8] = 0.0;
+        rJacobian[24][9] = 0.0;
+        rJacobian[24][10] = 0.0;
+        rJacobian[24][11] = 0.0;
+        rJacobian[24][12] = 0.0;
+        rJacobian[24][13] = 0.0;
+        rJacobian[24][14] = 0.0;
+        rJacobian[24][15] = 0.0;
+        rJacobian[24][16] = 0.0;
+        rJacobian[24][17] = 0.0;
+        rJacobian[24][18] = 0.0;
+        rJacobian[24][19] = 0.0;
+        rJacobian[24][20] = -(mDt * (-0.015699999999999999));
+        rJacobian[24][21] = 0.0;
+        rJacobian[24][22] = 0.0;
+        rJacobian[24][23] = 0.0;
+        rJacobian[24][24] = 1.0 - (mDt * (-0.015757));
+        rJacobian[24][25] = 0.0;
+        rJacobian[25][0] = 0.0;
+        rJacobian[25][1] = 0.0;
+        rJacobian[25][2] = 0.0;
+        rJacobian[25][3] = 0.0;
+        rJacobian[25][4] = 0.0;
+        rJacobian[25][5] = 0.0;
+        rJacobian[25][6] = 0.0;
+        rJacobian[25][7] = 0.0;
+        rJacobian[25][8] = 0.0;
+        rJacobian[25][9] = 0.0;
+        rJacobian[25][10] = 0.0;
+        rJacobian[25][11] = 0.0;
+        rJacobian[25][12] = 0.0;
+        rJacobian[25][13] = 0.0;
+        rJacobian[25][14] = 0.0;
+        rJacobian[25][15] = 0.0;
+        rJacobian[25][16] = 0.0;
+        rJacobian[25][17] = 0.0;
+        rJacobian[25][18] = 0.0;
+        rJacobian[25][19] = 0.0;
+        rJacobian[25][20] = 0.0;
+        rJacobian[25][21] = 0.0;
+        rJacobian[25][22] = 0.0;
+        rJacobian[25][23] = -(mDt * (-0.0030000000000000001));
+        rJacobian[25][24] = 0.0;
+        rJacobian[25][25] = 1.0 - (mDt * (-0.0063300000000000006));
     }
 
     void CellShannon2004FromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
@@ -1380,19 +1380,19 @@
         double var_chaste_interface__INa_j_gate__j = rY[3];
         // Units: dimensionless; Initial value: 0.991562
         double var_chaste_interface__INa_m_gate__m = rY[4];
-        // Units: dimensionless; Initial value: 001405627
+        // Units: dimensionless; Initial value: 0.001405627
         double var_chaste_interface__IKr_Xr_gate__Xr = rY[5];
-        // Units: dimensionless; Initial value: 008641386
+        // Units: dimensionless; Initial value: 0.008641386
         double var_chaste_interface__IKs_Xs_gate__Xs = rY[6];
-        // Units: dimensionless; Initial value: 005412034
+        // Units: dimensionless; Initial value: 0.005412034
         double var_chaste_interface__Itos_X_gate__X_tos = rY[7];
-        // Units: dimensionless; Initial value: 004051574
+        // Units: dimensionless; Initial value: 0.004051574
         double var_chaste_interface__Itos_Y_gate__Y_tos = rY[8];
         // Units: dimensionless; Initial value: 0.9945511
         double var_chaste_interface__Itos_R_gate__R_tos = rY[9];
         // Units: dimensionless; Initial value: 0.9946
         double var_chaste_interface__Itof_X_gate__X_tof = rY[10];
-        // Units: dimensionless; Initial value: 004051574
+        // Units: dimensionless; Initial value: 0.004051574
         double var_chaste_interface__Itof_Y_gate__Y_tof = rY[11];
         // Units: dimensionless; Initial value: 0.9945511
         double var_chaste_interface__ICaL_d_gate__d = rY[12];
@@ -1400,9 +1400,9 @@
         double var_chaste_interface__ICaL_f_gate__f = rY[13];
         // Units: dimensionless; Initial value: 1.000681
         double var_chaste_interface__ICaL_fCa_gate__fCaB_SL = rY[14];
-        // Units: dimensionless; Initial value: 01452605
+        // Units: dimensionless; Initial value: 0.01452605
         double var_chaste_interface__ICaL_fCa_gate__fCaB_jct = rY[15];
-        // Units: dimensionless; Initial value: 02421991
+        // Units: dimensionless; Initial value: 0.02421991
         double var_chaste_interface__Na_buffer__Na_SL = rY[19];
         // Units: millimolar; Initial value: 8.80733
         double var_chaste_interface__Na_buffer__Na_jct = rY[20];
@@ -1410,9 +1410,9 @@
         double var_chaste_interface__Na_buffer__Nai = rY[23];
         // Units: millimolar; Initial value: 8.80853
         double var_chaste_interface__Ca_buffer__Ca_SL = rY[25];
-        // Units: millimolar; Initial value: 0001031812
+        // Units: millimolar; Initial value: 0.0001031812
         double var_chaste_interface__Ca_buffer__Ca_jct = rY[26];
-        // Units: millimolar; Initial value: 0001737475
+        // Units: millimolar; Initial value: 0.0001737475
         
         const double var_ICaL__Fx_ICaL_SL = 0.10000000000000001; // dimensionless
         const double var_ICaL__Fx_ICaL_jct = 0.90000000000000002; // dimensionless
@@ -1429,36 +1429,36 @@
         const double var_ICaL_fCa_gate__fCa_jct = 1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_jct; // dimensionless
         const double var_ICab__Fx_CaBk_SL = 0.89000000000000001; // dimensionless
         const double var_ICab__Fx_CaBk_jct = 0.11; // dimensionless
-        const double var_ICab__G_CaBk = 00025129999999999998; // milliS_per_microF
+        const double var_ICab__G_CaBk = 0.00025129999999999998; // milliS_per_microF
         const double var_ICap__Fx_SLCaP_SL = 0.89000000000000001; // dimensionless
         const double var_ICap__Fx_SLCaP_jct = 0.11; // dimensionless
         const double var_ICap__H = 1.6000000000000001; // dimensionless
-        const double var_ICap__Km = 00050000000000000001; // millimolar
+        const double var_ICap__Km = 0.00050000000000000001; // millimolar
         const double var_ICap__Q10_SLCaP = 2.3500000000000001; // dimensionless
-        const double var_ICap__V_maxAF = 067299999999999999; // microA_per_microF
+        const double var_ICap__V_maxAF = 0.067299999999999999; // microA_per_microF
         const double var_ICl_Ca__Fx_Cl_SL = 0.89000000000000001; // dimensionless
         const double var_ICl_Ca__Fx_Cl_jct = 0.11; // dimensionless
         const double var_ICl_Ca__G_Cl = 0.109625; // milliS_per_microF
         const double var_ICl_Ca__Kd_ClCa = 0.10000000000000001; // millimolar
-        const double var_IClb__G_ClBk = 0089999999999999993; // milliS_per_microF
-        const double var_IKp__g_Kp = 001; // milliS_per_microF
+        const double var_IClb__G_ClBk = 0.0089999999999999993; // milliS_per_microF
+        const double var_IKp__g_Kp = 0.001; // milliS_per_microF
         const double var_IKs__Fx_Ks_SL = 0.89000000000000001; // dimensionless
         const double var_IKs__Fx_Ks_jct = 0.11; // dimensionless
         const double var_IKs__pCa_SL = 3.0 - log10(var_chaste_interface__Ca_buffer__Ca_SL); // dimensionless
-        const double var_IKs__G_Ks_SL = (057000000000000002 + 0.19 / (1.0 + exp(-12.0 + 1.6666666666666667 * var_IKs__pCa_SL))) * mParameters[10]; // milliS_per_microF
+        const double var_IKs__G_Ks_SL = (0.057000000000000002 + 0.19 / (1.0 + exp(-12.0 + 1.6666666666666667 * var_IKs__pCa_SL))) * mParameters[10]; // milliS_per_microF
         const double var_IKs__pCa_jct = 3.0 - log10(var_chaste_interface__Ca_buffer__Ca_jct); // dimensionless
-        const double var_IKs__G_Ks_jct = (057000000000000002 + 0.19 / (1.0 + exp(-12.0 + 1.6666666666666667 * var_IKs__pCa_jct))) * mParameters[10]; // milliS_per_microF
-        const double var_IKs__pKNa = 018329999999999999; // dimensionless
+        const double var_IKs__G_Ks_jct = (0.057000000000000002 + 0.19 / (1.0 + exp(-12.0 + 1.6666666666666667 * var_IKs__pCa_jct))) * mParameters[10]; // milliS_per_microF
+        const double var_IKs__pKNa = 0.018329999999999999; // dimensionless
         const double var_INa__Fx_Na_SL = 0.89000000000000001; // dimensionless
         const double var_INa__Fx_Na_jct = 0.11; // dimensionless
         const double var_INaCa__Fx_NCX_SL = 0.89000000000000001; // dimensionless
         const double var_INaCa__Fx_NCX_jct = 0.11; // dimensionless
         const double var_INaCa__HNa = 3.0; // dimensionless
-        const double var_INaCa__K_mCai = 0035899999999999999; // millimolar
+        const double var_INaCa__K_mCai = 0.0035899999999999999; // millimolar
         const double var_INaCa__K_mCao = 1.3; // millimolar
         const double var_INaCa__K_mNai = 12.289999999999999; // millimolar
         const double var_INaCa__K_mNao = 87.5; // millimolar
-        const double var_INaCa__Kd_act = 00025599999999999999; // millimolar
+        const double var_INaCa__Kd_act = 0.00025599999999999999; // millimolar
         const double var_INaCa__Ka_SL = 1.0 / (1.0 + pow(var_INaCa__Kd_act, 3) / pow(var_chaste_interface__Ca_buffer__Ca_SL, 3)); // dimensionless
         const double var_INaCa__Ka_jct = 1.0 / (1.0 + pow(var_INaCa__Kd_act, 3) / pow(var_chaste_interface__Ca_buffer__Ca_jct, 3)); // dimensionless
         const double var_INaCa__Q10_NCX = 1.5700000000000001; // dimensionless
@@ -1473,19 +1473,19 @@
         const double var_INa__openProb = pow(var_chaste_interface__INa_m_gate__m, 3) * var_chaste_interface__INa_h_gate__h * var_chaste_interface__INa_j_gate__j; // dimensionless
         const double var_INab__Fx_NaBk_SL = 0.89000000000000001; // dimensionless
         const double var_INab__Fx_NaBk_jct = 0.11; // dimensionless
-        const double var_INab__G_NaBk = 00029700000000000001; // milliS_per_microF
-        const double var_Itof__G_tof = 02; // milliS_per_microF
-        const double var_IKr_Rr_gate__Rr = 1.0 / (1.0 + exp(1.4732142857142858 + 044642857142857144 * var_chaste_interface__cell__V)); // dimensionless
+        const double var_INab__G_NaBk = 0.00029700000000000001; // milliS_per_microF
+        const double var_Itof__G_tof = 0.02; // milliS_per_microF
+        const double var_IKr_Rr_gate__Rr = 1.0 / (1.0 + exp(1.4732142857142858 + 0.044642857142857144 * var_chaste_interface__cell__V)); // dimensionless
         const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
         const double var_cell__i_Stim = var_cell__i_Stim_converter / HeartConfig::Instance()->GetCapacitance(); // microA_per_microF
         const double var_model_parameters__Cli = 15.0; // millimolar
-        const double var_model_parameters__Clo = 150; // millimolar
+        const double var_model_parameters__Clo = 150.0; // millimolar
         const double var_model_parameters__F = 96485.0; // coulomb_per_mole
         const double var_IK1__G_K1 = 0.3872983346207417 * sqrt(mParameters[5]); // milliS_per_microF
         const double var_IKr__G_IKr = 0.43033148291193518 * sqrt(mParameters[5]) * mParameters[9]; // milliS_per_microF
-        const double var_INaK__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(01485884101040119 * mParameters[6]); // dimensionless
+        const double var_INaK__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * mParameters[6]); // dimensionless
         const double var_model_parameters__R = 8314.2999999999993; // joule_per_kilomole_kelvin
-        const double var_model_parameters__T = 310; // kelvin
+        const double var_model_parameters__T = 310.0; // kelvin
         const double var_ICaL__Q_CaL = pow(var_ICaL__Q10_CaL, (-31.0 + 0.10000000000000001 * var_model_parameters__T)); // dimensionless
         const double var_ICaL__temp = 0.45000000000000001 * pow(var_model_parameters__F, 2) * var_ICaL__Q_CaL * var_chaste_interface__ICaL_d_gate__d * var_chaste_interface__ICaL_f_gate__f * var_chaste_interface__cell__V / (var_model_parameters__R * var_model_parameters__T); // coulomb_per_mole
         const double var_ICaL__i_CaL_Ca_SL = 4.0 * (-var_ICaL__gamma_Cao * mParameters[4] + var_chaste_interface__Ca_buffer__Ca_SL * var_ICaL__gamma_Cai * exp(2.0 * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))) * var_ICaL__Fx_ICaL_SL * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL / (-1.0 + exp(2.0 * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // microA_per_microF
@@ -1508,7 +1508,7 @@
         const double var_INaCa__temp_jct = (pow(var_chaste_interface__Na_buffer__Na_jct, var_INaCa__HNa) * mParameters[4] * exp(var_INaCa__eta * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T)) - pow(mParameters[6], var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_jct * exp((-1.0 + var_INaCa__eta) * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))) / (1.0 + var_INaCa__ksat * exp((-1.0 + var_INaCa__eta) * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // millimolar4
         const double var_INaCa__i_NaCa_jct = var_INaCa__Fx_NCX_jct * var_INaCa__Ka_jct * var_INaCa__Q_NCX * mParameters[11] * var_INaCa__temp_jct / (pow(var_chaste_interface__Na_buffer__Na_jct, var_INaCa__HNa) * var_INaCa__K_mCao + pow(var_chaste_interface__Na_buffer__Na_jct, var_INaCa__HNa) * mParameters[4] + pow(mParameters[6], var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_jct + pow(var_INaCa__K_mNao, var_INaCa__HNa) * (1.0 + var_chaste_interface__Ca_buffer__Ca_jct / var_INaCa__K_mCai) * var_chaste_interface__Ca_buffer__Ca_jct + pow(mParameters[6], var_INaCa__HNa) * (1.0 + pow((var_chaste_interface__Na_buffer__Na_jct / var_INaCa__K_mNai), var_INaCa__HNa)) * var_INaCa__K_mCai); // microA_per_microF
         const double var_INaCa__i_NaCa = var_INaCa__i_NaCa_SL + var_INaCa__i_NaCa_jct; // microA_per_microF
-        const double var_INaK__f_NaK = 1.0 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T)) + 036499999999999998 * var_INaK__sigma * exp(-var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // dimensionless
+        const double var_INaK__f_NaK = 1.0 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T)) + 0.036499999999999998 * var_INaK__sigma * exp(-var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // dimensionless
         const double var_INaK__i_NaK_SL = var_INaK__Fx_NaK_SL * var_INaK__I_NaK_max * var_INaK__f_NaK * mParameters[5] / ((1.0 + pow((var_INaK__Km_Nai / var_chaste_interface__Na_buffer__Na_SL), var_INaK__H_NaK)) * (var_INaK__Km_Ko + mParameters[5])); // microA_per_microF
         const double var_INaK__i_NaK_jct = var_INaK__Fx_NaK_jct * var_INaK__I_NaK_max * var_INaK__f_NaK * mParameters[5] / ((1.0 + pow((var_INaK__Km_Nai / var_chaste_interface__Na_buffer__Na_jct), var_INaK__H_NaK)) * (var_INaK__Km_Ko + mParameters[5])); // microA_per_microF
         const double var_INaK__i_NaK = var_INaK__i_NaK_SL + var_INaK__i_NaK_jct; // microA_per_microF
@@ -1522,7 +1522,7 @@
         const double var_IClb__i_Clb = (-var_reversal_potentials__E_Cl + var_chaste_interface__cell__V) * var_IClb__G_ClBk; // microA_per_microF
         const double var_reversal_potentials__E_K = var_model_parameters__R * var_model_parameters__T * log(mParameters[5] / mParameters[3]) / var_model_parameters__F; // millivolt
         const double var_IK1_K1_gate__alpha_K1 = 1.02 / (1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__V - 0.23849999999999999 * var_reversal_potentials__E_K)); // per_millisecond
-        const double var_IK1_K1_gate__beta_K1 = (1.0 * exp(-36.698642499999998 + 061749999999999999 * var_chaste_interface__cell__V - 061749999999999999 * var_reversal_potentials__E_K) + 0.49124000000000001 * exp(0.43983232 + 080320000000000003 * var_chaste_interface__cell__V - 080320000000000003 * var_reversal_potentials__E_K)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_reversal_potentials__E_K - 0.51429999999999998 * var_chaste_interface__cell__V)); // per_millisecond
+        const double var_IK1_K1_gate__beta_K1 = (1.0 * exp(-36.698642499999998 + 0.061749999999999999 * var_chaste_interface__cell__V - 0.061749999999999999 * var_reversal_potentials__E_K) + 0.49124000000000001 * exp(0.43983232 + 0.080320000000000003 * var_chaste_interface__cell__V - 0.080320000000000003 * var_reversal_potentials__E_K)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_reversal_potentials__E_K - 0.51429999999999998 * var_chaste_interface__cell__V)); // per_millisecond
         const double var_IK1_K1_gate__K1_infinity = var_IK1_K1_gate__alpha_K1 / (var_IK1_K1_gate__alpha_K1 + var_IK1_K1_gate__beta_K1); // dimensionless
         const double var_IK1__i_K1 = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_IK1__G_K1 * var_IK1_K1_gate__K1_infinity; // microA_per_microF
         const double var_IKp__i_Kp = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_IKp__g_Kp / (1.0 + exp(7.4880000000000004 - 0.16722408026755853 * var_chaste_interface__cell__V)); // microA_per_microF
@@ -1553,19 +1553,19 @@
         double var_chaste_interface__INa_j_gate__j = rY[3];
         // Units: dimensionless; Initial value: 0.991562
         double var_chaste_interface__INa_m_gate__m = rY[4];
-        // Units: dimensionless; Initial value: 001405627
+        // Units: dimensionless; Initial value: 0.001405627
         double var_chaste_interface__IKr_Xr_gate__Xr = rY[5];
-        // Units: dimensionless; Initial value: 008641386
+        // Units: dimensionless; Initial value: 0.008641386
         double var_chaste_interface__IKs_Xs_gate__Xs = rY[6];
-        // Units: dimensionless; Initial value: 005412034
+        // Units: dimensionless; Initial value: 0.005412034
         double var_chaste_interface__Itos_X_gate__X_tos = rY[7];
-        // Units: dimensionless; Initial value: 004051574
+        // Units: dimensionless; Initial value: 0.004051574
         double var_chaste_interface__Itos_Y_gate__Y_tos = rY[8];
         // Units: dimensionless; Initial value: 0.9945511
         double var_chaste_interface__Itos_R_gate__R_tos = rY[9];
         // Units: dimensionless; Initial value: 0.9946
         double var_chaste_interface__Itof_X_gate__X_tof = rY[10];
-        // Units: dimensionless; Initial value: 004051574
+        // Units: dimensionless; Initial value: 0.004051574
         double var_chaste_interface__Itof_Y_gate__Y_tof = rY[11];
         // Units: dimensionless; Initial value: 0.9945511
         double var_chaste_interface__ICaL_d_gate__d = rY[12];
@@ -1575,28 +1575,28 @@
         
         const double var_ICaL_d_gate__d_infinity = 1.0 / (1.0 + exp(-2.4166666666666665 - 0.16666666666666666 * var_chaste_interface__cell__V));
         const double var_ICaL_d_gate__tau_d = 28.571428571428569 * (1.0 - exp(-2.4166666666666665 - 0.16666666666666666 * var_chaste_interface__cell__V)) * var_ICaL_d_gate__d_infinity / (14.5 + var_chaste_interface__cell__V);
-        const double var_ICaL_f_gate__f_infinity = 1.0 / (1.0 + exp(9.7388888888888889 + 0.27777777777777779 * var_chaste_interface__cell__V)) + 0.59999999999999998 / (1.0 + exp(2.5 - 050000000000000003 * var_chaste_interface__cell__V));
-        const double var_ICaL_f_gate__tau_f = 1.0 / (02 + 019699999999999999 * exp(-0.23877882250000002 * pow((1 + 068965517241379309 * var_chaste_interface__cell__V), 2)));
+        const double var_ICaL_f_gate__f_infinity = 1.0 / (1.0 + exp(9.7388888888888889 + 0.27777777777777779 * var_chaste_interface__cell__V)) + 0.59999999999999998 / (1.0 + exp(2.5 - 0.050000000000000003 * var_chaste_interface__cell__V));
+        const double var_ICaL_f_gate__tau_f = 1.0 / (0.02 + 0.019699999999999999 * exp(-0.23877882250000002 * pow((1 + 0.068965517241379309 * var_chaste_interface__cell__V), 2)));
         const double var_IKr_Xr_gate__Xr_infinity = 1.0 / (1.0 + exp(-6.666666666666667 - 0.13333333333333333 * var_chaste_interface__cell__V));
-        const double var_IKr_Xr_gate__tau_Xr = 1.0 / (00060999999999999997 * (10 + var_chaste_interface__cell__V) / (-1.0 + exp(1.45 + 0.14499999999999999 * var_chaste_interface__cell__V)) + 0013799999999999999 * (7.0 + var_chaste_interface__cell__V) / (1.0 - exp(-0.86099999999999999 - 0.123 * var_chaste_interface__cell__V)));
-        const double var_IKs_Xs_gate__Xs_infinity = 1.0 / (1.0 + exp(089820359281437126 - 059880239520958084 * var_chaste_interface__cell__V));
-        const double var_IKs_Xs_gate__tau_Xs = 1.0 / (00013100000000000001 * (30 + var_chaste_interface__cell__V) / (-1.0 + exp(2.0609999999999999 + 068699999999999997 * var_chaste_interface__cell__V)) + 7.1899999999999999e-5 * (30 + var_chaste_interface__cell__V) / (1.0 - exp(-4.4399999999999995 - 0.14799999999999999 * var_chaste_interface__cell__V)));
-        const double var_INa_h_gate__alpha_h = ((var_chaste_interface__cell__V < -40) ? (0.13500000000000001 * exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__cell__V)) : (0));
-        const double var_INa_h_gate__beta_h = ((var_chaste_interface__cell__V < -40) ? (310000 * exp(0.34999999999999998 * var_chaste_interface__cell__V) + 3.5600000000000001 * exp(079000000000000001 * var_chaste_interface__cell__V)) : (7.6923076923076916 / (1.0 + exp(-0.96036036036036043 - 0900900900900901 * var_chaste_interface__cell__V))));
-        const double var_INa_j_gate__alpha_j = ((var_chaste_interface__cell__V < -40) ? (1.0 * (37.780000000000001 + var_chaste_interface__cell__V) * (-127140 * exp(0.24440000000000001 * var_chaste_interface__cell__V) - 3.4740000000000003e-5 * exp(-043909999999999998 * var_chaste_interface__cell__V)) / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__V))) : (0));
-        const double var_INa_j_gate__beta_j = ((var_chaste_interface__cell__V < -40) ? (0.1212 * exp(-01052 * var_chaste_interface__cell__V) / (1.0 + exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__cell__V))) : (0.29999999999999999 * exp(-2.5349999999999999e-7 * var_chaste_interface__cell__V) / (1.0 + exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__cell__V))));
+        const double var_IKr_Xr_gate__tau_Xr = 1.0 / (0.00060999999999999997 * (10.0 + var_chaste_interface__cell__V) / (-1.0 + exp(1.45 + 0.14499999999999999 * var_chaste_interface__cell__V)) + 0.0013799999999999999 * (7.0 + var_chaste_interface__cell__V) / (1.0 - exp(-0.86099999999999999 - 0.123 * var_chaste_interface__cell__V)));
+        const double var_IKs_Xs_gate__Xs_infinity = 1.0 / (1.0 + exp(0.089820359281437126 - 0.059880239520958084 * var_chaste_interface__cell__V));
+        const double var_IKs_Xs_gate__tau_Xs = 1.0 / (0.00013100000000000001 * (30.0 + var_chaste_interface__cell__V) / (-1.0 + exp(2.0609999999999999 + 0.068699999999999997 * var_chaste_interface__cell__V)) + 7.1899999999999999e-5 * (30.0 + var_chaste_interface__cell__V) / (1.0 - exp(-4.4399999999999995 - 0.14799999999999999 * var_chaste_interface__cell__V)));
+        const double var_INa_h_gate__alpha_h = ((var_chaste_interface__cell__V < -40.0) ? (0.13500000000000001 * exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__cell__V)) : (0));
+        const double var_INa_h_gate__beta_h = ((var_chaste_interface__cell__V < -40.0) ? (310000.0 * exp(0.34999999999999998 * var_chaste_interface__cell__V) + 3.5600000000000001 * exp(0.079000000000000001 * var_chaste_interface__cell__V)) : (7.6923076923076916 / (1.0 + exp(-0.96036036036036043 - 0.0900900900900901 * var_chaste_interface__cell__V))));
+        const double var_INa_j_gate__alpha_j = ((var_chaste_interface__cell__V < -40.0) ? (1.0 * (37.780000000000001 + var_chaste_interface__cell__V) * (-127140.0 * exp(0.24440000000000001 * var_chaste_interface__cell__V) - 3.4740000000000003e-5 * exp(-0.043909999999999998 * var_chaste_interface__cell__V)) / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__V))) : (0));
+        const double var_INa_j_gate__beta_j = ((var_chaste_interface__cell__V < -40.0) ? (0.1212 * exp(-0.01052 * var_chaste_interface__cell__V) / (1.0 + exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__cell__V))) : (0.29999999999999999 * exp(-2.5349999999999999e-7 * var_chaste_interface__cell__V) / (1.0 + exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__cell__V))));
         const double var_INa_m_gate__alpha_m = 0.32000000000000001 * (47.130000000000003 + var_chaste_interface__cell__V) / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__cell__V));
-        const double var_INa_m_gate__beta_m = 080000000000000002 * exp(-090909090909090912 * var_chaste_interface__cell__V);
-        const double var_Itof_X_gate__X_tof_infinity = 1.0 / (1.0 + exp(-0.20000000000000001 - 066666666666666666 * var_chaste_interface__cell__V));
-        const double var_Itof_X_gate__tau_X_tof = 1.5 + 3.5 * exp(-0011111111111111111 * pow(var_chaste_interface__cell__V, 2));
+        const double var_INa_m_gate__beta_m = 0.080000000000000002 * exp(-0.090909090909090912 * var_chaste_interface__cell__V);
+        const double var_Itof_X_gate__X_tof_infinity = 1.0 / (1.0 + exp(-0.20000000000000001 - 0.066666666666666666 * var_chaste_interface__cell__V));
+        const double var_Itof_X_gate__tau_X_tof = 1.5 + 3.5 * exp(-0.0011111111111111111 * pow(var_chaste_interface__cell__V, 2));
         const double var_Itof_Y_gate__Y_tof_infinity = 1.0 / (1.0 + exp(3.3500000000000001 + 0.10000000000000001 * var_chaste_interface__cell__V));
-        const double var_Itof_Y_gate__tau_Y_tof = 20 + 20 / (1.0 + exp(3.3500000000000001 + 0.10000000000000001 * var_chaste_interface__cell__V));
+        const double var_Itof_Y_gate__tau_Y_tof = 20.0 + 20.0 / (1.0 + exp(3.3500000000000001 + 0.10000000000000001 * var_chaste_interface__cell__V));
         const double var_Itos_R_gate__R_tos_infinity = 1.0 / (1.0 + exp(3.3500000000000001 + 0.10000000000000001 * var_chaste_interface__cell__V));
-        const double var_Itos_R_gate__tau_R_tos = 220 + 2800 / (1.0 + exp(6.0 + 0.10000000000000001 * var_chaste_interface__cell__V));
-        const double var_Itos_X_gate__X_tos_infinity = 1.0 / (1.0 + exp(-0.20000000000000001 - 066666666666666666 * var_chaste_interface__cell__V));
-        const double var_Itos_X_gate__tau_X_tos = 0.5 + 9.0 / (1.0 + exp(0.20000000000000001 + 066666666666666666 * var_chaste_interface__cell__V));
+        const double var_Itos_R_gate__tau_R_tos = 220.0 + 2800.0 / (1.0 + exp(6.0 + 0.10000000000000001 * var_chaste_interface__cell__V));
+        const double var_Itos_X_gate__X_tos_infinity = 1.0 / (1.0 + exp(-0.20000000000000001 - 0.066666666666666666 * var_chaste_interface__cell__V));
+        const double var_Itos_X_gate__tau_X_tos = 0.5 + 9.0 / (1.0 + exp(0.20000000000000001 + 0.066666666666666666 * var_chaste_interface__cell__V));
         const double var_Itos_Y_gate__Y_tos_infinity = 1.0 / (1.0 + exp(3.3500000000000001 + 0.10000000000000001 * var_chaste_interface__cell__V));
-        const double var_Itos_Y_gate__tau_Y_tos = 30 + 3000 / (1.0 + exp(6.0 + 0.10000000000000001 * var_chaste_interface__cell__V));
+        const double var_Itos_Y_gate__tau_Y_tos = 30.0 + 3000.0 / (1.0 + exp(6.0 + 0.10000000000000001 * var_chaste_interface__cell__V));
         
         
         rY[5] = (var_chaste_interface__IKr_Xr_gate__Xr + ((var_IKr_Xr_gate__Xr_infinity / var_IKr_Xr_gate__tau_Xr) * mDt)) / (1.0 - ((-1 / var_IKr_Xr_gate__tau_Xr) * mDt));
@@ -1654,13 +1654,13 @@
         double var_chaste_interface__INa_j_gate__j = rY[3];
         // Units: dimensionless; Initial value: 0.991562
         double var_chaste_interface__INa_m_gate__m = rY[4];
-        // Units: dimensionless; Initial value: 001405627
+        // Units: dimensionless; Initial value: 0.001405627
         double var_chaste_interface__IKr_Xr_gate__Xr = rY[5];
-        // Units: dimensionless; Initial value: 008641386
+        // Units: dimensionless; Initial value: 0.008641386
         double var_chaste_interface__IKs_Xs_gate__Xs = rY[6];
-        // Units: dimensionless; Initial value: 005412034
+        // Units: dimensionless; Initial value: 0.005412034
         double var_chaste_interface__Itos_X_gate__X_tos = rY[7];
-        // Units: dimensionless; Initial value: 004051574
+        // Units: dimensionless; Initial value: 0.004051574
         double var_chaste_interface__Itos_Y_gate__Y_tos = rY[8];
         // Units: dimensionless; Initial value: 0.9945511
         double var_chaste_interface__Itos_R_gate__R_tos = rY[9];
@@ -1670,9 +1670,9 @@
         double var_chaste_interface__ICaL_f_gate__f = rY[13];
         // Units: dimensionless; Initial value: 1.000681
         double var_chaste_interface__ICaL_fCa_gate__fCaB_SL = rY[14];
-        // Units: dimensionless; Initial value: 01452605
+        // Units: dimensionless; Initial value: 0.01452605
         double var_chaste_interface__ICaL_fCa_gate__fCaB_jct = rY[15];
-        // Units: dimensionless; Initial value: 02421991
+        // Units: dimensionless; Initial value: 0.02421991
         double var_chaste_interface__Jrel_SR__O = rY[18];
         // Units: dimensionless; Initial value: 8.156628e-07
         double var_chaste_interface__Na_buffer__Na_SL = rY[19];
@@ -1684,9 +1684,9 @@
         double var_chaste_interface__Ca_buffer__Ca_SR = rY[24];
         // Units: millimolar; Initial value: 0.5545201
         double var_chaste_interface__Ca_buffer__Ca_SL = rY[25];
-        // Units: millimolar; Initial value: 0001031812
+        // Units: millimolar; Initial value: 0.0001031812
         double var_chaste_interface__Ca_buffer__Ca_jct = rY[26];
-        // Units: millimolar; Initial value: 0001737475
+        // Units: millimolar; Initial value: 0.0001737475
         
 
         // Mathematics
@@ -1706,20 +1706,20 @@
         const double var_IKs__Fx_Ks_SL = 0.89000000000000001; // dimensionless
         const double var_IKs__Fx_Ks_jct = 0.11; // dimensionless
         const double var_IKs__pCa_SL = 3.0 - log10(var_chaste_interface__Ca_buffer__Ca_SL); // dimensionless
-        const double var_IKs__G_Ks_SL = (057000000000000002 + 0.19 / (1.0 + exp(-12.0 + 1.6666666666666667 * var_IKs__pCa_SL))) * mParameters[10]; // milliS_per_microF
+        const double var_IKs__G_Ks_SL = (0.057000000000000002 + 0.19 / (1.0 + exp(-12.0 + 1.6666666666666667 * var_IKs__pCa_SL))) * mParameters[10]; // milliS_per_microF
         const double var_IKs__pCa_jct = 3.0 - log10(var_chaste_interface__Ca_buffer__Ca_jct); // dimensionless
-        const double var_IKs__G_Ks_jct = (057000000000000002 + 0.19 / (1.0 + exp(-12.0 + 1.6666666666666667 * var_IKs__pCa_jct))) * mParameters[10]; // milliS_per_microF
-        const double var_IKs__pKNa = 018329999999999999; // dimensionless
+        const double var_IKs__G_Ks_jct = (0.057000000000000002 + 0.19 / (1.0 + exp(-12.0 + 1.6666666666666667 * var_IKs__pCa_jct))) * mParameters[10]; // milliS_per_microF
+        const double var_IKs__pKNa = 0.018329999999999999; // dimensionless
         const double var_INa__Fx_Na_SL = 0.89000000000000001; // dimensionless
         const double var_INa__Fx_Na_jct = 0.11; // dimensionless
         const double var_INaCa__Fx_NCX_SL = 0.89000000000000001; // dimensionless
         const double var_INaCa__Fx_NCX_jct = 0.11; // dimensionless
         const double var_INaCa__HNa = 3.0; // dimensionless
-        const double var_INaCa__K_mCai = 0035899999999999999; // millimolar
+        const double var_INaCa__K_mCai = 0.0035899999999999999; // millimolar
         const double var_INaCa__K_mCao = 1.3; // millimolar
         const double var_INaCa__K_mNai = 12.289999999999999; // millimolar
         const double var_INaCa__K_mNao = 87.5; // millimolar
-        const double var_INaCa__Kd_act = 00025599999999999999; // millimolar
+        const double var_INaCa__Kd_act = 0.00025599999999999999; // millimolar
         const double var_INaCa__Ka_SL = 1.0 / (1.0 + pow(var_INaCa__Kd_act, 3) / pow(var_chaste_interface__Ca_buffer__Ca_SL, 3)); // dimensionless
         const double var_INaCa__Ka_jct = 1.0 / (1.0 + pow(var_INaCa__Kd_act, 3) / pow(var_chaste_interface__Ca_buffer__Ca_jct, 3)); // dimensionless
         const double var_INaCa__Q10_NCX = 1.5700000000000001; // dimensionless
@@ -1727,14 +1727,14 @@
         const double var_INaCa__ksat = 0.27000000000000002; // dimensionless
         const double var_INa__openProb = pow(var_chaste_interface__INa_m_gate__m, 3) * var_chaste_interface__INa_h_gate__h * var_chaste_interface__INa_j_gate__j; // dimensionless
         const double var_Jrel_SR__j_rel_SR = (-var_chaste_interface__Ca_buffer__Ca_jct + var_chaste_interface__Ca_buffer__Ca_SR) * var_chaste_interface__Jrel_SR__O * mParameters[1]; // millimolar_per_millisecond
-        const double var_ICaL_f_gate__tau_f = 1.0 / (02 + 019699999999999999 * exp(-0.23877882250000002 * pow((1 + 068965517241379309 * var_chaste_interface__cell__V), 2))); // millisecond
-        const double var_IKr_Rr_gate__Rr = 1.0 / (1.0 + exp(1.4732142857142858 + 044642857142857144 * var_chaste_interface__cell__V)); // dimensionless
+        const double var_ICaL_f_gate__tau_f = 1.0 / (0.02 + 0.019699999999999999 * exp(-0.23877882250000002 * pow((1 + 0.068965517241379309 * var_chaste_interface__cell__V), 2))); // millisecond
+        const double var_IKr_Rr_gate__Rr = 1.0 / (1.0 + exp(1.4732142857142858 + 0.044642857142857144 * var_chaste_interface__cell__V)); // dimensionless
         const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
         const double var_model_parameters__F = 96485.0; // coulomb_per_mole
         const double var_IK1__G_K1 = 0.3872983346207417 * sqrt(mParameters[5]); // milliS_per_microF
         const double var_IKr__G_IKr = 0.43033148291193518 * sqrt(mParameters[5]) * mParameters[9]; // milliS_per_microF
         const double var_model_parameters__R = 8314.2999999999993; // joule_per_kilomole_kelvin
-        const double var_model_parameters__T = 310; // kelvin
+        const double var_model_parameters__T = 310.0; // kelvin
         const double var_ICaL__Q_CaL = pow(var_ICaL__Q10_CaL, (-31.0 + 0.10000000000000001 * var_model_parameters__T)); // dimensionless
         const double var_ICaL__temp = 0.45000000000000001 * pow(var_model_parameters__F, 2) * var_ICaL__Q_CaL * var_chaste_interface__ICaL_d_gate__d * var_chaste_interface__ICaL_f_gate__f * var_chaste_interface__cell__V / (var_model_parameters__R * var_model_parameters__T); // coulomb_per_mole
         const double var_ICaL__i_CaL_Ca_SL = 4.0 * (-var_ICaL__gamma_Cao * mParameters[4] + var_chaste_interface__Ca_buffer__Ca_SL * var_ICaL__gamma_Cai * exp(2.0 * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))) * var_ICaL__Fx_ICaL_SL * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL / (-1.0 + exp(2.0 * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // microA_per_microF
@@ -1755,7 +1755,7 @@
         const double var_INaCa__i_NaCa = var_INaCa__i_NaCa_SL + var_INaCa__i_NaCa_jct; // microA_per_microF
         const double var_reversal_potentials__E_K = var_model_parameters__R * var_model_parameters__T * log(mParameters[5] / mParameters[3]) / var_model_parameters__F; // millivolt
         const double var_IK1_K1_gate__alpha_K1 = 1.02 / (1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__V - 0.23849999999999999 * var_reversal_potentials__E_K)); // per_millisecond
-        const double var_IK1_K1_gate__beta_K1 = (1.0 * exp(-36.698642499999998 + 061749999999999999 * var_chaste_interface__cell__V - 061749999999999999 * var_reversal_potentials__E_K) + 0.49124000000000001 * exp(0.43983232 + 080320000000000003 * var_chaste_interface__cell__V - 080320000000000003 * var_reversal_potentials__E_K)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_reversal_potentials__E_K - 0.51429999999999998 * var_chaste_interface__cell__V)); // per_millisecond
+        const double var_IK1_K1_gate__beta_K1 = (1.0 * exp(-36.698642499999998 + 0.061749999999999999 * var_chaste_interface__cell__V - 0.061749999999999999 * var_reversal_potentials__E_K) + 0.49124000000000001 * exp(0.43983232 + 0.080320000000000003 * var_chaste_interface__cell__V - 0.080320000000000003 * var_reversal_potentials__E_K)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_reversal_potentials__E_K - 0.51429999999999998 * var_chaste_interface__cell__V)); // per_millisecond
         const double var_IK1_K1_gate__K1_infinity = var_IK1_K1_gate__alpha_K1 / (var_IK1_K1_gate__alpha_K1 + var_IK1_K1_gate__beta_K1); // dimensionless
         const double var_IK1__i_K1 = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_IK1__G_K1 * var_IK1_K1_gate__K1_infinity; // microA_per_microF
         const double var_IKr__i_Kr = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_IKr__G_IKr * var_IKr_Rr_gate__Rr * var_chaste_interface__IKr_Xr_gate__Xr; // microA_per_microF
@@ -1811,22 +1811,22 @@ void OdeSystemInformation<CellShannon2004FromCellMLBackwardEuler>::Initialise(vo
     // rY[4]:
     this->mVariableNames.push_back("membrane_fast_sodium_current_m_gate");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(001405627);
+    this->mInitialConditions.push_back(0.001405627);
 
     // rY[5]:
     this->mVariableNames.push_back("IKr_Xr_gate__Xr");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(008641386);
+    this->mInitialConditions.push_back(0.008641386);
 
     // rY[6]:
     this->mVariableNames.push_back("IKs_Xs_gate__Xs");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(005412034);
+    this->mInitialConditions.push_back(0.005412034);
 
     // rY[7]:
     this->mVariableNames.push_back("Itos_X_gate__X_tos");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(004051574);
+    this->mInitialConditions.push_back(0.004051574);
 
     // rY[8]:
     this->mVariableNames.push_back("Itos_Y_gate__Y_tos");
@@ -1841,7 +1841,7 @@ void OdeSystemInformation<CellShannon2004FromCellMLBackwardEuler>::Initialise(vo
     // rY[10]:
     this->mVariableNames.push_back("Itof_X_gate__X_tof");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(004051574);
+    this->mInitialConditions.push_back(0.004051574);
 
     // rY[11]:
     this->mVariableNames.push_back("Itof_Y_gate__Y_tof");
@@ -1861,12 +1861,12 @@ void OdeSystemInformation<CellShannon2004FromCellMLBackwardEuler>::Initialise(vo
     // rY[14]:
     this->mVariableNames.push_back("ICaL_fCa_gate__fCaB_SL");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(01452605);
+    this->mInitialConditions.push_back(0.01452605);
 
     // rY[15]:
     this->mVariableNames.push_back("ICaL_fCa_gate__fCaB_jct");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(02421991);
+    this->mInitialConditions.push_back(0.02421991);
 
     // rY[16]:
     this->mVariableNames.push_back("Jrel_SR__R");
@@ -1916,12 +1916,12 @@ void OdeSystemInformation<CellShannon2004FromCellMLBackwardEuler>::Initialise(vo
     // rY[25]:
     this->mVariableNames.push_back("Ca_buffer__Ca_SL");
     this->mVariableUnits.push_back("millimolar");
-    this->mInitialConditions.push_back(0001031812);
+    this->mInitialConditions.push_back(0.0001031812);
 
     // rY[26]:
     this->mVariableNames.push_back("Ca_buffer__Ca_jct");
     this->mVariableUnits.push_back("millimolar");
-    this->mInitialConditions.push_back(0001737475);
+    this->mInitialConditions.push_back(0.0001737475);
 
     // rY[27]:
     this->mVariableNames.push_back("Ca_buffer__Ca_SLB_SL");
@@ -1931,17 +1931,17 @@ void OdeSystemInformation<CellShannon2004FromCellMLBackwardEuler>::Initialise(vo
     // rY[28]:
     this->mVariableNames.push_back("Ca_buffer__Ca_SLB_jct");
     this->mVariableUnits.push_back("millimolar");
-    this->mInitialConditions.push_back(009566355);
+    this->mInitialConditions.push_back(0.009566355);
 
     // rY[29]:
     this->mVariableNames.push_back("Ca_buffer__Ca_SLHigh_SL");
     this->mVariableUnits.push_back("millimolar");
-    this->mInitialConditions.push_back(07297378);
+    this->mInitialConditions.push_back(0.07297378);
 
     // rY[30]:
     this->mVariableNames.push_back("Ca_buffer__Ca_SLHigh_jct");
     this->mVariableUnits.push_back("millimolar");
-    this->mInitialConditions.push_back(007347888);
+    this->mInitialConditions.push_back(0.007347888);
 
     // rY[31]:
     this->mVariableNames.push_back("Ca_buffer__Ca_Calsequestrin");
@@ -1951,7 +1951,7 @@ void OdeSystemInformation<CellShannon2004FromCellMLBackwardEuler>::Initialise(vo
     // rY[32]:
     this->mVariableNames.push_back("cytosolic_Ca_buffer__Ca_TroponinC");
     this->mVariableUnits.push_back("millimolar");
-    this->mInitialConditions.push_back(008773191);
+    this->mInitialConditions.push_back(0.008773191);
 
     // rY[33]:
     this->mVariableNames.push_back("cytosolic_Ca_buffer__Ca_TroponinC_Ca_Mg");
@@ -1961,17 +1961,17 @@ void OdeSystemInformation<CellShannon2004FromCellMLBackwardEuler>::Initialise(vo
     // rY[34]:
     this->mVariableNames.push_back("cytosolic_Ca_buffer__Mg_TroponinC_Ca_Mg");
     this->mVariableUnits.push_back("millimolar");
-    this->mInitialConditions.push_back(01524002);
+    this->mInitialConditions.push_back(0.01524002);
 
     // rY[35]:
     this->mVariableNames.push_back("cytosolic_Ca_buffer__Ca_Calmodulin");
     this->mVariableUnits.push_back("millimolar");
-    this->mInitialConditions.push_back(0002911916);
+    this->mInitialConditions.push_back(0.0002911916);
 
     // rY[36]:
     this->mVariableNames.push_back("cytosolic_Ca_buffer__Ca_Myosin");
     this->mVariableUnits.push_back("millimolar");
-    this->mInitialConditions.push_back(001298754);
+    this->mInitialConditions.push_back(0.001298754);
 
     // rY[37]:
     this->mVariableNames.push_back("cytosolic_Ca_buffer__Mg_Myosin");
@@ -1981,7 +1981,7 @@ void OdeSystemInformation<CellShannon2004FromCellMLBackwardEuler>::Initialise(vo
     // rY[38]:
     this->mVariableNames.push_back("cytosolic_Ca_buffer__Ca_SRB");
     this->mVariableUnits.push_back("millimolar");
-    this->mInitialConditions.push_back(002143165);
+    this->mInitialConditions.push_back(0.002143165);
 
     // mParameters[0]:
     this->mParameterNames.push_back("SR_leak_current_max");
