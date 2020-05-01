@@ -452,10 +452,10 @@
         const double var_IKs_Xs_gate__Xs_infinity = 1.0 / (1.0 + exp(0.089820359281437126 - 0.059880239520958084 * var_chaste_interface__cell__V)); // dimensionless
         const double var_IKs_Xs_gate__tau_Xs = 1.0 / (0.00013100000000000001 * (30.0 + var_chaste_interface__cell__V) / (-1.0 + exp(2.0609999999999999 + 0.068699999999999997 * var_chaste_interface__cell__V)) + 7.1899999999999999e-5 * (30.0 + var_chaste_interface__cell__V) / (1.0 - exp(-4.4399999999999995 - 0.14799999999999999 * var_chaste_interface__cell__V))); // millisecond
         const double d_dt_chaste_interface_var_IKs_Xs_gate__Xs = (-var_chaste_interface__IKs_Xs_gate__Xs + var_IKs_Xs_gate__Xs_infinity) / var_IKs_Xs_gate__tau_Xs; // 1 / millisecond
-        const double var_INa_h_gate__alpha_h = ((var_chaste_interface__cell__V < -40.0) ? (0.13500000000000001 * exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__cell__V)) : (0.0)); // per_millisecond
+        const double var_INa_h_gate__alpha_h = ((var_chaste_interface__cell__V < -40.0) ? (0.13500000000000001 * exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__cell__V)) : (0)); // per_millisecond
         const double var_INa_h_gate__beta_h = ((var_chaste_interface__cell__V < -40.0) ? (310000.0 * exp(0.34999999999999998 * var_chaste_interface__cell__V) + 3.5600000000000001 * exp(0.079000000000000001 * var_chaste_interface__cell__V)) : (7.6923076923076916 / (1.0 + exp(-0.96036036036036043 - 0.0900900900900901 * var_chaste_interface__cell__V)))); // per_millisecond
         const double d_dt_chaste_interface_var_INa_h_gate__h = (1.0 - var_chaste_interface__INa_h_gate__h) * var_INa_h_gate__alpha_h - var_INa_h_gate__beta_h * var_chaste_interface__INa_h_gate__h; // 1 / millisecond
-        const double var_INa_j_gate__alpha_j = ((var_chaste_interface__cell__V < -40.0) ? (1.0 * (37.780000000000001 + var_chaste_interface__cell__V) * (-127140.0 * exp(0.24440000000000001 * var_chaste_interface__cell__V) - 3.4740000000000003e-5 * exp(-0.043909999999999998 * var_chaste_interface__cell__V)) / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__V))) : (0.0)); // per_millisecond
+        const double var_INa_j_gate__alpha_j = ((var_chaste_interface__cell__V < -40.0) ? (1.0 * (37.780000000000001 + var_chaste_interface__cell__V) * (-127140.0 * exp(0.24440000000000001 * var_chaste_interface__cell__V) - 3.4740000000000003e-5 * exp(-0.043909999999999998 * var_chaste_interface__cell__V)) / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__V))) : (0)); // per_millisecond
         const double var_INa_j_gate__beta_j = ((var_chaste_interface__cell__V < -40.0) ? (0.1212 * exp(-0.01052 * var_chaste_interface__cell__V) / (1.0 + exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__cell__V))) : (0.29999999999999999 * exp(-2.5349999999999999e-7 * var_chaste_interface__cell__V) / (1.0 + exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__cell__V)))); // per_millisecond
         const double d_dt_chaste_interface_var_INa_j_gate__j = (1.0 - var_chaste_interface__INa_j_gate__j) * var_INa_j_gate__alpha_j - var_INa_j_gate__beta_j * var_chaste_interface__INa_j_gate__j; // 1 / millisecond
         const double var_INa_m_gate__alpha_m = 0.32000000000000001 * (47.130000000000003 + var_chaste_interface__cell__V) / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__cell__V)); // per_millisecond
@@ -1304,11 +1304,11 @@
         IJth(rJacobian, 36, 1) = 1.9320000000000004 - var_x215 - var_x216;
         IJth(rJacobian, 38, 1) = 1.71 - var_x211;
         IJth(rJacobian, 0, 2) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x148 * var_x37 - var_x150 * var_x37);
-        IJth(rJacobian, 2, 2) = -((var_x235) ? (0.13500000000000001 * var_x234) : (0.0)) - ((var_x235) ? (310000.0 * var_x237 + 3.5600000000000001 * var_x236) : (7.6923076923076916 / var_x239));
+        IJth(rJacobian, 2, 2) = -((var_x235) ? (0.13500000000000001 * var_x234) : (0)) - ((var_x235) ? (310000.0 * var_x237 + 3.5600000000000001 * var_x236) : (7.6923076923076916 / var_x239));
         IJth(rJacobian, 19, 2) = -var_x349 * var_x37;
         IJth(rJacobian, 20, 2) = -var_x354 * var_x37;
         IJth(rJacobian, 0, 3) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x148 * var_x152 - var_x150 * var_x152);
-        IJth(rJacobian, 3, 3) = -((var_x235) ? (0.1212 * var_x251) : (0.29999999999999999 * var_x256)) - ((var_x235) ? (var_x246 * var_x247) : (0.0));
+        IJth(rJacobian, 3, 3) = -((var_x235) ? (0.1212 * var_x251) : (0.29999999999999999 * var_x256)) - ((var_x235) ? (var_x246 * var_x247) : (0));
         IJth(rJacobian, 19, 3) = -var_x152 * var_x349;
         IJth(rJacobian, 20, 3) = -var_x152 * var_x354;
         IJth(rJacobian, 0, 4) = mSetVoltageDerivativeToZero ? 0.0 : (-0.33000000000000002 * var_x154 - 2.6699999999999999 * var_x155);

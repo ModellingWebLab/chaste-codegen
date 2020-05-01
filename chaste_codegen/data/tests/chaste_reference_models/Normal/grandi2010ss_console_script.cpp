@@ -26,7 +26,7 @@
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__cell__stim_amplitude = -15.0 * HeartConfig::Instance()->GetCapacitance(); // uA_per_uF
         const double var_chaste_interface__cell__stim_duration = 3.0; // millisecond
-        const double var_chaste_interface__cell__stim_offset = 0.0; // millisecond
+        const double var_chaste_interface__cell__stim_offset = 0; // millisecond
         const double var_chaste_interface__cell__stim_period = 1000.0; // millisecond
         boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__cell__stim_amplitude),
@@ -146,8 +146,8 @@
         const double var_cell__FoRT = var_cell__Frdy / (var_cell__R * var_cell__Temp); // dimensionless
         const double var_cell__Qpow = -31.0 + 0.10000000000000001 * var_cell__Temp; // dimensionless
         const double var_cell__ecl = 1.0 * log(var_cell__Cli / var_cell__Clo) / var_cell__FoRT; // dimensionless
-        const double var_cell__fcaCaMSL = 0.0; // dimensionless
-        const double var_cell__fcaCaj = 0.0; // dimensionless
+        const double var_cell__fcaCaMSL = 0; // dimensionless
+        const double var_cell__fcaCaj = 0; // dimensionless
         const double var_cell__gkp = 0.002; // dimensionless
         const double var_cell__gkr = 0.015061601901917734 * sqrt(var_cell__Ko) * mParameters[2]; // dimensionless
         const double var_cell__gks_junc = 0.0035000000000000001; // dimensionless
@@ -377,8 +377,8 @@
         const double var_cell__Vsr = 0.035000000000000003 * var_cell__Vcell; // dimensionless
         const double var_cell__Bmax_Csqn = 0.14000000000000001 * var_cell__Vmyo / var_cell__Vsr; // dimensionless
         const double var_cell__ec50SR = 0.45000000000000001; // dimensionless
-        const double var_cell__fcaCaMSL = 0.0; // dimensionless
-        const double var_cell__fcaCaj = 0.0; // dimensionless
+        const double var_cell__fcaCaMSL = 0; // dimensionless
+        const double var_cell__fcaCaj = 0; // dimensionless
         const double var_cell__hillSRCaP = 1.7869999999999999; // dimensionless
         const double var_cell__kiCa = 0.5; // dimensionless
         const double var_cell__kim = 0.0050000000000000001; // dimensionless
@@ -455,8 +455,8 @@
         const double var_cell__I_cabk_sl = (-var_cell__eca_sl + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__GCaB; // dimensionless
         const double var_cell__I_nabk_junc = (-var_cell__ena_junc + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__GNaB; // dimensionless
         const double var_cell__I_nabk_sl = (-var_cell__ena_sl + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__GNaB; // dimensionless
-        const double var_cell__ah = ((var_chaste_interface__cell__sVm >= -40.0) ? (0.0) : (0.057000000000000002 * exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__cell__sVm))); // dimensionless
-        const double var_cell__aj = ((var_chaste_interface__cell__sVm >= -40.0) ? (0.0) : ((37.780000000000001 + var_chaste_interface__cell__sVm) * (-25428.0 * exp(0.24440000000000001 * var_chaste_interface__cell__sVm) - 6.9480000000000002e-6 * exp(-0.043909999999999998 * var_chaste_interface__cell__sVm)) / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__sVm)))); // dimensionless
+        const double var_cell__ah = ((var_chaste_interface__cell__sVm >= -40.0) ? (0) : (0.057000000000000002 * exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__cell__sVm))); // dimensionless
+        const double var_cell__aj = ((var_chaste_interface__cell__sVm >= -40.0) ? (0) : ((37.780000000000001 + var_chaste_interface__cell__sVm) * (-25428.0 * exp(0.24440000000000001 * var_chaste_interface__cell__sVm) - 6.9480000000000002e-6 * exp(-0.043909999999999998 * var_chaste_interface__cell__sVm)) / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__sVm)))); // dimensionless
         const double var_cell__bh = ((var_chaste_interface__cell__sVm >= -40.0) ? (5.9230769230769234 / (1.0 + exp(-0.96036036036036043 - 0.0900900900900901 * var_chaste_interface__cell__sVm))) : (310000.0 * exp(0.34849999999999998 * var_chaste_interface__cell__sVm) + 2.7000000000000002 * exp(0.079000000000000001 * var_chaste_interface__cell__sVm))); // dimensionless
         const double var_cell__bj = ((var_chaste_interface__cell__sVm >= -40.0) ? (0.59999999999999998 * exp(0.057000000000000002 * var_chaste_interface__cell__sVm) / (1.0 + exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__cell__sVm))) : (0.024240000000000001 * exp(-0.01052 * var_chaste_interface__cell__sVm) / (1.0 + exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__cell__sVm)))); // dimensionless
         const double var_cell__dss = 1.0 / (1.0 + exp(-0.83333333333333337 - 0.16666666666666666 * var_chaste_interface__cell__sVm)); // dimensionless

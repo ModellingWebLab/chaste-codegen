@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.0.1
+//! This source file was generated from CellML by chaste_codegen version 0.1
 //!
 //! Model: kurata_model_2002
 //!
@@ -49,13 +49,13 @@
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: millivolt; Initial value: -58.600291137693
         double var_chaste_interface__L_type_calcium_channel_current_d_gate__d = rY[1];
-        // Units: dimensionless; Initial value: 0.000602055134
+        // Units: dimensionless; Initial value: 000602055134
         double var_chaste_interface__L_type_calcium_channel_current_f_gate__f = rY[2];
         // Units: dimensionless; Initial value: 0.626999773853
         double var_chaste_interface__L_type_calcium_channel_current_fCa_gate__fCa = rY[3];
         // Units: dimensionless; Initial value: 0.589580408056
         double var_chaste_interface__T_type_calcium_channel_current_d_gate__d = rY[4];
-        // Units: dimensionless; Initial value: 0.004571884917
+        // Units: dimensionless; Initial value: 004571884917
         double var_chaste_interface__T_type_calcium_channel_current_f_gate__f = rY[5];
         // Units: dimensionless; Initial value: 0.249637570396
         double var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paS = rY[6];
@@ -65,25 +65,25 @@
         double var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pi_gate__piy = rY[8];
         // Units: dimensionless; Initial value: 0.852396631172
         double var_chaste_interface__slowly_activating_delayed_rectifier_potassium_current_n_gate__n = rY[9];
-        // Units: dimensionless; Initial value: 0.054409723782
+        // Units: dimensionless; Initial value: 054409723782
         double var_chaste_interface__AP_sensitive_currents_q_gate__q = rY[10];
         // Units: dimensionless; Initial value: 0.531446952485
         double var_chaste_interface__AP_sensitive_currents_r_gate__r = rY[11];
-        // Units: dimensionless; Initial value: 0.005550489445
+        // Units: dimensionless; Initial value: 005550489445
         double var_chaste_interface__hyperpolarisation_activated_current_y_gate__y = rY[12];
-        // Units: dimensionless; Initial value: 0.067156687129
+        // Units: dimensionless; Initial value: 067156687129
         double var_chaste_interface__sustained_inward_current_qa_gate__qa = rY[13];
         // Units: dimensionless; Initial value: 0.426018100136
         double var_chaste_interface__sustained_inward_current_qi_gate__qi = rY[14];
         // Units: dimensionless; Initial value: 0.333330378068
         double var_chaste_interface__intracellular_ion_concentrations__Ca_sub = rY[18];
-        // Units: millimolar; Initial value: 0.00019074741
+        // Units: millimolar; Initial value: 00019074741
         double var_chaste_interface__intracellular_ion_concentrations__Nai = rY[19];
         // Units: millimolar; Initial value: 9.438646305915
         double var_chaste_interface__intracellular_ion_concentrations__Ki = rY[20];
         // Units: millimolar; Initial value: 139.984146485614
         
-        const double var_AP_sensitive_currents__g_sus = 0.02; // nanoS
+        const double var_AP_sensitive_currents__g_sus = 02; // nanoS
         const double var_AP_sensitive_currents__g_to = 0.17999999999999999; // nanoS
         const double var_L_type_calcium_channel_current__E_CaL = 45.0; // millivolt
         const double var_L_type_calcium_channel_current__g_CaL = 0.57999999999999996; // nanoS
@@ -93,15 +93,15 @@
         const double var_hyperpolarisation_activated_current__g_h_Na = 0.14373749999999999; // nanoS
         const double var_intracellular_ion_concentrations__Cao = 2.0; // millimolar
         const double var_intracellular_ion_concentrations__Ko = 5.4000000000000004; // millimolar
-        const double var_background_muscarinic_potassium_channel_current__g_K_ACh = 0.0011000000000000001 * pow(var_intracellular_ion_concentrations__Ko, 0.40999999999999998); // picoA
-        const double var_intracellular_ion_concentrations__Nao = 140.0; // millimolar
-        const double var_membrane__F = 96485000000000000.0; // femtocoulomb_per_millimole
-        const double var_membrane__R = 8314400000000000.0; // attojoule_per_millimole_kelvin
+        const double var_background_muscarinic_potassium_channel_current__g_K_ACh = 0011000000000000001 * pow(var_intracellular_ion_concentrations__Ko, 0.40999999999999998); // picoA
+        const double var_intracellular_ion_concentrations__Nao = 140; // millimolar
+        const double var_membrane__F = 96485000000000000; // femtocoulomb_per_millimole
+        const double var_membrane__R = 8314400000000000; // attojoule_per_millimole_kelvin
         const double var_membrane__T = 310.14999999999998; // kelvin
         const double var_L_type_calcium_channel_current__i_CaL = (-var_L_type_calcium_channel_current__E_CaL + var_chaste_interface__membrane__V) * var_L_type_calcium_channel_current__g_CaL * var_chaste_interface__L_type_calcium_channel_current_d_gate__d * var_chaste_interface__L_type_calcium_channel_current_fCa_gate__fCa * var_chaste_interface__L_type_calcium_channel_current_f_gate__f; // picoA
         const double var_T_type_calcium_channel_current__i_CaT = (-var_T_type_calcium_channel_current__E_CaT + var_chaste_interface__membrane__V) * var_T_type_calcium_channel_current__g_CaT * var_chaste_interface__T_type_calcium_channel_current_d_gate__d * var_chaste_interface__T_type_calcium_channel_current_f_gate__f; // picoA
         const double var_background_muscarinic_potassium_channel_current__i_K_ACh = 1.0 * (-var_intracellular_ion_concentrations__Ko * exp(-var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T)) + var_chaste_interface__intracellular_ion_concentrations__Ki) * var_background_muscarinic_potassium_channel_current__g_K_ACh; // picoA
-        const double var_rapidly_activating_delayed_rectifier_potassium_current__g_Kr = 0.025000000000000001 * pow(var_intracellular_ion_concentrations__Ko, 0.58999999999999997); // nanoS
+        const double var_rapidly_activating_delayed_rectifier_potassium_current__g_Kr = 025000000000000001 * pow(var_intracellular_ion_concentrations__Ko, 0.58999999999999997); // nanoS
         const double var_reversal_potentials__E_K = var_membrane__R * var_membrane__T * log(var_intracellular_ion_concentrations__Ko / var_chaste_interface__intracellular_ion_concentrations__Ki) / var_membrane__F; // millivolt
         const double var_AP_sensitive_currents__i_sus = (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * var_AP_sensitive_currents__g_sus * var_chaste_interface__AP_sensitive_currents_r_gate__r; // picoA
         const double var_AP_sensitive_currents__i_to = (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * var_AP_sensitive_currents__g_to * var_chaste_interface__AP_sensitive_currents_q_gate__q * var_chaste_interface__AP_sensitive_currents_r_gate__r; // picoA
@@ -111,7 +111,7 @@
         const double var_hyperpolarisation_activated_current__i_h_Na = pow(var_chaste_interface__hyperpolarisation_activated_current_y_gate__y, 2) * (-var_reversal_potentials__E_Na + var_chaste_interface__membrane__V) * var_hyperpolarisation_activated_current__g_h_Na; // picoA
         const double var_hyperpolarisation_activated_current__i_h = var_hyperpolarisation_activated_current__i_h_K + var_hyperpolarisation_activated_current__i_h_Na; // picoA
         const double var_slowly_activating_delayed_rectifier_potassium_current__E_Ks = var_membrane__R * var_membrane__T * log((1.0 * var_intracellular_ion_concentrations__Ko + 0.12 * var_intracellular_ion_concentrations__Nao) / (1.0 * var_chaste_interface__intracellular_ion_concentrations__Ki + 0.12 * var_chaste_interface__intracellular_ion_concentrations__Nai)) / var_membrane__F; // millivolt
-        const double var_slowly_activating_delayed_rectifier_potassium_current__g_Ks = 0.025899999999999999; // nanoS
+        const double var_slowly_activating_delayed_rectifier_potassium_current__g_Ks = 025899999999999999; // nanoS
         const double var_slowly_activating_delayed_rectifier_potassium_current__i_Ks = pow(var_chaste_interface__slowly_activating_delayed_rectifier_potassium_current_n_gate__n, 2) * (-var_slowly_activating_delayed_rectifier_potassium_current__E_Ks + var_chaste_interface__membrane__V) * var_slowly_activating_delayed_rectifier_potassium_current__g_Ks; // picoA
         const double var_sodium_calcium_exchange_current__K1ni = 395.30000000000001; // millimolar
         const double var_sodium_calcium_exchange_current__K1no = 1628.0; // millimolar
@@ -119,11 +119,11 @@
         const double var_sodium_calcium_exchange_current__K2no = 561.39999999999998; // millimolar
         const double var_sodium_calcium_exchange_current__K3ni = 26.440000000000001; // millimolar
         const double var_sodium_calcium_exchange_current__K3no = 4.6630000000000003; // millimolar
-        const double var_sodium_calcium_exchange_current__Kci = 0.0207; // millimolar
+        const double var_sodium_calcium_exchange_current__Kci = 0207; // millimolar
         const double var_sodium_calcium_exchange_current__Kcni = 26.440000000000001; // millimolar
         const double var_sodium_calcium_exchange_current__Kco = 3.6629999999999998; // millimolar
         const double var_sodium_calcium_exchange_current__Qci = 0.13689999999999999; // dimensionless
-        const double var_sodium_calcium_exchange_current__Qco = 0.0; // dimensionless
+        const double var_sodium_calcium_exchange_current__Qco = 0; // dimensionless
         const double var_sodium_calcium_exchange_current__Qn = 0.43149999999999999; // dimensionless
         const double var_sodium_calcium_exchange_current__di = 1.0 + (1.0 + (1.0 + var_chaste_interface__intracellular_ion_concentrations__Nai / var_sodium_calcium_exchange_current__K3ni) * var_chaste_interface__intracellular_ion_concentrations__Nai / var_sodium_calcium_exchange_current__K2ni) * var_chaste_interface__intracellular_ion_concentrations__Nai / var_sodium_calcium_exchange_current__K1ni + (1.0 + var_chaste_interface__intracellular_ion_concentrations__Nai / var_sodium_calcium_exchange_current__Kcni + exp(-var_membrane__F * var_chaste_interface__membrane__V * var_sodium_calcium_exchange_current__Qci / (var_membrane__R * var_membrane__T))) * var_chaste_interface__intracellular_ion_concentrations__Ca_sub / var_sodium_calcium_exchange_current__Kci; // dimensionless
         const double var_sodium_calcium_exchange_current__do = 1.0 + (1.0 + exp(var_membrane__F * var_chaste_interface__membrane__V * var_sodium_calcium_exchange_current__Qco / (var_membrane__R * var_membrane__T))) * var_intracellular_ion_concentrations__Cao / var_sodium_calcium_exchange_current__Kco + (1.0 + var_intracellular_ion_concentrations__Nao / var_sodium_calcium_exchange_current__K2no) * (1.0 + var_intracellular_ion_concentrations__Nao / var_sodium_calcium_exchange_current__K3no) * var_intracellular_ion_concentrations__Nao / var_sodium_calcium_exchange_current__K1no; // dimensionless
@@ -141,16 +141,16 @@
         const double var_sodium_calcium_exchange_current__x3 = (var_sodium_calcium_exchange_current__k21 + var_sodium_calcium_exchange_current__k23) * var_sodium_calcium_exchange_current__k14 * var_sodium_calcium_exchange_current__k43 + (var_sodium_calcium_exchange_current__k41 + var_sodium_calcium_exchange_current__k43) * var_sodium_calcium_exchange_current__k12 * var_sodium_calcium_exchange_current__k23; // dimensionless
         const double var_sodium_calcium_exchange_current__x4 = (var_sodium_calcium_exchange_current__k12 + var_sodium_calcium_exchange_current__k14) * var_sodium_calcium_exchange_current__k23 * var_sodium_calcium_exchange_current__k34 + (var_sodium_calcium_exchange_current__k32 + var_sodium_calcium_exchange_current__k34) * var_sodium_calcium_exchange_current__k14 * var_sodium_calcium_exchange_current__k21; // dimensionless
         const double var_sodium_calcium_exchange_current__i_NaCa = (var_sodium_calcium_exchange_current__k21 * var_sodium_calcium_exchange_current__x2 - var_sodium_calcium_exchange_current__k12 * var_sodium_calcium_exchange_current__x1) * var_sodium_calcium_exchange_current__kNaCa / (var_sodium_calcium_exchange_current__x1 + var_sodium_calcium_exchange_current__x2 + var_sodium_calcium_exchange_current__x3 + var_sodium_calcium_exchange_current__x4); // picoA
-        const double var_sodium_dependent_background_current__g_b_Na = 0.0054000000000000003; // nanoS
+        const double var_sodium_dependent_background_current__g_b_Na = 0054000000000000003; // nanoS
         const double var_sodium_dependent_background_current__i_b_Na = (-var_reversal_potentials__E_Na + var_chaste_interface__membrane__V) * var_sodium_dependent_background_current__g_b_Na; // picoA
         const double var_sodium_potassium_pump_current__Km_Kp = 1.3999999999999999; // millimolar
         const double var_sodium_potassium_pump_current__Km_Nap = 14.0; // millimolar
         const double var_sodium_potassium_pump_current__i_NaK_max = 3.6000000000000001; // picoA
-        const double var_sodium_potassium_pump_current__i_NaK = var_sodium_potassium_pump_current__i_NaK_max / ((1.0 + pow((var_sodium_potassium_pump_current__Km_Kp / var_intracellular_ion_concentrations__Ko), 1.2)) * (1.0 + pow((var_sodium_potassium_pump_current__Km_Nap / var_chaste_interface__intracellular_ion_concentrations__Nai), 1.3)) * (1.0 + exp(-4.0 + 0.033333333333333333 * var_reversal_potentials__E_Na - 0.033333333333333333 * var_chaste_interface__membrane__V))); // picoA
+        const double var_sodium_potassium_pump_current__i_NaK = var_sodium_potassium_pump_current__i_NaK_max / ((1.0 + pow((var_sodium_potassium_pump_current__Km_Kp / var_intracellular_ion_concentrations__Ko), 1.2)) * (1.0 + pow((var_sodium_potassium_pump_current__Km_Nap / var_chaste_interface__intracellular_ion_concentrations__Nai), 1.3)) * (1.0 + exp(-4.0 + 033333333333333333 * var_reversal_potentials__E_Na - 033333333333333333 * var_chaste_interface__membrane__V))); // picoA
         const double var_sustained_inward_current__E_st = 37.399999999999999; // millivolt
-        const double var_sustained_inward_current__g_st = 0.014999999999999999; // nanoS
+        const double var_sustained_inward_current__g_st = 014999999999999999; // nanoS
         const double var_sustained_inward_current__i_st = (-var_sustained_inward_current__E_st + var_chaste_interface__membrane__V) * var_sustained_inward_current__g_st * var_chaste_interface__sustained_inward_current_qa_gate__qa * var_chaste_interface__sustained_inward_current_qi_gate__qi; // picoA
-        const double var_chaste_interface__i_ionic = 1000000.0 * (9.9999999999999995e-7 * var_AP_sensitive_currents__i_sus + 9.9999999999999995e-7 * var_AP_sensitive_currents__i_to + 9.9999999999999995e-7 * var_L_type_calcium_channel_current__i_CaL + 9.9999999999999995e-7 * var_T_type_calcium_channel_current__i_CaT + 9.9999999999999995e-7 * var_background_muscarinic_potassium_channel_current__i_K_ACh + 9.9999999999999995e-7 * var_hyperpolarisation_activated_current__i_h + 9.9999999999999995e-7 * var_rapidly_activating_delayed_rectifier_potassium_current__i_Kr + 9.9999999999999995e-7 * var_slowly_activating_delayed_rectifier_potassium_current__i_Ks + 9.9999999999999995e-7 * var_sodium_calcium_exchange_current__i_NaCa + 9.9999999999999995e-7 * var_sodium_dependent_background_current__i_b_Na + 9.9999999999999995e-7 * var_sodium_potassium_pump_current__i_NaK + 9.9999999999999995e-7 * var_sustained_inward_current__i_st) * HeartConfig::Instance()->GetCapacitance() / mParameters[0]; // uA_per_cm2
+        const double var_chaste_interface__i_ionic = 1000000 * (9.9999999999999995e-7 * var_AP_sensitive_currents__i_sus + 9.9999999999999995e-7 * var_AP_sensitive_currents__i_to + 9.9999999999999995e-7 * var_L_type_calcium_channel_current__i_CaL + 9.9999999999999995e-7 * var_T_type_calcium_channel_current__i_CaT + 9.9999999999999995e-7 * var_background_muscarinic_potassium_channel_current__i_K_ACh + 9.9999999999999995e-7 * var_hyperpolarisation_activated_current__i_h + 9.9999999999999995e-7 * var_rapidly_activating_delayed_rectifier_potassium_current__i_Kr + 9.9999999999999995e-7 * var_slowly_activating_delayed_rectifier_potassium_current__i_Ks + 9.9999999999999995e-7 * var_sodium_calcium_exchange_current__i_NaCa + 9.9999999999999995e-7 * var_sodium_dependent_background_current__i_b_Na + 9.9999999999999995e-7 * var_sodium_potassium_pump_current__i_NaK + 9.9999999999999995e-7 * var_sustained_inward_current__i_st) * HeartConfig::Instance()->GetCapacitance() / mParameters[0]; // uA_per_cm2
 
         const double i_ionic = var_chaste_interface__i_ionic;
         EXCEPT_IF_NOT(!std::isnan(i_ionic));
@@ -167,13 +167,13 @@
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: millivolt; Initial value: -58.600291137693
         double var_chaste_interface__L_type_calcium_channel_current_d_gate__d = rY[1];
-        // Units: dimensionless; Initial value: 0.000602055134
+        // Units: dimensionless; Initial value: 000602055134
         double var_chaste_interface__L_type_calcium_channel_current_f_gate__f = rY[2];
         // Units: dimensionless; Initial value: 0.626999773853
         double var_chaste_interface__L_type_calcium_channel_current_fCa_gate__fCa = rY[3];
         // Units: dimensionless; Initial value: 0.589580408056
         double var_chaste_interface__T_type_calcium_channel_current_d_gate__d = rY[4];
-        // Units: dimensionless; Initial value: 0.004571884917
+        // Units: dimensionless; Initial value: 004571884917
         double var_chaste_interface__T_type_calcium_channel_current_f_gate__f = rY[5];
         // Units: dimensionless; Initial value: 0.249637570396
         double var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paS = rY[6];
@@ -183,19 +183,19 @@
         double var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pi_gate__piy = rY[8];
         // Units: dimensionless; Initial value: 0.852396631172
         double var_chaste_interface__slowly_activating_delayed_rectifier_potassium_current_n_gate__n = rY[9];
-        // Units: dimensionless; Initial value: 0.054409723782
+        // Units: dimensionless; Initial value: 054409723782
         double var_chaste_interface__AP_sensitive_currents_q_gate__q = rY[10];
         // Units: dimensionless; Initial value: 0.531446952485
         double var_chaste_interface__AP_sensitive_currents_r_gate__r = rY[11];
-        // Units: dimensionless; Initial value: 0.005550489445
+        // Units: dimensionless; Initial value: 005550489445
         double var_chaste_interface__hyperpolarisation_activated_current_y_gate__y = rY[12];
-        // Units: dimensionless; Initial value: 0.067156687129
+        // Units: dimensionless; Initial value: 067156687129
         double var_chaste_interface__sustained_inward_current_qa_gate__qa = rY[13];
         // Units: dimensionless; Initial value: 0.426018100136
         double var_chaste_interface__sustained_inward_current_qi_gate__qi = rY[14];
         // Units: dimensionless; Initial value: 0.333330378068
         double var_chaste_interface__intracellular_ion_concentrations__Ca_sub = rY[18];
-        // Units: millimolar; Initial value: 0.00019074741
+        // Units: millimolar; Initial value: 00019074741
         double var_chaste_interface__intracellular_ion_concentrations__Nai = rY[19];
         // Units: millimolar; Initial value: 9.438646305915
         double var_chaste_interface__intracellular_ion_concentrations__Ki = rY[20];
@@ -204,7 +204,7 @@
 
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
-        const double var_AP_sensitive_currents__g_sus = 0.02; // nanoS
+        const double var_AP_sensitive_currents__g_sus = 02; // nanoS
         const double var_AP_sensitive_currents__g_to = 0.17999999999999999; // nanoS
         const double var_L_type_calcium_channel_current__E_CaL = 45.0; // millivolt
         const double var_L_type_calcium_channel_current__g_CaL = 0.57999999999999996; // nanoS
@@ -214,15 +214,15 @@
         const double var_hyperpolarisation_activated_current__g_h_Na = 0.14373749999999999; // nanoS
         const double var_intracellular_ion_concentrations__Cao = 2.0; // millimolar
         const double var_intracellular_ion_concentrations__Ko = 5.4000000000000004; // millimolar
-        const double var_background_muscarinic_potassium_channel_current__g_K_ACh = 0.0011000000000000001 * pow(var_intracellular_ion_concentrations__Ko, 0.40999999999999998); // picoA
-        const double var_intracellular_ion_concentrations__Nao = 140.0; // millimolar
-        const double var_membrane__F = 96485000000000000.0; // femtocoulomb_per_millimole
-        const double var_membrane__R = 8314400000000000.0; // attojoule_per_millimole_kelvin
+        const double var_background_muscarinic_potassium_channel_current__g_K_ACh = 0011000000000000001 * pow(var_intracellular_ion_concentrations__Ko, 0.40999999999999998); // picoA
+        const double var_intracellular_ion_concentrations__Nao = 140; // millimolar
+        const double var_membrane__F = 96485000000000000; // femtocoulomb_per_millimole
+        const double var_membrane__R = 8314400000000000; // attojoule_per_millimole_kelvin
         const double var_membrane__T = 310.14999999999998; // kelvin
         const double var_L_type_calcium_channel_current__i_CaL = (-var_L_type_calcium_channel_current__E_CaL + var_chaste_interface__membrane__V) * var_L_type_calcium_channel_current__g_CaL * var_chaste_interface__L_type_calcium_channel_current_d_gate__d * var_chaste_interface__L_type_calcium_channel_current_fCa_gate__fCa * var_chaste_interface__L_type_calcium_channel_current_f_gate__f; // picoA
         const double var_T_type_calcium_channel_current__i_CaT = (-var_T_type_calcium_channel_current__E_CaT + var_chaste_interface__membrane__V) * var_T_type_calcium_channel_current__g_CaT * var_chaste_interface__T_type_calcium_channel_current_d_gate__d * var_chaste_interface__T_type_calcium_channel_current_f_gate__f; // picoA
         const double var_background_muscarinic_potassium_channel_current__i_K_ACh = 1.0 * (-var_intracellular_ion_concentrations__Ko * exp(-var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T)) + var_chaste_interface__intracellular_ion_concentrations__Ki) * var_background_muscarinic_potassium_channel_current__g_K_ACh; // picoA
-        const double var_rapidly_activating_delayed_rectifier_potassium_current__g_Kr = 0.025000000000000001 * pow(var_intracellular_ion_concentrations__Ko, 0.58999999999999997); // nanoS
+        const double var_rapidly_activating_delayed_rectifier_potassium_current__g_Kr = 025000000000000001 * pow(var_intracellular_ion_concentrations__Ko, 0.58999999999999997); // nanoS
         const double var_reversal_potentials__E_K = var_membrane__R * var_membrane__T * log(var_intracellular_ion_concentrations__Ko / var_chaste_interface__intracellular_ion_concentrations__Ki) / var_membrane__F; // millivolt
         const double var_AP_sensitive_currents__i_sus = (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * var_AP_sensitive_currents__g_sus * var_chaste_interface__AP_sensitive_currents_r_gate__r; // picoA
         const double var_AP_sensitive_currents__i_to = (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * var_AP_sensitive_currents__g_to * var_chaste_interface__AP_sensitive_currents_q_gate__q * var_chaste_interface__AP_sensitive_currents_r_gate__r; // picoA
@@ -232,7 +232,7 @@
         const double var_hyperpolarisation_activated_current__i_h_Na = pow(var_chaste_interface__hyperpolarisation_activated_current_y_gate__y, 2) * (-var_reversal_potentials__E_Na + var_chaste_interface__membrane__V) * var_hyperpolarisation_activated_current__g_h_Na; // picoA
         const double var_hyperpolarisation_activated_current__i_h = var_hyperpolarisation_activated_current__i_h_K + var_hyperpolarisation_activated_current__i_h_Na; // picoA
         const double var_slowly_activating_delayed_rectifier_potassium_current__E_Ks = var_membrane__R * var_membrane__T * log((1.0 * var_intracellular_ion_concentrations__Ko + 0.12 * var_intracellular_ion_concentrations__Nao) / (1.0 * var_chaste_interface__intracellular_ion_concentrations__Ki + 0.12 * var_chaste_interface__intracellular_ion_concentrations__Nai)) / var_membrane__F; // millivolt
-        const double var_slowly_activating_delayed_rectifier_potassium_current__g_Ks = 0.025899999999999999; // nanoS
+        const double var_slowly_activating_delayed_rectifier_potassium_current__g_Ks = 025899999999999999; // nanoS
         const double var_slowly_activating_delayed_rectifier_potassium_current__i_Ks = pow(var_chaste_interface__slowly_activating_delayed_rectifier_potassium_current_n_gate__n, 2) * (-var_slowly_activating_delayed_rectifier_potassium_current__E_Ks + var_chaste_interface__membrane__V) * var_slowly_activating_delayed_rectifier_potassium_current__g_Ks; // picoA
         const double var_sodium_calcium_exchange_current__K1ni = 395.30000000000001; // millimolar
         const double var_sodium_calcium_exchange_current__K1no = 1628.0; // millimolar
@@ -240,11 +240,11 @@
         const double var_sodium_calcium_exchange_current__K2no = 561.39999999999998; // millimolar
         const double var_sodium_calcium_exchange_current__K3ni = 26.440000000000001; // millimolar
         const double var_sodium_calcium_exchange_current__K3no = 4.6630000000000003; // millimolar
-        const double var_sodium_calcium_exchange_current__Kci = 0.0207; // millimolar
+        const double var_sodium_calcium_exchange_current__Kci = 0207; // millimolar
         const double var_sodium_calcium_exchange_current__Kcni = 26.440000000000001; // millimolar
         const double var_sodium_calcium_exchange_current__Kco = 3.6629999999999998; // millimolar
         const double var_sodium_calcium_exchange_current__Qci = 0.13689999999999999; // dimensionless
-        const double var_sodium_calcium_exchange_current__Qco = 0.0; // dimensionless
+        const double var_sodium_calcium_exchange_current__Qco = 0; // dimensionless
         const double var_sodium_calcium_exchange_current__Qn = 0.43149999999999999; // dimensionless
         const double var_sodium_calcium_exchange_current__di = 1.0 + (1.0 + (1.0 + var_chaste_interface__intracellular_ion_concentrations__Nai / var_sodium_calcium_exchange_current__K3ni) * var_chaste_interface__intracellular_ion_concentrations__Nai / var_sodium_calcium_exchange_current__K2ni) * var_chaste_interface__intracellular_ion_concentrations__Nai / var_sodium_calcium_exchange_current__K1ni + (1.0 + var_chaste_interface__intracellular_ion_concentrations__Nai / var_sodium_calcium_exchange_current__Kcni + exp(-var_membrane__F * var_chaste_interface__membrane__V * var_sodium_calcium_exchange_current__Qci / (var_membrane__R * var_membrane__T))) * var_chaste_interface__intracellular_ion_concentrations__Ca_sub / var_sodium_calcium_exchange_current__Kci; // dimensionless
         const double var_sodium_calcium_exchange_current__do = 1.0 + (1.0 + exp(var_membrane__F * var_chaste_interface__membrane__V * var_sodium_calcium_exchange_current__Qco / (var_membrane__R * var_membrane__T))) * var_intracellular_ion_concentrations__Cao / var_sodium_calcium_exchange_current__Kco + (1.0 + var_intracellular_ion_concentrations__Nao / var_sodium_calcium_exchange_current__K2no) * (1.0 + var_intracellular_ion_concentrations__Nao / var_sodium_calcium_exchange_current__K3no) * var_intracellular_ion_concentrations__Nao / var_sodium_calcium_exchange_current__K1no; // dimensionless
@@ -262,14 +262,14 @@
         const double var_sodium_calcium_exchange_current__x3 = (var_sodium_calcium_exchange_current__k21 + var_sodium_calcium_exchange_current__k23) * var_sodium_calcium_exchange_current__k14 * var_sodium_calcium_exchange_current__k43 + (var_sodium_calcium_exchange_current__k41 + var_sodium_calcium_exchange_current__k43) * var_sodium_calcium_exchange_current__k12 * var_sodium_calcium_exchange_current__k23; // dimensionless
         const double var_sodium_calcium_exchange_current__x4 = (var_sodium_calcium_exchange_current__k12 + var_sodium_calcium_exchange_current__k14) * var_sodium_calcium_exchange_current__k23 * var_sodium_calcium_exchange_current__k34 + (var_sodium_calcium_exchange_current__k32 + var_sodium_calcium_exchange_current__k34) * var_sodium_calcium_exchange_current__k14 * var_sodium_calcium_exchange_current__k21; // dimensionless
         const double var_sodium_calcium_exchange_current__i_NaCa = (var_sodium_calcium_exchange_current__k21 * var_sodium_calcium_exchange_current__x2 - var_sodium_calcium_exchange_current__k12 * var_sodium_calcium_exchange_current__x1) * var_sodium_calcium_exchange_current__kNaCa / (var_sodium_calcium_exchange_current__x1 + var_sodium_calcium_exchange_current__x2 + var_sodium_calcium_exchange_current__x3 + var_sodium_calcium_exchange_current__x4); // picoA
-        const double var_sodium_dependent_background_current__g_b_Na = 0.0054000000000000003; // nanoS
+        const double var_sodium_dependent_background_current__g_b_Na = 0054000000000000003; // nanoS
         const double var_sodium_dependent_background_current__i_b_Na = (-var_reversal_potentials__E_Na + var_chaste_interface__membrane__V) * var_sodium_dependent_background_current__g_b_Na; // picoA
         const double var_sodium_potassium_pump_current__Km_Kp = 1.3999999999999999; // millimolar
         const double var_sodium_potassium_pump_current__Km_Nap = 14.0; // millimolar
         const double var_sodium_potassium_pump_current__i_NaK_max = 3.6000000000000001; // picoA
-        const double var_sodium_potassium_pump_current__i_NaK = var_sodium_potassium_pump_current__i_NaK_max / ((1.0 + pow((var_sodium_potassium_pump_current__Km_Kp / var_intracellular_ion_concentrations__Ko), 1.2)) * (1.0 + pow((var_sodium_potassium_pump_current__Km_Nap / var_chaste_interface__intracellular_ion_concentrations__Nai), 1.3)) * (1.0 + exp(-4.0 + 0.033333333333333333 * var_reversal_potentials__E_Na - 0.033333333333333333 * var_chaste_interface__membrane__V))); // picoA
+        const double var_sodium_potassium_pump_current__i_NaK = var_sodium_potassium_pump_current__i_NaK_max / ((1.0 + pow((var_sodium_potassium_pump_current__Km_Kp / var_intracellular_ion_concentrations__Ko), 1.2)) * (1.0 + pow((var_sodium_potassium_pump_current__Km_Nap / var_chaste_interface__intracellular_ion_concentrations__Nai), 1.3)) * (1.0 + exp(-4.0 + 033333333333333333 * var_reversal_potentials__E_Na - 033333333333333333 * var_chaste_interface__membrane__V))); // picoA
         const double var_sustained_inward_current__E_st = 37.399999999999999; // millivolt
-        const double var_sustained_inward_current__g_st = 0.014999999999999999; // nanoS
+        const double var_sustained_inward_current__g_st = 014999999999999999; // nanoS
         const double var_sustained_inward_current__i_st = (-var_sustained_inward_current__E_st + var_chaste_interface__membrane__V) * var_sustained_inward_current__g_st * var_chaste_interface__sustained_inward_current_qa_gate__qa * var_chaste_interface__sustained_inward_current_qi_gate__qi; // picoA
         d_dt_chaste_interface_var_membrane__V = -1.0 * var_AP_sensitive_currents__i_sus - 1.0 * var_AP_sensitive_currents__i_to - 1.0 * var_L_type_calcium_channel_current__i_CaL - 1.0 * var_T_type_calcium_channel_current__i_CaT - 1.0 * var_background_muscarinic_potassium_channel_current__i_K_ACh - 1.0 * var_hyperpolarisation_activated_current__i_h - 1.0 * var_rapidly_activating_delayed_rectifier_potassium_current__i_Kr - 1.0 * var_slowly_activating_delayed_rectifier_potassium_current__i_Ks - 1.0 * var_sodium_calcium_exchange_current__i_NaCa - 1.0 * var_sodium_dependent_background_current__i_b_Na - 1.0 * var_sodium_potassium_pump_current__i_NaK - 1.0 * var_sustained_inward_current__i_st; // millivolt / millisecond
 
@@ -310,13 +310,13 @@
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: millivolt; Initial value: -58.600291137693
         double var_chaste_interface__L_type_calcium_channel_current_d_gate__d = rY[1];
-        // Units: dimensionless; Initial value: 0.000602055134
+        // Units: dimensionless; Initial value: 000602055134
         double var_chaste_interface__L_type_calcium_channel_current_f_gate__f = rY[2];
         // Units: dimensionless; Initial value: 0.626999773853
         double var_chaste_interface__L_type_calcium_channel_current_fCa_gate__fCa = rY[3];
         // Units: dimensionless; Initial value: 0.589580408056
         double var_chaste_interface__T_type_calcium_channel_current_d_gate__d = rY[4];
-        // Units: dimensionless; Initial value: 0.004571884917
+        // Units: dimensionless; Initial value: 004571884917
         double var_chaste_interface__T_type_calcium_channel_current_f_gate__f = rY[5];
         // Units: dimensionless; Initial value: 0.249637570396
         double var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paS = rY[6];
@@ -326,25 +326,25 @@
         double var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pi_gate__piy = rY[8];
         // Units: dimensionless; Initial value: 0.852396631172
         double var_chaste_interface__slowly_activating_delayed_rectifier_potassium_current_n_gate__n = rY[9];
-        // Units: dimensionless; Initial value: 0.054409723782
+        // Units: dimensionless; Initial value: 054409723782
         double var_chaste_interface__AP_sensitive_currents_q_gate__q = rY[10];
         // Units: dimensionless; Initial value: 0.531446952485
         double var_chaste_interface__AP_sensitive_currents_r_gate__r = rY[11];
-        // Units: dimensionless; Initial value: 0.005550489445
+        // Units: dimensionless; Initial value: 005550489445
         double var_chaste_interface__hyperpolarisation_activated_current_y_gate__y = rY[12];
-        // Units: dimensionless; Initial value: 0.067156687129
+        // Units: dimensionless; Initial value: 067156687129
         double var_chaste_interface__sustained_inward_current_qa_gate__qa = rY[13];
         // Units: dimensionless; Initial value: 0.426018100136
         double var_chaste_interface__sustained_inward_current_qi_gate__qi = rY[14];
         // Units: dimensionless; Initial value: 0.333330378068
         double var_chaste_interface__intracellular_ion_concentrations__Cai = rY[15];
-        // Units: millimolar; Initial value: 0.000312494921
+        // Units: millimolar; Initial value: 000312494921
         double var_chaste_interface__intracellular_ion_concentrations__Ca_up = rY[16];
         // Units: millimolar; Initial value: 1.462338380106
         double var_chaste_interface__intracellular_ion_concentrations__Ca_rel = rY[17];
         // Units: millimolar; Initial value: 0.296742023718
         double var_chaste_interface__intracellular_ion_concentrations__Ca_sub = rY[18];
-        // Units: millimolar; Initial value: 0.00019074741
+        // Units: millimolar; Initial value: 00019074741
         double var_chaste_interface__intracellular_ion_concentrations__Nai = rY[19];
         // Units: millimolar; Initial value: 9.438646305915
         double var_chaste_interface__intracellular_ion_concentrations__Ki = rY[20];
@@ -354,9 +354,9 @@
         double var_chaste_interface__calcium_buffering__fCMi = rY[22];
         // Units: millimolar; Initial value: 0.116947220413
         double var_chaste_interface__calcium_buffering__fCMs = rY[23];
-        // Units: millimolar; Initial value: 0.074631965653
+        // Units: millimolar; Initial value: 074631965653
         double var_chaste_interface__calcium_buffering__fTC = rY[24];
-        // Units: millimolar; Initial value: 0.059206293446
+        // Units: millimolar; Initial value: 059206293446
         double var_chaste_interface__calcium_buffering__fTMC = rY[25];
         // Units: millimolar; Initial value: 0.602955114871
         double var_chaste_interface__calcium_buffering__fCQ = rY[26];
@@ -365,23 +365,23 @@
         
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
-        const double var_AP_sensitive_currents__g_sus = 0.02; // nanoS
+        const double var_AP_sensitive_currents__g_sus = 02; // nanoS
         const double var_AP_sensitive_currents__g_to = 0.17999999999999999; // nanoS
         const double var_L_type_calcium_channel_current__E_CaL = 45.0; // millivolt
         const double var_L_type_calcium_channel_current__g_CaL = 0.57999999999999996; // nanoS
-        const double var_L_type_calcium_channel_current_fCa_gate__Km_fCa = 0.00035; // millimolar
-        const double var_L_type_calcium_channel_current_fCa_gate__beta_fCa = 60.0; // per_millimolar_millisecond
+        const double var_L_type_calcium_channel_current_fCa_gate__Km_fCa = 00035; // millimolar
+        const double var_L_type_calcium_channel_current_fCa_gate__beta_fCa = 60; // per_millimolar_millisecond
         const double var_L_type_calcium_channel_current_fCa_gate__alpha_fCa = var_L_type_calcium_channel_current_fCa_gate__Km_fCa * var_L_type_calcium_channel_current_fCa_gate__beta_fCa; // per_millisecond
         const double var_T_type_calcium_channel_current__E_CaT = 45.0; // millivolt
         const double var_T_type_calcium_channel_current__g_CaT = 0.45800000000000002; // nanoS
-        const double var_calcium_buffering__CM_tot = 0.044999999999999998; // dimensionless
-        const double var_calcium_buffering__CQ_tot = 10.0; // dimensionless
-        const double var_calcium_buffering__TC_tot = 0.031; // dimensionless
-        const double var_calcium_buffering__TMC_tot = 0.062; // dimensionless
+        const double var_calcium_buffering__CM_tot = 044999999999999998; // dimensionless
+        const double var_calcium_buffering__CQ_tot = 10; // dimensionless
+        const double var_calcium_buffering__TC_tot = 031; // dimensionless
+        const double var_calcium_buffering__TMC_tot = 062; // dimensionless
         const double var_calcium_buffering__kb_CM = 0.54200000000000004; // per_millisecond
         const double var_calcium_buffering__kb_CQ = 0.44500000000000001; // per_millisecond
         const double var_calcium_buffering__kb_TC = 0.44600000000000001; // per_millisecond
-        const double var_calcium_buffering__kb_TMC = 0.0075100000000000002; // per_millisecond
+        const double var_calcium_buffering__kb_TMC = 0075100000000000002; // per_millisecond
         const double var_calcium_buffering__kb_TMM = 0.751; // per_millisecond
         const double var_calcium_buffering__kf_CM = 227.69999999999999; // per_millimolar_millisecond
         const double var_calcium_buffering__kf_CQ = 0.53400000000000003; // per_millimolar_millisecond
@@ -390,12 +390,12 @@
         const double var_calcium_buffering__kf_TMM = 2.2770000000000001; // per_millimolar_millisecond
         const double var_hyperpolarisation_activated_current__g_h_K = 0.23126250000000001; // nanoS
         const double var_hyperpolarisation_activated_current__g_h_Na = 0.14373749999999999; // nanoS
-        const double var_intracellular_calcium_dynamics__K_rel = 0.0011999999999999999; // millimolar
-        const double var_intracellular_calcium_dynamics__K_up = 0.00059999999999999995; // millimolar
+        const double var_intracellular_calcium_dynamics__K_rel = 0011999999999999999; // millimolar
+        const double var_intracellular_calcium_dynamics__K_up = 00059999999999999995; // millimolar
         const double var_intracellular_calcium_dynamics__P_rel = 0.5; // per_millisecond
-        const double var_intracellular_calcium_dynamics__P_up = 0.0050000000000000001; // millimolar_per_millisecond
-        const double var_intracellular_calcium_dynamics__tau_dif_Ca = 0.040000000000000001; // millisecond
-        const double var_intracellular_calcium_dynamics__tau_tr = 60.0; // millisecond
+        const double var_intracellular_calcium_dynamics__P_up = 0050000000000000001; // millimolar_per_millisecond
+        const double var_intracellular_calcium_dynamics__tau_dif_Ca = 040000000000000001; // millisecond
+        const double var_intracellular_calcium_dynamics__tau_tr = 60; // millisecond
         const double var_calcium_buffering__delta_fCQ = -var_chaste_interface__calcium_buffering__fCQ * var_calcium_buffering__kb_CQ + (1.0 - var_chaste_interface__calcium_buffering__fCQ) * var_calcium_buffering__kf_CQ * var_chaste_interface__intracellular_ion_concentrations__Ca_rel; // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_calcium_buffering__fCQ = var_calcium_buffering__delta_fCQ; // millimolar / millisecond
         const double var_L_type_calcium_channel_current_fCa_gate__fCa_infinity = var_L_type_calcium_channel_current_fCa_gate__Km_fCa / (var_L_type_calcium_channel_current_fCa_gate__Km_fCa + var_chaste_interface__intracellular_ion_concentrations__Ca_sub); // dimensionless
@@ -416,54 +416,54 @@
         const double var_intracellular_calcium_dynamics__j_up = var_intracellular_calcium_dynamics__P_up / (1.0 + var_intracellular_calcium_dynamics__K_up / var_chaste_interface__intracellular_ion_concentrations__Cai); // millimolar_per_millisecond
         const double var_intracellular_ion_concentrations__Cao = 2.0; // millimolar
         const double var_intracellular_ion_concentrations__Ko = 5.4000000000000004; // millimolar
-        const double var_background_muscarinic_potassium_channel_current__g_K_ACh = 0.0011000000000000001 * pow(var_intracellular_ion_concentrations__Ko, 0.40999999999999998); // picoA
+        const double var_background_muscarinic_potassium_channel_current__g_K_ACh = 0011000000000000001 * pow(var_intracellular_ion_concentrations__Ko, 0.40999999999999998); // picoA
         const double var_intracellular_ion_concentrations__Mgi = 2.5; // millimolar
         const double var_calcium_buffering__delta_fTMM = -var_chaste_interface__calcium_buffering__fTMM * var_calcium_buffering__kb_TMM + (1.0 - var_chaste_interface__calcium_buffering__fTMC - var_chaste_interface__calcium_buffering__fTMM) * var_calcium_buffering__kf_TMM * var_intracellular_ion_concentrations__Mgi; // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_calcium_buffering__fTMM = var_calcium_buffering__delta_fTMM; // millimolar / millisecond
-        const double var_intracellular_ion_concentrations__Nao = 140.0; // millimolar
+        const double var_intracellular_ion_concentrations__Nao = 140; // millimolar
         const double var_intracellular_ion_concentrations__V_i = 1.5835000000000001e-12; // liter
         const double var_intracellular_ion_concentrations__V_rel = 4.2223e-15; // liter
         const double var_intracellular_ion_concentrations__V_sub = 3.5097999999999997e-14; // liter
         const double var_intracellular_ion_concentrations__V_up = 4.0815999999999997e-14; // liter
         const double d_dt_chaste_interface_var_intracellular_ion_concentrations__Ca_up = -var_intracellular_calcium_dynamics__j_tr * var_intracellular_ion_concentrations__V_rel / var_intracellular_ion_concentrations__V_up + var_intracellular_calcium_dynamics__j_up; // millimolar / millisecond
         const double d_dt_chaste_interface_var_intracellular_ion_concentrations__Cai = (var_intracellular_calcium_dynamics__j_Ca_dif * var_intracellular_ion_concentrations__V_sub - var_intracellular_calcium_dynamics__j_up * var_intracellular_ion_concentrations__V_up) / var_intracellular_ion_concentrations__V_i - var_calcium_buffering__CM_tot * var_calcium_buffering__delta_fCMi - var_calcium_buffering__TC_tot * var_calcium_buffering__delta_fTC - var_calcium_buffering__TMC_tot * var_calcium_buffering__delta_fTMC; // millimolar / millisecond
-        const double var_membrane__F = 96485000000000000.0; // femtocoulomb_per_millimole
-        const double var_membrane__R = 8314400000000000.0; // attojoule_per_millimole_kelvin
+        const double var_membrane__F = 96485000000000000; // femtocoulomb_per_millimole
+        const double var_membrane__R = 8314400000000000; // attojoule_per_millimole_kelvin
         const double var_membrane__T = 310.14999999999998; // kelvin
-        const double var_AP_sensitive_currents_q_gate__q_infinity = 1.0 / (1.0 + exp(3.7692307692307692 + 0.076923076923076927 * var_chaste_interface__membrane__V)); // dimensionless
-        const double var_AP_sensitive_currents_q_gate__tau_q = 6.0599999999999996 + 39.101999999999997 / (0.065000000000000002 * exp(4.593 + 0.10000000000000001 * var_chaste_interface__membrane__V) + 0.56999999999999995 * exp(-3.52 - 0.080000000000000002 * var_chaste_interface__membrane__V)); // millisecond
-        const double var_AP_sensitive_currents_r_gate__r_infinity = 1.0 / (1.0 + exp(1.2866666666666666 - 0.066666666666666666 * var_chaste_interface__membrane__V)); // dimensionless
-        const double var_AP_sensitive_currents_r_gate__tau_r = 2.75352 + 14.40516 / (1.0369999999999999 * exp(2.7548999999999997 + 0.089999999999999997 * var_chaste_interface__membrane__V) + 0.36899999999999999 * exp(-2.8607999999999998 - 0.12 * var_chaste_interface__membrane__V)); // millisecond
+        const double var_AP_sensitive_currents_q_gate__q_infinity = 1.0 / (1.0 + exp(3.7692307692307692 + 076923076923076927 * var_chaste_interface__membrane__V)); // dimensionless
+        const double var_AP_sensitive_currents_q_gate__tau_q = 6.0599999999999996 + 39.101999999999997 / (065000000000000002 * exp(4.593 + 0.10000000000000001 * var_chaste_interface__membrane__V) + 0.56999999999999995 * exp(-3.52 - 080000000000000002 * var_chaste_interface__membrane__V)); // millisecond
+        const double var_AP_sensitive_currents_r_gate__r_infinity = 1.0 / (1.0 + exp(1.2866666666666666 - 066666666666666666 * var_chaste_interface__membrane__V)); // dimensionless
+        const double var_AP_sensitive_currents_r_gate__tau_r = 2.75352 + 14.40516 / (1.0369999999999999 * exp(2.7548999999999997 + 089999999999999997 * var_chaste_interface__membrane__V) + 0.36899999999999999 * exp(-2.8607999999999998 - 0.12 * var_chaste_interface__membrane__V)); // millisecond
         const double d_dt_chaste_interface_var_AP_sensitive_currents_q_gate__q = (-var_chaste_interface__AP_sensitive_currents_q_gate__q + var_AP_sensitive_currents_q_gate__q_infinity) / var_AP_sensitive_currents_q_gate__tau_q; // 1 / millisecond
         const double d_dt_chaste_interface_var_AP_sensitive_currents_r_gate__r = (-var_chaste_interface__AP_sensitive_currents_r_gate__r + var_AP_sensitive_currents_r_gate__r_infinity) / var_AP_sensitive_currents_r_gate__tau_r; // 1 / millisecond
         const double var_L_type_calcium_channel_current__i_CaL = (-var_L_type_calcium_channel_current__E_CaL + var_chaste_interface__membrane__V) * var_L_type_calcium_channel_current__g_CaL * var_chaste_interface__L_type_calcium_channel_current_d_gate__d * var_chaste_interface__L_type_calcium_channel_current_fCa_gate__fCa * var_chaste_interface__L_type_calcium_channel_current_f_gate__f; // picoA
-        const double var_L_type_calcium_channel_current_d_gate__alpha_d = -0.028389999999999999 * (35.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-14.0 - 0.40000000000000002 * var_chaste_interface__membrane__V)) - 0.084900000000000003 * var_chaste_interface__membrane__V / (-1.0 + exp(-0.20798668885191349 * var_chaste_interface__membrane__V)); // per_millisecond
-        const double var_L_type_calcium_channel_current_d_gate__beta_d = 0.011429999999999999 * (-5.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-2.0 + 0.40000000000000002 * var_chaste_interface__membrane__V)); // per_millisecond
+        const double var_L_type_calcium_channel_current_d_gate__alpha_d = -028389999999999999 * (35.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-14.0 - 0.40000000000000002 * var_chaste_interface__membrane__V)) - 084900000000000003 * var_chaste_interface__membrane__V / (-1.0 + exp(-0.20798668885191349 * var_chaste_interface__membrane__V)); // per_millisecond
+        const double var_L_type_calcium_channel_current_d_gate__beta_d = 011429999999999999 * (-5.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-2.0 + 0.40000000000000002 * var_chaste_interface__membrane__V)); // per_millisecond
         const double var_L_type_calcium_channel_current_d_gate__d_infinity = 1.0 / (1.0 + exp(-2.3500000000000001 - 0.16666666666666666 * var_chaste_interface__membrane__V)); // dimensionless
         const double var_L_type_calcium_channel_current_d_gate__tau_d = 1.0 / (var_L_type_calcium_channel_current_d_gate__alpha_d + var_L_type_calcium_channel_current_d_gate__beta_d); // millisecond
         const double d_dt_chaste_interface_var_L_type_calcium_channel_current_d_gate__d = (-var_chaste_interface__L_type_calcium_channel_current_d_gate__d + var_L_type_calcium_channel_current_d_gate__d_infinity) / var_L_type_calcium_channel_current_d_gate__tau_d; // 1 / millisecond
         const double var_L_type_calcium_channel_current_f_gate__f_infinity = 1.0 / (1.0 + exp(6.0 + 0.20000000000000001 * var_chaste_interface__membrane__V)); // dimensionless
-        const double var_L_type_calcium_channel_current_f_gate__tau_f = 44.299999999999997 + 257.10000000000002 * exp(-5.4668495419491743 * pow((1 + 0.030769230769230771 * var_chaste_interface__membrane__V), 2)); // millisecond
+        const double var_L_type_calcium_channel_current_f_gate__tau_f = 44.299999999999997 + 257.10000000000002 * exp(-5.4668495419491743 * pow((1 + 030769230769230771 * var_chaste_interface__membrane__V), 2)); // millisecond
         const double d_dt_chaste_interface_var_L_type_calcium_channel_current_f_gate__f = (-var_chaste_interface__L_type_calcium_channel_current_f_gate__f + var_L_type_calcium_channel_current_f_gate__f_infinity) / var_L_type_calcium_channel_current_f_gate__tau_f; // 1 / millisecond
         const double var_T_type_calcium_channel_current__i_CaT = (-var_T_type_calcium_channel_current__E_CaT + var_chaste_interface__membrane__V) * var_T_type_calcium_channel_current__g_CaT * var_chaste_interface__T_type_calcium_channel_current_d_gate__d * var_chaste_interface__T_type_calcium_channel_current_f_gate__f; // picoA
         const double var_T_type_calcium_channel_current_d_gate__d_infinity = 1.0 / (1.0 + exp(-4.3833333333333337 - 0.16666666666666666 * var_chaste_interface__membrane__V)); // dimensionless
-        const double var_T_type_calcium_channel_current_d_gate__tau_d = 1.0 / (1.0680000000000001 * exp(0.87666666666666671 + 0.033333333333333333 * var_chaste_interface__membrane__V) + 1.0680000000000001 * exp(-0.87666666666666671 - 0.033333333333333333 * var_chaste_interface__membrane__V)); // millisecond
+        const double var_T_type_calcium_channel_current_d_gate__tau_d = 1.0 / (1.0680000000000001 * exp(0.87666666666666671 + 033333333333333333 * var_chaste_interface__membrane__V) + 1.0680000000000001 * exp(-0.87666666666666671 - 033333333333333333 * var_chaste_interface__membrane__V)); // millisecond
         const double d_dt_chaste_interface_var_T_type_calcium_channel_current_d_gate__d = (-var_chaste_interface__T_type_calcium_channel_current_d_gate__d + var_T_type_calcium_channel_current_d_gate__d_infinity) / var_T_type_calcium_channel_current_d_gate__tau_d; // 1 / millisecond
         const double var_T_type_calcium_channel_current_f_gate__f_infinity = 1.0 / (1.0 + exp(11.017857142857144 + 0.17857142857142858 * var_chaste_interface__membrane__V)); // dimensionless
-        const double var_T_type_calcium_channel_current_f_gate__tau_f = 1.0 / (0.014999999999999999 * exp(4.0117035110533159 + 0.065019505851755519 * var_chaste_interface__membrane__V) + 0.015299999999999999 * exp(-0.74069627851140463 - 0.012004801920768308 * var_chaste_interface__membrane__V)); // millisecond
+        const double var_T_type_calcium_channel_current_f_gate__tau_f = 1.0 / (014999999999999999 * exp(4.0117035110533159 + 065019505851755519 * var_chaste_interface__membrane__V) + 015299999999999999 * exp(-0.74069627851140463 - 012004801920768308 * var_chaste_interface__membrane__V)); // millisecond
         const double d_dt_chaste_interface_var_T_type_calcium_channel_current_f_gate__f = (-var_chaste_interface__T_type_calcium_channel_current_f_gate__f + var_T_type_calcium_channel_current_f_gate__f_infinity) / var_T_type_calcium_channel_current_f_gate__tau_f; // 1 / millisecond
         const double var_background_muscarinic_potassium_channel_current__i_K_ACh = 1.0 * (-var_intracellular_ion_concentrations__Ko * exp(-var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T)) + var_chaste_interface__intracellular_ion_concentrations__Ki) * var_background_muscarinic_potassium_channel_current__g_K_ACh; // picoA
-        const double var_hyperpolarisation_activated_current_y_gate__tau_y = 0.71665290000000004 / (exp(-8.5404617897664554 - 0.022074080614542406 * var_chaste_interface__membrane__V) + exp(-3.8001143986272159 + 0.051999376007487906 * var_chaste_interface__membrane__V)); // millisecond
-        const double var_hyperpolarisation_activated_current_y_gate__y_infinity = 1.0 / (1.0 + exp(4.7407407407407405 + 0.07407407407407407 * var_chaste_interface__membrane__V)); // dimensionless
+        const double var_hyperpolarisation_activated_current_y_gate__tau_y = 0.71665290000000004 / (exp(-8.5404617897664554 - 022074080614542406 * var_chaste_interface__membrane__V) + exp(-3.8001143986272159 + 051999376007487906 * var_chaste_interface__membrane__V)); // millisecond
+        const double var_hyperpolarisation_activated_current_y_gate__y_infinity = 1.0 / (1.0 + exp(4.7407407407407405 + 07407407407407407 * var_chaste_interface__membrane__V)); // dimensionless
         const double d_dt_chaste_interface_var_hyperpolarisation_activated_current_y_gate__y = (-var_chaste_interface__hyperpolarisation_activated_current_y_gate__y + var_hyperpolarisation_activated_current_y_gate__y_infinity) / var_hyperpolarisation_activated_current_y_gate__tau_y; // 1 / millisecond
-        const double var_rapidly_activating_delayed_rectifier_potassium_current__g_Kr = 0.025000000000000001 * pow(var_intracellular_ion_concentrations__Ko, 0.58999999999999997); // nanoS
-        const double var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__pa_infinity = 1.0 / (1.0 + exp(-2.1886792452830188 - 0.094339622641509441 * var_chaste_interface__membrane__V)); // dimensionless
-        const double var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__tau_paF = 0.84655354000000005 / (0.037199999999999997 * exp(0.062893081761006289 * var_chaste_interface__membrane__V) + 0.00096000000000000002 * exp(-0.044444444444444446 * var_chaste_interface__membrane__V)); // millisecond
+        const double var_rapidly_activating_delayed_rectifier_potassium_current__g_Kr = 025000000000000001 * pow(var_intracellular_ion_concentrations__Ko, 0.58999999999999997); // nanoS
+        const double var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__pa_infinity = 1.0 / (1.0 + exp(-2.1886792452830188 - 094339622641509441 * var_chaste_interface__membrane__V)); // dimensionless
+        const double var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__tau_paF = 0.84655354000000005 / (037199999999999997 * exp(062893081761006289 * var_chaste_interface__membrane__V) + 00096000000000000002 * exp(-044444444444444446 * var_chaste_interface__membrane__V)); // millisecond
         const double d_dt_chaste_interface_var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paF = (-var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paF + var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__pa_infinity) / var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__tau_paF; // 1 / millisecond
-        const double var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__tau_paS = 0.84655354000000005 / (0.0041999999999999997 * exp(0.058823529411764705 * var_chaste_interface__membrane__V) + 0.00014999999999999999 * exp(-0.046296296296296294 * var_chaste_interface__membrane__V)); // millisecond
+        const double var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__tau_paS = 0.84655354000000005 / (0041999999999999997 * exp(058823529411764705 * var_chaste_interface__membrane__V) + 00014999999999999999 * exp(-046296296296296294 * var_chaste_interface__membrane__V)); // millisecond
         const double d_dt_chaste_interface_var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paS = (-var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paS + var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__pa_infinity) / var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__tau_paS; // 1 / millisecond
-        const double var_rapidly_activating_delayed_rectifier_potassium_current_pi_gate__pi_infinity = 1.0 / (1.0 + exp(1.672514619883041 + 0.058479532163742687 * var_chaste_interface__membrane__V)); // dimensionless
-        const double var_rapidly_activating_delayed_rectifier_potassium_current_pi_gate__tau_pi = 1.0 / (0.10000000000000001 * exp(-0.018299935950224173 * var_chaste_interface__membrane__V) + 0.65600000000000003 * exp(0.009420009985210585 * var_chaste_interface__membrane__V)); // millisecond
+        const double var_rapidly_activating_delayed_rectifier_potassium_current_pi_gate__pi_infinity = 1.0 / (1.0 + exp(1.672514619883041 + 058479532163742687 * var_chaste_interface__membrane__V)); // dimensionless
+        const double var_rapidly_activating_delayed_rectifier_potassium_current_pi_gate__tau_pi = 1.0 / (0.10000000000000001 * exp(-018299935950224173 * var_chaste_interface__membrane__V) + 0.65600000000000003 * exp(009420009985210585 * var_chaste_interface__membrane__V)); // millisecond
         const double d_dt_chaste_interface_var_rapidly_activating_delayed_rectifier_potassium_current_pi_gate__piy = (-var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pi_gate__piy + var_rapidly_activating_delayed_rectifier_potassium_current_pi_gate__pi_infinity) / var_rapidly_activating_delayed_rectifier_potassium_current_pi_gate__tau_pi; // 1 / millisecond
         const double var_reversal_potentials__E_K = var_membrane__R * var_membrane__T * log(var_intracellular_ion_concentrations__Ko / var_chaste_interface__intracellular_ion_concentrations__Ki) / var_membrane__F; // millivolt
         const double var_AP_sensitive_currents__i_sus = (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * var_AP_sensitive_currents__g_sus * var_chaste_interface__AP_sensitive_currents_r_gate__r; // picoA
@@ -473,9 +473,9 @@
         const double var_reversal_potentials__E_Na = var_membrane__R * var_membrane__T * log(var_intracellular_ion_concentrations__Nao / var_chaste_interface__intracellular_ion_concentrations__Nai) / var_membrane__F; // millivolt
         const double var_hyperpolarisation_activated_current__i_h_Na = pow(var_chaste_interface__hyperpolarisation_activated_current_y_gate__y, 2) * (-var_reversal_potentials__E_Na + var_chaste_interface__membrane__V) * var_hyperpolarisation_activated_current__g_h_Na; // picoA
         const double var_slowly_activating_delayed_rectifier_potassium_current__E_Ks = var_membrane__R * var_membrane__T * log((1.0 * var_intracellular_ion_concentrations__Ko + 0.12 * var_intracellular_ion_concentrations__Nao) / (1.0 * var_chaste_interface__intracellular_ion_concentrations__Ki + 0.12 * var_chaste_interface__intracellular_ion_concentrations__Nai)) / var_membrane__F; // millivolt
-        const double var_slowly_activating_delayed_rectifier_potassium_current__g_Ks = 0.025899999999999999; // nanoS
-        const double var_slowly_activating_delayed_rectifier_potassium_current_n_gate__alpha_n = 0.014 / (1.0 + exp(4.4444444444444446 - 0.1111111111111111 * var_chaste_interface__membrane__V)); // per_millisecond
-        const double var_slowly_activating_delayed_rectifier_potassium_current_n_gate__beta_n = 0.001 * exp(-0.022222222222222223 * var_chaste_interface__membrane__V); // per_millisecond
+        const double var_slowly_activating_delayed_rectifier_potassium_current__g_Ks = 025899999999999999; // nanoS
+        const double var_slowly_activating_delayed_rectifier_potassium_current_n_gate__alpha_n = 014 / (1.0 + exp(4.4444444444444446 - 0.1111111111111111 * var_chaste_interface__membrane__V)); // per_millisecond
+        const double var_slowly_activating_delayed_rectifier_potassium_current_n_gate__beta_n = 001 * exp(-022222222222222223 * var_chaste_interface__membrane__V); // per_millisecond
         const double var_slowly_activating_delayed_rectifier_potassium_current__i_Ks = pow(var_chaste_interface__slowly_activating_delayed_rectifier_potassium_current_n_gate__n, 2) * (-var_slowly_activating_delayed_rectifier_potassium_current__E_Ks + var_chaste_interface__membrane__V) * var_slowly_activating_delayed_rectifier_potassium_current__g_Ks; // picoA
         const double var_slowly_activating_delayed_rectifier_potassium_current_n_gate__n_infinity = var_slowly_activating_delayed_rectifier_potassium_current_n_gate__alpha_n / (var_slowly_activating_delayed_rectifier_potassium_current_n_gate__alpha_n + var_slowly_activating_delayed_rectifier_potassium_current_n_gate__beta_n); // dimensionless
         const double var_slowly_activating_delayed_rectifier_potassium_current_n_gate__tau_n = 1.0 / (var_slowly_activating_delayed_rectifier_potassium_current_n_gate__alpha_n + var_slowly_activating_delayed_rectifier_potassium_current_n_gate__beta_n); // millisecond
@@ -486,11 +486,11 @@
         const double var_sodium_calcium_exchange_current__K2no = 561.39999999999998; // millimolar
         const double var_sodium_calcium_exchange_current__K3ni = 26.440000000000001; // millimolar
         const double var_sodium_calcium_exchange_current__K3no = 4.6630000000000003; // millimolar
-        const double var_sodium_calcium_exchange_current__Kci = 0.0207; // millimolar
+        const double var_sodium_calcium_exchange_current__Kci = 0207; // millimolar
         const double var_sodium_calcium_exchange_current__Kcni = 26.440000000000001; // millimolar
         const double var_sodium_calcium_exchange_current__Kco = 3.6629999999999998; // millimolar
         const double var_sodium_calcium_exchange_current__Qci = 0.13689999999999999; // dimensionless
-        const double var_sodium_calcium_exchange_current__Qco = 0.0; // dimensionless
+        const double var_sodium_calcium_exchange_current__Qco = 0; // dimensionless
         const double var_sodium_calcium_exchange_current__Qn = 0.43149999999999999; // dimensionless
         const double var_sodium_calcium_exchange_current__di = 1.0 + (1.0 + (1.0 + var_chaste_interface__intracellular_ion_concentrations__Nai / var_sodium_calcium_exchange_current__K3ni) * var_chaste_interface__intracellular_ion_concentrations__Nai / var_sodium_calcium_exchange_current__K2ni) * var_chaste_interface__intracellular_ion_concentrations__Nai / var_sodium_calcium_exchange_current__K1ni + (1.0 + var_chaste_interface__intracellular_ion_concentrations__Nai / var_sodium_calcium_exchange_current__Kcni + exp(-var_membrane__F * var_chaste_interface__membrane__V * var_sodium_calcium_exchange_current__Qci / (var_membrane__R * var_membrane__T))) * var_chaste_interface__intracellular_ion_concentrations__Ca_sub / var_sodium_calcium_exchange_current__Kci; // dimensionless
         const double var_sodium_calcium_exchange_current__do = 1.0 + (1.0 + exp(var_membrane__F * var_chaste_interface__membrane__V * var_sodium_calcium_exchange_current__Qco / (var_membrane__R * var_membrane__T))) * var_intracellular_ion_concentrations__Cao / var_sodium_calcium_exchange_current__Kco + (1.0 + var_intracellular_ion_concentrations__Nao / var_sodium_calcium_exchange_current__K2no) * (1.0 + var_intracellular_ion_concentrations__Nao / var_sodium_calcium_exchange_current__K3no) * var_intracellular_ion_concentrations__Nao / var_sodium_calcium_exchange_current__K1no; // dimensionless
@@ -509,22 +509,22 @@
         const double var_sodium_calcium_exchange_current__x4 = (var_sodium_calcium_exchange_current__k12 + var_sodium_calcium_exchange_current__k14) * var_sodium_calcium_exchange_current__k23 * var_sodium_calcium_exchange_current__k34 + (var_sodium_calcium_exchange_current__k32 + var_sodium_calcium_exchange_current__k34) * var_sodium_calcium_exchange_current__k14 * var_sodium_calcium_exchange_current__k21; // dimensionless
         const double var_sodium_calcium_exchange_current__i_NaCa = (var_sodium_calcium_exchange_current__k21 * var_sodium_calcium_exchange_current__x2 - var_sodium_calcium_exchange_current__k12 * var_sodium_calcium_exchange_current__x1) * var_sodium_calcium_exchange_current__kNaCa / (var_sodium_calcium_exchange_current__x1 + var_sodium_calcium_exchange_current__x2 + var_sodium_calcium_exchange_current__x3 + var_sodium_calcium_exchange_current__x4); // picoA
         const double d_dt_chaste_interface_var_intracellular_ion_concentrations__Ca_sub = -var_intracellular_calcium_dynamics__j_Ca_dif + (var_intracellular_calcium_dynamics__j_rel * var_intracellular_ion_concentrations__V_rel + 0.5 * (-var_L_type_calcium_channel_current__i_CaL - var_T_type_calcium_channel_current__i_CaT + 2.0 * var_sodium_calcium_exchange_current__i_NaCa) * mParameters[0] / var_membrane__F) / var_intracellular_ion_concentrations__V_sub - var_calcium_buffering__CM_tot * var_calcium_buffering__delta_fCMs; // millimolar / millisecond
-        const double var_sodium_dependent_background_current__g_b_Na = 0.0054000000000000003; // nanoS
+        const double var_sodium_dependent_background_current__g_b_Na = 0054000000000000003; // nanoS
         const double var_sodium_dependent_background_current__i_b_Na = (-var_reversal_potentials__E_Na + var_chaste_interface__membrane__V) * var_sodium_dependent_background_current__g_b_Na; // picoA
         const double var_sodium_potassium_pump_current__Km_Kp = 1.3999999999999999; // millimolar
         const double var_sodium_potassium_pump_current__Km_Nap = 14.0; // millimolar
         const double var_sodium_potassium_pump_current__i_NaK_max = 3.6000000000000001; // picoA
-        const double var_sodium_potassium_pump_current__i_NaK = var_sodium_potassium_pump_current__i_NaK_max / ((1.0 + pow((var_sodium_potassium_pump_current__Km_Kp / var_intracellular_ion_concentrations__Ko), 1.2)) * (1.0 + pow((var_sodium_potassium_pump_current__Km_Nap / var_chaste_interface__intracellular_ion_concentrations__Nai), 1.3)) * (1.0 + exp(-4.0 + 0.033333333333333333 * var_reversal_potentials__E_Na - 0.033333333333333333 * var_chaste_interface__membrane__V))); // picoA
+        const double var_sodium_potassium_pump_current__i_NaK = var_sodium_potassium_pump_current__i_NaK_max / ((1.0 + pow((var_sodium_potassium_pump_current__Km_Kp / var_intracellular_ion_concentrations__Ko), 1.2)) * (1.0 + pow((var_sodium_potassium_pump_current__Km_Nap / var_chaste_interface__intracellular_ion_concentrations__Nai), 1.3)) * (1.0 + exp(-4.0 + 033333333333333333 * var_reversal_potentials__E_Na - 033333333333333333 * var_chaste_interface__membrane__V))); // picoA
         const double d_dt_chaste_interface_var_intracellular_ion_concentrations__Ki = 1.0 * (-var_AP_sensitive_currents__i_sus - var_AP_sensitive_currents__i_to - var_background_muscarinic_potassium_channel_current__i_K_ACh - var_hyperpolarisation_activated_current__i_h_K - var_rapidly_activating_delayed_rectifier_potassium_current__i_Kr - var_slowly_activating_delayed_rectifier_potassium_current__i_Ks + 2.0 * var_sodium_potassium_pump_current__i_NaK) * mParameters[0] / ((var_intracellular_ion_concentrations__V_i + var_intracellular_ion_concentrations__V_sub) * var_membrane__F); // millimolar / millisecond
         const double var_sustained_inward_current__E_st = 37.399999999999999; // millivolt
-        const double var_sustained_inward_current__g_st = 0.014999999999999999; // nanoS
-        const double var_sustained_inward_current_qa_gate__alpha_qa = 1.0 / (0.20000000000000001 * exp(-0.0014285714285714286 * var_chaste_interface__membrane__V) + 0.14999999999999999 * exp(-0.090909090909090912 * var_chaste_interface__membrane__V)); // per_millisecond
-        const double var_sustained_inward_current_qa_gate__beta_qa = 1.0 / (16.0 * exp(0.125 * var_chaste_interface__membrane__V) + 15.0 * exp(0.02 * var_chaste_interface__membrane__V)); // per_millisecond
+        const double var_sustained_inward_current__g_st = 014999999999999999; // nanoS
+        const double var_sustained_inward_current_qa_gate__alpha_qa = 1.0 / (0.20000000000000001 * exp(-0014285714285714286 * var_chaste_interface__membrane__V) + 0.14999999999999999 * exp(-090909090909090912 * var_chaste_interface__membrane__V)); // per_millisecond
+        const double var_sustained_inward_current_qa_gate__beta_qa = 1.0 / (16.0 * exp(0.125 * var_chaste_interface__membrane__V) + 15.0 * exp(02 * var_chaste_interface__membrane__V)); // per_millisecond
         const double var_sustained_inward_current_qa_gate__qa_infinity = 1.0 / (1.0 + exp(-11.4 - 0.20000000000000001 * var_chaste_interface__membrane__V)); // dimensionless
         const double var_sustained_inward_current_qa_gate__tau_qa = 1.0 / (var_sustained_inward_current_qa_gate__alpha_qa + var_sustained_inward_current_qa_gate__beta_qa); // millisecond
         const double d_dt_chaste_interface_var_sustained_inward_current_qa_gate__qa = (-var_chaste_interface__sustained_inward_current_qa_gate__qa + var_sustained_inward_current_qa_gate__qa_infinity) / var_sustained_inward_current_qa_gate__tau_qa; // 1 / millisecond
-        const double var_sustained_inward_current_qi_gate__alpha_qi = 1.0 / (700.0 * exp(0.014285714285714285 * var_chaste_interface__membrane__V) + 3100.0 * exp(0.076923076923076927 * var_chaste_interface__membrane__V)); // per_millisecond
-        const double var_sustained_inward_current_qi_gate__beta_qi = 1.0 / (50.0 * exp(-0.0014285714285714286 * var_chaste_interface__membrane__V) + 95.0 * exp(-0.10000000000000001 * var_chaste_interface__membrane__V)) + 0.00022900000000000001 / (1.0 + exp(-0.20000000000000001 * var_chaste_interface__membrane__V)); // per_millisecond
+        const double var_sustained_inward_current_qi_gate__alpha_qi = 1.0 / (700 * exp(014285714285714285 * var_chaste_interface__membrane__V) + 3100 * exp(076923076923076927 * var_chaste_interface__membrane__V)); // per_millisecond
+        const double var_sustained_inward_current_qi_gate__beta_qi = 1.0 / (50 * exp(-0014285714285714286 * var_chaste_interface__membrane__V) + 95.0 * exp(-0.10000000000000001 * var_chaste_interface__membrane__V)) + 00022900000000000001 / (1.0 + exp(-0.20000000000000001 * var_chaste_interface__membrane__V)); // per_millisecond
         const double var_sustained_inward_current__i_st = (-var_sustained_inward_current__E_st + var_chaste_interface__membrane__V) * var_sustained_inward_current__g_st * var_chaste_interface__sustained_inward_current_qa_gate__qa * var_chaste_interface__sustained_inward_current_qi_gate__qi; // picoA
         const double d_dt_chaste_interface_var_intracellular_ion_concentrations__Nai = 1.0 * (-var_hyperpolarisation_activated_current__i_h_Na - var_sodium_dependent_background_current__i_b_Na - var_sustained_inward_current__i_st - 3.0 * var_sodium_calcium_exchange_current__i_NaCa - 3.0 * var_sodium_potassium_pump_current__i_NaK) * mParameters[0] / ((var_intracellular_ion_concentrations__V_i + var_intracellular_ion_concentrations__V_sub) * var_membrane__F); // millimolar / millisecond
         const double var_sustained_inward_current_qi_gate__qi_infinity = var_sustained_inward_current_qi_gate__alpha_qi / (var_sustained_inward_current_qi_gate__alpha_qi + var_sustained_inward_current_qi_gate__beta_qi); // dimensionless
@@ -533,7 +533,7 @@
 
         if (mSetVoltageDerivativeToZero)
         {
-            d_dt_chaste_interface_var_membrane__V = 0.0;
+            d_dt_chaste_interface_var_membrane__V = 0;
         }
         else
         {
@@ -817,13 +817,13 @@
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: millivolt; Initial value: -58.600291137693
         double var_chaste_interface__L_type_calcium_channel_current_d_gate__d = rY[1];
-        // Units: dimensionless; Initial value: 0.000602055134
+        // Units: dimensionless; Initial value: 000602055134
         double var_chaste_interface__L_type_calcium_channel_current_f_gate__f = rY[2];
         // Units: dimensionless; Initial value: 0.626999773853
         double var_chaste_interface__L_type_calcium_channel_current_fCa_gate__fCa = rY[3];
         // Units: dimensionless; Initial value: 0.589580408056
         double var_chaste_interface__T_type_calcium_channel_current_d_gate__d = rY[4];
-        // Units: dimensionless; Initial value: 0.004571884917
+        // Units: dimensionless; Initial value: 004571884917
         double var_chaste_interface__T_type_calcium_channel_current_f_gate__f = rY[5];
         // Units: dimensionless; Initial value: 0.249637570396
         double var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paS = rY[6];
@@ -833,19 +833,19 @@
         double var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pi_gate__piy = rY[8];
         // Units: dimensionless; Initial value: 0.852396631172
         double var_chaste_interface__slowly_activating_delayed_rectifier_potassium_current_n_gate__n = rY[9];
-        // Units: dimensionless; Initial value: 0.054409723782
+        // Units: dimensionless; Initial value: 054409723782
         double var_chaste_interface__AP_sensitive_currents_q_gate__q = rY[10];
         // Units: dimensionless; Initial value: 0.531446952485
         double var_chaste_interface__AP_sensitive_currents_r_gate__r = rY[11];
-        // Units: dimensionless; Initial value: 0.005550489445
+        // Units: dimensionless; Initial value: 005550489445
         double var_chaste_interface__hyperpolarisation_activated_current_y_gate__y = rY[12];
-        // Units: dimensionless; Initial value: 0.067156687129
+        // Units: dimensionless; Initial value: 067156687129
         double var_chaste_interface__sustained_inward_current_qa_gate__qa = rY[13];
         // Units: dimensionless; Initial value: 0.426018100136
         double var_chaste_interface__sustained_inward_current_qi_gate__qi = rY[14];
         // Units: dimensionless; Initial value: 0.333330378068
         double var_chaste_interface__intracellular_ion_concentrations__Ca_sub = rY[18];
-        // Units: millimolar; Initial value: 0.00019074741
+        // Units: millimolar; Initial value: 00019074741
         double var_chaste_interface__intracellular_ion_concentrations__Nai = rY[19];
         // Units: millimolar; Initial value: 9.438646305915
         double var_chaste_interface__intracellular_ion_concentrations__Ki = rY[20];
@@ -853,7 +853,7 @@
         
         
         // Mathematics
-        const double var_AP_sensitive_currents__g_sus = 0.02; // nanoS
+        const double var_AP_sensitive_currents__g_sus = 02; // nanoS
         const double var_AP_sensitive_currents__g_to = 0.17999999999999999; // nanoS
         const double var_L_type_calcium_channel_current__E_CaL = 45.0; // millivolt
         const double var_L_type_calcium_channel_current__g_CaL = 0.57999999999999996; // nanoS
@@ -863,15 +863,15 @@
         const double var_hyperpolarisation_activated_current__g_h_Na = 0.14373749999999999; // nanoS
         const double var_intracellular_ion_concentrations__Cao = 2.0; // millimolar
         const double var_intracellular_ion_concentrations__Ko = 5.4000000000000004; // millimolar
-        const double var_background_muscarinic_potassium_channel_current__g_K_ACh = 0.0011000000000000001 * pow(var_intracellular_ion_concentrations__Ko, 0.40999999999999998); // picoA
-        const double var_intracellular_ion_concentrations__Nao = 140.0; // millimolar
-        const double var_membrane__F = 96485000000000000.0; // femtocoulomb_per_millimole
-        const double var_membrane__R = 8314400000000000.0; // attojoule_per_millimole_kelvin
+        const double var_background_muscarinic_potassium_channel_current__g_K_ACh = 0011000000000000001 * pow(var_intracellular_ion_concentrations__Ko, 0.40999999999999998); // picoA
+        const double var_intracellular_ion_concentrations__Nao = 140; // millimolar
+        const double var_membrane__F = 96485000000000000; // femtocoulomb_per_millimole
+        const double var_membrane__R = 8314400000000000; // attojoule_per_millimole_kelvin
         const double var_membrane__T = 310.14999999999998; // kelvin
         const double var_L_type_calcium_channel_current__i_CaL = (-var_L_type_calcium_channel_current__E_CaL + var_chaste_interface__membrane__V) * var_L_type_calcium_channel_current__g_CaL * var_chaste_interface__L_type_calcium_channel_current_d_gate__d * var_chaste_interface__L_type_calcium_channel_current_fCa_gate__fCa * var_chaste_interface__L_type_calcium_channel_current_f_gate__f; // picoA
         const double var_T_type_calcium_channel_current__i_CaT = (-var_T_type_calcium_channel_current__E_CaT + var_chaste_interface__membrane__V) * var_T_type_calcium_channel_current__g_CaT * var_chaste_interface__T_type_calcium_channel_current_d_gate__d * var_chaste_interface__T_type_calcium_channel_current_f_gate__f; // picoA
         const double var_background_muscarinic_potassium_channel_current__i_K_ACh = 1.0 * (-var_intracellular_ion_concentrations__Ko * exp(-var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T)) + var_chaste_interface__intracellular_ion_concentrations__Ki) * var_background_muscarinic_potassium_channel_current__g_K_ACh; // picoA
-        const double var_rapidly_activating_delayed_rectifier_potassium_current__g_Kr = 0.025000000000000001 * pow(var_intracellular_ion_concentrations__Ko, 0.58999999999999997); // nanoS
+        const double var_rapidly_activating_delayed_rectifier_potassium_current__g_Kr = 025000000000000001 * pow(var_intracellular_ion_concentrations__Ko, 0.58999999999999997); // nanoS
         const double var_reversal_potentials__E_K = var_membrane__R * var_membrane__T * log(var_intracellular_ion_concentrations__Ko / var_chaste_interface__intracellular_ion_concentrations__Ki) / var_membrane__F; // millivolt
         const double var_AP_sensitive_currents__i_sus = (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * var_AP_sensitive_currents__g_sus * var_chaste_interface__AP_sensitive_currents_r_gate__r; // picoA
         const double var_AP_sensitive_currents__i_to = (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * var_AP_sensitive_currents__g_to * var_chaste_interface__AP_sensitive_currents_q_gate__q * var_chaste_interface__AP_sensitive_currents_r_gate__r; // picoA
@@ -881,7 +881,7 @@
         const double var_hyperpolarisation_activated_current__i_h_Na = pow(var_chaste_interface__hyperpolarisation_activated_current_y_gate__y, 2) * (-var_reversal_potentials__E_Na + var_chaste_interface__membrane__V) * var_hyperpolarisation_activated_current__g_h_Na; // picoA
         const double var_hyperpolarisation_activated_current__i_h = var_hyperpolarisation_activated_current__i_h_K + var_hyperpolarisation_activated_current__i_h_Na; // picoA
         const double var_slowly_activating_delayed_rectifier_potassium_current__E_Ks = var_membrane__R * var_membrane__T * log((1.0 * var_intracellular_ion_concentrations__Ko + 0.12 * var_intracellular_ion_concentrations__Nao) / (1.0 * var_chaste_interface__intracellular_ion_concentrations__Ki + 0.12 * var_chaste_interface__intracellular_ion_concentrations__Nai)) / var_membrane__F; // millivolt
-        const double var_slowly_activating_delayed_rectifier_potassium_current__g_Ks = 0.025899999999999999; // nanoS
+        const double var_slowly_activating_delayed_rectifier_potassium_current__g_Ks = 025899999999999999; // nanoS
         const double var_slowly_activating_delayed_rectifier_potassium_current__i_Ks = pow(var_chaste_interface__slowly_activating_delayed_rectifier_potassium_current_n_gate__n, 2) * (-var_slowly_activating_delayed_rectifier_potassium_current__E_Ks + var_chaste_interface__membrane__V) * var_slowly_activating_delayed_rectifier_potassium_current__g_Ks; // picoA
         const double var_sodium_calcium_exchange_current__K1ni = 395.30000000000001; // millimolar
         const double var_sodium_calcium_exchange_current__K1no = 1628.0; // millimolar
@@ -889,11 +889,11 @@
         const double var_sodium_calcium_exchange_current__K2no = 561.39999999999998; // millimolar
         const double var_sodium_calcium_exchange_current__K3ni = 26.440000000000001; // millimolar
         const double var_sodium_calcium_exchange_current__K3no = 4.6630000000000003; // millimolar
-        const double var_sodium_calcium_exchange_current__Kci = 0.0207; // millimolar
+        const double var_sodium_calcium_exchange_current__Kci = 0207; // millimolar
         const double var_sodium_calcium_exchange_current__Kcni = 26.440000000000001; // millimolar
         const double var_sodium_calcium_exchange_current__Kco = 3.6629999999999998; // millimolar
         const double var_sodium_calcium_exchange_current__Qci = 0.13689999999999999; // dimensionless
-        const double var_sodium_calcium_exchange_current__Qco = 0.0; // dimensionless
+        const double var_sodium_calcium_exchange_current__Qco = 0; // dimensionless
         const double var_sodium_calcium_exchange_current__Qn = 0.43149999999999999; // dimensionless
         const double var_sodium_calcium_exchange_current__di = 1.0 + (1.0 + (1.0 + var_chaste_interface__intracellular_ion_concentrations__Nai / var_sodium_calcium_exchange_current__K3ni) * var_chaste_interface__intracellular_ion_concentrations__Nai / var_sodium_calcium_exchange_current__K2ni) * var_chaste_interface__intracellular_ion_concentrations__Nai / var_sodium_calcium_exchange_current__K1ni + (1.0 + var_chaste_interface__intracellular_ion_concentrations__Nai / var_sodium_calcium_exchange_current__Kcni + exp(-var_membrane__F * var_chaste_interface__membrane__V * var_sodium_calcium_exchange_current__Qci / (var_membrane__R * var_membrane__T))) * var_chaste_interface__intracellular_ion_concentrations__Ca_sub / var_sodium_calcium_exchange_current__Kci; // dimensionless
         const double var_sodium_calcium_exchange_current__do = 1.0 + (1.0 + exp(var_membrane__F * var_chaste_interface__membrane__V * var_sodium_calcium_exchange_current__Qco / (var_membrane__R * var_membrane__T))) * var_intracellular_ion_concentrations__Cao / var_sodium_calcium_exchange_current__Kco + (1.0 + var_intracellular_ion_concentrations__Nao / var_sodium_calcium_exchange_current__K2no) * (1.0 + var_intracellular_ion_concentrations__Nao / var_sodium_calcium_exchange_current__K3no) * var_intracellular_ion_concentrations__Nao / var_sodium_calcium_exchange_current__K1no; // dimensionless
@@ -911,14 +911,14 @@
         const double var_sodium_calcium_exchange_current__x3 = (var_sodium_calcium_exchange_current__k21 + var_sodium_calcium_exchange_current__k23) * var_sodium_calcium_exchange_current__k14 * var_sodium_calcium_exchange_current__k43 + (var_sodium_calcium_exchange_current__k41 + var_sodium_calcium_exchange_current__k43) * var_sodium_calcium_exchange_current__k12 * var_sodium_calcium_exchange_current__k23; // dimensionless
         const double var_sodium_calcium_exchange_current__x4 = (var_sodium_calcium_exchange_current__k12 + var_sodium_calcium_exchange_current__k14) * var_sodium_calcium_exchange_current__k23 * var_sodium_calcium_exchange_current__k34 + (var_sodium_calcium_exchange_current__k32 + var_sodium_calcium_exchange_current__k34) * var_sodium_calcium_exchange_current__k14 * var_sodium_calcium_exchange_current__k21; // dimensionless
         const double var_sodium_calcium_exchange_current__i_NaCa = (var_sodium_calcium_exchange_current__k21 * var_sodium_calcium_exchange_current__x2 - var_sodium_calcium_exchange_current__k12 * var_sodium_calcium_exchange_current__x1) * var_sodium_calcium_exchange_current__kNaCa / (var_sodium_calcium_exchange_current__x1 + var_sodium_calcium_exchange_current__x2 + var_sodium_calcium_exchange_current__x3 + var_sodium_calcium_exchange_current__x4); // picoA
-        const double var_sodium_dependent_background_current__g_b_Na = 0.0054000000000000003; // nanoS
+        const double var_sodium_dependent_background_current__g_b_Na = 0054000000000000003; // nanoS
         const double var_sodium_dependent_background_current__i_b_Na = (-var_reversal_potentials__E_Na + var_chaste_interface__membrane__V) * var_sodium_dependent_background_current__g_b_Na; // picoA
         const double var_sodium_potassium_pump_current__Km_Kp = 1.3999999999999999; // millimolar
         const double var_sodium_potassium_pump_current__Km_Nap = 14.0; // millimolar
         const double var_sodium_potassium_pump_current__i_NaK_max = 3.6000000000000001; // picoA
-        const double var_sodium_potassium_pump_current__i_NaK = var_sodium_potassium_pump_current__i_NaK_max / ((1.0 + pow((var_sodium_potassium_pump_current__Km_Kp / var_intracellular_ion_concentrations__Ko), 1.2)) * (1.0 + pow((var_sodium_potassium_pump_current__Km_Nap / var_chaste_interface__intracellular_ion_concentrations__Nai), 1.3)) * (1.0 + exp(-4.0 + 0.033333333333333333 * var_reversal_potentials__E_Na - 0.033333333333333333 * var_chaste_interface__membrane__V))); // picoA
+        const double var_sodium_potassium_pump_current__i_NaK = var_sodium_potassium_pump_current__i_NaK_max / ((1.0 + pow((var_sodium_potassium_pump_current__Km_Kp / var_intracellular_ion_concentrations__Ko), 1.2)) * (1.0 + pow((var_sodium_potassium_pump_current__Km_Nap / var_chaste_interface__intracellular_ion_concentrations__Nai), 1.3)) * (1.0 + exp(-4.0 + 033333333333333333 * var_reversal_potentials__E_Na - 033333333333333333 * var_chaste_interface__membrane__V))); // picoA
         const double var_sustained_inward_current__E_st = 37.399999999999999; // millivolt
-        const double var_sustained_inward_current__g_st = 0.014999999999999999; // nanoS
+        const double var_sustained_inward_current__g_st = 014999999999999999; // nanoS
         const double var_sustained_inward_current__i_st = (-var_sustained_inward_current__E_st + var_chaste_interface__membrane__V) * var_sustained_inward_current__g_st * var_chaste_interface__sustained_inward_current_qa_gate__qa * var_chaste_interface__sustained_inward_current_qi_gate__qi; // picoA
         d_dt_chaste_interface_var_membrane__V = -1.0 * var_AP_sensitive_currents__i_sus - 1.0 * var_AP_sensitive_currents__i_to - 1.0 * var_L_type_calcium_channel_current__i_CaL - 1.0 * var_T_type_calcium_channel_current__i_CaT - 1.0 * var_background_muscarinic_potassium_channel_current__i_K_ACh - 1.0 * var_hyperpolarisation_activated_current__i_h - 1.0 * var_rapidly_activating_delayed_rectifier_potassium_current__i_Kr - 1.0 * var_slowly_activating_delayed_rectifier_potassium_current__i_Ks - 1.0 * var_sodium_calcium_exchange_current__i_NaCa - 1.0 * var_sodium_dependent_background_current__i_b_Na - 1.0 * var_sodium_potassium_pump_current__i_NaK - 1.0 * var_sustained_inward_current__i_st; // millivolt / millisecond
 
@@ -933,13 +933,13 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -58.600291137693
             double var_chaste_interface__L_type_calcium_channel_current_d_gate__d = rY[1];
-            // Units: dimensionless; Initial value: 0.000602055134
+            // Units: dimensionless; Initial value: 000602055134
             double var_chaste_interface__L_type_calcium_channel_current_f_gate__f = rY[2];
             // Units: dimensionless; Initial value: 0.626999773853
             double var_chaste_interface__L_type_calcium_channel_current_fCa_gate__fCa = rY[3];
             // Units: dimensionless; Initial value: 0.589580408056
             double var_chaste_interface__T_type_calcium_channel_current_d_gate__d = rY[4];
-            // Units: dimensionless; Initial value: 0.004571884917
+            // Units: dimensionless; Initial value: 004571884917
             double var_chaste_interface__T_type_calcium_channel_current_f_gate__f = rY[5];
             // Units: dimensionless; Initial value: 0.249637570396
             double var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paS = rY[6];
@@ -949,43 +949,43 @@
             double var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pi_gate__piy = rY[8];
             // Units: dimensionless; Initial value: 0.852396631172
             double var_chaste_interface__slowly_activating_delayed_rectifier_potassium_current_n_gate__n = rY[9];
-            // Units: dimensionless; Initial value: 0.054409723782
+            // Units: dimensionless; Initial value: 054409723782
             double var_chaste_interface__AP_sensitive_currents_q_gate__q = rY[10];
             // Units: dimensionless; Initial value: 0.531446952485
             double var_chaste_interface__AP_sensitive_currents_r_gate__r = rY[11];
-            // Units: dimensionless; Initial value: 0.005550489445
+            // Units: dimensionless; Initial value: 005550489445
             double var_chaste_interface__hyperpolarisation_activated_current_y_gate__y = rY[12];
-            // Units: dimensionless; Initial value: 0.067156687129
+            // Units: dimensionless; Initial value: 067156687129
             double var_chaste_interface__sustained_inward_current_qa_gate__qa = rY[13];
             // Units: dimensionless; Initial value: 0.426018100136
             double var_chaste_interface__sustained_inward_current_qi_gate__qi = rY[14];
             // Units: dimensionless; Initial value: 0.333330378068
             double var_chaste_interface__intracellular_ion_concentrations__Ca_sub = rY[18];
-            // Units: millimolar; Initial value: 0.00019074741
+            // Units: millimolar; Initial value: 00019074741
             double var_chaste_interface__intracellular_ion_concentrations__Nai = rY[19];
             // Units: millimolar; Initial value: 9.438646305915
             
             const double var_x0 = pow(var_chaste_interface__hyperpolarisation_activated_current_y_gate__y, 2);
             const double var_x1 = pow(var_chaste_interface__slowly_activating_delayed_rectifier_potassium_current_n_gate__n, 2);
-            const double var_x2 = exp(-0.037415977988011655 * var_chaste_interface__membrane__V);
-            const double var_x3 = -0.040569866382531065 * var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paF - 0.027046577588354045 * var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paS;
+            const double var_x2 = exp(-037415977988011655 * var_chaste_interface__membrane__V);
+            const double var_x3 = -040569866382531065 * var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paF - 027046577588354045 * var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paS;
             const double var_x4 = var_x3 * var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pi_gate__piy;
-            const double var_x5 = exp(-0.0051222473865587953 * var_chaste_interface__membrane__V);
-            const double var_x6 = 0.037821482602117998 * var_chaste_interface__intracellular_ion_concentrations__Nai;
+            const double var_x5 = exp(-0051222473865587953 * var_chaste_interface__membrane__V);
+            const double var_x6 = 037821482602117998 * var_chaste_interface__intracellular_ion_concentrations__Nai;
             const double var_x7 = 1.0 + var_x6;
             const double var_x8 = (var_x5 + var_x7) * var_chaste_interface__intracellular_ion_concentrations__Ca_sub;
             const double var_x9 = var_x7 * var_chaste_interface__intracellular_ion_concentrations__Nai;
             const double var_x10 = (1.0 + 0.43687199650502401 * var_x9) * var_chaste_interface__intracellular_ion_concentrations__Nai;
-            const double var_x11 = pow((0.0207 + var_x8 + 5.2365292183152033e-5 * var_x10), (-2));
+            const double var_x11 = pow((0207 + var_x8 + 5.2365292183152033e-5 * var_x10), (-2));
             const double var_x12 = pow(var_chaste_interface__intracellular_ion_concentrations__Ca_sub, 2);
             const double var_x13 = var_x11 * var_x12 * pow(var_x5, 2);
-            const double var_x14 = 0.0051222473865587953 * var_x13;
-            const double var_x15 = 1 / (1.0 + 48.309178743961354 * var_x8 + 0.0025297242600556538 * var_x10);
+            const double var_x14 = 0051222473865587953 * var_x13;
+            const double var_x15 = 1 / (1.0 + 48.309178743961354 * var_x8 + 0025297242600556538 * var_x10);
             const double var_x16 = var_x5 * var_chaste_interface__intracellular_ion_concentrations__Ca_sub;
             const double var_x17 = var_x15 * var_x16;
             const double var_x18 = 0.24745156456805775 * var_x17;
             const double var_x19 = pow(var_chaste_interface__intracellular_ion_concentrations__Nai, 2);
-            const double var_x20 = 0.0080724972509135153 * var_chaste_interface__membrane__V;
+            const double var_x20 = 0080724972509135153 * var_chaste_interface__membrane__V;
             const double var_x21 = exp(var_x20);
             const double var_x22 = var_x15 * var_x21;
             const double var_x23 = var_x19 * var_x22;
@@ -1001,10 +1001,10 @@
             const double var_x33 = 48.309178743961354 * var_x5;
             const double var_x34 = var_x15 * var_x33;
             const double var_x35 = var_x34 * var_chaste_interface__intracellular_ion_concentrations__Ca_sub;
-            const double var_x36 = var_x35 + 0.0011051656880977081 * var_x24;
+            const double var_x36 = var_x35 + 0011051656880977081 * var_x24;
             const double var_x37 = var_x21 * var_x36;
             const double var_x38 = var_x30 * var_x37;
-            const double var_x39 = 0.0080724972509135153 * var_x38;
+            const double var_x39 = 0080724972509135153 * var_x38;
             const double var_x40 = exp(-var_x20);
             const double var_x41 = 0.96776646412697098 + var_x21;
             const double var_x42 = var_x40 * var_x41;
@@ -1024,13 +1024,13 @@
             const double var_x56 = var_x21 * var_x55;
             const double var_x57 = 0.96776646412697098 * var_x54 + var_x50 * var_x56;
             const double var_x58 = var_x49 * pow(var_x40, 2);
-            const double var_x59 = 0.0051975633156138403 * var_x58;
+            const double var_x59 = 0051975633156138403 * var_x58;
             const double var_x60 = 0.64386064857757164 * var_x51;
             const double var_x61 = var_x47 * var_x49;
-            const double var_x62 = 0.0080724972509135153 * var_x40 * (var_x60 + 0.52840101781434401 * var_x61);
+            const double var_x62 = 0080724972509135153 * var_x40 * (var_x60 + 0.52840101781434401 * var_x61);
             const double var_x63 = var_x56 * var_x61;
-            const double var_x64 = 0.0044075879065866861 * var_x63;
-            const double var_x65 = 0.0044075879065866861 * var_x21 * var_x47 * var_x51;
+            const double var_x64 = 0044075879065866861 * var_x63;
+            const double var_x65 = 0044075879065866861 * var_x21 * var_x47 * var_x51;
             const double var_x66 = var_x18 * var_x57 + var_x50 * (var_x32 + var_x39 + var_x43 + var_x44 - var_x46) - var_x14 * var_x57 - var_x35 * (var_x64 - var_x59 - var_x62 - var_x65);
             const double var_x67 = var_x29 * var_x53;
             const double var_x68 = pow(var_chaste_interface__intracellular_ion_concentrations__Nai, 3);
@@ -1042,7 +1042,7 @@
             const double var_x74 = var_x41 * var_x61;
             const double var_x75 = var_x24 * var_x74;
             const double var_x76 = var_x38 + var_x35 * var_x42;
-            const double var_x77 = 1 / (var_x57 + var_x76 + 0.0011051656880977081 * var_x71 + 0.00060342106912241779 * var_x75 + var_x17 * var_x73 + var_x36 * var_x60);
+            const double var_x77 = 1 / (var_x57 + var_x76 + 0011051656880977081 * var_x71 + 00060342106912241779 * var_x75 + var_x17 * var_x73 + var_x36 * var_x60);
             const double var_x78 = 125.0 * var_x77;
             const double var_x79 = var_chaste_interface__sustained_inward_current_qa_gate__qa * var_chaste_interface__sustained_inward_current_qi_gate__qi;
             const double var_x80 = var_chaste_interface__AP_sensitive_currents_q_gate__q * var_chaste_interface__AP_sensitive_currents_r_gate__r;
@@ -1054,19 +1054,19 @@
             const double var_x86 = var_x69 * var_x7;
             const double var_x87 = var_x21 * var_x67 * var_x68 * var_x7;
             const double var_x88 = var_x26 * var_x74;
-            const double var_x89 = var_x46 + var_x59 + var_x62 + var_x65 - var_x32 - var_x39 - var_x43 - var_x44 - var_x64 + 0.0051975633156138403 * var_x84 - 8.9214469789726909e-6 * var_x71 - var_x27 * var_x87 - var_x28 * var_x60 + 0.42408406915774627 * var_x17 * var_x72 + 0.25945310625488094 * var_x17 * var_x58 - 0.0034078609320893128 * var_x13 * var_x72 - var_x24 * var_x41 * var_x85 + 5.9354904835575489e-6 * var_x29 * var_x51 * var_x86 - 6.398105028215114e-8 * var_x11 * var_x16 * var_x88 - var_x15 * var_x25 * var_x85 * pow(var_x21, 2);
-            const double var_x90 = (var_x50 * var_x76 - var_x35 * var_x57) / pow((var_x45 + 0.0207 * var_x38 + 0.020032765807428299 * var_x54 + 2.2876929743622558e-5 * var_x71 + 0.011302211302211302 * var_x63 + 1.2490816130834047e-5 * var_x75 + 0.013327915425555734 * var_x84 + var_x17 * var_x52 * var_x55), 2);
-            const double var_x91 = 0.053561249999999998 * var_x90;
+            const double var_x89 = var_x46 + var_x59 + var_x62 + var_x65 - var_x32 - var_x39 - var_x43 - var_x44 - var_x64 + 0051975633156138403 * var_x84 - 8.9214469789726909e-6 * var_x71 - var_x27 * var_x87 - var_x28 * var_x60 + 0.42408406915774627 * var_x17 * var_x72 + 0.25945310625488094 * var_x17 * var_x58 - 0034078609320893128 * var_x13 * var_x72 - var_x24 * var_x41 * var_x85 + 5.9354904835575489e-6 * var_x29 * var_x51 * var_x86 - 6.398105028215114e-8 * var_x11 * var_x16 * var_x88 - var_x15 * var_x25 * var_x85 * pow(var_x21, 2);
+            const double var_x90 = (var_x50 * var_x76 - var_x35 * var_x57) / pow((var_x45 + 0207 * var_x38 + 020032765807428299 * var_x54 + 2.2876929743622558e-5 * var_x71 + 011302211302211302 * var_x63 + 1.2490816130834047e-5 * var_x75 + 013327915425555734 * var_x84 + var_x17 * var_x52 * var_x55), 2);
+            const double var_x91 = 053561249999999998 * var_x90;
             const double var_x92 = 1 / var_chaste_interface__intracellular_ion_concentrations__Nai;
             const double var_x93 = pow(var_x92, 1.3);
-            const double var_x94 = log(140.0 * var_x92);
-            const double var_x95 = 0.033333333333333333 * var_chaste_interface__membrane__V;
+            const double var_x94 = log(140 * var_x92);
+            const double var_x95 = 033333333333333333 * var_chaste_interface__membrane__V;
             const double var_x96 = -var_x95;
             const double var_x97 = exp(-4.0 + var_x96 + 0.89088499421326284 * var_x94);
             const double var_x98 = 1.0 + var_x97;
             const double var_x99 = var_x97 / (pow(var_x98, 2) * (1.0 + 30.900566853219949 * var_x93));
             
-            partialF = -0.0054000000000000003 + var_x4 - 0.375 * var_x0 - 0.014999999999999999 * var_x79 - 0.17999999999999999 * var_x80 - 0.025899999999999999 * var_x1 - 0.57999999999999996 * var_x83 - 0.02 * var_chaste_interface__AP_sensitive_currents_r_gate__r - 0.45800000000000002 * var_x81 - 0.10017396017979863 * var_x99 - 0.00044373633078820127 * var_x2 - var_x66 * var_x78 - var_x89 * var_x91;
+            partialF = -0054000000000000003 + var_x4 - 0.375 * var_x0 - 014999999999999999 * var_x79 - 0.17999999999999999 * var_x80 - 025899999999999999 * var_x1 - 0.57999999999999996 * var_x83 - 02 * var_chaste_interface__AP_sensitive_currents_r_gate__r - 0.45800000000000002 * var_x81 - 0.10017396017979863 * var_x99 - 00044373633078820127 * var_x2 - var_x66 * var_x78 - var_x89 * var_x91;
         }
         else
         {
@@ -1084,12 +1084,12 @@
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: millivolt; Initial value: -58.600291137693
         double var_chaste_interface__L_type_calcium_channel_current_d_gate__d = rY[1];
-        // Units: dimensionless; Initial value: 0.000602055134
+        // Units: dimensionless; Initial value: 000602055134
         
         
         // Mathematics
-        const double var_L_type_calcium_channel_current_d_gate__alpha_d = -0.028389999999999999 * (35.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-14.0 - 0.40000000000000002 * var_chaste_interface__membrane__V)) - 0.084900000000000003 * var_chaste_interface__membrane__V / (-1.0 + exp(-0.20798668885191349 * var_chaste_interface__membrane__V)); // per_millisecond
-        const double var_L_type_calcium_channel_current_d_gate__beta_d = 0.011429999999999999 * (-5.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-2.0 + 0.40000000000000002 * var_chaste_interface__membrane__V)); // per_millisecond
+        const double var_L_type_calcium_channel_current_d_gate__alpha_d = -028389999999999999 * (35.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-14.0 - 0.40000000000000002 * var_chaste_interface__membrane__V)) - 084900000000000003 * var_chaste_interface__membrane__V / (-1.0 + exp(-0.20798668885191349 * var_chaste_interface__membrane__V)); // per_millisecond
+        const double var_L_type_calcium_channel_current_d_gate__beta_d = 011429999999999999 * (-5.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-2.0 + 0.40000000000000002 * var_chaste_interface__membrane__V)); // per_millisecond
         const double var_L_type_calcium_channel_current_d_gate__d_infinity = 1.0 / (1.0 + exp(-2.3500000000000001 - 0.16666666666666666 * var_chaste_interface__membrane__V)); // dimensionless
         const double var_L_type_calcium_channel_current_d_gate__tau_d = 1.0 / (var_L_type_calcium_channel_current_d_gate__alpha_d + var_L_type_calcium_channel_current_d_gate__beta_d); // millisecond
         const double d_dt_chaste_interface_var_L_type_calcium_channel_current_d_gate__d = (-var_chaste_interface__L_type_calcium_channel_current_d_gate__d + var_L_type_calcium_channel_current_d_gate__d_infinity) / var_L_type_calcium_channel_current_d_gate__tau_d; // 1 / millisecond
@@ -1108,13 +1108,13 @@
             const double var_x162 = 0.40000000000000002 * var_chaste_interface__membrane__V;
             const double var_x163 = exp(-2.0 + var_x162);
             const double var_x164 = -1.0 + var_x163;
-            const double var_x165 = 0.011429999999999999 / var_x164;
+            const double var_x165 = 011429999999999999 / var_x164;
             const double var_x166 = exp(-14.0 - var_x162);
             const double var_x167 = -1.0 + var_x166;
-            const double var_x168 = 0.028389999999999999 / var_x167;
+            const double var_x168 = 028389999999999999 / var_x167;
             const double var_x169 = exp(-0.20798668885191349 * var_chaste_interface__membrane__V);
             const double var_x170 = -1.0 + var_x169;
-            const double var_x171 = 0.084900000000000003 / var_x170;
+            const double var_x171 = 084900000000000003 / var_x170;
             const double var_x172 = -5.0 + var_chaste_interface__membrane__V;
             const double var_x173 = 35.0 + var_chaste_interface__membrane__V;
             const double var_x174 = var_x165 * var_x172;
@@ -1144,7 +1144,7 @@
         
         // Mathematics
         const double var_L_type_calcium_channel_current_f_gate__f_infinity = 1.0 / (1.0 + exp(6.0 + 0.20000000000000001 * var_chaste_interface__membrane__V)); // dimensionless
-        const double var_L_type_calcium_channel_current_f_gate__tau_f = 44.299999999999997 + 257.10000000000002 * exp(-5.4668495419491743 * pow((1 + 0.030769230769230771 * var_chaste_interface__membrane__V), 2)); // millisecond
+        const double var_L_type_calcium_channel_current_f_gate__tau_f = 44.299999999999997 + 257.10000000000002 * exp(-5.4668495419491743 * pow((1 + 030769230769230771 * var_chaste_interface__membrane__V), 2)); // millisecond
         const double d_dt_chaste_interface_var_L_type_calcium_channel_current_f_gate__f = (-var_chaste_interface__L_type_calcium_channel_current_f_gate__f + var_L_type_calcium_channel_current_f_gate__f_infinity) / var_L_type_calcium_channel_current_f_gate__tau_f; // 1 / millisecond
 
         return d_dt_chaste_interface_var_L_type_calcium_channel_current_f_gate__f;
@@ -1158,7 +1158,7 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -58.600291137693
             
-            const double var_x180 = exp(-5.4668495419491743 * pow((1 + 0.030769230769230771 * var_chaste_interface__membrane__V), 2));
+            const double var_x180 = exp(-5.4668495419491743 * pow((1 + 030769230769230771 * var_chaste_interface__membrane__V), 2));
             const double var_x181 = 1 / (44.299999999999997 + 257.10000000000002 * var_x180);
             
             partialF = -var_x181;
@@ -1179,12 +1179,12 @@
         double var_chaste_interface__L_type_calcium_channel_current_fCa_gate__fCa = rY[3];
         // Units: dimensionless; Initial value: 0.589580408056
         double var_chaste_interface__intracellular_ion_concentrations__Ca_sub = rY[18];
-        // Units: millimolar; Initial value: 0.00019074741
+        // Units: millimolar; Initial value: 00019074741
         
         
         // Mathematics
-        const double var_L_type_calcium_channel_current_fCa_gate__Km_fCa = 0.00035; // millimolar
-        const double var_L_type_calcium_channel_current_fCa_gate__beta_fCa = 60.0; // per_millimolar_millisecond
+        const double var_L_type_calcium_channel_current_fCa_gate__Km_fCa = 00035; // millimolar
+        const double var_L_type_calcium_channel_current_fCa_gate__beta_fCa = 60; // per_millimolar_millisecond
         const double var_L_type_calcium_channel_current_fCa_gate__alpha_fCa = var_L_type_calcium_channel_current_fCa_gate__Km_fCa * var_L_type_calcium_channel_current_fCa_gate__beta_fCa; // per_millisecond
         const double var_L_type_calcium_channel_current_fCa_gate__fCa_infinity = var_L_type_calcium_channel_current_fCa_gate__Km_fCa / (var_L_type_calcium_channel_current_fCa_gate__Km_fCa + var_chaste_interface__intracellular_ion_concentrations__Ca_sub); // dimensionless
         const double var_L_type_calcium_channel_current_fCa_gate__tau_fCa = var_L_type_calcium_channel_current_fCa_gate__fCa_infinity / var_L_type_calcium_channel_current_fCa_gate__alpha_fCa; // millisecond
@@ -1199,11 +1199,11 @@
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_ion_concentrations__Ca_sub = rY[18];
-            // Units: millimolar; Initial value: 0.00019074741
+            // Units: millimolar; Initial value: 00019074741
             
-            const double var_x182 = 60.0 * var_chaste_interface__intracellular_ion_concentrations__Ca_sub;
+            const double var_x182 = 60 * var_chaste_interface__intracellular_ion_concentrations__Ca_sub;
             
-            partialF = -0.021000000000000001 - var_x182;
+            partialF = -021000000000000001 - var_x182;
         }
         else
         {
@@ -1221,12 +1221,12 @@
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: millivolt; Initial value: -58.600291137693
         double var_chaste_interface__T_type_calcium_channel_current_d_gate__d = rY[4];
-        // Units: dimensionless; Initial value: 0.004571884917
+        // Units: dimensionless; Initial value: 004571884917
         
         
         // Mathematics
         const double var_T_type_calcium_channel_current_d_gate__d_infinity = 1.0 / (1.0 + exp(-4.3833333333333337 - 0.16666666666666666 * var_chaste_interface__membrane__V)); // dimensionless
-        const double var_T_type_calcium_channel_current_d_gate__tau_d = 1.0 / (1.0680000000000001 * exp(0.87666666666666671 + 0.033333333333333333 * var_chaste_interface__membrane__V) + 1.0680000000000001 * exp(-0.87666666666666671 - 0.033333333333333333 * var_chaste_interface__membrane__V)); // millisecond
+        const double var_T_type_calcium_channel_current_d_gate__tau_d = 1.0 / (1.0680000000000001 * exp(0.87666666666666671 + 033333333333333333 * var_chaste_interface__membrane__V) + 1.0680000000000001 * exp(-0.87666666666666671 - 033333333333333333 * var_chaste_interface__membrane__V)); // millisecond
         const double d_dt_chaste_interface_var_T_type_calcium_channel_current_d_gate__d = (-var_chaste_interface__T_type_calcium_channel_current_d_gate__d + var_T_type_calcium_channel_current_d_gate__d_infinity) / var_T_type_calcium_channel_current_d_gate__tau_d; // 1 / millisecond
 
         return d_dt_chaste_interface_var_T_type_calcium_channel_current_d_gate__d;
@@ -1240,7 +1240,7 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -58.600291137693
             
-            const double var_x95 = 0.033333333333333333 * var_chaste_interface__membrane__V;
+            const double var_x95 = 033333333333333333 * var_chaste_interface__membrane__V;
             const double var_x96 = -var_x95;
             const double var_x186 = exp(0.87666666666666671 + var_x95);
             const double var_x187 = exp(-0.87666666666666671 + var_x96);
@@ -1270,7 +1270,7 @@
         
         // Mathematics
         const double var_T_type_calcium_channel_current_f_gate__f_infinity = 1.0 / (1.0 + exp(11.017857142857144 + 0.17857142857142858 * var_chaste_interface__membrane__V)); // dimensionless
-        const double var_T_type_calcium_channel_current_f_gate__tau_f = 1.0 / (0.014999999999999999 * exp(4.0117035110533159 + 0.065019505851755519 * var_chaste_interface__membrane__V) + 0.015299999999999999 * exp(-0.74069627851140463 - 0.012004801920768308 * var_chaste_interface__membrane__V)); // millisecond
+        const double var_T_type_calcium_channel_current_f_gate__tau_f = 1.0 / (014999999999999999 * exp(4.0117035110533159 + 065019505851755519 * var_chaste_interface__membrane__V) + 015299999999999999 * exp(-0.74069627851140463 - 012004801920768308 * var_chaste_interface__membrane__V)); // millisecond
         const double d_dt_chaste_interface_var_T_type_calcium_channel_current_f_gate__f = (-var_chaste_interface__T_type_calcium_channel_current_f_gate__f + var_T_type_calcium_channel_current_f_gate__f_infinity) / var_T_type_calcium_channel_current_f_gate__tau_f; // 1 / millisecond
 
         return d_dt_chaste_interface_var_T_type_calcium_channel_current_f_gate__f;
@@ -1284,10 +1284,10 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -58.600291137693
             
-            const double var_x192 = exp(4.0117035110533159 + 0.065019505851755519 * var_chaste_interface__membrane__V);
-            const double var_x193 = exp(-0.74069627851140463 - 0.012004801920768308 * var_chaste_interface__membrane__V);
-            const double var_x194 = 0.014999999999999999 * var_x192;
-            const double var_x195 = 0.015299999999999999 * var_x193;
+            const double var_x192 = exp(4.0117035110533159 + 065019505851755519 * var_chaste_interface__membrane__V);
+            const double var_x193 = exp(-0.74069627851140463 - 012004801920768308 * var_chaste_interface__membrane__V);
+            const double var_x194 = 014999999999999999 * var_x192;
+            const double var_x195 = 015299999999999999 * var_x193;
             
             partialF = -var_x194 - var_x195;
         }
@@ -1311,8 +1311,8 @@
         
         
         // Mathematics
-        const double var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__pa_infinity = 1.0 / (1.0 + exp(-2.1886792452830188 - 0.094339622641509441 * var_chaste_interface__membrane__V)); // dimensionless
-        const double var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__tau_paS = 0.84655354000000005 / (0.0041999999999999997 * exp(0.058823529411764705 * var_chaste_interface__membrane__V) + 0.00014999999999999999 * exp(-0.046296296296296294 * var_chaste_interface__membrane__V)); // millisecond
+        const double var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__pa_infinity = 1.0 / (1.0 + exp(-2.1886792452830188 - 094339622641509441 * var_chaste_interface__membrane__V)); // dimensionless
+        const double var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__tau_paS = 0.84655354000000005 / (0041999999999999997 * exp(058823529411764705 * var_chaste_interface__membrane__V) + 00014999999999999999 * exp(-046296296296296294 * var_chaste_interface__membrane__V)); // millisecond
         const double d_dt_chaste_interface_var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paS = (-var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paS + var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__pa_infinity) / var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__tau_paS; // 1 / millisecond
 
         return d_dt_chaste_interface_var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paS;
@@ -1326,10 +1326,10 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -58.600291137693
             
-            const double var_x199 = exp(0.058823529411764705 * var_chaste_interface__membrane__V);
-            const double var_x200 = exp(-0.046296296296296294 * var_chaste_interface__membrane__V);
-            const double var_x201 = 0.0049612928202981696 * var_x199;
-            const double var_x202 = 0.0001771890292963632 * var_x200;
+            const double var_x199 = exp(058823529411764705 * var_chaste_interface__membrane__V);
+            const double var_x200 = exp(-046296296296296294 * var_chaste_interface__membrane__V);
+            const double var_x201 = 0049612928202981696 * var_x199;
+            const double var_x202 = 0001771890292963632 * var_x200;
             
             partialF = -var_x201 - var_x202;
         }
@@ -1353,8 +1353,8 @@
         
         
         // Mathematics
-        const double var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__pa_infinity = 1.0 / (1.0 + exp(-2.1886792452830188 - 0.094339622641509441 * var_chaste_interface__membrane__V)); // dimensionless
-        const double var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__tau_paF = 0.84655354000000005 / (0.037199999999999997 * exp(0.062893081761006289 * var_chaste_interface__membrane__V) + 0.00096000000000000002 * exp(-0.044444444444444446 * var_chaste_interface__membrane__V)); // millisecond
+        const double var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__pa_infinity = 1.0 / (1.0 + exp(-2.1886792452830188 - 094339622641509441 * var_chaste_interface__membrane__V)); // dimensionless
+        const double var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__tau_paF = 0.84655354000000005 / (037199999999999997 * exp(062893081761006289 * var_chaste_interface__membrane__V) + 00096000000000000002 * exp(-044444444444444446 * var_chaste_interface__membrane__V)); // millisecond
         const double d_dt_chaste_interface_var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paF = (-var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paF + var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__pa_infinity) / var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__tau_paF; // 1 / millisecond
 
         return d_dt_chaste_interface_var_rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paF;
@@ -1368,10 +1368,10 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -58.600291137693
             
-            const double var_x204 = exp(0.062893081761006289 * var_chaste_interface__membrane__V);
-            const double var_x205 = exp(-0.044444444444444446 * var_chaste_interface__membrane__V);
-            const double var_x206 = 0.043942879265498072 * var_x204;
-            const double var_x207 = 0.0011340097874967246 * var_x205;
+            const double var_x204 = exp(062893081761006289 * var_chaste_interface__membrane__V);
+            const double var_x205 = exp(-044444444444444446 * var_chaste_interface__membrane__V);
+            const double var_x206 = 043942879265498072 * var_x204;
+            const double var_x207 = 0011340097874967246 * var_x205;
             
             partialF = -var_x206 - var_x207;
         }
@@ -1395,8 +1395,8 @@
         
         
         // Mathematics
-        const double var_rapidly_activating_delayed_rectifier_potassium_current_pi_gate__pi_infinity = 1.0 / (1.0 + exp(1.672514619883041 + 0.058479532163742687 * var_chaste_interface__membrane__V)); // dimensionless
-        const double var_rapidly_activating_delayed_rectifier_potassium_current_pi_gate__tau_pi = 1.0 / (0.10000000000000001 * exp(-0.018299935950224173 * var_chaste_interface__membrane__V) + 0.65600000000000003 * exp(0.009420009985210585 * var_chaste_interface__membrane__V)); // millisecond
+        const double var_rapidly_activating_delayed_rectifier_potassium_current_pi_gate__pi_infinity = 1.0 / (1.0 + exp(1.672514619883041 + 058479532163742687 * var_chaste_interface__membrane__V)); // dimensionless
+        const double var_rapidly_activating_delayed_rectifier_potassium_current_pi_gate__tau_pi = 1.0 / (0.10000000000000001 * exp(-018299935950224173 * var_chaste_interface__membrane__V) + 0.65600000000000003 * exp(009420009985210585 * var_chaste_interface__membrane__V)); // millisecond
         const double d_dt_chaste_interface_var_rapidly_activating_delayed_rectifier_potassium_current_pi_gate__piy = (-var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pi_gate__piy + var_rapidly_activating_delayed_rectifier_potassium_current_pi_gate__pi_infinity) / var_rapidly_activating_delayed_rectifier_potassium_current_pi_gate__tau_pi; // 1 / millisecond
 
         return d_dt_chaste_interface_var_rapidly_activating_delayed_rectifier_potassium_current_pi_gate__piy;
@@ -1410,8 +1410,8 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -58.600291137693
             
-            const double var_x210 = exp(0.009420009985210585 * var_chaste_interface__membrane__V);
-            const double var_x211 = exp(-0.018299935950224173 * var_chaste_interface__membrane__V);
+            const double var_x210 = exp(009420009985210585 * var_chaste_interface__membrane__V);
+            const double var_x211 = exp(-018299935950224173 * var_chaste_interface__membrane__V);
             const double var_x212 = 0.10000000000000001 * var_x211;
             const double var_x213 = 0.65600000000000003 * var_x210;
             
@@ -1433,12 +1433,12 @@
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: millivolt; Initial value: -58.600291137693
         double var_chaste_interface__slowly_activating_delayed_rectifier_potassium_current_n_gate__n = rY[9];
-        // Units: dimensionless; Initial value: 0.054409723782
+        // Units: dimensionless; Initial value: 054409723782
         
         
         // Mathematics
-        const double var_slowly_activating_delayed_rectifier_potassium_current_n_gate__alpha_n = 0.014 / (1.0 + exp(4.4444444444444446 - 0.1111111111111111 * var_chaste_interface__membrane__V)); // per_millisecond
-        const double var_slowly_activating_delayed_rectifier_potassium_current_n_gate__beta_n = 0.001 * exp(-0.022222222222222223 * var_chaste_interface__membrane__V); // per_millisecond
+        const double var_slowly_activating_delayed_rectifier_potassium_current_n_gate__alpha_n = 014 / (1.0 + exp(4.4444444444444446 - 0.1111111111111111 * var_chaste_interface__membrane__V)); // per_millisecond
+        const double var_slowly_activating_delayed_rectifier_potassium_current_n_gate__beta_n = 001 * exp(-022222222222222223 * var_chaste_interface__membrane__V); // per_millisecond
         const double var_slowly_activating_delayed_rectifier_potassium_current_n_gate__n_infinity = var_slowly_activating_delayed_rectifier_potassium_current_n_gate__alpha_n / (var_slowly_activating_delayed_rectifier_potassium_current_n_gate__alpha_n + var_slowly_activating_delayed_rectifier_potassium_current_n_gate__beta_n); // dimensionless
         const double var_slowly_activating_delayed_rectifier_potassium_current_n_gate__tau_n = 1.0 / (var_slowly_activating_delayed_rectifier_potassium_current_n_gate__alpha_n + var_slowly_activating_delayed_rectifier_potassium_current_n_gate__beta_n); // millisecond
         const double d_dt_chaste_interface_var_slowly_activating_delayed_rectifier_potassium_current_n_gate__n = (-var_chaste_interface__slowly_activating_delayed_rectifier_potassium_current_n_gate__n + var_slowly_activating_delayed_rectifier_potassium_current_n_gate__n_infinity) / var_slowly_activating_delayed_rectifier_potassium_current_n_gate__tau_n; // 1 / millisecond
@@ -1454,12 +1454,12 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -58.600291137693
             
-            const double var_x214 = exp(-0.022222222222222223 * var_chaste_interface__membrane__V);
-            const double var_x215 = 0.001 * var_x214;
+            const double var_x214 = exp(-022222222222222223 * var_chaste_interface__membrane__V);
+            const double var_x215 = 001 * var_x214;
             const double var_x216 = exp(4.4444444444444446 - 0.1111111111111111 * var_chaste_interface__membrane__V);
             const double var_x217 = 1.0 + var_x216;
             const double var_x218 = 1 / var_x217;
-            const double var_x219 = 0.014 * var_x218;
+            const double var_x219 = 014 * var_x218;
             
             partialF = -var_x215 - var_x219;
         }
@@ -1483,8 +1483,8 @@
         
         
         // Mathematics
-        const double var_AP_sensitive_currents_q_gate__q_infinity = 1.0 / (1.0 + exp(3.7692307692307692 + 0.076923076923076927 * var_chaste_interface__membrane__V)); // dimensionless
-        const double var_AP_sensitive_currents_q_gate__tau_q = 6.0599999999999996 + 39.101999999999997 / (0.065000000000000002 * exp(4.593 + 0.10000000000000001 * var_chaste_interface__membrane__V) + 0.56999999999999995 * exp(-3.52 - 0.080000000000000002 * var_chaste_interface__membrane__V)); // millisecond
+        const double var_AP_sensitive_currents_q_gate__q_infinity = 1.0 / (1.0 + exp(3.7692307692307692 + 076923076923076927 * var_chaste_interface__membrane__V)); // dimensionless
+        const double var_AP_sensitive_currents_q_gate__tau_q = 6.0599999999999996 + 39.101999999999997 / (065000000000000002 * exp(4.593 + 0.10000000000000001 * var_chaste_interface__membrane__V) + 0.56999999999999995 * exp(-3.52 - 080000000000000002 * var_chaste_interface__membrane__V)); // millisecond
         const double d_dt_chaste_interface_var_AP_sensitive_currents_q_gate__q = (-var_chaste_interface__AP_sensitive_currents_q_gate__q + var_AP_sensitive_currents_q_gate__q_infinity) / var_AP_sensitive_currents_q_gate__tau_q; // 1 / millisecond
 
         return d_dt_chaste_interface_var_AP_sensitive_currents_q_gate__q;
@@ -1499,8 +1499,8 @@
             // Units: millivolt; Initial value: -58.600291137693
             
             const double var_x227 = exp(4.593 + 0.10000000000000001 * var_chaste_interface__membrane__V);
-            const double var_x228 = exp(-3.52 - 0.080000000000000002 * var_chaste_interface__membrane__V);
-            const double var_x229 = 1 / (0.065000000000000002 * var_x227 + 0.56999999999999995 * var_x228);
+            const double var_x228 = exp(-3.52 - 080000000000000002 * var_chaste_interface__membrane__V);
+            const double var_x229 = 1 / (065000000000000002 * var_x227 + 0.56999999999999995 * var_x228);
             const double var_x230 = 1 / (6.0599999999999996 + 39.101999999999997 * var_x229);
             
             partialF = -var_x230;
@@ -1521,12 +1521,12 @@
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: millivolt; Initial value: -58.600291137693
         double var_chaste_interface__AP_sensitive_currents_r_gate__r = rY[11];
-        // Units: dimensionless; Initial value: 0.005550489445
+        // Units: dimensionless; Initial value: 005550489445
         
         
         // Mathematics
-        const double var_AP_sensitive_currents_r_gate__r_infinity = 1.0 / (1.0 + exp(1.2866666666666666 - 0.066666666666666666 * var_chaste_interface__membrane__V)); // dimensionless
-        const double var_AP_sensitive_currents_r_gate__tau_r = 2.75352 + 14.40516 / (1.0369999999999999 * exp(2.7548999999999997 + 0.089999999999999997 * var_chaste_interface__membrane__V) + 0.36899999999999999 * exp(-2.8607999999999998 - 0.12 * var_chaste_interface__membrane__V)); // millisecond
+        const double var_AP_sensitive_currents_r_gate__r_infinity = 1.0 / (1.0 + exp(1.2866666666666666 - 066666666666666666 * var_chaste_interface__membrane__V)); // dimensionless
+        const double var_AP_sensitive_currents_r_gate__tau_r = 2.75352 + 14.40516 / (1.0369999999999999 * exp(2.7548999999999997 + 089999999999999997 * var_chaste_interface__membrane__V) + 0.36899999999999999 * exp(-2.8607999999999998 - 0.12 * var_chaste_interface__membrane__V)); // millisecond
         const double d_dt_chaste_interface_var_AP_sensitive_currents_r_gate__r = (-var_chaste_interface__AP_sensitive_currents_r_gate__r + var_AP_sensitive_currents_r_gate__r_infinity) / var_AP_sensitive_currents_r_gate__tau_r; // 1 / millisecond
 
         return d_dt_chaste_interface_var_AP_sensitive_currents_r_gate__r;
@@ -1540,7 +1540,7 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -58.600291137693
             
-            const double var_x233 = exp(2.7548999999999997 + 0.089999999999999997 * var_chaste_interface__membrane__V);
+            const double var_x233 = exp(2.7548999999999997 + 089999999999999997 * var_chaste_interface__membrane__V);
             const double var_x234 = exp(-2.8607999999999998 - 0.12 * var_chaste_interface__membrane__V);
             const double var_x235 = 1 / (1.0369999999999999 * var_x233 + 0.36899999999999999 * var_x234);
             const double var_x236 = 1 / (2.75352 + 14.40516 * var_x235);
@@ -1563,12 +1563,12 @@
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: millivolt; Initial value: -58.600291137693
         double var_chaste_interface__hyperpolarisation_activated_current_y_gate__y = rY[12];
-        // Units: dimensionless; Initial value: 0.067156687129
+        // Units: dimensionless; Initial value: 067156687129
         
         
         // Mathematics
-        const double var_hyperpolarisation_activated_current_y_gate__tau_y = 0.71665290000000004 / (exp(-8.5404617897664554 - 0.022074080614542406 * var_chaste_interface__membrane__V) + exp(-3.8001143986272159 + 0.051999376007487906 * var_chaste_interface__membrane__V)); // millisecond
-        const double var_hyperpolarisation_activated_current_y_gate__y_infinity = 1.0 / (1.0 + exp(4.7407407407407405 + 0.07407407407407407 * var_chaste_interface__membrane__V)); // dimensionless
+        const double var_hyperpolarisation_activated_current_y_gate__tau_y = 0.71665290000000004 / (exp(-8.5404617897664554 - 022074080614542406 * var_chaste_interface__membrane__V) + exp(-3.8001143986272159 + 051999376007487906 * var_chaste_interface__membrane__V)); // millisecond
+        const double var_hyperpolarisation_activated_current_y_gate__y_infinity = 1.0 / (1.0 + exp(4.7407407407407405 + 07407407407407407 * var_chaste_interface__membrane__V)); // dimensionless
         const double d_dt_chaste_interface_var_hyperpolarisation_activated_current_y_gate__y = (-var_chaste_interface__hyperpolarisation_activated_current_y_gate__y + var_hyperpolarisation_activated_current_y_gate__y_infinity) / var_hyperpolarisation_activated_current_y_gate__tau_y; // 1 / millisecond
 
         return d_dt_chaste_interface_var_hyperpolarisation_activated_current_y_gate__y;
@@ -1582,8 +1582,8 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -58.600291137693
             
-            const double var_x239 = exp(-3.8001143986272159 + 0.051999376007487906 * var_chaste_interface__membrane__V);
-            const double var_x240 = exp(-8.5404617897664554 - 0.022074080614542406 * var_chaste_interface__membrane__V);
+            const double var_x239 = exp(-3.8001143986272159 + 051999376007487906 * var_chaste_interface__membrane__V);
+            const double var_x240 = exp(-8.5404617897664554 - 022074080614542406 * var_chaste_interface__membrane__V);
             const double var_x241 = 1.3953756414018557 * var_x240;
             const double var_x242 = 1.3953756414018557 * var_x239;
             
@@ -1609,8 +1609,8 @@
         
         
         // Mathematics
-        const double var_sustained_inward_current_qa_gate__alpha_qa = 1.0 / (0.20000000000000001 * exp(-0.0014285714285714286 * var_chaste_interface__membrane__V) + 0.14999999999999999 * exp(-0.090909090909090912 * var_chaste_interface__membrane__V)); // per_millisecond
-        const double var_sustained_inward_current_qa_gate__beta_qa = 1.0 / (16.0 * exp(0.125 * var_chaste_interface__membrane__V) + 15.0 * exp(0.02 * var_chaste_interface__membrane__V)); // per_millisecond
+        const double var_sustained_inward_current_qa_gate__alpha_qa = 1.0 / (0.20000000000000001 * exp(-0014285714285714286 * var_chaste_interface__membrane__V) + 0.14999999999999999 * exp(-090909090909090912 * var_chaste_interface__membrane__V)); // per_millisecond
+        const double var_sustained_inward_current_qa_gate__beta_qa = 1.0 / (16.0 * exp(0.125 * var_chaste_interface__membrane__V) + 15.0 * exp(02 * var_chaste_interface__membrane__V)); // per_millisecond
         const double var_sustained_inward_current_qa_gate__qa_infinity = 1.0 / (1.0 + exp(-11.4 - 0.20000000000000001 * var_chaste_interface__membrane__V)); // dimensionless
         const double var_sustained_inward_current_qa_gate__tau_qa = 1.0 / (var_sustained_inward_current_qa_gate__alpha_qa + var_sustained_inward_current_qa_gate__beta_qa); // millisecond
         const double d_dt_chaste_interface_var_sustained_inward_current_qa_gate__qa = (-var_chaste_interface__sustained_inward_current_qa_gate__qa + var_sustained_inward_current_qa_gate__qa_infinity) / var_sustained_inward_current_qa_gate__tau_qa; // 1 / millisecond
@@ -1626,10 +1626,10 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -58.600291137693
             
-            const double var_x246 = exp(0.02 * var_chaste_interface__membrane__V);
+            const double var_x246 = exp(02 * var_chaste_interface__membrane__V);
             const double var_x247 = exp(0.125 * var_chaste_interface__membrane__V);
-            const double var_x248 = exp(-0.090909090909090912 * var_chaste_interface__membrane__V);
-            const double var_x249 = exp(-0.0014285714285714286 * var_chaste_interface__membrane__V);
+            const double var_x248 = exp(-090909090909090912 * var_chaste_interface__membrane__V);
+            const double var_x249 = exp(-0014285714285714286 * var_chaste_interface__membrane__V);
             const double var_x250 = 1.0 / (16.0 * var_x247 + 15.0 * var_x246);
             const double var_x251 = 1.0 / (0.20000000000000001 * var_x249 + 0.14999999999999999 * var_x248);
             
@@ -1655,8 +1655,8 @@
         
         
         // Mathematics
-        const double var_sustained_inward_current_qi_gate__alpha_qi = 1.0 / (700.0 * exp(0.014285714285714285 * var_chaste_interface__membrane__V) + 3100.0 * exp(0.076923076923076927 * var_chaste_interface__membrane__V)); // per_millisecond
-        const double var_sustained_inward_current_qi_gate__beta_qi = 1.0 / (50.0 * exp(-0.0014285714285714286 * var_chaste_interface__membrane__V) + 95.0 * exp(-0.10000000000000001 * var_chaste_interface__membrane__V)) + 0.00022900000000000001 / (1.0 + exp(-0.20000000000000001 * var_chaste_interface__membrane__V)); // per_millisecond
+        const double var_sustained_inward_current_qi_gate__alpha_qi = 1.0 / (700 * exp(014285714285714285 * var_chaste_interface__membrane__V) + 3100 * exp(076923076923076927 * var_chaste_interface__membrane__V)); // per_millisecond
+        const double var_sustained_inward_current_qi_gate__beta_qi = 1.0 / (50 * exp(-0014285714285714286 * var_chaste_interface__membrane__V) + 95.0 * exp(-0.10000000000000001 * var_chaste_interface__membrane__V)) + 00022900000000000001 / (1.0 + exp(-0.20000000000000001 * var_chaste_interface__membrane__V)); // per_millisecond
         const double var_sustained_inward_current_qi_gate__qi_infinity = var_sustained_inward_current_qi_gate__alpha_qi / (var_sustained_inward_current_qi_gate__alpha_qi + var_sustained_inward_current_qi_gate__beta_qi); // dimensionless
         const double var_sustained_inward_current_qi_gate__tau_qi = 6.6500000000000004 / (var_sustained_inward_current_qi_gate__alpha_qi + var_sustained_inward_current_qi_gate__beta_qi); // millisecond
         const double d_dt_chaste_interface_var_sustained_inward_current_qi_gate__qi = (-var_chaste_interface__sustained_inward_current_qi_gate__qi + var_sustained_inward_current_qi_gate__qi_infinity) / var_sustained_inward_current_qi_gate__tau_qi; // 1 / millisecond
@@ -1673,14 +1673,14 @@
             // Units: millivolt; Initial value: -58.600291137693
             
             const double var_x177 = 0.20000000000000001 * var_chaste_interface__membrane__V;
-            const double var_x224 = 0.076923076923076927 * var_chaste_interface__membrane__V;
+            const double var_x224 = 076923076923076927 * var_chaste_interface__membrane__V;
             const double var_x243 = -var_x177;
-            const double var_x249 = exp(-0.0014285714285714286 * var_chaste_interface__membrane__V);
+            const double var_x249 = exp(-0014285714285714286 * var_chaste_interface__membrane__V);
             const double var_x252 = exp(-0.10000000000000001 * var_chaste_interface__membrane__V);
-            const double var_x253 = 1 / (50.0 * var_x249 + 95.0 * var_x252);
-            const double var_x254 = exp(0.014285714285714285 * var_chaste_interface__membrane__V);
+            const double var_x253 = 1 / (50 * var_x249 + 95.0 * var_x252);
+            const double var_x254 = exp(014285714285714285 * var_chaste_interface__membrane__V);
             const double var_x255 = exp(var_x224);
-            const double var_x256 = 1 / (700.0 * var_x254 + 3100.0 * var_x255);
+            const double var_x256 = 1 / (700 * var_x254 + 3100 * var_x255);
             const double var_x258 = exp(var_x243);
             const double var_x259 = 1.0 + var_x258;
             const double var_x260 = 1 / var_x259;
@@ -1704,32 +1704,32 @@
     {
         
         double var_chaste_interface__intracellular_ion_concentrations__Cai = rY[15];
-        // Units: millimolar; Initial value: 0.000312494921
+        // Units: millimolar; Initial value: 000312494921
         double var_chaste_interface__intracellular_ion_concentrations__Ca_sub = rY[18];
-        // Units: millimolar; Initial value: 0.00019074741
+        // Units: millimolar; Initial value: 00019074741
         double var_chaste_interface__calcium_buffering__fTMM = rY[21];
         // Units: millimolar; Initial value: 0.350600895635
         double var_chaste_interface__calcium_buffering__fCMi = rY[22];
         // Units: millimolar; Initial value: 0.116947220413
         double var_chaste_interface__calcium_buffering__fTC = rY[24];
-        // Units: millimolar; Initial value: 0.059206293446
+        // Units: millimolar; Initial value: 059206293446
         double var_chaste_interface__calcium_buffering__fTMC = rY[25];
         // Units: millimolar; Initial value: 0.602955114871
         
         
         // Mathematics
-        const double var_calcium_buffering__CM_tot = 0.044999999999999998; // dimensionless
-        const double var_calcium_buffering__TC_tot = 0.031; // dimensionless
-        const double var_calcium_buffering__TMC_tot = 0.062; // dimensionless
+        const double var_calcium_buffering__CM_tot = 044999999999999998; // dimensionless
+        const double var_calcium_buffering__TC_tot = 031; // dimensionless
+        const double var_calcium_buffering__TMC_tot = 062; // dimensionless
         const double var_calcium_buffering__kb_CM = 0.54200000000000004; // per_millisecond
         const double var_calcium_buffering__kb_TC = 0.44600000000000001; // per_millisecond
-        const double var_calcium_buffering__kb_TMC = 0.0075100000000000002; // per_millisecond
+        const double var_calcium_buffering__kb_TMC = 0075100000000000002; // per_millisecond
         const double var_calcium_buffering__kf_CM = 227.69999999999999; // per_millimolar_millisecond
         const double var_calcium_buffering__kf_TC = 88.799999999999997; // per_millimolar_millisecond
         const double var_calcium_buffering__kf_TMC = 227.69999999999999; // per_millimolar_millisecond
-        const double var_intracellular_calcium_dynamics__K_up = 0.00059999999999999995; // millimolar
-        const double var_intracellular_calcium_dynamics__P_up = 0.0050000000000000001; // millimolar_per_millisecond
-        const double var_intracellular_calcium_dynamics__tau_dif_Ca = 0.040000000000000001; // millisecond
+        const double var_intracellular_calcium_dynamics__K_up = 00059999999999999995; // millimolar
+        const double var_intracellular_calcium_dynamics__P_up = 0050000000000000001; // millimolar_per_millisecond
+        const double var_intracellular_calcium_dynamics__tau_dif_Ca = 040000000000000001; // millisecond
         const double var_calcium_buffering__delta_fCMi = -var_chaste_interface__calcium_buffering__fCMi * var_calcium_buffering__kb_CM + (1.0 - var_chaste_interface__calcium_buffering__fCMi) * var_calcium_buffering__kf_CM * var_chaste_interface__intracellular_ion_concentrations__Cai; // millimolar_per_millisecond
         const double var_calcium_buffering__delta_fTC = -var_chaste_interface__calcium_buffering__fTC * var_calcium_buffering__kb_TC + (1.0 - var_chaste_interface__calcium_buffering__fTC) * var_calcium_buffering__kf_TC * var_chaste_interface__intracellular_ion_concentrations__Cai; // millimolar_per_millisecond
         const double var_calcium_buffering__delta_fTMC = -var_chaste_interface__calcium_buffering__fTMC * var_calcium_buffering__kb_TMC + (1.0 - var_chaste_interface__calcium_buffering__fTMC - var_chaste_interface__calcium_buffering__fTMM) * var_calcium_buffering__kf_TMC * var_chaste_interface__intracellular_ion_concentrations__Cai; // millimolar_per_millisecond
@@ -1749,17 +1749,17 @@
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_ion_concentrations__Cai = rY[15];
-            // Units: millimolar; Initial value: 0.000312494921
+            // Units: millimolar; Initial value: 000312494921
             double var_chaste_interface__calcium_buffering__fTMM = rY[21];
             // Units: millimolar; Initial value: 0.350600895635
             double var_chaste_interface__calcium_buffering__fCMi = rY[22];
             // Units: millimolar; Initial value: 0.116947220413
             double var_chaste_interface__calcium_buffering__fTC = rY[24];
-            // Units: millimolar; Initial value: 0.059206293446
+            // Units: millimolar; Initial value: 059206293446
             double var_chaste_interface__calcium_buffering__fTMC = rY[25];
             // Units: millimolar; Initial value: 0.602955114871
             
-            const double var_x270 = 1 / (pow((1.0 + 0.00059999999999999995 / var_chaste_interface__intracellular_ion_concentrations__Cai), 2) * pow(var_chaste_interface__intracellular_ion_concentrations__Cai, 2));
+            const double var_x270 = 1 / (pow((1.0 + 00059999999999999995 / var_chaste_interface__intracellular_ion_concentrations__Cai), 2) * pow(var_chaste_interface__intracellular_ion_concentrations__Cai, 2));
             
             partialF = -27.670820618882221 + 10.246499999999999 * var_chaste_interface__calcium_buffering__fCMi + 2.7527999999999997 * var_chaste_interface__calcium_buffering__fTC + 14.1174 * var_chaste_interface__calcium_buffering__fTMC + 14.1174 * var_chaste_interface__calcium_buffering__fTMM - 7.7327439216924522e-8 * var_x270;
         }
@@ -1777,7 +1777,7 @@
     {
         
         double var_chaste_interface__intracellular_ion_concentrations__Cai = rY[15];
-        // Units: millimolar; Initial value: 0.000312494921
+        // Units: millimolar; Initial value: 000312494921
         double var_chaste_interface__intracellular_ion_concentrations__Ca_up = rY[16];
         // Units: millimolar; Initial value: 1.462338380106
         double var_chaste_interface__intracellular_ion_concentrations__Ca_rel = rY[17];
@@ -1785,9 +1785,9 @@
         
         
         // Mathematics
-        const double var_intracellular_calcium_dynamics__K_up = 0.00059999999999999995; // millimolar
-        const double var_intracellular_calcium_dynamics__P_up = 0.0050000000000000001; // millimolar_per_millisecond
-        const double var_intracellular_calcium_dynamics__tau_tr = 60.0; // millisecond
+        const double var_intracellular_calcium_dynamics__K_up = 00059999999999999995; // millimolar
+        const double var_intracellular_calcium_dynamics__P_up = 0050000000000000001; // millimolar_per_millisecond
+        const double var_intracellular_calcium_dynamics__tau_tr = 60; // millisecond
         const double var_intracellular_calcium_dynamics__j_tr = (-var_chaste_interface__intracellular_ion_concentrations__Ca_rel + var_chaste_interface__intracellular_ion_concentrations__Ca_up) / var_intracellular_calcium_dynamics__tau_tr; // millimolar_per_millisecond
         const double var_intracellular_calcium_dynamics__j_up = var_intracellular_calcium_dynamics__P_up / (1.0 + var_intracellular_calcium_dynamics__K_up / var_chaste_interface__intracellular_ion_concentrations__Cai); // millimolar_per_millisecond
         const double var_intracellular_ion_concentrations__V_rel = 4.2223e-15; // liter
@@ -1804,7 +1804,7 @@
         {
             
             
-            partialF = -0.0017241196262903437;
+            partialF = -0017241196262903437;
         }
         else
         {
@@ -1824,18 +1824,18 @@
         double var_chaste_interface__intracellular_ion_concentrations__Ca_rel = rY[17];
         // Units: millimolar; Initial value: 0.296742023718
         double var_chaste_interface__intracellular_ion_concentrations__Ca_sub = rY[18];
-        // Units: millimolar; Initial value: 0.00019074741
+        // Units: millimolar; Initial value: 00019074741
         double var_chaste_interface__calcium_buffering__fCQ = rY[26];
         // Units: millimolar; Initial value: 0.260317260703
         
         
         // Mathematics
-        const double var_calcium_buffering__CQ_tot = 10.0; // dimensionless
+        const double var_calcium_buffering__CQ_tot = 10; // dimensionless
         const double var_calcium_buffering__kb_CQ = 0.44500000000000001; // per_millisecond
         const double var_calcium_buffering__kf_CQ = 0.53400000000000003; // per_millimolar_millisecond
-        const double var_intracellular_calcium_dynamics__K_rel = 0.0011999999999999999; // millimolar
+        const double var_intracellular_calcium_dynamics__K_rel = 0011999999999999999; // millimolar
         const double var_intracellular_calcium_dynamics__P_rel = 0.5; // per_millisecond
-        const double var_intracellular_calcium_dynamics__tau_tr = 60.0; // millisecond
+        const double var_intracellular_calcium_dynamics__tau_tr = 60; // millisecond
         const double var_calcium_buffering__delta_fCQ = -var_chaste_interface__calcium_buffering__fCQ * var_calcium_buffering__kb_CQ + (1.0 - var_chaste_interface__calcium_buffering__fCQ) * var_calcium_buffering__kf_CQ * var_chaste_interface__intracellular_ion_concentrations__Ca_rel; // millimolar_per_millisecond
         const double var_intracellular_calcium_dynamics__j_rel = (-var_chaste_interface__intracellular_ion_concentrations__Ca_sub + var_chaste_interface__intracellular_ion_concentrations__Ca_rel) * var_intracellular_calcium_dynamics__P_rel / (1.0 + pow(var_intracellular_calcium_dynamics__K_rel, 2) / pow(var_chaste_interface__intracellular_ion_concentrations__Ca_sub, 2)); // millimolar_per_millisecond
         const double var_intracellular_calcium_dynamics__j_tr = (-var_chaste_interface__intracellular_ion_concentrations__Ca_rel + var_chaste_interface__intracellular_ion_concentrations__Ca_up) / var_intracellular_calcium_dynamics__tau_tr; // millimolar_per_millisecond
@@ -1850,7 +1850,7 @@
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_ion_concentrations__Ca_sub = rY[18];
-            // Units: millimolar; Initial value: 0.00019074741
+            // Units: millimolar; Initial value: 00019074741
             double var_chaste_interface__calcium_buffering__fCQ = rY[26];
             // Units: millimolar; Initial value: 0.260317260703
             
@@ -1877,25 +1877,25 @@
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: millivolt; Initial value: -58.600291137693
         double var_chaste_interface__L_type_calcium_channel_current_d_gate__d = rY[1];
-        // Units: dimensionless; Initial value: 0.000602055134
+        // Units: dimensionless; Initial value: 000602055134
         double var_chaste_interface__L_type_calcium_channel_current_f_gate__f = rY[2];
         // Units: dimensionless; Initial value: 0.626999773853
         double var_chaste_interface__L_type_calcium_channel_current_fCa_gate__fCa = rY[3];
         // Units: dimensionless; Initial value: 0.589580408056
         double var_chaste_interface__T_type_calcium_channel_current_d_gate__d = rY[4];
-        // Units: dimensionless; Initial value: 0.004571884917
+        // Units: dimensionless; Initial value: 004571884917
         double var_chaste_interface__T_type_calcium_channel_current_f_gate__f = rY[5];
         // Units: dimensionless; Initial value: 0.249637570396
         double var_chaste_interface__intracellular_ion_concentrations__Cai = rY[15];
-        // Units: millimolar; Initial value: 0.000312494921
+        // Units: millimolar; Initial value: 000312494921
         double var_chaste_interface__intracellular_ion_concentrations__Ca_rel = rY[17];
         // Units: millimolar; Initial value: 0.296742023718
         double var_chaste_interface__intracellular_ion_concentrations__Ca_sub = rY[18];
-        // Units: millimolar; Initial value: 0.00019074741
+        // Units: millimolar; Initial value: 00019074741
         double var_chaste_interface__intracellular_ion_concentrations__Nai = rY[19];
         // Units: millimolar; Initial value: 9.438646305915
         double var_chaste_interface__calcium_buffering__fCMs = rY[23];
-        // Units: millimolar; Initial value: 0.074631965653
+        // Units: millimolar; Initial value: 074631965653
         
         
         // Mathematics
@@ -1903,21 +1903,21 @@
         const double var_L_type_calcium_channel_current__g_CaL = 0.57999999999999996; // nanoS
         const double var_T_type_calcium_channel_current__E_CaT = 45.0; // millivolt
         const double var_T_type_calcium_channel_current__g_CaT = 0.45800000000000002; // nanoS
-        const double var_calcium_buffering__CM_tot = 0.044999999999999998; // dimensionless
+        const double var_calcium_buffering__CM_tot = 044999999999999998; // dimensionless
         const double var_calcium_buffering__kb_CM = 0.54200000000000004; // per_millisecond
         const double var_calcium_buffering__kf_CM = 227.69999999999999; // per_millimolar_millisecond
-        const double var_intracellular_calcium_dynamics__K_rel = 0.0011999999999999999; // millimolar
+        const double var_intracellular_calcium_dynamics__K_rel = 0011999999999999999; // millimolar
         const double var_intracellular_calcium_dynamics__P_rel = 0.5; // per_millisecond
-        const double var_intracellular_calcium_dynamics__tau_dif_Ca = 0.040000000000000001; // millisecond
+        const double var_intracellular_calcium_dynamics__tau_dif_Ca = 040000000000000001; // millisecond
         const double var_calcium_buffering__delta_fCMs = -var_chaste_interface__calcium_buffering__fCMs * var_calcium_buffering__kb_CM + (1.0 - var_chaste_interface__calcium_buffering__fCMs) * var_calcium_buffering__kf_CM * var_chaste_interface__intracellular_ion_concentrations__Ca_sub; // millimolar_per_millisecond
         const double var_intracellular_calcium_dynamics__j_rel = (-var_chaste_interface__intracellular_ion_concentrations__Ca_sub + var_chaste_interface__intracellular_ion_concentrations__Ca_rel) * var_intracellular_calcium_dynamics__P_rel / (1.0 + pow(var_intracellular_calcium_dynamics__K_rel, 2) / pow(var_chaste_interface__intracellular_ion_concentrations__Ca_sub, 2)); // millimolar_per_millisecond
         const double var_intracellular_calcium_dynamics__j_Ca_dif = (-var_chaste_interface__intracellular_ion_concentrations__Cai + var_chaste_interface__intracellular_ion_concentrations__Ca_sub) / var_intracellular_calcium_dynamics__tau_dif_Ca; // millimolar_per_millisecond
         const double var_intracellular_ion_concentrations__Cao = 2.0; // millimolar
-        const double var_intracellular_ion_concentrations__Nao = 140.0; // millimolar
+        const double var_intracellular_ion_concentrations__Nao = 140; // millimolar
         const double var_intracellular_ion_concentrations__V_rel = 4.2223e-15; // liter
         const double var_intracellular_ion_concentrations__V_sub = 3.5097999999999997e-14; // liter
-        const double var_membrane__F = 96485000000000000.0; // femtocoulomb_per_millimole
-        const double var_membrane__R = 8314400000000000.0; // attojoule_per_millimole_kelvin
+        const double var_membrane__F = 96485000000000000; // femtocoulomb_per_millimole
+        const double var_membrane__R = 8314400000000000; // attojoule_per_millimole_kelvin
         const double var_membrane__T = 310.14999999999998; // kelvin
         const double var_L_type_calcium_channel_current__i_CaL = (-var_L_type_calcium_channel_current__E_CaL + var_chaste_interface__membrane__V) * var_L_type_calcium_channel_current__g_CaL * var_chaste_interface__L_type_calcium_channel_current_d_gate__d * var_chaste_interface__L_type_calcium_channel_current_fCa_gate__fCa * var_chaste_interface__L_type_calcium_channel_current_f_gate__f; // picoA
         const double var_T_type_calcium_channel_current__i_CaT = (-var_T_type_calcium_channel_current__E_CaT + var_chaste_interface__membrane__V) * var_T_type_calcium_channel_current__g_CaT * var_chaste_interface__T_type_calcium_channel_current_d_gate__d * var_chaste_interface__T_type_calcium_channel_current_f_gate__f; // picoA
@@ -1927,11 +1927,11 @@
         const double var_sodium_calcium_exchange_current__K2no = 561.39999999999998; // millimolar
         const double var_sodium_calcium_exchange_current__K3ni = 26.440000000000001; // millimolar
         const double var_sodium_calcium_exchange_current__K3no = 4.6630000000000003; // millimolar
-        const double var_sodium_calcium_exchange_current__Kci = 0.0207; // millimolar
+        const double var_sodium_calcium_exchange_current__Kci = 0207; // millimolar
         const double var_sodium_calcium_exchange_current__Kcni = 26.440000000000001; // millimolar
         const double var_sodium_calcium_exchange_current__Kco = 3.6629999999999998; // millimolar
         const double var_sodium_calcium_exchange_current__Qci = 0.13689999999999999; // dimensionless
-        const double var_sodium_calcium_exchange_current__Qco = 0.0; // dimensionless
+        const double var_sodium_calcium_exchange_current__Qco = 0; // dimensionless
         const double var_sodium_calcium_exchange_current__Qn = 0.43149999999999999; // dimensionless
         const double var_sodium_calcium_exchange_current__di = 1.0 + (1.0 + (1.0 + var_chaste_interface__intracellular_ion_concentrations__Nai / var_sodium_calcium_exchange_current__K3ni) * var_chaste_interface__intracellular_ion_concentrations__Nai / var_sodium_calcium_exchange_current__K2ni) * var_chaste_interface__intracellular_ion_concentrations__Nai / var_sodium_calcium_exchange_current__K1ni + (1.0 + var_chaste_interface__intracellular_ion_concentrations__Nai / var_sodium_calcium_exchange_current__Kcni + exp(-var_membrane__F * var_chaste_interface__membrane__V * var_sodium_calcium_exchange_current__Qci / (var_membrane__R * var_membrane__T))) * var_chaste_interface__intracellular_ion_concentrations__Ca_sub / var_sodium_calcium_exchange_current__Kci; // dimensionless
         const double var_sodium_calcium_exchange_current__do = 1.0 + (1.0 + exp(var_membrane__F * var_chaste_interface__membrane__V * var_sodium_calcium_exchange_current__Qco / (var_membrane__R * var_membrane__T))) * var_intracellular_ion_concentrations__Cao / var_sodium_calcium_exchange_current__Kco + (1.0 + var_intracellular_ion_concentrations__Nao / var_sodium_calcium_exchange_current__K2no) * (1.0 + var_intracellular_ion_concentrations__Nao / var_sodium_calcium_exchange_current__K3no) * var_intracellular_ion_concentrations__Nao / var_sodium_calcium_exchange_current__K1no; // dimensionless
@@ -1964,25 +1964,25 @@
             double var_chaste_interface__intracellular_ion_concentrations__Ca_rel = rY[17];
             // Units: millimolar; Initial value: 0.296742023718
             double var_chaste_interface__intracellular_ion_concentrations__Ca_sub = rY[18];
-            // Units: millimolar; Initial value: 0.00019074741
+            // Units: millimolar; Initial value: 00019074741
             double var_chaste_interface__intracellular_ion_concentrations__Nai = rY[19];
             // Units: millimolar; Initial value: 9.438646305915
             double var_chaste_interface__calcium_buffering__fCMs = rY[23];
-            // Units: millimolar; Initial value: 0.074631965653
+            // Units: millimolar; Initial value: 074631965653
             
-            const double var_x5 = exp(-0.0051222473865587953 * var_chaste_interface__membrane__V);
-            const double var_x6 = 0.037821482602117998 * var_chaste_interface__intracellular_ion_concentrations__Nai;
+            const double var_x5 = exp(-0051222473865587953 * var_chaste_interface__membrane__V);
+            const double var_x6 = 037821482602117998 * var_chaste_interface__intracellular_ion_concentrations__Nai;
             const double var_x7 = 1.0 + var_x6;
             const double var_x8 = (var_x5 + var_x7) * var_chaste_interface__intracellular_ion_concentrations__Ca_sub;
             const double var_x9 = var_x7 * var_chaste_interface__intracellular_ion_concentrations__Nai;
             const double var_x10 = (1.0 + 0.43687199650502401 * var_x9) * var_chaste_interface__intracellular_ion_concentrations__Nai;
-            const double var_x11 = pow((0.0207 + var_x8 + 5.2365292183152033e-5 * var_x10), (-2));
+            const double var_x11 = pow((0207 + var_x8 + 5.2365292183152033e-5 * var_x10), (-2));
             const double var_x12 = pow(var_chaste_interface__intracellular_ion_concentrations__Ca_sub, 2);
-            const double var_x15 = 1 / (1.0 + 48.309178743961354 * var_x8 + 0.0025297242600556538 * var_x10);
+            const double var_x15 = 1 / (1.0 + 48.309178743961354 * var_x8 + 0025297242600556538 * var_x10);
             const double var_x16 = var_x5 * var_chaste_interface__intracellular_ion_concentrations__Ca_sub;
             const double var_x17 = var_x15 * var_x16;
             const double var_x19 = pow(var_chaste_interface__intracellular_ion_concentrations__Nai, 2);
-            const double var_x20 = 0.0080724972509135153 * var_chaste_interface__membrane__V;
+            const double var_x20 = 0080724972509135153 * var_chaste_interface__membrane__V;
             const double var_x21 = exp(var_x20);
             const double var_x22 = var_x15 * var_x21;
             const double var_x23 = var_x19 * var_x22;
@@ -1995,7 +1995,7 @@
             const double var_x33 = 48.309178743961354 * var_x5;
             const double var_x34 = var_x15 * var_x33;
             const double var_x35 = var_x34 * var_chaste_interface__intracellular_ion_concentrations__Ca_sub;
-            const double var_x36 = var_x35 + 0.0011051656880977081 * var_x24;
+            const double var_x36 = var_x35 + 0011051656880977081 * var_x24;
             const double var_x37 = var_x21 * var_x36;
             const double var_x38 = var_x30 * var_x37;
             const double var_x40 = exp(-var_x20);
@@ -2026,13 +2026,13 @@
             const double var_x74 = var_x41 * var_x61;
             const double var_x75 = var_x24 * var_x74;
             const double var_x76 = var_x38 + var_x35 * var_x42;
-            const double var_x77 = 1 / (var_x57 + var_x76 + 0.0011051656880977081 * var_x71 + 0.00060342106912241779 * var_x75 + var_x17 * var_x73 + var_x36 * var_x60);
+            const double var_x77 = 1 / (var_x57 + var_x76 + 0011051656880977081 * var_x71 + 00060342106912241779 * var_x75 + var_x17 * var_x73 + var_x36 * var_x60);
             const double var_x84 = var_x36 * var_x51;
             const double var_x87 = var_x21 * var_x67 * var_x68 * var_x7;
             const double var_x88 = var_x26 * var_x74;
-            const double var_x90 = (var_x50 * var_x76 - var_x35 * var_x57) / pow((var_x45 + 0.0207 * var_x38 + 0.020032765807428299 * var_x54 + 2.2876929743622558e-5 * var_x71 + 0.011302211302211302 * var_x63 + 1.2490816130834047e-5 * var_x75 + 0.013327915425555734 * var_x84 + var_x17 * var_x52 * var_x55), 2);
+            const double var_x90 = (var_x50 * var_x76 - var_x35 * var_x57) / pow((var_x45 + 0207 * var_x38 + 020032765807428299 * var_x54 + 2.2876929743622558e-5 * var_x71 + 011302211302211302 * var_x63 + 1.2490816130834047e-5 * var_x75 + 013327915425555734 * var_x84 + var_x17 * var_x52 * var_x55), 2);
             const double var_x124 = var_x11 * (-48.309178743961354 - var_x33 - 1.8271247633873431 * var_chaste_interface__intracellular_ion_concentrations__Nai);
-            const double var_x125 = 0.0207 * var_x16;
+            const double var_x125 = 0207 * var_x16;
             const double var_x126 = var_x124 * var_x125;
             const double var_x127 = 4.7355244569298691e-7 * var_x26;
             const double var_x128 = var_x126 + var_x34 + var_x124 * var_x127;
@@ -2040,16 +2040,16 @@
             const double var_x130 = var_x34 * var_x42;
             const double var_x131 = var_x126 * var_x42;
             const double var_x132 = var_x50 * (var_x129 + var_x130 + var_x131) - var_x126 * var_x57 - var_x34 * var_x57;
-            const double var_x133 = 0.013771830208622637 * var_x16 * var_x72;
+            const double var_x133 = 013771830208622637 * var_x16 * var_x72;
             const double var_x134 = 4.7355244569298691e-7 * var_x87;
             const double var_x135 = 2.5855989390826479e-7 * var_x88;
             const double var_x136 = -var_x129 - var_x130 - var_x131 - var_x124 * var_x133 - var_x124 * var_x134 - var_x124 * var_x135 - var_x128 * var_x60 - var_x15 * var_x5 * var_x73;
             const double var_x272 = 1.0 + 1.4399999999999998e-6 / var_x12;
             const double var_x273 = 1 / var_x272;
             const double var_x275 = (-var_chaste_interface__intracellular_ion_concentrations__Ca_sub + var_chaste_interface__intracellular_ion_concentrations__Ca_rel) / (pow(var_x272, 2) * pow(var_chaste_interface__intracellular_ion_concentrations__Ca_sub, 3));
-            const double var_x276 = 0.036912022524200436 * var_x77;
+            const double var_x276 = 036912022524200436 * var_x77;
             const double var_x277 = 1.5816432531394641e-5 * var_x90;
-            const double var_x279 = 0.060150151005755319 * var_x273;
+            const double var_x279 = 060150151005755319 * var_x273;
             
             partialF = -35.246499999999997 - var_x279 + 10.246499999999999 * var_chaste_interface__calcium_buffering__fCMs + 1.7323243489657528e-7 * var_x275 + (var_x132 * var_x276 + var_x136 * var_x277) * mParameters[0];
         }
@@ -2069,13 +2069,13 @@
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: millivolt; Initial value: -58.600291137693
         double var_chaste_interface__hyperpolarisation_activated_current_y_gate__y = rY[12];
-        // Units: dimensionless; Initial value: 0.067156687129
+        // Units: dimensionless; Initial value: 067156687129
         double var_chaste_interface__sustained_inward_current_qa_gate__qa = rY[13];
         // Units: dimensionless; Initial value: 0.426018100136
         double var_chaste_interface__sustained_inward_current_qi_gate__qi = rY[14];
         // Units: dimensionless; Initial value: 0.333330378068
         double var_chaste_interface__intracellular_ion_concentrations__Ca_sub = rY[18];
-        // Units: millimolar; Initial value: 0.00019074741
+        // Units: millimolar; Initial value: 00019074741
         double var_chaste_interface__intracellular_ion_concentrations__Nai = rY[19];
         // Units: millimolar; Initial value: 9.438646305915
         
@@ -2084,11 +2084,11 @@
         const double var_hyperpolarisation_activated_current__g_h_Na = 0.14373749999999999; // nanoS
         const double var_intracellular_ion_concentrations__Cao = 2.0; // millimolar
         const double var_intracellular_ion_concentrations__Ko = 5.4000000000000004; // millimolar
-        const double var_intracellular_ion_concentrations__Nao = 140.0; // millimolar
+        const double var_intracellular_ion_concentrations__Nao = 140; // millimolar
         const double var_intracellular_ion_concentrations__V_i = 1.5835000000000001e-12; // liter
         const double var_intracellular_ion_concentrations__V_sub = 3.5097999999999997e-14; // liter
-        const double var_membrane__F = 96485000000000000.0; // femtocoulomb_per_millimole
-        const double var_membrane__R = 8314400000000000.0; // attojoule_per_millimole_kelvin
+        const double var_membrane__F = 96485000000000000; // femtocoulomb_per_millimole
+        const double var_membrane__R = 8314400000000000; // attojoule_per_millimole_kelvin
         const double var_membrane__T = 310.14999999999998; // kelvin
         const double var_reversal_potentials__E_Na = var_membrane__R * var_membrane__T * log(var_intracellular_ion_concentrations__Nao / var_chaste_interface__intracellular_ion_concentrations__Nai) / var_membrane__F; // millivolt
         const double var_hyperpolarisation_activated_current__i_h_Na = pow(var_chaste_interface__hyperpolarisation_activated_current_y_gate__y, 2) * (-var_reversal_potentials__E_Na + var_chaste_interface__membrane__V) * var_hyperpolarisation_activated_current__g_h_Na; // picoA
@@ -2098,11 +2098,11 @@
         const double var_sodium_calcium_exchange_current__K2no = 561.39999999999998; // millimolar
         const double var_sodium_calcium_exchange_current__K3ni = 26.440000000000001; // millimolar
         const double var_sodium_calcium_exchange_current__K3no = 4.6630000000000003; // millimolar
-        const double var_sodium_calcium_exchange_current__Kci = 0.0207; // millimolar
+        const double var_sodium_calcium_exchange_current__Kci = 0207; // millimolar
         const double var_sodium_calcium_exchange_current__Kcni = 26.440000000000001; // millimolar
         const double var_sodium_calcium_exchange_current__Kco = 3.6629999999999998; // millimolar
         const double var_sodium_calcium_exchange_current__Qci = 0.13689999999999999; // dimensionless
-        const double var_sodium_calcium_exchange_current__Qco = 0.0; // dimensionless
+        const double var_sodium_calcium_exchange_current__Qco = 0; // dimensionless
         const double var_sodium_calcium_exchange_current__Qn = 0.43149999999999999; // dimensionless
         const double var_sodium_calcium_exchange_current__di = 1.0 + (1.0 + (1.0 + var_chaste_interface__intracellular_ion_concentrations__Nai / var_sodium_calcium_exchange_current__K3ni) * var_chaste_interface__intracellular_ion_concentrations__Nai / var_sodium_calcium_exchange_current__K2ni) * var_chaste_interface__intracellular_ion_concentrations__Nai / var_sodium_calcium_exchange_current__K1ni + (1.0 + var_chaste_interface__intracellular_ion_concentrations__Nai / var_sodium_calcium_exchange_current__Kcni + exp(-var_membrane__F * var_chaste_interface__membrane__V * var_sodium_calcium_exchange_current__Qci / (var_membrane__R * var_membrane__T))) * var_chaste_interface__intracellular_ion_concentrations__Ca_sub / var_sodium_calcium_exchange_current__Kci; // dimensionless
         const double var_sodium_calcium_exchange_current__do = 1.0 + (1.0 + exp(var_membrane__F * var_chaste_interface__membrane__V * var_sodium_calcium_exchange_current__Qco / (var_membrane__R * var_membrane__T))) * var_intracellular_ion_concentrations__Cao / var_sodium_calcium_exchange_current__Kco + (1.0 + var_intracellular_ion_concentrations__Nao / var_sodium_calcium_exchange_current__K2no) * (1.0 + var_intracellular_ion_concentrations__Nao / var_sodium_calcium_exchange_current__K3no) * var_intracellular_ion_concentrations__Nao / var_sodium_calcium_exchange_current__K1no; // dimensionless
@@ -2120,14 +2120,14 @@
         const double var_sodium_calcium_exchange_current__x3 = (var_sodium_calcium_exchange_current__k21 + var_sodium_calcium_exchange_current__k23) * var_sodium_calcium_exchange_current__k14 * var_sodium_calcium_exchange_current__k43 + (var_sodium_calcium_exchange_current__k41 + var_sodium_calcium_exchange_current__k43) * var_sodium_calcium_exchange_current__k12 * var_sodium_calcium_exchange_current__k23; // dimensionless
         const double var_sodium_calcium_exchange_current__x4 = (var_sodium_calcium_exchange_current__k12 + var_sodium_calcium_exchange_current__k14) * var_sodium_calcium_exchange_current__k23 * var_sodium_calcium_exchange_current__k34 + (var_sodium_calcium_exchange_current__k32 + var_sodium_calcium_exchange_current__k34) * var_sodium_calcium_exchange_current__k14 * var_sodium_calcium_exchange_current__k21; // dimensionless
         const double var_sodium_calcium_exchange_current__i_NaCa = (var_sodium_calcium_exchange_current__k21 * var_sodium_calcium_exchange_current__x2 - var_sodium_calcium_exchange_current__k12 * var_sodium_calcium_exchange_current__x1) * var_sodium_calcium_exchange_current__kNaCa / (var_sodium_calcium_exchange_current__x1 + var_sodium_calcium_exchange_current__x2 + var_sodium_calcium_exchange_current__x3 + var_sodium_calcium_exchange_current__x4); // picoA
-        const double var_sodium_dependent_background_current__g_b_Na = 0.0054000000000000003; // nanoS
+        const double var_sodium_dependent_background_current__g_b_Na = 0054000000000000003; // nanoS
         const double var_sodium_dependent_background_current__i_b_Na = (-var_reversal_potentials__E_Na + var_chaste_interface__membrane__V) * var_sodium_dependent_background_current__g_b_Na; // picoA
         const double var_sodium_potassium_pump_current__Km_Kp = 1.3999999999999999; // millimolar
         const double var_sodium_potassium_pump_current__Km_Nap = 14.0; // millimolar
         const double var_sodium_potassium_pump_current__i_NaK_max = 3.6000000000000001; // picoA
-        const double var_sodium_potassium_pump_current__i_NaK = var_sodium_potassium_pump_current__i_NaK_max / ((1.0 + pow((var_sodium_potassium_pump_current__Km_Kp / var_intracellular_ion_concentrations__Ko), 1.2)) * (1.0 + pow((var_sodium_potassium_pump_current__Km_Nap / var_chaste_interface__intracellular_ion_concentrations__Nai), 1.3)) * (1.0 + exp(-4.0 + 0.033333333333333333 * var_reversal_potentials__E_Na - 0.033333333333333333 * var_chaste_interface__membrane__V))); // picoA
+        const double var_sodium_potassium_pump_current__i_NaK = var_sodium_potassium_pump_current__i_NaK_max / ((1.0 + pow((var_sodium_potassium_pump_current__Km_Kp / var_intracellular_ion_concentrations__Ko), 1.2)) * (1.0 + pow((var_sodium_potassium_pump_current__Km_Nap / var_chaste_interface__intracellular_ion_concentrations__Nai), 1.3)) * (1.0 + exp(-4.0 + 033333333333333333 * var_reversal_potentials__E_Na - 033333333333333333 * var_chaste_interface__membrane__V))); // picoA
         const double var_sustained_inward_current__E_st = 37.399999999999999; // millivolt
-        const double var_sustained_inward_current__g_st = 0.014999999999999999; // nanoS
+        const double var_sustained_inward_current__g_st = 014999999999999999; // nanoS
         const double var_sustained_inward_current__i_st = (-var_sustained_inward_current__E_st + var_chaste_interface__membrane__V) * var_sustained_inward_current__g_st * var_chaste_interface__sustained_inward_current_qa_gate__qa * var_chaste_interface__sustained_inward_current_qi_gate__qi; // picoA
         const double d_dt_chaste_interface_var_intracellular_ion_concentrations__Nai = 1.0 * (-var_hyperpolarisation_activated_current__i_h_Na - var_sodium_dependent_background_current__i_b_Na - var_sustained_inward_current__i_st - 3.0 * var_sodium_calcium_exchange_current__i_NaCa - 3.0 * var_sodium_potassium_pump_current__i_NaK) * mParameters[0] / ((var_intracellular_ion_concentrations__V_i + var_intracellular_ion_concentrations__V_sub) * var_membrane__F); // millimolar / millisecond
 
@@ -2142,25 +2142,25 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -58.600291137693
             double var_chaste_interface__hyperpolarisation_activated_current_y_gate__y = rY[12];
-            // Units: dimensionless; Initial value: 0.067156687129
+            // Units: dimensionless; Initial value: 067156687129
             double var_chaste_interface__intracellular_ion_concentrations__Ca_sub = rY[18];
-            // Units: millimolar; Initial value: 0.00019074741
+            // Units: millimolar; Initial value: 00019074741
             double var_chaste_interface__intracellular_ion_concentrations__Nai = rY[19];
             // Units: millimolar; Initial value: 9.438646305915
             
             const double var_x0 = pow(var_chaste_interface__hyperpolarisation_activated_current_y_gate__y, 2);
-            const double var_x5 = exp(-0.0051222473865587953 * var_chaste_interface__membrane__V);
-            const double var_x6 = 0.037821482602117998 * var_chaste_interface__intracellular_ion_concentrations__Nai;
+            const double var_x5 = exp(-0051222473865587953 * var_chaste_interface__membrane__V);
+            const double var_x6 = 037821482602117998 * var_chaste_interface__intracellular_ion_concentrations__Nai;
             const double var_x7 = 1.0 + var_x6;
             const double var_x8 = (var_x5 + var_x7) * var_chaste_interface__intracellular_ion_concentrations__Ca_sub;
             const double var_x9 = var_x7 * var_chaste_interface__intracellular_ion_concentrations__Nai;
             const double var_x10 = (1.0 + 0.43687199650502401 * var_x9) * var_chaste_interface__intracellular_ion_concentrations__Nai;
-            const double var_x11 = pow((0.0207 + var_x8 + 5.2365292183152033e-5 * var_x10), (-2));
-            const double var_x15 = 1 / (1.0 + 48.309178743961354 * var_x8 + 0.0025297242600556538 * var_x10);
+            const double var_x11 = pow((0207 + var_x8 + 5.2365292183152033e-5 * var_x10), (-2));
+            const double var_x15 = 1 / (1.0 + 48.309178743961354 * var_x8 + 0025297242600556538 * var_x10);
             const double var_x16 = var_x5 * var_chaste_interface__intracellular_ion_concentrations__Ca_sub;
             const double var_x17 = var_x15 * var_x16;
             const double var_x19 = pow(var_chaste_interface__intracellular_ion_concentrations__Nai, 2);
-            const double var_x20 = 0.0080724972509135153 * var_chaste_interface__membrane__V;
+            const double var_x20 = 0080724972509135153 * var_chaste_interface__membrane__V;
             const double var_x21 = exp(var_x20);
             const double var_x22 = var_x15 * var_x21;
             const double var_x23 = var_x19 * var_x22;
@@ -2173,7 +2173,7 @@
             const double var_x33 = 48.309178743961354 * var_x5;
             const double var_x34 = var_x15 * var_x33;
             const double var_x35 = var_x34 * var_chaste_interface__intracellular_ion_concentrations__Ca_sub;
-            const double var_x36 = var_x35 + 0.0011051656880977081 * var_x24;
+            const double var_x36 = var_x35 + 0011051656880977081 * var_x24;
             const double var_x37 = var_x21 * var_x36;
             const double var_x38 = var_x30 * var_x37;
             const double var_x40 = exp(-var_x20);
@@ -2204,43 +2204,43 @@
             const double var_x74 = var_x41 * var_x61;
             const double var_x75 = var_x24 * var_x74;
             const double var_x76 = var_x38 + var_x35 * var_x42;
-            const double var_x77 = 1 / (var_x57 + var_x76 + 0.0011051656880977081 * var_x71 + 0.00060342106912241779 * var_x75 + var_x17 * var_x73 + var_x36 * var_x60);
+            const double var_x77 = 1 / (var_x57 + var_x76 + 0011051656880977081 * var_x71 + 00060342106912241779 * var_x75 + var_x17 * var_x73 + var_x36 * var_x60);
             const double var_x84 = var_x36 * var_x51;
             const double var_x86 = var_x69 * var_x7;
             const double var_x87 = var_x21 * var_x67 * var_x68 * var_x7;
             const double var_x88 = var_x26 * var_x74;
-            const double var_x90 = (var_x50 * var_x76 - var_x35 * var_x57) / pow((var_x45 + 0.0207 * var_x38 + 0.020032765807428299 * var_x54 + 2.2876929743622558e-5 * var_x71 + 0.011302211302211302 * var_x63 + 1.2490816130834047e-5 * var_x75 + 0.013327915425555734 * var_x84 + var_x17 * var_x52 * var_x55), 2);
+            const double var_x90 = (var_x50 * var_x76 - var_x35 * var_x57) / pow((var_x45 + 0207 * var_x38 + 020032765807428299 * var_x54 + 2.2876929743622558e-5 * var_x71 + 011302211302211302 * var_x63 + 1.2490816130834047e-5 * var_x75 + 013327915425555734 * var_x84 + var_x17 * var_x52 * var_x55), 2);
             const double var_x92 = 1 / var_chaste_interface__intracellular_ion_concentrations__Nai;
             const double var_x93 = pow(var_x92, 1.3);
-            const double var_x94 = log(140.0 * var_x92);
-            const double var_x95 = 0.033333333333333333 * var_chaste_interface__membrane__V;
+            const double var_x94 = log(140 * var_x92);
+            const double var_x95 = 033333333333333333 * var_chaste_interface__membrane__V;
             const double var_x96 = -var_x95;
             const double var_x97 = exp(-4.0 + var_x96 + 0.89088499421326284 * var_x94);
             const double var_x98 = 1.0 + var_x97;
             const double var_x99 = var_x97 / (pow(var_x98, 2) * (1.0 + 30.900566853219949 * var_x93));
-            const double var_x125 = 0.0207 * var_x16;
+            const double var_x125 = 0207 * var_x16;
             const double var_x127 = 4.7355244569298691e-7 * var_x26;
-            const double var_x133 = 0.013771830208622637 * var_x16 * var_x72;
+            const double var_x133 = 013771830208622637 * var_x16 * var_x72;
             const double var_x134 = 4.7355244569298691e-7 * var_x87;
             const double var_x135 = 2.5855989390826479e-7 * var_x88;
             const double var_x137 = var_x29 * var_x37;
-            const double var_x138 = var_x11 * (-0.0025297242600556538 - 0.0011051656880977081 * var_x9 - 1.8271247633873431 * var_chaste_interface__intracellular_ion_concentrations__Ca_sub - (0.0011051656880977081 + 8.3598009689690465e-5 * var_chaste_interface__intracellular_ion_concentrations__Nai) * var_chaste_interface__intracellular_ion_concentrations__Nai);
+            const double var_x138 = var_x11 * (-0025297242600556538 - 0011051656880977081 * var_x9 - 1.8271247633873431 * var_chaste_interface__intracellular_ion_concentrations__Ca_sub - (0011051656880977081 + 8.3598009689690465e-5 * var_chaste_interface__intracellular_ion_concentrations__Nai) * var_chaste_interface__intracellular_ion_concentrations__Nai);
             const double var_x139 = var_x125 * var_x138;
             const double var_x140 = var_x22 * var_x9;
-            const double var_x141 = var_x139 + 0.0022103313761954162 * var_x140 + 4.1799004844845232e-5 * var_x23 + var_x127 * var_x138;
+            const double var_x141 = var_x139 + 0022103313761954162 * var_x140 + 4.1799004844845232e-5 * var_x23 + var_x127 * var_x138;
             const double var_x142 = var_x141 * var_x31;
             const double var_x143 = pow((1 + var_x6), (-2));
-            const double var_x144 = 0.0014304645462223146 * var_x143 * var_chaste_interface__intracellular_ion_concentrations__Nai;
+            const double var_x144 = 0014304645462223146 * var_x143 * var_chaste_interface__intracellular_ion_concentrations__Nai;
             const double var_x145 = var_x144 * var_x37;
             const double var_x146 = var_x139 * var_x42;
             const double var_x147 = var_x29 - var_x144;
             const double var_x148 = var_x147 * var_x21;
             const double var_x149 = var_x50 * (var_x137 + var_x142 + var_x146 - var_x145) - var_x139 * var_x57 - 26.376837971040871 * var_x148 * var_x17 * var_x61;
             const double var_x150 = var_x0 * var_x92;
-            const double var_x151 = var_x145 - var_x137 - var_x142 - var_x146 - 4.1799004844845232e-5 * var_x70 - var_x133 * var_x138 - var_x134 * var_x138 - var_x135 * var_x138 - var_x141 * var_x60 - var_x148 * var_x50 - 0.0033154970642931239 * var_x24 * var_x67 - 0.0012068421382448356 * var_x140 * var_x74 - 2.2822279467564968e-5 * var_x23 * var_x74 + 1.5809003345251601e-6 * var_x143 * var_x53 * var_x86 - 32.140377158446256 * var_x147 * var_x17 * var_x51;
-            const double var_x153 = var_x92 * var_x93 / (var_x98 * pow((0.032361865876120534 + var_x93), 2));
+            const double var_x151 = var_x145 - var_x137 - var_x142 - var_x146 - 4.1799004844845232e-5 * var_x70 - var_x133 * var_x138 - var_x134 * var_x138 - var_x135 * var_x138 - var_x141 * var_x60 - var_x148 * var_x50 - 0033154970642931239 * var_x24 * var_x67 - 0012068421382448356 * var_x140 * var_x74 - 2.2822279467564968e-5 * var_x23 * var_x74 + 1.5809003345251601e-6 * var_x143 * var_x53 * var_x86 - 32.140377158446256 * var_x147 * var_x17 * var_x51;
+            const double var_x153 = var_x92 * var_x93 / (var_x98 * pow((032361865876120534 + var_x93), 2));
             const double var_x154 = var_x92 * var_x99;
-            const double var_x280 = 0.0024012228482076215 * var_x77;
+            const double var_x280 = 0024012228482076215 * var_x77;
             const double var_x281 = 1.0288999782284837e-6 * var_x90;
             
             partialF = (-2.4598814923744084e-5 * var_x150 - 2.4287088639502301e-6 * var_x153 - 5.1430434785105685e-5 * var_x154 - 9.2414019019544699e-7 * var_x92 - var_x149 * var_x280 - var_x151 * var_x281) * mParameters[0];
@@ -2267,13 +2267,13 @@
         double var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pi_gate__piy = rY[8];
         // Units: dimensionless; Initial value: 0.852396631172
         double var_chaste_interface__slowly_activating_delayed_rectifier_potassium_current_n_gate__n = rY[9];
-        // Units: dimensionless; Initial value: 0.054409723782
+        // Units: dimensionless; Initial value: 054409723782
         double var_chaste_interface__AP_sensitive_currents_q_gate__q = rY[10];
         // Units: dimensionless; Initial value: 0.531446952485
         double var_chaste_interface__AP_sensitive_currents_r_gate__r = rY[11];
-        // Units: dimensionless; Initial value: 0.005550489445
+        // Units: dimensionless; Initial value: 005550489445
         double var_chaste_interface__hyperpolarisation_activated_current_y_gate__y = rY[12];
-        // Units: dimensionless; Initial value: 0.067156687129
+        // Units: dimensionless; Initial value: 067156687129
         double var_chaste_interface__intracellular_ion_concentrations__Nai = rY[19];
         // Units: millimolar; Initial value: 9.438646305915
         double var_chaste_interface__intracellular_ion_concentrations__Ki = rY[20];
@@ -2281,19 +2281,19 @@
         
         
         // Mathematics
-        const double var_AP_sensitive_currents__g_sus = 0.02; // nanoS
+        const double var_AP_sensitive_currents__g_sus = 02; // nanoS
         const double var_AP_sensitive_currents__g_to = 0.17999999999999999; // nanoS
         const double var_hyperpolarisation_activated_current__g_h_K = 0.23126250000000001; // nanoS
         const double var_intracellular_ion_concentrations__Ko = 5.4000000000000004; // millimolar
-        const double var_background_muscarinic_potassium_channel_current__g_K_ACh = 0.0011000000000000001 * pow(var_intracellular_ion_concentrations__Ko, 0.40999999999999998); // picoA
-        const double var_intracellular_ion_concentrations__Nao = 140.0; // millimolar
+        const double var_background_muscarinic_potassium_channel_current__g_K_ACh = 0011000000000000001 * pow(var_intracellular_ion_concentrations__Ko, 0.40999999999999998); // picoA
+        const double var_intracellular_ion_concentrations__Nao = 140; // millimolar
         const double var_intracellular_ion_concentrations__V_i = 1.5835000000000001e-12; // liter
         const double var_intracellular_ion_concentrations__V_sub = 3.5097999999999997e-14; // liter
-        const double var_membrane__F = 96485000000000000.0; // femtocoulomb_per_millimole
-        const double var_membrane__R = 8314400000000000.0; // attojoule_per_millimole_kelvin
+        const double var_membrane__F = 96485000000000000; // femtocoulomb_per_millimole
+        const double var_membrane__R = 8314400000000000; // attojoule_per_millimole_kelvin
         const double var_membrane__T = 310.14999999999998; // kelvin
         const double var_background_muscarinic_potassium_channel_current__i_K_ACh = 1.0 * (-var_intracellular_ion_concentrations__Ko * exp(-var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T)) + var_chaste_interface__intracellular_ion_concentrations__Ki) * var_background_muscarinic_potassium_channel_current__g_K_ACh; // picoA
-        const double var_rapidly_activating_delayed_rectifier_potassium_current__g_Kr = 0.025000000000000001 * pow(var_intracellular_ion_concentrations__Ko, 0.58999999999999997); // nanoS
+        const double var_rapidly_activating_delayed_rectifier_potassium_current__g_Kr = 025000000000000001 * pow(var_intracellular_ion_concentrations__Ko, 0.58999999999999997); // nanoS
         const double var_reversal_potentials__E_K = var_membrane__R * var_membrane__T * log(var_intracellular_ion_concentrations__Ko / var_chaste_interface__intracellular_ion_concentrations__Ki) / var_membrane__F; // millivolt
         const double var_AP_sensitive_currents__i_sus = (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * var_AP_sensitive_currents__g_sus * var_chaste_interface__AP_sensitive_currents_r_gate__r; // picoA
         const double var_AP_sensitive_currents__i_to = (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * var_AP_sensitive_currents__g_to * var_chaste_interface__AP_sensitive_currents_q_gate__q * var_chaste_interface__AP_sensitive_currents_r_gate__r; // picoA
@@ -2301,12 +2301,12 @@
         const double var_rapidly_activating_delayed_rectifier_potassium_current__i_Kr = (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * (0.40000000000000002 * var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paS + 0.59999999999999998 * var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paF) * var_rapidly_activating_delayed_rectifier_potassium_current__g_Kr * var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pi_gate__piy; // picoA
         const double var_reversal_potentials__E_Na = var_membrane__R * var_membrane__T * log(var_intracellular_ion_concentrations__Nao / var_chaste_interface__intracellular_ion_concentrations__Nai) / var_membrane__F; // millivolt
         const double var_slowly_activating_delayed_rectifier_potassium_current__E_Ks = var_membrane__R * var_membrane__T * log((1.0 * var_intracellular_ion_concentrations__Ko + 0.12 * var_intracellular_ion_concentrations__Nao) / (1.0 * var_chaste_interface__intracellular_ion_concentrations__Ki + 0.12 * var_chaste_interface__intracellular_ion_concentrations__Nai)) / var_membrane__F; // millivolt
-        const double var_slowly_activating_delayed_rectifier_potassium_current__g_Ks = 0.025899999999999999; // nanoS
+        const double var_slowly_activating_delayed_rectifier_potassium_current__g_Ks = 025899999999999999; // nanoS
         const double var_slowly_activating_delayed_rectifier_potassium_current__i_Ks = pow(var_chaste_interface__slowly_activating_delayed_rectifier_potassium_current_n_gate__n, 2) * (-var_slowly_activating_delayed_rectifier_potassium_current__E_Ks + var_chaste_interface__membrane__V) * var_slowly_activating_delayed_rectifier_potassium_current__g_Ks; // picoA
         const double var_sodium_potassium_pump_current__Km_Kp = 1.3999999999999999; // millimolar
         const double var_sodium_potassium_pump_current__Km_Nap = 14.0; // millimolar
         const double var_sodium_potassium_pump_current__i_NaK_max = 3.6000000000000001; // picoA
-        const double var_sodium_potassium_pump_current__i_NaK = var_sodium_potassium_pump_current__i_NaK_max / ((1.0 + pow((var_sodium_potassium_pump_current__Km_Kp / var_intracellular_ion_concentrations__Ko), 1.2)) * (1.0 + pow((var_sodium_potassium_pump_current__Km_Nap / var_chaste_interface__intracellular_ion_concentrations__Nai), 1.3)) * (1.0 + exp(-4.0 + 0.033333333333333333 * var_reversal_potentials__E_Na - 0.033333333333333333 * var_chaste_interface__membrane__V))); // picoA
+        const double var_sodium_potassium_pump_current__i_NaK = var_sodium_potassium_pump_current__i_NaK_max / ((1.0 + pow((var_sodium_potassium_pump_current__Km_Kp / var_intracellular_ion_concentrations__Ko), 1.2)) * (1.0 + pow((var_sodium_potassium_pump_current__Km_Nap / var_chaste_interface__intracellular_ion_concentrations__Nai), 1.3)) * (1.0 + exp(-4.0 + 033333333333333333 * var_reversal_potentials__E_Na - 033333333333333333 * var_chaste_interface__membrane__V))); // picoA
         const double d_dt_chaste_interface_var_intracellular_ion_concentrations__Ki = 1.0 * (-var_AP_sensitive_currents__i_sus - var_AP_sensitive_currents__i_to - var_background_muscarinic_potassium_channel_current__i_K_ACh - var_hyperpolarisation_activated_current__i_h_K - var_rapidly_activating_delayed_rectifier_potassium_current__i_Kr - var_slowly_activating_delayed_rectifier_potassium_current__i_Ks + 2.0 * var_sodium_potassium_pump_current__i_NaK) * mParameters[0] / ((var_intracellular_ion_concentrations__V_i + var_intracellular_ion_concentrations__V_sub) * var_membrane__F); // millimolar / millisecond
 
         return d_dt_chaste_interface_var_intracellular_ion_concentrations__Ki;
@@ -2324,13 +2324,13 @@
             double var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pi_gate__piy = rY[8];
             // Units: dimensionless; Initial value: 0.852396631172
             double var_chaste_interface__slowly_activating_delayed_rectifier_potassium_current_n_gate__n = rY[9];
-            // Units: dimensionless; Initial value: 0.054409723782
+            // Units: dimensionless; Initial value: 054409723782
             double var_chaste_interface__AP_sensitive_currents_q_gate__q = rY[10];
             // Units: dimensionless; Initial value: 0.531446952485
             double var_chaste_interface__AP_sensitive_currents_r_gate__r = rY[11];
-            // Units: dimensionless; Initial value: 0.005550489445
+            // Units: dimensionless; Initial value: 005550489445
             double var_chaste_interface__hyperpolarisation_activated_current_y_gate__y = rY[12];
-            // Units: dimensionless; Initial value: 0.067156687129
+            // Units: dimensionless; Initial value: 067156687129
             double var_chaste_interface__intracellular_ion_concentrations__Nai = rY[19];
             // Units: millimolar; Initial value: 9.438646305915
             double var_chaste_interface__intracellular_ion_concentrations__Ki = rY[20];
@@ -2338,18 +2338,18 @@
             
             const double var_x0 = pow(var_chaste_interface__hyperpolarisation_activated_current_y_gate__y, 2);
             const double var_x1 = pow(var_chaste_interface__slowly_activating_delayed_rectifier_potassium_current_n_gate__n, 2);
-            const double var_x3 = -0.040569866382531065 * var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paF - 0.027046577588354045 * var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paS;
+            const double var_x3 = -040569866382531065 * var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paF - 027046577588354045 * var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paS;
             const double var_x4 = var_x3 * var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pi_gate__piy;
             const double var_x80 = var_chaste_interface__AP_sensitive_currents_q_gate__q * var_chaste_interface__AP_sensitive_currents_r_gate__r;
             const double var_x108 = 1 / var_chaste_interface__intracellular_ion_concentrations__Ki;
             const double var_x114 = 1.0 * var_chaste_interface__intracellular_ion_concentrations__Ki + 0.12 * var_chaste_interface__intracellular_ion_concentrations__Nai;
-            const double var_x152 = var_x1 * (0.0054054054054054048 * var_chaste_interface__intracellular_ion_concentrations__Nai + 0.045045045045045043 * var_chaste_interface__intracellular_ion_concentrations__Ki) / pow(var_x114, 2);
+            const double var_x152 = var_x1 * (0054054054054054048 * var_chaste_interface__intracellular_ion_concentrations__Nai + 045045045045045043 * var_chaste_interface__intracellular_ion_concentrations__Ki) / pow(var_x114, 2);
             const double var_x155 = var_x0 * var_x108;
             const double var_x156 = var_x108 * var_chaste_interface__AP_sensitive_currents_r_gate__r;
             const double var_x157 = var_x108 * var_x4;
             const double var_x158 = var_x108 * var_x80;
             
-            partialF = (-1.406291416773793e-8 + 0.0001711370722584161 * var_x157 - 3.4227414451683221e-6 * var_x156 - 9.8400393807144087e-5 * var_x152 - 3.0804673006514896e-5 * var_x158 - 3.9577587173161957e-5 * var_x155) * mParameters[0];
+            partialF = (-1.406291416773793e-8 + 0001711370722584161 * var_x157 - 3.4227414451683221e-6 * var_x156 - 9.8400393807144087e-5 * var_x152 - 3.0804673006514896e-5 * var_x158 - 3.9577587173161957e-5 * var_x155) * mParameters[0];
         }
         else
         {
@@ -2403,7 +2403,7 @@
     {
         
         double var_chaste_interface__intracellular_ion_concentrations__Cai = rY[15];
-        // Units: millimolar; Initial value: 0.000312494921
+        // Units: millimolar; Initial value: 000312494921
         double var_chaste_interface__calcium_buffering__fCMi = rY[22];
         // Units: millimolar; Initial value: 0.116947220413
         
@@ -2423,7 +2423,7 @@
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_ion_concentrations__Cai = rY[15];
-            // Units: millimolar; Initial value: 0.000312494921
+            // Units: millimolar; Initial value: 000312494921
             
             const double var_x283 = -227.69999999999999 * var_chaste_interface__intracellular_ion_concentrations__Cai;
             
@@ -2443,9 +2443,9 @@
     {
         
         double var_chaste_interface__intracellular_ion_concentrations__Ca_sub = rY[18];
-        // Units: millimolar; Initial value: 0.00019074741
+        // Units: millimolar; Initial value: 00019074741
         double var_chaste_interface__calcium_buffering__fCMs = rY[23];
-        // Units: millimolar; Initial value: 0.074631965653
+        // Units: millimolar; Initial value: 074631965653
         
         
         // Mathematics
@@ -2463,7 +2463,7 @@
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_ion_concentrations__Ca_sub = rY[18];
-            // Units: millimolar; Initial value: 0.00019074741
+            // Units: millimolar; Initial value: 00019074741
             
             
             partialF = -0.54200000000000004 - 227.69999999999999 * var_chaste_interface__intracellular_ion_concentrations__Ca_sub;
@@ -2482,9 +2482,9 @@
     {
         
         double var_chaste_interface__intracellular_ion_concentrations__Cai = rY[15];
-        // Units: millimolar; Initial value: 0.000312494921
+        // Units: millimolar; Initial value: 000312494921
         double var_chaste_interface__calcium_buffering__fTC = rY[24];
-        // Units: millimolar; Initial value: 0.059206293446
+        // Units: millimolar; Initial value: 059206293446
         
         
         // Mathematics
@@ -2502,7 +2502,7 @@
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_ion_concentrations__Cai = rY[15];
-            // Units: millimolar; Initial value: 0.000312494921
+            // Units: millimolar; Initial value: 000312494921
             
             
             partialF = -0.44600000000000001 - 88.799999999999997 * var_chaste_interface__intracellular_ion_concentrations__Cai;
@@ -2521,7 +2521,7 @@
     {
         
         double var_chaste_interface__intracellular_ion_concentrations__Cai = rY[15];
-        // Units: millimolar; Initial value: 0.000312494921
+        // Units: millimolar; Initial value: 000312494921
         double var_chaste_interface__calcium_buffering__fTMM = rY[21];
         // Units: millimolar; Initial value: 0.350600895635
         double var_chaste_interface__calcium_buffering__fTMC = rY[25];
@@ -2529,7 +2529,7 @@
         
         
         // Mathematics
-        const double var_calcium_buffering__kb_TMC = 0.0075100000000000002; // per_millisecond
+        const double var_calcium_buffering__kb_TMC = 0075100000000000002; // per_millisecond
         const double var_calcium_buffering__kf_TMC = 227.69999999999999; // per_millimolar_millisecond
         const double var_calcium_buffering__delta_fTMC = -var_chaste_interface__calcium_buffering__fTMC * var_calcium_buffering__kb_TMC + (1.0 - var_chaste_interface__calcium_buffering__fTMC - var_chaste_interface__calcium_buffering__fTMM) * var_calcium_buffering__kf_TMC * var_chaste_interface__intracellular_ion_concentrations__Cai; // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_calcium_buffering__fTMC = var_calcium_buffering__delta_fTMC; // millimolar / millisecond
@@ -2543,11 +2543,11 @@
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_ion_concentrations__Cai = rY[15];
-            // Units: millimolar; Initial value: 0.000312494921
+            // Units: millimolar; Initial value: 000312494921
             
             const double var_x283 = -227.69999999999999 * var_chaste_interface__intracellular_ion_concentrations__Cai;
             
-            partialF = -0.0075100000000000002 + var_x283;
+            partialF = -0075100000000000002 + var_x283;
         }
         else
         {
@@ -2614,7 +2614,7 @@ void OdeSystemInformation<Cellkurata_model_2002FromCellMLGRL2>::Initialise(void)
     // rY[1]:
     this->mVariableNames.push_back("L_type_calcium_channel_current_d_gate__d");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(0.000602055134);
+    this->mInitialConditions.push_back(000602055134);
 
     // rY[2]:
     this->mVariableNames.push_back("L_type_calcium_channel_current_f_gate__f");
@@ -2629,7 +2629,7 @@ void OdeSystemInformation<Cellkurata_model_2002FromCellMLGRL2>::Initialise(void)
     // rY[4]:
     this->mVariableNames.push_back("T_type_calcium_channel_current_d_gate__d");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(0.004571884917);
+    this->mInitialConditions.push_back(004571884917);
 
     // rY[5]:
     this->mVariableNames.push_back("T_type_calcium_channel_current_f_gate__f");
@@ -2654,7 +2654,7 @@ void OdeSystemInformation<Cellkurata_model_2002FromCellMLGRL2>::Initialise(void)
     // rY[9]:
     this->mVariableNames.push_back("slowly_activating_delayed_rectifier_potassium_current_n_gate__n");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(0.054409723782);
+    this->mInitialConditions.push_back(054409723782);
 
     // rY[10]:
     this->mVariableNames.push_back("AP_sensitive_currents_q_gate__q");
@@ -2664,12 +2664,12 @@ void OdeSystemInformation<Cellkurata_model_2002FromCellMLGRL2>::Initialise(void)
     // rY[11]:
     this->mVariableNames.push_back("AP_sensitive_currents_r_gate__r");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(0.005550489445);
+    this->mInitialConditions.push_back(005550489445);
 
     // rY[12]:
     this->mVariableNames.push_back("hyperpolarisation_activated_current_y_gate__y");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(0.067156687129);
+    this->mInitialConditions.push_back(067156687129);
 
     // rY[13]:
     this->mVariableNames.push_back("sustained_inward_current_qa_gate__qa");
@@ -2684,7 +2684,7 @@ void OdeSystemInformation<Cellkurata_model_2002FromCellMLGRL2>::Initialise(void)
     // rY[15]:
     this->mVariableNames.push_back("intracellular_ion_concentrations__Cai");
     this->mVariableUnits.push_back("millimolar");
-    this->mInitialConditions.push_back(0.000312494921);
+    this->mInitialConditions.push_back(000312494921);
 
     // rY[16]:
     this->mVariableNames.push_back("intracellular_ion_concentrations__Ca_up");
@@ -2699,7 +2699,7 @@ void OdeSystemInformation<Cellkurata_model_2002FromCellMLGRL2>::Initialise(void)
     // rY[18]:
     this->mVariableNames.push_back("intracellular_ion_concentrations__Ca_sub");
     this->mVariableUnits.push_back("millimolar");
-    this->mInitialConditions.push_back(0.00019074741);
+    this->mInitialConditions.push_back(00019074741);
 
     // rY[19]:
     this->mVariableNames.push_back("cytosolic_sodium_concentration");
@@ -2724,12 +2724,12 @@ void OdeSystemInformation<Cellkurata_model_2002FromCellMLGRL2>::Initialise(void)
     // rY[23]:
     this->mVariableNames.push_back("calcium_buffering__fCMs");
     this->mVariableUnits.push_back("millimolar");
-    this->mInitialConditions.push_back(0.074631965653);
+    this->mInitialConditions.push_back(074631965653);
 
     // rY[24]:
     this->mVariableNames.push_back("calcium_buffering__fTC");
     this->mVariableUnits.push_back("millimolar");
-    this->mInitialConditions.push_back(0.059206293446);
+    this->mInitialConditions.push_back(059206293446);
 
     // rY[25]:
     this->mVariableNames.push_back("calcium_buffering__fTMC");

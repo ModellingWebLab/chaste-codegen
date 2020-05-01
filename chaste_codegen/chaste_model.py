@@ -230,11 +230,11 @@ class ChasteModel(object):
         return [sp.Eq(eq.lhs, optimize(eq.rhs, self._OPTIMS)) for eq in equations]
 
     def _get_initial_value(self, var):
-        """Returns the initial value of a variable if it has one, none otherwise"""
+        """Returns the initial value of a variable if it has one, 0 otherwise"""
         # state vars have an initial value parameter defined
-        initial_value = None
+        initial_value = 0
         if var in self._state_vars:
-            initial_value = getattr(var, 'initial_value', None)
+            initial_value = getattr(var, 'initial_value', 0)
         else:
             eqs = self._model.get_equations_for([var])
             # If there is a defining equation, there should be just 1 equation and it should be of the form var = value

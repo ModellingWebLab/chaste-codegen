@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.0.1
+//! This source file was generated from CellML by chaste_codegen version 0.1
 //!
 //! Model: grandi2010
 //!
@@ -26,8 +26,8 @@
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__cell__stim_amplitude = -15.0 * HeartConfig::Instance()->GetCapacitance(); // uA_per_uF
         const double var_chaste_interface__cell__stim_duration = 3.0; // millisecond
-        const double var_chaste_interface__cell__stim_offset = 0.0; // millisecond
-        const double var_chaste_interface__cell__stim_period = 1000.0; // millisecond
+        const double var_chaste_interface__cell__stim_offset = 0; // millisecond
+        const double var_chaste_interface__cell__stim_period = 1000; // millisecond
         boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__cell__stim_amplitude),
                 var_chaste_interface__cell__stim_duration,
@@ -73,7 +73,7 @@
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: millivolt; Initial value: -81.3842590704928
         double var_chaste_interface__cell__sm = rY[1];
-        // Units: dimensionless; Initial value: 0.00384941567866232
+        // Units: dimensionless; Initial value: 00384941567866232
         double var_chaste_interface__cell__sh = rY[2];
         // Units: dimensionless; Initial value: 0.623723834301669
         double var_chaste_interface__cell__sj = rY[3];
@@ -83,21 +83,21 @@
         double var_chaste_interface__cell__sf = rY[5];
         // Units: dimensionless; Initial value: 0.995094078386247
         double var_chaste_interface__cell__sfcaBj = rY[6];
-        // Units: dimensionless; Initial value: 0.0246274349529557
+        // Units: dimensionless; Initial value: 0246274349529557
         double var_chaste_interface__cell__sfcaBsl = rY[7];
-        // Units: dimensionless; Initial value: 0.0150911724206476
+        // Units: dimensionless; Initial value: 0150911724206476
         double var_chaste_interface__cell__sxtos = rY[8];
-        // Units: dimensionless; Initial value: 0.000442853722673121
+        // Units: dimensionless; Initial value: 000442853722673121
         double var_chaste_interface__cell__sytos = rY[9];
         // Units: dimensionless; Initial value: 0.789013894749951
         double var_chaste_interface__cell__sxtof = rY[10];
-        // Units: dimensionless; Initial value: 0.000442846429332686
+        // Units: dimensionless; Initial value: 000442846429332686
         double var_chaste_interface__cell__sytof = rY[11];
         // Units: dimensionless; Initial value: 0.999995784674368
         double var_chaste_interface__cell__sxkr = rY[12];
-        // Units: dimensionless; Initial value: 0.020160578118589
+        // Units: dimensionless; Initial value: 020160578118589
         double var_chaste_interface__cell__sxks = rY[13];
-        // Units: dimensionless; Initial value: 0.00430143235332308
+        // Units: dimensionless; Initial value: 00430143235332308
         double var_chaste_interface__cell__sNaj = rY[32];
         // Units: dimensionless; Initial value: 8.21411036389602
         double var_chaste_interface__cell__sNasl = rY[33];
@@ -105,65 +105,65 @@
         double var_chaste_interface__cell__sNai = rY[34];
         // Units: dimensionless; Initial value: 8.21340895351653
         double var_chaste_interface__cell__sCaj = rY[35];
-        // Units: dimensionless; Initial value: 0.000175648385857736
+        // Units: dimensionless; Initial value: 000175648385857736
         double var_chaste_interface__cell__sCasl = rY[36];
-        // Units: dimensionless; Initial value: 0.000105614570409386
+        // Units: dimensionless; Initial value: 000105614570409386
         
         const double var_cell__Cao = 1.8; // dimensionless
         const double var_cell__Cli = 15.0; // dimensionless
-        const double var_cell__Clo = 150.0; // dimensionless
+        const double var_cell__Clo = 150; // dimensionless
         const double var_cell__Fjunc = 0.11; // dimensionless
         const double var_cell__Fjunc_CaL = 0.90000000000000002; // dimensionless
         const double var_cell__Frdy = 96485.0; // dimensionless
         const double var_cell__Fsl = 1.0 - var_cell__Fjunc; // dimensionless
         const double var_cell__Fsl_CaL = 1.0 - var_cell__Fjunc_CaL; // dimensionless
-        const double var_cell__GCaB = 0.00055130000000000001; // dimensionless
-        const double var_cell__GClB = 0.0089999999999999993; // dimensionless
-        const double var_cell__GClCa = 0.0548125; // dimensionless
-        const double var_cell__GNaB = 0.00059699999999999998; // dimensionless
+        const double var_cell__GCaB = 00055130000000000001; // dimensionless
+        const double var_cell__GClB = 0089999999999999993; // dimensionless
+        const double var_cell__GClCa = 0548125; // dimensionless
+        const double var_cell__GNaB = 00059699999999999998; // dimensionless
         const double var_cell__GtoFast = 0.1144; // dimensionless
-        const double var_cell__GtoSlow = 0.015599999999999999; // dimensionless
+        const double var_cell__GtoSlow = 015599999999999999; // dimensionless
         const double var_cell__IbarNCX = 4.5; // dimensionless
         const double var_cell__IbarNaK = 1.8; // dimensionless
-        const double var_cell__IbarSLCaP = 0.067299999999999999; // dimensionless
+        const double var_cell__IbarSLCaP = 067299999999999999; // dimensionless
         const double var_cell__KdClCa = 0.10000000000000001; // dimensionless
-        const double var_cell__Kdact = 0.00014999999999999999; // dimensionless
-        const double var_cell__KmCai = 0.0035899999999999999; // dimensionless
+        const double var_cell__Kdact = 00014999999999999999; // dimensionless
+        const double var_cell__KmCai = 0035899999999999999; // dimensionless
         const double var_cell__KmCao = 1.3; // dimensionless
         const double var_cell__KmKo = 1.5; // dimensionless
         const double var_cell__KmNai = 12.289999999999999; // dimensionless
         const double var_cell__KmNaip = 11.0; // dimensionless
         const double var_cell__KmNao = 87.5; // dimensionless
-        const double var_cell__KmPCa = 0.00050000000000000001; // dimensionless
+        const double var_cell__KmPCa = 00050000000000000001; // dimensionless
         const double var_cell__Ko = 5.4000000000000004; // dimensionless
-        const double var_cell__Nao = 140.0; // dimensionless
+        const double var_cell__Nao = 140; // dimensionless
         const double var_cell__Q10CaL = 1.8; // dimensionless
         const double var_cell__Q10NCX = 1.5700000000000001; // dimensionless
         const double var_cell__Q10SLCaP = 2.3500000000000001; // dimensionless
         const double var_cell__R = 8314.0; // dimensionless
-        const double var_cell__Temp = 310.0; // dimensionless
+        const double var_cell__Temp = 310; // dimensionless
         const double var_cell__FoRT = var_cell__Frdy / (var_cell__R * var_cell__Temp); // dimensionless
         const double var_cell__Qpow = -31.0 + 0.10000000000000001 * var_cell__Temp; // dimensionless
         const double var_cell__ecl = 1.0 * log(var_cell__Cli / var_cell__Clo) / var_cell__FoRT; // dimensionless
-        const double var_cell__fcaCaMSL = 0.0; // dimensionless
-        const double var_cell__fcaCaj = 0.0; // dimensionless
-        const double var_cell__gkp = 0.002; // dimensionless
-        const double var_cell__gkr = 0.015061601901917734 * sqrt(var_cell__Ko) * mParameters[2]; // dimensionless
-        const double var_cell__gks_junc = 0.0035000000000000001; // dimensionless
-        const double var_cell__gks_sl = 0.0035000000000000001; // dimensionless
+        const double var_cell__fcaCaMSL = 0; // dimensionless
+        const double var_cell__fcaCaj = 0; // dimensionless
+        const double var_cell__gkp = 002; // dimensionless
+        const double var_cell__gkr = 015061601901917734 * sqrt(var_cell__Ko) * mParameters[2]; // dimensionless
+        const double var_cell__gks_junc = 0035000000000000001; // dimensionless
+        const double var_cell__gks_sl = 0035000000000000001; // dimensionless
         const double var_cell__ksat = 0.32000000000000001; // dimensionless
         const double var_cell__nu = 0.27000000000000002; // dimensionless
-        const double var_cell__pCa = 0.00027 * mParameters[0]; // dimensionless
+        const double var_cell__pCa = 00027 * mParameters[0]; // dimensionless
         const double var_cell__pK = 1.35e-7 * mParameters[0]; // dimensionless
         const double var_cell__pNa = 7.4999999999999993e-9 * mParameters[0]; // dimensionless
-        const double var_cell__pNaK = 0.018329999999999999; // dimensionless
+        const double var_cell__pNaK = 018329999999999999; // dimensionless
         const double var_cell__I_pca_junc = pow(var_cell__Q10SLCaP, var_cell__Qpow) * pow(var_chaste_interface__cell__sCaj, 1.6000000000000001) * var_cell__Fjunc * var_cell__IbarSLCaP / (pow(var_cell__KmPCa, 1.6000000000000001) + pow(var_chaste_interface__cell__sCaj, 1.6000000000000001)); // dimensionless
         const double var_cell__Ka_junc = 1.0 / (1.0 + pow(var_cell__Kdact, 2) / pow(var_chaste_interface__cell__sCaj, 2)); // dimensionless
         const double var_cell__eca_junc = 0.5 * log(var_cell__Cao / var_chaste_interface__cell__sCaj) / var_cell__FoRT; // dimensionless
         const double var_cell__I_pca_sl = pow(var_cell__Q10SLCaP, var_cell__Qpow) * pow(var_chaste_interface__cell__sCasl, 1.6000000000000001) * var_cell__Fsl * var_cell__IbarSLCaP / (pow(var_cell__KmPCa, 1.6000000000000001) + pow(var_chaste_interface__cell__sCasl, 1.6000000000000001)); // dimensionless
         const double var_cell__Ka_sl = 1.0 / (1.0 + pow(var_cell__Kdact, 2) / pow(var_chaste_interface__cell__sCasl, 2)); // dimensionless
         const double var_cell__eca_sl = 0.5 * log(var_cell__Cao / var_chaste_interface__cell__sCasl) / var_cell__FoRT; // dimensionless
-        const double var_cell__sKi = 120.0; // dimensionless
+        const double var_cell__sKi = 120; // dimensionless
         const double var_cell__ek = 1.0 * log(var_cell__Ko / var_cell__sKi) / var_cell__FoRT; // dimensionless
         const double var_cell__eks = 1.0 * log((var_cell__Nao * var_cell__pNaK + var_cell__Ko) / (var_cell__pNaK * var_chaste_interface__cell__sNai + var_cell__sKi)) / var_cell__FoRT; // dimensionless
         const double var_cell__ena_junc = 1.0 * log(var_cell__Nao / var_chaste_interface__cell__sNaj) / var_cell__FoRT; // dimensionless
@@ -180,7 +180,7 @@
         const double var_cell__I_nabk_junc = (-var_cell__ena_junc + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__GNaB; // dimensionless
         const double var_cell__I_nabk_sl = (-var_cell__ena_sl + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__GNaB; // dimensionless
         const double var_cell__aki = 1.02 / (1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__sVm - 0.23849999999999999 * var_cell__ek)); // dimensionless
-        const double var_cell__bki = (0.49124000000000001 * exp(0.43983232 + 0.080320000000000003 * var_chaste_interface__cell__sVm - 0.080320000000000003 * var_cell__ek) + exp(-36.698642499999998 + 0.061749999999999999 * var_chaste_interface__cell__sVm - 0.061749999999999999 * var_cell__ek)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_cell__ek - 0.51429999999999998 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__bki = (0.49124000000000001 * exp(0.43983232 + 080320000000000003 * var_chaste_interface__cell__sVm - 080320000000000003 * var_cell__ek) + exp(-36.698642499999998 + 061749999999999999 * var_chaste_interface__cell__sVm - 061749999999999999 * var_cell__ek)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_cell__ek - 0.51429999999999998 * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__ibarca_j = 4.0 * (-0.34100000000000003 * var_cell__Cao + 0.34100000000000003 * var_chaste_interface__cell__sCaj * exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__FoRT * var_cell__Frdy * var_cell__pCa * var_chaste_interface__cell__sVm / (-1.0 + exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__ibarca_sl = 4.0 * (-0.34100000000000003 * var_cell__Cao + 0.34100000000000003 * var_chaste_interface__cell__sCasl * exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__FoRT * var_cell__Frdy * var_cell__pCa * var_chaste_interface__cell__sVm / (-1.0 + exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__ibark = (-0.75 * var_cell__Ko + 0.75 * var_cell__sKi * exp(var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__FoRT * var_cell__Frdy * var_cell__pK * var_chaste_interface__cell__sVm / (-1.0 + exp(var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
@@ -192,7 +192,7 @@
         const double var_cell__I_kp_junc = (-var_cell__ek + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__gkp * var_cell__kp_kp; // dimensionless
         const double var_cell__I_kp_sl = (-var_cell__ek + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__gkp * var_cell__kp_kp; // dimensionless
         const double var_cell__I_kp = var_cell__I_kp_junc + var_cell__I_kp_sl; // dimensionless
-        const double var_cell__rkr = 1.0 / (1.0 + exp(3.0833333333333335 + 0.041666666666666664 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__rkr = 1.0 / (1.0 + exp(3.0833333333333335 + 041666666666666664 * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__s1_junc = pow(var_chaste_interface__cell__sNaj, 3) * var_cell__Cao * exp(var_cell__FoRT * var_cell__nu * var_chaste_interface__cell__sVm); // dimensionless
         const double var_cell__s1_sl = pow(var_chaste_interface__cell__sNasl, 3) * var_cell__Cao * exp(var_cell__FoRT * var_cell__nu * var_chaste_interface__cell__sVm); // dimensionless
         const double var_cell__s2_junc = pow(var_cell__Nao, 3) * var_chaste_interface__cell__sCaj * exp((-1.0 + var_cell__nu) * var_cell__FoRT * var_chaste_interface__cell__sVm); // dimensionless
@@ -207,8 +207,8 @@
         const double var_cell__I_Ca_sl = 0.45000000000000001 * pow(var_cell__Q10CaL, var_cell__Qpow) * (1.0 - var_chaste_interface__cell__sfcaBsl + var_cell__fcaCaMSL) * var_cell__Fsl_CaL * var_cell__ibarca_sl * var_chaste_interface__cell__sd * var_chaste_interface__cell__sf; // dimensionless
         const double var_cell__I_Ca_tot_sl = -2.0 * var_cell__I_ncx_sl + var_cell__I_Ca_sl + var_cell__I_cabk_sl + var_cell__I_pca_sl; // dimensionless
         const double var_cell__I_Ca_tot = var_cell__I_Ca_tot_junc + var_cell__I_Ca_tot_sl; // dimensionless
-        const double var_cell__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * var_cell__Nao); // dimensionless
-        const double var_cell__fnak = 1.0 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_cell__FoRT * var_chaste_interface__cell__sVm) + 0.036499999999999998 * var_cell__sigma * exp(-var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(01485884101040119 * var_cell__Nao); // dimensionless
+        const double var_cell__fnak = 1.0 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_cell__FoRT * var_chaste_interface__cell__sVm) + 036499999999999998 * var_cell__sigma * exp(-var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__I_nak_junc = 1.0 * var_cell__Fjunc * var_cell__IbarNaK * var_cell__Ko * var_cell__fnak / ((1.0 + pow(var_cell__KmNaip, 4) / pow(var_chaste_interface__cell__sNaj, 4)) * (var_cell__KmKo + var_cell__Ko)); // dimensionless
         const double var_cell__I_nak_sl = 1.0 * var_cell__Fsl * var_cell__IbarNaK * var_cell__Ko * var_cell__fnak / ((1.0 + pow(var_cell__KmNaip, 4) / pow(var_chaste_interface__cell__sNasl, 4)) * (var_cell__KmKo + var_cell__Ko)); // dimensionless
         const double var_cell__I_nak = var_cell__I_nak_junc + var_cell__I_nak_sl; // dimensionless
@@ -243,7 +243,7 @@
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: millivolt; Initial value: -81.3842590704928
         double var_chaste_interface__cell__sm = rY[1];
-        // Units: dimensionless; Initial value: 0.00384941567866232
+        // Units: dimensionless; Initial value: 00384941567866232
         double var_chaste_interface__cell__sh = rY[2];
         // Units: dimensionless; Initial value: 0.623723834301669
         double var_chaste_interface__cell__sj = rY[3];
@@ -253,21 +253,21 @@
         double var_chaste_interface__cell__sf = rY[5];
         // Units: dimensionless; Initial value: 0.995094078386247
         double var_chaste_interface__cell__sfcaBj = rY[6];
-        // Units: dimensionless; Initial value: 0.0246274349529557
+        // Units: dimensionless; Initial value: 0246274349529557
         double var_chaste_interface__cell__sfcaBsl = rY[7];
-        // Units: dimensionless; Initial value: 0.0150911724206476
+        // Units: dimensionless; Initial value: 0150911724206476
         double var_chaste_interface__cell__sxtos = rY[8];
-        // Units: dimensionless; Initial value: 0.000442853722673121
+        // Units: dimensionless; Initial value: 000442853722673121
         double var_chaste_interface__cell__sytos = rY[9];
         // Units: dimensionless; Initial value: 0.789013894749951
         double var_chaste_interface__cell__sxtof = rY[10];
-        // Units: dimensionless; Initial value: 0.000442846429332686
+        // Units: dimensionless; Initial value: 000442846429332686
         double var_chaste_interface__cell__sytof = rY[11];
         // Units: dimensionless; Initial value: 0.999995784674368
         double var_chaste_interface__cell__sxkr = rY[12];
-        // Units: dimensionless; Initial value: 0.020160578118589
+        // Units: dimensionless; Initial value: 020160578118589
         double var_chaste_interface__cell__sxks = rY[13];
-        // Units: dimensionless; Initial value: 0.00430143235332308
+        // Units: dimensionless; Initial value: 00430143235332308
         double var_chaste_interface__cell__sNaj = rY[32];
         // Units: dimensionless; Initial value: 8.21411036389602
         double var_chaste_interface__cell__sNasl = rY[33];
@@ -275,67 +275,67 @@
         double var_chaste_interface__cell__sNai = rY[34];
         // Units: dimensionless; Initial value: 8.21340895351653
         double var_chaste_interface__cell__sCaj = rY[35];
-        // Units: dimensionless; Initial value: 0.000175648385857736
+        // Units: dimensionless; Initial value: 000175648385857736
         double var_chaste_interface__cell__sCasl = rY[36];
-        // Units: dimensionless; Initial value: 0.000105614570409386
+        // Units: dimensionless; Initial value: 000105614570409386
         
 
         // Mathematics
         const double var_cell__Cao = 1.8; // dimensionless
         const double var_cell__Cli = 15.0; // dimensionless
-        const double var_cell__Clo = 150.0; // dimensionless
+        const double var_cell__Clo = 150; // dimensionless
         const double var_cell__Fjunc = 0.11; // dimensionless
         const double var_cell__Fjunc_CaL = 0.90000000000000002; // dimensionless
         const double var_cell__Frdy = 96485.0; // dimensionless
         const double var_cell__Fsl = 1.0 - var_cell__Fjunc; // dimensionless
         const double var_cell__Fsl_CaL = 1.0 - var_cell__Fjunc_CaL; // dimensionless
-        const double var_cell__GCaB = 0.00055130000000000001; // dimensionless
-        const double var_cell__GClB = 0.0089999999999999993; // dimensionless
-        const double var_cell__GClCa = 0.0548125; // dimensionless
-        const double var_cell__GNaB = 0.00059699999999999998; // dimensionless
+        const double var_cell__GCaB = 00055130000000000001; // dimensionless
+        const double var_cell__GClB = 0089999999999999993; // dimensionless
+        const double var_cell__GClCa = 0548125; // dimensionless
+        const double var_cell__GNaB = 00059699999999999998; // dimensionless
         const double var_cell__GtoFast = 0.1144; // dimensionless
-        const double var_cell__GtoSlow = 0.015599999999999999; // dimensionless
+        const double var_cell__GtoSlow = 015599999999999999; // dimensionless
         const double var_cell__IbarNCX = 4.5; // dimensionless
         const double var_cell__IbarNaK = 1.8; // dimensionless
-        const double var_cell__IbarSLCaP = 0.067299999999999999; // dimensionless
+        const double var_cell__IbarSLCaP = 067299999999999999; // dimensionless
         const double var_cell__KdClCa = 0.10000000000000001; // dimensionless
-        const double var_cell__Kdact = 0.00014999999999999999; // dimensionless
-        const double var_cell__KmCai = 0.0035899999999999999; // dimensionless
+        const double var_cell__Kdact = 00014999999999999999; // dimensionless
+        const double var_cell__KmCai = 0035899999999999999; // dimensionless
         const double var_cell__KmCao = 1.3; // dimensionless
         const double var_cell__KmKo = 1.5; // dimensionless
         const double var_cell__KmNai = 12.289999999999999; // dimensionless
         const double var_cell__KmNaip = 11.0; // dimensionless
         const double var_cell__KmNao = 87.5; // dimensionless
-        const double var_cell__KmPCa = 0.00050000000000000001; // dimensionless
+        const double var_cell__KmPCa = 00050000000000000001; // dimensionless
         const double var_cell__Ko = 5.4000000000000004; // dimensionless
-        const double var_cell__Nao = 140.0; // dimensionless
+        const double var_cell__Nao = 140; // dimensionless
         const double var_cell__Q10CaL = 1.8; // dimensionless
         const double var_cell__Q10NCX = 1.5700000000000001; // dimensionless
         const double var_cell__Q10SLCaP = 2.3500000000000001; // dimensionless
         const double var_cell__R = 8314.0; // dimensionless
-        const double var_cell__Temp = 310.0; // dimensionless
+        const double var_cell__Temp = 310; // dimensionless
         const double var_cell__FoRT = var_cell__Frdy / (var_cell__R * var_cell__Temp); // dimensionless
         const double var_cell__Qpow = -31.0 + 0.10000000000000001 * var_cell__Temp; // dimensionless
         const double var_cell__ecl = 1.0 * log(var_cell__Cli / var_cell__Clo) / var_cell__FoRT; // dimensionless
-        const double var_cell__fcaCaMSL = 0.0; // dimensionless
-        const double var_cell__fcaCaj = 0.0; // dimensionless
-        const double var_cell__gkp = 0.002; // dimensionless
-        const double var_cell__gkr = 0.015061601901917734 * sqrt(var_cell__Ko) * mParameters[2]; // dimensionless
-        const double var_cell__gks_junc = 0.0035000000000000001; // dimensionless
-        const double var_cell__gks_sl = 0.0035000000000000001; // dimensionless
+        const double var_cell__fcaCaMSL = 0; // dimensionless
+        const double var_cell__fcaCaj = 0; // dimensionless
+        const double var_cell__gkp = 002; // dimensionless
+        const double var_cell__gkr = 015061601901917734 * sqrt(var_cell__Ko) * mParameters[2]; // dimensionless
+        const double var_cell__gks_junc = 0035000000000000001; // dimensionless
+        const double var_cell__gks_sl = 0035000000000000001; // dimensionless
         const double var_cell__ksat = 0.32000000000000001; // dimensionless
         const double var_cell__nu = 0.27000000000000002; // dimensionless
-        const double var_cell__pCa = 0.00027 * mParameters[0]; // dimensionless
+        const double var_cell__pCa = 00027 * mParameters[0]; // dimensionless
         const double var_cell__pK = 1.35e-7 * mParameters[0]; // dimensionless
         const double var_cell__pNa = 7.4999999999999993e-9 * mParameters[0]; // dimensionless
-        const double var_cell__pNaK = 0.018329999999999999; // dimensionless
+        const double var_cell__pNaK = 018329999999999999; // dimensionless
         const double var_cell__I_pca_junc = pow(var_cell__Q10SLCaP, var_cell__Qpow) * pow(var_chaste_interface__cell__sCaj, 1.6000000000000001) * var_cell__Fjunc * var_cell__IbarSLCaP / (pow(var_cell__KmPCa, 1.6000000000000001) + pow(var_chaste_interface__cell__sCaj, 1.6000000000000001)); // dimensionless
         const double var_cell__Ka_junc = 1.0 / (1.0 + pow(var_cell__Kdact, 2) / pow(var_chaste_interface__cell__sCaj, 2)); // dimensionless
         const double var_cell__eca_junc = 0.5 * log(var_cell__Cao / var_chaste_interface__cell__sCaj) / var_cell__FoRT; // dimensionless
         const double var_cell__I_pca_sl = pow(var_cell__Q10SLCaP, var_cell__Qpow) * pow(var_chaste_interface__cell__sCasl, 1.6000000000000001) * var_cell__Fsl * var_cell__IbarSLCaP / (pow(var_cell__KmPCa, 1.6000000000000001) + pow(var_chaste_interface__cell__sCasl, 1.6000000000000001)); // dimensionless
         const double var_cell__Ka_sl = 1.0 / (1.0 + pow(var_cell__Kdact, 2) / pow(var_chaste_interface__cell__sCasl, 2)); // dimensionless
         const double var_cell__eca_sl = 0.5 * log(var_cell__Cao / var_chaste_interface__cell__sCasl) / var_cell__FoRT; // dimensionless
-        const double var_cell__sKi = 120.0; // dimensionless
+        const double var_cell__sKi = 120; // dimensionless
         const double var_cell__ek = 1.0 * log(var_cell__Ko / var_cell__sKi) / var_cell__FoRT; // dimensionless
         const double var_cell__eks = 1.0 * log((var_cell__Nao * var_cell__pNaK + var_cell__Ko) / (var_cell__pNaK * var_chaste_interface__cell__sNai + var_cell__sKi)) / var_cell__FoRT; // dimensionless
         const double var_cell__ena_junc = 1.0 * log(var_cell__Nao / var_chaste_interface__cell__sNaj) / var_cell__FoRT; // dimensionless
@@ -352,7 +352,7 @@
         const double var_cell__I_nabk_junc = (-var_cell__ena_junc + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__GNaB; // dimensionless
         const double var_cell__I_nabk_sl = (-var_cell__ena_sl + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__GNaB; // dimensionless
         const double var_cell__aki = 1.02 / (1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__sVm - 0.23849999999999999 * var_cell__ek)); // dimensionless
-        const double var_cell__bki = (0.49124000000000001 * exp(0.43983232 + 0.080320000000000003 * var_chaste_interface__cell__sVm - 0.080320000000000003 * var_cell__ek) + exp(-36.698642499999998 + 0.061749999999999999 * var_chaste_interface__cell__sVm - 0.061749999999999999 * var_cell__ek)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_cell__ek - 0.51429999999999998 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__bki = (0.49124000000000001 * exp(0.43983232 + 080320000000000003 * var_chaste_interface__cell__sVm - 080320000000000003 * var_cell__ek) + exp(-36.698642499999998 + 061749999999999999 * var_chaste_interface__cell__sVm - 061749999999999999 * var_cell__ek)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_cell__ek - 0.51429999999999998 * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__ibarca_j = 4.0 * (-0.34100000000000003 * var_cell__Cao + 0.34100000000000003 * var_chaste_interface__cell__sCaj * exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__FoRT * var_cell__Frdy * var_cell__pCa * var_chaste_interface__cell__sVm / (-1.0 + exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__ibarca_sl = 4.0 * (-0.34100000000000003 * var_cell__Cao + 0.34100000000000003 * var_chaste_interface__cell__sCasl * exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__FoRT * var_cell__Frdy * var_cell__pCa * var_chaste_interface__cell__sVm / (-1.0 + exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__ibark = (-0.75 * var_cell__Ko + 0.75 * var_cell__sKi * exp(var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__FoRT * var_cell__Frdy * var_cell__pK * var_chaste_interface__cell__sVm / (-1.0 + exp(var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
@@ -364,7 +364,7 @@
         const double var_cell__I_kp_junc = (-var_cell__ek + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__gkp * var_cell__kp_kp; // dimensionless
         const double var_cell__I_kp_sl = (-var_cell__ek + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__gkp * var_cell__kp_kp; // dimensionless
         const double var_cell__I_kp = var_cell__I_kp_junc + var_cell__I_kp_sl; // dimensionless
-        const double var_cell__rkr = 1.0 / (1.0 + exp(3.0833333333333335 + 0.041666666666666664 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__rkr = 1.0 / (1.0 + exp(3.0833333333333335 + 041666666666666664 * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__s1_junc = pow(var_chaste_interface__cell__sNaj, 3) * var_cell__Cao * exp(var_cell__FoRT * var_cell__nu * var_chaste_interface__cell__sVm); // dimensionless
         const double var_cell__s1_sl = pow(var_chaste_interface__cell__sNasl, 3) * var_cell__Cao * exp(var_cell__FoRT * var_cell__nu * var_chaste_interface__cell__sVm); // dimensionless
         const double var_cell__s2_junc = pow(var_cell__Nao, 3) * var_chaste_interface__cell__sCaj * exp((-1.0 + var_cell__nu) * var_cell__FoRT * var_chaste_interface__cell__sVm); // dimensionless
@@ -379,8 +379,8 @@
         const double var_cell__I_Ca_sl = 0.45000000000000001 * pow(var_cell__Q10CaL, var_cell__Qpow) * (1.0 - var_chaste_interface__cell__sfcaBsl + var_cell__fcaCaMSL) * var_cell__Fsl_CaL * var_cell__ibarca_sl * var_chaste_interface__cell__sd * var_chaste_interface__cell__sf; // dimensionless
         const double var_cell__I_Ca_tot_sl = -2.0 * var_cell__I_ncx_sl + var_cell__I_Ca_sl + var_cell__I_cabk_sl + var_cell__I_pca_sl; // dimensionless
         const double var_cell__I_Ca_tot = var_cell__I_Ca_tot_junc + var_cell__I_Ca_tot_sl; // dimensionless
-        const double var_cell__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * var_cell__Nao); // dimensionless
-        const double var_cell__fnak = 1.0 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_cell__FoRT * var_chaste_interface__cell__sVm) + 0.036499999999999998 * var_cell__sigma * exp(-var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(01485884101040119 * var_cell__Nao); // dimensionless
+        const double var_cell__fnak = 1.0 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_cell__FoRT * var_chaste_interface__cell__sVm) + 036499999999999998 * var_cell__sigma * exp(-var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__I_nak_junc = 1.0 * var_cell__Fjunc * var_cell__IbarNaK * var_cell__Ko * var_cell__fnak / ((1.0 + pow(var_cell__KmNaip, 4) / pow(var_chaste_interface__cell__sNaj, 4)) * (var_cell__KmKo + var_cell__Ko)); // dimensionless
         const double var_cell__I_nak_sl = 1.0 * var_cell__Fsl * var_cell__IbarNaK * var_cell__Ko * var_cell__fnak / ((1.0 + pow(var_cell__KmNaip, 4) / pow(var_chaste_interface__cell__sNasl, 4)) * (var_cell__KmKo + var_cell__Ko)); // dimensionless
         const double var_cell__I_nak = var_cell__I_nak_junc + var_cell__I_nak_sl; // dimensionless
@@ -423,7 +423,7 @@
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: millivolt; Initial value: -81.3842590704928
         double var_chaste_interface__cell__sm = rY[1];
-        // Units: dimensionless; Initial value: 0.00384941567866232
+        // Units: dimensionless; Initial value: 00384941567866232
         double var_chaste_interface__cell__sh = rY[2];
         // Units: dimensionless; Initial value: 0.623723834301669
         double var_chaste_interface__cell__sj = rY[3];
@@ -433,21 +433,21 @@
         double var_chaste_interface__cell__sf = rY[5];
         // Units: dimensionless; Initial value: 0.995094078386247
         double var_chaste_interface__cell__sfcaBj = rY[6];
-        // Units: dimensionless; Initial value: 0.0246274349529557
+        // Units: dimensionless; Initial value: 0246274349529557
         double var_chaste_interface__cell__sfcaBsl = rY[7];
-        // Units: dimensionless; Initial value: 0.0150911724206476
+        // Units: dimensionless; Initial value: 0150911724206476
         double var_chaste_interface__cell__sxtos = rY[8];
-        // Units: dimensionless; Initial value: 0.000442853722673121
+        // Units: dimensionless; Initial value: 000442853722673121
         double var_chaste_interface__cell__sytos = rY[9];
         // Units: dimensionless; Initial value: 0.789013894749951
         double var_chaste_interface__cell__sxtof = rY[10];
-        // Units: dimensionless; Initial value: 0.000442846429332686
+        // Units: dimensionless; Initial value: 000442846429332686
         double var_chaste_interface__cell__sytof = rY[11];
         // Units: dimensionless; Initial value: 0.999995784674368
         double var_chaste_interface__cell__sxkr = rY[12];
-        // Units: dimensionless; Initial value: 0.020160578118589
+        // Units: dimensionless; Initial value: 020160578118589
         double var_chaste_interface__cell__sxks = rY[13];
-        // Units: dimensionless; Initial value: 0.00430143235332308
+        // Units: dimensionless; Initial value: 00430143235332308
         double var_chaste_interface__cell__sRyRr = rY[14];
         // Units: dimensionless; Initial value: 0.893326456705696
         double var_chaste_interface__cell__sRyRo = rY[15];
@@ -459,25 +459,25 @@
         double var_chaste_interface__cell__sNaBsl = rY[18];
         // Units: dimensionless; Initial value: 0.744248540671373
         double var_chaste_interface__cell__sTnCL = rY[19];
-        // Units: dimensionless; Initial value: 0.00904644567707666
+        // Units: dimensionless; Initial value: 00904644567707666
         double var_chaste_interface__cell__sTnCHc = rY[20];
         // Units: dimensionless; Initial value: 0.1183943202639
         double var_chaste_interface__cell__sTnCHm = rY[21];
-        // Units: dimensionless; Initial value: 0.0101423649465603
+        // Units: dimensionless; Initial value: 0101423649465603
         double var_chaste_interface__cell__sCaM = rY[22];
-        // Units: dimensionless; Initial value: 0.000299824763475116
+        // Units: dimensionless; Initial value: 000299824763475116
         double var_chaste_interface__cell__sMyoc = rY[23];
-        // Units: dimensionless; Initial value: 0.00201443980536826
+        // Units: dimensionless; Initial value: 00201443980536826
         double var_chaste_interface__cell__sMyom = rY[24];
         // Units: dimensionless; Initial value: 0.137467597337588
         double var_chaste_interface__cell__sSRB = rY[25];
-        // Units: dimensionless; Initial value: 0.00220110816535249
+        // Units: dimensionless; Initial value: 00220110816535249
         double var_chaste_interface__cell__sSLLj = rY[26];
-        // Units: dimensionless; Initial value: 0.00739549938515031
+        // Units: dimensionless; Initial value: 00739549938515031
         double var_chaste_interface__cell__sSLLsl = rY[27];
-        // Units: dimensionless; Initial value: 0.00979616077807075
+        // Units: dimensionless; Initial value: 00979616077807075
         double var_chaste_interface__cell__sSLHj = rY[28];
-        // Units: dimensionless; Initial value: 0.0735225248399363
+        // Units: dimensionless; Initial value: 0735225248399363
         double var_chaste_interface__cell__sSLHsl = rY[29];
         // Units: dimensionless; Initial value: 0.113642236788144
         double var_chaste_interface__cell__sCsqnb = rY[30];
@@ -491,20 +491,20 @@
         double var_chaste_interface__cell__sNai = rY[34];
         // Units: dimensionless; Initial value: 8.21340895351653
         double var_chaste_interface__cell__sCaj = rY[35];
-        // Units: dimensionless; Initial value: 0.000175648385857736
+        // Units: dimensionless; Initial value: 000175648385857736
         double var_chaste_interface__cell__sCasl = rY[36];
-        // Units: dimensionless; Initial value: 0.000105614570409386
+        // Units: dimensionless; Initial value: 000105614570409386
         double var_chaste_interface__cell__sCai = rY[37];
         // Units: dimensionless; Initial value: 8.85230799863012e-05
         
         
         // Mathematics
-        const double var_cell__Bmax_CaM = 0.024; // dimensionless
+        const double var_cell__Bmax_CaM = 024; // dimensionless
         const double var_cell__Bmax_Naj = 7.5609999999999999; // dimensionless
         const double var_cell__Bmax_Nasl = 1.6499999999999999; // dimensionless
-        const double var_cell__Bmax_SR = 0.017100000000000001; // dimensionless
+        const double var_cell__Bmax_SR = 017100000000000001; // dimensionless
         const double var_cell__Bmax_TnChigh = 0.14000000000000001; // dimensionless
-        const double var_cell__Bmax_TnClow = 0.070000000000000007; // dimensionless
+        const double var_cell__Bmax_TnClow = 070000000000000007; // dimensionless
         const double var_cell__Bmax_myosin = 0.14000000000000001; // dimensionless
         const double var_cell__Cao = 1.8; // dimensionless
         const double var_cell__Cmem = 1.3809999999999999e-10; // dimensionless
@@ -513,85 +513,85 @@
         const double var_cell__Frdy = 96485.0; // dimensionless
         const double var_cell__Fsl = 1.0 - var_cell__Fjunc; // dimensionless
         const double var_cell__Fsl_CaL = 1.0 - var_cell__Fjunc_CaL; // dimensionless
-        const double var_cell__GCaB = 0.00055130000000000001; // dimensionless
-        const double var_cell__GNaB = 0.00059699999999999998; // dimensionless
+        const double var_cell__GCaB = 00055130000000000001; // dimensionless
+        const double var_cell__GNaB = 00059699999999999998; // dimensionless
         const double var_cell__IbarNCX = 4.5; // dimensionless
         const double var_cell__IbarNaK = 1.8; // dimensionless
-        const double var_cell__IbarSLCaP = 0.067299999999999999; // dimensionless
+        const double var_cell__IbarSLCaP = 067299999999999999; // dimensionless
         const double var_cell__J_ca_juncsl = 8.2413054227789685e-13; // dimensionless
         const double var_cell__J_ca_slmyo = 3.7242560798480505e-12; // dimensionless
         const double var_cell__J_na_juncsl = 1.8312782322060799e-14; // dimensionless
         const double var_cell__J_na_slmyo = 1.6386279222197945e-12; // dimensionless
-        const double var_cell__Kdact = 0.00014999999999999999; // dimensionless
-        const double var_cell__KmCai = 0.0035899999999999999; // dimensionless
+        const double var_cell__Kdact = 00014999999999999999; // dimensionless
+        const double var_cell__KmCai = 0035899999999999999; // dimensionless
         const double var_cell__KmCao = 1.3; // dimensionless
         const double var_cell__KmKo = 1.5; // dimensionless
         const double var_cell__KmNai = 12.289999999999999; // dimensionless
         const double var_cell__KmNaip = 11.0; // dimensionless
         const double var_cell__KmNao = 87.5; // dimensionless
-        const double var_cell__KmPCa = 0.00050000000000000001; // dimensionless
-        const double var_cell__Kmf = 0.00024600000000000002; // dimensionless
+        const double var_cell__KmPCa = 00050000000000000001; // dimensionless
+        const double var_cell__Kmf = 00024600000000000002; // dimensionless
         const double var_cell__Kmr = 1.7; // dimensionless
         const double var_cell__Ko = 5.4000000000000004; // dimensionless
         const double var_cell__MaxSR = 15.0; // dimensionless
         const double var_cell__Mgi = 1.0; // dimensionless
         const double var_cell__MinSR = 1.0; // dimensionless
-        const double var_cell__Nao = 140.0; // dimensionless
+        const double var_cell__Nao = 140; // dimensionless
         const double var_cell__Q10CaL = 1.8; // dimensionless
         const double var_cell__Q10NCX = 1.5700000000000001; // dimensionless
         const double var_cell__Q10SLCaP = 2.3500000000000001; // dimensionless
         const double var_cell__Q10SRCaP = 2.6000000000000001; // dimensionless
         const double var_cell__R = 8314.0; // dimensionless
-        const double var_cell__Temp = 310.0; // dimensionless
+        const double var_cell__Temp = 310; // dimensionless
         const double var_cell__FoRT = var_cell__Frdy / (var_cell__R * var_cell__Temp); // dimensionless
         const double var_cell__Qpow = -31.0 + 0.10000000000000001 * var_cell__Temp; // dimensionless
-        const double var_cell__Vmax_SRCaP = 0.0053114; // dimensionless
-        const double var_cell__cellLength = 100.0; // dimensionless
+        const double var_cell__Vmax_SRCaP = 0053114; // dimensionless
+        const double var_cell__cellLength = 100; // dimensionless
         const double var_cell__cellRadius = 10.25; // dimensionless
         const double var_cell__Vcell = 1.0000000000000001e-15 * M_PI * pow(var_cell__cellRadius, 2) * var_cell__cellLength; // dimensionless
-        const double var_cell__Vjunc = 0.00053900000000000009 * var_cell__Vcell; // dimensionless
+        const double var_cell__Vjunc = 00053900000000000009 * var_cell__Vcell; // dimensionless
         const double var_cell__Vmyo = 0.65000000000000002 * var_cell__Vcell; // dimensionless
-        const double var_cell__Bmax_SLhighj = 0.000165 * var_cell__Vmyo / var_cell__Vjunc; // dimensionless
-        const double var_cell__Bmax_SLlowj = 0.00046000000000000001 * var_cell__Vmyo / var_cell__Vjunc; // dimensionless
-        const double var_cell__Vsl = 0.02 * var_cell__Vcell; // dimensionless
-        const double var_cell__Bmax_SLhighsl = 0.0134 * var_cell__Vmyo / var_cell__Vsl; // dimensionless
-        const double var_cell__Bmax_SLlowsl = 0.037400000000000003 * var_cell__Vmyo / var_cell__Vsl; // dimensionless
-        const double var_cell__Vsr = 0.035000000000000003 * var_cell__Vcell; // dimensionless
+        const double var_cell__Bmax_SLhighj = 000165 * var_cell__Vmyo / var_cell__Vjunc; // dimensionless
+        const double var_cell__Bmax_SLlowj = 00046000000000000001 * var_cell__Vmyo / var_cell__Vjunc; // dimensionless
+        const double var_cell__Vsl = 02 * var_cell__Vcell; // dimensionless
+        const double var_cell__Bmax_SLhighsl = 0134 * var_cell__Vmyo / var_cell__Vsl; // dimensionless
+        const double var_cell__Bmax_SLlowsl = 037400000000000003 * var_cell__Vmyo / var_cell__Vsl; // dimensionless
+        const double var_cell__Vsr = 035000000000000003 * var_cell__Vcell; // dimensionless
         const double var_cell__Bmax_Csqn = 0.14000000000000001 * var_cell__Vmyo / var_cell__Vsr; // dimensionless
         const double var_cell__ec50SR = 0.45000000000000001; // dimensionless
-        const double var_cell__fcaCaMSL = 0.0; // dimensionless
-        const double var_cell__fcaCaj = 0.0; // dimensionless
+        const double var_cell__fcaCaMSL = 0; // dimensionless
+        const double var_cell__fcaCaj = 0; // dimensionless
         const double var_cell__hillSRCaP = 1.7869999999999999; // dimensionless
         const double var_cell__kiCa = 0.5; // dimensionless
-        const double var_cell__kim = 0.0050000000000000001; // dimensionless
-        const double var_cell__koCa = 10.0; // dimensionless
+        const double var_cell__kim = 0050000000000000001; // dimensionless
+        const double var_cell__koCa = 10; // dimensionless
         const double var_cell__koff_cam = 0.23799999999999999; // dimensionless
         const double var_cell__koff_csqn = 65.0; // dimensionless
-        const double var_cell__koff_myoca = 0.00046000000000000001; // dimensionless
+        const double var_cell__koff_myoca = 00046000000000000001; // dimensionless
         const double var_cell__koff_myomg = 5.7000000000000003e-5; // dimensionless
-        const double var_cell__koff_na = 0.001; // dimensionless
-        const double var_cell__koff_slh = 0.029999999999999999; // dimensionless
+        const double var_cell__koff_na = 001; // dimensionless
+        const double var_cell__koff_slh = 029999999999999999; // dimensionless
         const double var_cell__koff_sll = 1.3; // dimensionless
-        const double var_cell__koff_sr = 0.059999999999999998; // dimensionless
+        const double var_cell__koff_sr = 059999999999999998; // dimensionless
         const double var_cell__koff_tnchca = 3.1999999999999999e-5; // dimensionless
-        const double var_cell__koff_tnchmg = 0.0033300000000000001; // dimensionless
-        const double var_cell__koff_tncl = 0.019599999999999999; // dimensionless
-        const double var_cell__kom = 0.059999999999999998; // dimensionless
+        const double var_cell__koff_tnchmg = 0033300000000000001; // dimensionless
+        const double var_cell__koff_tncl = 019599999999999999; // dimensionless
+        const double var_cell__kom = 059999999999999998; // dimensionless
         const double var_cell__kon_cam = 34.0; // dimensionless
-        const double var_cell__kon_csqn = 100.0; // dimensionless
+        const double var_cell__kon_csqn = 100; // dimensionless
         const double var_cell__kon_myoca = 13.800000000000001; // dimensionless
-        const double var_cell__kon_myomg = 0.015699999999999999; // dimensionless
-        const double var_cell__kon_na = 0.0001; // dimensionless
-        const double var_cell__kon_slh = 100.0; // dimensionless
-        const double var_cell__kon_sll = 100.0; // dimensionless
-        const double var_cell__kon_sr = 100.0; // dimensionless
+        const double var_cell__kon_myomg = 015699999999999999; // dimensionless
+        const double var_cell__kon_na = 0001; // dimensionless
+        const double var_cell__kon_slh = 100; // dimensionless
+        const double var_cell__kon_sll = 100; // dimensionless
+        const double var_cell__kon_sr = 100; // dimensionless
         const double var_cell__kon_tnchca = 2.3700000000000001; // dimensionless
-        const double var_cell__kon_tnchmg = 0.0030000000000000001; // dimensionless
+        const double var_cell__kon_tnchmg = 0030000000000000001; // dimensionless
         const double var_cell__kon_tncl = 32.700000000000003; // dimensionless
         const double var_cell__ks = 25.0; // dimensionless
         const double var_cell__ksat = 0.32000000000000001; // dimensionless
         const double var_cell__nu = 0.27000000000000002; // dimensionless
-        const double var_cell__pCa = 0.00027 * mParameters[0]; // dimensionless
+        const double var_cell__pCa = 00027 * mParameters[0]; // dimensionless
         const double var_cell__pNa = 7.4999999999999993e-9 * mParameters[0]; // dimensionless
         const double var_cell__kCaSR = -(-var_cell__MinSR + var_cell__MaxSR) / (1.0 + pow((var_cell__ec50SR / var_chaste_interface__cell__sCa_sr), 2.5)) + var_cell__MaxSR; // dimensionless
         const double var_cell__kiSRCa = var_cell__kCaSR * var_cell__kiCa; // dimensionless
@@ -637,12 +637,12 @@
         const double var_cell__I_cabk_sl = (-var_cell__eca_sl + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__GCaB; // dimensionless
         const double var_cell__I_nabk_junc = (-var_cell__ena_junc + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__GNaB; // dimensionless
         const double var_cell__I_nabk_sl = (-var_cell__ena_sl + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__GNaB; // dimensionless
-        const double var_cell__ah = ((var_chaste_interface__cell__sVm >= -40.0) ? (0.0) : (0.057000000000000002 * exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__cell__sVm))); // dimensionless
-        const double var_cell__aj = ((var_chaste_interface__cell__sVm >= -40.0) ? (0.0) : ((37.780000000000001 + var_chaste_interface__cell__sVm) * (-25428.0 * exp(0.24440000000000001 * var_chaste_interface__cell__sVm) - 6.9480000000000002e-6 * exp(-0.043909999999999998 * var_chaste_interface__cell__sVm)) / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__sVm)))); // dimensionless
-        const double var_cell__bh = ((var_chaste_interface__cell__sVm >= -40.0) ? (5.9230769230769234 / (1.0 + exp(-0.96036036036036043 - 0.0900900900900901 * var_chaste_interface__cell__sVm))) : (310000.0 * exp(0.34849999999999998 * var_chaste_interface__cell__sVm) + 2.7000000000000002 * exp(0.079000000000000001 * var_chaste_interface__cell__sVm))); // dimensionless
-        const double var_cell__bj = ((var_chaste_interface__cell__sVm >= -40.0) ? (0.59999999999999998 * exp(0.057000000000000002 * var_chaste_interface__cell__sVm) / (1.0 + exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__cell__sVm))) : (0.024240000000000001 * exp(-0.01052 * var_chaste_interface__cell__sVm) / (1.0 + exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__cell__sVm)))); // dimensionless
+        const double var_cell__ah = ((var_chaste_interface__cell__sVm >= -40) ? (0) : (057000000000000002 * exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__cell__sVm))); // dimensionless
+        const double var_cell__aj = ((var_chaste_interface__cell__sVm >= -40) ? (0) : ((37.780000000000001 + var_chaste_interface__cell__sVm) * (-25428.0 * exp(0.24440000000000001 * var_chaste_interface__cell__sVm) - 6.9480000000000002e-6 * exp(-043909999999999998 * var_chaste_interface__cell__sVm)) / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__sVm)))); // dimensionless
+        const double var_cell__bh = ((var_chaste_interface__cell__sVm >= -40) ? (5.9230769230769234 / (1.0 + exp(-0.96036036036036043 - 0900900900900901 * var_chaste_interface__cell__sVm))) : (310000 * exp(0.34849999999999998 * var_chaste_interface__cell__sVm) + 2.7000000000000002 * exp(079000000000000001 * var_chaste_interface__cell__sVm))); // dimensionless
+        const double var_cell__bj = ((var_chaste_interface__cell__sVm >= -40) ? (0.59999999999999998 * exp(057000000000000002 * var_chaste_interface__cell__sVm) / (1.0 + exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__cell__sVm))) : (024240000000000001 * exp(-01052 * var_chaste_interface__cell__sVm) / (1.0 + exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__cell__sVm)))); // dimensionless
         const double var_cell__dss = 1.0 / (1.0 + exp(-0.83333333333333337 - 0.16666666666666666 * var_chaste_interface__cell__sVm)); // dimensionless
-        const double var_cell__fss = 1.0 / (1.0 + exp(3.8888888888888888 + 0.1111111111111111 * var_chaste_interface__cell__sVm)) + 0.59999999999999998 / (1.0 + exp(2.5 - 0.050000000000000003 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__fss = 1.0 / (1.0 + exp(3.8888888888888888 + 0.1111111111111111 * var_chaste_interface__cell__sVm)) + 0.59999999999999998 / (1.0 + exp(2.5 - 050000000000000003 * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__hss = 1.0 / pow((1.0 + exp(9.6298788694481825 + 0.13458950201884254 * var_chaste_interface__cell__sVm)), 2); // dimensionless
         const double var_cell__ibarca_j = 4.0 * (-0.34100000000000003 * var_cell__Cao + 0.34100000000000003 * var_chaste_interface__cell__sCaj * exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__FoRT * var_cell__Frdy * var_cell__pCa * var_chaste_interface__cell__sVm / (-1.0 + exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__ibarca_sl = 4.0 * (-0.34100000000000003 * var_cell__Cao + 0.34100000000000003 * var_chaste_interface__cell__sCasl * exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__FoRT * var_cell__Frdy * var_cell__pCa * var_chaste_interface__cell__sVm / (-1.0 + exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
@@ -656,18 +656,18 @@
         const double var_cell__I_ncx_junc = pow(var_cell__Q10NCX, var_cell__Qpow) * (-var_cell__s2_junc + var_cell__s1_junc) * var_cell__Fjunc * var_cell__IbarNCX * var_cell__Ka_junc / ((1.0 + var_cell__ksat * exp((-1.0 + var_cell__nu) * var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__s3_junc); // dimensionless
         const double var_cell__s2_sl = pow(var_cell__Nao, 3) * var_chaste_interface__cell__sCasl * exp((-1.0 + var_cell__nu) * var_cell__FoRT * var_chaste_interface__cell__sVm); // dimensionless
         const double var_cell__I_ncx_sl = pow(var_cell__Q10NCX, var_cell__Qpow) * (-var_cell__s2_sl + var_cell__s1_sl) * var_cell__Fsl * var_cell__IbarNCX * var_cell__Ka_sl / ((1.0 + var_cell__ksat * exp((-1.0 + var_cell__nu) * var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__s3_sl); // dimensionless
-        const double d_dt_chaste_interface_var_cell__sfcaBj = -0.011900000000000001 * var_chaste_interface__cell__sfcaBj + 1.7 * (1.0 - var_chaste_interface__cell__sfcaBj) * var_chaste_interface__cell__sCaj; // 1 / ms
+        const double d_dt_chaste_interface_var_cell__sfcaBj = -011900000000000001 * var_chaste_interface__cell__sfcaBj + 1.7 * (1.0 - var_chaste_interface__cell__sfcaBj) * var_chaste_interface__cell__sCaj; // 1 / ms
         const double var_cell__I_CaNa_junc = 0.45000000000000001 * pow(var_cell__Q10CaL, var_cell__Qpow) * (1.0 - var_chaste_interface__cell__sfcaBj + var_cell__fcaCaj) * var_cell__Fjunc_CaL * var_cell__ibarna_j * var_chaste_interface__cell__sd * var_chaste_interface__cell__sf; // dimensionless
         const double var_cell__I_Ca_junc = 0.45000000000000001 * pow(var_cell__Q10CaL, var_cell__Qpow) * (1.0 - var_chaste_interface__cell__sfcaBj + var_cell__fcaCaj) * var_cell__Fjunc_CaL * var_cell__ibarca_j * var_chaste_interface__cell__sd * var_chaste_interface__cell__sf; // dimensionless
         const double var_cell__I_Ca_tot_junc = -2.0 * var_cell__I_ncx_junc + var_cell__I_Ca_junc + var_cell__I_cabk_junc + var_cell__I_pca_junc; // dimensionless
         const double d_dt_chaste_interface_var_cell__sCaj = -var_cell__J_CaB_junction + (-var_chaste_interface__cell__sCaj + var_chaste_interface__cell__sCasl) * var_cell__J_ca_juncsl / var_cell__Vjunc + var_cell__J_SRCarel * var_cell__Vsr / var_cell__Vjunc + var_cell__J_SRleak * var_cell__Vmyo / var_cell__Vjunc - 0.5 * var_cell__Cmem * var_cell__I_Ca_tot_junc / (var_cell__Frdy * var_cell__Vjunc); // 1 / ms
-        const double d_dt_chaste_interface_var_cell__sfcaBsl = -0.011900000000000001 * var_chaste_interface__cell__sfcaBsl + 1.7 * (1.0 - var_chaste_interface__cell__sfcaBsl) * var_chaste_interface__cell__sCasl; // 1 / ms
+        const double d_dt_chaste_interface_var_cell__sfcaBsl = -011900000000000001 * var_chaste_interface__cell__sfcaBsl + 1.7 * (1.0 - var_chaste_interface__cell__sfcaBsl) * var_chaste_interface__cell__sCasl; // 1 / ms
         const double var_cell__I_CaNa_sl = 0.45000000000000001 * pow(var_cell__Q10CaL, var_cell__Qpow) * (1.0 - var_chaste_interface__cell__sfcaBsl + var_cell__fcaCaMSL) * var_cell__Fsl_CaL * var_cell__ibarna_sl * var_chaste_interface__cell__sd * var_chaste_interface__cell__sf; // dimensionless
         const double var_cell__I_Ca_sl = 0.45000000000000001 * pow(var_cell__Q10CaL, var_cell__Qpow) * (1.0 - var_chaste_interface__cell__sfcaBsl + var_cell__fcaCaMSL) * var_cell__Fsl_CaL * var_cell__ibarca_sl * var_chaste_interface__cell__sd * var_chaste_interface__cell__sf; // dimensionless
         const double var_cell__I_Ca_tot_sl = -2.0 * var_cell__I_ncx_sl + var_cell__I_Ca_sl + var_cell__I_cabk_sl + var_cell__I_pca_sl; // dimensionless
         const double d_dt_chaste_interface_var_cell__sCasl = -var_cell__J_CaB_sl + (-var_chaste_interface__cell__sCasl + var_chaste_interface__cell__sCai) * var_cell__J_ca_slmyo / var_cell__Vsl + (-var_chaste_interface__cell__sCasl + var_chaste_interface__cell__sCaj) * var_cell__J_ca_juncsl / var_cell__Vsl - 0.5 * var_cell__Cmem * var_cell__I_Ca_tot_sl / (var_cell__Frdy * var_cell__Vsl); // 1 / ms
-        const double var_cell__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * var_cell__Nao); // dimensionless
-        const double var_cell__fnak = 1.0 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_cell__FoRT * var_chaste_interface__cell__sVm) + 0.036499999999999998 * var_cell__sigma * exp(-var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(01485884101040119 * var_cell__Nao); // dimensionless
+        const double var_cell__fnak = 1.0 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_cell__FoRT * var_chaste_interface__cell__sVm) + 036499999999999998 * var_cell__sigma * exp(-var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__I_nak_junc = 1.0 * var_cell__Fjunc * var_cell__IbarNaK * var_cell__Ko * var_cell__fnak / ((1.0 + pow(var_cell__KmNaip, 4) / pow(var_chaste_interface__cell__sNaj, 4)) * (var_cell__KmKo + var_cell__Ko)); // dimensionless
         const double var_cell__I_nak_sl = 1.0 * var_cell__Fsl * var_cell__IbarNaK * var_cell__Ko * var_cell__fnak / ((1.0 + pow(var_cell__KmNaip, 4) / pow(var_chaste_interface__cell__sNasl, 4)) * (var_cell__KmKo + var_cell__Ko)); // dimensionless
         const double var_cell__I_Na_junc = pow(var_chaste_interface__cell__sm, 3) * (-var_cell__ena_junc + var_chaste_interface__cell__sVm) * var_cell__Fjunc * mParameters[1] * var_chaste_interface__cell__sh * var_chaste_interface__cell__sj; // dimensionless
@@ -678,25 +678,25 @@
         const double d_dt_chaste_interface_var_cell__sNasl = -d_dt_chaste_interface_var_cell__sNaBsl + (-var_chaste_interface__cell__sNasl + var_chaste_interface__cell__sNai) * var_cell__J_na_slmyo / var_cell__Vsl + (-var_chaste_interface__cell__sNasl + var_chaste_interface__cell__sNaj) * var_cell__J_na_juncsl / var_cell__Vsl - var_cell__Cmem * var_cell__I_Na_tot_sl / (var_cell__Frdy * var_cell__Vsl); // 1 / ms
         const double var_cell__taud = 28.571428571428569 * (1.0 - exp(-0.83333333333333337 - 0.16666666666666666 * var_chaste_interface__cell__sVm)) * var_cell__dss / (5.0 + var_chaste_interface__cell__sVm); // dimensionless
         const double d_dt_chaste_interface_var_cell__sd = (-var_chaste_interface__cell__sd + var_cell__dss) / var_cell__taud; // 1 / ms
-        const double var_cell__tauf = 1.0 / (0.02 + 0.019699999999999999 * exp(-0.23877882250000002 * pow((1 + 0.068965517241379309 * var_chaste_interface__cell__sVm), 2))); // dimensionless
+        const double var_cell__tauf = 1.0 / (02 + 019699999999999999 * exp(-0.23877882250000002 * pow((1 + 068965517241379309 * var_chaste_interface__cell__sVm), 2))); // dimensionless
         const double d_dt_chaste_interface_var_cell__sf = (-var_chaste_interface__cell__sf + var_cell__fss) / var_cell__tauf; // 1 / ms
         const double var_cell__tauh = 1.0 / (var_cell__ah + var_cell__bh); // dimensionless
         const double d_dt_chaste_interface_var_cell__sh = (-var_chaste_interface__cell__sh + var_cell__hss) / var_cell__tauh; // 1 / ms
         const double var_cell__tauj = 1.0 / (var_cell__aj + var_cell__bj); // dimensionless
         const double d_dt_chaste_interface_var_cell__sj = (-var_chaste_interface__cell__sj + var_cell__jss) / var_cell__tauj; // 1 / ms
-        const double var_cell__taum = 0.12920000000000001 * exp(-8.682389366752302 * pow((1 + 0.021838829438742085 * var_chaste_interface__cell__sVm), 2)) + 0.064869999999999997 * exp(-0.0089012876052174655 * pow((-1 + 0.2073398299813394 * var_chaste_interface__cell__sVm), 2)); // dimensionless
+        const double var_cell__taum = 0.12920000000000001 * exp(-8.682389366752302 * pow((1 + 021838829438742085 * var_chaste_interface__cell__sVm), 2)) + 064869999999999997 * exp(-0089012876052174655 * pow((-1 + 0.2073398299813394 * var_chaste_interface__cell__sVm), 2)); // dimensionless
         const double d_dt_chaste_interface_var_cell__sm = (-var_chaste_interface__cell__sm + var_cell__mss) / var_cell__taum; // 1 / ms
-        const double var_cell__tauxr = 230.0 / (1.0 + exp(2.0 + 0.050000000000000003 * var_chaste_interface__cell__sVm)) + 3300.0 / ((1.0 + exp(1.2222222222222223 + 0.1111111111111111 * var_chaste_interface__cell__sVm)) * (1.0 + exp(-2.4444444444444446 - 0.1111111111111111 * var_chaste_interface__cell__sVm))); // dimensionless
-        const double var_cell__tauxs = 990.10000000000002 / (1.0 + exp(-0.17252124645892353 - 0.070821529745042494 * var_chaste_interface__cell__sVm)); // dimensionless
-        const double var_cell__tauxtof = 0.5 + 8.5 * exp(-0.81000000000000005 * pow((1 + 0.022222222222222223 * var_chaste_interface__cell__sVm), 2)); // dimensionless
-        const double var_cell__tauxtos = 0.5 + 9.0 / (1.0 + exp(0.20000000000000001 + 0.066666666666666666 * var_chaste_interface__cell__sVm)); // dimensionless
-        const double var_cell__tauytof = 7.0 + 85.0 * exp(-7.2727272727272725 * pow((1 + 0.025000000000000001 * var_chaste_interface__cell__sVm), 2)); // dimensionless
-        const double var_cell__tauytos = 30.0 + 800.0 / (1.0 + exp(6.0 + 0.10000000000000001 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__tauxr = 230 / (1.0 + exp(2.0 + 050000000000000003 * var_chaste_interface__cell__sVm)) + 3300 / ((1.0 + exp(1.2222222222222223 + 0.1111111111111111 * var_chaste_interface__cell__sVm)) * (1.0 + exp(-2.4444444444444446 - 0.1111111111111111 * var_chaste_interface__cell__sVm))); // dimensionless
+        const double var_cell__tauxs = 990.10000000000002 / (1.0 + exp(-0.17252124645892353 - 070821529745042494 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__tauxtof = 0.5 + 8.5 * exp(-0.81000000000000005 * pow((1 + 022222222222222223 * var_chaste_interface__cell__sVm), 2)); // dimensionless
+        const double var_cell__tauxtos = 0.5 + 9.0 / (1.0 + exp(0.20000000000000001 + 066666666666666666 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__tauytof = 7.0 + 85.0 * exp(-7.2727272727272725 * pow((1 + 025000000000000001 * var_chaste_interface__cell__sVm), 2)); // dimensionless
+        const double var_cell__tauytos = 30 + 800 / (1.0 + exp(6.0 + 0.10000000000000001 * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__xrss = 1.0 / (1.0 + exp(-2.0 - 0.20000000000000001 * var_chaste_interface__cell__sVm)); // dimensionless
         const double d_dt_chaste_interface_var_cell__sxkr = (-var_chaste_interface__cell__sxkr + var_cell__xrss) / var_cell__tauxr; // 1 / ms
-        const double var_cell__xsss = 1.0 / (1.0 + exp(-0.26666666666666666 - 0.070175438596491224 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__xsss = 1.0 / (1.0 + exp(-0.26666666666666666 - 070175438596491224 * var_chaste_interface__cell__sVm)); // dimensionless
         const double d_dt_chaste_interface_var_cell__sxks = (-var_chaste_interface__cell__sxks + var_cell__xsss) / var_cell__tauxs; // 1 / ms
-        const double var_cell__xtoss = 1.0 / (1.0 + exp(1.4615384615384615 - 0.076923076923076927 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__xtoss = 1.0 / (1.0 + exp(1.4615384615384615 - 076923076923076927 * var_chaste_interface__cell__sVm)); // dimensionless
         const double d_dt_chaste_interface_var_cell__sxtof = (-var_chaste_interface__cell__sxtof + var_cell__xtoss) / var_cell__tauxtof; // 1 / ms
         const double d_dt_chaste_interface_var_cell__sxtos = (-var_chaste_interface__cell__sxtos + var_cell__xtoss) / var_cell__tauxtos; // 1 / ms
         const double var_cell__ytoss = 1.0 / (1.0 + exp(3.8999999999999999 + 0.20000000000000001 * var_chaste_interface__cell__sVm)); // dimensionless
@@ -1158,7 +1158,7 @@
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: millivolt; Initial value: -81.3842590704928
         double var_chaste_interface__cell__sm = rY[1];
-        // Units: dimensionless; Initial value: 0.00384941567866232
+        // Units: dimensionless; Initial value: 00384941567866232
         double var_chaste_interface__cell__sh = rY[2];
         // Units: dimensionless; Initial value: 0.623723834301669
         double var_chaste_interface__cell__sj = rY[3];
@@ -1168,21 +1168,21 @@
         double var_chaste_interface__cell__sf = rY[5];
         // Units: dimensionless; Initial value: 0.995094078386247
         double var_chaste_interface__cell__sfcaBj = rY[6];
-        // Units: dimensionless; Initial value: 0.0246274349529557
+        // Units: dimensionless; Initial value: 0246274349529557
         double var_chaste_interface__cell__sfcaBsl = rY[7];
-        // Units: dimensionless; Initial value: 0.0150911724206476
+        // Units: dimensionless; Initial value: 0150911724206476
         double var_chaste_interface__cell__sxtos = rY[8];
-        // Units: dimensionless; Initial value: 0.000442853722673121
+        // Units: dimensionless; Initial value: 000442853722673121
         double var_chaste_interface__cell__sytos = rY[9];
         // Units: dimensionless; Initial value: 0.789013894749951
         double var_chaste_interface__cell__sxtof = rY[10];
-        // Units: dimensionless; Initial value: 0.000442846429332686
+        // Units: dimensionless; Initial value: 000442846429332686
         double var_chaste_interface__cell__sytof = rY[11];
         // Units: dimensionless; Initial value: 0.999995784674368
         double var_chaste_interface__cell__sxkr = rY[12];
-        // Units: dimensionless; Initial value: 0.020160578118589
+        // Units: dimensionless; Initial value: 020160578118589
         double var_chaste_interface__cell__sxks = rY[13];
-        // Units: dimensionless; Initial value: 0.00430143235332308
+        // Units: dimensionless; Initial value: 00430143235332308
         double var_chaste_interface__cell__sNaj = rY[32];
         // Units: dimensionless; Initial value: 8.21411036389602
         double var_chaste_interface__cell__sNasl = rY[33];
@@ -1190,67 +1190,67 @@
         double var_chaste_interface__cell__sNai = rY[34];
         // Units: dimensionless; Initial value: 8.21340895351653
         double var_chaste_interface__cell__sCaj = rY[35];
-        // Units: dimensionless; Initial value: 0.000175648385857736
+        // Units: dimensionless; Initial value: 000175648385857736
         double var_chaste_interface__cell__sCasl = rY[36];
-        // Units: dimensionless; Initial value: 0.000105614570409386
+        // Units: dimensionless; Initial value: 000105614570409386
         
         
         // Mathematics
         const double var_cell__Cao = 1.8; // dimensionless
         const double var_cell__Cli = 15.0; // dimensionless
-        const double var_cell__Clo = 150.0; // dimensionless
+        const double var_cell__Clo = 150; // dimensionless
         const double var_cell__Fjunc = 0.11; // dimensionless
         const double var_cell__Fjunc_CaL = 0.90000000000000002; // dimensionless
         const double var_cell__Frdy = 96485.0; // dimensionless
         const double var_cell__Fsl = 1.0 - var_cell__Fjunc; // dimensionless
         const double var_cell__Fsl_CaL = 1.0 - var_cell__Fjunc_CaL; // dimensionless
-        const double var_cell__GCaB = 0.00055130000000000001; // dimensionless
-        const double var_cell__GClB = 0.0089999999999999993; // dimensionless
-        const double var_cell__GClCa = 0.0548125; // dimensionless
-        const double var_cell__GNaB = 0.00059699999999999998; // dimensionless
+        const double var_cell__GCaB = 00055130000000000001; // dimensionless
+        const double var_cell__GClB = 0089999999999999993; // dimensionless
+        const double var_cell__GClCa = 0548125; // dimensionless
+        const double var_cell__GNaB = 00059699999999999998; // dimensionless
         const double var_cell__GtoFast = 0.1144; // dimensionless
-        const double var_cell__GtoSlow = 0.015599999999999999; // dimensionless
+        const double var_cell__GtoSlow = 015599999999999999; // dimensionless
         const double var_cell__IbarNCX = 4.5; // dimensionless
         const double var_cell__IbarNaK = 1.8; // dimensionless
-        const double var_cell__IbarSLCaP = 0.067299999999999999; // dimensionless
+        const double var_cell__IbarSLCaP = 067299999999999999; // dimensionless
         const double var_cell__KdClCa = 0.10000000000000001; // dimensionless
-        const double var_cell__Kdact = 0.00014999999999999999; // dimensionless
-        const double var_cell__KmCai = 0.0035899999999999999; // dimensionless
+        const double var_cell__Kdact = 00014999999999999999; // dimensionless
+        const double var_cell__KmCai = 0035899999999999999; // dimensionless
         const double var_cell__KmCao = 1.3; // dimensionless
         const double var_cell__KmKo = 1.5; // dimensionless
         const double var_cell__KmNai = 12.289999999999999; // dimensionless
         const double var_cell__KmNaip = 11.0; // dimensionless
         const double var_cell__KmNao = 87.5; // dimensionless
-        const double var_cell__KmPCa = 0.00050000000000000001; // dimensionless
+        const double var_cell__KmPCa = 00050000000000000001; // dimensionless
         const double var_cell__Ko = 5.4000000000000004; // dimensionless
-        const double var_cell__Nao = 140.0; // dimensionless
+        const double var_cell__Nao = 140; // dimensionless
         const double var_cell__Q10CaL = 1.8; // dimensionless
         const double var_cell__Q10NCX = 1.5700000000000001; // dimensionless
         const double var_cell__Q10SLCaP = 2.3500000000000001; // dimensionless
         const double var_cell__R = 8314.0; // dimensionless
-        const double var_cell__Temp = 310.0; // dimensionless
+        const double var_cell__Temp = 310; // dimensionless
         const double var_cell__FoRT = var_cell__Frdy / (var_cell__R * var_cell__Temp); // dimensionless
         const double var_cell__Qpow = -31.0 + 0.10000000000000001 * var_cell__Temp; // dimensionless
         const double var_cell__ecl = 1.0 * log(var_cell__Cli / var_cell__Clo) / var_cell__FoRT; // dimensionless
-        const double var_cell__fcaCaMSL = 0.0; // dimensionless
-        const double var_cell__fcaCaj = 0.0; // dimensionless
-        const double var_cell__gkp = 0.002; // dimensionless
-        const double var_cell__gkr = 0.015061601901917734 * sqrt(var_cell__Ko) * mParameters[2]; // dimensionless
-        const double var_cell__gks_junc = 0.0035000000000000001; // dimensionless
-        const double var_cell__gks_sl = 0.0035000000000000001; // dimensionless
+        const double var_cell__fcaCaMSL = 0; // dimensionless
+        const double var_cell__fcaCaj = 0; // dimensionless
+        const double var_cell__gkp = 002; // dimensionless
+        const double var_cell__gkr = 015061601901917734 * sqrt(var_cell__Ko) * mParameters[2]; // dimensionless
+        const double var_cell__gks_junc = 0035000000000000001; // dimensionless
+        const double var_cell__gks_sl = 0035000000000000001; // dimensionless
         const double var_cell__ksat = 0.32000000000000001; // dimensionless
         const double var_cell__nu = 0.27000000000000002; // dimensionless
-        const double var_cell__pCa = 0.00027 * mParameters[0]; // dimensionless
+        const double var_cell__pCa = 00027 * mParameters[0]; // dimensionless
         const double var_cell__pK = 1.35e-7 * mParameters[0]; // dimensionless
         const double var_cell__pNa = 7.4999999999999993e-9 * mParameters[0]; // dimensionless
-        const double var_cell__pNaK = 0.018329999999999999; // dimensionless
+        const double var_cell__pNaK = 018329999999999999; // dimensionless
         const double var_cell__I_pca_junc = pow(var_cell__Q10SLCaP, var_cell__Qpow) * pow(var_chaste_interface__cell__sCaj, 1.6000000000000001) * var_cell__Fjunc * var_cell__IbarSLCaP / (pow(var_cell__KmPCa, 1.6000000000000001) + pow(var_chaste_interface__cell__sCaj, 1.6000000000000001)); // dimensionless
         const double var_cell__Ka_junc = 1.0 / (1.0 + pow(var_cell__Kdact, 2) / pow(var_chaste_interface__cell__sCaj, 2)); // dimensionless
         const double var_cell__eca_junc = 0.5 * log(var_cell__Cao / var_chaste_interface__cell__sCaj) / var_cell__FoRT; // dimensionless
         const double var_cell__I_pca_sl = pow(var_cell__Q10SLCaP, var_cell__Qpow) * pow(var_chaste_interface__cell__sCasl, 1.6000000000000001) * var_cell__Fsl * var_cell__IbarSLCaP / (pow(var_cell__KmPCa, 1.6000000000000001) + pow(var_chaste_interface__cell__sCasl, 1.6000000000000001)); // dimensionless
         const double var_cell__Ka_sl = 1.0 / (1.0 + pow(var_cell__Kdact, 2) / pow(var_chaste_interface__cell__sCasl, 2)); // dimensionless
         const double var_cell__eca_sl = 0.5 * log(var_cell__Cao / var_chaste_interface__cell__sCasl) / var_cell__FoRT; // dimensionless
-        const double var_cell__sKi = 120.0; // dimensionless
+        const double var_cell__sKi = 120; // dimensionless
         const double var_cell__ek = 1.0 * log(var_cell__Ko / var_cell__sKi) / var_cell__FoRT; // dimensionless
         const double var_cell__eks = 1.0 * log((var_cell__Nao * var_cell__pNaK + var_cell__Ko) / (var_cell__pNaK * var_chaste_interface__cell__sNai + var_cell__sKi)) / var_cell__FoRT; // dimensionless
         const double var_cell__ena_junc = 1.0 * log(var_cell__Nao / var_chaste_interface__cell__sNaj) / var_cell__FoRT; // dimensionless
@@ -1267,7 +1267,7 @@
         const double var_cell__I_nabk_junc = (-var_cell__ena_junc + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__GNaB; // dimensionless
         const double var_cell__I_nabk_sl = (-var_cell__ena_sl + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__GNaB; // dimensionless
         const double var_cell__aki = 1.02 / (1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__sVm - 0.23849999999999999 * var_cell__ek)); // dimensionless
-        const double var_cell__bki = (0.49124000000000001 * exp(0.43983232 + 0.080320000000000003 * var_chaste_interface__cell__sVm - 0.080320000000000003 * var_cell__ek) + exp(-36.698642499999998 + 0.061749999999999999 * var_chaste_interface__cell__sVm - 0.061749999999999999 * var_cell__ek)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_cell__ek - 0.51429999999999998 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__bki = (0.49124000000000001 * exp(0.43983232 + 080320000000000003 * var_chaste_interface__cell__sVm - 080320000000000003 * var_cell__ek) + exp(-36.698642499999998 + 061749999999999999 * var_chaste_interface__cell__sVm - 061749999999999999 * var_cell__ek)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_cell__ek - 0.51429999999999998 * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__ibarca_j = 4.0 * (-0.34100000000000003 * var_cell__Cao + 0.34100000000000003 * var_chaste_interface__cell__sCaj * exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__FoRT * var_cell__Frdy * var_cell__pCa * var_chaste_interface__cell__sVm / (-1.0 + exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__ibarca_sl = 4.0 * (-0.34100000000000003 * var_cell__Cao + 0.34100000000000003 * var_chaste_interface__cell__sCasl * exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__FoRT * var_cell__Frdy * var_cell__pCa * var_chaste_interface__cell__sVm / (-1.0 + exp(2.0 * var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__ibark = (-0.75 * var_cell__Ko + 0.75 * var_cell__sKi * exp(var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__FoRT * var_cell__Frdy * var_cell__pK * var_chaste_interface__cell__sVm / (-1.0 + exp(var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
@@ -1279,7 +1279,7 @@
         const double var_cell__I_kp_junc = (-var_cell__ek + var_chaste_interface__cell__sVm) * var_cell__Fjunc * var_cell__gkp * var_cell__kp_kp; // dimensionless
         const double var_cell__I_kp_sl = (-var_cell__ek + var_chaste_interface__cell__sVm) * var_cell__Fsl * var_cell__gkp * var_cell__kp_kp; // dimensionless
         const double var_cell__I_kp = var_cell__I_kp_junc + var_cell__I_kp_sl; // dimensionless
-        const double var_cell__rkr = 1.0 / (1.0 + exp(3.0833333333333335 + 0.041666666666666664 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__rkr = 1.0 / (1.0 + exp(3.0833333333333335 + 041666666666666664 * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__s1_junc = pow(var_chaste_interface__cell__sNaj, 3) * var_cell__Cao * exp(var_cell__FoRT * var_cell__nu * var_chaste_interface__cell__sVm); // dimensionless
         const double var_cell__s1_sl = pow(var_chaste_interface__cell__sNasl, 3) * var_cell__Cao * exp(var_cell__FoRT * var_cell__nu * var_chaste_interface__cell__sVm); // dimensionless
         const double var_cell__s2_junc = pow(var_cell__Nao, 3) * var_chaste_interface__cell__sCaj * exp((-1.0 + var_cell__nu) * var_cell__FoRT * var_chaste_interface__cell__sVm); // dimensionless
@@ -1294,8 +1294,8 @@
         const double var_cell__I_Ca_sl = 0.45000000000000001 * pow(var_cell__Q10CaL, var_cell__Qpow) * (1.0 - var_chaste_interface__cell__sfcaBsl + var_cell__fcaCaMSL) * var_cell__Fsl_CaL * var_cell__ibarca_sl * var_chaste_interface__cell__sd * var_chaste_interface__cell__sf; // dimensionless
         const double var_cell__I_Ca_tot_sl = -2.0 * var_cell__I_ncx_sl + var_cell__I_Ca_sl + var_cell__I_cabk_sl + var_cell__I_pca_sl; // dimensionless
         const double var_cell__I_Ca_tot = var_cell__I_Ca_tot_junc + var_cell__I_Ca_tot_sl; // dimensionless
-        const double var_cell__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * var_cell__Nao); // dimensionless
-        const double var_cell__fnak = 1.0 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_cell__FoRT * var_chaste_interface__cell__sVm) + 0.036499999999999998 * var_cell__sigma * exp(-var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(01485884101040119 * var_cell__Nao); // dimensionless
+        const double var_cell__fnak = 1.0 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_cell__FoRT * var_chaste_interface__cell__sVm) + 036499999999999998 * var_cell__sigma * exp(-var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__I_nak_junc = 1.0 * var_cell__Fjunc * var_cell__IbarNaK * var_cell__Ko * var_cell__fnak / ((1.0 + pow(var_cell__KmNaip, 4) / pow(var_chaste_interface__cell__sNaj, 4)) * (var_cell__KmKo + var_cell__Ko)); // dimensionless
         const double var_cell__I_nak_sl = 1.0 * var_cell__Fsl * var_cell__IbarNaK * var_cell__Ko * var_cell__fnak / ((1.0 + pow(var_cell__KmNaip, 4) / pow(var_chaste_interface__cell__sNasl, 4)) * (var_cell__KmKo + var_cell__Ko)); // dimensionless
         const double var_cell__I_nak = var_cell__I_nak_junc + var_cell__I_nak_sl; // dimensionless
@@ -1328,7 +1328,7 @@
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             double var_chaste_interface__cell__sm = rY[1];
-            // Units: dimensionless; Initial value: 0.00384941567866232
+            // Units: dimensionless; Initial value: 00384941567866232
             double var_chaste_interface__cell__sh = rY[2];
             // Units: dimensionless; Initial value: 0.623723834301669
             double var_chaste_interface__cell__sj = rY[3];
@@ -1338,29 +1338,29 @@
             double var_chaste_interface__cell__sf = rY[5];
             // Units: dimensionless; Initial value: 0.995094078386247
             double var_chaste_interface__cell__sfcaBj = rY[6];
-            // Units: dimensionless; Initial value: 0.0246274349529557
+            // Units: dimensionless; Initial value: 0246274349529557
             double var_chaste_interface__cell__sfcaBsl = rY[7];
-            // Units: dimensionless; Initial value: 0.0150911724206476
+            // Units: dimensionless; Initial value: 0150911724206476
             double var_chaste_interface__cell__sxtos = rY[8];
-            // Units: dimensionless; Initial value: 0.000442853722673121
+            // Units: dimensionless; Initial value: 000442853722673121
             double var_chaste_interface__cell__sytos = rY[9];
             // Units: dimensionless; Initial value: 0.789013894749951
             double var_chaste_interface__cell__sxtof = rY[10];
-            // Units: dimensionless; Initial value: 0.000442846429332686
+            // Units: dimensionless; Initial value: 000442846429332686
             double var_chaste_interface__cell__sytof = rY[11];
             // Units: dimensionless; Initial value: 0.999995784674368
             double var_chaste_interface__cell__sxkr = rY[12];
-            // Units: dimensionless; Initial value: 0.020160578118589
+            // Units: dimensionless; Initial value: 020160578118589
             double var_chaste_interface__cell__sxks = rY[13];
-            // Units: dimensionless; Initial value: 0.00430143235332308
+            // Units: dimensionless; Initial value: 00430143235332308
             double var_chaste_interface__cell__sNaj = rY[32];
             // Units: dimensionless; Initial value: 8.21411036389602
             double var_chaste_interface__cell__sNasl = rY[33];
             // Units: dimensionless; Initial value: 8.21322794157889
             double var_chaste_interface__cell__sCaj = rY[35];
-            // Units: dimensionless; Initial value: 0.000175648385857736
+            // Units: dimensionless; Initial value: 000175648385857736
             double var_chaste_interface__cell__sCasl = rY[36];
-            // Units: dimensionless; Initial value: 0.000105614570409386
+            // Units: dimensionless; Initial value: 000105614570409386
             
             const double var_x0 = exp(7.4880000000000004 - 0.16722408026755853 * var_chaste_interface__cell__sVm);
             const double var_x1 = 1.0 + var_x0;
@@ -1375,23 +1375,23 @@
             const double var_x10 = exp(-45.047763776781437 - 0.51429999999999998 * var_chaste_interface__cell__sVm);
             const double var_x11 = 1.0 + var_x10;
             const double var_x12 = 1 / var_x11;
-            const double var_x13 = exp(7.0933355765099853 + 0.080320000000000003 * var_chaste_interface__cell__sVm);
-            const double var_x14 = exp(-31.583430521794174 + 0.061749999999999999 * var_chaste_interface__cell__sVm);
+            const double var_x13 = exp(7.0933355765099853 + 080320000000000003 * var_chaste_interface__cell__sVm);
+            const double var_x14 = exp(-31.583430521794174 + 061749999999999999 * var_chaste_interface__cell__sVm);
             const double var_x15 = var_x14 + 0.49124000000000001 * var_x13;
             const double var_x16 = var_x12 * var_x15;
             const double var_x17 = 1 / (var_x16 + 1.02 * var_x9);
             const double var_x18 = mParameters[2] * var_chaste_interface__cell__sxkr;
-            const double var_x19 = exp(3.0833333333333335 + 0.041666666666666664 * var_chaste_interface__cell__sVm);
+            const double var_x19 = exp(3.0833333333333335 + 041666666666666664 * var_chaste_interface__cell__sVm);
             const double var_x20 = 1.0 + var_x19;
-            const double var_x21 = 0.035000000000000003 / var_x20;
+            const double var_x21 = 035000000000000003 / var_x20;
             const double var_x22 = 82.837440942604388 + var_chaste_interface__cell__sVm;
             const double var_x23 = pow(var_chaste_interface__cell__sNaj, (-4));
-            const double var_x24 = exp(-0.003743588350780262 * var_chaste_interface__cell__sVm);
+            const double var_x24 = exp(-003743588350780262 * var_chaste_interface__cell__sVm);
             const double var_x25 = exp(2.0802377414561666);
-            const double var_x26 = 0.037435883507802616 * var_chaste_interface__cell__sVm;
+            const double var_x26 = 037435883507802616 * var_chaste_interface__cell__sVm;
             const double var_x27 = exp(-var_x26);
-            const double var_x28 = 1.0 + 0.1245 * var_x24 + 0.036499999999999998 * var_x27 * (-0.14285714285714285 + 0.14285714285714285 * var_x25);
-            const double var_x29 = (0.00046607674967214262 * var_x24 + 0.037435883507802616 * var_x27 * (-0.0052142857142857138 + 0.0052142857142857138 * var_x25)) / pow(var_x28, 2);
+            const double var_x28 = 1.0 + 0.1245 * var_x24 + 036499999999999998 * var_x27 * (-0.14285714285714285 + 0.14285714285714285 * var_x25);
+            const double var_x29 = (00046607674967214262 * var_x24 + 037435883507802616 * var_x27 * (-0052142857142857138 + 0052142857142857138 * var_x25)) / pow(var_x28, 2);
             const double var_x30 = var_x29 / (1.0 + 14641.0 * var_x23);
             const double var_x31 = pow(var_chaste_interface__cell__sNasl, (-4));
             const double var_x32 = var_x29 / (1.0 + 14641.0 * var_x31);
@@ -1399,18 +1399,18 @@
             const double var_x34 = pow(var_chaste_interface__cell__sm, 3);
             const double var_x35 = var_x34 * mParameters[1] * var_chaste_interface__cell__sj;
             const double var_x36 = var_x35 * var_chaste_interface__cell__sh;
-            const double var_x37 = exp(-0.027328194960695912 * var_chaste_interface__cell__sVm);
+            const double var_x37 = exp(-027328194960695912 * var_chaste_interface__cell__sVm);
             const double var_x38 = 74988.56697214958 * var_x37;
             const double var_x39 = pow(var_chaste_interface__cell__sNaj, 3);
-            const double var_x40 = exp(0.010107688547106707 * var_chaste_interface__cell__sVm);
-            const double var_x41 = 0.018193839384792073 * var_x40;
+            const double var_x40 = exp(010107688547106707 * var_chaste_interface__cell__sVm);
+            const double var_x41 = 018193839384792073 * var_x40;
             const double var_x42 = 1.0 + 0.32000000000000001 * var_x37;
             const double var_x43 = 1 / var_x42;
             const double var_x44 = pow(var_chaste_interface__cell__sCaj, 2);
             const double var_x45 = 1 / var_x44;
             const double var_x46 = 1.0 + 2.2499999999999996e-8 * var_x45;
             const double var_x47 = 1 / var_x46;
-            const double var_x48 = 2744000.0 * var_chaste_interface__cell__sCaj;
+            const double var_x48 = 2744000 * var_chaste_interface__cell__sCaj;
             const double var_x49 = (1.0 + 278.55153203342621 * var_chaste_interface__cell__sCaj) * var_chaste_interface__cell__sCaj;
             const double var_x50 = 1 / (9850.9599999999991 + var_x48 + 669921.875 * var_x49 + 8.4066800865219591 * var_x39);
             const double var_x51 = var_x47 * var_x50;
@@ -1420,7 +1420,7 @@
             const double var_x55 = pow(var_chaste_interface__cell__sCasl, (-2));
             const double var_x56 = 1.0 + 2.2499999999999996e-8 * var_x55;
             const double var_x57 = 1 / var_x56;
-            const double var_x58 = 2744000.0 * var_chaste_interface__cell__sCasl;
+            const double var_x58 = 2744000 * var_chaste_interface__cell__sCasl;
             const double var_x59 = (1.0 + 278.55153203342621 * var_chaste_interface__cell__sCasl) * var_chaste_interface__cell__sCasl;
             const double var_x60 = 1 / (9850.9599999999991 + var_x58 + 669921.875 * var_x59 + 8.4066800865219591 * var_x54);
             const double var_x61 = var_x57 * var_x60;
@@ -1449,7 +1449,7 @@
             const double var_x84 = -105.0 + var_x78 * var_chaste_interface__cell__sNaj;
             const double var_x85 = 1.0971453706510394e-5 * var_x84;
             const double var_x86 = var_x83 * var_x85;
-            const double var_x87 = exp(0.074871767015605231 * var_chaste_interface__cell__sVm);
+            const double var_x87 = exp(074871767015605231 * var_chaste_interface__cell__sVm);
             const double var_x88 = -1.0 + var_x87;
             const double var_x89 = 1 / var_x88;
             const double var_x90 = var_x75 * var_x89;
@@ -1462,10 +1462,10 @@
             const double var_x97 = -0.61380000000000001 + var_x92 * var_chaste_interface__cell__sCasl;
             const double var_x98 = 0.17554325930416628 * var_x97;
             const double var_x99 = var_x96 * var_x98;
-            const double var_x100 = -4.0500000000000007 + 90.0 * var_x71;
+            const double var_x100 = -4.0500000000000007 + 90 * var_x71;
             const double var_x101 = var_x100 * var_x76;
-            const double var_x102 = 1.0 - 0.099999999999999978 * var_chaste_interface__cell__sfcaBsl - 0.90000000000000002 * var_chaste_interface__cell__sfcaBj;
-            const double var_x103 = 0.0002194290741302079 * var_x102;
+            const double var_x102 = 1.0 - 099999999999999978 * var_chaste_interface__cell__sfcaBsl - 0.90000000000000002 * var_chaste_interface__cell__sfcaBj;
+            const double var_x103 = 0002194290741302079 * var_x102;
             const double var_x104 = var_x76 * var_chaste_interface__cell__sVm;
             const double var_x105 = var_x102 * var_x71;
             const double var_x106 = var_x82 * var_x84;
@@ -1476,19 +1476,19 @@
             const double var_x111 = 4.5636229207574697e-8 * var_x109 * var_x70 * var_x79;
             const double var_x112 = var_x87 * var_chaste_interface__cell__sVm;
             const double var_x113 = var_x112 * var_x75 / pow(var_x88, 2);
-            const double var_x114 = 0.013143234011781513 * var_x113 * var_x70 * var_x97;
+            const double var_x114 = 013143234011781513 * var_x113 * var_x70 * var_x97;
             const double var_x115 = var_x82 * var_x93;
             const double var_x116 = 0.11828910610603366 * var_x113 * var_x115;
             const double var_x117 = var_x107 * var_x77;
             const double var_x118 = 3.4227171905681023e-8 * var_x117 * var_chaste_interface__cell__sNasl;
             const double var_x119 = var_x112 * var_x96;
-            const double var_x120 = 0.0044818427980174965 * var_x119 * var_chaste_interface__cell__sCasl;
+            const double var_x120 = 0044818427980174965 * var_x119 * var_chaste_interface__cell__sCasl;
             const double var_x121 = var_x112 * var_x91;
-            const double var_x122 = 0.040336585182157478 * var_x121 * var_chaste_interface__cell__sCaj;
+            const double var_x122 = 040336585182157478 * var_x121 * var_chaste_interface__cell__sCaj;
             const double var_x123 = var_x107 * var_x83;
             const double var_x124 = 3.0804454715112929e-7 * var_x123 * var_chaste_interface__cell__sNaj;
             
-            partialF = -0.010148299999999999 + var_x110 + var_x111 + var_x114 + var_x116 - var_x118 - var_x120 - var_x122 - var_x124 - var_x81 - var_x86 - var_x95 - var_x99 - 1.0 * var_x36 - 0.002 / var_x1 - 0.0035000000000000001 * var_x2 - 0.495 * var_x53 - 0.15495652173913044 * var_x30 - 1.2537391304347827 * var_x32 - 0.006029375 / var_x4 - 4.0049999999999999 * var_x63 - 0.0043287860817742326 * var_x67 - 0.035023814661627878 * var_x69 - 0.048783124999999997 / var_x6 - var_x101 * var_x103 - var_x18 * var_x21 - 0.1144 * var_chaste_interface__cell__sxtof * var_chaste_interface__cell__sytof - 0.015599999999999999 * var_chaste_interface__cell__sxtos * var_chaste_interface__cell__sytos - 0.35699999999999998 * var_x17 * var_x9 - 0.00073930691316271028 * var_x104 * var_x105 + 0.085144499999999998 * var_x17 * var_x22 * var_x33 - 0.00033444816053511704 * var_x0 * var_x22 / pow(var_x1, 2) + 8.2145212573634477e-6 * var_x100 * var_x105 * var_x108 * var_chaste_interface__cell__sVm + 0.0014583333333333334 * var_x18 * var_x19 * var_x22 / pow(var_x20, 2) - 0.34313725490196073 * var_x22 * var_x9 * (0.24326999999999999 * var_x33 - var_x12 * (0.061749999999999999 * var_x14 + 0.039456396800000001 * var_x13) - 0.51429999999999998 * var_x10 * var_x15 / pow(var_x11, 2)) / pow((var_x9 + 0.98039215686274506 * var_x16), 2);
+            partialF = -010148299999999999 + var_x110 + var_x111 + var_x114 + var_x116 - var_x118 - var_x120 - var_x122 - var_x124 - var_x81 - var_x86 - var_x95 - var_x99 - 1.0 * var_x36 - 002 / var_x1 - 0035000000000000001 * var_x2 - 0.495 * var_x53 - 0.15495652173913044 * var_x30 - 1.2537391304347827 * var_x32 - 006029375 / var_x4 - 4.0049999999999999 * var_x63 - 0043287860817742326 * var_x67 - 035023814661627878 * var_x69 - 048783124999999997 / var_x6 - var_x101 * var_x103 - var_x18 * var_x21 - 0.1144 * var_chaste_interface__cell__sxtof * var_chaste_interface__cell__sytof - 015599999999999999 * var_chaste_interface__cell__sxtos * var_chaste_interface__cell__sytos - 0.35699999999999998 * var_x17 * var_x9 - 00073930691316271028 * var_x104 * var_x105 + 085144499999999998 * var_x17 * var_x22 * var_x33 - 00033444816053511704 * var_x0 * var_x22 / pow(var_x1, 2) + 8.2145212573634477e-6 * var_x100 * var_x105 * var_x108 * var_chaste_interface__cell__sVm + 0014583333333333334 * var_x18 * var_x19 * var_x22 / pow(var_x20, 2) - 0.34313725490196073 * var_x22 * var_x9 * (0.24326999999999999 * var_x33 - var_x12 * (061749999999999999 * var_x14 + 039456396800000001 * var_x13) - 0.51429999999999998 * var_x10 * var_x15 / pow(var_x11, 2)) / pow((var_x9 + 0.98039215686274506 * var_x16), 2);
         }
         else
         {
@@ -1506,12 +1506,12 @@
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: millivolt; Initial value: -81.3842590704928
         double var_chaste_interface__cell__sm = rY[1];
-        // Units: dimensionless; Initial value: 0.00384941567866232
+        // Units: dimensionless; Initial value: 00384941567866232
         
         
         // Mathematics
         const double var_cell__mss = 1.0 / pow((1.0 + exp(-6.2967884828349945 - 0.11074197120708749 * var_chaste_interface__cell__sVm)), 2); // dimensionless
-        const double var_cell__taum = 0.12920000000000001 * exp(-8.682389366752302 * pow((1 + 0.021838829438742085 * var_chaste_interface__cell__sVm), 2)) + 0.064869999999999997 * exp(-0.0089012876052174655 * pow((-1 + 0.2073398299813394 * var_chaste_interface__cell__sVm), 2)); // dimensionless
+        const double var_cell__taum = 0.12920000000000001 * exp(-8.682389366752302 * pow((1 + 021838829438742085 * var_chaste_interface__cell__sVm), 2)) + 064869999999999997 * exp(-0089012876052174655 * pow((-1 + 0.2073398299813394 * var_chaste_interface__cell__sVm), 2)); // dimensionless
         const double d_dt_chaste_interface_var_cell__sm = (-var_chaste_interface__cell__sm + var_cell__mss) / var_cell__taum; // 1 / ms
 
         return d_dt_chaste_interface_var_cell__sm;
@@ -1525,10 +1525,10 @@
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
-            const double var_x187 = exp(-0.0089012876052174655 * pow((-1 + 0.2073398299813394 * var_chaste_interface__cell__sVm), 2));
-            const double var_x188 = exp(-8.682389366752302 * pow((1 + 0.021838829438742085 * var_chaste_interface__cell__sVm), 2));
+            const double var_x187 = exp(-0089012876052174655 * pow((-1 + 0.2073398299813394 * var_chaste_interface__cell__sVm), 2));
+            const double var_x188 = exp(-8.682389366752302 * pow((1 + 021838829438742085 * var_chaste_interface__cell__sVm), 2));
             const double var_x191 = 0.12920000000000001 * var_x188;
-            const double var_x192 = 0.064869999999999997 * var_x187;
+            const double var_x192 = 064869999999999997 * var_x187;
             const double var_x193 = 1 / (var_x191 + var_x192);
             
             partialF = -var_x193;
@@ -1553,8 +1553,8 @@
         
         
         // Mathematics
-        const double var_cell__ah = ((var_chaste_interface__cell__sVm >= -40.0) ? (0.0) : (0.057000000000000002 * exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__cell__sVm))); // dimensionless
-        const double var_cell__bh = ((var_chaste_interface__cell__sVm >= -40.0) ? (5.9230769230769234 / (1.0 + exp(-0.96036036036036043 - 0.0900900900900901 * var_chaste_interface__cell__sVm))) : (310000.0 * exp(0.34849999999999998 * var_chaste_interface__cell__sVm) + 2.7000000000000002 * exp(0.079000000000000001 * var_chaste_interface__cell__sVm))); // dimensionless
+        const double var_cell__ah = ((var_chaste_interface__cell__sVm >= -40) ? (0) : (057000000000000002 * exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__cell__sVm))); // dimensionless
+        const double var_cell__bh = ((var_chaste_interface__cell__sVm >= -40) ? (5.9230769230769234 / (1.0 + exp(-0.96036036036036043 - 0900900900900901 * var_chaste_interface__cell__sVm))) : (310000 * exp(0.34849999999999998 * var_chaste_interface__cell__sVm) + 2.7000000000000002 * exp(079000000000000001 * var_chaste_interface__cell__sVm))); // dimensionless
         const double var_cell__hss = 1.0 / pow((1.0 + exp(9.6298788694481825 + 0.13458950201884254 * var_chaste_interface__cell__sVm)), 2); // dimensionless
         const double var_cell__tauh = 1.0 / (var_cell__ah + var_cell__bh); // dimensionless
         const double d_dt_chaste_interface_var_cell__sh = (-var_chaste_interface__cell__sh + var_cell__hss) / var_cell__tauh; // 1 / ms
@@ -1570,14 +1570,14 @@
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
-            const double var_x197 = var_chaste_interface__cell__sVm >= -40.0;
+            const double var_x197 = var_chaste_interface__cell__sVm >= -40;
             const double var_x198 = exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__cell__sVm);
-            const double var_x199 = exp(-0.96036036036036043 - 0.0900900900900901 * var_chaste_interface__cell__sVm);
+            const double var_x199 = exp(-0.96036036036036043 - 0900900900900901 * var_chaste_interface__cell__sVm);
             const double var_x200 = 1.0 + var_x199;
             const double var_x201 = exp(0.34849999999999998 * var_chaste_interface__cell__sVm);
-            const double var_x202 = exp(0.079000000000000001 * var_chaste_interface__cell__sVm);
-            const double var_x203 = 1.0 * ((var_x197) ? (0.0) : (0.057000000000000002 * var_x198));
-            const double var_x204 = 1.0 * ((var_x197) ? (5.9230769230769234 / var_x200) : (310000.0 * var_x201 + 2.7000000000000002 * var_x202));
+            const double var_x202 = exp(079000000000000001 * var_chaste_interface__cell__sVm);
+            const double var_x203 = 1.0 * ((var_x197) ? (0) : (057000000000000002 * var_x198));
+            const double var_x204 = 1.0 * ((var_x197) ? (5.9230769230769234 / var_x200) : (310000 * var_x201 + 2.7000000000000002 * var_x202));
             
             partialF = -var_x203 - var_x204;
         }
@@ -1601,8 +1601,8 @@
         
         
         // Mathematics
-        const double var_cell__aj = ((var_chaste_interface__cell__sVm >= -40.0) ? (0.0) : ((37.780000000000001 + var_chaste_interface__cell__sVm) * (-25428.0 * exp(0.24440000000000001 * var_chaste_interface__cell__sVm) - 6.9480000000000002e-6 * exp(-0.043909999999999998 * var_chaste_interface__cell__sVm)) / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__sVm)))); // dimensionless
-        const double var_cell__bj = ((var_chaste_interface__cell__sVm >= -40.0) ? (0.59999999999999998 * exp(0.057000000000000002 * var_chaste_interface__cell__sVm) / (1.0 + exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__cell__sVm))) : (0.024240000000000001 * exp(-0.01052 * var_chaste_interface__cell__sVm) / (1.0 + exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__cell__sVm)))); // dimensionless
+        const double var_cell__aj = ((var_chaste_interface__cell__sVm >= -40) ? (0) : ((37.780000000000001 + var_chaste_interface__cell__sVm) * (-25428.0 * exp(0.24440000000000001 * var_chaste_interface__cell__sVm) - 6.9480000000000002e-6 * exp(-043909999999999998 * var_chaste_interface__cell__sVm)) / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__sVm)))); // dimensionless
+        const double var_cell__bj = ((var_chaste_interface__cell__sVm >= -40) ? (0.59999999999999998 * exp(057000000000000002 * var_chaste_interface__cell__sVm) / (1.0 + exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__cell__sVm))) : (024240000000000001 * exp(-01052 * var_chaste_interface__cell__sVm) / (1.0 + exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__cell__sVm)))); // dimensionless
         const double var_cell__jss = 1.0 / pow((1.0 + exp(9.6298788694481825 + 0.13458950201884254 * var_chaste_interface__cell__sVm)), 2); // dimensionless
         const double var_cell__tauj = 1.0 / (var_cell__aj + var_cell__bj); // dimensionless
         const double d_dt_chaste_interface_var_cell__sj = (-var_chaste_interface__cell__sj + var_cell__jss) / var_cell__tauj; // 1 / ms
@@ -1618,25 +1618,25 @@
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
-            const double var_x197 = var_chaste_interface__cell__sVm >= -40.0;
+            const double var_x197 = var_chaste_interface__cell__sVm >= -40;
             const double var_x206 = exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__sVm);
             const double var_x207 = 1.0 + var_x206;
             const double var_x208 = 1 / var_x207;
             const double var_x209 = exp(0.24440000000000001 * var_chaste_interface__cell__sVm);
-            const double var_x210 = exp(-0.043909999999999998 * var_chaste_interface__cell__sVm);
+            const double var_x210 = exp(-043909999999999998 * var_chaste_interface__cell__sVm);
             const double var_x211 = -25428.0 * var_x209 - 6.9480000000000002e-6 * var_x210;
             const double var_x212 = var_x208 * var_x211;
             const double var_x213 = 37.780000000000001 + var_chaste_interface__cell__sVm;
             const double var_x214 = exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__cell__sVm);
             const double var_x215 = 1.0 + var_x214;
-            const double var_x216 = exp(0.057000000000000002 * var_chaste_interface__cell__sVm);
+            const double var_x216 = exp(057000000000000002 * var_chaste_interface__cell__sVm);
             const double var_x217 = var_x216 / var_x215;
             const double var_x218 = exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__cell__sVm);
             const double var_x219 = 1.0 + var_x218;
-            const double var_x220 = exp(-0.01052 * var_chaste_interface__cell__sVm);
+            const double var_x220 = exp(-01052 * var_chaste_interface__cell__sVm);
             const double var_x221 = var_x220 / var_x219;
-            const double var_x222 = 1.0 * ((var_x197) ? (0.0) : (var_x212 * var_x213));
-            const double var_x223 = 1.0 * ((var_x197) ? (0.59999999999999998 * var_x217) : (0.024240000000000001 * var_x221));
+            const double var_x222 = 1.0 * ((var_x197) ? (0) : (var_x212 * var_x213));
+            const double var_x223 = 1.0 * ((var_x197) ? (0.59999999999999998 * var_x217) : (024240000000000001 * var_x221));
             
             partialF = -var_x222 - var_x223;
         }
@@ -1679,7 +1679,7 @@
             const double var_x225 = 1.0 - var_x224;
             const double var_x226 = 1 / var_x225;
             const double var_x227 = 1.0 + var_x224;
-            const double var_x231 = 0.035000000000000003 * var_x227;
+            const double var_x231 = 035000000000000003 * var_x227;
             const double var_x232 = 5.0 + var_chaste_interface__cell__sVm;
             const double var_x233 = var_x226 * var_x232;
             
@@ -1705,8 +1705,8 @@
         
         
         // Mathematics
-        const double var_cell__fss = 1.0 / (1.0 + exp(3.8888888888888888 + 0.1111111111111111 * var_chaste_interface__cell__sVm)) + 0.59999999999999998 / (1.0 + exp(2.5 - 0.050000000000000003 * var_chaste_interface__cell__sVm)); // dimensionless
-        const double var_cell__tauf = 1.0 / (0.02 + 0.019699999999999999 * exp(-0.23877882250000002 * pow((1 + 0.068965517241379309 * var_chaste_interface__cell__sVm), 2))); // dimensionless
+        const double var_cell__fss = 1.0 / (1.0 + exp(3.8888888888888888 + 0.1111111111111111 * var_chaste_interface__cell__sVm)) + 0.59999999999999998 / (1.0 + exp(2.5 - 050000000000000003 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__tauf = 1.0 / (02 + 019699999999999999 * exp(-0.23877882250000002 * pow((1 + 068965517241379309 * var_chaste_interface__cell__sVm), 2))); // dimensionless
         const double d_dt_chaste_interface_var_cell__sf = (-var_chaste_interface__cell__sf + var_cell__fss) / var_cell__tauf; // 1 / ms
 
         return d_dt_chaste_interface_var_cell__sf;
@@ -1720,9 +1720,9 @@
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
-            const double var_x236 = 0.019699999999999999 * exp(-0.23877882250000002 * pow((1 + 0.068965517241379309 * var_chaste_interface__cell__sVm), 2));
+            const double var_x236 = 019699999999999999 * exp(-0.23877882250000002 * pow((1 + 068965517241379309 * var_chaste_interface__cell__sVm), 2));
             
-            partialF = -0.02 - var_x236;
+            partialF = -02 - var_x236;
         }
         else
         {
@@ -1738,13 +1738,13 @@
     {
         
         double var_chaste_interface__cell__sfcaBj = rY[6];
-        // Units: dimensionless; Initial value: 0.0246274349529557
+        // Units: dimensionless; Initial value: 0246274349529557
         double var_chaste_interface__cell__sCaj = rY[35];
-        // Units: dimensionless; Initial value: 0.000175648385857736
+        // Units: dimensionless; Initial value: 000175648385857736
         
         
         // Mathematics
-        const double d_dt_chaste_interface_var_cell__sfcaBj = -0.011900000000000001 * var_chaste_interface__cell__sfcaBj + 1.7 * (1.0 - var_chaste_interface__cell__sfcaBj) * var_chaste_interface__cell__sCaj; // 1 / ms
+        const double d_dt_chaste_interface_var_cell__sfcaBj = -011900000000000001 * var_chaste_interface__cell__sfcaBj + 1.7 * (1.0 - var_chaste_interface__cell__sfcaBj) * var_chaste_interface__cell__sCaj; // 1 / ms
 
         return d_dt_chaste_interface_var_cell__sfcaBj;
     }
@@ -1755,10 +1755,10 @@
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sCaj = rY[35];
-            // Units: dimensionless; Initial value: 0.000175648385857736
+            // Units: dimensionless; Initial value: 000175648385857736
             
             
-            partialF = -0.011900000000000001 - 1.7 * var_chaste_interface__cell__sCaj;
+            partialF = -011900000000000001 - 1.7 * var_chaste_interface__cell__sCaj;
         }
         else
         {
@@ -1774,13 +1774,13 @@
     {
         
         double var_chaste_interface__cell__sfcaBsl = rY[7];
-        // Units: dimensionless; Initial value: 0.0150911724206476
+        // Units: dimensionless; Initial value: 0150911724206476
         double var_chaste_interface__cell__sCasl = rY[36];
-        // Units: dimensionless; Initial value: 0.000105614570409386
+        // Units: dimensionless; Initial value: 000105614570409386
         
         
         // Mathematics
-        const double d_dt_chaste_interface_var_cell__sfcaBsl = -0.011900000000000001 * var_chaste_interface__cell__sfcaBsl + 1.7 * (1.0 - var_chaste_interface__cell__sfcaBsl) * var_chaste_interface__cell__sCasl; // 1 / ms
+        const double d_dt_chaste_interface_var_cell__sfcaBsl = -011900000000000001 * var_chaste_interface__cell__sfcaBsl + 1.7 * (1.0 - var_chaste_interface__cell__sfcaBsl) * var_chaste_interface__cell__sCasl; // 1 / ms
 
         return d_dt_chaste_interface_var_cell__sfcaBsl;
     }
@@ -1791,10 +1791,10 @@
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sCasl = rY[36];
-            // Units: dimensionless; Initial value: 0.000105614570409386
+            // Units: dimensionless; Initial value: 000105614570409386
             
             
-            partialF = -0.011900000000000001 - 1.7 * var_chaste_interface__cell__sCasl;
+            partialF = -011900000000000001 - 1.7 * var_chaste_interface__cell__sCasl;
         }
         else
         {
@@ -1812,12 +1812,12 @@
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: millivolt; Initial value: -81.3842590704928
         double var_chaste_interface__cell__sxtos = rY[8];
-        // Units: dimensionless; Initial value: 0.000442853722673121
+        // Units: dimensionless; Initial value: 000442853722673121
         
         
         // Mathematics
-        const double var_cell__tauxtos = 0.5 + 9.0 / (1.0 + exp(0.20000000000000001 + 0.066666666666666666 * var_chaste_interface__cell__sVm)); // dimensionless
-        const double var_cell__xtoss = 1.0 / (1.0 + exp(1.4615384615384615 - 0.076923076923076927 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__tauxtos = 0.5 + 9.0 / (1.0 + exp(0.20000000000000001 + 066666666666666666 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__xtoss = 1.0 / (1.0 + exp(1.4615384615384615 - 076923076923076927 * var_chaste_interface__cell__sVm)); // dimensionless
         const double d_dt_chaste_interface_var_cell__sxtos = (-var_chaste_interface__cell__sxtos + var_cell__xtoss) / var_cell__tauxtos; // 1 / ms
 
         return d_dt_chaste_interface_var_cell__sxtos;
@@ -1831,7 +1831,7 @@
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
-            const double var_x243 = exp(0.20000000000000001 + 0.066666666666666666 * var_chaste_interface__cell__sVm);
+            const double var_x243 = exp(0.20000000000000001 + 066666666666666666 * var_chaste_interface__cell__sVm);
             const double var_x244 = 1.0 + var_x243;
             const double var_x245 = 1 / var_x244;
             const double var_x246 = 1 / (0.5 + 9.0 * var_x245);
@@ -1858,7 +1858,7 @@
         
         
         // Mathematics
-        const double var_cell__tauytos = 30.0 + 800.0 / (1.0 + exp(6.0 + 0.10000000000000001 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__tauytos = 30 + 800 / (1.0 + exp(6.0 + 0.10000000000000001 * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__ytoss = 1.0 / (1.0 + exp(3.8999999999999999 + 0.20000000000000001 * var_chaste_interface__cell__sVm)); // dimensionless
         const double d_dt_chaste_interface_var_cell__sytos = (-var_chaste_interface__cell__sytos + var_cell__ytoss) / var_cell__tauytos; // 1 / ms
 
@@ -1876,7 +1876,7 @@
             const double var_x251 = exp(6.0 + 0.10000000000000001 * var_chaste_interface__cell__sVm);
             const double var_x252 = 1.0 + var_x251;
             const double var_x253 = 1 / var_x252;
-            const double var_x254 = 1 / (30.0 + 800.0 * var_x253);
+            const double var_x254 = 1 / (30 + 800 * var_x253);
             
             partialF = -var_x254;
         }
@@ -1896,12 +1896,12 @@
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: millivolt; Initial value: -81.3842590704928
         double var_chaste_interface__cell__sxtof = rY[10];
-        // Units: dimensionless; Initial value: 0.000442846429332686
+        // Units: dimensionless; Initial value: 000442846429332686
         
         
         // Mathematics
-        const double var_cell__tauxtof = 0.5 + 8.5 * exp(-0.81000000000000005 * pow((1 + 0.022222222222222223 * var_chaste_interface__cell__sVm), 2)); // dimensionless
-        const double var_cell__xtoss = 1.0 / (1.0 + exp(1.4615384615384615 - 0.076923076923076927 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__tauxtof = 0.5 + 8.5 * exp(-0.81000000000000005 * pow((1 + 022222222222222223 * var_chaste_interface__cell__sVm), 2)); // dimensionless
+        const double var_cell__xtoss = 1.0 / (1.0 + exp(1.4615384615384615 - 076923076923076927 * var_chaste_interface__cell__sVm)); // dimensionless
         const double d_dt_chaste_interface_var_cell__sxtof = (-var_chaste_interface__cell__sxtof + var_cell__xtoss) / var_cell__tauxtof; // 1 / ms
 
         return d_dt_chaste_interface_var_cell__sxtof;
@@ -1915,7 +1915,7 @@
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
-            const double var_x260 = exp(-0.81000000000000005 * pow((1 + 0.022222222222222223 * var_chaste_interface__cell__sVm), 2));
+            const double var_x260 = exp(-0.81000000000000005 * pow((1 + 022222222222222223 * var_chaste_interface__cell__sVm), 2));
             const double var_x261 = 1 / (0.5 + 8.5 * var_x260);
             
             partialF = -var_x261;
@@ -1940,7 +1940,7 @@
         
         
         // Mathematics
-        const double var_cell__tauytof = 7.0 + 85.0 * exp(-7.2727272727272725 * pow((1 + 0.025000000000000001 * var_chaste_interface__cell__sVm), 2)); // dimensionless
+        const double var_cell__tauytof = 7.0 + 85.0 * exp(-7.2727272727272725 * pow((1 + 025000000000000001 * var_chaste_interface__cell__sVm), 2)); // dimensionless
         const double var_cell__ytoss = 1.0 / (1.0 + exp(3.8999999999999999 + 0.20000000000000001 * var_chaste_interface__cell__sVm)); // dimensionless
         const double d_dt_chaste_interface_var_cell__sytof = (-var_chaste_interface__cell__sytof + var_cell__ytoss) / var_cell__tauytof; // 1 / ms
 
@@ -1955,7 +1955,7 @@
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
-            const double var_x262 = exp(-7.2727272727272725 * pow((1 + 0.025000000000000001 * var_chaste_interface__cell__sVm), 2));
+            const double var_x262 = exp(-7.2727272727272725 * pow((1 + 025000000000000001 * var_chaste_interface__cell__sVm), 2));
             const double var_x263 = 1 / (7.0 + 85.0 * var_x262);
             
             partialF = -var_x263;
@@ -1976,11 +1976,11 @@
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: millivolt; Initial value: -81.3842590704928
         double var_chaste_interface__cell__sxkr = rY[12];
-        // Units: dimensionless; Initial value: 0.020160578118589
+        // Units: dimensionless; Initial value: 020160578118589
         
         
         // Mathematics
-        const double var_cell__tauxr = 230.0 / (1.0 + exp(2.0 + 0.050000000000000003 * var_chaste_interface__cell__sVm)) + 3300.0 / ((1.0 + exp(1.2222222222222223 + 0.1111111111111111 * var_chaste_interface__cell__sVm)) * (1.0 + exp(-2.4444444444444446 - 0.1111111111111111 * var_chaste_interface__cell__sVm))); // dimensionless
+        const double var_cell__tauxr = 230 / (1.0 + exp(2.0 + 050000000000000003 * var_chaste_interface__cell__sVm)) + 3300 / ((1.0 + exp(1.2222222222222223 + 0.1111111111111111 * var_chaste_interface__cell__sVm)) * (1.0 + exp(-2.4444444444444446 - 0.1111111111111111 * var_chaste_interface__cell__sVm))); // dimensionless
         const double var_cell__xrss = 1.0 / (1.0 + exp(-2.0 - 0.20000000000000001 * var_chaste_interface__cell__sVm)); // dimensionless
         const double d_dt_chaste_interface_var_cell__sxkr = (-var_chaste_interface__cell__sxkr + var_cell__xrss) / var_cell__tauxr; // 1 / ms
 
@@ -1995,7 +1995,7 @@
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
-            const double var_x237 = 0.050000000000000003 * var_chaste_interface__cell__sVm;
+            const double var_x237 = 050000000000000003 * var_chaste_interface__cell__sVm;
             const double var_x240 = 0.1111111111111111 * var_chaste_interface__cell__sVm;
             const double var_x264 = exp(2.0 + var_x237);
             const double var_x265 = 1.0 + var_x264;
@@ -2007,7 +2007,7 @@
             const double var_x271 = 1.0 + var_x270;
             const double var_x272 = 1 / var_x271;
             const double var_x273 = var_x269 * var_x272;
-            const double var_x276 = 1 / (230.0 * var_x266 + 3300.0 * var_x273);
+            const double var_x276 = 1 / (230 * var_x266 + 3300 * var_x273);
             
             partialF = -var_x276;
         }
@@ -2027,12 +2027,12 @@
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: millivolt; Initial value: -81.3842590704928
         double var_chaste_interface__cell__sxks = rY[13];
-        // Units: dimensionless; Initial value: 0.00430143235332308
+        // Units: dimensionless; Initial value: 00430143235332308
         
         
         // Mathematics
-        const double var_cell__tauxs = 990.10000000000002 / (1.0 + exp(-0.17252124645892353 - 0.070821529745042494 * var_chaste_interface__cell__sVm)); // dimensionless
-        const double var_cell__xsss = 1.0 / (1.0 + exp(-0.26666666666666666 - 0.070175438596491224 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__tauxs = 990.10000000000002 / (1.0 + exp(-0.17252124645892353 - 070821529745042494 * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__xsss = 1.0 / (1.0 + exp(-0.26666666666666666 - 070175438596491224 * var_chaste_interface__cell__sVm)); // dimensionless
         const double d_dt_chaste_interface_var_cell__sxks = (-var_chaste_interface__cell__sxks + var_cell__xsss) / var_cell__tauxs; // 1 / ms
 
         return d_dt_chaste_interface_var_cell__sxks;
@@ -2046,10 +2046,10 @@
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
-            const double var_x279 = exp(-0.17252124645892353 - 0.070821529745042494 * var_chaste_interface__cell__sVm);
-            const double var_x280 = 0.00100999899000101 * var_x279;
+            const double var_x279 = exp(-0.17252124645892353 - 070821529745042494 * var_chaste_interface__cell__sVm);
+            const double var_x280 = 00100999899000101 * var_x279;
             
-            partialF = -0.00100999899000101 - var_x280;
+            partialF = -00100999899000101 - var_x280;
         }
         else
         {
@@ -2073,7 +2073,7 @@
         double var_chaste_interface__cell__sCa_sr = rY[31];
         // Units: dimensionless; Initial value: 0.563755421404699
         double var_chaste_interface__cell__sCaj = rY[35];
-        // Units: dimensionless; Initial value: 0.000175648385857736
+        // Units: dimensionless; Initial value: 000175648385857736
         
         
         // Mathematics
@@ -2081,9 +2081,9 @@
         const double var_cell__MinSR = 1.0; // dimensionless
         const double var_cell__ec50SR = 0.45000000000000001; // dimensionless
         const double var_cell__kiCa = 0.5; // dimensionless
-        const double var_cell__kim = 0.0050000000000000001; // dimensionless
-        const double var_cell__koCa = 10.0; // dimensionless
-        const double var_cell__kom = 0.059999999999999998; // dimensionless
+        const double var_cell__kim = 0050000000000000001; // dimensionless
+        const double var_cell__koCa = 10; // dimensionless
+        const double var_cell__kom = 059999999999999998; // dimensionless
         const double var_cell__kCaSR = -(-var_cell__MinSR + var_cell__MaxSR) / (1.0 + pow((var_cell__ec50SR / var_chaste_interface__cell__sCa_sr), 2.5)) + var_cell__MaxSR; // dimensionless
         const double var_cell__kiSRCa = var_cell__kCaSR * var_cell__kiCa; // dimensionless
         const double var_cell__koSRCa = var_cell__koCa / var_cell__kCaSR; // dimensionless
@@ -2101,7 +2101,7 @@
             double var_chaste_interface__cell__sCa_sr = rY[31];
             // Units: dimensionless; Initial value: 0.563755421404699
             double var_chaste_interface__cell__sCaj = rY[35];
-            // Units: dimensionless; Initial value: 0.000175648385857736
+            // Units: dimensionless; Initial value: 000175648385857736
             
             const double var_x44 = pow(var_chaste_interface__cell__sCaj, 2);
             const double var_x281 = 1 / var_chaste_interface__cell__sCa_sr;
@@ -2112,10 +2112,10 @@
             const double var_x286 = -7.5 + var_x285;
             const double var_x287 = var_x286 * var_chaste_interface__cell__sCaj;
             const double var_x288 = 1 / (15.0 - 14.0 * var_x284);
-            const double var_x289 = 10.0 * var_x288 * var_x44;
+            const double var_x289 = 10 * var_x288 * var_x44;
             const double var_x290 = -var_x289;
             
-            partialF = -0.0050000000000000001 + var_x287 + var_x290;
+            partialF = -0050000000000000001 + var_x287 + var_x290;
         }
         else
         {
@@ -2139,7 +2139,7 @@
         double var_chaste_interface__cell__sCa_sr = rY[31];
         // Units: dimensionless; Initial value: 0.563755421404699
         double var_chaste_interface__cell__sCaj = rY[35];
-        // Units: dimensionless; Initial value: 0.000175648385857736
+        // Units: dimensionless; Initial value: 000175648385857736
         
         
         // Mathematics
@@ -2147,9 +2147,9 @@
         const double var_cell__MinSR = 1.0; // dimensionless
         const double var_cell__ec50SR = 0.45000000000000001; // dimensionless
         const double var_cell__kiCa = 0.5; // dimensionless
-        const double var_cell__kim = 0.0050000000000000001; // dimensionless
-        const double var_cell__koCa = 10.0; // dimensionless
-        const double var_cell__kom = 0.059999999999999998; // dimensionless
+        const double var_cell__kim = 0050000000000000001; // dimensionless
+        const double var_cell__koCa = 10; // dimensionless
+        const double var_cell__kom = 059999999999999998; // dimensionless
         const double var_cell__kCaSR = -(-var_cell__MinSR + var_cell__MaxSR) / (1.0 + pow((var_cell__ec50SR / var_chaste_interface__cell__sCa_sr), 2.5)) + var_cell__MaxSR; // dimensionless
         const double var_cell__kiSRCa = var_cell__kCaSR * var_cell__kiCa; // dimensionless
         const double var_cell__koSRCa = var_cell__koCa / var_cell__kCaSR; // dimensionless
@@ -2166,7 +2166,7 @@
             double var_chaste_interface__cell__sCa_sr = rY[31];
             // Units: dimensionless; Initial value: 0.563755421404699
             double var_chaste_interface__cell__sCaj = rY[35];
-            // Units: dimensionless; Initial value: 0.000175648385857736
+            // Units: dimensionless; Initial value: 000175648385857736
             
             const double var_x281 = 1 / var_chaste_interface__cell__sCa_sr;
             const double var_x282 = pow(var_x281, 2.5);
@@ -2176,7 +2176,7 @@
             const double var_x286 = -7.5 + var_x285;
             const double var_x287 = var_x286 * var_chaste_interface__cell__sCaj;
             
-            partialF = -0.059999999999999998 + var_x287;
+            partialF = -059999999999999998 + var_x287;
         }
         else
         {
@@ -2200,7 +2200,7 @@
         double var_chaste_interface__cell__sCa_sr = rY[31];
         // Units: dimensionless; Initial value: 0.563755421404699
         double var_chaste_interface__cell__sCaj = rY[35];
-        // Units: dimensionless; Initial value: 0.000175648385857736
+        // Units: dimensionless; Initial value: 000175648385857736
         
         
         // Mathematics
@@ -2208,9 +2208,9 @@
         const double var_cell__MinSR = 1.0; // dimensionless
         const double var_cell__ec50SR = 0.45000000000000001; // dimensionless
         const double var_cell__kiCa = 0.5; // dimensionless
-        const double var_cell__kim = 0.0050000000000000001; // dimensionless
-        const double var_cell__koCa = 10.0; // dimensionless
-        const double var_cell__kom = 0.059999999999999998; // dimensionless
+        const double var_cell__kim = 0050000000000000001; // dimensionless
+        const double var_cell__koCa = 10; // dimensionless
+        const double var_cell__kom = 059999999999999998; // dimensionless
         const double var_cell__kCaSR = -(-var_cell__MinSR + var_cell__MaxSR) / (1.0 + pow((var_cell__ec50SR / var_chaste_interface__cell__sCa_sr), 2.5)) + var_cell__MaxSR; // dimensionless
         const double var_cell__kiSRCa = var_cell__kCaSR * var_cell__kiCa; // dimensionless
         const double var_cell__koSRCa = var_cell__koCa / var_cell__kCaSR; // dimensionless
@@ -2228,7 +2228,7 @@
             double var_chaste_interface__cell__sCa_sr = rY[31];
             // Units: dimensionless; Initial value: 0.563755421404699
             double var_chaste_interface__cell__sCaj = rY[35];
-            // Units: dimensionless; Initial value: 0.000175648385857736
+            // Units: dimensionless; Initial value: 000175648385857736
             
             const double var_x44 = pow(var_chaste_interface__cell__sCaj, 2);
             const double var_x281 = 1 / var_chaste_interface__cell__sCa_sr;
@@ -2236,10 +2236,10 @@
             const double var_x283 = 1.0 + 0.13584112963311223 * var_x282;
             const double var_x284 = 1 / var_x283;
             const double var_x288 = 1 / (15.0 - 14.0 * var_x284);
-            const double var_x289 = 10.0 * var_x288 * var_x44;
+            const double var_x289 = 10 * var_x288 * var_x44;
             const double var_x290 = -var_x289;
             
-            partialF = -0.065000000000000002 + var_x290;
+            partialF = -065000000000000002 + var_x290;
         }
         else
         {
@@ -2262,8 +2262,8 @@
         
         // Mathematics
         const double var_cell__Bmax_Naj = 7.5609999999999999; // dimensionless
-        const double var_cell__koff_na = 0.001; // dimensionless
-        const double var_cell__kon_na = 0.0001; // dimensionless
+        const double var_cell__koff_na = 001; // dimensionless
+        const double var_cell__kon_na = 0001; // dimensionless
         const double d_dt_chaste_interface_var_cell__sNaBj = -var_cell__koff_na * var_chaste_interface__cell__sNaBj + (-var_chaste_interface__cell__sNaBj + var_cell__Bmax_Naj) * var_cell__kon_na * var_chaste_interface__cell__sNaj; // 1 / ms
 
         return d_dt_chaste_interface_var_cell__sNaBj;
@@ -2277,9 +2277,9 @@
             double var_chaste_interface__cell__sNaj = rY[32];
             // Units: dimensionless; Initial value: 8.21411036389602
             
-            const double var_x301 = 0.0001 * var_chaste_interface__cell__sNaj;
+            const double var_x301 = 0001 * var_chaste_interface__cell__sNaj;
             
-            partialF = -0.001 - var_x301;
+            partialF = -001 - var_x301;
         }
         else
         {
@@ -2302,8 +2302,8 @@
         
         // Mathematics
         const double var_cell__Bmax_Nasl = 1.6499999999999999; // dimensionless
-        const double var_cell__koff_na = 0.001; // dimensionless
-        const double var_cell__kon_na = 0.0001; // dimensionless
+        const double var_cell__koff_na = 001; // dimensionless
+        const double var_cell__kon_na = 0001; // dimensionless
         const double d_dt_chaste_interface_var_cell__sNaBsl = -var_cell__koff_na * var_chaste_interface__cell__sNaBsl + (-var_chaste_interface__cell__sNaBsl + var_cell__Bmax_Nasl) * var_cell__kon_na * var_chaste_interface__cell__sNasl; // 1 / ms
 
         return d_dt_chaste_interface_var_cell__sNaBsl;
@@ -2317,9 +2317,9 @@
             double var_chaste_interface__cell__sNasl = rY[33];
             // Units: dimensionless; Initial value: 8.21322794157889
             
-            const double var_x303 = 0.0001 * var_chaste_interface__cell__sNasl;
+            const double var_x303 = 0001 * var_chaste_interface__cell__sNasl;
             
-            partialF = -0.001 - var_x303;
+            partialF = -001 - var_x303;
         }
         else
         {
@@ -2335,14 +2335,14 @@
     {
         
         double var_chaste_interface__cell__sTnCL = rY[19];
-        // Units: dimensionless; Initial value: 0.00904644567707666
+        // Units: dimensionless; Initial value: 00904644567707666
         double var_chaste_interface__cell__sCai = rY[37];
         // Units: dimensionless; Initial value: 8.85230799863012e-05
         
         
         // Mathematics
-        const double var_cell__Bmax_TnClow = 0.070000000000000007; // dimensionless
-        const double var_cell__koff_tncl = 0.019599999999999999; // dimensionless
+        const double var_cell__Bmax_TnClow = 070000000000000007; // dimensionless
+        const double var_cell__koff_tncl = 019599999999999999; // dimensionless
         const double var_cell__kon_tncl = 32.700000000000003; // dimensionless
         const double d_dt_chaste_interface_var_cell__sTnCL = -var_cell__koff_tncl * var_chaste_interface__cell__sTnCL + (-var_chaste_interface__cell__sTnCL + var_cell__Bmax_TnClow) * var_cell__kon_tncl * var_chaste_interface__cell__sCai; // 1 / ms
 
@@ -2359,7 +2359,7 @@
             
             const double var_x305 = 32.700000000000003 * var_chaste_interface__cell__sCai;
             
-            partialF = -0.019599999999999999 - var_x305;
+            partialF = -019599999999999999 - var_x305;
         }
         else
         {
@@ -2377,7 +2377,7 @@
         double var_chaste_interface__cell__sTnCHc = rY[20];
         // Units: dimensionless; Initial value: 0.1183943202639
         double var_chaste_interface__cell__sTnCHm = rY[21];
-        // Units: dimensionless; Initial value: 0.0101423649465603
+        // Units: dimensionless; Initial value: 0101423649465603
         double var_chaste_interface__cell__sCai = rY[37];
         // Units: dimensionless; Initial value: 8.85230799863012e-05
         
@@ -2420,14 +2420,14 @@
         double var_chaste_interface__cell__sTnCHc = rY[20];
         // Units: dimensionless; Initial value: 0.1183943202639
         double var_chaste_interface__cell__sTnCHm = rY[21];
-        // Units: dimensionless; Initial value: 0.0101423649465603
+        // Units: dimensionless; Initial value: 0101423649465603
         
         
         // Mathematics
         const double var_cell__Bmax_TnChigh = 0.14000000000000001; // dimensionless
         const double var_cell__Mgi = 1.0; // dimensionless
-        const double var_cell__koff_tnchmg = 0.0033300000000000001; // dimensionless
-        const double var_cell__kon_tnchmg = 0.0030000000000000001; // dimensionless
+        const double var_cell__koff_tnchmg = 0033300000000000001; // dimensionless
+        const double var_cell__kon_tnchmg = 0030000000000000001; // dimensionless
         const double d_dt_chaste_interface_var_cell__sTnCHm = -var_cell__koff_tnchmg * var_chaste_interface__cell__sTnCHm + (-var_chaste_interface__cell__sTnCHc - var_chaste_interface__cell__sTnCHm + var_cell__Bmax_TnChigh) * var_cell__Mgi * var_cell__kon_tnchmg; // 1 / ms
 
         return d_dt_chaste_interface_var_cell__sTnCHm;
@@ -2440,7 +2440,7 @@
         {
             
             
-            partialF = -0.0063300000000000006;
+            partialF = -0063300000000000006;
         }
         else
         {
@@ -2456,13 +2456,13 @@
     {
         
         double var_chaste_interface__cell__sCaM = rY[22];
-        // Units: dimensionless; Initial value: 0.000299824763475116
+        // Units: dimensionless; Initial value: 000299824763475116
         double var_chaste_interface__cell__sCai = rY[37];
         // Units: dimensionless; Initial value: 8.85230799863012e-05
         
         
         // Mathematics
-        const double var_cell__Bmax_CaM = 0.024; // dimensionless
+        const double var_cell__Bmax_CaM = 024; // dimensionless
         const double var_cell__koff_cam = 0.23799999999999999; // dimensionless
         const double var_cell__kon_cam = 34.0; // dimensionless
         const double d_dt_chaste_interface_var_cell__sCaM = -var_cell__koff_cam * var_chaste_interface__cell__sCaM + (-var_chaste_interface__cell__sCaM + var_cell__Bmax_CaM) * var_cell__kon_cam * var_chaste_interface__cell__sCai; // 1 / ms
@@ -2496,7 +2496,7 @@
     {
         
         double var_chaste_interface__cell__sMyoc = rY[23];
-        // Units: dimensionless; Initial value: 0.00201443980536826
+        // Units: dimensionless; Initial value: 00201443980536826
         double var_chaste_interface__cell__sMyom = rY[24];
         // Units: dimensionless; Initial value: 0.137467597337588
         double var_chaste_interface__cell__sCai = rY[37];
@@ -2505,7 +2505,7 @@
         
         // Mathematics
         const double var_cell__Bmax_myosin = 0.14000000000000001; // dimensionless
-        const double var_cell__koff_myoca = 0.00046000000000000001; // dimensionless
+        const double var_cell__koff_myoca = 00046000000000000001; // dimensionless
         const double var_cell__kon_myoca = 13.800000000000001; // dimensionless
         const double d_dt_chaste_interface_var_cell__sMyoc = -var_cell__koff_myoca * var_chaste_interface__cell__sMyoc + (-var_chaste_interface__cell__sMyoc - var_chaste_interface__cell__sMyom + var_cell__Bmax_myosin) * var_cell__kon_myoca * var_chaste_interface__cell__sCai; // 1 / ms
 
@@ -2523,7 +2523,7 @@
             const double var_x313 = 13.800000000000001 * var_chaste_interface__cell__sCai;
             const double var_x314 = -var_x313;
             
-            partialF = -0.00046000000000000001 + var_x314;
+            partialF = -00046000000000000001 + var_x314;
         }
         else
         {
@@ -2539,7 +2539,7 @@
     {
         
         double var_chaste_interface__cell__sMyoc = rY[23];
-        // Units: dimensionless; Initial value: 0.00201443980536826
+        // Units: dimensionless; Initial value: 00201443980536826
         double var_chaste_interface__cell__sMyom = rY[24];
         // Units: dimensionless; Initial value: 0.137467597337588
         
@@ -2548,7 +2548,7 @@
         const double var_cell__Bmax_myosin = 0.14000000000000001; // dimensionless
         const double var_cell__Mgi = 1.0; // dimensionless
         const double var_cell__koff_myomg = 5.7000000000000003e-5; // dimensionless
-        const double var_cell__kon_myomg = 0.015699999999999999; // dimensionless
+        const double var_cell__kon_myomg = 015699999999999999; // dimensionless
         const double d_dt_chaste_interface_var_cell__sMyom = -var_cell__koff_myomg * var_chaste_interface__cell__sMyom + (-var_chaste_interface__cell__sMyoc - var_chaste_interface__cell__sMyom + var_cell__Bmax_myosin) * var_cell__Mgi * var_cell__kon_myomg; // 1 / ms
 
         return d_dt_chaste_interface_var_cell__sMyom;
@@ -2561,7 +2561,7 @@
         {
             
             
-            partialF = -0.015757;
+            partialF = -015757;
         }
         else
         {
@@ -2577,15 +2577,15 @@
     {
         
         double var_chaste_interface__cell__sSRB = rY[25];
-        // Units: dimensionless; Initial value: 0.00220110816535249
+        // Units: dimensionless; Initial value: 00220110816535249
         double var_chaste_interface__cell__sCai = rY[37];
         // Units: dimensionless; Initial value: 8.85230799863012e-05
         
         
         // Mathematics
-        const double var_cell__Bmax_SR = 0.017100000000000001; // dimensionless
-        const double var_cell__koff_sr = 0.059999999999999998; // dimensionless
-        const double var_cell__kon_sr = 100.0; // dimensionless
+        const double var_cell__Bmax_SR = 017100000000000001; // dimensionless
+        const double var_cell__koff_sr = 059999999999999998; // dimensionless
+        const double var_cell__kon_sr = 100; // dimensionless
         const double d_dt_chaste_interface_var_cell__sSRB = -var_cell__koff_sr * var_chaste_interface__cell__sSRB + (-var_chaste_interface__cell__sSRB + var_cell__Bmax_SR) * var_cell__kon_sr * var_chaste_interface__cell__sCai; // 1 / ms
 
         return d_dt_chaste_interface_var_cell__sSRB;
@@ -2599,9 +2599,9 @@
             double var_chaste_interface__cell__sCai = rY[37];
             // Units: dimensionless; Initial value: 8.85230799863012e-05
             
-            const double var_x317 = 100.0 * var_chaste_interface__cell__sCai;
+            const double var_x317 = 100 * var_chaste_interface__cell__sCai;
             
-            partialF = -0.059999999999999998 - var_x317;
+            partialF = -059999999999999998 - var_x317;
         }
         else
         {
@@ -2617,20 +2617,20 @@
     {
         
         double var_chaste_interface__cell__sSLLj = rY[26];
-        // Units: dimensionless; Initial value: 0.00739549938515031
+        // Units: dimensionless; Initial value: 00739549938515031
         double var_chaste_interface__cell__sCaj = rY[35];
-        // Units: dimensionless; Initial value: 0.000175648385857736
+        // Units: dimensionless; Initial value: 000175648385857736
         
         
         // Mathematics
-        const double var_cell__cellLength = 100.0; // dimensionless
+        const double var_cell__cellLength = 100; // dimensionless
         const double var_cell__cellRadius = 10.25; // dimensionless
         const double var_cell__Vcell = 1.0000000000000001e-15 * M_PI * pow(var_cell__cellRadius, 2) * var_cell__cellLength; // dimensionless
-        const double var_cell__Vjunc = 0.00053900000000000009 * var_cell__Vcell; // dimensionless
+        const double var_cell__Vjunc = 00053900000000000009 * var_cell__Vcell; // dimensionless
         const double var_cell__Vmyo = 0.65000000000000002 * var_cell__Vcell; // dimensionless
-        const double var_cell__Bmax_SLlowj = 0.00046000000000000001 * var_cell__Vmyo / var_cell__Vjunc; // dimensionless
+        const double var_cell__Bmax_SLlowj = 00046000000000000001 * var_cell__Vmyo / var_cell__Vjunc; // dimensionless
         const double var_cell__koff_sll = 1.3; // dimensionless
-        const double var_cell__kon_sll = 100.0; // dimensionless
+        const double var_cell__kon_sll = 100; // dimensionless
         const double d_dt_chaste_interface_var_cell__sSLLj = -var_cell__koff_sll * var_chaste_interface__cell__sSLLj + (-var_chaste_interface__cell__sSLLj + var_cell__Bmax_SLlowj) * var_cell__kon_sll * var_chaste_interface__cell__sCaj; // 1 / ms
 
         return d_dt_chaste_interface_var_cell__sSLLj;
@@ -2642,9 +2642,9 @@
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sCaj = rY[35];
-            // Units: dimensionless; Initial value: 0.000175648385857736
+            // Units: dimensionless; Initial value: 000175648385857736
             
-            const double var_x319 = 100.0 * var_chaste_interface__cell__sCaj;
+            const double var_x319 = 100 * var_chaste_interface__cell__sCaj;
             const double var_x320 = -var_x319;
             
             partialF = -1.3 + var_x320;
@@ -2663,20 +2663,20 @@
     {
         
         double var_chaste_interface__cell__sSLLsl = rY[27];
-        // Units: dimensionless; Initial value: 0.00979616077807075
+        // Units: dimensionless; Initial value: 00979616077807075
         double var_chaste_interface__cell__sCasl = rY[36];
-        // Units: dimensionless; Initial value: 0.000105614570409386
+        // Units: dimensionless; Initial value: 000105614570409386
         
         
         // Mathematics
-        const double var_cell__cellLength = 100.0; // dimensionless
+        const double var_cell__cellLength = 100; // dimensionless
         const double var_cell__cellRadius = 10.25; // dimensionless
         const double var_cell__Vcell = 1.0000000000000001e-15 * M_PI * pow(var_cell__cellRadius, 2) * var_cell__cellLength; // dimensionless
         const double var_cell__Vmyo = 0.65000000000000002 * var_cell__Vcell; // dimensionless
-        const double var_cell__Vsl = 0.02 * var_cell__Vcell; // dimensionless
-        const double var_cell__Bmax_SLlowsl = 0.037400000000000003 * var_cell__Vmyo / var_cell__Vsl; // dimensionless
+        const double var_cell__Vsl = 02 * var_cell__Vcell; // dimensionless
+        const double var_cell__Bmax_SLlowsl = 037400000000000003 * var_cell__Vmyo / var_cell__Vsl; // dimensionless
         const double var_cell__koff_sll = 1.3; // dimensionless
-        const double var_cell__kon_sll = 100.0; // dimensionless
+        const double var_cell__kon_sll = 100; // dimensionless
         const double d_dt_chaste_interface_var_cell__sSLLsl = -var_cell__koff_sll * var_chaste_interface__cell__sSLLsl + (-var_chaste_interface__cell__sSLLsl + var_cell__Bmax_SLlowsl) * var_cell__kon_sll * var_chaste_interface__cell__sCasl; // 1 / ms
 
         return d_dt_chaste_interface_var_cell__sSLLsl;
@@ -2688,9 +2688,9 @@
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sCasl = rY[36];
-            // Units: dimensionless; Initial value: 0.000105614570409386
+            // Units: dimensionless; Initial value: 000105614570409386
             
-            const double var_x322 = 100.0 * var_chaste_interface__cell__sCasl;
+            const double var_x322 = 100 * var_chaste_interface__cell__sCasl;
             const double var_x323 = -var_x322;
             
             partialF = -1.3 + var_x323;
@@ -2709,20 +2709,20 @@
     {
         
         double var_chaste_interface__cell__sSLHj = rY[28];
-        // Units: dimensionless; Initial value: 0.0735225248399363
+        // Units: dimensionless; Initial value: 0735225248399363
         double var_chaste_interface__cell__sCaj = rY[35];
-        // Units: dimensionless; Initial value: 0.000175648385857736
+        // Units: dimensionless; Initial value: 000175648385857736
         
         
         // Mathematics
-        const double var_cell__cellLength = 100.0; // dimensionless
+        const double var_cell__cellLength = 100; // dimensionless
         const double var_cell__cellRadius = 10.25; // dimensionless
         const double var_cell__Vcell = 1.0000000000000001e-15 * M_PI * pow(var_cell__cellRadius, 2) * var_cell__cellLength; // dimensionless
-        const double var_cell__Vjunc = 0.00053900000000000009 * var_cell__Vcell; // dimensionless
+        const double var_cell__Vjunc = 00053900000000000009 * var_cell__Vcell; // dimensionless
         const double var_cell__Vmyo = 0.65000000000000002 * var_cell__Vcell; // dimensionless
-        const double var_cell__Bmax_SLhighj = 0.000165 * var_cell__Vmyo / var_cell__Vjunc; // dimensionless
-        const double var_cell__koff_slh = 0.029999999999999999; // dimensionless
-        const double var_cell__kon_slh = 100.0; // dimensionless
+        const double var_cell__Bmax_SLhighj = 000165 * var_cell__Vmyo / var_cell__Vjunc; // dimensionless
+        const double var_cell__koff_slh = 029999999999999999; // dimensionless
+        const double var_cell__kon_slh = 100; // dimensionless
         const double d_dt_chaste_interface_var_cell__sSLHj = -var_cell__koff_slh * var_chaste_interface__cell__sSLHj + (-var_chaste_interface__cell__sSLHj + var_cell__Bmax_SLhighj) * var_cell__kon_slh * var_chaste_interface__cell__sCaj; // 1 / ms
 
         return d_dt_chaste_interface_var_cell__sSLHj;
@@ -2734,12 +2734,12 @@
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sCaj = rY[35];
-            // Units: dimensionless; Initial value: 0.000175648385857736
+            // Units: dimensionless; Initial value: 000175648385857736
             
-            const double var_x319 = 100.0 * var_chaste_interface__cell__sCaj;
+            const double var_x319 = 100 * var_chaste_interface__cell__sCaj;
             const double var_x320 = -var_x319;
             
-            partialF = -0.029999999999999999 + var_x320;
+            partialF = -029999999999999999 + var_x320;
         }
         else
         {
@@ -2757,18 +2757,18 @@
         double var_chaste_interface__cell__sSLHsl = rY[29];
         // Units: dimensionless; Initial value: 0.113642236788144
         double var_chaste_interface__cell__sCasl = rY[36];
-        // Units: dimensionless; Initial value: 0.000105614570409386
+        // Units: dimensionless; Initial value: 000105614570409386
         
         
         // Mathematics
-        const double var_cell__cellLength = 100.0; // dimensionless
+        const double var_cell__cellLength = 100; // dimensionless
         const double var_cell__cellRadius = 10.25; // dimensionless
         const double var_cell__Vcell = 1.0000000000000001e-15 * M_PI * pow(var_cell__cellRadius, 2) * var_cell__cellLength; // dimensionless
         const double var_cell__Vmyo = 0.65000000000000002 * var_cell__Vcell; // dimensionless
-        const double var_cell__Vsl = 0.02 * var_cell__Vcell; // dimensionless
-        const double var_cell__Bmax_SLhighsl = 0.0134 * var_cell__Vmyo / var_cell__Vsl; // dimensionless
-        const double var_cell__koff_slh = 0.029999999999999999; // dimensionless
-        const double var_cell__kon_slh = 100.0; // dimensionless
+        const double var_cell__Vsl = 02 * var_cell__Vcell; // dimensionless
+        const double var_cell__Bmax_SLhighsl = 0134 * var_cell__Vmyo / var_cell__Vsl; // dimensionless
+        const double var_cell__koff_slh = 029999999999999999; // dimensionless
+        const double var_cell__kon_slh = 100; // dimensionless
         const double d_dt_chaste_interface_var_cell__sSLHsl = -var_cell__koff_slh * var_chaste_interface__cell__sSLHsl + (-var_chaste_interface__cell__sSLHsl + var_cell__Bmax_SLhighsl) * var_cell__kon_slh * var_chaste_interface__cell__sCasl; // 1 / ms
 
         return d_dt_chaste_interface_var_cell__sSLHsl;
@@ -2780,12 +2780,12 @@
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sCasl = rY[36];
-            // Units: dimensionless; Initial value: 0.000105614570409386
+            // Units: dimensionless; Initial value: 000105614570409386
             
-            const double var_x322 = 100.0 * var_chaste_interface__cell__sCasl;
+            const double var_x322 = 100 * var_chaste_interface__cell__sCasl;
             const double var_x323 = -var_x322;
             
-            partialF = -0.029999999999999999 + var_x323;
+            partialF = -029999999999999999 + var_x323;
         }
         else
         {
@@ -2807,14 +2807,14 @@
         
         
         // Mathematics
-        const double var_cell__cellLength = 100.0; // dimensionless
+        const double var_cell__cellLength = 100; // dimensionless
         const double var_cell__cellRadius = 10.25; // dimensionless
         const double var_cell__Vcell = 1.0000000000000001e-15 * M_PI * pow(var_cell__cellRadius, 2) * var_cell__cellLength; // dimensionless
         const double var_cell__Vmyo = 0.65000000000000002 * var_cell__Vcell; // dimensionless
-        const double var_cell__Vsr = 0.035000000000000003 * var_cell__Vcell; // dimensionless
+        const double var_cell__Vsr = 035000000000000003 * var_cell__Vcell; // dimensionless
         const double var_cell__Bmax_Csqn = 0.14000000000000001 * var_cell__Vmyo / var_cell__Vsr; // dimensionless
         const double var_cell__koff_csqn = 65.0; // dimensionless
-        const double var_cell__kon_csqn = 100.0; // dimensionless
+        const double var_cell__kon_csqn = 100; // dimensionless
         const double d_dt_chaste_interface_var_cell__sCsqnb = -var_cell__koff_csqn * var_chaste_interface__cell__sCsqnb + (-var_chaste_interface__cell__sCsqnb + var_cell__Bmax_Csqn) * var_cell__kon_csqn * var_chaste_interface__cell__sCa_sr; // 1 / ms
 
         return d_dt_chaste_interface_var_cell__sCsqnb;
@@ -2828,7 +2828,7 @@
             double var_chaste_interface__cell__sCa_sr = rY[31];
             // Units: dimensionless; Initial value: 0.563755421404699
             
-            const double var_x327 = 100.0 * var_chaste_interface__cell__sCa_sr;
+            const double var_x327 = 100 * var_chaste_interface__cell__sCa_sr;
             
             partialF = -65.0 - var_x327;
         }
@@ -2852,27 +2852,27 @@
         double var_chaste_interface__cell__sCa_sr = rY[31];
         // Units: dimensionless; Initial value: 0.563755421404699
         double var_chaste_interface__cell__sCaj = rY[35];
-        // Units: dimensionless; Initial value: 0.000175648385857736
+        // Units: dimensionless; Initial value: 000175648385857736
         double var_chaste_interface__cell__sCai = rY[37];
         // Units: dimensionless; Initial value: 8.85230799863012e-05
         
         
         // Mathematics
-        const double var_cell__Kmf = 0.00024600000000000002; // dimensionless
+        const double var_cell__Kmf = 00024600000000000002; // dimensionless
         const double var_cell__Kmr = 1.7; // dimensionless
         const double var_cell__Q10SRCaP = 2.6000000000000001; // dimensionless
-        const double var_cell__Temp = 310.0; // dimensionless
+        const double var_cell__Temp = 310; // dimensionless
         const double var_cell__Qpow = -31.0 + 0.10000000000000001 * var_cell__Temp; // dimensionless
-        const double var_cell__Vmax_SRCaP = 0.0053114; // dimensionless
-        const double var_cell__cellLength = 100.0; // dimensionless
+        const double var_cell__Vmax_SRCaP = 0053114; // dimensionless
+        const double var_cell__cellLength = 100; // dimensionless
         const double var_cell__cellRadius = 10.25; // dimensionless
         const double var_cell__Vcell = 1.0000000000000001e-15 * M_PI * pow(var_cell__cellRadius, 2) * var_cell__cellLength; // dimensionless
         const double var_cell__Vmyo = 0.65000000000000002 * var_cell__Vcell; // dimensionless
-        const double var_cell__Vsr = 0.035000000000000003 * var_cell__Vcell; // dimensionless
+        const double var_cell__Vsr = 035000000000000003 * var_cell__Vcell; // dimensionless
         const double var_cell__Bmax_Csqn = 0.14000000000000001 * var_cell__Vmyo / var_cell__Vsr; // dimensionless
         const double var_cell__hillSRCaP = 1.7869999999999999; // dimensionless
         const double var_cell__koff_csqn = 65.0; // dimensionless
-        const double var_cell__kon_csqn = 100.0; // dimensionless
+        const double var_cell__kon_csqn = 100; // dimensionless
         const double var_cell__ks = 25.0; // dimensionless
         const double var_cell__J_serca = 1.0 * pow(var_cell__Q10SRCaP, var_cell__Qpow) * (pow((var_chaste_interface__cell__sCai / var_cell__Kmf), var_cell__hillSRCaP) - pow((var_chaste_interface__cell__sCa_sr / var_cell__Kmr), var_cell__hillSRCaP)) * var_cell__Vmax_SRCaP / (1.0 + pow((var_chaste_interface__cell__sCai / var_cell__Kmf), var_cell__hillSRCaP) + pow((var_chaste_interface__cell__sCa_sr / var_cell__Kmr), var_cell__hillSRCaP)); // dimensionless
         const double var_cell__J_SRleak = 5.3480000000000003e-6 * var_chaste_interface__cell__sCa_sr - 5.3480000000000003e-6 * var_chaste_interface__cell__sCaj; // dimensionless
@@ -2897,7 +2897,7 @@
             double var_chaste_interface__cell__sCai = rY[37];
             // Units: dimensionless; Initial value: 8.85230799863012e-05
             
-            const double var_x328 = 100.0 * var_chaste_interface__cell__sCsqnb;
+            const double var_x328 = 100 * var_chaste_interface__cell__sCsqnb;
             const double var_x329 = 25.0 * var_chaste_interface__cell__sRyRo;
             const double var_x330 = pow(var_chaste_interface__cell__sCa_sr, 1.7869999999999999);
             const double var_x331 = 0.38742512113256738 * var_x330;
@@ -2909,7 +2909,7 @@
             const double var_x337 = (var_x333 - var_x331) / pow((3.5530476870814998e-7 + var_x332 + 1.3765399305573384e-7 * var_x330), 2);
             const double var_x338 = var_x335 * var_x337;
             
-            partialF = -260.00009932 + var_x328 - var_x329 - 4.6421953480341129e-16 * var_x338 - 0.0036772346118413473 * var_x336;
+            partialF = -2600009932 + var_x328 - var_x329 - 4.6421953480341129e-16 * var_x338 - 0036772346118413473 * var_x336;
         }
         else
         {
@@ -2927,7 +2927,7 @@
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: millivolt; Initial value: -81.3842590704928
         double var_chaste_interface__cell__sm = rY[1];
-        // Units: dimensionless; Initial value: 0.00384941567866232
+        // Units: dimensionless; Initial value: 00384941567866232
         double var_chaste_interface__cell__sh = rY[2];
         // Units: dimensionless; Initial value: 0.623723834301669
         double var_chaste_interface__cell__sj = rY[3];
@@ -2937,7 +2937,7 @@
         double var_chaste_interface__cell__sf = rY[5];
         // Units: dimensionless; Initial value: 0.995094078386247
         double var_chaste_interface__cell__sfcaBj = rY[6];
-        // Units: dimensionless; Initial value: 0.0246274349529557
+        // Units: dimensionless; Initial value: 0246274349529557
         double var_chaste_interface__cell__sNaBj = rY[17];
         // Units: dimensionless; Initial value: 3.41097946062695
         double var_chaste_interface__cell__sNaj = rY[32];
@@ -2945,7 +2945,7 @@
         double var_chaste_interface__cell__sNasl = rY[33];
         // Units: dimensionless; Initial value: 8.21322794157889
         double var_chaste_interface__cell__sCaj = rY[35];
-        // Units: dimensionless; Initial value: 0.000175648385857736
+        // Units: dimensionless; Initial value: 000175648385857736
         
         
         // Mathematics
@@ -2955,32 +2955,32 @@
         const double var_cell__Fjunc = 0.11; // dimensionless
         const double var_cell__Fjunc_CaL = 0.90000000000000002; // dimensionless
         const double var_cell__Frdy = 96485.0; // dimensionless
-        const double var_cell__GNaB = 0.00059699999999999998; // dimensionless
+        const double var_cell__GNaB = 00059699999999999998; // dimensionless
         const double var_cell__IbarNCX = 4.5; // dimensionless
         const double var_cell__IbarNaK = 1.8; // dimensionless
         const double var_cell__J_na_juncsl = 1.8312782322060799e-14; // dimensionless
-        const double var_cell__Kdact = 0.00014999999999999999; // dimensionless
-        const double var_cell__KmCai = 0.0035899999999999999; // dimensionless
+        const double var_cell__Kdact = 00014999999999999999; // dimensionless
+        const double var_cell__KmCai = 0035899999999999999; // dimensionless
         const double var_cell__KmCao = 1.3; // dimensionless
         const double var_cell__KmKo = 1.5; // dimensionless
         const double var_cell__KmNai = 12.289999999999999; // dimensionless
         const double var_cell__KmNaip = 11.0; // dimensionless
         const double var_cell__KmNao = 87.5; // dimensionless
         const double var_cell__Ko = 5.4000000000000004; // dimensionless
-        const double var_cell__Nao = 140.0; // dimensionless
+        const double var_cell__Nao = 140; // dimensionless
         const double var_cell__Q10CaL = 1.8; // dimensionless
         const double var_cell__Q10NCX = 1.5700000000000001; // dimensionless
         const double var_cell__R = 8314.0; // dimensionless
-        const double var_cell__Temp = 310.0; // dimensionless
+        const double var_cell__Temp = 310; // dimensionless
         const double var_cell__FoRT = var_cell__Frdy / (var_cell__R * var_cell__Temp); // dimensionless
         const double var_cell__Qpow = -31.0 + 0.10000000000000001 * var_cell__Temp; // dimensionless
-        const double var_cell__cellLength = 100.0; // dimensionless
+        const double var_cell__cellLength = 100; // dimensionless
         const double var_cell__cellRadius = 10.25; // dimensionless
         const double var_cell__Vcell = 1.0000000000000001e-15 * M_PI * pow(var_cell__cellRadius, 2) * var_cell__cellLength; // dimensionless
-        const double var_cell__Vjunc = 0.00053900000000000009 * var_cell__Vcell; // dimensionless
-        const double var_cell__fcaCaj = 0.0; // dimensionless
-        const double var_cell__koff_na = 0.001; // dimensionless
-        const double var_cell__kon_na = 0.0001; // dimensionless
+        const double var_cell__Vjunc = 00053900000000000009 * var_cell__Vcell; // dimensionless
+        const double var_cell__fcaCaj = 0; // dimensionless
+        const double var_cell__koff_na = 001; // dimensionless
+        const double var_cell__kon_na = 0001; // dimensionless
         const double var_cell__ksat = 0.32000000000000001; // dimensionless
         const double var_cell__nu = 0.27000000000000002; // dimensionless
         const double var_cell__pNa = 7.4999999999999993e-9 * mParameters[0]; // dimensionless
@@ -2994,8 +2994,8 @@
         const double var_cell__s2_junc = pow(var_cell__Nao, 3) * var_chaste_interface__cell__sCaj * exp((-1.0 + var_cell__nu) * var_cell__FoRT * var_chaste_interface__cell__sVm); // dimensionless
         const double var_cell__I_ncx_junc = pow(var_cell__Q10NCX, var_cell__Qpow) * (-var_cell__s2_junc + var_cell__s1_junc) * var_cell__Fjunc * var_cell__IbarNCX * var_cell__Ka_junc / ((1.0 + var_cell__ksat * exp((-1.0 + var_cell__nu) * var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__s3_junc); // dimensionless
         const double var_cell__I_CaNa_junc = 0.45000000000000001 * pow(var_cell__Q10CaL, var_cell__Qpow) * (1.0 - var_chaste_interface__cell__sfcaBj + var_cell__fcaCaj) * var_cell__Fjunc_CaL * var_cell__ibarna_j * var_chaste_interface__cell__sd * var_chaste_interface__cell__sf; // dimensionless
-        const double var_cell__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * var_cell__Nao); // dimensionless
-        const double var_cell__fnak = 1.0 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_cell__FoRT * var_chaste_interface__cell__sVm) + 0.036499999999999998 * var_cell__sigma * exp(-var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(01485884101040119 * var_cell__Nao); // dimensionless
+        const double var_cell__fnak = 1.0 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_cell__FoRT * var_chaste_interface__cell__sVm) + 036499999999999998 * var_cell__sigma * exp(-var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__I_nak_junc = 1.0 * var_cell__Fjunc * var_cell__IbarNaK * var_cell__Ko * var_cell__fnak / ((1.0 + pow(var_cell__KmNaip, 4) / pow(var_chaste_interface__cell__sNaj, 4)) * (var_cell__KmKo + var_cell__Ko)); // dimensionless
         const double var_cell__I_Na_junc = pow(var_chaste_interface__cell__sm, 3) * (-var_cell__ena_junc + var_chaste_interface__cell__sVm) * var_cell__Fjunc * mParameters[1] * var_chaste_interface__cell__sh * var_chaste_interface__cell__sj; // dimensionless
         const double var_cell__I_Na_tot_junc = 3.0 * var_cell__I_nak_junc + 3.0 * var_cell__I_ncx_junc + var_cell__I_CaNa_junc + var_cell__I_Na_junc + var_cell__I_nabk_junc; // dimensionless
@@ -3012,7 +3012,7 @@
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             double var_chaste_interface__cell__sm = rY[1];
-            // Units: dimensionless; Initial value: 0.00384941567866232
+            // Units: dimensionless; Initial value: 00384941567866232
             double var_chaste_interface__cell__sh = rY[2];
             // Units: dimensionless; Initial value: 0.623723834301669
             double var_chaste_interface__cell__sj = rY[3];
@@ -3022,33 +3022,33 @@
             double var_chaste_interface__cell__sf = rY[5];
             // Units: dimensionless; Initial value: 0.995094078386247
             double var_chaste_interface__cell__sfcaBj = rY[6];
-            // Units: dimensionless; Initial value: 0.0246274349529557
+            // Units: dimensionless; Initial value: 0246274349529557
             double var_chaste_interface__cell__sNaBj = rY[17];
             // Units: dimensionless; Initial value: 3.41097946062695
             double var_chaste_interface__cell__sNaj = rY[32];
             // Units: dimensionless; Initial value: 8.21411036389602
             double var_chaste_interface__cell__sCaj = rY[35];
-            // Units: dimensionless; Initial value: 0.000175648385857736
+            // Units: dimensionless; Initial value: 000175648385857736
             
             const double var_x23 = pow(var_chaste_interface__cell__sNaj, (-4));
-            const double var_x24 = exp(-0.003743588350780262 * var_chaste_interface__cell__sVm);
+            const double var_x24 = exp(-003743588350780262 * var_chaste_interface__cell__sVm);
             const double var_x25 = exp(2.0802377414561666);
-            const double var_x26 = 0.037435883507802616 * var_chaste_interface__cell__sVm;
+            const double var_x26 = 037435883507802616 * var_chaste_interface__cell__sVm;
             const double var_x27 = exp(-var_x26);
-            const double var_x28 = 1.0 + 0.1245 * var_x24 + 0.036499999999999998 * var_x27 * (-0.14285714285714285 + 0.14285714285714285 * var_x25);
+            const double var_x28 = 1.0 + 0.1245 * var_x24 + 036499999999999998 * var_x27 * (-0.14285714285714285 + 0.14285714285714285 * var_x25);
             const double var_x34 = pow(var_chaste_interface__cell__sm, 3);
             const double var_x35 = var_x34 * mParameters[1] * var_chaste_interface__cell__sj;
             const double var_x36 = var_x35 * var_chaste_interface__cell__sh;
-            const double var_x37 = exp(-0.027328194960695912 * var_chaste_interface__cell__sVm);
+            const double var_x37 = exp(-027328194960695912 * var_chaste_interface__cell__sVm);
             const double var_x39 = pow(var_chaste_interface__cell__sNaj, 3);
-            const double var_x40 = exp(0.010107688547106707 * var_chaste_interface__cell__sVm);
+            const double var_x40 = exp(010107688547106707 * var_chaste_interface__cell__sVm);
             const double var_x42 = 1.0 + 0.32000000000000001 * var_x37;
             const double var_x43 = 1 / var_x42;
             const double var_x44 = pow(var_chaste_interface__cell__sCaj, 2);
             const double var_x45 = 1 / var_x44;
             const double var_x46 = 1.0 + 2.2499999999999996e-8 * var_x45;
             const double var_x47 = 1 / var_x46;
-            const double var_x48 = 2744000.0 * var_chaste_interface__cell__sCaj;
+            const double var_x48 = 2744000 * var_chaste_interface__cell__sCaj;
             const double var_x49 = (1.0 + 278.55153203342621 * var_chaste_interface__cell__sCaj) * var_chaste_interface__cell__sCaj;
             const double var_x50 = 1 / (9850.9599999999991 + var_x48 + 669921.875 * var_x49 + 8.4066800865219591 * var_x39);
             const double var_x51 = var_x47 * var_x50;
@@ -3066,22 +3066,22 @@
             const double var_x107 = var_x71 * var_chaste_interface__cell__sVm;
             const double var_x123 = var_x107 * var_x83;
             const double var_x125 = 1 / var_chaste_interface__cell__sNaj;
-            const double var_x151 = 0.001754199282790071 * var_x125;
+            const double var_x151 = 001754199282790071 * var_x125;
             const double var_x152 = 1 / var_x28;
             const double var_x153 = var_x152 / (pow((6.8301345536507063e-5 + var_x23), 2) * pow(var_chaste_interface__cell__sNaj, 5));
             const double var_x154 = pow(var_chaste_interface__cell__sNaj, 2);
             const double var_x155 = var_x43 * var_x65;
-            const double var_x156 = var_x155 * var_x47 / pow((0.0035899999999999999 + 0.244140625 * var_x49 + 3.0636589236596063e-6 * var_x39 + var_chaste_interface__cell__sCaj), 2);
+            const double var_x156 = var_x155 * var_x47 / pow((0035899999999999999 + 0.244140625 * var_x49 + 3.0636589236596063e-6 * var_x39 + var_chaste_interface__cell__sCaj), 2);
             const double var_x157 = var_x154 * var_x156;
             const double var_x158 = var_x154 * var_x40 * var_x52;
             const double var_x159 = 2.9383572576048089 * var_x125 * var_x36;
             const double var_x160 = 8.228590279882795e-6 * var_x123;
-            const double var_x302 = 0.0001 * var_chaste_interface__cell__sNaBj;
+            const double var_x302 = 0001 * var_chaste_interface__cell__sNaBj;
             const double var_x342 = 1 / M_PI;
             const double var_x343 = 0.25275361828036119 * var_x342;
             const double var_x351 = 3.2338348512952546 * var_x342;
             
-            partialF = -0.0007561 + var_x302 - var_x351 - var_x343 * (var_x151 + var_x159 + var_x160 + 8.0190000000000001 * var_x158 + 0.0001270048672132754 * var_x153 - 4.973979775839485e-12 * var_x157);
+            partialF = -0007561 + var_x302 - var_x351 - var_x343 * (var_x151 + var_x159 + var_x160 + 8.0190000000000001 * var_x158 + 0001270048672132754 * var_x153 - 4.973979775839485e-12 * var_x157);
         }
         else
         {
@@ -3099,7 +3099,7 @@
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: millivolt; Initial value: -81.3842590704928
         double var_chaste_interface__cell__sm = rY[1];
-        // Units: dimensionless; Initial value: 0.00384941567866232
+        // Units: dimensionless; Initial value: 00384941567866232
         double var_chaste_interface__cell__sh = rY[2];
         // Units: dimensionless; Initial value: 0.623723834301669
         double var_chaste_interface__cell__sj = rY[3];
@@ -3109,7 +3109,7 @@
         double var_chaste_interface__cell__sf = rY[5];
         // Units: dimensionless; Initial value: 0.995094078386247
         double var_chaste_interface__cell__sfcaBsl = rY[7];
-        // Units: dimensionless; Initial value: 0.0150911724206476
+        // Units: dimensionless; Initial value: 0150911724206476
         double var_chaste_interface__cell__sNaBsl = rY[18];
         // Units: dimensionless; Initial value: 0.744248540671373
         double var_chaste_interface__cell__sNaj = rY[32];
@@ -3119,7 +3119,7 @@
         double var_chaste_interface__cell__sNai = rY[34];
         // Units: dimensionless; Initial value: 8.21340895351653
         double var_chaste_interface__cell__sCasl = rY[36];
-        // Units: dimensionless; Initial value: 0.000105614570409386
+        // Units: dimensionless; Initial value: 000105614570409386
         
         
         // Mathematics
@@ -3131,33 +3131,33 @@
         const double var_cell__Frdy = 96485.0; // dimensionless
         const double var_cell__Fsl = 1.0 - var_cell__Fjunc; // dimensionless
         const double var_cell__Fsl_CaL = 1.0 - var_cell__Fjunc_CaL; // dimensionless
-        const double var_cell__GNaB = 0.00059699999999999998; // dimensionless
+        const double var_cell__GNaB = 00059699999999999998; // dimensionless
         const double var_cell__IbarNCX = 4.5; // dimensionless
         const double var_cell__IbarNaK = 1.8; // dimensionless
         const double var_cell__J_na_juncsl = 1.8312782322060799e-14; // dimensionless
         const double var_cell__J_na_slmyo = 1.6386279222197945e-12; // dimensionless
-        const double var_cell__Kdact = 0.00014999999999999999; // dimensionless
-        const double var_cell__KmCai = 0.0035899999999999999; // dimensionless
+        const double var_cell__Kdact = 00014999999999999999; // dimensionless
+        const double var_cell__KmCai = 0035899999999999999; // dimensionless
         const double var_cell__KmCao = 1.3; // dimensionless
         const double var_cell__KmKo = 1.5; // dimensionless
         const double var_cell__KmNai = 12.289999999999999; // dimensionless
         const double var_cell__KmNaip = 11.0; // dimensionless
         const double var_cell__KmNao = 87.5; // dimensionless
         const double var_cell__Ko = 5.4000000000000004; // dimensionless
-        const double var_cell__Nao = 140.0; // dimensionless
+        const double var_cell__Nao = 140; // dimensionless
         const double var_cell__Q10CaL = 1.8; // dimensionless
         const double var_cell__Q10NCX = 1.5700000000000001; // dimensionless
         const double var_cell__R = 8314.0; // dimensionless
-        const double var_cell__Temp = 310.0; // dimensionless
+        const double var_cell__Temp = 310; // dimensionless
         const double var_cell__FoRT = var_cell__Frdy / (var_cell__R * var_cell__Temp); // dimensionless
         const double var_cell__Qpow = -31.0 + 0.10000000000000001 * var_cell__Temp; // dimensionless
-        const double var_cell__cellLength = 100.0; // dimensionless
+        const double var_cell__cellLength = 100; // dimensionless
         const double var_cell__cellRadius = 10.25; // dimensionless
         const double var_cell__Vcell = 1.0000000000000001e-15 * M_PI * pow(var_cell__cellRadius, 2) * var_cell__cellLength; // dimensionless
-        const double var_cell__Vsl = 0.02 * var_cell__Vcell; // dimensionless
-        const double var_cell__fcaCaMSL = 0.0; // dimensionless
-        const double var_cell__koff_na = 0.001; // dimensionless
-        const double var_cell__kon_na = 0.0001; // dimensionless
+        const double var_cell__Vsl = 02 * var_cell__Vcell; // dimensionless
+        const double var_cell__fcaCaMSL = 0; // dimensionless
+        const double var_cell__koff_na = 001; // dimensionless
+        const double var_cell__kon_na = 0001; // dimensionless
         const double var_cell__ksat = 0.32000000000000001; // dimensionless
         const double var_cell__nu = 0.27000000000000002; // dimensionless
         const double var_cell__pNa = 7.4999999999999993e-9 * mParameters[0]; // dimensionless
@@ -3171,8 +3171,8 @@
         const double var_cell__s2_sl = pow(var_cell__Nao, 3) * var_chaste_interface__cell__sCasl * exp((-1.0 + var_cell__nu) * var_cell__FoRT * var_chaste_interface__cell__sVm); // dimensionless
         const double var_cell__I_ncx_sl = pow(var_cell__Q10NCX, var_cell__Qpow) * (-var_cell__s2_sl + var_cell__s1_sl) * var_cell__Fsl * var_cell__IbarNCX * var_cell__Ka_sl / ((1.0 + var_cell__ksat * exp((-1.0 + var_cell__nu) * var_cell__FoRT * var_chaste_interface__cell__sVm)) * var_cell__s3_sl); // dimensionless
         const double var_cell__I_CaNa_sl = 0.45000000000000001 * pow(var_cell__Q10CaL, var_cell__Qpow) * (1.0 - var_chaste_interface__cell__sfcaBsl + var_cell__fcaCaMSL) * var_cell__Fsl_CaL * var_cell__ibarna_sl * var_chaste_interface__cell__sd * var_chaste_interface__cell__sf; // dimensionless
-        const double var_cell__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * var_cell__Nao); // dimensionless
-        const double var_cell__fnak = 1.0 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_cell__FoRT * var_chaste_interface__cell__sVm) + 0.036499999999999998 * var_cell__sigma * exp(-var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
+        const double var_cell__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(01485884101040119 * var_cell__Nao); // dimensionless
+        const double var_cell__fnak = 1.0 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_cell__FoRT * var_chaste_interface__cell__sVm) + 036499999999999998 * var_cell__sigma * exp(-var_cell__FoRT * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__I_nak_sl = 1.0 * var_cell__Fsl * var_cell__IbarNaK * var_cell__Ko * var_cell__fnak / ((1.0 + pow(var_cell__KmNaip, 4) / pow(var_chaste_interface__cell__sNasl, 4)) * (var_cell__KmKo + var_cell__Ko)); // dimensionless
         const double var_cell__I_Na_sl = pow(var_chaste_interface__cell__sm, 3) * (-var_cell__ena_sl + var_chaste_interface__cell__sVm) * var_cell__Fsl * mParameters[1] * var_chaste_interface__cell__sh * var_chaste_interface__cell__sj; // dimensionless
         const double var_cell__I_Na_tot_sl = 3.0 * var_cell__I_nak_sl + 3.0 * var_cell__I_ncx_sl + var_cell__I_CaNa_sl + var_cell__I_Na_sl + var_cell__I_nabk_sl; // dimensionless
@@ -3189,7 +3189,7 @@
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             double var_chaste_interface__cell__sm = rY[1];
-            // Units: dimensionless; Initial value: 0.00384941567866232
+            // Units: dimensionless; Initial value: 00384941567866232
             double var_chaste_interface__cell__sh = rY[2];
             // Units: dimensionless; Initial value: 0.623723834301669
             double var_chaste_interface__cell__sj = rY[3];
@@ -3199,32 +3199,32 @@
             double var_chaste_interface__cell__sf = rY[5];
             // Units: dimensionless; Initial value: 0.995094078386247
             double var_chaste_interface__cell__sfcaBsl = rY[7];
-            // Units: dimensionless; Initial value: 0.0150911724206476
+            // Units: dimensionless; Initial value: 0150911724206476
             double var_chaste_interface__cell__sNaBsl = rY[18];
             // Units: dimensionless; Initial value: 0.744248540671373
             double var_chaste_interface__cell__sNasl = rY[33];
             // Units: dimensionless; Initial value: 8.21322794157889
             double var_chaste_interface__cell__sCasl = rY[36];
-            // Units: dimensionless; Initial value: 0.000105614570409386
+            // Units: dimensionless; Initial value: 000105614570409386
             
-            const double var_x24 = exp(-0.003743588350780262 * var_chaste_interface__cell__sVm);
+            const double var_x24 = exp(-003743588350780262 * var_chaste_interface__cell__sVm);
             const double var_x25 = exp(2.0802377414561666);
-            const double var_x26 = 0.037435883507802616 * var_chaste_interface__cell__sVm;
+            const double var_x26 = 037435883507802616 * var_chaste_interface__cell__sVm;
             const double var_x27 = exp(-var_x26);
-            const double var_x28 = 1.0 + 0.1245 * var_x24 + 0.036499999999999998 * var_x27 * (-0.14285714285714285 + 0.14285714285714285 * var_x25);
+            const double var_x28 = 1.0 + 0.1245 * var_x24 + 036499999999999998 * var_x27 * (-0.14285714285714285 + 0.14285714285714285 * var_x25);
             const double var_x31 = pow(var_chaste_interface__cell__sNasl, (-4));
             const double var_x34 = pow(var_chaste_interface__cell__sm, 3);
             const double var_x35 = var_x34 * mParameters[1] * var_chaste_interface__cell__sj;
             const double var_x36 = var_x35 * var_chaste_interface__cell__sh;
-            const double var_x37 = exp(-0.027328194960695912 * var_chaste_interface__cell__sVm);
-            const double var_x40 = exp(0.010107688547106707 * var_chaste_interface__cell__sVm);
+            const double var_x37 = exp(-027328194960695912 * var_chaste_interface__cell__sVm);
+            const double var_x40 = exp(010107688547106707 * var_chaste_interface__cell__sVm);
             const double var_x42 = 1.0 + 0.32000000000000001 * var_x37;
             const double var_x43 = 1 / var_x42;
             const double var_x54 = pow(var_chaste_interface__cell__sNasl, 3);
             const double var_x55 = pow(var_chaste_interface__cell__sCasl, (-2));
             const double var_x56 = 1.0 + 2.2499999999999996e-8 * var_x55;
             const double var_x57 = 1 / var_x56;
-            const double var_x58 = 2744000.0 * var_chaste_interface__cell__sCasl;
+            const double var_x58 = 2744000 * var_chaste_interface__cell__sCasl;
             const double var_x59 = (1.0 + 278.55153203342621 * var_chaste_interface__cell__sCasl) * var_chaste_interface__cell__sCasl;
             const double var_x60 = 1 / (9850.9599999999991 + var_x58 + 669921.875 * var_x59 + 8.4066800865219591 * var_x54);
             const double var_x61 = var_x57 * var_x60;
@@ -3243,20 +3243,20 @@
             const double var_x117 = var_x107 * var_x77;
             const double var_x130 = 1 / var_chaste_interface__cell__sNasl;
             const double var_x152 = 1 / var_x28;
-            const double var_x161 = 0.014193066924392391 * var_x130;
+            const double var_x161 = 014193066924392391 * var_x130;
             const double var_x162 = var_x152 / (pow((6.8301345536507063e-5 + var_x31), 2) * pow(var_chaste_interface__cell__sNasl, 5));
             const double var_x163 = pow(var_chaste_interface__cell__sNasl, 2);
             const double var_x164 = var_x43 * var_x68;
-            const double var_x165 = var_x164 * var_x57 / pow((0.0035899999999999999 + 0.244140625 * var_x59 + 3.0636589236596063e-6 * var_x54 + var_chaste_interface__cell__sCasl), 2);
+            const double var_x165 = var_x164 * var_x57 / pow((0035899999999999999 + 0.244140625 * var_x59 + 3.0636589236596063e-6 * var_x54 + var_chaste_interface__cell__sCasl), 2);
             const double var_x166 = var_x163 * var_x165;
             const double var_x167 = 23.773981447893455 * var_x130 * var_x36;
             const double var_x168 = var_x163 * var_x40 * var_x62;
             const double var_x169 = 9.1428780887586595e-7 * var_x117;
-            const double var_x304 = 0.0001 * var_chaste_interface__cell__sNaBsl;
+            const double var_x304 = 0001 * var_chaste_interface__cell__sNaBsl;
             const double var_x342 = 1 / M_PI;
-            const double var_x352 = 0.0068117100126557344 * var_x342;
+            const double var_x352 = 0068117100126557344 * var_x342;
             
-            partialF = -0.000165 + var_x304 - 7.8855000811034159 * var_x342 - var_x352 * (var_x161 + var_x167 + var_x169 + 0.001027584834725592 * var_x162 + 64.881 * var_x168 - 4.0244018186337653e-11 * var_x166);
+            partialF = -000165 + var_x304 - 7.8855000811034159 * var_x342 - var_x352 * (var_x161 + var_x167 + var_x169 + 001027584834725592 * var_x162 + 64.881 * var_x168 - 4.0244018186337653e-11 * var_x166);
         }
         else
         {
@@ -3279,7 +3279,7 @@
         
         // Mathematics
         const double var_cell__J_na_slmyo = 1.6386279222197945e-12; // dimensionless
-        const double var_cell__cellLength = 100.0; // dimensionless
+        const double var_cell__cellLength = 100; // dimensionless
         const double var_cell__cellRadius = 10.25; // dimensionless
         const double var_cell__Vcell = 1.0000000000000001e-15 * M_PI * pow(var_cell__cellRadius, 2) * var_cell__cellLength; // dimensionless
         const double var_cell__Vmyo = 0.65000000000000002 * var_cell__Vcell; // dimensionless
@@ -3319,21 +3319,21 @@
         double var_chaste_interface__cell__sf = rY[5];
         // Units: dimensionless; Initial value: 0.995094078386247
         double var_chaste_interface__cell__sfcaBj = rY[6];
-        // Units: dimensionless; Initial value: 0.0246274349529557
+        // Units: dimensionless; Initial value: 0246274349529557
         double var_chaste_interface__cell__sRyRo = rY[15];
         // Units: dimensionless; Initial value: 7.56436968249499e-07
         double var_chaste_interface__cell__sSLLj = rY[26];
-        // Units: dimensionless; Initial value: 0.00739549938515031
+        // Units: dimensionless; Initial value: 00739549938515031
         double var_chaste_interface__cell__sSLHj = rY[28];
-        // Units: dimensionless; Initial value: 0.0735225248399363
+        // Units: dimensionless; Initial value: 0735225248399363
         double var_chaste_interface__cell__sCa_sr = rY[31];
         // Units: dimensionless; Initial value: 0.563755421404699
         double var_chaste_interface__cell__sNaj = rY[32];
         // Units: dimensionless; Initial value: 8.21411036389602
         double var_chaste_interface__cell__sCaj = rY[35];
-        // Units: dimensionless; Initial value: 0.000175648385857736
+        // Units: dimensionless; Initial value: 000175648385857736
         double var_chaste_interface__cell__sCasl = rY[36];
-        // Units: dimensionless; Initial value: 0.000105614570409386
+        // Units: dimensionless; Initial value: 000105614570409386
         
         
         // Mathematics
@@ -3342,41 +3342,41 @@
         const double var_cell__Fjunc = 0.11; // dimensionless
         const double var_cell__Fjunc_CaL = 0.90000000000000002; // dimensionless
         const double var_cell__Frdy = 96485.0; // dimensionless
-        const double var_cell__GCaB = 0.00055130000000000001; // dimensionless
+        const double var_cell__GCaB = 00055130000000000001; // dimensionless
         const double var_cell__IbarNCX = 4.5; // dimensionless
-        const double var_cell__IbarSLCaP = 0.067299999999999999; // dimensionless
+        const double var_cell__IbarSLCaP = 067299999999999999; // dimensionless
         const double var_cell__J_ca_juncsl = 8.2413054227789685e-13; // dimensionless
-        const double var_cell__Kdact = 0.00014999999999999999; // dimensionless
-        const double var_cell__KmCai = 0.0035899999999999999; // dimensionless
+        const double var_cell__Kdact = 00014999999999999999; // dimensionless
+        const double var_cell__KmCai = 0035899999999999999; // dimensionless
         const double var_cell__KmCao = 1.3; // dimensionless
         const double var_cell__KmNai = 12.289999999999999; // dimensionless
         const double var_cell__KmNao = 87.5; // dimensionless
-        const double var_cell__KmPCa = 0.00050000000000000001; // dimensionless
-        const double var_cell__Nao = 140.0; // dimensionless
+        const double var_cell__KmPCa = 00050000000000000001; // dimensionless
+        const double var_cell__Nao = 140; // dimensionless
         const double var_cell__Q10CaL = 1.8; // dimensionless
         const double var_cell__Q10NCX = 1.5700000000000001; // dimensionless
         const double var_cell__Q10SLCaP = 2.3500000000000001; // dimensionless
         const double var_cell__R = 8314.0; // dimensionless
-        const double var_cell__Temp = 310.0; // dimensionless
+        const double var_cell__Temp = 310; // dimensionless
         const double var_cell__FoRT = var_cell__Frdy / (var_cell__R * var_cell__Temp); // dimensionless
         const double var_cell__Qpow = -31.0 + 0.10000000000000001 * var_cell__Temp; // dimensionless
-        const double var_cell__cellLength = 100.0; // dimensionless
+        const double var_cell__cellLength = 100; // dimensionless
         const double var_cell__cellRadius = 10.25; // dimensionless
         const double var_cell__Vcell = 1.0000000000000001e-15 * M_PI * pow(var_cell__cellRadius, 2) * var_cell__cellLength; // dimensionless
-        const double var_cell__Vjunc = 0.00053900000000000009 * var_cell__Vcell; // dimensionless
+        const double var_cell__Vjunc = 00053900000000000009 * var_cell__Vcell; // dimensionless
         const double var_cell__Vmyo = 0.65000000000000002 * var_cell__Vcell; // dimensionless
-        const double var_cell__Bmax_SLhighj = 0.000165 * var_cell__Vmyo / var_cell__Vjunc; // dimensionless
-        const double var_cell__Bmax_SLlowj = 0.00046000000000000001 * var_cell__Vmyo / var_cell__Vjunc; // dimensionless
-        const double var_cell__Vsr = 0.035000000000000003 * var_cell__Vcell; // dimensionless
-        const double var_cell__fcaCaj = 0.0; // dimensionless
-        const double var_cell__koff_slh = 0.029999999999999999; // dimensionless
+        const double var_cell__Bmax_SLhighj = 000165 * var_cell__Vmyo / var_cell__Vjunc; // dimensionless
+        const double var_cell__Bmax_SLlowj = 00046000000000000001 * var_cell__Vmyo / var_cell__Vjunc; // dimensionless
+        const double var_cell__Vsr = 035000000000000003 * var_cell__Vcell; // dimensionless
+        const double var_cell__fcaCaj = 0; // dimensionless
+        const double var_cell__koff_slh = 029999999999999999; // dimensionless
         const double var_cell__koff_sll = 1.3; // dimensionless
-        const double var_cell__kon_slh = 100.0; // dimensionless
-        const double var_cell__kon_sll = 100.0; // dimensionless
+        const double var_cell__kon_slh = 100; // dimensionless
+        const double var_cell__kon_sll = 100; // dimensionless
         const double var_cell__ks = 25.0; // dimensionless
         const double var_cell__ksat = 0.32000000000000001; // dimensionless
         const double var_cell__nu = 0.27000000000000002; // dimensionless
-        const double var_cell__pCa = 0.00027 * mParameters[0]; // dimensionless
+        const double var_cell__pCa = 00027 * mParameters[0]; // dimensionless
         const double var_cell__I_pca_junc = pow(var_cell__Q10SLCaP, var_cell__Qpow) * pow(var_chaste_interface__cell__sCaj, 1.6000000000000001) * var_cell__Fjunc * var_cell__IbarSLCaP / (pow(var_cell__KmPCa, 1.6000000000000001) + pow(var_chaste_interface__cell__sCaj, 1.6000000000000001)); // dimensionless
         const double var_cell__J_SRleak = 5.3480000000000003e-6 * var_chaste_interface__cell__sCa_sr - 5.3480000000000003e-6 * var_chaste_interface__cell__sCaj; // dimensionless
         const double var_cell__Ka_junc = 1.0 / (1.0 + pow(var_cell__Kdact, 2) / pow(var_chaste_interface__cell__sCaj, 2)); // dimensionless
@@ -3410,29 +3410,29 @@
             double var_chaste_interface__cell__sf = rY[5];
             // Units: dimensionless; Initial value: 0.995094078386247
             double var_chaste_interface__cell__sfcaBj = rY[6];
-            // Units: dimensionless; Initial value: 0.0246274349529557
+            // Units: dimensionless; Initial value: 0246274349529557
             double var_chaste_interface__cell__sRyRo = rY[15];
             // Units: dimensionless; Initial value: 7.56436968249499e-07
             double var_chaste_interface__cell__sSLLj = rY[26];
-            // Units: dimensionless; Initial value: 0.00739549938515031
+            // Units: dimensionless; Initial value: 00739549938515031
             double var_chaste_interface__cell__sSLHj = rY[28];
-            // Units: dimensionless; Initial value: 0.0735225248399363
+            // Units: dimensionless; Initial value: 0735225248399363
             double var_chaste_interface__cell__sNaj = rY[32];
             // Units: dimensionless; Initial value: 8.21411036389602
             double var_chaste_interface__cell__sCaj = rY[35];
-            // Units: dimensionless; Initial value: 0.000175648385857736
+            // Units: dimensionless; Initial value: 000175648385857736
             
             const double var_x3 = 1 / var_chaste_interface__cell__sCaj;
-            const double var_x37 = exp(-0.027328194960695912 * var_chaste_interface__cell__sVm);
+            const double var_x37 = exp(-027328194960695912 * var_chaste_interface__cell__sVm);
             const double var_x39 = pow(var_chaste_interface__cell__sNaj, 3);
-            const double var_x40 = exp(0.010107688547106707 * var_chaste_interface__cell__sVm);
+            const double var_x40 = exp(010107688547106707 * var_chaste_interface__cell__sVm);
             const double var_x42 = 1.0 + 0.32000000000000001 * var_x37;
             const double var_x43 = 1 / var_x42;
             const double var_x44 = pow(var_chaste_interface__cell__sCaj, 2);
             const double var_x45 = 1 / var_x44;
             const double var_x46 = 1.0 + 2.2499999999999996e-8 * var_x45;
             const double var_x47 = 1 / var_x46;
-            const double var_x48 = 2744000.0 * var_chaste_interface__cell__sCaj;
+            const double var_x48 = 2744000 * var_chaste_interface__cell__sCaj;
             const double var_x49 = (1.0 + 278.55153203342621 * var_chaste_interface__cell__sCaj) * var_chaste_interface__cell__sCaj;
             const double var_x50 = 1 / (9850.9599999999991 + var_x48 + 669921.875 * var_x49 + 8.4066800865219591 * var_x39);
             const double var_x51 = var_x47 * var_x50;
@@ -3442,7 +3442,7 @@
             const double var_x74 = mParameters[0] * var_chaste_interface__cell__sf;
             const double var_x75 = var_x74 * var_chaste_interface__cell__sd;
             const double var_x82 = 1.0 - var_chaste_interface__cell__sfcaBj;
-            const double var_x87 = exp(0.074871767015605231 * var_chaste_interface__cell__sVm);
+            const double var_x87 = exp(074871767015605231 * var_chaste_interface__cell__sVm);
             const double var_x88 = -1.0 + var_x87;
             const double var_x89 = 1 / var_x88;
             const double var_x90 = var_x75 * var_x89;
@@ -3450,23 +3450,23 @@
             const double var_x112 = var_x87 * var_chaste_interface__cell__sVm;
             const double var_x121 = var_x112 * var_x91;
             const double var_x155 = var_x43 * var_x65;
-            const double var_x156 = var_x155 * var_x47 / pow((0.0035899999999999999 + 0.244140625 * var_x49 + 3.0636589236596063e-6 * var_x39 + var_chaste_interface__cell__sCaj), 2);
-            const double var_x170 = 0.00080995817805876559 * var_x3;
+            const double var_x156 = var_x155 * var_x47 / pow((0035899999999999999 + 0.244140625 * var_x49 + 3.0636589236596063e-6 * var_x39 + var_chaste_interface__cell__sCaj), 2);
+            const double var_x170 = 00080995817805876559 * var_x3;
             const double var_x171 = 5.2281977629563632e-6 + pow(var_chaste_interface__cell__sCaj, 1.6000000000000001);
-            const double var_x172 = 0.011844800000000001 * pow(var_chaste_interface__cell__sCaj, 2.2000000000000002) / pow(var_x171, 2);
-            const double var_x173 = 0.011844800000000001 * pow(var_chaste_interface__cell__sCaj, 0.60000000000000009) / var_x171;
+            const double var_x172 = 011844800000000001 * pow(var_chaste_interface__cell__sCaj, 2.2000000000000002) / pow(var_x171, 2);
+            const double var_x173 = 011844800000000001 * pow(var_chaste_interface__cell__sCaj, 0.60000000000000009) / var_x171;
             const double var_x175 = var_x37 * var_x52;
             const double var_x176 = var_x156 * (-3413921.875 - 373215529.24791086 * var_chaste_interface__cell__sCaj);
             const double var_x177 = var_x155 * var_x50 / (pow(var_x46, 2) * pow(var_chaste_interface__cell__sCaj, 3));
             const double var_x178 = 0.53874226280448645 * var_x121;
-            const double var_x321 = 100.0 * var_chaste_interface__cell__sSLLj;
-            const double var_x325 = 100.0 * var_chaste_interface__cell__sSLHj;
+            const double var_x321 = 100 * var_chaste_interface__cell__sSLLj;
+            const double var_x325 = 100 * var_chaste_interface__cell__sSLHj;
             const double var_x342 = 1 / M_PI;
             const double var_x357 = 0.1263768091401806 * var_x342;
             const double var_x362 = 1623.3766233766235 * var_chaste_interface__cell__sRyRo;
             const double var_x363 = 145.53234034920845 * var_x342;
             
-            partialF = -75.377506864564012 + var_x321 + var_x325 - var_x362 - var_x363 - var_x357 * (var_x170 + var_x173 + var_x178 - var_x172 + 2716560.0 * var_x175 - 1.3148220554360853e-13 * var_x176 - 4.4549999999999992e-8 * var_x177);
+            partialF = -75.377506864564012 + var_x321 + var_x325 - var_x362 - var_x363 - var_x357 * (var_x170 + var_x173 + var_x178 - var_x172 + 2716560 * var_x175 - 1.3148220554360853e-13 * var_x176 - 4.4549999999999992e-8 * var_x177);
         }
         else
         {
@@ -3488,17 +3488,17 @@
         double var_chaste_interface__cell__sf = rY[5];
         // Units: dimensionless; Initial value: 0.995094078386247
         double var_chaste_interface__cell__sfcaBsl = rY[7];
-        // Units: dimensionless; Initial value: 0.0150911724206476
+        // Units: dimensionless; Initial value: 0150911724206476
         double var_chaste_interface__cell__sSLLsl = rY[27];
-        // Units: dimensionless; Initial value: 0.00979616077807075
+        // Units: dimensionless; Initial value: 00979616077807075
         double var_chaste_interface__cell__sSLHsl = rY[29];
         // Units: dimensionless; Initial value: 0.113642236788144
         double var_chaste_interface__cell__sNasl = rY[33];
         // Units: dimensionless; Initial value: 8.21322794157889
         double var_chaste_interface__cell__sCaj = rY[35];
-        // Units: dimensionless; Initial value: 0.000175648385857736
+        // Units: dimensionless; Initial value: 000175648385857736
         double var_chaste_interface__cell__sCasl = rY[36];
-        // Units: dimensionless; Initial value: 0.000105614570409386
+        // Units: dimensionless; Initial value: 000105614570409386
         double var_chaste_interface__cell__sCai = rY[37];
         // Units: dimensionless; Initial value: 8.85230799863012e-05
         
@@ -3511,40 +3511,40 @@
         const double var_cell__Frdy = 96485.0; // dimensionless
         const double var_cell__Fsl = 1.0 - var_cell__Fjunc; // dimensionless
         const double var_cell__Fsl_CaL = 1.0 - var_cell__Fjunc_CaL; // dimensionless
-        const double var_cell__GCaB = 0.00055130000000000001; // dimensionless
+        const double var_cell__GCaB = 00055130000000000001; // dimensionless
         const double var_cell__IbarNCX = 4.5; // dimensionless
-        const double var_cell__IbarSLCaP = 0.067299999999999999; // dimensionless
+        const double var_cell__IbarSLCaP = 067299999999999999; // dimensionless
         const double var_cell__J_ca_juncsl = 8.2413054227789685e-13; // dimensionless
         const double var_cell__J_ca_slmyo = 3.7242560798480505e-12; // dimensionless
-        const double var_cell__Kdact = 0.00014999999999999999; // dimensionless
-        const double var_cell__KmCai = 0.0035899999999999999; // dimensionless
+        const double var_cell__Kdact = 00014999999999999999; // dimensionless
+        const double var_cell__KmCai = 0035899999999999999; // dimensionless
         const double var_cell__KmCao = 1.3; // dimensionless
         const double var_cell__KmNai = 12.289999999999999; // dimensionless
         const double var_cell__KmNao = 87.5; // dimensionless
-        const double var_cell__KmPCa = 0.00050000000000000001; // dimensionless
-        const double var_cell__Nao = 140.0; // dimensionless
+        const double var_cell__KmPCa = 00050000000000000001; // dimensionless
+        const double var_cell__Nao = 140; // dimensionless
         const double var_cell__Q10CaL = 1.8; // dimensionless
         const double var_cell__Q10NCX = 1.5700000000000001; // dimensionless
         const double var_cell__Q10SLCaP = 2.3500000000000001; // dimensionless
         const double var_cell__R = 8314.0; // dimensionless
-        const double var_cell__Temp = 310.0; // dimensionless
+        const double var_cell__Temp = 310; // dimensionless
         const double var_cell__FoRT = var_cell__Frdy / (var_cell__R * var_cell__Temp); // dimensionless
         const double var_cell__Qpow = -31.0 + 0.10000000000000001 * var_cell__Temp; // dimensionless
-        const double var_cell__cellLength = 100.0; // dimensionless
+        const double var_cell__cellLength = 100; // dimensionless
         const double var_cell__cellRadius = 10.25; // dimensionless
         const double var_cell__Vcell = 1.0000000000000001e-15 * M_PI * pow(var_cell__cellRadius, 2) * var_cell__cellLength; // dimensionless
         const double var_cell__Vmyo = 0.65000000000000002 * var_cell__Vcell; // dimensionless
-        const double var_cell__Vsl = 0.02 * var_cell__Vcell; // dimensionless
-        const double var_cell__Bmax_SLhighsl = 0.0134 * var_cell__Vmyo / var_cell__Vsl; // dimensionless
-        const double var_cell__Bmax_SLlowsl = 0.037400000000000003 * var_cell__Vmyo / var_cell__Vsl; // dimensionless
-        const double var_cell__fcaCaMSL = 0.0; // dimensionless
-        const double var_cell__koff_slh = 0.029999999999999999; // dimensionless
+        const double var_cell__Vsl = 02 * var_cell__Vcell; // dimensionless
+        const double var_cell__Bmax_SLhighsl = 0134 * var_cell__Vmyo / var_cell__Vsl; // dimensionless
+        const double var_cell__Bmax_SLlowsl = 037400000000000003 * var_cell__Vmyo / var_cell__Vsl; // dimensionless
+        const double var_cell__fcaCaMSL = 0; // dimensionless
+        const double var_cell__koff_slh = 029999999999999999; // dimensionless
         const double var_cell__koff_sll = 1.3; // dimensionless
-        const double var_cell__kon_slh = 100.0; // dimensionless
-        const double var_cell__kon_sll = 100.0; // dimensionless
+        const double var_cell__kon_slh = 100; // dimensionless
+        const double var_cell__kon_sll = 100; // dimensionless
         const double var_cell__ksat = 0.32000000000000001; // dimensionless
         const double var_cell__nu = 0.27000000000000002; // dimensionless
-        const double var_cell__pCa = 0.00027 * mParameters[0]; // dimensionless
+        const double var_cell__pCa = 00027 * mParameters[0]; // dimensionless
         const double var_cell__I_pca_sl = pow(var_cell__Q10SLCaP, var_cell__Qpow) * pow(var_chaste_interface__cell__sCasl, 1.6000000000000001) * var_cell__Fsl * var_cell__IbarSLCaP / (pow(var_cell__KmPCa, 1.6000000000000001) + pow(var_chaste_interface__cell__sCasl, 1.6000000000000001)); // dimensionless
         const double var_cell__Ka_sl = 1.0 / (1.0 + pow(var_cell__Kdact, 2) / pow(var_chaste_interface__cell__sCasl, 2)); // dimensionless
         const double var_cell__eca_sl = 0.5 * log(var_cell__Cao / var_chaste_interface__cell__sCasl) / var_cell__FoRT; // dimensionless
@@ -3576,26 +3576,26 @@
             double var_chaste_interface__cell__sf = rY[5];
             // Units: dimensionless; Initial value: 0.995094078386247
             double var_chaste_interface__cell__sfcaBsl = rY[7];
-            // Units: dimensionless; Initial value: 0.0150911724206476
+            // Units: dimensionless; Initial value: 0150911724206476
             double var_chaste_interface__cell__sSLLsl = rY[27];
-            // Units: dimensionless; Initial value: 0.00979616077807075
+            // Units: dimensionless; Initial value: 00979616077807075
             double var_chaste_interface__cell__sSLHsl = rY[29];
             // Units: dimensionless; Initial value: 0.113642236788144
             double var_chaste_interface__cell__sNasl = rY[33];
             // Units: dimensionless; Initial value: 8.21322794157889
             double var_chaste_interface__cell__sCasl = rY[36];
-            // Units: dimensionless; Initial value: 0.000105614570409386
+            // Units: dimensionless; Initial value: 000105614570409386
             
             const double var_x5 = 1 / var_chaste_interface__cell__sCasl;
-            const double var_x37 = exp(-0.027328194960695912 * var_chaste_interface__cell__sVm);
-            const double var_x40 = exp(0.010107688547106707 * var_chaste_interface__cell__sVm);
+            const double var_x37 = exp(-027328194960695912 * var_chaste_interface__cell__sVm);
+            const double var_x40 = exp(010107688547106707 * var_chaste_interface__cell__sVm);
             const double var_x42 = 1.0 + 0.32000000000000001 * var_x37;
             const double var_x43 = 1 / var_x42;
             const double var_x54 = pow(var_chaste_interface__cell__sNasl, 3);
             const double var_x55 = pow(var_chaste_interface__cell__sCasl, (-2));
             const double var_x56 = 1.0 + 2.2499999999999996e-8 * var_x55;
             const double var_x57 = 1 / var_x56;
-            const double var_x58 = 2744000.0 * var_chaste_interface__cell__sCasl;
+            const double var_x58 = 2744000 * var_chaste_interface__cell__sCasl;
             const double var_x59 = (1.0 + 278.55153203342621 * var_chaste_interface__cell__sCasl) * var_chaste_interface__cell__sCasl;
             const double var_x60 = 1 / (9850.9599999999991 + var_x58 + 669921.875 * var_x59 + 8.4066800865219591 * var_x54);
             const double var_x61 = var_x57 * var_x60;
@@ -3605,7 +3605,7 @@
             const double var_x70 = 1.0 - var_chaste_interface__cell__sfcaBsl;
             const double var_x74 = mParameters[0] * var_chaste_interface__cell__sf;
             const double var_x75 = var_x74 * var_chaste_interface__cell__sd;
-            const double var_x87 = exp(0.074871767015605231 * var_chaste_interface__cell__sVm);
+            const double var_x87 = exp(074871767015605231 * var_chaste_interface__cell__sVm);
             const double var_x88 = -1.0 + var_x87;
             const double var_x89 = 1 / var_x88;
             const double var_x90 = var_x75 * var_x89;
@@ -3613,21 +3613,21 @@
             const double var_x112 = var_x87 * var_chaste_interface__cell__sVm;
             const double var_x119 = var_x112 * var_x96;
             const double var_x164 = var_x43 * var_x68;
-            const double var_x165 = var_x164 * var_x57 / pow((0.0035899999999999999 + 0.244140625 * var_x59 + 3.0636589236596063e-6 * var_x54 + var_chaste_interface__cell__sCasl), 2);
-            const double var_x179 = 0.0065532979861118307 * var_x5;
+            const double var_x165 = var_x164 * var_x57 / pow((0035899999999999999 + 0.244140625 * var_x59 + 3.0636589236596063e-6 * var_x54 + var_chaste_interface__cell__sCasl), 2);
+            const double var_x179 = 0065532979861118307 * var_x5;
             const double var_x180 = 5.2281977629563632e-6 + pow(var_chaste_interface__cell__sCasl, 1.6000000000000001);
-            const double var_x181 = 0.095835200000000009 * pow(var_chaste_interface__cell__sCasl, 2.2000000000000002) / pow(var_x180, 2);
-            const double var_x182 = 0.095835200000000009 * pow(var_chaste_interface__cell__sCasl, 0.60000000000000009) / var_x180;
+            const double var_x181 = 095835200000000009 * pow(var_chaste_interface__cell__sCasl, 2.2000000000000002) / pow(var_x180, 2);
+            const double var_x182 = 095835200000000009 * pow(var_chaste_interface__cell__sCasl, 0.60000000000000009) / var_x180;
             const double var_x183 = var_x37 * var_x62;
             const double var_x184 = var_x165 * (-3413921.875 - 373215529.24791086 * var_chaste_interface__cell__sCasl);
             const double var_x185 = var_x164 * var_x60 / (pow(var_x56, 2) * pow(var_chaste_interface__cell__sCasl, 3));
-            const double var_x186 = 0.059860251422720709 * var_x119;
-            const double var_x324 = 100.0 * var_chaste_interface__cell__sSLLsl;
-            const double var_x326 = 100.0 * var_chaste_interface__cell__sSLHsl;
+            const double var_x186 = 059860251422720709 * var_x119;
+            const double var_x324 = 100 * var_chaste_interface__cell__sSLLsl;
+            const double var_x326 = 100 * var_chaste_interface__cell__sSLHsl;
             const double var_x342 = 1 / M_PI;
-            const double var_x364 = 0.0034058550063278672 * var_x342;
+            const double var_x364 = 0034058550063278672 * var_x342;
             
-            partialF = -165.10000000000002 + var_x324 + var_x326 - 21.646099331949777 * var_x342 - var_x364 * (var_x179 + var_x182 + var_x186 - var_x181 + 21979440.0 * var_x183 - 1.0638105721255599e-12 * var_x184 - 3.6044999999999992e-7 * var_x185);
+            partialF = -165.10000000000002 + var_x324 + var_x326 - 21.646099331949777 * var_x342 - var_x364 * (var_x179 + var_x182 + var_x186 - var_x181 + 21979440 * var_x183 - 1.0638105721255599e-12 * var_x184 - 3.6044999999999992e-7 * var_x185);
         }
         else
         {
@@ -3643,60 +3643,60 @@
     {
         
         double var_chaste_interface__cell__sTnCL = rY[19];
-        // Units: dimensionless; Initial value: 0.00904644567707666
+        // Units: dimensionless; Initial value: 00904644567707666
         double var_chaste_interface__cell__sTnCHc = rY[20];
         // Units: dimensionless; Initial value: 0.1183943202639
         double var_chaste_interface__cell__sTnCHm = rY[21];
-        // Units: dimensionless; Initial value: 0.0101423649465603
+        // Units: dimensionless; Initial value: 0101423649465603
         double var_chaste_interface__cell__sCaM = rY[22];
-        // Units: dimensionless; Initial value: 0.000299824763475116
+        // Units: dimensionless; Initial value: 000299824763475116
         double var_chaste_interface__cell__sMyoc = rY[23];
-        // Units: dimensionless; Initial value: 0.00201443980536826
+        // Units: dimensionless; Initial value: 00201443980536826
         double var_chaste_interface__cell__sMyom = rY[24];
         // Units: dimensionless; Initial value: 0.137467597337588
         double var_chaste_interface__cell__sSRB = rY[25];
-        // Units: dimensionless; Initial value: 0.00220110816535249
+        // Units: dimensionless; Initial value: 00220110816535249
         double var_chaste_interface__cell__sCa_sr = rY[31];
         // Units: dimensionless; Initial value: 0.563755421404699
         double var_chaste_interface__cell__sCasl = rY[36];
-        // Units: dimensionless; Initial value: 0.000105614570409386
+        // Units: dimensionless; Initial value: 000105614570409386
         double var_chaste_interface__cell__sCai = rY[37];
         // Units: dimensionless; Initial value: 8.85230799863012e-05
         
         
         // Mathematics
-        const double var_cell__Bmax_CaM = 0.024; // dimensionless
-        const double var_cell__Bmax_SR = 0.017100000000000001; // dimensionless
+        const double var_cell__Bmax_CaM = 024; // dimensionless
+        const double var_cell__Bmax_SR = 017100000000000001; // dimensionless
         const double var_cell__Bmax_TnChigh = 0.14000000000000001; // dimensionless
-        const double var_cell__Bmax_TnClow = 0.070000000000000007; // dimensionless
+        const double var_cell__Bmax_TnClow = 070000000000000007; // dimensionless
         const double var_cell__Bmax_myosin = 0.14000000000000001; // dimensionless
         const double var_cell__J_ca_slmyo = 3.7242560798480505e-12; // dimensionless
-        const double var_cell__Kmf = 0.00024600000000000002; // dimensionless
+        const double var_cell__Kmf = 00024600000000000002; // dimensionless
         const double var_cell__Kmr = 1.7; // dimensionless
         const double var_cell__Mgi = 1.0; // dimensionless
         const double var_cell__Q10SRCaP = 2.6000000000000001; // dimensionless
-        const double var_cell__Temp = 310.0; // dimensionless
+        const double var_cell__Temp = 310; // dimensionless
         const double var_cell__Qpow = -31.0 + 0.10000000000000001 * var_cell__Temp; // dimensionless
-        const double var_cell__Vmax_SRCaP = 0.0053114; // dimensionless
-        const double var_cell__cellLength = 100.0; // dimensionless
+        const double var_cell__Vmax_SRCaP = 0053114; // dimensionless
+        const double var_cell__cellLength = 100; // dimensionless
         const double var_cell__cellRadius = 10.25; // dimensionless
         const double var_cell__Vcell = 1.0000000000000001e-15 * M_PI * pow(var_cell__cellRadius, 2) * var_cell__cellLength; // dimensionless
         const double var_cell__Vmyo = 0.65000000000000002 * var_cell__Vcell; // dimensionless
-        const double var_cell__Vsr = 0.035000000000000003 * var_cell__Vcell; // dimensionless
+        const double var_cell__Vsr = 035000000000000003 * var_cell__Vcell; // dimensionless
         const double var_cell__hillSRCaP = 1.7869999999999999; // dimensionless
         const double var_cell__koff_cam = 0.23799999999999999; // dimensionless
-        const double var_cell__koff_myoca = 0.00046000000000000001; // dimensionless
+        const double var_cell__koff_myoca = 00046000000000000001; // dimensionless
         const double var_cell__koff_myomg = 5.7000000000000003e-5; // dimensionless
-        const double var_cell__koff_sr = 0.059999999999999998; // dimensionless
+        const double var_cell__koff_sr = 059999999999999998; // dimensionless
         const double var_cell__koff_tnchca = 3.1999999999999999e-5; // dimensionless
-        const double var_cell__koff_tnchmg = 0.0033300000000000001; // dimensionless
-        const double var_cell__koff_tncl = 0.019599999999999999; // dimensionless
+        const double var_cell__koff_tnchmg = 0033300000000000001; // dimensionless
+        const double var_cell__koff_tncl = 019599999999999999; // dimensionless
         const double var_cell__kon_cam = 34.0; // dimensionless
         const double var_cell__kon_myoca = 13.800000000000001; // dimensionless
-        const double var_cell__kon_myomg = 0.015699999999999999; // dimensionless
-        const double var_cell__kon_sr = 100.0; // dimensionless
+        const double var_cell__kon_myomg = 015699999999999999; // dimensionless
+        const double var_cell__kon_sr = 100; // dimensionless
         const double var_cell__kon_tnchca = 2.3700000000000001; // dimensionless
-        const double var_cell__kon_tnchmg = 0.0030000000000000001; // dimensionless
+        const double var_cell__kon_tnchmg = 0030000000000000001; // dimensionless
         const double var_cell__kon_tncl = 32.700000000000003; // dimensionless
         const double d_dt_chaste_interface_var_cell__sCaM = -var_cell__koff_cam * var_chaste_interface__cell__sCaM + (-var_chaste_interface__cell__sCaM + var_cell__Bmax_CaM) * var_cell__kon_cam * var_chaste_interface__cell__sCai; // 1 / ms
         const double var_cell__J_serca = 1.0 * pow(var_cell__Q10SRCaP, var_cell__Qpow) * (pow((var_chaste_interface__cell__sCai / var_cell__Kmf), var_cell__hillSRCaP) - pow((var_chaste_interface__cell__sCa_sr / var_cell__Kmr), var_cell__hillSRCaP)) * var_cell__Vmax_SRCaP / (1.0 + pow((var_chaste_interface__cell__sCai / var_cell__Kmf), var_cell__hillSRCaP) + pow((var_chaste_interface__cell__sCa_sr / var_cell__Kmr), var_cell__hillSRCaP)); // dimensionless
@@ -3718,19 +3718,19 @@
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sTnCL = rY[19];
-            // Units: dimensionless; Initial value: 0.00904644567707666
+            // Units: dimensionless; Initial value: 00904644567707666
             double var_chaste_interface__cell__sTnCHc = rY[20];
             // Units: dimensionless; Initial value: 0.1183943202639
             double var_chaste_interface__cell__sTnCHm = rY[21];
-            // Units: dimensionless; Initial value: 0.0101423649465603
+            // Units: dimensionless; Initial value: 0101423649465603
             double var_chaste_interface__cell__sCaM = rY[22];
-            // Units: dimensionless; Initial value: 0.000299824763475116
+            // Units: dimensionless; Initial value: 000299824763475116
             double var_chaste_interface__cell__sMyoc = rY[23];
-            // Units: dimensionless; Initial value: 0.00201443980536826
+            // Units: dimensionless; Initial value: 00201443980536826
             double var_chaste_interface__cell__sMyom = rY[24];
             // Units: dimensionless; Initial value: 0.137467597337588
             double var_chaste_interface__cell__sSRB = rY[25];
-            // Units: dimensionless; Initial value: 0.00220110816535249
+            // Units: dimensionless; Initial value: 00220110816535249
             double var_chaste_interface__cell__sCa_sr = rY[31];
             // Units: dimensionless; Initial value: 0.563755421404699
             double var_chaste_interface__cell__sCai = rY[37];
@@ -3742,7 +3742,7 @@
             const double var_x312 = 34.0 * var_chaste_interface__cell__sCaM;
             const double var_x315 = 13.800000000000001 * var_chaste_interface__cell__sMyoc;
             const double var_x316 = 13.800000000000001 * var_chaste_interface__cell__sMyom;
-            const double var_x318 = 100.0 * var_chaste_interface__cell__sSRB;
+            const double var_x318 = 100 * var_chaste_interface__cell__sSRB;
             const double var_x330 = pow(var_chaste_interface__cell__sCa_sr, 1.7869999999999999);
             const double var_x331 = 0.38742512113256738 * var_x330;
             const double var_x332 = pow(var_chaste_interface__cell__sCai, 1.7869999999999999);
@@ -3797,7 +3797,7 @@ void OdeSystemInformation<Cellgrandi2010ssFromCellMLGRL1>::Initialise(void)
     // rY[1]:
     this->mVariableNames.push_back("cell__sm");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(0.00384941567866232);
+    this->mInitialConditions.push_back(00384941567866232);
 
     // rY[2]:
     this->mVariableNames.push_back("cell__sh");
@@ -3822,17 +3822,17 @@ void OdeSystemInformation<Cellgrandi2010ssFromCellMLGRL1>::Initialise(void)
     // rY[6]:
     this->mVariableNames.push_back("cell__sfcaBj");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(0.0246274349529557);
+    this->mInitialConditions.push_back(0246274349529557);
 
     // rY[7]:
     this->mVariableNames.push_back("cell__sfcaBsl");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(0.0150911724206476);
+    this->mInitialConditions.push_back(0150911724206476);
 
     // rY[8]:
     this->mVariableNames.push_back("cell__sxtos");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(0.000442853722673121);
+    this->mInitialConditions.push_back(000442853722673121);
 
     // rY[9]:
     this->mVariableNames.push_back("cell__sytos");
@@ -3842,7 +3842,7 @@ void OdeSystemInformation<Cellgrandi2010ssFromCellMLGRL1>::Initialise(void)
     // rY[10]:
     this->mVariableNames.push_back("cell__sxtof");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(0.000442846429332686);
+    this->mInitialConditions.push_back(000442846429332686);
 
     // rY[11]:
     this->mVariableNames.push_back("cell__sytof");
@@ -3852,12 +3852,12 @@ void OdeSystemInformation<Cellgrandi2010ssFromCellMLGRL1>::Initialise(void)
     // rY[12]:
     this->mVariableNames.push_back("cell__sxkr");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(0.020160578118589);
+    this->mInitialConditions.push_back(020160578118589);
 
     // rY[13]:
     this->mVariableNames.push_back("cell__sxks");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(0.00430143235332308);
+    this->mInitialConditions.push_back(00430143235332308);
 
     // rY[14]:
     this->mVariableNames.push_back("cell__sRyRr");
@@ -3887,7 +3887,7 @@ void OdeSystemInformation<Cellgrandi2010ssFromCellMLGRL1>::Initialise(void)
     // rY[19]:
     this->mVariableNames.push_back("cell__sTnCL");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(0.00904644567707666);
+    this->mInitialConditions.push_back(00904644567707666);
 
     // rY[20]:
     this->mVariableNames.push_back("cell__sTnCHc");
@@ -3897,17 +3897,17 @@ void OdeSystemInformation<Cellgrandi2010ssFromCellMLGRL1>::Initialise(void)
     // rY[21]:
     this->mVariableNames.push_back("cell__sTnCHm");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(0.0101423649465603);
+    this->mInitialConditions.push_back(0101423649465603);
 
     // rY[22]:
     this->mVariableNames.push_back("cell__sCaM");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(0.000299824763475116);
+    this->mInitialConditions.push_back(000299824763475116);
 
     // rY[23]:
     this->mVariableNames.push_back("cell__sMyoc");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(0.00201443980536826);
+    this->mInitialConditions.push_back(00201443980536826);
 
     // rY[24]:
     this->mVariableNames.push_back("cell__sMyom");
@@ -3917,22 +3917,22 @@ void OdeSystemInformation<Cellgrandi2010ssFromCellMLGRL1>::Initialise(void)
     // rY[25]:
     this->mVariableNames.push_back("cell__sSRB");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(0.00220110816535249);
+    this->mInitialConditions.push_back(00220110816535249);
 
     // rY[26]:
     this->mVariableNames.push_back("cell__sSLLj");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(0.00739549938515031);
+    this->mInitialConditions.push_back(00739549938515031);
 
     // rY[27]:
     this->mVariableNames.push_back("cell__sSLLsl");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(0.00979616077807075);
+    this->mInitialConditions.push_back(00979616077807075);
 
     // rY[28]:
     this->mVariableNames.push_back("cell__sSLHj");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(0.0735225248399363);
+    this->mInitialConditions.push_back(0735225248399363);
 
     // rY[29]:
     this->mVariableNames.push_back("cell__sSLHsl");
@@ -3967,12 +3967,12 @@ void OdeSystemInformation<Cellgrandi2010ssFromCellMLGRL1>::Initialise(void)
     // rY[35]:
     this->mVariableNames.push_back("cell__sCaj");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(0.000175648385857736);
+    this->mInitialConditions.push_back(000175648385857736);
 
     // rY[36]:
     this->mVariableNames.push_back("cell__sCasl");
     this->mVariableUnits.push_back("dimensionless");
-    this->mInitialConditions.push_back(0.000105614570409386);
+    this->mInitialConditions.push_back(000105614570409386);
 
     // rY[37]:
     this->mVariableNames.push_back("cytosolic_calcium_concentration");

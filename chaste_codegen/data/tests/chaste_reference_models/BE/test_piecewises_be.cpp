@@ -68,10 +68,10 @@
         double var_chaste_interface__fast_sodium_current_m_gate__m = rCurrentGuess[1];
         
         //output_equations
-        const double var_fast_sodium_current_m_gate__alpha_m = ((fabs(pow(var_chaste_interface__fast_sodium_current_m_gate__m, 2) * var_chaste_interface__membrane__V) < 0.0) ? (2000.0) : (200.0 * var_chaste_interface__membrane__V / (1.0 - exp(-0.10000000000000001 * var_chaste_interface__membrane__V)))); // per_second
+        const double var_fast_sodium_current_m_gate__alpha_m = ((fabs(pow(var_chaste_interface__fast_sodium_current_m_gate__m, 2) * var_chaste_interface__membrane__V) < 0) ? (2000.0) : (200.0 * var_chaste_interface__membrane__V / (1.0 - exp(-0.10000000000000001 * var_chaste_interface__membrane__V)))); // per_second
         const double var_fast_sodium_current_m_gate__m_orig_deriv = var_fast_sodium_current_m_gate__alpha_m; // 1 / second
         const double d_dt_chaste_interface_var_fast_sodium_current_m_gate__m = 0.001 * var_fast_sodium_current_m_gate__m_orig_deriv; // 1 / millisecond
-        const double var_fast_sodium_current_m_gate2__alpha_m = ((fabs(var_chaste_interface__membrane__V) < 0.0) ? (2000.0 * pow(var_chaste_interface__fast_sodium_current_m_gate2__m, 2)) : (200.0 * var_chaste_interface__membrane__V / (1.0 - exp(-0.10000000000000001 * var_chaste_interface__membrane__V)))); // per_second
+        const double var_fast_sodium_current_m_gate2__alpha_m = ((fabs(var_chaste_interface__membrane__V) < 0) ? (2000.0 * pow(var_chaste_interface__fast_sodium_current_m_gate2__m, 2)) : (200.0 * var_chaste_interface__membrane__V / (1.0 - exp(-0.10000000000000001 * var_chaste_interface__membrane__V)))); // per_second
         const double var_fast_sodium_current_m_gate2__m_orig_deriv = var_fast_sodium_current_m_gate2__alpha_m; // 1 / second
         const double d_dt_chaste_interface_var_fast_sodium_current_m_gate2__m = 0.001 * var_fast_sodium_current_m_gate2__m_orig_deriv; // 1 / millisecond
         
@@ -89,7 +89,7 @@
         
         
         
-        rJacobian[0][0] = 1.0 - (mDt * (0.001 * ((fabs(var_chaste_interface__membrane__V) < 0.0) ? (4000.0 * var_chaste_interface__fast_sodium_current_m_gate2__m) : (0))));
+        rJacobian[0][0] = 1.0 - (mDt * (0.001 * ((fabs(var_chaste_interface__membrane__V) < 0) ? (4000.0 * var_chaste_interface__fast_sodium_current_m_gate2__m) : (0))));
         rJacobian[0][1] = 0.0;
         rJacobian[1][0] = 0.0;
         rJacobian[1][1] = 1.0;
