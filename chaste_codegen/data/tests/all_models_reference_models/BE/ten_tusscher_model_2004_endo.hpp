@@ -28,11 +28,11 @@ class Cellten_tusscher_model_2004_endoFromCellMLBackwardEuler : public AbstractB
         archive & boost::serialization::base_object<AbstractBackwardEulerCardiacCell<6> >(*this);
         
     }
-    
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     double GetIntracellularCalciumConcentration();
@@ -43,6 +43,7 @@ public:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time);
     void ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time);
 
+    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY);
 };
 
 // Needs to be included last

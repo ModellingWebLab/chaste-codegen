@@ -28,9 +28,11 @@ class Cellzhang_SAN_model_2000_allFromCellMLGRL2 : public AbstractGeneralizedRus
         archive & boost::serialization::base_object<AbstractGeneralizedRushLarsenCardiacCell >(*this);
         
     }
+
     //
     // Settable parameters and readable variables
     //
+
 public:
 
     Cellzhang_SAN_model_2000_allFromCellMLGRL2(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);

@@ -29,10 +29,11 @@ class Cellpandit_model_2001_epiFromCellMLCvodeDataClamp : public AbstractCvodeCe
         archive & boost::serialization::base_object<AbstractCvodeCellWithDataClamp >(*this);
         
     }
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

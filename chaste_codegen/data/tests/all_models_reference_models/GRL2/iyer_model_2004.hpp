@@ -28,9 +28,11 @@ class Celliyer_model_2004FromCellMLGRL2 : public AbstractGeneralizedRushLarsenCa
         archive & boost::serialization::base_object<AbstractGeneralizedRushLarsenCardiacCell >(*this);
         
     }
+
     //
     // Settable parameters and readable variables
     //
+
 public:
 
     Celliyer_model_2004FromCellMLGRL2(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
@@ -174,6 +176,7 @@ public:
     double EvaluateYDerivative66(double var_chaste_interface__environment__time, std::vector<double>& rY);
     double EvaluatePartialDerivative66(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical=false);
 
+    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY);
 };
 
 // Needs to be included last

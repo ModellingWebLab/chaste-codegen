@@ -28,11 +28,11 @@ class Cellgrandi2010ssFromCellMLBackwardEuler : public AbstractBackwardEulerCard
         archive & boost::serialization::base_object<AbstractBackwardEulerCardiacCell<26> >(*this);
         
     }
-    
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
@@ -44,6 +44,7 @@ public:
     void UpdateTransmembranePotential(double var_chaste_interface__cell__time);
     void ComputeOneStepExceptVoltage(double var_chaste_interface__cell__time);
 
+    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__cell__time, const std::vector<double> & rY);
 };
 
 // Needs to be included last

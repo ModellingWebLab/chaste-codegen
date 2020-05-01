@@ -38,7 +38,6 @@
         return p_cellml_stim;
     }
 
-
     Cellbondarenko_model_2004_apexFromCellML::Cellbondarenko_model_2004_apexFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
@@ -128,7 +127,7 @@
         const double var_rapid_delayed_rectifier_potassium_current__g_Kr = 0.078; // milliS_per_microF
         const double var_slow_delayed_rectifier_potassium_current__g_Ks = 0.0057499999999999999; // milliS_per_microF
         const double var_slow_delayed_rectifier_potassium_current__i_Ks = pow(var_chaste_interface__slow_delayed_rectifier_potassium_current__nKs, 2) * (-var_fast_transient_outward_potassium_current__E_K + var_chaste_interface__membrane__V) * var_slow_delayed_rectifier_potassium_current__g_Ks; // picoA_per_picoF
-        const double var_slow_transient_outward_potassium_current__g_Kto_s = 0.0; // milliS_per_microF
+        const double var_slow_transient_outward_potassium_current__g_Kto_s = 0; // milliS_per_microF
         const double var_slow_transient_outward_potassium_current__i_Kto_s = (-var_fast_transient_outward_potassium_current__E_K + var_chaste_interface__membrane__V) * var_chaste_interface__slow_transient_outward_potassium_current__ato_s * var_slow_transient_outward_potassium_current__g_Kto_s * var_chaste_interface__slow_transient_outward_potassium_current__ito_s; // picoA_per_picoF
         const double var_sodium_background_current__g_Nab = 0.0025999999999999999; // milliS_per_microF
         const double var_sodium_calcium_exchange_current__K_mCa = 1380.0; // micromolar
@@ -246,7 +245,7 @@
 
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
-        const double d_dt_chaste_interface_var_non_inactivating_steady_state_potassium_current__iKss = 0.0; // 1 / millisecond
+        const double d_dt_chaste_interface_var_non_inactivating_steady_state_potassium_current__iKss = 0; // 1 / millisecond
         const double var_L_type_calcium_current__E_CaL = 63.0; // millivolt
         const double var_L_type_calcium_current__Kpc_half = 20.0; // micromolar
         const double var_L_type_calcium_current__Kpc_max = 0.23324; // per_millisecond
@@ -384,7 +383,7 @@
         const double var_slow_delayed_rectifier_potassium_current__i_Ks = pow(var_chaste_interface__slow_delayed_rectifier_potassium_current__nKs, 2) * (-var_fast_transient_outward_potassium_current__E_K + var_chaste_interface__membrane__V) * var_slow_delayed_rectifier_potassium_current__g_Ks; // picoA_per_picoF
         const double var_slow_transient_outward_potassium_current__ass = 1.0 / (1.0 + exp(-2.9220779220779218 - 0.12987012987012986 * var_chaste_interface__membrane__V)); // dimensionless
         const double d_dt_chaste_interface_var_non_inactivating_steady_state_potassium_current__aKss = (-var_chaste_interface__non_inactivating_steady_state_potassium_current__aKss + var_slow_transient_outward_potassium_current__ass) / var_non_inactivating_steady_state_potassium_current__tau_Kss; // 1 / millisecond
-        const double var_slow_transient_outward_potassium_current__g_Kto_s = 0.0; // milliS_per_microF
+        const double var_slow_transient_outward_potassium_current__g_Kto_s = 0; // milliS_per_microF
         const double var_slow_transient_outward_potassium_current__iss = 1.0 / (1.0 + exp(7.9298245614035094 + 0.17543859649122806 * var_chaste_interface__membrane__V)); // dimensionless
         const double var_slow_transient_outward_potassium_current__i_Kto_s = (-var_fast_transient_outward_potassium_current__E_K + var_chaste_interface__membrane__V) * var_chaste_interface__slow_transient_outward_potassium_current__ato_s * var_slow_transient_outward_potassium_current__g_Kto_s * var_chaste_interface__slow_transient_outward_potassium_current__ito_s; // picoA_per_picoF
         const double var_slow_transient_outward_potassium_current__tau_ta_s = 2.0579999999999998 + 0.49299999999999999 * exp(-0.062899999999999998 * var_chaste_interface__membrane__V); // millisecond
@@ -476,6 +475,20 @@
         rDY[38] = d_dt_chaste_interface_var_rapid_delayed_rectifier_potassium_current__C_K1;
         rDY[39] = d_dt_chaste_interface_var_rapid_delayed_rectifier_potassium_current__C_K2;
         rDY[40] = d_dt_chaste_interface_var_rapid_delayed_rectifier_potassium_current__I_K;
+    }
+
+    std::vector<double> Cellbondarenko_model_2004_apexFromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+        const double var_membrane__i_stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
+
+        std::vector<double> dqs(1);
+        dqs[0] = var_membrane__i_stim_converter;
+        return dqs;
     }
 
 template<>
@@ -689,6 +702,10 @@ void OdeSystemInformation<Cellbondarenko_model_2004_apexFromCellML>::Initialise(
     this->mVariableNames.push_back("rapid_delayed_rectifier_potassium_current__I_K");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(3.19129e-05);
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     
     this->mAttributes["SuggestedForwardEulerTimestep"] = 0.0002;

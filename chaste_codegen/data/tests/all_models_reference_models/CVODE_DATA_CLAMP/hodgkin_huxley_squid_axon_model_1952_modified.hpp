@@ -29,10 +29,11 @@ class Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvodeDataClamp 
         archive & boost::serialization::base_object<AbstractCvodeCellWithDataClamp >(*this);
         
     }
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);

@@ -25,8 +25,7 @@
     boost::shared_ptr<RegularStimulus> Cellearm_noble_model_1990FromCellMLCvodeDataClamp::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
-        const double var_membrane__C_m = 4.0000000000000003e-5; // microF
-        const double var_chaste_interface__membrane__stim_amplitude = -0.0013000000000000002 * HeartConfig::Instance()->GetCapacitance() / var_membrane__C_m; // uA_per_cm2
+        const double var_chaste_interface__membrane__stim_amplitude = -0.0013000000000000002 * HeartConfig::Instance()->GetCapacitance() / NV_Ith_S(mParameters, 0); // uA_per_cm2
         const double var_chaste_interface__membrane__stim_duration = 2.0; // millisecond
         const double var_chaste_interface__membrane__stim_period = 1000.0; // millisecond
         const double var_chaste_interface__membrane__stim_start = 100.0; // millisecond
@@ -44,7 +43,8 @@
     {
         return NV_Ith_S(mStateVariables, 1);
     }
-       
+    
+   
     Cellearm_noble_model_1990FromCellMLCvodeDataClamp::Cellearm_noble_model_1990FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCellWithDataClamp(
                 pOdeSolver,
@@ -60,7 +60,8 @@
         // We have a default stimulus specified in the CellML file metadata
         this->mHasDefaultStimulusFromCellML = true;
         
-        NV_Ith_S(this->mParameters, 0) = 0.0; // (var_membrane_data_clamp_current_conductance) [dimensionless]
+        NV_Ith_S(this->mParameters, 0) = 4.0000000000000003e-5; // (var_membrane__C_m) [microF]
+        NV_Ith_S(this->mParameters, 1) = 0.0; // (var_membrane_data_clamp_current_conductance) [dimensionless]
     }
 
     Cellearm_noble_model_1990FromCellMLCvodeDataClamp::~Cellearm_noble_model_1990FromCellMLCvodeDataClamp()
@@ -115,7 +116,6 @@
         const double var_fast_sodium_current__g_Na = 0.5; // microS
         const double var_L_type_calcium_current_f_Ca_gate__CaChoff = var_chaste_interface__intracellular_calcium_concentration__Ca_i / (0.001 + var_chaste_interface__intracellular_calcium_concentration__Ca_i); // dimensionless
         const double var_L_type_calcium_current_f_Ca_gate__CaChon = (1.0 - var_L_type_calcium_current_f_Ca_gate__CaChoff) * (1.0 - var_chaste_interface__L_type_calcium_current_f_Ca_gate__f_Ca); // dimensionless
-        const double var_membrane__C_m = 4.0000000000000003e-5; // microF
         const double var_membrane__F = 96485.341499999995; // coulomb_per_mole
         const double var_membrane__R = 8314.4719999999998; // joule_per_kilomole_kelvin
         const double var_membrane__T = 310.0; // kelvin
@@ -143,9 +143,9 @@
         const double var_potassium_background_current__i_b_K = (-var_transient_outward_current__E_K + var_chaste_interface__membrane__V) * var_potassium_background_current__g_b_K; // nanoA
         const double var_time_independent_potassium_current__i_K1 = (-var_transient_outward_current__E_K + var_chaste_interface__membrane__V) * var_extracellular_potassium_concentration__K_c * var_time_independent_potassium_current__g_K1 / ((1.0 + exp(2.0 * (-10.0 - var_transient_outward_current__E_K + var_chaste_interface__membrane__V) / var_membrane__RTONF)) * (var_extracellular_potassium_concentration__K_c + var_time_independent_potassium_current__K_m_K1)); // nanoA
         const double var_transient_outward_current__g_to = 0.01; // microS
-        const double var_transient_outward_current__g_to_s = 0.0; // dimensionless
+        const double var_transient_outward_current__g_to_s = 0; // dimensionless
         const double var_transient_outward_current__i_to = (-var_transient_outward_current__E_K + var_chaste_interface__membrane__V) * ((1.0 - var_transient_outward_current__g_to_s) * var_chaste_interface__transient_outward_current_s_gate__s + var_transient_outward_current__g_to_s) * var_transient_outward_current__g_to * var_chaste_interface__transient_outward_current_r_gate__r; // nanoA
-        const double var_chaste_interface__i_ionic = (0.001 * var_L_type_calcium_current__i_Ca_L + 0.001 * var_Na_Ca_exchanger__i_NaCa + 0.001 * var_calcium_background_current__i_b_Ca + 0.001 * var_fast_sodium_current__i_Na + 0.001 * var_potassium_background_current__i_b_K + 0.001 * var_sodium_background_current__i_b_Na + 0.001 * var_sodium_potassium_pump__i_NaK + 0.001 * var_time_independent_potassium_current__i_K1 + 0.001 * var_transient_outward_current__i_to) * HeartConfig::Instance()->GetCapacitance() / var_membrane__C_m; // uA_per_cm2
+        const double var_chaste_interface__i_ionic = (0.001 * var_L_type_calcium_current__i_Ca_L + 0.001 * var_Na_Ca_exchanger__i_NaCa + 0.001 * var_calcium_background_current__i_b_Ca + 0.001 * var_fast_sodium_current__i_Na + 0.001 * var_potassium_background_current__i_b_K + 0.001 * var_sodium_background_current__i_b_Na + 0.001 * var_sodium_potassium_pump__i_NaK + 0.001 * var_time_independent_potassium_current__i_K1 + 0.001 * var_transient_outward_current__i_to) * HeartConfig::Instance()->GetCapacitance() / NV_Ith_S(mParameters, 0); // uA_per_cm2
 
         const double i_ionic = var_chaste_interface__i_ionic;
         if (made_new_cvode_vector)
@@ -202,7 +202,7 @@
         const double var_Na_Ca_exchanger__k_NaCa = 0.0001; // nanoA
         const double var_Na_Ca_exchanger__n_NaCa = 3.0; // dimensionless
         const double var_calcium_background_current__g_b_Ca = 5.0000000000000002e-5; // microS
-        const double var_calcium_release__K_leak_rate = 0.0; // per_second
+        const double var_calcium_release__K_leak_rate = 0; // per_second
         const double var_calcium_release__K_m_rel = 250.0; // per_second
         const double var_calcium_release__PrecFrac = 1.0 - var_chaste_interface__calcium_release__ActFrac - var_chaste_interface__calcium_release__ProdFrac; // dimensionless
         const double var_calcium_release__ProdFracRate = 0.59999999999999998; // per_second
@@ -303,7 +303,7 @@
         const double var_potassium_background_current__i_b_K = (-var_transient_outward_current__E_K + var_chaste_interface__membrane__V) * var_potassium_background_current__g_b_K; // nanoA
         const double var_time_independent_potassium_current__i_K1 = (-var_transient_outward_current__E_K + var_chaste_interface__membrane__V) * var_extracellular_potassium_concentration__K_c * var_time_independent_potassium_current__g_K1 / ((1.0 + exp(2.0 * (-10.0 - var_transient_outward_current__E_K + var_chaste_interface__membrane__V) / var_membrane__RTONF)) * (var_extracellular_potassium_concentration__K_c + var_time_independent_potassium_current__K_m_K1)); // nanoA
         const double var_transient_outward_current__g_to = 0.01; // microS
-        const double var_transient_outward_current__g_to_s = 0.0; // dimensionless
+        const double var_transient_outward_current__g_to_s = 0; // dimensionless
         const double var_transient_outward_current_r_gate__r_orig_deriv = 333.0 / (1.0 + exp(-0.80000000000000004 - 0.20000000000000001 * var_chaste_interface__membrane__V)) - 333.0 * var_chaste_interface__transient_outward_current_r_gate__r; // 1 / second
         const double d_dt_chaste_interface_var_transient_outward_current_r_gate__r = 0.001 * var_transient_outward_current_r_gate__r_orig_deriv; // 1 / millisecond
         const double var_transient_outward_current_s_gate__alpha_s = 0.033000000000000002 * exp(-0.058823529411764705 * var_chaste_interface__membrane__V); // per_second
@@ -319,19 +319,18 @@
             d_dt_chaste_interface_var_membrane__V = 0.0;
         }
         else
-        {const double var_membrane__C_m = 4.0000000000000003e-5; // microF
-            const double var_L_type_calcium_current__i_Ca_L = var_L_type_calcium_current__i_Ca_L_Ca + var_L_type_calcium_current__i_Ca_L_K + var_L_type_calcium_current__i_Ca_L_Na; // nanoA
+        {const double var_L_type_calcium_current__i_Ca_L = var_L_type_calcium_current__i_Ca_L_Ca + var_L_type_calcium_current__i_Ca_L_K + var_L_type_calcium_current__i_Ca_L_Na; // nanoA
             const double var_membrane__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
-            const double var_membrane__i_Stim = 1000.0 * var_membrane__C_m * var_membrane__i_Stim_converter / HeartConfig::Instance()->GetCapacitance(); // nanoA
+            const double var_membrane__i_Stim = 1000.0 * NV_Ith_S(mParameters, 0) * var_membrane__i_Stim_converter / HeartConfig::Instance()->GetCapacitance(); // nanoA
             
             // Special handling of data clamp current here
             // (we want to save expense of calling the interpolation method if possible.)
             double var_chaste_interface__membrane_data_clamp_current = 0.0;
             if (mDataClampIsOn)
             {
-                var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time_converted) + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 0); // uA_per_cm2
+                var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time_converted) + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 1); // uA_per_cm2
             }
-            const double var_membrane__V_orig_deriv = -1.0 * (var_L_type_calcium_current__i_Ca_L + var_Na_Ca_exchanger__i_NaCa + var_calcium_background_current__i_b_Ca + var_fast_sodium_current__i_Na + var_membrane__i_Stim + var_chaste_interface__membrane_data_clamp_current + var_potassium_background_current__i_b_K + var_sodium_background_current__i_b_Na + var_sodium_potassium_pump__i_NaK + var_time_independent_potassium_current__i_K1 + var_transient_outward_current__i_to) / var_membrane__C_m; // millivolt / second
+            const double var_membrane__V_orig_deriv = -1.0 * (var_L_type_calcium_current__i_Ca_L + var_Na_Ca_exchanger__i_NaCa + var_calcium_background_current__i_b_Ca + var_fast_sodium_current__i_Na + var_membrane__i_Stim + var_chaste_interface__membrane_data_clamp_current + var_potassium_background_current__i_b_K + var_sodium_background_current__i_b_Na + var_sodium_potassium_pump__i_NaK + var_time_independent_potassium_current__i_K1 + var_transient_outward_current__i_to) / NV_Ith_S(mParameters, 0); // millivolt / second
             d_dt_chaste_interface_var_membrane__V = 0.001 * var_membrane__V_orig_deriv; // millivolt / millisecond
             
         }
@@ -361,18 +360,19 @@
         double var_chaste_interface__membrane__V = NV_Ith_S(rY,0);
         // Units: millivolt; Initial value: -91.6
         
-
         // Mathematics
+        const double var_membrane__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
         // Special handling of data clamp current here (see #2708)
         // (we want to save expense of calling the interpolation method if possible.)
         double var_chaste_interface__membrane_data_clamp_current = 0.0;
         if (mDataClampIsOn)
         {
-            var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time_converted) + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 0); // uA_per_cm2
+            var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time_converted) + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 1); // uA_per_cm2
         }
-        
-        N_Vector dqs = N_VNew_Serial(1);
+
+        N_Vector dqs = N_VNew_Serial(2);
         NV_Ith_S(dqs, 0) = var_chaste_interface__membrane_data_clamp_current;
+        NV_Ith_S(dqs, 1) = var_membrane__i_Stim_converter;
         return dqs;
     }
 
@@ -464,11 +464,19 @@ void OdeSystemInformation<Cellearm_noble_model_1990FromCellMLCvodeDataClamp>::In
     this->mInitialConditions.push_back(0.0015);
 
     // mParameters[0]:
+    this->mParameterNames.push_back("membrane_capacitance");
+    this->mParameterUnits.push_back("microF");
+
+    // mParameters[1]:
     this->mParameterNames.push_back("membrane_data_clamp_current_conductance");
     this->mParameterUnits.push_back("dimensionless");
 
     // Derived Quantity index [0]:
     this->mDerivedQuantityNames.push_back("membrane_data_clamp_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
+
+    // Derived Quantity index [1]:
+    this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     this->mInitialised = true;

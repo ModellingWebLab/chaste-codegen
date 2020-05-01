@@ -29,11 +29,11 @@ class Celldokos_model_1996FromCellMLCvode : public AbstractCvodeCell
         archive & boost::serialization::base_object<AbstractCvodeCell >(*this);
         
     }
-    
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     double GetIntracellularCalciumConcentration();

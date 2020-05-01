@@ -29,11 +29,11 @@ class Cellviswanathan_model_1999_epiFromCellMLCvode : public AbstractCvodeCell
         archive & boost::serialization::base_object<AbstractCvodeCell >(*this);
         
     }
-    
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
@@ -42,6 +42,7 @@ public:
     ~Cellviswanathan_model_1999_epiFromCellMLCvode();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const N_Vector rY, N_Vector rDY);
+    N_Vector ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const N_Vector & rY);
 };
 
 // Needs to be included last

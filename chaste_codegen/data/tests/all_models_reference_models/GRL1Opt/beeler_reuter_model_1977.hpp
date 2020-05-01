@@ -28,9 +28,11 @@ class Cellbeeler_reuter_model_1977FromCellMLGRL1 : public AbstractGeneralizedRus
         archive & boost::serialization::base_object<AbstractGeneralizedRushLarsenCardiacCell >(*this);
         
     }
+
     //
     // Settable parameters and readable variables
     //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
@@ -58,6 +60,7 @@ public:
     double EvaluateYDerivative7(double var_chaste_interface__environment__time, std::vector<double>& rY);
     double EvaluatePartialDerivative7(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical=false);
 
+    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY);
 };
 
 // Needs to be included last

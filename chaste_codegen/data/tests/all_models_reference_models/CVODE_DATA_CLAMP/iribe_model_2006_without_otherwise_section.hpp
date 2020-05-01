@@ -29,10 +29,11 @@ class Celliribe_model_2006_without_otherwise_sectionFromCellMLCvodeDataClamp : p
         archive & boost::serialization::base_object<AbstractCvodeCellWithDataClamp >(*this);
         
     }
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

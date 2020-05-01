@@ -100,7 +100,7 @@ def test_script_convert(capsys, tmp_path):
     """Convert a normal model via command line script"""
     LOGGER.info('Testing regular model conversion for command line script\n')
     tmp_path = str(tmp_path)
-    model_name = 'aslanidi_model_2009'
+    model_name = 'grandi2010ss'
     model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
     assert os.path.isfile(model_file)
     testargs = ["chaste_codegen", model_file]
@@ -111,9 +111,9 @@ def test_script_convert(capsys, tmp_path):
         chaste_codegen()
     os.chdir(savedPath)
     reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Normal')
-    compare_file_against_reference(os.path.join(reference, model_name + '.hpp'),
+    compare_file_against_reference(os.path.join(reference, model_name + '_console_script.hpp'),
                                    os.path.join(tmp_path, model_name + '.hpp'))
-    compare_file_against_reference(os.path.join(reference, model_name + '.cpp'),
+    compare_file_against_reference(os.path.join(reference, model_name + '_console_script.cpp'),
                                    os.path.join(tmp_path, model_name + '.cpp'))
 
 
@@ -121,7 +121,7 @@ def test_script_class_convtype_output_dll_loadable(capsys, tmp_path):
     """Convert a normal model with a given class name and dynamicly loadable via command line script"""
     LOGGER.info('Testing model with options -t Chaste -c --dynamically-loadable and -o for command line script\n')
     tmp_path = str(tmp_path)
-    model_name = 'aslanidi_model_2009'
+    model_name = 'noble_model_1998'
     model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'output_class.c')
@@ -138,47 +138,24 @@ def test_script_class_convtype_output_dll_loadable(capsys, tmp_path):
                                    os.path.join(tmp_path, 'output_class.c'))
 
 
-def test_script_output_expose_annotated_variables(capsys, tmp_path):
-    """Convert a normal model with expose annotated variables on"""
-    LOGGER.info('Testing model with options --expose-annotated-variables and -o for command line script\n')
-    tmp_path = str(tmp_path)
-    # Check options: -o --expose-annotated-variables
-    model_name = 'aslanidi_model_2009'
-    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
-    model_file = str(model_file)
-    outfile = os.path.join(tmp_path, 'expose_annotated_variables_cellaslanidi_model_2009.cpp')
-    outfile = str(outfile)
-    # Call commandline script
-    testargs = ['chaste_codegen', model_file, '-o', outfile, '--expose-annotated-variables']
-    with mock.patch.object(sys, 'argv', testargs):
-        chaste_codegen()
-    # Check output
-    model_name = 'expose_annotated_variables_cellaslanidi_model_2009'
-    reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Normal')
-    compare_file_against_reference(os.path.join(reference, model_name + '.hpp'),
-                                   os.path.join(tmp_path, model_name + '.hpp'))
-    compare_file_against_reference(os.path.join(reference, model_name + '.cpp'),
-                                   os.path.join(tmp_path, model_name + '.cpp'))
-
-
 def test_script_opt(capsys, tmp_path):
     """Convert an optimised model type"""
     LOGGER.info('Testing model with options -t ChasteOpt and -o for command line script\n')
     tmp_path = str(tmp_path)
-    model_name = 'livshitz_rudy_2007'
+    model_name = 'aslanidi_model_2009'
     model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
     assert os.path.isfile(model_file)
-    outfile = os.path.join(tmp_path, 'livshitz_rudy_2007.cpp')
+    outfile = os.path.join(tmp_path, 'dynamic_aslanidi_model_2009.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', model_file, '-t', 'ChasteOpt', '-o', outfile]
+    testargs = ['chaste_codegen', model_file, '-t', 'ChasteOpt', '-o', outfile, '--dynamically-loadable']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
     reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Opt')
-    compare_file_against_reference(os.path.join(reference, 'livshitz_rudy_2007.hpp'),
-                                   os.path.join(tmp_path, 'livshitz_rudy_2007.hpp'))
-    compare_file_against_reference(os.path.join(reference, 'livshitz_rudy_2007.cpp'),
-                                   os.path.join(tmp_path, 'livshitz_rudy_2007.cpp'))
+    compare_file_against_reference(os.path.join(reference, 'dynamic_aslanidi_model_2009.hpp'),
+                                   os.path.join(tmp_path, 'dynamic_aslanidi_model_2009.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'dynamic_aslanidi_model_2009.cpp'),
+                                   os.path.join(tmp_path, 'dynamic_aslanidi_model_2009.cpp'))
 
 
 def test_script_cvode(capsys, tmp_path):
@@ -188,59 +165,60 @@ def test_script_cvode(capsys, tmp_path):
     model_name = 'mahajan_2008'
     model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
     assert os.path.isfile(model_file)
-    outfile = os.path.join(tmp_path, 'mahajan_2008.cpp')
+    outfile = os.path.join(tmp_path, 'dynamic_mahajan_2008.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', model_file, '-t', 'CVODE', '-o', outfile, '-c', 'Cellmahajan_2008FromCellMLCvode']
+    testargs = ['chaste_codegen', model_file, '-t', 'CVODE', '-o', outfile, '--dynamically-loadable', '-c',
+                'Dynamicmahajan_2008FromCellMLCvode']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
     reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Cvode')
-    compare_file_against_reference(os.path.join(reference, 'mahajan_2008.hpp'),
-                                   os.path.join(tmp_path, 'mahajan_2008.hpp'))
-    compare_file_against_reference(os.path.join(reference, 'mahajan_2008.cpp'),
-                                   os.path.join(tmp_path, 'mahajan_2008.cpp'))
+    compare_file_against_reference(os.path.join(reference, 'dynamic_mahajan_2008.hpp'),
+                                   os.path.join(tmp_path, 'dynamic_mahajan_2008.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'dynamic_mahajan_2008.cpp'),
+                                   os.path.join(tmp_path, 'dynamic_mahajan_2008.cpp'))
 
 
 def test_script_cvode_jacobian(capsys, tmp_path):
     """Convert a CVODE model type with jacobian"""
     LOGGER.info('Testing model with options -t ChasteOpt and -o for command line script\n')
     tmp_path = str(tmp_path)
-    model_name = 'luo_rudy_1994'
+    model_name = 'Shannon2004'
     model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
     assert os.path.isfile(model_file)
-    outfile = os.path.join(tmp_path, 'luo_rudy_1994.cpp')
+    outfile = os.path.join(tmp_path, 'dynamic_Shannon2004.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', model_file, '-t', 'CVODE', '-o', outfile, '-j',
-                '-c', 'Cellluo_rudy_1994FromCellMLCvode']
+    testargs = ['chaste_codegen', model_file, '-t', 'CVODE', '-o', outfile, '-j', '--dynamically-loadable',
+                '-c', 'DynamicShannon2004FromCellMLCvode']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
     reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Cvode_with_jacobian')
-    compare_file_against_reference(os.path.join(reference, 'luo_rudy_1994.hpp'),
-                                   os.path.join(tmp_path, 'luo_rudy_1994.hpp'))
-    compare_file_against_reference(os.path.join(reference, 'luo_rudy_1994.cpp'),
-                                   os.path.join(tmp_path, 'luo_rudy_1994.cpp'))
+    compare_file_against_reference(os.path.join(reference, 'dynamic_Shannon2004.hpp'),
+                                   os.path.join(tmp_path, 'dynamic_Shannon2004.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'dynamic_Shannon2004.cpp'),
+                                   os.path.join(tmp_path, 'dynamic_Shannon2004.cpp'))
 
 
 def test_script_dynamic_BE(capsys, tmp_path):
     """Convert a BackwardsEuler model type"""
     LOGGER.info('Testing model with options -t BackwardsEuler, and --dynamically-loadable for command line script\n')
     tmp_path = str(tmp_path)
-    model_name = 'luo_rudy_1994'
+    model_name = 'courtemanche_ramirez_nattel_model_1998'
     model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
     assert os.path.isfile(model_file)
-    outfile = os.path.join(tmp_path, 'dynamic_luo_rudy_1994.cpp')
+    outfile = os.path.join(tmp_path, 'dynamic_courtemanche_ramirez_nattel_model_1998.cpp')
     # Call commandline script
     testargs = ['chaste_codegen', model_file, '-t', 'BackwardsEuler', '-o', outfile,
-                '-c', 'Dynamicluo_rudy_1994FromCellMLBackwardEuler', '--dynamically-loadable']
+                '-c', 'Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler', '--dynamically-loadable']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
     reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'BE')
-    compare_file_against_reference(os.path.join(reference, 'dynamic_luo_rudy_1994.hpp'),
-                                   os.path.join(tmp_path, 'dynamic_luo_rudy_1994.hpp'))
-    compare_file_against_reference(os.path.join(reference, 'dynamic_luo_rudy_1994.cpp'),
-                                   os.path.join(tmp_path, 'dynamic_luo_rudy_1994.cpp'))
+    compare_file_against_reference(os.path.join(reference, 'dynamic_courtemanche_ramirez_nattel_model_1998.hpp'),
+                                   os.path.join(tmp_path, 'dynamic_courtemanche_ramirez_nattel_model_1998.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'dynamic_courtemanche_ramirez_nattel_model_1998.cpp'),
+                                   os.path.join(tmp_path, 'dynamic_courtemanche_ramirez_nattel_model_1998.cpp'))
 
 
 def test_script_dynamic_RL(capsys, tmp_path):
@@ -250,60 +228,60 @@ def test_script_dynamic_RL(capsys, tmp_path):
     model_name = 'luo_rudy_1994'
     model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
     assert os.path.isfile(model_file)
-    outfile = os.path.join(tmp_path, 'dynamic_luo_rudy_1994.cpp')
+    outfile = os.path.join(tmp_path, 'dynamic_livshitz_rudy_2007.cpp')
     # Call commandline script
     testargs = ['chaste_codegen', model_file, '-t', 'RushLarsen', '-o', outfile,
-                '-c', 'Dynamicluo_rudy_1994FromCellMLRushLarsen', '--dynamically-loadable']
+                '-c', 'Dynamiclivshitz_rudy_2007FromCellMLRushLarsen', '--dynamically-loadable']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
     reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'RL')
-    compare_file_against_reference(os.path.join(reference, 'dynamic_luo_rudy_1994.hpp'),
-                                   os.path.join(tmp_path, 'dynamic_luo_rudy_1994.hpp'))
-    compare_file_against_reference(os.path.join(reference, 'dynamic_luo_rudy_1994.cpp'),
-                                   os.path.join(tmp_path, 'dynamic_luo_rudy_1994.cpp'))
+    compare_file_against_reference(os.path.join(reference, 'dynamic_livshitz_rudy_2007.hpp'),
+                                   os.path.join(tmp_path, 'dynamic_livshitz_rudy_2007.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'dynamic_livshitz_rudy_2007.cpp'),
+                                   os.path.join(tmp_path, 'dynamic_livshitz_rudy_2007.cpp'))
 
 
 def test_script_RLopt(capsys, tmp_path):
     """Convert a RushLarsen model type"""
     LOGGER.info('Testing model with options -t RushLarsenOpt,  for command line script\n')
     tmp_path = str(tmp_path)
-    model_name = 'matsuoka_model_2003'
+    model_name = 'bondarenko_model_2004_apex'
     model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
     assert os.path.isfile(model_file)
-    outfile = os.path.join(tmp_path, 'matsuoka_model_2003.cpp')
+    outfile = os.path.join(tmp_path, 'dynamic_bondarenko_model_2004_apex.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', model_file, '-t', 'RushLarsenOpt', '-o', outfile,
-                '-c', 'Cellmatsuoka_model_2003FromCellMLRushLarsen']
+    testargs = ['chaste_codegen', model_file, '-t', 'RushLarsenOpt', '-o', outfile, '--dynamically-loadable',
+                '-c', 'Dynamicbondarenko_model_2004_apexFromCellMLRushLarsen']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
     reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'RLopt')
-    compare_file_against_reference(os.path.join(reference, 'matsuoka_model_2003.hpp'),
-                                   os.path.join(tmp_path, 'matsuoka_model_2003.hpp'))
-    compare_file_against_reference(os.path.join(reference, 'matsuoka_model_2003.cpp'),
-                                   os.path.join(tmp_path, 'matsuoka_model_2003.cpp'))
+    compare_file_against_reference(os.path.join(reference, 'dynamic_bondarenko_model_2004_apex.hpp'),
+                                   os.path.join(tmp_path, 'dynamic_bondarenko_model_2004_apex.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'dynamic_bondarenko_model_2004_apex.cpp'),
+                                   os.path.join(tmp_path, 'dynamic_bondarenko_model_2004_apex.cpp'))
 
 
 def test_script_GRL1(capsys, tmp_path):
     """Convert a Generalised RushLarsen First Order model type"""
     LOGGER.info('Testing model Generalised RushLarsen First Order,  for command line script\n')
     tmp_path = str(tmp_path)
-    model_name = 'luo_rudy_1994'
+    model_name = 'demir_model_1994'
     model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
     assert os.path.isfile(model_file)
-    outfile = os.path.join(tmp_path, 'dynamic_luo_rudy_1994.cpp')
+    outfile = os.path.join(tmp_path, 'dynamic_demir_model_1994.cpp')
     # Call commandline script
     testargs = ['chaste_codegen', model_file, '-t', 'GeneralisedRushLarsen1', '-o', outfile,
-                '-c', 'Dynamicluo_rudy_1994FromCellMLGRL1', '--dynamically-loadable']
+                '-c', 'Dynamicdemir_model_1994FromCellMLGRL1', '--dynamically-loadable']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
     reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'GRL1')
-    compare_file_against_reference(os.path.join(reference, 'dynamic_luo_rudy_1994.hpp'),
-                                   os.path.join(tmp_path, 'dynamic_luo_rudy_1994.hpp'))
-    compare_file_against_reference(os.path.join(reference, 'dynamic_luo_rudy_1994.cpp'),
-                                   os.path.join(tmp_path, 'dynamic_luo_rudy_1994.cpp'))
+    compare_file_against_reference(os.path.join(reference, 'dynamic_demir_model_1994.hpp'),
+                                   os.path.join(tmp_path, 'dynamic_demir_model_1994.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'dynamic_demir_model_1994.cpp'),
+                                   os.path.join(tmp_path, 'dynamic_demir_model_1994.cpp'))
 
 
 def test_script_GRL1Opt(capsys, tmp_path):
@@ -313,39 +291,39 @@ def test_script_GRL1Opt(capsys, tmp_path):
     model_name = 'matsuoka_model_2003'
     model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
     assert os.path.isfile(model_file)
-    outfile = os.path.join(tmp_path, 'matsuoka_model_2003.cpp')
+    outfile = os.path.join(tmp_path, 'dynamic_matsuoka_model_2003.cpp')
     # Call commandline script
     testargs = ['chaste_codegen', model_file, '-t', 'GeneralisedRushLarsen1Opt', '-o', outfile,
-                '-c', 'Cellmatsuoka_model_2003FromCellMLGRL1']
+                '--dynamically-loadable', '-c', 'Dynamicmatsuoka_model_2003FromCellMLGRL1']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
     reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'GRL1Opt')
-    compare_file_against_reference(os.path.join(reference, 'matsuoka_model_2003.hpp'),
-                                   os.path.join(tmp_path, 'matsuoka_model_2003.hpp'))
-    compare_file_against_reference(os.path.join(reference, 'matsuoka_model_2003.cpp'),
-                                   os.path.join(tmp_path, 'matsuoka_model_2003.cpp'))
+    compare_file_against_reference(os.path.join(reference, 'dynamic_matsuoka_model_2003.hpp'),
+                                   os.path.join(tmp_path, 'dynamic_matsuoka_model_2003.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'dynamic_matsuoka_model_2003.cpp'),
+                                   os.path.join(tmp_path, 'dynamic_matsuoka_model_2003.cpp'))
 
 
 def test_script_GRL2(capsys, tmp_path):
     """Convert a Generalised RushLarsen First Order model type"""
     LOGGER.info('Testing model Generalised RushLarsen First Order,  for command line script\n')
     tmp_path = str(tmp_path)
-    model_name = 'luo_rudy_1994'
+    model_name = 'winslow_model_1999'
     model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
     assert os.path.isfile(model_file)
-    outfile = os.path.join(tmp_path, 'dynamic_luo_rudy_1994.cpp')
+    outfile = os.path.join(tmp_path, 'dynamic_winslow_model_1999.cpp')
     # Call commandline script
     testargs = ['chaste_codegen', model_file, '-t', 'GeneralisedRushLarsen2', '-o', outfile,
-                '-c', 'Dynamicluo_rudy_1994FromCellMLGRL2', '--dynamically-loadable']
+                '-c', 'Dynamicwinslow_model_1999FromCellMLGRL2', '--dynamically-loadable']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
     reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'GRL2')
-    compare_file_against_reference(os.path.join(reference, 'dynamic_luo_rudy_1994.hpp'),
-                                   os.path.join(tmp_path, 'dynamic_luo_rudy_1994.hpp'))
-    compare_file_against_reference(os.path.join(reference, 'dynamic_luo_rudy_1994.cpp'),
-                                   os.path.join(tmp_path, 'dynamic_luo_rudy_1994.cpp'))
+    compare_file_against_reference(os.path.join(reference, 'dynamic_winslow_model_1999.hpp'),
+                                   os.path.join(tmp_path, 'dynamic_winslow_model_1999.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'dynamic_winslow_model_1999.cpp'),
+                                   os.path.join(tmp_path, 'dynamic_winslow_model_1999.cpp'))
 
 
 def test_script_GRL2Opt(capsys, tmp_path):
@@ -355,18 +333,18 @@ def test_script_GRL2Opt(capsys, tmp_path):
     model_name = 'viswanathan_model_1999_epi'
     model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
     assert os.path.isfile(model_file)
-    outfile = os.path.join(tmp_path, 'viswanathan_model_1999_epi.cpp')
+    outfile = os.path.join(tmp_path, 'dynamic_viswanathan_model_1999_epi.cpp')
     # Call commandline script
     testargs = ['chaste_codegen', model_file, '-t', 'GeneralisedRushLarsen2Opt', '-o', outfile,
-                '-c', 'Cellviswanathan_model_1999_epiFromCellMLGRL2']
+                '--dynamically-loadable', '-c', 'Dynamicviswanathan_model_1999_epiFromCellMLGRL2']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
     reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'GRL2Opt')
-    compare_file_against_reference(os.path.join(reference, 'viswanathan_model_1999_epi.hpp'),
-                                   os.path.join(tmp_path, 'viswanathan_model_1999_epi.hpp'))
-    compare_file_against_reference(os.path.join(reference, 'viswanathan_model_1999_epi.cpp'),
-                                   os.path.join(tmp_path, 'viswanathan_model_1999_epi.cpp'))
+    compare_file_against_reference(os.path.join(reference, 'dynamic_viswanathan_model_1999_epi.hpp'),
+                                   os.path.join(tmp_path, 'dynamic_viswanathan_model_1999_epi.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'dynamic_viswanathan_model_1999_epi.cpp'),
+                                   os.path.join(tmp_path, 'dynamic_viswanathan_model_1999_epi.cpp'))
 
 
 def test_script_CVODE_DATA_CLAMP(capsys, tmp_path):

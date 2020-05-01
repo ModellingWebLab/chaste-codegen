@@ -29,10 +29,11 @@ class Cellpriebe_beuckelmann_model_1998FromCellMLCvodeDataClamp : public Abstrac
         archive & boost::serialization::base_object<AbstractCvodeCellWithDataClamp >(*this);
         
     }
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

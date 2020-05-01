@@ -22,7 +22,6 @@
 #include "MathsCustomFunctions.hpp"
 
 
-
     Cellzhang_SAN_model_2000_0D_capableFromCellML::Cellzhang_SAN_model_2000_0D_capableFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,

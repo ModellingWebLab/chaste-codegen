@@ -28,11 +28,11 @@ class Celldemir_model_1994FromCellMLBackwardEuler : public AbstractBackwardEuler
         archive & boost::serialization::base_object<AbstractBackwardEulerCardiacCell<16> >(*this);
         
     }
-    
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     double GetIntracellularCalciumConcentration();

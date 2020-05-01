@@ -28,11 +28,11 @@ class Celldokos_model_1996FromCellMLBackwardEuler : public AbstractBackwardEuler
         archive & boost::serialization::base_object<AbstractBackwardEulerCardiacCell<9> >(*this);
         
     }
-    
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     double GetIntracellularCalciumConcentration();

@@ -38,7 +38,6 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-
     double Cellviswanathan_model_1999_epiFromCellMLBackwardEuler::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
@@ -57,6 +56,7 @@
         // We have a default stimulus specified in the CellML file metadata
         this->mHasDefaultStimulusFromCellML = true;
         
+        this->mParameters[0] = 0.001; // (var_membrane__Cm) [microF]
     }
 
     Cellviswanathan_model_1999_epiFromCellMLBackwardEuler::~Cellviswanathan_model_1999_epiFromCellMLBackwardEuler()
@@ -131,7 +131,6 @@
         const double var_ionic_concentrations__Ko = 4.5; // millimolar
         const double var_ATP_sensitive_potassium_current__GKbaraATP = pow((0.25 * var_ionic_concentrations__Ko), var_ATP_sensitive_potassium_current__nATP) * var_ATP_sensitive_potassium_current__g_K_ATP * var_ATP_sensitive_potassium_current__pATP; // milliS_per_microF
         const double var_ionic_concentrations__Nao = 132.0; // millimolar
-        const double var_membrane__Cm = 0.001; // microF
         const double var_membrane__F = 96485.0; // coulomb_per_mole
         const double var_membrane__R = 8314.0; // joule_per_kilomole_kelvin
         const double var_membrane__T = 310.0; // kelvin
@@ -187,7 +186,7 @@
         const double var_transient_outward_current__g_to = 0; // milliS_per_microF
         const double var_transient_outward_current__rvdv = exp(0.01 * var_chaste_interface__membrane__V); // dimensionless
         const double var_transient_outward_current__i_to = pow(var_chaste_interface__transient_outward_current_zdv_gate__zdv, 3) * (-var_time_independent_potassium_current__E_K + var_chaste_interface__membrane__V) * var_transient_outward_current__g_to * var_transient_outward_current__rvdv * var_chaste_interface__transient_outward_current_ydv_gate__ydv; // microA_per_microF
-        const double var_membrane__dVdt = -1.0 * (var_ATP_sensitive_potassium_current__i_K_ATP + var_L_type_Ca_channel__i_Ca_L + var_Na_Ca_exchanger__i_NaCa + var_T_type_Ca_channel__i_Ca_T + var_calcium_background_current__i_Ca_b + var_fast_sodium_current__i_Na + var_membrane__I_st + var_non_specific_calcium_activated_current__i_ns_Ca + var_plateau_potassium_current__i_Kp + var_rapid_delayed_rectifier_potassium_current__i_Kr + var_sarcolemmal_calcium_pump__i_p_Ca + var_slow_delayed_rectifier_potassium_current__i_Ks + var_sodium_background_current__i_Na_b + var_sodium_potassium_pump__i_NaK + var_time_independent_potassium_current__i_K1 + var_transient_outward_current__i_to) / var_membrane__Cm; // dimensionless
+        const double var_membrane__dVdt = -1.0 * (var_ATP_sensitive_potassium_current__i_K_ATP + var_L_type_Ca_channel__i_Ca_L + var_Na_Ca_exchanger__i_NaCa + var_T_type_Ca_channel__i_Ca_T + var_calcium_background_current__i_Ca_b + var_fast_sodium_current__i_Na + var_membrane__I_st + var_non_specific_calcium_activated_current__i_ns_Ca + var_plateau_potassium_current__i_Kp + var_rapid_delayed_rectifier_potassium_current__i_Kr + var_sarcolemmal_calcium_pump__i_p_Ca + var_slow_delayed_rectifier_potassium_current__i_Ks + var_sodium_background_current__i_Na_b + var_sodium_potassium_pump__i_NaK + var_time_independent_potassium_current__i_K1 + var_transient_outward_current__i_to) / mParameters[0]; // dimensionless
         const double var_membrane__V_orig_deriv = var_membrane__dVdt; // millivolt / second
         const double var_chaste_interface__i_ionic = 0.001 * HeartConfig::Instance()->GetCapacitance() * var_membrane__V_orig_deriv; // uA_per_cm2
 
@@ -292,7 +291,7 @@
         const double d_dt_chaste_interface_var_calcium_dynamics__OVRLDtrack = 0.001 * var_calcium_dynamics__OVRLDtrack_orig_deriv; // 1 / millisecond
         const double var_calcium_dynamics__Tn_max = 0.070000000000000007; // millimolar
         const double var_calcium_dynamics__delta_Ca_ith = 0.00018000000000000001; // millimolar
-        const double var_calcium_dynamics__G_rel = ((var_chaste_interface__calcium_dynamics__Cainfluxtrack > var_calcium_dynamics__delta_Ca_ith) ? ((1.0 - var_chaste_interface__calcium_dynamics__APtrack2) * (-var_calcium_dynamics__delta_Ca_ith + var_chaste_interface__calcium_dynamics__Cainfluxtrack) * var_chaste_interface__calcium_dynamics__APtrack2 * var_calcium_dynamics__G_rel_max / (-var_calcium_dynamics__delta_Ca_ith + var_chaste_interface__calcium_dynamics__Cainfluxtrack + var_calcium_dynamics__K_mrel)) : ((var_chaste_interface__calcium_dynamics__OVRLDtrack2 > 0.0) ? ((1.0 - var_chaste_interface__calcium_dynamics__OVRLDtrack2) * var_calcium_dynamics__G_rel_overload * var_chaste_interface__calcium_dynamics__OVRLDtrack2) : (0.0))); // per_second
+        const double var_calcium_dynamics__G_rel = ((var_chaste_interface__calcium_dynamics__Cainfluxtrack > var_calcium_dynamics__delta_Ca_ith) ? ((1.0 - var_chaste_interface__calcium_dynamics__APtrack2) * (-var_calcium_dynamics__delta_Ca_ith + var_chaste_interface__calcium_dynamics__Cainfluxtrack) * var_chaste_interface__calcium_dynamics__APtrack2 * var_calcium_dynamics__G_rel_max / (-var_calcium_dynamics__delta_Ca_ith + var_chaste_interface__calcium_dynamics__Cainfluxtrack + var_calcium_dynamics__K_mrel)) : ((var_chaste_interface__calcium_dynamics__OVRLDtrack2 > 0) ? ((1.0 - var_chaste_interface__calcium_dynamics__OVRLDtrack2) * var_calcium_dynamics__G_rel_overload * var_chaste_interface__calcium_dynamics__OVRLDtrack2) : (0))); // per_second
         const double var_calcium_dynamics__i_leak = var_chaste_interface__calcium_dynamics__Ca_NSR * var_calcium_dynamics__K_leak; // millimolar_per_second
         const double var_calcium_dynamics__i_rel = (-var_chaste_interface__calcium_dynamics__Cai + var_chaste_interface__calcium_dynamics__Ca_JSR) * var_calcium_dynamics__G_rel; // millimolar_per_second
         const double var_calcium_dynamics__i_up = var_chaste_interface__calcium_dynamics__Cai * var_calcium_dynamics__I_up / (var_chaste_interface__calcium_dynamics__Cai + var_calcium_dynamics__K_mup); // millimolar_per_second
@@ -313,7 +312,6 @@
         const double var_calcium_dynamics__V_NSR = 0.081176470588235281 * var_ionic_concentrations__V_myo; // micro_litre
         const double var_calcium_dynamics__Ca_NSR_orig_deriv = -var_calcium_dynamics__i_leak - var_calcium_dynamics__V_JSR * var_calcium_dynamics__i_tr / var_calcium_dynamics__V_NSR + var_calcium_dynamics__i_up; // millimolar / second
         const double d_dt_chaste_interface_var_calcium_dynamics__Ca_NSR = 0.001 * var_calcium_dynamics__Ca_NSR_orig_deriv; // millimolar / millisecond
-        const double var_membrane__Cm = 0.001; // microF
         const double var_membrane__F = 96485.0; // coulomb_per_mole
         const double var_membrane__I_st_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
         const double var_membrane__I_st = var_membrane__I_st_converter / HeartConfig::Instance()->GetCapacitance(); // microA_per_microF
@@ -348,7 +346,7 @@
         const double var_sarcolemmal_calcium_pump__i_p_Ca = var_chaste_interface__calcium_dynamics__Cai * var_sarcolemmal_calcium_pump__I_pCa / (var_chaste_interface__calcium_dynamics__Cai + var_sarcolemmal_calcium_pump__K_mpCa); // microA_per_microF
         const double var_calcium_dynamics__Cai_orig_deriv = 1.0 * ((-var_calcium_dynamics__i_up + var_calcium_dynamics__i_leak) * var_calcium_dynamics__V_NSR / var_ionic_concentrations__V_myo + var_calcium_dynamics__V_JSR * var_calcium_dynamics__i_rel / var_ionic_concentrations__V_myo - 0.5 * (-var_Na_Ca_exchanger__i_NaCa + var_L_type_Ca_channel__i_CaCa + var_T_type_Ca_channel__i_Ca_T + var_calcium_background_current__i_Ca_b + var_sarcolemmal_calcium_pump__i_p_Ca) * var_ionic_concentrations__A_cap / (var_ionic_concentrations__V_myo * var_membrane__F)) / (1.0 + var_calcium_dynamics__CMDN_max * var_calcium_dynamics__K_mCMDN / pow((var_chaste_interface__calcium_dynamics__Cai + var_calcium_dynamics__K_mCMDN), 2) + var_calcium_dynamics__K_mTn * var_calcium_dynamics__Tn_max / pow((var_chaste_interface__calcium_dynamics__Cai + var_calcium_dynamics__K_mTn), 2)); // millimolar / second
         const double d_dt_chaste_interface_var_calcium_dynamics__Cai = 0.001 * var_calcium_dynamics__Cai_orig_deriv; // millimolar / millisecond
-        const double var_calcium_dynamics__Cainfluxtrack_orig_deriv = ((var_chaste_interface__calcium_dynamics__APtrack > 0.20000000000000001) ? (-0.5 * (-var_Na_Ca_exchanger__i_NaCa + var_L_type_Ca_channel__i_CaCa + var_T_type_Ca_channel__i_Ca_T + var_calcium_background_current__i_Ca_b + var_sarcolemmal_calcium_pump__i_p_Ca) * var_ionic_concentrations__A_cap / (var_ionic_concentrations__V_myo * var_membrane__F)) : ((var_chaste_interface__calcium_dynamics__APtrack2 > 0.01) ? (0.0) : (-500.0 * var_chaste_interface__calcium_dynamics__Cainfluxtrack))); // 1 / second
+        const double var_calcium_dynamics__Cainfluxtrack_orig_deriv = ((var_chaste_interface__calcium_dynamics__APtrack > 0.20000000000000001) ? (-0.5 * (-var_Na_Ca_exchanger__i_NaCa + var_L_type_Ca_channel__i_CaCa + var_T_type_Ca_channel__i_Ca_T + var_calcium_background_current__i_Ca_b + var_sarcolemmal_calcium_pump__i_p_Ca) * var_ionic_concentrations__A_cap / (var_ionic_concentrations__V_myo * var_membrane__F)) : ((var_chaste_interface__calcium_dynamics__APtrack2 > 0.01) ? (0) : (-500.0 * var_chaste_interface__calcium_dynamics__Cainfluxtrack))); // 1 / second
         const double d_dt_chaste_interface_var_calcium_dynamics__Cainfluxtrack = 0.001 * var_calcium_dynamics__Cainfluxtrack_orig_deriv; // 1 / millisecond
         const double var_slow_delayed_rectifier_potassium_current__PNaK = 0.018329999999999999; // dimensionless
         const double var_slow_delayed_rectifier_potassium_current__E_Ks = var_membrane__R * var_membrane__T * log((var_ionic_concentrations__Nao * var_slow_delayed_rectifier_potassium_current__PNaK + var_ionic_concentrations__Ko) / (var_chaste_interface__ionic_concentrations__Nai * var_slow_delayed_rectifier_potassium_current__PNaK + var_chaste_interface__ionic_concentrations__Ki)) / var_membrane__F; // millivolt
@@ -378,7 +376,7 @@
         const double var_transient_outward_current__i_to = pow(var_chaste_interface__transient_outward_current_zdv_gate__zdv, 3) * (-var_time_independent_potassium_current__E_K + var_chaste_interface__membrane__V) * var_transient_outward_current__g_to * var_transient_outward_current__rvdv * var_chaste_interface__transient_outward_current_ydv_gate__ydv; // microA_per_microF
         const double var_ionic_concentrations__Ki_orig_deriv = (-var_ATP_sensitive_potassium_current__i_K_ATP - var_L_type_Ca_channel__i_CaK - var_non_specific_calcium_activated_current__i_ns_K - var_plateau_potassium_current__i_Kp - var_rapid_delayed_rectifier_potassium_current__i_Kr - var_slow_delayed_rectifier_potassium_current__i_Ks - var_time_independent_potassium_current__i_K1 - var_transient_outward_current__i_to + 2.0 * var_sodium_potassium_pump__i_NaK) * var_ionic_concentrations__A_cap / (var_ionic_concentrations__V_myo * var_membrane__F); // millimolar / second
         const double d_dt_chaste_interface_var_ionic_concentrations__Ki = 0.001 * var_ionic_concentrations__Ki_orig_deriv; // millimolar / millisecond
-        const double var_membrane__dVdt = -1.0 * (var_ATP_sensitive_potassium_current__i_K_ATP + var_L_type_Ca_channel__i_Ca_L + var_Na_Ca_exchanger__i_NaCa + var_T_type_Ca_channel__i_Ca_T + var_calcium_background_current__i_Ca_b + var_fast_sodium_current__i_Na + var_membrane__I_st + var_non_specific_calcium_activated_current__i_ns_Ca + var_plateau_potassium_current__i_Kp + var_rapid_delayed_rectifier_potassium_current__i_Kr + var_sarcolemmal_calcium_pump__i_p_Ca + var_slow_delayed_rectifier_potassium_current__i_Ks + var_sodium_background_current__i_Na_b + var_sodium_potassium_pump__i_NaK + var_time_independent_potassium_current__i_K1 + var_transient_outward_current__i_to) / var_membrane__Cm; // dimensionless
+        const double var_membrane__dVdt = -1.0 * (var_ATP_sensitive_potassium_current__i_K_ATP + var_L_type_Ca_channel__i_Ca_L + var_Na_Ca_exchanger__i_NaCa + var_T_type_Ca_channel__i_Ca_T + var_calcium_background_current__i_Ca_b + var_fast_sodium_current__i_Na + var_membrane__I_st + var_non_specific_calcium_activated_current__i_ns_Ca + var_plateau_potassium_current__i_Kp + var_rapid_delayed_rectifier_potassium_current__i_Kr + var_sarcolemmal_calcium_pump__i_p_Ca + var_slow_delayed_rectifier_potassium_current__i_Ks + var_sodium_background_current__i_Na_b + var_sodium_potassium_pump__i_NaK + var_time_independent_potassium_current__i_K1 + var_transient_outward_current__i_to) / mParameters[0]; // dimensionless
         const double var_calcium_dynamics__APtrack_orig_deriv = ((var_membrane__dVdt > 150000.0) ? (100000.0 - 100500.0 * var_chaste_interface__calcium_dynamics__APtrack) : (-500.0 * var_chaste_interface__calcium_dynamics__APtrack)); // 1 / second
         const double d_dt_chaste_interface_var_calcium_dynamics__APtrack = 0.001 * var_calcium_dynamics__APtrack_orig_deriv; // 1 / millisecond
         
@@ -437,114 +435,112 @@
         
         const double var_x0 = 1 / var_chaste_interface__ionic_concentrations__Nai;
         const double var_x1 = log(132.0 * var_x0);
-        const double var_x2 = 1 / var_chaste_interface__calcium_dynamics__Cai;
-        const double var_x3 = log(1.8 * var_x2);
-        const double var_x4 = 1 / var_chaste_interface__ionic_concentrations__Ki;
-        const double var_x5 = log(4.5 * var_x4);
-        const double var_x6 = 0.00050000000000000001 + var_chaste_interface__calcium_dynamics__Cai;
-        const double var_x7 = 1 / var_x6;
-        const double var_x8 = 1 / (1.0 + exp(1.2521739130434781 - 0.16722408026755853 * var_chaste_interface__membrane__V));
-        const double var_x9 = -26.712338705498265 * var_x5 + var_chaste_interface__membrane__V;
-        const double var_x10 = pow(var_chaste_interface__ionic_concentrations__Nai, (-2));
-        const double var_x11 = 0.037435883507802616 * var_chaste_interface__membrane__V;
-        const double var_x12 = 1 / (1.0 + 0.1245 * exp(-0.003743588350780262 * var_chaste_interface__membrane__V) + 0.036499999999999998 * (-0.14285714285714285 + 0.14285714285714285 * exp(1.961367013372957)) * exp(-var_x11));
-        const double var_x13 = pow(var_chaste_interface__ionic_concentrations__Nai, 3.0);
-        const double var_x14 = 0.018717941753901308 * var_chaste_interface__membrane__V;
-        const double var_x15 = exp(var_x14);
-        const double var_x16 = exp(-var_x14);
-        const double var_x17 = 1.8 * var_x13 * var_x15 - 2299968.0 * var_x16 * var_chaste_interface__calcium_dynamics__Cai;
-        const double var_x18 = 1 / (1.0 + 144.92753623188406 * var_chaste_interface__calcium_dynamics__Cai);
-        const double var_x19 = 1 / (1.0 + 2299.9679999999998 * var_chaste_interface__calcium_dynamics__Cai + 0.0018000000000000002 * var_x13);
-        const double var_x20 = var_x18 * var_x19;
-        const double var_x21 = var_x17 * var_x20;
-        const double var_x22 = pow(var_chaste_interface__T_type_Ca_channel_b_gate__b, 2) * var_chaste_interface__T_type_Ca_channel_g_gate__g;
-        const double var_x23 = var_x22 * (-13.356169352749133 * var_x3 + var_chaste_interface__membrane__V);
-        const double var_x24 = exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__membrane__V - 6.3708927812613361 * var_x5);
-        const double var_x25 = 1.0 + var_x24;
-        const double var_x26 = 1 / var_x25;
-        const double var_x27 = exp(-2.4444678999999998 + 13.738155796237757 * var_x5 - 0.51429999999999998 * var_chaste_interface__membrane__V);
-        const double var_x28 = 1.0 + var_x27;
-        const double var_x29 = 1 / var_x28;
-        const double var_x30 = exp(0.43983232 + 0.080320000000000003 * var_chaste_interface__membrane__V - 2.1455350448256207 * var_x5);
-        const double var_x31 = exp(-36.698642499999998 + 0.061749999999999999 * var_chaste_interface__membrane__V - 1.6494869150645177 * var_x5);
-        const double var_x32 = var_x31 + 0.49124000000000001 * var_x30;
-        const double var_x33 = var_x29 * var_x32;
-        const double var_x34 = 1 / (1000.0 * var_x33 + 1020.0 * var_x26);
-        const double var_x35 = var_x26 * var_x34;
-        const double var_x36 = var_chaste_interface__rapid_delayed_rectifier_potassium_current_xr_gate__xr / (1.0 + exp(0.4017857142857143 + 0.044642857142857144 * var_chaste_interface__membrane__V));
-        const double var_x37 = pow(var_x2, 1.3999999999999999);
-        const double var_x38 = 1.0 + 6.4818210260626455e-7 * var_x37;
-        const double var_x39 = 0.25979999999999998 / var_x38;
-        const double var_x40 = 0.018329999999999999 * var_chaste_interface__ionic_concentrations__Nai + var_chaste_interface__ionic_concentrations__Ki;
-        const double var_x41 = var_chaste_interface__slow_delayed_rectifier_potassium_current_xs1_gate__xs1 * var_chaste_interface__slow_delayed_rectifier_potassium_current_xs2_gate__xs2;
-        const double var_x42 = var_x41 * (-26.712338705498265 * log(6.9195599999999997 / var_x40) + var_chaste_interface__membrane__V);
-        const double var_x43 = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * var_chaste_interface__fast_sodium_current_h_gate__h * var_chaste_interface__fast_sodium_current_j_gate__j;
-        const double var_x44 = exp(0.074871767015605231 * var_chaste_interface__membrane__V);
-        const double var_x45 = -0.61380000000000001 + 1.0 * var_x44 * var_chaste_interface__calcium_dynamics__Cai;
-        const double var_x46 = 1 / (-1.0 + var_x44);
-        const double var_x47 = var_chaste_interface__L_type_Ca_channel_d_gate__d * var_chaste_interface__L_type_Ca_channel_f_gate__f * var_chaste_interface__membrane__V;
-        const double var_x48 = var_x47 / (1.0 + 1666.6666666666667 * var_chaste_interface__calcium_dynamics__Cai);
-        const double var_x49 = var_x46 * var_x48;
-        const double var_x50 = var_x45 * var_x49;
-        const double var_x51 = exp(var_x11);
-        const double var_x52 = 0.75 * var_x51;
-        const double var_x53 = -99.0 + var_x52 * var_chaste_interface__ionic_concentrations__Nai;
-        const double var_x54 = 1 / (-1.0 + var_x51);
-        const double var_x55 = var_x48 * var_x54;
-        const double var_x56 = -3.375 + var_x52 * var_chaste_interface__ionic_concentrations__Ki;
-        const double var_x57 = (var_chaste_interface__calcium_dynamics__APtrack > 0.17999999999999999) && (var_chaste_interface__calcium_dynamics__APtrack < 0.20000000000000001);
-        const double var_x58 = 1.0 - var_chaste_interface__calcium_dynamics__APtrack2;
-        const double var_x59 = 0.00062 + var_chaste_interface__calcium_dynamics__Cainfluxtrack;
-        const double var_x60 = 1 / var_x59;
-        const double var_x61 = -0.00018000000000000001 + var_chaste_interface__calcium_dynamics__Cainfluxtrack;
-        const double var_x62 = 60000.0 * var_x60 * var_x61;
-        const double var_x63 = var_x58 * var_x62;
-        const double var_x64 = var_chaste_interface__calcium_dynamics__Cainfluxtrack > 0.00018000000000000001;
-        const double var_x65 = ((var_x64) ? (var_x63 - var_x62 * var_chaste_interface__calcium_dynamics__APtrack2) : (0));
-        const double var_x66 = 0.80000000000000004 + var_chaste_interface__calcium_dynamics__Ca_JSR;
-        const double var_x67 = pow(var_x66, (-2));
-        const double var_x68 = 1 / (1.0 + 8.0 * var_x67);
-        const double var_x69 = 0.001 * var_x68;
-        const double var_x70 = var_x69 * (-var_chaste_interface__calcium_dynamics__Ca_JSR + var_chaste_interface__calcium_dynamics__Cai);
-        const double var_x71 = var_chaste_interface__calcium_dynamics__OVRLDtrack2 > 0.0;
-        const double var_x72 = ((var_x64) ? (var_x63 * var_chaste_interface__calcium_dynamics__APtrack2) : ((var_x71) ? (4000.0 * (1.0 - var_chaste_interface__calcium_dynamics__OVRLDtrack2) * var_chaste_interface__calcium_dynamics__OVRLDtrack2) : (0.0)));
-        const double var_x73 = var_x72 * (-var_chaste_interface__calcium_dynamics__Cai + var_chaste_interface__calcium_dynamics__Ca_JSR);
-        const double var_x74 = 60000.0 * var_x58 * var_chaste_interface__calcium_dynamics__APtrack2;
-        const double var_x75 = ((var_x64) ? (var_x60 * var_x74 - var_x61 * var_x74 / pow(var_x59, 2)) : (0));
-        const double var_x76 = ((var_x64) ? (0) : ((var_x71) ? (4000.0 - 8000.0 * var_chaste_interface__calcium_dynamics__OVRLDtrack2) : (0)));
-        const double var_x77 = 0.00092000000000000003 + var_chaste_interface__calcium_dynamics__Cai;
-        const double var_x78 = 1 / var_x77;
-        const double var_x79 = var_chaste_interface__calcium_dynamics__Cai / pow(var_x77, 2);
-        const double var_x80 = 0.0023800000000000002 + var_chaste_interface__calcium_dynamics__Cai;
-        const double var_x81 = pow(var_x6, (-2));
-        const double var_x82 = 1.0 + 0.00011900000000000002 / pow(var_x80, 2) + 3.5000000000000004e-5 * var_x81;
-        const double var_x83 = 1 / var_x82;
-        const double var_x84 = 0.001 * var_x83;
-        const double var_x85 = var_x84 * (0.0070588235294117632 * var_chaste_interface__calcium_dynamics__Ca_JSR - 0.0070588235294117632 * var_chaste_interface__calcium_dynamics__Cai);
-        const double var_x86 = 0.40588235294117642 * var_x78;
-        const double var_x87 = 1.1499999999999999 * var_x7;
-        const double var_x88 = var_x16 * var_x20;
-        const double var_x89 = var_x17 * var_x19 / pow((0.0068999999999999999 + var_chaste_interface__calcium_dynamics__Cai), 2);
-        const double var_x90 = var_x17 * var_x18 / pow((0.00043478865792915378 + 7.8261958427247687e-7 * var_x13 + var_chaste_interface__calcium_dynamics__Cai), 2);
-        const double var_x91 = var_x47 / pow((0.00059999999999999995 + var_chaste_interface__calcium_dynamics__Cai), 2);
-        const double var_x92 = 1 / M_PI;
-        const double var_x93 = 0.090316078310111333 * var_x92;
-        const double var_x94 = -var_x93 * (var_x87 + 4599.9359999999997 * var_x88 + 0.040282206767891383 * var_x2 + 1.38e-5 * var_x89 + 8.6957731585830757e-7 * var_x90 + 7.8019226357407252 * var_x44 * var_x49 + 0.6678084676374566 * var_x2 * var_x22 - 1.1499999999999999 * var_x81 * var_chaste_interface__calcium_dynamics__Cai - 0.0046811535814444347 * var_x45 * var_x46 * var_x91);
-        const double var_x95 = pow(var_chaste_interface__ionic_concentrations__Nai, 2.0);
-        const double var_x96 = var_x90 * var_x95;
-        const double var_x97 = var_x15 * var_x20 * var_x95;
-        const double var_x98 = 2.0416447122894152e-12 * var_x96 - 0.010800000000000001 * var_x97;
-        const double var_x99 = var_chaste_interface__calcium_dynamics__APtrack > 0.20000000000000001;
-        const double var_x100 = var_chaste_interface__calcium_dynamics__OVRLDtrack > 0.97999999999999998;
-        const double var_x101 = var_x54 * var_x91;
-        const double var_x102 = 0.00018063215662022267 * var_x92;
-        const double var_x103 = var_x24 * var_x4 / pow(var_x25, 2);
-        const double var_x104 = var_x41 * (-0.433 - var_x39) * (0.14451785951707913 * var_chaste_interface__ionic_concentrations__Ki + 0.0026490123649480601 * var_chaste_interface__ionic_concentrations__Nai) / pow(var_x40, 2);
-        const double var_x105 = var_x51 * var_x55;
-        const double var_x106 = var_x12 / (pow((0.01 + var_x10), 2) * pow(var_chaste_interface__ionic_concentrations__Nai, 3));
+        const double var_x2 = 1 / var_chaste_interface__ionic_concentrations__Ki;
+        const double var_x3 = log(4.5 * var_x2);
+        const double var_x4 = pow(var_chaste_interface__ionic_concentrations__Nai, (-2));
+        const double var_x5 = 0.037435883507802616 * var_chaste_interface__membrane__V;
+        const double var_x6 = 1 / (1.0 + 0.1245 * exp(-0.003743588350780262 * var_chaste_interface__membrane__V) + 0.036499999999999998 * (-0.14285714285714285 + 0.14285714285714285 * exp(1.961367013372957)) * exp(-var_x5));
+        const double var_x7 = 1 / (1.0 + exp(1.2521739130434781 - 0.16722408026755853 * var_chaste_interface__membrane__V));
+        const double var_x8 = -26.712338705498265 * var_x3 + var_chaste_interface__membrane__V;
+        const double var_x9 = pow(var_chaste_interface__ionic_concentrations__Nai, 3.0);
+        const double var_x10 = 0.018717941753901308 * var_chaste_interface__membrane__V;
+        const double var_x11 = exp(var_x10);
+        const double var_x12 = exp(-var_x10);
+        const double var_x13 = 1.8 * var_x11 * var_x9 - 2299968.0 * var_x12 * var_chaste_interface__calcium_dynamics__Cai;
+        const double var_x14 = 1 / (1.0 + 144.92753623188406 * var_chaste_interface__calcium_dynamics__Cai);
+        const double var_x15 = 1 / (1.0 + 2299.9679999999998 * var_chaste_interface__calcium_dynamics__Cai + 0.0018000000000000002 * var_x9);
+        const double var_x16 = var_x14 * var_x15;
+        const double var_x17 = 0.002 * var_x13 * var_x16;
+        const double var_x18 = exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__membrane__V - 6.3708927812613361 * var_x3);
+        const double var_x19 = 1.0 + var_x18;
+        const double var_x20 = 1 / var_x19;
+        const double var_x21 = exp(-2.4444678999999998 + 13.738155796237757 * var_x3 - 0.51429999999999998 * var_chaste_interface__membrane__V);
+        const double var_x22 = 1.0 + var_x21;
+        const double var_x23 = 1 / var_x22;
+        const double var_x24 = exp(0.43983232 + 0.080320000000000003 * var_chaste_interface__membrane__V - 2.1455350448256207 * var_x3);
+        const double var_x25 = exp(-36.698642499999998 + 0.061749999999999999 * var_chaste_interface__membrane__V - 1.6494869150645177 * var_x3);
+        const double var_x26 = var_x25 + 0.49124000000000001 * var_x24;
+        const double var_x27 = var_x23 * var_x26;
+        const double var_x28 = 1 / (1000.0 * var_x27 + 1020.0 * var_x20);
+        const double var_x29 = var_x20 * var_x28;
+        const double var_x30 = var_chaste_interface__rapid_delayed_rectifier_potassium_current_xr_gate__xr / (1.0 + exp(0.4017857142857143 + 0.044642857142857144 * var_chaste_interface__membrane__V));
+        const double var_x31 = 1 / var_chaste_interface__calcium_dynamics__Cai;
+        const double var_x32 = pow(var_x31, 1.3999999999999999);
+        const double var_x33 = 1.0 + 6.4818210260626455e-7 * var_x32;
+        const double var_x34 = 0.25979999999999998 / var_x33;
+        const double var_x35 = 0.018329999999999999 * var_chaste_interface__ionic_concentrations__Nai + var_chaste_interface__ionic_concentrations__Ki;
+        const double var_x36 = var_chaste_interface__slow_delayed_rectifier_potassium_current_xs1_gate__xs1 * var_chaste_interface__slow_delayed_rectifier_potassium_current_xs2_gate__xs2;
+        const double var_x37 = var_x36 * (-26.712338705498265 * log(6.9195599999999997 / var_x35) + var_chaste_interface__membrane__V);
+        const double var_x38 = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * var_chaste_interface__fast_sodium_current_h_gate__h * var_chaste_interface__fast_sodium_current_j_gate__j;
+        const double var_x39 = exp(var_x5);
+        const double var_x40 = 0.75 * var_x39;
+        const double var_x41 = -99.0 + var_x40 * var_chaste_interface__ionic_concentrations__Nai;
+        const double var_x42 = 1 / (-1.0 + var_x39);
+        const double var_x43 = var_chaste_interface__L_type_Ca_channel_d_gate__d * var_chaste_interface__L_type_Ca_channel_f_gate__f * var_chaste_interface__membrane__V;
+        const double var_x44 = var_x43 / (1.0 + 1666.6666666666667 * var_chaste_interface__calcium_dynamics__Cai);
+        const double var_x45 = var_x42 * var_x44;
+        const double var_x46 = -3.375 + var_x40 * var_chaste_interface__ionic_concentrations__Ki;
+        const double var_x47 = log(1.8 * var_x31);
+        const double var_x48 = 0.00050000000000000001 + var_chaste_interface__calcium_dynamics__Cai;
+        const double var_x49 = 1.1499999999999999 / var_x48;
+        const double var_x50 = pow(var_chaste_interface__T_type_Ca_channel_b_gate__b, 2) * var_chaste_interface__T_type_Ca_channel_g_gate__g;
+        const double var_x51 = exp(0.074871767015605231 * var_chaste_interface__membrane__V);
+        const double var_x52 = 1 / (-1.0 + var_x51);
+        const double var_x53 = var_x52 * (-0.61380000000000001 + 1.0 * var_x51 * var_chaste_interface__calcium_dynamics__Cai);
+        const double var_x54 = 7.8019226357407252 * var_x44;
+        const double var_x55 = -0.040282206767891383 * var_x47 + var_x49 * var_chaste_interface__calcium_dynamics__Cai + var_x53 * var_x54 + 0.050000000000000003 * var_x50 * (-13.356169352749133 * var_x47 + var_chaste_interface__membrane__V);
+        const double var_x56 = (var_chaste_interface__calcium_dynamics__APtrack > 0.17999999999999999) && (var_chaste_interface__calcium_dynamics__APtrack < 0.20000000000000001);
+        const double var_x57 = 1.0 - var_chaste_interface__calcium_dynamics__APtrack2;
+        const double var_x58 = 0.00062 + var_chaste_interface__calcium_dynamics__Cainfluxtrack;
+        const double var_x59 = 1 / var_x58;
+        const double var_x60 = -0.00018000000000000001 + var_chaste_interface__calcium_dynamics__Cainfluxtrack;
+        const double var_x61 = 60000.0 * var_x59 * var_x60;
+        const double var_x62 = var_x57 * var_x61;
+        const double var_x63 = var_chaste_interface__calcium_dynamics__Cainfluxtrack > 0.00018000000000000001;
+        const double var_x64 = ((var_x63) ? (var_x62 - var_x61 * var_chaste_interface__calcium_dynamics__APtrack2) : (0));
+        const double var_x65 = 0.80000000000000004 + var_chaste_interface__calcium_dynamics__Ca_JSR;
+        const double var_x66 = pow(var_x65, (-2));
+        const double var_x67 = 1 / (1.0 + 8.0 * var_x66);
+        const double var_x68 = 0.001 * var_x67;
+        const double var_x69 = var_x68 * (-var_chaste_interface__calcium_dynamics__Ca_JSR + var_chaste_interface__calcium_dynamics__Cai);
+        const double var_x70 = var_chaste_interface__calcium_dynamics__OVRLDtrack2 > 0;
+        const double var_x71 = ((var_x63) ? (var_x62 * var_chaste_interface__calcium_dynamics__APtrack2) : ((var_x70) ? (4000.0 * (1.0 - var_chaste_interface__calcium_dynamics__OVRLDtrack2) * var_chaste_interface__calcium_dynamics__OVRLDtrack2) : (0)));
+        const double var_x72 = var_x71 * (-var_chaste_interface__calcium_dynamics__Cai + var_chaste_interface__calcium_dynamics__Ca_JSR);
+        const double var_x73 = 60000.0 * var_x57 * var_chaste_interface__calcium_dynamics__APtrack2;
+        const double var_x74 = ((var_x63) ? (var_x59 * var_x73 - var_x60 * var_x73 / pow(var_x58, 2)) : (0));
+        const double var_x75 = ((var_x63) ? (0) : ((var_x70) ? (4000.0 - 8000.0 * var_chaste_interface__calcium_dynamics__OVRLDtrack2) : (0)));
+        const double var_x76 = 0.00092000000000000003 + var_chaste_interface__calcium_dynamics__Cai;
+        const double var_x77 = 1 / var_x76;
+        const double var_x78 = var_chaste_interface__calcium_dynamics__Cai / pow(var_x76, 2);
+        const double var_x79 = 0.0023800000000000002 + var_chaste_interface__calcium_dynamics__Cai;
+        const double var_x80 = pow(var_x48, (-2));
+        const double var_x81 = 1.0 + 0.00011900000000000002 / pow(var_x79, 2) + 3.5000000000000004e-5 * var_x80;
+        const double var_x82 = 1 / var_x81;
+        const double var_x83 = 0.001 * var_x82;
+        const double var_x84 = var_x83 * (0.0070588235294117632 * var_chaste_interface__calcium_dynamics__Ca_JSR - 0.0070588235294117632 * var_chaste_interface__calcium_dynamics__Cai);
+        const double var_x85 = 0.40588235294117642 * var_x77;
+        const double var_x86 = var_x12 * var_x16;
+        const double var_x87 = var_x13 * var_x15 / pow((0.0068999999999999999 + var_chaste_interface__calcium_dynamics__Cai), 2);
+        const double var_x88 = var_x13 * var_x14 / pow((0.00043478865792915378 + 7.8261958427247687e-7 * var_x9 + var_chaste_interface__calcium_dynamics__Cai), 2);
+        const double var_x89 = var_x43 / pow((0.00059999999999999995 + var_chaste_interface__calcium_dynamics__Cai), 2);
+        const double var_x90 = 1 / M_PI;
+        const double var_x91 = 0.090316078310111333 * var_x90;
+        const double var_x92 = -var_x91 * (var_x49 + 4599.9359999999997 * var_x86 + 0.040282206767891383 * var_x31 + 1.38e-5 * var_x87 + 8.6957731585830757e-7 * var_x88 + 0.6678084676374566 * var_x31 * var_x50 - 1.1499999999999999 * var_x80 * var_chaste_interface__calcium_dynamics__Cai - 0.0046811535814444347 * var_x53 * var_x89 + var_x51 * var_x52 * var_x54);
+        const double var_x93 = pow(var_chaste_interface__ionic_concentrations__Nai, 2.0);
+        const double var_x94 = var_x88 * var_x93;
+        const double var_x95 = var_x11 * var_x16 * var_x93;
+        const double var_x96 = 2.0416447122894152e-12 * var_x94 - 0.010800000000000001 * var_x95;
+        const double var_x97 = var_chaste_interface__calcium_dynamics__APtrack > 0.20000000000000001;
+        const double var_x98 = var_chaste_interface__calcium_dynamics__OVRLDtrack > 0.97999999999999998;
+        const double var_x99 = var_x42 * var_x89;
+        const double var_x100 = 0.00018063215662022267 * var_x90;
+        const double var_x101 = var_x18 * var_x2 / pow(var_x19, 2);
+        const double var_x102 = var_x36 * (-0.433 - var_x34) * (0.14451785951707913 * var_chaste_interface__ionic_concentrations__Ki + 0.0026490123649480601 * var_chaste_interface__ionic_concentrations__Nai) / pow(var_x35, 2);
+        const double var_x103 = var_x39 * var_x45;
+        const double var_x104 = var_x6 / (pow((0.01 + var_x4), 2) * pow(var_chaste_interface__ionic_concentrations__Nai, 3));
         
         
-        rJacobian[0][0] = 1.0 - (mDt * (0.001 * ((2.0 * var_x21 + 50.0 * var_x23 + 7801.9226357407251 * var_x50 + 7.0160275741043607 * var_chaste_interface__membrane__V - 106.84935482199306 * var_x1 - 40.282206767891381 * var_x3 - 0.00073656881518639836 * var_x5 + 698346.2608190868 * var_x35 * var_x9 + 2.4381008236689765 * var_x53 * var_x55 + 0.6971162355083147 * var_x55 * var_x56 + 1150.0 * var_x7 * var_chaste_interface__calcium_dynamics__Cai + 5.5199999999999996 * var_x8 * var_x9 + 1500.0 * var_x12 / (1.0 + 100.0 * var_x10) + 23.862446088641736 * var_x36 * var_x9 + 1000.0 * var_x42 * (0.433 + var_x39) + 1000.0 * GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted) / HeartConfig::Instance()->GetCapacitance() + 16000.0 * var_x43 * (-26.712338705498265 * var_x1 + var_chaste_interface__membrane__V) < -150000.0) ? (-100500.0) : (-500.0))));
+        rJacobian[0][0] = 1.0 - (mDt * (0.001 * ((1.0 * (var_x17 + var_x55 + 0.0070160275741043606 * var_chaste_interface__membrane__V - 0.10684935482199306 * var_x1 - 7.3656881518639831e-7 * var_x3 + var_x37 * (0.433 + var_x34) + GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted) / HeartConfig::Instance()->GetCapacitance() + 16.0 * var_x38 * (-26.712338705498265 * var_x1 + var_chaste_interface__membrane__V) + 1.5 * var_x6 / (1.0 + 100.0 * var_x4) + 0.0055199999999999997 * var_x7 * var_x8 + 0.0024381008236689767 * var_x41 * var_x45 + 0.00069711623550831479 * var_x45 * var_x46 + 698.34626081908675 * var_x29 * var_x8 + 0.023862446088641735 * var_x30 * var_x8) / mParameters[0] < -150000.0) ? (-100500.0) : (-500.0))));
         rJacobian[0][1] = 0.0;
         rJacobian[0][2] = 0.0;
         rJacobian[0][3] = 0.0;
@@ -557,7 +553,7 @@
         rJacobian[0][10] = 0.0;
         rJacobian[0][11] = 0.0;
         rJacobian[1][0] = 0.0;
-        rJacobian[1][1] = 1.0 - (mDt * (0.001 * ((var_x57) ? (-100500.0) : (-500.0))));
+        rJacobian[1][1] = 1.0 - (mDt * (0.001 * ((var_x56) ? (-100500.0) : (-500.0))));
         rJacobian[1][2] = 0.0;
         rJacobian[1][3] = 0.0;
         rJacobian[1][4] = 0.0;
@@ -570,7 +566,7 @@
         rJacobian[1][11] = 0.0;
         rJacobian[2][0] = 0.0;
         rJacobian[2][1] = 0.0;
-        rJacobian[2][2] = 1.0 - (mDt * (0.001 * ((var_x57) ? (-100500.0) : (-10.0))));
+        rJacobian[2][2] = 1.0 - (mDt * (0.001 * ((var_x56) ? (-100500.0) : (-10.0))));
         rJacobian[2][3] = 0.0;
         rJacobian[2][4] = 0.0;
         rJacobian[2][5] = 0.0;
@@ -581,14 +577,14 @@
         rJacobian[2][10] = 0.0;
         rJacobian[2][11] = 0.0;
         rJacobian[3][0] = 0.0;
-        rJacobian[3][1] = -(mDt * (var_x65 * var_x70));
+        rJacobian[3][1] = -(mDt * (var_x64 * var_x69));
         rJacobian[3][2] = 0.0;
-        rJacobian[3][3] = 1.0 - (mDt * (var_x69 * (-5.5555555555555554 - var_x72) + 0.00025000000000000001 * (-var_x73 + 5.5555555555555554 * var_chaste_interface__calcium_dynamics__Ca_NSR - 5.5555555555555554 * var_chaste_interface__calcium_dynamics__Ca_JSR) / (pow(var_x66, 3) * pow((0.125 + var_x67), 2))));
-        rJacobian[3][4] = -(mDt * (0.0055555555555555558 * var_x68));
-        rJacobian[3][5] = -(mDt * (var_x69 * var_x72));
-        rJacobian[3][6] = -(mDt * (var_x70 * var_x75));
+        rJacobian[3][3] = 1.0 - (mDt * (var_x68 * (-5.5555555555555554 - var_x71) + 0.00025000000000000001 * (-var_x72 + 5.5555555555555554 * var_chaste_interface__calcium_dynamics__Ca_NSR - 5.5555555555555554 * var_chaste_interface__calcium_dynamics__Ca_JSR) / (pow(var_x65, 3) * pow((0.125 + var_x66), 2))));
+        rJacobian[3][4] = -(mDt * (0.0055555555555555558 * var_x67));
+        rJacobian[3][5] = -(mDt * (var_x68 * var_x71));
+        rJacobian[3][6] = -(mDt * (var_x69 * var_x74));
         rJacobian[3][7] = 0.0;
-        rJacobian[3][8] = -(mDt * (var_x70 * var_x76));
+        rJacobian[3][8] = -(mDt * (var_x69 * var_x75));
         rJacobian[3][9] = 0.0;
         rJacobian[3][10] = 0.0;
         rJacobian[3][11] = 0.0;
@@ -597,7 +593,7 @@
         rJacobian[4][2] = 0.0;
         rJacobian[4][3] = -(mDt * (0.00048309178743961351));
         rJacobian[4][4] = 1.0 - (mDt * (-0.00081642512077294684));
-        rJacobian[4][5] = -(mDt * (0.0050000000000000001 * var_x78 - 0.0050000000000000001 * var_x79));
+        rJacobian[4][5] = -(mDt * (0.0050000000000000001 * var_x77 - 0.0050000000000000001 * var_x78));
         rJacobian[4][6] = 0.0;
         rJacobian[4][7] = 0.0;
         rJacobian[4][8] = 0.0;
@@ -605,29 +601,29 @@
         rJacobian[4][10] = 0.0;
         rJacobian[4][11] = 0.0;
         rJacobian[5][0] = 0.0;
-        rJacobian[5][1] = -(mDt * (var_x65 * var_x85));
+        rJacobian[5][1] = -(mDt * (var_x64 * var_x84));
         rJacobian[5][2] = 0.0;
-        rJacobian[5][3] = -(mDt * (7.0588235294117641e-6 * var_x72 * var_x83));
-        rJacobian[5][4] = -(mDt * (2.7058823529411762e-5 * var_x83));
-        rJacobian[5][5] = 1.0 - (mDt * (var_x84 * (var_x94 - var_x86 + 0.40588235294117642 * var_x79 - 0.0070588235294117632 * var_x72) + 0.001 * (0.00023800000000000004 / pow(var_x80, 3) + 7.0000000000000007e-5 / pow(var_x6, 3)) * (0.027058823529411764 * var_chaste_interface__calcium_dynamics__Ca_NSR + 0.0070588235294117632 * var_x73 - var_x86 * var_chaste_interface__calcium_dynamics__Cai - var_x93 * (0.050000000000000003 * var_x23 + 0.003016 * var_chaste_interface__membrane__V + 7.8019226357407252 * var_x50 - 0.002 * var_x21 - 0.040282206767891383 * var_x3 + var_x87 * var_chaste_interface__calcium_dynamics__Cai)) / pow(var_x82, 2)));
-        rJacobian[5][6] = -(mDt * (var_x75 * var_x85));
+        rJacobian[5][3] = -(mDt * (7.0588235294117632e-6 * var_x71 * var_x82));
+        rJacobian[5][4] = -(mDt * (2.7058823529411762e-5 * var_x82));
+        rJacobian[5][5] = 1.0 - (mDt * (var_x83 * (var_x92 - var_x85 + 0.40588235294117642 * var_x78 - 0.0070588235294117632 * var_x71) + 0.001 * (0.00023800000000000004 / pow(var_x79, 3) + 7.0000000000000007e-5 / pow(var_x48, 3)) * (0.027058823529411764 * var_chaste_interface__calcium_dynamics__Ca_NSR + 0.0070588235294117632 * var_x72 - var_x85 * var_chaste_interface__calcium_dynamics__Cai - var_x91 * (var_x55 - var_x17 + 0.003016 * var_chaste_interface__membrane__V)) / pow(var_x81, 2)));
+        rJacobian[5][6] = -(mDt * (var_x74 * var_x84));
         rJacobian[5][7] = 0.0;
-        rJacobian[5][8] = -(mDt * (var_x76 * var_x85));
+        rJacobian[5][8] = -(mDt * (var_x75 * var_x84));
         rJacobian[5][9] = 0.0;
         rJacobian[5][10] = 0.0;
-        rJacobian[5][11] = -(mDt * (-9.0316078310111333e-5 * var_x83 * var_x92 * var_x98));
+        rJacobian[5][11] = -(mDt * (-9.0316078310111333e-5 * var_x82 * var_x90 * var_x96));
         rJacobian[6][0] = 0.0;
         rJacobian[6][1] = 0.0;
         rJacobian[6][2] = 0.0;
         rJacobian[6][3] = 0.0;
         rJacobian[6][4] = 0.0;
-        rJacobian[6][5] = -(mDt * (0.001 * ((var_x99) ? (var_x94) : (0))));
-        rJacobian[6][6] = 1.0 - (mDt * (0.001 * (((var_x99) || (var_chaste_interface__calcium_dynamics__APtrack2 > 0.01)) ? (0) : (-500.0))));
+        rJacobian[6][5] = -(mDt * (0.001 * ((var_x97) ? (var_x92) : (0))));
+        rJacobian[6][6] = 1.0 - (mDt * (0.001 * (((var_x97) || (var_chaste_interface__calcium_dynamics__APtrack2 > 0.01)) ? (0) : (-500.0))));
         rJacobian[6][7] = 0.0;
         rJacobian[6][8] = 0.0;
         rJacobian[6][9] = 0.0;
         rJacobian[6][10] = 0.0;
-        rJacobian[6][11] = -(mDt * (0.001 * ((var_x99) ? (-var_x93 * var_x98) : (0))));
+        rJacobian[6][11] = -(mDt * (0.001 * ((var_x97) ? (-var_x91 * var_x96) : (0))));
         rJacobian[7][0] = 0.0;
         rJacobian[7][1] = 0.0;
         rJacobian[7][2] = 0.0;
@@ -648,7 +644,7 @@
         rJacobian[8][5] = 0.0;
         rJacobian[8][6] = 0.0;
         rJacobian[8][7] = 0.0;
-        rJacobian[8][8] = 1.0 - (mDt * (0.001 * (((var_x100) && (var_chaste_interface__calcium_dynamics__OVRLDtrack2 < 0.97999999999999998)) ? (-50000.0) : (-500.0))));
+        rJacobian[8][8] = 1.0 - (mDt * (0.001 * (((var_x98) && (var_chaste_interface__calcium_dynamics__OVRLDtrack2 < 0.97999999999999998)) ? (-50000.0) : (-500.0))));
         rJacobian[8][9] = 0.0;
         rJacobian[8][10] = 0.0;
         rJacobian[8][11] = 0.0;
@@ -661,7 +657,7 @@
         rJacobian[9][6] = 0.0;
         rJacobian[9][7] = 0.0;
         rJacobian[9][8] = 0.0;
-        rJacobian[9][9] = 1.0 - (mDt * (0.001 * (((var_x100) && (var_chaste_interface__calcium_dynamics__OVRLDtrack3 < 0.97999999999999998)) ? (-50000.0) : (-10.0))));
+        rJacobian[9][9] = 1.0 - (mDt * (0.001 * (((var_x98) && (var_chaste_interface__calcium_dynamics__OVRLDtrack3 < 0.97999999999999998)) ? (-50000.0) : (-10.0))));
         rJacobian[9][10] = 0.0;
         rJacobian[9][11] = 0.0;
         rJacobian[10][0] = 0.0;
@@ -669,25 +665,25 @@
         rJacobian[10][2] = 0.0;
         rJacobian[10][3] = 0.0;
         rJacobian[10][4] = 0.0;
-        rJacobian[10][5] = -(mDt * (var_x102 * (4.1826974130498884e-7 * var_x101 * var_x56 - 2.3575679435995052e-7 * var_x2 * var_x37 * var_x42 / pow(var_x38, 2))));
+        rJacobian[10][5] = -(mDt * (var_x100 * (4.1826974130498884e-7 * var_x46 * var_x99 - 2.3575679435995052e-7 * var_x31 * var_x32 * var_x37 / pow(var_x33, 2))));
         rJacobian[10][6] = 0.0;
         rJacobian[10][7] = 0.0;
         rJacobian[10][8] = 0.0;
         rJacobian[10][9] = 0.0;
-        rJacobian[10][10] = 1.0 - (mDt * (var_x102 * (184.83763041301756 * var_x104 - 0.00052283717663123607 * var_x105 - 7.3656881518639831e-7 * var_x4 - 18654.461852717679 * var_x35 * var_x4 - 0.63742174226149029 * var_x36 * var_x4 - 0.14745210965435041 * var_x4 * var_x8 + 4449.089151873166 * var_x103 * var_x34 * var_x9 - 0.00067122862439358594 * var_x26 * var_x9 * (6498.310636886562 * var_x103 - 1000.0 * var_x29 * (1.053972635420138 * var_x30 * var_x4 + 1.6494869150645177 * var_x31 * var_x4) - 13738.155796237757 * var_x27 * var_x32 * var_x4 / pow(var_x28, 2)) / pow((var_x26 + 0.98039215686274506 * var_x33), 2))));
-        rJacobian[10][11] = -(mDt * (var_x102 * (3.3880737654706117 * var_x104 + 0.059999999999999998 * var_x106)));
+        rJacobian[10][10] = 1.0 - (mDt * (var_x100 * (184.83763041301756 * var_x102 - 0.00052283717663123607 * var_x103 - 7.3656881518639831e-7 * var_x2 - 18654.461852717679 * var_x2 * var_x29 - 0.63742174226149029 * var_x2 * var_x30 - 0.14745210965435041 * var_x2 * var_x7 + 4449.089151873166 * var_x101 * var_x28 * var_x8 - 0.00067122862439358594 * var_x20 * var_x8 * (6498.310636886562 * var_x101 - 1000.0 * var_x23 * (1.053972635420138 * var_x2 * var_x24 + 1.6494869150645177 * var_x2 * var_x25) - 13738.155796237757 * var_x2 * var_x21 * var_x26 / pow(var_x22, 2)) / pow((var_x20 + 0.98039215686274506 * var_x27), 2))));
+        rJacobian[10][11] = -(mDt * (var_x100 * (3.3880737654706117 * var_x102 + 0.059999999999999998 * var_x104)));
         rJacobian[11][0] = 0.0;
         rJacobian[11][1] = 0.0;
         rJacobian[11][2] = 0.0;
         rJacobian[11][3] = 0.0;
         rJacobian[11][4] = 0.0;
-        rJacobian[11][5] = -(mDt * (var_x102 * (2.6087319475749228e-6 * var_x90 + 4.1400000000000003e-5 * var_x89 + 13799.808000000001 * var_x88 + 1.4628604942013857e-6 * var_x101 * var_x53)));
+        rJacobian[11][5] = -(mDt * (var_x100 * (2.6087319475749228e-6 * var_x88 + 4.1400000000000003e-5 * var_x87 + 13799.808000000001 * var_x86 + 1.4628604942013857e-6 * var_x41 * var_x99)));
         rJacobian[11][6] = 0.0;
         rJacobian[11][7] = 0.0;
         rJacobian[11][8] = 0.0;
         rJacobian[11][9] = 0.0;
         rJacobian[11][10] = 0.0;
-        rJacobian[11][11] = 1.0 - (mDt * (var_x102 * (6.124934136868245e-12 * var_x96 - 0.032399999999999998 * var_x97 - 0.10684935482199306 * var_x0 - 0.0018285756177517324 * var_x105 - 0.089999999999999997 * var_x106 - 427.39741928797224 * var_x0 * var_x43)));
+        rJacobian[11][11] = 1.0 - (mDt * (var_x100 * (6.124934136868245e-12 * var_x94 - 0.032399999999999998 * var_x95 - 0.10684935482199306 * var_x0 - 0.0018285756177517324 * var_x103 - 0.089999999999999997 * var_x104 - 427.39741928797224 * var_x0 * var_x38)));
     }
 
     void Cellviswanathan_model_1999_epiFromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted)
@@ -756,7 +752,6 @@
         const double var_ionic_concentrations__Ko = 4.5; // millimolar
         const double var_ATP_sensitive_potassium_current__GKbaraATP = pow((0.25 * var_ionic_concentrations__Ko), var_ATP_sensitive_potassium_current__nATP) * var_ATP_sensitive_potassium_current__g_K_ATP * var_ATP_sensitive_potassium_current__pATP; // milliS_per_microF
         const double var_ionic_concentrations__Nao = 132.0; // millimolar
-        const double var_membrane__Cm = 0.001; // microF
         const double var_membrane__F = 96485.0; // coulomb_per_mole
         const double var_membrane__I_st_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
         const double var_membrane__I_st = var_membrane__I_st_converter / HeartConfig::Instance()->GetCapacitance(); // microA_per_microF
@@ -813,7 +808,7 @@
         const double var_transient_outward_current__g_to = 0; // milliS_per_microF
         const double var_transient_outward_current__rvdv = exp(0.01 * var_chaste_interface__membrane__V); // dimensionless
         const double var_transient_outward_current__i_to = pow(var_chaste_interface__transient_outward_current_zdv_gate__zdv, 3) * (-var_time_independent_potassium_current__E_K + var_chaste_interface__membrane__V) * var_transient_outward_current__g_to * var_transient_outward_current__rvdv * var_chaste_interface__transient_outward_current_ydv_gate__ydv; // microA_per_microF
-        const double var_membrane__dVdt = -1.0 * (var_ATP_sensitive_potassium_current__i_K_ATP + var_L_type_Ca_channel__i_Ca_L + var_Na_Ca_exchanger__i_NaCa + var_T_type_Ca_channel__i_Ca_T + var_calcium_background_current__i_Ca_b + var_fast_sodium_current__i_Na + var_membrane__I_st + var_non_specific_calcium_activated_current__i_ns_Ca + var_plateau_potassium_current__i_Kp + var_rapid_delayed_rectifier_potassium_current__i_Kr + var_sarcolemmal_calcium_pump__i_p_Ca + var_slow_delayed_rectifier_potassium_current__i_Ks + var_sodium_background_current__i_Na_b + var_sodium_potassium_pump__i_NaK + var_time_independent_potassium_current__i_K1 + var_transient_outward_current__i_to) / var_membrane__Cm; // dimensionless
+        const double var_membrane__dVdt = -1.0 * (var_ATP_sensitive_potassium_current__i_K_ATP + var_L_type_Ca_channel__i_Ca_L + var_Na_Ca_exchanger__i_NaCa + var_T_type_Ca_channel__i_Ca_T + var_calcium_background_current__i_Ca_b + var_fast_sodium_current__i_Na + var_membrane__I_st + var_non_specific_calcium_activated_current__i_ns_Ca + var_plateau_potassium_current__i_Kp + var_rapid_delayed_rectifier_potassium_current__i_Kr + var_sarcolemmal_calcium_pump__i_p_Ca + var_slow_delayed_rectifier_potassium_current__i_Ks + var_sodium_background_current__i_Na_b + var_sodium_potassium_pump__i_NaK + var_time_independent_potassium_current__i_K1 + var_transient_outward_current__i_to) / mParameters[0]; // dimensionless
         const double var_membrane__V_orig_deriv = var_membrane__dVdt; // millivolt / second
         const double d_dt_chaste_interface_var_membrane__V = 0.001 * var_membrane__V_orig_deriv; // millivolt / millisecond
         
@@ -864,10 +859,10 @@
         const double var_T_type_Ca_channel_b_gate__b_inf = 1.0 / (1.0 + exp(-1.2962962962962963 - 0.092592592592592587 * var_chaste_interface__membrane__V));
         const double var_T_type_Ca_channel_b_gate__tau_b = 0.0037000000000000002 + 0.0061000000000000004 / (1.0 + exp(5.5555555555555554 + 0.22222222222222221 * var_chaste_interface__membrane__V));
         const double var_T_type_Ca_channel_g_gate__g_inf = 1.0 / (1.0 + exp(10.714285714285715 + 0.17857142857142858 * var_chaste_interface__membrane__V));
-        const double var_T_type_Ca_channel_g_gate__tau_g = ((var_chaste_interface__membrane__V <= 0.0) ? (0.012 - 0.00087500000000000002 * var_chaste_interface__membrane__V) : (0.012));
-        const double var_fast_sodium_current_h_gate__alpha_h = ((var_chaste_interface__membrane__V < -40.0) ? (135.0 * exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__membrane__V)) : (0.0));
+        const double var_T_type_Ca_channel_g_gate__tau_g = ((var_chaste_interface__membrane__V <= 0) ? (0.012 - 0.00087500000000000002 * var_chaste_interface__membrane__V) : (0.012));
+        const double var_fast_sodium_current_h_gate__alpha_h = ((var_chaste_interface__membrane__V < -40.0) ? (135.0 * exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__membrane__V)) : (0));
         const double var_fast_sodium_current_h_gate__beta_h = ((var_chaste_interface__membrane__V < -40.0) ? (3560.0 * exp(0.079000000000000001 * var_chaste_interface__membrane__V) + 310000000.0 * exp(0.34999999999999998 * var_chaste_interface__membrane__V)) : (7692.3076923076933 / (1.0 + exp(-0.96036036036036043 - 0.0900900900900901 * var_chaste_interface__membrane__V))));
-        const double var_fast_sodium_current_j_gate__alpha_j = ((var_chaste_interface__membrane__V < -40.0) ? (1000.0 * (37.780000000000001 + var_chaste_interface__membrane__V) * (-127140.0 * exp(0.24440000000000001 * var_chaste_interface__membrane__V) - 3.4740000000000003e-5 * exp(-0.043909999999999998 * var_chaste_interface__membrane__V)) / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__membrane__V))) : (0.0));
+        const double var_fast_sodium_current_j_gate__alpha_j = ((var_chaste_interface__membrane__V < -40.0) ? (1000.0 * (37.780000000000001 + var_chaste_interface__membrane__V) * (-127140.0 * exp(0.24440000000000001 * var_chaste_interface__membrane__V) - 3.4740000000000003e-5 * exp(-0.043909999999999998 * var_chaste_interface__membrane__V)) / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__membrane__V))) : (0));
         const double var_fast_sodium_current_j_gate__beta_j = ((var_chaste_interface__membrane__V < -40.0) ? (121.2 * exp(-0.01052 * var_chaste_interface__membrane__V) / (1.0 + exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__membrane__V))) : (300.0 * exp(-2.5349999999999999e-7 * var_chaste_interface__membrane__V) / (1.0 + exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__membrane__V))));
         const double var_fast_sodium_current_m_gate__E0_m = 47.130000000000003 + var_chaste_interface__membrane__V;
         const double var_fast_sodium_current_m_gate__alpha_m = ((var_fast_sodium_current_m_gate__delta_m <= fabs(var_fast_sodium_current_m_gate__E0_m)) ? (320.0 * var_fast_sodium_current_m_gate__E0_m / (1.0 - exp(-0.10000000000000001 * var_fast_sodium_current_m_gate__E0_m))) : (3200.0));
@@ -916,6 +911,20 @@
         rY[22] = _guess[9];
         rY[24] = _guess[10];
         rY[23] = _guess[11];
+    }
+
+    std::vector<double> Cellviswanathan_model_1999_epiFromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+        const double var_membrane__I_st_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
+
+        std::vector<double> dqs(1);
+        dqs[0] = var_membrane__I_st_converter;
+        return dqs;
     }
 
 template<>
@@ -1049,6 +1058,14 @@ void OdeSystemInformation<Cellviswanathan_model_1999_epiFromCellMLBackwardEuler>
     this->mVariableNames.push_back("ionic_concentrations__Ki");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(137.6244);
+
+    // mParameters[0]:
+    this->mParameterNames.push_back("membrane_capacitance");
+    this->mParameterUnits.push_back("microF");
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     this->mInitialised = true;
 }

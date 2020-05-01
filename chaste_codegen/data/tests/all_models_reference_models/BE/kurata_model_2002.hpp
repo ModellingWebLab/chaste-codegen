@@ -28,11 +28,11 @@ class Cellkurata_model_2002FromCellMLBackwardEuler : public AbstractBackwardEule
         archive & boost::serialization::base_object<AbstractBackwardEulerCardiacCell<13> >(*this);
         
     }
-    
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     Cellkurata_model_2002FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);

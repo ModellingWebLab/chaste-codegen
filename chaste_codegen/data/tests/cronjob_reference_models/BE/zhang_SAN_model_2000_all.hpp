@@ -28,11 +28,11 @@ class Cellzhang_SAN_model_2000_allFromCellMLBackwardEuler : public AbstractBackw
         archive & boost::serialization::base_object<AbstractBackwardEulerCardiacCell<0> >(*this);
         
     }
-    
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     Cellzhang_SAN_model_2000_allFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);

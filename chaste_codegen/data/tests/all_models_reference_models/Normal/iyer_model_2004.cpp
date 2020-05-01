@@ -22,7 +22,6 @@
 #include "MathsCustomFunctions.hpp"
 
 
-
     Celliyer_model_2004FromCellML::Celliyer_model_2004FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
@@ -92,7 +91,7 @@
         const double var_COMPUTE_ICa_ICaK__a2_Ca = -1.0 + exp(2.0 * var_COMPUTE_ICa_ICaK__VF_over_RT); // dimensionless
         const double var_COMPUTE_ICa_ICaK__ICamax = 4.0 * var_COMPUTE_ICa_ICaK__PCa * var_COMPUTE_ICa_ICaK__VFsq_over_RT * var_COMPUTE_ICa_ICaK__a1_Ca / var_COMPUTE_ICa_ICaK__a2_Ca; // uA_per_uF
         const double var_COMPUTE_ICa_ICaK__ICa = var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__Open * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa * var_COMPUTE_ICa_ICaK__ICamax; // uA_per_uF
-        const double var_COMPUTE_ICa_ICaK__Icabar = ((var_COMPUTE_ICa_ICaK__ICamax >= 0.0) ? (0.0) : (var_COMPUTE_ICa_ICaK__ICamax)); // uA_per_uF
+        const double var_COMPUTE_ICa_ICaK__Icabar = ((var_COMPUTE_ICa_ICaK__ICamax >= 0) ? (0) : (var_COMPUTE_ICa_ICaK__ICamax)); // uA_per_uF
         const double var_COMPUTE_ICa_ICaK__PKprime = var_COMPUTE_ICa_ICaK__PK / (1.0 + var_COMPUTE_ICa_ICaK__Icabar / var_COMPUTE_ICa_ICaK__ICahalf); // litre_per_farad_second
         const double var_COMPUTE_ICa_ICaK__a2_K = -1.0 + exp(var_COMPUTE_ICa_ICaK__VF_over_RT); // dimensionless
         const double var_COMPUTE_ICa_ICaK__ICaK = var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__Open * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa * var_COMPUTE_ICa_ICaK__PKprime * var_COMPUTE_ICa_ICaK__VFsq_over_RT * var_COMPUTE_ICa_ICaK__a1_K / var_COMPUTE_ICa_ICaK__a2_K; // uA_per_uF
@@ -529,7 +528,7 @@
         const double var_COMPUTE_ICa_ICaK__a2_Ca = -1.0 + exp(2.0 * var_COMPUTE_ICa_ICaK__VF_over_RT); // dimensionless
         const double var_COMPUTE_ICa_ICaK__ICamax = 4.0 * var_COMPUTE_ICa_ICaK__PCa * var_COMPUTE_ICa_ICaK__VFsq_over_RT * var_COMPUTE_ICa_ICaK__a1_Ca / var_COMPUTE_ICa_ICaK__a2_Ca; // uA_per_uF
         const double var_COMPUTE_ICa_ICaK__ICa = var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__Open * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa * var_COMPUTE_ICa_ICaK__ICamax; // uA_per_uF
-        const double var_COMPUTE_ICa_ICaK__Icabar = ((var_COMPUTE_ICa_ICaK__ICamax >= 0.0) ? (0.0) : (var_COMPUTE_ICa_ICaK__ICamax)); // uA_per_uF
+        const double var_COMPUTE_ICa_ICaK__Icabar = ((var_COMPUTE_ICa_ICaK__ICamax >= 0) ? (0) : (var_COMPUTE_ICa_ICaK__ICamax)); // uA_per_uF
         const double var_COMPUTE_ICa_ICaK__PKprime = var_COMPUTE_ICa_ICaK__PK / (1.0 + var_COMPUTE_ICa_ICaK__Icabar / var_COMPUTE_ICa_ICaK__ICahalf); // litre_per_farad_second
         const double var_COMPUTE_ICa_ICaK__a2_K = -1.0 + exp(var_COMPUTE_ICa_ICaK__VF_over_RT); // dimensionless
         const double var_COMPUTE_ICa_ICaK__ICaK = var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__Open * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa * var_COMPUTE_ICa_ICaK__PKprime * var_COMPUTE_ICa_ICaK__VFsq_over_RT * var_COMPUTE_ICa_ICaK__a1_K / var_COMPUTE_ICa_ICaK__a2_K; // uA_per_uF
@@ -594,7 +593,7 @@
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__fKo = 0.5 * sqrt(var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ko); // dimensionless
         const double var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__CMDNtot = 0.050000000000000003; // mM
         const double var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__CSQNtot = 15.0; // mM
-        const double var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__EGTAtot = 0.0; // mM
+        const double var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__EGTAtot = 0; // mM
         const double var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__HTRPNtot = 0.14000000000000001; // mM
         const double var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__KmCMDN = 0.0023800000000000002; // mM
         const double var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__KmCSQN = 0.80000000000000004; // mM
@@ -864,6 +863,20 @@
         rDY[64] = d_dt_chaste_interface_var_IKs__C1ks;
         rDY[65] = d_dt_chaste_interface_var_IKs__O1ks;
         rDY[66] = d_dt_chaste_interface_var_IKs__O2ks;
+    }
+
+    std::vector<double> Celliyer_model_2004FromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+        const double var_I_stimulus__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
+
+        std::vector<double> dqs(1);
+        dqs[0] = var_I_stimulus__i_Stim_converter;
+        return dqs;
     }
 
 template<>
@@ -1207,6 +1220,10 @@ void OdeSystemInformation<Celliyer_model_2004FromCellML>::Initialise(void)
     this->mVariableNames.push_back("IKs__O2ks");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.298547822e-05);
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     
     this->mAttributes["SuggestedForwardEulerTimestep"] = 0.00001;

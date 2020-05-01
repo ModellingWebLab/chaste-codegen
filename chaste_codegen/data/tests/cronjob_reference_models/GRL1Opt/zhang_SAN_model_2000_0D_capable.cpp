@@ -22,15 +22,14 @@
 #include "MathsCustomFunctions.hpp"
 
 
-
     Cellzhang_SAN_model_2000_0D_capableFromCellMLGRL1::Cellzhang_SAN_model_2000_0D_capableFromCellMLGRL1(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractGeneralizedRushLarsenCardiacCell(
-           15,
+                15,
                 0,
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        //
+        // 
         this->mpSystemInfo = OdeSystemInformation<Cellzhang_SAN_model_2000_0D_capableFromCellMLGRL1>::Instance();
         Init();
         
@@ -461,11 +460,11 @@
             const double var_x0 = -0.16666666666666666 * var_chaste_interface__membrane__V;
             const double var_x1 = exp(-2.3500000000000001 + var_x0);
             const double var_x2 = 1.0 + var_x1;
-            const double var_x3 = exp(-1.5 - 0.025000000000000001 * var_chaste_interface__membrane__V);
-            const double var_x4 = 0.018714999999999999 * var_chaste_interface__membrane__V;
+            const double var_x3 = 0.018714999999999999 * var_chaste_interface__membrane__V;
+            const double var_x4 = exp(-1.5 - 0.025000000000000001 * var_chaste_interface__membrane__V);
             const double var_x5 = 13.441615999999998 - 0.28969 * var_chaste_interface__membrane__V;
             
-            partialF = -0.0048327079999999998 - 0.003322752 * var_chaste_interface__four_AP_sensitive_currents_r_gate__r - 0.054649999999999997 * var_chaste_interface__hyperpolarisation_activated_current_y_gate__y - 0.00173814 / var_x2 - 0.017225000000000001 * pow(var_chaste_interface__slow_delayed_rectifying_potassium_current_xs_gate__xs, 2) + (-0.015940800000000001 * var_chaste_interface__rapid_delayed_rectifying_potassium_current_P_as_gate__P_as - 0.023911200000000001 * var_chaste_interface__rapid_delayed_rectifying_potassium_current_P_af_gate__P_af) * var_chaste_interface__rapid_delayed_rectifying_potassium_current_P_i_gate__P_i - 0.21390300000000001 * var_chaste_interface__T_type_Ca_channel_d_gate__d_T * var_chaste_interface__T_type_Ca_channel_f_gate__f_T - 0.0068989604918571314 * var_x3 / pow((1 + 0.66666666666666663 * var_x3), 2) - 0.00013614499999999998 * (19.164159999999999 * exp(var_x4) + 51353.959999999999 * mParameters[0] * exp(-var_x4)) / (1.1024 + 274.40000000000003 * mParameters[0]) - 0.28969 * var_chaste_interface__L_type_Ca_channel_d_gate__d_L * var_chaste_interface__L_type_Ca_channel_f_gate__f_L - 0.24524999999999997 * var_chaste_interface__four_AP_sensitive_currents_q_gate__q * var_chaste_interface__four_AP_sensitive_currents_r_gate__r + 0.001 * var_x1 * var_x5 / pow(var_x2, 2);
+            partialF = -0.0048327079999999998 - 0.017225000000000001 * pow(var_chaste_interface__slow_delayed_rectifying_potassium_current_xs_gate__xs, 2) - 0.054649999999999997 * var_chaste_interface__hyperpolarisation_activated_current_y_gate__y - 0.00173814 / var_x2 - 0.003322752 * var_chaste_interface__four_AP_sensitive_currents_r_gate__r + (-0.015940800000000001 * var_chaste_interface__rapid_delayed_rectifying_potassium_current_P_as_gate__P_as - 0.023911199999999997 * var_chaste_interface__rapid_delayed_rectifying_potassium_current_P_af_gate__P_af) * var_chaste_interface__rapid_delayed_rectifying_potassium_current_P_i_gate__P_i - 0.21390299999999998 * var_chaste_interface__T_type_Ca_channel_d_gate__d_T * var_chaste_interface__T_type_Ca_channel_f_gate__f_T - 0.00013614499999999998 * (19.164159999999999 * exp(var_x3) + 51353.959999999999 * mParameters[0] * exp(-var_x3)) / (1.1024 + 274.40000000000003 * mParameters[0]) - 0.24524999999999997 * var_chaste_interface__four_AP_sensitive_currents_q_gate__q * var_chaste_interface__four_AP_sensitive_currents_r_gate__r - 0.28969 * var_chaste_interface__L_type_Ca_channel_d_gate__d_L * var_chaste_interface__L_type_Ca_channel_f_gate__f_L - 0.0068989604918571314 * var_x4 / pow((1 + 0.66666666666666663 * var_x4), 2) + 0.001 * var_x1 * var_x5 / pow(var_x2, 2);
         }
         else
         {
@@ -760,7 +759,7 @@
             const double var_x64 = exp(4.6163849154746419 + 0.065019505851755519 * var_chaste_interface__membrane__V);
             const double var_x65 = exp(-0.85234093637454988 - 0.012004801920768308 * var_chaste_interface__membrane__V);
             
-            partialF = -0.014999999999999999 * var_x64 - 0.015300000000000001 * var_x65;
+            partialF = -0.015300000000000001 * var_x65 - 0.014999999999999999 * var_x64;
         }
         else
         {
@@ -880,7 +879,7 @@
             const double var_x81 = exp(-0.56603773584905659 + 0.062893081761006289 * var_chaste_interface__membrane__V);
             const double var_x82 = exp(0.40000000000000002 - 0.044444444444444446 * var_chaste_interface__membrane__V);
             
-            partialF = -0.037200000000000004 * var_x81 - 0.00096000000000000002 * var_x82;
+            partialF = -0.00095999999999999992 * var_x82 - 0.037200000000000004 * var_x81;
         }
         else
         {
@@ -919,7 +918,7 @@
             const double var_x84 = exp(-0.52941176470588236 + 0.058823529411764705 * var_chaste_interface__membrane__V);
             const double var_x85 = exp(0.41666666666666663 - 0.046296296296296294 * var_chaste_interface__membrane__V);
             
-            partialF = -0.0042000000000000006 * var_x84 - 0.00014999999999999999 * var_x85;
+            partialF = -0.00014999999999999999 * var_x85 - 0.0042000000000000006 * var_x84;
         }
         else
         {

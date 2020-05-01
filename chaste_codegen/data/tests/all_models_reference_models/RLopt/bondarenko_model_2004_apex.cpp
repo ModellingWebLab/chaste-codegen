@@ -38,7 +38,6 @@
         return p_cellml_stim;
     }
 
-
     Cellbondarenko_model_2004_apexFromCellMLRushLarsen::Cellbondarenko_model_2004_apexFromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractRushLarsenCardiacCell(
                 41,
@@ -206,7 +205,7 @@
 
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
-        const double d_dt_chaste_interface_var_non_inactivating_steady_state_potassium_current__iKss = 0.0; // 1 / millisecond
+        const double d_dt_chaste_interface_var_non_inactivating_steady_state_potassium_current__iKss = 0; // 1 / millisecond
         const double d_dt_chaste_interface_var_calcium_buffering__HTRPN_Ca = -3.1999999999999999e-5 * var_chaste_interface__calcium_buffering__HTRPN_Ca + 0.0023700000000000001 * (140.0 - var_chaste_interface__calcium_buffering__HTRPN_Ca) * var_chaste_interface__calcium_concentration__Cai; // micromolar / millisecond
         const double d_dt_chaste_interface_var_calcium_buffering__LTRPN_Ca = -0.019599999999999999 * var_chaste_interface__calcium_buffering__LTRPN_Ca + 0.0327 * (70.0 - var_chaste_interface__calcium_buffering__LTRPN_Ca) * var_chaste_interface__calcium_concentration__Cai; // micromolar / millisecond
         const double d_dt_chaste_interface_var_L_type_calcium_current__C2 = 0.10000000000000001 * var_chaste_interface__L_type_calcium_current__C3 * exp(-0.92307692307692313 - 0.076923076923076927 * var_chaste_interface__membrane__V) - 0.050000000000000003 * var_chaste_interface__L_type_calcium_current__C2 * exp(-0.92307692307692313 - 0.076923076923076927 * var_chaste_interface__membrane__V) + 1.6000000000000001 * (1.0 + 0.69999999999999996 * exp(-160.0 * pow((1 + 0.025000000000000001 * var_chaste_interface__membrane__V), 2)) - 0.75 * exp(-1.0 * pow((1 + 0.050000000000000003 * var_chaste_interface__membrane__V), 2))) * (1.0 - var_chaste_interface__L_type_calcium_current__C3 - var_chaste_interface__L_type_calcium_current__C4 - var_chaste_interface__L_type_calcium_current__I1 - var_chaste_interface__L_type_calcium_current__I2 - var_chaste_interface__L_type_calcium_current__I3 - var_chaste_interface__L_type_calcium_current__O - 2 * var_chaste_interface__L_type_calcium_current__C2) * exp(1.2 + 0.10000000000000001 * var_chaste_interface__membrane__V) / (1.0 + 0.12 * exp(1.2 + 0.10000000000000001 * var_chaste_interface__membrane__V)) - 1.2000000000000002 * (1.0 + 0.69999999999999996 * exp(-160.0 * pow((1 + 0.025000000000000001 * var_chaste_interface__membrane__V), 2)) - 0.75 * exp(-1.0 * pow((1 + 0.050000000000000003 * var_chaste_interface__membrane__V), 2))) * var_chaste_interface__L_type_calcium_current__C2 * exp(1.2 + 0.10000000000000001 * var_chaste_interface__membrane__V) / (1.0 + 0.12 * exp(1.2 + 0.10000000000000001 * var_chaste_interface__membrane__V)); // 1 / millisecond
@@ -367,6 +366,20 @@
         rY[38] += mDt * rDY[38];
         rY[39] += mDt * rDY[39];
         rY[40] += mDt * rDY[40];
+    }
+
+    std::vector<double> Cellbondarenko_model_2004_apexFromCellMLRushLarsen::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+        const double var_membrane__i_stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
+
+        std::vector<double> dqs(1);
+        dqs[0] = var_membrane__i_stim_converter;
+        return dqs;
     }
 
 template<>
@@ -580,6 +593,10 @@ void OdeSystemInformation<Cellbondarenko_model_2004_apexFromCellMLRushLarsen>::I
     this->mVariableNames.push_back("rapid_delayed_rectifier_potassium_current__I_K");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(3.19129e-05);
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     
     this->mAttributes["SuggestedForwardEulerTimestep"] = 0.0002;

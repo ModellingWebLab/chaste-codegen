@@ -29,10 +29,11 @@ class Cellluo_rudy_1994FromCellMLCvodeDataClamp : public AbstractCvodeCellWithDa
         archive & boost::serialization::base_object<AbstractCvodeCellWithDataClamp >(*this);
         
     }
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

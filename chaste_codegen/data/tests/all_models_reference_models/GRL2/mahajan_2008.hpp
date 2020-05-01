@@ -28,9 +28,11 @@ class Cellmahajan_2008FromCellMLGRL2 : public AbstractGeneralizedRushLarsenCardi
         archive & boost::serialization::base_object<AbstractGeneralizedRushLarsenCardiacCell >(*this);
         
     }
+
     //
     // Settable parameters and readable variables
     //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
@@ -94,6 +96,7 @@ public:
     double EvaluateYDerivative25(double var_chaste_interface__Environment__time, std::vector<double>& rY);
     double EvaluatePartialDerivative25(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical=false);
 
+    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__Environment__time, const std::vector<double> & rY);
 };
 
 // Needs to be included last

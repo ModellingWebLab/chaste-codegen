@@ -1,5 +1,6 @@
 usage: chaste_codegen [-h] [--version] [-t TYPE] [-o OUTFILE] [-j]
-                      [-c CLASS_NAME] [-y] [-m] [--expose-annotated-variables]
+                      [-c CLASS_NAME] [-y] [-m]
+
                       cellml_file
 
 Chaste code generation for cellml.
@@ -43,6 +44,3 @@ Chaste options:
   -m, --use-modifiers   [experimental] add modifier functions for certain
                         metadata-annotated variables for use in sensitivity
                         analysis (only works if -t Chaste is used)
-  --expose-annotated-variables
-                        expose all oxmeta-annotated variables for access via
-                        the GetAnyVariable functionality

@@ -22,7 +22,6 @@
 #include "MathsCustomFunctions.hpp"
 
 
-
     Celliyer_model_2007FromCellMLRushLarsen::Celliyer_model_2007FromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractRushLarsenCardiacCell(
                 67,
@@ -145,11 +144,11 @@
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKr = (-var_COMPUTE_REVERSAL_POTENTIALS__EK + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GKr * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__fKo * var_chaste_interface__IKr__OHerg; // uA_per_uF
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKs = (-var_COMPUTE_REVERSAL_POTENTIALS__EK + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * (var_chaste_interface__IKs__O1ks + var_chaste_interface__IKs__O2ks) * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GKs; // uA_per_uF
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__INa = (-var_COMPUTE_REVERSAL_POTENTIALS__ENa + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * (var_chaste_interface__INa__na6 + var_chaste_interface__INa__na7) * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GNa; // uA_per_uF
-        const double var_environment__iso = 0.0; // dimensionless
-        const double var_COMPUTE_ICa_ICaK__PCa = ((var_environment__iso == 0.0) ? (0.00024689999999999998 * var_COMPUTE_ICa_ICaK__Pscale) : (0.00037034999999999998 * var_COMPUTE_ICa_ICaK__Pscale)); // litre_per_farad_second
+        const double var_environment__iso = 0; // dimensionless
+        const double var_COMPUTE_ICa_ICaK__PCa = ((var_environment__iso == 0) ? (0.00024689999999999998 * var_COMPUTE_ICa_ICaK__Pscale) : (0.00037034999999999998 * var_COMPUTE_ICa_ICaK__Pscale)); // litre_per_farad_second
         const double var_COMPUTE_ICa_ICaK__ICamax = 4.0 * var_COMPUTE_ICa_ICaK__PCa * var_COMPUTE_ICa_ICaK__VFsq_over_RT * var_COMPUTE_ICa_ICaK__a1_Ca / var_COMPUTE_ICa_ICaK__a2_Ca; // uA_per_uF
         const double var_COMPUTE_ICa_ICaK__ICa = var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__Open * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa * var_COMPUTE_ICa_ICaK__ICamax; // uA_per_uF
-        const double var_COMPUTE_ICa_ICaK__Icabar = ((var_COMPUTE_ICa_ICaK__ICamax >= 0.0) ? (0.0) : (var_COMPUTE_ICa_ICaK__ICamax)); // uA_per_uF
+        const double var_COMPUTE_ICa_ICaK__Icabar = ((var_COMPUTE_ICa_ICaK__ICamax >= 0) ? (0) : (var_COMPUTE_ICa_ICaK__ICamax)); // uA_per_uF
         const double var_COMPUTE_ICa_ICaK__PKprime = var_COMPUTE_ICa_ICaK__PK / (1.0 + var_COMPUTE_ICa_ICaK__Icabar / var_COMPUTE_ICa_ICaK__ICahalf); // litre_per_farad_second
         const double var_COMPUTE_ICa_ICaK__ICaK = var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__Open * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa * var_COMPUTE_ICa_ICaK__PKprime * var_COMPUTE_ICa_ICaK__VFsq_over_RT * var_COMPUTE_ICa_ICaK__a1_K / var_COMPUTE_ICa_ICaK__a2_K; // uA_per_uF
         const double var_I_stimulus__i_Stim = 0.0; // uA_per_uF
@@ -588,7 +587,7 @@
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKv14_Na = 0.02 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__OKv14 * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__PKv14 * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__VFsq_over_RT * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__a1_Na / var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__a2; // uA_per_uF
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__fKo = 0.5 * sqrt(var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ko); // dimensionless
         const double var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__CMDNtot = 0.050000000000000003; // mM
-        const double var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__EGTAtot = 0.0; // mM
+        const double var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__EGTAtot = 0; // mM
         const double var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__HTRPNtot = 0.14000000000000001; // mM
         const double var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__KmCMDN = 0.0023800000000000002; // mM
         const double var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__KmCSQN = 0.80000000000000004; // mM
@@ -765,14 +764,14 @@
         const double var_INa__k57 = var_INa__rho; // per_ms
         const double d_dt_chaste_interface_var_INa__na5 = var_INa__k125 * var_chaste_interface__INa__na12 + var_INa__k45 * var_chaste_interface__INa__na4 + var_INa__k65 * var_chaste_interface__INa__na6 + var_INa__k75 * var_chaste_interface__INa__na7 - (var_INa__k512 + var_INa__k54 + var_INa__k56 + var_INa__k57) * var_chaste_interface__INa__na5; // 1 / ms
         const double d_dt_chaste_interface_var_INa__na7 = var_INa__k57 * var_chaste_interface__INa__na5 + var_INa__k67 * var_chaste_interface__INa__na6 - (var_INa__k75 + var_INa__k76) * var_chaste_interface__INa__na7; // 1 / ms
-        const double var_environment__CSQN2 = 0.0; // dimensionless
+        const double var_environment__CSQN2 = 0; // dimensionless
         const double var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__H50C2O1 = ((var_environment__CSQN2 == 1.0) ? (0.5) : (1.0)); // mM
         const double var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__HmaxO1C2 = ((var_environment__CSQN2 == 1.0) ? (0.20000000000000001) : (0.5)); // dimensionless
         const double var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__klumenC2O1 = -(-var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__Hmin + var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__HmaxC2O1) / (1.0 + pow((var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__H50C2O1 / var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR), var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__HN)) + var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__HmaxC2O1; // dimensionless
         const double var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__klumenO1C2 = -(-var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__Hmin + var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__HmaxO1C2) / (1.0 + pow((var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__H50O1C2 / var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR), var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__HN)) + var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__HmaxO1C2; // dimensionless
         const double var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__dC2_RyR = var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR * var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__kcplus / var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__klumenO1C2 - var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__C2_RyR * var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__kcminus * var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__klumenC2O1; // per_ms
         const double d_dt_chaste_interface_var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__C2_RyR = var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__dC2_RyR; // 1 / ms
-        const double var_environment__RyR2 = 0.0; // dimensionless
+        const double var_environment__RyR2 = 0; // dimensionless
         const double var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__kryr = ((var_environment__RyR2 == 1.0) ? (0.80000000000000004) : (1.0)); // dimensionless
         const double var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__dC1_RyR = var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR * var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__kaminus - pow((1000.0 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS), (var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__kryr * var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__ncoop)) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__C1_RyR * var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__kaplus * var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__klumenC1O1; // per_ms
         const double var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__dO2_RyR = -var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O2_RyR * var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__kbminus + pow((1000.0 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS), (var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__kryr * var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__mcoop)) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR * var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__kbplus; // per_ms
@@ -783,14 +782,14 @@
         const double d_dt_chaste_interface_var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__C1_RyR = var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__dC1_RyR; // 1 / ms
         const double d_dt_chaste_interface_var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR = var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__dO1_RyR; // 1 / ms
         const double d_dt_chaste_interface_var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O2_RyR = var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__dO2_RyR; // 1 / ms
-        const double var_environment__iso = 0.0; // dimensionless
-        const double var_COMPUTE_ICa_ICaK__PCa = ((var_environment__iso == 0.0) ? (0.00024689999999999998 * var_COMPUTE_ICa_ICaK__Pscale) : (0.00037034999999999998 * var_COMPUTE_ICa_ICaK__Pscale)); // litre_per_farad_second
+        const double var_environment__iso = 0; // dimensionless
+        const double var_COMPUTE_ICa_ICaK__PCa = ((var_environment__iso == 0) ? (0.00024689999999999998 * var_COMPUTE_ICa_ICaK__Pscale) : (0.00037034999999999998 * var_COMPUTE_ICa_ICaK__Pscale)); // litre_per_farad_second
         const double var_COMPUTE_ICa_ICaK__ICamax = 4.0 * var_COMPUTE_ICa_ICaK__PCa * var_COMPUTE_ICa_ICaK__VFsq_over_RT * var_COMPUTE_ICa_ICaK__a1_Ca / var_COMPUTE_ICa_ICaK__a2_Ca; // uA_per_uF
         const double var_COMPUTE_ICa_ICaK__ICa = var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__Open * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa * var_COMPUTE_ICa_ICaK__ICamax; // uA_per_uF
-        const double var_COMPUTE_ICa_ICaK__Icabar = ((var_COMPUTE_ICa_ICaK__ICamax >= 0.0) ? (0.0) : (var_COMPUTE_ICa_ICaK__ICamax)); // uA_per_uF
+        const double var_COMPUTE_ICa_ICaK__Icabar = ((var_COMPUTE_ICa_ICaK__ICamax >= 0) ? (0) : (var_COMPUTE_ICa_ICaK__ICamax)); // uA_per_uF
         const double var_COMPUTE_ICa_ICaK__PKprime = var_COMPUTE_ICa_ICaK__PK / (1.0 + var_COMPUTE_ICa_ICaK__Icabar / var_COMPUTE_ICa_ICaK__ICahalf); // litre_per_farad_second
         const double var_COMPUTE_ICa_ICaK__ICaK = var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__Open * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa * var_COMPUTE_ICa_ICaK__PKprime * var_COMPUTE_ICa_ICaK__VFsq_over_RT * var_COMPUTE_ICa_ICaK__a1_K / var_COMPUTE_ICa_ICaK__a2_K; // uA_per_uF
-        const double var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Jup = ((var_environment__iso == 0.0) ? ((var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__fb * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__vmaxf - var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__rb * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__vmaxr) * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__KSR / (1.0 + var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__fb + var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__rb)) : (1.5 * (var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__fb * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__vmaxf - var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__rb * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__vmaxr) * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__KSR / (1.0 + var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__fb + var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__rb))); // mM_per_ms
+        const double var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Jup = ((var_environment__iso == 0) ? ((var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__fb * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__vmaxf - var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__rb * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__vmaxr) * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__KSR / (1.0 + var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__fb + var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__rb)) : (1.5 * (var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__fb * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__vmaxf - var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__rb * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__vmaxr) * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__KSR / (1.0 + var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__fb + var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__rb))); // mM_per_ms
         const double d_dt_chaste_interface_var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaNSR = var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Vmyo * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Jup / var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__VNSR - var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__VJSR * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Jtr / var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__VNSR; // mM / ms
         const double d_dt_chaste_interface_var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS = (-var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__a2 * var_COMPUTE_ICa_ICaK__ICa + var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__VJSR * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Jrel / var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__VSS - var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Vmyo * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Jxfer / var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__VSS) * var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__beta_SS; // mM / ms
         const double d_dt_chaste_interface_var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai = (-var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Jup - var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__Jtrpn - 0.5 * (-2.0 * var_COMPUTE_INaK_INaCa_ICab_IpCa__INaCa + var_COMPUTE_INaK_INaCa_ICab_IpCa__ICab + var_COMPUTE_INaK_INaCa_ICab_IpCa__IpCa) * var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__a1 + var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Jxfer) * var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__beta_i; // mM / ms
@@ -949,6 +948,20 @@
         rY[64] += mDt * rDY[64];
         rY[65] += mDt * rDY[65];
         rY[66] += mDt * rDY[66];
+    }
+
+    std::vector<double> Celliyer_model_2007FromCellMLRushLarsen::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+        const double var_I_stimulus__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
+
+        std::vector<double> dqs(1);
+        dqs[0] = var_I_stimulus__i_Stim_converter;
+        return dqs;
     }
 
 template<>
@@ -1292,6 +1305,10 @@ void OdeSystemInformation<Celliyer_model_2007FromCellMLRushLarsen>::Initialise(v
     this->mVariableNames.push_back("IKs__O2ks");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0258818770122187);
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     
     this->mAttributes["SuggestedForwardEulerTimestep"] = 0.00001;

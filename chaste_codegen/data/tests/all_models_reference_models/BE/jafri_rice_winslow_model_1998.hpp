@@ -28,11 +28,11 @@ class Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler : public Abstract
         archive & boost::serialization::base_object<AbstractBackwardEulerCardiacCell<25> >(*this);
         
     }
-    
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
@@ -43,6 +43,7 @@ public:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time);
     void ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time);
 
+    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY);
 };
 
 // Needs to be included last

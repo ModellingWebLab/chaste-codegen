@@ -22,7 +22,6 @@
 #include "MathsCustomFunctions.hpp"
 
 
-
     Celltest_V_not_state_derived_quantFromCellML::Celltest_V_not_state_derived_quantFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
@@ -78,21 +77,6 @@
         rDY[0] = d_dt_chaste_interface_var_membrane__V1;
     }
 
-    std::vector<double> Celltest_V_not_state_derived_quantFromCellML::ComputeDerivedQuantities(double var_chaste_interface__membrane__time_converted, const std::vector<double> & rY)
-    {
-        // Inputs:
-        // Time units: millisecond
-        
-
-        // Mathematics
-        const double var_membrane__time = 0.001 * var_chaste_interface__membrane__time_converted; // second
-        const double var_membrane__V_converted = 2000.0 * var_membrane__time; // millivolt
-
-        std::vector<double> dqs(1);
-        dqs[0] = var_membrane__V_converted;
-        return dqs;
-    }
-
 template<>
 void OdeSystemInformation<Celltest_V_not_state_derived_quantFromCellML>::Initialise(void)
 {
@@ -104,10 +88,6 @@ void OdeSystemInformation<Celltest_V_not_state_derived_quantFromCellML>::Initial
     this->mVariableNames.push_back("membrane__V1");
     this->mVariableUnits.push_back("volt");
     this->mInitialConditions.push_back(-69.1865);
-
-    // Derived Quantity index [0]:
-    this->mDerivedQuantityNames.push_back("membrane_voltage");
-    this->mDerivedQuantityUnits.push_back("millivolt");
 
     this->mInitialised = true;
 }

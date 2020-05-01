@@ -28,11 +28,11 @@ class Celliyer_model_2004FromCellMLBackwardEuler : public AbstractBackwardEulerC
         archive & boost::serialization::base_object<AbstractBackwardEulerCardiacCell<65> >(*this);
         
     }
-    
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     Celliyer_model_2004FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
@@ -42,6 +42,7 @@ public:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time);
     void ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time);
 
+    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY);
 };
 
 // Needs to be included last

@@ -29,17 +29,18 @@ class Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvode : public 
         archive & boost::serialization::base_object<AbstractCvodeCell >(*this);
         
     }
-    
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvode();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time, const N_Vector rY, N_Vector rDY);
+    N_Vector ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY);
 };
 
 // Needs to be included last

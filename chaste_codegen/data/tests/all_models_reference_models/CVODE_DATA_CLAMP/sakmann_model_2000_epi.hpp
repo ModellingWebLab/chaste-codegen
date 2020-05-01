@@ -29,10 +29,11 @@ class Cellsakmann_model_2000_epiFromCellMLCvodeDataClamp : public AbstractCvodeC
         archive & boost::serialization::base_object<AbstractCvodeCellWithDataClamp >(*this);
         
     }
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

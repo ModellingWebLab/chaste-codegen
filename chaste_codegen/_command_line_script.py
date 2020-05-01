@@ -63,9 +63,6 @@ def chaste_codegen():
                        action='store_true', default=False,
                        help='[experimental] add modifier functions for certain metadata-annotated variables '
                        'for use in sensitivity analysis (only works if -t Chaste is used)')
-    group.add_argument('--expose-annotated-variables', dest='expose_annotated_variables',
-                       action='store_true', default=False,
-                       help='expose all oxmeta-annotated variables for access via the GetAnyVariable functionality')
 
     # process options
     args = parser.parse_args()
