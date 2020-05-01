@@ -1,5 +1,5 @@
 usage: chaste_codegen [-h] [--version] [-t TYPE] [-o OUTFILE] [-j]
-                      [-c CLASS_NAME] [-y] [--expose-annotated-variables]
+                      [-c CLASS_NAME] [-y]
                       cellml_file
 
 Chaste code generation for cellml.
@@ -40,6 +40,3 @@ Chaste options:
   -y, --dll, --dynamically-loadable
                         add code to allow the model to be compiled to a shared
                         library and dynamically loaded
-  --expose-annotated-variables
-                        expose all oxmeta-annotated variables for access via
-                        the GetAnyVariable functionality

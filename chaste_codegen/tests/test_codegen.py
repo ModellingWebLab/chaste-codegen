@@ -1,6 +1,5 @@
 import logging
 import os
-import sys
 
 import cellmlmanip
 import pytest
@@ -170,30 +169,26 @@ def test_Cvode_jacobian(tmp_path, model):
     chaste_model = cg.CvodeChasteModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
                                        class_name=class_name, use_analytic_jacobian=True)
     chaste_model.generate_chaste_code()
-    # check if we are python 3.5 (< 3.6) and there is a different version of the reference
-    expected_cpp_path = model['expected_cpp_path']
-    assert sys.version_info.major == 3
-    if sys.version_info.minor < 6 and os.path.isfile(expected_cpp_path + '_3.5'):
-        expected_cpp_path += '_3.5'
 
     # Compare against reference
     test_utils.compare_model_against_reference('Cvode_with_jacobian', chaste_model,
                                                tmp_path, model['expected_hpp_path'],
-                                               expected_cpp_path)
+                                               model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_cvode_models)
 def test_Cvode(tmp_path, model):
     """ Check generation of Cvode models against reference"""
-    # Note: currently only implemented partia eval
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLCvode'
     LOGGER.info('Converting: Cvode: ' + class_name + '\n')
     # Generate chaste code
     chaste_model = cg.CvodeChasteModel(cellmlmanip.load_model(model['model']), model['model_name_from_file'],
                                        class_name=class_name)
     chaste_model.generate_chaste_code()
+
     # Compare against reference
-    test_utils.compare_model_against_reference('Cvode', chaste_model, tmp_path, model['expected_hpp_path'],
+    test_utils.compare_model_against_reference('Cvode', chaste_model,
+                                               tmp_path, model['expected_hpp_path'],
                                                model['expected_cpp_path'])
 
 
@@ -214,7 +209,7 @@ def test_Normal(tmp_path, model):
 @pytest.mark.parametrize(('model'), chaste_opt_models)
 def test_Opt(tmp_path, model):
     """ Check generation of Opt models against reference"""
-    # Note: currently only implemented partia eval
+    # Note: currently only implemented partial eval
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellML'
     LOGGER.info('Converting: Opt: ' + class_name + '\n')
     # Generate chaste code
@@ -224,144 +219,6 @@ def test_Opt(tmp_path, model):
     # Compare against reference
     test_utils.compare_model_against_reference('Opt', chaste_model, tmp_path, model['expected_hpp_path'],
                                                model['expected_cpp_path'])
-
-
-def test_dymaic_model(tmp_path):
-    tmp_path = str(tmp_path)
-    LOGGER.info('Converting: Normal Dynamic luo_rudy_1994\n')
-    model_file = \
-        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'luo_rudy_1994.cellml')
-    chaste_model = cellmlmanip.load_model(model_file)
-    chaste_model = cg.NormalChasteModel(chaste_model,
-                                        'dynamic_luo_rudy_1994',
-                                        class_name='Dynamicluo_rudy_1994FromCellML',
-                                        dynamically_loadable=True)
-    chaste_model.generate_chaste_code()
-    expected_hpp_path = \
-        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'Normal', 'dynamic_luo_rudy_1994.hpp')
-    expected_cpp_path = \
-        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'Normal', 'dynamic_luo_rudy_1994.cpp')
-    # Compare against reference
-    test_utils.compare_model_against_reference('Normal', chaste_model, tmp_path, expected_hpp_path,
-                                               expected_cpp_path)
-
-
-def test_dymaic_cvode(tmp_path):
-    tmp_path = str(tmp_path)
-    LOGGER.info('Converting: CVODE Dynamic luo_rudy_1994\n')
-    model_file = \
-        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'luo_rudy_1994.cellml')
-    chaste_model = cellmlmanip.load_model(model_file)
-    chaste_model = cg.CvodeChasteModel(chaste_model,
-                                       'dynamic_luo_rudy_1994',
-                                       class_name='Dynamicluo_rudy_1994FromCellMLCvode',
-                                       dynamically_loadable=True)
-    chaste_model.generate_chaste_code()
-    expected_hpp_path = \
-        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'Cvode', 'dynamic_luo_rudy_1994.hpp')
-    expected_cpp_path = \
-        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'Cvode', 'dynamic_luo_rudy_1994.cpp')
-    # Compare against reference
-    test_utils.compare_model_against_reference('Cvode', chaste_model, tmp_path, expected_hpp_path,
-                                               expected_cpp_path)
-
-
-def test_dynamic_BE(tmp_path):
-    tmp_path = str(tmp_path)
-    LOGGER.info('Converting: BE Dynamic luo_rudy_1994\n')
-    model_file = \
-        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'luo_rudy_1994.cellml')
-    chaste_model = cellmlmanip.load_model(model_file)
-    chaste_model = cg.BackwardEulerModel(chaste_model, 'dynamic_luo_rudy_1994',
-                                         class_name='Dynamicluo_rudy_1994FromCellMLBackwardEuler',
-                                         dynamically_loadable=True)
-    chaste_model.generate_chaste_code()
-    expected_hpp_path = \
-        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'BE', 'dynamic_luo_rudy_1994.hpp')
-    expected_cpp_path = \
-        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'BE', 'dynamic_luo_rudy_1994.cpp')
-    # Compare against reference
-    test_utils.compare_model_against_reference('BE', chaste_model, tmp_path, expected_hpp_path,
-                                               expected_cpp_path)
-
-
-def test_dynamic_RL(tmp_path):
-    tmp_path = str(tmp_path)
-    LOGGER.info('Converting: RL Dynamic luo_rudy_1994\n')
-    model_file = \
-        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'luo_rudy_1994.cellml')
-    chaste_model = cellmlmanip.load_model(model_file)
-    chaste_model = cg.RushLarsenModel(chaste_model, 'dynamic_luo_rudy_1994',
-                                      class_name='Dynamicluo_rudy_1994FromCellMLRushLarsen',
-                                      dynamically_loadable=True)
-    chaste_model.generate_chaste_code()
-    expected_hpp_path = \
-        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'RL', 'dynamic_luo_rudy_1994.hpp')
-    expected_cpp_path = \
-        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'RL', 'dynamic_luo_rudy_1994.cpp')
-    # Compare against reference
-    test_utils.compare_model_against_reference('RL', chaste_model, tmp_path, expected_hpp_path,
-                                               expected_cpp_path)
-
-
-def test_dynamic_GRL1(tmp_path):
-    tmp_path = str(tmp_path)
-    LOGGER.info('Converting: Generalised Rush Larsen First order Dynamic luo_rudy_1994\n')
-    model_file = \
-        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'luo_rudy_1994.cellml')
-    chaste_model = cellmlmanip.load_model(model_file)
-    chaste_model = cg.GeneralisedRushLarsenFirstOrderModel(chaste_model, 'dynamic_luo_rudy_1994',
-                                                           class_name='Dynamicluo_rudy_1994FromCellMLGRL1',
-                                                           dynamically_loadable=True)
-    chaste_model.generate_chaste_code()
-    expected_hpp_path = \
-        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'GRL1', 'dynamic_luo_rudy_1994.hpp')
-    expected_cpp_path = \
-        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'GRL1', 'dynamic_luo_rudy_1994.cpp')
-    # Compare against reference
-    test_utils.compare_model_against_reference('GRL1', chaste_model, tmp_path, expected_hpp_path,
-                                               expected_cpp_path)
-
-
-def test_dynamic_GRL2(tmp_path):
-    tmp_path = str(tmp_path)
-    LOGGER.info('Converting: Generalised Rush Larsen Second order Dynamic luo_rudy_1994\n')
-    model_file = \
-        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'luo_rudy_1994.cellml')
-    chaste_model = cellmlmanip.load_model(model_file)
-    chaste_model = cg.GeneralisedRushLarsenSecondOrderModel(chaste_model, 'dynamic_luo_rudy_1994',
-                                                            class_name='Dynamicluo_rudy_1994FromCellMLGRL2',
-                                                            dynamically_loadable=True)
-    chaste_model.generate_chaste_code()
-    expected_hpp_path = \
-        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'GRL2', 'dynamic_luo_rudy_1994.hpp')
-    expected_cpp_path = \
-        os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'GRL2', 'dynamic_luo_rudy_1994.cpp')
-    # Compare against reference
-    test_utils.compare_model_against_reference('GRL2', chaste_model, tmp_path, expected_hpp_path,
-                                               expected_cpp_path)
-
-
-def testexpose_annotated_variables(tmp_path):
-    tmp_path = str(tmp_path)
-    LOGGER.info('Testing expose_annotated_variables option\n')
-    model_file = \
-        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'aslanidi_model_2009.cellml')
-    chaste_model = cellmlmanip.load_model(model_file)
-
-    chaste_model = cg.NormalChasteModel(chaste_model,
-                                        'expose_annotated_variables_cellaslanidi_model_2009',
-                                        class_name='Cellaslanidi_model_2009FromCellML',
-                                        expose_annotated_variables=True)
-
-    chaste_model.generate_chaste_code()
-    expected_hpp_path = os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'Normal',
-                                     'expose_annotated_variables_cellaslanidi_model_2009.hpp')
-    expected_cpp_path = os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'Normal',
-                                     'expose_annotated_variables_cellaslanidi_model_2009.cpp')
-    # Compare against reference
-    test_utils.compare_model_against_reference('Normal', chaste_model, tmp_path,
-                                               expected_hpp_path, expected_cpp_path)
 
 
 def test_missing_capacitance(tmp_path):

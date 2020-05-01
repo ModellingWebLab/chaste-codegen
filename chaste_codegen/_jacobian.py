@@ -10,17 +10,17 @@ def get_jacobian(state_vars, derivative_equations):
              The list of common expressions is of the form [('var_x1', <expression>), ..]
              The jacobian Matrix is an sympy.Matrix
     """
-    if len(state_vars) == 0:
-        return [], sp.Matrix([])
-    jacobian_equations, jacobian_matrix = [], []
-    state_var_matrix = sp.Matrix(state_vars)
-    # sort by state var
-    derivative_eqs = sorted(derivative_equations, key=lambda d: state_vars.index(d.lhs.args[0]))
-    # we're only interested in the rhs
-    derivative_eqs = [eq.rhs for eq in derivative_eqs]
-    derivative_eq_matrix = sp.Matrix(derivative_eqs)
-    jacobian_matrix = derivative_eq_matrix.jacobian(state_var_matrix)
-    jacobian_equations, jacobian_matrix = sp.cse(jacobian_matrix, order='none')
+    jacobian_equations, jacobian_matrix = [], sp.Matrix([])
+    if len(state_vars) > 0:
+        jacobian_equations, jacobian_matrix = [], []
+        state_var_matrix = sp.Matrix(state_vars)
+        # sort by state var
+        derivative_eqs = sorted(derivative_equations, key=lambda d: state_vars.index(d.lhs.args[0]))
+        # we're only interested in the rhs
+        derivative_eqs = [eq.rhs for eq in derivative_eqs]
+        derivative_eq_matrix = sp.Matrix(derivative_eqs)
+        jacobian_matrix = derivative_eq_matrix.jacobian(state_var_matrix)
+        jacobian_equations, jacobian_matrix = sp.cse(jacobian_matrix, order='none')
     return jacobian_equations, sp.Matrix(jacobian_matrix)
 
 

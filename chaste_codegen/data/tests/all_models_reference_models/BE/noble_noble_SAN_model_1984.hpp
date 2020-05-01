@@ -28,11 +28,11 @@ class Cellnoble_noble_SAN_model_1984FromCellMLBackwardEuler : public AbstractBac
         archive & boost::serialization::base_object<AbstractBackwardEulerCardiacCell<7> >(*this);
         
     }
-    
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     double GetIntracellularCalciumConcentration();

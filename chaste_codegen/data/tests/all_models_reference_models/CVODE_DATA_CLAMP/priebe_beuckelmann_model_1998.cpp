@@ -27,7 +27,7 @@
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__cell__stim_amplitude = -15.0 * HeartConfig::Instance()->GetCapacitance(); // uA_per_uF
         const double var_chaste_interface__cell__stim_duration = 3.0; // millisecond
-        const double var_chaste_interface__cell__stim_offset = 0.0; // millisecond
+        const double var_chaste_interface__cell__stim_offset = 0; // millisecond
         const double var_chaste_interface__cell__stim_period = 1000.0; // millisecond
         boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__cell__stim_amplitude),
@@ -43,7 +43,8 @@
     {
         return NV_Ith_S(mStateVariables, 1);
     }
-       
+    
+   
     Cellpriebe_beuckelmann_model_1998FromCellMLCvodeDataClamp::Cellpriebe_beuckelmann_model_1998FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCellWithDataClamp(
                 pOdeSolver,
@@ -59,7 +60,10 @@
         // We have a default stimulus specified in the CellML file metadata
         this->mHasDefaultStimulusFromCellML = true;
         
-        NV_Ith_S(this->mParameters, 0) = 0.0; // (var_membrane_data_clamp_current_conductance) [dimensionless]
+        NV_Ith_S(this->mParameters, 0) = 0.064000000000000001; // (var_ICa__g_Ca_max) [mS_per_uF]
+        NV_Ith_S(this->mParameters, 1) = 0.0; // (var_membrane_data_clamp_current_conductance) [dimensionless]
+        NV_Ith_S(this->mParameters, 2) = 16.0; // (var_INa__g_Na) [mS_per_uF]
+        NV_Ith_S(this->mParameters, 3) = 0.014999999999999999; // (var_IKr__g_Kr_max) [mS_per_uF]
     }
 
     Cellpriebe_beuckelmann_model_1998FromCellMLCvodeDataClamp::~Cellpriebe_beuckelmann_model_1998FromCellMLCvodeDataClamp()
@@ -108,11 +112,8 @@
         double var_chaste_interface__Ionic_concentrations__Ki = NV_Ith_S(rY, 19);
         // Units: mM; Initial value: 140.0
         
-        const double var_ICa__g_Ca_max = 0.064000000000000001; // mS_per_uF
         const double var_ICa_f_Ca_gate__Km_Ca = 0.00059999999999999995; // mM
-        const double var_IKr__g_Kr_max = 0.014999999999999999; // mS_per_uF
         const double var_IKs__g_Ks_max = 0.02; // mS_per_uF
-        const double var_INa__g_Na = 16.0; // mS_per_uF
         const double var_INaCa__K_mCa = 1.3799999999999999; // mM
         const double var_INaCa__K_mNa = 87.5; // mM
         const double var_INaCa__K_sat = 0.10000000000000001; // dimensionless
@@ -134,27 +135,27 @@
         const double var_IKs__E_Ks = log((1.0 * var_Ionic_concentrations__Ko + 0.018329999999999999 * var_Ionic_concentrations__Nao) / (1.0 * var_chaste_interface__Ionic_concentrations__Ki + 0.018329999999999999 * var_chaste_interface__Ionic_concentrations__Nai)) / var_cell__FonRT; // mV
         const double var_INa__E_Na = log(var_Ionic_concentrations__Nao / var_chaste_interface__Ionic_concentrations__Nai) / var_cell__FonRT; // mV
         const double var_Ito__E_to = log((1.0 * var_Ionic_concentrations__Ko + 0.042999999999999997 * var_Ionic_concentrations__Nao) / (1.0 * var_chaste_interface__Ionic_concentrations__Ki + 0.042999999999999997 * var_chaste_interface__Ionic_concentrations__Nai)) / var_cell__FonRT; // mV
-        const double var_ICa__i_Ca = (-var_ICa__E_Ca + var_chaste_interface__cell__V) * var_ICa__g_Ca_max * var_chaste_interface__ICa_d_gate__d * var_ICa_f_Ca_gate__f_Ca * var_chaste_interface__ICa_f_gate__f; // uA_per_uF
+        const double var_ICa__i_Ca = (-var_ICa__E_Ca + var_chaste_interface__cell__V) * NV_Ith_S(mParameters, 0) * var_chaste_interface__ICa_d_gate__d * var_ICa_f_Ca_gate__f_Ca * var_chaste_interface__ICa_f_gate__f; // uA_per_uF
         const double var_IK1_K1_gate__alpha_K1 = 0.10000000000000001 / (1.0 + exp(-12.0 + 0.059999999999999998 * var_chaste_interface__cell__V - 0.059999999999999998 * var_IK1__E_K1)); // per_ms
         const double var_IK1_K1_gate__beta_K1 = (1.0 * exp(-1.0 + 0.10000000000000001 * var_chaste_interface__cell__V - 0.10000000000000001 * var_IK1__E_K1) + 3.0 * exp(0.02 + 0.00020000000000000001 * var_chaste_interface__cell__V - 0.00020000000000000001 * var_IK1__E_K1)) / (1.0 + exp(0.5 * var_IK1__E_K1 - 0.5 * var_chaste_interface__cell__V)); // per_ms
         const double var_IK1_K1_gate__K1_infinity = var_IK1_K1_gate__alpha_K1 / (var_IK1_K1_gate__alpha_K1 + var_IK1_K1_gate__beta_K1); // dimensionless
         const double var_IKr__rik = 1.0 / (1.0 + exp(1.1304347826086956 + 0.043478260869565216 * var_chaste_interface__cell__V)); // dimensionless
-        const double var_IKr__i_Kr = (-var_IKr__E_K + var_chaste_interface__cell__V) * var_IKr__g_Kr_max * var_IKr__rik * var_chaste_interface__IKr_Xr_gate__Xr; // uA_per_uF
+        const double var_IKr__i_Kr = (-var_IKr__E_K + var_chaste_interface__cell__V) * NV_Ith_S(mParameters, 3) * var_IKr__rik * var_chaste_interface__IKr_Xr_gate__Xr; // uA_per_uF
         const double var_IKs__i_Ks = pow(var_chaste_interface__IKs_Xs_gate__Xs, 2) * (-var_IKs__E_Ks + var_chaste_interface__cell__V) * var_IKs__g_Ks_max; // uA_per_uF
-        const double var_INa__i_Na = pow(var_chaste_interface__INa_m_gate__m, 3) * (-var_INa__E_Na + var_chaste_interface__cell__V) * var_INa__g_Na * var_chaste_interface__INa_h_gate__h * var_chaste_interface__INa_j_gate__j; // uA_per_uF
+        const double var_INa__i_Na = pow(var_chaste_interface__INa_m_gate__m, 3) * (-var_INa__E_Na + var_chaste_interface__cell__V) * NV_Ith_S(mParameters, 2) * var_chaste_interface__INa_h_gate__h * var_chaste_interface__INa_j_gate__j; // uA_per_uF
         const double var_INaK__f_NaK = 1.0 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_cell__FonRT * var_chaste_interface__cell__V) + 0.036499999999999998 * var_INaK__sigma * exp(-var_cell__FonRT * var_chaste_interface__cell__V)); // dimensionless
-        const double var_cell__failing = 0.0; // dimensionless
-        const double var_ICab__g_b_Ca_max = ((var_cell__failing == 0.0) ? (0.00084999999999999995) : (0.0012999999999999999)); // mS_per_uF
+        const double var_cell__failing = 0; // dimensionless
+        const double var_ICab__g_b_Ca_max = ((var_cell__failing == 0) ? (0.00084999999999999995) : (0.0012999999999999999)); // mS_per_uF
         const double var_ICab__i_b_Ca = (-var_ICa__E_Ca + var_chaste_interface__cell__V) * var_ICab__g_b_Ca_max; // uA_per_uF
-        const double var_IK1__g_K1_max = ((var_cell__failing == 0.0) ? (2.5) : (2.0)); // mS_per_uF
+        const double var_IK1__g_K1_max = ((var_cell__failing == 0) ? (2.5) : (2.0)); // mS_per_uF
         const double var_IK1__i_K1 = (-var_IK1__E_K1 + var_chaste_interface__cell__V) * var_IK1__g_K1_max * var_IK1_K1_gate__K1_infinity; // uA_per_uF
-        const double var_INaCa__K_NaCa = ((var_cell__failing == 0.0) ? (1000.0) : (1650.0)); // uA_per_uF
+        const double var_INaCa__K_NaCa = ((var_cell__failing == 0) ? (1000.0) : (1650.0)); // uA_per_uF
         const double var_INaCa__i_NaCa = 1.0 * (pow(var_chaste_interface__Ionic_concentrations__Nai, 3) * var_Ionic_concentrations__Cao * exp(var_INaCa__eta * var_cell__FonRT * var_chaste_interface__cell__V) - pow(var_Ionic_concentrations__Nao, 3) * var_chaste_interface__Ionic_concentrations__Cai * exp((-1.0 + var_INaCa__eta) * var_cell__FonRT * var_chaste_interface__cell__V)) * var_INaCa__K_NaCa / ((1.0 + var_INaCa__K_sat * exp((-1.0 + var_INaCa__eta) * var_cell__FonRT * var_chaste_interface__cell__V)) * (pow(var_INaCa__K_mNa, 3) + pow(var_Ionic_concentrations__Nao, 3)) * (var_INaCa__K_mCa + var_Ionic_concentrations__Cao)); // uA_per_uF
-        const double var_INaK__I_NaK_max = ((var_cell__failing == 0.0) ? (1.3) : (0.75)); // uA_per_uF
+        const double var_INaK__I_NaK_max = ((var_cell__failing == 0) ? (1.3) : (0.75)); // uA_per_uF
         const double var_INaK__i_NaK = 1.0 * var_INaK__I_NaK_max * var_INaK__f_NaK * var_Ionic_concentrations__Ko / ((1.0 + pow((var_INaK__K_mNai / var_chaste_interface__Ionic_concentrations__Nai), 1.5)) * (var_INaK__K_mKo + var_Ionic_concentrations__Ko)); // uA_per_uF
-        const double var_INab__g_b_Na_max = ((var_cell__failing == 0.0) ? (0.001) : (0.0)); // mS_per_uF
+        const double var_INab__g_b_Na_max = ((var_cell__failing == 0) ? (0.001) : (0)); // mS_per_uF
         const double var_INab__i_b_Na = (-var_INa__E_Na + var_chaste_interface__cell__V) * var_INab__g_b_Na_max; // uA_per_uF
-        const double var_Ito__g_to_max = ((var_cell__failing == 0.0) ? (0.29999999999999999) : (0.191)); // mS_per_uF
+        const double var_Ito__g_to_max = ((var_cell__failing == 0) ? (0.29999999999999999) : (0.191)); // mS_per_uF
         const double var_Ito__i_to = (-var_Ito__E_to + var_chaste_interface__cell__V) * var_Ito__g_to_max * var_chaste_interface__Ito_r_gate__r * var_chaste_interface__Ito_t_gate__t; // uA_per_uF
         const double var_cell__i_Stim = 0.0; // uA_per_uF
         const double var_cell__I_tot = var_ICa__i_Ca + var_ICab__i_b_Ca + var_IK1__i_K1 + var_IKr__i_Kr + var_IKs__i_Ks + var_INa__i_Na + var_INaCa__i_NaCa + var_INaK__i_NaK + var_INab__i_b_Na + var_Ito__i_to + var_cell__i_Stim; // uA_per_uF
@@ -225,11 +226,8 @@
         const double d_dt_chaste_interface_var_Irel__OVRLDtrack = 0; // 1 / ms
         const double d_dt_chaste_interface_var_Irel__OVRLDtrack2 = 0; // 1 / ms
         const double d_dt_chaste_interface_var_Irel__OVRLDtrack3 = 0; // 1 / ms
-        const double var_ICa__g_Ca_max = 0.064000000000000001; // mS_per_uF
         const double var_ICa_f_Ca_gate__Km_Ca = 0.00059999999999999995; // mM
-        const double var_IKr__g_Kr_max = 0.014999999999999999; // mS_per_uF
         const double var_IKs__g_Ks_max = 0.02; // mS_per_uF
-        const double var_INa__g_Na = 16.0; // mS_per_uF
         const double var_INaCa__K_mCa = 1.3799999999999999; // mM
         const double var_INaCa__K_mNa = 87.5; // mM
         const double var_INaCa__K_sat = 0.10000000000000001; // dimensionless
@@ -252,7 +250,7 @@
         const double var_Irel__G_rel_max = 22.0; // per_ms
         const double var_Irel__K_mrel = 0.00080000000000000004; // mM
         const double var_Irel__delta_Ca_ith = 5.0000000000000004e-6; // mM
-        const double var_Irel__G_rel = ((var_chaste_interface__Irel__Cainfluxtrack > var_Irel__delta_Ca_ith) ? (1.0 * (1.0 - var_chaste_interface__Irel__APtrack2) * (-var_Irel__delta_Ca_ith + var_chaste_interface__Irel__Cainfluxtrack) * var_chaste_interface__Irel__APtrack2 * var_Irel__G_rel_max / (-var_Irel__delta_Ca_ith + var_chaste_interface__Irel__Cainfluxtrack + var_Irel__K_mrel)) : (0.0)); // per_ms
+        const double var_Irel__G_rel = ((var_chaste_interface__Irel__Cainfluxtrack > var_Irel__delta_Ca_ith) ? (1.0 * (1.0 - var_chaste_interface__Irel__APtrack2) * (-var_Irel__delta_Ca_ith + var_chaste_interface__Irel__Cainfluxtrack) * var_chaste_interface__Irel__APtrack2 * var_Irel__G_rel_max / (-var_Irel__delta_Ca_ith + var_chaste_interface__Irel__Cainfluxtrack + var_Irel__K_mrel)) : (0)); // per_ms
         const double var_Irel__i_rel = (-var_chaste_interface__Ionic_concentrations__Cai + var_chaste_interface__Ionic_concentrations__Ca_JSR) * var_Irel__G_rel; // mM_per_ms
         const double var_Itr__tau_tr = 180.0; // ms
         const double var_Itr__i_tr = 1.0 * (-var_chaste_interface__Ionic_concentrations__Ca_JSR + var_chaste_interface__Ionic_concentrations__Ca_NSR) / var_Itr__tau_tr; // mM_per_ms
@@ -278,7 +276,7 @@
         const double var_IKs__E_Ks = log((1.0 * var_Ionic_concentrations__Ko + 0.018329999999999999 * var_Ionic_concentrations__Nao) / (1.0 * var_chaste_interface__Ionic_concentrations__Ki + 0.018329999999999999 * var_chaste_interface__Ionic_concentrations__Nai)) / var_cell__FonRT; // mV
         const double var_INa__E_Na = log(var_Ionic_concentrations__Nao / var_chaste_interface__Ionic_concentrations__Nai) / var_cell__FonRT; // mV
         const double var_Ito__E_to = log((1.0 * var_Ionic_concentrations__Ko + 0.042999999999999997 * var_Ionic_concentrations__Nao) / (1.0 * var_chaste_interface__Ionic_concentrations__Ki + 0.042999999999999997 * var_chaste_interface__Ionic_concentrations__Nai)) / var_cell__FonRT; // mV
-        const double var_ICa__i_Ca = (-var_ICa__E_Ca + var_chaste_interface__cell__V) * var_ICa__g_Ca_max * var_chaste_interface__ICa_d_gate__d * var_ICa_f_Ca_gate__f_Ca * var_chaste_interface__ICa_f_gate__f; // uA_per_uF
+        const double var_ICa__i_Ca = (-var_ICa__E_Ca + var_chaste_interface__cell__V) * NV_Ith_S(mParameters, 0) * var_chaste_interface__ICa_d_gate__d * var_ICa_f_Ca_gate__f_Ca * var_chaste_interface__ICa_f_gate__f; // uA_per_uF
         const double var_ICa_d_gate__alpha_d = 0.63524014987941491 * exp(-0.89836705491478086 * pow((-1 + 0.044722719141323794 * var_chaste_interface__cell__V), 2)) / sqrt(M_PI); // per_ms
         const double var_ICa_d_gate__beta_d = 0.14710000000000001 - 0.25101580310038191 * exp(-0.08830693125184777 * pow((-1 + 0.15937778911130945 * var_chaste_interface__cell__V), 2)) / sqrt(M_PI); // per_ms
         const double d_dt_chaste_interface_var_ICa_d_gate__d = (1.0 - var_chaste_interface__ICa_d_gate__d) * var_ICa_d_gate__alpha_d - var_ICa_d_gate__beta_d * var_chaste_interface__ICa_d_gate__d; // 1 / ms
@@ -289,7 +287,7 @@
         const double var_IK1_K1_gate__beta_K1 = (1.0 * exp(-1.0 + 0.10000000000000001 * var_chaste_interface__cell__V - 0.10000000000000001 * var_IK1__E_K1) + 3.0 * exp(0.02 + 0.00020000000000000001 * var_chaste_interface__cell__V - 0.00020000000000000001 * var_IK1__E_K1)) / (1.0 + exp(0.5 * var_IK1__E_K1 - 0.5 * var_chaste_interface__cell__V)); // per_ms
         const double var_IK1_K1_gate__K1_infinity = var_IK1_K1_gate__alpha_K1 / (var_IK1_K1_gate__alpha_K1 + var_IK1_K1_gate__beta_K1); // dimensionless
         const double var_IKr__rik = 1.0 / (1.0 + exp(1.1304347826086956 + 0.043478260869565216 * var_chaste_interface__cell__V)); // dimensionless
-        const double var_IKr__i_Kr = (-var_IKr__E_K + var_chaste_interface__cell__V) * var_IKr__g_Kr_max * var_IKr__rik * var_chaste_interface__IKr_Xr_gate__Xr; // uA_per_uF
+        const double var_IKr__i_Kr = (-var_IKr__E_K + var_chaste_interface__cell__V) * NV_Ith_S(mParameters, 3) * var_IKr__rik * var_chaste_interface__IKr_Xr_gate__Xr; // uA_per_uF
         const double var_IKr_Xr_gate__alpha_Xr = 0.0050000000000000001 * exp(0.0021416822000000003 + 0.00052660000000000001 * var_chaste_interface__cell__V) / (1.0 + exp(-0.51325540000000003 - 0.12620000000000001 * var_chaste_interface__cell__V)); // per_ms
         const double var_IKr_Xr_gate__beta_Xr = 0.016 * exp(0.105056 + 0.0016000000000000001 * var_chaste_interface__cell__V) / (1.0 + exp(5.1411779999999991 + 0.078299999999999995 * var_chaste_interface__cell__V)); // per_ms
         const double d_dt_chaste_interface_var_IKr_Xr_gate__Xr = (1.0 - var_chaste_interface__IKr_Xr_gate__Xr) * var_IKr_Xr_gate__alpha_Xr - var_chaste_interface__IKr_Xr_gate__Xr * var_IKr_Xr_gate__beta_Xr; // 1 / ms
@@ -297,12 +295,12 @@
         const double var_IKs_Xs_gate__alpha_Xs = 0.0030130000000000001 / (1.0 + exp(-0.17842998931347828 - 0.069846547135942336 * var_chaste_interface__cell__V)); // per_ms
         const double var_IKs_Xs_gate__beta_Xs = 0.0058700000000000002 / (1.0 + exp(1.0082174462705435 + 0.063211125158027806 * var_chaste_interface__cell__V)); // per_ms
         const double d_dt_chaste_interface_var_IKs_Xs_gate__Xs = (1.0 - var_chaste_interface__IKs_Xs_gate__Xs) * var_IKs_Xs_gate__alpha_Xs - var_chaste_interface__IKs_Xs_gate__Xs * var_IKs_Xs_gate__beta_Xs; // 1 / ms
-        const double var_INa__i_Na = pow(var_chaste_interface__INa_m_gate__m, 3) * (-var_INa__E_Na + var_chaste_interface__cell__V) * var_INa__g_Na * var_chaste_interface__INa_h_gate__h * var_chaste_interface__INa_j_gate__j; // uA_per_uF
+        const double var_INa__i_Na = pow(var_chaste_interface__INa_m_gate__m, 3) * (-var_INa__E_Na + var_chaste_interface__cell__V) * NV_Ith_S(mParameters, 2) * var_chaste_interface__INa_h_gate__h * var_chaste_interface__INa_j_gate__j; // uA_per_uF
         const double var_INaK__f_NaK = 1.0 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_cell__FonRT * var_chaste_interface__cell__V) + 0.036499999999999998 * var_INaK__sigma * exp(-var_cell__FonRT * var_chaste_interface__cell__V)); // dimensionless
-        const double var_INa_h_gate__alpha_h = ((var_chaste_interface__cell__V < -40.0) ? (0.13500000000000001 * exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__cell__V)) : (0.0)); // per_ms
+        const double var_INa_h_gate__alpha_h = ((var_chaste_interface__cell__V < -40.0) ? (0.13500000000000001 * exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__cell__V)) : (0)); // per_ms
         const double var_INa_h_gate__beta_h = ((var_chaste_interface__cell__V < -40.0) ? (310000.0 * exp(0.34999999999999998 * var_chaste_interface__cell__V) + 3.5600000000000001 * exp(0.079000000000000001 * var_chaste_interface__cell__V)) : (7.6923076923076916 / (1.0 + exp(-0.96036036036036043 - 0.0900900900900901 * var_chaste_interface__cell__V)))); // per_ms
         const double d_dt_chaste_interface_var_INa_h_gate__h = (1.0 - var_chaste_interface__INa_h_gate__h) * var_INa_h_gate__alpha_h - var_INa_h_gate__beta_h * var_chaste_interface__INa_h_gate__h; // 1 / ms
-        const double var_INa_j_gate__alpha_j = ((var_chaste_interface__cell__V < -40.0) ? ((37.780000000000001 + var_chaste_interface__cell__V) * (-127140.0 * exp(0.24399999999999999 * var_chaste_interface__cell__V) - 3.4740000000000003e-5 * exp(-0.043909999999999998 * var_chaste_interface__cell__V)) / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__V))) : (0.0)); // per_ms
+        const double var_INa_j_gate__alpha_j = ((var_chaste_interface__cell__V < -40.0) ? ((37.780000000000001 + var_chaste_interface__cell__V) * (-127140.0 * exp(0.24399999999999999 * var_chaste_interface__cell__V) - 3.4740000000000003e-5 * exp(-0.043909999999999998 * var_chaste_interface__cell__V)) / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__V))) : (0)); // per_ms
         const double var_INa_j_gate__beta_j = ((var_chaste_interface__cell__V < -40.0) ? (0.1212 * exp(-0.01052 * var_chaste_interface__cell__V) / (1.0 + exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__cell__V))) : (0.29999999999999999 * exp(-2.5349999999999999e-7 * var_chaste_interface__cell__V) / (1.0 + exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__cell__V)))); // per_ms
         const double d_dt_chaste_interface_var_INa_j_gate__j = (1.0 - var_chaste_interface__INa_j_gate__j) * var_INa_j_gate__alpha_j - var_INa_j_gate__beta_j * var_chaste_interface__INa_j_gate__j; // 1 / ms
         const double var_INa_m_gate__alpha_m = ((fabs(47.130000000000003 + var_chaste_interface__cell__V) > 0.001) ? (0.32000000000000001 * (47.130000000000003 + var_chaste_interface__cell__V) / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__cell__V))) : (3.2000000000000002)); // per_ms
@@ -314,24 +312,24 @@
         const double var_Ito_t_gate__alpha_t = (5.6119999999999998e-5 * var_chaste_interface__cell__V + 0.072099999999999997 * exp(-5.9257863000000004 - 0.17299999999999999 * var_chaste_interface__cell__V)) / (1.0 + exp(-5.9326369200000002 - 0.17319999999999999 * var_chaste_interface__cell__V)); // per_ms
         const double var_Ito_t_gate__beta_t = (0.0001215 * var_chaste_interface__cell__V + 0.076700000000000004 * exp(-5.6479010000000002e-8 - 1.6600000000000001e-9 * var_chaste_interface__cell__V)) / (1.0 + exp(-5.4573693999999993 - 0.16039999999999999 * var_chaste_interface__cell__V)); // per_ms
         const double d_dt_chaste_interface_var_Ito_t_gate__t = (1.0 - var_chaste_interface__Ito_t_gate__t) * var_Ito_t_gate__alpha_t - var_Ito_t_gate__beta_t * var_chaste_interface__Ito_t_gate__t; // 1 / ms
-        const double var_cell__failing = 0.0; // dimensionless
-        const double var_ICab__g_b_Ca_max = ((var_cell__failing == 0.0) ? (0.00084999999999999995) : (0.0012999999999999999)); // mS_per_uF
+        const double var_cell__failing = 0; // dimensionless
+        const double var_ICab__g_b_Ca_max = ((var_cell__failing == 0) ? (0.00084999999999999995) : (0.0012999999999999999)); // mS_per_uF
         const double var_ICab__i_b_Ca = (-var_ICa__E_Ca + var_chaste_interface__cell__V) * var_ICab__g_b_Ca_max; // uA_per_uF
-        const double var_IK1__g_K1_max = ((var_cell__failing == 0.0) ? (2.5) : (2.0)); // mS_per_uF
+        const double var_IK1__g_K1_max = ((var_cell__failing == 0) ? (2.5) : (2.0)); // mS_per_uF
         const double var_IK1__i_K1 = (-var_IK1__E_K1 + var_chaste_interface__cell__V) * var_IK1__g_K1_max * var_IK1_K1_gate__K1_infinity; // uA_per_uF
-        const double var_INaCa__K_NaCa = ((var_cell__failing == 0.0) ? (1000.0) : (1650.0)); // uA_per_uF
+        const double var_INaCa__K_NaCa = ((var_cell__failing == 0) ? (1000.0) : (1650.0)); // uA_per_uF
         const double var_INaCa__i_NaCa = 1.0 * (pow(var_chaste_interface__Ionic_concentrations__Nai, 3) * var_Ionic_concentrations__Cao * exp(var_INaCa__eta * var_cell__FonRT * var_chaste_interface__cell__V) - pow(var_Ionic_concentrations__Nao, 3) * var_chaste_interface__Ionic_concentrations__Cai * exp((-1.0 + var_INaCa__eta) * var_cell__FonRT * var_chaste_interface__cell__V)) * var_INaCa__K_NaCa / ((1.0 + var_INaCa__K_sat * exp((-1.0 + var_INaCa__eta) * var_cell__FonRT * var_chaste_interface__cell__V)) * (pow(var_INaCa__K_mNa, 3) + pow(var_Ionic_concentrations__Nao, 3)) * (var_INaCa__K_mCa + var_Ionic_concentrations__Cao)); // uA_per_uF
-        const double d_dt_chaste_interface_var_Irel__Cainfluxtrack = ((var_chaste_interface__Irel__APtrack > 0.20000000000000001) ? (-0.5 * (-var_INaCa__i_NaCa + var_ICa__i_Ca + var_ICab__i_b_Ca) * var_cell__Cm / (var_Ionic_concentrations__V_myo * var_cell__F)) : ((var_chaste_interface__Irel__APtrack2 > 0.01) ? (0.0) : (-0.5 * var_chaste_interface__Irel__Cainfluxtrack))); // mM / ms
-        const double var_INaK__I_NaK_max = ((var_cell__failing == 0.0) ? (1.3) : (0.75)); // uA_per_uF
+        const double d_dt_chaste_interface_var_Irel__Cainfluxtrack = ((var_chaste_interface__Irel__APtrack > 0.20000000000000001) ? (-0.5 * (-var_INaCa__i_NaCa + var_ICa__i_Ca + var_ICab__i_b_Ca) * var_cell__Cm / (var_Ionic_concentrations__V_myo * var_cell__F)) : ((var_chaste_interface__Irel__APtrack2 > 0.01) ? (0) : (-0.5 * var_chaste_interface__Irel__Cainfluxtrack))); // mM / ms
+        const double var_INaK__I_NaK_max = ((var_cell__failing == 0) ? (1.3) : (0.75)); // uA_per_uF
         const double var_INaK__i_NaK = 1.0 * var_INaK__I_NaK_max * var_INaK__f_NaK * var_Ionic_concentrations__Ko / ((1.0 + pow((var_INaK__K_mNai / var_chaste_interface__Ionic_concentrations__Nai), 1.5)) * (var_INaK__K_mKo + var_Ionic_concentrations__Ko)); // uA_per_uF
-        const double var_INab__g_b_Na_max = ((var_cell__failing == 0.0) ? (0.001) : (0.0)); // mS_per_uF
+        const double var_INab__g_b_Na_max = ((var_cell__failing == 0) ? (0.001) : (0)); // mS_per_uF
         const double var_INab__i_b_Na = (-var_INa__E_Na + var_chaste_interface__cell__V) * var_INab__g_b_Na_max; // uA_per_uF
         const double d_dt_chaste_interface_var_Ionic_concentrations__Nai = -1.0 * (3.0 * var_INaCa__i_NaCa + 3.0 * var_INaK__i_NaK + var_INa__i_Na + var_INab__i_b_Na) * var_cell__Cm / (var_Ionic_concentrations__V_myo * var_cell__F); // mM / ms
-        const double var_Ileak__K_leak = ((var_cell__failing == 0.0) ? (0.00025999999999999998) : (0.00017000000000000001)); // per_ms
+        const double var_Ileak__K_leak = ((var_cell__failing == 0) ? (0.00025999999999999998) : (0.00017000000000000001)); // per_ms
         const double var_Ileak__i_leak = var_Ileak__K_leak * var_chaste_interface__Ionic_concentrations__Ca_NSR; // mM_per_ms
-        const double var_Ito__g_to_max = ((var_cell__failing == 0.0) ? (0.29999999999999999) : (0.191)); // mS_per_uF
+        const double var_Ito__g_to_max = ((var_cell__failing == 0) ? (0.29999999999999999) : (0.191)); // mS_per_uF
         const double var_Ito__i_to = (-var_Ito__E_to + var_chaste_interface__cell__V) * var_Ito__g_to_max * var_chaste_interface__Ito_r_gate__r * var_chaste_interface__Ito_t_gate__t; // uA_per_uF
-        const double var_Iup__I_up_max = ((var_cell__failing == 0.0) ? (0.0044999999999999997) : (0.0015)); // mM_per_ms
+        const double var_Iup__I_up_max = ((var_cell__failing == 0) ? (0.0044999999999999997) : (0.0015)); // mM_per_ms
         const double var_Iup__i_up = var_chaste_interface__Ionic_concentrations__Cai * var_Iup__I_up_max / (var_chaste_interface__Ionic_concentrations__Cai + var_Iup__K_mup); // mM_per_ms
         const double d_dt_chaste_interface_var_Ionic_concentrations__Ca_NSR = 1.0 * var_Iup__i_up - 1.0 * var_Ileak__i_leak - 1.0 * var_Ionic_concentrations__V_JSR * var_Itr__i_tr / var_Ionic_concentrations__V_NSR; // mM / ms
         const double d_dt_chaste_interface_var_Ionic_concentrations__Cai = ((-var_Iup__i_up + var_Ileak__i_leak) * var_Ionic_concentrations__V_NSR / var_Ionic_concentrations__V_myo + var_Ionic_concentrations__V_JSR * var_Irel__i_rel / var_Ionic_concentrations__V_myo - 0.5 * (-2.0 * var_INaCa__i_NaCa + var_ICa__i_Ca + var_ICab__i_b_Ca) * var_cell__Cm / (var_Ionic_concentrations__V_myo * var_cell__F)) * var_calcium_buffers_in_the_myoplasm__Cai_bufc; // mM / ms
@@ -353,7 +351,7 @@
             double var_chaste_interface__membrane_data_clamp_current = 0.0;
             if (mDataClampIsOn)
             {
-                var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time) + var_chaste_interface__cell__V) * NV_Ith_S(mParameters, 0); // uA_per_cm2
+                var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time) + var_chaste_interface__cell__V) * NV_Ith_S(mParameters, 1); // uA_per_cm2
             }
             d_dt_chaste_interface_var_cell__V = var_cell__dVdt + var_chaste_interface__membrane_data_clamp_current; // mV / ms
             
@@ -390,18 +388,19 @@
         double var_chaste_interface__cell__V = NV_Ith_S(rY,0);
         // Units: mV; Initial value: -90.7796417483135
         
-
         // Mathematics
+        const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
         // Special handling of data clamp current here (see #2708)
         // (we want to save expense of calling the interpolation method if possible.)
         double var_chaste_interface__membrane_data_clamp_current = 0.0;
         if (mDataClampIsOn)
         {
-            var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time) + var_chaste_interface__cell__V) * NV_Ith_S(mParameters, 0); // uA_per_cm2
+            var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time) + var_chaste_interface__cell__V) * NV_Ith_S(mParameters, 1); // uA_per_cm2
         }
-        
-        N_Vector dqs = N_VNew_Serial(1);
+
+        N_Vector dqs = N_VNew_Serial(2);
         NV_Ith_S(dqs, 0) = var_chaste_interface__membrane_data_clamp_current;
+        NV_Ith_S(dqs, 1) = var_cell__i_Stim_converter;
         return dqs;
     }
 
@@ -523,11 +522,27 @@ void OdeSystemInformation<Cellpriebe_beuckelmann_model_1998FromCellMLCvodeDataCl
     this->mInitialConditions.push_back(2.5);
 
     // mParameters[0]:
+    this->mParameterNames.push_back("membrane_L_type_calcium_current_conductance");
+    this->mParameterUnits.push_back("mS_per_uF");
+
+    // mParameters[1]:
     this->mParameterNames.push_back("membrane_data_clamp_current_conductance");
     this->mParameterUnits.push_back("dimensionless");
 
+    // mParameters[2]:
+    this->mParameterNames.push_back("membrane_fast_sodium_current_conductance");
+    this->mParameterUnits.push_back("mS_per_uF");
+
+    // mParameters[3]:
+    this->mParameterNames.push_back("membrane_rapid_delayed_rectifier_potassium_current_conductance");
+    this->mParameterUnits.push_back("mS_per_uF");
+
     // Derived Quantity index [0]:
     this->mDerivedQuantityNames.push_back("membrane_data_clamp_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
+
+    // Derived Quantity index [1]:
+    this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     this->mInitialised = true;

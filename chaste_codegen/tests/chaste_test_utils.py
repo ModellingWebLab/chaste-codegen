@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 
 import chaste_codegen as cg
 from chaste_codegen._script_utils import write_file
@@ -74,6 +75,12 @@ def compare_model_against_reference(model_type, chaste_model, tmp_path, expected
     """
     tmp_path = str(tmp_path)
 
+    # check if we are python 3.5 (< 3.6) and there is a different version of the reference
+    assert sys.version_info.major == 3
+    if sys.version_info.minor < 6 and os.path.isfile(expected_cpp_path + '_3.5'):
+        expected_cpp_path += '_3.5'
+
+    # Compare against reference
     # Write generated files
     hhp_gen_file_path = os.path.join(tmp_path, chaste_model.file_name + ".hpp")
     cpp_gen_file_path = os.path.join(tmp_path, chaste_model.file_name + ".cpp")

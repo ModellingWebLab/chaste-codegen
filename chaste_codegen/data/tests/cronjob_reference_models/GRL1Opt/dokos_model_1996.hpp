@@ -28,9 +28,11 @@ class Celldokos_model_1996FromCellMLGRL1 : public AbstractGeneralizedRushLarsenC
         archive & boost::serialization::base_object<AbstractGeneralizedRushLarsenCardiacCell >(*this);
         
     }
+
     //
     // Settable parameters and readable variables
     //
+
 public:
 
     double GetIntracellularCalciumConcentration();

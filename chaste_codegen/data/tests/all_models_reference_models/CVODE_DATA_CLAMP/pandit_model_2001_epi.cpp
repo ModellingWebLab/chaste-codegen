@@ -25,8 +25,7 @@
     boost::shared_ptr<RegularStimulus> Cellpandit_model_2001_epiFromCellMLCvodeDataClamp::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
-        const double var_membrane__Cm = 0.0001; // microF
-        const double var_chaste_interface__membrane__stim_amplitude = -0.00059999999999999995 * HeartConfig::Instance()->GetCapacitance() / var_membrane__Cm; // uA_per_cm2
+        const double var_chaste_interface__membrane__stim_amplitude = -0.00059999999999999995 * HeartConfig::Instance()->GetCapacitance() / NV_Ith_S(mParameters, 0); // uA_per_cm2
         const double var_chaste_interface__membrane__stim_duration = 5.0; // millisecond
         const double var_chaste_interface__membrane__stim_period = 1000.0; // millisecond
         const double var_chaste_interface__membrane__stim_start = 100.0; // millisecond
@@ -39,6 +38,7 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
+
    
     Cellpandit_model_2001_epiFromCellMLCvodeDataClamp::Cellpandit_model_2001_epiFromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCellWithDataClamp(
@@ -55,7 +55,8 @@
         // We have a default stimulus specified in the CellML file metadata
         this->mHasDefaultStimulusFromCellML = true;
         
-        NV_Ith_S(this->mParameters, 0) = 0.0; // (var_membrane_data_clamp_current_conductance) [dimensionless]
+        NV_Ith_S(this->mParameters, 0) = 0.0001; // (var_membrane__Cm) [microF]
+        NV_Ith_S(this->mParameters, 1) = 0.0; // (var_membrane_data_clamp_current_conductance) [dimensionless]
     }
 
     Cellpandit_model_2001_epiFromCellMLCvodeDataClamp::~Cellpandit_model_2001_epiFromCellMLCvodeDataClamp()
@@ -127,7 +128,6 @@
         const double var_hyperpolarisation_activated_current__f_K = 1.0 - var_hyperpolarisation_activated_current__f_Na; // dimensionless
         const double var_hyperpolarisation_activated_current__g_f = 0.0014499999999999999; // microS
         const double var_inward_rectifier__g_K1 = 0.024; // microS
-        const double var_membrane__Cm = 0.0001; // microF
         const double var_membrane__F = 96487.0; // coulomb_per_mole
         const double var_membrane__R = 8314.5; // millijoule_per_mole_kelvin
         const double var_membrane__T = 295.0; // kelvin
@@ -159,7 +159,7 @@
         const double var_sodium_potassium_pump__i_NaK = var_sodium_potassium_pump__i_NaK_max * var_standard_ionic_concentrations__K_o / ((1.0 + pow((var_sodium_potassium_pump__K_m_Na / var_chaste_interface__intracellular_ion_concentrations__Na_i), 1.5)) * (var_sodium_potassium_pump__K_m_K + var_standard_ionic_concentrations__K_o) * (1.0 + 0.1245 * exp(-0.10000000000000001 * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T)) + 0.036499999999999998 * var_sodium_potassium_pump__sigma * exp(-var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T)))); // nanoA
         const double var_steady_state_outward_K_current__g_ss = 0.0070000000000000001; // microS
         const double var_steady_state_outward_K_current__i_ss = (-var_Ca_independent_transient_outward_K_current__E_K + var_chaste_interface__membrane__V) * var_steady_state_outward_K_current__g_ss * var_chaste_interface__steady_state_outward_K_current_r_ss_gate__r_ss * var_chaste_interface__steady_state_outward_K_current_s_ss_gate__s_ss; // nanoA
-        const double var_chaste_interface__i_ionic = (0.001 * var_Ca_independent_transient_outward_K_current__i_t + 0.001 * var_L_type_Ca_channel__i_Ca_L + 0.001 * var_Na_Ca_ion_exchanger_current__i_NaCa + 0.001 * var_background_currents__i_B + 0.001 * var_hyperpolarisation_activated_current__i_f + 0.001 * var_inward_rectifier__i_K1 + 0.001 * var_sarcolemmal_calcium_pump_current__i_Ca_P + 0.001 * var_sodium_current__i_Na + 0.001 * var_sodium_potassium_pump__i_NaK + 0.001 * var_steady_state_outward_K_current__i_ss) * HeartConfig::Instance()->GetCapacitance() / var_membrane__Cm; // uA_per_cm2
+        const double var_chaste_interface__i_ionic = (0.001 * var_Ca_independent_transient_outward_K_current__i_t + 0.001 * var_L_type_Ca_channel__i_Ca_L + 0.001 * var_Na_Ca_ion_exchanger_current__i_NaCa + 0.001 * var_background_currents__i_B + 0.001 * var_hyperpolarisation_activated_current__i_f + 0.001 * var_inward_rectifier__i_K1 + 0.001 * var_sarcolemmal_calcium_pump_current__i_Ca_P + 0.001 * var_sodium_current__i_Na + 0.001 * var_sodium_potassium_pump__i_NaK + 0.001 * var_steady_state_outward_K_current__i_ss) * HeartConfig::Instance()->GetCapacitance() / NV_Ith_S(mParameters, 0); // uA_per_cm2
 
         const double i_ionic = var_chaste_interface__i_ionic;
         if (made_new_cvode_vector)
@@ -402,9 +402,8 @@
             d_dt_chaste_interface_var_membrane__V = 0.0;
         }
         else
-        {const double var_membrane__Cm = 0.0001; // microF
-            const double var_membrane__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
-            const double var_membrane__i_Stim = 1000.0 * var_membrane__Cm * var_membrane__i_Stim_converter / HeartConfig::Instance()->GetCapacitance(); // nanoA
+        {const double var_membrane__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
+            const double var_membrane__i_Stim = 1000.0 * NV_Ith_S(mParameters, 0) * var_membrane__i_Stim_converter / HeartConfig::Instance()->GetCapacitance(); // nanoA
             const double var_background_currents__i_B = var_background_currents__i_B_Ca + var_background_currents__i_B_K + var_background_currents__i_B_Na; // nanoA
             const double var_hyperpolarisation_activated_current__i_f = var_hyperpolarisation_activated_current__i_f_K + var_hyperpolarisation_activated_current__i_f_Na; // nanoA
             
@@ -413,9 +412,9 @@
             double var_chaste_interface__membrane_data_clamp_current = 0.0;
             if (mDataClampIsOn)
             {
-                var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time_converted) + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 0); // uA_per_cm2
+                var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time_converted) + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 1); // uA_per_cm2
             }
-            const double var_membrane__V_orig_deriv = (-var_Ca_independent_transient_outward_K_current__i_t - var_L_type_Ca_channel__i_Ca_L - var_Na_Ca_ion_exchanger_current__i_NaCa - var_background_currents__i_B - var_hyperpolarisation_activated_current__i_f - var_inward_rectifier__i_K1 - var_membrane__i_Stim - var_chaste_interface__membrane_data_clamp_current - var_sarcolemmal_calcium_pump_current__i_Ca_P - var_sodium_current__i_Na - var_sodium_potassium_pump__i_NaK - var_steady_state_outward_K_current__i_ss) / var_membrane__Cm; // millivolt / second
+            const double var_membrane__V_orig_deriv = (-var_Ca_independent_transient_outward_K_current__i_t - var_L_type_Ca_channel__i_Ca_L - var_Na_Ca_ion_exchanger_current__i_NaCa - var_background_currents__i_B - var_hyperpolarisation_activated_current__i_f - var_inward_rectifier__i_K1 - var_membrane__i_Stim - var_chaste_interface__membrane_data_clamp_current - var_sarcolemmal_calcium_pump_current__i_Ca_P - var_sodium_current__i_Na - var_sodium_potassium_pump__i_NaK - var_steady_state_outward_K_current__i_ss) / NV_Ith_S(mParameters, 0); // millivolt / second
             d_dt_chaste_interface_var_membrane__V = 0.001 * var_membrane__V_orig_deriv; // millivolt / millisecond
             
         }
@@ -455,18 +454,19 @@
         double var_chaste_interface__membrane__V = NV_Ith_S(rY,0);
         // Units: millivolt; Initial value: -80.50146
         
-
         // Mathematics
+        const double var_membrane__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
         // Special handling of data clamp current here (see #2708)
         // (we want to save expense of calling the interpolation method if possible.)
         double var_chaste_interface__membrane_data_clamp_current = 0.0;
         if (mDataClampIsOn)
         {
-            var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time_converted) + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 0); // uA_per_cm2
+            var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time_converted) + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 1); // uA_per_cm2
         }
-        
-        N_Vector dqs = N_VNew_Serial(1);
+
+        N_Vector dqs = N_VNew_Serial(2);
         NV_Ith_S(dqs, 0) = var_chaste_interface__membrane_data_clamp_current;
+        NV_Ith_S(dqs, 1) = var_membrane__i_Stim_converter;
         return dqs;
     }
 
@@ -608,11 +608,19 @@ void OdeSystemInformation<Cellpandit_model_2001_epiFromCellMLCvodeDataClamp>::In
     this->mInitialConditions.push_back(0.06600742);
 
     // mParameters[0]:
+    this->mParameterNames.push_back("membrane_capacitance");
+    this->mParameterUnits.push_back("microF");
+
+    // mParameters[1]:
     this->mParameterNames.push_back("membrane_data_clamp_current_conductance");
     this->mParameterUnits.push_back("dimensionless");
 
     // Derived Quantity index [0]:
     this->mDerivedQuantityNames.push_back("membrane_data_clamp_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
+
+    // Derived Quantity index [1]:
+    this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     

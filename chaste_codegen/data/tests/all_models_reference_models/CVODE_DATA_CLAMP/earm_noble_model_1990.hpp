@@ -29,10 +29,11 @@ class Cellearm_noble_model_1990FromCellMLCvodeDataClamp : public AbstractCvodeCe
         archive & boost::serialization::base_object<AbstractCvodeCellWithDataClamp >(*this);
         
     }
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

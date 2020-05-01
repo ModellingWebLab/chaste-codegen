@@ -28,9 +28,11 @@ class Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL2 : public A
         archive & boost::serialization::base_object<AbstractGeneralizedRushLarsenCardiacCell >(*this);
         
     }
+
     //
     // Settable parameters and readable variables
     //
+
 public:
 
     Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL2(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
@@ -48,6 +50,7 @@ public:
     double EvaluateYDerivative3(double var_chaste_interface__environment__time, std::vector<double>& rY);
     double EvaluatePartialDerivative3(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical=false);
 
+    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY);
 };
 
 // Needs to be included last

@@ -23,7 +23,6 @@
 #include "CardiacNewtonSolver.hpp"
 
 
-
     Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler::Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<0>(
                 4,
@@ -133,6 +132,20 @@
         
     }
 
+    std::vector<double> Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+        const double var_membrane__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
+
+        std::vector<double> dqs(1);
+        dqs[0] = var_membrane__i_Stim_converter;
+        return dqs;
+    }
+
 template<>
 void OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler>::Initialise(void)
 {
@@ -159,6 +172,10 @@ void OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromC
     this->mVariableNames.push_back("potassium_channel_n_gate__n");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.325);
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     this->mInitialised = true;
 }

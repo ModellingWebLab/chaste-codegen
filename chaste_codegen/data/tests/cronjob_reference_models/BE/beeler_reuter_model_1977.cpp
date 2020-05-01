@@ -38,7 +38,6 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-
     double Cellbeeler_reuter_model_1977FromCellMLBackwardEuler::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
@@ -71,8 +70,8 @@
         const std::vector<double>& rY = *pStateVariables;
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: mV; Initial value: -84.624
-        double var_chaste_interface__slow_inward_current__Cai_converted = rY[1];
-        // Units: millimolar; Initial value: 0.0001
+        double var_chaste_interface__slow_inward_current__Cai = rY[1];
+        // Units: concentration_units; Initial value: 0.0001
         double var_chaste_interface__sodium_current_m_gate__m = rY[2];
         // Units: dimensionless; Initial value: 0.011
         double var_chaste_interface__sodium_current_h_gate__h = rY[3];
@@ -86,8 +85,7 @@
         double var_chaste_interface__time_dependent_outward_current_x1_gate__x1 = rY[7];
         // Units: dimensionless; Initial value: 0.0001
         
-        const double var_slow_inward_current__Cai = 1.0 * var_chaste_interface__slow_inward_current__Cai_converted; // concentration_units
-        const double var_slow_inward_current__E_s = 7.6990712032745758 - 13.028700000000001 * log(var_slow_inward_current__Cai); // mV
+        const double var_slow_inward_current__E_s = 7.6990712032745758 - 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai); // mV
         const double var_slow_inward_current__g_s = 0.00089999999999999998; // mS_per_mm2
         const double var_slow_inward_current__i_s = (-var_slow_inward_current__E_s + var_chaste_interface__membrane__V) * var_slow_inward_current__g_s * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f; // uA_per_mm2
         const double var_sodium_current__E_Na = 50.0; // mV
@@ -114,17 +112,15 @@
         // Units: dimensionless; Initial value: 0.994
         
         //output_nonlinear_state_assignments
-        double var_chaste_interface__slow_inward_current__Cai_converted = rCurrentGuess[0];
+        double var_chaste_interface__slow_inward_current__Cai = rCurrentGuess[0];
         
         //output_equations
-        const double var_slow_inward_current__Cai = 1.0 * var_chaste_interface__slow_inward_current__Cai_converted; // concentration_units
-        const double var_slow_inward_current__E_s = 7.6990712032745758 - 13.028700000000001 * log(var_slow_inward_current__Cai); // mV
+        const double var_slow_inward_current__E_s = 7.6990712032745758 - 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai); // mV
         const double var_slow_inward_current__g_s = 0.00089999999999999998; // mS_per_mm2
         const double var_slow_inward_current__i_s = (-var_slow_inward_current__E_s + var_chaste_interface__membrane__V) * var_slow_inward_current__g_s * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f; // uA_per_mm2
-        const double var_slow_inward_current__Cai_orig_deriv = 7.0000000000000007e-6 - 0.070000000000000007 * var_slow_inward_current__Cai - 0.01 * var_slow_inward_current__i_s; // concentration_units / ms
-        const double d_dt_chaste_interface_var_slow_inward_current__Cai_converted = 1.0 * var_slow_inward_current__Cai_orig_deriv; // millimolar / ms
+        const double d_dt_chaste_interface_var_slow_inward_current__Cai = 7.0000000000000007e-6 - 0.070000000000000007 * var_chaste_interface__slow_inward_current__Cai - 0.01 * var_slow_inward_current__i_s; // concentration_units / ms
         
-        rResidual[0] = rCurrentGuess[0] - rY[1] - mDt*d_dt_chaste_interface_var_slow_inward_current__Cai_converted;
+        rResidual[0] = rCurrentGuess[0] - rY[1] - mDt*d_dt_chaste_interface_var_slow_inward_current__Cai;
     }
 
     void Cellbeeler_reuter_model_1977FromCellMLBackwardEuler::ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[1], double rJacobian[1][1])
@@ -135,11 +131,11 @@
         double var_chaste_interface__slow_inward_current_f_gate__f = rY[6];
         // Units: dimensionless; Initial value: 0.994
         
-        double var_chaste_interface__slow_inward_current__Cai_converted = rCurrentGuess[0];
+        double var_chaste_interface__slow_inward_current__Cai = rCurrentGuess[0];
         
         
         
-        rJacobian[0][0] = 1.0 - (mDt * (-0.070000000000000007 - 0.0001172583 * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f / var_chaste_interface__slow_inward_current__Cai_converted));
+        rJacobian[0][0] = 1.0 - (mDt * (-0.070000000000000007 - 0.0001172583 * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f / var_chaste_interface__slow_inward_current__Cai));
     }
 
     void Cellbeeler_reuter_model_1977FromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
@@ -148,8 +144,8 @@
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: mV; Initial value: -84.624
-        double var_chaste_interface__slow_inward_current__Cai_converted = rY[1];
-        // Units: millimolar; Initial value: 0.0001
+        double var_chaste_interface__slow_inward_current__Cai = rY[1];
+        // Units: concentration_units; Initial value: 0.0001
         double var_chaste_interface__sodium_current_m_gate__m = rY[2];
         // Units: dimensionless; Initial value: 0.011
         double var_chaste_interface__sodium_current_h_gate__h = rY[3];
@@ -164,8 +160,7 @@
         // Units: dimensionless; Initial value: 0.0001
         
         const double var_membrane__C = 0.01; // uF_per_mm2
-        const double var_slow_inward_current__Cai = 1.0 * var_chaste_interface__slow_inward_current__Cai_converted; // concentration_units
-        const double var_slow_inward_current__E_s = 7.6990712032745758 - 13.028700000000001 * log(var_slow_inward_current__Cai); // mV
+        const double var_slow_inward_current__E_s = 7.6990712032745758 - 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai); // mV
         const double var_slow_inward_current__g_s = 0.00089999999999999998; // mS_per_mm2
         const double var_slow_inward_current__i_s = (-var_slow_inward_current__E_s + var_chaste_interface__membrane__V) * var_slow_inward_current__g_s * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f; // uA_per_mm2
         const double var_sodium_current__E_Na = 50.0; // mV
@@ -227,6 +222,20 @@
         rY[1] = _guess[0];
     }
 
+    std::vector<double> Cellbeeler_reuter_model_1977FromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+        const double var_stimulus_protocol__Istim_converter = -GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
+
+        std::vector<double> dqs(1);
+        dqs[0] = var_stimulus_protocol__Istim_converter;
+        return dqs;
+    }
+
 template<>
 void OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLBackwardEuler>::Initialise(void)
 {
@@ -241,7 +250,7 @@ void OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLBackwardEuler>::
 
     // rY[1]:
     this->mVariableNames.push_back("cytosolic_calcium_concentration");
-    this->mVariableUnits.push_back("millimolar");
+    this->mVariableUnits.push_back("concentration_units");
     this->mInitialConditions.push_back(0.0001);
 
     // rY[2]:
@@ -273,6 +282,10 @@ void OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLBackwardEuler>::
     this->mVariableNames.push_back("time_dependent_outward_current_x1_gate__x1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0001);
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     this->mInitialised = true;
 }

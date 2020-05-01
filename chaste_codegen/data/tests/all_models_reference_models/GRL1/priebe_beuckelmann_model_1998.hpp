@@ -28,9 +28,11 @@ class Cellpriebe_beuckelmann_model_1998FromCellMLGRL1 : public AbstractGeneraliz
         archive & boost::serialization::base_object<AbstractGeneralizedRushLarsenCardiacCell >(*this);
         
     }
+
     //
     // Settable parameters and readable variables
     //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
@@ -86,6 +88,7 @@ public:
     double EvaluateYDerivative21(double var_chaste_interface__environment__time, std::vector<double>& rY);
     double EvaluatePartialDerivative21(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical=false);
 
+    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY);
 };
 
 // Needs to be included last

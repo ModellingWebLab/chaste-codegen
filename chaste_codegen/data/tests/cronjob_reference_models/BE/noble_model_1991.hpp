@@ -28,11 +28,11 @@ class Cellnoble_model_1991FromCellMLBackwardEuler : public AbstractBackwardEuler
         archive & boost::serialization::base_object<AbstractBackwardEulerCardiacCell<9> >(*this);
         
     }
-    
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
@@ -43,6 +43,7 @@ public:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted);
     void ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted);
 
+    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY);
 };
 
 // Needs to be included last

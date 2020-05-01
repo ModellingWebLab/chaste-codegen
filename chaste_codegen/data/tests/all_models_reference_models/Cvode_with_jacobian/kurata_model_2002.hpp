@@ -29,11 +29,11 @@ class Cellkurata_model_2002FromCellMLCvode : public AbstractCvodeCell
         archive & boost::serialization::base_object<AbstractCvodeCell >(*this);
         
     }
-    
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     Cellkurata_model_2002FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);

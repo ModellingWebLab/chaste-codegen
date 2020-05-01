@@ -29,11 +29,11 @@ class Celldemir_model_1994FromCellMLCvode : public AbstractCvodeCell
         archive & boost::serialization::base_object<AbstractCvodeCell >(*this);
         
     }
-    
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     double GetIntracellularCalciumConcentration();

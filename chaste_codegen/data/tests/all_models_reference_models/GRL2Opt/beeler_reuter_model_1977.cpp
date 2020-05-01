@@ -37,19 +37,18 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-
     double Cellbeeler_reuter_model_1977FromCellMLGRL2::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
     Cellbeeler_reuter_model_1977FromCellMLGRL2::Cellbeeler_reuter_model_1977FromCellMLGRL2(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractGeneralizedRushLarsenCardiacCell(
-           8,
+                8,
                 0,
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        //
+        // 
         this->mpSystemInfo = OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLGRL2>::Instance();
         Init();
 
@@ -70,8 +69,8 @@
         const std::vector<double>& rY = *pStateVariables;
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: mV; Initial value: -84.624
-        double var_chaste_interface__slow_inward_current__Cai_converted = rY[1];
-        // Units: millimolar; Initial value: 0.0001
+        double var_chaste_interface__slow_inward_current__Cai = rY[1];
+        // Units: concentration_units; Initial value: 0.0001
         double var_chaste_interface__sodium_current_m_gate__m = rY[2];
         // Units: dimensionless; Initial value: 0.011
         double var_chaste_interface__sodium_current_h_gate__h = rY[3];
@@ -85,7 +84,7 @@
         double var_chaste_interface__time_dependent_outward_current_x1_gate__x1 = rY[7];
         // Units: dimensionless; Initial value: 0.0001
         
-        const double var_slow_inward_current__i_s = 0.00089999999999999998 * (-7.6990712032745758 + 13.028700000000001 * log(1.0 * var_chaste_interface__slow_inward_current__Cai_converted) + var_chaste_interface__membrane__V) * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f; // uA_per_mm2
+        const double var_slow_inward_current__i_s = 0.00089999999999999998 * (-7.6990712032745758 + 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai) + var_chaste_interface__membrane__V) * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f; // uA_per_mm2
         const double var_sodium_current__i_Na = (3.0000000000000001e-5 + 0.040000000000000001 * pow(var_chaste_interface__sodium_current_m_gate__m, 3) * var_chaste_interface__sodium_current_h_gate__h * var_chaste_interface__sodium_current_j_gate__j) * (-50.0 + var_chaste_interface__membrane__V); // uA_per_mm2
         const double var_time_dependent_outward_current__i_x1 = 0.0080000000000000002 * (-1.0 + exp(3.0800000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V)) * var_chaste_interface__time_dependent_outward_current_x1_gate__x1 / exp(1.4000000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V); // uA_per_mm2
         const double var_time_independent_outward_current__i_K1 = 0.014 * (-1.0 + exp(3.3999999999999999 + 0.040000000000000001 * var_chaste_interface__membrane__V)) / (exp(2.1200000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V) + exp(4.2400000000000002 + 0.080000000000000002 * var_chaste_interface__membrane__V)) + 0.0007000000000000001 * (23.0 + var_chaste_interface__membrane__V) / (1.0 - exp(-0.92000000000000004 - 0.040000000000000001 * var_chaste_interface__membrane__V)); // uA_per_mm2
@@ -105,8 +104,8 @@
 
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: mV; Initial value: -84.624
-        double var_chaste_interface__slow_inward_current__Cai_converted = rY[1];
-        // Units: millimolar; Initial value: 0.0001
+        double var_chaste_interface__slow_inward_current__Cai = rY[1];
+        // Units: concentration_units; Initial value: 0.0001
         double var_chaste_interface__sodium_current_m_gate__m = rY[2];
         // Units: dimensionless; Initial value: 0.011
         double var_chaste_interface__sodium_current_h_gate__h = rY[3];
@@ -123,8 +122,7 @@
 
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
-        const double var_slow_inward_current__Cai = 1.0 * var_chaste_interface__slow_inward_current__Cai_converted; // concentration_units
-        const double var_slow_inward_current__i_s = 0.00089999999999999998 * (-7.6990712032745758 + 13.028700000000001 * log(var_slow_inward_current__Cai) + var_chaste_interface__membrane__V) * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f; // uA_per_mm2
+        const double var_slow_inward_current__i_s = 0.00089999999999999998 * (-7.6990712032745758 + 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai) + var_chaste_interface__membrane__V) * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f; // uA_per_mm2
         d_dt_chaste_interface_var_membrane__V = -0.99999999999999978 * GetIntracellularAreaStimulus(var_chaste_interface__environment__time) - 100.0 * var_slow_inward_current__i_s - 0.070000000000000007 * (23.0 + var_chaste_interface__membrane__V) / (1.0 - exp(-0.92000000000000004 - 0.040000000000000001 * var_chaste_interface__membrane__V)) - 1.3999999999999999 * (-1.0 + exp(3.3999999999999999 + 0.040000000000000001 * var_chaste_interface__membrane__V)) / (exp(2.1200000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V) + exp(4.2400000000000002 + 0.080000000000000002 * var_chaste_interface__membrane__V)) - 100.0 * (3.0000000000000001e-5 + 0.040000000000000001 * pow(var_chaste_interface__sodium_current_m_gate__m, 3) * var_chaste_interface__sodium_current_h_gate__h * var_chaste_interface__sodium_current_j_gate__j) * (-50.0 + var_chaste_interface__membrane__V) - 0.80000000000000004 * (-1.0 + exp(3.0800000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V)) * var_chaste_interface__time_dependent_outward_current_x1_gate__x1 / exp(1.4000000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V); // mV / ms
 
         double evalF = d_dt_chaste_interface_var_membrane__V;
@@ -163,8 +161,8 @@
 
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: mV; Initial value: -84.624
-        double var_chaste_interface__slow_inward_current__Cai_converted = rY[1];
-        // Units: millimolar; Initial value: 0.0001
+        double var_chaste_interface__slow_inward_current__Cai = rY[1];
+        // Units: concentration_units; Initial value: 0.0001
         double var_chaste_interface__sodium_current_m_gate__m = rY[2];
         // Units: dimensionless; Initial value: 0.011
         double var_chaste_interface__sodium_current_h_gate__h = rY[3];
@@ -181,11 +179,10 @@
         
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
-        const double var_slow_inward_current__Cai = 1.0 * var_chaste_interface__slow_inward_current__Cai_converted; // concentration_units
         const double d_dt_chaste_interface_var_slow_inward_current_d_gate__d = 0.095000000000000001 * (1.0 - var_chaste_interface__slow_inward_current_d_gate__d) * exp(0.050000000000000003 - 0.01 * var_chaste_interface__membrane__V) / (1.0 + exp(0.35997120230381568 - 0.071994240460763137 * var_chaste_interface__membrane__V)) - 0.070000000000000007 * var_chaste_interface__slow_inward_current_d_gate__d * exp(-0.74576271186440679 - 0.016949152542372881 * var_chaste_interface__membrane__V) / (1.0 + exp(2.2000000000000002 + 0.050000000000000003 * var_chaste_interface__membrane__V)); // 1 / ms
         const double d_dt_chaste_interface_var_slow_inward_current_f_gate__f = 0.012 * (1.0 - var_chaste_interface__slow_inward_current_f_gate__f) * exp(-0.224 - 0.0080000000000000002 * var_chaste_interface__membrane__V) / (1.0 + exp(4.197901049475262 + 0.14992503748125938 * var_chaste_interface__membrane__V)) - 0.0064999999999999997 * var_chaste_interface__slow_inward_current_f_gate__f * exp(-0.59999999999999998 - 0.02 * var_chaste_interface__membrane__V) / (1.0 + exp(-6.0 - 0.20000000000000001 * var_chaste_interface__membrane__V)); // 1 / ms
-        const double var_slow_inward_current__i_s = 0.00089999999999999998 * (-7.6990712032745758 + 13.028700000000001 * log(var_slow_inward_current__Cai) + var_chaste_interface__membrane__V) * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f; // uA_per_mm2
-        const double d_dt_chaste_interface_var_slow_inward_current__Cai_converted = 7.0000000000000007e-6 - 0.070000000000000007 * var_slow_inward_current__Cai - 0.01 * var_slow_inward_current__i_s; // millimolar / ms
+        const double var_slow_inward_current__i_s = 0.00089999999999999998 * (-7.6990712032745758 + 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai) + var_chaste_interface__membrane__V) * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f; // uA_per_mm2
+        const double d_dt_chaste_interface_var_slow_inward_current__Cai = 7.0000000000000007e-6 - 0.070000000000000007 * var_chaste_interface__slow_inward_current__Cai - 0.01 * var_slow_inward_current__i_s; // concentration_units / ms
         const double d_dt_chaste_interface_var_sodium_current_h_gate__h = 0.126 * (1.0 - var_chaste_interface__sodium_current_h_gate__h) * exp(-19.25 - 0.25 * var_chaste_interface__membrane__V) - 1.7 * var_chaste_interface__sodium_current_h_gate__h / (1.0 + exp(-1.845 - 0.082000000000000003 * var_chaste_interface__membrane__V)); // 1 / ms
         const double d_dt_chaste_interface_var_sodium_current_j_gate__j = -0.29999999999999999 * var_chaste_interface__sodium_current_j_gate__j / (1.0 + exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__membrane__V)) + 0.055 * (1.0 - var_chaste_interface__sodium_current_j_gate__j) * exp(-19.5 - 0.25 * var_chaste_interface__membrane__V) / (1.0 + exp(-15.600000000000001 - 0.20000000000000001 * var_chaste_interface__membrane__V)); // 1 / ms
         const double d_dt_chaste_interface_var_sodium_current_m_gate__m = -40.0 * var_chaste_interface__sodium_current_m_gate__m * exp(-4.032 - 0.056000000000000001 * var_chaste_interface__membrane__V) - 1.0 * (1.0 - var_chaste_interface__sodium_current_m_gate__m) * (47.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-4.7000000000000002 - 0.10000000000000001 * var_chaste_interface__membrane__V)); // 1 / ms
@@ -201,7 +198,7 @@
         }
         
         mEvalF[0] = d_dt_chaste_interface_var_membrane__V;
-        mEvalF[1] = d_dt_chaste_interface_var_slow_inward_current__Cai_converted;
+        mEvalF[1] = d_dt_chaste_interface_var_slow_inward_current__Cai;
         mEvalF[2] = d_dt_chaste_interface_var_sodium_current_m_gate__m;
         mEvalF[3] = d_dt_chaste_interface_var_sodium_current_h_gate__h;
         mEvalF[4] = d_dt_chaste_interface_var_sodium_current_j_gate__j;
@@ -304,8 +301,8 @@
         double d_dt_chaste_interface_var_membrane__V;
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: mV; Initial value: -84.624
-        double var_chaste_interface__slow_inward_current__Cai_converted = rY[1];
-        // Units: millimolar; Initial value: 0.0001
+        double var_chaste_interface__slow_inward_current__Cai = rY[1];
+        // Units: concentration_units; Initial value: 0.0001
         double var_chaste_interface__sodium_current_m_gate__m = rY[2];
         // Units: dimensionless; Initial value: 0.011
         double var_chaste_interface__sodium_current_h_gate__h = rY[3];
@@ -321,8 +318,7 @@
         
         
         // Mathematics
-        const double var_slow_inward_current__Cai = 1.0 * var_chaste_interface__slow_inward_current__Cai_converted; // concentration_units
-        const double var_slow_inward_current__i_s = 0.00089999999999999998 * (-7.6990712032745758 + 13.028700000000001 * log(var_slow_inward_current__Cai) + var_chaste_interface__membrane__V) * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f; // uA_per_mm2
+        const double var_slow_inward_current__i_s = 0.00089999999999999998 * (-7.6990712032745758 + 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai) + var_chaste_interface__membrane__V) * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f; // uA_per_mm2
         d_dt_chaste_interface_var_membrane__V = -0.99999999999999978 * GetIntracellularAreaStimulus(var_chaste_interface__environment__time) - 100.0 * var_slow_inward_current__i_s - 0.070000000000000007 * (23.0 + var_chaste_interface__membrane__V) / (1.0 - exp(-0.92000000000000004 - 0.040000000000000001 * var_chaste_interface__membrane__V)) - 1.3999999999999999 * (-1.0 + exp(3.3999999999999999 + 0.040000000000000001 * var_chaste_interface__membrane__V)) / (exp(2.1200000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V) + exp(4.2400000000000002 + 0.080000000000000002 * var_chaste_interface__membrane__V)) - 100.0 * (3.0000000000000001e-5 + 0.040000000000000001 * pow(var_chaste_interface__sodium_current_m_gate__m, 3) * var_chaste_interface__sodium_current_h_gate__h * var_chaste_interface__sodium_current_j_gate__j) * (-50.0 + var_chaste_interface__membrane__V) - 0.80000000000000004 * (-1.0 + exp(3.0800000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V)) * var_chaste_interface__time_dependent_outward_current_x1_gate__x1 / exp(1.4000000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V); // mV / ms
 
         return d_dt_chaste_interface_var_membrane__V;
@@ -380,8 +376,8 @@
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: mV; Initial value: -84.624
-        double var_chaste_interface__slow_inward_current__Cai_converted = rY[1];
-        // Units: millimolar; Initial value: 0.0001
+        double var_chaste_interface__slow_inward_current__Cai = rY[1];
+        // Units: concentration_units; Initial value: 0.0001
         double var_chaste_interface__slow_inward_current_d_gate__d = rY[5];
         // Units: dimensionless; Initial value: 0.003
         double var_chaste_interface__slow_inward_current_f_gate__f = rY[6];
@@ -389,11 +385,10 @@
         
         
         // Mathematics
-        const double var_slow_inward_current__Cai = 1.0 * var_chaste_interface__slow_inward_current__Cai_converted; // concentration_units
-        const double var_slow_inward_current__i_s = 0.00089999999999999998 * (-7.6990712032745758 + 13.028700000000001 * log(var_slow_inward_current__Cai) + var_chaste_interface__membrane__V) * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f; // uA_per_mm2
-        const double d_dt_chaste_interface_var_slow_inward_current__Cai_converted = 7.0000000000000007e-6 - 0.070000000000000007 * var_slow_inward_current__Cai - 0.01 * var_slow_inward_current__i_s; // millimolar / ms
+        const double var_slow_inward_current__i_s = 0.00089999999999999998 * (-7.6990712032745758 + 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai) + var_chaste_interface__membrane__V) * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f; // uA_per_mm2
+        const double d_dt_chaste_interface_var_slow_inward_current__Cai = 7.0000000000000007e-6 - 0.070000000000000007 * var_chaste_interface__slow_inward_current__Cai - 0.01 * var_slow_inward_current__i_s; // concentration_units / ms
 
-        return d_dt_chaste_interface_var_slow_inward_current__Cai_converted;
+        return d_dt_chaste_interface_var_slow_inward_current__Cai;
     }
 
     double Cellbeeler_reuter_model_1977FromCellMLGRL2::EvaluatePartialDerivative1(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
@@ -401,15 +396,15 @@
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
-            double var_chaste_interface__slow_inward_current__Cai_converted = rY[1];
-            // Units: millimolar; Initial value: 0.0001
+            double var_chaste_interface__slow_inward_current__Cai = rY[1];
+            // Units: concentration_units; Initial value: 0.0001
             double var_chaste_interface__slow_inward_current_d_gate__d = rY[5];
             // Units: dimensionless; Initial value: 0.003
             double var_chaste_interface__slow_inward_current_f_gate__f = rY[6];
             // Units: dimensionless; Initial value: 0.994
             
             const double var_x7 = var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f;
-            const double var_x14 = var_x7 / var_chaste_interface__slow_inward_current__Cai_converted;
+            const double var_x14 = var_x7 / var_chaste_interface__slow_inward_current__Cai;
             
             partialF = -0.070000000000000007 - 0.0001172583 * var_x14;
         }
@@ -682,6 +677,20 @@
         return partialF;
     }
 
+    std::vector<double> Cellbeeler_reuter_model_1977FromCellMLGRL2::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+        const double var_stimulus_protocol__Istim_converter = -GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
+
+        std::vector<double> dqs(1);
+        dqs[0] = var_stimulus_protocol__Istim_converter;
+        return dqs;
+    }
+
 template<>
 void OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLGRL2>::Initialise(void)
 {
@@ -696,7 +705,7 @@ void OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLGRL2>::Initialis
 
     // rY[1]:
     this->mVariableNames.push_back("cytosolic_calcium_concentration");
-    this->mVariableUnits.push_back("millimolar");
+    this->mVariableUnits.push_back("concentration_units");
     this->mInitialConditions.push_back(0.0001);
 
     // rY[2]:
@@ -728,6 +737,10 @@ void OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLGRL2>::Initialis
     this->mVariableNames.push_back("time_dependent_outward_current_x1_gate__x1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0001);
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     this->mInitialised = true;
 }

@@ -28,11 +28,11 @@ class Celliribe_model_2006_without_otherwise_sectionFromCellMLBackwardEuler : pu
         archive & boost::serialization::base_object<AbstractBackwardEulerCardiacCell<15> >(*this);
         
     }
-    
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
@@ -44,6 +44,7 @@ public:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted);
     void ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted);
 
+    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY);
 };
 
 // Needs to be included last

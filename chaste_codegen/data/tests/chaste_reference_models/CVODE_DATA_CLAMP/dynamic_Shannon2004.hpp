@@ -29,10 +29,11 @@ class DynamicShannon2004FromCellMLCvodeDataClamp : public AbstractCvodeCellWithD
         archive & boost::serialization::base_object<AbstractCvodeCellWithDataClamp >(*this);
         archive & boost::serialization::base_object<AbstractDynamicallyLoadableEntity>(*this);
     }
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

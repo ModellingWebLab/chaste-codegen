@@ -28,11 +28,11 @@ class Celltest_piecewises_beFromCellMLBackwardEuler : public AbstractBackwardEul
         archive & boost::serialization::base_object<AbstractBackwardEulerCardiacCell<2> >(*this);
         
     }
-    
-    // 
+
+    //
     // Settable parameters and readable variables
-    // 
-    
+    //
+
 public:
 
     Celltest_piecewises_beFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);

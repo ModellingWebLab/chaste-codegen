@@ -28,9 +28,11 @@ class Cellkurata_model_2002FromCellMLGRL2 : public AbstractGeneralizedRushLarsen
         archive & boost::serialization::base_object<AbstractGeneralizedRushLarsenCardiacCell >(*this);
         
     }
+
     //
     // Settable parameters and readable variables
     //
+
 public:
 
     Cellkurata_model_2002FromCellMLGRL2(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);

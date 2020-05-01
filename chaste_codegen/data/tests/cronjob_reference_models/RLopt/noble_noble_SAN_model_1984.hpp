@@ -28,9 +28,11 @@ class Cellnoble_noble_SAN_model_1984FromCellMLRushLarsen : public AbstractRushLa
         archive & boost::serialization::base_object<AbstractRushLarsenCardiacCell >(*this);
         
     }
+
     //
     // Settable parameters and readable variables
     //
+
 public:
 
     double GetIntracellularCalciumConcentration();

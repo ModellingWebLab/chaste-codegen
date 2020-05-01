@@ -28,9 +28,11 @@ class Cellmatsuoka_model_2003FromCellMLRushLarsen : public AbstractRushLarsenCar
         archive & boost::serialization::base_object<AbstractRushLarsenCardiacCell >(*this);
         
     }
+
     //
     // Settable parameters and readable variables
     //
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

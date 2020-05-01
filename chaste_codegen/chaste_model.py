@@ -135,7 +135,6 @@ class ChasteModel(object):
         self._cpp_template = ''
 
         self._is_self_excitatory = False
-        self.expose_annotated_variables = kwargs.get('expose_annotated_variables', False)
 
         # Store parameters for future reference
         self._model = model
@@ -231,11 +230,11 @@ class ChasteModel(object):
         return [sp.Eq(eq.lhs, optimize(eq.rhs, self._OPTIMS)) for eq in equations]
 
     def _get_initial_value(self, var):
-        """Returns the initial value of a variable if it has one, none otherwise"""
+        """Returns the initial value of a variable if it has one, 0 otherwise"""
         # state vars have an initial value parameter defined
-        initial_value = None
+        initial_value = 0
         if var in self._state_vars:
-            initial_value = getattr(var, 'initial_value', None)
+            initial_value = getattr(var, 'initial_value', 0)
         else:
             eqs = self._model.get_equations_for([var])
             # If there is a defining equation, there should be just 1 equation and it should be of the form var = value
@@ -321,33 +320,20 @@ class ChasteModel(object):
             self._logger.info(warning)
             return cytosolic_calcium_concentration
 
-    def _get_modifiable_parameters_annotated(self):
-        """ Get the variables annotated in the model as modifiable parametery"""
-        return self._model.get_variables_by_rdf((self._PYCMLMETA, 'modifiable-parameter'), 'yes')
-
-    def _get_modifiable_parameters_exposed(self):
-        """ Get the variables in the model that have exposed annotation and are modifiable parameters
-            (irrespective of any modifiable_parameters tags)"""
-        return [q for q in self._model.variables()
-                if self._model.has_ontology_annotation(q, self._OXMETA)
-                and not self._model.get_ontology_terms_by_variable(q, self._OXMETA)[-1] == 'membrane_stimulus_current'
-                and q not in self._model.get_derived_quantities()
-                and q not in self._state_vars
-                and not q == self._time_variable]
-
     def _get_modifiable_parameters(self):
-        """ Get all modifiable parameters
+        """ Get all modifiable parameters, either annotated as such or with other annotation.
 
-            Note: the result depends on self.expose_annotated_variables to determine whether or not to include
-            variables exposed with oxford metadata that are a modifiable parameter but are not annotated as such"""
-        if self.expose_annotated_variables:
-            # Combined and sorted in display name order
-            return \
-                sorted(set(self._get_modifiable_parameters_annotated() + self._get_modifiable_parameters_exposed()),
-                       key=lambda v: self._model.get_display_name(v, self._OXMETA))
-        else:
-            return sorted(self._get_modifiable_parameters_annotated(),
-                          key=lambda v: self._model.get_display_name(v, self._OXMETA))
+        Stimulus currents are ignored and the result is sorted by display name"""
+        tagged = self._model.get_variables_by_rdf((self._PYCMLMETA, 'modifiable-parameter'), 'yes')
+        annotated = [q for q in self._model.variables()
+                     if self._model.has_ontology_annotation(q, self._OXMETA)]
+
+        currents = [var for var in annotated if self._model.get_ontology_terms_by_variable(var, self._OXMETA)[-1]
+                    .startswith('membrane_stimulus_current')]
+
+        parameters = set(tagged + annotated) -\
+            set(currents + self._model.get_derived_quantities() + self._state_vars + [self._time_variable])
+        return sorted(parameters, key=lambda v: self._model.get_display_name(v, self._OXMETA))
 
     def _get_membrane_stimulus_current(self):
         """ Find the membrane_stimulus_current variable if it exists"""
@@ -664,29 +650,17 @@ class ChasteModel(object):
                     derivatives.add(s)
         return eqs
 
-    def _get_derived_quant_annotated(self):
-        """ Get the variables annotated in the model as derived derived-quantity"""
-        return self._model.get_variables_by_rdf((self._PYCMLMETA, 'derived-quantity'), 'yes')
-
-    def _get_derived_quant_exposed(self):
-        """ Get the variables in the model that have exposed annotation and are derived quantities
-            (irrespective of any derived-quantity tags)"""
-        return [q for q in self._model.get_derived_quantities()
-                if self._model.has_ontology_annotation(q, self._OXMETA)] +\
-               [self._membrane_stimulus_current] if self._membrane_stimulus_current is not None else []
-
     def _get_derived_quant(self):
         """ Get all derived quantities
 
-            Note: the result depends on self.expose_annotated_variables to determine whether or not to include
-            variables exposed with oxford metadata that are derived quantities but are not annotated as such"""
-        if self.expose_annotated_variables:
-            # Combined and sorted in display name order
-            return \
-                sorted(set(self._get_derived_quant_annotated() + self._get_derived_quant_exposed()),
-                       key=lambda v: self._model.get_display_name(v, self._OXMETA))
-        else:
-            return self._get_derived_quant_annotated()  # These are already sorted
+        Stimulus currents are ignored and the result is sorted by display name"""
+        tagged = self._model.get_variables_by_rdf((self._PYCMLMETA, 'derived-quantity'), 'yes')
+        annotated = [q for q in self._model.get_derived_quantities()
+                     if self._model.has_ontology_annotation(q, self._OXMETA)]
+
+        return sorted(set(tagged + annotated +
+                          [self._membrane_stimulus_current] if self._membrane_stimulus_current is not None else []),
+                      key=lambda v: self._model.get_display_name(v, self._OXMETA))
 
     def _get_derived_quant_eqs(self):
         """ Get the defining equations for derived quantities"""
