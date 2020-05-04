@@ -3916,7 +3916,7 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__cell__V = rY[0];
+        double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: millivolt; Initial value: -85.56885
         double var_chaste_interface__INa_h_gate__h = rY[2];
         // Units: dimensionless; Initial value: 0.9867005

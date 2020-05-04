@@ -361,7 +361,8 @@
             d_dt_chaste_interface_var_membrane__V = 0.0;
         }
         else
-        {const double var_hyperpolarization_activated_current__i_f = var_hyperpolarization_activated_current__i_f_K + var_hyperpolarization_activated_current__i_f_Na; // picoA_per_picoF
+        {
+            const double var_hyperpolarization_activated_current__i_f = var_hyperpolarization_activated_current__i_f_K + var_hyperpolarization_activated_current__i_f_Na; // picoA_per_picoF
             
             // Special handling of data clamp current here
             // (we want to save expense of calling the interpolation method if possible.)
@@ -400,7 +401,7 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__membrane__V = NV_Ith_S(rY,0);
+        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
         // Units: millivolt; Initial value: -69.1370441635924
         
         // Mathematics

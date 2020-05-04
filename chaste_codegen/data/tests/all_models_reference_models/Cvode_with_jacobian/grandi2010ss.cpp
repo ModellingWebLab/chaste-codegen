@@ -637,20 +637,6 @@
         NV_Ith_S(rDY,37) = d_dt_chaste_interface_var_cell__sCai;
     }
 
-    N_Vector Cellgrandi2010ssFromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__cell__time, const N_Vector & rY)
-    {
-        // Inputs:
-        // Time units: millisecond
-        
-
-        // Mathematics
-        const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__cell__time); // uA_per_cm2
-
-        N_Vector dqs = N_VNew_Serial(1);
-        NV_Ith_S(dqs, 0) = var_cell__i_Stim_converter;
-        return dqs;
-    }
-
     void Cellgrandi2010ssFromCellMLCvode::EvaluateAnalyticJacobian(double var_chaste_interface__cell__time, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3)
     {
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
@@ -1251,6 +1237,20 @@
         IJth(rJacobian, 31, 37) = 26713.606559545973 * var_x340 - 3.3723651925989277e-9 * var_x341;
         IJth(rJacobian, 36, 37) = 17.724002759538607 * var_x342;
         IJth(rJacobian, 37, 37) = -7.0788000000000011 + var_x306 + var_x309 + var_x310 + var_x312 + var_x315 + var_x316 + var_x318 - var_x367 + 1.8158889498609611e-10 * var_x341 - 1438.4249685909372 * var_x340;
+    }
+
+    N_Vector Cellgrandi2010ssFromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__cell__time, const N_Vector & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+        const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__cell__time); // uA_per_cm2
+
+        N_Vector dqs = N_VNew_Serial(1);
+        NV_Ith_S(dqs, 0) = var_cell__i_Stim_converter;
+        return dqs;
     }
 
 template<>

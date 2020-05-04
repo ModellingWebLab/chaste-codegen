@@ -475,7 +475,8 @@
             d_dt_chaste_interface_var_membrane__V = 0.0;
         }
         else
-        {const double var_membrane__V_orig_deriv = var_membrane__dVdt; // millivolt / second
+        {
+            const double var_membrane__V_orig_deriv = var_membrane__dVdt; // millivolt / second
             
             // Special handling of data clamp current here
             // (we want to save expense of calling the interpolation method if possible.)
@@ -519,7 +520,7 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__membrane__V = NV_Ith_S(rY,0);
+        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
         // Units: millivolt; Initial value: -88.984
         
         // Mathematics

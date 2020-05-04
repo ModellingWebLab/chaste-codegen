@@ -440,20 +440,6 @@
         NV_Ith_S(rDY,25) = d_dt_chaste_interface_var_intracellular_ion_concentrations__Ca_NSR;
     }
 
-    N_Vector Cellpandit_model_2001_epiFromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const N_Vector & rY)
-    {
-        // Inputs:
-        // Time units: millisecond
-        
-
-        // Mathematics
-        const double var_membrane__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
-
-        N_Vector dqs = N_VNew_Serial(1);
-        NV_Ith_S(dqs, 0) = var_membrane__i_Stim_converter;
-        return dqs;
-    }
-
     void Cellpandit_model_2001_epiFromCellMLCvode::EvaluateAnalyticJacobian(double var_chaste_interface__environment__time_converted, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3)
     {
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
@@ -817,6 +803,20 @@
         IJth(rJacobian, 21, 25) = var_x174 * (0.2735562310030395 * var_x180 + 2.651834266564234e-10 * var_x184);
         IJth(rJacobian, 24, 25) = 1.7400382808421784 * var_x202;
         IJth(rJacobian, 25, 25) = -0.19333758676024207 - 4.9248350664764349e-13 * var_x184 - 0.00050803300043421621 * var_x180;
+    }
+
+    N_Vector Cellpandit_model_2001_epiFromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const N_Vector & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+        const double var_membrane__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
+
+        N_Vector dqs = N_VNew_Serial(1);
+        NV_Ith_S(dqs, 0) = var_membrane__i_Stim_converter;
+        return dqs;
     }
 
 template<>

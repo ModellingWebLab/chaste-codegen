@@ -422,9 +422,9 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__cell__V = NV_Ith_S(rY,0);
+        double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
         // Units: mV; Initial value: -89.4356034692784
-        double var_chaste_interface__Ca__Ca_T = NV_Ith_S(rY,14);
+        double var_chaste_interface__Ca__Ca_T = NV_Ith_S(rY, 14);
         // Units: mM; Initial value: 0.0257059808595638
         
         // Mathematics

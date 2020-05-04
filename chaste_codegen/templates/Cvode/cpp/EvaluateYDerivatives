@@ -21,9 +21,16 @@
         }
         else
         {
-            {%- for deriv in y_derivative_equations %}{% if not deriv.in_eqs_excl_voltage %}
-            {% if not deriv.is_voltage%}const double {% endif %}{{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
-            {%- endfor %}
+            {% for deriv in y_derivative_equations %}{% if not deriv.in_eqs_excl_voltage %}
+            {%- if deriv.is_data_clamp_current is defined and deriv.is_data_clamp_current %}
+            // Special handling of data clamp current here
+            // (we want to save expense of calling the interpolation method if possible.)
+            double {{ deriv.lhs }} = 0.0;
+            if (mDataClampIsOn)
+            {
+                {{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}
+            }{% else %}{% if not deriv.is_voltage%}const double {% endif %}{{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
+            {% endif %}{%- endfor %}
         }
         {% for deriv in y_derivatives %}
         NV_Ith_S(rDY,{{loop.index0}}) = {{deriv}};

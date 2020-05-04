@@ -416,7 +416,8 @@
             d_dt_chaste_interface_var_membrane__V = 0.0;
         }
         else
-        {const double var_L_type_Ca_current__P_K = 5.7899999999999998e-7; // cm_per_second
+        {
+            const double var_L_type_Ca_current__P_K = 5.7899999999999998e-7; // cm_per_second
             const double var_L_type_Ca_current__i_Ca_half = -0.26500000000000001; // microA_per_microF
             const double var_fast_sodium_current__g_Na = 12.800000000000001; // milliS_per_microF
             const double var_membrane__C_sc = 0.001; // microF_per_cm2
@@ -504,7 +505,7 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__membrane__V = NV_Ith_S(rY,0);
+        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
         // Units: millivolt; Initial value: -96.1638
         
         // Mathematics

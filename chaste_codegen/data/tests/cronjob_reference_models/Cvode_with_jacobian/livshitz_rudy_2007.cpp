@@ -411,31 +411,6 @@
         NV_Ith_S(rDY,17) = d_dt_chaste_interface_var_Ca__Over;
     }
 
-    N_Vector Celllivshitz_rudy_2007FromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__Environment__time, const N_Vector & rY)
-    {
-        // Inputs:
-        // Time units: millisecond
-        double var_chaste_interface__Ca__Ca_T = NV_Ith_S(rY,14);
-        // Units: mM; Initial value: 0.0257059808595638
-        
-
-        // Mathematics
-        const double var_Ca__cmdnbar = 0.050000000000000003; // mM
-        const double var_Ca__kmcmdn = 0.0023800000000000002; // mM
-        const double var_Ca__kmtrpn = 0.00050000000000000001; // mM
-        const double var_Ca__dmyo = -var_chaste_interface__Ca__Ca_T * var_Ca__kmcmdn * var_Ca__kmtrpn; // mM3
-        const double var_Ca__trpnbar = 0.070000000000000007; // mM
-        const double var_Ca__bmyo = -var_chaste_interface__Ca__Ca_T + var_Ca__cmdnbar + var_Ca__kmcmdn + var_Ca__kmtrpn + var_Ca__trpnbar; // mM
-        const double var_Ca__cmyo = var_Ca__cmdnbar * var_Ca__kmtrpn + var_Ca__kmcmdn * var_Ca__kmtrpn + var_Ca__kmcmdn * var_Ca__trpnbar - (var_Ca__kmcmdn + var_Ca__kmtrpn) * var_chaste_interface__Ca__Ca_T; // mM2
-        const double var_Ca__Ca_i = -0.33333333333333331 * var_Ca__bmyo + 1.1547005383792515 * sqrt(-var_Ca__cmyo + 0.33333333333333331 * pow(var_Ca__bmyo, 2)) * cos(0.33333333333333331 * acos(0.096225044864937631 * pow((-var_Ca__cmyo + 0.33333333333333331 * pow(var_Ca__bmyo, 2)), (-1.5)) * (-2.0 * pow(var_Ca__bmyo, 3) - 27.0 * var_Ca__dmyo + 9.0 * var_Ca__bmyo * var_Ca__cmyo))); // mM
-        const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__Environment__time); // uA_per_cm2
-
-        N_Vector dqs = N_VNew_Serial(2);
-        NV_Ith_S(dqs, 0) = var_Ca__Ca_i;
-        NV_Ith_S(dqs, 1) = var_cell__i_Stim_converter;
-        return dqs;
-    }
-
     void Celllivshitz_rudy_2007FromCellMLCvode::EvaluateAnalyticJacobian(double var_chaste_interface__Environment__time, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3)
     {
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
@@ -844,6 +819,31 @@
         IJth(rJacobian, 14, 16) = 4.7352941176470591e-5;
         IJth(rJacobian, 15, 16) = 0.0083333333333333332;
         IJth(rJacobian, 16, 16) = -0.0013079710144927536;
+    }
+
+    N_Vector Celllivshitz_rudy_2007FromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__Environment__time, const N_Vector & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        double var_chaste_interface__Ca__Ca_T = NV_Ith_S(rY, 14);
+        // Units: mM; Initial value: 0.0257059808595638
+        
+
+        // Mathematics
+        const double var_Ca__cmdnbar = 0.050000000000000003; // mM
+        const double var_Ca__kmcmdn = 0.0023800000000000002; // mM
+        const double var_Ca__kmtrpn = 0.00050000000000000001; // mM
+        const double var_Ca__dmyo = -var_chaste_interface__Ca__Ca_T * var_Ca__kmcmdn * var_Ca__kmtrpn; // mM3
+        const double var_Ca__trpnbar = 0.070000000000000007; // mM
+        const double var_Ca__bmyo = -var_chaste_interface__Ca__Ca_T + var_Ca__cmdnbar + var_Ca__kmcmdn + var_Ca__kmtrpn + var_Ca__trpnbar; // mM
+        const double var_Ca__cmyo = var_Ca__cmdnbar * var_Ca__kmtrpn + var_Ca__kmcmdn * var_Ca__kmtrpn + var_Ca__kmcmdn * var_Ca__trpnbar - (var_Ca__kmcmdn + var_Ca__kmtrpn) * var_chaste_interface__Ca__Ca_T; // mM2
+        const double var_Ca__Ca_i = -0.33333333333333331 * var_Ca__bmyo + 1.1547005383792515 * sqrt(-var_Ca__cmyo + 0.33333333333333331 * pow(var_Ca__bmyo, 2)) * cos(0.33333333333333331 * acos(0.096225044864937631 * pow((-var_Ca__cmyo + 0.33333333333333331 * pow(var_Ca__bmyo, 2)), (-1.5)) * (-2.0 * pow(var_Ca__bmyo, 3) - 27.0 * var_Ca__dmyo + 9.0 * var_Ca__bmyo * var_Ca__cmyo))); // mM
+        const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__Environment__time); // uA_per_cm2
+
+        N_Vector dqs = N_VNew_Serial(2);
+        NV_Ith_S(dqs, 0) = var_Ca__Ca_i;
+        NV_Ith_S(dqs, 1) = var_cell__i_Stim_converter;
+        return dqs;
     }
 
 template<>

@@ -440,7 +440,8 @@
             d_dt_chaste_interface_var_membrane__V = 0.0;
         }
         else
-        {const double var_calcium_activated_chloride_current__E_Cl = -40.0; // millivolt
+        {
+            const double var_calcium_activated_chloride_current__E_Cl = -40.0; // millivolt
             const double var_calcium_activated_chloride_current__Km_Cl = 10.0; // micromolar
             const double var_calcium_activated_chloride_current__g_ClCa = 10.0; // milliS_per_microF
             const double var_calcium_activated_chloride_current__O_ClCa = 0.20000000000000001 / (1.0 + exp(5.9871794871794881 - 0.12820512820512822 * var_chaste_interface__membrane__V)); // dimensionless
@@ -506,7 +507,7 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__membrane__V = NV_Ith_S(rY,0);
+        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
         // Units: millivolt; Initial value: -82.4202
         
         // Mathematics

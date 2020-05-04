@@ -446,20 +446,6 @@
         NV_Ith_S(rDY,26) = d_dt_chaste_interface_var_K__K_i;
     }
 
-    N_Vector Cellfink_noble_giles_model_2008FromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__Environment__time, const N_Vector & rY)
-    {
-        // Inputs:
-        // Time units: millisecond
-        
-
-        // Mathematics
-        const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__Environment__time); // uA_per_cm2
-
-        N_Vector dqs = N_VNew_Serial(1);
-        NV_Ith_S(dqs, 0) = var_cell__i_Stim_converter;
-        return dqs;
-    }
-
     void Cellfink_noble_giles_model_2008FromCellMLCvode::EvaluateAnalyticJacobian(double var_chaste_interface__Environment__time, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3)
     {
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
@@ -900,6 +886,20 @@
         IJth(rJacobian, 26, 25) = 0.00015902686554868019 * var_x75 - 9.9391790967925116e-8 * var_x76 - 2.1912923713842655e-5 * var_x78;
         IJth(rJacobian, 0, 26) = mSetVoltageDerivativeToZero ? 0.0 : (-0.64113025583269556 * var_x84 - 5.3427521319391307 * var_x86 - 0.25992489121883872 * var_x85 - 10.052922411456667 * var_x78 + var_x55 * var_x83 + var_x6 * (0.009050972624097476 * var_x80 - 0.13565712352459006 * var_x82 - var_x22 * var_x81));
         IJth(rJacobian, 26, 26) = -4.6583596330447822e-5 * var_x84 - 1.8885766345635723e-5 * var_x85 - 0.00038819663608706523 * var_x86 - 0.00073043079046142181 * var_x78 + var_x272 * var_x83 + var_x6 * (6.576305692690868e-7 * var_x80 - 9.8566502268897146e-6 * var_x82 - var_x271 * var_x81);
+    }
+
+    N_Vector Cellfink_noble_giles_model_2008FromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__Environment__time, const N_Vector & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+        const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__Environment__time); // uA_per_cm2
+
+        N_Vector dqs = N_VNew_Serial(1);
+        NV_Ith_S(dqs, 0) = var_cell__i_Stim_converter;
+        return dqs;
     }
 
 template<>

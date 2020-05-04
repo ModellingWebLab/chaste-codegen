@@ -411,7 +411,8 @@
             d_dt_chaste_interface_var_cell__V = 0.0;
         }
         else
-        {const double var_cell__i_tot = var_ICaL__i_CaL + var_ICab__i_b_Ca + var_IK1__i_K1 + var_IKr__i_Kr + var_IKs__i_Ks + var_INa__i_Na + var_INaCa__i_NaCa + var_INaK__i_NaK + var_INab__i_b_Na + var_IpCa__i_p_Ca + var_IpK__i_p_K + var_Ito__i_to + var_cell__i_Stim; // nanoA_per_nanoF
+        {
+            const double var_cell__i_tot = var_ICaL__i_CaL + var_ICab__i_b_Ca + var_IK1__i_K1 + var_IKr__i_Kr + var_IKs__i_Ks + var_INa__i_Na + var_INaCa__i_NaCa + var_INaK__i_NaK + var_INab__i_b_Na + var_IpCa__i_p_Ca + var_IpK__i_p_K + var_Ito__i_to + var_cell__i_Stim; // nanoA_per_nanoF
             
             // Special handling of data clamp current here
             // (we want to save expense of calling the interpolation method if possible.)
@@ -457,7 +458,7 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__cell__V = NV_Ith_S(rY,0);
+        double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
         // Units: millivolt; Initial value: -86.45
         
         // Mathematics

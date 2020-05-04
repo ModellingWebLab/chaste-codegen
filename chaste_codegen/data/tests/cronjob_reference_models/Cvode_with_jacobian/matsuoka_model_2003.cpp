@@ -624,28 +624,6 @@
         NV_Ith_S(rDY,36) = d_dt_chaste_interface_var_NL_model__X;
     }
 
-    N_Vector Cellmatsuoka_model_2003FromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY)
-    {
-        // Inputs:
-        // Time units: millisecond
-        double var_chaste_interface__internal_ion_concentrations__Ca_Total = NV_Ith_S(rY,3);
-        // Units: millimolar; Initial value: 0.00040180173572968586
-        
-
-        // Mathematics
-        const double var_internal_ion_concentrations__CMDN_max = 0.050000000000000003; // millimolar
-        const double var_internal_ion_concentrations__K_mCMDN = 0.0023800000000000002; // millimolar
-        const double var_internal_ion_concentrations__b1 = -var_chaste_interface__internal_ion_concentrations__Ca_Total + var_internal_ion_concentrations__CMDN_max + var_internal_ion_concentrations__K_mCMDN; // millimolar
-        const double var_internal_ion_concentrations__c1 = var_chaste_interface__internal_ion_concentrations__Ca_Total * var_internal_ion_concentrations__K_mCMDN; // millimolar2
-        const double var_internal_ion_concentrations__Cai = 1.0 * sqrt(0.25 * pow(var_internal_ion_concentrations__b1, 2) + var_internal_ion_concentrations__c1) - 0.5 * var_internal_ion_concentrations__b1; // millimolar
-        const double var_membrane__i_ext_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
-
-        N_Vector dqs = N_VNew_Serial(2);
-        NV_Ith_S(dqs, 0) = var_internal_ion_concentrations__Cai;
-        NV_Ith_S(dqs, 1) = var_membrane__i_ext_converter;
-        return dqs;
-    }
-
     void Cellmatsuoka_model_2003FromCellMLCvode::EvaluateAnalyticJacobian(double var_chaste_interface__environment__time, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3)
     {
         double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
@@ -1375,7 +1353,27 @@
         IJth(rJacobian, 35, 36) = var_x437 * var_chaste_interface__NL_model__pCB;
         IJth(rJacobian, 36, 36) = -1.2;
     }
+    N_Vector Cellmatsuoka_model_2003FromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        double var_chaste_interface__internal_ion_concentrations__Ca_Total = NV_Ith_S(rY, 3);
+        // Units: millimolar; Initial value: 0.00040180173572968586
+        
 
+        // Mathematics
+        const double var_internal_ion_concentrations__CMDN_max = 0.050000000000000003; // millimolar
+        const double var_internal_ion_concentrations__K_mCMDN = 0.0023800000000000002; // millimolar
+        const double var_internal_ion_concentrations__b1 = -var_chaste_interface__internal_ion_concentrations__Ca_Total + var_internal_ion_concentrations__CMDN_max + var_internal_ion_concentrations__K_mCMDN; // millimolar
+        const double var_internal_ion_concentrations__c1 = var_chaste_interface__internal_ion_concentrations__Ca_Total * var_internal_ion_concentrations__K_mCMDN; // millimolar2
+        const double var_internal_ion_concentrations__Cai = 1.0 * sqrt(0.25 * pow(var_internal_ion_concentrations__b1, 2) + var_internal_ion_concentrations__c1) - 0.5 * var_internal_ion_concentrations__b1; // millimolar
+        const double var_membrane__i_ext_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
+
+        N_Vector dqs = N_VNew_Serial(2);
+        NV_Ith_S(dqs, 0) = var_internal_ion_concentrations__Cai;
+        NV_Ith_S(dqs, 1) = var_membrane__i_ext_converter;
+        return dqs;
+    }
 template<>
 void OdeSystemInformation<Cellmatsuoka_model_2003FromCellMLCvode>::Initialise(void)
 {

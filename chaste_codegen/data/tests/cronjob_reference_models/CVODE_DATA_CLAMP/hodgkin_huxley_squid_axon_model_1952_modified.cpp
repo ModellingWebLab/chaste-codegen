@@ -119,7 +119,8 @@
             d_dt_chaste_interface_var_membrane__V = 0.0;
         }
         else
-        {const double var_leakage_current__g_L = 0.29999999999999999; // milliS_per_cm2
+        {
+            const double var_leakage_current__g_L = 0.29999999999999999; // milliS_per_cm2
             const double var_membrane__Cm = 1.0; // microF_per_cm2
             const double var_membrane__E_R = -75.0; // millivolt
             const double var_leakage_current__E_L = 10.613 + var_membrane__E_R; // millivolt
@@ -154,7 +155,7 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__membrane__V = NV_Ith_S(rY,0);
+        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
         // Units: millivolt; Initial value: -75.0
         
         // Mathematics

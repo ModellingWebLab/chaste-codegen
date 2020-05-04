@@ -590,7 +590,8 @@
             d_dt_chaste_interface_var_membrane__Vm = 0.0;
         }
         else
-        {const double var_membrane__caiont = -2.0 * var_INaCa__INaCa - 2.0 * var_INaCa__INaCa_ss_sr + var_ICaL__ICaL + var_ICab__ICab + var_IpCa__IpCa; // uA_per_uF
+        {
+            const double var_membrane__caiont = -2.0 * var_INaCa__INaCa - 2.0 * var_INaCa__INaCa_ss_sr + var_ICaL__ICaL + var_ICab__ICab + var_IpCa__IpCa; // uA_per_uF
             const double var_membrane__clont = var_IClb__IClb + var_Ito2__Ito2; // uA_per_uF
             const double var_membrane__naiont = 3.0 * var_INaCa__INaCa + 3.0 * var_INaCa__INaCa_ss_sr + 3.0 * var_INaK__INaK + var_INa__INa + var_INaL__INaL + var_INab__INab; // uA_per_uF
             const double var_membrane__kiont = -2.0 * var_INaK__INaK + var_IK1__IK1 + var_IKp__IKp + var_IKr__IKr + var_IKs__IKs + var_Ito1__Ito1 + var_membrane__i_Stim; // uA_per_uF
@@ -660,7 +661,7 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__membrane__Vm = NV_Ith_S(rY,0);
+        double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
         // Units: mV; Initial value: -87.472528
         
         // Mathematics

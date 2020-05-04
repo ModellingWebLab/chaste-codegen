@@ -468,7 +468,8 @@
             d_dt_chaste_interface_var_cell__V = 0.0;
         }
         else
-        {const double var_cell__caiont = -2.0 * var_INaCa__INaCa + var_ICaL__ICaL + var_ICab__ICab + var_IpCa__IpCa; // uA_per_uF
+        {
+            const double var_cell__caiont = -2.0 * var_INaCa__INaCa + var_ICaL__ICaL + var_ICab__ICab + var_IpCa__IpCa; // uA_per_uF
             
             // Special handling of data clamp current here
             // (we want to save expense of calling the interpolation method if possible.)
@@ -516,7 +517,7 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__cell__V = NV_Ith_S(rY,0);
+        double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
         // Units: mV; Initial value: -85.781844107117
         
         // Mathematics

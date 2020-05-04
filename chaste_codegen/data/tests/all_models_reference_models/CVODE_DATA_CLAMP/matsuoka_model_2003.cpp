@@ -572,7 +572,8 @@
             d_dt_chaste_interface_var_membrane__Vm = 0.0;
         }
         else
-        {const double var_L_type_Ca_channel__i_Ca_L = var_L_type_Ca_channel__i_CaL_Ca + var_L_type_Ca_channel__i_CaL_K + var_L_type_Ca_channel__i_CaL_Na; // picoA
+        {
+            const double var_L_type_Ca_channel__i_Ca_L = var_L_type_Ca_channel__i_CaL_Ca + var_L_type_Ca_channel__i_CaL_K + var_L_type_Ca_channel__i_CaL_Na; // picoA
             const double var_background_NSC_current__i_bNSC = var_background_NSC_current__i_bNSC_K + var_background_NSC_current__i_bNSC_Na; // picoA
             const double var_background_lCa_current__i_lCa = var_background_lCa_current__i_lCa_K + var_background_lCa_current__i_lCa_Na; // picoA
             const double var_slow_time_dependent_potassium_current__i_Ks = var_slow_time_dependent_potassium_current__i_Ks_K + var_slow_time_dependent_potassium_current__i_Ks_Na; // picoA
@@ -635,9 +636,9 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__membrane__Vm = NV_Ith_S(rY,0);
+        double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
         // Units: millivolt; Initial value: -85.95752434460744
-        double var_chaste_interface__internal_ion_concentrations__Ca_Total = NV_Ith_S(rY,3);
+        double var_chaste_interface__internal_ion_concentrations__Ca_Total = NV_Ith_S(rY, 3);
         // Units: millimolar; Initial value: 0.00040180173572968586
         
         // Mathematics

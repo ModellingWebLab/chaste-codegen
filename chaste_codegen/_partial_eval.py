@@ -1,5 +1,5 @@
 import sympy as sp
-from cellmlmanip.model import VariableDummy
+from cellmlmanip.model import Variable
 
 
 def partial_eval(equations, required_lhs, keep_multiple_usages=True):
@@ -16,7 +16,7 @@ def partial_eval(equations, required_lhs, keep_multiple_usages=True):
         usage_count = dict()
         for eq in equations:
             usage_count.setdefault(eq.lhs, 0)
-            for var in eq.rhs.atoms(VariableDummy):
+            for var in eq.rhs.atoms(Variable):
                 usage_count.setdefault(var, 0)
                 usage_count[var] += 1
     # subs in all constants and expressions only used once
