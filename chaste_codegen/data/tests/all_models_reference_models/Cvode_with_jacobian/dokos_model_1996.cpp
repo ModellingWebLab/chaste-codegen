@@ -350,6 +350,7 @@
             const double var_membrane__i_tot = var_L_type_calcium_current__i_CaL + var_T_type_calcium_current__i_CaT + var_background_potassium_current__i_bK + var_background_sodium_current__i_bNa + var_delayed_rectifying_potassium_current__i_K + var_fast_sodium_current__i_Na + var_hyperpolarising_activated_current__i_f + var_sodium_calcium_exchange_current__i_NaCa + var_sodium_potassium_pump__i_p; // picoA
             const double var_membrane__E_orig_deriv = -var_membrane__i_tot / NV_Ith_S(mParameters, 0); // millivolt / second
             d_dt_chaste_interface_var_membrane__E = 0.001 * var_membrane__E_orig_deriv; // millivolt / millisecond
+            
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_membrane__E;
@@ -810,11 +811,23 @@
         IJth(rJacobian, 17, 17) = -0.01 + 3.179757621524301e-6 * var_x205 + 0.00051209851394887792 * var_x207 + 5.9490902045467693e-7 * var_x202 - 1.0054703611008607e-7 * var_x210 - 0.0074754519867847747 * var_x206 + var_x212 * var_x300 - var_x302 * var_chaste_interface__ion_concentrations__Nai - var_x303 * var_x79 - var_x304 * var_x79;
     }
 
+    N_Vector Celldokos_model_1996FromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const N_Vector & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+        // Mathematics
+
+        N_Vector dqs = N_VNew_Serial(1);
+        NV_Ith_S(dqs, 0) = var_chaste_interface__environment__time_converted;
+        return dqs;
+    }
+
 template<>
 void OdeSystemInformation<Celldokos_model_1996FromCellMLCvode>::Initialise(void)
 {
     this->mSystemName = "dokos_model_1996";
-    this->mFreeVariableName = "environment__time_converted";
+    this->mFreeVariableName = "environment__time";
     this->mFreeVariableUnits = "millisecond";
 
     // NV_Ith_S(rY,0):
@@ -910,6 +923,10 @@ void OdeSystemInformation<Celldokos_model_1996FromCellMLCvode>::Initialise(void)
     // mParameters[0]:
     this->mParameterNames.push_back("membrane_capacitance");
     this->mParameterUnits.push_back("nanoF");
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("environment__time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
 
     this->mInitialised = true;
 }

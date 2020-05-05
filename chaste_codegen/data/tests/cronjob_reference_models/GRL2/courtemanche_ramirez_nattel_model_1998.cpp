@@ -2189,8 +2189,9 @@
         // Mathematics
         const double var_membrane__i_st_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
 
-        std::vector<double> dqs(1);
-        dqs[0] = var_membrane__i_st_converter;
+        std::vector<double> dqs(2);
+        dqs[0] = var_chaste_interface__environment__time;
+        dqs[1] = var_membrane__i_st_converter;
         return dqs;
     }
 
@@ -2311,6 +2312,10 @@ void OdeSystemInformation<Cellcourtemanche_ramirez_nattel_model_1998FromCellMLGR
     this->mParameterUnits.push_back("picoF");
 
     // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("environment__time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
+
+    // Derived Quantity index [1]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 

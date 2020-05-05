@@ -245,9 +245,10 @@
         const double var_Ca__Ca_i = -0.33333333333333331 * var_Ca__bmyo + 1.1547005383792515 * sqrt(-var_Ca__cmyo + 0.33333333333333331 * pow(var_Ca__bmyo, 2)) * cos(0.33333333333333331 * acos(0.096225044864937631 * pow((-var_Ca__cmyo + 0.33333333333333331 * pow(var_Ca__bmyo, 2)), (-1.5)) * (-2.0 * pow(var_Ca__bmyo, 3) - 27.0 * var_Ca__dmyo + 9.0 * var_Ca__bmyo * var_Ca__cmyo))); // mM
         const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__Environment__time); // uA_per_cm2
 
-        std::vector<double> dqs(2);
-        dqs[0] = var_Ca__Ca_i;
-        dqs[1] = var_cell__i_Stim_converter;
+        std::vector<double> dqs(3);
+        dqs[0] = var_chaste_interface__Environment__time;
+        dqs[1] = var_Ca__Ca_i;
+        dqs[2] = var_cell__i_Stim_converter;
         return dqs;
     }
 
@@ -361,10 +362,14 @@ void OdeSystemInformation<Celllivshitz_rudy_2007FromCellML>::Initialise(void)
     this->mParameterUnits.push_back("mS_per_uF");
 
     // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("Environment__time");
+    this->mDerivedQuantityUnits.push_back("ms");
+
+    // Derived Quantity index [1]:
     this->mDerivedQuantityNames.push_back("cytosolic_calcium_concentration");
     this->mDerivedQuantityUnits.push_back("mM");
 
-    // Derived Quantity index [1]:
+    // Derived Quantity index [2]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 

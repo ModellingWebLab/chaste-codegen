@@ -636,9 +636,9 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__membrane__Vm = NV_Ith_S(rY,0);
+        double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
         // Units: millivolt; Initial value: -85.95752434460744
-        double var_chaste_interface__internal_ion_concentrations__Ca_Total = NV_Ith_S(rY,3);
+        double var_chaste_interface__internal_ion_concentrations__Ca_Total = NV_Ith_S(rY, 3);
         // Units: millimolar; Initial value: 0.00040180173572968586
         
         // Mathematics
@@ -656,10 +656,11 @@
             var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time) + var_chaste_interface__membrane__Vm) * NV_Ith_S(mParameters, 1); // uA_per_cm2
         }
 
-        N_Vector dqs = N_VNew_Serial(3);
+        N_Vector dqs = N_VNew_Serial(4);
         NV_Ith_S(dqs, 0) = var_internal_ion_concentrations__Cai;
-        NV_Ith_S(dqs, 1) = var_chaste_interface__membrane_data_clamp_current;
-        NV_Ith_S(dqs, 2) = var_membrane__i_ext_converter;
+        NV_Ith_S(dqs, 1) = var_chaste_interface__environment__time;
+        NV_Ith_S(dqs, 2) = var_chaste_interface__membrane_data_clamp_current;
+        NV_Ith_S(dqs, 3) = var_membrane__i_ext_converter;
         return dqs;
     }
 
@@ -868,10 +869,14 @@ void OdeSystemInformation<Cellmatsuoka_model_2003FromCellMLCvodeDataClamp>::Init
     this->mDerivedQuantityUnits.push_back("millimolar");
 
     // Derived Quantity index [1]:
+    this->mDerivedQuantityNames.push_back("environment__time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
+
+    // Derived Quantity index [2]:
     this->mDerivedQuantityNames.push_back("membrane_data_clamp_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
-    // Derived Quantity index [2]:
+    // Derived Quantity index [3]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 

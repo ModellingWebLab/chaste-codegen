@@ -387,6 +387,7 @@
             const double var_sodium_potassium_pump__i_p = 1.6000000000000001 * pow(var_ionic_concentrations__K_o, 2) * pow(var_ionic_concentrations__Na_i, 3) * var_sodium_potassium_pump__i_p_max / ((1.5 + exp(-1.5 - 0.025000000000000001 * var_chaste_interface__membrane__V)) * pow((var_ionic_concentrations__K_o + var_sodium_potassium_pump__K_m_K), 2) * pow((var_ionic_concentrations__Na_i + var_sodium_potassium_pump__K_m_Na), 3)); // nanoA
             const double var_membrane__V_orig_deriv = -1.0 * (var_L_type_Ca_channel__i_Ca_L + var_T_type_Ca_channel__i_Ca_T + var_calcium_background_current__i_b_Ca + var_four_AP_sensitive_currents__i_sus + var_four_AP_sensitive_currents__i_to + var_hyperpolarisation_activated_current__i_f_K + var_hyperpolarisation_activated_current__i_f_Na + var_persistent_calcium_current__i_Ca_p + var_potassium_background_current__i_b_K + var_rapid_delayed_rectifying_potassium_current__i_K_r + var_slow_delayed_rectifying_potassium_current__i_K_s + var_sodium_background_current__i_b_Na + var_sodium_calcium_exchanger__i_NaCa + var_sodium_current__i_Na + var_sodium_potassium_pump__i_p) / var_membrane__Cm; // millivolt / second
             d_dt_chaste_interface_var_membrane__V = 0.001 * var_membrane__V_orig_deriv; // millivolt / millisecond
+            
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_membrane__V;
@@ -575,11 +576,30 @@
         IJth(rJacobian, 14, 14) = -0.001 * var_x90 - 0.001 * var_x91;
     }
 
+    N_Vector Cellzhang_SAN_model_2000_0D_capableFromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const N_Vector & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+        // Mathematics
+        const double var_membrane__CmCentre = 2.0000000000000002e-5; // microF
+        const double var_membrane__CmPeriphery = 6.4999999999999994e-5; // microF
+        const double var_membrane__FCellConstant = 1.0309347; // dimensionless
+        const double var_membrane__dCell = 0; // dimensionless
+        const double var_membrane__FCell = var_membrane__FCellConstant * var_membrane__dCell / (1.0 + 0.77449999999999997 * exp(6.9491525423728815 - 10.16949152542373 * var_membrane__dCell)); // dimensionless
+        const double var_membrane__Cm = (-var_membrane__CmCentre + var_membrane__CmPeriphery) * var_membrane__FCell + var_membrane__CmCentre; // microF
+
+        N_Vector dqs = N_VNew_Serial(2);
+        NV_Ith_S(dqs, 0) = var_chaste_interface__environment__time_converted;
+        NV_Ith_S(dqs, 1) = var_membrane__Cm;
+        return dqs;
+    }
+
 template<>
 void OdeSystemInformation<Cellzhang_SAN_model_2000_0D_capableFromCellMLCvode>::Initialise(void)
 {
     this->mSystemName = "zhang_SAN_model_2000_0D_capable";
-    this->mFreeVariableName = "environment__time_converted";
+    this->mFreeVariableName = "environment__time";
     this->mFreeVariableUnits = "millisecond";
 
     // NV_Ith_S(rY,0):
@@ -660,6 +680,14 @@ void OdeSystemInformation<Cellzhang_SAN_model_2000_0D_capableFromCellMLCvode>::I
     // mParameters[0]:
     this->mParameterNames.push_back("cytosolic_calcium_concentration");
     this->mParameterUnits.push_back("millimolar");
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("environment__time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
+
+    // Derived Quantity index [1]:
+    this->mDerivedQuantityNames.push_back("membrane_capacitance");
+    this->mDerivedQuantityUnits.push_back("microF");
 
     this->mInitialised = true;
 }

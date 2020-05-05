@@ -335,8 +335,9 @@
         // Mathematics
         const double var_membrane__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
 
-        std::vector<double> dqs(1);
-        dqs[0] = var_membrane__i_Stim_converter;
+        std::vector<double> dqs(2);
+        dqs[0] = var_chaste_interface__environment__time_converted;
+        dqs[1] = var_membrane__i_Stim_converter;
         return dqs;
     }
 
@@ -344,7 +345,7 @@ template<>
 void OdeSystemInformation<Cellearm_noble_model_1990FromCellML>::Initialise(void)
 {
     this->mSystemName = "earm_noble_model_1990";
-    this->mFreeVariableName = "environment__time_converted";
+    this->mFreeVariableName = "environment__time";
     this->mFreeVariableUnits = "millisecond";
 
     // rY[0]:
@@ -432,6 +433,10 @@ void OdeSystemInformation<Cellearm_noble_model_1990FromCellML>::Initialise(void)
     this->mParameterUnits.push_back("microF");
 
     // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("environment__time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
+
+    // Derived Quantity index [1]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 

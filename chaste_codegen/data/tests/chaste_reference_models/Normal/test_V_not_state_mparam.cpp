@@ -77,17 +77,40 @@
         rDY[0] = d_dt_chaste_interface_var_membrane__V1;
     }
 
+    std::vector<double> Celltest_V_not_state_mparamFromCellML::ComputeDerivedQuantities(double var_chaste_interface__membrane__time_converted, const std::vector<double> & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+        const double var_membrane__V_converted = -75000.0; // millivolt
+
+        std::vector<double> dqs(2);
+        dqs[0] = var_chaste_interface__membrane__time_converted;
+        dqs[1] = var_membrane__V_converted;
+        return dqs;
+    }
+
 template<>
 void OdeSystemInformation<Celltest_V_not_state_mparamFromCellML>::Initialise(void)
 {
     this->mSystemName = "component_with_units";
-    this->mFreeVariableName = "membrane__time_converted";
+    this->mFreeVariableName = "membrane__time";
     this->mFreeVariableUnits = "millisecond";
 
     // rY[0]:
     this->mVariableNames.push_back("membrane__V1");
     this->mVariableUnits.push_back("volt");
     this->mInitialConditions.push_back(-69.1865);
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("membrane__time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
+
+    // Derived Quantity index [1]:
+    this->mDerivedQuantityNames.push_back("membrane_voltage");
+    this->mDerivedQuantityUnits.push_back("millivolt");
 
     this->mInitialised = true;
 }

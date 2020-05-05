@@ -2481,11 +2481,24 @@
         return partialF;
     }
 
+    std::vector<double> Celldemir_model_1994FromCellMLGRL2::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+
+        std::vector<double> dqs(1);
+        dqs[0] = var_chaste_interface__environment__time_converted;
+        return dqs;
+    }
+
 template<>
 void OdeSystemInformation<Celldemir_model_1994FromCellMLGRL2>::Initialise(void)
 {
     this->mSystemName = "demir_model_1994";
-    this->mFreeVariableName = "environment__time_converted";
+    this->mFreeVariableName = "environment__time";
     this->mFreeVariableUnits = "millisecond";
 
     // rY[0]:
@@ -2626,6 +2639,10 @@ void OdeSystemInformation<Celldemir_model_1994FromCellMLGRL2>::Initialise(void)
     // mParameters[0]:
     this->mParameterNames.push_back("membrane_capacitance");
     this->mParameterUnits.push_back("microF");
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("environment__time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
 
     this->mInitialised = true;
 }

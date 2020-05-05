@@ -128,11 +128,24 @@
         rY[2] = _guess[1];
     }
 
+    std::vector<double> Celltest_piecewises_beFromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+
+        std::vector<double> dqs(1);
+        dqs[0] = var_chaste_interface__environment__time_converted;
+        return dqs;
+    }
+
 template<>
 void OdeSystemInformation<Celltest_piecewises_beFromCellMLBackwardEuler>::Initialise(void)
 {
     this->mSystemName = "test_piecewise_BE";
-    this->mFreeVariableName = "environment__time_converted";
+    this->mFreeVariableName = "environment__time";
     this->mFreeVariableUnits = "millisecond";
 
     // rY[0]:
@@ -154,6 +167,10 @@ void OdeSystemInformation<Celltest_piecewises_beFromCellMLBackwardEuler>::Initia
     this->mVariableNames.push_back("fast_sodium_current_m_gate2__m");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0365);
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("environment__time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
 
     this->mInitialised = true;
 }

@@ -766,11 +766,24 @@
         rY[15] = _guess[8];
     }
 
+    std::vector<double> Celldokos_model_1996FromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+
+        std::vector<double> dqs(1);
+        dqs[0] = var_chaste_interface__environment__time_converted;
+        return dqs;
+    }
+
 template<>
 void OdeSystemInformation<Celldokos_model_1996FromCellMLBackwardEuler>::Initialise(void)
 {
     this->mSystemName = "dokos_model_1996";
-    this->mFreeVariableName = "environment__time_converted";
+    this->mFreeVariableName = "environment__time";
     this->mFreeVariableUnits = "millisecond";
 
     // rY[0]:
@@ -866,6 +879,10 @@ void OdeSystemInformation<Celldokos_model_1996FromCellMLBackwardEuler>::Initiali
     // mParameters[0]:
     this->mParameterNames.push_back("membrane_capacitance");
     this->mParameterUnits.push_back("nanoF");
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("environment__time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
 
     this->mInitialised = true;
 }
