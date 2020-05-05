@@ -344,7 +344,7 @@
         // Units: millivolt; Initial value: -60.0
         
         // Mathematics
-        // Special handling of data clamp current here (see #2708)
+        // Special handling of data clamp current here
         // (we want to save expense of calling the interpolation method if possible.)
         double var_chaste_interface__membrane_data_clamp_current = 0.0;
         if (mDataClampIsOn)

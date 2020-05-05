@@ -10,7 +10,7 @@
         {% endif %}{%- endfor %}
         // Mathematics
         {%- for eq in derived_quantity_equations %}{%- if eq.is_data_clamp_current is defined and eq.is_data_clamp_current %}
-        // Special handling of data clamp current here (see #2708)
+        // Special handling of data clamp current here
         // (we want to save expense of calling the interpolation method if possible.)
         double {{ eq.lhs }} = 0.0;
         if (mDataClampIsOn)
