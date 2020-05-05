@@ -413,7 +413,7 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__membrane_potential__V =(mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
+        double var_chaste_interface__membrane_potential__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
         // Units: millivolt; Initial value: -92.849333
         double var_chaste_interface__intracellular_calcium_concentration__Ca_i = NV_Ith_S(rY, 1);
         // Units: millimolar; Initial value: 9.91e-06
