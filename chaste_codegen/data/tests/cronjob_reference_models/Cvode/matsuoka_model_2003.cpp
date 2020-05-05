@@ -626,7 +626,7 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__internal_ion_concentrations__Ca_Total = NV_Ith_S(rY,3);
+        double var_chaste_interface__internal_ion_concentrations__Ca_Total = NV_Ith_S(rY, 3);
         // Units: millimolar; Initial value: 0.00040180173572968586
         
 

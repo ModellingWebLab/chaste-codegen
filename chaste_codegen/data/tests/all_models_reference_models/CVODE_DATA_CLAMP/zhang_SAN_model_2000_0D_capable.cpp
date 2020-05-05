@@ -299,7 +299,8 @@
             d_dt_chaste_interface_var_membrane__V = 0.0;
         }
         else
-        {const double var_L_type_Ca_channel__E_Ca_L = 46.399999999999999; // millivolt
+        {
+            const double var_L_type_Ca_channel__E_Ca_L = 46.399999999999999; // millivolt
             const double var_L_type_Ca_channel__g_Ca_L_Centre = 0.0057938; // microS
             const double var_L_type_Ca_channel__g_Ca_L_Periphery = 0.065886479999999997; // microS
             const double var_T_type_Ca_channel__E_Ca_T = 45.0; // millivolt
@@ -417,11 +418,11 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__membrane__V = NV_Ith_S(rY,0);
+        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
         // Units: millivolt; Initial value: -39.013558536
         
         // Mathematics
-        // Special handling of data clamp current here (see #2708)
+        // Special handling of data clamp current here
         // (we want to save expense of calling the interpolation method if possible.)
         double var_chaste_interface__membrane_data_clamp_current = 0.0;
         if (mDataClampIsOn)

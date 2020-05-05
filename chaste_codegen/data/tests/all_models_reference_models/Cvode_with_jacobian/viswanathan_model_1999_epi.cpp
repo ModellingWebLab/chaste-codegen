@@ -508,20 +508,6 @@
         NV_Ith_S(rDY,24) = d_dt_chaste_interface_var_ionic_concentrations__Ki;
     }
 
-    N_Vector Cellviswanathan_model_1999_epiFromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const N_Vector & rY)
-    {
-        // Inputs:
-        // Time units: millisecond
-        
-
-        // Mathematics
-        const double var_membrane__I_st_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
-
-        N_Vector dqs = N_VNew_Serial(1);
-        NV_Ith_S(dqs, 0) = var_membrane__I_st_converter;
-        return dqs;
-    }
-
     void Cellviswanathan_model_1999_epiFromCellMLCvode::EvaluateAnalyticJacobian(double var_chaste_interface__environment__time_converted, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3)
     {
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
@@ -1016,6 +1002,20 @@
         IJth(rJacobian, 24, 23) = var_x339 * (3.3880737654706117 * var_x348 + 0.059999999999999998 * var_x143);
         IJth(rJacobian, 0, 24) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x101 * (var_x153 + var_x154 + var_x155 + var_x156 + var_x158 + var_x160 - var_x159 + 184.83763041301756 * var_x151));
         IJth(rJacobian, 24, 24) = var_x339 * (var_x159 - var_x153 - var_x154 - var_x155 - var_x156 - var_x158 - var_x160 + 184.83763041301756 * var_x348);
+    }
+
+    N_Vector Cellviswanathan_model_1999_epiFromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const N_Vector & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+        const double var_membrane__I_st_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
+
+        N_Vector dqs = N_VNew_Serial(1);
+        NV_Ith_S(dqs, 0) = var_membrane__I_st_converter;
+        return dqs;
     }
 
 template<>

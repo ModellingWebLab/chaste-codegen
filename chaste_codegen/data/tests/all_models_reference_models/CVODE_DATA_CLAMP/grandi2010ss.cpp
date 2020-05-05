@@ -545,7 +545,8 @@
             d_dt_chaste_interface_var_cell__sVm = 0.0;
         }
         else
-        {const double var_cell__Cli = 15.0; // dimensionless
+        {
+            const double var_cell__Cli = 15.0; // dimensionless
             const double var_cell__Clo = 150.0; // dimensionless
             const double var_cell__GClB = 0.0089999999999999993; // dimensionless
             const double var_cell__GClCa = 0.0548125; // dimensionless
@@ -648,12 +649,12 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__cell__sVm = NV_Ith_S(rY,0);
+        double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
         // Units: millivolt; Initial value: -81.3842590704928
         
         // Mathematics
         const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__cell__time); // uA_per_cm2
-        // Special handling of data clamp current here (see #2708)
+        // Special handling of data clamp current here
         // (we want to save expense of calling the interpolation method if possible.)
         double var_chaste_interface__membrane_data_clamp_current = 0.0;
         if (mDataClampIsOn)

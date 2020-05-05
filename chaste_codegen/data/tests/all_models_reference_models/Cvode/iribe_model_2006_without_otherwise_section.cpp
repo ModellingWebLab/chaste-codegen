@@ -403,23 +403,23 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__membrane_potential__V = NV_Ith_S(rY,0);
+        double var_chaste_interface__membrane_potential__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
         // Units: millivolt; Initial value: -92.849333
-        double var_chaste_interface__intracellular_calcium_concentration__Ca_i = NV_Ith_S(rY,1);
+        double var_chaste_interface__intracellular_calcium_concentration__Ca_i = NV_Ith_S(rY, 1);
         // Units: millimolar; Initial value: 9.91e-06
-        double var_chaste_interface__fast_sodium_current_m_gate__m = NV_Ith_S(rY,2);
+        double var_chaste_interface__fast_sodium_current_m_gate__m = NV_Ith_S(rY, 2);
         // Units: dimensionless; Initial value: 0.0013809
-        double var_chaste_interface__fast_sodium_current_h_gate__h = NV_Ith_S(rY,3);
+        double var_chaste_interface__fast_sodium_current_h_gate__h = NV_Ith_S(rY, 3);
         // Units: dimensionless; Initial value: 0.99569
-        double var_chaste_interface__time_dependent_rectifier_potassium_current_x_gate__x = NV_Ith_S(rY,4);
+        double var_chaste_interface__time_dependent_rectifier_potassium_current_x_gate__x = NV_Ith_S(rY, 4);
         // Units: dimensionless; Initial value: 0.051127
-        double var_chaste_interface__L_type_Ca_channel_d_gate__d = NV_Ith_S(rY,7);
+        double var_chaste_interface__L_type_Ca_channel_d_gate__d = NV_Ith_S(rY, 7);
         // Units: dimensionless; Initial value: 1.7908e-08
-        double var_chaste_interface__L_type_Ca_channel_f_gate__f = NV_Ith_S(rY,8);
+        double var_chaste_interface__L_type_Ca_channel_f_gate__f = NV_Ith_S(rY, 8);
         // Units: dimensionless; Initial value: 1.0
-        double var_chaste_interface__intracellular_sodium_concentration__Na_i = NV_Ith_S(rY,16);
+        double var_chaste_interface__intracellular_sodium_concentration__Na_i = NV_Ith_S(rY, 16);
         // Units: millimolar; Initial value: 5.8041
-        double var_chaste_interface__intracellular_potassium_concentration__K_i = NV_Ith_S(rY,17);
+        double var_chaste_interface__intracellular_potassium_concentration__K_i = NV_Ith_S(rY, 17);
         // Units: millimolar; Initial value: 138.22
         
 

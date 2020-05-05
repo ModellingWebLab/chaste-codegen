@@ -374,20 +374,6 @@
         NV_Ith_S(rDY,21) = d_dt_chaste_interface_var_Ionic_concentrations__Ca_NSR;
     }
 
-    N_Vector Cellpriebe_beuckelmann_model_1998FromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY)
-    {
-        // Inputs:
-        // Time units: millisecond
-        
-
-        // Mathematics
-        const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
-
-        N_Vector dqs = N_VNew_Serial(1);
-        NV_Ith_S(dqs, 0) = var_cell__i_Stim_converter;
-        return dqs;
-    }
-
     void Cellpriebe_beuckelmann_model_1998FromCellMLCvode::EvaluateAnalyticJacobian(double var_chaste_interface__environment__time, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3)
     {
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
@@ -717,6 +703,20 @@
         IJth(rJacobian, 1, 21) = 2.1105882352941172e-5 * var_x104;
         IJth(rJacobian, 20, 21) = 0.0055555555555555558 * var_x215;
         IJth(rJacobian, 21, 21) = -0.00074309178743961349;
+    }
+
+    N_Vector Cellpriebe_beuckelmann_model_1998FromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+        const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
+
+        N_Vector dqs = N_VNew_Serial(1);
+        NV_Ith_S(dqs, 0) = var_cell__i_Stim_converter;
+        return dqs;
     }
 
 template<>

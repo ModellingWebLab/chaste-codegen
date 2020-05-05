@@ -447,20 +447,6 @@
         NV_Ith_S(rDY,30) = d_dt_chaste_interface_var_ionic_concentrations__Ko;
     }
 
-    N_Vector Celljafri_rice_winslow_model_1998FromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY)
-    {
-        // Inputs:
-        // Time units: millisecond
-        
-
-        // Mathematics
-        const double var_membrane__I_stim_converter = -GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
-
-        N_Vector dqs = N_VNew_Serial(1);
-        NV_Ith_S(dqs, 0) = var_membrane__I_stim_converter;
-        return dqs;
-    }
-
     void Celljafri_rice_winslow_model_1998FromCellMLCvode::EvaluateAnalyticJacobian(double var_chaste_interface__environment__time, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3)
     {
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
@@ -1028,6 +1014,20 @@
         IJth(rJacobian, 28, 30) = 0.00010635506760017689 * var_x159 - 0.000239298902100398 * var_x157 + var_x161 * var_x297 + var_x167 * var_x300 - var_x161 * var_x298;
         IJth(rJacobian, 29, 30) = var_x340 + var_x342 + var_x343 + var_x344 + var_x345 + var_x346 - var_x347 - var_x348 - var_x349 - var_x350 - var_x351 - var_x352 - var_x353;
         IJth(rJacobian, 30, 30) = var_x347 + var_x348 + var_x349 + var_x350 + var_x351 + var_x352 + var_x353 - var_x340 - var_x342 - var_x343 - var_x344 - var_x345 - var_x346;
+    }
+
+    N_Vector Celljafri_rice_winslow_model_1998FromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+        const double var_membrane__I_stim_converter = -GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
+
+        N_Vector dqs = N_VNew_Serial(1);
+        NV_Ith_S(dqs, 0) = var_membrane__I_stim_converter;
+        return dqs;
     }
 
 template<>

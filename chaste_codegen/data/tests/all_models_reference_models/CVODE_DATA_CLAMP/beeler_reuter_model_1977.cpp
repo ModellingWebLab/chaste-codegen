@@ -171,7 +171,8 @@
             d_dt_chaste_interface_var_membrane__V = 0.0;
         }
         else
-        {const double var_membrane__C = 0.01; // uF_per_mm2
+        {
+            const double var_membrane__C = 0.01; // uF_per_mm2
             const double var_sodium_current__E_Na = 50.0; // mV
             const double var_sodium_current__g_Na = 0.040000000000000001; // mS_per_mm2
             const double var_sodium_current__g_Nac = 3.0000000000000001e-5; // mS_per_mm2
@@ -206,11 +207,11 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__membrane__V = NV_Ith_S(rY,0);
+        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
         // Units: mV; Initial value: -84.624
         
         // Mathematics
-        // Special handling of data clamp current here (see #2708)
+        // Special handling of data clamp current here
         // (we want to save expense of calling the interpolation method if possible.)
         double var_chaste_interface__membrane_data_clamp_current = 0.0;
         if (mDataClampIsOn)

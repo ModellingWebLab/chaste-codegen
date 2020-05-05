@@ -413,7 +413,7 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__Ca__Ca_T = NV_Ith_S(rY,14);
+        double var_chaste_interface__Ca__Ca_T = NV_Ith_S(rY, 14);
         // Units: mM; Initial value: 0.0257059808595638
         
 
