@@ -1,6 +1,5 @@
 usage: chaste_codegen [-h] [--version] [-t TYPE] [-o OUTFILE] [-j]
                       [-c CLASS_NAME] [-y] [-m]
-
                       cellml_file
 
 Chaste code generation for cellml.

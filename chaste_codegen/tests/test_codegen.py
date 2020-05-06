@@ -42,12 +42,12 @@ def test_CVODE_DATA_CLAMP_modifiers(tmp_path):
                                                             class_name='CellShannon2004FromCellMLCvodeDataClamp',
                                                             use_modifiers=True)
     chaste_model.generate_chaste_code()
-    expected_hpp_path = os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'CVODEWithDataClamp',
+    expected_hpp_path = os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'CVODE_DATA_CLAMP',
                                      'Shannon2004_with_modifiers.hpp')
-    expected_cpp_path = os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'CVODEWithDataClamp',
+    expected_cpp_path = os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'CVODE_DATA_CLAMP',
                                      'Shannon2004_with_modifiers.cpp')
     # Compare against reference
-    test_utils.compare_model_against_reference('CVODEWithDataClamp', chaste_model, tmp_path, expected_hpp_path,
+    test_utils.compare_model_against_reference(chaste_model, tmp_path, expected_hpp_path,
                                                expected_cpp_path)
 
 
