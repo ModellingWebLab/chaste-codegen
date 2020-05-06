@@ -62,7 +62,7 @@ def test_CVODE_DATA_CLAMP(tmp_path, model):
 
     chaste_model.generate_chaste_code()
     # Compare against reference
-    test_utils.compare_model_against_reference('CVODE_DATA_CLAMP', chaste_model,
+    test_utils.compare_model_against_reference(chaste_model,
                                                tmp_path, model['expected_hpp_path'],
                                                model['expected_cpp_path'])
 
@@ -78,7 +78,7 @@ def test_GRL2Opt(tmp_path, model):
 
     chaste_model.generate_chaste_code()
     # Compare against reference
-    test_utils.compare_model_against_reference('GRL2Opt', chaste_model,
+    test_utils.compare_model_against_reference(chaste_model,
                                                tmp_path, model['expected_hpp_path'],
                                                model['expected_cpp_path'])
 
@@ -94,7 +94,7 @@ def test_GRL2(tmp_path, model):
 
     chaste_model.generate_chaste_code()
     # Compare against reference
-    test_utils.compare_model_against_reference('GRL', chaste_model,
+    test_utils.compare_model_against_reference(chaste_model,
                                                tmp_path, model['expected_hpp_path'],
                                                model['expected_cpp_path'])
 
@@ -110,7 +110,7 @@ def test_GRL1Opt(tmp_path, model):
 
     chaste_model.generate_chaste_code()
     # Compare against reference
-    test_utils.compare_model_against_reference('GRL1Opt', chaste_model,
+    test_utils.compare_model_against_reference(chaste_model,
                                                tmp_path, model['expected_hpp_path'],
                                                model['expected_cpp_path'])
 
@@ -126,7 +126,7 @@ def test_GRL1(tmp_path, model):
 
     chaste_model.generate_chaste_code()
     # Compare against reference
-    test_utils.compare_model_against_reference('GRL', chaste_model,
+    test_utils.compare_model_against_reference(chaste_model,
                                                tmp_path, model['expected_hpp_path'],
                                                model['expected_cpp_path'])
 
@@ -142,7 +142,7 @@ def test_RLopt(tmp_path, model):
 
     chaste_model.generate_chaste_code()
     # Compare against reference
-    test_utils.compare_model_against_reference('RLopt', chaste_model,
+    test_utils.compare_model_against_reference(chaste_model,
                                                tmp_path, model['expected_hpp_path'],
                                                model['expected_cpp_path'])
 
@@ -158,7 +158,7 @@ def test_RL(tmp_path, model):
 
     chaste_model.generate_chaste_code()
     # Compare against reference
-    test_utils.compare_model_against_reference('RL', chaste_model,
+    test_utils.compare_model_against_reference(chaste_model,
                                                tmp_path, model['expected_hpp_path'],
                                                model['expected_cpp_path'])
 
@@ -174,7 +174,7 @@ def test_BE(tmp_path, model):
 
     chaste_model.generate_chaste_code()
     # Compare against reference
-    test_utils.compare_model_against_reference('BE', chaste_model,
+    test_utils.compare_model_against_reference(chaste_model,
                                                tmp_path, model['expected_hpp_path'],
                                                model['expected_cpp_path'])
 
@@ -190,7 +190,7 @@ def test_Cvode_jacobian(tmp_path, model):
     chaste_model.generate_chaste_code()
 
     # Compare against reference
-    test_utils.compare_model_against_reference('Cvode_with_jacobian', chaste_model,
+    test_utils.compare_model_against_reference(chaste_model,
                                                tmp_path, model['expected_hpp_path'],
                                                model['expected_cpp_path'])
 
@@ -206,7 +206,7 @@ def test_Cvode(tmp_path, model):
     chaste_model.generate_chaste_code()
 
     # Compare against reference
-    test_utils.compare_model_against_reference('Cvode', chaste_model,
+    test_utils.compare_model_against_reference(chaste_model,
                                                tmp_path, model['expected_hpp_path'],
                                                model['expected_cpp_path'])
 
@@ -221,7 +221,7 @@ def test_Normal(tmp_path, model):
                                         class_name=class_name)
     chaste_model.generate_chaste_code()
     # Compare against reference
-    test_utils.compare_model_against_reference('Normal', chaste_model, tmp_path, model['expected_hpp_path'],
+    test_utils.compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'],
                                                model['expected_cpp_path'])
 
 
@@ -236,7 +236,7 @@ def test_Opt(tmp_path, model):
                                      class_name=class_name)
     chaste_model.generate_chaste_code()
     # Compare against reference
-    test_utils.compare_model_against_reference('Opt', chaste_model, tmp_path, model['expected_hpp_path'],
+    test_utils.compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'],
                                                model['expected_cpp_path'])
 
 
