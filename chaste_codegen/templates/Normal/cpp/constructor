@@ -1,5 +1,5 @@
     {{class_name}}::{{class_name}}(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
-        : AbstractCardiacCell(
+        : {% if modifiers|length > 0 %}AbstractCardiacCellWithModifiers<{% endif%}{{base_class}}{%- if modifiers|length > 0 %} >{% endif%}(
                 pSolver,
                 {{state_vars|length}},
                 {{membrane_voltage_index}},

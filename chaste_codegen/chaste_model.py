@@ -271,7 +271,12 @@ class ChasteModel(object):
         desired_units = self._units.get_unit('millisecond')
         try:
             # If the variable is in units that can be converted to millisecond, perform conversion
-            return self._model.convert_variable(time_variable, desired_units, DataDirectionFlow.INPUT)
+            time_var =  self._model.convert_variable(time_variable, desired_units, DataDirectionFlow.INPUT)
+            self._model.rdf.add((time_var.rdf_identity, create_rdf_node((self._PYCMLMETA, 'derived-quantity')),
+                                create_rdf_node('yes')))
+            self._model.rdf.add((time_var.rdf_identity, create_rdf_node((self._PYCMLMETA, 'derived-quantity')),
+                                create_rdf_node('yes')))
+            return time_var
         except DimensionalityError:
             warning = 'Incorrect definition of time variable (time needs to be dimensionally equivalent to second)'
             self._logger.info(warning)
@@ -328,12 +333,14 @@ class ChasteModel(object):
 
         These are all variables with annotation (including stat vars)
         except the stimulus current and time (the free variable)"""
-        if not self.use_modifiers:
-            return []
-        annotated = [q for q in self._model.variables()
-                     if self._model.has_ontology_annotation(q, self._OXMETA)]
-        modifiers = [m for m in annotated if not self._model.get_ontology_terms_by_variable(m, self._OXMETA)[-1].
-                     startswith('membrane_stimulus_current_') and not m == self._time_variable]
+        modifiers = []
+        if self.use_modifiers:
+            modifiers = [m for m in self._model.variables()
+                        if self._model.has_ontology_annotation(m, self._OXMETA)
+                        and not self._model.get_ontology_terms_by_variable(m, self._OXMETA)[-1].
+                        startswith('membrane_stimulus_current')
+                        and not m == self._time_variable]
+
         return sorted(modifiers, key=lambda m: self._model.get_display_name(m, self._OXMETA))
 
     def _get_modifiable_parameters(self):
@@ -707,11 +714,11 @@ class ChasteModel(object):
         # Printer for printing variable in comments e.g. for ode system information
         self._name_printer = cg.ChastePrinter(lambda variable: get_variable_name(variable))
 
-    def _print_rhs_with_modifiers(self, eq):
+    def _print_rhs_with_modifiers(self, modifier, eq):
         """ Print modifiable parameters in the correct format for the model type"""
-        if eq.lhs in self._modifiers:
-            return self._format_modifier(eq.lhs) + '->Calc(' + self._printer.doprint(eq.rhs) + ', '+ self._printer.doprint(self._time_variable) +')'
-        return self._printer.doprint(eq.rhs)
+        if modifier in self._modifiers:
+            return self._format_modifier(modifier) + '->Calc(' + self._printer.doprint(eq) + ', '+ self._printer.doprint(self._time_variable) +')'
+        return self._printer.doprint(eq)
 
     def _print_modifiable_parameters(self, variable):
         """ Print modifiable parameters in the correct format for the model type"""
@@ -775,6 +782,7 @@ class ChasteModel(object):
             [{'var': self._printer.doprint(var),
               'annotated_var_name': self._model.get_display_name(var, self._OXMETA),
               'initial_value': str(self._get_initial_value(var)),
+              'modifier': self._format_modifier(var) if var in self._modifiers else None,
               'units': self._model.units.format(self._model.units.evaluate_units(var)),
               'in_ionic': var in ionic_var_variables,
               'in_y_deriv': var in y_deriv_variables,
@@ -795,7 +803,7 @@ class ChasteModel(object):
         """ Format eqs for stimulus_current for outputting to chaste code"""
         default_stim = {'equations':
                         [{'lhs': self._printer.doprint(eq.lhs),
-                          'rhs': self._print_rhs_with_modifiers(eq),
+                          'rhs': self._printer.doprint(eq.rhs),
                           'units': self._model.units.format(self._model.units.evaluate_units(eq.lhs)),
                           'lhs_modifiable': eq.lhs in self._modifiable_parameters}
                          for eq in self._stimulus_equations]}
@@ -807,7 +815,7 @@ class ChasteModel(object):
     def _format_extended_equations_for_ionic_vars(self):
         """ Format equations and dependant equations ionic derivatives"""
         # Format the state ionic variables
-        return [{'lhs': self._printer.doprint(eq.lhs), 'rhs': self._print_rhs_with_modifiers(eq),
+        return [{'lhs': self._printer.doprint(eq.lhs), 'rhs': self._printer.doprint(eq.rhs),
                  'units': self._model.units.format(self._model.units.evaluate_units(eq.lhs))}
                 for eq in self._extended_equations_for_ionic_vars]
 
@@ -820,7 +828,7 @@ class ChasteModel(object):
         """Format derivative equations for chaste output"""
         # exclude ionic currents
         return [{'lhs': self._printer.doprint(eq.lhs),
-                 'rhs': self._print_rhs_with_modifiers(eq),
+                 'rhs': self._print_rhs_with_modifiers(eq.lhs, eq.rhs),
                  'sympy_lhs': eq.lhs,
                  'units': self._model.units.format(self._model.units.evaluate_units(eq.lhs)),
                  'in_eqs_excl_voltage': eq in self._derivative_eqs_excl_voltage,
@@ -863,7 +871,7 @@ class ChasteModel(object):
     def _format_derived_quant_eqs(self):
         """ Format equations for derived quantities based on current settings"""
         return [{'lhs': self._printer.doprint(eq.lhs),
-                 'rhs': self._print_rhs_with_modifiers(eq),
+                 'rhs': self._print_rhs_with_modifiers(eq.lhs, eq.rhs),
                  'sympy_lhs': eq.lhs,
                  'units': self._model.units.format(str(self._model.units.evaluate_units(eq.lhs)))}
                 for eq in self._derived_quant_eqs]
