@@ -597,6 +597,7 @@
             const double var_membrane__naiont = 3.0 * var_INaCa__INaCa + 3.0 * var_INaCa__INaCa_ss_sr + 3.0 * var_INaK__INaK + var_INa__INa + var_INaL__INaL + var_INab__INab; // uA_per_uF
             const double var_membrane__kiont = -2.0 * var_INaK__INaK + var_IK1__IK1 + var_IKp__IKp + var_IKr__IKr + var_IKs__IKs + var_Ito1__Ito1 + var_membrane__i_Stim; // uA_per_uF
             d_dt_chaste_interface_var_membrane__Vm = -var_membrane__caiont - var_membrane__clont - var_membrane__kiont - var_membrane__naiont; // mV / ms
+            
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_membrane__Vm;
@@ -647,20 +648,6 @@
         NV_Ith_S(rDY,45) = d_dt_chaste_interface_var_Cl__Cl_ss;
         NV_Ith_S(rDY,46) = d_dt_chaste_interface_var_K__K_i;
         NV_Ith_S(rDY,47) = d_dt_chaste_interface_var_CaMK_active__CaMK_trap;
-    }
-
-    N_Vector Celldecker_2009FromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY)
-    {
-        // Inputs:
-        // Time units: millisecond
-        
-
-        // Mathematics
-        const double var_membrane__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
-
-        N_Vector dqs = N_VNew_Serial(1);
-        NV_Ith_S(dqs, 0) = var_membrane__i_Stim_converter;
-        return dqs;
     }
 
     void Celldecker_2009FromCellMLCvode::EvaluateAnalyticJacobian(double var_chaste_interface__environment__time, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3)
@@ -1516,6 +1503,20 @@
         IJth(rJacobian, 47, 47) = -0.00068000000000000005 - var_x200 * var_x512 + var_x193 * var_x218 * var_x512;
     }
 
+    N_Vector Celldecker_2009FromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+        // Mathematics
+        const double var_membrane__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
+
+        N_Vector dqs = N_VNew_Serial(2);
+        NV_Ith_S(dqs, 0) = var_chaste_interface__environment__time;
+        NV_Ith_S(dqs, 1) = var_membrane__i_Stim_converter;
+        return dqs;
+    }
+
 template<>
 void OdeSystemInformation<Celldecker_2009FromCellMLCvode>::Initialise(void)
 {
@@ -1776,6 +1777,10 @@ void OdeSystemInformation<Celldecker_2009FromCellMLCvode>::Initialise(void)
     this->mParameterUnits.push_back("mS_per_uF");
 
     // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("environment__time");
+    this->mDerivedQuantityUnits.push_back("ms");
+
+    // Derived Quantity index [1]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 

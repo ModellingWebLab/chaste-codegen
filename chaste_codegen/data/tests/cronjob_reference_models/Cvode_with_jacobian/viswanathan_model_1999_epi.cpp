@@ -479,6 +479,7 @@
         {
             const double var_membrane__V_orig_deriv = var_membrane__dVdt; // millivolt / second
             d_dt_chaste_interface_var_membrane__V = 0.001 * var_membrane__V_orig_deriv; // millivolt / millisecond
+            
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_membrane__V;
@@ -506,20 +507,6 @@
         NV_Ith_S(rDY,22) = d_dt_chaste_interface_var_calcium_dynamics__OVRLDtrack3;
         NV_Ith_S(rDY,23) = d_dt_chaste_interface_var_ionic_concentrations__Nai;
         NV_Ith_S(rDY,24) = d_dt_chaste_interface_var_ionic_concentrations__Ki;
-    }
-
-    N_Vector Cellviswanathan_model_1999_epiFromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const N_Vector & rY)
-    {
-        // Inputs:
-        // Time units: millisecond
-        
-
-        // Mathematics
-        const double var_membrane__I_st_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
-
-        N_Vector dqs = N_VNew_Serial(1);
-        NV_Ith_S(dqs, 0) = var_membrane__I_st_converter;
-        return dqs;
     }
 
     void Cellviswanathan_model_1999_epiFromCellMLCvode::EvaluateAnalyticJacobian(double var_chaste_interface__environment__time_converted, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3)
@@ -1018,11 +1005,25 @@
         IJth(rJacobian, 24, 24) = var_x339 * (var_x159 - var_x153 - var_x154 - var_x155 - var_x156 - var_x158 - var_x160 + 184.83763041301756 * var_x348);
     }
 
+    N_Vector Cellviswanathan_model_1999_epiFromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const N_Vector & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+        // Mathematics
+        const double var_membrane__I_st_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
+
+        N_Vector dqs = N_VNew_Serial(2);
+        NV_Ith_S(dqs, 0) = var_chaste_interface__environment__time_converted;
+        NV_Ith_S(dqs, 1) = var_membrane__I_st_converter;
+        return dqs;
+    }
+
 template<>
 void OdeSystemInformation<Cellviswanathan_model_1999_epiFromCellMLCvode>::Initialise(void)
 {
     this->mSystemName = "viswanathan_model_1999_epi";
-    this->mFreeVariableName = "environment__time_converted";
+    this->mFreeVariableName = "environment__time";
     this->mFreeVariableUnits = "millisecond";
 
     // NV_Ith_S(rY,0):
@@ -1155,6 +1156,10 @@ void OdeSystemInformation<Cellviswanathan_model_1999_epiFromCellMLCvode>::Initia
     this->mParameterUnits.push_back("microF");
 
     // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("environment__time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
+
+    // Derived Quantity index [1]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 

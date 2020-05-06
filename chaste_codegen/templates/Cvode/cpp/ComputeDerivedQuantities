@@ -4,15 +4,20 @@
     {
         // Inputs:
         // Time units: millisecond
-        {% for state_var in state_vars %}
-        {%- if state_var.in_derived_quant %}double {{ state_var.var }} = NV_Ith_S(rY,{{loop.index0}});
+        {% for state_var in state_vars %}{% with %}{%- if state_var.modifier %}{% set entry = state_var.modifier ~ "->Calc(NV_Ith_S(rY, " ~ loop.index0 ~ "), " ~ free_variable.var_name ~ ")" %}{% else %}{% set entry = "NV_Ith_S(rY, " ~ loop.index0 ~ ")" %}{%endif %}
+        {%- if state_var.in_derived_quant %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : {{entry}}){%- else %}{{entry}}{%- endif %};
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
-        {% endif %}{%- endfor %}
-
+        {% endif %}{%- endwith%}{%- endfor %}
         // Mathematics
-        {%- for eq in derived_quantity_equations %}
-        const double {{eq.lhs}} = {{eq.rhs}}; // {{eq.units}}
-        {%- endfor %}
+        {%- for eq in derived_quantity_equations %}{%- if eq.is_data_clamp_current is defined and eq.is_data_clamp_current %}
+        // Special handling of data clamp current here
+        // (we want to save expense of calling the interpolation method if possible.)
+        double {{ eq.lhs }} = 0.0;
+        if (mDataClampIsOn)
+        {
+            {{eq.lhs}} = {{eq.rhs}}; // {{eq.units}}
+        }{% else %}
+        const double {{eq.lhs}} = {{eq.rhs}}; // {{eq.units}}{% endif %}{%- endfor %}
 
         N_Vector dqs = N_VNew_Serial({{derived_quantities|length}});
         {%- for quant in derived_quantities %}

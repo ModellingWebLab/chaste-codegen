@@ -415,6 +415,7 @@
         {
             const double var_cell__i_tot = var_ICaL__i_CaL + var_ICab__i_b_Ca + var_IK1__i_K1 + var_IKr__i_Kr + var_IKs__i_Ks + var_INa__i_Na + var_INaCa__i_NaCa + var_INaK__i_NaK + var_INab__i_b_Na + var_IpCa__i_p_Ca + var_IpK__i_p_K + var_Ito__i_to + var_cell__i_Stim; // nanoA_per_nanoF
             d_dt_chaste_interface_var_cell__V = -var_cell__i_tot; // millivolt / millisecond
+            
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_cell__V;
@@ -444,20 +445,6 @@
         NV_Ith_S(rDY,24) = d_dt_chaste_interface_var_Irel__R_prime;
         NV_Ith_S(rDY,25) = d_dt_chaste_interface_var_Na__Na_i;
         NV_Ith_S(rDY,26) = d_dt_chaste_interface_var_K__K_i;
-    }
-
-    N_Vector Cellfink_noble_giles_model_2008FromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__Environment__time, const N_Vector & rY)
-    {
-        // Inputs:
-        // Time units: millisecond
-        
-
-        // Mathematics
-        const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__Environment__time); // uA_per_cm2
-
-        N_Vector dqs = N_VNew_Serial(1);
-        NV_Ith_S(dqs, 0) = var_cell__i_Stim_converter;
-        return dqs;
     }
 
     void Cellfink_noble_giles_model_2008FromCellMLCvode::EvaluateAnalyticJacobian(double var_chaste_interface__Environment__time, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3)
@@ -902,6 +889,20 @@
         IJth(rJacobian, 26, 26) = -4.6583596330447822e-5 * var_x84 - 1.8885766345635723e-5 * var_x85 - 0.00038819663608706523 * var_x86 - 0.00073043079046142181 * var_x78 + var_x272 * var_x83 + var_x6 * (6.576305692690868e-7 * var_x80 - 9.8566502268897146e-6 * var_x82 - var_x271 * var_x81);
     }
 
+    N_Vector Cellfink_noble_giles_model_2008FromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__Environment__time, const N_Vector & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+        // Mathematics
+        const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__Environment__time); // uA_per_cm2
+
+        N_Vector dqs = N_VNew_Serial(2);
+        NV_Ith_S(dqs, 0) = var_chaste_interface__Environment__time;
+        NV_Ith_S(dqs, 1) = var_cell__i_Stim_converter;
+        return dqs;
+    }
+
 template<>
 void OdeSystemInformation<Cellfink_noble_giles_model_2008FromCellMLCvode>::Initialise(void)
 {
@@ -1045,6 +1046,10 @@ void OdeSystemInformation<Cellfink_noble_giles_model_2008FromCellMLCvode>::Initi
     this->mInitialConditions.push_back(141.0167);
 
     // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("Environment__time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
+
+    // Derived Quantity index [1]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 

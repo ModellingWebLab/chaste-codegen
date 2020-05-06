@@ -584,7 +584,8 @@
             d_dt_chaste_interface_var_cell__V = 0.0;
         }
         else
-        {const double var_ICaL__PK = 2.7000000000000001e-7; // litre_per_farad_millisecond
+        {
+            const double var_ICaL__PK = 2.7000000000000001e-7; // litre_per_farad_millisecond
             const double var_ICaL__gamma_Ki = 0.75; // dimensionless
             const double var_ICaL__gamma_Ko = 0.75; // dimensionless
             const double var_ICl_Ca__Fx_Cl_SL = 0.89000000000000001; // dimensionless
@@ -689,7 +690,7 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__cell__V = NV_Ith_S(rY, 0);
+        double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
         // Units: millivolt; Initial value: -85.56885
         double var_chaste_interface__INa_h_gate__h = NV_Ith_S(rY, 2);
         // Units: dimensionless; Initial value: 0.9867005
@@ -771,7 +772,7 @@
         const double var_ICaL_f_gate__tau_f = 1.0 / (0.02 + 0.019699999999999999 * exp(-0.23877882250000002 * pow((1 + 0.068965517241379309 * var_chaste_interface__cell__V), 2))); // millisecond
         const double var_IKr_Rr_gate__Rr = 1.0 / (1.0 + exp(1.4732142857142858 + 0.044642857142857144 * var_chaste_interface__cell__V)); // dimensionless
         const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
-        // Special handling of data clamp current here (see #2708)
+        // Special handling of data clamp current here
         // (we want to save expense of calling the interpolation method if possible.)
         double var_chaste_interface__membrane_data_clamp_current = 0.0;
         if (mDataClampIsOn)
@@ -814,7 +815,7 @@
         const double var_INa__i_Na_jct = (-var_reversal_potentials__E_Na_jct + var_chaste_interface__cell__V) * var_INa__Fx_Na_jct * NV_Ith_S(mParameters, 9) * var_INa__openProb; // microA_per_microF
         const double var_INa__i_Na = var_INa__i_Na_SL + var_INa__i_Na_jct; // microA_per_microF
 
-        N_Vector dqs = N_VNew_Serial(12);
+        N_Vector dqs = N_VNew_Serial(13);
         NV_Ith_S(dqs, 0) = var_Jrel_SR__j_rel_SR;
         NV_Ith_S(dqs, 1) = var_ICaL__i_CaL;
         NV_Ith_S(dqs, 2) = var_ICaL_fCa_gate__fCa_SL;
@@ -827,6 +828,7 @@
         NV_Ith_S(dqs, 9) = var_INaCa__i_NaCa;
         NV_Ith_S(dqs, 10) = var_cell__i_Stim_converter;
         NV_Ith_S(dqs, 11) = var_Itos__i_tos;
+        NV_Ith_S(dqs, 12) = var_chaste_interface__environment__time;
         return dqs;
     }
 
@@ -1135,6 +1137,10 @@ void OdeSystemInformation<DynamicShannon2004FromCellMLCvodeDataClamp>::Initialis
     // Derived Quantity index [11]:
     this->mDerivedQuantityNames.push_back("membrane_transient_outward_current");
     this->mDerivedQuantityUnits.push_back("microA_per_microF");
+
+    // Derived Quantity index [12]:
+    this->mDerivedQuantityNames.push_back("time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
 
     this->mInitialised = true;
 }

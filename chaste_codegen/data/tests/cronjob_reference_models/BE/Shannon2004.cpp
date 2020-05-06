@@ -1647,7 +1647,7 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__cell__V = rY[0];
+        double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: millivolt; Initial value: -85.56885
         double var_chaste_interface__INa_h_gate__h = rY[2];
         // Units: dimensionless; Initial value: 0.9867005
@@ -1766,7 +1766,7 @@
         const double var_INa__i_Na_jct = (-var_reversal_potentials__E_Na_jct + var_chaste_interface__cell__V) * var_INa__Fx_Na_jct * mParameters[8] * var_INa__openProb; // microA_per_microF
         const double var_INa__i_Na = var_INa__i_Na_SL + var_INa__i_Na_jct; // microA_per_microF
 
-        std::vector<double> dqs(11);
+        std::vector<double> dqs(12);
         dqs[0] = var_Jrel_SR__j_rel_SR;
         dqs[1] = var_ICaL__i_CaL;
         dqs[2] = var_ICaL_fCa_gate__fCa_SL;
@@ -1778,6 +1778,7 @@
         dqs[8] = var_INaCa__i_NaCa;
         dqs[9] = var_cell__i_Stim_converter;
         dqs[10] = var_Itos__i_tos;
+        dqs[11] = var_chaste_interface__environment__time;
         return dqs;
     }
 
@@ -2078,6 +2079,10 @@ void OdeSystemInformation<CellShannon2004FromCellMLBackwardEuler>::Initialise(vo
     // Derived Quantity index [10]:
     this->mDerivedQuantityNames.push_back("membrane_transient_outward_current");
     this->mDerivedQuantityUnits.push_back("microA_per_microF");
+
+    // Derived Quantity index [11]:
+    this->mDerivedQuantityNames.push_back("time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
 
     this->mInitialised = true;
 }

@@ -5,7 +5,7 @@
         // Inputs:
         // Time units: millisecond
         {% for state_var in state_vars %}{% with %}{%- if state_var.modifier %}{% set entry = state_var.modifier ~ "->Calc(rY[" ~ loop.index0 ~ "], " ~ free_variable.var_name ~ ")" %}{% else %}{% set entry = "rY[" ~ loop.index0 ~ "]" %}{%endif %}
-        {%- if state_var.in_derived_quant %}double {{ state_var.var }} = {{entry}};
+        {%- if state_var.in_derived_quant %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : {{entry}}){%- else %}{{entry}}{%- endif %};
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endwith%}{%- endfor %}
 

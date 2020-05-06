@@ -299,7 +299,8 @@
             d_dt_chaste_interface_var_membrane__V = 0.0;
         }
         else
-        {const double var_L_type_Ca_channel__E_Ca_L = 46.399999999999999; // millivolt
+        {
+            const double var_L_type_Ca_channel__E_Ca_L = 46.399999999999999; // millivolt
             const double var_L_type_Ca_channel__g_Ca_L_Centre = 0.0057938; // microS
             const double var_L_type_Ca_channel__g_Ca_L_Periphery = 0.065886479999999997; // microS
             const double var_T_type_Ca_channel__E_Ca_T = 45.0; // millivolt
@@ -417,11 +418,17 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__membrane__V = NV_Ith_S(rY,0);
+        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
         // Units: millivolt; Initial value: -39.013558536
         
         // Mathematics
-        // Special handling of data clamp current here (see #2708)
+        const double var_membrane__CmCentre = 2.0000000000000002e-5; // microF
+        const double var_membrane__CmPeriphery = 6.4999999999999994e-5; // microF
+        const double var_membrane__FCellConstant = 1.0309347; // dimensionless
+        const double var_membrane__dCell = 0; // dimensionless
+        const double var_membrane__FCell = var_membrane__FCellConstant * var_membrane__dCell / (1.0 + 0.77449999999999997 * exp(6.9491525423728815 - 10.16949152542373 * var_membrane__dCell)); // dimensionless
+        const double var_membrane__Cm = (-var_membrane__CmCentre + var_membrane__CmPeriphery) * var_membrane__FCell + var_membrane__CmCentre; // microF
+        // Special handling of data clamp current here
         // (we want to save expense of calling the interpolation method if possible.)
         double var_chaste_interface__membrane_data_clamp_current = 0.0;
         if (mDataClampIsOn)
@@ -429,8 +436,10 @@
             var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time_converted) + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 1); // uA_per_cm2
         }
 
-        N_Vector dqs = N_VNew_Serial(1);
-        NV_Ith_S(dqs, 0) = var_chaste_interface__membrane_data_clamp_current;
+        N_Vector dqs = N_VNew_Serial(3);
+        NV_Ith_S(dqs, 0) = var_chaste_interface__environment__time_converted;
+        NV_Ith_S(dqs, 1) = var_membrane__Cm;
+        NV_Ith_S(dqs, 2) = var_chaste_interface__membrane_data_clamp_current;
         return dqs;
     }
 
@@ -438,7 +447,7 @@ template<>
 void OdeSystemInformation<Cellzhang_SAN_model_2000_0D_capableFromCellMLCvodeDataClamp>::Initialise(void)
 {
     this->mSystemName = "zhang_SAN_model_2000_0D_capable";
-    this->mFreeVariableName = "environment__time_converted";
+    this->mFreeVariableName = "environment__time";
     this->mFreeVariableUnits = "millisecond";
 
     // NV_Ith_S(rY,0):
@@ -525,6 +534,14 @@ void OdeSystemInformation<Cellzhang_SAN_model_2000_0D_capableFromCellMLCvodeData
     this->mParameterUnits.push_back("dimensionless");
 
     // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("environment__time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
+
+    // Derived Quantity index [1]:
+    this->mDerivedQuantityNames.push_back("membrane_capacitance");
+    this->mDerivedQuantityUnits.push_back("microF");
+
+    // Derived Quantity index [2]:
     this->mDerivedQuantityNames.push_back("membrane_data_clamp_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 

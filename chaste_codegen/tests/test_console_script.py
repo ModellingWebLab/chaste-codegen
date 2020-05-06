@@ -12,7 +12,7 @@ from chaste_codegen.tests.chaste_test_utils import compare_file_against_referenc
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 def test_script_CVODE_DATA_CLAMP_modifiers2(capsys, tmp_path):
-    """Convert a CVODE with Data Clamp model type"""
+    """Convert a CVODE with Data Clamp model type with modifiers"""
     LOGGER.info('Testing model CVODE with data clamp ,  for command line script\n')
     tmp_path = str(tmp_path)
     model_name = 'Shannon2004'
@@ -369,7 +369,7 @@ def test_script_CVODE_DATA_CLAMP(capsys, tmp_path):
 
 
 def test_script_CVODE_DATA_CLAMP_modifiers(capsys, tmp_path):
-    """Convert a CVODE with Data Clamp model type"""
+    """Convert a CVODE with Data Clamp model type with modifiers"""
     LOGGER.info('Testing model CVODE with data clamp ,  for command line script\n')
     tmp_path = str(tmp_path)
     model_name = 'Shannon2004'

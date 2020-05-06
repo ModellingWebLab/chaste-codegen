@@ -252,7 +252,7 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__membrane__V = rY[0];
+        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: millivolt; Initial value: -83.853
         double var_chaste_interface__intracellular_calcium_concentration__Cai = rY[1];
         // Units: millimolar; Initial value: 0.0002
@@ -310,7 +310,7 @@
         const double var_time_independent_potassium_current_K1_gate__K1_infinity = var_time_independent_potassium_current_K1_gate__alpha_K1 / (var_time_independent_potassium_current_K1_gate__alpha_K1 + var_time_independent_potassium_current_K1_gate__beta_K1); // dimensionless
         const double var_time_independent_potassium_current__i_K1 = (-var_time_independent_potassium_current__E_K1 + var_chaste_interface__membrane__V) * var_time_independent_potassium_current__g_K1 * var_time_independent_potassium_current_K1_gate__K1_infinity; // microA_per_cm2
 
-        std::vector<double> dqs(10);
+        std::vector<double> dqs(11);
         dqs[0] = var_slow_inward_current__i_si;
         dqs[1] = var_slow_inward_current_f_gate__tau_f;
         dqs[2] = var_time_dependent_potassium_current__i_K;
@@ -321,6 +321,7 @@
         dqs[7] = var_background_current__i_b;
         dqs[8] = var_plateau_potassium_current__i_Kp;
         dqs[9] = var_membrane__I_stim_converter;
+        dqs[10] = var_chaste_interface__environment__time;
         return dqs;
     }
 
@@ -462,6 +463,10 @@ void OdeSystemInformation<Cellnew_luo_rudy_1991_with_rangeFromCellML>::Initialis
     // Derived Quantity index [9]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
+
+    // Derived Quantity index [10]:
+    this->mDerivedQuantityNames.push_back("time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
 
     this->mInitialised = true;
 }

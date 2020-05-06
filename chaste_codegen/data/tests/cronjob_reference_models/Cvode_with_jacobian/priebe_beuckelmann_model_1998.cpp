@@ -348,6 +348,7 @@
         else
         {
             d_dt_chaste_interface_var_cell__V = var_cell__dVdt; // mV / ms
+            
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_cell__V;
@@ -372,20 +373,6 @@
         NV_Ith_S(rDY,19) = d_dt_chaste_interface_var_Ionic_concentrations__Ki;
         NV_Ith_S(rDY,20) = d_dt_chaste_interface_var_Ionic_concentrations__Ca_JSR;
         NV_Ith_S(rDY,21) = d_dt_chaste_interface_var_Ionic_concentrations__Ca_NSR;
-    }
-
-    N_Vector Cellpriebe_beuckelmann_model_1998FromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY)
-    {
-        // Inputs:
-        // Time units: millisecond
-        
-
-        // Mathematics
-        const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
-
-        N_Vector dqs = N_VNew_Serial(1);
-        NV_Ith_S(dqs, 0) = var_cell__i_Stim_converter;
-        return dqs;
     }
 
     void Cellpriebe_beuckelmann_model_1998FromCellMLCvode::EvaluateAnalyticJacobian(double var_chaste_interface__environment__time, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3)
@@ -719,6 +706,20 @@
         IJth(rJacobian, 21, 21) = -0.00074309178743961349;
     }
 
+    N_Vector Cellpriebe_beuckelmann_model_1998FromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+        // Mathematics
+        const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
+
+        N_Vector dqs = N_VNew_Serial(2);
+        NV_Ith_S(dqs, 0) = var_chaste_interface__environment__time;
+        NV_Ith_S(dqs, 1) = var_cell__i_Stim_converter;
+        return dqs;
+    }
+
 template<>
 void OdeSystemInformation<Cellpriebe_beuckelmann_model_1998FromCellMLCvode>::Initialise(void)
 {
@@ -849,6 +850,10 @@ void OdeSystemInformation<Cellpriebe_beuckelmann_model_1998FromCellMLCvode>::Ini
     this->mParameterUnits.push_back("mS_per_uF");
 
     // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("environment__time");
+    this->mDerivedQuantityUnits.push_back("ms");
+
+    // Derived Quantity index [1]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 

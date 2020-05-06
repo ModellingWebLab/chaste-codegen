@@ -508,11 +508,24 @@
         rDY[14] = d_dt_chaste_interface_var_hyperpolarisation_activated_current_y_gate__y;
     }
 
+    std::vector<double> Cellzhang_SAN_model_2000_allFromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+
+        std::vector<double> dqs(1);
+        dqs[0] = var_chaste_interface__environment__time_converted;
+        return dqs;
+    }
+
 template<>
 void OdeSystemInformation<Cellzhang_SAN_model_2000_allFromCellML>::Initialise(void)
 {
     this->mSystemName = "zhang_SAN_model_2000_all";
-    this->mFreeVariableName = "environment__time_converted";
+    this->mFreeVariableName = "environment__time";
     this->mFreeVariableUnits = "millisecond";
 
     // rY[0]:
@@ -589,6 +602,10 @@ void OdeSystemInformation<Cellzhang_SAN_model_2000_allFromCellML>::Initialise(vo
     this->mVariableNames.push_back("hyperpolarisation_activated_current_y_gate__y");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.03889291759);
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("environment__time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
 
     this->mInitialised = true;
 }

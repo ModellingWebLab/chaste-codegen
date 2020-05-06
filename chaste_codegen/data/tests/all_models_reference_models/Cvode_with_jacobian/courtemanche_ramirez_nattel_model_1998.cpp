@@ -358,6 +358,7 @@
             const double var_membrane__i_st_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
             const double var_membrane__i_st = NV_Ith_S(mParameters, 0) * var_membrane__i_st_converter / HeartConfig::Instance()->GetCapacitance(); // picoA
             d_dt_chaste_interface_var_membrane__V = (-var_L_type_Ca_channel__i_Ca_L - var_Na_Ca_exchanger_current__i_NaCa - var_background_currents__i_B_Ca - var_background_currents__i_B_Na - var_fast_sodium_current__i_Na - var_membrane__i_st - var_rapid_delayed_rectifier_K_current__i_Kr - var_sarcolemmal_calcium_pump_current__i_CaP - var_slow_delayed_rectifier_K_current__i_Ks - var_sodium_potassium_pump__i_NaK - var_time_independent_potassium_current__i_K1 - var_transient_outward_K_current__i_to - var_ultrarapid_delayed_rectifier_K_current__i_Kur) / NV_Ith_S(mParameters, 0); // millivolt / millisecond
+            
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_membrane__V;
@@ -381,20 +382,6 @@
         NV_Ith_S(rDY,18) = d_dt_chaste_interface_var_intracellular_ion_concentrations__K_i;
         NV_Ith_S(rDY,19) = d_dt_chaste_interface_var_intracellular_ion_concentrations__Ca_rel;
         NV_Ith_S(rDY,20) = d_dt_chaste_interface_var_intracellular_ion_concentrations__Ca_up;
-    }
-
-    N_Vector Cellcourtemanche_ramirez_nattel_model_1998FromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY)
-    {
-        // Inputs:
-        // Time units: millisecond
-        
-
-        // Mathematics
-        const double var_membrane__i_st_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
-
-        N_Vector dqs = N_VNew_Serial(1);
-        NV_Ith_S(dqs, 0) = var_membrane__i_st_converter;
-        return dqs;
     }
 
     void Cellcourtemanche_ramirez_nattel_model_1998FromCellMLCvode::EvaluateAnalyticJacobian(double var_chaste_interface__environment__time, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3)
@@ -805,6 +792,20 @@
         IJth(rJacobian, 20, 20) = -0.00081642512077294684;
     }
 
+    N_Vector Cellcourtemanche_ramirez_nattel_model_1998FromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+        // Mathematics
+        const double var_membrane__i_st_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
+
+        N_Vector dqs = N_VNew_Serial(2);
+        NV_Ith_S(dqs, 0) = var_chaste_interface__environment__time;
+        NV_Ith_S(dqs, 1) = var_membrane__i_st_converter;
+        return dqs;
+    }
+
 template<>
 void OdeSystemInformation<Cellcourtemanche_ramirez_nattel_model_1998FromCellMLCvode>::Initialise(void)
 {
@@ -922,6 +923,10 @@ void OdeSystemInformation<Cellcourtemanche_ramirez_nattel_model_1998FromCellMLCv
     this->mParameterUnits.push_back("picoF");
 
     // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("environment__time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
+
+    // Derived Quantity index [1]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 

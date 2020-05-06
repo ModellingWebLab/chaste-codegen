@@ -595,6 +595,7 @@
             const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__cell__time); // uA_per_cm2
             const double var_cell__i_Stim = var_cell__i_Stim_converter / HeartConfig::Instance()->GetCapacitance(); // uA_per_uF
             d_dt_chaste_interface_var_cell__sVm = -var_cell__I_tot - var_cell__i_Stim; // millivolt / ms
+            
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_cell__sVm;
@@ -635,20 +636,6 @@
         NV_Ith_S(rDY,35) = d_dt_chaste_interface_var_cell__sCaj;
         NV_Ith_S(rDY,36) = d_dt_chaste_interface_var_cell__sCasl;
         NV_Ith_S(rDY,37) = d_dt_chaste_interface_var_cell__sCai;
-    }
-
-    N_Vector Cellgrandi2010ssFromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__cell__time, const N_Vector & rY)
-    {
-        // Inputs:
-        // Time units: millisecond
-        
-
-        // Mathematics
-        const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__cell__time); // uA_per_cm2
-
-        N_Vector dqs = N_VNew_Serial(1);
-        NV_Ith_S(dqs, 0) = var_cell__i_Stim_converter;
-        return dqs;
     }
 
     void Cellgrandi2010ssFromCellMLCvode::EvaluateAnalyticJacobian(double var_chaste_interface__cell__time, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3)
@@ -1253,6 +1240,20 @@
         IJth(rJacobian, 37, 37) = -7.0788000000000011 + var_x306 + var_x309 + var_x310 + var_x312 + var_x315 + var_x316 + var_x318 - var_x367 + 1.8158889498609611e-10 * var_x341 - 1438.4249685909372 * var_x340;
     }
 
+    N_Vector Cellgrandi2010ssFromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__cell__time, const N_Vector & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+        // Mathematics
+        const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__cell__time); // uA_per_cm2
+
+        N_Vector dqs = N_VNew_Serial(2);
+        NV_Ith_S(dqs, 0) = var_chaste_interface__cell__time;
+        NV_Ith_S(dqs, 1) = var_cell__i_Stim_converter;
+        return dqs;
+    }
+
 template<>
 void OdeSystemInformation<Cellgrandi2010ssFromCellMLCvode>::Initialise(void)
 {
@@ -1463,6 +1464,10 @@ void OdeSystemInformation<Cellgrandi2010ssFromCellMLCvode>::Initialise(void)
     this->mParameterUnits.push_back("dimensionless");
 
     // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("cell__time");
+    this->mDerivedQuantityUnits.push_back("ms");
+
+    // Derived Quantity index [1]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 

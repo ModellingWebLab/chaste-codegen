@@ -358,7 +358,8 @@
             d_dt_chaste_interface_var_membrane__V = 0.0;
         }
         else
-        {const double var_L_type_Ca_channel__E_Ca_L = 46.399999999999999; // millivolt
+        {
+            const double var_L_type_Ca_channel__E_Ca_L = 46.399999999999999; // millivolt
             const double var_L_type_Ca_channel__g_Ca_L_Centre_0DCapable = 0.0057938; // microS
             const double var_L_type_Ca_channel__g_Ca_L_Centre_1DCapable = 0.0082000000000000007; // microS
             const double var_L_type_Ca_channel__g_Ca_L_Centre_Published = 0.0057999999999999996; // microS
@@ -537,11 +538,11 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__membrane__V = NV_Ith_S(rY,0);
+        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
         // Units: millivolt; Initial value: -39.013558536
         
         // Mathematics
-        // Special handling of data clamp current here (see #2708)
+        // Special handling of data clamp current here
         // (we want to save expense of calling the interpolation method if possible.)
         double var_chaste_interface__membrane_data_clamp_current = 0.0;
         if (mDataClampIsOn)
@@ -549,8 +550,9 @@
             var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time_converted) + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 0); // uA_per_cm2
         }
 
-        N_Vector dqs = N_VNew_Serial(1);
-        NV_Ith_S(dqs, 0) = var_chaste_interface__membrane_data_clamp_current;
+        N_Vector dqs = N_VNew_Serial(2);
+        NV_Ith_S(dqs, 0) = var_chaste_interface__environment__time_converted;
+        NV_Ith_S(dqs, 1) = var_chaste_interface__membrane_data_clamp_current;
         return dqs;
     }
 
@@ -558,7 +560,7 @@ template<>
 void OdeSystemInformation<Cellzhang_SAN_model_2000_allFromCellMLCvodeDataClamp>::Initialise(void)
 {
     this->mSystemName = "zhang_SAN_model_2000_all";
-    this->mFreeVariableName = "environment__time_converted";
+    this->mFreeVariableName = "environment__time";
     this->mFreeVariableUnits = "millisecond";
 
     // NV_Ith_S(rY,0):
@@ -641,6 +643,10 @@ void OdeSystemInformation<Cellzhang_SAN_model_2000_allFromCellMLCvodeDataClamp>:
     this->mParameterUnits.push_back("dimensionless");
 
     // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("environment__time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
+
+    // Derived Quantity index [1]:
     this->mDerivedQuantityNames.push_back("membrane_data_clamp_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 

@@ -541,8 +541,9 @@
         // Mathematics
         const double var_membrane__i_stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
 
-        std::vector<double> dqs(1);
-        dqs[0] = var_membrane__i_stim_converter;
+        std::vector<double> dqs(2);
+        dqs[0] = var_chaste_interface__environment__time;
+        dqs[1] = var_membrane__i_stim_converter;
         return dqs;
     }
 
@@ -759,6 +760,10 @@ void OdeSystemInformation<Cellbondarenko_model_2004_apexFromCellMLRushLarsen>::I
     this->mInitialConditions.push_back(3.19129e-05);
 
     // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("environment__time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
+
+    // Derived Quantity index [1]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 

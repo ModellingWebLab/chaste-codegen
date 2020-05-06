@@ -348,6 +348,7 @@
             const double var_non_specific_calcium_activated_current__i_ns_Ca = var_non_specific_calcium_activated_current__i_ns_K + var_non_specific_calcium_activated_current__i_ns_Na; // uA_per_mm2
             const double var_membrane__dV_dt = (-var_L_type_Ca_channel__i_Ca_L - var_Na_Ca_exchanger__i_NaCa - var_calcium_background_current__i_Ca_b - var_fast_sodium_current__i_Na - var_non_specific_calcium_activated_current__i_ns_Ca - var_plateau_potassium_current__i_Kp - var_sarcolemmal_calcium_pump__i_p_Ca - var_sodium_background_current__i_Na_b - var_sodium_potassium_pump__i_NaK - var_time_dependent_potassium_current__i_K - var_time_independent_potassium_current__i_K1 + var_membrane__I_st) / NV_Ith_S(mParameters, 3); // mV_per_ms
             d_dt_chaste_interface_var_membrane__V = var_membrane__dV_dt; // mV / ms
+            
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_membrane__V;
@@ -368,20 +369,19 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__membrane__V = NV_Ith_S(rY,0);
+        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
         // Units: mV; Initial value: -84.624
-        double var_chaste_interface__fast_sodium_current_m_gate__m = NV_Ith_S(rY,2);
+        double var_chaste_interface__fast_sodium_current_m_gate__m = NV_Ith_S(rY, 2);
         // Units: dimensionless; Initial value: 0.0
-        double var_chaste_interface__fast_sodium_current_h_gate__h = NV_Ith_S(rY,3);
+        double var_chaste_interface__fast_sodium_current_h_gate__h = NV_Ith_S(rY, 3);
         // Units: dimensionless; Initial value: 1.0
-        double var_chaste_interface__fast_sodium_current_j_gate__j = NV_Ith_S(rY,4);
+        double var_chaste_interface__fast_sodium_current_j_gate__j = NV_Ith_S(rY, 4);
         // Units: dimensionless; Initial value: 1.0
-        double var_chaste_interface__ionic_concentrations__Nai = NV_Ith_S(rY,8);
+        double var_chaste_interface__ionic_concentrations__Nai = NV_Ith_S(rY, 8);
         // Units: mM; Initial value: 10.0
-        double var_chaste_interface__ionic_concentrations__Ki = NV_Ith_S(rY,9);
+        double var_chaste_interface__ionic_concentrations__Ki = NV_Ith_S(rY, 9);
         // Units: mM; Initial value: 145.0
         
-
         // Mathematics
         const double var_membrane__F = 96845.0; // faradays_constant_units
         const double var_membrane__I_st_converter = -GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
@@ -396,10 +396,11 @@
         const double var_time_independent_potassium_current_K1_gate__K1_infinity = var_time_independent_potassium_current_K1_gate__alpha_K1 / (var_time_independent_potassium_current_K1_gate__alpha_K1 + var_time_independent_potassium_current_K1_gate__beta_K1); // dimensionless
         const double var_time_independent_potassium_current__i_K1 = (-var_time_independent_potassium_current__E_K1 + var_chaste_interface__membrane__V) * var_time_independent_potassium_current__g_K1 * var_time_independent_potassium_current_K1_gate__K1_infinity; // uA_per_mm2
 
-        N_Vector dqs = N_VNew_Serial(3);
+        N_Vector dqs = N_VNew_Serial(4);
         NV_Ith_S(dqs, 0) = var_fast_sodium_current__i_Na;
         NV_Ith_S(dqs, 1) = var_time_independent_potassium_current__i_K1;
         NV_Ith_S(dqs, 2) = var_membrane__I_st_converter;
+        NV_Ith_S(dqs, 3) = var_chaste_interface__environment__time;
         return dqs;
     }
 
@@ -505,6 +506,10 @@ void OdeSystemInformation<Cellluo_rudy_1994FromCellMLCvode>::Initialise(void)
     // Derived Quantity index [2]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
+
+    // Derived Quantity index [3]:
+    this->mDerivedQuantityNames.push_back("time");
+    this->mDerivedQuantityUnits.push_back("ms");
 
     this->mInitialised = true;
 }

@@ -245,6 +245,12 @@ class ChasteModel(object):
                 initial_value = eqs[0].rhs
         return initial_value
 
+    def _set_is_metadata(self, variable, metadata_tag, ontology=_PYCMLMETA, object_value='yes'):
+        """Adds the metadata tag in the given ontology with the value object_value"""
+        self._model.add_cmeta_id(variable)
+        self._model.rdf.add((variable.rdf_identity, create_rdf_node((ontology, metadata_tag)),
+                            create_rdf_node(object_value)))
+
     def _state_var_key_order(self, var):
         """Returns a key to order state variables in the same way as pycml does"""
         if isinstance(var, sp.Derivative):
@@ -269,9 +275,11 @@ class ChasteModel(object):
     def _get_time_variable(self):
         time_variable = self._model.get_free_variable()
         desired_units = self._units.get_unit('millisecond')
+        # Add derived quantity metadata tag
+        self._set_is_metadata(time_variable, 'derived-quantity')
         try:
             # If the variable is in units that can be converted to millisecond, perform conversion
-            time_var =  self._model.convert_variable(time_variable, desired_units, DataDirectionFlow.INPUT)
+            time_var = self._model.convert_variable(time_variable, desired_units, DataDirectionFlow.INPUT)
             self._model.rdf.add((time_var.rdf_identity, create_rdf_node((self._PYCMLMETA, 'derived-quantity')),
                                 create_rdf_node('yes')))
             self._model.rdf.add((time_var.rdf_identity, create_rdf_node((self._PYCMLMETA, 'derived-quantity')),
@@ -286,11 +294,9 @@ class ChasteModel(object):
         """ If it is not a state var, annotates var as modifiable parameter or derived quantity as appropriate"""
         if var not in self._state_vars:
             if self._model.is_constant(var):
-                self._model.rdf.add((var.rdf_identity, create_rdf_node((self._PYCMLMETA, 'modifiable-parameter')),
-                                     create_rdf_node('yes')))
+                self._set_is_metadata(var, 'modifiable-parameter')
             else:  # not constant
-                self._model.rdf.add((var.rdf_identity, create_rdf_node((self._PYCMLMETA, 'derived-quantity')),
-                                    create_rdf_node('yes')))
+                self._set_is_metadata(var, 'derived-quantity')
 
     def _get_membrane_voltage_var(self):
         """ Find the membrane_voltage variable"""
@@ -336,10 +342,10 @@ class ChasteModel(object):
         modifiers = []
         if self.use_modifiers:
             modifiers = [m for m in self._model.variables()
-                        if self._model.has_ontology_annotation(m, self._OXMETA)
-                        and not self._model.get_ontology_terms_by_variable(m, self._OXMETA)[-1].
-                        startswith('membrane_stimulus_current')
-                        and not m == self._time_variable]
+                         if self._model.has_ontology_annotation(m, self._OXMETA)
+                         and not self._model.get_ontology_terms_by_variable(m, self._OXMETA)[-1].
+                         startswith('membrane_stimulus_current')
+                         and not m == self._time_variable]
 
         return sorted(modifiers, key=lambda m: self._model.get_display_name(m, self._OXMETA))
 
@@ -679,10 +685,11 @@ class ChasteModel(object):
         tagged = self._model.get_variables_by_rdf((self._PYCMLMETA, 'derived-quantity'), 'yes')
         annotated = [q for q in self._model.get_derived_quantities()
                      if self._model.has_ontology_annotation(q, self._OXMETA)]
+        derived_quant = tagged + annotated
+        if self._membrane_stimulus_current is not None and len(self._stimulus_equations) > 0:
+            derived_quant += [self._membrane_stimulus_current]
 
-        return sorted(set(tagged + annotated +
-                          [self._membrane_stimulus_current] if self._membrane_stimulus_current is not None else []),
-                      key=lambda v: self._model.get_display_name(v, self._OXMETA))
+        return sorted(set(derived_quant), key=lambda v: self._model.get_display_name(v, self._OXMETA))
 
     def _get_derived_quant_eqs(self):
         """ Get the defining equations for derived quantities"""
@@ -717,7 +724,8 @@ class ChasteModel(object):
     def _print_rhs_with_modifiers(self, modifier, eq):
         """ Print modifiable parameters in the correct format for the model type"""
         if modifier in self._modifiers:
-            return self._format_modifier(modifier) + '->Calc(' + self._printer.doprint(eq) + ', '+ self._printer.doprint(self._time_variable) +')'
+            return self._format_modifier(modifier) + '->Calc(' + self._printer.doprint(eq) + ', ' +\
+                self._printer.doprint(self._time_variable) + ')'
         return self._printer.doprint(eq)
 
     def _print_modifiable_parameters(self, variable):
@@ -732,7 +740,7 @@ class ChasteModel(object):
         return [{'name': self._model.get_display_name(param),
                  'modifier': self._format_modifier(param)}
                 for param in self._modifiers]
-    
+
     def _format_modifiable_parameters(self):
         """ Format the modifiable parameter for printing to chaste code"""
         return [{'units': self._model.units.format(self._model.units.evaluate_units(param)),

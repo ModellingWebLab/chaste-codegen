@@ -2863,8 +2863,9 @@
         // Mathematics
         const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__Environment__time); // uA_per_cm2
 
-        std::vector<double> dqs(1);
-        dqs[0] = var_cell__i_Stim_converter;
+        std::vector<double> dqs(2);
+        dqs[0] = var_chaste_interface__Environment__time;
+        dqs[1] = var_cell__i_Stim_converter;
         return dqs;
     }
 
@@ -3030,6 +3031,10 @@ void OdeSystemInformation<Cellmahajan_2008FromCellMLGRL2>::Initialise(void)
     this->mParameterUnits.push_back("uS_per_nF");
 
     // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("Environment__time");
+    this->mDerivedQuantityUnits.push_back("ms");
+
+    // Derived Quantity index [1]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
