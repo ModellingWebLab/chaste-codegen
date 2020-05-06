@@ -70,7 +70,7 @@ def get_file_lines(file_name, remove_comments=False):
     return lines
 
 
-def compare_model_against_reference(model_type, chaste_model, tmp_path, expected_hpp_path, expected_cpp_path):
+def compare_model_against_reference(chaste_model, tmp_path, expected_hpp_path, expected_cpp_path):
     """ Check a model's generated files against given reference files
     """
     tmp_path = str(tmp_path)
