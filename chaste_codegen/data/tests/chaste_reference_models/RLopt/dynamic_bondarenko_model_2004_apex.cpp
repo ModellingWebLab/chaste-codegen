@@ -39,7 +39,7 @@
     }
 
     Dynamicbondarenko_model_2004_apexFromCellMLRushLarsen::Dynamicbondarenko_model_2004_apexFromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
-        : AbstractRushLarsenCardiacCell(
+        : AbstractCardiacCellWithModifiers<AbstractRushLarsenCardiacCell >(
                 41,
                 0,
                 pIntracellularStimulus)
@@ -51,6 +51,11 @@
 
         // We have a default stimulus specified in the CellML file metadata
         this->mHasDefaultStimulusFromCellML = true;
+
+        // These will get initialised to DummyModifiers in the base class method.
+        
+        this->AddModifier("membrane_voltage",
+                          mp_membrane_voltage_modifier);
         
     }
 

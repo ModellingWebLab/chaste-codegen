@@ -39,7 +39,7 @@
     }
 
     Dynamicaslanidi_model_2009FromCellML::Dynamicaslanidi_model_2009FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
-        : AbstractCardiacCell(
+        : AbstractCardiacCellWithModifiers<AbstractCardiacCell >(
                 pSolver,
                 29,
                 0,
@@ -52,6 +52,13 @@
 
         // We have a default stimulus specified in the CellML file metadata
         this->mHasDefaultStimulusFromCellML = true;
+
+        // These will get initialised to DummyModifiers in the base class method.
+        
+        this->AddModifier("membrane_capacitance",
+                          mp_membrane_capacitance_modifier);
+        this->AddModifier("membrane_voltage",
+                          mp_membrane_voltage_modifier);
         
         this->mParameters[0] = 5.0000000000000002e-5; // (var_membrane__Cm) [nanoF]
     }
@@ -132,7 +139,7 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : mp_membrane_voltage_modifier->Calc(rY[0], var_chaste_interface__environment__time_converted));
         // Units: millivolt; Initial value: -80.0
         double var_chaste_interface__sodium_current_m_gate__m = rY[1];
         // Units: dimensionless; Initial value: 0.01309

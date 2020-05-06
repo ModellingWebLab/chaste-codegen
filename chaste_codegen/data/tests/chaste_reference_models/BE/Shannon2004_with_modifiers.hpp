@@ -1,5 +1,5 @@
-#ifndef CELLSHANNON2004FROMCELLMLCVODEDATACLAMP_HPP_
-#define CELLSHANNON2004FROMCELLMLCVODEDATACLAMP_HPP_
+#ifndef CELLSHANNON2004FROMCELLML_HPP_
+#define CELLSHANNON2004FROMCELLML_HPP_
 
 //! @file
 //!
@@ -19,15 +19,15 @@
 #include "AbstractModifier.hpp"
 
 #include "AbstractStimulusFunction.hpp"
-#include "AbstractCardiacCell.hpp"
+#include "AbstractBackwardEulerCardiacCell.hpp"
 
-class CellShannon2004FromCellMLCvodeDataClamp : public AbstractCardiacCellWithModifiers<AbstractCardiacCell >
+class CellShannon2004FromCellML : public AbstractCardiacCellWithModifiers<AbstractBackwardEulerCardiacCell<26> >
 {
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & archive, const unsigned int version)
     {
-        archive & boost::serialization::base_object<AbstractCardiacCellWithModifiers<AbstractCardiacCell > >(*this);
+        archive & boost::serialization::base_object<AbstractCardiacCellWithModifiers<AbstractBackwardEulerCardiacCell<26> > >(*this);
         
         // Despite this class having modifier member variables, they are all added to the
         // abstract class by the constructor, and archived via that, instead of here.
@@ -73,17 +73,19 @@ public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    CellShannon2004FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~CellShannon2004FromCellMLCvodeDataClamp();
-    double GetIIonic(const std::vector<double>* pStateVariables=NULL);
-    void EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY);
+    CellShannon2004FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~CellShannon2004FromCellML();
+    double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[26], double rResidual[26]);
+    void ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[26], double rJacobian[26][26]);protected:
+    void UpdateTransmembranePotential(double var_chaste_interface__environment__time);
+    void ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time);
 
     std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY);
 };
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(CellShannon2004FromCellMLCvodeDataClamp)
+CHASTE_CLASS_EXPORT(CellShannon2004FromCellML)
 
 namespace boost
 {
@@ -91,7 +93,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const CellShannon2004FromCellMLCvodeDataClamp * t, const unsigned int fileVersion)
+            Archive & ar, const CellShannon2004FromCellML * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -101,17 +103,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, CellShannon2004FromCellMLCvodeDataClamp * t, const unsigned int fileVersion)
+            Archive & ar, CellShannon2004FromCellML * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)CellShannon2004FromCellMLCvodeDataClamp(p_solver, p_stimulus);
+            ::new(t)CellShannon2004FromCellML(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLSHANNON2004FROMCELLMLCVODEDATACLAMP_HPP_
+#endif // CELLSHANNON2004FROMCELLML_HPP_
