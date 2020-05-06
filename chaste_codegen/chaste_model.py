@@ -242,6 +242,12 @@ class ChasteModel(object):
                 initial_value = eqs[0].rhs
         return initial_value
 
+    def _set_is_metadata(self, variable, metadata_tag, ontology=_PYCMLMETA, object_value='yes'):
+        """Adds the metadata tag in the given ontology with the value object_value"""
+        self._model.add_cmeta_id(variable)
+        self._model.rdf.add((variable.rdf_identity, create_rdf_node((ontology, metadata_tag)),
+                            create_rdf_node(object_value)))
+
     def _state_var_key_order(self, var):
         """Returns a key to order state variables in the same way as pycml does"""
         if isinstance(var, sp.Derivative):
@@ -267,9 +273,7 @@ class ChasteModel(object):
         time_variable = self._model.get_free_variable()
         desired_units = self._units.get_unit('millisecond')
         # Add derived quantity metadata tag
-        self._model.add_cmeta_id(time_variable)
-        self._model.rdf.add((time_variable.rdf_identity, create_rdf_node((self._PYCMLMETA, 'derived-quantity')),
-                            create_rdf_node('yes')))
+        self._set_is_metadata(time_variable, 'derived-quantity')
         try:
             # If the variable is in units that can be converted to millisecond, perform conversion
             return self._model.convert_variable(time_variable, desired_units, DataDirectionFlow.INPUT)
@@ -282,11 +286,9 @@ class ChasteModel(object):
         """ If it is not a state var, annotates var as modifiable parameter or derived quantity as appropriate"""
         if var not in self._state_vars:
             if self._model.is_constant(var):
-                self._model.rdf.add((var.rdf_identity, create_rdf_node((self._PYCMLMETA, 'modifiable-parameter')),
-                                     create_rdf_node('yes')))
+                self._set_is_metadata(var, 'modifiable-parameter')
             else:  # not constant
-                self._model.rdf.add((var.rdf_identity, create_rdf_node((self._PYCMLMETA, 'derived-quantity')),
-                                    create_rdf_node('yes')))
+                self._set_is_metadata(var, 'derived-quantity')
 
     def _get_membrane_voltage_var(self):
         """ Find the membrane_voltage variable"""
