@@ -662,7 +662,8 @@ class ChasteModel(object):
         annotated = [q for q in self._model.get_derived_quantities()
                      if self._model.has_ontology_annotation(q, self._OXMETA)]
         derived_quant = tagged + annotated
-        derived_quant += [self._membrane_stimulus_current] if self._membrane_stimulus_current is not None else []
+        if self._membrane_stimulus_current is not None and len(self._stimulus_equations) > 0:
+            derived_quant += [self._membrane_stimulus_current]
 
         return sorted(set(derived_quant), key=lambda v: self._model.get_display_name(v, self._OXMETA))
 
