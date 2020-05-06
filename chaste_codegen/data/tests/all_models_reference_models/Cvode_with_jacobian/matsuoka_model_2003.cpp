@@ -583,6 +583,7 @@
             const double var_transient_outward_current__i_to = var_transient_outward_current__i_to_K + var_transient_outward_current__i_to_Na; // picoA
             const double var_membrane__i_tot = var_L_type_Ca_channel__i_Ca_L + var_T_type_Ca_channel__i_Ca_T + var_membrane__i_I + var_rapid_time_dependent_potassium_current__i_Kr + var_slow_time_dependent_potassium_current__i_Ks + var_sodium_calcium_exchanger__i_NaCa + var_sodium_current__i_Na + var_sodium_potassium_pump__i_NaK + var_time_independent_potassium_current__i_K1 + var_transient_outward_current__i_to; // picoA
             d_dt_chaste_interface_var_membrane__Vm = (-var_membrane__i_ext - var_membrane__i_tot) / NV_Ith_S(mParameters, 0); // millivolt / millisecond
+            
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_membrane__Vm;
@@ -1353,6 +1354,7 @@
         IJth(rJacobian, 35, 36) = var_x437 * var_chaste_interface__NL_model__pCB;
         IJth(rJacobian, 36, 36) = -1.2;
     }
+
     N_Vector Cellmatsuoka_model_2003FromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY)
     {
         // Inputs:
@@ -1360,7 +1362,6 @@
         double var_chaste_interface__internal_ion_concentrations__Ca_Total = NV_Ith_S(rY, 3);
         // Units: millimolar; Initial value: 0.00040180173572968586
         
-
         // Mathematics
         const double var_internal_ion_concentrations__CMDN_max = 0.050000000000000003; // millimolar
         const double var_internal_ion_concentrations__K_mCMDN = 0.0023800000000000002; // millimolar
@@ -1369,11 +1370,13 @@
         const double var_internal_ion_concentrations__Cai = 1.0 * sqrt(0.25 * pow(var_internal_ion_concentrations__b1, 2) + var_internal_ion_concentrations__c1) - 0.5 * var_internal_ion_concentrations__b1; // millimolar
         const double var_membrane__i_ext_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
 
-        N_Vector dqs = N_VNew_Serial(2);
+        N_Vector dqs = N_VNew_Serial(3);
         NV_Ith_S(dqs, 0) = var_internal_ion_concentrations__Cai;
-        NV_Ith_S(dqs, 1) = var_membrane__i_ext_converter;
+        NV_Ith_S(dqs, 1) = var_chaste_interface__environment__time;
+        NV_Ith_S(dqs, 2) = var_membrane__i_ext_converter;
         return dqs;
     }
+
 template<>
 void OdeSystemInformation<Cellmatsuoka_model_2003FromCellMLCvode>::Initialise(void)
 {
@@ -1575,6 +1578,10 @@ void OdeSystemInformation<Cellmatsuoka_model_2003FromCellMLCvode>::Initialise(vo
     this->mDerivedQuantityUnits.push_back("millimolar");
 
     // Derived Quantity index [1]:
+    this->mDerivedQuantityNames.push_back("environment__time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
+
+    // Derived Quantity index [2]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 

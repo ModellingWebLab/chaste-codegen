@@ -298,6 +298,7 @@
             const double var_second_inward_current__i_si = var_second_inward_current__i_siCa + var_second_inward_current__i_siK + var_second_inward_current__i_siNa; // nanoA
             const double var_membrane__V_orig_deriv = (-var_Na_Ca_exchanger__i_NaCa - var_calcium_background_current__i_Ca_b - var_fast_sodium_current__i_Na - var_hyperpolarising_activated_current__i_f - var_second_inward_current__i_si - var_sodium_background_current__i_Na_b - var_sodium_potassium_pump__i_p - var_time_dependent_potassium_current__i_K - var_time_independent_potassium_current__i_K1) / NV_Ith_S(mParameters, 0); // millivolt / second
             d_dt_chaste_interface_var_membrane__V = 0.001 * var_membrane__V_orig_deriv; // millivolt / millisecond
+            
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_membrane__V;
@@ -551,11 +552,23 @@
         IJth(rJacobian, 13, 13) = var_x127 + 4.5316609527777084e-6 * var_x81 - 7.4808371283949473e-6 * var_chaste_interface__time_dependent_potassium_current_x_gate__x - 6.0528853041696024e-5 * var_x80 - var_x126 * var_x2;
     }
 
+    N_Vector Cellnoble_SAN_model_1989FromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const N_Vector & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+        // Mathematics
+
+        N_Vector dqs = N_VNew_Serial(1);
+        NV_Ith_S(dqs, 0) = var_chaste_interface__environment__time_converted;
+        return dqs;
+    }
+
 template<>
 void OdeSystemInformation<Cellnoble_SAN_model_1989FromCellMLCvode>::Initialise(void)
 {
     this->mSystemName = "Noble_SAN_model_1989";
-    this->mFreeVariableName = "environment__time_converted";
+    this->mFreeVariableName = "environment__time";
     this->mFreeVariableUnits = "millisecond";
 
     // NV_Ith_S(rY,0):
@@ -631,6 +644,10 @@ void OdeSystemInformation<Cellnoble_SAN_model_1989FromCellMLCvode>::Initialise(v
     // mParameters[0]:
     this->mParameterNames.push_back("membrane_capacitance");
     this->mParameterUnits.push_back("microF");
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("environment__time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
 
     this->mInitialised = true;
 }

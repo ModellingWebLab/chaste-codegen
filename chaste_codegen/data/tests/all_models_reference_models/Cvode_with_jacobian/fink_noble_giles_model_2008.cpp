@@ -415,6 +415,7 @@
         {
             const double var_cell__i_tot = var_ICaL__i_CaL + var_ICab__i_b_Ca + var_IK1__i_K1 + var_IKr__i_Kr + var_IKs__i_Ks + var_INa__i_Na + var_INaCa__i_NaCa + var_INaK__i_NaK + var_INab__i_b_Na + var_IpCa__i_p_Ca + var_IpK__i_p_K + var_Ito__i_to + var_cell__i_Stim; // nanoA_per_nanoF
             d_dt_chaste_interface_var_cell__V = -var_cell__i_tot; // millivolt / millisecond
+            
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_cell__V;
@@ -893,12 +894,12 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__Environment__time); // uA_per_cm2
 
-        N_Vector dqs = N_VNew_Serial(1);
-        NV_Ith_S(dqs, 0) = var_cell__i_Stim_converter;
+        N_Vector dqs = N_VNew_Serial(2);
+        NV_Ith_S(dqs, 0) = var_chaste_interface__Environment__time;
+        NV_Ith_S(dqs, 1) = var_cell__i_Stim_converter;
         return dqs;
     }
 
@@ -1045,6 +1046,10 @@ void OdeSystemInformation<Cellfink_noble_giles_model_2008FromCellMLCvode>::Initi
     this->mInitialConditions.push_back(141.0167);
 
     // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("Environment__time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
+
+    // Derived Quantity index [1]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 

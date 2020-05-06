@@ -635,6 +635,7 @@
             const double var_INa__i_Na = var_INa__i_Na_SL + var_INa__i_Na_jct; // microA_per_microF
             const double var_INab__i_Nab = var_INab__i_Nab_SL + var_INab__i_Nab_jct; // microA_per_microF
             d_dt_chaste_interface_var_cell__V = -var_ICaL__i_CaL - var_ICab__i_Cab - var_ICap__i_Cap - var_ICl_Ca__i_Cl_Ca - var_IClb__i_Clb - var_IK1__i_K1 - var_IKp__i_Kp - var_IKr__i_Kr - var_IKs__i_Ks - var_INa__i_Na - var_INaCa__i_NaCa - var_INaK__i_NaK - var_INab__i_Nab - var_Itof__i_tof - var_Itos__i_tos - var_cell__i_Stim; // millivolt / millisecond
+            
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_cell__V;
@@ -1341,7 +1342,6 @@
         double var_chaste_interface__Ca_buffer__Ca_jct = NV_Ith_S(rY, 26);
         // Units: millimolar; Initial value: 0.0001737475
         
-
         // Mathematics
         const double var_ICaL__Fx_ICaL_SL = 0.10000000000000001; // dimensionless
         const double var_ICaL__Fx_ICaL_jct = 0.90000000000000002; // dimensionless
@@ -1419,7 +1419,7 @@
         const double var_INa__i_Na_jct = (-var_reversal_potentials__E_Na_jct + var_chaste_interface__cell__V) * var_INa__Fx_Na_jct * NV_Ith_S(mParameters, 8) * var_INa__openProb; // microA_per_microF
         const double var_INa__i_Na = var_INa__i_Na_SL + var_INa__i_Na_jct; // microA_per_microF
 
-        N_Vector dqs = N_VNew_Serial(11);
+        N_Vector dqs = N_VNew_Serial(12);
         NV_Ith_S(dqs, 0) = var_Jrel_SR__j_rel_SR;
         NV_Ith_S(dqs, 1) = var_ICaL__i_CaL;
         NV_Ith_S(dqs, 2) = var_ICaL_fCa_gate__fCa_SL;
@@ -1431,6 +1431,7 @@
         NV_Ith_S(dqs, 8) = var_INaCa__i_NaCa;
         NV_Ith_S(dqs, 9) = var_cell__i_Stim_converter;
         NV_Ith_S(dqs, 10) = var_Itos__i_tos;
+        NV_Ith_S(dqs, 11) = var_chaste_interface__environment__time;
         return dqs;
     }
 
@@ -1731,6 +1732,10 @@ void OdeSystemInformation<DynamicShannon2004FromCellMLCvode>::Initialise(void)
     // Derived Quantity index [10]:
     this->mDerivedQuantityNames.push_back("membrane_transient_outward_current");
     this->mDerivedQuantityUnits.push_back("microA_per_microF");
+
+    // Derived Quantity index [11]:
+    this->mDerivedQuantityNames.push_back("time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
 
     this->mInitialised = true;
 }

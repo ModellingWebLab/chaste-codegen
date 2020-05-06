@@ -395,11 +395,31 @@
         
     }
 
+    std::vector<double> Cellzhang_SAN_model_2000_0D_capableFromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+        const double var_membrane__CmCentre = 2.0000000000000002e-5; // microF
+        const double var_membrane__CmPeriphery = 6.4999999999999994e-5; // microF
+        const double var_membrane__FCellConstant = 1.0309347; // dimensionless
+        const double var_membrane__dCell = 0; // dimensionless
+        const double var_membrane__FCell = var_membrane__FCellConstant * var_membrane__dCell / (1.0 + 0.77449999999999997 * exp(6.9491525423728815 - 10.16949152542373 * var_membrane__dCell)); // dimensionless
+        const double var_membrane__Cm = (-var_membrane__CmCentre + var_membrane__CmPeriphery) * var_membrane__FCell + var_membrane__CmCentre; // microF
+
+        std::vector<double> dqs(2);
+        dqs[0] = var_chaste_interface__environment__time_converted;
+        dqs[1] = var_membrane__Cm;
+        return dqs;
+    }
+
 template<>
 void OdeSystemInformation<Cellzhang_SAN_model_2000_0D_capableFromCellMLBackwardEuler>::Initialise(void)
 {
     this->mSystemName = "zhang_SAN_model_2000_0D_capable";
-    this->mFreeVariableName = "environment__time_converted";
+    this->mFreeVariableName = "environment__time";
     this->mFreeVariableUnits = "millisecond";
 
     // rY[0]:
@@ -480,6 +500,14 @@ void OdeSystemInformation<Cellzhang_SAN_model_2000_0D_capableFromCellMLBackwardE
     // mParameters[0]:
     this->mParameterNames.push_back("cytosolic_calcium_concentration");
     this->mParameterUnits.push_back("millimolar");
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("environment__time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
+
+    // Derived Quantity index [1]:
+    this->mDerivedQuantityNames.push_back("membrane_capacitance");
+    this->mDerivedQuantityUnits.push_back("microF");
 
     this->mInitialised = true;
 }

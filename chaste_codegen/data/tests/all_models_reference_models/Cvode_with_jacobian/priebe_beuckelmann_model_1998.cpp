@@ -348,6 +348,7 @@
         else
         {
             d_dt_chaste_interface_var_cell__V = var_cell__dVdt; // mV / ms
+            
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_cell__V;
@@ -710,12 +711,12 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
 
-        N_Vector dqs = N_VNew_Serial(1);
-        NV_Ith_S(dqs, 0) = var_cell__i_Stim_converter;
+        N_Vector dqs = N_VNew_Serial(2);
+        NV_Ith_S(dqs, 0) = var_chaste_interface__environment__time;
+        NV_Ith_S(dqs, 1) = var_cell__i_Stim_converter;
         return dqs;
     }
 
@@ -849,6 +850,10 @@ void OdeSystemInformation<Cellpriebe_beuckelmann_model_1998FromCellMLCvode>::Ini
     this->mParameterUnits.push_back("mS_per_uF");
 
     // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("environment__time");
+    this->mDerivedQuantityUnits.push_back("ms");
+
+    // Derived Quantity index [1]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 

@@ -810,6 +810,7 @@
             const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__Ito1 = var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKv14 + var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKv43; // uA_per_uF
             const double var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__i_tot = var_COMPUTE_ICa_ICaK__ICa + var_COMPUTE_ICa_ICaK__ICaK + var_COMPUTE_INaK_INaCa_ICab_IpCa__ICab + var_COMPUTE_INaK_INaCa_ICab_IpCa__INaCa + var_COMPUTE_INaK_INaCa_ICab_IpCa__INaK + var_COMPUTE_INaK_INaCa_ICab_IpCa__IpCa + var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IK1 + var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKr + var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKs + var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__INa + var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__INab + var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__Ito1 + var_I_stimulus__i_Stim; // uA_per_uF
             d_dt_chaste_interface_var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = -var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__i_tot; // mV / ms
+            
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
@@ -886,12 +887,12 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_I_stimulus__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
 
-        N_Vector dqs = N_VNew_Serial(1);
-        NV_Ith_S(dqs, 0) = var_I_stimulus__i_Stim_converter;
+        N_Vector dqs = N_VNew_Serial(2);
+        NV_Ith_S(dqs, 0) = var_chaste_interface__environment__time;
+        NV_Ith_S(dqs, 1) = var_I_stimulus__i_Stim_converter;
         return dqs;
     }
 
@@ -1238,6 +1239,10 @@ void OdeSystemInformation<Celliyer_model_2004FromCellMLCvode>::Initialise(void)
     this->mInitialConditions.push_back(1.298547822e-05);
 
     // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("environment__time");
+    this->mDerivedQuantityUnits.push_back("ms");
+
+    // Derived Quantity index [1]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 

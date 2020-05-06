@@ -337,8 +337,9 @@
         // Mathematics
         const double var_membrane__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
 
-        std::vector<double> dqs(1);
+        std::vector<double> dqs(2);
         dqs[0] = var_membrane__i_Stim_converter;
+        dqs[1] = var_chaste_interface__environment__time;
         return dqs;
     }
 
@@ -372,6 +373,10 @@ void OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromC
     // Derived Quantity index [0]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
+
+    // Derived Quantity index [1]:
+    this->mDerivedQuantityNames.push_back("time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
 
     this->mInitialised = true;
 }

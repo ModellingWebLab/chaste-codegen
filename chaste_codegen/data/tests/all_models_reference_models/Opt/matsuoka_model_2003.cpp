@@ -384,9 +384,10 @@
         const double var_internal_ion_concentrations__Cai = 1.0 * sqrt(0.25 * pow(var_internal_ion_concentrations__b1, 2) + var_internal_ion_concentrations__c1) - 0.5 * var_internal_ion_concentrations__b1; // millimolar
         const double var_membrane__i_ext_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
 
-        std::vector<double> dqs(2);
+        std::vector<double> dqs(3);
         dqs[0] = var_internal_ion_concentrations__Cai;
-        dqs[1] = var_membrane__i_ext_converter;
+        dqs[1] = var_chaste_interface__environment__time;
+        dqs[2] = var_membrane__i_ext_converter;
         return dqs;
     }
 
@@ -591,6 +592,10 @@ void OdeSystemInformation<Cellmatsuoka_model_2003FromCellML>::Initialise(void)
     this->mDerivedQuantityUnits.push_back("millimolar");
 
     // Derived Quantity index [1]:
+    this->mDerivedQuantityNames.push_back("environment__time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
+
+    // Derived Quantity index [2]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 

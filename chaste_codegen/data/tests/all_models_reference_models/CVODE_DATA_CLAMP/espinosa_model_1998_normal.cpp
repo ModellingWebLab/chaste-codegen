@@ -436,9 +436,10 @@
             var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time_converted) + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 1); // uA_per_cm2
         }
 
-        N_Vector dqs = N_VNew_Serial(2);
-        NV_Ith_S(dqs, 0) = var_chaste_interface__membrane_data_clamp_current;
-        NV_Ith_S(dqs, 1) = var_membrane__i_Stim_converter;
+        N_Vector dqs = N_VNew_Serial(3);
+        NV_Ith_S(dqs, 0) = var_chaste_interface__environment__time_converted;
+        NV_Ith_S(dqs, 1) = var_chaste_interface__membrane_data_clamp_current;
+        NV_Ith_S(dqs, 2) = var_membrane__i_Stim_converter;
         return dqs;
     }
 
@@ -446,7 +447,7 @@ template<>
 void OdeSystemInformation<Cellespinosa_model_1998_normalFromCellMLCvodeDataClamp>::Initialise(void)
 {
     this->mSystemName = "espinosa_model_1998_normal";
-    this->mFreeVariableName = "environment__time_converted";
+    this->mFreeVariableName = "environment__time";
     this->mFreeVariableUnits = "millisecond";
 
     // NV_Ith_S(rY,0):
@@ -563,10 +564,14 @@ void OdeSystemInformation<Cellespinosa_model_1998_normalFromCellMLCvodeDataClamp
     this->mParameterUnits.push_back("dimensionless");
 
     // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("environment__time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
+
+    // Derived Quantity index [1]:
     this->mDerivedQuantityNames.push_back("membrane_data_clamp_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
-    // Derived Quantity index [1]:
+    // Derived Quantity index [2]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 

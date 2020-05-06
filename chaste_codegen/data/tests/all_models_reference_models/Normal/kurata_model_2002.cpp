@@ -424,6 +424,19 @@
         rDY[26] = d_dt_chaste_interface_var_calcium_buffering__fCQ;
     }
 
+    std::vector<double> Cellkurata_model_2002FromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    {
+        // Inputs:
+        // Time units: millisecond
+        
+
+        // Mathematics
+
+        std::vector<double> dqs(1);
+        dqs[0] = var_chaste_interface__environment__time;
+        return dqs;
+    }
+
 template<>
 void OdeSystemInformation<Cellkurata_model_2002FromCellML>::Initialise(void)
 {
@@ -569,6 +582,10 @@ void OdeSystemInformation<Cellkurata_model_2002FromCellML>::Initialise(void)
     // mParameters[0]:
     this->mParameterNames.push_back("membrane_capacitance");
     this->mParameterUnits.push_back("picoF");
+
+    // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("environment__time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
 
     this->mInitialised = true;
 }

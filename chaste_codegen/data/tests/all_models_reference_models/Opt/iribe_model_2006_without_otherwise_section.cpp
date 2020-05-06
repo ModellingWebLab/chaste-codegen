@@ -292,12 +292,13 @@
         const double var_sodium_calcium_exchanger__i_NaCa = (pow(var_chaste_interface__intracellular_sodium_concentration__Na_i, 3) * var_cell_parameters__Ca_o * exp(var_cell_parameters__F * var_chaste_interface__membrane_potential__V * var_sodium_calcium_exchanger__gamma / (var_cell_parameters__R * var_cell_parameters__T)) - pow(var_cell_parameters__Na_o, 3) * var_chaste_interface__intracellular_calcium_concentration__Ca_i * exp((-1.0 + var_sodium_calcium_exchanger__gamma) * var_cell_parameters__F * var_chaste_interface__membrane_potential__V / (var_cell_parameters__R * var_cell_parameters__T))) * mParameters[6] / (1.0 + 144.92753623188406 * var_chaste_interface__intracellular_calcium_concentration__Ca_i); // nanoA
         const double var_time_dependent_rectifier_potassium_current__i_K = 0.0071428571428571426 * (-var_cell_parameters__K_o * exp(-var_cell_parameters__F * var_chaste_interface__membrane_potential__V / (var_cell_parameters__R * var_cell_parameters__T)) + var_chaste_interface__intracellular_potassium_concentration__K_i) * mParameters[2] * var_chaste_interface__time_dependent_rectifier_potassium_current_x_gate__x; // nanoA
 
-        std::vector<double> dqs(5);
-        dqs[0] = var_L_type_Ca_channel__i_Ca_L;
-        dqs[1] = var_time_dependent_rectifier_potassium_current__i_K;
-        dqs[2] = var_fast_sodium_current__i_Na;
-        dqs[3] = var_sodium_calcium_exchanger__i_NaCa;
-        dqs[4] = var_membrane_potential__i_Stim_converter;
+        std::vector<double> dqs(6);
+        dqs[0] = var_chaste_interface__environment__time_converted;
+        dqs[1] = var_L_type_Ca_channel__i_Ca_L;
+        dqs[2] = var_time_dependent_rectifier_potassium_current__i_K;
+        dqs[3] = var_fast_sodium_current__i_Na;
+        dqs[4] = var_sodium_calcium_exchanger__i_NaCa;
+        dqs[5] = var_membrane_potential__i_Stim_converter;
         return dqs;
     }
 
@@ -305,7 +306,7 @@ template<>
 void OdeSystemInformation<Celliribe_model_2006_without_otherwise_sectionFromCellML>::Initialise(void)
 {
     this->mSystemName = "iribe_model_2006";
-    this->mFreeVariableName = "environment__time_converted";
+    this->mFreeVariableName = "environment__time";
     this->mFreeVariableUnits = "millisecond";
 
     // rY[0]:
@@ -452,22 +453,26 @@ void OdeSystemInformation<Celliribe_model_2006_without_otherwise_sectionFromCell
     this->mParameterUnits.push_back("nanoA_per_millimolar4");
 
     // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("environment__time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
+
+    // Derived Quantity index [1]:
     this->mDerivedQuantityNames.push_back("membrane_L_type_calcium_current");
     this->mDerivedQuantityUnits.push_back("nanoA");
 
-    // Derived Quantity index [1]:
+    // Derived Quantity index [2]:
     this->mDerivedQuantityNames.push_back("membrane_delayed_rectifier_potassium_current");
     this->mDerivedQuantityUnits.push_back("nanoA");
 
-    // Derived Quantity index [2]:
+    // Derived Quantity index [3]:
     this->mDerivedQuantityNames.push_back("membrane_fast_sodium_current");
     this->mDerivedQuantityUnits.push_back("nanoA");
 
-    // Derived Quantity index [3]:
+    // Derived Quantity index [4]:
     this->mDerivedQuantityNames.push_back("membrane_sodium_calcium_exchanger_current");
     this->mDerivedQuantityUnits.push_back("nanoA");
 
-    // Derived Quantity index [4]:
+    // Derived Quantity index [5]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 

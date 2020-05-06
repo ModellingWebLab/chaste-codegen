@@ -450,6 +450,7 @@
             const double var_membrane__i_stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
             const double var_membrane__i_stim = var_membrane__i_stim_converter / HeartConfig::Instance()->GetCapacitance(); // picoA_per_picoF
             d_dt_chaste_interface_var_membrane__V = -var_L_type_calcium_current__i_CaL - var_calcium_activated_chloride_current__i_ClCa - var_calcium_background_current__i_Cab - var_calcium_pump_current__i_pCa - var_fast_sodium_current__i_Na - var_fast_transient_outward_potassium_current__i_Kto_f - var_membrane__i_stim - var_non_inactivating_steady_state_potassium_current__i_Kss - var_rapid_delayed_rectifier_potassium_current__i_Kr - var_slow_delayed_rectifier_potassium_current__i_Ks - var_slow_transient_outward_potassium_current__i_Kto_s - var_sodium_background_current__i_Nab - var_sodium_calcium_exchange_current__i_NaCa - var_sodium_potassium_pump_current__i_NaK - var_time_independent_potassium_current__i_K1 - var_ultra_rapidly_activating_delayed_rectifier_potassium_current__i_Kur; // millivolt / millisecond
+            
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_membrane__V;
@@ -1082,12 +1083,12 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_membrane__i_stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
 
-        N_Vector dqs = N_VNew_Serial(1);
-        NV_Ith_S(dqs, 0) = var_membrane__i_stim_converter;
+        N_Vector dqs = N_VNew_Serial(2);
+        NV_Ith_S(dqs, 0) = var_chaste_interface__environment__time;
+        NV_Ith_S(dqs, 1) = var_membrane__i_stim_converter;
         return dqs;
     }
 
@@ -1304,6 +1305,10 @@ void OdeSystemInformation<Cellbondarenko_model_2004_apexFromCellMLCvode>::Initia
     this->mInitialConditions.push_back(3.19129e-05);
 
     // Derived Quantity index [0]:
+    this->mDerivedQuantityNames.push_back("environment__time");
+    this->mDerivedQuantityUnits.push_back("millisecond");
+
+    // Derived Quantity index [1]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 

@@ -1352,10 +1352,11 @@
         const double var_time_independent_potassium_current_K1_gate__K1_infinity = var_time_independent_potassium_current_K1_gate__alpha_K1 / (var_time_independent_potassium_current_K1_gate__alpha_K1 + var_time_independent_potassium_current_K1_gate__beta_K1); // dimensionless
         const double var_time_independent_potassium_current__i_K1 = (-var_time_independent_potassium_current__E_K1 + var_chaste_interface__membrane__V) * var_time_independent_potassium_current__g_K1 * var_time_independent_potassium_current_K1_gate__K1_infinity; // uA_per_mm2
 
-        std::vector<double> dqs(3);
+        std::vector<double> dqs(4);
         dqs[0] = var_fast_sodium_current__i_Na;
         dqs[1] = var_time_independent_potassium_current__i_K1;
         dqs[2] = var_membrane__I_st_converter;
+        dqs[3] = var_chaste_interface__environment__time;
         return dqs;
     }
 
@@ -1461,6 +1462,10 @@ void OdeSystemInformation<Cellluo_rudy_1994FromCellMLGRL2>::Initialise(void)
     // Derived Quantity index [2]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
+
+    // Derived Quantity index [3]:
+    this->mDerivedQuantityNames.push_back("time");
+    this->mDerivedQuantityUnits.push_back("ms");
 
     this->mInitialised = true;
 }
