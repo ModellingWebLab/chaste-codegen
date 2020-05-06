@@ -1,3 +1,4 @@
+#ifdef CHASTE_CVODE
 #ifndef CELLSHANNON2004FROMCELLMLCVODEDATACLAMP_HPP_
 #define CELLSHANNON2004FROMCELLMLCVODEDATACLAMP_HPP_
 
@@ -19,15 +20,15 @@
 #include "AbstractModifier.hpp"
 
 #include "AbstractStimulusFunction.hpp"
-#include "AbstractCardiacCell.hpp"
+#include "AbstractCvodeCellWithDataClamp.hpp"
 
-class CellShannon2004FromCellMLCvodeDataClamp : public AbstractCardiacCellWithModifiers<AbstractCardiacCell >
+class CellShannon2004FromCellMLCvodeDataClamp : public AbstractCardiacCellWithModifiers<AbstractCvodeCellWithDataClamp >
 {
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & archive, const unsigned int version)
     {
-        archive & boost::serialization::base_object<AbstractCardiacCellWithModifiers<AbstractCardiacCell > >(*this);
+        archive & boost::serialization::base_object<AbstractCardiacCellWithModifiers<AbstractCvodeCellWithDataClamp > >(*this);
         
         // Despite this class having modifier member variables, they are all added to the
         // abstract class by the constructor, and archived via that, instead of here.
@@ -73,12 +74,11 @@ public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    CellShannon2004FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    CellShannon2004FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~CellShannon2004FromCellMLCvodeDataClamp();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
-    void EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY);
-
-    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY);
+    void EvaluateYDerivatives(double var_chaste_interface__environment__time, const N_Vector rY, N_Vector rDY);
+    N_Vector ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY);
 };
 
 // Needs to be included last
@@ -115,3 +115,4 @@ namespace boost
 }
 
 #endif // CELLSHANNON2004FROMCELLMLCVODEDATACLAMP_HPP_
+#endif // CHASTE_CVODE

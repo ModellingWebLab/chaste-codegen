@@ -32,25 +32,6 @@ chaste_GRL2Opt = get_models(ref_folder='chaste_reference_models', type='GRL2Opt'
 chaste_CVODE_DATA_CLAMP = get_models(ref_folder='chaste_reference_models', type='CVODE_DATA_CLAMP')
 
 
-def test_CVODE_DATA_CLAMP_modifiers(tmp_path):
-    tmp_path = str(tmp_path)
-    LOGGER.info('Converting: cvode with data clamp and modifiers Shannon2004\n')
-    model_file = \
-        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'Shannon2004.cellml')
-    chaste_model = cellmlmanip.load_model(model_file)
-    chaste_model = cg.CvodeWithDataClampModel(chaste_model, 'Shannon2004_with_modifiers',
-                                                            class_name='CellShannon2004FromCellMLCvodeDataClamp',
-                                                            use_modifiers=True)
-    chaste_model.generate_chaste_code()
-    expected_hpp_path = os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'CVODE_DATA_CLAMP',
-                                     'Shannon2004_with_modifiers.hpp')
-    expected_cpp_path = os.path.join(cg.DATA_DIR, 'tests', 'chaste_reference_models', 'CVODE_DATA_CLAMP',
-                                     'Shannon2004_with_modifiers.cpp')
-    # Compare against reference
-    test_utils.compare_model_against_reference(chaste_model, tmp_path, expected_hpp_path,
-                                               expected_cpp_path)
-
-
 @pytest.mark.parametrize(('model'), chaste_CVODE_DATA_CLAMP)
 def test_CVODE_DATA_CLAMP(tmp_path, model):
     """ Check generation of CVODE with Data Clamp models against reference"""
