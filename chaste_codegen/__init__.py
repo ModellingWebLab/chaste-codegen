@@ -3,7 +3,7 @@ Main module for cardiac Chaste code generation
 """
 import logging
 
-from cellmlmanip.transpiler import Transpiler
+from cellmlmanip.parser import Transpiler
 
 from ._chaste_printer import ChastePrinter  # noqa
 #
