@@ -333,7 +333,7 @@ class ChasteModel(object):
     def _get_modifiers(self):
         """ Get the variables that can be used as modifiers, if use_modifiers is switched on.
 
-        These are all variables with annotation (including stat vars)
+        These are all variables with annotation (including state vars)
         except the stimulus current and time (the free variable)"""
         modifiers = []
         if self.use_modifiers:
