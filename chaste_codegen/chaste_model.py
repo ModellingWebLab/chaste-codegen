@@ -280,15 +280,11 @@ class ChasteModel(object):
         try:
             # If the variable is in units that can be converted to millisecond, perform conversion
             time_var = self._model.convert_variable(time_variable, desired_units, DataDirectionFlow.INPUT)
-            self._model.rdf.add((time_var.rdf_identity, create_rdf_node((self._PYCMLMETA, 'derived-quantity')),
-                                create_rdf_node('yes')))
-            self._model.rdf.add((time_var.rdf_identity, create_rdf_node((self._PYCMLMETA, 'derived-quantity')),
-                                create_rdf_node('yes')))
             return time_var
         except DimensionalityError:
             warning = 'Incorrect definition of time variable (time needs to be dimensionally equivalent to second)'
             self._logger.info(warning)
-            assert False, warning
+            raise ValueError(warning)
 
     def _annotate_if_not_statevar(self, var):
         """ If it is not a state var, annotates var as modifiable parameter or derived quantity as appropriate"""
@@ -310,7 +306,7 @@ class ChasteModel(object):
             warning = 'Incorrect definition of membrane_voltage variable '\
                       '(units of membrane_voltage need to be dimensionally equivalent to Volt)'
             self._logger.info(warning)
-            assert False, warning
+            raise ValueError(warning)
 
     def _get_cytosolic_calcium_concentration_var(self):
         """ Find the cytosolic_calcium_concentration variable if it exists"""
