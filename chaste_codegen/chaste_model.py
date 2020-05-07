@@ -335,7 +335,7 @@ class ChasteModel(object):
             return cytosolic_calcium_concentration
 
     def _get_modifiers(self):
-        """ Get the variables that can be used as modifiers, if us_modifiers is switched on.
+        """ Get the variables that can be used as modifiers, if use_modifiers is switched on.
 
         These are all variables with annotation (including stat vars)
         except the stimulus current and time (the free variable)"""
