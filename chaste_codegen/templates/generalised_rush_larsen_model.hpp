@@ -1,7 +1,7 @@
 {% include "Shared/hpp/header_comments" %}
 {% include "Shared/hpp/includes" %}
-#include "AbstractGeneralizedRushLarsenCardiacCell.hpp"
-{% with %}{% set base_class = "AbstractGeneralizedRushLarsenCardiacCell" %}{% include "Shared/hpp/class_declaration" %}{% endwith %}
+#include "{{base_class}}.hpp"
+{% include "Shared/hpp/class_declaration" %}
 {% include "Shared/hpp/DefaultStimulus_IntracellularCalciumConcentration" %}
     {{class_name}}(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
 {% include "Shared/hpp/destructor_verify_state_variables_GetIIonic" %}

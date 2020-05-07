@@ -10,5 +10,5 @@
 {% include "Shared/cpp/EvaluateYDerivatives" %}
 {%- include "Cvode/cpp/EvaluateAnalyticJacobian" %}
 {%- include "Cvode/cpp/ComputeDerivedQuantities" %}
-{% include "Cvode/cpp/OdeSystemInformation" %}
+{% include "Shared/cpp/OdeSystemInformation" %}
 {% include "Shared/cpp/CHASTE_CLASS_EXPORT" %}#endif // CHASTE_CVODE
