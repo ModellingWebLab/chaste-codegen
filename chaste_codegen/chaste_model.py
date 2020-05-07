@@ -724,10 +724,6 @@ class ChasteModel(object):
                 self._printer.doprint(self._time_variable) + ')'
         return self._printer.doprint(eq)
 
-    def _print_modifiable_parameters(self, variable):
-        """ Print modifiable parameters in the correct format for the model type"""
-        return 'mParameters[' + str(self._modifiable_parameters.index(variable)) + ']'
-
     def _format_modifier(self, var):
         return 'mp_' + self._model.get_display_name(var) + '_modifier'
 
@@ -736,6 +732,10 @@ class ChasteModel(object):
         return [{'name': self._model.get_display_name(param),
                  'modifier': self._format_modifier(param)}
                 for param in self._modifiers]
+
+    def _print_modifiable_parameters(self, variable):
+        """ Print modifiable parameters in the correct format for the model type"""
+        return 'mParameters[' + str(self._modifiable_parameters.index(variable)) + ']'
 
     def _format_modifiable_parameters(self):
         """ Format the modifiable parameter for printing to chaste code"""

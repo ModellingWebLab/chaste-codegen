@@ -42,7 +42,7 @@
         return mStateVariables[1];
     }
     Dynamicviswanathan_model_1999_epiFromCellMLGRL2::Dynamicviswanathan_model_1999_epiFromCellMLGRL2(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
-        : AbstractCardiacCellWithModifiers<AbstractGeneralizedRushLarsenCardiacCell >(
+        : AbstractGeneralizedRushLarsenCardiacCell(
                 25,
                 0,
                 pIntracellularStimulus)
@@ -54,15 +54,6 @@
 
         // We have a default stimulus specified in the CellML file metadata
         this->mHasDefaultStimulusFromCellML = true;
-
-        // These will get initialised to DummyModifiers in the base class method.
-        
-        this->AddModifier("cytosolic_calcium_concentration",
-                          mp_cytosolic_calcium_concentration_modifier);
-        this->AddModifier("membrane_capacitance",
-                          mp_membrane_capacitance_modifier);
-        this->AddModifier("membrane_voltage",
-                          mp_membrane_voltage_modifier);
         
         this->mParameters[0] = 0.001; // (var_membrane__Cm) [microF]
     }

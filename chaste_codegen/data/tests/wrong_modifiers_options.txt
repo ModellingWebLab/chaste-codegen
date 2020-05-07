@@ -2,4 +2,4 @@ usage: chaste_codegen [-h] [--version] [-t TYPE] [-o OUTFILE]
                       [--use-analytic-jacobian] [-c CLASS_NAME] [-y]
                       [--use-modifiers]
                       cellml_file
-chaste_codegen: error: the following arguments are required: cellml_file
+chaste_codegen: error: --use-modifiers can only be used only works with one of the following translate-types ('Chaste', 'ChasteOpt', 'CVODE', 'CVODEWithDataClamp')

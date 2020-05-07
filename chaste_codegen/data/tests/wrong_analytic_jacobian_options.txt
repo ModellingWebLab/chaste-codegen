@@ -2,4 +2,4 @@ usage: chaste_codegen [-h] [--version] [-t TYPE] [-o OUTFILE]
                       [--use-analytic-jacobian] [-c CLASS_NAME] [-y]
                       [--use-modifiers]
                       cellml_file
-chaste_codegen: error: the following arguments are required: cellml_file
+chaste_codegen: error: --use-analytic-jacobian can only be used in combination with -t CVODE

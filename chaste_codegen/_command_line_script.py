@@ -11,21 +11,23 @@ import chaste_codegen as cg
 from chaste_codegen._script_utils import write_file
 
 
-def chaste_codegen():
-    # Link names to classes for converting code
-    translators = OrderedDict([('Chaste', cg.NormalChasteModel),
-                               ('ChasteOpt', cg.OptChasteModel),
-                              ('CVODE', cg.CvodeChasteModel),
-                              ('BackwardsEuler', cg.BackwardEulerModel),
-                              ('CVODEWithDataClamp', cg.CvodeWithDataClampModel),
-                              ('BackwardsEuler', cg.BackwardEulerModel),
-                              ('RushLarsen', cg.RushLarsenModel),
-                              ('RushLarsenOpt', cg.RushLarsenOptModel),
-                              ('GeneralisedRushLarsen1', cg.GeneralisedRushLarsenFirstOrderModel),
-                              ('GeneralisedRushLarsen1Opt', cg.GeneralisedRushLarsenFirstOrderModelOpt),
-                              ('GeneralisedRushLarsen2', cg.GeneralisedRushLarsenSecondOrderModel),
-                              ('GeneralisedRushLarsen2Opt', cg.GeneralisedRushLarsenSecondOrderModelOpt)])
+# Link names to classes for converting code
+TRANSLATORS = OrderedDict([('Chaste', cg.NormalChasteModel),
+                           ('ChasteOpt', cg.OptChasteModel),
+                           ('CVODE', cg.CvodeChasteModel),
+                           ('CVODEWithDataClamp', cg.CvodeWithDataClampModel),
+                           ('BackwardsEuler', cg.BackwardEulerModel),
+                           ('RushLarsen', cg.RushLarsenModel),
+                           ('RushLarsenOpt', cg.RushLarsenOptModel),
+                           ('GeneralisedRushLarsen1', cg.GeneralisedRushLarsenFirstOrderModel),
+                           ('GeneralisedRushLarsen1Opt', cg.GeneralisedRushLarsenFirstOrderModelOpt),
+                           ('GeneralisedRushLarsen2', cg.GeneralisedRushLarsenSecondOrderModel),
+                           ('GeneralisedRushLarsen2Opt', cg.GeneralisedRushLarsenSecondOrderModelOpt)])
 
+TRANSLATORS_WITH_MODIFIERS = ('Chaste', 'ChasteOpt', 'CVODE', 'CVODEWithDataClamp')
+
+
+def chaste_codegen():
     # Store extensions we can use and how to use them, based on extension of given outfile
     extension_lookup = {'.cellml': ['.hpp', '.cpp'], '': ['.hpp', '.cpp'], '.cpp': ['.hpp', '.cpp'],
                         '.hpp': ['.hpp', '.cpp'], '.c': ['.h', '.c'], '.h': ['.h', '.c']}
@@ -35,10 +37,10 @@ def chaste_codegen():
     parser.add_argument('--version', action='version',
                         version='%(prog)s {version}'.format(version=cg.__version__))
     parser.add_argument('cellml_file', metavar='cellml_file', help='The cellml file or URI to convert to chaste code')
-    parser.add_argument('-t', '--translate-type', choices=list(translators.keys()),
+    parser.add_argument('-t', '--translate-type', choices=list(TRANSLATORS.keys()),
                         default='Chaste', metavar='TYPE', dest='translator_class',
                         help='the type of code to output [default: Chaste].  '
-                        'Choices: ' + str(list(translators.keys())))
+                        'Choices: ' + str(list(TRANSLATORS.keys())))
     parser.add_argument('-o', dest='outfile', metavar='OUTFILE', default=None,
                         help='write program code to OUTFILE '
                              '[default action is to use the input filename with a different extension] '
@@ -47,28 +49,32 @@ def chaste_codegen():
 
     group = parser.add_argument_group('Transformations', 'These options control which transformations '
                                       '(typically optimisations) are applied in the generated code')
-    group.add_argument('-j', '--use-analytic-jacobian', dest='use_analytic_jacobian', default=False,
+    group.add_argument('--use-analytic-jacobian', dest='use_analytic_jacobian', default=False,
                        action='store_true', help='use a symbolic Jacobian calculated by SymPy '
-                       '(-j can only be used in combination with -t CVODE)')
+                       '(--use-analytic-jacobian can only be used in combination with -t CVODE)')
 
     group = parser.add_argument_group('Generated code options')
-    group.add_argument('-c', '--class-name', default=None, dest='class_name',
+    group.add_argument('-c', default=None, dest='class_name',
                        help='explicitly set the name of the generated class')
 
     group = parser.add_argument_group('Chaste options', description='Options specific to Chaste code output')
     group.add_argument('-y', '--dll', '--dynamically-loadable', dest='dynamically_loadable',
                        action='store_true', default=False,
                        help='add code to allow the model to be compiled to a shared library and dynamically loaded ')
-    group.add_argument('-m', '--use-modifiers', dest='use_modifiers',
+    group.add_argument('--use-modifiers', dest='use_modifiers',
                        action='store_true', default=False,
-                       help='[experimental] add modifier functions for certain metadata-annotated variables '
-                       'for use in sensitivity analysis (only works if -t Chaste is used)')
+                       help='add modifier functions for certain metadata-annotated variables '
+                       'for use in sensitivity analysis only works with one of the following translate-types ' +
+                       str(TRANSLATORS_WITH_MODIFIERS))
 
     # process options
     args = parser.parse_args()
     # Check option combinations
     if args.use_analytic_jacobian and not args.translator_class == 'CVODE':
-        parser.error('-j can only be used in combination with -t CVODE')
+        parser.error('--use-analytic-jacobian can only be used in combination with -t CVODE')
+    if args.use_modifiers and args.translator_class not in TRANSLATORS_WITH_MODIFIERS:
+        parser.error('--use-modifiers can only be used only works with one of the following translate-types ' +
+                     str(TRANSLATORS_WITH_MODIFIERS))
 
     model = cellmlmanip.load_model(args.cellml_file)
     outfile = args.outfile if args.outfile is not None else os.path.basename(args.cellml_file)
@@ -84,7 +90,7 @@ def chaste_codegen():
 
     ext = extension_lookup[outfile_extension]
     # generate code Based on parameters a different class of translator may be used
-    chaste_model = translators[args.translator_class](model, outfile_base, header_ext=ext[0], **vars(args))
+    chaste_model = TRANSLATORS[args.translator_class](model, outfile_base, header_ext=ext[0], **vars(args))
     chaste_model.generate_chaste_code()
 
     # Write generated files

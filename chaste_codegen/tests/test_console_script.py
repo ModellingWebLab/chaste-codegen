@@ -57,14 +57,13 @@ def test_usage(capsys):
         # compare to expected
         error = str(captured.err)
         expected = open(os.path.join(cg.DATA_DIR, 'tests', 'usage.txt'), 'r').read()
-        print(error)
         assert error == expected
 
 
-def test_wrong_cvode_options(capsys):
-    """Test what happens when supplying wrong cvode options"""
-    LOGGER.info('Testing illegal combination of options for jacobians on command line\n')
-    testargs = ["chaste_codegen", "-j", 'somefile.cellml']
+def test_wrong_analytic_jacobian_options(capsys):
+    """Test what happens when supplying wrong analytic jacobian options"""
+    LOGGER.info('Testing illegal combination of options for analytic jacobians on command line\n')
+    testargs = ["chaste_codegen", "--use-analytic-jacobian", 'somefile.cellml']
     with mock.patch.object(sys, 'argv', testargs):
         try:
             chaste_codegen()
@@ -73,8 +72,27 @@ def test_wrong_cvode_options(capsys):
         captured = capsys.readouterr()
         # compare to expected
         error = str(captured.err)
-        expected = open(os.path.join(cg.DATA_DIR, 'tests', 'wrong_cvode_options.txt'), 'r').read()
+        expected = open(os.path.join(cg.DATA_DIR, 'tests', 'wrong_analytic_jacobian_options.txt'), 'r').read()
         assert error == expected
+
+
+def test_wrong_modifiers_options(capsys):
+    """Test what happens when supplying wrong modifiers options"""
+    LOGGER.info('Testing illegal combination of options for modifiers on command line\n')
+    # Check each of the model types that can't take modifiers gives an error
+    for model_type in ('BackwardsEuler', 'RushLarsen', 'RushLarsenOpt', 'GeneralisedRushLarsen1',
+                       'GeneralisedRushLarsen1Opt', 'GeneralisedRushLarsen2', 'GeneralisedRushLarsen2Opt'):
+        testargs = ["chaste_codegen", "--use-modifiers", '-t', model_type, 'somefile.cellml']
+        with mock.patch.object(sys, 'argv', testargs):
+            try:
+                chaste_codegen()
+            except SystemExit:
+                pass  # We expect this to print usage and exit
+            captured = capsys.readouterr()
+            # compare to expected
+            error = str(captured.err)
+            expected = open(os.path.join(cg.DATA_DIR, 'tests', 'wrong_modifiers_options.txt'), 'r').read()
+            assert error == expected
 
 
 def test_script_convert(capsys, tmp_path):
@@ -170,8 +188,8 @@ def test_script_cvode_jacobian(capsys, tmp_path):
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'dynamic_Shannon2004.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', model_file, '-t', 'CVODE', '-o', outfile, '-j', '--dynamically-loadable',
-                '-c', 'DynamicShannon2004FromCellMLCvode']
+    testargs = ['chaste_codegen', model_file, '-t', 'CVODE', '-o', outfile, '--use-analytic-jacobian',
+                '--dynamically-loadable', '-c', 'DynamicShannon2004FromCellMLCvode']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
@@ -234,7 +252,7 @@ def test_script_RLopt(capsys, tmp_path):
     outfile = os.path.join(tmp_path, 'dynamic_bondarenko_model_2004_apex.cpp')
     # Call commandline script
     testargs = ['chaste_codegen', model_file, '-t', 'RushLarsenOpt', '-o', outfile, '--dynamically-loadable',
-                '--use-modifiers', '-c', 'Dynamicbondarenko_model_2004_apexFromCellMLRushLarsen']
+                '-c', 'Dynamicbondarenko_model_2004_apexFromCellMLRushLarsen']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
@@ -276,7 +294,7 @@ def test_script_GRL1Opt(capsys, tmp_path):
     outfile = os.path.join(tmp_path, 'dynamic_matsuoka_model_2003.cpp')
     # Call commandline script
     testargs = ['chaste_codegen', model_file, '-t', 'GeneralisedRushLarsen1Opt', '-o', outfile,
-                '--dynamically-loadable', '--use-modifiers', '-c', 'Dynamicmatsuoka_model_2003FromCellMLGRL1']
+                '--dynamically-loadable', '-c', 'Dynamicmatsuoka_model_2003FromCellMLGRL1']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
@@ -318,7 +336,7 @@ def test_script_GRL2Opt(capsys, tmp_path):
     outfile = os.path.join(tmp_path, 'dynamic_viswanathan_model_1999_epi.cpp')
     # Call commandline script
     testargs = ['chaste_codegen', model_file, '-t', 'GeneralisedRushLarsen2Opt', '-o', outfile,
-                '--dynamically-loadable', '--use-modifiers', '-c', 'Dynamicviswanathan_model_1999_epiFromCellMLGRL2']
+                '--dynamically-loadable', '-c', 'Dynamicviswanathan_model_1999_epiFromCellMLGRL2']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
@@ -351,7 +369,7 @@ def test_script_CVODE_DATA_CLAMP(capsys, tmp_path):
 
 
 def test_script_CVODE_DATA_CLAMP_modifiers(capsys, tmp_path):
-    """Convert a Normal model type with modifiers"""
+    """Convert a CVODE with data clamp and modifiers model type with modifiers"""
     LOGGER.info('Testing model CVODE with data clamp ,  for command line script\n')
     tmp_path = str(tmp_path)
     model_name = 'Shannon2004'
@@ -365,27 +383,6 @@ def test_script_CVODE_DATA_CLAMP_modifiers(capsys, tmp_path):
         chaste_codegen()
     # Check output
     reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'CVODE_DATA_CLAMP')
-    compare_file_against_reference(os.path.join(reference, 'Shannon2004_with_modifiers.hpp'),
-                                   os.path.join(tmp_path, 'Shannon2004_with_modifiers.hpp'))
-    compare_file_against_reference(os.path.join(reference, 'Shannon2004_with_modifiers.cpp'),
-                                   os.path.join(tmp_path, 'Shannon2004_with_modifiers.cpp'))
-
-
-def test_script_BE_modifiers(capsys, tmp_path):
-    """Convert a Backwards Euler model type with modifiers"""
-    LOGGER.info('Testing model CVODE with data clamp ,  for command line script\n')
-    tmp_path = str(tmp_path)
-    model_name = 'Shannon2004'
-    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
-    assert os.path.isfile(model_file)
-    outfile = os.path.join(tmp_path, 'Shannon2004_with_modifiers.cpp')
-    # Call commandline script
-    testargs = ['chaste_codegen', model_file, '-t', 'BackwardsEuler', '-o', outfile, '--use-modifiers',
-                '-c', 'CellShannon2004FromCellML']
-    with mock.patch.object(sys, 'argv', testargs):
-        chaste_codegen()
-    # Check output
-    reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'BE')
     compare_file_against_reference(os.path.join(reference, 'Shannon2004_with_modifiers.hpp'),
                                    os.path.join(tmp_path, 'Shannon2004_with_modifiers.hpp'))
     compare_file_against_reference(os.path.join(reference, 'Shannon2004_with_modifiers.cpp'),

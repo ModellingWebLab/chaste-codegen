@@ -39,7 +39,7 @@
     }
 
     Dynamicmatsuoka_model_2003FromCellMLGRL1::Dynamicmatsuoka_model_2003FromCellMLGRL1(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
-        : AbstractCardiacCellWithModifiers<AbstractGeneralizedRushLarsenCardiacCell >(
+        : AbstractGeneralizedRushLarsenCardiacCell(
                 37,
                 0,
                 pIntracellularStimulus)
@@ -51,15 +51,6 @@
 
         // We have a default stimulus specified in the CellML file metadata
         this->mHasDefaultStimulusFromCellML = true;
-
-        // These will get initialised to DummyModifiers in the base class method.
-        
-        this->AddModifier("cytosolic_calcium_concentration",
-                          mp_cytosolic_calcium_concentration_modifier);
-        this->AddModifier("membrane_capacitance",
-                          mp_membrane_capacitance_modifier);
-        this->AddModifier("membrane_voltage",
-                          mp_membrane_voltage_modifier);
         
         this->mParameters[0] = 132.0; // (var_membrane__Cm) [picoF]
     }
@@ -197,7 +188,7 @@
 
         // Mathematics
         const double var_L_type_Ca_channel__p_open_CaL = (var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_U + var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_UCa) * var_chaste_interface__L_type_Ca_channel_ultra_slow_gate__y * var_chaste_interface__L_type_Ca_channel_voltage_dependent_gate__p_AP_CaL / (1.0 + 2.7439999999999993 / pow(var_chaste_interface__ATP_production__ATPi, 3)); // dimensionless
-        const double var_internal_ion_concentrations__Cai = mp_cytosolic_calcium_concentration_modifier->Calc(-0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total, var_chaste_interface__environment__time); // millimolar
+        const double var_internal_ion_concentrations__Cai = -0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total; // millimolar
         const double var_background_lCa_current__p_open = 1.0 / (1.0 + 1.7279999999999996e-9 / pow(var_internal_ion_concentrations__Cai, 3)); // dimensionless
         const double var_constant_field_equations__CF_Ca = ((var_chaste_interface__membrane__Vm == 0) ? (-1.8) : (0.074870384603595908 * (-1.8 * exp(-0.074870384603595908 * var_chaste_interface__membrane__Vm) + var_internal_ion_concentrations__Cai) * var_chaste_interface__membrane__Vm / (1.0 - exp(-0.074870384603595908 * var_chaste_interface__membrane__Vm)))); // millimolar
         const double var_L_type_Ca_channel__i_CaL_Ca = 8712.0 * var_L_type_Ca_channel__p_open_CaL * var_constant_field_equations__CF_Ca; // picoA
@@ -343,7 +334,7 @@
         const double var_SR_T_current__i_SR_T = 386.0 * var_chaste_interface__Ca_concentrations_in_SR__Caup - 386.0 * var_Ca_concentrations_in_SR__Carel; // picoA
         const double var_SR_calcium_pump__k2 = 1.0 / (1.0 + 0.10000000000000001 / var_chaste_interface__ATP_production__ATPi); // per_millisecond
         const double var_SR_calcium_pump__p_E1Ca = 1.0 / (1.0 + 0.080000000000000002 / var_chaste_interface__Ca_concentrations_in_SR__Caup); // dimensionless
-        const double var_internal_ion_concentrations__Cai = mp_cytosolic_calcium_concentration_modifier->Calc(-0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total, var_chaste_interface__environment__time); // millimolar
+        const double var_internal_ion_concentrations__Cai = -0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total; // millimolar
         const double var_NL_model__Q_b = -0.029999999999999999 * var_chaste_interface__NL_model__pCa + 39.0 * (1.0 - var_chaste_interface__NL_model__pCB - var_chaste_interface__NL_model__pCa - var_chaste_interface__NL_model__pCaCB) * var_internal_ion_concentrations__Cai; // per_millisecond
         const double d_dt_chaste_interface_var_NL_model__pCa = -var_NL_model__Q_a + var_NL_model__Q_b; // 1 / millisecond
         const double var_NL_model__Q_r = 0.029999999999999999 * var_chaste_interface__NL_model__pCaCB - 1560.0 * var_chaste_interface__NL_model__pCB * var_internal_ion_concentrations__Cai; // per_millisecond
@@ -930,7 +921,7 @@
         
         // Mathematics
         const double var_L_type_Ca_channel__p_open_CaL = (var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_U + var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_UCa) * var_chaste_interface__L_type_Ca_channel_ultra_slow_gate__y * var_chaste_interface__L_type_Ca_channel_voltage_dependent_gate__p_AP_CaL / (1.0 + 2.7439999999999993 / pow(var_chaste_interface__ATP_production__ATPi, 3)); // dimensionless
-        const double var_internal_ion_concentrations__Cai = mp_cytosolic_calcium_concentration_modifier->Calc(-0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total, var_chaste_interface__environment__time); // millimolar
+        const double var_internal_ion_concentrations__Cai = -0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total; // millimolar
         const double var_background_lCa_current__p_open = 1.0 / (1.0 + 1.7279999999999996e-9 / pow(var_internal_ion_concentrations__Cai, 3)); // dimensionless
         const double var_constant_field_equations__CF_Ca = ((var_chaste_interface__membrane__Vm == 0) ? (-1.8) : (0.074870384603595908 * (-1.8 * exp(-0.074870384603595908 * var_chaste_interface__membrane__Vm) + var_internal_ion_concentrations__Cai) * var_chaste_interface__membrane__Vm / (1.0 - exp(-0.074870384603595908 * var_chaste_interface__membrane__Vm)))); // millimolar
         const double var_L_type_Ca_channel__i_CaL_Ca = 8712.0 * var_L_type_Ca_channel__p_open_CaL * var_constant_field_equations__CF_Ca; // picoA
@@ -1234,7 +1225,7 @@
         
         // Mathematics
         const double var_L_type_Ca_channel__p_open_CaL = (var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_U + var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_UCa) * var_chaste_interface__L_type_Ca_channel_ultra_slow_gate__y * var_chaste_interface__L_type_Ca_channel_voltage_dependent_gate__p_AP_CaL / (1.0 + 2.7439999999999993 / pow(var_chaste_interface__ATP_production__ATPi, 3)); // dimensionless
-        const double var_internal_ion_concentrations__Cai = mp_cytosolic_calcium_concentration_modifier->Calc(-0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total, var_chaste_interface__environment__time); // millimolar
+        const double var_internal_ion_concentrations__Cai = -0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total; // millimolar
         const double var_background_lCa_current__p_open = 1.0 / (1.0 + 1.7279999999999996e-9 / pow(var_internal_ion_concentrations__Cai, 3)); // dimensionless
         const double var_constant_field_equations__CF_Na = ((var_chaste_interface__membrane__Vm == 0) ? (-140.0) : (0.037435192301797954 * (-140.0 * exp(-0.037435192301797954 * var_chaste_interface__membrane__Vm) + var_chaste_interface__internal_ion_concentrations__Nai) * var_chaste_interface__membrane__Vm / (1.0 - exp(-0.037435192301797954 * var_chaste_interface__membrane__Vm)))); // millimolar
         const double var_L_type_Ca_channel__i_CaL_Na = 0.16117199999999998 * var_L_type_Ca_channel__p_open_CaL * var_constant_field_equations__CF_Na; // picoA
@@ -1404,7 +1395,7 @@
         
         // Mathematics
         const double var_L_type_Ca_channel__p_open_CaL = (var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_U + var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_UCa) * var_chaste_interface__L_type_Ca_channel_ultra_slow_gate__y * var_chaste_interface__L_type_Ca_channel_voltage_dependent_gate__p_AP_CaL / (1.0 + 2.7439999999999993 / pow(var_chaste_interface__ATP_production__ATPi, 3)); // dimensionless
-        const double var_internal_ion_concentrations__Cai = mp_cytosolic_calcium_concentration_modifier->Calc(-0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total, var_chaste_interface__environment__time); // millimolar
+        const double var_internal_ion_concentrations__Cai = -0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total; // millimolar
         const double var_background_lCa_current__p_open = 1.0 / (1.0 + 1.7279999999999996e-9 / pow(var_internal_ion_concentrations__Cai, 3)); // dimensionless
         const double var_constant_field_equations__CF_K = ((var_chaste_interface__membrane__Vm == 0) ? (var_chaste_interface__internal_ion_concentrations__Ki) : (0.037435192301797954 * (-5.4000000000000004 * exp(-0.037435192301797954 * var_chaste_interface__membrane__Vm) + var_chaste_interface__internal_ion_concentrations__Ki) * var_chaste_interface__membrane__Vm / (1.0 - exp(-0.037435192301797954 * var_chaste_interface__membrane__Vm)))); // millimolar
         const double var_L_type_Ca_channel__i_CaL_K = 3.1798799999999998 * var_L_type_Ca_channel__p_open_CaL * var_constant_field_equations__CF_K; // picoA
@@ -1675,7 +1666,7 @@
         const double var_NL_model__Q_d2 = 0.027 * pow(d_dt_chaste_interface_var_NL_model__X, 2) * var_chaste_interface__NL_model__pCaCB; // per_millisecond
         const double var_SR_calcium_pump__k2 = 1.0 / (1.0 + 0.10000000000000001 / var_chaste_interface__ATP_production__ATPi); // per_millisecond
         const double var_SR_calcium_pump__p_E1Ca = 1.0 / (1.0 + 0.080000000000000002 / var_chaste_interface__Ca_concentrations_in_SR__Caup); // dimensionless
-        const double var_internal_ion_concentrations__Cai = mp_cytosolic_calcium_concentration_modifier->Calc(-0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total, var_chaste_interface__environment__time); // millimolar
+        const double var_internal_ion_concentrations__Cai = -0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total; // millimolar
         const double var_NL_model__Q_b = -0.029999999999999999 * var_chaste_interface__NL_model__pCa + 39.0 * (1.0 - var_chaste_interface__NL_model__pCB - var_chaste_interface__NL_model__pCa - var_chaste_interface__NL_model__pCaCB) * var_internal_ion_concentrations__Cai; // per_millisecond
         const double var_NL_model__Q_r = 0.029999999999999999 * var_chaste_interface__NL_model__pCaCB - 1560.0 * var_chaste_interface__NL_model__pCB * var_internal_ion_concentrations__Cai; // per_millisecond
         const double var_RyR_channel__i_RyR = 62000.0 * (-var_internal_ion_concentrations__Cai + var_Ca_concentrations_in_SR__Carel) * var_chaste_interface__RyR_channel__p_open_RyR; // picoA
@@ -1813,7 +1804,7 @@
         // Mathematics
         const double var_SR_calcium_pump__k2 = 1.0 / (1.0 + 0.10000000000000001 / var_chaste_interface__ATP_production__ATPi); // per_millisecond
         const double var_SR_calcium_pump__p_E1Ca = 1.0 / (1.0 + 0.080000000000000002 / var_chaste_interface__Ca_concentrations_in_SR__Caup); // dimensionless
-        const double var_internal_ion_concentrations__Cai = mp_cytosolic_calcium_concentration_modifier->Calc(-0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total, var_chaste_interface__environment__time); // millimolar
+        const double var_internal_ion_concentrations__Cai = -0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total; // millimolar
         const double var_SR_calcium_pump__p_E2Ca = 1.0 / (1.0 + 0.00080000000000000004 / var_internal_ion_concentrations__Cai); // dimensionless
         const double var_SR_calcium_pump__i_SR_U = 1625.0 * var_SR_calcium_pump__p_E1Ca * var_chaste_interface__SR_calcium_pump_y_gate__y - 162500.0 * (1.0 - var_chaste_interface__SR_calcium_pump_y_gate__y) * var_SR_calcium_pump__k2 * var_SR_calcium_pump__p_E2Ca; // picoA
         const double var_sodium_potassium_pump__Nao_Eff = 140.0 * exp(-0.030696857687474322 * var_chaste_interface__membrane__Vm); // millimolar
@@ -2238,7 +2229,7 @@
         
         
         // Mathematics
-        const double var_internal_ion_concentrations__Cai = mp_cytosolic_calcium_concentration_modifier->Calc(-0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total, var_chaste_interface__environment__time); // millimolar
+        const double var_internal_ion_concentrations__Cai = -0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total; // millimolar
         const double var_constant_field_equations__CF_Ca = ((var_chaste_interface__membrane__Vm == 0) ? (-1.8) : (0.074870384603595908 * (-1.8 * exp(-0.074870384603595908 * var_chaste_interface__membrane__Vm) + var_internal_ion_concentrations__Cai) * var_chaste_interface__membrane__Vm / (1.0 - exp(-0.074870384603595908 * var_chaste_interface__membrane__Vm)))); // millimolar
         const double var_L_type_Ca_channel_Ca_dependent_gate__iCaL = 0.067599999999999993 * var_constant_field_equations__CF_Ca; // picoA
         const double var_L_type_Ca_channel_Ca_dependent_gate__Cacm = -0.29999999999999999 * var_L_type_Ca_channel_Ca_dependent_gate__iCaL + var_internal_ion_concentrations__Cai; // millimolar
@@ -2307,7 +2298,7 @@
         
         // Mathematics
         const double var_L_type_Ca_channel_Ca_dependent_gate__p_CCa = 1.0 - var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_C - var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_U - var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_UCa; // dimensionless
-        const double var_internal_ion_concentrations__Cai = mp_cytosolic_calcium_concentration_modifier->Calc(-0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total, var_chaste_interface__environment__time); // millimolar
+        const double var_internal_ion_concentrations__Cai = -0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total; // millimolar
         const double var_constant_field_equations__CF_Ca = ((var_chaste_interface__membrane__Vm == 0) ? (-1.8) : (0.074870384603595908 * (-1.8 * exp(-0.074870384603595908 * var_chaste_interface__membrane__Vm) + var_internal_ion_concentrations__Cai) * var_chaste_interface__membrane__Vm / (1.0 - exp(-0.074870384603595908 * var_chaste_interface__membrane__Vm)))); // millimolar
         const double var_L_type_Ca_channel_Ca_dependent_gate__iCaL = 0.067599999999999993 * var_constant_field_equations__CF_Ca; // picoA
         const double var_L_type_Ca_channel_Ca_dependent_gate__Cacm = -0.29999999999999999 * var_L_type_Ca_channel_Ca_dependent_gate__iCaL + var_internal_ion_concentrations__Cai; // millimolar
@@ -2355,7 +2346,7 @@
         
         // Mathematics
         const double var_L_type_Ca_channel_Ca_dependent_gate__p_CCa = 1.0 - var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_C - var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_U - var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_UCa; // dimensionless
-        const double var_internal_ion_concentrations__Cai = mp_cytosolic_calcium_concentration_modifier->Calc(-0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total, var_chaste_interface__environment__time); // millimolar
+        const double var_internal_ion_concentrations__Cai = -0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total; // millimolar
         const double var_constant_field_equations__CF_Ca = ((var_chaste_interface__membrane__Vm == 0) ? (-1.8) : (0.074870384603595908 * (-1.8 * exp(-0.074870384603595908 * var_chaste_interface__membrane__Vm) + var_internal_ion_concentrations__Cai) * var_chaste_interface__membrane__Vm / (1.0 - exp(-0.074870384603595908 * var_chaste_interface__membrane__Vm)))); // millimolar
         const double var_L_type_Ca_channel_Ca_dependent_gate__iCaL = 0.067599999999999993 * var_constant_field_equations__CF_Ca; // picoA
         const double var_L_type_Ca_channel_Ca_dependent_gate__Cacm = -0.29999999999999999 * var_L_type_Ca_channel_Ca_dependent_gate__iCaL + var_internal_ion_concentrations__Cai; // millimolar
@@ -2777,7 +2768,7 @@
         
         
         // Mathematics
-        const double var_internal_ion_concentrations__Cai = mp_cytosolic_calcium_concentration_modifier->Calc(-0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total, var_chaste_interface__environment__time); // millimolar
+        const double var_internal_ion_concentrations__Cai = -0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total; // millimolar
         const double d_dt_chaste_interface_var_slow_time_dependent_potassium_current_y2_gate__y2 = -0.004444 * var_chaste_interface__slow_time_dependent_potassium_current_y2_gate__y2 + 3.7000000000000002 * (1.0 - var_chaste_interface__slow_time_dependent_potassium_current_y2_gate__y2) * var_internal_ion_concentrations__Cai; // 1 / millisecond
 
         return d_dt_chaste_interface_var_slow_time_dependent_potassium_current_y2_gate__y2;
@@ -2904,7 +2895,7 @@
         
         
         // Mathematics
-        const double var_internal_ion_concentrations__Cai = mp_cytosolic_calcium_concentration_modifier->Calc(-0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total, var_chaste_interface__environment__time); // millimolar
+        const double var_internal_ion_concentrations__Cai = -0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total; // millimolar
         const double var_sodium_calcium_exchanger__k1 = 1.0 * exp(0.011979261536575346 * var_chaste_interface__membrane__Vm); // per_millisecond
         const double var_sodium_calcium_exchanger__k2 = 1.0 * exp(-0.025455930765222609 * var_chaste_interface__membrane__Vm); // per_millisecond
         const double var_sodium_calcium_exchanger__p_E1Na = 1.0 / (1.0 + 669.921875 * (1.0 + 724.63768115942037 * var_internal_ion_concentrations__Cai) / pow(var_chaste_interface__internal_ion_concentrations__Nai, 3)); // dimensionless
@@ -3033,7 +3024,7 @@
         // Mathematics
         const double var_SR_calcium_pump__k2 = 1.0 / (1.0 + 0.10000000000000001 / var_chaste_interface__ATP_production__ATPi); // per_millisecond
         const double var_SR_calcium_pump__p_E1Ca = 1.0 / (1.0 + 0.080000000000000002 / var_chaste_interface__Ca_concentrations_in_SR__Caup); // dimensionless
-        const double var_internal_ion_concentrations__Cai = mp_cytosolic_calcium_concentration_modifier->Calc(-0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total, var_chaste_interface__environment__time); // millimolar
+        const double var_internal_ion_concentrations__Cai = -0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total; // millimolar
         const double var_SR_calcium_pump__p_E2Ca = 1.0 / (1.0 + 0.00080000000000000004 / var_internal_ion_concentrations__Cai); // dimensionless
         const double d_dt_chaste_interface_var_SR_calcium_pump_y_gate__y = (1.0 - var_chaste_interface__SR_calcium_pump_y_gate__y) * (0.01 - 0.01 * var_SR_calcium_pump__p_E2Ca + var_SR_calcium_pump__k2 * var_SR_calcium_pump__p_E2Ca) - (1.0 - 0.98999999999999999 * var_SR_calcium_pump__p_E1Ca) * var_chaste_interface__SR_calcium_pump_y_gate__y; // 1 / millisecond
 
@@ -3104,7 +3095,7 @@
         // Mathematics
         const double var_Ca_concentrations_in_SR__Carel = -5.4000000000000004 + 0.5 * var_chaste_interface__Ca_concentrations_in_SR__Ca_Total + 5.4000000000000004 * sqrt(pow((1 - 0.092592592592592587 * var_chaste_interface__Ca_concentrations_in_SR__Ca_Total), 2) + 0.027434842249657067 * var_chaste_interface__Ca_concentrations_in_SR__Ca_Total); // millimolar
         const double var_L_type_Ca_channel__p_open_CaL = (var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_U + var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_UCa) * var_chaste_interface__L_type_Ca_channel_ultra_slow_gate__y * var_chaste_interface__L_type_Ca_channel_voltage_dependent_gate__p_AP_CaL / (1.0 + 2.7439999999999993 / pow(var_chaste_interface__ATP_production__ATPi, 3)); // dimensionless
-        const double var_internal_ion_concentrations__Cai = mp_cytosolic_calcium_concentration_modifier->Calc(-0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total, var_chaste_interface__environment__time); // millimolar
+        const double var_internal_ion_concentrations__Cai = -0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total; // millimolar
         const double var_constant_field_equations__CF_Ca = ((var_chaste_interface__membrane__Vm == 0) ? (-1.8) : (0.074870384603595908 * (-1.8 * exp(-0.074870384603595908 * var_chaste_interface__membrane__Vm) + var_internal_ion_concentrations__Cai) * var_chaste_interface__membrane__Vm / (1.0 - exp(-0.074870384603595908 * var_chaste_interface__membrane__Vm)))); // millimolar
         const double var_L_type_Ca_channel_Ca_dependent_gate__iCaL = 0.067599999999999993 * var_constant_field_equations__CF_Ca; // picoA
         const double var_RyR_channel__k1 = 280000.0 * pow(var_internal_ion_concentrations__Cai, 2) - 150.0 * var_L_type_Ca_channel__p_open_CaL * var_L_type_Ca_channel_Ca_dependent_gate__iCaL; // per_millisecond
@@ -3165,7 +3156,7 @@
         // Mathematics
         const double var_Ca_concentrations_in_SR__Carel = -5.4000000000000004 + 0.5 * var_chaste_interface__Ca_concentrations_in_SR__Ca_Total + 5.4000000000000004 * sqrt(pow((1 - 0.092592592592592587 * var_chaste_interface__Ca_concentrations_in_SR__Ca_Total), 2) + 0.027434842249657067 * var_chaste_interface__Ca_concentrations_in_SR__Ca_Total); // millimolar
         const double var_L_type_Ca_channel__p_open_CaL = (var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_U + var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_UCa) * var_chaste_interface__L_type_Ca_channel_ultra_slow_gate__y * var_chaste_interface__L_type_Ca_channel_voltage_dependent_gate__p_AP_CaL / (1.0 + 2.7439999999999993 / pow(var_chaste_interface__ATP_production__ATPi, 3)); // dimensionless
-        const double var_internal_ion_concentrations__Cai = mp_cytosolic_calcium_concentration_modifier->Calc(-0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total, var_chaste_interface__environment__time); // millimolar
+        const double var_internal_ion_concentrations__Cai = -0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total; // millimolar
         const double var_constant_field_equations__CF_Ca = ((var_chaste_interface__membrane__Vm == 0) ? (-1.8) : (0.074870384603595908 * (-1.8 * exp(-0.074870384603595908 * var_chaste_interface__membrane__Vm) + var_internal_ion_concentrations__Cai) * var_chaste_interface__membrane__Vm / (1.0 - exp(-0.074870384603595908 * var_chaste_interface__membrane__Vm)))); // millimolar
         const double var_L_type_Ca_channel_Ca_dependent_gate__iCaL = 0.067599999999999993 * var_constant_field_equations__CF_Ca; // picoA
         const double var_RyR_channel__k1 = 280000.0 * pow(var_internal_ion_concentrations__Cai, 2) - 150.0 * var_L_type_Ca_channel__p_open_CaL * var_L_type_Ca_channel_Ca_dependent_gate__iCaL; // per_millisecond
@@ -3251,7 +3242,7 @@
         // Mathematics
         const double var_Ca_concentrations_in_SR__Carel = -5.4000000000000004 + 0.5 * var_chaste_interface__Ca_concentrations_in_SR__Ca_Total + 5.4000000000000004 * sqrt(pow((1 - 0.092592592592592587 * var_chaste_interface__Ca_concentrations_in_SR__Ca_Total), 2) + 0.027434842249657067 * var_chaste_interface__Ca_concentrations_in_SR__Ca_Total); // millimolar
         const double var_SR_T_current__i_SR_T = 386.0 * var_chaste_interface__Ca_concentrations_in_SR__Caup - 386.0 * var_Ca_concentrations_in_SR__Carel; // picoA
-        const double var_internal_ion_concentrations__Cai = mp_cytosolic_calcium_concentration_modifier->Calc(-0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total, var_chaste_interface__environment__time); // millimolar
+        const double var_internal_ion_concentrations__Cai = -0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total; // millimolar
         const double var_RyR_channel__i_RyR = 62000.0 * (-var_internal_ion_concentrations__Cai + var_Ca_concentrations_in_SR__Carel) * var_chaste_interface__RyR_channel__p_open_RyR; // picoA
         const double d_dt_chaste_interface_var_Ca_concentrations_in_SR__Ca_Total = 3.2387883511406234e-5 * var_SR_T_current__i_SR_T - 3.2387883511406234e-5 * var_RyR_channel__i_RyR; // millimolar / millisecond
 
@@ -3304,7 +3295,7 @@
         const double var_SR_T_current__i_SR_T = 386.0 * var_chaste_interface__Ca_concentrations_in_SR__Caup - 386.0 * var_Ca_concentrations_in_SR__Carel; // picoA
         const double var_SR_calcium_pump__k2 = 1.0 / (1.0 + 0.10000000000000001 / var_chaste_interface__ATP_production__ATPi); // per_millisecond
         const double var_SR_calcium_pump__p_E1Ca = 1.0 / (1.0 + 0.080000000000000002 / var_chaste_interface__Ca_concentrations_in_SR__Caup); // dimensionless
-        const double var_internal_ion_concentrations__Cai = mp_cytosolic_calcium_concentration_modifier->Calc(-0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total, var_chaste_interface__environment__time); // millimolar
+        const double var_internal_ion_concentrations__Cai = -0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total; // millimolar
         const double var_SR_L_current__i_SR_L = 459.0 * var_chaste_interface__Ca_concentrations_in_SR__Caup - 459.0 * var_internal_ion_concentrations__Cai; // picoA
         const double var_SR_calcium_pump__p_E2Ca = 1.0 / (1.0 + 0.00080000000000000004 / var_internal_ion_concentrations__Cai); // dimensionless
         const double var_SR_calcium_pump__i_SR_U = 1625.0 * var_SR_calcium_pump__p_E1Ca * var_chaste_interface__SR_calcium_pump_y_gate__y - 162500.0 * (1.0 - var_chaste_interface__SR_calcium_pump_y_gate__y) * var_SR_calcium_pump__k2 * var_SR_calcium_pump__p_E2Ca; // picoA
@@ -3353,7 +3344,7 @@
         
         // Mathematics
         const double var_NL_model__Q_a = -0.0038999999999999998 * var_chaste_interface__NL_model__pCaCB + 0.0038999999999999998 * var_chaste_interface__NL_model__pCa * exp(-0.86212130841993795); // per_millisecond
-        const double var_internal_ion_concentrations__Cai = mp_cytosolic_calcium_concentration_modifier->Calc(-0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total, var_chaste_interface__environment__time); // millimolar
+        const double var_internal_ion_concentrations__Cai = -0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total; // millimolar
         const double var_NL_model__Q_b = -0.029999999999999999 * var_chaste_interface__NL_model__pCa + 39.0 * (1.0 - var_chaste_interface__NL_model__pCB - var_chaste_interface__NL_model__pCa - var_chaste_interface__NL_model__pCaCB) * var_internal_ion_concentrations__Cai; // per_millisecond
         const double d_dt_chaste_interface_var_NL_model__pCa = -var_NL_model__Q_a + var_NL_model__Q_b; // 1 / millisecond
 
@@ -3403,7 +3394,7 @@
         const double d_dt_chaste_interface_var_NL_model__X = 1.1488559970494261 - 1.2 * var_chaste_interface__NL_model__X; // micrometre / millisecond
         const double var_NL_model__Q_a = -0.0038999999999999998 * var_chaste_interface__NL_model__pCaCB + 0.0038999999999999998 * var_chaste_interface__NL_model__pCa * exp(-0.86212130841993795); // per_millisecond
         const double var_NL_model__Q_d2 = 0.027 * pow(d_dt_chaste_interface_var_NL_model__X, 2) * var_chaste_interface__NL_model__pCaCB; // per_millisecond
-        const double var_internal_ion_concentrations__Cai = mp_cytosolic_calcium_concentration_modifier->Calc(-0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total, var_chaste_interface__environment__time); // millimolar
+        const double var_internal_ion_concentrations__Cai = -0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total; // millimolar
         const double var_NL_model__Q_r = 0.029999999999999999 * var_chaste_interface__NL_model__pCaCB - 1560.0 * var_chaste_interface__NL_model__pCB * var_internal_ion_concentrations__Cai; // per_millisecond
         const double d_dt_chaste_interface_var_NL_model__pCaCB = -var_NL_model__Q_d2 - var_NL_model__Q_r + var_NL_model__Q_a; // 1 / millisecond
 
@@ -3448,7 +3439,7 @@
         
         // Mathematics
         const double d_dt_chaste_interface_var_NL_model__X = 1.1488559970494261 - 1.2 * var_chaste_interface__NL_model__X; // micrometre / millisecond
-        const double var_internal_ion_concentrations__Cai = mp_cytosolic_calcium_concentration_modifier->Calc(-0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total, var_chaste_interface__environment__time); // millimolar
+        const double var_internal_ion_concentrations__Cai = -0.026190000000000001 + 0.5 * sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total) + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total; // millimolar
         const double var_NL_model__Q_r = 0.029999999999999999 * var_chaste_interface__NL_model__pCaCB - 1560.0 * var_chaste_interface__NL_model__pCB * var_internal_ion_concentrations__Cai; // per_millisecond
         const double d_dt_chaste_interface_var_NL_model__pCB = -0.12 * var_chaste_interface__NL_model__pCB - 0.027 * pow(d_dt_chaste_interface_var_NL_model__X, 2) * var_chaste_interface__NL_model__pCB + var_NL_model__Q_r; // 1 / millisecond
 
@@ -3529,7 +3520,7 @@
         const double var_internal_ion_concentrations__K_mCMDN = 0.0023800000000000002; // millimolar
         const double var_internal_ion_concentrations__b1 = -var_chaste_interface__internal_ion_concentrations__Ca_Total + var_internal_ion_concentrations__CMDN_max + var_internal_ion_concentrations__K_mCMDN; // millimolar
         const double var_internal_ion_concentrations__c1 = var_chaste_interface__internal_ion_concentrations__Ca_Total * var_internal_ion_concentrations__K_mCMDN; // millimolar2
-        const double var_internal_ion_concentrations__Cai = mp_cytosolic_calcium_concentration_modifier->Calc(1.0 * sqrt(0.25 * pow(var_internal_ion_concentrations__b1, 2) + var_internal_ion_concentrations__c1) - 0.5 * var_internal_ion_concentrations__b1, var_chaste_interface__environment__time); // millimolar
+        const double var_internal_ion_concentrations__Cai = 1.0 * sqrt(0.25 * pow(var_internal_ion_concentrations__b1, 2) + var_internal_ion_concentrations__c1) - 0.5 * var_internal_ion_concentrations__b1; // millimolar
         const double var_membrane__i_ext_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
 
         std::vector<double> dqs(3);
