@@ -1,9 +1,9 @@
 
     void {{class_name}}::EvaluateEquations(double {{free_variable.var_name}}, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
     {
-        std::vector<double>& rY = rGetStateVariables();
+        {{vector_decl}} rY = rGetStateVariables();
         {%- for state_var in state_vars %}
-        {% if state_var.in_ab %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}{%- endif %}
+        {% if state_var.in_ab %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : {{state_vec_ind_start}}{{loop.index0}}{{vec_ind_end}});{%- else %}{{state_vec_ind_start}}{{loop.index0}}{{vec_ind_end}};{%- endif %}{%- endif %}
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {%- endfor %}
 
@@ -24,7 +24,7 @@
             {%- endfor %}
         }
         {% for deriv in derivative_alpha_beta %}
-        {% if deriv.type=='non_linear'%}rDY[{{loop.index0}}] = {{deriv.deriv}};{% else %}rAlphaOrTau[{{loop.index0}}] = {{deriv.r_alpha_or_tau}};
+        {% if deriv.type=='non_linear'%}{{vec_ind_start}}{{loop.index0}}{{vec_ind_end}} = {{deriv.deriv}};{% else %}rAlphaOrTau[{{loop.index0}}] = {{deriv.r_alpha_or_tau}};
         rBetaOrInf[{{loop.index0}}] = {{deriv.r_beta_or_inf}};{%- endif %}
         {%- endfor %}
     }

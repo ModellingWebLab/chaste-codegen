@@ -528,127 +528,127 @@ void OdeSystemInformation<Cellviswanathan_model_1999_epiFromCellMLCvode>::Initia
     this->mFreeVariableName = "environment__time";
     this->mFreeVariableUnits = "millisecond";
 
-    // NV_Ith_S(rY,0):
+    // NV_Ith_S(rY, 0):
     this->mVariableNames.push_back("membrane_voltage");
     this->mVariableUnits.push_back("millivolt");
     this->mInitialConditions.push_back(-88.984);
 
-    // NV_Ith_S(rY,1):
+    // NV_Ith_S(rY, 1):
     this->mVariableNames.push_back("cytosolic_calcium_concentration");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.00035237);
 
-    // NV_Ith_S(rY,2):
+    // NV_Ith_S(rY, 2):
     this->mVariableNames.push_back("fast_sodium_current_m_gate__m");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00079287);
 
-    // NV_Ith_S(rY,3):
+    // NV_Ith_S(rY, 3):
     this->mVariableNames.push_back("fast_sodium_current_h_gate__h");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9938);
 
-    // NV_Ith_S(rY,4):
+    // NV_Ith_S(rY, 4):
     this->mVariableNames.push_back("fast_sodium_current_j_gate__j");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.99573);
 
-    // NV_Ith_S(rY,5):
+    // NV_Ith_S(rY, 5):
     this->mVariableNames.push_back("L_type_Ca_channel_d_gate__d");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(3.18355e-06);
 
-    // NV_Ith_S(rY,6):
+    // NV_Ith_S(rY, 6):
     this->mVariableNames.push_back("L_type_Ca_channel_f_gate__f");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9974388);
 
-    // NV_Ith_S(rY,7):
+    // NV_Ith_S(rY, 7):
     this->mVariableNames.push_back("T_type_Ca_channel_b_gate__b");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000967785);
 
-    // NV_Ith_S(rY,8):
+    // NV_Ith_S(rY, 8):
     this->mVariableNames.push_back("T_type_Ca_channel_g_gate__g");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.95331988);
 
-    // NV_Ith_S(rY,9):
+    // NV_Ith_S(rY, 9):
     this->mVariableNames.push_back("rapid_delayed_rectifier_potassium_current_xr_gate__xr");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00032151644);
 
-    // NV_Ith_S(rY,10):
+    // NV_Ith_S(rY, 10):
     this->mVariableNames.push_back("slow_delayed_rectifier_potassium_current_xs1_gate__xs1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0272635);
 
-    // NV_Ith_S(rY,11):
+    // NV_Ith_S(rY, 11):
     this->mVariableNames.push_back("slow_delayed_rectifier_potassium_current_xs2_gate__xs2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0631269);
 
-    // NV_Ith_S(rY,12):
+    // NV_Ith_S(rY, 12):
     this->mVariableNames.push_back("transient_outward_current_zdv_gate__zdv");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.011528);
 
-    // NV_Ith_S(rY,13):
+    // NV_Ith_S(rY, 13):
     this->mVariableNames.push_back("transient_outward_current_ydv_gate__ydv");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.985232);
 
-    // NV_Ith_S(rY,14):
+    // NV_Ith_S(rY, 14):
     this->mVariableNames.push_back("calcium_dynamics__Ca_JSR");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.817895);
 
-    // NV_Ith_S(rY,15):
+    // NV_Ith_S(rY, 15):
     this->mVariableNames.push_back("calcium_dynamics__Ca_NSR");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(2.797668);
 
-    // NV_Ith_S(rY,16):
+    // NV_Ith_S(rY, 16):
     this->mVariableNames.push_back("calcium_dynamics__APtrack");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(3.814e-87);
 
-    // NV_Ith_S(rY,17):
+    // NV_Ith_S(rY, 17):
     this->mVariableNames.push_back("calcium_dynamics__APtrack2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(2.1084e-86);
 
-    // NV_Ith_S(rY,18):
+    // NV_Ith_S(rY, 18):
     this->mVariableNames.push_back("calcium_dynamics__APtrack3");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.01925);
 
-    // NV_Ith_S(rY,19):
+    // NV_Ith_S(rY, 19):
     this->mVariableNames.push_back("calcium_dynamics__Cainfluxtrack");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.784e-87);
 
-    // NV_Ith_S(rY,20):
+    // NV_Ith_S(rY, 20):
     this->mVariableNames.push_back("calcium_dynamics__OVRLDtrack");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
 
-    // NV_Ith_S(rY,21):
+    // NV_Ith_S(rY, 21):
     this->mVariableNames.push_back("calcium_dynamics__OVRLDtrack2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
 
-    // NV_Ith_S(rY,22):
+    // NV_Ith_S(rY, 22):
     this->mVariableNames.push_back("calcium_dynamics__OVRLDtrack3");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
 
-    // NV_Ith_S(rY,23):
+    // NV_Ith_S(rY, 23):
     this->mVariableNames.push_back("ionic_concentrations__Nai");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(15.6748357);
 
-    // NV_Ith_S(rY,24):
+    // NV_Ith_S(rY, 24):
     this->mVariableNames.push_back("ionic_concentrations__Ki");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(137.6244);

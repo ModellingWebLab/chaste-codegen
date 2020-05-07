@@ -12,6 +12,7 @@ class RushLarsenModel(ChasteModel):
         super().__init__(model, file_name, **kwargs)
         self._hpp_template = 'rush_larsen_model.hpp'
         self._cpp_template = 'rush_larsen_model.cpp'
+        self._vars_for_template['base_class'] = 'AbstractRushLarsenCardiacCell'
 
         self._derivative_equations = \
             partial_eval(self._derivative_equations, self._y_derivatives, keep_multiple_usages=False)

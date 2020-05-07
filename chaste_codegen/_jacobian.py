@@ -24,23 +24,25 @@ def get_jacobian(state_vars, derivative_equations):
     return jacobian_equations, sp.Matrix(jacobian_matrix)
 
 
-def format_jacobian(jacobian_equations, jacobian_matrix, printer, swap_inner_outer_index=True, skip_0_entries=True):
+def format_jacobian(jacobian_equations, jacobian_matrix, printer, print_rhs,
+                    swap_inner_outer_index=True, skip_0_entries=True):
     """Format the jacobian for outputting
 
     :param jacobian_equations: list of common term equations (expects a list as per get_jacobian)
     :param jacobian_matrix: a jacobian matrix (expects a sympy.Matrix as per get_jacobian)
     :param printer: printer object to Retrieve outputtable version of variables and equations
+    :param print_rhs: function to turn rhs of an equation into outputtable version
     :param swap_inner_outer_index: swap inner and outer index so [j, i] instead of [i, j]  by swapping swap loops.
                                    This swpas whether the 1st index is row or column.
     :param skip_0_entries: should entries in the jacobian matrixt that are 0 be skipped in the output?
-    :return: Formatted common expressions, formattex jacobian matrix.
+    :return: Formatted common expressions, formatted jacobian matrix.
              The formatted list of common expressions is of the form:
              [{'lhs': 'var_x1', 'rhs': <printed_expr>, 'sympy_lhs': x1}]
              The jacobian Matrix is a list of the form:
              [{'i': i, 'j': 'entry': <printted jacobian matrix entry for index [i, j])}
     """
     assert isinstance(jacobian_matrix, sp.Matrix), 'Expecting a jacobian as a matrix'
-    equations = [{'lhs': printer.doprint(eq[0]), 'rhs': printer.doprint(eq[1]), 'sympy_lhs': eq[0]}
+    equations = [{'lhs': printer.doprint(eq[0]), 'rhs': print_rhs(eq[0], eq[1]), 'sympy_lhs': eq[0]}
                  for eq in jacobian_equations]
     rows, cols = jacobian_matrix.shape
     jacobian = []

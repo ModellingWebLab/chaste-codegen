@@ -1,8 +1,8 @@
     {% for state_var in state_vars %}{% set statevarloop = loop %}
-    double {{class_name}}::EvaluateYDerivative{{statevarloop.index0}}(double {{free_variable.var_name}}, std::vector<double>& rY)
+    double {{class_name}}::EvaluateYDerivative{{statevarloop.index0}}(double {{free_variable.var_name}}, {{vector_decl}} rY)
     {
         {% for deriv in y_derivative_equations %}{%- if deriv.is_voltage and statevarloop.index0 == membrane_voltage_index%}double {{deriv.lhs}};{%- endif %}{%- endfor %}
-        {% for state_var in state_vars %}{%- if state_var.in_evaluate_y_derivative[statevarloop.index0] %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
+        {% for state_var in state_vars %}{%- if state_var.in_evaluate_y_derivative[statevarloop.index0] %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : {{state_vec_ind_start}}{{loop.index0}}{{vec_ind_end}});{%- else %}{{state_vec_ind_start}}{{loop.index0}}{{vec_ind_end}};{%- endif %}
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}
         
@@ -14,12 +14,12 @@
         return {% for deriv in y_derivatives %}{%- if loop.index0 == statevarloop.index0 %}{{deriv}};{%- endif %}{%- endfor %}
     }
 
-    double {{class_name}}::EvaluatePartialDerivative{{statevarloop.index0}}(double {{free_variable.var_name}}, std::vector<double>& rY, double delta, bool forceNumerical)
+    double {{class_name}}::EvaluatePartialDerivative{{statevarloop.index0}}(double {{free_variable.var_name}}, {{vector_decl}} rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
-            {% for state_var in state_vars %}{%- if state_var.in_evaluate_partial_derivative[statevarloop.index0] %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
+            {% for state_var in state_vars %}{%- if state_var.in_evaluate_partial_derivative[statevarloop.index0] %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : {{state_vec_ind_start}}{{loop.index0}}{{vec_ind_end}});{%- else %}{{state_vec_ind_start}}{{loop.index0}}{{vec_ind_end}};{%- endif %}
             // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
             {% endif %}{%- endfor %}
             {% for equation in jacobian_equations if equation.in_evaluate_partial_derivative[loop.index0] %}const double {{equation.lhs}} = {{equation.rhs}};
@@ -28,7 +28,7 @@
         }
         else
         {
-            const double y_save = rY[{{statevarloop.index0}}];
+            const double y_save = {{state_vec_ind_start}}{{statevarloop.index0}}{{vec_ind_end}};
             rY[{{statevarloop.index0}}] += delta;
             const double temp = EvaluateYDerivative{{statevarloop.index0}}({{free_variable.var_name}}, rY);
             partialF = (temp-mEvalF[{{statevarloop.index0}}])/delta;

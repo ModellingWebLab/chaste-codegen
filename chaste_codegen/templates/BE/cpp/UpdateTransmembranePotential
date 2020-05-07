@@ -2,13 +2,13 @@
     void {{class_name}}::UpdateTransmembranePotential(double {{free_variable.var_name}})
     {
         // Time units: millisecond
-        std::vector<double>& rY = rGetStateVariables();
+        {{vector_decl}} rY = rGetStateVariables();
         {% for state_var in state_vars %}
-        {%- if state_var.in_voltage_deriv %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
+        {%- if state_var.in_voltage_deriv %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : {{state_vec_ind_start}}{{loop.index0}}{{vec_ind_end}});{%- else %}{{state_vec_ind_start}}{{loop.index0}}{{vec_ind_end}};{%- endif %}
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}
         {% for deriv in y_derivative_equations %}
         {%- if deriv.in_membrane_voltage %}const double {{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}
         {% endif %}{%- endfor %}
-        {% for deriv in y_derivative_equations %}{%- if deriv.is_voltage%}rY[0] += mDt*{{deriv.lhs}};{%- endif %}{%- endfor %}
+        {% for deriv in y_derivative_equations %}{%- if deriv.is_voltage%}{{state_vec_ind_start}}{{membrane_voltage_index}}{{vec_ind_end}} += mDt*{{deriv.lhs}};{%- endif %}{%- endfor %}
     }

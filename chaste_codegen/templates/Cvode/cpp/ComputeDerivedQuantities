@@ -1,10 +1,10 @@
 {%- if derived_quantities|length > 0 %}
 
-    N_Vector {{class_name}}::ComputeDerivedQuantities(double {{free_variable.var_name}}, const N_Vector & rY)
+    {{vector_decl}} {{class_name}}::ComputeDerivedQuantities(double {{free_variable.var_name}}, const {{vector_decl}} & rY)
     {
         // Inputs:
         // Time units: millisecond
-        {% for state_var in state_vars %}{% with %}{%- if state_var.modifier %}{% set entry = state_var.modifier ~ "->Calc(NV_Ith_S(rY, " ~ loop.index0 ~ "), " ~ free_variable.var_name ~ ")" %}{% else %}{% set entry = "NV_Ith_S(rY, " ~ loop.index0 ~ ")" %}{%endif %}
+        {% for state_var in state_vars %}{% with %}{%- if state_var.modifier %}{% set entry = state_var.modifier ~ "->Calc(" ~ state_vec_ind_start ~ loop.index0 ~ vec_ind_end ~ ", " ~ free_variable.var_name ~ ")" %}{% else %}{% set entry = state_vec_ind_start ~ loop.index0 ~ vec_ind_end %}{%endif %}
         {%- if state_var.in_derived_quant %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : {{entry}}){%- else %}{{entry}}{%- endif %};
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endwith%}{%- endfor %}
@@ -19,7 +19,7 @@
         }{% else %}
         const double {{eq.lhs}} = {{eq.rhs}}; // {{eq.units}}{% endif %}{%- endfor %}
 
-        N_Vector dqs = N_VNew_Serial({{derived_quantities|length}});
+        {{vector_decl}} dqs = N_VNew_Serial({{derived_quantities|length}});
         {%- for quant in derived_quantities %}
         NV_Ith_S(dqs, {{loop.index0}}) = {{quant.var}};
         {%- endfor %}

@@ -611,77 +611,77 @@ void OdeSystemInformation<Cellhilgemann_noble_model_1987FromCellMLCvode>::Initia
     this->mFreeVariableName = "environment__time";
     this->mFreeVariableUnits = "millisecond";
 
-    // NV_Ith_S(rY,0):
+    // NV_Ith_S(rY, 0):
     this->mVariableNames.push_back("membrane_voltage");
     this->mVariableUnits.push_back("millivolt");
     this->mInitialConditions.push_back(-88.0);
 
-    // NV_Ith_S(rY,1):
+    // NV_Ith_S(rY, 1):
     this->mVariableNames.push_back("cytosolic_calcium_concentration");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(1e-05);
 
-    // NV_Ith_S(rY,2):
+    // NV_Ith_S(rY, 2):
     this->mVariableNames.push_back("fast_sodium_current_m_gate__m");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.076);
 
-    // NV_Ith_S(rY,3):
+    // NV_Ith_S(rY, 3):
     this->mVariableNames.push_back("fast_sodium_current_h_gate__h");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.015);
 
-    // NV_Ith_S(rY,4):
+    // NV_Ith_S(rY, 4):
     this->mVariableNames.push_back("second_inward_calcium_current_d_gate__d");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0011);
 
-    // NV_Ith_S(rY,5):
+    // NV_Ith_S(rY, 5):
     this->mVariableNames.push_back("second_inward_calcium_current_f_Ca_gate__f_Ca");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.785);
 
-    // NV_Ith_S(rY,6):
+    // NV_Ith_S(rY, 6):
     this->mVariableNames.push_back("calcium_release__ActFrac");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
 
-    // NV_Ith_S(rY,7):
+    // NV_Ith_S(rY, 7):
     this->mVariableNames.push_back("calcium_release__ProdFrac");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
 
-    // NV_Ith_S(rY,8):
+    // NV_Ith_S(rY, 8):
     this->mVariableNames.push_back("intracellular_sodium_concentration__Na_i");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(6.5);
 
-    // NV_Ith_S(rY,9):
+    // NV_Ith_S(rY, 9):
     this->mVariableNames.push_back("extracellular_calcium_concentration__Ca_o");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(2.0);
 
-    // NV_Ith_S(rY,10):
+    // NV_Ith_S(rY, 10):
     this->mVariableNames.push_back("intracellular_potassium_concentration__K_i");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(140.0);
 
-    // NV_Ith_S(rY,11):
+    // NV_Ith_S(rY, 11):
     this->mVariableNames.push_back("intracellular_calcium_concentration__Ca_up");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.3);
 
-    // NV_Ith_S(rY,12):
+    // NV_Ith_S(rY, 12):
     this->mVariableNames.push_back("intracellular_calcium_concentration__Ca_rel");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.3);
 
-    // NV_Ith_S(rY,13):
+    // NV_Ith_S(rY, 13):
     this->mVariableNames.push_back("intracellular_calcium_concentration__Ca_Calmod");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.0005);
 
-    // NV_Ith_S(rY,14):
+    // NV_Ith_S(rY, 14):
     this->mVariableNames.push_back("intracellular_calcium_concentration__Ca_Trop");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.0015);

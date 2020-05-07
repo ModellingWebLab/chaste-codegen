@@ -3,11 +3,11 @@
 {% include "Shared/cpp/includes" %}
 {% include "Shared/cpp/UseCellMLDefaultStimulus" %}
 {% include "Cvode/cpp/GetIntracellularCalciumConcentration" %}
-{% with %}{% set base_class = "AbstractCvodeCell" %}{%- include "Cvode/cpp/constructor" %}{% endwith %}
+{%- include "Shared/cpp/constructor" %}
 {% include "Shared/cpp/destructor" %}
 {% include "Cvode/cpp/VerifyStateVariables" %}
 {% include "Cvode/cpp/GetIIonic" %}
-{% include "Cvode/cpp/EvaluateYDerivatives" %}
+{% include "Shared/cpp/EvaluateYDerivatives" %}
 {%- include "Cvode/cpp/EvaluateAnalyticJacobian" %}
 {%- include "Cvode/cpp/ComputeDerivedQuantities" %}
 {% include "Cvode/cpp/OdeSystemInformation" %}

@@ -13,6 +13,7 @@ class BackwardEulerModel(ChasteModel):
         super().__init__(model, file_name, **kwargs)
         self._hpp_template = 'backward_euler_model.hpp'
         self._cpp_template = 'backward_euler_model.cpp'
+        self._vars_for_template['base_class'] = 'AbstractBackwardEulerCardiacCell'
         # get deriv eqs and substitute in all variables other than state vars
         self._derivative_equations = \
             partial_eval(self._derivative_equations, self._y_derivatives, keep_multiple_usages=False)
@@ -30,7 +31,8 @@ class BackwardEulerModel(ChasteModel):
             self._format_rearranged_linear_derivs()
         self._vars_for_template['jacobian_equations'], self._vars_for_template['jacobian_entries'] = \
             format_jacobian(self._jacobian_equations, self._jacobian_matrix, self._printer,
-                            swap_inner_outer_index=False, skip_0_entries=False)
+                            self._print_rhs_with_modifiers, swap_inner_outer_index=False,
+                            skip_0_entries=False)
 
     def _format_rearranged_linear_derivs(self):
         """Formats the rearranged linear derivative expressions

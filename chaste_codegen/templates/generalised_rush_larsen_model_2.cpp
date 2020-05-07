@@ -2,7 +2,7 @@
 {% include "Shared/cpp/includes" %}
 {% include "Shared/cpp/UseCellMLDefaultStimulus" %}
 {% include "Shared/cpp/GetIntracellularCalciumConcentration" %}
-{% with %}{% set base_class = "AbstractGeneralizedRushLarsenCardiacCell" %}{% include "RL/cpp/constructor" %}{% endwith %}
+{% include "RL/cpp/constructor" %}
 {% include "Shared/cpp/destructor" %}
 {% include "Shared/cpp/VerifyStateVariables" %}
 {% include "Shared/cpp/GetIIonic" %}

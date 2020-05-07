@@ -466,137 +466,137 @@ void OdeSystemInformation<Cellfink_noble_giles_model_2008FromCellMLCvode>::Initi
     this->mFreeVariableName = "Environment__time";
     this->mFreeVariableUnits = "millisecond";
 
-    // NV_Ith_S(rY,0):
+    // NV_Ith_S(rY, 0):
     this->mVariableNames.push_back("membrane_voltage");
     this->mVariableUnits.push_back("millivolt");
     this->mInitialConditions.push_back(-86.45);
 
-    // NV_Ith_S(rY,1):
+    // NV_Ith_S(rY, 1):
     this->mVariableNames.push_back("iKr_Markov__Cr1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9786);
 
-    // NV_Ith_S(rY,2):
+    // NV_Ith_S(rY, 2):
     this->mVariableNames.push_back("iKr_Markov__Cr2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0031);
 
-    // NV_Ith_S(rY,3):
+    // NV_Ith_S(rY, 3):
     this->mVariableNames.push_back("iKr_Markov__Cr3");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0029);
 
-    // NV_Ith_S(rY,4):
+    // NV_Ith_S(rY, 4):
     this->mVariableNames.push_back("iKr_Markov__Or4");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.014);
 
-    // NV_Ith_S(rY,5):
+    // NV_Ith_S(rY, 5):
     this->mVariableNames.push_back("iKr_Markov__Ir5");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0014);
 
-    // NV_Ith_S(rY,6):
+    // NV_Ith_S(rY, 6):
     this->mVariableNames.push_back("iKr_Markov_Sotalol_block__BCr1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
 
-    // NV_Ith_S(rY,7):
+    // NV_Ith_S(rY, 7):
     this->mVariableNames.push_back("iKr_Markov_Sotalol_block__BCr2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
 
-    // NV_Ith_S(rY,8):
+    // NV_Ith_S(rY, 8):
     this->mVariableNames.push_back("iKr_Markov_Sotalol_block__BCr3");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
 
-    // NV_Ith_S(rY,9):
+    // NV_Ith_S(rY, 9):
     this->mVariableNames.push_back("iKr_Markov_Sotalol_block__BOr4");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
 
-    // NV_Ith_S(rY,10):
+    // NV_Ith_S(rY, 10):
     this->mVariableNames.push_back("iKr_Markov_Sotalol_block__BIr5");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
 
-    // NV_Ith_S(rY,11):
+    // NV_Ith_S(rY, 11):
     this->mVariableNames.push_back("iKs_Xs_gate__Xs");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00303);
 
-    // NV_Ith_S(rY,12):
+    // NV_Ith_S(rY, 12):
     this->mVariableNames.push_back("ito_s_gate__s");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.0);
 
-    // NV_Ith_S(rY,13):
+    // NV_Ith_S(rY, 13):
     this->mVariableNames.push_back("ito_r_gate__r");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(2.11e-08);
 
-    // NV_Ith_S(rY,14):
+    // NV_Ith_S(rY, 14):
     this->mVariableNames.push_back("iNa_m_gate__m");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00132);
 
-    // NV_Ith_S(rY,15):
+    // NV_Ith_S(rY, 15):
     this->mVariableNames.push_back("iNa_h_gate__h");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.7768);
 
-    // NV_Ith_S(rY,16):
+    // NV_Ith_S(rY, 16):
     this->mVariableNames.push_back("iNa_j_gate__j");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.7766);
 
-    // NV_Ith_S(rY,17):
+    // NV_Ith_S(rY, 17):
     this->mVariableNames.push_back("iCaL_d_gate__d");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(5.06e-06);
 
-    // NV_Ith_S(rY,18):
+    // NV_Ith_S(rY, 18):
     this->mVariableNames.push_back("iCaL_f_gate__f");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9999);
 
-    // NV_Ith_S(rY,19):
+    // NV_Ith_S(rY, 19):
     this->mVariableNames.push_back("iCaL_f2_gate__f2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9995);
 
-    // NV_Ith_S(rY,20):
+    // NV_Ith_S(rY, 20):
     this->mVariableNames.push_back("iCaL_fCass_gate__fCass");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.0);
 
-    // NV_Ith_S(rY,21):
+    // NV_Ith_S(rY, 21):
     this->mVariableNames.push_back("Ca__Ca_i");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.0001092);
 
-    // NV_Ith_S(rY,22):
+    // NV_Ith_S(rY, 22):
     this->mVariableNames.push_back("Ca__Ca_SR");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(2.7656);
 
-    // NV_Ith_S(rY,23):
+    // NV_Ith_S(rY, 23):
     this->mVariableNames.push_back("Ca__Ca_ss");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.0001893);
 
-    // NV_Ith_S(rY,24):
+    // NV_Ith_S(rY, 24):
     this->mVariableNames.push_back("Irel__R_prime");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9864);
 
-    // NV_Ith_S(rY,25):
+    // NV_Ith_S(rY, 25):
     this->mVariableNames.push_back("Na__Na_i");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(7.940167);
 
-    // NV_Ith_S(rY,26):
+    // NV_Ith_S(rY, 26):
     this->mVariableNames.push_back("K__K_i");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(141.0167);

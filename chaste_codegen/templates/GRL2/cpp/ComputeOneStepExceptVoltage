@@ -1,14 +1,14 @@
 
     void {{class_name}}::ComputeOneStepExceptVoltage(double {{free_variable.var_name}})
     {
-        std::vector<double>& rY = rGetStateVariables();
+        {{vector_decl}} rY = rGetStateVariables();
         const double delta=1e-8;
         const unsigned size = GetNumberOfStateVariables();
         mYInit = rY;
         double y_save;
 
         {% for state_var in state_vars %}
-        {%- if state_var.in_y_deriv %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
+        {%- if state_var.in_y_deriv %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : {{state_vec_ind_start}}{{loop.index0}}{{vec_ind_end}});{%- else %}{{state_vec_ind_start}}{{loop.index0}}{{vec_ind_end}};{%- endif %}
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}
         
@@ -38,33 +38,33 @@
             if (var == {{membrane_voltage_index}}) continue;
             if (fabs(mPartialF[var]) < delta)
             {
-                rY[var] = mYInit[var] + 0.5*mDt*mEvalF[var];
+                {{state_vec_ind_start}}var{{vec_ind_end}} = mYInit[var] + 0.5*mDt*mEvalF[var];
             }
             else
             {
-                rY[var] = mYInit[var] + (mEvalF[var]/mPartialF[var])*(exp(mPartialF[var]*0.5*mDt)-1.0);
+                {{state_vec_ind_start}}var{{vec_ind_end}} = mYInit[var] + (mEvalF[var]/mPartialF[var])*(exp(mPartialF[var]*0.5*mDt)-1.0);
             }
             
         }
         
         {%- for deriv in y_derivatives %}
         {% if loop.index0 != membrane_voltage_index %}
-        y_save = rY[{{loop.index0}}];
-        rY[{{loop.index0}}] = mYInit[{{loop.index0}}];
+        y_save = {{state_vec_ind_start}}{{loop.index0}}{{vec_ind_end}};
+        {{state_vec_ind_start}}{{loop.index0}}{{vec_ind_end}} = mYInit[{{loop.index0}}];
         mEvalF[{{loop.index0}}] = EvaluateYDerivative{{loop.index0}}({{free_variable.var_name}}, rY);
         mPartialF[{{loop.index0}}] = EvaluatePartialDerivative{{loop.index0}}({{free_variable.var_name}}, rY, delta);
-        rY[{{loop.index0}}] = y_save;
+        {{state_vec_ind_start}}{{loop.index0}}{{vec_ind_end}} = y_save;
         {% endif %}{%- endfor %}        
         for (unsigned var=0; var<size; var++)
         {
             if (var == {{membrane_voltage_index}}) continue;
             if (fabs(mPartialF[var]) < delta)
             {
-                rY[var] = mYInit[var] + mDt*mEvalF[var];
+                {{state_vec_ind_start}}var{{vec_ind_end}} = mYInit[var] + mDt*mEvalF[var];
             }
             else
             {
-                rY[var] = mYInit[var] + (mEvalF[var]/mPartialF[var])*(exp(mPartialF[var]*mDt)-1.0);
+                {{state_vec_ind_start}}var{{vec_ind_end}} = mYInit[var] + (mEvalF[var]/mPartialF[var])*(exp(mPartialF[var]*mDt)-1.0);
             }
             
         }

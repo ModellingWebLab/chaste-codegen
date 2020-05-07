@@ -182,22 +182,22 @@ void OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromC
     this->mFreeVariableName = "time";
     this->mFreeVariableUnits = "millisecond";
 
-    // NV_Ith_S(rY,0):
+    // NV_Ith_S(rY, 0):
     this->mVariableNames.push_back("membrane_voltage");
     this->mVariableUnits.push_back("millivolt");
     this->mInitialConditions.push_back(-75.0);
 
-    // NV_Ith_S(rY,1):
+    // NV_Ith_S(rY, 1):
     this->mVariableNames.push_back("sodium_channel_m_gate__m");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.05);
 
-    // NV_Ith_S(rY,2):
+    // NV_Ith_S(rY, 2):
     this->mVariableNames.push_back("sodium_channel_h_gate__h");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.6);
 
-    // NV_Ith_S(rY,3):
+    // NV_Ith_S(rY, 3):
     this->mVariableNames.push_back("potassium_channel_n_gate__n");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.325);

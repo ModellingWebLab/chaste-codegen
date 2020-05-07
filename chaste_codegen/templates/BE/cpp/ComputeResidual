@@ -1,9 +1,9 @@
 {%- if nonlinear_state_vars|length > 0 %}
     void {{class_name}}::ComputeResidual(double {{free_variable.var_name}}, const double rCurrentGuess[{{nonlinear_state_vars|length}}], double rResidual[{{nonlinear_state_vars|length}}])
     {
-        std::vector<double>& rY = rGetStateVariables();
+        {{vector_decl}} rY = rGetStateVariables();
         {% for state_var in state_vars %}
-        {%- if state_var.linear and state_var.in_residual_eqs %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
+        {%- if state_var.linear and state_var.in_residual_eqs %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : {{state_vec_ind_start}}{{loop.index0}}{{vec_ind_end}});{%- else %}{{state_vec_ind_start}}{{loop.index0}}{{vec_ind_end}};{%- endif %}
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}
         //output_nonlinear_state_assignments
@@ -15,6 +15,6 @@
         const double {{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
         {%- endfor %}
         {% for residual_var in residual_equations %}
-        rResidual[{{ residual_var.residual_index }}] = rCurrentGuess[{{ residual_var.residual_index }}] - rY[{{ residual_var.state_var_index }}] - mDt*{{ residual_var.var }};
+        rResidual[{{ residual_var.residual_index }}] = rCurrentGuess[{{ residual_var.residual_index }}] - {{state_vec_ind_start}}{{ residual_var.state_var_index }}{{vec_ind_end}} - mDt*{{ residual_var.var }};
         {%- endfor %}
     }{% endif -%}

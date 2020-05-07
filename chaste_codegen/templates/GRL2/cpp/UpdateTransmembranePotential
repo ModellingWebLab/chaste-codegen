@@ -1,12 +1,12 @@
 
     void {{class_name}}::UpdateTransmembranePotential(double {{free_variable.var_name}})
     {
-        std::vector<double>& rY = rGetStateVariables();
+        {{vector_decl}} rY = rGetStateVariables();
         const unsigned v_index = GetVoltageIndex();
         const double delta = 1e-8;
-        const double yinit = rY[v_index];
+        const double yinit = {{state_vec_ind_start}}v_index{{vec_ind_end}};
 
-        {% for state_var in state_vars %}{%- if state_var.in_voltage_deriv %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
+        {% for state_var in state_vars %}{%- if state_var.in_voltage_deriv %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : {{state_vec_ind_start}}{{loop.index0}}{{vec_ind_end}});{%- else %}{{state_vec_ind_start}}{{loop.index0}}{{vec_ind_end}};{%- endif %}
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}
 
@@ -21,23 +21,23 @@
         double partialF = EvaluatePartialDerivative{{membrane_voltage_index}}({{free_variable.var_name}}, rY, delta, true);
         if (fabs(partialF) < delta)
         {
-            rY[v_index] += 0.5*evalF*mDt;
+            {{state_vec_ind_start}}v_index{{vec_ind_end}} += 0.5*evalF*mDt;
         }
         else
         {
-            rY[v_index] += (evalF/partialF)*(exp(partialF*0.5*mDt)-1.0);
+            {{state_vec_ind_start}}v_index{{vec_ind_end}} += (evalF/partialF)*(exp(partialF*0.5*mDt)-1.0);
         }
 
-        rY[v_index] = yinit;
+        {{state_vec_ind_start}}v_index{{vec_ind_end}} = yinit;
         evalF = EvaluateYDerivative{{membrane_voltage_index}}({{free_variable.var_name}}, rY);
         mEvalF[{{membrane_voltage_index}}] = evalF;
         partialF = EvaluatePartialDerivative{{membrane_voltage_index}}({{free_variable.var_name}}, rY, delta, true);
         if (fabs(partialF) < delta)
         {
-            rY[v_index] = yinit + evalF*mDt;
+            {{state_vec_ind_start}}v_index{{vec_ind_end}} = yinit + evalF*mDt;
         }
         else
         {
-            rY[v_index] = yinit + (evalF/partialF)*(exp(partialF*mDt)-1.0);
+            {{state_vec_ind_start}}v_index{{vec_ind_end}} = yinit + (evalF/partialF)*(exp(partialF*mDt)-1.0);
         }
     }

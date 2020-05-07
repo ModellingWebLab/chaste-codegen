@@ -7,11 +7,16 @@ from chaste_codegen.chaste_model import ChasteModel
 
 class CvodeChasteModel(ChasteModel):
     """ Holds template and information specific for the CVODE model type"""
-
     def __init__(self, model, file_name, **kwargs):
         super().__init__(model, file_name, **kwargs)
         self._hpp_template = 'cvode_model.hpp'
         self._cpp_template = 'cvode_model.cpp'
+        self._vars_for_template['base_class'] = 'AbstractCvodeCell'
+        self._vars_for_template['is_cvode'] = True
+        self._vars_for_template['vector_decl'] = "N_Vector"
+        self._vars_for_template['state_vec_ind_start'] = "NV_Ith_S(rY, "
+        self._vars_for_template['vec_ind_start'] = "NV_Ith_S(rDY,"
+        self._vars_for_template['vec_ind_end'] = ")"
 
         self._use_analytic_jacobian = kwargs.get('use_analytic_jacobian', False)  # store if jacobians are needed
         if self._use_analytic_jacobian:
@@ -21,7 +26,8 @@ class CvodeChasteModel(ChasteModel):
             self._jacobian_equations, self._jacobian_matrix = get_jacobian(self._state_vars, self._derivative_equations)
             self._formatted_state_vars = self._update_state_vars()
             self._vars_for_template['jacobian_equations'], self._vars_for_template['jacobian_entries'] = \
-                format_jacobian(self._jacobian_equations, self._jacobian_matrix, self._printer)
+                format_jacobian(self._jacobian_equations, self._jacobian_matrix, self._printer,
+                                self._print_rhs_with_modifiers)
         else:
             self._vars_for_template['jacobian_equations'], self._vars_for_template['jacobian_entries'] = \
                 [], sp.Matrix()

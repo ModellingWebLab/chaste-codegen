@@ -727,62 +727,62 @@ void OdeSystemInformation<Cellluo_rudy_1994FromCellMLCvode>::Initialise(void)
     this->mFreeVariableName = "time";
     this->mFreeVariableUnits = "ms";
 
-    // NV_Ith_S(rY,0):
+    // NV_Ith_S(rY, 0):
     this->mVariableNames.push_back("membrane_voltage");
     this->mVariableUnits.push_back("mV");
     this->mInitialConditions.push_back(-84.624);
 
-    // NV_Ith_S(rY,1):
+    // NV_Ith_S(rY, 1):
     this->mVariableNames.push_back("cytosolic_calcium_concentration");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(0.00012);
 
-    // NV_Ith_S(rY,2):
+    // NV_Ith_S(rY, 2):
     this->mVariableNames.push_back("fast_sodium_current_m_gate__m");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
 
-    // NV_Ith_S(rY,3):
+    // NV_Ith_S(rY, 3):
     this->mVariableNames.push_back("fast_sodium_current_h_gate__h");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.0);
 
-    // NV_Ith_S(rY,4):
+    // NV_Ith_S(rY, 4):
     this->mVariableNames.push_back("fast_sodium_current_j_gate__j");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.0);
 
-    // NV_Ith_S(rY,5):
+    // NV_Ith_S(rY, 5):
     this->mVariableNames.push_back("L_type_Ca_channel_d_gate__d");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
 
-    // NV_Ith_S(rY,6):
+    // NV_Ith_S(rY, 6):
     this->mVariableNames.push_back("L_type_Ca_channel_f_gate__f");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.0);
 
-    // NV_Ith_S(rY,7):
+    // NV_Ith_S(rY, 7):
     this->mVariableNames.push_back("time_dependent_potassium_current_X_gate__X");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
 
-    // NV_Ith_S(rY,8):
+    // NV_Ith_S(rY, 8):
     this->mVariableNames.push_back("cytosolic_sodium_concentration");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(10.0);
 
-    // NV_Ith_S(rY,9):
+    // NV_Ith_S(rY, 9):
     this->mVariableNames.push_back("cytosolic_potassium_concentration");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(145.0);
 
-    // NV_Ith_S(rY,10):
+    // NV_Ith_S(rY, 10):
     this->mVariableNames.push_back("JSR_calcium_concentration");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(1.8);
 
-    // NV_Ith_S(rY,11):
+    // NV_Ith_S(rY, 11):
     this->mVariableNames.push_back("NSR_calcium_concentration");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(1.8);

@@ -6,7 +6,7 @@ void OdeSystemInformation<{{class_name}}>::Initialise(void)
     this->mFreeVariableName = "{{free_variable.name}}";
     this->mFreeVariableUnits = "{{free_variable.units}}";
 
-    {% for ode_info in ode_system_information %}// NV_Ith_S(rY,{{loop.index0}}):
+    {% for ode_info in ode_system_information %}// {{state_vec_ind_start}}{{loop.index0}}{{vec_ind_end}}:
     this->mVariableNames.push_back("{{ode_info.name}}");
     this->mVariableUnits.push_back("{{ode_info.units}}");
     this->mInitialConditions.push_back({{ode_info.initial_value}});

@@ -25,9 +25,6 @@ class ChasteModel(object):
     It also holds relevant formatted equations and derivatives.
     Please Note: this calass cannot generate chaste code directly, instead use a subclass of the model type
     """
-    # TODO: implement and check options see https://chaste.cs.ox.ac.uk/trac/wiki/ChasteGuides/CodeGenerationFromCellML
-    # TODO: Model types Opt (lookup tables todo), BE
-
     _MEMBRANE_VOLTAGE_INDEX = 0  # default index for voltage in state vector
     _CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX = 1  # default index for cytosolic calcium concentration in state vector
     _OXMETA = 'https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#'  # oxford metadata uri prefix
@@ -188,7 +185,14 @@ class ChasteModel(object):
 
         # dict of variables to pass to the jinja2 templates
         self._vars_for_template = \
-            {'converter_version': cg.__version__,
+            {'base_class': '',
+             'is_cvode': False,
+             # indicate how to declare and call state vars and values
+             'vector_decl': 'std::vector<double>&',
+             'state_vec_ind_start': 'rY[',
+             'vec_ind_start': 'rDY[',
+             'vec_ind_end': ']',
+             'converter_version': cg.__version__,
              'model_name': self._model.name,
              'file_name': self.file_name,
              'class_name': kwargs.get('class_name', 'ModelFromCellMl'),

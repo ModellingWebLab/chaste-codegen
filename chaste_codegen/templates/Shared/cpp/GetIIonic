@@ -5,7 +5,7 @@
         if (!pStateVariables) pStateVariables = &rGetStateVariables();
         const std::vector<double>& rY = *pStateVariables;
         {% for state_var in state_vars %}
-        {%- if state_var.in_ionic %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
+        {%- if state_var.in_ionic %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : {{state_vec_ind_start}}{{loop.index0}}{{vec_ind_end}});{%- else %}{{state_vec_ind_start}}{{loop.index0}}{{vec_ind_end}};{%- endif %}
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}{% for ionic_var in ionic_vars %}
         const double {{ionic_var.lhs}} = {{ionic_var.rhs}}; // {{ionic_var.units}}

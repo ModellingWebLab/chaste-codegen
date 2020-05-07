@@ -450,77 +450,77 @@ void OdeSystemInformation<Cellzhang_SAN_model_2000_0D_capableFromCellMLCvodeData
     this->mFreeVariableName = "environment__time";
     this->mFreeVariableUnits = "millisecond";
 
-    // NV_Ith_S(rY,0):
+    // NV_Ith_S(rY, 0):
     this->mVariableNames.push_back("membrane_voltage");
     this->mVariableUnits.push_back("millivolt");
     this->mInitialConditions.push_back(-39.013558536);
 
-    // NV_Ith_S(rY,1):
+    // NV_Ith_S(rY, 1):
     this->mVariableNames.push_back("sodium_current_m_gate__m");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.092361701692);
 
-    // NV_Ith_S(rY,2):
+    // NV_Ith_S(rY, 2):
     this->mVariableNames.push_back("sodium_current_h_gate__h1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.015905380261);
 
-    // NV_Ith_S(rY,3):
+    // NV_Ith_S(rY, 3):
     this->mVariableNames.push_back("sodium_current_h_gate__h2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.01445216109);
 
-    // NV_Ith_S(rY,4):
+    // NV_Ith_S(rY, 4):
     this->mVariableNames.push_back("L_type_Ca_channel_d_gate__d_L");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.04804900895);
 
-    // NV_Ith_S(rY,5):
+    // NV_Ith_S(rY, 5):
     this->mVariableNames.push_back("L_type_Ca_channel_f_gate__f_L");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.48779845203);
 
-    // NV_Ith_S(rY,6):
+    // NV_Ith_S(rY, 6):
     this->mVariableNames.push_back("T_type_Ca_channel_d_gate__d_T");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.42074047435);
 
-    // NV_Ith_S(rY,7):
+    // NV_Ith_S(rY, 7):
     this->mVariableNames.push_back("T_type_Ca_channel_f_gate__f_T");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.038968420558);
 
-    // NV_Ith_S(rY,8):
+    // NV_Ith_S(rY, 8):
     this->mVariableNames.push_back("four_AP_sensitive_currents_q_gate__q");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.29760539675);
 
-    // NV_Ith_S(rY,9):
+    // NV_Ith_S(rY, 9):
     this->mVariableNames.push_back("four_AP_sensitive_currents_r_gate__r");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.064402950262);
 
-    // NV_Ith_S(rY,10):
+    // NV_Ith_S(rY, 10):
     this->mVariableNames.push_back("rapid_delayed_rectifying_potassium_current_P_af_gate__P_af");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.13034201158);
 
-    // NV_Ith_S(rY,11):
+    // NV_Ith_S(rY, 11):
     this->mVariableNames.push_back("rapid_delayed_rectifying_potassium_current_P_as_gate__P_as");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.46960956028);
 
-    // NV_Ith_S(rY,12):
+    // NV_Ith_S(rY, 12):
     this->mVariableNames.push_back("rapid_delayed_rectifying_potassium_current_P_i_gate__P_i");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.87993375273);
 
-    // NV_Ith_S(rY,13):
+    // NV_Ith_S(rY, 13):
     this->mVariableNames.push_back("slow_delayed_rectifying_potassium_current_xs_gate__xs");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.082293827208);
 
-    // NV_Ith_S(rY,14):
+    // NV_Ith_S(rY, 14):
     this->mVariableNames.push_back("hyperpolarisation_activated_current_y_gate__y");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.03889291759);

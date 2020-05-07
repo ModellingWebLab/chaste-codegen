@@ -8,8 +8,7 @@ class CvodeWithDataClampModel(CvodeChasteModel):
 
     def __init__(self, model, file_name, **kwargs):
         super().__init__(model, file_name, **kwargs)
-        self._hpp_template = 'cvode_with_data_clamp_model.hpp'
-        self._cpp_template = 'cvode_with_data_clamp_model.cpp'
+        self._vars_for_template['base_class'] = 'AbstractCvodeCellWithDataClamp'
 
     def _add_data_clamp_to_model(self):
         """ Add add membrane_data_clamp_current_conductance and membrane_data_clamp_current to the model"""
