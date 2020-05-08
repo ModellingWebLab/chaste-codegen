@@ -44,7 +44,6 @@
         return NV_Ith_S(mStateVariables, 1);
     }
     
-   
     CellShannon2004FromCellMLCvode::CellShannon2004FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -53,7 +52,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<CellShannon2004FromCellMLCvode>::Instance();
         Init();
 
@@ -351,8 +350,7 @@
         // Units: millimolar; Initial value: 0.1381982
         double var_chaste_interface__cytosolic_Ca_buffer__Ca_SRB = NV_Ith_S(rY, 38);
         // Units: millimolar; Initial value: 0.002143165
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_cell__V;
         const double var_Ca_buffer__Bmax_Calsequestrin = 0.14000000000000001; // millimolar

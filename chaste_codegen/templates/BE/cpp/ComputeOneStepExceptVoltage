@@ -4,16 +4,16 @@
         // Time units: millisecond
         {{vector_decl}} rY = rGetStateVariables();
         {% for state_var in state_vars %}
-        {%- if state_var.in_y_deriv and state_var.linear %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : {{state_vec_ind_start}}{{loop.index0}}{{vec_ind_end}});{%- else %}{{state_vec_ind_start}}{{loop.index0}}{{vec_ind_end}};{%- endif %}
+        {%- if state_var.in_y_deriv and state_var.linear %}double {{ state_var.var }} = {{state_var.rY_lookup}};
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}
         {% for eq in linear_equations %}const double {{eq.lhs}} = {{eq.rhs}};
         {% endfor %}
         {% for deriv in linear_deriv_eqs %}
-        {{state_vec_ind_start}}{{deriv.state_var_index}}{{vec_ind_end}} = ({{deriv.var}} + (({{deriv.g}}) * mDt)) / (1.0 - (({{deriv.h}}) * mDt));
+        rY[{{deriv.state_var_index}}] = ({{deriv.var}} + (({{deriv.g}}) * mDt)) / (1.0 - (({{deriv.h}}) * mDt));
         {%- endfor %}
         {% if nonlinear_state_vars|length > 0 %}
-        double _guess[{{nonlinear_state_vars|length}}] = {{"{"}}{%- for state_var in nonlinear_state_vars %}{% if loop.index0 > 0 %},{% endif %}{{state_vec_ind_start}}{{state_var.state_var_index}}{{vec_ind_end}}{%- endfor %}{{"}"}};
+        double _guess[{{nonlinear_state_vars|length}}] = {{"{"}}{%- for state_var in nonlinear_state_vars %}{% if loop.index0 > 0 %},{% endif %}rY[{{state_var.state_var_index}}]{%- endfor %}{{"}"}};
         CardiacNewtonSolver<{{nonlinear_state_vars|length}},{{class_name}}>* _p_solver = CardiacNewtonSolver<{{nonlinear_state_vars|length}},{{class_name}}>::Instance();
         _p_solver->Solve(*this, {{free_variable.var_name}}, _guess);
         {%- for state_var in nonlinear_state_vars %}

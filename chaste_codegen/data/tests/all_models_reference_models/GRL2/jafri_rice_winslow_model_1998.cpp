@@ -45,7 +45,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Celljafri_rice_winslow_model_1998FromCellMLGRL2>::Instance();
         Init();
 

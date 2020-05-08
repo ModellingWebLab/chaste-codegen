@@ -1,0 +1,8 @@
+{% if is_cvode is defined and is_cvode  %}{% set solver = "pOdeSolver"%}{% else %}{% set solver = "pSolver"%}{% endif %}
+    {{class_name}}::{{class_name}}(boost::shared_ptr<AbstractIvpOdeSolver> {{solver}}{%- if is_cvode is defined and is_cvode  %} /* unused; should be empty */{% endif %}, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+        : {% if modifiers|length > 0 %}AbstractCardiacCellWithModifiers<{% endif%}{{base_class}}{%- if modifiers|length > 0 %} >{% endif%}(
+                {{solver}},
+                {{state_vars|length}},
+                {{membrane_voltage_index}},
+                pIntracellularStimulus)
+    {

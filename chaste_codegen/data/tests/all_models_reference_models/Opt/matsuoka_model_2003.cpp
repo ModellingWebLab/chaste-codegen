@@ -327,6 +327,7 @@
         else
         {
             d_dt_chaste_interface_var_membrane__Vm = (-var_L_type_Ca_channel__i_CaL_Ca - var_L_type_Ca_channel__i_CaL_K - var_L_type_Ca_channel__i_CaL_Na - var_T_type_Ca_channel__i_Ca_T - var_background_Cab_current__i_Cab - var_background_KATP_current__i_KATP - var_background_Kpl_current__i_Kpl - var_background_NSC_current__i_bNSC_K - var_background_NSC_current__i_bNSC_Na - var_background_lCa_current__i_lCa_K - var_background_lCa_current__i_lCa_Na - var_membrane__i_ext - var_rapid_time_dependent_potassium_current__i_Kr - var_slow_time_dependent_potassium_current__i_Ks_K - var_slow_time_dependent_potassium_current__i_Ks_Na - var_sodium_calcium_exchanger__i_NaCa - var_sodium_current__i_Na_K - var_sodium_current__i_Na_Na - var_sodium_potassium_pump__i_NaK - var_time_independent_potassium_current__i_K1 - var_transient_outward_current__i_to_K - var_transient_outward_current__i_to_Na) / mParameters[0]; // millivolt / millisecond
+            
         }
         
         rDY[0] = d_dt_chaste_interface_var_membrane__Vm;

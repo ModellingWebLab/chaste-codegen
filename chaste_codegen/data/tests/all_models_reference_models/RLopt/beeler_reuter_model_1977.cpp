@@ -48,7 +48,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLRushLarsen>::Instance();
         Init();
 

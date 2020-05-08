@@ -45,7 +45,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellaslanidi_model_2009FromCellMLGRL2>::Instance();
         Init();
 

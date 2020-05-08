@@ -1,0 +1,11 @@
+        // Time units: millisecond
+        //
+        this->mpSystemInfo = OdeSystemInformation<{{class_name}}>::Instance();
+        Init();{%- if default_stimulus_equations.membrane_stimulus_current_duration is defined %}
+
+        // We have a default stimulus specified in the CellML file metadata
+        this->mHasDefaultStimulusFromCellML = true;{%- endif %}{%- if is_cvode is defined and is_cvode and jacobian_equations|length > 0 %}
+        mUseAnalyticJacobian = true;
+        mHasAnalyticJacobian = true;{%- endif %}
+{% include "Shared/cpp/parameters" %}
+    }

@@ -39,7 +39,6 @@
         return p_cellml_stim;
     }
 
-   
     Celllivshitz_rudy_2007FromCellMLCvode::Celllivshitz_rudy_2007FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -48,7 +47,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Celllivshitz_rudy_2007FromCellMLCvode>::Instance();
         Init();
 
@@ -234,9 +233,7 @@
         double var_chaste_interface__Ca__Ca_NSR = NV_Ith_S(rY, 16);
         // Units: mM; Initial value: 2.71518235696672
         
-        // Units: dimensionless; Initial value: 1e-12
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_cell__V;
         const double var_Ca__cmdnbar = 0.050000000000000003; // mM

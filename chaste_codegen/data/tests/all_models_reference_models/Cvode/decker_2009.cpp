@@ -44,7 +44,6 @@
         return NV_Ith_S(mStateVariables, 1);
     }
     
-   
     Celldecker_2009FromCellMLCvode::Celldecker_2009FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -53,7 +52,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Celldecker_2009FromCellMLCvode>::Instance();
         Init();
 
@@ -331,8 +330,7 @@
         // Units: mM; Initial value: 145.5689
         double var_chaste_interface__CaMK_active__CaMK_trap = NV_Ith_S(rY, 47);
         // Units: dimensionless; Initial value: 0.0018861341
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_membrane__Vm;
         const double var_CT_K_Cl__CT_K_Cl_max = 1.77e-5; // mM_per_ms

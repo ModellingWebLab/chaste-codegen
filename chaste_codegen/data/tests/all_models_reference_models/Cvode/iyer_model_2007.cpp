@@ -23,7 +23,6 @@
 #include "MathsCustomFunctions.hpp"
 
 
-   
     Celliyer_model_2007FromCellMLCvode::Celliyer_model_2007FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -32,7 +31,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Celliyer_model_2007FromCellMLCvode>::Instance();
         Init();
         
@@ -314,8 +313,7 @@
         // Units: dimensionless; Initial value: 5.65460174551007e-07
         double var_chaste_interface__IKs__O2ks = NV_Ith_S(rY, 66);
         // Units: dimensionless; Initial value: 0.0258818770122187
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
         const double var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Acap = 0.00015339999999999999; // cm2

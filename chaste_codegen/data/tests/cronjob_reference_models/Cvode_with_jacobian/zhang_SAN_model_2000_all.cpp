@@ -23,7 +23,6 @@
 #include "MathsCustomFunctions.hpp"
 
 
-   
     Cellzhang_SAN_model_2000_allFromCellMLCvode::Cellzhang_SAN_model_2000_allFromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -32,7 +31,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellzhang_SAN_model_2000_allFromCellMLCvode>::Instance();
         Init();
         mUseAnalyticJacobian = true;
@@ -281,8 +280,7 @@
         // Units: dimensionless; Initial value: 0.082293827208
         double var_chaste_interface__hyperpolarisation_activated_current_y_gate__y = NV_Ith_S(rY, 14);
         // Units: dimensionless; Initial value: 0.03889291759
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
         const double var_membrane__FCellConstant = 1.0309347; // dimensionless

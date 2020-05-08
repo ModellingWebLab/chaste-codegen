@@ -28,7 +28,6 @@
         return NV_Ith_S(mStateVariables, 1);
     }
     
-   
     Cellnoble_noble_SAN_model_1984FromCellMLCvode::Cellnoble_noble_SAN_model_1984FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -37,7 +36,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellnoble_noble_SAN_model_1984FromCellMLCvode>::Instance();
         Init();
         
@@ -175,8 +174,7 @@
         // Units: millimolar; Initial value: 3.0
         double var_chaste_interface__intracellular_potassium_concentration__Ki = NV_Ith_S(rY, 14);
         // Units: millimolar; Initial value: 140.0
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
         const double var_Na_Ca_exchanger__K_NaCa = 0.002; // nanoA

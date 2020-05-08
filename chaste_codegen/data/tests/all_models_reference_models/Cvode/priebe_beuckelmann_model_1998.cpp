@@ -44,7 +44,6 @@
         return NV_Ith_S(mStateVariables, 1);
     }
     
-   
     Cellpriebe_beuckelmann_model_1998FromCellMLCvode::Cellpriebe_beuckelmann_model_1998FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -53,7 +52,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellpriebe_beuckelmann_model_1998FromCellMLCvode>::Instance();
         Init();
 
@@ -205,11 +204,8 @@
         double var_chaste_interface__Irel__Cainfluxtrack = NV_Ith_S(rY, 14);
         // Units: mM; Initial value: -7.71120176147331e-138
         
-        // Units: dimensionless; Initial value: 1e-06
         
-        // Units: dimensionless; Initial value: 1e-06
         
-        // Units: dimensionless; Initial value: 1e-06
         double var_chaste_interface__Ionic_concentrations__Nai = NV_Ith_S(rY, 18);
         // Units: mM; Initial value: 10.0
         double var_chaste_interface__Ionic_concentrations__Ki = NV_Ith_S(rY, 19);
@@ -218,8 +214,7 @@
         // Units: mM; Initial value: 2.5
         double var_chaste_interface__Ionic_concentrations__Ca_NSR = NV_Ith_S(rY, 21);
         // Units: mM; Initial value: 2.5
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_cell__V;
         const double d_dt_chaste_interface_var_Irel__OVRLDtrack = 0; // 1 / ms

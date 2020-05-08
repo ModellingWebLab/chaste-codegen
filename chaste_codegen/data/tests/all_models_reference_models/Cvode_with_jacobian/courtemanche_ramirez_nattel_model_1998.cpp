@@ -39,7 +39,6 @@
         return p_cellml_stim;
     }
 
-   
     Cellcourtemanche_ramirez_nattel_model_1998FromCellMLCvode::Cellcourtemanche_ramirez_nattel_model_1998FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -48,7 +47,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellcourtemanche_ramirez_nattel_model_1998FromCellMLCvode>::Instance();
         Init();
 
@@ -210,8 +209,7 @@
         // Units: millimolar; Initial value: 1.488
         double var_chaste_interface__intracellular_ion_concentrations__Ca_up = NV_Ith_S(rY, 20);
         // Units: millimolar; Initial value: 1.488
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
         const double var_Ca_buffers__CMDN_max = 0.050000000000000003; // millimolar

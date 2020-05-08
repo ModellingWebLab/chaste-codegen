@@ -44,7 +44,6 @@
         return NV_Ith_S(mStateVariables, 1);
     }
     
-   
     Cellnygren_atrial_model_1998FromCellMLCvode::Cellnygren_atrial_model_1998FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -53,7 +52,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellnygren_atrial_model_1998FromCellMLCvode>::Instance();
         Init();
 
@@ -237,8 +236,7 @@
         // Units: dimensionless; Initial value: 0.4284
         double var_chaste_interface__Ca_handling_by_the_SR__F2 = NV_Ith_S(rY, 28);
         // Units: dimensionless; Initial value: 0.0028
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
         const double var_Ca_handling_by_the_SR__I_up_max = 2800.0; // picoA

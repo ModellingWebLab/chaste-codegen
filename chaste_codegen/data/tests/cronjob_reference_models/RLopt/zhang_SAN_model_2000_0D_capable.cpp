@@ -29,7 +29,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellzhang_SAN_model_2000_0D_capableFromCellMLRushLarsen>::Instance();
         Init();
         
@@ -106,11 +106,8 @@
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
         // Units: millivolt; Initial value: -39.013558536
         
-        // Units: dimensionless; Initial value: 0.092361701692
         
-        // Units: dimensionless; Initial value: 0.015905380261
         
-        // Units: dimensionless; Initial value: 0.01445216109
         double var_chaste_interface__L_type_Ca_channel_d_gate__d_L = rY[4];
         // Units: dimensionless; Initial value: 0.04804900895
         double var_chaste_interface__L_type_Ca_channel_f_gate__f_L = rY[5];

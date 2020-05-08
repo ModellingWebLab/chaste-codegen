@@ -199,6 +199,7 @@
         else
         {
             d_dt_chaste_interface_var_membrane__E = -0.001 * (var_L_type_calcium_current__i_CaL + var_T_type_calcium_current__i_CaT + var_background_potassium_current__i_bK + var_background_sodium_current__i_bNa + var_delayed_rectifying_potassium_current__i_KK + var_delayed_rectifying_potassium_current__i_KNa + var_fast_sodium_current__i_Na + var_hyperpolarising_activated_current__i_fK + var_hyperpolarising_activated_current__i_fNa + var_sodium_calcium_exchange_current__i_NaCa + var_sodium_potassium_pump__i_p) / mParameters[0]; // millivolt / millisecond
+            
         }
         
         rDY[0] = d_dt_chaste_interface_var_membrane__E;

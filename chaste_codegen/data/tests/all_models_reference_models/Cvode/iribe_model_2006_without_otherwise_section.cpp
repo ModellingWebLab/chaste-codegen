@@ -44,7 +44,6 @@
         return NV_Ith_S(mStateVariables, 1);
     }
     
-   
     Celliribe_model_2006_without_otherwise_sectionFromCellMLCvode::Celliribe_model_2006_without_otherwise_sectionFromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -53,7 +52,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Celliribe_model_2006_without_otherwise_sectionFromCellMLCvode>::Instance();
         Init();
 
@@ -205,8 +204,7 @@
         // Units: dimensionless; Initial value: 0.00023505
         double var_chaste_interface__Force__P_3 = NV_Ith_S(rY, 22);
         // Units: dimensionless; Initial value: 0.00015349
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_membrane_potential__V;
         const double var_CaMKII_factor__Tau_CaMK = 0.80000000000000004; // second

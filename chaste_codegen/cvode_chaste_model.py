@@ -12,11 +12,7 @@ class CvodeChasteModel(ChasteModel):
         self._hpp_template = 'cvode_model.hpp'
         self._cpp_template = 'cvode_model.cpp'
         self._vars_for_template['base_class'] = 'AbstractCvodeCell'
-        self._vars_for_template['is_cvode'] = True
-        self._vars_for_template['vector_decl'] = "N_Vector"
-        self._vars_for_template['state_vec_ind_start'] = "NV_Ith_S(rY, "
-        self._vars_for_template['vec_ind_start'] = "NV_Ith_S(rDY,"
-        self._vars_for_template['vec_ind_end'] = ")"
+        self._vars_for_template['vector_decl'] = "N_Vector"  # indicate how to declare state vars and values
 
         self._use_analytic_jacobian = kwargs.get('use_analytic_jacobian', False)  # store if jacobians are needed
         if self._use_analytic_jacobian:
@@ -34,6 +30,9 @@ class CvodeChasteModel(ChasteModel):
 
     def _print_modifiable_parameters(self, symbol):
         return 'NV_Ith_S(mParameters, ' + str(self._modifiable_parameters.index(symbol)) + ')'
+
+    def _format_rY_entry(self, index):
+        return 'NV_Ith_S(rY, ' + str(index) + ')'
 
     def _update_state_vars(self):
         jacobian_symbols = set()

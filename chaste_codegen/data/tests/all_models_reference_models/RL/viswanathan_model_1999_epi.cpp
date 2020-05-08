@@ -48,7 +48,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellviswanathan_model_1999_epiFromCellMLRushLarsen>::Instance();
         Init();
 

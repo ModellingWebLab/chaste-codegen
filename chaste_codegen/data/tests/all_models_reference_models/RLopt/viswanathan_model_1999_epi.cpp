@@ -48,7 +48,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellviswanathan_model_1999_epiFromCellMLRushLarsen>::Instance();
         Init();
 
@@ -138,9 +138,7 @@
         double var_chaste_interface__slow_delayed_rectifier_potassium_current_xs2_gate__xs2 = rY[11];
         // Units: dimensionless; Initial value: 0.0631269
         
-        // Units: dimensionless; Initial value: 0.011528
         
-        // Units: dimensionless; Initial value: 0.985232
         double var_chaste_interface__calcium_dynamics__Ca_JSR = rY[14];
         // Units: millimolar; Initial value: 0.817895
         double var_chaste_interface__calcium_dynamics__Ca_NSR = rY[15];

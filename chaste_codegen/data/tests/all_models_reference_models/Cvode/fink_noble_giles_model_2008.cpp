@@ -39,7 +39,6 @@
         return p_cellml_stim;
     }
 
-   
     Cellfink_noble_giles_model_2008FromCellMLCvode::Cellfink_noble_giles_model_2008FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -48,7 +47,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellfink_noble_giles_model_2008FromCellMLCvode>::Instance();
         Init();
 
@@ -236,8 +235,7 @@
         // Units: millimolar; Initial value: 7.940167
         double var_chaste_interface__K__K_i = NV_Ith_S(rY, 26);
         // Units: millimolar; Initial value: 141.0167
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_cell__V;
         const double var_Ca__V_sr = 0.0010939999999999999; // nanolitre

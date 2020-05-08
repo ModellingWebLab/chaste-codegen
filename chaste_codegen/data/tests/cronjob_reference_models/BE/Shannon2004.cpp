@@ -49,7 +49,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<CellShannon2004FromCellMLBackwardEuler>::Instance();
         Init();
 

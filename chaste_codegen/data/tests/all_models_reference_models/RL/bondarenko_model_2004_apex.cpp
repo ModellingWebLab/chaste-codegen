@@ -45,7 +45,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellbondarenko_model_2004_apexFromCellMLRushLarsen>::Instance();
         Init();
 

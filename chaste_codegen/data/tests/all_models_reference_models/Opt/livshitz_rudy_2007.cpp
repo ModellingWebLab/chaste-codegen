@@ -152,7 +152,6 @@
         double var_chaste_interface__Ca__Ca_NSR = rY[16];
         // Units: mM; Initial value: 2.71518235696672
         
-        // Units: dimensionless; Initial value: 1e-12
 
         // Mathematics
         double d_dt_chaste_interface_var_cell__V;
@@ -204,6 +203,7 @@
         else
         {
             d_dt_chaste_interface_var_cell__V = -var_cell__caiont - var_cell__kiont - var_cell__naiont; // mV / ms
+            
         }
         
         rDY[0] = d_dt_chaste_interface_var_cell__V;

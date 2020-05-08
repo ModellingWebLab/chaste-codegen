@@ -234,6 +234,7 @@
         else
         {
             d_dt_chaste_interface_var_cell__V = -var_ICaL__i_CaL - var_ICab__i_b_Ca - var_IK1__i_K1 - var_IKr__i_Kr - var_IKs__i_Ks - var_INa__i_Na - var_INaCa__i_NaCa - var_INaK__i_NaK - var_INab__i_b_Na - var_IpCa__i_p_Ca - var_IpK__i_p_K - var_Ito__i_to - var_cell__i_Stim; // millivolt / millisecond
+            
         }
         
         rDY[0] = d_dt_chaste_interface_var_cell__V;

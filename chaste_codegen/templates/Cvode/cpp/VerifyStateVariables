@@ -13,7 +13,7 @@
         const double tol = 100*this->mAbsTol;
         {{vector_decl}} rY = rGetStateVariables();
         {% for state_var in state_vars %}
-        {%- if state_var.range_low != '' or  state_var.range_high != '' %}double {{ state_var.var }} = {{state_vec_ind_start}}{{loop.index0}}{{vec_ind_end}};
+        {%- if state_var.range_low != '' or  state_var.range_high != '' %}double {{ state_var.var }} = {{state_var.rY_lookup}};
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}
         {% for state_var in state_vars %}

@@ -44,7 +44,6 @@
         return NV_Ith_S(mStateVariables, 1);
     }
     
-   
     Cellearm_noble_model_1990FromCellMLCvode::Cellearm_noble_model_1990FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -53,7 +52,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellearm_noble_model_1990FromCellMLCvode>::Instance();
         Init();
 
@@ -193,8 +192,7 @@
         // Units: millimolar; Initial value: 0.0005
         double var_chaste_interface__intracellular_calcium_concentration__Ca_Trop = NV_Ith_S(rY, 15);
         // Units: millimolar; Initial value: 0.0015
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
         const double var_L_type_calcium_current__P_Ca_L = 0.050000000000000003; // nanoA_per_millimolar

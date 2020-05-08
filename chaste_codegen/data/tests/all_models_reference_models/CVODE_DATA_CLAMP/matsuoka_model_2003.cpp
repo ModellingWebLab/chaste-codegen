@@ -39,7 +39,6 @@
         return p_cellml_stim;
     }
 
-   
     Cellmatsuoka_model_2003FromCellMLCvodeDataClamp::Cellmatsuoka_model_2003FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCellWithDataClamp(
                 pOdeSolver,
@@ -48,7 +47,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellmatsuoka_model_2003FromCellMLCvodeDataClamp>::Instance();
         Init();
 
@@ -307,8 +306,7 @@
         // Units: dimensionless; Initial value: 0.00042941813853474524
         double var_chaste_interface__NL_model__X = NV_Ith_S(rY, 36);
         // Units: micrometre; Initial value: 0.9573749975411884
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_membrane__Vm;
         const double var_ATP_production__Adenosine_Total = 5.0; // millimolar

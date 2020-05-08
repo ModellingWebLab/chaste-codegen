@@ -231,6 +231,7 @@
         else
         {
             d_dt_chaste_interface_var_membrane__V = 0.001 * (-var_Ca_independent_transient_outward_K_current__i_t - var_L_type_Ca_channel__i_Ca_L - var_Na_Ca_ion_exchanger_current__i_NaCa - var_background_currents__i_B_Ca - var_background_currents__i_B_K - var_background_currents__i_B_Na - var_hyperpolarisation_activated_current__i_f_K - var_hyperpolarisation_activated_current__i_f_Na - var_inward_rectifier__i_K1 - var_sarcolemmal_calcium_pump_current__i_Ca_P - var_sodium_current__i_Na - var_sodium_potassium_pump__i_NaK - var_steady_state_outward_K_current__i_ss - 1000.0 * GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted) * mParameters[0] / HeartConfig::Instance()->GetCapacitance()) / mParameters[0]; // millivolt / millisecond
+            
         }
         
         rDY[0] = d_dt_chaste_interface_var_membrane__V;

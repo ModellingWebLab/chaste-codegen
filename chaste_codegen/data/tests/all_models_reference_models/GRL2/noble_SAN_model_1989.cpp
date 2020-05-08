@@ -32,7 +32,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellnoble_SAN_model_1989FromCellMLGRL2>::Instance();
         Init();
         

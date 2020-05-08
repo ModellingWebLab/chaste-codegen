@@ -44,7 +44,6 @@
         return NV_Ith_S(mStateVariables, 1);
     }
     
-   
     Cellbeeler_reuter_model_1977FromCellMLCvode::Cellbeeler_reuter_model_1977FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -53,7 +52,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLCvode>::Instance();
         Init();
 
@@ -140,8 +139,7 @@
         // Units: dimensionless; Initial value: 0.994
         double var_chaste_interface__time_dependent_outward_current_x1_gate__x1 = NV_Ith_S(rY, 7);
         // Units: dimensionless; Initial value: 0.0001
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
         const double var_slow_inward_current__E_s = 7.6990712032745758 - 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai); // mV

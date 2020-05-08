@@ -43,7 +43,6 @@
         return NV_Ith_S(mStateVariables, 1);
     }
     
-   
     Cellluo_rudy_1994FromCellMLCvode::Cellluo_rudy_1994FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -52,7 +51,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellluo_rudy_1994FromCellMLCvode>::Instance();
         Init();
 
@@ -215,8 +214,7 @@
         // Units: mM; Initial value: 1.8
         double var_chaste_interface__ionic_concentrations__Ca_NSR = NV_Ith_S(rY, 11);
         // Units: mM; Initial value: 1.8
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
         const double var_L_type_Ca_channel__P_Ca = 5.4e-6; // mm_per_ms

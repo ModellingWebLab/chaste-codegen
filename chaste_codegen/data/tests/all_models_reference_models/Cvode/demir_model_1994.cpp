@@ -28,7 +28,6 @@
         return NV_Ith_S(mStateVariables, 1);
     }
     
-   
     Celldemir_model_1994FromCellMLCvode::Celldemir_model_1994FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -37,7 +36,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Celldemir_model_1994FromCellMLCvode>::Instance();
         Init();
         
@@ -207,8 +206,7 @@
         // Units: dimensionless; Initial value: 0.0007594214
         double var_chaste_interface__SR_Ca_uptake_and_release__F3 = NV_Ith_S(rY, 26);
         // Units: dimensionless; Initial value: 0.8859153
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
         const double var_L_type_Ca_channel__E_Ca_L = 46.399999999999999; // millivolt

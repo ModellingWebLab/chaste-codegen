@@ -44,7 +44,6 @@
         return NV_Ith_S(mStateVariables, 37);
     }
     
-   
     Cellgrandi2010ssFromCellMLCvode::Cellgrandi2010ssFromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -53,7 +52,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellgrandi2010ssFromCellMLCvode>::Instance();
         Init();
 
@@ -333,8 +332,7 @@
         // Units: dimensionless; Initial value: 0.000105614570409386
         double var_chaste_interface__cell__sCai = NV_Ith_S(rY, 37);
         // Units: dimensionless; Initial value: 8.85230799863012e-05
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_cell__sVm;
         const double var_cell__Bmax_CaM = 0.024; // dimensionless

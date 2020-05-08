@@ -39,7 +39,6 @@
         return p_cellml_stim;
     }
 
-   
     Cellwinslow_model_1999FromCellMLCvode::Cellwinslow_model_1999FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -48,7 +47,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellwinslow_model_1999FromCellMLCvode>::Instance();
         Init();
 
@@ -244,8 +243,7 @@
         // Units: millimolar; Initial value: 0.257
         double var_chaste_interface__intracellular_ion_concentrations__Ca_NSR = NV_Ith_S(rY, 32);
         // Units: millimolar; Initial value: 0.257
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
         const double var_L_type_Ca_current__P_Ca = 0.00031250000000000001; // cm_per_second

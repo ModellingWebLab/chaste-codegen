@@ -28,7 +28,6 @@
         return NV_Ith_S(mStateVariables, 1);
     }
     
-   
     Celldokos_model_1996FromCellMLCvode::Celldokos_model_1996FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -37,7 +36,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Celldokos_model_1996FromCellMLCvode>::Instance();
         Init();
         
@@ -207,8 +206,7 @@
         // Units: millimolar; Initial value: 140.0073
         double var_chaste_interface__ion_concentrations__Ko = NV_Ith_S(rY, 17);
         // Units: millimolar; Initial value: 5.4243
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_membrane__E;
         const double var_L_type_calcium_current__g_CaL = 0.40000000000000002; // nanoS

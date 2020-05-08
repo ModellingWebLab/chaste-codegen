@@ -44,7 +44,6 @@
         return NV_Ith_S(mStateVariables, 1);
     }
     
-   
     Cellten_tusscher_model_2006_epiFromCellMLCvode::Cellten_tusscher_model_2006_epiFromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -53,7 +52,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellten_tusscher_model_2006_epiFromCellMLCvode>::Instance();
         Init();
 
@@ -217,8 +216,7 @@
         // Units: millimolar; Initial value: 8.604
         double var_chaste_interface__potassium_dynamics__K_i = NV_Ith_S(rY, 18);
         // Units: millimolar; Initial value: 136.89
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
         const double var_calcium_background_current__g_bca = 0.00059199999999999997; // nanoS_per_picoF

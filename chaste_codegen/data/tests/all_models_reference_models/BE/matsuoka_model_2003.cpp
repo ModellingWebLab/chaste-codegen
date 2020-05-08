@@ -46,7 +46,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellmatsuoka_model_2003FromCellMLBackwardEuler>::Instance();
         Init();
 

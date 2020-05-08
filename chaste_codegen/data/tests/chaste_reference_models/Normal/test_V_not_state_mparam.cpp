@@ -58,8 +58,6 @@
     {
         // Inputs:
         // Time units: millisecond
-        
-        // Units: volt; Initial value: -69.1865
 
         // Mathematics
         

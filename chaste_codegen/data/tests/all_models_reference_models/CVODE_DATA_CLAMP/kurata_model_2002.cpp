@@ -23,7 +23,6 @@
 #include "MathsCustomFunctions.hpp"
 
 
-   
     Cellkurata_model_2002FromCellMLCvodeDataClamp::Cellkurata_model_2002FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCellWithDataClamp(
                 pOdeSolver,
@@ -32,7 +31,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellkurata_model_2002FromCellMLCvodeDataClamp>::Instance();
         Init();
         
@@ -232,8 +231,7 @@
         // Units: millimolar; Initial value: 0.602955114871
         double var_chaste_interface__calcium_buffering__fCQ = NV_Ith_S(rY, 26);
         // Units: millimolar; Initial value: 0.260317260703
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
         const double var_AP_sensitive_currents__g_sus = 0.02; // nanoS

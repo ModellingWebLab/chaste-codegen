@@ -48,7 +48,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellten_tusscher_model_2004_epiFromCellMLGRL2>::Instance();
         Init();
 

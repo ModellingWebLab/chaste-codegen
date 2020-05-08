@@ -39,7 +39,6 @@
         return p_cellml_stim;
     }
 
-   
     Cellbondarenko_model_2004_apexFromCellMLCvode::Cellbondarenko_model_2004_apexFromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -48,7 +47,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellbondarenko_model_2004_apexFromCellMLCvode>::Instance();
         Init();
 
@@ -257,8 +256,7 @@
         // Units: dimensionless; Initial value: 0.000641229
         double var_chaste_interface__rapid_delayed_rectifier_potassium_current__I_K = NV_Ith_S(rY, 40);
         // Units: dimensionless; Initial value: 3.19129e-05
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
         const double d_dt_chaste_interface_var_non_inactivating_steady_state_potassium_current__iKss = 0; // 1 / millisecond

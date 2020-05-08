@@ -23,7 +23,6 @@
 #include "MathsCustomFunctions.hpp"
 
 
-   
     Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvode::Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -32,7 +31,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvode>::Instance();
         Init();
         
@@ -99,8 +98,7 @@
         // Units: dimensionless; Initial value: 0.6
         double var_chaste_interface__potassium_channel_n_gate__n = NV_Ith_S(rY, 3);
         // Units: dimensionless; Initial value: 0.325
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
         const double var_potassium_channel_n_gate__alpha_n = -0.01 * (65.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-6.5 - 0.10000000000000001 * var_chaste_interface__membrane__V)); // per_millisecond

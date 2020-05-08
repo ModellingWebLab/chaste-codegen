@@ -39,7 +39,6 @@
         return p_cellml_stim;
     }
 
-   
     Cellaslanidi_model_2009FromCellMLCvodeDataClamp::Cellaslanidi_model_2009FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCellWithDataClamp(
                 pOdeSolver,
@@ -48,7 +47,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellaslanidi_model_2009FromCellMLCvodeDataClamp>::Instance();
         Init();
 
@@ -236,8 +235,7 @@
         // Units: dimensionless; Initial value: 0.002262
         double var_chaste_interface__Ca_handling_by_the_SR__F3 = NV_Ith_S(rY, 28);
         // Units: dimensionless; Initial value: 0.612697
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
         const double var_Ca_handling_by_the_SR__I_up_max = 2.7999999999999998; // picoA

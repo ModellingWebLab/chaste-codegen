@@ -39,7 +39,6 @@
         return p_cellml_stim;
     }
 
-   
     Celljafri_rice_winslow_model_1998FromCellMLCvode::Celljafri_rice_winslow_model_1998FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -48,7 +47,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Celljafri_rice_winslow_model_1998FromCellMLCvode>::Instance();
         Init();
 
@@ -240,8 +239,7 @@
         // Units: mM; Initial value: 143.727
         double var_chaste_interface__ionic_concentrations__Ko = NV_Ith_S(rY, 30);
         // Units: mM; Initial value: 5.4
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
         const double var_L_type_Ca_channel__P_Ca = 3.375e-5; // mm_per_ms

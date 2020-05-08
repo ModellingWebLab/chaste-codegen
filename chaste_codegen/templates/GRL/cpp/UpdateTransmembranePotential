@@ -6,7 +6,7 @@
         const double delta = 1e-8;
 
         {% for deriv in y_derivative_equations %}{%- if deriv.is_voltage%}double {{deriv.lhs}};{%- endif %}{%- endfor %}
-        {% for state_var in state_vars %}{%- if state_var.in_voltage_deriv %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : {{state_vec_ind_start}}{{loop.index0}}{{vec_ind_end}});{%- else %}{{state_vec_ind_start}}{{loop.index0}}{{vec_ind_end}};{%- endif %}
+        {% for state_var in state_vars %}{%- if state_var.in_voltage_deriv %}double {{ state_var.var }} = {{state_var.rY_lookup}};
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}
 
@@ -20,10 +20,10 @@
         double partialF = EvaluatePartialDerivative{{membrane_voltage_index}}({{free_variable.var_name}}, rY, delta, true);
         if (fabs(partialF) < delta)
         {
-            {{state_vec_ind_start}}v_index{{vec_ind_end}} += evalF*mDt;
+            rY[v_index] += evalF*mDt;
         }
         else
         {
-            {{state_vec_ind_start}}v_index{{vec_ind_end}} += (evalF/partialF)*(exp(partialF*mDt)-1.0);
+            rY[v_index] += (evalF/partialF)*(exp(partialF*mDt)-1.0);
         }
     }

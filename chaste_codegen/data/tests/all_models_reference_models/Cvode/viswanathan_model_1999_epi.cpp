@@ -44,7 +44,6 @@
         return NV_Ith_S(mStateVariables, 1);
     }
     
-   
     Cellviswanathan_model_1999_epiFromCellMLCvode::Cellviswanathan_model_1999_epiFromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -53,7 +52,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellviswanathan_model_1999_epiFromCellMLCvode>::Instance();
         Init();
 
@@ -266,8 +265,7 @@
         // Units: millimolar; Initial value: 15.6748357
         double var_chaste_interface__ionic_concentrations__Ki = NV_Ith_S(rY, 24);
         // Units: millimolar; Initial value: 137.6244
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
         const double var_ATP_sensitive_potassium_current__ATPi = 3.0; // millimolar

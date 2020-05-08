@@ -186,12 +186,8 @@ class ChasteModel(object):
         # dict of variables to pass to the jinja2 templates
         self._vars_for_template = \
             {'base_class': '',
-             'is_cvode': False,
-             # indicate how to declare and call state vars and values
+             # indicate how to declare state vars and values
              'vector_decl': 'std::vector<double>&',
-             'state_vec_ind_start': 'rY[',
-             'vec_ind_start': 'rDY[',
-             'vec_ind_end': ']',
              'converter_version': cg.__version__,
              'model_name': self._model.name,
              'file_name': self.file_name,
@@ -749,6 +745,18 @@ class ChasteModel(object):
                  'initial_value': self._printer.doprint(self._get_initial_value(param))}
                 for param in self._modifiable_parameters]
 
+    def _format_rY_entry(self, index):
+        return 'rY[' + str(index) + ']'
+
+    def _format_rY_lookup(self, index, var, use_modifier=True):
+        entry = self._format_rY_entry(index)
+        if use_modifier and var in self._modifiers:
+            entry = self._format_modifier(var) +\
+                '->Calc(' + entry + ', ' + self._printer.doprint(self._time_variable) + ')'
+        if var == self._membrane_voltage_var:
+            entry = '(mSetVoltageDerivativeToZero ? this->mFixedVoltage : ' + entry + ')'
+        return entry
+
     def _format_state_variables(self):
         """ Get equations defining the derivatives including  V (self._membrane_voltage_var)"""
         def get_range_annotation(subject, annotation_tag):
@@ -787,21 +795,23 @@ class ChasteModel(object):
             derived_quant_variables.update(eq.rhs.free_symbols)
 
         formatted_state_vars = \
-            [{'var': self._printer.doprint(var),
-              'annotated_var_name': self._model.get_display_name(var, self._OXMETA),
-              'initial_value': str(self._get_initial_value(var)),
-              'modifier': self._format_modifier(var) if var in self._modifiers else None,
-              'units': self._model.units.format(self._model.units.evaluate_units(var)),
-              'in_ionic': var in ionic_var_variables,
-              'in_y_deriv': var in y_deriv_variables,
-              'in_deriv_excl_voltage': var in deriv_excl_voltage_variables,
-              'in_voltage_deriv': var in voltage_deriv_variables,
-              'in_derived_quant': var in derived_quant_variables,
-              'range_low': get_range_annotation(var, 'range-low'),
-              'range_high': get_range_annotation(var, 'range-high'),
-              'sympy_var': var,
-              'state_var_index': self._state_vars.index(var)}
-             for var in self._state_vars]
+            [{'var': self._printer.doprint(var[1]),
+              'annotated_var_name': self._model.get_display_name(var[1], self._OXMETA),
+              'rY_lookup': self._format_rY_lookup(var[0], var[1]),
+              'rY_lookup_no_modifier': self._format_rY_lookup(var[0], var[1], use_modifier=False),
+              'initial_value': str(self._get_initial_value(var[1])),
+              'modifier': self._format_modifier(var[1]) if var[1] in self._modifiers else None,
+              'units': self._model.units.format(self._model.units.evaluate_units(var[1])),
+              'in_ionic': var[1] in ionic_var_variables,
+              'in_y_deriv': var[1] in y_deriv_variables,
+              'in_deriv_excl_voltage': var[1] in deriv_excl_voltage_variables,
+              'in_voltage_deriv': var[1] in voltage_deriv_variables,
+              'in_derived_quant': var[1] in derived_quant_variables,
+              'range_low': get_range_annotation(var[1], 'range-low'),
+              'range_high': get_range_annotation(var[1], 'range-high'),
+              'sympy_var': var[1],
+              'state_var_index': self._state_vars.index(var[1])}
+             for var in enumerate(self._state_vars)]
 
         use_verify_state_variables = \
             len([eq for eq in formatted_state_vars if eq['range_low'] != '' or eq['range_high'] != '']) > 0
@@ -853,10 +863,11 @@ class ChasteModel(object):
 
     def _format_system_info(self):
         """ Format general ode system info for chaste output"""
-        return [{'name': self._model.get_display_name(var, self._OXMETA),
-                 'initial_value': str(self._get_initial_value(var)),
-                 'units': self._model.units.format(self._model.units.evaluate_units(var))}
-                for var in self._state_vars]
+        return [{'name': self._model.get_display_name(var[1], self._OXMETA),
+                 'initial_value': str(self._get_initial_value(var[1])),
+                 'units': self._model.units.format(self._model.units.evaluate_units(var[1])),
+                 'rY_lookup': self._format_rY_entry(var[0])}
+                for var in enumerate(self._state_vars)]
 
     def _format_named_attributes(self):
         """ Format named attributes for chaste output"""
