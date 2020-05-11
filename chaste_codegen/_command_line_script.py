@@ -63,8 +63,8 @@ def chaste_codegen():
                        help='add code to allow the model to be compiled to a shared library and dynamically loaded ')
     group.add_argument('--use-modifiers', dest='use_modifiers',
                        action='store_true', default=False,
-                       help='add modifier functions for certain metadata-annotated variables '
-                       'for use in sensitivity analysis only works with one of the following translate-types ' +
+                       help='add modifier functions for metadata-annotated variables (except time & stimulus) '
+                       'for use in sensitivity analysis. Only works with one of the following translator types (-t): ' +
                        str(TRANSLATORS_WITH_MODIFIERS))
 
     # process options
