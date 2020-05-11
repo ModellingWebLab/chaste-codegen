@@ -45,7 +45,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Dynamicbondarenko_model_2004_apexFromCellMLRushLarsen>::Instance();
         Init();
 
@@ -180,6 +180,8 @@
         // Units: dimensionless; Initial value: 0.00265563
         double var_chaste_interface__fast_transient_outward_potassium_current__ito_f = rY[29];
         // Units: dimensionless; Initial value: 0.999977
+        
+        
         double var_chaste_interface__slow_delayed_rectifier_potassium_current__nKs = rY[32];
         // Units: dimensionless; Initial value: 0.000262753
         double var_chaste_interface__ultra_rapidly_activating_delayed_rectifier_potassium_current__aur = rY[33];

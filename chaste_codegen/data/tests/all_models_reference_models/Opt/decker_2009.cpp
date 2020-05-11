@@ -351,7 +351,6 @@
         else
         {
             d_dt_chaste_interface_var_membrane__Vm = -var_ICaL__ICaL - var_ICab__ICab - var_IClb__IClb - var_IK1__IK1 - var_IKp__IKp - var_IKr__IKr - var_IKs__IKs - var_INa__INa - var_INaL__INaL - var_INab__INab - var_IpCa__IpCa - var_Ito1__Ito1 - var_Ito2__Ito2 - var_membrane__i_Stim - 1.0 * var_INaCa__INaCa - 1.0 * var_INaCa__INaCa_ss_sr - 1.0 * var_INaK__INaK; // mV / ms
-            
         }
         
         rDY[0] = d_dt_chaste_interface_var_membrane__Vm;

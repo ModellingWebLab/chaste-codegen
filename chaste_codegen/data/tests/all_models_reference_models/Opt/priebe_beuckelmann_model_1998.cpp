@@ -211,7 +211,6 @@
         else
         {
             d_dt_chaste_interface_var_cell__V = var_cell__dVdt; // mV / ms
-            
         }
         
         rDY[0] = d_dt_chaste_interface_var_cell__V;

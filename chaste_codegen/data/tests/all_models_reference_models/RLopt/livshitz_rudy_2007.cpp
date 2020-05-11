@@ -45,7 +45,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Celllivshitz_rudy_2007FromCellMLRushLarsen>::Instance();
         Init();
 
@@ -149,6 +149,7 @@
         // Units: mM; Initial value: 7.87371650296567
         double var_chaste_interface__Ca__Ca_NSR = rY[16];
         // Units: mM; Initial value: 2.71518235696672
+        
 
         // Mathematics
         double d_dt_chaste_interface_var_cell__V;

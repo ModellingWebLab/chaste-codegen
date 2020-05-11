@@ -203,7 +203,6 @@
         else
         {
             d_dt_chaste_interface_var_cell__V = -var_cell__caiont - var_cell__kiont - var_cell__naiont; // mV / ms
-            
         }
         
         rDY[0] = d_dt_chaste_interface_var_cell__V;

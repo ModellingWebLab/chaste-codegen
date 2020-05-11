@@ -591,8 +591,7 @@
             const double var_cell__I_tot = var_cell__I_Ca_tot + var_cell__I_Cl_tot + var_cell__I_K_tot + var_cell__I_Na_tot; // uA_per_uF
             const double var_cell__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__cell__time); // uA_per_cm2
             const double var_cell__i_Stim = var_cell__i_Stim_converter / HeartConfig::Instance()->GetCapacitance(); // uA_per_uF
-            
-            // Special handling of data clamp current here
+        // Special handling of data clamp current here
             // (we want to save expense of calling the interpolation method if possible.)
             double var_chaste_interface__membrane_data_clamp_current = 0.0;
             if (mDataClampIsOn)
@@ -600,7 +599,6 @@
                 var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__cell__time) + var_chaste_interface__cell__sVm) * NV_Ith_S(mParameters, 1); // uA_per_cm2
             }
             d_dt_chaste_interface_var_cell__sVm = -var_cell__I_tot - var_cell__i_Stim - var_chaste_interface__membrane_data_clamp_current; // millivolt / ms
-            
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_cell__sVm;

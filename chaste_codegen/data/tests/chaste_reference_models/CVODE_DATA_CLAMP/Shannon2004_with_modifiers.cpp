@@ -44,7 +44,6 @@
         return NV_Ith_S(mStateVariables, 1);
     }
     
-   
     CellShannon2004FromCellMLCvodeDataClamp::CellShannon2004FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCellWithModifiers<AbstractCvodeCellWithDataClamp >(
                 pOdeSolver,
@@ -53,15 +52,14 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<CellShannon2004FromCellMLCvodeDataClamp>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
         this->mHasDefaultStimulusFromCellML = true;
-
-        // These will get initialised to DummyModifiers in the base class method.
         
+        // These will get initialised to DummyModifiers in the base class method.
         this->AddModifier("JSR_calcium_concentration",
                           mp_JSR_calcium_concentration_modifier);
         this->AddModifier("SR_leak_current_max",
@@ -126,7 +124,6 @@
                           mp_membrane_transient_outward_current_conductance_modifier);
         this->AddModifier("membrane_voltage",
                           mp_membrane_voltage_modifier);
-        
         NV_Ith_S(this->mParameters, 0) = 5.3480000000000003e-6; // (var_Jleak_SR__KSRleak) [per_millisecond]
         NV_Ith_S(this->mParameters, 1) = 25.0; // (var_Jrel_SR__ks) [per_millisecond]
         NV_Ith_S(this->mParameters, 2) = 0.0053114; // (var_Jpump_SR__V_max) [millimolar_per_millisecond]
@@ -417,8 +414,7 @@
         // Units: millimolar; Initial value: 0.1381982
         double var_chaste_interface__cytosolic_Ca_buffer__Ca_SRB = NV_Ith_S(rY, 38);
         // Units: millimolar; Initial value: 0.002143165
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_cell__V;
         const double var_Ca_buffer__Bmax_Calsequestrin = 0.14000000000000001; // millimolar
@@ -700,8 +696,7 @@
             const double var_Itos__i_tos = mp_membrane_transient_outward_current_modifier->Calc((-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * (0.5 * var_chaste_interface__Itos_R_gate__R_tos + var_chaste_interface__Itos_Y_gate__Y_tos) * NV_Ith_S(mParameters, 13) * var_chaste_interface__Itos_X_gate__X_tos, var_chaste_interface__environment__time); // microA_per_microF
             const double var_INa__i_Na = mp_membrane_fast_sodium_current_modifier->Calc(var_INa__i_Na_SL + var_INa__i_Na_jct, var_chaste_interface__environment__time); // microA_per_microF
             const double var_INab__i_Nab = var_INab__i_Nab_SL + var_INab__i_Nab_jct; // microA_per_microF
-            
-            // Special handling of data clamp current here
+        // Special handling of data clamp current here
             // (we want to save expense of calling the interpolation method if possible.)
             double var_chaste_interface__membrane_data_clamp_current = 0.0;
             if (mDataClampIsOn)
@@ -709,7 +704,6 @@
                 var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time) + var_chaste_interface__cell__V) * NV_Ith_S(mParameters, 8); // uA_per_cm2
             }
             d_dt_chaste_interface_var_cell__V = -var_ICaL__i_CaL - var_ICab__i_Cab - var_ICap__i_Cap - var_ICl_Ca__i_Cl_Ca - var_IClb__i_Clb - var_IK1__i_K1 - var_IKp__i_Kp - var_IKr__i_Kr - var_IKs__i_Ks - var_INa__i_Na - var_INaCa__i_NaCa - var_INaK__i_NaK - var_INab__i_Nab - var_Itof__i_tof - var_Itos__i_tos - var_cell__i_Stim - var_chaste_interface__membrane_data_clamp_current; // millivolt / millisecond
-            
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_cell__V;

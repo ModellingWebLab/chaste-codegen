@@ -52,14 +52,12 @@
 
         // We have a default stimulus specified in the CellML file metadata
         this->mHasDefaultStimulusFromCellML = true;
-
-        // These will get initialised to DummyModifiers in the base class method.
         
+        // These will get initialised to DummyModifiers in the base class method.
         this->AddModifier("membrane_capacitance",
                           mp_membrane_capacitance_modifier);
         this->AddModifier("membrane_voltage",
                           mp_membrane_voltage_modifier);
-        
         this->mParameters[0] = 5.0000000000000002e-5; // (var_membrane__Cm) [nanoF]
     }
 

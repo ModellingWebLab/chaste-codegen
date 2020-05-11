@@ -477,7 +477,6 @@
         {
             const double var_membrane__V_orig_deriv = var_membrane__dVdt; // millivolt / second
             d_dt_chaste_interface_var_membrane__V = 0.001 * var_membrane__V_orig_deriv; // millivolt / millisecond
-            
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_membrane__V;

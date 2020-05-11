@@ -193,7 +193,6 @@
         else
         {
             d_dt_chaste_interface_var_membrane__V = (-var_L_type_Ca_channel__i_CaCa - var_L_type_Ca_channel__i_CaK - var_L_type_Ca_channel__i_CaNa - var_Na_Ca_exchanger__i_NaCa - var_calcium_background_current__i_Ca_b - var_fast_sodium_current__i_Na - var_non_specific_calcium_activated_current__i_ns_K - var_non_specific_calcium_activated_current__i_ns_Na - var_plateau_potassium_current__i_Kp - var_sarcolemmal_calcium_pump__i_p_Ca - var_sodium_background_current__i_Na_b - var_sodium_potassium_pump__i_NaK - var_time_dependent_potassium_current__i_K - var_time_independent_potassium_current__i_K1 - 0.0099999999999999985 * GetIntracellularAreaStimulus(var_chaste_interface__environment__time)) / mParameters[3]; // mV / ms
-            
         }
         
         rDY[0] = d_dt_chaste_interface_var_membrane__V;

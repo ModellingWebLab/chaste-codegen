@@ -91,7 +91,6 @@
         else
         {
             d_dt_chaste_interface_var_membrane__V = -19.316099999999999 - 1.0 * GetIntracellularAreaStimulus(var_chaste_interface__environment__time) - 0.29999999999999999 * var_chaste_interface__membrane__V - 36.0 * pow(var_chaste_interface__potassium_channel_n_gate__n, 4) * (87.0 + var_chaste_interface__membrane__V) - 120.0 * pow(var_chaste_interface__sodium_channel_m_gate__m, 3) * (-40.0 + var_chaste_interface__membrane__V) * var_chaste_interface__sodium_channel_h_gate__h; // millivolt / millisecond
-            
         }
         
         rDY[0] = d_dt_chaste_interface_var_membrane__V;

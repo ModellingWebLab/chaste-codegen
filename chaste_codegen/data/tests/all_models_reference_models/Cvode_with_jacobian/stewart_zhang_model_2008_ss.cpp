@@ -363,7 +363,6 @@
         {
             const double var_hyperpolarization_activated_current__i_f = var_hyperpolarization_activated_current__i_f_K + var_hyperpolarization_activated_current__i_f_Na; // picoA_per_picoF
             d_dt_chaste_interface_var_membrane__V = -1.0 * var_L_type_Ca_current__i_CaL - 1.0 * var_calcium_background_current__i_b_Ca - 1.0 * var_calcium_pump_current__i_p_Ca - 1.0 * var_fast_sodium_current__i_Na - 1.0 * var_hyperpolarization_activated_current__i_f - 1.0 * var_inward_rectifier_potassium_current__i_K1 - 1.0 * var_potassium_pump_current__i_p_K - 1.0 * var_rapid_time_dependent_potassium_current__i_Kr - 1.0 * var_slow_time_dependent_potassium_current__i_Ks - 1.0 * var_sodium_background_current__i_b_Na - 1.0 * var_sodium_calcium_exchanger_current__i_NaCa - 1.0 * var_sodium_potassium_pump_current__i_NaK - 1.0 * var_sustained_outward_current__i_sus - 1.0 * var_transient_outward_current__i_to; // millivolt / millisecond
-            
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_membrane__V;

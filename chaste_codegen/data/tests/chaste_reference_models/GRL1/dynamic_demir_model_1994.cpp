@@ -32,7 +32,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Dynamicdemir_model_1994FromCellMLGRL1>::Instance();
         Init();
         

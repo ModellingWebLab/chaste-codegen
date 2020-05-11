@@ -468,7 +468,6 @@
         {
             const double var_cell__caiont = -2.0 * var_INaCa__INaCa + var_ICaL__ICaL + var_ICab__ICab + var_IpCa__IpCa; // uA_per_uF
             d_dt_chaste_interface_var_cell__V = -var_cell__caiont - var_cell__clont - var_cell__kiont - var_cell__naiont; // mV / ms
-            
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_cell__V;

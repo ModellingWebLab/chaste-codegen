@@ -45,7 +45,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Dynamicmatsuoka_model_2003FromCellMLGRL1>::Instance();
         Init();
 

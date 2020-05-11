@@ -18,7 +18,6 @@
 #include <boost/serialization/base_object.hpp>
 #include "AbstractCardiacCellWithModifiers.hpp"
 #include "AbstractModifier.hpp"
-
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractCvodeCellWithDataClamp.hpp"
 

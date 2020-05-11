@@ -270,7 +270,6 @@
         else
         {
             d_dt_chaste_interface_var_cell__V = -var_ICaL__ICaL - var_ICab__ICab - var_IpCa__IpCa - var_cell__clont - var_cell__kiont - var_cell__naiont + 2.0 * var_INaCa__INaCa; // mV / ms
-            
         }
         
         rDY[0] = d_dt_chaste_interface_var_cell__V;
