@@ -44,7 +44,6 @@
         return NV_Ith_S(mStateVariables, 1);
     }
     
-   
     Cellhund_rudy_2004_aFromCellMLCvodeDataClamp::Cellhund_rudy_2004_aFromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCellWithDataClamp(
                 pOdeSolver,
@@ -53,7 +52,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellhund_rudy_2004_aFromCellMLCvodeDataClamp>::Instance();
         Init();
 
@@ -276,8 +275,7 @@
         // Units: mM; Initial value: 1.832822335168
         double var_chaste_interface__Ca__Ca_ss = NV_Ith_S(rY, 28);
         // Units: mM; Initial value: 0.00012271265
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_cell__V;
         const double var_Ca__BSLmax = 1.1240000000000001; // mM
@@ -470,8 +468,7 @@
         else
         {
             const double var_cell__caiont = -2.0 * var_INaCa__INaCa + var_ICaL__ICaL + var_ICab__ICab + var_IpCa__IpCa; // uA_per_uF
-            
-            // Special handling of data clamp current here
+        // Special handling of data clamp current here
             // (we want to save expense of calling the interpolation method if possible.)
             double var_chaste_interface__membrane_data_clamp_current = 0.0;
             if (mDataClampIsOn)
@@ -479,7 +476,6 @@
                 var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__Environment__time) + var_chaste_interface__cell__V) * NV_Ith_S(mParameters, 1); // uA_per_cm2
             }
             d_dt_chaste_interface_var_cell__V = -var_cell__caiont - var_cell__clont - var_cell__kiont - var_cell__naiont - var_chaste_interface__membrane_data_clamp_current; // mV / ms
-            
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_cell__V;
@@ -544,147 +540,147 @@ void OdeSystemInformation<Cellhund_rudy_2004_aFromCellMLCvodeDataClamp>::Initial
     this->mFreeVariableName = "Environment__time";
     this->mFreeVariableUnits = "ms";
 
-    // NV_Ith_S(rY,0):
+    // NV_Ith_S(rY, 0):
     this->mVariableNames.push_back("membrane_voltage");
     this->mVariableUnits.push_back("mV");
     this->mInitialConditions.push_back(-85.781844107117);
 
-    // NV_Ith_S(rY,1):
+    // NV_Ith_S(rY, 1):
     this->mVariableNames.push_back("cytosolic_calcium_concentration");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(0.00012131666);
 
-    // NV_Ith_S(rY,2):
+    // NV_Ith_S(rY, 2):
     this->mVariableNames.push_back("INa__H");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.987317750543);
 
-    // NV_Ith_S(rY,3):
+    // NV_Ith_S(rY, 3):
     this->mVariableNames.push_back("INa__m");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.001356538159);
 
-    // NV_Ith_S(rY,4):
+    // NV_Ith_S(rY, 4):
     this->mVariableNames.push_back("INa__J");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.991924983076);
 
-    // NV_Ith_S(rY,5):
+    // NV_Ith_S(rY, 5):
     this->mVariableNames.push_back("ICaL__d");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.64013e-06);
 
-    // NV_Ith_S(rY,6):
+    // NV_Ith_S(rY, 6):
     this->mVariableNames.push_back("ICaL__dp");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(8.98230672628);
 
-    // NV_Ith_S(rY,7):
+    // NV_Ith_S(rY, 7):
     this->mVariableNames.push_back("ICaL__f");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.999961508634);
 
-    // NV_Ith_S(rY,8):
+    // NV_Ith_S(rY, 8):
     this->mVariableNames.push_back("ICaL__fca");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.97836624923);
 
-    // NV_Ith_S(rY,9):
+    // NV_Ith_S(rY, 9):
     this->mVariableNames.push_back("ICaL__fca2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.893052931249);
 
-    // NV_Ith_S(rY,10):
+    // NV_Ith_S(rY, 10):
     this->mVariableNames.push_back("ICaL__f2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.992234519148);
 
-    // NV_Ith_S(rY,11):
+    // NV_Ith_S(rY, 11):
     this->mVariableNames.push_back("IKr__xr");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(7.24074e-06);
 
-    // NV_Ith_S(rY,12):
+    // NV_Ith_S(rY, 12):
     this->mVariableNames.push_back("IKs__xs1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.019883138161);
 
-    // NV_Ith_S(rY,13):
+    // NV_Ith_S(rY, 13):
     this->mVariableNames.push_back("IKs__xs2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.019890650554);
 
-    // NV_Ith_S(rY,14):
+    // NV_Ith_S(rY, 14):
     this->mVariableNames.push_back("Ito__ydv");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.013970786703);
 
-    // NV_Ith_S(rY,15):
+    // NV_Ith_S(rY, 15):
     this->mVariableNames.push_back("Ito__ydv2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.99996472752);
 
-    // NV_Ith_S(rY,16):
+    // NV_Ith_S(rY, 16):
     this->mVariableNames.push_back("Ito__zdv");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.829206149767);
 
-    // NV_Ith_S(rY,17):
+    // NV_Ith_S(rY, 17):
     this->mVariableNames.push_back("Ito2__AA");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000816605172);
 
-    // NV_Ith_S(rY,18):
+    // NV_Ith_S(rY, 18):
     this->mVariableNames.push_back("INal__mL");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.001356538159);
 
-    // NV_Ith_S(rY,19):
+    // NV_Ith_S(rY, 19):
     this->mVariableNames.push_back("INal__hL");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.26130711759);
 
-    // NV_Ith_S(rY,20):
+    // NV_Ith_S(rY, 20):
     this->mVariableNames.push_back("Irel__CaMKtrap");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.021123704774);
 
-    // NV_Ith_S(rY,21):
+    // NV_Ith_S(rY, 21):
     this->mVariableNames.push_back("Irel__ro");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0);
 
-    // NV_Ith_S(rY,22):
+    // NV_Ith_S(rY, 22):
     this->mVariableNames.push_back("Irel__ri");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.862666650318);
 
-    // NV_Ith_S(rY,23):
+    // NV_Ith_S(rY, 23):
     this->mVariableNames.push_back("Na__Na_i");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(12.972433387269);
 
-    // NV_Ith_S(rY,24):
+    // NV_Ith_S(rY, 24):
     this->mVariableNames.push_back("K__K_i");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(135.469546216758);
 
-    // NV_Ith_S(rY,25):
+    // NV_Ith_S(rY, 25):
     this->mVariableNames.push_back("Cl__Cl_i");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(15.59207157178);
 
-    // NV_Ith_S(rY,26):
+    // NV_Ith_S(rY, 26):
     this->mVariableNames.push_back("Ca__Ca_jsr");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(1.737580994071);
 
-    // NV_Ith_S(rY,27):
+    // NV_Ith_S(rY, 27):
     this->mVariableNames.push_back("Ca__Ca_nsr");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(1.832822335168);
 
-    // NV_Ith_S(rY,28):
+    // NV_Ith_S(rY, 28):
     this->mVariableNames.push_back("Ca__Ca_ss");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(0.00012271265);

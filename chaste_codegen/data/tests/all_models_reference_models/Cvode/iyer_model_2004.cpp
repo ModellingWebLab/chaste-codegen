@@ -23,7 +23,6 @@
 #include "MathsCustomFunctions.hpp"
 
 
-   
     Celliyer_model_2004FromCellMLCvode::Celliyer_model_2004FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -32,7 +31,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Celliyer_model_2004FromCellMLCvode>::Instance();
         Init();
         
@@ -313,8 +312,7 @@
         // Units: dimensionless; Initial value: 2.491710696e-07
         double var_chaste_interface__IKs__O2ks = NV_Ith_S(rY, 66);
         // Units: dimensionless; Initial value: 1.298547822e-05
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
         const double var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Acap = 0.00015339999999999999; // cm2
@@ -810,7 +808,6 @@
             const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__Ito1 = var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKv14 + var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKv43; // uA_per_uF
             const double var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__i_tot = var_COMPUTE_ICa_ICaK__ICa + var_COMPUTE_ICa_ICaK__ICaK + var_COMPUTE_INaK_INaCa_ICab_IpCa__ICab + var_COMPUTE_INaK_INaCa_ICab_IpCa__INaCa + var_COMPUTE_INaK_INaCa_ICab_IpCa__INaK + var_COMPUTE_INaK_INaCa_ICab_IpCa__IpCa + var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IK1 + var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKr + var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKs + var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__INa + var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__INab + var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__Ito1 + var_I_stimulus__i_Stim; // uA_per_uF
             d_dt_chaste_interface_var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = -var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__i_tot; // mV / ms
-            
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
@@ -903,337 +900,337 @@ void OdeSystemInformation<Celliyer_model_2004FromCellMLCvode>::Initialise(void)
     this->mFreeVariableName = "environment__time";
     this->mFreeVariableUnits = "ms";
 
-    // NV_Ith_S(rY,0):
+    // NV_Ith_S(rY, 0):
     this->mVariableNames.push_back("membrane_voltage");
     this->mVariableUnits.push_back("mV");
     this->mInitialConditions.push_back(-90.65755929);
 
-    // NV_Ith_S(rY,1):
+    // NV_Ith_S(rY, 1):
     this->mVariableNames.push_back("COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(9.798304162);
 
-    // NV_Ith_S(rY,2):
+    // NV_Ith_S(rY, 2):
     this->mVariableNames.push_back("COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(125.5589432);
 
-    // NV_Ith_S(rY,3):
+    // NV_Ith_S(rY, 3):
     this->mVariableNames.push_back("COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(8.601192016e-05);
 
-    // NV_Ith_S(rY,4):
+    // NV_Ith_S(rY, 4):
     this->mVariableNames.push_back("COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(0.0001420215245);
 
-    // NV_Ith_S(rY,5):
+    // NV_Ith_S(rY, 5):
     this->mVariableNames.push_back("COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(0.2852239446);
 
-    // NV_Ith_S(rY,6):
+    // NV_Ith_S(rY, 6):
     this->mVariableNames.push_back("COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaNSR");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(0.2855294915);
 
-    // NV_Ith_S(rY,7):
+    // NV_Ith_S(rY, 7):
     this->mVariableNames.push_back("COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__LTRPNCa");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.08046584973);
 
-    // NV_Ith_S(rY,8):
+    // NV_Ith_S(rY, 8):
     this->mVariableNames.push_back("COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__HTRPNCa");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9772152481);
 
-    // NV_Ith_S(rY,9):
+    // NV_Ith_S(rY, 9):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__C1_RyR");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.4448038946);
 
-    // NV_Ith_S(rY,10):
+    // NV_Ith_S(rY, 10):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O2_RyR");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(3.97392006e-09);
 
-    // NV_Ith_S(rY,11):
+    // NV_Ith_S(rY, 11):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__C2_RyR");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.554535924);
 
-    // NV_Ith_S(rY,12):
+    // NV_Ith_S(rY, 12):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0006601783287);
 
-    // NV_Ith_S(rY,13):
+    // NV_Ith_S(rY, 13):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C0");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.8621934054);
 
-    // NV_Ith_S(rY,14):
+    // NV_Ith_S(rY, 14):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.01141398211);
 
-    // NV_Ith_S(rY,15):
+    // NV_Ith_S(rY, 15):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(5.666325225e-05);
 
-    // NV_Ith_S(rY,16):
+    // NV_Ith_S(rY, 16):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C3");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.25021357e-07);
 
-    // NV_Ith_S(rY,17):
+    // NV_Ith_S(rY, 17):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C4");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.034426748e-10);
 
-    // NV_Ith_S(rY,18):
+    // NV_Ith_S(rY, 18):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__CCa0");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.1198547081);
 
-    // NV_Ith_S(rY,19):
+    // NV_Ith_S(rY, 19):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__CCa1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.006346794302);
 
-    // NV_Ith_S(rY,20):
+    // NV_Ith_S(rY, 20):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__CCa2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0001260326488);
 
-    // NV_Ith_S(rY,21):
+    // NV_Ith_S(rY, 21):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__CCa3");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.112315238e-06);
 
-    // NV_Ith_S(rY,22):
+    // NV_Ith_S(rY, 22):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__CCa4");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(3.681315892e-09);
 
-    // NV_Ith_S(rY,23):
+    // NV_Ith_S(rY, 23):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__Open");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(7.757981563e-12);
 
-    // NV_Ith_S(rY,24):
+    // NV_Ith_S(rY, 24):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9997157074);
 
-    // NV_Ith_S(rY,25):
+    // NV_Ith_S(rY, 25):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C0Kv43");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9513721351);
 
-    // NV_Ith_S(rY,26):
+    // NV_Ith_S(rY, 26):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C1Kv43");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.02668288089);
 
-    // NV_Ith_S(rY,27):
+    // NV_Ith_S(rY, 27):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C2Kv43");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0002806380358);
 
-    // NV_Ith_S(rY,28):
+    // NV_Ith_S(rY, 28):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C3Kv43");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.311837579e-06);
 
-    // NV_Ith_S(rY,29):
+    // NV_Ith_S(rY, 29):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__OKv43");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(2.29955624e-09);
 
-    // NV_Ith_S(rY,30):
+    // NV_Ith_S(rY, 30):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI0Kv43");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.01513025204);
 
-    // NV_Ith_S(rY,31):
+    // NV_Ith_S(rY, 31):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI1Kv43");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.005442964601);
 
-    // NV_Ith_S(rY,32):
+    // NV_Ith_S(rY, 32):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI2Kv43");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0009918373359);
 
-    // NV_Ith_S(rY,33):
+    // NV_Ith_S(rY, 33):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI3Kv43");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(9.514386057e-05);
 
-    // NV_Ith_S(rY,34):
+    // NV_Ith_S(rY, 34):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__OIKv43");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(2.742677382e-06);
 
-    // NV_Ith_S(rY,35):
+    // NV_Ith_S(rY, 35):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C0Kv14");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.5977099765);
 
-    // NV_Ith_S(rY,36):
+    // NV_Ith_S(rY, 36):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C1Kv14");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.1730990528);
 
-    // NV_Ith_S(rY,37):
+    // NV_Ith_S(rY, 37):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C2Kv14");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.01881072386);
 
-    // NV_Ith_S(rY,38):
+    // NV_Ith_S(rY, 38):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C3Kv14");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000916070135);
 
-    // NV_Ith_S(rY,39):
+    // NV_Ith_S(rY, 39):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__OKv14");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.975541357e-05);
 
-    // NV_Ith_S(rY,40):
+    // NV_Ith_S(rY, 40):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__CI0Kv14");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.03539084346);
 
-    // NV_Ith_S(rY,41):
+    // NV_Ith_S(rY, 41):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__CI1Kv14");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.005428824353);
 
-    // NV_Ith_S(rY,42):
+    // NV_Ith_S(rY, 42):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__CI2Kv14");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.02287858869);
 
-    // NV_Ith_S(rY,43):
+    // NV_Ith_S(rY, 43):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__CI3Kv14");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.03233800003);
 
-    // NV_Ith_S(rY,44):
+    // NV_Ith_S(rY, 44):
     this->mVariableNames.push_back("COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__OIKv14");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.1134082058);
 
-    // NV_Ith_S(rY,45):
+    // NV_Ith_S(rY, 45):
     this->mVariableNames.push_back("INa__na1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.1437575649);
 
-    // NV_Ith_S(rY,46):
+    // NV_Ith_S(rY, 46):
     this->mVariableNames.push_back("INa__na2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0417776208);
 
-    // NV_Ith_S(rY,47):
+    // NV_Ith_S(rY, 47):
     this->mVariableNames.push_back("INa__na3");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.004552898364);
 
-    // NV_Ith_S(rY,48):
+    // NV_Ith_S(rY, 48):
     this->mVariableNames.push_back("INa__na4");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000220520743);
 
-    // NV_Ith_S(rY,49):
+    // NV_Ith_S(rY, 49):
     this->mVariableNames.push_back("INa__na5");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(4.005266484e-06);
 
-    // NV_Ith_S(rY,50):
+    // NV_Ith_S(rY, 50):
     this->mVariableNames.push_back("INa__na6");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.57442749e-08);
 
-    // NV_Ith_S(rY,51):
+    // NV_Ith_S(rY, 51):
     this->mVariableNames.push_back("INa__na7");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(2.856607179e-09);
 
-    // NV_Ith_S(rY,52):
+    // NV_Ith_S(rY, 52):
     this->mVariableNames.push_back("INa__na8");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.4749950008);
 
-    // NV_Ith_S(rY,53):
+    // NV_Ith_S(rY, 53):
     this->mVariableNames.push_back("INa__na9");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.2707214097);
 
-    // NV_Ith_S(rY,54):
+    // NV_Ith_S(rY, 54):
     this->mVariableNames.push_back("INa__na10");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.05786120057);
 
-    // NV_Ith_S(rY,55):
+    // NV_Ith_S(rY, 55):
     this->mVariableNames.push_back("INa__na11");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.005496292279);
 
-    // NV_Ith_S(rY,56):
+    // NV_Ith_S(rY, 56):
     this->mVariableNames.push_back("INa__na12");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0001957874519);
 
-    // NV_Ith_S(rY,57):
+    // NV_Ith_S(rY, 57):
     this->mVariableNames.push_back("INa__na13");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000417679396);
 
-    // NV_Ith_S(rY,58):
+    // NV_Ith_S(rY, 58):
     this->mVariableNames.push_back("IKr__C1Herg");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.996697338);
 
-    // NV_Ith_S(rY,59):
+    // NV_Ith_S(rY, 59):
     this->mVariableNames.push_back("IKr__C2Herg");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0004340879648);
 
-    // NV_Ith_S(rY,60):
+    // NV_Ith_S(rY, 60):
     this->mVariableNames.push_back("IKr__C3Herg");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(7.634099755e-05);
 
-    // NV_Ith_S(rY,61):
+    // NV_Ith_S(rY, 61):
     this->mVariableNames.push_back("IKr__OHerg");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(9.511789113e-06);
 
-    // NV_Ith_S(rY,62):
+    // NV_Ith_S(rY, 62):
     this->mVariableNames.push_back("IKr__IHerg");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.533347007e-06);
 
-    // NV_Ith_S(rY,63):
+    // NV_Ith_S(rY, 63):
     this->mVariableNames.push_back("IKs__C0ks");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9645606295);
 
-    // NV_Ith_S(rY,64):
+    // NV_Ith_S(rY, 64):
     this->mVariableNames.push_back("IKs__C1ks");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.03542613568);
 
-    // NV_Ith_S(rY,65):
+    // NV_Ith_S(rY, 65):
     this->mVariableNames.push_back("IKs__O1ks");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(2.491710696e-07);
 
-    // NV_Ith_S(rY,66):
+    // NV_Ith_S(rY, 66):
     this->mVariableNames.push_back("IKs__O2ks");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.298547822e-05);

@@ -3,7 +3,8 @@
 #include "CardiacNewtonSolver.hpp"
 {% include "Shared/cpp/UseCellMLDefaultStimulus" %}
 {% include "Shared/cpp/GetIntracellularCalciumConcentration" %}
-{% include "BE/cpp/constructor" %}
+{% include "BE/cpp/constructor_declaration" %}
+{% include "Shared/cpp/constructor_body" %}
 {% include "Shared/cpp/destructor" %}
 {% include "Shared/cpp/VerifyStateVariables" %}
 {% include "Shared/cpp/GetIIonic" %}

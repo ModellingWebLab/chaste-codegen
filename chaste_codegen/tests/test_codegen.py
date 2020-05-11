@@ -243,7 +243,7 @@ def test_wrong_units_time(capsys, tmp_path):
         os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'test_wrong_units_time_odes.cellml')
     chaste_model = cellmlmanip.load_model(model_file)
 
-    with pytest.raises(AssertionError) as error:
+    with pytest.raises(ValueError) as error:
         chaste_model = cg.NormalChasteModel(chaste_model,
                                             'test_wrong_units_time_odes',
                                             class_name='test_wrong_units_time_odes')
@@ -258,7 +258,7 @@ def test_wrong_units_voltage(capsys, tmp_path):
         os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'test_wrong_units_voltage.cellml')
     chaste_model = cellmlmanip.load_model(model_file)
 
-    with pytest.raises(AssertionError) as error:
+    with pytest.raises(ValueError) as error:
         chaste_model = cg.NormalChasteModel(chaste_model,
                                             'test_wrong_units_voltage',
                                             class_name='test_wrong_units_voltage')

@@ -29,7 +29,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Celliyer_model_2007FromCellMLGRL1>::Instance();
         Init();
         

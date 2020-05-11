@@ -48,7 +48,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Dynamicviswanathan_model_1999_epiFromCellMLGRL2>::Instance();
         Init();
 

@@ -29,7 +29,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellzhang_SAN_model_2000_allFromCellMLRushLarsen>::Instance();
         Init();
         

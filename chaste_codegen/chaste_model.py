@@ -25,9 +25,6 @@ class ChasteModel(object):
     It also holds relevant formatted equations and derivatives.
     Please Note: this calass cannot generate chaste code directly, instead use a subclass of the model type
     """
-    # TODO: implement and check options see https://chaste.cs.ox.ac.uk/trac/wiki/ChasteGuides/CodeGenerationFromCellML
-    # TODO: Model types Opt (lookup tables todo), BE
-
     _MEMBRANE_VOLTAGE_INDEX = 0  # default index for voltage in state vector
     _CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX = 1  # default index for cytosolic calcium concentration in state vector
     _OXMETA = 'https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#'  # oxford metadata uri prefix
@@ -135,6 +132,7 @@ class ChasteModel(object):
         self._cpp_template = ''
 
         self._is_self_excitatory = False
+        self.use_modifiers = kwargs.get('use_modifiers', False)
 
         # Store parameters for future reference
         self._model = model
@@ -158,6 +156,7 @@ class ChasteModel(object):
 
         self._in_interface.extend(self._state_vars)
 
+        self._modifiers = self._get_modifiers()
         self._modifiable_parameters = self._get_modifiable_parameters()
         self._in_interface.append(self._time_variable)
 
@@ -186,12 +185,16 @@ class ChasteModel(object):
 
         # dict of variables to pass to the jinja2 templates
         self._vars_for_template = \
-            {'converter_version': cg.__version__,
+            {'base_class': '',
+             # indicate how to declare state vars and values
+             'vector_decl': 'std::vector<double>&',
+             'converter_version': cg.__version__,
              'model_name': self._model.name,
              'file_name': self.file_name,
              'class_name': kwargs.get('class_name', 'ModelFromCellMl'),
              'header_ext': kwargs.get('header_ext', '.hpp'),
              'dynamically_loadable': kwargs.get('dynamically_loadable', False),
+             'modifiers': self._format_modifiers(),
              'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
              'use_get_intracellular_calcium_concentration':
                  self._cytosolic_calcium_concentration_var in self._state_vars,
@@ -276,11 +279,12 @@ class ChasteModel(object):
         self._set_is_metadata(time_variable, 'derived-quantity')
         try:
             # If the variable is in units that can be converted to millisecond, perform conversion
-            return self._model.convert_variable(time_variable, desired_units, DataDirectionFlow.INPUT)
+            time_var = self._model.convert_variable(time_variable, desired_units, DataDirectionFlow.INPUT)
+            return time_var
         except DimensionalityError:
             warning = 'Incorrect definition of time variable (time needs to be dimensionally equivalent to second)'
             self._logger.info(warning)
-            assert False, warning
+            raise ValueError(warning)
 
     def _annotate_if_not_statevar(self, var):
         """ If it is not a state var, annotates var as modifiable parameter or derived quantity as appropriate"""
@@ -302,7 +306,7 @@ class ChasteModel(object):
             warning = 'Incorrect definition of membrane_voltage variable '\
                       '(units of membrane_voltage need to be dimensionally equivalent to Volt)'
             self._logger.info(warning)
-            assert False, warning
+            raise ValueError(warning)
 
     def _get_cytosolic_calcium_concentration_var(self):
         """ Find the cytosolic_calcium_concentration variable if it exists"""
@@ -326,6 +330,21 @@ class ChasteModel(object):
             self._logger.info(warning)
             return cytosolic_calcium_concentration
 
+    def _get_modifiers(self):
+        """ Get the variables that can be used as modifiers, if use_modifiers is switched on.
+
+        These are all variables with annotation (including state vars)
+        except the stimulus current and time (the free variable)"""
+        modifiers = []
+        if self.use_modifiers:
+            modifiers = [m for m in self._model.variables()
+                         if self._model.has_ontology_annotation(m, self._OXMETA)
+                         and not self._model.get_ontology_terms_by_variable(m, self._OXMETA)[-1].
+                         startswith('membrane_stimulus_current')
+                         and not m == self._time_variable]
+
+        return sorted(modifiers, key=lambda m: self._model.get_display_name(m, self._OXMETA))
+
     def _get_modifiable_parameters(self):
         """ Get all modifiable parameters, either annotated as such or with other annotation.
 
@@ -333,7 +352,6 @@ class ChasteModel(object):
         tagged = self._model.get_variables_by_rdf((self._PYCMLMETA, 'modifiable-parameter'), 'yes')
         annotated = [q for q in self._model.variables()
                      if self._model.has_ontology_annotation(q, self._OXMETA)]
-
         currents = [var for var in annotated if self._model.get_ontology_terms_by_variable(var, self._OXMETA)[-1]
                     .startswith('membrane_stimulus_current')]
 
@@ -699,6 +717,22 @@ class ChasteModel(object):
         # Printer for printing variable in comments e.g. for ode system information
         self._name_printer = cg.ChastePrinter(lambda variable: get_variable_name(variable))
 
+    def _print_rhs_with_modifiers(self, modifier, eq):
+        """ Print modifiable parameters in the correct format for the model type"""
+        if modifier in self._modifiers:
+            return self._format_modifier(modifier) + '->Calc(' + self._printer.doprint(eq) + ', ' +\
+                self._printer.doprint(self._time_variable) + ')'
+        return self._printer.doprint(eq)
+
+    def _format_modifier(self, var):
+        return 'mp_' + self._model.get_display_name(var) + '_modifier'
+
+    def _format_modifiers(self):
+        """ Format the modifiers for printing to chaste code"""
+        return [{'name': self._model.get_display_name(param),
+                 'modifier': self._format_modifier(param)}
+                for param in self._modifiers]
+
     def _print_modifiable_parameters(self, variable):
         """ Print modifiable parameters in the correct format for the model type"""
         return 'mParameters[' + str(self._modifiable_parameters.index(variable)) + ']'
@@ -710,6 +744,18 @@ class ChasteModel(object):
                  'name': self._model.get_display_name(param, self._OXMETA),
                  'initial_value': self._printer.doprint(self._get_initial_value(param))}
                 for param in self._modifiable_parameters]
+
+    def _format_rY_entry(self, index):
+        return 'rY[' + str(index) + ']'
+
+    def _format_rY_lookup(self, index, var, use_modifier=True):
+        entry = self._format_rY_entry(index)
+        if use_modifier and var in self._modifiers:
+            entry = self._format_modifier(var) +\
+                '->Calc(' + entry + ', ' + self._printer.doprint(self._time_variable) + ')'
+        if var == self._membrane_voltage_var:
+            entry = '(mSetVoltageDerivativeToZero ? this->mFixedVoltage : ' + entry + ')'
+        return entry
 
     def _format_state_variables(self):
         """ Get equations defining the derivatives including  V (self._membrane_voltage_var)"""
@@ -749,20 +795,23 @@ class ChasteModel(object):
             derived_quant_variables.update(eq.rhs.free_symbols)
 
         formatted_state_vars = \
-            [{'var': self._printer.doprint(var),
-              'annotated_var_name': self._model.get_display_name(var, self._OXMETA),
-              'initial_value': str(self._get_initial_value(var)),
-              'units': self._model.units.format(self._model.units.evaluate_units(var)),
-              'in_ionic': var in ionic_var_variables,
-              'in_y_deriv': var in y_deriv_variables,
-              'in_deriv_excl_voltage': var in deriv_excl_voltage_variables,
-              'in_voltage_deriv': var in voltage_deriv_variables,
-              'in_derived_quant': var in derived_quant_variables,
-              'range_low': get_range_annotation(var, 'range-low'),
-              'range_high': get_range_annotation(var, 'range-high'),
-              'sympy_var': var,
-              'state_var_index': self._state_vars.index(var)}
-             for var in self._state_vars]
+            [{'var': self._printer.doprint(var[1]),
+              'annotated_var_name': self._model.get_display_name(var[1], self._OXMETA),
+              'rY_lookup': self._format_rY_lookup(var[0], var[1]),
+              'rY_lookup_no_modifier': self._format_rY_lookup(var[0], var[1], use_modifier=False),
+              'initial_value': str(self._get_initial_value(var[1])),
+              'modifier': self._format_modifier(var[1]) if var[1] in self._modifiers else None,
+              'units': self._model.units.format(self._model.units.evaluate_units(var[1])),
+              'in_ionic': var[1] in ionic_var_variables,
+              'in_y_deriv': var[1] in y_deriv_variables,
+              'in_deriv_excl_voltage': var[1] in deriv_excl_voltage_variables,
+              'in_voltage_deriv': var[1] in voltage_deriv_variables,
+              'in_derived_quant': var[1] in derived_quant_variables,
+              'range_low': get_range_annotation(var[1], 'range-low'),
+              'range_high': get_range_annotation(var[1], 'range-high'),
+              'sympy_var': var[1],
+              'state_var_index': self._state_vars.index(var[1])}
+             for var in enumerate(self._state_vars)]
 
         use_verify_state_variables = \
             len([eq for eq in formatted_state_vars if eq['range_low'] != '' or eq['range_high'] != '']) > 0
@@ -797,7 +846,7 @@ class ChasteModel(object):
         """Format derivative equations for chaste output"""
         # exclude ionic currents
         return [{'lhs': self._printer.doprint(eq.lhs),
-                 'rhs': self._printer.doprint(eq.rhs),
+                 'rhs': self._print_rhs_with_modifiers(eq.lhs, eq.rhs),
                  'sympy_lhs': eq.lhs,
                  'units': self._model.units.format(self._model.units.evaluate_units(eq.lhs)),
                  'in_eqs_excl_voltage': eq in self._derivative_eqs_excl_voltage,
@@ -814,10 +863,11 @@ class ChasteModel(object):
 
     def _format_system_info(self):
         """ Format general ode system info for chaste output"""
-        return [{'name': self._model.get_display_name(var, self._OXMETA),
-                 'initial_value': str(self._get_initial_value(var)),
-                 'units': self._model.units.format(self._model.units.evaluate_units(var))}
-                for var in self._state_vars]
+        return [{'name': self._model.get_display_name(var[1], self._OXMETA),
+                 'initial_value': str(self._get_initial_value(var[1])),
+                 'units': self._model.units.format(self._model.units.evaluate_units(var[1])),
+                 'rY_lookup': self._format_rY_entry(var[0])}
+                for var in enumerate(self._state_vars)]
 
     def _format_named_attributes(self):
         """ Format named attributes for chaste output"""
@@ -840,7 +890,7 @@ class ChasteModel(object):
     def _format_derived_quant_eqs(self):
         """ Format equations for derived quantities based on current settings"""
         return [{'lhs': self._printer.doprint(eq.lhs),
-                 'rhs': self._printer.doprint(eq.rhs),
+                 'rhs': self._print_rhs_with_modifiers(eq.lhs, eq.rhs),
                  'sympy_lhs': eq.lhs,
                  'units': self._model.units.format(str(self._model.units.evaluate_units(eq.lhs)))}
                 for eq in self._derived_quant_eqs]

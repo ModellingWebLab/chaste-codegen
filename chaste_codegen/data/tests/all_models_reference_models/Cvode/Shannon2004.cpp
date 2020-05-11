@@ -44,7 +44,6 @@
         return NV_Ith_S(mStateVariables, 1);
     }
     
-   
     CellShannon2004FromCellMLCvode::CellShannon2004FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -53,7 +52,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<CellShannon2004FromCellMLCvode>::Instance();
         Init();
 
@@ -349,8 +348,7 @@
         // Units: millimolar; Initial value: 0.1381982
         double var_chaste_interface__cytosolic_Ca_buffer__Ca_SRB = NV_Ith_S(rY, 38);
         // Units: millimolar; Initial value: 0.002143165
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_cell__V;
         const double var_Ca_buffer__Bmax_Calsequestrin = 0.14000000000000001; // millimolar
@@ -633,7 +631,6 @@
             const double var_INa__i_Na = var_INa__i_Na_SL + var_INa__i_Na_jct; // microA_per_microF
             const double var_INab__i_Nab = var_INab__i_Nab_SL + var_INab__i_Nab_jct; // microA_per_microF
             d_dt_chaste_interface_var_cell__V = -var_ICaL__i_CaL - var_ICab__i_Cab - var_ICap__i_Cap - var_ICl_Ca__i_Cl_Ca - var_IClb__i_Clb - var_IK1__i_K1 - var_IKp__i_Kp - var_IKr__i_Kr - var_IKs__i_Ks - var_INa__i_Na - var_INaCa__i_NaCa - var_INaK__i_NaK - var_INab__i_Nab - var_Itof__i_tof - var_Itos__i_tos - var_cell__i_Stim; // millivolt / millisecond
-            
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_cell__V;
@@ -822,197 +819,197 @@ void OdeSystemInformation<CellShannon2004FromCellMLCvode>::Initialise(void)
     this->mFreeVariableName = "time";
     this->mFreeVariableUnits = "millisecond";
 
-    // NV_Ith_S(rY,0):
+    // NV_Ith_S(rY, 0):
     this->mVariableNames.push_back("membrane_voltage");
     this->mVariableUnits.push_back("millivolt");
     this->mInitialConditions.push_back(-85.56885);
 
-    // NV_Ith_S(rY,1):
+    // NV_Ith_S(rY, 1):
     this->mVariableNames.push_back("cytosolic_calcium_concentration");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(8.597401e-05);
 
-    // NV_Ith_S(rY,2):
+    // NV_Ith_S(rY, 2):
     this->mVariableNames.push_back("membrane_fast_sodium_current_h_gate");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9867005);
 
-    // NV_Ith_S(rY,3):
+    // NV_Ith_S(rY, 3):
     this->mVariableNames.push_back("membrane_fast_sodium_current_j_gate");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.991562);
 
-    // NV_Ith_S(rY,4):
+    // NV_Ith_S(rY, 4):
     this->mVariableNames.push_back("membrane_fast_sodium_current_m_gate");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.001405627);
 
-    // NV_Ith_S(rY,5):
+    // NV_Ith_S(rY, 5):
     this->mVariableNames.push_back("IKr_Xr_gate__Xr");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.008641386);
 
-    // NV_Ith_S(rY,6):
+    // NV_Ith_S(rY, 6):
     this->mVariableNames.push_back("IKs_Xs_gate__Xs");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.005412034);
 
-    // NV_Ith_S(rY,7):
+    // NV_Ith_S(rY, 7):
     this->mVariableNames.push_back("Itos_X_gate__X_tos");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.004051574);
 
-    // NV_Ith_S(rY,8):
+    // NV_Ith_S(rY, 8):
     this->mVariableNames.push_back("Itos_Y_gate__Y_tos");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9945511);
 
-    // NV_Ith_S(rY,9):
+    // NV_Ith_S(rY, 9):
     this->mVariableNames.push_back("Itos_R_gate__R_tos");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9946);
 
-    // NV_Ith_S(rY,10):
+    // NV_Ith_S(rY, 10):
     this->mVariableNames.push_back("Itof_X_gate__X_tof");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.004051574);
 
-    // NV_Ith_S(rY,11):
+    // NV_Ith_S(rY, 11):
     this->mVariableNames.push_back("Itof_Y_gate__Y_tof");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9945511);
 
-    // NV_Ith_S(rY,12):
+    // NV_Ith_S(rY, 12):
     this->mVariableNames.push_back("membrane_L_type_calcium_current_d_gate");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(7.175662e-06);
 
-    // NV_Ith_S(rY,13):
+    // NV_Ith_S(rY, 13):
     this->mVariableNames.push_back("membrane_L_type_calcium_current_f_gate");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.000681);
 
-    // NV_Ith_S(rY,14):
+    // NV_Ith_S(rY, 14):
     this->mVariableNames.push_back("ICaL_fCa_gate__fCaB_SL");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.01452605);
 
-    // NV_Ith_S(rY,15):
+    // NV_Ith_S(rY, 15):
     this->mVariableNames.push_back("ICaL_fCa_gate__fCaB_jct");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.02421991);
 
-    // NV_Ith_S(rY,16):
+    // NV_Ith_S(rY, 16):
     this->mVariableNames.push_back("Jrel_SR__R");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.8884332);
 
-    // NV_Ith_S(rY,17):
+    // NV_Ith_S(rY, 17):
     this->mVariableNames.push_back("Jrel_SR__I");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.024274e-07);
 
-    // NV_Ith_S(rY,18):
+    // NV_Ith_S(rY, 18):
     this->mVariableNames.push_back("Jrel_SR__O");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(8.156628e-07);
 
-    // NV_Ith_S(rY,19):
+    // NV_Ith_S(rY, 19):
     this->mVariableNames.push_back("Na_buffer__Na_SL");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(8.80733);
 
-    // NV_Ith_S(rY,20):
+    // NV_Ith_S(rY, 20):
     this->mVariableNames.push_back("Na_buffer__Na_jct");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(8.80329);
 
-    // NV_Ith_S(rY,21):
+    // NV_Ith_S(rY, 21):
     this->mVariableNames.push_back("Na_buffer__Na_SL_buf");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.7720854);
 
-    // NV_Ith_S(rY,22):
+    // NV_Ith_S(rY, 22):
     this->mVariableNames.push_back("Na_buffer__Na_jct_buf");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(3.539892);
 
-    // NV_Ith_S(rY,23):
+    // NV_Ith_S(rY, 23):
     this->mVariableNames.push_back("cytosolic_sodium_concentration");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(8.80853);
 
-    // NV_Ith_S(rY,24):
+    // NV_Ith_S(rY, 24):
     this->mVariableNames.push_back("JSR_calcium_concentration");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.5545201);
 
-    // NV_Ith_S(rY,25):
+    // NV_Ith_S(rY, 25):
     this->mVariableNames.push_back("Ca_buffer__Ca_SL");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.0001031812);
 
-    // NV_Ith_S(rY,26):
+    // NV_Ith_S(rY, 26):
     this->mVariableNames.push_back("Ca_buffer__Ca_jct");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.0001737475);
 
-    // NV_Ith_S(rY,27):
+    // NV_Ith_S(rY, 27):
     this->mVariableNames.push_back("Ca_buffer__Ca_SLB_SL");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.1110363);
 
-    // NV_Ith_S(rY,28):
+    // NV_Ith_S(rY, 28):
     this->mVariableNames.push_back("Ca_buffer__Ca_SLB_jct");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.009566355);
 
-    // NV_Ith_S(rY,29):
+    // NV_Ith_S(rY, 29):
     this->mVariableNames.push_back("Ca_buffer__Ca_SLHigh_SL");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.07297378);
 
-    // NV_Ith_S(rY,30):
+    // NV_Ith_S(rY, 30):
     this->mVariableNames.push_back("Ca_buffer__Ca_SLHigh_jct");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.007347888);
 
-    // NV_Ith_S(rY,31):
+    // NV_Ith_S(rY, 31):
     this->mVariableNames.push_back("Ca_buffer__Ca_Calsequestrin");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(1.242988);
 
-    // NV_Ith_S(rY,32):
+    // NV_Ith_S(rY, 32):
     this->mVariableNames.push_back("cytosolic_Ca_buffer__Ca_TroponinC");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.008773191);
 
-    // NV_Ith_S(rY,33):
+    // NV_Ith_S(rY, 33):
     this->mVariableNames.push_back("cytosolic_Ca_buffer__Ca_TroponinC_Ca_Mg");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.1078283);
 
-    // NV_Ith_S(rY,34):
+    // NV_Ith_S(rY, 34):
     this->mVariableNames.push_back("cytosolic_Ca_buffer__Mg_TroponinC_Ca_Mg");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.01524002);
 
-    // NV_Ith_S(rY,35):
+    // NV_Ith_S(rY, 35):
     this->mVariableNames.push_back("cytosolic_Ca_buffer__Ca_Calmodulin");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.0002911916);
 
-    // NV_Ith_S(rY,36):
+    // NV_Ith_S(rY, 36):
     this->mVariableNames.push_back("cytosolic_Ca_buffer__Ca_Myosin");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.001298754);
 
-    // NV_Ith_S(rY,37):
+    // NV_Ith_S(rY, 37):
     this->mVariableNames.push_back("cytosolic_Ca_buffer__Mg_Myosin");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.1381982);
 
-    // NV_Ith_S(rY,38):
+    // NV_Ith_S(rY, 38):
     this->mVariableNames.push_back("cytosolic_Ca_buffer__Ca_SRB");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.002143165);

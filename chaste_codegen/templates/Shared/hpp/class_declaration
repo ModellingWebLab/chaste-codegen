@@ -1,16 +1,21 @@
 
-class {{class_name}} : public {{base_class}}{%- if dynamically_loadable %}, public AbstractDynamicallyLoadableEntity{%- endif %}
+class {{class_name}} : public {% if modifiers|length > 0 %}AbstractCardiacCellWithModifiers<{% endif%}{{base_class}}{%- if modifiers|length > 0 %} >{% endif%}{%- if dynamically_loadable %}, public AbstractDynamicallyLoadableEntity{%- endif %}
 {
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & archive, const unsigned int version)
     {
-        archive & boost::serialization::base_object<{{base_class}} >(*this);
+        archive & boost::serialization::base_object{%- if modifiers|length > 0 %}<AbstractCardiacCellWithModifiers{% endif%}<{{base_class}} >{%- if modifiers|length > 0 %} >{% endif%}(*this);
 {% include "Shared/hpp/AbstractDynamicallyLoadableEntity" %}
+        {%- if modifiers|length > 0 %}
+        // Despite this class having modifier member variables, they are all added to the
+        // abstract class by the constructor, and archived via that, instead of here.{%- endif %}
     }
 
     //
     // Settable parameters and readable variables
-    //
+    //{% for mod in modifiers %}
+    boost::shared_ptr<AbstractModifier> {{mod.modifier}};
+    {%- endfor %}
 
 public:

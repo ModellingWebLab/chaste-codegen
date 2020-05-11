@@ -15,23 +15,29 @@
 
 #include "ChasteSerialization.hpp"
 #include <boost/serialization/base_object.hpp>
+#include "AbstractCardiacCellWithModifiers.hpp"
+#include "AbstractModifier.hpp"
 #include "AbstractDynamicallyLoadableEntity.hpp"
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractCardiacCell.hpp"
 
-class Dynamicaslanidi_model_2009FromCellML : public AbstractCardiacCell, public AbstractDynamicallyLoadableEntity
+class Dynamicaslanidi_model_2009FromCellML : public AbstractCardiacCellWithModifiers<AbstractCardiacCell >, public AbstractDynamicallyLoadableEntity
 {
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & archive, const unsigned int version)
     {
-        archive & boost::serialization::base_object<AbstractCardiacCell >(*this);
+        archive & boost::serialization::base_object<AbstractCardiacCellWithModifiers<AbstractCardiacCell > >(*this);
         archive & boost::serialization::base_object<AbstractDynamicallyLoadableEntity>(*this);
+        // Despite this class having modifier member variables, they are all added to the
+        // abstract class by the constructor, and archived via that, instead of here.
     }
 
     //
     // Settable parameters and readable variables
     //
+    boost::shared_ptr<AbstractModifier> mp_membrane_capacitance_modifier;
+    boost::shared_ptr<AbstractModifier> mp_membrane_voltage_modifier;
 
 public:
 

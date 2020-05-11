@@ -28,7 +28,6 @@
         return NV_Ith_S(mStateVariables, 1);
     }
     
-   
     Celldemir_model_1994FromCellMLCvodeDataClamp::Celldemir_model_1994FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCellWithDataClamp(
                 pOdeSolver,
@@ -37,7 +36,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Celldemir_model_1994FromCellMLCvodeDataClamp>::Instance();
         Init();
         
@@ -208,8 +207,7 @@
         // Units: dimensionless; Initial value: 0.0007594214
         double var_chaste_interface__SR_Ca_uptake_and_release__F3 = NV_Ith_S(rY, 26);
         // Units: dimensionless; Initial value: 0.8859153
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
         const double var_L_type_Ca_channel__E_Ca_L = 46.399999999999999; // millivolt
@@ -374,8 +372,7 @@
         {
             const double var_hyperpolarisation_activated_current__i_f = var_hyperpolarisation_activated_current__i_f_K + var_hyperpolarisation_activated_current__i_f_Na; // nanoA
             const double var_linear_background_current__i_B = var_linear_background_current__i_B_Ca + var_linear_background_current__i_B_K + var_linear_background_current__i_B_Na; // nanoA
-            
-            // Special handling of data clamp current here
+        // Special handling of data clamp current here
             // (we want to save expense of calling the interpolation method if possible.)
             double var_chaste_interface__membrane_data_clamp_current = 0.0;
             if (mDataClampIsOn)
@@ -384,7 +381,6 @@
             }
             const double var_membrane__V_orig_deriv = (-var_L_type_Ca_channel__i_Ca_L - var_T_type_Ca_channel__i_Ca_T - var_calcium_pump_current__i_Ca_P - var_delayed_rectifying_potassium_current__i_K - var_hyperpolarisation_activated_current__i_f - var_linear_background_current__i_B - var_chaste_interface__membrane_data_clamp_current - var_sodium_calcium_pump__i_NaCa - var_sodium_current__i_Na - var_sodium_potassium_pump__i_NaK) / NV_Ith_S(mParameters, 0); // millivolt / second
             d_dt_chaste_interface_var_membrane__V = 0.001 * var_membrane__V_orig_deriv; // millivolt / millisecond
-            
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_membrane__V;
@@ -445,137 +441,137 @@ void OdeSystemInformation<Celldemir_model_1994FromCellMLCvodeDataClamp>::Initial
     this->mFreeVariableName = "environment__time";
     this->mFreeVariableUnits = "millisecond";
 
-    // NV_Ith_S(rY,0):
+    // NV_Ith_S(rY, 0):
     this->mVariableNames.push_back("membrane_voltage");
     this->mVariableUnits.push_back("millivolt");
     this->mInitialConditions.push_back(-49.54105);
 
-    // NV_Ith_S(rY,1):
+    // NV_Ith_S(rY, 1):
     this->mVariableNames.push_back("cytosolic_calcium_concentration");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(0.0003787018);
 
-    // NV_Ith_S(rY,2):
+    // NV_Ith_S(rY, 2):
     this->mVariableNames.push_back("sodium_current_m_gate__m");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.250113);
 
-    // NV_Ith_S(rY,3):
+    // NV_Ith_S(rY, 3):
     this->mVariableNames.push_back("sodium_current_h_gate__h1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.001386897);
 
-    // NV_Ith_S(rY,4):
+    // NV_Ith_S(rY, 4):
     this->mVariableNames.push_back("sodium_current_h_gate__h2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.002065463);
 
-    // NV_Ith_S(rY,5):
+    // NV_Ith_S(rY, 5):
     this->mVariableNames.push_back("L_type_Ca_channel_d_gate__d_L");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.002572773);
 
-    // NV_Ith_S(rY,6):
+    // NV_Ith_S(rY, 6):
     this->mVariableNames.push_back("L_type_Ca_channel_f_gate__f_L");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.98651);
 
-    // NV_Ith_S(rY,7):
+    // NV_Ith_S(rY, 7):
     this->mVariableNames.push_back("T_type_Ca_channel_d_gate__d_T");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.02012114);
 
-    // NV_Ith_S(rY,8):
+    // NV_Ith_S(rY, 8):
     this->mVariableNames.push_back("T_type_Ca_channel_f_gate__f_T");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.1945111);
 
-    // NV_Ith_S(rY,9):
+    // NV_Ith_S(rY, 9):
     this->mVariableNames.push_back("delayed_rectifying_potassium_current_P_a_gate__P_a");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.02302278);
 
-    // NV_Ith_S(rY,10):
+    // NV_Ith_S(rY, 10):
     this->mVariableNames.push_back("delayed_rectifying_potassium_current_P_i_gate__P_i");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.3777728);
 
-    // NV_Ith_S(rY,11):
+    // NV_Ith_S(rY, 11):
     this->mVariableNames.push_back("hyperpolarisation_activated_current_y_gate__y");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.09227776);
 
-    // NV_Ith_S(rY,12):
+    // NV_Ith_S(rY, 12):
     this->mVariableNames.push_back("intracellular_concentrations_and_buffer_equations__Na_i");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(9.701621);
 
-    // NV_Ith_S(rY,13):
+    // NV_Ith_S(rY, 13):
     this->mVariableNames.push_back("intracellular_concentrations_and_buffer_equations__K_i");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(140.7347);
 
-    // NV_Ith_S(rY,14):
+    // NV_Ith_S(rY, 14):
     this->mVariableNames.push_back("intracellular_concentrations_and_buffer_equations__Ca_Calmod");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.1411678);
 
-    // NV_Ith_S(rY,15):
+    // NV_Ith_S(rY, 15):
     this->mVariableNames.push_back("intracellular_concentrations_and_buffer_equations__Ca_Trop");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.07331396);
 
-    // NV_Ith_S(rY,16):
+    // NV_Ith_S(rY, 16):
     this->mVariableNames.push_back("intracellular_concentrations_and_buffer_equations__Ca_Mg_Trop");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.7618549);
 
-    // NV_Ith_S(rY,17):
+    // NV_Ith_S(rY, 17):
     this->mVariableNames.push_back("intracellular_concentrations_and_buffer_equations__Mg_Mg_Trop");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.2097049);
 
-    // NV_Ith_S(rY,18):
+    // NV_Ith_S(rY, 18):
     this->mVariableNames.push_back("cleft_space_equations__Na_c");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(139.9988);
 
-    // NV_Ith_S(rY,19):
+    // NV_Ith_S(rY, 19):
     this->mVariableNames.push_back("cleft_space_equations__Ca_c");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(2.00474);
 
-    // NV_Ith_S(rY,20):
+    // NV_Ith_S(rY, 20):
     this->mVariableNames.push_back("cleft_space_equations__K_c");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(5.389014);
 
-    // NV_Ith_S(rY,21):
+    // NV_Ith_S(rY, 21):
     this->mVariableNames.push_back("SR_Ca_uptake_and_release__Ca_up");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(16.95311);
 
-    // NV_Ith_S(rY,22):
+    // NV_Ith_S(rY, 22):
     this->mVariableNames.push_back("SR_Ca_uptake_and_release__Ca_rel");
     this->mVariableUnits.push_back("millimolar");
     this->mInitialConditions.push_back(16.85024);
 
-    // NV_Ith_S(rY,23):
+    // NV_Ith_S(rY, 23):
     this->mVariableNames.push_back("SR_Ca_uptake_and_release__Ca_Calse");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.9528726);
 
-    // NV_Ith_S(rY,24):
+    // NV_Ith_S(rY, 24):
     this->mVariableNames.push_back("SR_Ca_uptake_and_release__F1");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.1133251);
 
-    // NV_Ith_S(rY,25):
+    // NV_Ith_S(rY, 25):
     this->mVariableNames.push_back("SR_Ca_uptake_and_release__F2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0007594214);
 
-    // NV_Ith_S(rY,26):
+    // NV_Ith_S(rY, 26):
     this->mVariableNames.push_back("SR_Ca_uptake_and_release__F3");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.8859153);

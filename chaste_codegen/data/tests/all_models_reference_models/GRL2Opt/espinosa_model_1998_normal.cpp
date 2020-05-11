@@ -48,7 +48,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellespinosa_model_1998_normalFromCellMLGRL2>::Instance();
         Init();
 

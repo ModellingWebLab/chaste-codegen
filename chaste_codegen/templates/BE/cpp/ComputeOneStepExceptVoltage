@@ -2,9 +2,9 @@
     void {{class_name}}::ComputeOneStepExceptVoltage(double {{free_variable.var_name}})
     {
         // Time units: millisecond
-        std::vector<double>& rY = rGetStateVariables();
+        {{vector_decl}} rY = rGetStateVariables();
         {% for state_var in state_vars %}
-        {%- if state_var.in_y_deriv and state_var.linear %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[{{loop.index0}}]);{%- else %}rY[{{loop.index0}}];{%- endif %}
+        {%- if state_var.in_y_deriv and state_var.linear %}double {{ state_var.var }} = {{state_var.rY_lookup}};
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}
         {% for eq in linear_equations %}const double {{eq.lhs}} = {{eq.rhs}};

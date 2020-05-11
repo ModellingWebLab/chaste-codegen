@@ -1,0 +1,6 @@
+    {{class_name}}::{{class_name}}(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+        : {% if modifiers|length > 0 %}AbstractCardiacCellWithModifiers<{% endif%}{{base_class}}{%- if modifiers|length > 0 %} >{% endif%}(
+                {{state_vars|length}},
+                {{membrane_voltage_index}},
+                pIntracellularStimulus)
+    {

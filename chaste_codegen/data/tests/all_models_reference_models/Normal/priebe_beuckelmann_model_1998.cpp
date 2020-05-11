@@ -188,11 +188,8 @@
         double var_chaste_interface__Irel__Cainfluxtrack = rY[14];
         // Units: mM; Initial value: -7.71120176147331e-138
         
-        // Units: dimensionless; Initial value: 1e-06
         
-        // Units: dimensionless; Initial value: 1e-06
         
-        // Units: dimensionless; Initial value: 1e-06
         double var_chaste_interface__Ionic_concentrations__Nai = rY[18];
         // Units: mM; Initial value: 10.0
         double var_chaste_interface__Ionic_concentrations__Ki = rY[19];

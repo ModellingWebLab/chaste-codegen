@@ -1,2 +1,8 @@
-        {% for param in modifiable_parameters %}
+        {% if modifiers|length > 0 %}
+        // These will get initialised to DummyModifiers in the base class method.{%- endif %}
+        {%- for mod in modifiers %}
+        this->AddModifier("{{mod.name}}",
+                          {{mod.modifier}});
+        {%- endfor %}
+        {%- for param in modifiable_parameters %}
         {% if is_cvode is defined and is_cvode %}NV_Ith_S(this->mParameters, {{loop.index0}}){% else %}this->mParameters[{{loop.index0}}]{% endif %} = {{param["initial_value"]}}; // ({{param["comment_name"]}}) [{{param["units"]}}]{%- endfor %}

@@ -48,7 +48,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellearm_noble_model_1990FromCellMLGRL1>::Instance();
         Init();
 

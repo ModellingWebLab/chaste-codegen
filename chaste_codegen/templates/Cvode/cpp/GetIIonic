@@ -2,7 +2,7 @@
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
-        N_Vector rY;
+        {{vector_decl}} rY;
         bool made_new_cvode_vector = false;
         if (!pStateVariables)
         {
@@ -14,7 +14,7 @@
             rY = MakeNVector(*pStateVariables);
         }
         {% for state_var in state_vars %}
-        {%- if state_var.in_ionic %}double {{ state_var.var }} = {% if loop.index0 == membrane_voltage_index %}(mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, {{loop.index0}}));{%- else %}NV_Ith_S(rY, {{loop.index0}});{%- endif %}
+        {%- if state_var.in_ionic %}double {{ state_var.var }} = {{state_var.rY_lookup_no_modifier}};
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}{% for ionic_var in ionic_vars %}
         const double {{ionic_var.lhs}} = {{ionic_var.rhs}}; // {{ionic_var.units}}

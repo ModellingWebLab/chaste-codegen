@@ -44,7 +44,6 @@
         return NV_Ith_S(mStateVariables, 1);
     }
     
-   
     Cellpriebe_beuckelmann_model_1998FromCellMLCvode::Cellpriebe_beuckelmann_model_1998FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -53,7 +52,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellpriebe_beuckelmann_model_1998FromCellMLCvode>::Instance();
         Init();
 
@@ -205,11 +204,8 @@
         double var_chaste_interface__Irel__Cainfluxtrack = NV_Ith_S(rY, 14);
         // Units: mM; Initial value: -7.71120176147331e-138
         
-        // Units: dimensionless; Initial value: 1e-06
         
-        // Units: dimensionless; Initial value: 1e-06
         
-        // Units: dimensionless; Initial value: 1e-06
         double var_chaste_interface__Ionic_concentrations__Nai = NV_Ith_S(rY, 18);
         // Units: mM; Initial value: 10.0
         double var_chaste_interface__Ionic_concentrations__Ki = NV_Ith_S(rY, 19);
@@ -218,8 +214,7 @@
         // Units: mM; Initial value: 2.5
         double var_chaste_interface__Ionic_concentrations__Ca_NSR = NV_Ith_S(rY, 21);
         // Units: mM; Initial value: 2.5
-        
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_cell__V;
         const double d_dt_chaste_interface_var_Irel__OVRLDtrack = 0; // 1 / ms
@@ -346,7 +341,6 @@
         else
         {
             d_dt_chaste_interface_var_cell__V = var_cell__dVdt; // mV / ms
-            
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_cell__V;
@@ -394,112 +388,112 @@ void OdeSystemInformation<Cellpriebe_beuckelmann_model_1998FromCellMLCvode>::Ini
     this->mFreeVariableName = "environment__time";
     this->mFreeVariableUnits = "ms";
 
-    // NV_Ith_S(rY,0):
+    // NV_Ith_S(rY, 0):
     this->mVariableNames.push_back("membrane_voltage");
     this->mVariableUnits.push_back("mV");
     this->mInitialConditions.push_back(-90.7796417483135);
 
-    // NV_Ith_S(rY,1):
+    // NV_Ith_S(rY, 1):
     this->mVariableNames.push_back("cytosolic_calcium_concentration");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(0.0002);
 
-    // NV_Ith_S(rY,2):
+    // NV_Ith_S(rY, 2):
     this->mVariableNames.push_back("INa_m_gate__m");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000585525582501575);
 
-    // NV_Ith_S(rY,3):
+    // NV_Ith_S(rY, 3):
     this->mVariableNames.push_back("INa_h_gate__h");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.995865529216237);
 
-    // NV_Ith_S(rY,4):
+    // NV_Ith_S(rY, 4):
     this->mVariableNames.push_back("INa_j_gate__j");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.997011204496203);
 
-    // NV_Ith_S(rY,5):
+    // NV_Ith_S(rY, 5):
     this->mVariableNames.push_back("ICa_d_gate__d");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(2.50653215966786e-10);
 
-    // NV_Ith_S(rY,6):
+    // NV_Ith_S(rY, 6):
     this->mVariableNames.push_back("ICa_f_gate__f");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.92130376850548);
 
-    // NV_Ith_S(rY,7):
+    // NV_Ith_S(rY, 7):
     this->mVariableNames.push_back("Ito_r_gate__r");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.75032478501027e-05);
 
-    // NV_Ith_S(rY,8):
+    // NV_Ith_S(rY, 8):
     this->mVariableNames.push_back("Ito_t_gate__t");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.999897251531651);
 
-    // NV_Ith_S(rY,9):
+    // NV_Ith_S(rY, 9):
     this->mVariableNames.push_back("IKs_Xs_gate__Xs");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.00885658064818147);
 
-    // NV_Ith_S(rY,10):
+    // NV_Ith_S(rY, 10):
     this->mVariableNames.push_back("IKr_Xr_gate__Xr");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000215523048438941);
 
-    // NV_Ith_S(rY,11):
+    // NV_Ith_S(rY, 11):
     this->mVariableNames.push_back("Irel__APtrack");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(-1.372158997089e-136);
 
-    // NV_Ith_S(rY,12):
+    // NV_Ith_S(rY, 12):
     this->mVariableNames.push_back("Irel__APtrack2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(-7.58517896402761e-136);
 
-    // NV_Ith_S(rY,13):
+    // NV_Ith_S(rY, 13):
     this->mVariableNames.push_back("Irel__APtrack3");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(4.82035353592764e-05);
 
-    // NV_Ith_S(rY,14):
+    // NV_Ith_S(rY, 14):
     this->mVariableNames.push_back("Irel__Cainfluxtrack");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(-7.71120176147331e-138);
 
-    // NV_Ith_S(rY,15):
+    // NV_Ith_S(rY, 15):
     this->mVariableNames.push_back("Irel__OVRLDtrack");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1e-06);
 
-    // NV_Ith_S(rY,16):
+    // NV_Ith_S(rY, 16):
     this->mVariableNames.push_back("Irel__OVRLDtrack2");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1e-06);
 
-    // NV_Ith_S(rY,17):
+    // NV_Ith_S(rY, 17):
     this->mVariableNames.push_back("Irel__OVRLDtrack3");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1e-06);
 
-    // NV_Ith_S(rY,18):
+    // NV_Ith_S(rY, 18):
     this->mVariableNames.push_back("Ionic_concentrations__Nai");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(10.0);
 
-    // NV_Ith_S(rY,19):
+    // NV_Ith_S(rY, 19):
     this->mVariableNames.push_back("Ionic_concentrations__Ki");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(140.0);
 
-    // NV_Ith_S(rY,20):
+    // NV_Ith_S(rY, 20):
     this->mVariableNames.push_back("Ionic_concentrations__Ca_JSR");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(2.5);
 
-    // NV_Ith_S(rY,21):
+    // NV_Ith_S(rY, 21):
     this->mVariableNames.push_back("Ionic_concentrations__Ca_NSR");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(2.5);

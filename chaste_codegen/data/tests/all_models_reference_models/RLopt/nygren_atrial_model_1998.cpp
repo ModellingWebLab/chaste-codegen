@@ -48,7 +48,7 @@
                 pIntracellularStimulus)
     {
         // Time units: millisecond
-        // 
+        //
         this->mpSystemInfo = OdeSystemInformation<Cellnygren_atrial_model_1998FromCellMLRushLarsen>::Instance();
         Init();
 
