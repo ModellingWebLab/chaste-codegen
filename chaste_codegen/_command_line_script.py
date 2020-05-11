@@ -73,7 +73,8 @@ def chaste_codegen():
     if args.use_analytic_jacobian and not args.translator_class == 'CVODE':
         parser.error('--use-analytic-jacobian can only be used in combination with -t CVODE')
     if args.use_modifiers and args.translator_class not in TRANSLATORS_WITH_MODIFIERS:
-        parser.error('--use-modifiers can only be used only works with one of the following translate-types ' +
+        parser.error('--use-modifiers can only be used with one of the following translator types ' +
+
                      str(TRANSLATORS_WITH_MODIFIERS))
 
     model = cellmlmanip.load_model(args.cellml_file)
