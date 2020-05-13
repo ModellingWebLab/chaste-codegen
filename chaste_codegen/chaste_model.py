@@ -3,7 +3,8 @@ import time
 from collections import OrderedDict
 
 import sympy as sp
-from cellmlmanip.model import DataDirectionFlow
+import pint
+from cellmlmanip.model import DataDirectionFlow, Variable
 from cellmlmanip.rdf import create_rdf_node
 from cellmlmanip.units import UnitStore
 from pint import DimensionalityError
@@ -66,7 +67,8 @@ class ChasteModel(object):
                  'message': 'Membrane capacitance is required to be able to apply conversion to stimulus current!'},
              'uA_per_uF':
                 {'condition': lambda self: True,
-                 'message': ''}}
+                 'message': ''}
+            }
          }
     # Encodes conversion rules for membrane stimulus as lambda functions
     # The dict is indexed first by metadata tag then by unit (dimensionally equivalent to) the current unit
@@ -161,9 +163,10 @@ class ChasteModel(object):
         self._in_interface.append(self._time_variable)
 
         # get capacitance and update stimulus current
+        self._membrane_capacitance, self._membrane_capacitance_factor = self._get_membrane_capacitance()
         self._membrane_stimulus_current = self._get_membrane_stimulus_current()
         self._original_membrane_stimulus_current = self._membrane_stimulus_current
-        self._membrane_capacitance, self._membrane_capacitance_factor = self._get_membrane_capacitance()
+#        self._membrane_capacitance, self._membrane_capacitance_factor = self._get_membrane_capacitance()
         self._stimulus_params, self._stimulus_equations = self._get_stimulus()
         self._in_interface.extend(self._stimulus_params)
 
@@ -267,9 +270,12 @@ class ChasteModel(object):
     def _add_units(self):
         """ Add needed units to the model to allow converting time, voltage and calcium in specific units
             as well as units for converting membrane_stimulus_current."""
-        units = UnitStore(self._model.units)
+        units = self._model.units
         for unit_name, unit_defn in self._UNIT_DEFINITIONS.items():
-            units.add_unit(unit_name, unit_defn)
+            try:
+                units.add_unit(unit_name, unit_defn)
+            except ValueError:
+                pass  # already exists
         return units
 
     def _get_time_variable(self):
@@ -398,6 +404,27 @@ class ChasteModel(object):
 
     def _get_stimulus(self):
         """ Store the stimulus currents in the model"""
+        try:
+            amplitude = self._model.get_variable_by_ontology_term((self._OXMETA, "membrane_stimulus_current_amplitude"))
+            uA = self._units.get_unit('uA')
+            uA_per_cm2 = self._units.get_unit('uA_per_cm2')
+            uA_per_uF = self._units.get_unit('uA_per_uF')
+
+            chaste_membrane_capacitance = self._units.Quantity(sp.Function(self._HEARTCONFIG_GETCAPACITANCE, real=True)(), uA_per_cm2 / uA_per_uF)
+
+            self._model.units.add_conversion_rule(from_unit=uA_per_uF, to_unit=uA_per_cm2,
+                                                  rule=lambda ureg, rhs: rhs * chaste_membrane_capacitance)
+
+
+            capactiance = self._model.get_variable_by_ontology_term((self._OXMETA, "membrane_capacitance"))
+            capactiance_quant = self._units.Quantity(sp.Function(self._HEARTCONFIG_GETCAPACITANCE, real=True)() / (self._membrane_capacitance_factor * capactiance), uA_per_cm2 / uA)
+            self._model.units.add_conversion_rule(from_unit=uA, to_unit=uA_per_cm2,
+                                                  rule=lambda ureg, rhs: rhs * capactiance_quant)
+            # Convert if necessary
+            self._model.convert_variable(amplitude, uA_per_cm2, DataDirectionFlow.OUTPUT)
+        except KeyError:
+            self._logger.info(self._model.name + 'has no membrane_stimulus_current_amplitude')
+
         # get stimulus parameters
         has_stim = True
         stim_param = []
@@ -411,41 +438,8 @@ class ChasteModel(object):
         if not has_stim:
             return [], []
 
-        stim_eq = self.get_equations_for(stim_param, filter_modifiable_parameters_lhs=False)
-        return_stim_eqs = []
-        for eq in stim_eq:
-            key = self._model.get_display_name(eq.lhs, self._OXMETA)
-            factor = 1.0
-            if key in self._STIM_UNITS:
-                current_units = self._model.units.evaluate_units(eq.lhs)
-                units = None
-                for units_to_try in [self._units.get_unit(unit_dict['units']) for unit_dict in self._STIM_UNITS[key]]:
-                    if units_to_try.dimensionality == current_units.dimensionality:
-                        units = units_to_try
-                        factor = self._model.units.get_conversion_factor(from_unit=current_units, to_unit=units)
-                        if factor != 1.0:
-                            warning = 'converting ' + str(key) + ' from ' + str(current_units) + ' to ' + str(units)
-                            self._logger.info(warning)
-                        # apply convrsion rule if we have one
-                        if key in self._STIM_CONVERSION_RULES and self._units.format(units) \
-                                in self._STIM_CONVERSION_RULES[key]:
-                            warning = 'Converting ' + str(key) + ' from ' + str(units) + ' into Chaste units'
-                            self._logger.info(warning)
-                            # Error check to see if conversion is possible
-                            unit_name = self._units.format(units)
-                            assert self._STIM_CONVERSION_RULES_ERR_CHECK[key][unit_name]['condition'](self), \
-                                self._STIM_CONVERSION_RULES_ERR_CHECK[key][unit_name]['message']
-                            # Apply conversion rule
-                            units, factor, eq, additional_eqs = \
-                                self._STIM_CONVERSION_RULES[key][self._units.format(units)](
-                                    self, current_units, factor, eq)
-                            return_stim_eqs.extend(additional_eqs)
-                            # update units of the converted variable
-                        eq.lhs.units = units
-            rhs = eq.rhs if factor == 1.0 else factor * eq.rhs
-            return_stim_eqs.append(sp.Eq(eq.lhs, rhs))
-        # remove duplicates
-        return_stim_eqs = list(OrderedDict.fromkeys(return_stim_eqs))
+        return_stim_eqs = self.get_equations_for(stim_param, filter_modifiable_parameters_lhs=False)
+        return_stim_eqs = list(OrderedDict.fromkeys(return_stim_eqs))  # Order for output in template
         return stim_param, return_stim_eqs
 
     def _get_ionic_derivs(self):
