@@ -59,47 +59,6 @@ class ChasteModel(object):
 
     # Indicates error checks that should be carried out as assert <condition>, <message>
     # before conversion rules can be applied. There should be one for every conversion rule
-    # using same indexing (see below).
-    _STIM_CONVERSION_RULES_ERR_CHECK = \
-        {'membrane_stimulus_current_amplitude':
-            {'uA':
-                {'condition': lambda self: self._membrane_capacitance is not None,
-                 'message': 'Membrane capacitance is required to be able to apply conversion to stimulus current!'},
-             'uA_per_uF':
-                {'condition': lambda self: True,
-                 'message': ''}
-            }
-         }
-    # Encodes conversion rules for membrane stimulus as lambda functions
-    # The dict is indexed first by metadata tag then by unit (dimensionally equivalent to) the current unit
-    _STIM_CONVERSION_RULES = \
-        {'membrane_stimulus_current_amplitude':
-            {'uA':
-                lambda self,
-                current_units,
-                factor, eq:
-                (self._units.get_unit(self._STIM_UNITS['membrane_stimulus_current_amplitude'][0]['units']),
-                 factor / self._membrane_capacitance_factor,
-                 sp.Eq(eq.lhs,
-                       eq.rhs / self._membrane_capacitance.lhs *
-                       sp.Function(self._HEARTCONFIG_GETCAPACITANCE, real=True)()),
-                 [] if self._membrane_capacitance.lhs in self._modifiable_parameters else
-                    [self._membrane_capacitance]
-                 ),
-             'uA_per_uF':
-                lambda self,
-                current_units,
-                factor, eq:
-                (current_units,
-                 factor,
-                 sp.Eq(eq.lhs, eq.rhs * sp.Function(self._HEARTCONFIG_GETCAPACITANCE, real=True)()),
-                 [])}}
-    # Indicates which metadata tags variables used in calculating Chaste stimulus have and whether they are optional.
-    _STIM_METADATA_TAGS = \
-        {'membrane_stimulus_current_amplitude': {'optional': False},
-         'membrane_stimulus_current_duration': {'optional': False},
-         'membrane_stimulus_current_period': {'optional': False},
-         'membrane_stimulus_current_offset': {'optional': True}}
 
     _V = Wild('V')
     _W = Wild('W')
@@ -163,10 +122,9 @@ class ChasteModel(object):
         self._in_interface.append(self._time_variable)
 
         # get capacitance and update stimulus current
-        self._membrane_capacitance, self._membrane_capacitance_factor = self._get_membrane_capacitance()
         self._membrane_stimulus_current = self._get_membrane_stimulus_current()
         self._original_membrane_stimulus_current = self._membrane_stimulus_current
-#        self._membrane_capacitance, self._membrane_capacitance_factor = self._get_membrane_capacitance()
+        self._membrane_capacitance, self._membrane_capacitance_factor = self._get_membrane_capacitance()
         self._stimulus_params, self._stimulus_equations = self._get_stimulus()
         self._in_interface.extend(self._stimulus_params)
 
@@ -404,40 +362,53 @@ class ChasteModel(object):
 
     def _get_stimulus(self):
         """ Store the stimulus currents in the model"""
+        optional_stim_param = []
         try:
+            # Get required stimulus parameters
             amplitude = self._model.get_variable_by_ontology_term((self._OXMETA, "membrane_stimulus_current_amplitude"))
-            uA = self._units.get_unit('uA')
-            uA_per_cm2 = self._units.get_unit('uA_per_cm2')
-            uA_per_uF = self._units.get_unit('uA_per_uF')
-
-            chaste_membrane_capacitance = self._units.Quantity(sp.Function(self._HEARTCONFIG_GETCAPACITANCE, real=True)(), uA_per_cm2 / uA_per_uF)
-
-            self._model.units.add_conversion_rule(from_unit=uA_per_uF, to_unit=uA_per_cm2,
-                                                  rule=lambda ureg, rhs: rhs * chaste_membrane_capacitance)
-
-
-            capactiance = self._model.get_variable_by_ontology_term((self._OXMETA, "membrane_capacitance"))
-            capactiance_quant = self._units.Quantity(sp.Function(self._HEARTCONFIG_GETCAPACITANCE, real=True)() / (self._membrane_capacitance_factor * capactiance), uA_per_cm2 / uA)
-            self._model.units.add_conversion_rule(from_unit=uA, to_unit=uA_per_cm2,
-                                                  rule=lambda ureg, rhs: rhs * capactiance_quant)
-            # Convert if necessary
-            self._model.convert_variable(amplitude, uA_per_cm2, DataDirectionFlow.OUTPUT)
+            duration = self._model.get_variable_by_ontology_term((self._OXMETA, "membrane_stimulus_current_duration"))
+            period = self._model.get_variable_by_ontology_term((self._OXMETA, "membrane_stimulus_current_period"))
         except KeyError:
-            self._logger.info(self._model.name + 'has no membrane_stimulus_current_amplitude')
-
-        # get stimulus parameters
-        has_stim = True
-        stim_param = []
-        for tag in self._STIM_METADATA_TAGS:
-            try:
-                stim_param.append(self._model.get_variable_by_ontology_term((self._OXMETA, tag)))
-            except KeyError:
-                has_stim = has_stim and self._STIM_METADATA_TAGS[tag]['optional']
-
-        # If we can't use the stimulus tags we can return now
-        if not has_stim:
+            self._logger.info(self._model.name + 'has no default stimulus params tagged')
             return [], []
 
+        try:
+            # Get required stimulus parameter
+            optional_stim_param.append(self._model.get_variable_by_ontology_term((self._OXMETA, "membrane_stimulus_current_offset")))
+        except KeyError:
+            self._logger.info(self._model.name + 'has no stimulus offset tagged')
+
+        uF = self._units.get_unit('uF')
+        uA = self._units.get_unit('uA')
+        uA_per_cm2 = self._units.get_unit('uA_per_cm2')
+        uA_per_uF = self._units.get_unit('uA_per_uF')
+
+        config_capacitance = self._units.Quantity(sp.Function(self._HEARTCONFIG_GETCAPACITANCE, real=True)(), uA_per_cm2 / uA_per_uF)
+
+        # get capacitance and convert if necessary
+        try:
+            capacitance = self._model.get_variable_by_ontology_term((self._OXMETA, "membrane_capacitance"))
+            self._model.units.add_conversion_rule(from_unit=uF, to_unit=uA / uA_per_cm2,
+                                                  rule=lambda ureg, rhs: rhs / config_capacitance)
+            # Convert if necessary
+            capacitance = self._model.convert_variable(capacitance, uA / uA_per_cm2, DataDirectionFlow.OUTPUT)
+
+            # add conversion rule for amplitude from uA to uA_per_cm2
+            self._model.units.add_conversion_rule(from_unit=uA, to_unit=uA_per_cm2,
+                                                  rule=lambda ureg,
+                                                  rhs: rhs / self._units.Quantity(capacitance, capacitance.units))
+        except KeyError:
+            self._logger.info(self._model.name + 'has no capacitance')
+
+
+        # add conversion rule for amplitude from uA_per_uF to uA_per_cm2
+        self._model.units.add_conversion_rule(from_unit=uA_per_uF, to_unit=uA_per_cm2,
+                                              rule=lambda ureg, rhs: rhs * config_capacitance)
+
+        # Convert if necessary
+        amplitude = self._model.convert_variable(amplitude, uA_per_cm2, DataDirectionFlow.OUTPUT)
+
+        stim_param = [amplitude, duration, period] + optional_stim_param
         return_stim_eqs = self.get_equations_for(stim_param, filter_modifiable_parameters_lhs=False)
         return_stim_eqs = list(OrderedDict.fromkeys(return_stim_eqs))  # Order for output in template
         return stim_param, return_stim_eqs
