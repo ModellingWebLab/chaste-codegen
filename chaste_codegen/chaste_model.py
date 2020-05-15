@@ -2,6 +2,7 @@ import logging
 import time
 from collections import OrderedDict
 
+from chaste_codegen._partial_eval import partial_eval
 import sympy as sp
 import pint
 from cellmlmanip.model import DataDirectionFlow, Variable
@@ -31,31 +32,13 @@ class ChasteModel(object):
     _OXMETA = 'https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#'  # oxford metadata uri prefix
     _PYCMLMETA = 'https://chaste.comlab.ox.ac.uk/cellml/ns/pycml#'  # pycml metadata uri
 
-    _HEARTCONFIG_GETCAPACITANCE = 'HeartConfig::Instance()->GetCapacitance'  # call to get capacitance in Chaste
-    # Definitions of units required in the model. These will be added at the start so we can be sure they are defined
-    _UNIT_DEFINITIONS = {'uA_per_cm2': 'ampere / 1e6 / (meter * 1e-2)**2',
-                         'uA_per_uF': 'ampere / 1e6 / (farad * 1e-6)',
-                         'uA': 'ampere / 1e6',
-                         'uF': 'farad / 1e6',
-                         'uF_per_mm2': 'farad / 1e6 / (meter * 1e-3)**2',
-                         'millisecond': 'second / 1e3',
-                         'millimolar': 'mole / 1e3 / litre',
-                         'millivolt': 'volt / 1e3'}
     # _STIM_UNITS encodes units that are possible units to try and convert to.
     # Indexed by metadata tag then by unit.
     # For membrane_stimulus_current also encodes whether to use model capacitance and/or _HEARTCONFIG_GETCAPACITANCE
     _STIM_UNITS = {'membrane_stimulus_current':
-                   [{'units': 'uA_per_cm2', 'use_capacitance': False, 'use_heartconfig_capacitance': False},
-                    {'units': 'uA', 'use_capacitance': True, 'use_heartconfig_capacitance': True},
-                    {'units': 'uA_per_uF', 'use_capacitance': False, 'use_heartconfig_capacitance': True}],
-                   'membrane_stimulus_current_period': [{'units': 'millisecond'}],
-                   'membrane_stimulus_current_duration': [{'units': 'millisecond'}],
-                   'membrane_stimulus_current_amplitude': [{'units': 'uA_per_cm2'},
-                                                           {'units': 'uA_per_uF'},
-                                                           {'units': 'uA'}],
-                   'membrane_stimulus_current_offset': [{'units': 'millisecond'}],
-                   'membrane_stimulus_current_end': [{'units': 'millisecond'}],
-                   'membrane_capacitance': [{'units': 'uF'}, {'units': 'uF_per_mm2'}]}
+                   [{'units': 'uA_per_cm2', 'use_capacitance': False},
+                    {'units': 'uA', 'use_capacitance': True},
+                    {'units': 'uA_per_uF', 'use_capacitance': False}]}
 
     # Indicates error checks that should be carried out as assert <condition>, <message>
     # before conversion rules can be applied. There should be one for every conversion rule
@@ -98,7 +81,12 @@ class ChasteModel(object):
         # Store parameters for future reference
         self._model = model
 
+        # Add units needed for conversions
         self._units = self._add_units()
+        # add 'HeartConfig::Instance()->GetCapacitance' call for use in conversions
+        self._config_capacitance = self._units.Quantity(
+            sp.Function('HeartConfig::Instance()->GetCapacitance', real=True)(),
+            self.uA_per_cm2 / self.uA_per_uF)
 
         # in_interface may have already been set by child class
         self._in_interface = getattr(self, '_in_interface', [])
@@ -124,7 +112,7 @@ class ChasteModel(object):
         # get capacitance and update stimulus current
         self._membrane_stimulus_current = self._get_membrane_stimulus_current()
         self._original_membrane_stimulus_current = self._membrane_stimulus_current
-        self._membrane_capacitance, self._membrane_capacitance_factor = self._get_membrane_capacitance()
+        self._membrane_capacitance = self._get_membrane_capacitance()
         self._stimulus_params, self._stimulus_equations = self._get_stimulus()
         self._in_interface.extend(self._stimulus_params)
 
@@ -193,6 +181,50 @@ class ChasteModel(object):
                      if not filter_modifiable_parameters_lhs or eq.lhs not in self._modifiable_parameters]
         return [sp.Eq(eq.lhs, optimize(eq.rhs, self._OPTIMS)) for eq in equations]
 
+    def _add_units(self):
+        """ Add needed units to the model to allow converting time, voltage and calcium in specific units
+            as well as units for converting membrane_stimulus_current."""
+        units = self._model.units
+        unit_definitions = {'uA_per_cm2': 'ampere / 1e6 / (meter * 1e-2)**2',
+                            'uA_per_uF': 'ampere / 1e6 / (farad * 1e-6)',
+                            'uA': 'ampere / 1e6',
+                            'uF': 'farad / 1e6',
+                            'uF_per_mm2': 'farad / 1e6 / (meter * 1e-3)**2',
+                            'millisecond': 'second / 1e3',
+                            'millimolar': 'mole / 1e3 / litre',
+                            'millivolt': 'volt / 1e3'}
+        for unit_name, unit_defn in unit_definitions.items():
+            try:
+                units.add_unit(unit_name, unit_defn)
+            except ValueError:
+                pass  # already exists
+        self.uA_per_cm2 = units.get_unit('uA_per_cm2')
+        self.uA_per_uF = units.get_unit('uA_per_uF')
+        self.uA = units.get_unit('uA')
+        self.uF = units.get_unit('uF')
+        self.uF_per_mm2 = units.get_unit('uF_per_mm2')
+        self.millisecond = units.get_unit('millisecond')
+        self.millimolar = units.get_unit('millimolar')
+        self.millivolt = units.get_unit('millivolt')
+        return units
+
+    def _get_converted_var(self, tag, units, conversion_optional=False, optional=False):
+        '''Retreive variable by tag and convert to desired units'''
+        try:
+            var = self._model.get_variable_by_ontology_term((self._OXMETA, tag))
+        except KeyError:
+            if not optional:
+                raise
+            else:
+                return None
+        try:
+            return self._model.convert_variable(var, units, DataDirectionFlow.INPUT)
+        except DimensionalityError:
+            if not conversion_optional:
+                raise
+            else:
+                return var
+
     def _get_initial_value(self, var):
         """Returns the initial value of a variable if it has one, 0 otherwise"""
         # state vars have an initial value parameter defined
@@ -220,34 +252,20 @@ class ChasteModel(object):
             return self._MEMBRANE_VOLTAGE_INDEX
         elif var == self._cytosolic_calcium_concentration_var and \
                 self._model.units.evaluate_units(self._cytosolic_calcium_concentration_var).dimensionality == \
-                self._units.get_unit('millimolar').dimensionality:
+                self.millimolar.dimensionality:
             return self._CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX
         else:
             return self._MEMBRANE_VOLTAGE_INDEX + self._CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX + 1
 
-    def _add_units(self):
-        """ Add needed units to the model to allow converting time, voltage and calcium in specific units
-            as well as units for converting membrane_stimulus_current."""
-        units = self._model.units
-        for unit_name, unit_defn in self._UNIT_DEFINITIONS.items():
-            try:
-                units.add_unit(unit_name, unit_defn)
-            except ValueError:
-                pass  # already exists
-        return units
-
     def _get_time_variable(self):
         time_variable = self._model.get_free_variable()
-        desired_units = self._units.get_unit('millisecond')
         # Add derived quantity metadata tag
         self._set_is_metadata(time_variable, 'derived-quantity')
         try:
             # If the variable is in units that can be converted to millisecond, perform conversion
-            time_var = self._model.convert_variable(time_variable, desired_units, DataDirectionFlow.INPUT)
-            return time_var
+            return self._model.convert_variable(self._model.get_free_variable(), self.millisecond, DataDirectionFlow.INPUT)
         except DimensionalityError:
             warning = 'Incorrect definition of time variable (time needs to be dimensionally equivalent to second)'
-            self._logger.info(warning)
             raise ValueError(warning)
 
     def _annotate_if_not_statevar(self, var):
@@ -260,39 +278,27 @@ class ChasteModel(object):
 
     def _get_membrane_voltage_var(self):
         """ Find the membrane_voltage variable"""
-        voltage = self._model.get_variable_by_ontology_term((self._OXMETA, "membrane_voltage"))
-        desired_units = self._units.get_unit('millivolt')
-        self._annotate_if_not_statevar(voltage)  # If V is not state var annotate as appropriate.
         try:
-            # Convert if necessary
-            return self._model.convert_variable(voltage, desired_units, DataDirectionFlow.INPUT)
+            # Get and convert V
+            voltage = self._get_converted_var('membrane_voltage', self.millivolt)
+        except KeyError:
+            raise ValueError('Voltag not tagged in the model')
         except DimensionalityError:
-            warning = 'Incorrect definition of membrane_voltage variable '\
-                      '(units of membrane_voltage need to be dimensionally equivalent to Volt)'
-            self._logger.info(warning)
-            raise ValueError(warning)
+            raise ValueError('Incorrect definition of membrane_voltage variable '\
+                      '(units of membrane_voltage need to be dimensionally equivalent to Volt)')
+        self._annotate_if_not_statevar(voltage)  # If V is not state var annotate as appropriate.
+        return voltage
 
     def _get_cytosolic_calcium_concentration_var(self):
         """ Find the cytosolic_calcium_concentration variable if it exists"""
         try:
-            cytosolic_calcium_concentration = \
-                self._model.get_variable_by_ontology_term((self._OXMETA, "cytosolic_calcium_concentration"))
+            cytosolic_calcium_concentration = self._get_converted_var('cytosolic_calcium_concentration',
+                                                                      self.millimolar, conversion_optional=True)
             self._annotate_if_not_statevar(cytosolic_calcium_concentration)  # If not state var annotate as appropriate
-
         except KeyError:
             self._logger.info(self._model.name + ' has no cytosolic_calcium_concentration')
             return None
-
-        # Convert if necessary
-        desired_units = self._units.get_unit('millimolar')
-        # units can't be converted to millimolar (e.g. could be dimensionless)
-        try:
-            return self._model.convert_variable(cytosolic_calcium_concentration,
-                                                desired_units, DataDirectionFlow.INPUT)
-        except DimensionalityError:
-            warning = 'cytosolic_calcium_concentration units not dimensionally equivalent to molar (mole/litre)'
-            self._logger.info(warning)
-            return cytosolic_calcium_concentration
+        return cytosolic_calcium_concentration
 
     def _get_modifiers(self):
         """ Get the variables that can be used as modifiers, if use_modifiers is switched on.
@@ -335,82 +341,46 @@ class ChasteModel(object):
 
     def _get_membrane_capacitance(self):
         """ Find membrane_capacitance if the model has it"""
-        equation, capacitance_factor = None, 1.0
-        # add membrane_capacitance if the model has it
+        equation = None
+
+        # get capacitance and convert if necessary
         try:
-            # add membrane_capacitance factor
-            membrane_capacitance = self._model.get_variable_by_ontology_term((self._OXMETA, "membrane_capacitance"))
-            if membrane_capacitance is not None:
-                current_units = self._model.units.evaluate_units(membrane_capacitance)
-                capacitance_eqs = [eq for eq in self._model.get_equations_for([membrane_capacitance])
-                                   if eq.lhs == membrane_capacitance]
-                assert len(capacitance_eqs) == 1, 'Expecting exactly 1 defining equation expected'
-                equation = capacitance_eqs[0]
-                for desired_unit_info in [unit_dict['units'] for unit_dict in self._STIM_UNITS['membrane_capacitance']]:
-                    desired_units = self._units.get_unit(desired_unit_info)
-                    if current_units.dimensionality == desired_units.dimensionality:
-                        capacitance_factor = \
-                            self._model.units.get_conversion_factor(from_unit=current_units, to_unit=desired_units)
-                        if capacitance_factor != 1.0:
-                            warning = 'converting capacitance from ' + str(current_units) + ' to ' + str(desired_units)
-                            self._logger.info(warning)
-                        break
+            self._model.units.add_conversion_rule(from_unit=self.uF, to_unit=self.uA / self.uA_per_cm2,
+                                                  rule=lambda ureg, rhs: rhs / self._config_capacitance)
+            # Convert if necessary
+            return self._get_converted_var('membrane_capacitance', self.uA / self.uA_per_cm2)
         except KeyError:
-            # no membrane_capacitance
-            pass
-        return equation, capacitance_factor
+            self._logger.info(self._model.name + ' has no capacitance')
+            return None
 
     def _get_stimulus(self):
         """ Store the stimulus currents in the model"""
-        optional_stim_param = []
-        try:
-            # Get required stimulus parameters
-            amplitude = self._model.get_variable_by_ontology_term((self._OXMETA, "membrane_stimulus_current_amplitude"))
-            duration = self._model.get_variable_by_ontology_term((self._OXMETA, "membrane_stimulus_current_duration"))
-            period = self._model.get_variable_by_ontology_term((self._OXMETA, "membrane_stimulus_current_period"))
+        # add conversion rule (for amplitude) from uA_per_uF to uA_per_cm2 by multiplying by 'HeartConfig::Instance()->GetCapacitance' call
+        self._model.units.add_conversion_rule(from_unit=self.uA_per_uF, to_unit=self.uA_per_cm2,
+                                              rule=lambda ureg, rhs: rhs * self._config_capacitance)
+
+        # add conversion rule (for amplitude) from uA to uA_per_cm2 by deviding by (converted) capacitance in the model
+        if self._membrane_capacitance is not None:  # Can only do this if the model has a capacitance
+            self._model.units.add_conversion_rule(from_unit=self.uA, to_unit=self.uA_per_cm2,
+                                                  rule=lambda ureg,
+                                                  rhs: rhs / self._units.Quantity(self._membrane_capacitance, self._membrane_capacitance.units))
+
+        stim_param = []
+        try: # Get required stimulus parameters
+            stim_param.append(self._get_converted_var('membrane_stimulus_current_amplitude', self.uA_per_cm2))
+            stim_param.append(self._get_converted_var('membrane_stimulus_current_duration', self.millisecond))
+            stim_param.append(self._get_converted_var('membrane_stimulus_current_period', self.millisecond))
         except KeyError:
             self._logger.info(self._model.name + 'has no default stimulus params tagged')
             return [], []
 
-        try:
-            # Get required stimulus parameter
-            optional_stim_param.append(self._model.get_variable_by_ontology_term((self._OXMETA, "membrane_stimulus_current_offset")))
-        except KeyError:
-            self._logger.info(self._model.name + 'has no stimulus offset tagged')
+        # Get optional stimulus params
+        stim_param.append(self._get_converted_var('membrane_stimulus_current_offset', self.millisecond, optional=True))
+        stim_param.append(self._get_converted_var('membrane_stimulus_current_end', self.millisecond, optional=True))
 
-        uF = self._units.get_unit('uF')
-        uA = self._units.get_unit('uA')
-        uA_per_cm2 = self._units.get_unit('uA_per_cm2')
-        uA_per_uF = self._units.get_unit('uA_per_uF')
-
-        config_capacitance = self._units.Quantity(sp.Function(self._HEARTCONFIG_GETCAPACITANCE, real=True)(), uA_per_cm2 / uA_per_uF)
-
-        # get capacitance and convert if necessary
-        try:
-            capacitance = self._model.get_variable_by_ontology_term((self._OXMETA, "membrane_capacitance"))
-            self._model.units.add_conversion_rule(from_unit=uF, to_unit=uA / uA_per_cm2,
-                                                  rule=lambda ureg, rhs: rhs / config_capacitance)
-            # Convert if necessary
-            capacitance = self._model.convert_variable(capacitance, uA / uA_per_cm2, DataDirectionFlow.OUTPUT)
-
-            # add conversion rule for amplitude from uA to uA_per_cm2
-            self._model.units.add_conversion_rule(from_unit=uA, to_unit=uA_per_cm2,
-                                                  rule=lambda ureg,
-                                                  rhs: rhs / self._units.Quantity(capacitance, capacitance.units))
-        except KeyError:
-            self._logger.info(self._model.name + 'has no capacitance')
-
-
-        # add conversion rule for amplitude from uA_per_uF to uA_per_cm2
-        self._model.units.add_conversion_rule(from_unit=uA_per_uF, to_unit=uA_per_cm2,
-                                              rule=lambda ureg, rhs: rhs * config_capacitance)
-
-        # Convert if necessary
-        amplitude = self._model.convert_variable(amplitude, uA_per_cm2, DataDirectionFlow.OUTPUT)
-
-        stim_param = [amplitude, duration, period] + optional_stim_param
+        # Remove empty (optional) params
+        stim_param = [p for p in stim_param if p is not None]
         return_stim_eqs = self.get_equations_for(stim_param, filter_modifiable_parameters_lhs=False)
-        return_stim_eqs = list(OrderedDict.fromkeys(return_stim_eqs))  # Order for output in template
         return stim_param, return_stim_eqs
 
     def _get_ionic_derivs(self):
@@ -460,14 +430,14 @@ class ChasteModel(object):
 
         desired_units_and_capacitance['use_capacitance'] = desired_units_and_capacitance['use_capacitance'] \
             and self._membrane_capacitance is not None
-        # Reverse topological order is more similar (though not necessarily identical) to pycml
+
         return equations_for_ionic_vars, desired_units_and_capacitance, stimulus_current_factor
 
     def _get_extended_equations_for_ionic_vars(self):
         """ Get the equations defining the ionic derivatives and all dependant equations"""
 
         # create the const double var_chaste_interface__i_ionic = .. equation
-        i_ionic_lhs = self._model.add_variable(name='_i_ionic', units=self._units.get_unit('uA_per_cm2'))
+        i_ionic_lhs = self._model.add_variable(name='_i_ionic', units=self.uA_per_cm2)
         i_ionic_rhs = sp.sympify(0.0, evaluate=False)
 
         # add i_ionic to interface for printing
@@ -486,13 +456,8 @@ class ChasteModel(object):
 
         # check if we need to convert using capacitance
         if self._current_unit_and_capacitance['use_capacitance']:
-            div = self._membrane_capacitance_factor * self._membrane_capacitance.lhs \
-                if self._membrane_capacitance_factor != 1.0 else self._membrane_capacitance.lhs
-            i_ionic_rhs /= div
+            i_ionic_rhs /= self._membrane_capacitance
 
-        # check if we need to convert using _HEARTCONFIG_GETCAPACITANCE
-        if self._current_unit_and_capacitance['use_heartconfig_capacitance']:
-            i_ionic_rhs *= sp.Function(self._HEARTCONFIG_GETCAPACITANCE, real=True)()
 
         i_ionic_eq = sp.Eq(i_ionic_lhs, i_ionic_rhs)
         self._model.add_equation(i_ionic_eq)
@@ -576,8 +541,7 @@ class ChasteModel(object):
 
             # add converter equation
             converter_var = self._model.add_variable(name=self._membrane_stimulus_current.name + '_converter',
-                                                     units=self._units.get_unit('uA_per_cm2'),
-                                                     cmeta_id=None)
+                                                     units=self.uA_per_cm2, cmeta_id=None)
             # move metadata tag
             self._model.transfer_cmeta_id(self._membrane_stimulus_current, converter_var)
             # add new equation for converter_var
@@ -586,18 +550,10 @@ class ChasteModel(object):
             # determine capacitance stuff
             stim_current_eq_rhs = converter_var
             if self._current_unit_and_capacitance['use_capacitance']:
-                stim_current_eq_rhs *= self._membrane_capacitance.lhs
-                fac = self._membrane_capacitance_factor / self._membrane_stimulus_current_factor
-                if fac != 1.0:
-                    stim_current_eq_rhs *= fac
-            else:
-                fac = 1 / self._membrane_stimulus_current_factor
-                if fac != 1.0:
-                    stim_current_eq_rhs *= fac
-
-            # check if the results needs to be divided by heartconfig_capacitance and add if needed
-            if self._current_unit_and_capacitance['use_heartconfig_capacitance']:
-                stim_current_eq_rhs /= sp.Function(self._HEARTCONFIG_GETCAPACITANCE, real=True)()
+                stim_current_eq_rhs *= self._membrane_capacitance
+            fac = 1 / self._membrane_stimulus_current_factor
+            if fac != 1.0:
+                stim_current_eq_rhs *= fac
 
             # Get stimulus defining equation
             eq = [e for e in self._model.equations if e.lhs == self._membrane_stimulus_current][-1]
