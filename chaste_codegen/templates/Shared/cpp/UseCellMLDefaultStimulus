@@ -7,7 +7,7 @@
                 -fabs({{default_stimulus_equations["membrane_stimulus_current_amplitude"]}}),
                 {{default_stimulus_equations["membrane_stimulus_current_duration"]}},
                 {{default_stimulus_equations["membrane_stimulus_current_period"]}},
-                {% if default_stimulus_equations["membrane_stimulus_current_offset"] is defined %}{{default_stimulus_equations["membrane_stimulus_current_offset"]}}{%- else %}0.0{%- endif %}
+                {% if default_stimulus_equations["membrane_stimulus_current_offset"] is defined %}{{default_stimulus_equations["membrane_stimulus_current_offset"]}}{%- else %}0.0{%- endif %}{% if default_stimulus_equations["membrane_stimulus_current_end"] is defined %}, {{default_stimulus_equations["membrane_stimulus_current_end"]}}{%- endif %}
                 ));
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
