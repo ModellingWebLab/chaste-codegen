@@ -6,7 +6,9 @@ import pytest
 
 import chaste_codegen as cg
 import chaste_codegen.tests.chaste_test_utils as test_utils
+from cellmlmanip.rdf import create_rdf_node
 
+OXMETA = 'https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#'  # oxford metadata uri prefix
 
 # Show more logging output
 LOGGER = logging.getLogger(__name__)
@@ -220,18 +222,39 @@ def test_Opt(tmp_path, model):
     test_utils.compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'],
                                                model['expected_cpp_path'])
 
+def test_missing_V(tmp_path):
+    tmp_path = str(tmp_path)
+    LOGGER.info('Testing missing capacitance\n')
+    model_file = \
+        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'hodgkin_huxley_squid_axon_model_1952_modified.cellml')
+    chaste_model = cellmlmanip.load_model(model_file)
+    
+    # Remove membrane_voltage metadata tag
+    voltage = chaste_model.get_variable_by_ontology_term((OXMETA, 'membrane_voltage'))
+    chaste_model.rdf.remove((voltage.rdf_identity, None, None))
+    
+    with pytest.raises(KeyError) as error:
+        chaste_model = cg.NormalChasteModel(chaste_model,
+                                            'hodgkin_huxley_squid_axon_model_1952_modified',
+                                            class_name='hodgkin_huxley_squid_axon_model_1952_modified')
+    assert str(error.value) == \
+        '\'Voltage not tagged in the model!\''
 
 def test_missing_capacitance(tmp_path):
     tmp_path = str(tmp_path)
     LOGGER.info('Testing missing capacitance\n')
     model_file = \
-        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'pandit_model_2001_epi_old_no_capacitance.cellml')
+        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'pandit_model_2001_epi.cellml')
     chaste_model = cellmlmanip.load_model(model_file)
+
+    # Remove capacitance metadata tag
+    capacitance = chaste_model.get_variable_by_ontology_term((OXMETA, 'membrane_capacitance'))
+    chaste_model.rdf.remove((capacitance.rdf_identity, None, None))
 
     with pytest.raises(KeyError) as error:
         chaste_model = cg.NormalChasteModel(chaste_model,
-                                            'pandit_model_2001_epi_old_no_capacitance',
-                                            class_name='pandit_model_2001_epi_old_no_capacitance')
+                                            'pandit_model_2001_epi',
+                                            class_name='pandit_model_2001_epi')
     assert str(error.value) == \
         '\'Membrane capacitance is required to be able to apply conversion to stimulus current!\''
 

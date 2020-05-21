@@ -179,32 +179,6 @@ class ChasteModel(object):
                      if not filter_modifiable_parameters_lhs or eq.lhs not in self._modifiable_parameters]
         return [sp.Eq(eq.lhs, optimize(eq.rhs, self._OPTIMS)) for eq in equations]
 
-    def _get_converted_var(self, tag, units, direction=DataDirectionFlow.INPUT, conversion_optional=False,
-                           optional=False):
-        '''Retreive variable by tag and convert to desired units
-
-        :param tag: the metadata tage to get the variable for.
-        :param units: the units to (try to) convert the variable to.
-        :param direction: the conversion direction.
-        :param conversion_optional: is conversion optional and should the variable be returned if it didn't succeed?
-        :param optional: is this optional? If so return None instead of raising an error if the variable doesn't exist.
-        :return: The (converted) variable, or None, if option and the variable didn't exist.
-        '''
-        try:
-            var = self._model.get_variable_by_ontology_term((self._OXMETA, tag))
-        except KeyError:
-            if not optional:
-                raise
-            else:
-                return None
-        try:
-            return self._model.convert_variable(var, units, direction)
-        except DimensionalityError:
-            if not conversion_optional:
-                raise
-            else:
-                return var
-
     def _get_initial_value(self, var):
         """Returns the initial value of a variable if it has one, 0 otherwise"""
         # state vars have an initial value parameter defined
@@ -223,12 +197,6 @@ class ChasteModel(object):
         self._model.add_cmeta_id(variable)
         self._model.rdf.add((variable.rdf_identity, create_rdf_node((ontology, metadata_tag)),
                             create_rdf_node('yes')))
-
-    def _unset_is_metadata(self, variable, metadata_tag, ontology=_PYCMLMETA):
-        """Adds the metadata tag in the given ontology with the value object_value"""
-        self._model.add_cmeta_id(variable)
-        self._model.rdf.remove((variable.rdf_identity, create_rdf_node((ontology, metadata_tag)),
-                               create_rdf_node('yes')))
 
     def _state_var_key_order(self, var):
         """Returns a key to order state variables in the same way as pycml does"""
@@ -308,9 +276,10 @@ class ChasteModel(object):
         """ Find the membrane_voltage variable"""
         try:
             # Get and convert V
-            voltage = self._get_converted_var('membrane_voltage', self.millivolt)
+            voltage = self._model.get_variable_by_ontology_term((self._OXMETA, 'membrane_voltage'))
+            voltage = self._model.convert_variable(voltage, self.millivolt, DataDirectionFlow.INPUT)
         except KeyError:
-            raise ValueError('Voltag not tagged in the model')
+            raise KeyError('Voltage not tagged in the model!')
         except DimensionalityError:
             raise ValueError('Incorrect definition of membrane_voltage variable '
                              '(units of membrane_voltage need to be dimensionally equivalent to Volt)')
@@ -320,13 +289,15 @@ class ChasteModel(object):
     def _get_cytosolic_calcium_concentration_var(self):
         """ Find the cytosolic_calcium_concentration variable if it exists"""
         try:
-            cytosolic_calcium_concentration = self._get_converted_var('cytosolic_calcium_concentration',
-                                                                      self.millimolar, conversion_optional=True)
-            self._annotate_if_not_statevar(cytosolic_calcium_concentration)  # If not state var annotate as appropriate
+            calcium = self._model.get_variable_by_ontology_term((self._OXMETA, 'cytosolic_calcium_concentration'))
+            calcium = self._model.convert_variable(calcium, self.millimolar, DataDirectionFlow.INPUT)
         except KeyError:
             self._logger.info(self._model.name + ' has no cytosolic_calcium_concentration')
             return None
-        return cytosolic_calcium_concentration
+        except DimensionalityError:
+            pass  # Conversion is optional
+        self._annotate_if_not_statevar(calcium)  # If not state var annotate as appropriate
+        return calcium
 
     def _get_modifiers(self):
         """ Get the variables that can be used as modifiers, if use_modifiers is switched on.
@@ -435,7 +406,8 @@ class ChasteModel(object):
     def _get_membrane_capacitance(self):
         """ Find membrane_capacitance if the model has it and convert it to uA/uA_per_cm2 if necessary"""
         try:
-            return self._get_converted_var('membrane_capacitance', self.uA / self.uA_per_cm2, DataDirectionFlow.OUTPUT)
+            capacitance = self._model.get_variable_by_ontology_term((self._OXMETA, 'membrane_capacitance'))
+            return self._model.convert_variable(capacitance, self.uA / self.uA_per_cm2, DataDirectionFlow.OUTPUT)
         except KeyError:
             self._logger.info(self._model.name + ' has no capacitance tagged')
             return None
@@ -461,24 +433,33 @@ class ChasteModel(object):
         # Convert and store stimulus parameters
         stim_params = []
         try:  # Get required stimulus parameters
-            stim_params.append(self._get_converted_var('membrane_stimulus_current_amplitude', self.uA_per_cm2))
-            stim_params.append(self._get_converted_var('membrane_stimulus_current_duration', self.millisecond))
-            stim_params.append(self._get_converted_var('membrane_stimulus_current_period', self.millisecond))
+            ampl = self._model.get_variable_by_ontology_term((self._OXMETA, 'membrane_stimulus_current_amplitude'))
+            duration = self._model.get_variable_by_ontology_term((self._OXMETA, 'membrane_stimulus_current_duration'))
+            period = self._model.get_variable_by_ontology_term((self._OXMETA, 'membrane_stimulus_current_period'))
+            
+            stim_params.append(self._model.convert_variable(ampl, self.uA_per_cm2, DataDirectionFlow.INPUT))
+            stim_params.append(self._model.convert_variable(duration, self.millisecond, DataDirectionFlow.INPUT))
+            stim_params.append(self._model.convert_variable(period, self.millisecond, DataDirectionFlow.INPUT))
         except KeyError:
             self._logger.info(self._model.name + 'has no default stimulus params tagged')
             return [], []
         except TypeError as e:
             if str(e) == 'Invalid magnitude for Quantity: None':
                 raise KeyError('Membrane capacitance is required to be able to apply conversion to stimulus current!')
-            else:
-                raise
 
-        # Get optional stimulus params
-        stim_params.append(self._get_converted_var('membrane_stimulus_current_offset', self.millisecond, optional=True))
-        stim_params.append(self._get_converted_var('membrane_stimulus_current_end', self.millisecond, optional=True))
+        try:  # Get optional stimulus parameter
+            offset = self._model.get_variable_by_ontology_term((self._OXMETA, 'membrane_stimulus_current_offset'))
+            if offset is not None:
+                stim_params.append(self._model.convert_variable(offset, self.millisecond, DataDirectionFlow.INPUT))
+        except KeyError:
+            pass  # Optional Parameter
 
-        # Remove empty (optional) params
-        stim_params = list(filter(None, stim_params))
+        try:  # Get optional stimulus parameter
+            end = self._model.get_variable_by_ontology_term((self._OXMETA, 'membrane_stimulus_current_end'))
+            if end is not None:
+                stim_params.append(self._model.convert_variable(end, self.millisecond, DataDirectionFlow.INPUT))
+        except KeyError:
+            pass  # Optional Parameter
 
         return_stim_eqs = self.get_equations_for(stim_params, filter_modifiable_parameters_lhs=False)
         return stim_params, return_stim_eqs
