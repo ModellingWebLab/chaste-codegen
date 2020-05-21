@@ -1,11 +1,11 @@
-#ifndef DYNAMICASLANIDI_MODEL_2009FROMCELLML_HPP_
-#define DYNAMICASLANIDI_MODEL_2009FROMCELLML_HPP_
+#ifndef CELLZHANG_SAN_MODEL_2000_ALLFROMCELLML_HPP_
+#define CELLZHANG_SAN_MODEL_2000_ALLFROMCELLML_HPP_
 
 //! @file
 //!
 //! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
-//! Model: aslanidi_model_2009
+//! Model: zhang_SAN_model_2000_all
 //!
 //! Processed by chaste_codegen: https://github.com/ModellingWebLab/chaste-codegen
 //!     (translator: chaste_codegen)
@@ -15,35 +15,27 @@
 
 #include "ChasteSerialization.hpp"
 #include <boost/serialization/base_object.hpp>
-#include "AbstractCardiacCellWithModifiers.hpp"
-#include "AbstractModifier.hpp"
-#include "AbstractDynamicallyLoadableEntity.hpp"
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractCardiacCell.hpp"
 
-class Dynamicaslanidi_model_2009FromCellML : public AbstractCardiacCellWithModifiers<AbstractCardiacCell >, public AbstractDynamicallyLoadableEntity
+class Cellzhang_SAN_model_2000_allFromCellML : public AbstractCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & archive, const unsigned int version)
     {
-        archive & boost::serialization::base_object<AbstractCardiacCellWithModifiers<AbstractCardiacCell > >(*this);
-        archive & boost::serialization::base_object<AbstractDynamicallyLoadableEntity>(*this);
-        // Despite this class having modifier member variables, they are all added to the
-        // abstract class by the constructor, and archived via that, instead of here.
+        archive & boost::serialization::base_object<AbstractCardiacCell >(*this);
+        
     }
 
     //
     // Settable parameters and readable variables
     //
-    boost::shared_ptr<AbstractModifier> mp_membrane__Cm_modifier;
-    boost::shared_ptr<AbstractModifier> mp_membrane_voltage_modifier;
 
 public:
 
-    boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
-    Dynamicaslanidi_model_2009FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Dynamicaslanidi_model_2009FromCellML();
+    Cellzhang_SAN_model_2000_allFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellzhang_SAN_model_2000_allFromCellML();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY);
 
@@ -52,7 +44,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Dynamicaslanidi_model_2009FromCellML)
+CHASTE_CLASS_EXPORT(Cellzhang_SAN_model_2000_allFromCellML)
 
 namespace boost
 {
@@ -60,7 +52,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Dynamicaslanidi_model_2009FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, const Cellzhang_SAN_model_2000_allFromCellML * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -70,17 +62,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Dynamicaslanidi_model_2009FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, Cellzhang_SAN_model_2000_allFromCellML * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Dynamicaslanidi_model_2009FromCellML(p_solver, p_stimulus);
+            ::new(t)Cellzhang_SAN_model_2000_allFromCellML(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // DYNAMICASLANIDI_MODEL_2009FROMCELLML_HPP_
+#endif // CELLZHANG_SAN_MODEL_2000_ALLFROMCELLML_HPP_

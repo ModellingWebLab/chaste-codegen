@@ -14,7 +14,7 @@ class CvodeWithDataClampModel(CvodeChasteModel):
         """ Add add membrane_data_clamp_current_conductance and membrane_data_clamp_current to the model"""
         self._membrane_data_clamp_current_conductance = \
             self._model.add_variable(name='membrane_data_clamp_current_conductance',
-                                     units=self._units.get_unit('dimensionless'))
+                                     units=self.dimensionless)
         self._model.add_equation(sp.Eq(self._membrane_data_clamp_current_conductance, 0.0))
 
         # add membrane_data_clamp_current
@@ -27,14 +27,10 @@ class CvodeWithDataClampModel(CvodeChasteModel):
         self._membrane_data_clamp_current_eq = sp.Eq(self._membrane_data_clamp_current, clamp_current)
         self._model.add_equation(self._membrane_data_clamp_current_eq)
 
-    def _get_modifiable_parameters(self):
-        """ Get all modifiable parameters and adds membrane_data_clamp_current_conductance"""
-        modifiable_parameters = super()._get_modifiable_parameters()
-        self._add_data_clamp_to_model()
-
-        # Add membrane_data_clamp_conductance to modifiable parameters
-        modifiable_parameters.append(self._membrane_data_clamp_current_conductance)
-        return sorted(modifiable_parameters, key=lambda m: self._model.get_display_name(m, self._OXMETA))
+        # Add data clamp current as modifiable parameter and re-sort
+        self._modifiable_parameters.append(self._membrane_data_clamp_current_conductance)
+        self._modifiable_parameters = sorted(self._modifiable_parameters,
+                                             key=lambda m: self._model.get_display_name(m, self._OXMETA))
 
     def _get_derivative_equations(self):
         """ Get equations defining the derivatives including V and add in membrane_data_clamp_current"""
@@ -54,24 +50,25 @@ class CvodeWithDataClampModel(CvodeChasteModel):
 
         derivative_equations = super()._get_derivative_equations()
 
+        self._add_data_clamp_to_model()
+
         # piggy-backs on the analysis that finds ionic currents, in order to add in data clamp currents
         # Find dv/dt
         current_index = None
-        if len(self._equations_for_ionic_vars) > 0:
-            for i, eq in enumerate(derivative_equations):
-                if isinstance(eq.lhs, sp.Derivative) and eq.lhs.args[0] == self._membrane_voltage_var:
-                    # We need to add data_clamp to the equation with the correct sign
-                    # This is achieved by substitution the first of the ionic currents
-                    # by (ionic_current + data_clamp_current)
-                    ionic_var = self._equations_for_ionic_vars[0].lhs
-                    current_index = find_ionic_var(derivative_equations[i], ionic_var, derivative_equations)
-                    if current_index is not None:
-                        eq = derivative_equations[current_index]
-                        rhs = eq.rhs.xreplace({ionic_var: (ionic_var + self._membrane_data_clamp_current)})
-                        derivative_equations[current_index] = sp.Eq(eq.lhs, rhs)
-            # add the equation for data_clamp_current to derivative_equations just before dv/dt
-            if current_index is not None:
-                derivative_equations.insert(current_index, self._membrane_data_clamp_current_eq)
+        for i, eq in enumerate(derivative_equations):
+            if isinstance(eq.lhs, sp.Derivative) and eq.lhs.args[0] == self._membrane_voltage_var:
+                # We need to add data_clamp to the equation with the correct sign
+                # This is achieved by substitution the first of the ionic currents
+                # by (ionic_current + data_clamp_current)
+                ionic_var = self._equations_for_ionic_vars[0].lhs
+                current_index = find_ionic_var(derivative_equations[i], ionic_var, derivative_equations)
+                if current_index is not None:
+                    eq = derivative_equations[current_index]
+                    rhs = eq.rhs.xreplace({ionic_var: (ionic_var + self._membrane_data_clamp_current)})
+                    derivative_equations[current_index] = sp.Eq(eq.lhs, rhs)
+        # add the equation for data_clamp_current to derivative_equations just before dv/dt
+        if current_index is not None:
+            derivative_equations.insert(current_index, self._membrane_data_clamp_current_eq)
 
         return derivative_equations
 

@@ -20,7 +20,7 @@
         }
         else
         {
-        {% for deriv in y_derivative_equations %}{% if not deriv.in_eqs_excl_voltage %}{% if deriv.is_data_clamp_current is defined and deriv.is_data_clamp_current %}// Special handling of data clamp current here
+        {% for deriv in y_derivative_equations %}{% if not deriv.in_eqs_excl_voltage %}{% if deriv.is_data_clamp_current is defined and deriv.is_data_clamp_current %}    // Special handling of data clamp current here
             // (we want to save expense of calling the interpolation method if possible.)
             double {{ deriv.lhs }} = 0.0;
             if (mDataClampIsOn)

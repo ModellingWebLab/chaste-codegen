@@ -81,7 +81,7 @@
         const double var_potassium_channel_n_gate__alpha_n = -0.01 * (65.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-6.5 - 0.10000000000000001 * var_chaste_interface__membrane__V)); // per_millisecond
         const double var_potassium_channel_n_gate__beta_n = 0.125 * exp(0.9375 + 0.012500000000000001 * var_chaste_interface__membrane__V); // per_millisecond
         const double var_sodium_channel_h_gate__alpha_h = 0.070000000000000007 * exp(-3.75 - 0.050000000000000003 * var_chaste_interface__membrane__V); // per_millisecond
-        const double var_sodium_channel_h_gate__beta_h = 1.0 / (1.0 + exp(-4.5 - 0.10000000000000001 * var_chaste_interface__membrane__V)); // per_millisecond
+        const double var_sodium_channel_h_gate__beta_h = 1 / (1.0 + exp(-4.5 - 0.10000000000000001 * var_chaste_interface__membrane__V)); // per_millisecond
         const double var_sodium_channel_m_gate__alpha_m = -0.10000000000000001 * (50.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-5.0 - 0.10000000000000001 * var_chaste_interface__membrane__V)); // per_millisecond
         const double var_sodium_channel_m_gate__beta_m = 4.0 * exp(-4.166666666666667 - 0.055555555555555552 * var_chaste_interface__membrane__V); // per_millisecond
 
@@ -130,10 +130,10 @@
         
 
         // Mathematics
-        const double var_membrane__i_Stim_converter = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
+        const double var_membrane__i_Stim = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // microA_per_cm2
 
         std::vector<double> dqs(2);
-        dqs[0] = var_membrane__i_Stim_converter;
+        dqs[0] = var_membrane__i_Stim;
         dqs[1] = var_chaste_interface__environment__time;
         return dqs;
     }
@@ -167,7 +167,7 @@ void OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromC
 
     // Derived Quantity index [0]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
-    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
+    this->mDerivedQuantityUnits.push_back("microA_per_cm2");
 
     // Derived Quantity index [1]:
     this->mDerivedQuantityNames.push_back("time");

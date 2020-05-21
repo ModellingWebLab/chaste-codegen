@@ -228,12 +228,12 @@ def test_missing_capacitance(tmp_path):
         os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'pandit_model_2001_epi_old_no_capacitance.cellml')
     chaste_model = cellmlmanip.load_model(model_file)
 
-    with pytest.raises(AssertionError) as error:
+    with pytest.raises(KeyError) as error:
         chaste_model = cg.NormalChasteModel(chaste_model,
                                             'pandit_model_2001_epi_old_no_capacitance',
                                             class_name='pandit_model_2001_epi_old_no_capacitance')
     assert str(error.value) == \
-        'Membrane capacitance is required to be able to apply conversion to stimulus current!'
+        '\'Membrane capacitance is required to be able to apply conversion to stimulus current!\''
 
 
 def test_wrong_units_time(capsys, tmp_path):

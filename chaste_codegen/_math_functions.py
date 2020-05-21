@@ -64,3 +64,6 @@ class sin_(RealFunction):
         """
         assert argindex == 1
         return (cos_(self.args[0]))
+
+
+MATH_FUNC_SYMPY_MAPPING = {abs_: sp.Abs, acos_: sp.acos, cos_: sp.cos, exp_: sp.exp, sin_: sp.sin, sqrt_: sp.sqrt}
