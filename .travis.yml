@@ -14,6 +14,6 @@ install:
 script:
     - python -m flake8
     - python -m isort --verbose --check-only --diff --recursive chaste_codegen
-    - if [[ $TRAVIS_EVENT_TYPE == "cron" ]] ; then python -m pytest -m cronjob --cov=chaste_codegen chaste_codegen ; else python -m pytest -m "not cronjob and not all_models" --cov=chaste_codegen chaste_codegen ; fi
+    - python -m pytest -m "not all_models" --cov=chaste_codegen chaste_codegen
 after_success:
     - codecov
