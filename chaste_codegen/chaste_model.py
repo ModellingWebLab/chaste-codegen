@@ -436,7 +436,7 @@ class ChasteModel(object):
             ampl = self._model.get_variable_by_ontology_term((self._OXMETA, 'membrane_stimulus_current_amplitude'))
             duration = self._model.get_variable_by_ontology_term((self._OXMETA, 'membrane_stimulus_current_duration'))
             period = self._model.get_variable_by_ontology_term((self._OXMETA, 'membrane_stimulus_current_period'))
-            
+
             stim_params.append(self._model.convert_variable(ampl, self.uA_per_cm2, DataDirectionFlow.INPUT))
             stim_params.append(self._model.convert_variable(duration, self.millisecond, DataDirectionFlow.INPUT))
             stim_params.append(self._model.convert_variable(period, self.millisecond, DataDirectionFlow.INPUT))

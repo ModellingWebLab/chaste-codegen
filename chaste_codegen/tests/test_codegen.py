@@ -6,7 +6,7 @@ import pytest
 
 import chaste_codegen as cg
 import chaste_codegen.tests.chaste_test_utils as test_utils
-from cellmlmanip.rdf import create_rdf_node
+
 
 OXMETA = 'https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#'  # oxford metadata uri prefix
 
@@ -222,23 +222,25 @@ def test_Opt(tmp_path, model):
     test_utils.compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'],
                                                model['expected_cpp_path'])
 
+
 def test_missing_V(tmp_path):
     tmp_path = str(tmp_path)
     LOGGER.info('Testing missing capacitance\n')
     model_file = \
         os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'hodgkin_huxley_squid_axon_model_1952_modified.cellml')
     chaste_model = cellmlmanip.load_model(model_file)
-    
+
     # Remove membrane_voltage metadata tag
     voltage = chaste_model.get_variable_by_ontology_term((OXMETA, 'membrane_voltage'))
     chaste_model.rdf.remove((voltage.rdf_identity, None, None))
-    
+
     with pytest.raises(KeyError) as error:
         chaste_model = cg.NormalChasteModel(chaste_model,
                                             'hodgkin_huxley_squid_axon_model_1952_modified',
                                             class_name='hodgkin_huxley_squid_axon_model_1952_modified')
     assert str(error.value) == \
         '\'Voltage not tagged in the model!\''
+
 
 def test_missing_capacitance(tmp_path):
     tmp_path = str(tmp_path)
