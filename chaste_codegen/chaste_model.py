@@ -97,7 +97,7 @@ class ChasteModel(object):
 
         self._in_interface.extend(self._state_vars)
 
-        # Retreive stimulus current paramas sow e can exclude these from modifiers etc.
+        # Retrieve stimulus current parameters so we can exclude these from modifiers etc.
         self._stimulus_params = self._get_stimulus_prams()
         self._membrane_stimulus_current_orig = self._get_membrane_stimulus_current()
 
