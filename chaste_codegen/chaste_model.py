@@ -77,7 +77,7 @@ class ChasteModel(object):
         # Add units needed for conversions
         self._units = self._add_units()
 
-        # Ass conversion rules for working with stimulus current & amplitude
+        # Add conversion rules for working with stimulus current & amplitude
         self._add_conversion_rules()
 
         # in_interface may have already been set by child class
