@@ -415,7 +415,7 @@ class ChasteModel(object):
             self._logger.info(self._model.name + ' has capacitance in incompatible units, skipping')
             return None
 
-    def _get_stimulus_prams(self):
+    def _get_stimulus_params(self):
         """ Get membrane_stimulus_current_ parameters"""
         stim_param_tags =\
             ('membrane_stimulus_current_amplitude', 'membrane_stimulus_current_duration',
