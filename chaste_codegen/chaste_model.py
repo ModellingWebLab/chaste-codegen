@@ -339,7 +339,6 @@ class ChasteModel(object):
             return None, self._stimulus_units
         # get derivative equations
         d_eqs = self.get_equations_for(self._y_derivatives)
-        # Convert the membrane_stimulus_current
 
         # get dv/dt
         deriv_eq_only = [eq for eq in d_eqs if isinstance(eq.lhs, sp.Derivative)
