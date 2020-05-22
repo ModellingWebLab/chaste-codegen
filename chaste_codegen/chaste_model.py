@@ -238,7 +238,7 @@ class ChasteModel(object):
         """ Add conversion rules to allow converting stimulus current & amplitude"""
         # add 'HeartConfig::Instance()->GetCapacitance' call for use in conversions
         self._config_capacitance_call = sp.Function('HeartConfig::Instance()->GetCapacitance', real=True)()
-        self._config_capacitance = self._units.Quantity(self._config_capacitance_call, self.uA_per_cm2 / self.uA_per_uF)
+        self._config_capacitance = self._units.Quantity(self._config_capacitance_call, self.uA_per_cm2 / self.uA_per_uF)  # i.e. uF/cm2
 
         # Add conversion rules for use in capacitance
         self._model.units.add_conversion_rule(from_unit=self.uF, to_unit=self.uA / self.uA_per_cm2,
