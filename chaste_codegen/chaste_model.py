@@ -33,10 +33,7 @@ class ChasteModel(object):
     # Optimisations to be applied to equations
     _V, _W = Wild('V'), Wild('W')
     # log(x)/log(10) --> log10(x)
-    _LOG10_OPT = ReplaceOptim(_V * log(_W) / log(10), _V * log10(_W), cost_function=lambda expr: expr.count(
-        lambda e: (  # division & eval of transcendentals are expensive floating point operations...
-            e.is_Pow and e.exp.is_negative  # division
-            or (isinstance(e, (log, log10)) and not e.args[0].is_number))))
+    _LOG10_OPT = ReplaceOptim(_V * log(_W) / log(10), _V * log10(_W))
     # For P^n make sure n is passed as int if it is actually a whole number
     _POW_OPT = ReplaceOptim(lambda p: p.is_Pow and (isinstance(p.exp, sp.Float) or isinstance(p.exp, float))
                             and float(p.exp).is_integer(),
@@ -98,7 +95,7 @@ class ChasteModel(object):
         self._in_interface.extend(self._state_vars)
 
         # Retrieve stimulus current parameters so we can exclude these from modifiers etc.
-        self._stimulus_params = self._get_stimulus_prams()
+        self._stimulus_params = self._get_stimulus_params()
         self._membrane_stimulus_current_orig = self._get_membrane_stimulus_current()
 
         self._modifiers = self._get_modifiers()
@@ -348,7 +345,7 @@ class ChasteModel(object):
         deriv_eq_only = [eq for eq in d_eqs if isinstance(eq.lhs, sp.Derivative)
                          and eq.lhs.args[0] == self._membrane_voltage_var]
         assert len(deriv_eq_only) == 1, 'Expecting exactly 1 dv/dt equation'
-        deq = deriv_eq_only[0]
+        dvdt = deriv_eq_only[0]
 
         # Assign temporary values to variables in order to check the stimulus sign.
         # This will process defining expressions in a breadth first search until the stimulus
@@ -360,7 +357,7 @@ class ChasteModel(object):
         # The stimulus current is then negated from the sign expected by Chaste if evaluating
         # dV/dt gives a positive value.
         negate_stimulus = False
-        voltage_rhs = deq.rhs
+        voltage_rhs = dvdt.rhs
         variables = list(voltage_rhs.free_symbols)
         for variable in variables:
             if self._membrane_stimulus_current_orig != variable:
@@ -415,7 +412,7 @@ class ChasteModel(object):
             self._logger.info(self._model.name + ' has capacitance in incompatible units, skipping')
             return None
 
-    def _get_stimulus_prams(self):
+    def _get_stimulus_params(self):
         """ Get membrane_stimulus_current_ parameters"""
         stim_param_tags =\
             ('membrane_stimulus_current_amplitude', 'membrane_stimulus_current_duration',

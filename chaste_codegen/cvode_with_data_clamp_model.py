@@ -57,14 +57,14 @@ class CvodeWithDataClampModel(CvodeChasteModel):
         deriv_eq_only = [eq for eq in derivative_equations if isinstance(eq.lhs, sp.Derivative)
                          and eq.lhs.args[0] == self._membrane_voltage_var]
         assert len(deriv_eq_only) == 1, 'Expecting exactly 1 dv/dt equation'
-        deq = deriv_eq_only[0]
+        dvdt = deriv_eq_only[0]
 
         current_index = None
         # We need to add data_clamp to the equation with the correct sign
         # This is achieved by substitution the first of the ionic currents
         # by (ionic_current + data_clamp_current)
         ionic_var = self._equations_for_ionic_vars[0].lhs
-        current_index = find_ionic_var(deq, ionic_var, derivative_equations)
+        current_index = find_ionic_var(dvdt, ionic_var, derivative_equations)
         if current_index is not None:
             eq = derivative_equations[current_index]
             rhs = eq.rhs.xreplace({ionic_var: (ionic_var + self._membrane_data_clamp_current)})

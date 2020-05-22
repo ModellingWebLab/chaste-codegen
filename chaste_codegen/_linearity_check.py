@@ -89,12 +89,12 @@ def check_expr(expr, state_var, membrane_voltage_var, state_vars):
             result = check_expr(expr.args[0], state_var, membrane_voltage_var, state_vars)
         else:
             result = KINDS.NONLINEAR
-    elif isinstance(expr, sp.log) or isinstance(expr, log10) or isinstance(expr, log2) or\
-            isinstance(expr, cg.RealFunction) or\
-            isinstance(expr, sp.functions.elementary.trigonometric.TrigonometricFunction) or\
-            isinstance(expr, sp.functions.elementary.hyperbolic.HyperbolicFunction) or\
-            isinstance(expr, sp.functions.elementary.trigonometric.InverseTrigonometricFunction) or\
-            isinstance(expr, sp.functions.elementary.hyperbolic.InverseHyperbolicFunction):
+    elif isinstance(expr, (sp.log, log10, log2)) or\
+            isinstance(expr, (cg.RealFunction,
+                              sp.functions.elementary.trigonometric.TrigonometricFunction,
+                              sp.functions.elementary.hyperbolic.HyperbolicFunction,
+                              sp.functions.elementary.trigonometric.InverseTrigonometricFunction,
+                              sp.functions.elementary.hyperbolic.InverseHyperbolicFunction)):
         if state_var not in expr.free_symbols:
             result = check_expr(expr.args[0], state_var, membrane_voltage_var, state_vars)
         else:
