@@ -54,18 +54,21 @@ class CvodeWithDataClampModel(CvodeChasteModel):
 
         # piggy-backs on the analysis that finds ionic currents, in order to add in data clamp currents
         # Find dv/dt
+        deriv_eq_only = [eq for eq in derivative_equations if isinstance(eq.lhs, sp.Derivative)
+                         and eq.lhs.args[0] == self._membrane_voltage_var]
+        assert len(deriv_eq_only) == 1, 'Expecting exactly 1 dv/dt equation'
+        deq = deriv_eq_only[0]
+
         current_index = None
-        for i, eq in enumerate(derivative_equations):
-            if isinstance(eq.lhs, sp.Derivative) and eq.lhs.args[0] == self._membrane_voltage_var:
-                # We need to add data_clamp to the equation with the correct sign
-                # This is achieved by substitution the first of the ionic currents
-                # by (ionic_current + data_clamp_current)
-                ionic_var = self._equations_for_ionic_vars[0].lhs
-                current_index = find_ionic_var(derivative_equations[i], ionic_var, derivative_equations)
-                if current_index is not None:
-                    eq = derivative_equations[current_index]
-                    rhs = eq.rhs.xreplace({ionic_var: (ionic_var + self._membrane_data_clamp_current)})
-                    derivative_equations[current_index] = sp.Eq(eq.lhs, rhs)
+        # We need to add data_clamp to the equation with the correct sign
+        # This is achieved by substitution the first of the ionic currents
+        # by (ionic_current + data_clamp_current)
+        ionic_var = self._equations_for_ionic_vars[0].lhs
+        current_index = find_ionic_var(deq, ionic_var, derivative_equations)
+        if current_index is not None:
+            eq = derivative_equations[current_index]
+            rhs = eq.rhs.xreplace({ionic_var: (ionic_var + self._membrane_data_clamp_current)})
+            derivative_equations[current_index] = sp.Eq(eq.lhs, rhs)
         # add the equation for data_clamp_current to derivative_equations just before dv/dt
         if current_index is not None:
             derivative_equations.insert(current_index, self._membrane_data_clamp_current_eq)
