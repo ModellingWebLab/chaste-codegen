@@ -14,12 +14,12 @@ class CvodeWithDataClampModel(CvodeChasteModel):
         """ Add add membrane_data_clamp_current_conductance and membrane_data_clamp_current to the model"""
         self._membrane_data_clamp_current_conductance = \
             self._model.add_variable(name='membrane_data_clamp_current_conductance',
-                                     units=self.dimensionless)
+                                     units=self.units.get_unit('dimensionless'))
         self._model.add_equation(sp.Eq(self._membrane_data_clamp_current_conductance, 0.0))
 
         # add membrane_data_clamp_current
         self._membrane_data_clamp_current = self._model.add_variable(name='membrane_data_clamp_current',
-                                                                     units=self._units.get_unit('uA_per_cm2'))
+                                                                     units=self.units.get_unit('uA_per_cm2'))
         # add clamp current equation
         self._in_interface.append(self._membrane_data_clamp_current)
         clamp_current = self._membrane_data_clamp_current_conductance * \

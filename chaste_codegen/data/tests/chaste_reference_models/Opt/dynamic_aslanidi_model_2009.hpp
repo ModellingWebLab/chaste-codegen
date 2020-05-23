@@ -36,7 +36,7 @@ class Dynamicaslanidi_model_2009FromCellML : public AbstractCardiacCellWithModif
     //
     // Settable parameters and readable variables
     //
-    boost::shared_ptr<AbstractModifier> mp_membrane__Cm_modifier;
+    boost::shared_ptr<AbstractModifier> mp_membrane_capacitance_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_voltage_modifier;
 
 public:

@@ -136,7 +136,7 @@ def test_GRL2Opt_all_models(tmp_path, model, request):
 
 @pytest.mark.all_models
 @pytest.mark.parametrize(('model'), chaste_CVODE_DATA_CLAMP)
-def test_CVODE_DATA_CLAMP(tmp_path, model, request):
+def test_CVODE_DATA_CLAMP_all_models(tmp_path, model, request):
     """ Check generation of CVODE Data Clamp models against reference"""
     if request.config.option.markexpr != 'all_models':
         pytest.skip('Skip if not explicitly set to run all_models with -m all_models')

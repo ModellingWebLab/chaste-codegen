@@ -85,7 +85,7 @@
         double var_chaste_interface__time_dependent_outward_current_x1_gate__x1 = rY[7];
         // Units: dimensionless; Initial value: 0.0001
         
-        const double var_slow_inward_current__E_s = 7.6990712032745758 - 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai); // mV
+        const double var_slow_inward_current__E_s = 7.6990712032745758 - 13.028700000000001 * log(10) * log10(var_chaste_interface__slow_inward_current__Cai); // mV
         const double var_slow_inward_current__g_s = 0.00089999999999999998; // mS_per_mm2
         const double var_slow_inward_current__i_s = (-var_slow_inward_current__E_s + var_chaste_interface__membrane__V) * var_slow_inward_current__g_s * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f; // uA_per_mm2
         const double var_sodium_current__E_Na = 50.0; // mV
@@ -115,7 +115,7 @@
         double var_chaste_interface__slow_inward_current__Cai = rCurrentGuess[0];
         
         //output_equations
-        const double var_slow_inward_current__E_s = 7.6990712032745758 - 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai); // mV
+        const double var_slow_inward_current__E_s = 7.6990712032745758 - 13.028700000000001 * log(10) * log10(var_chaste_interface__slow_inward_current__Cai); // mV
         const double var_slow_inward_current__g_s = 0.00089999999999999998; // mS_per_mm2
         const double var_slow_inward_current__i_s = (-var_slow_inward_current__E_s + var_chaste_interface__membrane__V) * var_slow_inward_current__g_s * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f; // uA_per_mm2
         const double d_dt_chaste_interface_var_slow_inward_current__Cai = 7.0000000000000007e-6 - 0.070000000000000007 * var_chaste_interface__slow_inward_current__Cai - 0.01 * var_slow_inward_current__i_s; // concentration_units / ms
@@ -160,7 +160,7 @@
         // Units: dimensionless; Initial value: 0.0001
         
         const double var_membrane__C = 0.01; // uF_per_mm2
-        const double var_slow_inward_current__E_s = 7.6990712032745758 - 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai); // mV
+        const double var_slow_inward_current__E_s = 7.6990712032745758 - 13.028700000000001 * log(10) * log10(var_chaste_interface__slow_inward_current__Cai); // mV
         const double var_slow_inward_current__g_s = 0.00089999999999999998; // mS_per_mm2
         const double var_slow_inward_current__i_s = (-var_slow_inward_current__E_s + var_chaste_interface__membrane__V) * var_slow_inward_current__g_s * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f; // uA_per_mm2
         const double var_sodium_current__E_Na = 50.0; // mV

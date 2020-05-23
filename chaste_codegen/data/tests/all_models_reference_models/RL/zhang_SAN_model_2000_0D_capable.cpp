@@ -116,7 +116,6 @@
         const double var_hyperpolarisation_activated_current__g_f_K = (-var_hyperpolarisation_activated_current__g_f_K_Centre + var_hyperpolarisation_activated_current__g_f_K_Periphery) * var_membrane__FCell + var_hyperpolarisation_activated_current__g_f_K_Centre; // microS
         const double var_hyperpolarisation_activated_current__g_f_Na = (-var_hyperpolarisation_activated_current__g_f_Na_Centre + var_hyperpolarisation_activated_current__g_f_Na_Periphery) * var_membrane__FCell + var_hyperpolarisation_activated_current__g_f_Na_Centre; // microS
         const double var_membrane__Cm = (-var_membrane__CmCentre + var_membrane__CmPeriphery) * var_membrane__FCell + var_membrane__CmCentre; // microF
-        const double var_membrane__Cm_converted = var_membrane__Cm / HeartConfig::Instance()->GetCapacitance(); // uA / uA_per_cm2
         const double var_persistent_calcium_current__i_Ca_p_max_Centre = 0; // nanoA
         const double var_persistent_calcium_current__i_Ca_p_max_Periphery = 0; // nanoA
         const double var_persistent_calcium_current__i_Ca_p_max = (-var_persistent_calcium_current__i_Ca_p_max_Centre + var_persistent_calcium_current__i_Ca_p_max_Periphery) * var_membrane__FCell + var_persistent_calcium_current__i_Ca_p_max_Centre; // nanoA
@@ -128,16 +127,16 @@
         const double var_rapid_delayed_rectifying_potassium_current__g_K_r_Periphery = 0.016; // microS
         const double var_rapid_delayed_rectifying_potassium_current__g_K_r = (-var_rapid_delayed_rectifying_potassium_current__g_K_r_Centre + var_rapid_delayed_rectifying_potassium_current__g_K_r_Periphery) * var_membrane__FCell + var_rapid_delayed_rectifying_potassium_current__g_K_r_Centre; // microS
         const double var_rapid_delayed_rectifying_potassium_current__P_a = 0.40000000000000002 * var_chaste_interface__rapid_delayed_rectifying_potassium_current_P_as_gate__P_as + 0.59999999999999998 * var_chaste_interface__rapid_delayed_rectifying_potassium_current_P_af_gate__P_af; // dimensionless
-        const double var_reversal_and_equilibrium_potentials__E_Ca = 0.5 * var_membrane__R * var_membrane__T * log(var_ionic_concentrations__Ca_o / mParameters[0]) / var_membrane__F; // millivolt
+        const double var_reversal_and_equilibrium_potentials__E_Ca = 0.5 * var_membrane__R * var_membrane__T * log(10) * log10(var_ionic_concentrations__Ca_o / mParameters[0]) / var_membrane__F; // millivolt
         const double var_calcium_background_current__i_b_Ca = (-var_reversal_and_equilibrium_potentials__E_Ca + var_chaste_interface__membrane__V) * var_calcium_background_current__g_b_Ca; // nanoA
-        const double var_reversal_and_equilibrium_potentials__E_K = var_membrane__R * var_membrane__T * log(var_ionic_concentrations__K_o / var_ionic_concentrations__K_i) / var_membrane__F; // millivolt
+        const double var_reversal_and_equilibrium_potentials__E_K = var_membrane__R * var_membrane__T * log(10) * log10(var_ionic_concentrations__K_o / var_ionic_concentrations__K_i) / var_membrane__F; // millivolt
         const double var_four_AP_sensitive_currents__i_sus = (-var_reversal_and_equilibrium_potentials__E_K + var_chaste_interface__membrane__V) * var_four_AP_sensitive_currents__g_sus * var_chaste_interface__four_AP_sensitive_currents_r_gate__r; // nanoA
         const double var_four_AP_sensitive_currents__i_to = (-var_reversal_and_equilibrium_potentials__E_K + var_chaste_interface__membrane__V) * var_four_AP_sensitive_currents__g_to * var_chaste_interface__four_AP_sensitive_currents_q_gate__q * var_chaste_interface__four_AP_sensitive_currents_r_gate__r; // nanoA
         const double var_hyperpolarisation_activated_current__i_f_K = (-var_reversal_and_equilibrium_potentials__E_K + var_chaste_interface__membrane__V) * var_hyperpolarisation_activated_current__g_f_K * var_chaste_interface__hyperpolarisation_activated_current_y_gate__y; // nanoA
         const double var_potassium_background_current__i_b_K = (-var_reversal_and_equilibrium_potentials__E_K + var_chaste_interface__membrane__V) * var_potassium_background_current__g_b_K; // nanoA
         const double var_rapid_delayed_rectifying_potassium_current__i_K_r = (-var_reversal_and_equilibrium_potentials__E_K + var_chaste_interface__membrane__V) * var_rapid_delayed_rectifying_potassium_current__P_a * var_rapid_delayed_rectifying_potassium_current__g_K_r * var_chaste_interface__rapid_delayed_rectifying_potassium_current_P_i_gate__P_i; // nanoA
-        const double var_reversal_and_equilibrium_potentials__E_K_s = var_membrane__R * var_membrane__T * log((0.029999999999999999 * var_ionic_concentrations__Na_o + var_ionic_concentrations__K_o) / (0.029999999999999999 * var_ionic_concentrations__Na_i + var_ionic_concentrations__K_i)) / var_membrane__F; // millivolt
-        const double var_reversal_and_equilibrium_potentials__E_Na = var_membrane__R * var_membrane__T * log(var_ionic_concentrations__Na_o / var_ionic_concentrations__Na_i) / var_membrane__F; // millivolt
+        const double var_reversal_and_equilibrium_potentials__E_K_s = var_membrane__R * var_membrane__T * log(10) * log10((0.029999999999999999 * var_ionic_concentrations__Na_o + var_ionic_concentrations__K_o) / (0.029999999999999999 * var_ionic_concentrations__Na_i + var_ionic_concentrations__K_i)) / var_membrane__F; // millivolt
+        const double var_reversal_and_equilibrium_potentials__E_Na = var_membrane__R * var_membrane__T * log(10) * log10(var_ionic_concentrations__Na_o / var_ionic_concentrations__Na_i) / var_membrane__F; // millivolt
         const double var_hyperpolarisation_activated_current__i_f_Na = (-var_reversal_and_equilibrium_potentials__E_Na + var_chaste_interface__membrane__V) * var_hyperpolarisation_activated_current__g_f_Na * var_chaste_interface__hyperpolarisation_activated_current_y_gate__y; // nanoA
         const double var_slow_delayed_rectifying_potassium_current__g_K_s_Centre = 0.00034450000000000003; // microS
         const double var_slow_delayed_rectifying_potassium_current__g_K_s_Periphery = 0.0104; // microS
@@ -165,7 +164,7 @@
         const double var_sodium_potassium_pump__i_p_max_Periphery = 0.15519359999999999; // nanoA
         const double var_sodium_potassium_pump__i_p_max = (-var_sodium_potassium_pump__i_p_max_Centre + var_sodium_potassium_pump__i_p_max_Periphery) * var_membrane__FCell + var_sodium_potassium_pump__i_p_max_Centre; // nanoA
         const double var_sodium_potassium_pump__i_p = 1.6000000000000001 * pow(var_ionic_concentrations__K_o, 2) * pow(var_ionic_concentrations__Na_i, 3) * var_sodium_potassium_pump__i_p_max / ((1.5 + exp(-1.5 - 0.025000000000000001 * var_chaste_interface__membrane__V)) * pow((var_ionic_concentrations__K_o + var_sodium_potassium_pump__K_m_K), 2) * pow((var_ionic_concentrations__Na_i + var_sodium_potassium_pump__K_m_Na), 3)); // nanoA
-        const double var_chaste_interface__i_ionic = 0.001 * (var_L_type_Ca_channel__i_Ca_L + var_T_type_Ca_channel__i_Ca_T + var_calcium_background_current__i_b_Ca + var_four_AP_sensitive_currents__i_sus + var_four_AP_sensitive_currents__i_to + var_hyperpolarisation_activated_current__i_f_K + var_hyperpolarisation_activated_current__i_f_Na + var_persistent_calcium_current__i_Ca_p + var_potassium_background_current__i_b_K + var_rapid_delayed_rectifying_potassium_current__i_K_r + var_slow_delayed_rectifying_potassium_current__i_K_s + var_sodium_background_current__i_b_Na + var_sodium_calcium_exchanger__i_NaCa + var_sodium_current__i_Na + var_sodium_potassium_pump__i_p) / var_membrane__Cm_converted; // uA_per_cm2
+        const double var_chaste_interface__i_ionic = 0.001 * (var_L_type_Ca_channel__i_Ca_L + var_T_type_Ca_channel__i_Ca_T + var_calcium_background_current__i_b_Ca + var_four_AP_sensitive_currents__i_sus + var_four_AP_sensitive_currents__i_to + var_hyperpolarisation_activated_current__i_f_K + var_hyperpolarisation_activated_current__i_f_Na + var_persistent_calcium_current__i_Ca_p + var_potassium_background_current__i_b_K + var_rapid_delayed_rectifying_potassium_current__i_K_r + var_slow_delayed_rectifying_potassium_current__i_K_s + var_sodium_background_current__i_b_Na + var_sodium_calcium_exchanger__i_NaCa + var_sodium_current__i_Na + var_sodium_potassium_pump__i_p) * HeartConfig::Instance()->GetCapacitance() / var_membrane__Cm; // uA_per_cm2
 
         const double i_ionic = var_chaste_interface__i_ionic;
         EXCEPT_IF_NOT(!std::isnan(i_ionic));
@@ -301,16 +300,16 @@
             const double var_rapid_delayed_rectifying_potassium_current__g_K_r_Periphery = 0.016; // microS
             const double var_rapid_delayed_rectifying_potassium_current__g_K_r = (-var_rapid_delayed_rectifying_potassium_current__g_K_r_Centre + var_rapid_delayed_rectifying_potassium_current__g_K_r_Periphery) * var_membrane__FCell + var_rapid_delayed_rectifying_potassium_current__g_K_r_Centre; // microS
             const double var_rapid_delayed_rectifying_potassium_current__P_a = 0.40000000000000002 * var_chaste_interface__rapid_delayed_rectifying_potassium_current_P_as_gate__P_as + 0.59999999999999998 * var_chaste_interface__rapid_delayed_rectifying_potassium_current_P_af_gate__P_af; // dimensionless
-            const double var_reversal_and_equilibrium_potentials__E_Ca = 0.5 * var_membrane__R * var_membrane__T * log(var_ionic_concentrations__Ca_o / mParameters[0]) / var_membrane__F; // millivolt
+            const double var_reversal_and_equilibrium_potentials__E_Ca = 0.5 * var_membrane__R * var_membrane__T * log(10) * log10(var_ionic_concentrations__Ca_o / mParameters[0]) / var_membrane__F; // millivolt
             const double var_calcium_background_current__i_b_Ca = (-var_reversal_and_equilibrium_potentials__E_Ca + var_chaste_interface__membrane__V) * var_calcium_background_current__g_b_Ca; // nanoA
-            const double var_reversal_and_equilibrium_potentials__E_K = var_membrane__R * var_membrane__T * log(var_ionic_concentrations__K_o / var_ionic_concentrations__K_i) / var_membrane__F; // millivolt
+            const double var_reversal_and_equilibrium_potentials__E_K = var_membrane__R * var_membrane__T * log(10) * log10(var_ionic_concentrations__K_o / var_ionic_concentrations__K_i) / var_membrane__F; // millivolt
             const double var_four_AP_sensitive_currents__i_sus = (-var_reversal_and_equilibrium_potentials__E_K + var_chaste_interface__membrane__V) * var_four_AP_sensitive_currents__g_sus * var_chaste_interface__four_AP_sensitive_currents_r_gate__r; // nanoA
             const double var_four_AP_sensitive_currents__i_to = (-var_reversal_and_equilibrium_potentials__E_K + var_chaste_interface__membrane__V) * var_four_AP_sensitive_currents__g_to * var_chaste_interface__four_AP_sensitive_currents_q_gate__q * var_chaste_interface__four_AP_sensitive_currents_r_gate__r; // nanoA
             const double var_hyperpolarisation_activated_current__i_f_K = (-var_reversal_and_equilibrium_potentials__E_K + var_chaste_interface__membrane__V) * var_hyperpolarisation_activated_current__g_f_K * var_chaste_interface__hyperpolarisation_activated_current_y_gate__y; // nanoA
             const double var_potassium_background_current__i_b_K = (-var_reversal_and_equilibrium_potentials__E_K + var_chaste_interface__membrane__V) * var_potassium_background_current__g_b_K; // nanoA
             const double var_rapid_delayed_rectifying_potassium_current__i_K_r = (-var_reversal_and_equilibrium_potentials__E_K + var_chaste_interface__membrane__V) * var_rapid_delayed_rectifying_potassium_current__P_a * var_rapid_delayed_rectifying_potassium_current__g_K_r * var_chaste_interface__rapid_delayed_rectifying_potassium_current_P_i_gate__P_i; // nanoA
-            const double var_reversal_and_equilibrium_potentials__E_K_s = var_membrane__R * var_membrane__T * log((0.029999999999999999 * var_ionic_concentrations__Na_o + var_ionic_concentrations__K_o) / (0.029999999999999999 * var_ionic_concentrations__Na_i + var_ionic_concentrations__K_i)) / var_membrane__F; // millivolt
-            const double var_reversal_and_equilibrium_potentials__E_Na = var_membrane__R * var_membrane__T * log(var_ionic_concentrations__Na_o / var_ionic_concentrations__Na_i) / var_membrane__F; // millivolt
+            const double var_reversal_and_equilibrium_potentials__E_K_s = var_membrane__R * var_membrane__T * log(10) * log10((0.029999999999999999 * var_ionic_concentrations__Na_o + var_ionic_concentrations__K_o) / (0.029999999999999999 * var_ionic_concentrations__Na_i + var_ionic_concentrations__K_i)) / var_membrane__F; // millivolt
+            const double var_reversal_and_equilibrium_potentials__E_Na = var_membrane__R * var_membrane__T * log(10) * log10(var_ionic_concentrations__Na_o / var_ionic_concentrations__Na_i) / var_membrane__F; // millivolt
             const double var_hyperpolarisation_activated_current__i_f_Na = (-var_reversal_and_equilibrium_potentials__E_Na + var_chaste_interface__membrane__V) * var_hyperpolarisation_activated_current__g_f_Na * var_chaste_interface__hyperpolarisation_activated_current_y_gate__y; // nanoA
             const double var_slow_delayed_rectifying_potassium_current__g_K_s_Centre = 0.00034450000000000003; // microS
             const double var_slow_delayed_rectifying_potassium_current__g_K_s_Periphery = 0.0104; // microS
@@ -413,11 +412,10 @@
         const double var_membrane__dCell = 0; // dimensionless
         const double var_membrane__FCell = var_membrane__FCellConstant * var_membrane__dCell / (1.0 + 0.77449999999999997 * exp(6.9491525423728815 - 10.16949152542373 * var_membrane__dCell)); // dimensionless
         const double var_membrane__Cm = (-var_membrane__CmCentre + var_membrane__CmPeriphery) * var_membrane__FCell + var_membrane__CmCentre; // microF
-        const double var_membrane__Cm_converted = var_membrane__Cm / HeartConfig::Instance()->GetCapacitance(); // uA / uA_per_cm2
 
         std::vector<double> dqs(2);
         dqs[0] = var_chaste_interface__environment__time_converted;
-        dqs[1] = var_membrane__Cm_converted;
+        dqs[1] = var_membrane__Cm;
         return dqs;
     }
 
@@ -513,7 +511,7 @@ void OdeSystemInformation<Cellzhang_SAN_model_2000_0D_capableFromCellMLRushLarse
 
     // Derived Quantity index [1]:
     this->mDerivedQuantityNames.push_back("membrane_capacitance");
-    this->mDerivedQuantityUnits.push_back("uA / uA_per_cm2");
+    this->mDerivedQuantityUnits.push_back("microF");
 
     this->mInitialised = true;
 }

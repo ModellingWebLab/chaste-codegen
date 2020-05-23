@@ -265,8 +265,8 @@ def test_wrong_units_time(capsys, tmp_path):
         os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'test_wrong_units_time_odes.cellml')
     chaste_model = cellmlmanip.load_model(model_file)
 
-    with pytest.raises(ValueError, match="Incorrect definition of time variable (time needs to be dimensionally "
-                                         "equivalent to second)"):
+    with pytest.raises(ValueError, match='Incorrect definition of time variable: '
+                                         'time needs to be dimensionally equivalent to second'):
         chaste_model = cg.NormalChasteModel(chaste_model,
                                             'test_wrong_units_time_odes',
                                             class_name='test_wrong_units_time_odes')
@@ -279,8 +279,8 @@ def test_wrong_units_voltage(capsys, tmp_path):
         os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'test_wrong_units_voltage.cellml')
     chaste_model = cellmlmanip.load_model(model_file)
 
-    with pytest.raises(ValueError, match="Incorrect definition of membrane_voltage variable (units of membrane_voltage"
-                                         " need to be dimensionally equivalent to Volt)"):
+    with pytest.raises(ValueError, match='Incorrect definition of membrane_voltage variable: '
+                                         'units of membrane_voltage need to be dimensionally equivalent to Volt'):
         chaste_model = cg.NormalChasteModel(chaste_model,
                                             'test_wrong_units_voltage',
                                             class_name='test_wrong_units_voltage')

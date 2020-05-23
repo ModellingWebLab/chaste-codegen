@@ -107,7 +107,7 @@
         const double var_intracellular_ion_concentrations__Ko = 5.4000000000000004; // millimolar
         const double var_background_muscarinic_potassium_channel_current__g_K_ACh = 0.0011000000000000001 * pow(var_intracellular_ion_concentrations__Ko, 0.40999999999999998); // picoA
         const double var_intracellular_ion_concentrations__Nao = 140.0; // millimolar
-        const double var_membrane__Cm_converted = 9.9999999999999995e-7 * NV_Ith_S(mParameters, 0) / HeartConfig::Instance()->GetCapacitance(); // uA / uA_per_cm2
+        const double var_membrane__Cm_converted = 9.9999999999999995e-7 * NV_Ith_S(mParameters, 0); // uF
         const double var_membrane__F = 96485000000000000.0; // femtocoulomb_per_millimole
         const double var_membrane__R = 8314400000000000.0; // attojoule_per_millimole_kelvin
         const double var_membrane__T = 310.14999999999998; // kelvin
@@ -115,15 +115,15 @@
         const double var_T_type_calcium_channel_current__i_CaT = (-var_T_type_calcium_channel_current__E_CaT + var_chaste_interface__membrane__V) * var_T_type_calcium_channel_current__g_CaT * var_chaste_interface__T_type_calcium_channel_current_d_gate__d * var_chaste_interface__T_type_calcium_channel_current_f_gate__f; // picoA
         const double var_background_muscarinic_potassium_channel_current__i_K_ACh = (-var_intracellular_ion_concentrations__Ko * exp(-var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T)) + var_chaste_interface__intracellular_ion_concentrations__Ki) * var_background_muscarinic_potassium_channel_current__g_K_ACh; // picoA
         const double var_rapidly_activating_delayed_rectifier_potassium_current__g_Kr = 0.025000000000000001 * pow(var_intracellular_ion_concentrations__Ko, 0.58999999999999997); // nanoS
-        const double var_reversal_potentials__E_K = var_membrane__R * var_membrane__T * log(var_intracellular_ion_concentrations__Ko / var_chaste_interface__intracellular_ion_concentrations__Ki) / var_membrane__F; // millivolt
+        const double var_reversal_potentials__E_K = var_membrane__R * var_membrane__T * log(10) * log10(var_intracellular_ion_concentrations__Ko / var_chaste_interface__intracellular_ion_concentrations__Ki) / var_membrane__F; // millivolt
         const double var_AP_sensitive_currents__i_sus = (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * var_AP_sensitive_currents__g_sus * var_chaste_interface__AP_sensitive_currents_r_gate__r; // picoA
         const double var_AP_sensitive_currents__i_to = (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * var_AP_sensitive_currents__g_to * var_chaste_interface__AP_sensitive_currents_q_gate__q * var_chaste_interface__AP_sensitive_currents_r_gate__r; // picoA
         const double var_hyperpolarisation_activated_current__i_h_K = pow(var_chaste_interface__hyperpolarisation_activated_current_y_gate__y, 2) * (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * var_hyperpolarisation_activated_current__g_h_K; // picoA
         const double var_rapidly_activating_delayed_rectifier_potassium_current__i_Kr = (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * (0.40000000000000002 * var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paS + 0.59999999999999998 * var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paF) * var_rapidly_activating_delayed_rectifier_potassium_current__g_Kr * var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pi_gate__piy; // picoA
-        const double var_reversal_potentials__E_Na = var_membrane__R * var_membrane__T * log(var_intracellular_ion_concentrations__Nao / var_chaste_interface__intracellular_ion_concentrations__Nai) / var_membrane__F; // millivolt
+        const double var_reversal_potentials__E_Na = var_membrane__R * var_membrane__T * log(10) * log10(var_intracellular_ion_concentrations__Nao / var_chaste_interface__intracellular_ion_concentrations__Nai) / var_membrane__F; // millivolt
         const double var_hyperpolarisation_activated_current__i_h_Na = pow(var_chaste_interface__hyperpolarisation_activated_current_y_gate__y, 2) * (-var_reversal_potentials__E_Na + var_chaste_interface__membrane__V) * var_hyperpolarisation_activated_current__g_h_Na; // picoA
         const double var_hyperpolarisation_activated_current__i_h = var_hyperpolarisation_activated_current__i_h_K + var_hyperpolarisation_activated_current__i_h_Na; // picoA
-        const double var_slowly_activating_delayed_rectifier_potassium_current__E_Ks = var_membrane__R * var_membrane__T * log((0.12 * var_intracellular_ion_concentrations__Nao + var_intracellular_ion_concentrations__Ko) / (0.12 * var_chaste_interface__intracellular_ion_concentrations__Nai + var_chaste_interface__intracellular_ion_concentrations__Ki)) / var_membrane__F; // millivolt
+        const double var_slowly_activating_delayed_rectifier_potassium_current__E_Ks = var_membrane__R * var_membrane__T * log(10) * log10((0.12 * var_intracellular_ion_concentrations__Nao + var_intracellular_ion_concentrations__Ko) / (0.12 * var_chaste_interface__intracellular_ion_concentrations__Nai + var_chaste_interface__intracellular_ion_concentrations__Ki)) / var_membrane__F; // millivolt
         const double var_slowly_activating_delayed_rectifier_potassium_current__g_Ks = 0.025899999999999999; // nanoS
         const double var_slowly_activating_delayed_rectifier_potassium_current__i_Ks = pow(var_chaste_interface__slowly_activating_delayed_rectifier_potassium_current_n_gate__n, 2) * (-var_slowly_activating_delayed_rectifier_potassium_current__E_Ks + var_chaste_interface__membrane__V) * var_slowly_activating_delayed_rectifier_potassium_current__g_Ks; // picoA
         const double var_sodium_calcium_exchange_current__K1ni = 395.30000000000001; // millimolar
@@ -163,7 +163,7 @@
         const double var_sustained_inward_current__E_st = 37.399999999999999; // millivolt
         const double var_sustained_inward_current__g_st = 0.014999999999999999; // nanoS
         const double var_sustained_inward_current__i_st = (-var_sustained_inward_current__E_st + var_chaste_interface__membrane__V) * var_sustained_inward_current__g_st * var_chaste_interface__sustained_inward_current_qa_gate__qa * var_chaste_interface__sustained_inward_current_qi_gate__qi; // picoA
-        const double var_chaste_interface__i_ionic = 9.9999999999999995e-7 * (var_AP_sensitive_currents__i_sus + var_AP_sensitive_currents__i_to + var_L_type_calcium_channel_current__i_CaL + var_T_type_calcium_channel_current__i_CaT + var_background_muscarinic_potassium_channel_current__i_K_ACh + var_hyperpolarisation_activated_current__i_h + var_rapidly_activating_delayed_rectifier_potassium_current__i_Kr + var_slowly_activating_delayed_rectifier_potassium_current__i_Ks + var_sodium_calcium_exchange_current__i_NaCa + var_sodium_dependent_background_current__i_b_Na + var_sodium_potassium_pump_current__i_NaK + var_sustained_inward_current__i_st) / var_membrane__Cm_converted; // uA_per_cm2
+        const double var_chaste_interface__i_ionic = 9.9999999999999995e-7 * (var_AP_sensitive_currents__i_sus + var_AP_sensitive_currents__i_to + var_L_type_calcium_channel_current__i_CaL + var_T_type_calcium_channel_current__i_CaT + var_background_muscarinic_potassium_channel_current__i_K_ACh + var_hyperpolarisation_activated_current__i_h + var_rapidly_activating_delayed_rectifier_potassium_current__i_Kr + var_slowly_activating_delayed_rectifier_potassium_current__i_Ks + var_sodium_calcium_exchange_current__i_NaCa + var_sodium_dependent_background_current__i_b_Na + var_sodium_potassium_pump_current__i_NaK + var_sustained_inward_current__i_st) * HeartConfig::Instance()->GetCapacitance() / var_membrane__Cm_converted; // uA_per_cm2
 
         const double i_ionic = var_chaste_interface__i_ionic;
         if (made_new_cvode_vector)
@@ -335,14 +335,14 @@
         const double var_rapidly_activating_delayed_rectifier_potassium_current_pi_gate__pi_infinity = 1 / (1.0 + exp(1.672514619883041 + 0.058479532163742687 * var_chaste_interface__membrane__V)); // dimensionless
         const double var_rapidly_activating_delayed_rectifier_potassium_current_pi_gate__tau_pi = 1 / (0.10000000000000001 * exp(-0.018299935950224173 * var_chaste_interface__membrane__V) + 0.65600000000000003 * exp(0.009420009985210585 * var_chaste_interface__membrane__V)); // millisecond
         const double d_dt_chaste_interface_var_rapidly_activating_delayed_rectifier_potassium_current_pi_gate__piy = (-var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pi_gate__piy + var_rapidly_activating_delayed_rectifier_potassium_current_pi_gate__pi_infinity) / var_rapidly_activating_delayed_rectifier_potassium_current_pi_gate__tau_pi; // 1 / millisecond
-        const double var_reversal_potentials__E_K = var_membrane__R * var_membrane__T * log(var_intracellular_ion_concentrations__Ko / var_chaste_interface__intracellular_ion_concentrations__Ki) / var_membrane__F; // millivolt
+        const double var_reversal_potentials__E_K = var_membrane__R * var_membrane__T * log(10) * log10(var_intracellular_ion_concentrations__Ko / var_chaste_interface__intracellular_ion_concentrations__Ki) / var_membrane__F; // millivolt
         const double var_AP_sensitive_currents__i_sus = (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * var_AP_sensitive_currents__g_sus * var_chaste_interface__AP_sensitive_currents_r_gate__r; // picoA
         const double var_AP_sensitive_currents__i_to = (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * var_AP_sensitive_currents__g_to * var_chaste_interface__AP_sensitive_currents_q_gate__q * var_chaste_interface__AP_sensitive_currents_r_gate__r; // picoA
         const double var_hyperpolarisation_activated_current__i_h_K = pow(var_chaste_interface__hyperpolarisation_activated_current_y_gate__y, 2) * (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * var_hyperpolarisation_activated_current__g_h_K; // picoA
         const double var_rapidly_activating_delayed_rectifier_potassium_current__i_Kr = (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * (0.40000000000000002 * var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paS + 0.59999999999999998 * var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paF) * var_rapidly_activating_delayed_rectifier_potassium_current__g_Kr * var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pi_gate__piy; // picoA
-        const double var_reversal_potentials__E_Na = var_membrane__R * var_membrane__T * log(var_intracellular_ion_concentrations__Nao / var_chaste_interface__intracellular_ion_concentrations__Nai) / var_membrane__F; // millivolt
+        const double var_reversal_potentials__E_Na = var_membrane__R * var_membrane__T * log(10) * log10(var_intracellular_ion_concentrations__Nao / var_chaste_interface__intracellular_ion_concentrations__Nai) / var_membrane__F; // millivolt
         const double var_hyperpolarisation_activated_current__i_h_Na = pow(var_chaste_interface__hyperpolarisation_activated_current_y_gate__y, 2) * (-var_reversal_potentials__E_Na + var_chaste_interface__membrane__V) * var_hyperpolarisation_activated_current__g_h_Na; // picoA
-        const double var_slowly_activating_delayed_rectifier_potassium_current__E_Ks = var_membrane__R * var_membrane__T * log((0.12 * var_intracellular_ion_concentrations__Nao + var_intracellular_ion_concentrations__Ko) / (0.12 * var_chaste_interface__intracellular_ion_concentrations__Nai + var_chaste_interface__intracellular_ion_concentrations__Ki)) / var_membrane__F; // millivolt
+        const double var_slowly_activating_delayed_rectifier_potassium_current__E_Ks = var_membrane__R * var_membrane__T * log(10) * log10((0.12 * var_intracellular_ion_concentrations__Nao + var_intracellular_ion_concentrations__Ko) / (0.12 * var_chaste_interface__intracellular_ion_concentrations__Nai + var_chaste_interface__intracellular_ion_concentrations__Ki)) / var_membrane__F; // millivolt
         const double var_slowly_activating_delayed_rectifier_potassium_current__g_Ks = 0.025899999999999999; // nanoS
         const double var_slowly_activating_delayed_rectifier_potassium_current_n_gate__alpha_n = 0.014 / (1.0 + exp(4.4444444444444446 - 0.1111111111111111 * var_chaste_interface__membrane__V)); // per_millisecond
         const double var_slowly_activating_delayed_rectifier_potassium_current_n_gate__beta_n = 0.001 * exp(-0.022222222222222223 * var_chaste_interface__membrane__V); // per_millisecond
@@ -455,7 +455,7 @@
         // Units: millivolt; Initial value: -58.600291137693
         
         // Mathematics
-        const double var_membrane__Cm_converted = 9.9999999999999995e-7 * NV_Ith_S(mParameters, 0) / HeartConfig::Instance()->GetCapacitance(); // uA / uA_per_cm2
+        const double var_membrane__Cm_converted = 9.9999999999999995e-7 * NV_Ith_S(mParameters, 0); // uF
         // Special handling of data clamp current here
         // (we want to save expense of calling the interpolation method if possible.)
         double var_chaste_interface__membrane_data_clamp_current = 0.0;
@@ -627,7 +627,7 @@ void OdeSystemInformation<Cellkurata_model_2002FromCellMLCvodeDataClamp>::Initia
 
     // Derived Quantity index [1]:
     this->mDerivedQuantityNames.push_back("membrane_capacitance");
-    this->mDerivedQuantityUnits.push_back("uA / uA_per_cm2");
+    this->mDerivedQuantityUnits.push_back("uF");
 
     // Derived Quantity index [2]:
     this->mDerivedQuantityNames.push_back("membrane_data_clamp_current");
