@@ -1,6 +1,5 @@
 import os
 import re
-import sys
 
 import chaste_codegen as cg
 from chaste_codegen._script_utils import write_file
