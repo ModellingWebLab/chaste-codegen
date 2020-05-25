@@ -74,7 +74,6 @@ def compare_model_against_reference(chaste_model, tmp_path, expected_hpp_path, e
     """ Check a model's generated files against given reference files
     """
     tmp_path = str(tmp_path)
-
     # Compare against reference
     # Write generated files
     hhp_gen_file_path = os.path.join(tmp_path, chaste_model.file_name + ".hpp")
