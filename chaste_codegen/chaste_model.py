@@ -16,6 +16,7 @@ from sympy.codegen.rewriting import (
 )
 
 import chaste_codegen as cg
+from chaste_codegen._rdf import get_variables_transitively
 
 from ._math_functions import MATH_FUNC_SYMPY_MAPPING
 
@@ -116,6 +117,7 @@ class ChasteModel(object):
         # get capacitance and update stimulus current
         self._in_interface.extend(self._stimulus_params)
         self._membrane_stimulus_current_converted, self._stimulus_units = self._convert_membrane_stimulus_current()
+        self._convert_other_currents()
 
         self._ionic_derivs = self._get_ionic_derivs()
         self._equations_for_ionic_vars = self._get_equations_for_ionic_vars()
@@ -396,6 +398,17 @@ class ChasteModel(object):
         self._set_is_metadata(membrane_stimulus_current_converted, 'derived-quantity')
         return membrane_stimulus_current_converted, \
             (self._membrane_stimulus_current_orig.units, membrane_stimulus_current_converted.units)
+
+    def _convert_other_currents(self):
+        """ Try to convert other currents (apart from stimulus current) to uA_per_cm2 """
+        currents = get_variables_transitively(self._model, (self._OXMETA, 'CellMembraneCurrent'))
+        currents = set(currents) - set(self._stimulus_params + [self._membrane_stimulus_current_converted])
+        print(currents)
+        for current in currents:
+            try:
+                self._model.convert_variable(current, self.units.get_unit('uA_per_cm2'), DataDirectionFlow.INPUT)
+            except DimensionalityError:
+                pass  # conversion is optional, convert only if possible
 
     def _get_membrane_capacitance(self):
         """ Find membrane_capacitance if the model has it and convert it to uA/uA_per_cm2 if necessary"""

@@ -1,0 +1,3 @@
+[submodule "chaste_codegen/ontologies"]
+	path = chaste_codegen/ontologies
+	url = https://github.com/ModellingWebLab/ontologies
