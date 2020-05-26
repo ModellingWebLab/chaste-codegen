@@ -223,8 +223,7 @@ def test_Opt(tmp_path, model):
                                                model['expected_cpp_path'])
 
 
-def test_missing_V(tmp_path):
-    tmp_path = str(tmp_path)
+def test_missing_V():
     LOGGER.info('Testing missing Voltage metadata tag\n')
     model_file = \
         os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'hodgkin_huxley_squid_axon_model_1952_modified.cellml')
@@ -240,8 +239,7 @@ def test_missing_V(tmp_path):
                                             class_name='hodgkin_huxley_squid_axon_model_1952_modified')
 
 
-def test_missing_capacitance(tmp_path):
-    tmp_path = str(tmp_path)
+def test_missing_capacitance():
     LOGGER.info('Testing missing capacitance\n')
     model_file = \
         os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'pandit_model_2001_epi.cellml')
@@ -258,8 +256,7 @@ def test_missing_capacitance(tmp_path):
                                             class_name='pandit_model_2001_epi')
 
 
-def test_wrong_units_time(capsys, tmp_path):
-    tmp_path = str(tmp_path)
+def test_wrong_units_time():
     LOGGER.info('Testing wrong units for time\n')
     model_file = \
         os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'test_wrong_units_time_odes.cellml')
@@ -272,8 +269,7 @@ def test_wrong_units_time(capsys, tmp_path):
                                             class_name='test_wrong_units_time_odes')
 
 
-def test_wrong_units_voltage(capsys, tmp_path):
-    tmp_path = str(tmp_path)
+def test_wrong_units_voltage():
     LOGGER.info('Testing wrong units for Voltage\n')
     model_file = \
         os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'test_wrong_units_voltage.cellml')
