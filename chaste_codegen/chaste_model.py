@@ -34,7 +34,10 @@ class ChasteModel(object):
     # Optimisations to be applied to equations
     _V, _W = Wild('V'), Wild('W')
     # log(x)/log(10) --> log10(x)
-    _LOG10_OPT = ReplaceOptim(_V * log(_W) / log(10), _V * log10(_W))
+    _LOG10_OPT = ReplaceOptim(_V * log(_W) / log(10), _V * log10(_W), cost_function=lambda expr: expr.count(
+        lambda e: (  # cost function prevents turning log(x) into log(10) * log10(x) as we want normal log in that case
+            e.is_Pow and e.exp.is_negative  # division
+            or (isinstance(e, (log, log10)) and not e.args[0].is_number))))
     # For P^n make sure n is passed as int if it is actually a whole number
     _POW_OPT = ReplaceOptim(lambda p: p.is_Pow and (isinstance(p.exp, sp.Float) or isinstance(p.exp, float))
                             and float(p.exp).is_integer(),
@@ -398,7 +401,7 @@ class ChasteModel(object):
             (self._membrane_stimulus_current_orig.units, membrane_stimulus_current_converted.units)
 
     def _get_membrane_capacitance(self):
-        """ Find membrane_capacitance if the model has it and convert it to uA/uA_per_cm2 if necessary"""
+        """ Find membrane_capacitance if the model has it and convert it to uF if necessary"""
         try:
             capacitance = self._model.get_variable_by_ontology_term((self._OXMETA, 'membrane_capacitance'))
             return self._model.convert_variable(capacitance, self.units.get_unit('uF'), DataDirectionFlow.OUTPUT)
