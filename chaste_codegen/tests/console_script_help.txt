@@ -1,0 +1,48 @@
+usage: chaste_codegen [-h] [--version] [-t TYPE] [-o OUTFILE]
+                      [--use-analytic-jacobian] [-c CLASS_NAME] [-y]
+                      [--use-modifiers]
+                      cellml_file
+
+Chaste code generation for cellml.
+
+positional arguments:
+  cellml_file           The cellml file or URI to convert to chaste code
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit
+  -t TYPE, --translate-type TYPE
+                        the type of code to output [default: Chaste]. Choices:
+                        ['Chaste', 'ChasteOpt', 'CVODE', 'CVODEWithDataClamp',
+                        'BackwardsEuler', 'RushLarsen', 'RushLarsenOpt',
+                        'GeneralisedRushLarsen1', 'GeneralisedRushLarsen1Opt',
+                        'GeneralisedRushLarsen2', 'GeneralisedRushLarsen2Opt']
+  -o OUTFILE            write program code to OUTFILE [default action is to
+                        use the input filename with a different extension]
+                        NOTE: expects provided OUTFILE to have an extension
+                        relevant to code being generated (e.g. for CHASTE/C++
+                        code: .cpp, .c, .hpp, or .h)
+
+Transformations:
+  These options control which transformations (typically optimisations) are
+  applied in the generated code
+
+  --use-analytic-jacobian
+                        use a symbolic Jacobian calculated by SymPy (--use-
+                        analytic-jacobian can only be used in combination with
+                        -t CVODE)
+
+Generated code options:
+  -c CLASS_NAME         explicitly set the name of the generated class
+
+Chaste options:
+  Options specific to Chaste code output
+
+  -y, --dll, --dynamically-loadable
+                        add code to allow the model to be compiled to a shared
+                        library and dynamically loaded
+  --use-modifiers       add modifier functions for metadata-annotated
+                        variables (except time & stimulus) for use in
+                        sensitivity analysis. Only works with one of the
+                        following translator types (-t): ('Chaste',
+                        'ChasteOpt', 'CVODE', 'CVODEWithDataClamp')
