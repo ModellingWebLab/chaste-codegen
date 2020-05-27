@@ -64,3 +64,8 @@ class sin_(RealFunction):
         """
         assert argindex == 1
         return (cos_(self.args[0]))
+
+
+# MATH_FUNC_SYMPY_MAPPING provides a mapping from our specified math functions back to sympy versions.
+# This can be used to put sympy function into an expression or evaluation. e.g. `expr.subs(MATH_FUNC_SYMPY_MAPPING)`.
+MATH_FUNC_SYMPY_MAPPING = {abs_: sp.Abs, acos_: sp.acos, cos_: sp.cos, exp_: sp.exp, sin_: sp.sin, sqrt_: sp.sqrt}

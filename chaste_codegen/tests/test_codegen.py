@@ -8,6 +8,8 @@ import chaste_codegen as cg
 import chaste_codegen.tests.chaste_test_utils as test_utils
 
 
+OXMETA = 'https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#'  # oxford metadata uri prefix
+
 # Show more logging output
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
@@ -221,48 +223,60 @@ def test_Opt(tmp_path, model):
                                                model['expected_cpp_path'])
 
 
-def test_missing_capacitance(tmp_path):
-    tmp_path = str(tmp_path)
-    LOGGER.info('Testing missing capacitance\n')
+def test_missing_V():
+    LOGGER.info('Testing missing Voltage metadata tag\n')
     model_file = \
-        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'pandit_model_2001_epi_old_no_capacitance.cellml')
+        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'hodgkin_huxley_squid_axon_model_1952_modified.cellml')
     chaste_model = cellmlmanip.load_model(model_file)
 
-    with pytest.raises(AssertionError) as error:
+    # Remove membrane_voltage metadata tag
+    voltage = chaste_model.get_variable_by_ontology_term((OXMETA, 'membrane_voltage'))
+    chaste_model.rdf.remove((voltage.rdf_identity, None, None))
+
+    with pytest.raises(KeyError, match='Voltage not tagged in the model!'):
         chaste_model = cg.NormalChasteModel(chaste_model,
-                                            'pandit_model_2001_epi_old_no_capacitance',
-                                            class_name='pandit_model_2001_epi_old_no_capacitance')
-    assert str(error.value) == \
-        'Membrane capacitance is required to be able to apply conversion to stimulus current!'
+                                            'hodgkin_huxley_squid_axon_model_1952_modified',
+                                            class_name='hodgkin_huxley_squid_axon_model_1952_modified')
 
 
-def test_wrong_units_time(capsys, tmp_path):
-    tmp_path = str(tmp_path)
+def test_missing_capacitance():
+    LOGGER.info('Testing missing capacitance\n')
+    model_file = \
+        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'pandit_model_2001_epi.cellml')
+    chaste_model = cellmlmanip.load_model(model_file)
+
+    # Remove capacitance metadata tag
+    capacitance = chaste_model.get_variable_by_ontology_term((OXMETA, 'membrane_capacitance'))
+    chaste_model.rdf.remove((capacitance.rdf_identity, None, None))
+
+    with pytest.raises(KeyError, match='Membrane capacitance is required to be able to apply conversion '
+                                       'to stimulus current!'):
+        chaste_model = cg.NormalChasteModel(chaste_model,
+                                            'pandit_model_2001_epi',
+                                            class_name='pandit_model_2001_epi')
+
+
+def test_wrong_units_time():
     LOGGER.info('Testing wrong units for time\n')
     model_file = \
         os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'test_wrong_units_time_odes.cellml')
     chaste_model = cellmlmanip.load_model(model_file)
 
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(ValueError, match='Incorrect definition of time variable: '
+                                         'time needs to be dimensionally equivalent to second'):
         chaste_model = cg.NormalChasteModel(chaste_model,
                                             'test_wrong_units_time_odes',
                                             class_name='test_wrong_units_time_odes')
-    warning = 'Incorrect definition of time variable (time needs to be dimensionally equivalent to second)'
-    assert str(error.value) == warning
 
 
-def test_wrong_units_voltage(capsys, tmp_path):
-    tmp_path = str(tmp_path)
-    LOGGER.info('Testing wrong units for time\n')
+def test_wrong_units_voltage():
+    LOGGER.info('Testing wrong units for Voltage\n')
     model_file = \
         os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'test_wrong_units_voltage.cellml')
     chaste_model = cellmlmanip.load_model(model_file)
 
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(ValueError, match='Incorrect definition of membrane_voltage variable: '
+                                         'units of membrane_voltage need to be dimensionally equivalent to Volt'):
         chaste_model = cg.NormalChasteModel(chaste_model,
                                             'test_wrong_units_voltage',
                                             class_name='test_wrong_units_voltage')
-    warning = \
-        'Incorrect definition of membrane_voltage variable '\
-        '(units of membrane_voltage need to be dimensionally equivalent to Volt)'
-    assert str(error.value) == warning
