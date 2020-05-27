@@ -134,9 +134,9 @@
         const double var_iK1_rectification__SPM = 0.0014613; // millimolar
         const double var_iK1_rectification__fac = 1.0648; // dimensionless
         const double var_iK1_rectification__phi = 0.88380000000000003; // dimensionless
-        const double var_reversal_potentials__E_Ca = 0.5 * var_Environment__R * var_Environment__T * log(10) * log10(var_Environment__Ca_o / var_chaste_interface__Ca__Ca_i) / var_Environment__F; // millivolt
+        const double var_reversal_potentials__E_Ca = 0.5 * var_Environment__R * var_Environment__T * log(var_Environment__Ca_o / var_chaste_interface__Ca__Ca_i) / var_Environment__F; // millivolt
         const double var_ICab__i_b_Ca = (-var_reversal_potentials__E_Ca + var_chaste_interface__cell__V) * var_ICab__g_bca; // nanoA_per_nanoF
-        const double var_reversal_potentials__E_K = var_Environment__R * var_Environment__T * log(10) * log10(var_Environment__K_o / var_chaste_interface__K__K_i) / var_Environment__F; // millivolt
+        const double var_reversal_potentials__E_K = var_Environment__R * var_Environment__T * log(var_Environment__K_o / var_chaste_interface__K__K_i) / var_Environment__F; // millivolt
         const double var_IKr__i_Kr = 0.43033148291193518 * sqrt(var_Environment__K_o) * (-7.8571428571428568 + 0.028571428571428571 * var_Environment__T) * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_IKr__g_Kr_0 * var_chaste_interface__iKr_Markov__Or4; // nanoA_per_nanoF
         const double var_IpK__i_p_K = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_IpK__g_pK / (1.0 + exp(4.1806020066889626 - 0.16722408026755853 * var_chaste_interface__cell__V)); // nanoA_per_nanoF
         const double var_Ito__i_to = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_Ito__g_to * var_chaste_interface__ito_r_gate__r * var_chaste_interface__ito_s_gate__s; // nanoA_per_nanoF
@@ -149,11 +149,11 @@
         const double var_iK1_rectification__rec1 = pow(var_iK1_rectification__temp, 2) / (pow(var_iK1_rectification__temp, 3) + var_iK1_rectification__SPM / var_iK1_rectification__Kd1SPM + var_iK1_rectification__Mg_Buf / var_iK1_rectification__KiMg); // dimensionless
         const double var_iK1_rectification__xK1_inf = (1.0 - var_iK1_rectification__phi) * var_iK1_rectification__rec2 + var_iK1_rectification__phi * var_iK1_rectification__rec1; // dimensionless
         const double var_IK1__i_K1 = 0.43033148291193518 * sqrt(var_Environment__K_o) * (-7.8571428571428568 + 0.028571428571428571 * var_Environment__T) * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_IK1__g_K1_0 * var_iK1_rectification__xK1_inf; // nanoA_per_nanoF
-        const double var_reversal_potentials__E_Na = var_Environment__R * var_Environment__T * log(10) * log10(var_Environment__Na_o / var_chaste_interface__Na__Na_i) / var_Environment__F; // millivolt
+        const double var_reversal_potentials__E_Na = var_Environment__R * var_Environment__T * log(var_Environment__Na_o / var_chaste_interface__Na__Na_i) / var_Environment__F; // millivolt
         const double var_INa__i_Na = pow(var_chaste_interface__iNa_m_gate__m, 3) * (-var_reversal_potentials__E_Na + var_chaste_interface__cell__V) * var_INa__g_Na * var_chaste_interface__iNa_h_gate__h * var_chaste_interface__iNa_j_gate__j; // nanoA_per_nanoF
         const double var_INab__i_b_Na = (-var_reversal_potentials__E_Na + var_chaste_interface__cell__V) * var_INab__g_bna; // nanoA_per_nanoF
         const double var_reversal_potentials__P_kna = 0.029999999999999999; // dimensionless
-        const double var_reversal_potentials__E_Ks = var_Environment__R * var_Environment__T * log(10) * log10((var_Environment__Na_o * var_reversal_potentials__P_kna + var_Environment__K_o) / (var_chaste_interface__Na__Na_i * var_reversal_potentials__P_kna + var_chaste_interface__K__K_i)) / var_Environment__F; // millivolt
+        const double var_reversal_potentials__E_Ks = var_Environment__R * var_Environment__T * log((var_Environment__Na_o * var_reversal_potentials__P_kna + var_Environment__K_o) / (var_chaste_interface__Na__Na_i * var_reversal_potentials__P_kna + var_chaste_interface__K__K_i)) / var_Environment__F; // millivolt
         const double var_IKs__i_Ks = pow(var_chaste_interface__iKs_Xs_gate__Xs, 2) * (-var_reversal_potentials__E_Ks + var_chaste_interface__cell__V) * var_IKs__g_Ks; // nanoA_per_nanoF
         const double var_cell__i_tot = var_ICaL__i_CaL + var_ICab__i_b_Ca + var_IK1__i_K1 + var_IKr__i_Kr + var_IKs__i_Ks + var_INa__i_Na + var_INaCa__i_NaCa + var_INaK__i_NaK + var_INab__i_b_Na + var_IpCa__i_p_Ca + var_IpK__i_p_K + var_Ito__i_to + var_cell__i_Stim; // nanoA_per_nanoF
         const double var_chaste_interface__i_ionic = 0.99999999999999989 * HeartConfig::Instance()->GetCapacitance() * var_cell__i_tot; // uA_per_cm2
@@ -364,10 +364,10 @@
         const double var_ito_s_gate__s_inf = 1 / (1.0 + exp(4.0 + 0.20000000000000001 * var_chaste_interface__cell__V)); // dimensionless
         const double var_ito_s_gate__tau_s = 3.0 + 5.0 / (1.0 + exp(-4.0 + 0.20000000000000001 * var_chaste_interface__cell__V)) + 85.0 * exp(-6.328125 * pow((1 + 0.022222222222222223 * var_chaste_interface__cell__V), 2)); // millisecond
         const double d_dt_chaste_interface_var_ito_s_gate__s = (-var_chaste_interface__ito_s_gate__s + var_ito_s_gate__s_inf) / var_ito_s_gate__tau_s; // 1 / millisecond
-        const double var_reversal_potentials__E_Ca = 0.5 * var_Environment__R * var_Environment__T * log(10) * log10(var_Environment__Ca_o / var_chaste_interface__Ca__Ca_i) / var_Environment__F; // millivolt
+        const double var_reversal_potentials__E_Ca = 0.5 * var_Environment__R * var_Environment__T * log(var_Environment__Ca_o / var_chaste_interface__Ca__Ca_i) / var_Environment__F; // millivolt
         const double var_ICab__i_b_Ca = (-var_reversal_potentials__E_Ca + var_chaste_interface__cell__V) * var_ICab__g_bca; // nanoA_per_nanoF
         const double d_dt_chaste_interface_var_Ca__Ca_i = ((-var_Ileak_Iup_Ixfer__i_up + var_Ileak_Iup_Ixfer__i_leak) * var_Ca__V_sr / var_cell__Vol_c - 0.5 * (-2.0 * var_INaCa__i_NaCa + var_ICab__i_b_Ca + var_IpCa__i_p_Ca) * var_cell__Cm / (var_Environment__F * var_cell__Vol_c) + var_Ileak_Iup_Ixfer__i_xfer) * var_Ca_buffer__Ca_i_bufc; // millimolar / millisecond
-        const double var_reversal_potentials__E_K = var_Environment__R * var_Environment__T * log(10) * log10(var_Environment__K_o / var_chaste_interface__K__K_i) / var_Environment__F; // millivolt
+        const double var_reversal_potentials__E_K = var_Environment__R * var_Environment__T * log(var_Environment__K_o / var_chaste_interface__K__K_i) / var_Environment__F; // millivolt
         const double var_IKr__i_Kr = 0.43033148291193518 * sqrt(var_Environment__K_o) * (-7.8571428571428568 + 0.028571428571428571 * var_Environment__T) * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_IKr__g_Kr_0 * var_chaste_interface__iKr_Markov__Or4; // nanoA_per_nanoF
         const double var_IpK__i_p_K = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_IpK__g_pK / (1.0 + exp(4.1806020066889626 - 0.16722408026755853 * var_chaste_interface__cell__V)); // nanoA_per_nanoF
         const double var_Ito__i_to = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_Ito__g_to * var_chaste_interface__ito_r_gate__r * var_chaste_interface__ito_s_gate__s; // nanoA_per_nanoF
@@ -380,12 +380,12 @@
         const double var_iK1_rectification__rec1 = pow(var_iK1_rectification__temp, 2) / (pow(var_iK1_rectification__temp, 3) + var_iK1_rectification__SPM / var_iK1_rectification__Kd1SPM + var_iK1_rectification__Mg_Buf / var_iK1_rectification__KiMg); // dimensionless
         const double var_iK1_rectification__xK1_inf = (1.0 - var_iK1_rectification__phi) * var_iK1_rectification__rec2 + var_iK1_rectification__phi * var_iK1_rectification__rec1; // dimensionless
         const double var_IK1__i_K1 = 0.43033148291193518 * sqrt(var_Environment__K_o) * (-7.8571428571428568 + 0.028571428571428571 * var_Environment__T) * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_IK1__g_K1_0 * var_iK1_rectification__xK1_inf; // nanoA_per_nanoF
-        const double var_reversal_potentials__E_Na = var_Environment__R * var_Environment__T * log(10) * log10(var_Environment__Na_o / var_chaste_interface__Na__Na_i) / var_Environment__F; // millivolt
+        const double var_reversal_potentials__E_Na = var_Environment__R * var_Environment__T * log(var_Environment__Na_o / var_chaste_interface__Na__Na_i) / var_Environment__F; // millivolt
         const double var_INa__i_Na = pow(var_chaste_interface__iNa_m_gate__m, 3) * (-var_reversal_potentials__E_Na + var_chaste_interface__cell__V) * var_INa__g_Na * var_chaste_interface__iNa_h_gate__h * var_chaste_interface__iNa_j_gate__j; // nanoA_per_nanoF
         const double var_INab__i_b_Na = (-var_reversal_potentials__E_Na + var_chaste_interface__cell__V) * var_INab__g_bna; // nanoA_per_nanoF
         const double d_dt_chaste_interface_var_Na__Na_i = (-var_INa__i_Na - var_INab__i_b_Na - 3.0 * var_INaCa__i_NaCa - 3.0 * var_INaK__i_NaK) * var_cell__Cm / (var_Environment__F * var_cell__Vol_c); // millimolar / millisecond
         const double var_reversal_potentials__P_kna = 0.029999999999999999; // dimensionless
-        const double var_reversal_potentials__E_Ks = var_Environment__R * var_Environment__T * log(10) * log10((var_Environment__Na_o * var_reversal_potentials__P_kna + var_Environment__K_o) / (var_chaste_interface__Na__Na_i * var_reversal_potentials__P_kna + var_chaste_interface__K__K_i)) / var_Environment__F; // millivolt
+        const double var_reversal_potentials__E_Ks = var_Environment__R * var_Environment__T * log((var_Environment__Na_o * var_reversal_potentials__P_kna + var_Environment__K_o) / (var_chaste_interface__Na__Na_i * var_reversal_potentials__P_kna + var_chaste_interface__K__K_i)) / var_Environment__F; // millivolt
         const double var_IKs__i_Ks = pow(var_chaste_interface__iKs_Xs_gate__Xs, 2) * (-var_reversal_potentials__E_Ks + var_chaste_interface__cell__V) * var_IKs__g_Ks; // nanoA_per_nanoF
         const double d_dt_chaste_interface_var_K__K_i = (-var_IK1__i_K1 - var_IKr__i_Kr - var_IKs__i_Ks - var_IpK__i_p_K - var_Ito__i_to - var_cell__i_Stim + 2.0 * var_INaK__i_NaK) * var_cell__Cm / (var_Environment__F * var_cell__Vol_c); // millimolar / millisecond
 

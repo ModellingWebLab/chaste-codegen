@@ -176,7 +176,7 @@
         const double var_ICaL__xica = 2.0 * var_ICaL__jca * var_cell__wca; // nA_per_nF
         const double var_INaCa__xiNaCa = var_INaCa__jNaCa * var_cell__wca; // nA_per_nF
         const double var_reversal_potentials__K_i = 140.0; // mM
-        const double var_reversal_potentials__ek = log(10) * log10(var_Environment__K_o / var_reversal_potentials__K_i) / var_Environment__FonRT; // mV
+        const double var_reversal_potentials__ek = log(var_Environment__K_o / var_reversal_potentials__K_i) / var_Environment__FonRT; // mV
         const double var_IK1__aki = 1.02 / (1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__V - 0.23849999999999999 * var_reversal_potentials__ek)); // per_ms
         const double var_IK1__bki = (0.49124000000000001 * exp(0.43983232 + 0.080320000000000003 * var_chaste_interface__cell__V - 0.080320000000000003 * var_reversal_potentials__ek) + exp(-36.698642499999998 + 0.061749999999999999 * var_chaste_interface__cell__V - 0.061749999999999999 * var_reversal_potentials__ek)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_reversal_potentials__ek - 0.51429999999999998 * var_chaste_interface__cell__V)); // per_ms
         const double var_IK1__xkin = var_IK1__aki / (var_IK1__aki + var_IK1__bki); // dimensionless
@@ -185,10 +185,10 @@
         const double var_Ito__xitof = (-var_reversal_potentials__ek + var_chaste_interface__cell__V) * var_Ito__gtof * var_chaste_interface__Ito__xtof * var_chaste_interface__Ito__ytof; // nA_per_nF
         const double var_Ito__xitos = (-var_reversal_potentials__ek + var_chaste_interface__cell__V) * (0.5 * var_Ito__rs_inf + var_chaste_interface__Ito__ytos) * NV_Ith_S(mParameters, 2) * var_Ito__gtos * var_chaste_interface__Ito__xtos; // nA_per_nF
         const double var_Ito__xito = var_Ito__xitof + var_Ito__xitos; // nA_per_nF
-        const double var_reversal_potentials__ena = log(10) * log10(var_Environment__Na_o / var_chaste_interface__Na__Na_i) / var_Environment__FonRT; // mV
+        const double var_reversal_potentials__ena = log(var_Environment__Na_o / var_chaste_interface__Na__Na_i) / var_Environment__FonRT; // mV
         const double var_INa__xina = pow(var_chaste_interface__INa__xm, 3) * (-var_reversal_potentials__ena + var_chaste_interface__cell__V) * NV_Ith_S(mParameters, 5) * var_chaste_interface__INa__xh * var_chaste_interface__INa__xj; // nA_per_nF
         const double var_reversal_potentials__prNaK = 0.018329999999999999; // dimensionless
-        const double var_reversal_potentials__eks = log(10) * log10((var_Environment__Na_o * var_reversal_potentials__prNaK + var_Environment__K_o) / (var_chaste_interface__Na__Na_i * var_reversal_potentials__prNaK + var_reversal_potentials__K_i)) / var_Environment__FonRT; // mV
+        const double var_reversal_potentials__eks = log((var_Environment__Na_o * var_reversal_potentials__prNaK + var_Environment__K_o) / (var_chaste_interface__Na__Na_i * var_reversal_potentials__prNaK + var_reversal_potentials__K_i)) / var_Environment__FonRT; // mV
         const double var_IKs__xiks = (-var_reversal_potentials__eks + var_chaste_interface__cell__V) * NV_Ith_S(mParameters, 1) * var_IKs__gks * var_IKs__gksx * var_chaste_interface__IKs__xs1 * var_chaste_interface__IKs__xs2; // nA_per_nF
         const double var_cell__Itotal = -var_ICaL__xica - var_IK1__xik1 - var_IKr__xikr - var_IKs__xiks - var_INa__xina - var_INaCa__xiNaCa - var_INaK__xiNaK - var_Ito__xito - var_cell__i_Stim; // nA_per_nF
         const double var_chaste_interface__i_ionic = 0.99999999999999989 * HeartConfig::Instance()->GetCapacitance() * var_cell__Itotal; // uA_per_cm2
@@ -442,7 +442,7 @@
         const double d_dt_chaste_interface_var_Ito__ytof = (-var_chaste_interface__Ito__ytof + var_Ito__ytof_inf) / var_Ito__tyf; // 1 / ms
         const double var_cell__wca = 8.0; // mV_per_uM
         const double var_INaCa__xiNaCa = var_INaCa__jNaCa * var_cell__wca; // nA_per_nF
-        const double var_reversal_potentials__ena = log(10) * log10(var_Environment__Na_o / var_chaste_interface__Na__Na_i) / var_Environment__FonRT; // mV
+        const double var_reversal_potentials__ena = log(var_Environment__Na_o / var_chaste_interface__Na__Na_i) / var_Environment__FonRT; // mV
         const double var_INa__xina = pow(var_chaste_interface__INa__xm, 3) * (-var_reversal_potentials__ena + var_chaste_interface__cell__V) * NV_Ith_S(mParameters, 5) * var_chaste_interface__INa__xh * var_chaste_interface__INa__xj; // nA_per_nF
         const double d_dt_chaste_interface_var_Na__Na_i = 0.001 * (-var_INa__xina - 3.0 * var_INaCa__xiNaCa - 3.0 * var_INaK__xiNaK) / var_cell__wca; // mM / ms
 
@@ -463,7 +463,7 @@
             const double var_cell__i_Stim = 1.0000000000000002 * var_cell__i_Stim_converted / HeartConfig::Instance()->GetCapacitance(); // nA_per_nF
             const double var_ICaL__xica = 2.0 * var_ICaL__jca * var_cell__wca; // nA_per_nF
             const double var_reversal_potentials__K_i = 140.0; // mM
-            const double var_reversal_potentials__ek = log(10) * log10(var_Environment__K_o / var_reversal_potentials__K_i) / var_Environment__FonRT; // mV
+            const double var_reversal_potentials__ek = log(var_Environment__K_o / var_reversal_potentials__K_i) / var_Environment__FonRT; // mV
             const double var_IK1__aki = 1.02 / (1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__V - 0.23849999999999999 * var_reversal_potentials__ek)); // per_ms
             const double var_IK1__bki = (0.49124000000000001 * exp(0.43983232 + 0.080320000000000003 * var_chaste_interface__cell__V - 0.080320000000000003 * var_reversal_potentials__ek) + exp(-36.698642499999998 + 0.061749999999999999 * var_chaste_interface__cell__V - 0.061749999999999999 * var_reversal_potentials__ek)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_reversal_potentials__ek - 0.51429999999999998 * var_chaste_interface__cell__V)); // per_ms
             const double var_IK1__xkin = var_IK1__aki / (var_IK1__aki + var_IK1__bki); // dimensionless
@@ -473,7 +473,7 @@
             const double var_Ito__xitos = (-var_reversal_potentials__ek + var_chaste_interface__cell__V) * (0.5 * var_Ito__rs_inf + var_chaste_interface__Ito__ytos) * NV_Ith_S(mParameters, 2) * var_Ito__gtos * var_chaste_interface__Ito__xtos; // nA_per_nF
             const double var_Ito__xito = var_Ito__xitof + var_Ito__xitos; // nA_per_nF
             const double var_reversal_potentials__prNaK = 0.018329999999999999; // dimensionless
-            const double var_reversal_potentials__eks = log(10) * log10((var_Environment__Na_o * var_reversal_potentials__prNaK + var_Environment__K_o) / (var_chaste_interface__Na__Na_i * var_reversal_potentials__prNaK + var_reversal_potentials__K_i)) / var_Environment__FonRT; // mV
+            const double var_reversal_potentials__eks = log((var_Environment__Na_o * var_reversal_potentials__prNaK + var_Environment__K_o) / (var_chaste_interface__Na__Na_i * var_reversal_potentials__prNaK + var_reversal_potentials__K_i)) / var_Environment__FonRT; // mV
             const double var_IKs__xiks = (-var_reversal_potentials__eks + var_chaste_interface__cell__V) * NV_Ith_S(mParameters, 1) * var_IKs__gks * var_IKs__gksx * var_chaste_interface__IKs__xs1 * var_chaste_interface__IKs__xs2; // nA_per_nF
             const double var_cell__Itotal = -var_ICaL__xica - var_IK1__xik1 - var_IKr__xikr - var_IKs__xiks - var_INa__xina - var_INaCa__xiNaCa - var_INaK__xiNaK - var_Ito__xito - var_cell__i_Stim; // nA_per_nF
             // Special handling of data clamp current here
