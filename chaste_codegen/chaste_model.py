@@ -408,7 +408,7 @@ class ChasteModel(object):
         currents = set(currents) - set(self._stimulus_params + [self._membrane_stimulus_current_converted])
         for current in currents:
             try:
-                self._model.convert_variable(current, self.units.get_unit('uA_per_cm2'), DataDirectionFlow.INPUT)
+                self._model.convert_variable(current, self.units.get_unit('uA_per_cm2'), DataDirectionFlow.OUTPUT)
             except DimensionalityError:
                 pass  # conversion is optional, convert only if possible
 
