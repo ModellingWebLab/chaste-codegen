@@ -403,12 +403,17 @@ class ChasteModel(object):
             (self._membrane_stimulus_current_orig.units, membrane_stimulus_current_converted.units)
 
     def _convert_other_currents(self):
-        """ Try to convert other currents (apart from stimulus current) to uA_per_cm2 """
+        """ Try to convert other currents (apart from stimulus current) to uA_per_cm2 
+        
+        Only variables in units convertible to Chaste's current units are converted. 
+        This is to allow for 'current-related' variables in the ontology 
+        that aren't themselves currents but might be included within the superclass.
+        """
         currents = get_variables_transitively(self._model, (self._OXMETA, 'CellMembraneCurrent'))
         currents = set(currents) - set(self._stimulus_params + [self._membrane_stimulus_current_converted])
         for current in currents:
             try:
-                self._model.convert_variable(current, self.units.get_unit('uA_per_cm2'), DataDirectionFlow.INPUT)
+                self._model.convert_variable(current, self.units.get_unit('uA_per_cm2'), DataDirectionFlow.OUTPUT)
             except DimensionalityError:
                 pass  # conversion is optional, convert only if possible
 
