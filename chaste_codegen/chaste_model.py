@@ -20,6 +20,8 @@ from chaste_codegen._rdf import get_variables_transitively
 
 from ._math_functions import MATH_FUNC_SYMPY_MAPPING
 
+from ._math_functions import MATH_FUNC_SYMPY_MAPPING
+
 
 class ChasteModel(object):
     """ Holds information about a cellml model for which chaste code is to be generated.
