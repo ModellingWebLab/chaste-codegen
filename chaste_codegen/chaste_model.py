@@ -409,8 +409,10 @@ class ChasteModel(object):
         This is to allow for 'current-related' variables in the ontology 
         that aren't themselves currents but might be included within the superclass.
         """
-        currents = get_variables_transitively(self._model, (self._OXMETA, 'CellMembraneCurrent'))
-        currents = set(currents) - set(self._stimulus_params + [self._membrane_stimulus_current_converted])
+        Membrane_current_related = set(get_variables_transitively(self._model, (self._OXMETA, 'CellMembraneCurrentRelated')))
+        all_currents = set(get_variables_transitively(self._model, (self._OXMETA, 'IonicCurrent')))
+        currents = Membrane_current_related.intersection(all_currents)
+        currents = currents - set(self._stimulus_params + [self._membrane_stimulus_current_converted])
         for current in currents:
             try:
                 self._model.convert_variable(current, self.units.get_unit('uA_per_cm2'), DataDirectionFlow.OUTPUT)

@@ -2117,7 +2117,6 @@
         const double var_reversal_potentials__E_K = var_membrane__R * var_membrane__T * log(var_potassium_dynamics__K_o / var_chaste_interface__potassium_dynamics__K_i) / var_membrane__F; // millivolt
         const double var_rapid_time_dependent_potassium_current__i_Kr = 0.43033148291193518 * sqrt(var_potassium_dynamics__K_o) * (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * mParameters[4] * var_chaste_interface__rapid_time_dependent_potassium_current_Xr1_gate__Xr1 * var_chaste_interface__rapid_time_dependent_potassium_current_Xr2_gate__Xr2; // picoA_per_picoF
         const double var_rapid_time_dependent_potassium_current__i_Kr_converted = HeartConfig::Instance()->GetCapacitance() * var_rapid_time_dependent_potassium_current__i_Kr; // uA_per_cm2
-        const double var_sodium_calcium_exchanger_current__K_NaCa_converted = HeartConfig::Instance()->GetCapacitance() * mParameters[5]; // uA_per_cm2
         const double var_sodium_calcium_exchanger_current__K_sat = 0.10000000000000001; // dimensionless
         const double var_sodium_calcium_exchanger_current__Km_Ca = 1.3799999999999999; // millimolar
         const double var_sodium_calcium_exchanger_current__Km_Nai = 87.5; // millimolar
@@ -2130,13 +2129,12 @@
         const double var_sodium_calcium_exchanger_current__i_NaCa = (pow(var_chaste_interface__sodium_dynamics__Na_i, 3) * var_calcium_dynamics__Ca_o * exp(var_membrane__F * var_chaste_interface__membrane__V * var_sodium_calcium_exchanger_current__gamma / (var_membrane__R * var_membrane__T)) - pow(var_sodium_dynamics__Na_o, 3) * var_chaste_interface__calcium_dynamics__Ca_i * var_sodium_calcium_exchanger_current__alpha * exp((-1.0 + var_sodium_calcium_exchanger_current__gamma) * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * mParameters[5] / ((1.0 + var_sodium_calcium_exchanger_current__K_sat * exp((-1.0 + var_sodium_calcium_exchanger_current__gamma) * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * (pow(var_sodium_calcium_exchanger_current__Km_Nai, 3) + pow(var_sodium_dynamics__Na_o, 3)) * (var_calcium_dynamics__Ca_o + var_sodium_calcium_exchanger_current__Km_Ca)); // picoA_per_picoF
         const double var_sodium_calcium_exchanger_current__i_NaCa_converted = HeartConfig::Instance()->GetCapacitance() * var_sodium_calcium_exchanger_current__i_NaCa; // uA_per_cm2
 
-        std::vector<double> dqs(6);
+        std::vector<double> dqs(5);
         dqs[0] = var_chaste_interface__environment__time;
         dqs[1] = var_L_type_Ca_current__i_CaL_converted;
         dqs[2] = var_fast_sodium_current__i_Na_converted;
         dqs[3] = var_rapid_time_dependent_potassium_current__i_Kr_converted;
         dqs[4] = var_sodium_calcium_exchanger_current__i_NaCa_converted;
-        dqs[5] = var_sodium_calcium_exchanger_current__K_NaCa_converted;
         return dqs;
     }
 
@@ -2268,7 +2266,7 @@ void OdeSystemInformation<Cellstewart_zhang_model_2008_ssFromCellMLGRL1>::Initia
     this->mParameterUnits.push_back("nanoS_per_picoF");
 
     // mParameters[5]:
-    this->mParameterNames.push_back("sodium_calcium_exchanger_current__K_NaCa");
+    this->mParameterNames.push_back("membrane_sodium_calcium_exchanger_current_conductance");
     this->mParameterUnits.push_back("picoA_per_picoF");
 
     // Derived Quantity index [0]:
@@ -2289,10 +2287,6 @@ void OdeSystemInformation<Cellstewart_zhang_model_2008_ssFromCellMLGRL1>::Initia
 
     // Derived Quantity index [4]:
     this->mDerivedQuantityNames.push_back("membrane_sodium_calcium_exchanger_current");
-    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
-
-    // Derived Quantity index [5]:
-    this->mDerivedQuantityNames.push_back("membrane_sodium_calcium_exchanger_current_conductance");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     this->mInitialised = true;

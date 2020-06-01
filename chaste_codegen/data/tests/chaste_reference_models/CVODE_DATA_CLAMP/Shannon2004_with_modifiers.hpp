@@ -64,7 +64,7 @@ class CellShannon2004FromCellMLCvodeDataClamp : public AbstractCardiacCellWithMo
     boost::shared_ptr<AbstractModifier> mp_IKs__i_Ks_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_slow_delayed_rectifier_potassium_current_conductance_modifier;
     boost::shared_ptr<AbstractModifier> mp_INaCa__i_NaCa_modifier;
-    boost::shared_ptr<AbstractModifier> mp_INaCa__V_max_modifier;
+    boost::shared_ptr<AbstractModifier> mp_membrane_sodium_calcium_exchanger_current_conductance_modifier;
     boost::shared_ptr<AbstractModifier> mp_Itos__i_tos_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_transient_outward_current_conductance_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_voltage_modifier;

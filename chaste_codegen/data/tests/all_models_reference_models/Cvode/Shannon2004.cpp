@@ -753,7 +753,6 @@
         const double var_INaCa__Ka_SL = 1 / (1.0 + pow(var_INaCa__Kd_act, 3) / pow(var_chaste_interface__Ca_buffer__Ca_SL, 3)); // dimensionless
         const double var_INaCa__Ka_jct = 1 / (1.0 + pow(var_INaCa__Kd_act, 3) / pow(var_chaste_interface__Ca_buffer__Ca_jct, 3)); // dimensionless
         const double var_INaCa__Q10_NCX = 1.5700000000000001; // dimensionless
-        const double var_INaCa__V_max_converted = HeartConfig::Instance()->GetCapacitance() * NV_Ith_S(mParameters, 11); // uA_per_cm2
         const double var_INaCa__eta = 0.34999999999999998; // dimensionless
         const double var_INaCa__ksat = 0.27000000000000002; // dimensionless
         const double var_INa__openProb = pow(var_chaste_interface__INa_m_gate__m, 3) * var_chaste_interface__INa_h_gate__h * var_chaste_interface__INa_j_gate__j; // dimensionless
@@ -804,7 +803,7 @@
         const double var_INa__i_Na = var_INa__i_Na_SL + var_INa__i_Na_jct; // microA_per_microF
         const double var_INa__i_Na_converted = HeartConfig::Instance()->GetCapacitance() * var_INa__i_Na; // uA_per_cm2
 
-        N_Vector dqs = N_VNew_Serial(13);
+        N_Vector dqs = N_VNew_Serial(12);
         NV_Ith_S(dqs, 0) = var_Jrel_SR__j_rel_SR;
         NV_Ith_S(dqs, 1) = var_ICaL__i_CaL_converted;
         NV_Ith_S(dqs, 2) = var_ICaL_fCa_gate__fCa_SL;
@@ -814,10 +813,9 @@
         NV_Ith_S(dqs, 6) = var_IKr__i_Kr_converted;
         NV_Ith_S(dqs, 7) = var_IKs__i_Ks_converted;
         NV_Ith_S(dqs, 8) = var_INaCa__i_NaCa_converted;
-        NV_Ith_S(dqs, 9) = var_INaCa__V_max_converted;
-        NV_Ith_S(dqs, 10) = var_cell__i_Stim_converted;
-        NV_Ith_S(dqs, 11) = var_Itos__i_tos_converted;
-        NV_Ith_S(dqs, 12) = var_chaste_interface__environment__time;
+        NV_Ith_S(dqs, 9) = var_cell__i_Stim_converted;
+        NV_Ith_S(dqs, 10) = var_Itos__i_tos_converted;
+        NV_Ith_S(dqs, 11) = var_chaste_interface__environment__time;
         return dqs;
     }
 
@@ -1068,7 +1066,7 @@ void OdeSystemInformation<CellShannon2004FromCellMLCvode>::Initialise(void)
     this->mParameterUnits.push_back("milliS_per_microF");
 
     // mParameters[11]:
-    this->mParameterNames.push_back("INaCa__V_max");
+    this->mParameterNames.push_back("membrane_sodium_calcium_exchanger_current_conductance");
     this->mParameterUnits.push_back("microA_per_microF");
 
     // mParameters[12]:
@@ -1112,18 +1110,14 @@ void OdeSystemInformation<CellShannon2004FromCellMLCvode>::Initialise(void)
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     // Derived Quantity index [9]:
-    this->mDerivedQuantityNames.push_back("membrane_sodium_calcium_exchanger_current_conductance");
-    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
-
-    // Derived Quantity index [10]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
-    // Derived Quantity index [11]:
+    // Derived Quantity index [10]:
     this->mDerivedQuantityNames.push_back("membrane_transient_outward_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
-    // Derived Quantity index [12]:
+    // Derived Quantity index [11]:
     this->mDerivedQuantityNames.push_back("time");
     this->mDerivedQuantityUnits.push_back("millisecond");
 
