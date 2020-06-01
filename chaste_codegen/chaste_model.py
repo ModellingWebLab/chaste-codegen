@@ -403,13 +403,15 @@ class ChasteModel(object):
             (self._membrane_stimulus_current_orig.units, membrane_stimulus_current_converted.units)
 
     def _convert_other_currents(self):
-        """ Try to convert other currents (apart from stimulus current) to uA_per_cm2 
-        
-        Only variables in units convertible to Chaste's current units are converted. 
-        This is to allow for 'current-related' variables in the ontology 
-        that aren't themselves currents but might be included within the superclass.
+        """ Try to convert other currents (apart from stimulus current) to uA_per_cm2
+
+        Currents are terms tagged with a term that is both `CellMembraneCurrentRelated` and an `IonicCurrent`
+        according to the OXMETA ontology (https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#).
+        Only variables in units convertible to Chaste's current units are converted,
+        so to currents in unusual units (e.g. dimensionless) are skipped.
         """
-        Membrane_current_related = set(get_variables_transitively(self._model, (self._OXMETA, 'CellMembraneCurrentRelated')))
+        Membrane_current_related = set(get_variables_transitively(self._model,
+                                       (self._OXMETA, 'CellMembraneCurrentRelated')))
         all_currents = set(get_variables_transitively(self._model, (self._OXMETA, 'IonicCurrent')))
         currents = Membrane_current_related.intersection(all_currents)
         currents = currents - set(self._stimulus_params + [self._membrane_stimulus_current_converted])
