@@ -120,6 +120,10 @@ class ChasteModel(object):
         # get capacitance and update stimulus current
         self._in_interface.extend(self._stimulus_params)
         self._membrane_stimulus_current_converted, self._stimulus_units = self._convert_membrane_stimulus_current()
+        # If we don't have a capacitance, update capacitance to allow converting i_ionic
+        if self._membrane_capacitance is None:
+            self._membrane_capacitance = 1
+
         self._convert_other_currents()
 
         self._ionic_derivs = self._get_ionic_derivs()
@@ -487,10 +491,6 @@ class ChasteModel(object):
         # Only equations with the same (lhs) units as the STIMULUS_CURRENT are kept.
         # Also exclude membrane_stimulus_current variable itself, and default_stimulus equations (if model has those)
         # Manually recurse down the equation graph (bfs style) if no currents are found
-
-        # If we don't have a capacitance, update capacitance to allow converting i_ionic
-        if self._membrane_capacitance is None:
-            self._membrane_capacitance = 1
 
         # If we don't have a stimulus_current we look for a set of default unit dimensions
         equations_for_ionic_vars = []

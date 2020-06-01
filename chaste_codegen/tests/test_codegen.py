@@ -3,6 +3,8 @@ import os
 
 import cellmlmanip
 import pytest
+import sympy as sp
+from cellmlmanip.rdf import create_rdf_node
 
 import chaste_codegen as cg
 import chaste_codegen.tests.chaste_test_utils as test_utils
@@ -280,3 +282,54 @@ def test_wrong_units_voltage():
         chaste_model = cg.NormalChasteModel(chaste_model,
                                             'test_wrong_units_voltage',
                                             class_name='test_wrong_units_voltage')
+
+
+def test_other_current_in_wrong_units():
+    LOGGER.info('Testing that conversion of currents in inconvertible units gets skipped\n')
+    model_file = \
+        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'hodgkin_huxley_squid_axon_model_1952_modified.cellml')
+    chaste_model = cellmlmanip.load_model(model_file)
+
+    PRED_IS = create_rdf_node(('http://biomodels.net/biology-qualifiers/', 'is'))  # is_a for tagging variables
+    chaste_model.units.add_unit('uA', 'ampere / 1e6')  # add uA unit to model
+
+    # add new variable to tags membrane_sodium_potassium_pump_current and membrane_potassium_pump_current
+    membrane_sodium_potassium_pump_current = \
+        chaste_model.add_variable('current1', 'dimensionless', cmeta_id='membrane_sodium_potassium_pump_current')
+    membrane_potassium_pump_current = chaste_model.add_variable('current2', 'uA',
+                                                                cmeta_id='membrane_potassium_pump_current')
+
+    # tag new variables
+    chaste_model.rdf.add((membrane_sodium_potassium_pump_current.rdf_identity, PRED_IS,
+                          create_rdf_node((OXMETA, 'membrane_sodium_potassium_pump_current'))))
+    chaste_model.rdf.add((membrane_potassium_pump_current.rdf_identity, PRED_IS,
+                          create_rdf_node((OXMETA, 'membrane_potassium_pump_current'))))
+
+    # add initial value equations
+    chaste_model.add_equation(sp.Eq(membrane_sodium_potassium_pump_current, 0.0))
+    chaste_model.add_equation(sp.Eq(membrane_potassium_pump_current, 0.0))
+
+    # check we can get our new variables by rdf tag
+    assert membrane_sodium_potassium_pump_current == \
+        chaste_model.get_variable_by_ontology_term((OXMETA, 'membrane_sodium_potassium_pump_current'))
+    assert membrane_potassium_pump_current == \
+        chaste_model.get_variable_by_ontology_term((OXMETA, 'membrane_potassium_pump_current'))
+
+    # generate code
+    generated_model = cg.NormalChasteModel(chaste_model,
+                                           'test_other_current_in_wrong_units',
+                                           class_name='test_other_current_in_wrong_units')
+
+    # re-retrieve (possibly converted) vars
+    membrane_sodium_potassium_pump_current == \
+        chaste_model.get_variable_by_ontology_term((OXMETA, 'membrane_sodium_potassium_pump_current'))
+    membrane_potassium_pump_current = \
+        chaste_model.get_variable_by_ontology_term((OXMETA, 'membrane_potassium_pump_current'))
+
+    # check the model derived quantities has membrane_potassium_pump_current and membrane_sodium_potassium_pump_current
+    assert membrane_sodium_potassium_pump_current in generated_model._derived_quant
+    assert membrane_potassium_pump_current in generated_model._derived_quant
+
+    # check units only converted where possible
+    assert str(membrane_sodium_potassium_pump_current.units) == 'dimensionless'
+    assert membrane_potassium_pump_current.units == generated_model.units.get_unit('uA_per_cm2')
