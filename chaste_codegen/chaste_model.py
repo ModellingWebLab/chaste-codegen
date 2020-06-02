@@ -412,7 +412,7 @@ class ChasteModel(object):
         Currents are terms tagged with a term that is both `CellMembraneCurrentRelated` and an `IonicCurrent`
         according to the OXMETA ontology (https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#).
         Only variables in units convertible to Chaste's current units are converted,
-        so to currents in unusual units (e.g. dimensionless) are skipped.
+        so currents in unusual units (e.g. dimensionless) are skipped.
         """
         current_related = set(get_variables_transitively(self._model,
                               (self._OXMETA, 'CellMembraneCurrentRelated')))
