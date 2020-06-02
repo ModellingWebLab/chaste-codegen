@@ -394,6 +394,7 @@
         const double var_membrane__T = 310.0; // kelvin
         const double var_fast_sodium_current__E_Na = var_membrane__R * var_membrane__T * log(NV_Ith_S(mParameters, 2) / var_chaste_interface__ionic_concentrations__Nai) / var_membrane__F; // mV
         const double var_fast_sodium_current__i_Na = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * (-var_fast_sodium_current__E_Na + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 5) * var_chaste_interface__fast_sodium_current_h_gate__h * var_chaste_interface__fast_sodium_current_j_gate__j; // uA_per_mm2
+        const double var_fast_sodium_current__i_Na_converted = 100.00000000000001 * var_fast_sodium_current__i_Na; // uA_per_cm2
         // Special handling of data clamp current here
         // (we want to save expense of calling the interpolation method if possible.)
         double var_chaste_interface__membrane_data_clamp_current = 0.0;
@@ -407,11 +408,12 @@
         const double var_time_independent_potassium_current_K1_gate__beta_K1 = (0.49124000000000001 * exp(0.43983232 + 0.080320000000000003 * var_chaste_interface__membrane__V - 0.080320000000000003 * var_time_independent_potassium_current__E_K1) + exp(-36.698642499999998 + 0.061749999999999999 * var_chaste_interface__membrane__V - 0.061749999999999999 * var_time_independent_potassium_current__E_K1)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_time_independent_potassium_current__E_K1 - 0.51429999999999998 * var_chaste_interface__membrane__V)); // per_ms
         const double var_time_independent_potassium_current_K1_gate__K1_infinity = var_time_independent_potassium_current_K1_gate__alpha_K1 / (var_time_independent_potassium_current_K1_gate__alpha_K1 + var_time_independent_potassium_current_K1_gate__beta_K1); // dimensionless
         const double var_time_independent_potassium_current__i_K1 = (-var_time_independent_potassium_current__E_K1 + var_chaste_interface__membrane__V) * var_time_independent_potassium_current__g_K1 * var_time_independent_potassium_current_K1_gate__K1_infinity; // uA_per_mm2
+        const double var_time_independent_potassium_current__i_K1_converted = 100.00000000000001 * var_time_independent_potassium_current__i_K1; // uA_per_cm2
 
         N_Vector dqs = N_VNew_Serial(5);
         NV_Ith_S(dqs, 0) = var_chaste_interface__membrane_data_clamp_current;
-        NV_Ith_S(dqs, 1) = var_fast_sodium_current__i_Na;
-        NV_Ith_S(dqs, 2) = var_time_independent_potassium_current__i_K1;
+        NV_Ith_S(dqs, 1) = var_fast_sodium_current__i_Na_converted;
+        NV_Ith_S(dqs, 2) = var_time_independent_potassium_current__i_K1_converted;
         NV_Ith_S(dqs, 3) = var_membrane__I_st_converted;
         NV_Ith_S(dqs, 4) = var_chaste_interface__environment__time;
         return dqs;
@@ -518,11 +520,11 @@ void OdeSystemInformation<Cellluo_rudy_1994FromCellMLCvodeDataClamp>::Initialise
 
     // Derived Quantity index [1]:
     this->mDerivedQuantityNames.push_back("membrane_fast_sodium_current");
-    this->mDerivedQuantityUnits.push_back("uA_per_mm2");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     // Derived Quantity index [2]:
     this->mDerivedQuantityNames.push_back("membrane_inward_rectifier_potassium_current");
-    this->mDerivedQuantityUnits.push_back("uA_per_mm2");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     // Derived Quantity index [3]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");

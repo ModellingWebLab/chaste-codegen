@@ -16,6 +16,7 @@ from sympy.codegen.rewriting import (
 )
 
 import chaste_codegen as cg
+from chaste_codegen._rdf import get_variables_transitively
 
 from ._math_functions import MATH_FUNC_SYMPY_MAPPING
 
@@ -119,6 +120,11 @@ class ChasteModel(object):
         # get capacitance and update stimulus current
         self._in_interface.extend(self._stimulus_params)
         self._membrane_stimulus_current_converted, self._stimulus_units = self._convert_membrane_stimulus_current()
+        # If we don't have a capacitance, update capacitance to allow converting i_ionic
+        if self._membrane_capacitance is None:
+            self._membrane_capacitance = 1
+
+        self._convert_other_currents()
 
         self._ionic_derivs = self._get_ionic_derivs()
         self._equations_for_ionic_vars = self._get_equations_for_ionic_vars()
@@ -400,6 +406,24 @@ class ChasteModel(object):
         return membrane_stimulus_current_converted, \
             (self._membrane_stimulus_current_orig.units, membrane_stimulus_current_converted.units)
 
+    def _convert_other_currents(self):
+        """ Try to convert other currents (apart from stimulus current) to uA_per_cm2
+
+        Currents are terms tagged with a term that is both `CellMembraneCurrentRelated` and an `IonicCurrent`
+        according to the OXMETA ontology (https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#).
+        Only variables in units convertible to Chaste's current units are converted,
+        so currents in unusual units (e.g. dimensionless) are skipped.
+        """
+        current_related = set(get_variables_transitively(self._model,
+                              (self._OXMETA, 'CellMembraneCurrentRelated')))
+        all_currents = set(get_variables_transitively(self._model, (self._OXMETA, 'IonicCurrent')))
+        currents = current_related.intersection(all_currents) - set([self._membrane_stimulus_current_converted])
+        for current in currents:
+            try:
+                self._model.convert_variable(current, self.units.get_unit('uA_per_cm2'), DataDirectionFlow.OUTPUT)
+            except DimensionalityError:
+                pass  # conversion is optional, convert only if possible
+
     def _get_membrane_capacitance(self):
         """ Find membrane_capacitance if the model has it and convert it to uF if necessary"""
         try:
@@ -466,10 +490,6 @@ class ChasteModel(object):
         # Only equations with the same (lhs) units as the STIMULUS_CURRENT are kept.
         # Also exclude membrane_stimulus_current variable itself, and default_stimulus equations (if model has those)
         # Manually recurse down the equation graph (bfs style) if no currents are found
-
-        # If we don't have a capacitance, update capacitance to allow converting i_ionic
-        if self._membrane_capacitance is None:
-            self._membrane_capacitance = 1
 
         # If we don't have a stimulus_current we look for a set of default unit dimensions
         equations_for_ionic_vars = []

@@ -82,8 +82,8 @@
                           mp_extracellular_potassium_concentration_modifier);
         this->AddModifier("extracellular_sodium_concentration",
                           mp_extracellular_sodium_concentration_modifier);
-        this->AddModifier("membrane_L_type_calcium_current",
-                          mp_membrane_L_type_calcium_current_modifier);
+        this->AddModifier("ICaL__i_CaL",
+                          mp_ICaL__i_CaL_modifier);
         this->AddModifier("membrane_L_type_calcium_current_conductance",
                           mp_membrane_L_type_calcium_current_conductance_modifier);
         this->AddModifier("membrane_L_type_calcium_current_d_gate",
@@ -94,8 +94,8 @@
                           mp_membrane_L_type_calcium_current_f_gate_modifier);
         this->AddModifier("membrane_L_type_calcium_current_f_gate_tau",
                           mp_membrane_L_type_calcium_current_f_gate_tau_modifier);
-        this->AddModifier("membrane_fast_sodium_current",
-                          mp_membrane_fast_sodium_current_modifier);
+        this->AddModifier("INa__i_Na",
+                          mp_INa__i_Na_modifier);
         this->AddModifier("membrane_fast_sodium_current_conductance",
                           mp_membrane_fast_sodium_current_conductance_modifier);
         this->AddModifier("membrane_fast_sodium_current_h_gate",
@@ -104,22 +104,22 @@
                           mp_membrane_fast_sodium_current_j_gate_modifier);
         this->AddModifier("membrane_fast_sodium_current_m_gate",
                           mp_membrane_fast_sodium_current_m_gate_modifier);
-        this->AddModifier("membrane_inward_rectifier_potassium_current",
-                          mp_membrane_inward_rectifier_potassium_current_modifier);
-        this->AddModifier("membrane_rapid_delayed_rectifier_potassium_current",
-                          mp_membrane_rapid_delayed_rectifier_potassium_current_modifier);
+        this->AddModifier("IK1__i_K1",
+                          mp_IK1__i_K1_modifier);
+        this->AddModifier("IKr__i_Kr",
+                          mp_IKr__i_Kr_modifier);
         this->AddModifier("membrane_rapid_delayed_rectifier_potassium_current_conductance",
                           mp_membrane_rapid_delayed_rectifier_potassium_current_conductance_modifier);
-        this->AddModifier("membrane_slow_delayed_rectifier_potassium_current",
-                          mp_membrane_slow_delayed_rectifier_potassium_current_modifier);
+        this->AddModifier("IKs__i_Ks",
+                          mp_IKs__i_Ks_modifier);
         this->AddModifier("membrane_slow_delayed_rectifier_potassium_current_conductance",
                           mp_membrane_slow_delayed_rectifier_potassium_current_conductance_modifier);
-        this->AddModifier("membrane_sodium_calcium_exchanger_current",
-                          mp_membrane_sodium_calcium_exchanger_current_modifier);
+        this->AddModifier("INaCa__i_NaCa",
+                          mp_INaCa__i_NaCa_modifier);
         this->AddModifier("membrane_sodium_calcium_exchanger_current_conductance",
                           mp_membrane_sodium_calcium_exchanger_current_conductance_modifier);
-        this->AddModifier("membrane_transient_outward_current",
-                          mp_membrane_transient_outward_current_modifier);
+        this->AddModifier("Itos__i_tos",
+                          mp_Itos__i_tos_modifier);
         this->AddModifier("membrane_transient_outward_current_conductance",
                           mp_membrane_transient_outward_current_conductance_modifier);
         this->AddModifier("membrane_voltage",
@@ -673,13 +673,13 @@
             const double var_IK1__G_K1 = 0.3872983346207417 * sqrt(NV_Ith_S(mParameters, 5)); // milliS_per_microF
             const double var_IKr__G_IKr = 0.43033148291193518 * sqrt(NV_Ith_S(mParameters, 5)) * NV_Ith_S(mParameters, 10); // milliS_per_microF
             const double var_ICaL__i_CaL_K = (var_ICaL__Fx_ICaL_SL * var_ICaL_fCa_gate__fCa_SL + var_ICaL__Fx_ICaL_jct * var_ICaL_fCa_gate__fCa_jct) * (-var_ICaL__gamma_Ko * NV_Ith_S(mParameters, 5) + var_ICaL__gamma_Ki * NV_Ith_S(mParameters, 3) * exp(var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))) * var_ICaL__PK * var_ICaL__temp / (-1.0 + exp(var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // microA_per_microF
-            const double var_ICaL__i_CaL = mp_membrane_L_type_calcium_current_modifier->Calc(var_ICaL__i_CaL_Ca_SL + var_ICaL__i_CaL_Ca_jct + var_ICaL__i_CaL_K + var_ICaL__i_CaL_Na_SL + var_ICaL__i_CaL_Na_jct, var_chaste_interface__environment__time); // microA_per_microF
+            const double var_ICaL__i_CaL = mp_ICaL__i_CaL_modifier->Calc(var_ICaL__i_CaL_Ca_SL + var_ICaL__i_CaL_Ca_jct + var_ICaL__i_CaL_K + var_ICaL__i_CaL_Na_SL + var_ICaL__i_CaL_Na_jct, var_chaste_interface__environment__time); // microA_per_microF
             const double var_ICap__i_Cap = var_ICap__i_Cap_SL + var_ICap__i_Cap_jct; // microA_per_microF
             const double var_IKs__E_Ks = var_model_parameters__R * var_model_parameters__T * log((var_IKs__pKNa * NV_Ith_S(mParameters, 6) + NV_Ith_S(mParameters, 5)) / (var_IKs__pKNa * var_chaste_interface__Na_buffer__Nai + NV_Ith_S(mParameters, 3))) / var_model_parameters__F; // millivolt
             const double var_IKs__i_Ks_SL = pow(var_chaste_interface__IKs_Xs_gate__Xs, 2) * (-var_IKs__E_Ks + var_chaste_interface__cell__V) * var_IKs__Fx_Ks_SL * var_IKs__G_Ks_SL; // microA_per_microF
             const double var_IKs__i_Ks_jct = pow(var_chaste_interface__IKs_Xs_gate__Xs, 2) * (-var_IKs__E_Ks + var_chaste_interface__cell__V) * var_IKs__Fx_Ks_jct * var_IKs__G_Ks_jct; // microA_per_microF
-            const double var_IKs__i_Ks = mp_membrane_slow_delayed_rectifier_potassium_current_modifier->Calc(var_IKs__i_Ks_SL + var_IKs__i_Ks_jct, var_chaste_interface__environment__time); // microA_per_microF
-            const double var_INaCa__i_NaCa = mp_membrane_sodium_calcium_exchanger_current_modifier->Calc(var_INaCa__i_NaCa_SL + var_INaCa__i_NaCa_jct, var_chaste_interface__environment__time); // microA_per_microF
+            const double var_IKs__i_Ks = mp_IKs__i_Ks_modifier->Calc(var_IKs__i_Ks_SL + var_IKs__i_Ks_jct, var_chaste_interface__environment__time); // microA_per_microF
+            const double var_INaCa__i_NaCa = mp_INaCa__i_NaCa_modifier->Calc(var_INaCa__i_NaCa_SL + var_INaCa__i_NaCa_jct, var_chaste_interface__environment__time); // microA_per_microF
             const double var_INaK__i_NaK = var_INaK__i_NaK_SL + var_INaK__i_NaK_jct; // microA_per_microF
             const double var_ICab__i_Cab = var_ICab__i_Cab_SL + var_ICab__i_Cab_jct; // microA_per_microF
             const double var_reversal_potentials__E_Cl = var_model_parameters__R * var_model_parameters__T * log(var_model_parameters__Cli / var_model_parameters__Clo) / var_model_parameters__F; // millivolt
@@ -689,12 +689,12 @@
             const double var_IK1_K1_gate__alpha_K1 = 1.02 / (1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__V - 0.23849999999999999 * var_reversal_potentials__E_K)); // per_millisecond
             const double var_IK1_K1_gate__beta_K1 = (0.49124000000000001 * exp(0.43983232 + 0.080320000000000003 * var_chaste_interface__cell__V - 0.080320000000000003 * var_reversal_potentials__E_K) + exp(-36.698642499999998 + 0.061749999999999999 * var_chaste_interface__cell__V - 0.061749999999999999 * var_reversal_potentials__E_K)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_reversal_potentials__E_K - 0.51429999999999998 * var_chaste_interface__cell__V)); // per_millisecond
             const double var_IK1_K1_gate__K1_infinity = var_IK1_K1_gate__alpha_K1 / (var_IK1_K1_gate__alpha_K1 + var_IK1_K1_gate__beta_K1); // dimensionless
-            const double var_IK1__i_K1 = mp_membrane_inward_rectifier_potassium_current_modifier->Calc((-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_IK1__G_K1 * var_IK1_K1_gate__K1_infinity, var_chaste_interface__environment__time); // microA_per_microF
+            const double var_IK1__i_K1 = mp_IK1__i_K1_modifier->Calc((-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_IK1__G_K1 * var_IK1_K1_gate__K1_infinity, var_chaste_interface__environment__time); // microA_per_microF
             const double var_IKp__i_Kp = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_IKp__g_Kp / (1.0 + exp(7.4880000000000004 - 0.16722408026755853 * var_chaste_interface__cell__V)); // microA_per_microF
-            const double var_IKr__i_Kr = mp_membrane_rapid_delayed_rectifier_potassium_current_modifier->Calc((-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_IKr__G_IKr * var_IKr_Rr_gate__Rr * var_chaste_interface__IKr_Xr_gate__Xr, var_chaste_interface__environment__time); // microA_per_microF
+            const double var_IKr__i_Kr = mp_IKr__i_Kr_modifier->Calc((-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_IKr__G_IKr * var_IKr_Rr_gate__Rr * var_chaste_interface__IKr_Xr_gate__Xr, var_chaste_interface__environment__time); // microA_per_microF
             const double var_Itof__i_tof = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_Itof__G_tof * var_chaste_interface__Itof_X_gate__X_tof * var_chaste_interface__Itof_Y_gate__Y_tof; // microA_per_microF
-            const double var_Itos__i_tos = mp_membrane_transient_outward_current_modifier->Calc((-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * (0.5 * var_chaste_interface__Itos_R_gate__R_tos + var_chaste_interface__Itos_Y_gate__Y_tos) * NV_Ith_S(mParameters, 13) * var_chaste_interface__Itos_X_gate__X_tos, var_chaste_interface__environment__time); // microA_per_microF
-            const double var_INa__i_Na = mp_membrane_fast_sodium_current_modifier->Calc(var_INa__i_Na_SL + var_INa__i_Na_jct, var_chaste_interface__environment__time); // microA_per_microF
+            const double var_Itos__i_tos = mp_Itos__i_tos_modifier->Calc((-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * (0.5 * var_chaste_interface__Itos_R_gate__R_tos + var_chaste_interface__Itos_Y_gate__Y_tos) * NV_Ith_S(mParameters, 13) * var_chaste_interface__Itos_X_gate__X_tos, var_chaste_interface__environment__time); // microA_per_microF
+            const double var_INa__i_Na = mp_INa__i_Na_modifier->Calc(var_INa__i_Na_SL + var_INa__i_Na_jct, var_chaste_interface__environment__time); // microA_per_microF
             const double var_INab__i_Nab = var_INab__i_Nab_SL + var_INab__i_Nab_jct; // microA_per_microF
             // Special handling of data clamp current here
             // (we want to save expense of calling the interpolation method if possible.)
@@ -852,43 +852,50 @@
         const double var_ICaL__i_CaL_K = (var_ICaL__Fx_ICaL_SL * var_ICaL_fCa_gate__fCa_SL + var_ICaL__Fx_ICaL_jct * var_ICaL_fCa_gate__fCa_jct) * (-var_ICaL__gamma_Ko * NV_Ith_S(mParameters, 5) + var_ICaL__gamma_Ki * NV_Ith_S(mParameters, 3) * exp(var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))) * var_ICaL__PK * var_ICaL__temp / (-1.0 + exp(var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // microA_per_microF
         const double var_ICaL__i_CaL_Na_SL = (-var_ICaL__gamma_Nao * NV_Ith_S(mParameters, 6) + var_ICaL__gamma_Nai * var_chaste_interface__Na_buffer__Na_SL * exp(var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))) * var_ICaL__Fx_ICaL_SL * var_ICaL__PNa * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL / (-1.0 + exp(var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // microA_per_microF
         const double var_ICaL__i_CaL_Na_jct = (-var_ICaL__gamma_Nao * NV_Ith_S(mParameters, 6) + var_ICaL__gamma_Nai * var_chaste_interface__Na_buffer__Na_jct * exp(var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))) * var_ICaL__Fx_ICaL_jct * var_ICaL__PNa * var_ICaL__temp * var_ICaL_fCa_gate__fCa_jct / (-1.0 + exp(var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // microA_per_microF
-        const double var_ICaL__i_CaL = mp_membrane_L_type_calcium_current_modifier->Calc(var_ICaL__i_CaL_Ca_SL + var_ICaL__i_CaL_Ca_jct + var_ICaL__i_CaL_K + var_ICaL__i_CaL_Na_SL + var_ICaL__i_CaL_Na_jct, var_chaste_interface__environment__time); // microA_per_microF
+        const double var_ICaL__i_CaL = mp_ICaL__i_CaL_modifier->Calc(var_ICaL__i_CaL_Ca_SL + var_ICaL__i_CaL_Ca_jct + var_ICaL__i_CaL_K + var_ICaL__i_CaL_Na_SL + var_ICaL__i_CaL_Na_jct, var_chaste_interface__environment__time); // microA_per_microF
+        const double var_ICaL__i_CaL_converted = HeartConfig::Instance()->GetCapacitance() * var_ICaL__i_CaL; // uA_per_cm2
         const double var_IKs__E_Ks = var_model_parameters__R * var_model_parameters__T * log((var_IKs__pKNa * NV_Ith_S(mParameters, 6) + NV_Ith_S(mParameters, 5)) / (var_IKs__pKNa * var_chaste_interface__Na_buffer__Nai + NV_Ith_S(mParameters, 3))) / var_model_parameters__F; // millivolt
         const double var_IKs__i_Ks_SL = pow(var_chaste_interface__IKs_Xs_gate__Xs, 2) * (-var_IKs__E_Ks + var_chaste_interface__cell__V) * var_IKs__Fx_Ks_SL * var_IKs__G_Ks_SL; // microA_per_microF
         const double var_IKs__i_Ks_jct = pow(var_chaste_interface__IKs_Xs_gate__Xs, 2) * (-var_IKs__E_Ks + var_chaste_interface__cell__V) * var_IKs__Fx_Ks_jct * var_IKs__G_Ks_jct; // microA_per_microF
-        const double var_IKs__i_Ks = mp_membrane_slow_delayed_rectifier_potassium_current_modifier->Calc(var_IKs__i_Ks_SL + var_IKs__i_Ks_jct, var_chaste_interface__environment__time); // microA_per_microF
+        const double var_IKs__i_Ks = mp_IKs__i_Ks_modifier->Calc(var_IKs__i_Ks_SL + var_IKs__i_Ks_jct, var_chaste_interface__environment__time); // microA_per_microF
+        const double var_IKs__i_Ks_converted = HeartConfig::Instance()->GetCapacitance() * var_IKs__i_Ks; // uA_per_cm2
         const double var_INaCa__Q_NCX = pow(var_INaCa__Q10_NCX, (-31.0 + 0.10000000000000001 * var_model_parameters__T)); // dimensionless
         const double var_INaCa__temp_SL = (pow(var_chaste_interface__Na_buffer__Na_SL, var_INaCa__HNa) * NV_Ith_S(mParameters, 4) * exp(var_INaCa__eta * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T)) - pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_SL * exp((-1.0 + var_INaCa__eta) * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))) / (1.0 + var_INaCa__ksat * exp((-1.0 + var_INaCa__eta) * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // millimolar4
         const double var_INaCa__i_NaCa_SL = var_INaCa__Fx_NCX_SL * var_INaCa__Ka_SL * var_INaCa__Q_NCX * NV_Ith_S(mParameters, 12) * var_INaCa__temp_SL / (pow(var_chaste_interface__Na_buffer__Na_SL, var_INaCa__HNa) * var_INaCa__K_mCao + pow(var_chaste_interface__Na_buffer__Na_SL, var_INaCa__HNa) * NV_Ith_S(mParameters, 4) + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_SL + pow(var_INaCa__K_mNao, var_INaCa__HNa) * (1.0 + var_chaste_interface__Ca_buffer__Ca_SL / var_INaCa__K_mCai) * var_chaste_interface__Ca_buffer__Ca_SL + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * (1.0 + pow((var_chaste_interface__Na_buffer__Na_SL / var_INaCa__K_mNai), var_INaCa__HNa)) * var_INaCa__K_mCai); // microA_per_microF
         const double var_INaCa__temp_jct = (pow(var_chaste_interface__Na_buffer__Na_jct, var_INaCa__HNa) * NV_Ith_S(mParameters, 4) * exp(var_INaCa__eta * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T)) - pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_jct * exp((-1.0 + var_INaCa__eta) * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))) / (1.0 + var_INaCa__ksat * exp((-1.0 + var_INaCa__eta) * var_chaste_interface__cell__V * var_model_parameters__F / (var_model_parameters__R * var_model_parameters__T))); // millimolar4
         const double var_INaCa__i_NaCa_jct = var_INaCa__Fx_NCX_jct * var_INaCa__Ka_jct * var_INaCa__Q_NCX * NV_Ith_S(mParameters, 12) * var_INaCa__temp_jct / (pow(var_chaste_interface__Na_buffer__Na_jct, var_INaCa__HNa) * var_INaCa__K_mCao + pow(var_chaste_interface__Na_buffer__Na_jct, var_INaCa__HNa) * NV_Ith_S(mParameters, 4) + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * var_chaste_interface__Ca_buffer__Ca_jct + pow(var_INaCa__K_mNao, var_INaCa__HNa) * (1.0 + var_chaste_interface__Ca_buffer__Ca_jct / var_INaCa__K_mCai) * var_chaste_interface__Ca_buffer__Ca_jct + pow(NV_Ith_S(mParameters, 6), var_INaCa__HNa) * (1.0 + pow((var_chaste_interface__Na_buffer__Na_jct / var_INaCa__K_mNai), var_INaCa__HNa)) * var_INaCa__K_mCai); // microA_per_microF
-        const double var_INaCa__i_NaCa = mp_membrane_sodium_calcium_exchanger_current_modifier->Calc(var_INaCa__i_NaCa_SL + var_INaCa__i_NaCa_jct, var_chaste_interface__environment__time); // microA_per_microF
+        const double var_INaCa__i_NaCa = mp_INaCa__i_NaCa_modifier->Calc(var_INaCa__i_NaCa_SL + var_INaCa__i_NaCa_jct, var_chaste_interface__environment__time); // microA_per_microF
+        const double var_INaCa__i_NaCa_converted = HeartConfig::Instance()->GetCapacitance() * var_INaCa__i_NaCa; // uA_per_cm2
         const double var_reversal_potentials__E_K = var_model_parameters__R * var_model_parameters__T * log(NV_Ith_S(mParameters, 5) / NV_Ith_S(mParameters, 3)) / var_model_parameters__F; // millivolt
         const double var_IK1_K1_gate__alpha_K1 = 1.02 / (1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__V - 0.23849999999999999 * var_reversal_potentials__E_K)); // per_millisecond
         const double var_IK1_K1_gate__beta_K1 = (0.49124000000000001 * exp(0.43983232 + 0.080320000000000003 * var_chaste_interface__cell__V - 0.080320000000000003 * var_reversal_potentials__E_K) + exp(-36.698642499999998 + 0.061749999999999999 * var_chaste_interface__cell__V - 0.061749999999999999 * var_reversal_potentials__E_K)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_reversal_potentials__E_K - 0.51429999999999998 * var_chaste_interface__cell__V)); // per_millisecond
         const double var_IK1_K1_gate__K1_infinity = var_IK1_K1_gate__alpha_K1 / (var_IK1_K1_gate__alpha_K1 + var_IK1_K1_gate__beta_K1); // dimensionless
-        const double var_IK1__i_K1 = mp_membrane_inward_rectifier_potassium_current_modifier->Calc((-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_IK1__G_K1 * var_IK1_K1_gate__K1_infinity, var_chaste_interface__environment__time); // microA_per_microF
-        const double var_IKr__i_Kr = mp_membrane_rapid_delayed_rectifier_potassium_current_modifier->Calc((-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_IKr__G_IKr * var_IKr_Rr_gate__Rr * var_chaste_interface__IKr_Xr_gate__Xr, var_chaste_interface__environment__time); // microA_per_microF
-        const double var_Itos__i_tos = mp_membrane_transient_outward_current_modifier->Calc((-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * (0.5 * var_chaste_interface__Itos_R_gate__R_tos + var_chaste_interface__Itos_Y_gate__Y_tos) * NV_Ith_S(mParameters, 13) * var_chaste_interface__Itos_X_gate__X_tos, var_chaste_interface__environment__time); // microA_per_microF
+        const double var_IK1__i_K1 = mp_IK1__i_K1_modifier->Calc((-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_IK1__G_K1 * var_IK1_K1_gate__K1_infinity, var_chaste_interface__environment__time); // microA_per_microF
+        const double var_IK1__i_K1_converted = HeartConfig::Instance()->GetCapacitance() * var_IK1__i_K1; // uA_per_cm2
+        const double var_IKr__i_Kr = mp_IKr__i_Kr_modifier->Calc((-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_IKr__G_IKr * var_IKr_Rr_gate__Rr * var_chaste_interface__IKr_Xr_gate__Xr, var_chaste_interface__environment__time); // microA_per_microF
+        const double var_IKr__i_Kr_converted = HeartConfig::Instance()->GetCapacitance() * var_IKr__i_Kr; // uA_per_cm2
+        const double var_Itos__i_tos = mp_Itos__i_tos_modifier->Calc((-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * (0.5 * var_chaste_interface__Itos_R_gate__R_tos + var_chaste_interface__Itos_Y_gate__Y_tos) * NV_Ith_S(mParameters, 13) * var_chaste_interface__Itos_X_gate__X_tos, var_chaste_interface__environment__time); // microA_per_microF
+        const double var_Itos__i_tos_converted = HeartConfig::Instance()->GetCapacitance() * var_Itos__i_tos; // uA_per_cm2
         const double var_reversal_potentials__E_Na_SL = var_model_parameters__R * var_model_parameters__T * log(NV_Ith_S(mParameters, 6) / var_chaste_interface__Na_buffer__Na_SL) / var_model_parameters__F; // millivolt
         const double var_INa__i_Na_SL = (-var_reversal_potentials__E_Na_SL + var_chaste_interface__cell__V) * var_INa__Fx_Na_SL * NV_Ith_S(mParameters, 9) * var_INa__openProb; // microA_per_microF
         const double var_reversal_potentials__E_Na_jct = var_model_parameters__R * var_model_parameters__T * log(NV_Ith_S(mParameters, 6) / var_chaste_interface__Na_buffer__Na_jct) / var_model_parameters__F; // millivolt
         const double var_INa__i_Na_jct = (-var_reversal_potentials__E_Na_jct + var_chaste_interface__cell__V) * var_INa__Fx_Na_jct * NV_Ith_S(mParameters, 9) * var_INa__openProb; // microA_per_microF
-        const double var_INa__i_Na = mp_membrane_fast_sodium_current_modifier->Calc(var_INa__i_Na_SL + var_INa__i_Na_jct, var_chaste_interface__environment__time); // microA_per_microF
+        const double var_INa__i_Na = mp_INa__i_Na_modifier->Calc(var_INa__i_Na_SL + var_INa__i_Na_jct, var_chaste_interface__environment__time); // microA_per_microF
+        const double var_INa__i_Na_converted = HeartConfig::Instance()->GetCapacitance() * var_INa__i_Na; // uA_per_cm2
 
         N_Vector dqs = N_VNew_Serial(13);
         NV_Ith_S(dqs, 0) = var_Jrel_SR__j_rel_SR;
-        NV_Ith_S(dqs, 1) = var_ICaL__i_CaL;
+        NV_Ith_S(dqs, 1) = var_ICaL__i_CaL_converted;
         NV_Ith_S(dqs, 2) = var_ICaL_fCa_gate__fCa_SL;
         NV_Ith_S(dqs, 3) = var_ICaL_f_gate__tau_f;
         NV_Ith_S(dqs, 4) = var_chaste_interface__membrane_data_clamp_current;
-        NV_Ith_S(dqs, 5) = var_INa__i_Na;
-        NV_Ith_S(dqs, 6) = var_IK1__i_K1;
-        NV_Ith_S(dqs, 7) = var_IKr__i_Kr;
-        NV_Ith_S(dqs, 8) = var_IKs__i_Ks;
-        NV_Ith_S(dqs, 9) = var_INaCa__i_NaCa;
+        NV_Ith_S(dqs, 5) = var_INa__i_Na_converted;
+        NV_Ith_S(dqs, 6) = var_IK1__i_K1_converted;
+        NV_Ith_S(dqs, 7) = var_IKr__i_Kr_converted;
+        NV_Ith_S(dqs, 8) = var_IKs__i_Ks_converted;
+        NV_Ith_S(dqs, 9) = var_INaCa__i_NaCa_converted;
         NV_Ith_S(dqs, 10) = var_cell__i_Stim_converted;
-        NV_Ith_S(dqs, 11) = var_Itos__i_tos;
+        NV_Ith_S(dqs, 11) = var_Itos__i_tos_converted;
         NV_Ith_S(dqs, 12) = var_chaste_interface__environment__time;
         return dqs;
     }
@@ -1157,7 +1164,7 @@ void OdeSystemInformation<CellShannon2004FromCellMLCvodeDataClamp>::Initialise(v
 
     // Derived Quantity index [1]:
     this->mDerivedQuantityNames.push_back("membrane_L_type_calcium_current");
-    this->mDerivedQuantityUnits.push_back("microA_per_microF");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     // Derived Quantity index [2]:
     this->mDerivedQuantityNames.push_back("membrane_L_type_calcium_current_fCa_gate");
@@ -1173,23 +1180,23 @@ void OdeSystemInformation<CellShannon2004FromCellMLCvodeDataClamp>::Initialise(v
 
     // Derived Quantity index [5]:
     this->mDerivedQuantityNames.push_back("membrane_fast_sodium_current");
-    this->mDerivedQuantityUnits.push_back("microA_per_microF");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     // Derived Quantity index [6]:
     this->mDerivedQuantityNames.push_back("membrane_inward_rectifier_potassium_current");
-    this->mDerivedQuantityUnits.push_back("microA_per_microF");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     // Derived Quantity index [7]:
     this->mDerivedQuantityNames.push_back("membrane_rapid_delayed_rectifier_potassium_current");
-    this->mDerivedQuantityUnits.push_back("microA_per_microF");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     // Derived Quantity index [8]:
     this->mDerivedQuantityNames.push_back("membrane_slow_delayed_rectifier_potassium_current");
-    this->mDerivedQuantityUnits.push_back("microA_per_microF");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     // Derived Quantity index [9]:
     this->mDerivedQuantityNames.push_back("membrane_sodium_calcium_exchanger_current");
-    this->mDerivedQuantityUnits.push_back("microA_per_microF");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     // Derived Quantity index [10]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
@@ -1197,7 +1204,7 @@ void OdeSystemInformation<CellShannon2004FromCellMLCvodeDataClamp>::Initialise(v
 
     // Derived Quantity index [11]:
     this->mDerivedQuantityNames.push_back("membrane_transient_outward_current");
-    this->mDerivedQuantityUnits.push_back("microA_per_microF");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
     // Derived Quantity index [12]:
     this->mDerivedQuantityNames.push_back("time");
