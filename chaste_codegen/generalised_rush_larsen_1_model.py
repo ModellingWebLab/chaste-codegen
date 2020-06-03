@@ -1,4 +1,4 @@
-import sympy as sp
+from sympy import Derivative
 
 from chaste_codegen._jacobian import format_jacobian, get_jacobian
 from chaste_codegen._partial_eval import partial_eval
@@ -44,7 +44,7 @@ class GeneralisedRushLarsenFirstOrderModel(ChasteModel):
             """
             used_state_vars = set()
             for eq in eq_to_expand:
-                for v in eq[1].atoms(sp.Derivative) | eq[1].free_symbols:
+                for v in eq[1].atoms(Derivative) | eq[1].free_symbols:
                     if v in self._state_vars:
                         used_state_vars.add(v)
                     elif v not in [e[0] for e in eq_to_expand]:

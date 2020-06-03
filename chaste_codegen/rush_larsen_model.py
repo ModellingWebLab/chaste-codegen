@@ -1,4 +1,4 @@
-import sympy as sp
+from sympy.codegen.rewriting import Wild
 
 from chaste_codegen._linearity_check import get_non_linear_state_vars, subst_deriv_eqs_non_linear_vars
 from chaste_codegen._partial_eval import partial_eval
@@ -34,8 +34,8 @@ class RushLarsenModel(ChasteModel):
         def match_alpha_beta(expr, x):  # expr already in piecewise_fold form
             """Match alpha*(1-x) - beta*x"""
             a, b = None, None
-            alpha = sp.Wild('alpha', exclude=[x])
-            beta = sp.Wild('beta', exclude=[x])
+            alpha = Wild('alpha', exclude=[x])
+            beta = Wild('beta', exclude=[x])
             match = expr.expand().match((alpha - x * alpha) - beta * x)
             if match is not None:
                 a, b = match[alpha], match[beta]
@@ -44,8 +44,8 @@ class RushLarsenModel(ChasteModel):
         def match_inf_tau(expr, x):  # expr already in piecewise_fold form
             """Match (inf-x)/tau"""
             i, t = None, None
-            inf = sp.Wild('inf', exclude=[x])
-            tau = sp.Wild('tau', exclude=[x])
+            inf = Wild('inf', exclude=[x])
+            tau = Wild('tau', exclude=[x])
             match = expr.expand().match(inf / tau - x / tau)
             if match is not None:
                 i, t = match[inf], match[tau]
