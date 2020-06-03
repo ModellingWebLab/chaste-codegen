@@ -1,7 +1,16 @@
-import sympy as sp
+from sympy import (
+    Abs,
+    Function,
+    acos,
+    cos,
+    exp,
+    sign,
+    sin,
+    sqrt,
+)
 
 
-class RealFunction(sp.Function):
+class RealFunction(Function):
     def _eval_is_real(self):
         return self.args[0].is_real
 
@@ -23,7 +32,7 @@ class abs_(RealFunction):
         Returns the first derivative of this function.
         """
         assert argindex == 1
-        return sp.sign(self.args[0])
+        return sign(self.args[0])
 
 
 class acos_(RealFunction):
@@ -68,4 +77,4 @@ class sin_(RealFunction):
 
 # MATH_FUNC_SYMPY_MAPPING provides a mapping from our specified math functions back to sympy versions.
 # This can be used to put sympy function into an expression or evaluation. e.g. `expr.subs(MATH_FUNC_SYMPY_MAPPING)`.
-MATH_FUNC_SYMPY_MAPPING = {abs_: sp.Abs, acos_: sp.acos, cos_: sp.cos, exp_: sp.exp, sin_: sp.sin, sqrt_: sp.sqrt}
+MATH_FUNC_SYMPY_MAPPING = {abs_: Abs, acos_: acos, cos_: cos, exp_: exp, sin_: sin, sqrt_: sqrt}

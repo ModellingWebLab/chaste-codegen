@@ -1,4 +1,4 @@
-import sympy as sp
+from sympy import Matrix, cse
 
 
 def get_jacobian(state_vars, derivative_equations):
@@ -10,18 +10,18 @@ def get_jacobian(state_vars, derivative_equations):
              The list of common expressions is of the form [('var_x1', <expression>), ..]
              The jacobian Matrix is an sympy.Matrix
     """
-    jacobian_equations, jacobian_matrix = [], sp.Matrix([])
+    jacobian_equations, jacobian_matrix = [], Matrix([])
     if len(state_vars) > 0:
         jacobian_equations, jacobian_matrix = [], []
-        state_var_matrix = sp.Matrix(state_vars)
+        state_var_matrix = Matrix(state_vars)
         # sort by state var
         derivative_eqs = sorted(derivative_equations, key=lambda d: state_vars.index(d.lhs.args[0]))
         # we're only interested in the rhs
         derivative_eqs = [eq.rhs for eq in derivative_eqs]
-        derivative_eq_matrix = sp.Matrix(derivative_eqs)
+        derivative_eq_matrix = Matrix(derivative_eqs)
         jacobian_matrix = derivative_eq_matrix.jacobian(state_var_matrix)
-        jacobian_equations, jacobian_matrix = sp.cse(jacobian_matrix, order='none')
-    return jacobian_equations, sp.Matrix(jacobian_matrix)
+        jacobian_equations, jacobian_matrix = cse(jacobian_matrix, order='none')
+    return jacobian_equations, Matrix(jacobian_matrix)
 
 
 def format_jacobian(jacobian_equations, jacobian_matrix, printer, print_rhs,
@@ -41,7 +41,7 @@ def format_jacobian(jacobian_equations, jacobian_matrix, printer, print_rhs,
              The jacobian Matrix is a list of the form:
              [{'i': i, 'j': 'entry': <printted jacobian matrix entry for index [i, j])}
     """
-    assert isinstance(jacobian_matrix, sp.Matrix), 'Expecting a jacobian as a matrix'
+    assert isinstance(jacobian_matrix, Matrix), 'Expecting a jacobian as a matrix'
     equations = [{'lhs': printer.doprint(eq[0]), 'rhs': print_rhs(eq[0], eq[1]), 'sympy_lhs': eq[0]}
                  for eq in jacobian_equations]
     rows, cols = jacobian_matrix.shape

@@ -1,4 +1,9 @@
-import sympy as sp
+from sympy import (
+    Derivative,
+    Piecewise,
+    Wild,
+    piecewise_fold,
+)
 
 from chaste_codegen._jacobian import format_jacobian, get_jacobian
 from chaste_codegen._linearity_check import get_non_linear_state_vars, subst_deriv_eqs_non_linear_vars
@@ -41,7 +46,7 @@ class BackwardEulerModel(ChasteModel):
         """
         def rearrange_expr(expr, var):  # expr already in piecewise_fold form
             """Rearrange an expression into the form g + h*var."""
-            if isinstance(expr, sp.Piecewise):
+            if isinstance(expr, Piecewise):
                 # The tests have to move into both components of gh:
                 # "if C1 then (a1,b1) elif C2 then (a2,b2) else (a0,b0)"
                 # maps to "(if C1 then a1 elif C2 then a2 else a0,
@@ -59,13 +64,13 @@ class BackwardEulerModel(ChasteModel):
                     pieces_i = [p for p in pieces_i if p[0] is not None]  # Remove cases that are None
                     new_expr = None
                     if pieces_i:
-                        new_expr = sp.Piecewise(*pieces_i)
+                        new_expr = Piecewise(*pieces_i)
                     return new_expr
                 gh = (piecewise_branch(0), piecewise_branch(1))
 
             else:
-                h = sp.Wild('h', exclude=[var])
-                g = sp.Wild('g', exclude=[var])
+                h = Wild('h', exclude=[var])
+                g = Wild('g', exclude=[var])
                 match = expr.expand().match(g + h * var)
                 gh = (None, None)
                 if match is not None:
@@ -74,7 +79,7 @@ class BackwardEulerModel(ChasteModel):
 
         def print_rearrange_expr(expr, var):
             """Print out the rearanged expression"""
-            expr = sp.piecewise_fold(expr)
+            expr = piecewise_fold(expr)
             gh = rearrange_expr(expr, var)
             return {'state_var_index': self._state_vars.index(var),
                     'var': self._printer.doprint(var),
@@ -87,7 +92,7 @@ class BackwardEulerModel(ChasteModel):
                                                             self._state_vars, self.get_equations_for)
 
         # sort the linear derivatives
-        linear_derivs = sorted([eq for eq in linear_derivs_eqs if isinstance(eq.lhs, sp.Derivative)],
+        linear_derivs = sorted([eq for eq in linear_derivs_eqs if isinstance(eq.lhs, Derivative)],
                                key=lambda d: self._model.get_display_name(d.lhs.args[0], self._OXMETA))
         formatted_expr = [print_rearrange_expr(d.rhs, d.lhs.args[0]) for d in linear_derivs]
 
@@ -113,7 +118,7 @@ class BackwardEulerModel(ChasteModel):
         for eq in self._jacobian_matrix:
             jacobian_symbols.update(eq.free_symbols)
 
-        non_linear_derivs = [eq.lhs for eq in self._derivative_equations if isinstance(eq.lhs, sp.Derivative)
+        non_linear_derivs = [eq.lhs for eq in self._derivative_equations if isinstance(eq.lhs, Derivative)
                              and eq.lhs.args[0] in self._non_linear_state_vars]
         non_linear_eqs = self._model.get_equations_for(non_linear_derivs)
         for eq in non_linear_eqs:

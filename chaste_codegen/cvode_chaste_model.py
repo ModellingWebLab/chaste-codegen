@@ -1,4 +1,4 @@
-import sympy as sp
+from sympy import Matrix
 
 from chaste_codegen._jacobian import format_jacobian, get_jacobian
 from chaste_codegen._partial_eval import partial_eval
@@ -26,7 +26,7 @@ class CvodeChasteModel(ChasteModel):
                                 self._print_rhs_with_modifiers)
         else:
             self._vars_for_template['jacobian_equations'], self._vars_for_template['jacobian_entries'] = \
-                [], sp.Matrix()
+                [], Matrix()
 
     def _print_modifiable_parameters(self, symbol):
         return 'NV_Ith_S(mParameters, ' + str(self._modifiable_parameters.index(symbol)) + ')'

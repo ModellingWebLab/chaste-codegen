@@ -2,9 +2,6 @@ from chaste_codegen._partial_eval import partial_eval
 from chaste_codegen.normal_chaste_model import NormalChasteModel
 
 
-# todo lookuptables
-
-
 class OptChasteModel(NormalChasteModel):
     """ Holds information specific for the Optimised model type. Builds on Normal model type"""
 

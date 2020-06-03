@@ -1,7 +1,20 @@
 from enum import Enum
 
-import sympy as sp
+from sympy import (
+    Add,
+    Derivative,
+    Eq,
+    Function,
+    Mul,
+    Piecewise,
+    Pow,
+    log,
+)
 from sympy.codegen.cfunctions import log2, log10
+from sympy.core.relational import Relational
+from sympy.functions.elementary.hyperbolic import HyperbolicFunction, InverseHyperbolicFunction
+from sympy.functions.elementary.trigonometric import InverseTrigonometricFunction, TrigonometricFunction
+from sympy.logic.boolalg import BooleanFunction
 
 import chaste_codegen as cg
 
@@ -39,13 +52,13 @@ def check_expr(expr, state_var, membrane_voltage_var, state_vars):
     if expr is state_var:
         result = KINDS.LINEAR
     elif expr is membrane_voltage_var or len(expr.free_symbols) == 0 or\
-            isinstance(expr, sp.Function('GetIntracellularAreaStimulus', real=True)):
+            isinstance(expr, Function('GetIntracellularAreaStimulus', real=True)):
         # constant, V or GetIntracellularAreaStimulus(time)
         result = KINDS.NONE
     elif expr in state_vars:
         result = KINDS.NONLINEAR
 
-    elif isinstance(expr, sp.Piecewise):
+    elif isinstance(expr, Piecewise):
         # If any conditions have a dependence, then we're
         # non-linear  Otherwise, all the pieces must be the same
         # (and that's what we are) or we're non-linear.
@@ -62,7 +75,7 @@ def check_expr(expr, state_var, membrane_voltage_var, state_vars):
                     result = KINDS.NONLINEAR
                     break
                 result = res
-    elif isinstance(expr, sp.Mul):
+    elif isinstance(expr, Mul):
         # Linear iff only 1 linear operand
         result = KINDS.NONE
         lin = 0
@@ -77,11 +90,11 @@ def check_expr(expr, state_var, membrane_voltage_var, state_vars):
                 break
             elif lin == 1:
                 result = KINDS.LINEAR
-    elif isinstance(expr, sp.Add) or isinstance(expr, sp.boolalg.BooleanFunction) or\
-            isinstance(expr, sp.relational.Relational):
+    elif isinstance(expr, Add) or isinstance(expr, BooleanFunction) or\
+            isinstance(expr, Relational):
         # linear if any operand linear, and non-linear
         result = max_kind(state_var, operands)
-    elif isinstance(expr, sp.Pow):
+    elif isinstance(expr, Pow):
         if state_var not in expr.free_symbols:
             result = max_kind(state_var, operands)
         elif len(expr.args) == 2 and expr.args[1] == -1:  # x/y divide is represented as x * pow(y, -1)
@@ -89,12 +102,9 @@ def check_expr(expr, state_var, membrane_voltage_var, state_vars):
             result = check_expr(expr.args[0], state_var, membrane_voltage_var, state_vars)
         else:
             result = KINDS.NONLINEAR
-    elif isinstance(expr, (sp.log, log10, log2)) or\
-            isinstance(expr, (cg.RealFunction,
-                              sp.functions.elementary.trigonometric.TrigonometricFunction,
-                              sp.functions.elementary.hyperbolic.HyperbolicFunction,
-                              sp.functions.elementary.trigonometric.InverseTrigonometricFunction,
-                              sp.functions.elementary.hyperbolic.InverseHyperbolicFunction)):
+    elif isinstance(expr, (log, log10, log2)) or\
+            isinstance(expr, (cg.RealFunction, TrigonometricFunction, HyperbolicFunction, InverseTrigonometricFunction,
+                              InverseHyperbolicFunction)):
         if state_var not in expr.free_symbols:
             result = check_expr(expr.args[0], state_var, membrane_voltage_var, state_vars)
         else:
@@ -106,7 +116,7 @@ def get_non_linear_state_vars(derivative_equations, membrane_voltage_var, state_
     """Returns the state vars whos derivative expressions are nont linear"""
     # return the state var part from the derivative equations where the rhs is not linear
     return sorted([eq.lhs.args[0] for eq in derivative_equations
-                   if isinstance(eq.lhs, sp.Derivative) and
+                   if isinstance(eq.lhs, Derivative) and
                    eq.lhs.args[0] != membrane_voltage_var and
                    check_expr(eq.rhs, eq.lhs.args[0], membrane_voltage_var, state_vars) != KINDS.LINEAR],
                   key=lambda s: printer.doprint(s))
@@ -132,8 +142,8 @@ def subst_deriv_eqs_non_linear_vars(y_derivatives, non_linear_state_vars, membra
     subs_dict = {}
     for eq in get_equations_for_func(linear_sv):
         # Substitute variables into the derivative where their definition contains a statevar
-        if isinstance(eq.lhs, sp.Derivative):
-            linear_derivs_eqs.append(sp.Eq(eq.lhs, eq.rhs.xreplace(subs_dict)))
+        if isinstance(eq.lhs, Derivative):
+            linear_derivs_eqs.append(Eq(eq.lhs, eq.rhs.xreplace(subs_dict)))
         elif not (eq.rhs.free_symbols - set([membrane_voltage_var])).intersection(non_lin_sym):
             # if the equation doesn't contain any statevars (except V)
             # or other variables whose definition contains a statevar just add this equation to the list

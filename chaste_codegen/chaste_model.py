@@ -1,19 +1,25 @@
 import logging
 import time
 
-import sympy as sp
 from cellmlmanip.model import DataDirectionFlow
 from cellmlmanip.rdf import create_rdf_node
 from cellmlmanip.units import UnitStore
 from pint import DimensionalityError
-from sympy.codegen.cfunctions import log10
-from sympy.codegen.rewriting import (
-    ReplaceOptim,
+from sympy import (
+    Derivative,
+    Eq,
+    Expr,
+    Float,
+    Function,
+    Mul,
+    Pow,
     Wild,
     log,
-    optimize,
-    optims_c99,
+    simplify,
+    sympify,
 )
+from sympy.codegen.cfunctions import log10
+from sympy.codegen.rewriting import ReplaceOptim, optimize, optims_c99
 
 import chaste_codegen as cg
 from chaste_codegen._rdf import get_variables_transitively
@@ -40,12 +46,12 @@ class ChasteModel(object):
             e.is_Pow and e.exp.is_negative  # division
             or (isinstance(e, (log, log10)) and not e.args[0].is_number))))
     # For P^n make sure n is passed as int if it is actually a whole number
-    _POW_OPT = ReplaceOptim(lambda p: p.is_Pow and (isinstance(p.exp, sp.Float) or isinstance(p.exp, float))
+    _POW_OPT = ReplaceOptim(lambda p: p.is_Pow and (isinstance(p.exp, Float) or isinstance(p.exp, float))
                             and float(p.exp).is_integer(),
-                            lambda p: sp.Pow(p.base, int(float(p.exp))))
+                            lambda p: Pow(p.base, int(float(p.exp))))
     # For 1.0 * x * ... remove the 1.0 for neater equations
-    _ONE_OPT = ReplaceOptim(lambda m: isinstance(m, sp.Mul) and 1.0 in m.args,
-                            lambda m: sp.mul.Mul(*[a for a in m.args if a != 1.0]))
+    _ONE_OPT = ReplaceOptim(lambda m: isinstance(m, Mul) and 1.0 in m.args,
+                            lambda m: Mul(*[a for a in m.args if a != 1.0]))
     _OPTIMS = optims_c99 + (_LOG10_OPT, _POW_OPT, _ONE_OPT)
 
     def __init__(self, model, file_name, **kwargs):
@@ -186,7 +192,7 @@ class ChasteModel(object):
         """
         equations = [eq for eq in self._model.get_equations_for(variables, recurse=recurse)
                      if not filter_modifiable_parameters_lhs or eq.lhs not in self._modifiable_parameters]
-        return [sp.Eq(eq.lhs, optimize(eq.rhs, self._OPTIMS)) for eq in equations]
+        return [Eq(eq.lhs, optimize(eq.rhs, self._OPTIMS)) for eq in equations]
 
     def _get_initial_value(self, var):
         """Returns the initial value of a variable if it has one, 0 otherwise"""
@@ -197,7 +203,7 @@ class ChasteModel(object):
         else:
             eqs = self._model.get_equations_for([var])
             # If there is a defining equation, there should be just 1 equation and it should be of the form var = value
-            if len(eqs) == 1 and isinstance(eqs[0].rhs, sp.numbers.Float):
+            if len(eqs) == 1 and isinstance(eqs[0].rhs, Float):
                 initial_value = eqs[0].rhs
         return initial_value
 
@@ -209,7 +215,7 @@ class ChasteModel(object):
 
     def _state_var_key_order(self, var):
         """Returns a key to order state variables in the same way as pycml does"""
-        if isinstance(var, sp.Derivative):
+        if isinstance(var, Derivative):
             var = var.args[0]
         if var == self._membrane_voltage_var:
             return self._MEMBRANE_VOLTAGE_INDEX
@@ -240,7 +246,7 @@ class ChasteModel(object):
     def _add_conversion_rules(self):
         """ Add conversion rules to allow converting stimulus current & amplitude"""
         # add 'HeartConfig::Instance()->GetCapacitance' call for use in conversions
-        self._config_capacitance_call = sp.Function('HeartConfig::Instance()->GetCapacitance', real=True)()
+        self._config_capacitance_call = Function('HeartConfig::Instance()->GetCapacitance', real=True)()
 
         self._model.units.add_conversion_rule(
             from_unit=self.units.get_unit('uA_per_uF'), to_unit=self.units.get_unit('uA_per_cm2'),
@@ -347,7 +353,7 @@ class ChasteModel(object):
         d_eqs = self.get_equations_for(self._y_derivatives)
 
         # get dv/dt
-        deriv_eq_only = [eq for eq in d_eqs if isinstance(eq.lhs, sp.Derivative)
+        deriv_eq_only = [eq for eq in d_eqs if isinstance(eq.lhs, Derivative)
                          and eq.lhs.args[0] == self._membrane_voltage_var]
         assert len(deriv_eq_only) == 1, 'Expecting exactly 1 dv/dt equation'
         dvdt = deriv_eq_only[0]
@@ -367,7 +373,7 @@ class ChasteModel(object):
         for variable in variables:
             if self._membrane_stimulus_current_orig != variable:
                 if self._membrane_stimulus_current_orig.units.dimensionality == variable.units.dimensionality:
-                    if isinstance(voltage_rhs, sp.expr.Expr):
+                    if isinstance(voltage_rhs, Expr):
                         voltage_rhs = voltage_rhs.xreplace({variable: 0.0})  # other currents = 0
                 else:
                     # For other variables see if we need to follow their definitions first
@@ -375,13 +381,13 @@ class ChasteModel(object):
                     if variable in [eq.lhs for eq in d_eqs]:
                         rhs = [eq.rhs for eq in d_eqs if eq.lhs == variable][-1]
 
-                    if rhs is not None and not isinstance(rhs, sp.numbers.Float):
+                    if rhs is not None and not isinstance(rhs, Float):
                         voltage_rhs = voltage_rhs.xreplace({variable: rhs})  # Update definition
                         variables.extend(rhs.free_symbols)
                     else:
-                        if isinstance(voltage_rhs, sp.expr.Expr):
+                        if isinstance(voltage_rhs, Expr):
                             voltage_rhs = voltage_rhs.xreplace({variable: 1.0})  # other variables = 1
-        if isinstance(voltage_rhs, sp.expr.Expr):
+        if isinstance(voltage_rhs, Expr):
             voltage_rhs = voltage_rhs.xreplace({self._membrane_stimulus_current_orig: 1.0})  # stimulus = 1
             # plug in math functions for sign calculation
             voltage_rhs = voltage_rhs.subs(MATH_FUNC_SYMPY_MAPPING)
@@ -392,14 +398,14 @@ class ChasteModel(object):
                                                                            DataDirectionFlow.INPUT)
 
         # Replace stim = ... with stim = +/-GetIntracellularAreaStimulus(t)
-        GetIntracellularAreaStimulus = sp.Function('GetIntracellularAreaStimulus', real=True)(self._time_variable)
+        GetIntracellularAreaStimulus = Function('GetIntracellularAreaStimulus', real=True)(self._time_variable)
         if negate_stimulus:
             GetIntracellularAreaStimulus = -GetIntracellularAreaStimulus
 
         # Get stimulus defining equation
         eq = self._model.get_definition(membrane_stimulus_current_converted)
         self._model.remove_equation(eq)
-        self._model.add_equation(sp.Eq(membrane_stimulus_current_converted, GetIntracellularAreaStimulus))
+        self._model.add_equation(Eq(membrane_stimulus_current_converted, GetIntracellularAreaStimulus))
 
         # Annotate the converted stimulus current as derived quantity
         self._set_is_metadata(membrane_stimulus_current_converted, 'derived-quantity')
@@ -511,7 +517,7 @@ class ChasteModel(object):
 
         # create the const double var_chaste_interface__i_ionic = .. equation
         i_ionic_lhs = self._model.add_variable(name='_i_ionic', units=self.units.get_unit('uA_per_cm2'))
-        i_ionic_rhs = sp.sympify(0.0, evaluate=False)
+        i_ionic_rhs = sympify(0.0, evaluate=False)
 
         # add i_ionic to interface for printing
         self._in_interface.append(i_ionic_lhs)
@@ -520,9 +526,9 @@ class ChasteModel(object):
             factor = self._model.units.get_conversion_factor(from_unit=self._model.units.evaluate_units(var.lhs),
                                                              to_unit=self.units.get_unit('uA_per_cm2'))
             i_ionic_rhs += factor * var.lhs
-        i_ionic_rhs = sp.simplify(i_ionic_rhs)  # clean up equation
+        i_ionic_rhs = simplify(i_ionic_rhs)  # clean up equation
 
-        i_ionic_eq = sp.Eq(i_ionic_lhs, i_ionic_rhs)
+        i_ionic_eq = Eq(i_ionic_lhs, i_ionic_rhs)
         self._model.add_equation(i_ionic_eq)
         equations_for_ionic_vars.append(i_ionic_eq)
 
@@ -532,7 +538,7 @@ class ChasteModel(object):
     def _get_extended_equations_for_ionic_vars(self):
         """ Get the equations defining the ionic derivatives and all dependant equations"""
         # Update equations to include i_ionic_eq & defining eqs, set stimulus current to 0
-        return [eq if eq.lhs != self._membrane_stimulus_current_orig else sp.Eq(eq.lhs, 0.0)
+        return [eq if eq.lhs != self._membrane_stimulus_current_orig else Eq(eq.lhs, 0.0)
                 for eq in self.get_equations_for([eq.lhs for eq in self._equations_for_ionic_vars])
                 if eq.lhs != self._membrane_stimulus_current_converted
                 or self._membrane_stimulus_current_orig == self._membrane_stimulus_current_converted]
@@ -613,7 +619,7 @@ class ChasteModel(object):
                              else self._print_modifiable_parameters(variable),
                              lambda deriv: 'd_dt_chaste_interface_' +
                                            (get_variable_name(deriv.expr)
-                                            if isinstance(deriv, sp.Derivative) else get_variable_name(deriv)))
+                                            if isinstance(deriv, Derivative) else get_variable_name(deriv)))
 
         # Printer for printing variable in comments e.g. for ode system information
         self._name_printer = cg.ChastePrinter(lambda variable: get_variable_name(variable))
@@ -755,7 +761,7 @@ class ChasteModel(object):
                  'units': self._model.units.format(self._model.units.evaluate_units(eq.lhs)),
                  'in_eqs_excl_voltage': eq in self._derivative_eqs_excl_voltage,
                  'in_membrane_voltage': eq in self._derivative_eqs_voltage,
-                 'is_voltage': isinstance(eq.lhs, sp.Derivative) and eq.lhs.args[0] == self._membrane_voltage_var}
+                 'is_voltage': isinstance(eq.lhs, Derivative) and eq.lhs.args[0] == self._membrane_voltage_var}
                 for eq in derivative_equations]
 
     def _format_free_variable(self):

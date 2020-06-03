@@ -1,4 +1,4 @@
-import sympy as sp
+from sympy import Derivative, Eq, Function
 
 from chaste_codegen.cvode_chaste_model import CvodeChasteModel
 
@@ -15,7 +15,7 @@ class CvodeWithDataClampModel(CvodeChasteModel):
         self._membrane_data_clamp_current_conductance = \
             self._model.add_variable(name='membrane_data_clamp_current_conductance',
                                      units=self.units.get_unit('dimensionless'))
-        self._model.add_equation(sp.Eq(self._membrane_data_clamp_current_conductance, 0.0))
+        self._model.add_equation(Eq(self._membrane_data_clamp_current_conductance, 0.0))
 
         # add membrane_data_clamp_current
         self._membrane_data_clamp_current = self._model.add_variable(name='membrane_data_clamp_current',
@@ -23,8 +23,8 @@ class CvodeWithDataClampModel(CvodeChasteModel):
         # add clamp current equation
         self._in_interface.append(self._membrane_data_clamp_current)
         clamp_current = self._membrane_data_clamp_current_conductance * \
-            (self._membrane_voltage_var - sp.Function('GetExperimentalVoltageAtTimeT')(self._time_variable))
-        self._membrane_data_clamp_current_eq = sp.Eq(self._membrane_data_clamp_current, clamp_current)
+            (self._membrane_voltage_var - Function('GetExperimentalVoltageAtTimeT')(self._time_variable))
+        self._membrane_data_clamp_current_eq = Eq(self._membrane_data_clamp_current, clamp_current)
         self._model.add_equation(self._membrane_data_clamp_current_eq)
 
         # Add data clamp current as modifiable parameter and re-sort
@@ -54,7 +54,7 @@ class CvodeWithDataClampModel(CvodeChasteModel):
 
         # piggy-backs on the analysis that finds ionic currents, in order to add in data clamp currents
         # Find dv/dt
-        deriv_eq_only = [eq for eq in derivative_equations if isinstance(eq.lhs, sp.Derivative)
+        deriv_eq_only = [eq for eq in derivative_equations if isinstance(eq.lhs, Derivative)
                          and eq.lhs.args[0] == self._membrane_voltage_var]
         assert len(deriv_eq_only) == 1, 'Expecting exactly 1 dv/dt equation'
         dvdt = deriv_eq_only[0]
@@ -68,7 +68,7 @@ class CvodeWithDataClampModel(CvodeChasteModel):
         if current_index is not None:
             eq = derivative_equations[current_index]
             rhs = eq.rhs.xreplace({ionic_var: (ionic_var + self._membrane_data_clamp_current)})
-            derivative_equations[current_index] = sp.Eq(eq.lhs, rhs)
+            derivative_equations[current_index] = Eq(eq.lhs, rhs)
         # add the equation for data_clamp_current to derivative_equations just before dv/dt
         if current_index is not None:
             derivative_equations.insert(current_index, self._membrane_data_clamp_current_eq)

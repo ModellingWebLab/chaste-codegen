@@ -1,5 +1,10 @@
-import sympy as sp
 from cellmlmanip.model import Variable
+from sympy import (
+    Eq,
+    Float,
+    Piecewise,
+    piecewise_fold,
+)
 
 
 def partial_eval(equations, required_lhs, keep_multiple_usages=True):
@@ -24,11 +29,11 @@ def partial_eval(equations, required_lhs, keep_multiple_usages=True):
     for eq in equations:
         new_rhs = eq.rhs.xreplace(subs_dict)
         # only apply piecewise_fold if needed to speed things up
-        if len(eq.rhs.atoms(sp.Piecewise)) > 0:
-            new_rhs = sp.piecewise_fold(new_rhs)
-        new_eq = sp.Eq(eq.lhs, new_rhs)
+        if len(eq.rhs.atoms(Piecewise)) > 0:
+            new_rhs = piecewise_fold(new_rhs)
+        new_eq = Eq(eq.lhs, new_rhs)
         if new_eq.lhs not in required_lhs and \
-                (not keep_multiple_usages or isinstance(new_eq.rhs, sp.numbers.Float) or usage_count[new_eq.lhs] <= 1):
+                (not keep_multiple_usages or isinstance(new_eq.rhs, Float) or usage_count[new_eq.lhs] <= 1):
             subs_dict[new_eq.lhs] = new_eq.rhs
         else:
             if not keep_multiple_usages:
