@@ -12,7 +12,7 @@ We reccomend installing chaste_codegen in a vritualenvironment (or using conda)
 
 Users install `chaste_codegen` using pip.
 
-`pip install chaste_codegen`
+```pip install chaste_codegen```
 
 To install chaste_codegen from GitHub source, first clone SymPy using git:
 
