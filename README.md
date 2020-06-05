@@ -8,7 +8,7 @@ The `chaste_codegen` module takes [cellmlmanip](https://github.com/ModellingWebL
 The [jinja2](http://jinja.pocoo.org/) templating engine is used.
 
 ## Installing 
-We reccomend installing chaste_codegen in a vritualenvironment (or using conda)
+We reccomend installing chaste_codegen in a vritual environment (using virtualenv or conda)
 
 Users install `chaste_codegen` using pip.
 
