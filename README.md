@@ -15,6 +15,7 @@ Please see [CONTRIBUTING.md](CONTRIBUTING.md) for the developer installation ins
 ## Using `chaste_codegen`
 
 TODO: PUT INFO ABOUT COMMAND LINE SCRIPT HERE
+@@include[console_script_help.txt](chaste_codegen/tests/console_script_help.txt)
 
 ## Contributing
 
