@@ -55,6 +55,9 @@ setup(
         'Jinja2>=2.11',
     ],
     extras_require={
+        'docs': [
+            'sphinx>=2.0',
+        ],
         'test': [
             'pytest>=3.9',          # For unit tests
             'pytest-cov>=2.5',      # For coverage checking
