@@ -15,10 +15,12 @@ Please see [CONTRIBUTING.md](CONTRIBUTING.md) for the developer installation ins
 ## Using `chaste_codegen`
 After installation, chaste_codegen can be called as follows:
 `chaste_codegen`
+```
 usage: chaste_codegen [-h] [--version] [-t TYPE] [-o OUTFILE]
                       [--use-analytic-jacobian] [-c CLASS_NAME] [-y]
                       [--use-modifiers]
                       cellml_file
+```
 
 For more information about the available options call
 `chaste_codegen -h`
