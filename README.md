@@ -16,10 +16,10 @@ Users install `chaste_codegen` using pip.
 
 To install chaste_codegen from GitHub source, first clone SymPy using git:
 
-$ git clone https://github.com/sympy/sympy.git
+`$ git clone https://github.com/sympy/sympy.git`
 Then, in the sympy repository that you cloned, simply run:
 
-$ python setup.py install
+`$ python setup.py install`
 
 ## Using `chaste_codegen`
 After installation, chaste_codegen can be called using the `chaste_codegen` command:
