@@ -13,8 +13,7 @@ Currently, there is no 'user' way of installing.
 Please see [CONTRIBUTING.md](CONTRIBUTING.md) for the developer installation instructions.
 
 ## Using `chaste_codegen`
-After installation, chaste_codegen can be called as follows:
-`chaste_codegen`
+After installation, chaste_codegen can be called using the `chaste_codegen` command:
 ```
 usage: chaste_codegen [-h] [--version] [-t TYPE] [-o OUTFILE]
                       [--use-analytic-jacobian] [-c CLASS_NAME] [-y]
