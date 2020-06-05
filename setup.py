@@ -22,12 +22,18 @@ setup(
     version=version,
     description='Code generation for cardiac Chaste',
     long_description=readme,
+    long_description_content_type="text/markdown",
     license='BSD 3-clause license',
-    # author='',
-    # author_email='',
+    author='Maurice Hendrix',
+    author_email='Maurice.Hendrix@nottingham.ac.uk',
     maintainer='Maurice Hendrix',
     maintainer_email='Maurice.Hendrix@nottingham.ac.uk',
     url='https://github.com/ModellingWebLab/chaste-codegen',
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: BSD License",
+        "Operating System :: OS Independent",
+    ],
 
     # Packages to include
     packages=find_packages(
