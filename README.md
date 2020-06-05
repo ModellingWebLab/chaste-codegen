@@ -8,9 +8,18 @@ The `chaste_codegen` module takes [cellmlmanip](https://github.com/ModellingWebL
 The [jinja2](http://jinja.pocoo.org/) templating engine is used.
 
 ## Installing 
+We reccomend installing chaste_codegen in a vritualenvironment (or using conda)
 
-## Installation
 Users install `chaste_codegen` using pip.
+
+`pip install chaste_codegen`
+
+To install chaste_codegen from GitHub source, first clone SymPy using git:
+
+$ git clone https://github.com/sympy/sympy.git
+Then, in the sympy repository that you cloned, simply run:
+
+$ python setup.py install
 
 ## Using `chaste_codegen`
 After installation, chaste_codegen can be called using the `chaste_codegen` command:
