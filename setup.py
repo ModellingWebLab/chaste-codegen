@@ -14,6 +14,10 @@ with open('README.md') as f:
 with open(os.path.join('chaste_codegen', 'version.txt'), 'r') as f:
     version = f.read()
 
+# Load license
+with open('LICENSE') as f:
+    license_ = f.read()
+
 # Go!
 setup(
     # Module name (lowercase)
@@ -23,7 +27,7 @@ setup(
     description='Code generation for cardiac Chaste',
     long_description=readme,
     long_description_content_type="text/markdown",
-    license='BSD 3-clause license',
+    license=license_,
     author='Maurice Hendrix',
     author_email='Maurice.Hendrix@nottingham.ac.uk',
     maintainer='Maurice Hendrix',
