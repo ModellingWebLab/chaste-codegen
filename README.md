@@ -9,8 +9,8 @@ The [jinja2](http://jinja.pocoo.org/) templating engine is used.
 
 ## Installing 
 
-Currently, there is no 'user' way of installing.
-Please see [CONTRIBUTING.md](CONTRIBUTING.md) for the developer installation instructions.
+## Installation
+Users install `chaste_codegen` using pip.
 
 ## Using `chaste_codegen`
 After installation, chaste_codegen can be called using the `chaste_codegen` command:
