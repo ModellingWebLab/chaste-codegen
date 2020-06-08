@@ -10,15 +10,8 @@ chaste_codegen is hosted on GitHub_, where you can find the code and installatio
 
 This page provides the *API*, or *developer documentation* for ``chaste_codegen``.
 
-* :ref:`genindex`
-* :ref:`search`
-
-Contents
-========
-.. toctree::
-    model_types 
-
-.. automodule:: chaste_codegen
-  :members:
-  :show-inheritance:
+API documentation
+=================
+.. automodapi:: chaste_codegen
+   :no-inheritance-diagram:
  

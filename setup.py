@@ -56,7 +56,8 @@ setup(
     ],
     extras_require={
         'docs': [
-            'sphinx>=2.0',
+            'sphinx>=3.0'
+            'sphinx-automodapi>=0.12',
         ],
         'test': [
             'pytest>=3.9',          # For unit tests

@@ -18,9 +18,9 @@
 #
 import os
 import sys
+
+
 sys.path.insert(0, os.path.abspath('../'))
-#import chaste_codegen
-import sphinx
 
 
 # -- General configuration ------------------------------------------------
@@ -38,7 +38,11 @@ extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
     'sphinx.ext.viewcode',
+    'sphinx_automodapi.automodapi',
+    'sphinx_automodapi.smart_resolver'
 ]
+
+numpydoc_show_class_members = False
 
 # Autodoc defaults
 autodoc_default_options = {
