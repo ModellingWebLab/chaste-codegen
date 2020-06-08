@@ -28,7 +28,7 @@ setup(
     long_description=readme,
     long_description_content_type="text/markdown",
     license=license_,
-    author=['Maurice Hendrix', 'Michael Clerx', 'Jonathan Cooper'],
+    author='Maurice Hendrix', 'Michael Clerx', 'Jonathan Cooper',
     author_email='Maurice.Hendrix@nottingham.ac.uk',
     maintainer='Maurice Hendrix',
     maintainer_email='Maurice.Hendrix@nottingham.ac.uk',
