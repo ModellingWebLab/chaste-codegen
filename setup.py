@@ -60,6 +60,7 @@ setup(
             'flake8>=3',            # For code style checking
             'isort',
             'mock>=3.0.5',         # For mocking command line args etc.
+            'pytest-cov',
         ],
     },
     entry_points={
