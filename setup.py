@@ -51,7 +51,7 @@ setup(
 
     # List of dependencies
     install_requires=[
-        # cellmlmanip                # Add this in when cellmlmanip is ready
+        'cellmlmanip>=0.1.0',
         'Jinja2>=2.11',
     ],
     extras_require={
