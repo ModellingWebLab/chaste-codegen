@@ -28,6 +28,14 @@ usage: chaste_codegen [-h] [--version] [-t TYPE] [-o OUTFILE]
 For more information about the available options call
 `chaste_codegen -h`
 
+## Release notes
+For release notes see [RELEASE.md](./RELEASE.md)
+
+
+## Documentation
+API documentation explaining how to use cellmlmanip can be found on [readthedocs](https://chaste_codegen.readthedocs.io/en/latest)
+
 ## Contributing
+
 
 For guidelines on contributing to `chaste_codegen`, please see [CONTRIBUTING.md](CONTRIBUTING.md).
