@@ -11,10 +11,11 @@
 - [ ] New feature (non-breaking change which adds functionality)
 - [ ] Breaking change (fix or feature that would cause existing functionality to change)
 
-## Checklist:
+## Documentation checklist
 <!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
-- [ ] I have updated all documentation necessary.
-- [ ] I have checked spelling in (new) comments.
+- [ ] I have updated all documentation in the code where necessary.
+- [ ] I have checked spelling in all (new) comments and documentation.
+- [ ] I have added a note to RELEASE.md if relevant (new feature, breaking change, or notable bug fix).
 
 ## Testing
 - [X] Testing is done automatically and codecov shows test coverage
