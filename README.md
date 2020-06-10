@@ -33,7 +33,7 @@ For release notes see [RELEASE.md](./RELEASE.md)
 
 
 ## Documentation
-API documentation explaining how to use cellmlmanip can be found on [readthedocs](https://chaste-codegen.readthedocs.io/en/latest)
+API documentation explaining how to use cellmlmanip can be found on [readthedocs](https://chaste-codegen.readthedocs.io/en/latest/)
 
 
 ## Contributing
