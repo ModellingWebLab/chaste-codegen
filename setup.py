@@ -51,7 +51,7 @@ setup(
     ],
     extras_require={
         'docs': [
-            'sphinx>=3.0'
+            'sphinx>=3.0',
             'sphinx-automodapi>=0.12',
         ],
         'test': [
