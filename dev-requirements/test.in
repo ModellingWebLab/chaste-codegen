@@ -1,6 +1,0 @@
--r base.in
-
-flake8
-pytest
-pytest-cov
-mock
