@@ -98,7 +98,7 @@ Below is an example `settings.json`; replace `<python_path>` with the folder tha
 ```
 
 ### Git setup
-The tests contain a large amount of reference files. When reference files are updated it's a common practice to regenerate them all and (after testing with chaste). Often only a few will have changes.
+The tests contain a large amount of reference files. When reference files are updated it's a common practice to regenerate them all (after they have been tested with chaste). Often only a few will have changes.
 In order to hide reference files for which only the timestamps have changed, please set up your git environment as follows.
 ```
 git config --global filter.strip_gen_time.clean "sed 's;^//! on .*;//! on (date omitted as unimportant);'"

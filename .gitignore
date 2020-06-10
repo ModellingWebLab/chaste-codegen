@@ -62,8 +62,8 @@ instance/
 .scrapy
 
 # Sphinx documentation
-chaste_codegen/docs/_build/
-chaste_codegen/docs/api/
+docs/_build/
+docs/api/
 
 # PyBuilder
 target/
