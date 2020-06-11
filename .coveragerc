@@ -2,6 +2,7 @@
 source = chaste_codegen
 omit =
     chaste_codegen/tests/*
+    chaste_codegen/templates/*
 
 [report]
 exclude_lines =
