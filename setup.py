@@ -22,12 +22,17 @@ setup(
     version=version,
     description='Code generation for cardiac Chaste',
     long_description=readme,
-    license='BSD 3-clause license',
-    # author='',
-    # author_email='',
+    long_description_content_type="text/markdown",
+    author='Maurice Hendrix, Michael Clerx, Jonathan Cooper',
+    author_email='Maurice.Hendrix@nottingham.ac.uk',
     maintainer='Maurice Hendrix',
     maintainer_email='Maurice.Hendrix@nottingham.ac.uk',
     url='https://github.com/ModellingWebLab/chaste-codegen',
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: BSD License",
+        "Operating System :: OS Independent",
+    ],
 
     # Packages to include
     packages=find_packages(
@@ -41,16 +46,21 @@ setup(
 
     # List of dependencies
     install_requires=[
-        # cellmlmanip                # Add this in when cellmlmanip is ready
+        'cellmlmanip>=0.1.0',
         'Jinja2>=2.11',
     ],
     extras_require={
+        'docs': [
+            'sphinx>=3.0',
+            'sphinx-automodapi>=0.12',
+        ],
         'test': [
             'pytest>=3.9',          # For unit tests
             'pytest-cov>=2.5',      # For coverage checking
             'flake8>=3',            # For code style checking
             'isort',
             'mock>=3.0.5',         # For mocking command line args etc.
+            'codecov>=2.1.3',
         ],
     },
     entry_points={
