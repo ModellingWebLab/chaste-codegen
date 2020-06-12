@@ -4,7 +4,7 @@ import os
 import pytest
 import sympy as sp
 from cellmlmanip import load_model
-from cellmlmanip.printer import Printer
+from chaste_codegen._chaste_printer import ChastePrinter
 
 import chaste_codegen as cg
 from chaste_codegen._jacobian import format_jacobian, get_jacobian
@@ -112,8 +112,10 @@ def test_format_wrong_params6(jacobian):
 
 def test_format_jacobian(jacobian):
     jacobian_equations, jacobian_matrix = jacobian
-    equations, jacobian = format_jacobian(jacobian_equations, sp.Matrix([jacobian_matrix]), Printer(),
+    equations, jacobian = format_jacobian(jacobian_equations, sp.Matrix([jacobian_matrix]), ChastePrinter(),
                                           lambda x, y: str(x) + str(y))
+    print(equations)
+    print(jacobian)
     assert str(equations) == ("[{'lhs': 'x0', 'rhs': 'x0120.0*_sodium_channel_m_gate$m**3.0', 'sympy_lhs': x0}, "
                               "{'lhs': 'x1', 'rhs': 'x1_membrane$V - 40.0', 'sympy_lhs': x1}, {'lhs': 'x2', 'rhs':"
                               " 'x2exp_(-0.055555555555555556*_membrane$V - 4.1666666666666667)', 'sympy_lhs': x2},"
