@@ -145,10 +145,10 @@ def subst_deriv_eqs_non_linear_vars(y_derivatives, non_linear_state_vars, membra
     This way we reduce the complexity of equations matched and reduce the chance of floating point errors"""
 
     assert isinstance(membrane_voltage_var, Variable), "membrane_voltage_var should be a cellmlmanip.Variable"
-    assert all([isinstance(eq, Derivative)for eq in y_derivatives]), "Expecting y_derivatives to be Derivatives"
-    assert all([isinstance(eq, Variable)for eq in non_linear_state_vars]), ("Expecting non_linear_state_vars all to be"
-                                                                            " cellmlmanip.Variable")
-    assert all([isinstance(eq, Variable)for eq in state_vars]), "Expecting state_vars all to be cellmlmanip.Variable"
+    assert all([isinstance(eq, Derivative) for eq in y_derivatives]), "Expecting y_derivatives to be Derivatives"
+    assert all([isinstance(eq, Variable) for eq in non_linear_state_vars]), ("Expecting non_linear_state_vars all to be"
+                                                                             " cellmlmanip.Variable")
+    assert all([isinstance(eq, Variable) for eq in state_vars]), "Expecting state_vars all to be cellmlmanip.Variable"
     assert callable(get_equations_for_func), 'Expecting get_equations_for_func to be a callable'
 
     # get the state vars for which derivative is linear
