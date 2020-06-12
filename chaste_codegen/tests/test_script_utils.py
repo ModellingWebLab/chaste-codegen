@@ -26,7 +26,7 @@ def test_wrong_params2():
 
 def test_wrong_params3():
     """ Check save_np_to_file works as expected """
-    with pytest.raises(FileNotFoundError, match="[[Errno 2]] No such file or directory: ' '"):
+    with pytest.raises(FileNotFoundError, match="No such file or directory: ' '"):
         write_file(" ", "")
 
 
