@@ -20,7 +20,6 @@ def partial_eval(equations, required_lhs, keep_multiple_usages=True):
     assert all([isinstance(eq, Eq) for eq in equations]), "Equations to be a collection of equations"
     assert all([isinstance(v, Variable) or isinstance(v, Derivative) for v in required_lhs]), \
         "Expecting required_lhs to be a collection of variables or Derivatives"
-    assert len(required_lhs) > 0, "Required lhs and equations should not be empty"
 
     evaluated_eqs = []
     # count usage of variables on rhs of equations

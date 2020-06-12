@@ -35,16 +35,11 @@ def test_wrong_params():
 
 
 def test_wrong_params2():
-    with pytest.raises(AssertionError, match="Required lhs and equations should not be empty"):
-        partial_eval([], [])
-
-
-def test_wrong_params3():
     with pytest.raises(AssertionError, match="Equations to be a collection of equations"):
         partial_eval([1], [2])
 
 
-def test_wrong_params4(derivatives_eqs):
+def test_wrong_params3(derivatives_eqs):
     with pytest.raises(AssertionError, match="Expecting required_lhs to be a collection of variables or Derivatives"):
         partial_eval(derivatives_eqs, [2])
 
