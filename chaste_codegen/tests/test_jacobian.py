@@ -117,10 +117,10 @@ def test_format_jacobian(jacobian):
                                           lambda x, y: str(x) + str(y))
     print()
     # order dictionary for printing
-    equations = [collections.OrderedDict({'lhs': eq['lhs'], 'rhs': eq['rhs'], 'sympy_lhs': eq['sympy_lhs']})
+    equations = [collections.OrderedDict([('lhs', eq['lhs']), ('rhs', eq['rhs']), ('sympy_lhs', eq['sympy_lhs'])])
                  for eq in equations]
     # order dictionary for printing
-    jacobian = [collections.OrderedDict({'i': jac['i'], 'j': jac['j'], 'entry': jac['entry']})
+    jacobian = [collections.OrderedDict([('i', jac['i']), ('j', jac['j']), ('entry', jac['entry'])])
                 for jac in jacobian]
     print(equations)
     print(jacobian)
