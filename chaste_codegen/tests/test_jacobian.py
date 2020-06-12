@@ -1,15 +1,15 @@
+import collections
 import logging
 import os
 
 import pytest
 import sympy as sp
 from cellmlmanip import load_model
-from chaste_codegen._chaste_printer import ChastePrinter
 
 import chaste_codegen as cg
+from chaste_codegen._chaste_printer import ChastePrinter
 from chaste_codegen._jacobian import format_jacobian, get_jacobian
 from chaste_codegen._partial_eval import partial_eval
-import collections
 
 
 # Show more logging output
@@ -115,8 +115,8 @@ def test_format_jacobian(jacobian):
     jacobian_equations, jacobian_matrix = jacobian
     equations, jacobian = format_jacobian(jacobian_equations, sp.Matrix([jacobian_matrix]), ChastePrinter(),
                                           lambda x, y: str(x) + str(y))
-    
-    #order dictionary for printing
+
+    # order dictionary for printing
     equations = [collections.OrderedDict({'lhs': eq['lhs'], 'rhs': eq['rhs'], 'sympy_lhs': eq['sympy_lhs']})
                  for eq in equations]
     assert str(equations) == ("[OrderedDict([('lhs', 'x0'), ('rhs', 'x0120.0*_sodium_channel_m_gate$m**3.0'), ('sympy_"
@@ -139,9 +139,9 @@ def test_format_jacobian(jacobian):
                               "hs', x16)]), OrderedDict([('lhs', 'x17'), ('rhs', 'x17_membrane$V + 65.0'), ('sympy_lh"
                               "s', x17)])]")
 
-    #order dictionary for printing
+    # order dictionary for printing
     jacobian = [collections.OrderedDict({'i': jac['i'], 'j': jac['j'], 'entry': jac['entry']})
-                 for jac in jacobian]
+                for jac in jacobian]
     print(jacobian)
     assert str(jacobian) == ("[OrderedDict([('i', 0), ('j', 0), ('entry', '-0.29999999999999999 - 36.0 * pow(potassium"
                              "_channel_n_gate$n, 4.0) - x0 * sodium_channel_h_gate$h')]), OrderedDict([('i', 1), ('j',"
