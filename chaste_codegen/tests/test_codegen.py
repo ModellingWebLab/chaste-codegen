@@ -225,6 +225,26 @@ def test_Opt(tmp_path, model):
                                                model['expected_cpp_path'])
 
 
+def test_ChasteModel(tmp_path):
+    """ Check ChasteModel"""
+    LOGGER.info('Testing ChastModel\n')
+    model_file = \
+        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'luo_rudy_1994.cellml')
+
+    chaste_model = cg.ChasteModel(cellmlmanip.load_model(model_file), 'luo_rudy_1994',
+                                  class_name='Cellluo_rudy_1994FromCellML')
+    chaste_model._hpp_template = 'normal_model.hpp'
+    chaste_model._cpp_template = 'normal_model.cpp'
+    chaste_model._vars_for_template['base_class'] = 'AbstractCardiacCell'
+    chaste_model.generate_chaste_code()
+
+    reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Normal')
+
+    test_utils.compare_model_against_reference(chaste_model,
+                                               tmp_path, os.path.join(reference, 'luo_rudy_1994.hpp'),
+                                               os.path.join(reference, 'luo_rudy_1994.cpp'))
+
+
 def test_missing_V():
     LOGGER.info('Testing missing Voltage metadata tag\n')
     model_file = \
