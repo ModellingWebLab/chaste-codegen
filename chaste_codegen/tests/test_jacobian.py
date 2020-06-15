@@ -115,7 +115,6 @@ def test_format_jacobian(jacobian):
     jacobian_equations, jacobian_matrix = jacobian
     equations, jacobian = format_jacobian(jacobian_equations, sp.Matrix([jacobian_matrix]), ChastePrinter(),
                                           lambda x, y: str(x) + str(y))
-    print()
     # order dictionary for printing
     equations = [collections.OrderedDict([('lhs', eq['lhs']), ('rhs', eq['rhs']), ('sympy_lhs', eq['sympy_lhs'])])
                  for eq in equations]
