@@ -34,9 +34,9 @@ def test_namespaces():
     assert PRED_IS_VERSION_OF == create_rdf_node((BQBIOL_NS, 'isVersionOf'))
 
 
-def test_wrong_params1():
+def test_wrong_params1(s_model):
     with pytest.raises(AssertionError, match="Expecting term to be a namespace tuple"):
-        get_variables_transitively(None, None)
+        get_variables_transitively(s_model, None)
 
 
 def test_wrong_params2():
