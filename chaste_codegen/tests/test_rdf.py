@@ -46,6 +46,5 @@ def test_wrong_params2():
 
 def test_rdf(s_model):
     all_currents = get_variables_transitively(s_model, (OXMETA_NS, 'IonicCurrent'))
-    print(all_currents)
     assert str(all_currents) == ("[_cell$i_Stim, _INa$i_Na, _IKr$i_Kr, _IKs$i_Ks, _Itos$i_tos, _IK1$i_K1, _ICaL$i_CaL,"
                                  " _INaCa$i_NaCa, _Jrel_SR$j_rel_SR]")
