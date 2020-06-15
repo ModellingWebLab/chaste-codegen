@@ -227,7 +227,7 @@ def test_Opt(tmp_path, model):
 
 def test_ChasteModel(tmp_path):
     """ Check ChasteModel"""
-    LOGGER.info('Testing ChastModel\n')
+    LOGGER.info('Testing ChasteModel\n')
     model_file = \
         os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'luo_rudy_1994.cellml')
 
