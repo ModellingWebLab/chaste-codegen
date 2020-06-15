@@ -13,8 +13,8 @@ LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 
 
-@pytest.fixture
-def hh_model(scope='session'):
+@pytest.fixture(scope='session')
+def hh_model():
     model_folder = os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'hodgkin_huxley_squid_axon_model_1952_modified.cellml')
     return load_model(model_folder)
 
