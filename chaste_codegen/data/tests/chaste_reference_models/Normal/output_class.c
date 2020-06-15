@@ -243,7 +243,7 @@
         const double var_calcium_release__RegBindSite = (1.0 - var_calcium_release__CaiReg) * var_calcium_release__CadsReg + var_calcium_release__CaiReg; // dimensionless
         const double var_calcium_release__ActRate = 500.0 * pow(var_calcium_release__RegBindSite, 2); // per_second
         const double var_calcium_release__InactRate = 60.0 + 500.0 * pow(var_calcium_release__RegBindSite, 2); // per_second
-        const double var_calcium_release__i_rel = (pow(var_chaste_interface__calcium_release__ActFrac, 2) * var_calcium_release__K_m_rel / pow((0.25 + var_chaste_interface__calcium_release__ActFrac), 2) + var_calcium_release__K_leak_rate) * var_chaste_interface__intracellular_calcium_concentration__Ca_rel; // millimolar_per_second
+        const double var_calcium_release__i_rel = (pow((var_chaste_interface__calcium_release__ActFrac / (0.25 + var_chaste_interface__calcium_release__ActFrac)), 2) * var_calcium_release__K_m_rel + var_calcium_release__K_leak_rate) * var_chaste_interface__intracellular_calcium_concentration__Ca_rel; // millimolar_per_second
         const double var_calcium_translocation__i_trans = 50.0 * var_chaste_interface__intracellular_calcium_concentration__Ca_up - 50.0 * var_chaste_interface__intracellular_calcium_concentration__Ca_rel; // millimolar_per_second
         const double var_intracellular_calcium_concentration__Calmod = 0.02; // millimolar
         const double var_intracellular_calcium_concentration__Kdecay = 10.0; // per_second

@@ -45,14 +45,7 @@ class ChasteModel(object):
         lambda e: (  # cost function prevents turning log(x) into log(10) * log10(x) as we want normal log in that case
             e.is_Pow and e.exp.is_negative  # division
             or (isinstance(e, (log, log10)) and not e.args[0].is_number))))
-    # For P^n make sure n is passed as int if it is actually a whole number
-    _POW_OPT = ReplaceOptim(lambda p: p.is_Pow and (isinstance(p.exp, Float) or isinstance(p.exp, float))
-                            and float(p.exp).is_integer(),
-                            lambda p: Pow(p.base, int(float(p.exp))))
-    # For 1.0 * x * ... remove the 1.0 for neater equations
-    _ONE_OPT = ReplaceOptim(lambda m: isinstance(m, Mul) and 1.0 in m.args,
-                            lambda m: Mul(*[a for a in m.args if a != 1.0]))
-    _OPTIMS = optims_c99 + (_LOG10_OPT, _POW_OPT, _ONE_OPT)
+    _OPTIMS = (_LOG10_OPT, )
 
     def __init__(self, model, file_name, **kwargs):
         """ Initialise a ChasteModel instance
@@ -190,9 +183,15 @@ class ChasteModel(object):
                  with optimisations around using log10, and powers of whole numbers applied to rhs
                  as well as modifiable parameters filtered out is required.
         """
-        equations = [eq for eq in self._model.get_equations_for(variables, recurse=recurse)
-                     if not filter_modifiable_parameters_lhs or eq.lhs not in self._modifiable_parameters]
-        return [Eq(eq.lhs, optimize(eq.rhs, self._OPTIMS)) for eq in equations]
+        equations = []
+        for eq in self._model.get_equations_for(variables, recurse=recurse):
+            if not filter_modifiable_parameters_lhs or eq.lhs not in self._modifiable_parameters:
+                # If the equation contains a log, apply optimisations
+                if len(eq.rhs.atoms(log)) >0:
+                    equations.append(Eq(eq.lhs, optimize(eq.rhs, self._OPTIMS)))
+                else:
+                    equations.append(eq)
+        return equations
 
     def _get_initial_value(self, var):
         """Returns the initial value of a variable if it has one, 0 otherwise"""
