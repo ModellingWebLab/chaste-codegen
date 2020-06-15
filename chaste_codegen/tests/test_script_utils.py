@@ -24,7 +24,7 @@ def test_wrong_params2():
         write_file("1.txt", [])
 
 
-def test_svae_reload(tmp_path):
+def test_save_reload(tmp_path):
     """ Check save_np_to_file works as expected """
     tmp_path = str(tmp_path)
     file_name = os.path.join(tmp_path, "random_data.txt")
