@@ -55,7 +55,7 @@ setup(
             'sphinx-automodapi>=0.12',
         ],
         'test': [
-            'pytest-cov>=2.10',      # For coverage checking
+            'pytest-cov>=2.10',     # For coverage checking
             'pytest>=4.6',          # For unit tests
             'flake8>=3',            # For code style checking
             'isort',
