@@ -53,7 +53,7 @@ def test_get_jacobian_no_partial_eval(state_vars, derivatives_eqs):
         get_jacobian(state_vars, derivatives_eqs)
 
 
-def test_get_and_format_jacobian(jacobian):
+def test_get_jacobian(jacobian):
     jacobian_equations, jacobian_matrix = jacobian
 
     assert str(jacobian_equations) == ("[(x0, 120.0*_sodium_channel_m_gate$m**3.0), (x1, _membrane$V - 40.0), "
