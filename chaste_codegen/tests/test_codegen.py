@@ -225,8 +225,8 @@ def test_Opt(tmp_path, model):
                                                model['expected_cpp_path'])
 
 
-def test_ChasteModel(tmp_path):
-    """ Check ChasteModel"""
+def test_chaste_model_base_class(tmp_path):
+    """ Check the base class ChasteModel behaves as expected"""
     LOGGER.info('Testing ChastModel\n')
     model_file = \
         os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'luo_rudy_1994.cellml')

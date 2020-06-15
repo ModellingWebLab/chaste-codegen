@@ -15,34 +15,34 @@ LOGGER.setLevel(logging.DEBUG)
 OXMETA = 'https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#'  # oxford metadata uri prefix
 
 
-@pytest.fixture
-def hn_model(scope='session'):
+@pytest.fixture(scope='session')
+def hn_model():
     model_folder = os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'hilgemann_noble_model_1987.cellml')
     return load_model(model_folder)
 
 
-@pytest.fixture
-def state_vars(hn_model, scope='session'):
+@pytest.fixture(scope='session')
+def state_vars(hn_model):
     return hn_model.get_state_variables()
 
 
-@pytest.fixture
-def derivatives_eqs(hn_model, scope='session'):
+@pytest.fixture(scope='session')
+def derivatives_eqs(hn_model):
     return hn_model.get_equations_for(hn_model.get_derivatives())
 
 
-@pytest.fixture
-def membrane_voltage_var(hn_model, scope='session'):
+@pytest.fixture(scope='session')
+def membrane_voltage_var(hn_model):
     return hn_model.get_variable_by_ontology_term((OXMETA, 'membrane_voltage'))
 
 
-@pytest.fixture
-def non_linear_state_vars(derivatives_eqs, membrane_voltage_var, state_vars, scope='session'):
+@pytest.fixture(scope='session')
+def non_linear_state_vars(derivatives_eqs, membrane_voltage_var, state_vars):
     return get_non_linear_state_vars(derivatives_eqs, membrane_voltage_var, state_vars, Printer())
 
 
-@pytest.fixture
-def y_derivatives(hn_model, scope='session'):
+@pytest.fixture(scope='session')
+def y_derivatives(hn_model):
     return hn_model.get_derivatives()
 
 

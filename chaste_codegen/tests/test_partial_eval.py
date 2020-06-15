@@ -13,19 +13,19 @@ LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 
 
-@pytest.fixture
-def hh_model(scope='session'):
+@pytest.fixture(scope='session')
+def hh_model():
     model_folder = os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'hodgkin_huxley_squid_axon_model_1952_modified.cellml')
     return load_model(model_folder)
 
 
-@pytest.fixture
-def state_vars(hh_model, scope='session'):
+@pytest.fixture(scope='session')
+def state_vars(hh_model):
     return hh_model.get_state_variables()
 
 
-@pytest.fixture
-def derivatives_eqs(hh_model, scope='session'):
+@pytest.fixture(scope='session')
+def derivatives_eqs(hh_model):
     return hh_model.get_equations_for(hh_model.get_derivatives())
 
 

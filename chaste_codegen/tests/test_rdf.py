@@ -20,8 +20,8 @@ LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 
 
-@pytest.fixture
-def s_model(scope='session'):
+@pytest.fixture(scope='session')
+def s_model():
     model_folder = os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'Shannon2004.cellml')
     return load_model(model_folder)
 

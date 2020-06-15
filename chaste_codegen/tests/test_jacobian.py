@@ -17,24 +17,24 @@ LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 
 
-@pytest.fixture
-def hh_model(scope='session'):
+@pytest.fixture(scope='session')
+def hh_model():
     model_folder = os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'hodgkin_huxley_squid_axon_model_1952_modified.cellml')
     return load_model(model_folder)
 
 
-@pytest.fixture
-def state_vars(hh_model, scope='session'):
+@pytest.fixture(scope='session')
+def state_vars(hh_model):
     return hh_model.get_state_variables()
 
 
-@pytest.fixture
-def derivatives_eqs(hh_model, scope='session'):
+@pytest.fixture(scope='session')
+def derivatives_eqs(hh_model):
     return hh_model.get_equations_for(hh_model.get_derivatives())
 
 
-@pytest.fixture
-def jacobian(state_vars, derivatives_eqs, scope='session'):
+@pytest.fixture(scope='session')
+def jacobian(state_vars, derivatives_eqs):
     lhs_to_keep = [eq.lhs for eq in derivatives_eqs if len(eq.lhs.args) > 0 and eq.lhs.args[0] in state_vars]
 
     derivatives_eqs = partial_eval(derivatives_eqs, lhs_to_keep, keep_multiple_usages=False)
