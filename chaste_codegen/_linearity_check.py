@@ -117,8 +117,8 @@ def _check_expr(expr, state_var, membrane_voltage_var, state_vars):
 def get_non_linear_state_vars(derivative_equations, membrane_voltage_var, state_vars, printer):
     """Returns the state vars whose derivative expressions are non linear"""
 
-    assert all([isinstance(eq, Eq)for eq in derivative_equations]), \
-        ("Expecting derivative_equations to be a collection of equations")
+    assert all([isinstance(eq, Eq) for eq in derivative_equations]), (
+        "Expecting derivative_equations to be a collection of equations")
     assert isinstance(membrane_voltage_var, Variable), "membrane_voltage_var should be a cellmlmanip.Variable"
     assert all([isinstance(v, Variable) for v in state_vars]), "state_vars should be cellmlmanip Variables"
     assert len(state_vars) > 0 and len(derivative_equations) > 0, ("Expecting state_vars and derivative_equations "
