@@ -35,12 +35,12 @@ def test_wrong_params():
 
 
 def test_wrong_params2():
-    with pytest.raises(AssertionError, match="Equations to be a collection of equations"):
+    with pytest.raises(AssertionError, match="Expecting equations to be a collection of equations"):
         partial_eval([1], [2])
 
 
 def test_wrong_params3(derivatives_eqs):
-    with pytest.raises(AssertionError, match="Expecting required_lhs to be a collection of variables or Derivatives"):
+    with pytest.raises(AssertionError, match="Expecting required_lhs to be a collection of variables or derivatives"):
         partial_eval(derivatives_eqs, [2])
 
 
