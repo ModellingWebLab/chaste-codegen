@@ -60,3 +60,5 @@ def test_partial_eval(state_vars, derivatives_eqs):
          "t$time), -36.0*_potassium_channel_n_gate$n**4.0*(_membrane$V + 87.0) - 120.0*_sodium_channel_m_gate$m**3.0*_"
          "sodium_channel_h_gate$h*(_membrane$V - 40.0) - 0.29999999999999999*_membrane$V - 1.0*Piecewise((-20.0, (_env"
          "ironment$time >= 10.0) & (_environment$time <= 10.5)), (0, True)) - 19.316099999999999)]")
+
+    
