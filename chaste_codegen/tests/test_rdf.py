@@ -26,7 +26,7 @@ def s_model(scope='session'):
     return load_model(model_folder)
 
 
-def test_namespaces(s_model):
+def test_namespaces():
     assert OXMETA_NS == 'https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#'
     assert BQBIOL_NS == 'http://biomodels.net/biology-qualifiers/'
 
