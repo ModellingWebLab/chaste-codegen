@@ -11,15 +11,13 @@ from sympy import (
     Expr,
     Float,
     Function,
-    Mul,
-    Pow,
     Wild,
     log,
     simplify,
     sympify,
 )
-from sympy.codegen.cfunctions import log10
-from sympy.codegen.rewriting import ReplaceOptim, optimize, optims_c99
+from sympy.codegen.cfunctions import log2, log10
+from sympy.codegen.rewriting import ReplaceOptim, optimize
 
 import chaste_codegen as cg
 from chaste_codegen._rdf import get_variables_transitively
@@ -45,7 +43,12 @@ class ChasteModel(object):
         lambda e: (  # cost function prevents turning log(x) into log(10) * log10(x) as we want normal log in that case
             e.is_Pow and e.exp.is_negative  # division
             or (isinstance(e, (log, log10)) and not e.args[0].is_number))))
-    _OPTIMS = (_LOG10_OPT, )
+    # log(x)/log(2) --> log2(x)
+    _LOG2_OPT = ReplaceOptim(_V * log(_W) / log(2), _V * log2(_W), cost_function=lambda expr: expr.count(
+        lambda e: (  # cost function prevents turning log(x) into log(2) * log2(x) as we want normal log in that case
+            e.is_Pow and e.exp.is_negative  # division
+            or (isinstance(e, (log, log2)) and not e.args[0].is_number))))
+    _LOG_OPTIMS = (_LOG10_OPT, _LOG2_OPT)
 
     def __init__(self, model, file_name, **kwargs):
         """ Initialise a ChasteModel instance
@@ -183,15 +186,10 @@ class ChasteModel(object):
                  with optimisations around using log10, and powers of whole numbers applied to rhs
                  as well as modifiable parameters filtered out is required.
         """
-        equations = []
-        for eq in self._model.get_equations_for(variables, recurse=recurse):
-            if not filter_modifiable_parameters_lhs or eq.lhs not in self._modifiable_parameters:
-                # If the equation contains a log, apply optimisations
-                if len(eq.rhs.atoms(log)) >0:
-                    equations.append(Eq(eq.lhs, optimize(eq.rhs, self._OPTIMS)))
-                else:
-                    equations.append(eq)
-        return equations
+        equations = [eq for eq in self._model.get_equations_for(variables, recurse=recurse)
+                     if not filter_modifiable_parameters_lhs or eq.lhs not in self._modifiable_parameters]
+        return [Eq(eq.lhs, optimize(eq.rhs, self._LOG_OPTIMS))
+                if len(eq.rhs.atoms(log)) > 0 else eq for eq in equations]
 
     def _get_initial_value(self, var):
         """Returns the initial value of a variable if it has one, 0 otherwise"""
@@ -349,7 +347,7 @@ class ChasteModel(object):
         if self._membrane_stimulus_current_orig is None:
             return None, self._stimulus_units
         # get derivative equations
-        d_eqs = self.get_equations_for(self._y_derivatives)
+        d_eqs = self._model.get_equations_for(self._y_derivatives)
 
         # get dv/dt
         deriv_eq_only = [eq for eq in d_eqs if isinstance(eq.lhs, Derivative)
@@ -504,7 +502,7 @@ class ChasteModel(object):
             equations_for_ionic_vars, equations, old_equations = [], self._ionic_derivs, None
             while len(equations_for_ionic_vars) == 0 and old_equations != equations:
                 old_equations = equations
-                equations = self.get_equations_for(equations, recurse=False)
+                equations = self._model.get_equations_for(equations, recurse=False)
                 equations_for_ionic_vars = [eq for eq in equations
                                             if (eq.lhs != self._membrane_stimulus_current_orig
                                                 and eq.lhs not in self._stimulus_params)
@@ -539,8 +537,7 @@ class ChasteModel(object):
         # Update equations to include i_ionic_eq & defining eqs, set stimulus current to 0
         return [eq if eq.lhs != self._membrane_stimulus_current_orig else Eq(eq.lhs, 0.0)
                 for eq in self.get_equations_for([eq.lhs for eq in self._equations_for_ionic_vars])
-                if eq.lhs != self._membrane_stimulus_current_converted
-                or self._membrane_stimulus_current_orig == self._membrane_stimulus_current_converted]
+                if eq.lhs != self._membrane_stimulus_current_converted]
 
     def _get_y_derivatives(self):
         """ Get derivatives for state variables"""

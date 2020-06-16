@@ -1,7 +1,7 @@
 from cellmlmanip.printer import Printer
+from sympy import Float, Mul
 from sympy.printing.cxxcode import cxxcode
 from sympy.printing.precedence import precedence
-import sympy as sp
 
 
 class ChastePrinter(Printer):
@@ -105,10 +105,10 @@ class ChastePrinter(Printer):
 
         For C++ printing we need to write ``x**y`` as ``pow(x, y)`` with lowercase ``p``."""
         p = precedence(expr)
-        
+
         # For P^n make sure n is passed as int if it is actually a whole number
         exp = expr.exp
-        if isinstance(exp, sp.Float) and float(exp).is_integer():
+        if isinstance(exp, Float) and float(exp).is_integer():
             exp = int(float(expr.exp))
         if exp != 1:
             return 'pow(' + self._bracket(expr.base, p) + ', ' + self._bracket(exp, p) + ')'
@@ -131,5 +131,5 @@ class ChastePrinter(Printer):
     def _print_Mul(self, expr):
         # In multiplications remove 1.0 * ...
         if 1.0 in expr.args:
-            expr = sp.Mul(*[a for a in expr.args if a != 1.0])
+            expr = Mul(*[a for a in expr.args if a != 1.0])
         return super()._print_Mul(expr)

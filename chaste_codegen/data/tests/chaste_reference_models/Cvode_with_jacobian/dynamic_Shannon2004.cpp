@@ -1,7 +1,7 @@
 #ifdef CHASTE_CVODE
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
 //! Model: shannon_2004
 //!
@@ -959,6 +959,7 @@
         const double var_x199 = var_x198 * var_x4 / pow((1.0 + 5.2281977629563632e-6 * var_x198), 2);
         const double var_x200 = var_x44 * var_x45;
         const double var_x201 = var_x200 * var_x72;
+                                                                                                                        
         const double var_x202 = -669921.875 - var_x45;
         const double var_x203 = var_x202 - 373215529.24791086 * var_chaste_interface__Ca_buffer__Ca_SL;
         const double var_x204 = var_x14 * var_x159 / log(10);
@@ -1001,6 +1002,7 @@
         const double var_x241 = exp(0.24440000000000001 * var_chaste_interface__cell__V);
         const double var_x242 = exp(-0.043909999999999998 * var_chaste_interface__cell__V);
         const double var_x243 = -127140.0 * var_x241 - 3.4740000000000003e-5 * var_x242;
+                                                                                         
         const double var_x244 = exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__V);
         const double var_x245 = 1.0 + var_x244;
         const double var_x246 = 1 / var_x245;
@@ -1071,6 +1073,8 @@
         const double var_x311 = 1 / (20.0 + 20.0 * var_x305);
         const double var_x312 = exp(-2.4166666666666665 - 0.16666666666666666 * var_chaste_interface__cell__V);
         const double var_x313 = 1.0 - var_x312;
+                                             
+                                               
         const double var_x314 = 1 / var_x313;
         const double var_x315 = 1.0 + var_x312;
         const double var_x316 = 1 / var_x315;
