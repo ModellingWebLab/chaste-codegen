@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.0.1
+//! This source file was generated from CellML by chaste_codegen version 0.1.0
 //!
 //! Model: earm_noble_model_1990
 //!
@@ -1226,7 +1226,7 @@
             const double var_x137 = exp(-3.2000000000000002 + 0.080000000000000002 * var_chaste_interface__membrane__V);
             const double var_x138 = 0.00050000000000000001 + var_chaste_interface__intracellular_calcium_concentration__Ca_i;
             const double var_x139 = pow(var_chaste_interface__intracellular_calcium_concentration__Ca_i, 2);
-            const double var_x140 = 1.0 * var_x139;
+            const double var_x140 = var_x139;
             const double var_x142 = pow(var_x138, (-2));
             const double var_x145 = -0.59999999999999998 * var_x137;
             
@@ -1399,7 +1399,7 @@
             const double var_x77 = var_chaste_interface__intracellular_sodium_concentration__Na_i / pow((1 + 0.025000000000000001 * var_chaste_interface__intracellular_sodium_concentration__Na_i), 2);
             const double var_x78 = pow(var_chaste_interface__intracellular_sodium_concentration__Na_i, 2.0);
             const double var_x79 = var_x11 * var_x17 * var_x78;
-            const double var_x80 = var_x7 * (0.00085421412300683362 * var_chaste_interface__intracellular_potassium_concentration__K_i + 0.0071184510250569474 * var_chaste_interface__intracellular_sodium_concentration__Na_i) / pow(var_x66, 2);
+            const double var_x80 = var_x7 * (0.0071184510250569474 * var_chaste_interface__intracellular_sodium_concentration__Na_i + 0.00085421412300683373 * var_chaste_interface__intracellular_potassium_concentration__K_i) / pow(var_x66, 2);
             const double var_x81 = var_x57 * var_x78;
             const double var_x82 = var_x31 * var_x47;
             

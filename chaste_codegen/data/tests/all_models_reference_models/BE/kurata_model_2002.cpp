@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.0.1
+//! This source file was generated from CellML by chaste_codegen version 0.1.0
 //!
 //! Model: kurata_model_2002
 //!
@@ -475,7 +475,7 @@
         const double var_x93 = 1 / var_chaste_interface__intracellular_ion_concentrations__Ki;
         const double var_x94 = var_x93 * var_chaste_interface__AP_sensitive_currents_r_gate__r;
         const double var_x95 = pow(var_chaste_interface__hyperpolarisation_activated_current_y_gate__y, 2);
-        const double var_x96 = pow(var_chaste_interface__slowly_activating_delayed_rectifier_potassium_current_n_gate__n, 2) * (0.0054054054054054048 * var_chaste_interface__intracellular_ion_concentrations__Nai + 0.045045045045045043 * var_chaste_interface__intracellular_ion_concentrations__Ki) / pow((0.12 * var_chaste_interface__intracellular_ion_concentrations__Nai + var_chaste_interface__intracellular_ion_concentrations__Ki), 2);
+        const double var_x96 = pow(var_chaste_interface__slowly_activating_delayed_rectifier_potassium_current_n_gate__n, 2) * (0.0054054054054054057 * var_chaste_interface__intracellular_ion_concentrations__Nai + 0.045045045045045043 * var_chaste_interface__intracellular_ion_concentrations__Ki) / pow((0.12 * var_chaste_interface__intracellular_ion_concentrations__Nai + var_chaste_interface__intracellular_ion_concentrations__Ki), 2);
         const double var_x97 = 1 / var_chaste_interface__intracellular_ion_concentrations__Nai;
         const double var_x98 = pow(var_x97, 1.3);
         const double var_x99 = exp(-4.0 + 0.89088499421326284 * log(140.0 * var_x97) - 0.033333333333333333 * var_chaste_interface__membrane__V);
@@ -641,7 +641,7 @@
         rJacobian[11][9] = 0.0;
         rJacobian[11][10] = 0.0;
         rJacobian[11][11] = 1.0 - (mDt * ((-1.406291416773793e-8 - 3.4227414451683221e-6 * var_x94 - 9.8400393807144087e-5 * var_x96 - 3.0804673006514896e-5 * var_x94 * var_chaste_interface__AP_sensitive_currents_q_gate__q - 3.9577587173161957e-5 * var_x93 * var_x95 + 0.0001711370722584161 * var_x93 * (-0.040569866382531065 * var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paF - 0.027046577588354045 * var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pa_gate__paS) * var_chaste_interface__rapidly_activating_delayed_rectifier_potassium_current_pi_gate__piy) * mParameters[0]));
-        rJacobian[11][12] = -(mDt * ((3.4286956523403795e-5 * var_x101 + 1.6191392426334868e-6 * var_x102 - 1.1808047256857289e-5 * var_x96) * mParameters[0]));
+        rJacobian[11][12] = -(mDt * ((3.4286956523403795e-5 * var_x101 + 1.6191392426334868e-6 * var_x102 - 1.1808047256857291e-5 * var_x96) * mParameters[0]));
         rJacobian[12][0] = 0.0;
         rJacobian[12][1] = 0.0;
         rJacobian[12][2] = 0.0;

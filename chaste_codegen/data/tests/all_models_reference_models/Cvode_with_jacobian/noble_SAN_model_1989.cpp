@@ -1,7 +1,7 @@
 #ifdef CHASTE_CVODE
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.0.1
+//! This source file was generated from CellML by chaste_codegen version 0.1.0
 //!
 //! Model: Noble_SAN_model_1989
 //!
@@ -544,8 +544,8 @@
         IJth(rJacobian, 10, 12) = 0.002 * var_chaste_interface__intracellular_calcium_concentration__Ca_rel - 0.002 * var_chaste_interface__intracellular_calcium_concentration__Ca_up;
         IJth(rJacobian, 11, 12) = 0.0050000000000000001 * var_chaste_interface__intracellular_calcium_concentration__Ca_up - 0.0050000000000000001 * var_chaste_interface__intracellular_calcium_concentration__Ca_rel;
         IJth(rJacobian, 12, 12) = -0.0050000000000000001 / var_x136 - var_x134 * var_x137;
-        IJth(rJacobian, 0, 13) = mSetVoltageDerivativeToZero ? 0.0 : (var_x52 * (var_x79 + 0.0034615384615384612 * var_x81 - 0.0057142857142857143 * var_chaste_interface__time_dependent_potassium_current_x_gate__x - 5.6243151692923217 * var_x77 - 0.046235354987934775 * var_x80 - var_x2 * var_x73));
-        IJth(rJacobian, 9, 13) = -0.00736305250454146 * var_x77;
+        IJth(rJacobian, 0, 13) = mSetVoltageDerivativeToZero ? 0.0 : (var_x52 * (var_x79 + 0.0034615384615384612 * var_x81 - 0.0057142857142857143 * var_chaste_interface__time_dependent_potassium_current_x_gate__x - 5.6243151692923226 * var_x77 - 0.046235354987934775 * var_x80 - var_x2 * var_x73));
+        IJth(rJacobian, 9, 13) = -0.0073630525045414608 * var_x77;
         IJth(rJacobian, 13, 13) = var_x127 + 4.5316609527777084e-6 * var_x81 - 7.4808371283949473e-6 * var_chaste_interface__time_dependent_potassium_current_x_gate__x - 6.0528853041696024e-5 * var_x80 - var_x126 * var_x2;
     }
 

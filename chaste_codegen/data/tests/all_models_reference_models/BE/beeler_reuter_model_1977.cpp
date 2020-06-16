@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.0.1
+//! This source file was generated from CellML by chaste_codegen version 0.1.0
 //!
 //! Model: beeler_reuter_model_1977
 //!
@@ -85,7 +85,7 @@
         double var_chaste_interface__time_dependent_outward_current_x1_gate__x1 = rY[7];
         // Units: dimensionless; Initial value: 0.0001
         
-        const double var_slow_inward_current__E_s = 7.6990712032745758 - 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai); // mV
+        const double var_slow_inward_current__E_s = -82.299999999999997 - 13.028700000000001 * log(0.001 * var_chaste_interface__slow_inward_current__Cai); // mV
         const double var_slow_inward_current__g_s = 0.00089999999999999998; // mS_per_mm2
         const double var_slow_inward_current__i_s = (-var_slow_inward_current__E_s + var_chaste_interface__membrane__V) * var_slow_inward_current__g_s * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f; // uA_per_mm2
         const double var_sodium_current__E_Na = 50.0; // mV
@@ -115,7 +115,7 @@
         double var_chaste_interface__slow_inward_current__Cai = rCurrentGuess[0];
         
         //output_equations
-        const double var_slow_inward_current__E_s = 7.6990712032745758 - 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai); // mV
+        const double var_slow_inward_current__E_s = -82.299999999999997 - 13.028700000000001 * log(0.001 * var_chaste_interface__slow_inward_current__Cai); // mV
         const double var_slow_inward_current__g_s = 0.00089999999999999998; // mS_per_mm2
         const double var_slow_inward_current__i_s = (-var_slow_inward_current__E_s + var_chaste_interface__membrane__V) * var_slow_inward_current__g_s * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f; // uA_per_mm2
         const double d_dt_chaste_interface_var_slow_inward_current__Cai = 7.0000000000000007e-6 - 0.070000000000000007 * var_chaste_interface__slow_inward_current__Cai - 0.01 * var_slow_inward_current__i_s; // concentration_units / ms
@@ -160,7 +160,7 @@
         // Units: dimensionless; Initial value: 0.0001
         
         const double var_membrane__C = 0.01; // uF_per_mm2
-        const double var_slow_inward_current__E_s = 7.6990712032745758 - 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai); // mV
+        const double var_slow_inward_current__E_s = -82.299999999999997 - 13.028700000000001 * log(0.001 * var_chaste_interface__slow_inward_current__Cai); // mV
         const double var_slow_inward_current__g_s = 0.00089999999999999998; // mS_per_mm2
         const double var_slow_inward_current__i_s = (-var_slow_inward_current__E_s + var_chaste_interface__membrane__V) * var_slow_inward_current__g_s * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f; // uA_per_mm2
         const double var_sodium_current__E_Na = 50.0; // mV
@@ -209,12 +209,12 @@
         const double var_time_dependent_outward_current_x1_gate__beta_x1 = 0.0012999999999999999 * exp(-1.1997600479904018 - 0.059988002399520089 * var_chaste_interface__membrane__V) / (1.0 + exp(-0.80000000000000004 - 0.040000000000000001 * var_chaste_interface__membrane__V));
         
         
-        rY[5] = (var_chaste_interface__slow_inward_current_d_gate__d + ((1.0 * var_slow_inward_current_d_gate__alpha_d) * mDt)) / (1.0 - ((-var_slow_inward_current_d_gate__alpha_d - var_slow_inward_current_d_gate__beta_d) * mDt));
-        rY[6] = (var_chaste_interface__slow_inward_current_f_gate__f + ((1.0 * var_slow_inward_current_f_gate__alpha_f) * mDt)) / (1.0 - ((-var_slow_inward_current_f_gate__alpha_f - var_slow_inward_current_f_gate__beta_f) * mDt));
-        rY[3] = (var_chaste_interface__sodium_current_h_gate__h + ((1.0 * var_sodium_current_h_gate__alpha_h) * mDt)) / (1.0 - ((-var_sodium_current_h_gate__alpha_h - var_sodium_current_h_gate__beta_h) * mDt));
-        rY[4] = (var_chaste_interface__sodium_current_j_gate__j + ((1.0 * var_sodium_current_j_gate__alpha_j) * mDt)) / (1.0 - ((-var_sodium_current_j_gate__alpha_j - var_sodium_current_j_gate__beta_j) * mDt));
-        rY[2] = (var_chaste_interface__sodium_current_m_gate__m + ((1.0 * var_sodium_current_m_gate__alpha_m) * mDt)) / (1.0 - ((-var_sodium_current_m_gate__alpha_m - var_sodium_current_m_gate__beta_m) * mDt));
-        rY[7] = (var_chaste_interface__time_dependent_outward_current_x1_gate__x1 + ((1.0 * var_time_dependent_outward_current_x1_gate__alpha_x1) * mDt)) / (1.0 - ((-var_time_dependent_outward_current_x1_gate__alpha_x1 - var_time_dependent_outward_current_x1_gate__beta_x1) * mDt));
+        rY[5] = (var_chaste_interface__slow_inward_current_d_gate__d + ((var_slow_inward_current_d_gate__alpha_d) * mDt)) / (1.0 - ((-var_slow_inward_current_d_gate__alpha_d - var_slow_inward_current_d_gate__beta_d) * mDt));
+        rY[6] = (var_chaste_interface__slow_inward_current_f_gate__f + ((var_slow_inward_current_f_gate__alpha_f) * mDt)) / (1.0 - ((-var_slow_inward_current_f_gate__alpha_f - var_slow_inward_current_f_gate__beta_f) * mDt));
+        rY[3] = (var_chaste_interface__sodium_current_h_gate__h + ((var_sodium_current_h_gate__alpha_h) * mDt)) / (1.0 - ((-var_sodium_current_h_gate__alpha_h - var_sodium_current_h_gate__beta_h) * mDt));
+        rY[4] = (var_chaste_interface__sodium_current_j_gate__j + ((var_sodium_current_j_gate__alpha_j) * mDt)) / (1.0 - ((-var_sodium_current_j_gate__alpha_j - var_sodium_current_j_gate__beta_j) * mDt));
+        rY[2] = (var_chaste_interface__sodium_current_m_gate__m + ((var_sodium_current_m_gate__alpha_m) * mDt)) / (1.0 - ((-var_sodium_current_m_gate__alpha_m - var_sodium_current_m_gate__beta_m) * mDt));
+        rY[7] = (var_chaste_interface__time_dependent_outward_current_x1_gate__x1 + ((var_time_dependent_outward_current_x1_gate__alpha_x1) * mDt)) / (1.0 - ((-var_time_dependent_outward_current_x1_gate__alpha_x1 - var_time_dependent_outward_current_x1_gate__beta_x1) * mDt));
         
         double _guess[1] = {rY[1]};
         CardiacNewtonSolver<1,Cellbeeler_reuter_model_1977FromCellMLBackwardEuler>* _p_solver = CardiacNewtonSolver<1,Cellbeeler_reuter_model_1977FromCellMLBackwardEuler>::Instance();

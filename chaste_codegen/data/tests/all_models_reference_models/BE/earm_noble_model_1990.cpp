@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.0.1
+//! This source file was generated from CellML by chaste_codegen version 0.1.0
 //!
 //! Model: earm_noble_model_1990
 //!
@@ -319,8 +319,8 @@
         const double var_x13 = pow(var_chaste_interface__intracellular_calcium_concentration__Ca_i, 2);
         const double var_x14 = var_x12 * var_x13;
         const double var_x15 = 0.5 * var_x14;
-        const double var_x16 = 1.0 * var_x13 / pow(var_x11, 3);
-        const double var_x17 = 1.0 * var_x12 * var_chaste_interface__intracellular_calcium_concentration__Ca_i;
+        const double var_x16 = var_x13 / pow(var_x11, 3);
+        const double var_x17 = var_x12 * var_chaste_interface__intracellular_calcium_concentration__Ca_i;
         const double var_x18 = var_x17 - var_x16;
         const double var_x19 = 100.0 * var_chaste_interface__intracellular_calcium_concentration__Ca_i;
         const double var_x20 = -var_x19;
@@ -376,7 +376,7 @@
         const double var_x70 = 1 / (40.0 + var_chaste_interface__intracellular_sodium_concentration__Na_i);
         const double var_x71 = var_chaste_interface__intracellular_sodium_concentration__Na_i / pow((1 + 0.025000000000000001 * var_chaste_interface__intracellular_sodium_concentration__Na_i), 2);
         const double var_x72 = -2.2052901175757333e-6 * var_x59 + 1.5752072268398093e-8 * var_x62 * var_chaste_interface__intracellular_sodium_concentration__Na_i;
-        const double var_x73 = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * (0.00085421412300683362 * var_chaste_interface__intracellular_potassium_concentration__K_i + 0.0071184510250569474 * var_chaste_interface__intracellular_sodium_concentration__Na_i) * var_chaste_interface__fast_sodium_current_h_gate__h / pow((0.12 * var_chaste_interface__intracellular_potassium_concentration__K_i + var_chaste_interface__intracellular_sodium_concentration__Na_i), 2);
+        const double var_x73 = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * (0.0071184510250569474 * var_chaste_interface__intracellular_sodium_concentration__Na_i + 0.00085421412300683373 * var_chaste_interface__intracellular_potassium_concentration__K_i) * var_chaste_interface__fast_sodium_current_h_gate__h / pow((0.12 * var_chaste_interface__intracellular_potassium_concentration__K_i + var_chaste_interface__intracellular_sodium_concentration__Na_i), 2);
         
         
         rJacobian[0][0] = 1.0 - (mDt * (-0.001 * ((fabs(var_x0) < 0.0001) ? (25.0) : (6.25 * var_x0 / (-1.0 + exp(8.5 + var_x1)))) + var_x5 * (-1.0 - 119.0 * var_x4)));
@@ -477,7 +477,7 @@
         rJacobian[9][5] = -(mDt * (9.2011025176140482e-10 * var_x48 + 0.69280032646065615 * var_x51 + 1.7420999462749735e-9 * var_x52 - var_x64 * var_x72));
         rJacobian[9][6] = 0.0;
         rJacobian[9][7] = 0.0;
-        rJacobian[9][8] = -(mDt * (-0.18949750727805761 * var_x73));
+        rJacobian[9][8] = -(mDt * (-0.18949750727805764 * var_x73));
         rJacobian[9][9] = 1.0 - (mDt * (1.7673477715833064e-7 * var_x71 + 2.0119028828602145e-15 * var_x57 - 0.00028277564345332906 * var_x70 - 1.5791458939838137 * var_x73 - 1.5752072268398093e-8 * var_x69 - 2.6978574498584515e-6 / var_chaste_interface__intracellular_sodium_concentration__Na_i - 1.5148695184999769e-6 * var_x56));
     }
 

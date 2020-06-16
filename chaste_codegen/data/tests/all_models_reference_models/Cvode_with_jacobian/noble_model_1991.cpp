@@ -1,7 +1,7 @@
 #ifdef CHASTE_CVODE
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.0.1
+//! This source file was generated from CellML by chaste_codegen version 0.1.0
 //!
 //! Model: noble_model_1991
 //!
@@ -453,7 +453,7 @@
         const double var_x59 = 1 / var_chaste_interface__intracellular_sodium_concentration__Na_i;
         const double var_x60 = var_chaste_interface__intracellular_sodium_concentration__Na_i / pow((1 + 0.025000000000000001 * var_chaste_interface__intracellular_sodium_concentration__Na_i), 2);
         const double var_x61 = var_x10 * var_x8 * pow(var_chaste_interface__intracellular_sodium_concentration__Na_i, 2.0);
-        const double var_x62 = var_x7 * (0.00085421412300683362 * var_chaste_interface__intracellular_potassium_concentration__K_i + 0.0071184510250569474 * var_chaste_interface__intracellular_sodium_concentration__Na_i) / pow(var_x49, 2);
+        const double var_x62 = var_x7 * (0.0071184510250569474 * var_chaste_interface__intracellular_sodium_concentration__Na_i + 0.00085421412300683373 * var_chaste_interface__intracellular_potassium_concentration__K_i) / pow(var_x49, 2);
         const double var_x63 = var_x32 * var_x41;
         const double var_x64 = var_x1 * var_x5;
         const double var_x65 = var_x1 * var_x15;
@@ -508,8 +508,8 @@
         const double var_x114 = pow(var_chaste_interface__intracellular_calcium_concentration__Ca_i, 2);
         const double var_x115 = var_x113 * var_x114;
         const double var_x116 = 0.5 * var_x115;
-        const double var_x117 = 1.0 * var_x114 / pow(var_x112, 3);
-        const double var_x118 = 1.0 * var_x113 * var_chaste_interface__intracellular_calcium_concentration__Ca_i;
+        const double var_x117 = var_x114 / pow(var_x112, 3);
+        const double var_x118 = var_x113 * var_chaste_interface__intracellular_calcium_concentration__Ca_i;
         const double var_x119 = 1.0 - var_chaste_interface__calcium_release__ActFrac - var_chaste_interface__calcium_release__ProdFrac;
         const double var_x120 = 5.9129400406899753e-8 * var_x35;
         const double var_x121 = 1.182588008137995e-8 * var_x33;
