@@ -39,7 +39,7 @@ def version(formatted=False):
     """
     Returns the version number, as a 3-part integer (major, minor, revision).
     If ``formatted=True``, it returns a string formatted version (e.g.
-    "codegen 1.0.0").
+    "chaste_codegen 1.0.0").
     """
     if formatted:
         return 'chaste_codegen ' + __version__

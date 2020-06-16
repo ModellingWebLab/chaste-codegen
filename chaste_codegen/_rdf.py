@@ -3,6 +3,7 @@ RDF handling routines, including parsing the 'oxmeta' ontology.
 """
 import pkg_resources
 import rdflib
+from cellmlmanip.model import Model
 from cellmlmanip.rdf import create_rdf_node
 
 
@@ -37,6 +38,10 @@ def get_variables_transitively(model, term):
         :meth:`create_rdf_node`, typically a :class:`rdflib.term.Node` or ``(ns_uri, local_name)`` pair.
     :return: a list of :class:`cellmlmanip.model.Variable` objects, sorted by order added to the model.
     """
+
+    assert isinstance(term, tuple), "Expecting term to be a namespace tuple"
+    assert isinstance(model, Model), "Expecting model to be a cellmlmanip Model"
+
     global _ONTOLOGY
 
     if _ONTOLOGY is None:

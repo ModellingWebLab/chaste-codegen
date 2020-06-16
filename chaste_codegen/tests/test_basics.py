@@ -30,6 +30,7 @@ def test_version():
     version = cg.version(formatted=True)
     assert isinstance(version, str)
     assert len(version) >= 1
+    assert version.startswith('chaste_codegen ')
 
 
 def test_cellmlmanip_import():

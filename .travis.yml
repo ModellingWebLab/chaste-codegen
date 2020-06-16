@@ -7,7 +7,6 @@ branches:
     - master
 install:
     - pip install .[test]
-
 script:
     - python -m flake8
     - python -m isort --verbose --check-only --diff --recursive chaste_codegen

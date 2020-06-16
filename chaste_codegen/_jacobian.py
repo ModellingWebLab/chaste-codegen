@@ -1,3 +1,4 @@
+from cellmlmanip.printer import Printer
 from sympy import Matrix, cse
 
 
@@ -10,6 +11,11 @@ def get_jacobian(state_vars, derivative_equations):
              The list of common expressions is of the form [('var_x1', <expression>), ..]
              The jacobian Matrix is an sympy.Matrix
     """
+    assert len(state_vars) > 0 and len(derivative_equations) > 0, ("Expecting state_vars and derivative_equations "
+                                                                   "not to be empty")
+    assert all([len(eq.lhs.args) > 0 and eq.lhs.args[0] in state_vars for eq in derivative_equations]), \
+        ("Expecting derivative equations to be reduced to the minimal set defining the state vars: the lhs is a state "
+         "var for every eq")
     jacobian_equations, jacobian_matrix = [], Matrix([])
     if len(state_vars) > 0:
         jacobian_equations, jacobian_matrix = [], []
@@ -41,7 +47,13 @@ def format_jacobian(jacobian_equations, jacobian_matrix, printer, print_rhs,
              The jacobian Matrix is a list of the form:
              [{'i': i, 'j': 'entry': <printted jacobian matrix entry for index [i, j])}
     """
-    assert isinstance(jacobian_matrix, Matrix), 'Expecting a jacobian as a matrix'
+    assert all([isinstance(eq, tuple) and len(eq) == 2 for eq in jacobian_equations]), \
+        'Expecting list of equation tuples'
+    assert isinstance(jacobian_matrix, Matrix) and len(jacobian_matrix) > 0, ("Expecting a non-empty jacobian "
+                                                                              "as a matrix")
+    assert isinstance(printer, Printer), 'Expecting printer to be a cellmlmanip.printer.Printer'
+    assert callable(print_rhs), 'Expecting print_rhs to be a callable'
+
     equations = [{'lhs': printer.doprint(eq[0]), 'rhs': print_rhs(eq[0], eq[1]), 'sympy_lhs': eq[0]}
                  for eq in jacobian_equations]
     rows, cols = jacobian_matrix.shape
