@@ -1,7 +1,7 @@
 #ifdef CHASTE_CVODE
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.0.1
+//! This source file was generated from CellML by chaste_codegen version 0.1.0
 //!
 //! Model: shannon_2004
 //!
@@ -180,8 +180,8 @@
         const double var_INaCa__K_mNai = 12.289999999999999; // millimolar
         const double var_INaCa__K_mNao = 87.5; // millimolar
         const double var_INaCa__Kd_act = 0.00025599999999999999; // millimolar
-        const double var_INaCa__Ka_SL = 1 / (1.0 + pow((var_INaCa__Kd_act / var_chaste_interface__Ca_buffer__Ca_SL), 3)); // dimensionless
-        const double var_INaCa__Ka_jct = 1 / (1.0 + pow((var_INaCa__Kd_act / var_chaste_interface__Ca_buffer__Ca_jct), 3)); // dimensionless
+        const double var_INaCa__Ka_SL = 1 / (1.0 + pow(var_INaCa__Kd_act, 3) / pow(var_chaste_interface__Ca_buffer__Ca_SL, 3)); // dimensionless
+        const double var_INaCa__Ka_jct = 1 / (1.0 + pow(var_INaCa__Kd_act, 3) / pow(var_chaste_interface__Ca_buffer__Ca_jct, 3)); // dimensionless
         const double var_INaCa__Q10_NCX = 1.5700000000000001; // dimensionless
         const double var_INaCa__eta = 0.34999999999999998; // dimensionless
         const double var_INaCa__ksat = 0.27000000000000002; // dimensionless
@@ -393,8 +393,8 @@
         const double var_INaCa__K_mNai = 12.289999999999999; // millimolar
         const double var_INaCa__K_mNao = 87.5; // millimolar
         const double var_INaCa__Kd_act = 0.00025599999999999999; // millimolar
-        const double var_INaCa__Ka_SL = 1 / (1.0 + pow((var_INaCa__Kd_act / var_chaste_interface__Ca_buffer__Ca_SL), 3)); // dimensionless
-        const double var_INaCa__Ka_jct = 1 / (1.0 + pow((var_INaCa__Kd_act / var_chaste_interface__Ca_buffer__Ca_jct), 3)); // dimensionless
+        const double var_INaCa__Ka_SL = 1 / (1.0 + pow(var_INaCa__Kd_act, 3) / pow(var_chaste_interface__Ca_buffer__Ca_SL, 3)); // dimensionless
+        const double var_INaCa__Ka_jct = 1 / (1.0 + pow(var_INaCa__Kd_act, 3) / pow(var_chaste_interface__Ca_buffer__Ca_jct, 3)); // dimensionless
         const double var_INaCa__Q10_NCX = 1.5700000000000001; // dimensionless
         const double var_INaCa__eta = 0.34999999999999998; // dimensionless
         const double var_INaCa__ksat = 0.27000000000000002; // dimensionless
@@ -758,8 +758,8 @@
         const double var_INaCa__K_mNai = 12.289999999999999; // millimolar
         const double var_INaCa__K_mNao = 87.5; // millimolar
         const double var_INaCa__Kd_act = 0.00025599999999999999; // millimolar
-        const double var_INaCa__Ka_SL = 1 / (1.0 + pow((var_INaCa__Kd_act / var_chaste_interface__Ca_buffer__Ca_SL), 3)); // dimensionless
-        const double var_INaCa__Ka_jct = 1 / (1.0 + pow((var_INaCa__Kd_act / var_chaste_interface__Ca_buffer__Ca_jct), 3)); // dimensionless
+        const double var_INaCa__Ka_SL = 1 / (1.0 + pow(var_INaCa__Kd_act, 3) / pow(var_chaste_interface__Ca_buffer__Ca_SL, 3)); // dimensionless
+        const double var_INaCa__Ka_jct = 1 / (1.0 + pow(var_INaCa__Kd_act, 3) / pow(var_chaste_interface__Ca_buffer__Ca_jct, 3)); // dimensionless
         const double var_INaCa__Q10_NCX = 1.5700000000000001; // dimensionless
         const double var_INaCa__eta = 0.34999999999999998; // dimensionless
         const double var_INaCa__ksat = 0.27000000000000002; // dimensionless

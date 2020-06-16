@@ -140,10 +140,10 @@
         const double var_ICaL__po = 1.0 - var_chaste_interface__ICaL__c1 - var_chaste_interface__ICaL__c2 - var_chaste_interface__ICaL__xi1ba - var_chaste_interface__ICaL__xi1ca - var_chaste_interface__ICaL__xi2ba - var_chaste_interface__ICaL__xi2ca; // dimensionless
         const double var_IK1__gkix = 0.29999999999999999; // uS_per_nF
         const double var_IKs__gks = 0.1386; // uS_per_nF
-        const double var_IKs__gksx = 1.0 + 0.80000000000000004 / (1.0 + 0.125 * pow(1 / var_Ca__Ca_i, 3)); // dimensionless
+        const double var_IKs__gksx = 1.0 + 0.80000000000000004 / (1.0 + 0.125 / pow(var_Ca__Ca_i, 3)); // dimensionless
         const double var_INaCa__gNaCa = 0.83999999999999997; // uM_per_ms
         const double var_INaCa__xkdna = 0.29999999999999999; // uM
-        const double var_INaCa__aloss = 1 / (1.0 + pow((var_INaCa__xkdna / var_chaste_interface__Ca__Ca_submem), 3)); // dimensionless
+        const double var_INaCa__aloss = 1 / (1.0 + pow(var_INaCa__xkdna, 3) / pow(var_chaste_interface__Ca__Ca_submem, 3)); // dimensionless
         const double var_INaCa__xmcai = 0.0035999999999999999; // mM
         const double var_INaCa__xmcao = 1.3; // mM
         const double var_INaCa__xmnai = 12.300000000000001; // mM
@@ -156,7 +156,7 @@
         const double var_Ito__gtof = 0.040000000000000001; // uS_per_nF
         const double var_Ito__gtos = 0.11; // uS_per_nF
         const double var_INaCa__yz1 = pow(var_INaCa__xmnao, 3) * var_Ca__csm + pow(var_chaste_interface__Na__Na_i, 3) * var_INaCa__xmcao; // mM4
-        const double var_INaCa__yz3 = pow(var_Environment__Na_o, 3) * (1.0 + pow((var_chaste_interface__Na__Na_i / var_INaCa__xmnai), 3)) * var_INaCa__xmcai; // mM4
+        const double var_INaCa__yz3 = pow(var_Environment__Na_o, 3) * (1.0 + pow(var_chaste_interface__Na__Na_i, 3) / pow(var_INaCa__xmnai, 3)) * var_INaCa__xmcai; // mM4
         const double var_INaCa__yz4 = pow(var_Environment__Na_o, 3) * var_Ca__csm + pow(var_chaste_interface__Na__Na_i, 3) * var_Environment__Ca_o; // mM4
         const double var_INaCa__zw8 = var_INaCa__yz1 + var_INaCa__yz2 + var_INaCa__yz3 + var_INaCa__yz4; // mM4
         const double var_ICaL__za = 2.0 * var_Environment__FonRT * var_chaste_interface__cell__V; // dimensionless
@@ -299,7 +299,7 @@
         const double var_Environment__FonRT = var_Environment__F / (var_Environment__R * var_Environment__T); // per_mV
         const double var_ICaL__cat = 3.0; // uM
         const double var_ICaL__cpt = 6.0936500000000002; // uM
-        const double var_ICaL__fca = 1 / (1.0 + pow((var_ICaL__cat / var_chaste_interface__Ca__Ca_dyad), 3)); // dimensionless
+        const double var_ICaL__fca = 1 / (1.0 + pow(var_ICaL__cat, 3) / pow(var_chaste_interface__Ca__Ca_dyad, 3)); // dimensionless
         const double var_ICaL__k1 = 0.024167999999999999 * var_ICaL__fca; // per_ms
         const double var_ICaL__k1t = 0.00413; // per_ms
         const double var_ICaL__k2 = 0.000103615; // per_ms
@@ -318,7 +318,7 @@
         const double var_ICaL__tau3 = 3.0; // ms
         const double var_ICaL__taupo = 1.0; // ms
         const double var_ICaL__tca = 78.032899999999998; // ms
-        const double var_ICaL__tau_ca = 0.10000000000000001 + var_ICaL__tca / (1.0 + pow((var_chaste_interface__Ca__Ca_dyad / var_ICaL__cpt), 4)); // ms
+        const double var_ICaL__tau_ca = 0.10000000000000001 + var_ICaL__tca / (1.0 + pow(var_chaste_interface__Ca__Ca_dyad, 4) / pow(var_ICaL__cpt, 4)); // ms
         const double var_ICaL__vth = 0; // mV
         const double var_ICaL__vx = -40.0; // mV
         const double var_ICaL__vy = -40.0; // mV
@@ -326,7 +326,7 @@
         const double var_ICaL__po = 1.0 - var_chaste_interface__ICaL__c1 - var_chaste_interface__ICaL__c2 - var_chaste_interface__ICaL__xi1ba - var_chaste_interface__ICaL__xi1ca - var_chaste_interface__ICaL__xi2ba - var_chaste_interface__ICaL__xi2ca; // dimensionless
         const double var_INaCa__gNaCa = 0.83999999999999997; // uM_per_ms
         const double var_INaCa__xkdna = 0.29999999999999999; // uM
-        const double var_INaCa__aloss = 1 / (1.0 + pow((var_INaCa__xkdna / var_chaste_interface__Ca__Ca_submem), 3)); // dimensionless
+        const double var_INaCa__aloss = 1 / (1.0 + pow(var_INaCa__xkdna, 3) / pow(var_chaste_interface__Ca__Ca_submem, 3)); // dimensionless
         const double var_INaCa__xmcai = 0.0035999999999999999; // mM
         const double var_INaCa__xmcao = 1.3; // mM
         const double var_INaCa__xmnai = 12.300000000000001; // mM
@@ -360,7 +360,7 @@
         const double var_Ca__dCa_JSR = -var_Ileak_Iup_Ixfer__jleak - var_chaste_interface__Irel__xir + var_Ileak_Iup_Ixfer__jup; // uM_per_ms
         const double d_dt_chaste_interface_var_Ca__Ca_NSR = var_Ca__dCa_JSR; // uM / ms
         const double var_INaCa__yz1 = pow(var_INaCa__xmnao, 3) * var_Ca__csm + pow(var_chaste_interface__Na__Na_i, 3) * var_INaCa__xmcao; // mM4
-        const double var_INaCa__yz3 = pow(var_Environment__Na_o, 3) * (1.0 + pow((var_chaste_interface__Na__Na_i / var_INaCa__xmnai), 3)) * var_INaCa__xmcai; // mM4
+        const double var_INaCa__yz3 = pow(var_Environment__Na_o, 3) * (1.0 + pow(var_chaste_interface__Na__Na_i, 3) / pow(var_INaCa__xmnai, 3)) * var_INaCa__xmcai; // mM4
         const double var_INaCa__yz4 = pow(var_Environment__Na_o, 3) * var_Ca__csm + pow(var_chaste_interface__Na__Na_i, 3) * var_Environment__Ca_o; // mM4
         const double var_INaCa__zw8 = var_INaCa__yz1 + var_INaCa__yz2 + var_INaCa__yz3 + var_INaCa__yz4; // mM4
         const double var_ICaL__Pr = 1.0 - 1.0 / (1.0 + exp((-var_chaste_interface__cell__V + var_ICaL__vy) / var_ICaL__sy)); // dimensionless
@@ -453,7 +453,7 @@
         {
             const double var_IK1__gkix = 0.29999999999999999; // uS_per_nF
             const double var_IKs__gks = 0.1386; // uS_per_nF
-            const double var_IKs__gksx = 1.0 + 0.80000000000000004 / (1.0 + 0.125 * pow(1 / var_Ca__Ca_i, 3)); // dimensionless
+            const double var_IKs__gksx = 1.0 + 0.80000000000000004 / (1.0 + 0.125 / pow(var_Ca__Ca_i, 3)); // dimensionless
             const double var_Ito__gtof = 0.040000000000000001; // uS_per_nF
             const double var_Ito__gtos = 0.11; // uS_per_nF
             const double var_IKr__rg = 1 / (1.0 + exp(1.4732142857142858 + 0.044642857142857144 * var_chaste_interface__cell__V)); // dimensionless

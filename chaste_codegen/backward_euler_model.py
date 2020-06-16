@@ -89,7 +89,7 @@ class BackwardEulerModel(ChasteModel):
         # Substitute non-linear bits into derivative equations, so that we can pattern match
         linear_derivs_eqs = subst_deriv_eqs_non_linear_vars(self._y_derivatives, self._non_linear_state_vars,
                                                             self._membrane_voltage_var,
-                                                            self._state_vars, self._model.get_equations_for)
+                                                            self._state_vars, self.get_equations_for)
 
         # sort the linear derivatives
         linear_derivs = sorted([eq for eq in linear_derivs_eqs if isinstance(eq.lhs, Derivative)],
