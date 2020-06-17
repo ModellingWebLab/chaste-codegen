@@ -509,7 +509,8 @@ class ChasteModel(object):
             equations_for_ionic_vars, equations, old_equations = [], self._ionic_derivs, None
             while len(equations_for_ionic_vars) == 0 and old_equations != equations:
                 old_equations = equations
-                equations = self.get_equations_for(equations, recurse=False, filter_modifiable_parameters_lhs=False, optimise=False)
+                equations = self.get_equations_for(equations, recurse=False, filter_modifiable_parameters_lhs=False,
+                                                   optimise=False)
                 equations_for_ionic_vars = [eq for eq in equations
                                             if (eq.lhs != self._membrane_stimulus_current_orig
                                                 and eq.lhs not in self._stimulus_params)
