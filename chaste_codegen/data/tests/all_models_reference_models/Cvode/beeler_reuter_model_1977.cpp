@@ -1,7 +1,7 @@
 #ifdef CHASTE_CVODE
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
 //! Model: beeler_reuter_model_1977
 //!
@@ -97,7 +97,7 @@
         double var_chaste_interface__time_dependent_outward_current_x1_gate__x1 = NV_Ith_S(rY, 7);
         // Units: dimensionless; Initial value: 0.0001
         
-        const double var_slow_inward_current__E_s = -82.299999999999997 - 13.028700000000001 * log(0.001 * var_chaste_interface__slow_inward_current__Cai); // mV
+        const double var_slow_inward_current__E_s = 7.6990712032745758 - 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai); // mV
         const double var_slow_inward_current__g_s = 0.00089999999999999998; // mS_per_mm2
         const double var_slow_inward_current__i_s = (-var_slow_inward_current__E_s + var_chaste_interface__membrane__V) * var_slow_inward_current__g_s * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f; // uA_per_mm2
         const double var_sodium_current__E_Na = 50.0; // mV
@@ -140,7 +140,7 @@
 
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
-        const double var_slow_inward_current__E_s = -82.299999999999997 - 13.028700000000001 * log(0.001 * var_chaste_interface__slow_inward_current__Cai); // mV
+        const double var_slow_inward_current__E_s = 7.6990712032745758 - 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai); // mV
         const double var_slow_inward_current__g_s = 0.00089999999999999998; // mS_per_mm2
         const double var_slow_inward_current_d_gate__alpha_d = 0.095000000000000001 * exp(0.050000000000000003 - 0.01 * var_chaste_interface__membrane__V) / (1.0 + exp(0.35997120230381568 - 0.071994240460763137 * var_chaste_interface__membrane__V)); // per_ms
         const double var_slow_inward_current_d_gate__beta_d = 0.070000000000000007 * exp(-0.74576271186440679 - 0.016949152542372881 * var_chaste_interface__membrane__V) / (1.0 + exp(2.2000000000000002 + 0.050000000000000003 * var_chaste_interface__membrane__V)); // per_ms

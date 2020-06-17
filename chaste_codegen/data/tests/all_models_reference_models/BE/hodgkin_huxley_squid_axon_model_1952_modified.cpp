@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
 //! Model: hodgkin_huxley_squid_axon_model_1952_modified
 //!
@@ -125,9 +125,9 @@
         const double var_sodium_channel_m_gate__beta_m = 4.0 * exp(-4.166666666666667 - 0.055555555555555552 * var_chaste_interface__membrane__V);
         
         
-        rY[3] = (var_chaste_interface__potassium_channel_n_gate__n + ((var_potassium_channel_n_gate__alpha_n) * mDt)) / (1.0 - ((-var_potassium_channel_n_gate__alpha_n - var_potassium_channel_n_gate__beta_n) * mDt));
-        rY[2] = (var_chaste_interface__sodium_channel_h_gate__h + ((var_sodium_channel_h_gate__alpha_h) * mDt)) / (1.0 - ((-var_sodium_channel_h_gate__alpha_h - var_sodium_channel_h_gate__beta_h) * mDt));
-        rY[1] = (var_chaste_interface__sodium_channel_m_gate__m + ((var_sodium_channel_m_gate__alpha_m) * mDt)) / (1.0 - ((-var_sodium_channel_m_gate__alpha_m - var_sodium_channel_m_gate__beta_m) * mDt));
+        rY[3] = (var_chaste_interface__potassium_channel_n_gate__n + ((1.0 * var_potassium_channel_n_gate__alpha_n) * mDt)) / (1.0 - ((-var_potassium_channel_n_gate__alpha_n - var_potassium_channel_n_gate__beta_n) * mDt));
+        rY[2] = (var_chaste_interface__sodium_channel_h_gate__h + ((1.0 * var_sodium_channel_h_gate__alpha_h) * mDt)) / (1.0 - ((-var_sodium_channel_h_gate__alpha_h - var_sodium_channel_h_gate__beta_h) * mDt));
+        rY[1] = (var_chaste_interface__sodium_channel_m_gate__m + ((1.0 * var_sodium_channel_m_gate__alpha_m) * mDt)) / (1.0 - ((-var_sodium_channel_m_gate__alpha_m - var_sodium_channel_m_gate__beta_m) * mDt));
         
     }
 

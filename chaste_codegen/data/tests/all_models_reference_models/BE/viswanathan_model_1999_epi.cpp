@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
 //! Model: viswanathan_model_1999_epi
 //!
@@ -486,7 +486,7 @@
         const double var_x50 = pow(var_chaste_interface__T_type_Ca_channel_b_gate__b, 2) * var_chaste_interface__T_type_Ca_channel_g_gate__g;
         const double var_x51 = exp(0.074871767015605231 * var_chaste_interface__membrane__V);
         const double var_x52 = 1 / (-1.0 + var_x51);
-        const double var_x53 = var_x52 * (-0.61380000000000001 + var_x51 * var_chaste_interface__calcium_dynamics__Cai);
+        const double var_x53 = var_x52 * (-0.61380000000000001 + 1.0 * var_x51 * var_chaste_interface__calcium_dynamics__Cai);
         const double var_x54 = 7.8019226357407252 * var_x44;
         const double var_x55 = -0.040282206767891383 * var_x47 + var_x49 * var_chaste_interface__calcium_dynamics__Cai + var_x53 * var_x54 + 0.050000000000000003 * var_x50 * (-13.356169352749133 * var_x47 + var_chaste_interface__membrane__V);
         const double var_x56 = (var_chaste_interface__calcium_dynamics__APtrack > 0.17999999999999999) && (var_chaste_interface__calcium_dynamics__APtrack < 0.20000000000000001);
@@ -540,7 +540,7 @@
         const double var_x104 = var_x6 / (pow((0.01 + var_x4), 2) * pow(var_chaste_interface__ionic_concentrations__Nai, 3));
         
         
-        rJacobian[0][0] = 1.0 - (mDt * (0.001 * (((var_x17 + var_x55 + 0.0070160275741043606 * var_chaste_interface__membrane__V - 0.10684935482199306 * var_x1 - 7.3656881518639831e-7 * var_x3 + var_x37 * (0.433 + var_x34) + GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted) / HeartConfig::Instance()->GetCapacitance() + 16.0 * var_x38 * (-26.712338705498265 * var_x1 + var_chaste_interface__membrane__V) + 1.5 * var_x6 / (1.0 + 100.0 * var_x4) + 0.0055199999999999997 * var_x7 * var_x8 + 0.0024381008236689767 * var_x41 * var_x45 + 0.00069711623550831479 * var_x45 * var_x46 + 698.34626081908675 * var_x29 * var_x8 + 0.023862446088641735 * var_x30 * var_x8) / mParameters[0] < -150000.0) ? (-100500.0) : (-500.0))));
+        rJacobian[0][0] = 1.0 - (mDt * (0.001 * ((1.0 * (var_x17 + var_x55 + 0.0070160275741043606 * var_chaste_interface__membrane__V - 0.10684935482199306 * var_x1 - 7.3656881518639831e-7 * var_x3 + var_x37 * (0.433 + var_x34) + GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted) / HeartConfig::Instance()->GetCapacitance() + 16.0 * var_x38 * (-26.712338705498265 * var_x1 + var_chaste_interface__membrane__V) + 1.5 * var_x6 / (1.0 + 100.0 * var_x4) + 0.0055199999999999997 * var_x7 * var_x8 + 0.0024381008236689767 * var_x41 * var_x45 + 0.00069711623550831479 * var_x45 * var_x46 + 698.34626081908675 * var_x29 * var_x8 + 0.023862446088641735 * var_x30 * var_x8) / mParameters[0] < -150000.0) ? (-100500.0) : (-500.0))));
         rJacobian[0][1] = 0.0;
         rJacobian[0][2] = 0.0;
         rJacobian[0][3] = 0.0;

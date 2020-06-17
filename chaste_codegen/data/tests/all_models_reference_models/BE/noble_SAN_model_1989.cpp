@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
 //! Model: Noble_SAN_model_1989
 //!
@@ -332,7 +332,7 @@
         rJacobian[4][0] = 0.0;
         rJacobian[4][1] = 0.0;
         rJacobian[4][2] = -(mDt * (0.21553787934331523 * var_x19 + 5.4198664995221396e-10 * var_x16 + 2.862565227702148e-10 * var_x20));
-        rJacobian[4][3] = -(mDt * (-0.0073630525045414608 * var_x40));
+        rJacobian[4][3] = -(mDt * (-0.00736305250454146 * var_x40));
         rJacobian[4][4] = 1.0 - (mDt * (var_x37 + 8.2844426792967482e-7 * var_x39 + 6.2592534133428895e-16 * var_x28 - 4.7129273908888172e-7 * var_x27 - 0.0013255108286874798 * var_x38 - 0.061358770871178837 * var_x40 - 2.4480558341308171e-5 * var_x41 - var_x30 * var_x41));
         rJacobian[4][5] = -(mDt * (-var_x36 * (-140.0 * var_x35 + var_x34 * var_chaste_interface__intracellular_sodium_concentration__Nai)));
         rJacobian[5][0] = 0.0;

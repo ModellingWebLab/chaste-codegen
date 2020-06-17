@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
 //! Model: luo_rudy_1994
 //!
@@ -788,7 +788,7 @@
             const double var_x84 = -1.0 + var_x83;
             const double var_x85 = 1 / var_x84;
             const double var_x86 = var_x83 * var_chaste_interface__ionic_concentrations__Cai;
-            const double var_x87 = var_x86 - 0.34000000000000002 * mParameters[0];
+            const double var_x87 = 1.0 * var_x86 - 0.34000000000000002 * mParameters[0];
             const double var_x88 = var_x85 * var_x87;
             const double var_x89 = 0.078597788527232842 * var_x88;
             const double var_x90 = var_x16 * var_x57;
@@ -920,7 +920,7 @@
             const double var_x84 = -1.0 + var_x83;
             const double var_x85 = 1 / var_x84;
             const double var_x86 = var_x83 * var_chaste_interface__ionic_concentrations__Cai;
-            const double var_x87 = var_x86 - 0.34000000000000002 * mParameters[0];
+            const double var_x87 = 1.0 * var_x86 - 0.34000000000000002 * mParameters[0];
             const double var_x88 = var_x85 * var_x87;
             const double var_x101 = var_x78 * var_chaste_interface__membrane__V;
             const double var_x105 = var_x101 * var_x83;
@@ -1126,7 +1126,7 @@
             const double var_x191 = 0.035000000000000003 * var_x190;
             const double var_x192 = 1.0 + var_x188;
             const double var_x193 = 1 / var_x192;
-            const double var_x194 = 1.0 - 1.0 * var_x193;
+            const double var_x194 = 1.0 - var_x193;
             const double var_x195 = var_x192 * var_x194;
             const double var_x197 = 10.0 + var_chaste_interface__membrane__V;
             const double var_x201 = var_x191 * var_x197;

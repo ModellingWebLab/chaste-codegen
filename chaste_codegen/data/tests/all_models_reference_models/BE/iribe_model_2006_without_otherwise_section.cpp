@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
 //! Model: iribe_model_2006
 //!
@@ -385,7 +385,7 @@
         const double var_x34 = var_x33 * var_x8;
         const double var_x35 = 0.20000000000000001 + var_chaste_interface__RyR__F_SRCa_RyR;
         const double var_x36 = 1 / var_x35;
-        const double var_x37 = var_x36;
+        const double var_x37 = 1.0 * var_x36;
         const double var_x38 = 0.25 + var_chaste_interface__RyR__F_2;
         const double var_x39 = pow(var_chaste_interface__RyR__F_2, 2);
         const double var_x40 = -var_chaste_interface__intracellular_calcium_concentration__Ca_i + var_chaste_interface__SR_calcium_concentration__Ca_SR;
@@ -431,7 +431,7 @@
         const double var_x80 = 1 / (1.0 + 0.035299999999999998 * exp(var_x18) + 0.1245 * exp(-0.0037433890822745472 * var_chaste_interface__membrane_potential__V));
         const double var_x81 = var_x80 / (21.699999999999999 + var_chaste_interface__intracellular_sodium_concentration__Na_i);
         const double var_x82 = var_x80 * var_chaste_interface__intracellular_sodium_concentration__Na_i / pow((1 + 0.046082949308755762 * var_chaste_interface__intracellular_sodium_concentration__Na_i), 2);
-        const double var_x83 = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * (0.0071184510250569474 * var_chaste_interface__intracellular_sodium_concentration__Na_i + 0.00085421412300683373 * var_chaste_interface__intracellular_potassium_concentration__K_i) * mParameters[3] * var_chaste_interface__fast_sodium_current_h_gate__h / pow((0.12 * var_chaste_interface__intracellular_potassium_concentration__K_i + var_chaste_interface__intracellular_sodium_concentration__Na_i), 2);
+        const double var_x83 = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * (0.00085421412300683362 * var_chaste_interface__intracellular_potassium_concentration__K_i + 0.0071184510250569474 * var_chaste_interface__intracellular_sodium_concentration__Na_i) * mParameters[3] * var_chaste_interface__fast_sodium_current_h_gate__h / pow((0.12 * var_chaste_interface__intracellular_potassium_concentration__K_i + var_chaste_interface__intracellular_sodium_concentration__Na_i), 2);
         
         
         rJacobian[0][0] = 1.0 - (mDt * (-0.00125));

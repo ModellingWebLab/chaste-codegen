@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
 //! Model: viswanathan_model_1999_epi
 //!
@@ -1133,7 +1133,7 @@
             const double var_x91 = -1.0 + var_x90;
             const double var_x92 = 1 / var_x91;
             const double var_x93 = var_x90 * var_chaste_interface__calcium_dynamics__Cai;
-            const double var_x94 = -0.61380000000000001 + var_x93;
+            const double var_x94 = -0.61380000000000001 + 1.0 * var_x93;
             const double var_x95 = var_x92 * var_x94;
             const double var_x96 = 7.8019226357407252 * var_x95;
             const double var_x97 = var_x71 * var_x96;
@@ -1290,7 +1290,7 @@
             const double var_x91 = -1.0 + var_x90;
             const double var_x92 = 1 / var_x91;
             const double var_x93 = var_x90 * var_chaste_interface__calcium_dynamics__Cai;
-            const double var_x94 = -0.61380000000000001 + var_x93;
+            const double var_x94 = -0.61380000000000001 + 1.0 * var_x93;
             const double var_x95 = var_x92 * var_x94;
             const double var_x96 = 7.8019226357407252 * var_x95;
             const double var_x97 = var_x71 * var_x96;
@@ -2297,7 +2297,7 @@
             const double var_x91 = -1.0 + var_x90;
             const double var_x92 = 1 / var_x91;
             const double var_x93 = var_x90 * var_chaste_interface__calcium_dynamics__Cai;
-            const double var_x94 = -0.61380000000000001 + var_x93;
+            const double var_x94 = -0.61380000000000001 + 1.0 * var_x93;
             const double var_x95 = var_x92 * var_x94;
             const double var_x96 = 7.8019226357407252 * var_x95;
             const double var_x97 = var_x71 * var_x96;
@@ -2316,7 +2316,7 @@
             const double var_x186 = var_x104 * var_x54;
             const double var_x187 = -0.040282206767891383 * var_x133 + var_x118 * var_chaste_interface__calcium_dynamics__Cai + var_x134 * var_x89 + var_x97 * var_chaste_interface__membrane__V;
             
-            partialF = 0.001 * ((var_x100 * (var_x186 + var_x187 + 0.0070160275741043606 * var_chaste_interface__membrane__V - 0.10684935482199306 * var_x122 - 7.3656881518639831e-7 * var_x5 + var_x110 * var_x30 + var_x123 * var_x34 + var_x142 * var_x37 + var_x18 * var_x56 + var_x23 * var_x56 + var_x3 * var_x56 + var_x76 * var_chaste_interface__membrane__V + var_x79 * var_chaste_interface__membrane__V + GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted) / HeartConfig::Instance()->GetCapacitance()) < -150000.0) ? (-100500.0) : (-500.0));
+            partialF = 0.001 * ((1.0 * var_x100 * (var_x186 + var_x187 + 0.0070160275741043606 * var_chaste_interface__membrane__V - 0.10684935482199306 * var_x122 - 7.3656881518639831e-7 * var_x5 + var_x110 * var_x30 + var_x123 * var_x34 + var_x142 * var_x37 + var_x18 * var_x56 + var_x23 * var_x56 + var_x3 * var_x56 + var_x76 * var_chaste_interface__membrane__V + var_x79 * var_chaste_interface__membrane__V + GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted) / HeartConfig::Instance()->GetCapacitance()) < -150000.0) ? (-100500.0) : (-500.0));
         }
         else
         {

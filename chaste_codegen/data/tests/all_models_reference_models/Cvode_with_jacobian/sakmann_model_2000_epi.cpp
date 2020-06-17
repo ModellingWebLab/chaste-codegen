@@ -1,7 +1,7 @@
 #ifdef CHASTE_CVODE
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
 //! Model: sakmann_model_2000_epi
 //!
@@ -550,7 +550,7 @@
         const double var_x84 = var_x12 * pow(var_chaste_interface__intracellular_sodium_concentration__Na_i, 2.0);
         const double var_x85 = var_x17 * var_x84;
         const double var_x86 = var_x5 * (0.12195121951219512 * var_chaste_interface__intracellular_potassium_concentration__K_i + 0.0036585365853658534 * var_chaste_interface__intracellular_sodium_concentration__Na_i) / pow(var_x67, 2);
-        const double var_x87 = var_x21 * (0.0071184510250569474 * var_chaste_interface__intracellular_sodium_concentration__Na_i + 0.00085421412300683373 * var_chaste_interface__intracellular_potassium_concentration__K_i) / pow(var_x69, 2);
+        const double var_x87 = var_x21 * (0.00085421412300683362 * var_chaste_interface__intracellular_potassium_concentration__K_i + 0.0071184510250569474 * var_chaste_interface__intracellular_sodium_concentration__Na_i) / pow(var_x69, 2);
         const double var_x88 = var_x43 * var_x53;
         const double var_x89 = var_x0 * var_x4;
         const double var_x90 = var_x0 * var_x6;
@@ -718,7 +718,7 @@
         IJth(rJacobian, 1, 14) = 4.5446085554999309e-7 * var_x85;
         IJth(rJacobian, 14, 14) = 6.634188331769168e-7 * var_x83 - 1.3633825666499792e-6 * var_x85 - 2.6016936179035892e-8 * var_x88 - 1.0127092529498691e-5 * var_x82 - 0.0010614701330830668 * var_x81 - 50989.636493120743 * var_x87;
         IJth(rJacobian, 15, 14) = 0.00070764675538871125 * var_x81 - 0.11044607112671274 * var_x86 - 4.4227922211794452e-7 * var_x83;
-        IJth(rJacobian, 0, 15) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x59 * (0.13356880329847826 * var_x90 + 177.03489247815671 * var_x91 + 5826.805475092815 * var_x86 + 8.2354559810040044e-6 * var_x88 + 9684220.4002066851 * var_x87 + 1.5265006091254658 * var_x89 - 0.085714285714285715 * var_x92));
+        IJth(rJacobian, 0, 15) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x59 * (9684220.4002066851 * var_x87 + 0.13356880329847826 * var_x90 + 177.03489247815671 * var_x91 + 5826.805475092815 * var_x86 + 8.2354559810040044e-6 * var_x88 + 1.5265006091254658 * var_x89 - 0.085714285714285715 * var_x92));
         IJth(rJacobian, 14, 15) = -6118.7563791744888 * var_x87;
         IJth(rJacobian, 15, 15) = 5.4156639443013623e-5 * var_x92 - 0.11185550647567587 * var_x91 - 0.00096448500280939937 * var_x89 - 8.4392437745822447e-5 * var_x90 - 5.2033872358071785e-9 * var_x88 - 3.6815357042237582 * var_x86;
         IJth(rJacobian, 0, 16) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x59 * (-0.32928000000000002 * var_x10 * var_x15 - 8.2800000000000004e-10 * (var_x62 - var_x63 * var_chaste_interface__intracellular_calcium_concentration__Ca_ds) / pow((0.0068999999999999999 + var_chaste_interface__intracellular_calcium_concentration__Ca_ds), 2)));

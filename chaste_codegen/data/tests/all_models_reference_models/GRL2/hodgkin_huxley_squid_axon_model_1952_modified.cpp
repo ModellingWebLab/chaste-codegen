@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
 //! Model: hodgkin_huxley_squid_axon_model_1952_modified
 //!
@@ -375,7 +375,7 @@
             const double var_x10 = exp(-4.5 + var_x4);
             const double var_x11 = 1.0 + var_x10;
             
-            partialF = -1.0 / var_x11 - 0.070000000000000007 * var_x9;
+            partialF = -1 / var_x11 - 0.070000000000000007 * var_x9;
         }
         else
         {

@@ -1,7 +1,7 @@
 #ifdef CHASTE_CVODE
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
 //! Model: earm_noble_model_1990
 //!
@@ -459,7 +459,7 @@
         const double var_x77 = var_chaste_interface__intracellular_sodium_concentration__Na_i / pow((1 + 0.025000000000000001 * var_chaste_interface__intracellular_sodium_concentration__Na_i), 2);
         const double var_x78 = pow(var_chaste_interface__intracellular_sodium_concentration__Na_i, 2.0);
         const double var_x79 = var_x11 * var_x17 * var_x78;
-        const double var_x80 = var_x7 * (0.0071184510250569474 * var_chaste_interface__intracellular_sodium_concentration__Na_i + 0.00085421412300683373 * var_chaste_interface__intracellular_potassium_concentration__K_i) / pow(var_x66, 2);
+        const double var_x80 = var_x7 * (0.00085421412300683362 * var_chaste_interface__intracellular_potassium_concentration__K_i + 0.0071184510250569474 * var_chaste_interface__intracellular_sodium_concentration__Na_i) / pow(var_x66, 2);
         const double var_x81 = var_x57 * var_x78;
         const double var_x82 = var_x31 * var_x47;
         const double var_x83 = var_x1 * var_x5;
@@ -519,10 +519,10 @@
         const double var_x137 = exp(-3.2000000000000002 + 0.080000000000000002 * var_chaste_interface__membrane__V);
         const double var_x138 = 0.00050000000000000001 + var_chaste_interface__intracellular_calcium_concentration__Ca_i;
         const double var_x139 = pow(var_chaste_interface__intracellular_calcium_concentration__Ca_i, 2);
-        const double var_x140 = var_x139;
+        const double var_x140 = 1.0 * var_x139;
         const double var_x141 = var_x140 / pow(var_x138, 3);
         const double var_x142 = pow(var_x138, (-2));
-        const double var_x143 = var_x142 * var_chaste_interface__intracellular_calcium_concentration__Ca_i;
+        const double var_x143 = 1.0 * var_x142 * var_chaste_interface__intracellular_calcium_concentration__Ca_i;
         const double var_x144 = var_x143 - var_x141;
         const double var_x145 = -0.59999999999999998 * var_x137;
         const double var_x146 = 0.5 * var_x139 * var_x142;
@@ -586,8 +586,8 @@
         IJth(rJacobian, 1, 10) = 5.0495650616665894e-7 * var_x79 - 6.7063429428673823e-16 * var_x81;
         IJth(rJacobian, 10, 10) = 1.7673477715833064e-7 * var_x77 + 2.0119028828602145e-15 * var_x81 - 0.00028277564345332906 * var_x76 - 1.5791458939838137 * var_x80 - 1.5752072268398093e-8 * var_x82 - 2.6978574498584515e-6 * var_x75 - 1.5148695184999769e-6 * var_x79;
         IJth(rJacobian, 11, 10) = 0.0001885170956355527 * var_x76 - 1.1782318477222043e-7 * var_x77;
-        IJth(rJacobian, 0, 11) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x54 * (0.26713760659695651 * var_x84 + 225.1649458484427 * var_x80 + 3.7433890822745475e-6 * var_x82 + 0.12975255177566458 * var_x83 + 0.045413393121482605 * var_x1 - 0.0097142857142857152 * var_x85));
-        IJth(rJacobian, 10, 11) = -0.18949750727805764 * var_x80;
+        IJth(rJacobian, 0, 11) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x54 * (0.26713760659695651 * var_x84 + 225.16494584844267 * var_x80 + 3.7433890822745475e-6 * var_x82 + 0.12975255177566458 * var_x83 + 0.045413393121482605 * var_x1 - 0.0097142857142857152 * var_x85));
+        IJth(rJacobian, 10, 11) = -0.18949750727805761 * var_x80;
         IJth(rJacobian, 11, 11) = 8.1754862903173357e-6 * var_x85 - 3.1504144536796189e-9 * var_x82 - 3.8219647206328062e-5 * var_x1 - 0.0001091989920180802 * var_x83 - 0.00022482145415487096 * var_x84;
         IJth(rJacobian, 1, 12) = 5.5199999999999998e-8 * var_x90 + 7.1999999999999999e-7 * var_x92 - 1.3248e-11 * var_x93;
         IJth(rJacobian, 12, 12) = -0.050000000000000003 + 6.4915199999999989e-10 * var_x93 - 2.7047999999999999e-6 * var_x90 - 3.5279999999999994e-5 * var_x92;

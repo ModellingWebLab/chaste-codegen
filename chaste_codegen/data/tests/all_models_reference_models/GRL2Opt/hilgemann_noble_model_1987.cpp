@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
 //! Model: hilgemann_noble_model_1987
 //!
@@ -904,7 +904,7 @@
             const double var_x141 = exp(-3.2000000000000002 + 0.080000000000000002 * var_chaste_interface__membrane__V);
             const double var_x142 = 0.00050000000000000001 + var_chaste_interface__intracellular_calcium_concentration__Ca_i;
             const double var_x143 = pow(var_chaste_interface__intracellular_calcium_concentration__Ca_i, 2);
-            const double var_x144 = var_x143;
+            const double var_x144 = 1.0 * var_x143;
             const double var_x146 = pow(var_x142, (-2));
             const double var_x149 = -0.59999999999999998 * var_x141;
             
@@ -1050,7 +1050,7 @@
             const double var_x75 = 1 / var_chaste_interface__intracellular_sodium_concentration__Na_i;
             const double var_x76 = 1 / (40.0 + var_chaste_interface__intracellular_sodium_concentration__Na_i);
             const double var_x77 = var_chaste_interface__intracellular_sodium_concentration__Na_i / pow((1 + 0.025000000000000001 * var_chaste_interface__intracellular_sodium_concentration__Na_i), 2);
-            const double var_x78 = var_x7 * (0.0071184510250569474 * var_chaste_interface__intracellular_sodium_concentration__Na_i + 0.00085421412300683373 * var_chaste_interface__intracellular_potassium_concentration__K_i) / pow(var_x67, 2);
+            const double var_x78 = var_x7 * (0.00085421412300683362 * var_chaste_interface__intracellular_potassium_concentration__K_i + 0.0071184510250569474 * var_chaste_interface__intracellular_sodium_concentration__Na_i) / pow(var_x67, 2);
             const double var_x79 = pow(var_chaste_interface__intracellular_sodium_concentration__Na_i, 2.0) * var_chaste_interface__extracellular_calcium_concentration__Ca_o;
             const double var_x80 = var_x58 * var_x79;
             const double var_x81 = var_x12 * var_x18;

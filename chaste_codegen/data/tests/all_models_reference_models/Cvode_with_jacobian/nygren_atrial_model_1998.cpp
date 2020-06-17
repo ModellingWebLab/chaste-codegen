@@ -1,7 +1,7 @@
 #ifdef CHASTE_CVODE
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
 //! Model: nygren_atrial_model_1998
 //!
@@ -738,20 +738,20 @@
         const double var_x239 = 0.20380000000000001 * var_x238;
         
         // Matrix entries
-        IJth(rJacobian, 0, 0) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x64 * (0.13928000000000001 + 0.5 * var_x9 + var_chaste_interface__delayed_rectifier_K_currents_n_gate__n + 3.0 * var_x16 + 2.75 * var_x17 + 7.5 * var_x18 + 0.037484200000000002 * var_x29 - 0.0017706325 * var_x61 - 0.020833333333333332 * var_x32 - 0.17058350483361479 * var_x34 + var_x38 * var_x42 + var_x50 * var_x55 + var_x56 * var_x57 + (6.75 * var_x4 + 6.75 * var_x5) * var_chaste_interface__L_type_Ca_channel_d_L_gate__d_L - var_x56 * var_x62));
+        IJth(rJacobian, 0, 0) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x64 * (0.13928000000000001 + 0.5 * var_x9 + 1.0 * var_chaste_interface__delayed_rectifier_K_currents_n_gate__n + 3.0 * var_x16 + 2.75 * var_x17 + 7.5 * var_x18 + 0.037484200000000002 * var_x29 - 0.0017706325 * var_x61 - 0.020833333333333332 * var_x32 - 0.17058350483361479 * var_x34 + var_x38 * var_x42 + var_x50 * var_x55 + var_x56 * var_x57 + (6.75 * var_x4 + 6.75 * var_x5) * var_chaste_interface__L_type_Ca_channel_d_L_gate__d_L - var_x56 * var_x62));
         IJth(rJacobian, 1, 0) = -6.9294442944473474e-8 + 6.6024752054987431e-8 * var_x29;
-        IJth(rJacobian, 2, 0) = 0.00012180267965895249 * var_x129 * var_x132 / pow(var_x130, 2) - 23.80952380952381 * var_x131 * (-0.061656057098765427 - 0.0024112654320987653 * var_chaste_interface__membrane__V) * (-var_chaste_interface__sodium_current_m_gate__m + 1 / var_x130) / pow((0.57142857142857151 + var_x131), 2);
+        IJth(rJacobian, 2, 0) = 0.00012180267965895249 * var_x129 * var_x132 / pow(var_x130, 2) - 23.80952380952381 * var_x131 * (-0.061656057098765427 - 0.0024112654320987653 * var_chaste_interface__membrane__V) * (1 / var_x130 - var_chaste_interface__sodium_current_m_gate__m) / pow((0.57142857142857151 + var_x131), 2);
         IJth(rJacobian, 3, 0) = -var_x136 * var_x139 + 0.010416666666666666 * var_x141 * (var_x140 - var_chaste_interface__sodium_current_h1_gate__h1) / pow((0.01 + var_x135), 2);
         IJth(rJacobian, 4, 0) = -var_x139 * var_x142 + 0.0026041666666666665 * var_x141 * (var_x140 - var_chaste_interface__sodium_current_h2_gate__h2) / pow((0.025000000000000001 + var_x135), 2);
-        IJth(rJacobian, 5, 0) = 0.00017241379310344829 * var_x143 * var_x146 / pow(var_x144, 2) - 0.37037037037037035 * var_x145 * (-0.077777777777777779 - 0.0022222222222222222 * var_chaste_interface__membrane__V) * (-var_chaste_interface__L_type_Ca_channel_d_L_gate__d_L + 1 / var_x144) / pow((0.7407407407407407 + var_x145), 2);
+        IJth(rJacobian, 5, 0) = 0.00017241379310344829 * var_x143 * var_x146 / pow(var_x144, 2) - 0.37037037037037035 * var_x145 * (-0.077777777777777779 - 0.0022222222222222222 * var_chaste_interface__membrane__V) * (1 / var_x144 - var_chaste_interface__L_type_Ca_channel_d_L_gate__d_L) / pow((0.7407407407407407 + var_x145), 2);
         IJth(rJacobian, 6, 0) = -var_x149 * var_x152 - 0.0062111801242236021 * var_x148 * (-0.38580246913580246 - 0.0096450617283950612 * var_chaste_interface__membrane__V) * (var_x153 - var_chaste_interface__L_type_Ca_channel_f_L1_gate__f_L_1) / pow((0.062111801242236024 + var_x148), 2);
         IJth(rJacobian, 7, 0) = -var_x152 * var_x155 - 0.00075058170081813405 * var_x154 * (-0.39674667724657808 - 0.0099186669311644524 * var_chaste_interface__membrane__V) * (var_x153 - var_chaste_interface__L_type_Ca_channel_f_L2_gate__f_L_2) / pow((0.046986414471215196 + var_x154), 2);
-        IJth(rJacobian, 8, 0) = 9.0909090909090904e-5 * var_x156 * var_x159 / pow(var_x157, 2) + 0.00063492063492063492 * var_x158 * (-var_chaste_interface__Ca_independent_transient_outward_K_current_r_gate__r + 1 / var_x157) * var_chaste_interface__membrane__V / pow((0.42857142857142855 + var_x158), 2);
-        IJth(rJacobian, 9, 0) = -8.6956521739130441e-5 * var_x160 * var_x163 / pow(var_x161, 2) - 0.0020781379883624274 * var_x162 * (-0.46809272073427638 - 0.0089245513962683768 * var_chaste_interface__membrane__V) * (-var_chaste_interface__Ca_independent_transient_outward_K_current_s_gate__s + 1 / var_x161) / pow((0.02938487115544472 + var_x162), 2);
-        IJth(rJacobian, 10, 0) = 0.000125 * var_x164 * var_x169 / pow(var_x165, 2) + 0.0092592592592592605 * var_x166 * (-var_chaste_interface__sustained_outward_K_current_r_sus_gate__r_sus + 1 / var_x165) / (pow(var_x167, 2) * pow((0.055555555555555559 + var_x168), 2));
+        IJth(rJacobian, 8, 0) = 9.0909090909090904e-5 * var_x156 * var_x159 / pow(var_x157, 2) + 0.00063492063492063492 * var_x158 * (1 / var_x157 - var_chaste_interface__Ca_independent_transient_outward_K_current_r_gate__r) * var_chaste_interface__membrane__V / pow((0.42857142857142855 + var_x158), 2);
+        IJth(rJacobian, 9, 0) = -8.6956521739130441e-5 * var_x160 * var_x163 / pow(var_x161, 2) - 0.0020781379883624274 * var_x162 * (-0.46809272073427638 - 0.0089245513962683768 * var_chaste_interface__membrane__V) * (1 / var_x161 - var_chaste_interface__Ca_independent_transient_outward_K_current_s_gate__s) / pow((0.02938487115544472 + var_x162), 2);
+        IJth(rJacobian, 10, 0) = 0.000125 * var_x164 * var_x169 / pow(var_x165, 2) + 0.0092592592592592605 * var_x166 * (1 / var_x165 - var_chaste_interface__sustained_outward_K_current_r_sus_gate__r_sus) / (pow(var_x167, 2) * pow((0.055555555555555559 + var_x168), 2));
         IJth(rJacobian, 11, 0) = -4.0000000000000003e-5 * var_x171 * var_x176 / pow(var_x172, 2) + 5.2222222222222227e-5 * var_x173 * (0.59999999999999998 - var_chaste_interface__sustained_outward_K_current_s_sus_gate__s_sus + 0.40000000000000002 / var_x172) / (pow(var_x174, 2) * pow((1 + 0.15666666666666668 * var_x175), 2));
-        IJth(rJacobian, 12, 0) = 7.874015748031497e-5 * var_x177 * var_x180 / pow(var_x178, 2) - 0.00081632653061224504 * var_x179 * (0.10000000000000001 - var_x58) * (-var_chaste_interface__delayed_rectifier_K_currents_n_gate__n + 1 / var_x178) / pow((1 + 0.57142857142857151 * var_x179), 2);
-        IJth(rJacobian, 13, 0) = 0.00016666666666666666 * var_x181 * var_x184 / pow(var_x182, 2) - 0.0046044755502348284 * var_x183 * (-0.081723584525982884 - 0.0040582584084490154 * var_chaste_interface__membrane__V) * (-var_chaste_interface__delayed_rectifier_K_currents_pa_gate__p_a + 1 / var_x182) / pow((0.14356754765632193 + var_x183), 2);
+        IJth(rJacobian, 12, 0) = 7.874015748031497e-5 * var_x177 * var_x180 / pow(var_x178, 2) - 0.00081632653061224504 * var_x179 * (0.10000000000000001 - var_x58) * (1 / var_x178 - var_chaste_interface__delayed_rectifier_K_currents_n_gate__n) / pow((1 + 0.57142857142857151 * var_x179), 2);
+        IJth(rJacobian, 13, 0) = 0.00016666666666666666 * var_x181 * var_x184 / pow(var_x182, 2) - 0.0046044755502348284 * var_x183 * (-0.081723584525982884 - 0.0040582584084490154 * var_chaste_interface__membrane__V) * (1 / var_x182 - var_chaste_interface__delayed_rectifier_K_currents_pa_gate__p_a) / pow((0.14356754765632193 + var_x183), 2);
         IJth(rJacobian, 14, 0) = -1.0673921144856187e-7 + 9.3563879015427174e-9 * var_x61 + 3.9074763446476996e-7 * var_x188 - 1.9807425616496227e-7 * var_x29 - 3.9074763446476996e-7 * var_x187 - var_x185 * var_x38 - var_x186 * var_x55;
         IJth(rJacobian, 15, 0) = 3.6695879005347264e-8 * var_x32 + 3.004661593767551e-7 * var_x34 - 1.3210516441925016e-5 * var_x18 - 4.843856028705839e-6 * var_x17 - 8.8070109612833433e-7 * var_x9 - 1.7614021922566687e-6 * var_chaste_interface__delayed_rectifier_K_currents_n_gate__n - 5.2842065767700058e-6 * var_x16 - 6.2375919343618122e-9 * var_x61 + var_x193 * var_x38;
         IJth(rJacobian, 16, 0) = (-0.00029723661994331282 * var_x4 - 0.00029723661994331282 * var_x5) * var_chaste_interface__L_type_Ca_channel_d_L_gate__d_L;
@@ -811,7 +811,7 @@
         IJth(rJacobian, 11, 11) = -0.001 * var_x176;
         IJth(rJacobian, 15, 11) = var_x195 * var_chaste_interface__sustained_outward_K_current_r_sus_gate__r_sus;
         IJth(rJacobian, 23, 11) = var_x218 * var_chaste_interface__sustained_outward_K_current_r_sus_gate__r_sus;
-        IJth(rJacobian, 0, 12) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x64 * (var_x30 + var_chaste_interface__membrane__V));
+        IJth(rJacobian, 0, 12) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x64 * (var_x30 + 1.0 * var_chaste_interface__membrane__V));
         IJth(rJacobian, 12, 12) = -0.001 * var_x180;
         IJth(rJacobian, 15, 12) = 4.6465863583271093e-5 * var_x11 - 1.7614021922566687e-6 * var_chaste_interface__membrane__V;
         IJth(rJacobian, 23, 12) = 1.2951486707769622e-5 * var_chaste_interface__membrane__V - 0.00034166076164169918 * var_x11;

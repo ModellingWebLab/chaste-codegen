@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
 //! Model: mahajan_shiferaw_model_2008
 //!
@@ -115,7 +115,7 @@
         // Units: uM; Initial value: 0.226941113355
         
         const double var_Ca__csm = 0.001 * var_chaste_interface__Ca__Ca_submem; // mM
-        const double var_cell__Itotal = -16.0 * (1.0 - var_chaste_interface__ICaL__c1 - var_chaste_interface__ICaL__c2 - var_chaste_interface__ICaL__xi1ba - var_chaste_interface__ICaL__xi1ca - var_chaste_interface__ICaL__xi2ba - var_chaste_interface__ICaL__xi2ca) * ((fabs(0.075353936071760372 * var_chaste_interface__cell__V) < 0.001) ? (-0.063960518821716009 + 0.10420416882000001 * var_Ca__csm * exp(0.075353936071760372 * var_chaste_interface__cell__V)) : (0.0078521942756732046 * (-0.61380000000000001 + var_Ca__csm * exp(0.075353936071760372 * var_chaste_interface__cell__V)) * var_chaste_interface__cell__V / (-1.0 + exp(0.075353936071760372 * var_chaste_interface__cell__V)))) * mParameters[3] - 0.040000000000000001 * (86.398763985973389 + var_chaste_interface__cell__V) * var_chaste_interface__Ito__xtof * var_chaste_interface__Ito__ytof - 1.173913043478261 * var_chaste_interface__Na__Na_i / ((12.0 + var_chaste_interface__Na__Na_i) * (1.0 + 0.1245 * exp(-0.0037676968035880187 * var_chaste_interface__cell__V) + 0.036499999999999998 * (-0.14285714285714285 + 0.14285714285714285 * exp(2.0208023774145616)) * exp(-0.037676968035880186 * var_chaste_interface__cell__V))) - 0.30599999999999999 * (86.398763985973389 + var_chaste_interface__cell__V) / ((1.0 + exp(6.4833277106546534 + 0.23849999999999999 * var_chaste_interface__cell__V)) * (1.02 / (1.0 + exp(6.4833277106546534 + 0.23849999999999999 * var_chaste_interface__cell__V)) + (exp(-31.363518823866141 + 0.061749999999999999 * var_chaste_interface__cell__V) + 0.49124000000000001 * exp(7.3793810433533835 + 0.080320000000000003 * var_chaste_interface__cell__V)) / (1.0 + exp(-46.879352217986117 - 0.51429999999999998 * var_chaste_interface__cell__V)))) - 6.7199999999999998 * (1.8 * pow(var_chaste_interface__Na__Na_i, 3) * exp(0.013186938812558063 * var_chaste_interface__cell__V) - 2515456.0 * var_Ca__csm * exp(-0.024490029223322121 * var_chaste_interface__cell__V)) / ((1.0 + 0.20000000000000001 * exp(-0.024490029223322121 * var_chaste_interface__cell__V)) * (1.0 + 0.026999999999999996 / pow(var_chaste_interface__Ca__Ca_submem, 3)) * (12405.2022 + 7.9663561662386391 * pow(var_chaste_interface__Na__Na_i, 3) + 4115811.375 * var_Ca__csm)) - 0.11 * (86.398763985973389 + var_chaste_interface__cell__V) * (0.5 / (1.0 + exp(3.3500000000000001 + 0.10000000000000001 * var_chaste_interface__cell__V)) + var_chaste_interface__Ito__ytos) * mParameters[2] * var_chaste_interface__Ito__xtos - pow(var_chaste_interface__INa__xm, 3) * (-26.541413816729872 * log(136.0 / var_chaste_interface__Na__Na_i) + var_chaste_interface__cell__V) * mParameters[4] * var_chaste_interface__INa__xh * var_chaste_interface__INa__xj - 0.1386 * (1.0 + 0.80000000000000004 / (1.0 + 1.2500000000000001e-10 / pow(var_chaste_interface__Ca__Ca_i_converted, 3))) * (-26.541413816729872 * log(7.8928799999999999 / (140.0 + 0.018329999999999999 * var_chaste_interface__Na__Na_i)) + var_chaste_interface__cell__V) * mParameters[1] * var_chaste_interface__IKs__xs1 * var_chaste_interface__IKs__xs2 - 1.0 * (86.398763985973389 + var_chaste_interface__cell__V) * mParameters[0] * mParameters[5] * var_chaste_interface__IKr__xr / (1.0 + exp(1.4732142857142858 + 0.044642857142857144 * var_chaste_interface__cell__V)); // nA_per_nF
+        const double var_cell__Itotal = -16.0 * (1.0 - var_chaste_interface__ICaL__c1 - var_chaste_interface__ICaL__c2 - var_chaste_interface__ICaL__xi1ba - var_chaste_interface__ICaL__xi1ca - var_chaste_interface__ICaL__xi2ba - var_chaste_interface__ICaL__xi2ca) * ((fabs(0.075353936071760372 * var_chaste_interface__cell__V) < 0.001) ? (-0.063960518821716009 + 0.10420416882000001 * var_Ca__csm * exp(0.075353936071760372 * var_chaste_interface__cell__V)) : (0.0078521942756732046 * (-0.61380000000000001 + var_Ca__csm * exp(0.075353936071760372 * var_chaste_interface__cell__V)) * var_chaste_interface__cell__V / (-1.0 + exp(0.075353936071760372 * var_chaste_interface__cell__V)))) * mParameters[3] - 0.040000000000000001 * (86.398763985973389 + var_chaste_interface__cell__V) * var_chaste_interface__Ito__xtof * var_chaste_interface__Ito__ytof - 1.173913043478261 * var_chaste_interface__Na__Na_i / ((12.0 + var_chaste_interface__Na__Na_i) * (1.0 + 0.1245 * exp(-0.0037676968035880187 * var_chaste_interface__cell__V) + 0.036499999999999998 * (-0.14285714285714285 + 0.14285714285714285 * exp(2.0208023774145616)) * exp(-0.037676968035880186 * var_chaste_interface__cell__V))) - 0.30599999999999999 * (86.398763985973389 + var_chaste_interface__cell__V) / ((1.0 + exp(6.4833277106546534 + 0.23849999999999999 * var_chaste_interface__cell__V)) * (1.02 / (1.0 + exp(6.4833277106546534 + 0.23849999999999999 * var_chaste_interface__cell__V)) + (0.49124000000000001 * exp(7.3793810433533835 + 0.080320000000000003 * var_chaste_interface__cell__V) + exp(-31.363518823866141 + 0.061749999999999999 * var_chaste_interface__cell__V)) / (1.0 + exp(-46.879352217986117 - 0.51429999999999998 * var_chaste_interface__cell__V)))) - 6.7199999999999998 * (1.8 * pow(var_chaste_interface__Na__Na_i, 3) * exp(0.013186938812558063 * var_chaste_interface__cell__V) - 2515456.0 * var_Ca__csm * exp(-0.024490029223322121 * var_chaste_interface__cell__V)) / ((1.0 + 0.20000000000000001 * exp(-0.024490029223322121 * var_chaste_interface__cell__V)) * (1.0 + 0.026999999999999996 / pow(var_chaste_interface__Ca__Ca_submem, 3)) * (12405.2022 + 7.9663561662386391 * pow(var_chaste_interface__Na__Na_i, 3) + 4115811.375 * var_Ca__csm)) - 0.11 * (86.398763985973389 + var_chaste_interface__cell__V) * (0.5 / (1.0 + exp(3.3500000000000001 + 0.10000000000000001 * var_chaste_interface__cell__V)) + var_chaste_interface__Ito__ytos) * mParameters[2] * var_chaste_interface__Ito__xtos - pow(var_chaste_interface__INa__xm, 3) * (-26.541413816729872 * log(136.0 / var_chaste_interface__Na__Na_i) + var_chaste_interface__cell__V) * mParameters[4] * var_chaste_interface__INa__xh * var_chaste_interface__INa__xj - 0.1386 * (1.0 + 0.80000000000000004 / (1.0 + 1.2500000000000001e-10 / pow(var_chaste_interface__Ca__Ca_i_converted, 3))) * (-26.541413816729872 * log(7.8928799999999999 / (140.0 + 0.018329999999999999 * var_chaste_interface__Na__Na_i)) + var_chaste_interface__cell__V) * mParameters[1] * var_chaste_interface__IKs__xs1 * var_chaste_interface__IKs__xs2 - 1.0 * (86.398763985973389 + var_chaste_interface__cell__V) * mParameters[0] * mParameters[5] * var_chaste_interface__IKr__xr / (1.0 + exp(1.4732142857142858 + 0.044642857142857144 * var_chaste_interface__cell__V)); // nA_per_nF
         const double var_chaste_interface__i_ionic = 0.99999999999999989 * HeartConfig::Instance()->GetCapacitance() * var_cell__Itotal; // uA_per_cm2
 
         const double i_ionic = var_chaste_interface__i_ionic;
@@ -183,7 +183,7 @@
         const double var_Ito__rt2 = 3.3500000000000001 + 0.10000000000000001 * var_chaste_interface__cell__V; // dimensionless
         const double var_INaCa__xiNaCa = 8.0 * var_INaCa__jNaCa; // nA_per_nF
         const double var_INa__xina = pow(var_chaste_interface__INa__xm, 3) * (-26.541413816729872 * log(136.0 / var_chaste_interface__Na__Na_i) + var_chaste_interface__cell__V) * mParameters[4] * var_chaste_interface__INa__xh * var_chaste_interface__INa__xj; // nA_per_nF
-        d_dt_chaste_interface_var_cell__V = -var_INa__xina - var_INaCa__xiNaCa - var_INaK__xiNaK - 16.0 * var_ICaL__jca - 1.0000000000000002 * GetIntracellularAreaStimulus(var_chaste_interface__Environment__time) / HeartConfig::Instance()->GetCapacitance() - 0.040000000000000001 * (86.398763985973389 + var_chaste_interface__cell__V) * var_chaste_interface__Ito__xtof * var_chaste_interface__Ito__ytof - 0.30599999999999999 * (86.398763985973389 + var_chaste_interface__cell__V) / ((1.0 + exp(6.4833277106546534 + 0.23849999999999999 * var_chaste_interface__cell__V)) * (1.02 / (1.0 + exp(6.4833277106546534 + 0.23849999999999999 * var_chaste_interface__cell__V)) + (exp(-31.363518823866141 + 0.061749999999999999 * var_chaste_interface__cell__V) + 0.49124000000000001 * exp(7.3793810433533835 + 0.080320000000000003 * var_chaste_interface__cell__V)) / (1.0 + exp(-46.879352217986117 - 0.51429999999999998 * var_chaste_interface__cell__V)))) - 0.11 * (86.398763985973389 + var_chaste_interface__cell__V) * (0.5 / (1.0 + exp(var_Ito__rt2)) + var_chaste_interface__Ito__ytos) * mParameters[2] * var_chaste_interface__Ito__xtos - 0.1386 * (1.0 + 0.80000000000000004 / (1.0 + 0.125 / pow(var_Ca__Ca_i, 3))) * (-26.541413816729872 * log(7.8928799999999999 / (140.0 + 0.018329999999999999 * var_chaste_interface__Na__Na_i)) + var_chaste_interface__cell__V) * mParameters[1] * var_chaste_interface__IKs__xs1 * var_chaste_interface__IKs__xs2 - 1.0 * (86.398763985973389 + var_chaste_interface__cell__V) * mParameters[0] * mParameters[5] * var_chaste_interface__IKr__xr / (1.0 + exp(1.4732142857142858 + 0.044642857142857144 * var_chaste_interface__cell__V)); // mV / ms
+        d_dt_chaste_interface_var_cell__V = -var_INa__xina - var_INaCa__xiNaCa - var_INaK__xiNaK - 16.0 * var_ICaL__jca - 1.0000000000000002 * GetIntracellularAreaStimulus(var_chaste_interface__Environment__time) / HeartConfig::Instance()->GetCapacitance() - 0.040000000000000001 * (86.398763985973389 + var_chaste_interface__cell__V) * var_chaste_interface__Ito__xtof * var_chaste_interface__Ito__ytof - 0.30599999999999999 * (86.398763985973389 + var_chaste_interface__cell__V) / ((1.0 + exp(6.4833277106546534 + 0.23849999999999999 * var_chaste_interface__cell__V)) * (1.02 / (1.0 + exp(6.4833277106546534 + 0.23849999999999999 * var_chaste_interface__cell__V)) + (0.49124000000000001 * exp(7.3793810433533835 + 0.080320000000000003 * var_chaste_interface__cell__V) + exp(-31.363518823866141 + 0.061749999999999999 * var_chaste_interface__cell__V)) / (1.0 + exp(-46.879352217986117 - 0.51429999999999998 * var_chaste_interface__cell__V)))) - 0.11 * (86.398763985973389 + var_chaste_interface__cell__V) * (0.5 / (1.0 + exp(var_Ito__rt2)) + var_chaste_interface__Ito__ytos) * mParameters[2] * var_chaste_interface__Ito__xtos - 0.1386 * (1.0 + 0.80000000000000004 / (1.0 + 0.125 / pow(var_Ca__Ca_i, 3))) * (-26.541413816729872 * log(7.8928799999999999 / (140.0 + 0.018329999999999999 * var_chaste_interface__Na__Na_i)) + var_chaste_interface__cell__V) * mParameters[1] * var_chaste_interface__IKs__xs1 * var_chaste_interface__IKs__xs2 - 1.0 * (86.398763985973389 + var_chaste_interface__cell__V) * mParameters[0] * mParameters[5] * var_chaste_interface__IKr__xr / (1.0 + exp(1.4732142857142858 + 0.044642857142857144 * var_chaste_interface__cell__V)); // mV / ms
 
         double evalF = d_dt_chaste_interface_var_cell__V;
         mEvalF[0] = d_dt_chaste_interface_var_cell__V;
@@ -281,7 +281,7 @@
         const double var_ICaL__k3 = 0.33333333333333331 - 0.33333333333333331 / (1.0 + exp(-13.333333333333334 - 0.33333333333333331 * var_chaste_interface__cell__V)); // per_ms
         const double var_ICaL__k3t = var_ICaL__k3; // per_ms
         const double var_ICaL__poinf = 1 / (1.0 + exp(-0.125 * var_chaste_interface__cell__V)); // dimensionless
-        const double var_ICaL__alpha = var_ICaL__poinf; // per_ms
+        const double var_ICaL__alpha = 1.0 * var_ICaL__poinf; // per_ms
         const double var_ICaL__beta = 1.0 - 1.0 * var_ICaL__poinf; // per_ms
         const double d_dt_chaste_interface_var_ICaL__c1 = 3.0 * var_ICaL__po + 0.0022399999999999998 * var_chaste_interface__ICaL__xi1ba + 0.000103615 * var_chaste_interface__ICaL__xi1ca + var_ICaL__alpha * var_chaste_interface__ICaL__c2 - (0.30413000000000001 + var_ICaL__beta + var_ICaL__k1) * var_chaste_interface__ICaL__c1; // 1 / ms
         const double var_ICaL__recov = 10.0 + 4954.0 * exp(0.064102564102564111 * var_chaste_interface__cell__V); // ms
@@ -300,7 +300,7 @@
         const double d_dt_chaste_interface_var_ICaL__xi2ca = var_chaste_interface__ICaL__c2 * var_ICaL__k6 + var_ICaL__k3 * var_chaste_interface__ICaL__xi1ca - (var_ICaL__k4 + var_ICaL__k5) * var_chaste_interface__ICaL__xi2ca; // 1 / ms
         const double var_ICaL__rxa = ((fabs(0.075353936071760372 * var_chaste_interface__cell__V) < 0.001) ? (-0.063960518821716009 + 0.10420416882000001 * var_Ca__csm * exp(0.075353936071760372 * var_chaste_interface__cell__V)) : (0.0078521942756732046 * (-0.61380000000000001 + var_Ca__csm * exp(0.075353936071760372 * var_chaste_interface__cell__V)) * var_chaste_interface__cell__V / (-1.0 + exp(0.075353936071760372 * var_chaste_interface__cell__V)))); // mA_per_cm2
         const double var_ICaL__jca = mParameters[3] * var_ICaL__po * var_ICaL__rxa; // uM_per_ms
-        const double d_dt_chaste_interface_var_IKr__xr = (-var_chaste_interface__IKr__xr + 1 / (1.0 + exp(-6.666666666666667 - 0.13333333333333333 * var_chaste_interface__cell__V))) * (((fabs(10.0 + var_chaste_interface__cell__V) > 0.001) ? (0.00060999999999999997 * (10.0 + var_chaste_interface__cell__V) / (-1.0 + exp(1.45 + 0.14499999999999999 * var_chaste_interface__cell__V))) : (0.0042068965517241376)) + ((fabs(7.0 + var_chaste_interface__cell__V) > 0.001) ? (0.0013799999999999999 * (7.0 + var_chaste_interface__cell__V) / (1.0 - exp(-0.86099999999999999 - 0.123 * var_chaste_interface__cell__V))) : (0.011219512195121951))); // 1 / ms
+        const double d_dt_chaste_interface_var_IKr__xr = (1 / (1.0 + exp(-6.666666666666667 - 0.13333333333333333 * var_chaste_interface__cell__V)) - var_chaste_interface__IKr__xr) * (((fabs(10.0 + var_chaste_interface__cell__V) > 0.001) ? (0.00060999999999999997 * (10.0 + var_chaste_interface__cell__V) / (-1.0 + exp(1.45 + 0.14499999999999999 * var_chaste_interface__cell__V))) : (0.0042068965517241376)) + ((fabs(7.0 + var_chaste_interface__cell__V) > 0.001) ? (0.0013799999999999999 * (7.0 + var_chaste_interface__cell__V) / (1.0 - exp(-0.86099999999999999 - 0.123 * var_chaste_interface__cell__V))) : (0.011219512195121951))); // 1 / ms
         const double var_IKs__tauxs1 = ((fabs(30.0 + var_chaste_interface__cell__V) < 0.014556040756914121) ? (417.94625266107982) : (1 / (0.00013100000000000001 * (30.0 + var_chaste_interface__cell__V) / (-1.0 + exp(2.0609999999999999 + 0.068699999999999997 * var_chaste_interface__cell__V)) + 7.1899999999999999e-5 * (30.0 + var_chaste_interface__cell__V) / (1.0 - exp(-4.4399999999999995 - 0.14799999999999999 * var_chaste_interface__cell__V))))); // ms
         const double var_IKs__xs1ss = 1 / (1.0 + exp(0.089820359281437126 - 0.059880239520958084 * var_chaste_interface__cell__V)); // dimensionless
         const double d_dt_chaste_interface_var_IKs__xs1 = (-var_chaste_interface__IKs__xs1 + var_IKs__xs1ss) / var_IKs__tauxs1; // 1 / ms
@@ -686,7 +686,7 @@
         const double var_Ito__rt2 = 3.3500000000000001 + 0.10000000000000001 * var_chaste_interface__cell__V; // dimensionless
         const double var_INaCa__xiNaCa = 8.0 * var_INaCa__jNaCa; // nA_per_nF
         const double var_INa__xina = pow(var_chaste_interface__INa__xm, 3) * (-26.541413816729872 * log(136.0 / var_chaste_interface__Na__Na_i) + var_chaste_interface__cell__V) * mParameters[4] * var_chaste_interface__INa__xh * var_chaste_interface__INa__xj; // nA_per_nF
-        d_dt_chaste_interface_var_cell__V = -var_INa__xina - var_INaCa__xiNaCa - var_INaK__xiNaK - 16.0 * var_ICaL__jca - 1.0000000000000002 * GetIntracellularAreaStimulus(var_chaste_interface__Environment__time) / HeartConfig::Instance()->GetCapacitance() - 0.040000000000000001 * (86.398763985973389 + var_chaste_interface__cell__V) * var_chaste_interface__Ito__xtof * var_chaste_interface__Ito__ytof - 0.30599999999999999 * (86.398763985973389 + var_chaste_interface__cell__V) / ((1.0 + exp(6.4833277106546534 + 0.23849999999999999 * var_chaste_interface__cell__V)) * (1.02 / (1.0 + exp(6.4833277106546534 + 0.23849999999999999 * var_chaste_interface__cell__V)) + (exp(-31.363518823866141 + 0.061749999999999999 * var_chaste_interface__cell__V) + 0.49124000000000001 * exp(7.3793810433533835 + 0.080320000000000003 * var_chaste_interface__cell__V)) / (1.0 + exp(-46.879352217986117 - 0.51429999999999998 * var_chaste_interface__cell__V)))) - 0.11 * (86.398763985973389 + var_chaste_interface__cell__V) * (0.5 / (1.0 + exp(var_Ito__rt2)) + var_chaste_interface__Ito__ytos) * mParameters[2] * var_chaste_interface__Ito__xtos - 0.1386 * (1.0 + 0.80000000000000004 / (1.0 + 0.125 / pow(var_Ca__Ca_i, 3))) * (-26.541413816729872 * log(7.8928799999999999 / (140.0 + 0.018329999999999999 * var_chaste_interface__Na__Na_i)) + var_chaste_interface__cell__V) * mParameters[1] * var_chaste_interface__IKs__xs1 * var_chaste_interface__IKs__xs2 - 1.0 * (86.398763985973389 + var_chaste_interface__cell__V) * mParameters[0] * mParameters[5] * var_chaste_interface__IKr__xr / (1.0 + exp(1.4732142857142858 + 0.044642857142857144 * var_chaste_interface__cell__V)); // mV / ms
+        d_dt_chaste_interface_var_cell__V = -var_INa__xina - var_INaCa__xiNaCa - var_INaK__xiNaK - 16.0 * var_ICaL__jca - 1.0000000000000002 * GetIntracellularAreaStimulus(var_chaste_interface__Environment__time) / HeartConfig::Instance()->GetCapacitance() - 0.040000000000000001 * (86.398763985973389 + var_chaste_interface__cell__V) * var_chaste_interface__Ito__xtof * var_chaste_interface__Ito__ytof - 0.30599999999999999 * (86.398763985973389 + var_chaste_interface__cell__V) / ((1.0 + exp(6.4833277106546534 + 0.23849999999999999 * var_chaste_interface__cell__V)) * (1.02 / (1.0 + exp(6.4833277106546534 + 0.23849999999999999 * var_chaste_interface__cell__V)) + (0.49124000000000001 * exp(7.3793810433533835 + 0.080320000000000003 * var_chaste_interface__cell__V) + exp(-31.363518823866141 + 0.061749999999999999 * var_chaste_interface__cell__V)) / (1.0 + exp(-46.879352217986117 - 0.51429999999999998 * var_chaste_interface__cell__V)))) - 0.11 * (86.398763985973389 + var_chaste_interface__cell__V) * (0.5 / (1.0 + exp(var_Ito__rt2)) + var_chaste_interface__Ito__ytos) * mParameters[2] * var_chaste_interface__Ito__xtos - 0.1386 * (1.0 + 0.80000000000000004 / (1.0 + 0.125 / pow(var_Ca__Ca_i, 3))) * (-26.541413816729872 * log(7.8928799999999999 / (140.0 + 0.018329999999999999 * var_chaste_interface__Na__Na_i)) + var_chaste_interface__cell__V) * mParameters[1] * var_chaste_interface__IKs__xs1 * var_chaste_interface__IKs__xs2 - 1.0 * (86.398763985973389 + var_chaste_interface__cell__V) * mParameters[0] * mParameters[5] * var_chaste_interface__IKr__xr / (1.0 + exp(1.4732142857142858 + 0.044642857142857144 * var_chaste_interface__cell__V)); // mV / ms
 
         return d_dt_chaste_interface_var_cell__V;
     }
@@ -743,9 +743,9 @@
             const double var_x3 = exp(-46.879352217986117 - 0.51429999999999998 * var_chaste_interface__cell__V);
             const double var_x4 = 1.0 + var_x3;
             const double var_x5 = 1 / var_x4;
-            const double var_x6 = exp(-31.363518823866141 + 0.061749999999999999 * var_chaste_interface__cell__V);
-            const double var_x7 = exp(7.3793810433533835 + 0.080320000000000003 * var_chaste_interface__cell__V);
-            const double var_x8 = var_x6 + 0.49124000000000001 * var_x7;
+            const double var_x6 = exp(7.3793810433533835 + 0.080320000000000003 * var_chaste_interface__cell__V);
+            const double var_x7 = exp(-31.363518823866141 + 0.061749999999999999 * var_chaste_interface__cell__V);
+            const double var_x8 = var_x7 + 0.49124000000000001 * var_x6;
             const double var_x9 = var_x5 * var_x8;
             const double var_x10 = 1 / (var_x9 + 1.02 * var_x2);
             const double var_x11 = 0.10000000000000001 * var_chaste_interface__cell__V;
@@ -804,7 +804,7 @@
             const double var_x64 = var_x15 * var_x63;
             const double var_x65 = var_x12 / pow(var_x13, 2);
             
-            partialF = var_x31 - var_x34 - 6.7199999999999998 * var_x49 - 1.173913043478261 * var_x55 - 0.032914599276144929 * var_x62 + var_x15 * (-0.055 * var_x14 - 0.11 * var_chaste_interface__Ito__ytos) + var_x25 * var_x26 - var_x56 * var_x59 - 0.040000000000000001 * var_chaste_interface__Ito__xtof * var_chaste_interface__Ito__ytof - 0.30599999999999999 * var_x10 * var_x2 - 0.050000000000000003 * var_x64 * var_x65 + 0.07298099999999999 * var_x10 * var_x35 * var_x36 + 0.044642857142857144 * var_x35 * var_x56 * var_x57 / pow(var_x58, 2) - 0.29411764705882354 * var_x2 * var_x35 * (0.24326999999999999 * var_x36 - var_x5 * (0.061749999999999999 * var_x6 + 0.039456396800000001 * var_x7) - 0.51429999999999998 * var_x3 * var_x8 / pow(var_x4, 2)) / pow((var_x2 + 0.98039215686274506 * var_x9), 2);
+            partialF = var_x31 - var_x34 - 6.7199999999999998 * var_x49 - 1.173913043478261 * var_x55 - 0.032914599276144929 * var_x62 + var_x15 * (-0.055 * var_x14 - 0.11 * var_chaste_interface__Ito__ytos) + var_x25 * var_x26 - var_x56 * var_x59 - 0.040000000000000001 * var_chaste_interface__Ito__xtof * var_chaste_interface__Ito__ytof - 0.30599999999999999 * var_x10 * var_x2 - 0.050000000000000003 * var_x64 * var_x65 + 0.07298099999999999 * var_x10 * var_x35 * var_x36 + 0.044642857142857144 * var_x35 * var_x56 * var_x57 / pow(var_x58, 2) - 0.29411764705882354 * var_x2 * var_x35 * (0.24326999999999999 * var_x36 - var_x5 * (0.061749999999999999 * var_x7 + 0.039456396800000001 * var_x6) - 0.51429999999999998 * var_x3 * var_x8 / pow(var_x4, 2)) / pow((var_x2 + 0.98039215686274506 * var_x9), 2);
         }
         else
         {
@@ -999,24 +999,24 @@
             
             const double var_x114 = -0.10000000000000001 * var_chaste_interface__cell__V;
             const double var_x126 = var_chaste_interface__cell__V < -40.0;
-            const double var_x130 = exp(0.24440000000000001 * var_chaste_interface__cell__V);
-            const double var_x131 = exp(-0.043909999999999998 * var_chaste_interface__cell__V);
-            const double var_x132 = -127140.0 * var_x130 - 3.4740000000000003e-5 * var_x131;
-            const double var_x134 = exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__V);
-            const double var_x135 = 1.0 + var_x134;
-            const double var_x136 = 1 / var_x135;
+            const double var_x130 = exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__V);
+            const double var_x131 = 1.0 + var_x130;
+            const double var_x132 = 1 / var_x131;
+            const double var_x133 = exp(0.24440000000000001 * var_chaste_interface__cell__V);
+            const double var_x134 = exp(-0.043909999999999998 * var_chaste_interface__cell__V);
+            const double var_x135 = -127140.0 * var_x133 - 3.4740000000000003e-5 * var_x134;
+            const double var_x136 = var_x132 * var_x135;
             const double var_x137 = exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__cell__V);
             const double var_x138 = 1.0 + var_x137;
             const double var_x139 = exp(-0.01052 * var_chaste_interface__cell__V);
             const double var_x140 = var_x139 / var_x138;
             const double var_x141 = 37.780000000000001 + var_chaste_interface__cell__V;
-            const double var_x142 = var_x136 * var_x141;
             const double var_x143 = exp(-3.2000000000000002 + var_x114);
             const double var_x144 = 1.0 + var_x143;
             const double var_x145 = exp(-2.5349999999999999e-7 * var_chaste_interface__cell__V);
             const double var_x146 = var_x145 / var_x144;
             
-            partialF = ((var_x126) ? (-0.1212 * var_x140 - var_x132 * var_x142) : (-0.29999999999999999 * var_x146));
+            partialF = ((var_x126) ? (-0.1212 * var_x140 - var_x136 * var_x141) : (-0.29999999999999999 * var_x146));
         }
         else
         {
@@ -1054,7 +1054,7 @@
         const double var_ICaL__k1 = 0.024167999999999999 * var_ICaL__fca; // per_ms
         const double var_ICaL__po = 1.0 - var_chaste_interface__ICaL__c1 - var_chaste_interface__ICaL__c2 - var_chaste_interface__ICaL__xi1ba - var_chaste_interface__ICaL__xi1ca - var_chaste_interface__ICaL__xi2ba - var_chaste_interface__ICaL__xi2ca; // dimensionless
         const double var_ICaL__poinf = 1 / (1.0 + exp(-0.125 * var_chaste_interface__cell__V)); // dimensionless
-        const double var_ICaL__alpha = var_ICaL__poinf; // per_ms
+        const double var_ICaL__alpha = 1.0 * var_ICaL__poinf; // per_ms
         const double var_ICaL__beta = 1.0 - 1.0 * var_ICaL__poinf; // per_ms
         const double d_dt_chaste_interface_var_ICaL__c1 = 3.0 * var_ICaL__po + 0.0022399999999999998 * var_chaste_interface__ICaL__xi1ba + 0.000103615 * var_chaste_interface__ICaL__xi1ca + var_ICaL__alpha * var_chaste_interface__ICaL__c2 - (0.30413000000000001 + var_ICaL__beta + var_ICaL__k1) * var_chaste_interface__ICaL__c1; // 1 / ms
 
@@ -1074,7 +1074,7 @@
             const double var_x147 = exp(-0.125 * var_chaste_interface__cell__V);
             const double var_x148 = 1.0 + var_x147;
             const double var_x152 = 1 / var_x148;
-            const double var_x153 = var_x152;
+            const double var_x153 = 1.0 * var_x152;
             const double var_x154 = pow(var_chaste_interface__Ca__Ca_dyad, 3);
             const double var_x155 = 1 / var_x154;
             const double var_x156 = 1 / (1.0 + 27.0 * var_x155);
@@ -1113,7 +1113,7 @@
         const double var_ICaL__Pr = 1.0 - 1.0 / (1.0 + exp(-10.0 - 0.25 * var_chaste_interface__cell__V)); // dimensionless
         const double var_ICaL__Ps = 1 / (1.0 + exp(-3.5335689045936394 - 0.088339222614840993 * var_chaste_interface__cell__V)); // dimensionless
         const double var_ICaL__poinf = 1 / (1.0 + exp(-0.125 * var_chaste_interface__cell__V)); // dimensionless
-        const double var_ICaL__alpha = var_ICaL__poinf; // per_ms
+        const double var_ICaL__alpha = 1.0 * var_ICaL__poinf; // per_ms
         const double var_ICaL__beta = 1.0 - 1.0 * var_ICaL__poinf; // per_ms
         const double var_ICaL__recov = 10.0 + 4954.0 * exp(0.064102564102564111 * var_chaste_interface__cell__V); // ms
         const double var_ICaL__tauba = 450.0 + (-450.0 + var_ICaL__recov) * var_ICaL__Pr; // ms
@@ -1140,7 +1140,7 @@
             const double var_x147 = exp(-0.125 * var_chaste_interface__cell__V);
             const double var_x148 = 1.0 + var_x147;
             const double var_x152 = 1 / var_x148;
-            const double var_x153 = var_x152;
+            const double var_x153 = 1.0 * var_x152;
             const double var_x154 = pow(var_chaste_interface__Ca__Ca_dyad, 3);
             const double var_x155 = 1 / var_x154;
             const double var_x156 = 1 / (1.0 + 27.0 * var_x155);
@@ -1163,12 +1163,11 @@
             const double var_x182 = var_x163 * var_x181;
             const double var_x183 = 1 / (0.10000000000000001 + var_x180 + var_x182);
             const double var_x184 = var_x156 * var_x183;
-            const double var_x190 = var_x173;
-            const double var_x195 = -var_x153;
-            const double var_x197 = var_x168 * var_x190;
-            const double var_x198 = var_x184 * var_x190;
+            const double var_x194 = -var_x153;
+            const double var_x196 = var_x168 * var_x173;
+            const double var_x197 = var_x173 * var_x184;
             
-            partialF = var_x195 - var_x197 - var_x198;
+            partialF = var_x194 - var_x196 - var_x197;
         }
         else
         {
@@ -1210,7 +1209,7 @@
         const double var_ICaL__Ps = 1 / (1.0 + exp(-3.5335689045936394 - 0.088339222614840993 * var_chaste_interface__cell__V)); // dimensionless
         const double var_ICaL__k3 = 0.33333333333333331 - 0.33333333333333331 / (1.0 + exp(-13.333333333333334 - 0.33333333333333331 * var_chaste_interface__cell__V)); // per_ms
         const double var_ICaL__poinf = 1 / (1.0 + exp(-0.125 * var_chaste_interface__cell__V)); // dimensionless
-        const double var_ICaL__alpha = var_ICaL__poinf; // per_ms
+        const double var_ICaL__alpha = 1.0 * var_ICaL__poinf; // per_ms
         const double var_ICaL__beta = 1.0 - 1.0 * var_ICaL__poinf; // per_ms
         const double var_ICaL__recov = 10.0 + 4954.0 * exp(0.064102564102564111 * var_chaste_interface__cell__V); // ms
         const double var_ICaL__tauca = 0.10000000000000001 + 78.032899999999998 / (1.0 + 0.00072525373756441506 * pow(var_chaste_interface__Ca__Ca_dyad, 4)) + (-0.10000000000000001 - 78.032899999999998 / (1.0 + 0.00072525373756441506 * pow(var_chaste_interface__Ca__Ca_dyad, 4)) + var_ICaL__recov) * var_ICaL__Pr; // ms
@@ -1235,13 +1234,13 @@
             const double var_x154 = pow(var_chaste_interface__Ca__Ca_dyad, 3);
             const double var_x155 = 1 / var_x154;
             const double var_x156 = 1 / (1.0 + 27.0 * var_x155);
-            const double var_x207 = exp(-13.333333333333334 - 0.33333333333333331 * var_chaste_interface__cell__V);
-            const double var_x208 = 1.0 + var_x207;
-            const double var_x212 = 0.33333333333333331 / var_x208;
-            const double var_x223 = -0.018268800000000002 * var_x156;
-            const double var_x224 = 41.377027474346242 + 1117.1797418073486 * var_x155;
+            const double var_x206 = exp(-13.333333333333334 - 0.33333333333333331 * var_chaste_interface__cell__V);
+            const double var_x207 = 1.0 + var_x206;
+            const double var_x211 = 0.33333333333333331 / var_x207;
+            const double var_x222 = -0.018268800000000002 * var_x156;
+            const double var_x223 = 41.377027474346242 + 1117.1797418073486 * var_x155;
             
-            partialF = -0.33343694833333332 + var_x212 + var_x223 - 1.8929217120000003e-7 * var_x156 * var_x224;
+            partialF = -0.33343694833333332 + var_x211 + var_x222 - 1.8929217120000003e-7 * var_x156 * var_x223;
         }
         else
         {
@@ -1279,7 +1278,7 @@
         const double var_ICaL__k3 = 0.33333333333333331 - 0.33333333333333331 / (1.0 + exp(-13.333333333333334 - 0.33333333333333331 * var_chaste_interface__cell__V)); // per_ms
         const double var_ICaL__k3t = var_ICaL__k3; // per_ms
         const double var_ICaL__poinf = 1 / (1.0 + exp(-0.125 * var_chaste_interface__cell__V)); // dimensionless
-        const double var_ICaL__alpha = var_ICaL__poinf; // per_ms
+        const double var_ICaL__alpha = 1.0 * var_ICaL__poinf; // per_ms
         const double var_ICaL__beta = 1.0 - 1.0 * var_ICaL__poinf; // per_ms
         const double var_ICaL__recov = 10.0 + 4954.0 * exp(0.064102564102564111 * var_chaste_interface__cell__V); // ms
         const double var_ICaL__tauba = 450.0 + (-450.0 + var_ICaL__recov) * var_ICaL__Pr; // ms
@@ -1299,11 +1298,11 @@
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -87.169816169406
             
-            const double var_x207 = exp(-13.333333333333334 - 0.33333333333333331 * var_chaste_interface__cell__V);
-            const double var_x208 = 1.0 + var_x207;
-            const double var_x212 = 0.33333333333333331 / var_x208;
+            const double var_x206 = exp(-13.333333333333334 - 0.33333333333333331 * var_chaste_interface__cell__V);
+            const double var_x207 = 1.0 + var_x206;
+            const double var_x211 = 0.33333333333333331 / var_x207;
             
-            partialF = -0.33762909604519775 + var_x212;
+            partialF = -0.33762909604519775 + var_x211;
         }
         else
         {
@@ -1337,7 +1336,7 @@
         const double var_ICaL__Ps = 1 / (1.0 + exp(-3.5335689045936394 - 0.088339222614840993 * var_chaste_interface__cell__V)); // dimensionless
         const double var_ICaL__k3 = 0.33333333333333331 - 0.33333333333333331 / (1.0 + exp(-13.333333333333334 - 0.33333333333333331 * var_chaste_interface__cell__V)); // per_ms
         const double var_ICaL__poinf = 1 / (1.0 + exp(-0.125 * var_chaste_interface__cell__V)); // dimensionless
-        const double var_ICaL__alpha = var_ICaL__poinf; // per_ms
+        const double var_ICaL__alpha = 1.0 * var_ICaL__poinf; // per_ms
         const double var_ICaL__beta = 1.0 - 1.0 * var_ICaL__poinf; // per_ms
         const double var_ICaL__recov = 10.0 + 4954.0 * exp(0.064102564102564111 * var_chaste_interface__cell__V); // ms
         const double var_ICaL__tauca = 0.10000000000000001 + 78.032899999999998 / (1.0 + 0.00072525373756441506 * pow(var_chaste_interface__Ca__Ca_dyad, 4)) + (-0.10000000000000001 - 78.032899999999998 / (1.0 + 0.00072525373756441506 * pow(var_chaste_interface__Ca__Ca_dyad, 4)) + var_ICaL__recov) * var_ICaL__Pr; // ms
@@ -1362,7 +1361,7 @@
             const double var_x147 = exp(-0.125 * var_chaste_interface__cell__V);
             const double var_x148 = 1.0 + var_x147;
             const double var_x152 = 1 / var_x148;
-            const double var_x153 = var_x152;
+            const double var_x153 = 1.0 * var_x152;
             const double var_x157 = pow(var_chaste_interface__Ca__Ca_dyad, 4);
             const double var_x161 = exp(-10.0 - 0.25 * var_chaste_interface__cell__V);
             const double var_x162 = 1.0 + var_x161;
@@ -1378,23 +1377,22 @@
             const double var_x181 = 9.9000000000000004 + var_x165 - var_x180;
             const double var_x182 = var_x163 * var_x181;
             const double var_x183 = 1 / (0.10000000000000001 + var_x180 + var_x182);
-            const double var_x190 = var_x173;
-            const double var_x191 = 1.0 - var_x190;
-            const double var_x195 = -var_x153;
-            const double var_x196 = 1.0 + var_x195;
-            const double var_x199 = var_x183 * var_x191;
-            const double var_x207 = exp(-13.333333333333334 - 0.33333333333333331 * var_chaste_interface__cell__V);
-            const double var_x208 = 1.0 + var_x207;
-            const double var_x212 = 0.33333333333333331 / var_x208;
-            const double var_x213 = 0.33333333333333331 - var_x212;
-            const double var_x214 = 1 / var_x196;
-            const double var_x215 = var_x152 * var_x214;
-            const double var_x220 = var_x170 * var_x213;
-            const double var_x225 = var_x191 * var_x220;
-            const double var_x226 = var_x215 * var_x225;
-            const double var_x227 = 233.2480818414322 * var_x226;
+            const double var_x190 = 1.0 - var_x173;
+            const double var_x194 = -var_x153;
+            const double var_x195 = 1.0 + var_x194;
+            const double var_x198 = var_x183 * var_x190;
+            const double var_x206 = exp(-13.333333333333334 - 0.33333333333333331 * var_chaste_interface__cell__V);
+            const double var_x207 = 1.0 + var_x206;
+            const double var_x211 = 0.33333333333333331 / var_x207;
+            const double var_x212 = 0.33333333333333331 - var_x211;
+            const double var_x213 = 1 / var_x195;
+            const double var_x214 = var_x152 * var_x213;
+            const double var_x219 = var_x170 * var_x212;
+            const double var_x224 = var_x190 * var_x219;
+            const double var_x225 = var_x214 * var_x224;
+            const double var_x226 = 233.2480818414322 * var_x225;
             
-            partialF = -var_x199 - var_x227;
+            partialF = -var_x198 - var_x226;
         }
         else
         {
@@ -1425,7 +1423,7 @@
         const double var_ICaL__k3 = 0.33333333333333331 - 0.33333333333333331 / (1.0 + exp(-13.333333333333334 - 0.33333333333333331 * var_chaste_interface__cell__V)); // per_ms
         const double var_ICaL__k3t = var_ICaL__k3; // per_ms
         const double var_ICaL__poinf = 1 / (1.0 + exp(-0.125 * var_chaste_interface__cell__V)); // dimensionless
-        const double var_ICaL__alpha = var_ICaL__poinf; // per_ms
+        const double var_ICaL__alpha = 1.0 * var_ICaL__poinf; // per_ms
         const double var_ICaL__beta = 1.0 - 1.0 * var_ICaL__poinf; // per_ms
         const double var_ICaL__recov = 10.0 + 4954.0 * exp(0.064102564102564111 * var_chaste_interface__cell__V); // ms
         const double var_ICaL__tauba = 450.0 + (-450.0 + var_ICaL__recov) * var_ICaL__Pr; // ms
@@ -1448,7 +1446,7 @@
             const double var_x147 = exp(-0.125 * var_chaste_interface__cell__V);
             const double var_x148 = 1.0 + var_x147;
             const double var_x152 = 1 / var_x148;
-            const double var_x153 = var_x152;
+            const double var_x153 = 1.0 * var_x152;
             const double var_x161 = exp(-10.0 - 0.25 * var_chaste_interface__cell__V);
             const double var_x162 = 1.0 + var_x161;
             const double var_x163 = 1.0 - 1.0 / var_x162;
@@ -1460,23 +1458,22 @@
             const double var_x169 = exp(-3.5335689045936394 - 0.088339222614840993 * var_chaste_interface__cell__V);
             const double var_x170 = 1.0 + var_x169;
             const double var_x173 = 1 / var_x170;
-            const double var_x190 = var_x173;
-            const double var_x191 = 1.0 - var_x190;
-            const double var_x195 = -var_x153;
-            const double var_x196 = 1.0 + var_x195;
-            const double var_x200 = var_x168 * var_x191;
-            const double var_x207 = exp(-13.333333333333334 - 0.33333333333333331 * var_chaste_interface__cell__V);
-            const double var_x208 = 1.0 + var_x207;
-            const double var_x212 = 0.33333333333333331 / var_x208;
-            const double var_x213 = 0.33333333333333331 - var_x212;
-            const double var_x214 = 1 / var_x196;
-            const double var_x215 = var_x152 * var_x214;
-            const double var_x220 = var_x170 * var_x213;
-            const double var_x225 = var_x191 * var_x220;
-            const double var_x226 = var_x215 * var_x225;
-            const double var_x238 = 1.8437500000000002 * var_x226;
+            const double var_x190 = 1.0 - var_x173;
+            const double var_x194 = -var_x153;
+            const double var_x195 = 1.0 + var_x194;
+            const double var_x199 = var_x168 * var_x190;
+            const double var_x206 = exp(-13.333333333333334 - 0.33333333333333331 * var_chaste_interface__cell__V);
+            const double var_x207 = 1.0 + var_x206;
+            const double var_x211 = 0.33333333333333331 / var_x207;
+            const double var_x212 = 0.33333333333333331 - var_x211;
+            const double var_x213 = 1 / var_x195;
+            const double var_x214 = var_x152 * var_x213;
+            const double var_x219 = var_x170 * var_x212;
+            const double var_x224 = var_x190 * var_x219;
+            const double var_x225 = var_x214 * var_x224;
+            const double var_x237 = 1.8437500000000002 * var_x225;
             
-            partialF = -var_x200 - var_x238;
+            partialF = -var_x199 - var_x237;
         }
         else
         {
@@ -1498,7 +1495,7 @@
         
         
         // Mathematics
-        const double d_dt_chaste_interface_var_IKr__xr = (-var_chaste_interface__IKr__xr + 1 / (1.0 + exp(-6.666666666666667 - 0.13333333333333333 * var_chaste_interface__cell__V))) * (((fabs(10.0 + var_chaste_interface__cell__V) > 0.001) ? (0.00060999999999999997 * (10.0 + var_chaste_interface__cell__V) / (-1.0 + exp(1.45 + 0.14499999999999999 * var_chaste_interface__cell__V))) : (0.0042068965517241376)) + ((fabs(7.0 + var_chaste_interface__cell__V) > 0.001) ? (0.0013799999999999999 * (7.0 + var_chaste_interface__cell__V) / (1.0 - exp(-0.86099999999999999 - 0.123 * var_chaste_interface__cell__V))) : (0.011219512195121951))); // 1 / ms
+        const double d_dt_chaste_interface_var_IKr__xr = (1 / (1.0 + exp(-6.666666666666667 - 0.13333333333333333 * var_chaste_interface__cell__V)) - var_chaste_interface__IKr__xr) * (((fabs(10.0 + var_chaste_interface__cell__V) > 0.001) ? (0.00060999999999999997 * (10.0 + var_chaste_interface__cell__V) / (-1.0 + exp(1.45 + 0.14499999999999999 * var_chaste_interface__cell__V))) : (0.0042068965517241376)) + ((fabs(7.0 + var_chaste_interface__cell__V) > 0.001) ? (0.0013799999999999999 * (7.0 + var_chaste_interface__cell__V) / (1.0 - exp(-0.86099999999999999 - 0.123 * var_chaste_interface__cell__V))) : (0.011219512195121951))); // 1 / ms
 
         return d_dt_chaste_interface_var_IKr__xr;
     }
@@ -1511,23 +1508,23 @@
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -87.169816169406
             
-            const double var_x243 = exp(1.45 + 0.14499999999999999 * var_chaste_interface__cell__V);
-            const double var_x244 = -1.0 + var_x243;
-            const double var_x245 = 0.00060999999999999997 / var_x244;
-            const double var_x246 = 10.0 + var_chaste_interface__cell__V;
-            const double var_x248 = exp(-0.86099999999999999 - 0.123 * var_chaste_interface__cell__V);
-            const double var_x249 = 1.0 - var_x248;
-            const double var_x250 = 0.0013799999999999999 / var_x249;
-            const double var_x251 = 7.0 + var_chaste_interface__cell__V;
-            const double var_x253 = var_x245 * var_x246;
-            const double var_x254 = var_x250 * var_x251;
-            const double var_x257 = fabs(var_x251) > 0.001;
-            const double var_x258 = fabs(var_x246) > 0.001;
-            const double var_x259 = (var_x257) && (var_x258);
+            const double var_x242 = exp(-0.86099999999999999 - 0.123 * var_chaste_interface__cell__V);
+            const double var_x243 = 1.0 - var_x242;
+            const double var_x244 = 0.0013799999999999999 / var_x243;
+            const double var_x245 = 7.0 + var_chaste_interface__cell__V;
+            const double var_x247 = exp(1.45 + 0.14499999999999999 * var_chaste_interface__cell__V);
+            const double var_x248 = -1.0 + var_x247;
+            const double var_x249 = 0.00060999999999999997 / var_x248;
+            const double var_x250 = 10.0 + var_chaste_interface__cell__V;
+            const double var_x252 = var_x249 * var_x250;
+            const double var_x253 = var_x244 * var_x245;
+            const double var_x256 = fabs(var_x245) > 0.001;
+            const double var_x257 = fabs(var_x250) > 0.001;
+            const double var_x258 = (var_x256) && (var_x257);
+            const double var_x259 = -var_x252;
             const double var_x260 = -var_x253;
-            const double var_x261 = -var_x254;
             
-            partialF = ((var_x259) ? (var_x260 + var_x261) : ((var_x258) ? (-0.011219512195121951 + var_x260) : ((var_x257) ? (-0.0042068965517241376 + var_x261) : (-0.015426408746846089))));
+            partialF = ((var_x258) ? (var_x259 + var_x260) : ((var_x256) ? (-0.0042068965517241376 + var_x260) : ((var_x257) ? (-0.011219512195121951 + var_x259) : (-0.015426408746846089))));
         }
         else
         {
@@ -1564,17 +1561,17 @@
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -87.169816169406
             
-            const double var_x265 = 30.0 + var_chaste_interface__cell__V;
-            const double var_x266 = fabs(var_x265) < 0.014556040756914121;
-            const double var_x267 = exp(2.0609999999999999 + 0.068699999999999997 * var_chaste_interface__cell__V);
-            const double var_x268 = -1.0 + var_x267;
-            const double var_x269 = 0.00013100000000000001 / var_x268;
-            const double var_x270 = exp(-4.4399999999999995 - 0.14799999999999999 * var_chaste_interface__cell__V);
-            const double var_x271 = 1.0 - var_x270;
-            const double var_x272 = 7.1899999999999999e-5 / var_x271;
-            const double var_x274 = ((var_x266) ? (0.0023926521499665608) : (var_x265 * var_x269 + var_x265 * var_x272));
+            const double var_x264 = 30.0 + var_chaste_interface__cell__V;
+            const double var_x265 = fabs(var_x264) < 0.014556040756914121;
+            const double var_x266 = exp(2.0609999999999999 + 0.068699999999999997 * var_chaste_interface__cell__V);
+            const double var_x267 = -1.0 + var_x266;
+            const double var_x268 = 0.00013100000000000001 / var_x267;
+            const double var_x269 = exp(-4.4399999999999995 - 0.14799999999999999 * var_chaste_interface__cell__V);
+            const double var_x270 = 1.0 - var_x269;
+            const double var_x271 = 7.1899999999999999e-5 / var_x270;
+            const double var_x273 = ((var_x265) ? (0.0023926521499665608) : (var_x264 * var_x268 + var_x264 * var_x271));
             
-            partialF = -var_x274;
+            partialF = -var_x273;
         }
         else
         {
@@ -1611,17 +1608,17 @@
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -87.169816169406
             
-            const double var_x265 = 30.0 + var_chaste_interface__cell__V;
-            const double var_x266 = fabs(var_x265) < 0.014556040756914121;
-            const double var_x267 = exp(2.0609999999999999 + 0.068699999999999997 * var_chaste_interface__cell__V);
-            const double var_x268 = -1.0 + var_x267;
-            const double var_x269 = 0.00013100000000000001 / var_x268;
-            const double var_x270 = exp(-4.4399999999999995 - 0.14799999999999999 * var_chaste_interface__cell__V);
-            const double var_x271 = 1.0 - var_x270;
-            const double var_x272 = 7.1899999999999999e-5 / var_x271;
-            const double var_x274 = ((var_x266) ? (0.0023926521499665608) : (var_x265 * var_x269 + var_x265 * var_x272));
+            const double var_x264 = 30.0 + var_chaste_interface__cell__V;
+            const double var_x265 = fabs(var_x264) < 0.014556040756914121;
+            const double var_x266 = exp(2.0609999999999999 + 0.068699999999999997 * var_chaste_interface__cell__V);
+            const double var_x267 = -1.0 + var_x266;
+            const double var_x268 = 0.00013100000000000001 / var_x267;
+            const double var_x269 = exp(-4.4399999999999995 - 0.14799999999999999 * var_chaste_interface__cell__V);
+            const double var_x270 = 1.0 - var_x269;
+            const double var_x271 = 7.1899999999999999e-5 / var_x270;
+            const double var_x273 = ((var_x265) ? (0.0023926521499665608) : (var_x264 * var_x268 + var_x264 * var_x271));
             
-            partialF = -0.25 * var_x274;
+            partialF = -0.25 * var_x273;
         }
         else
         {
@@ -1658,13 +1655,13 @@
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -87.169816169406
             
-            const double var_x276 = 0.066666666666666666 * var_chaste_interface__cell__V;
-            const double var_x277 = exp(0.20000000000000001 + var_x276);
-            const double var_x278 = 1.0 + var_x277;
-            const double var_x279 = 1 / var_x278;
-            const double var_x280 = 1 / (0.5 + 9.0 * var_x279);
+            const double var_x275 = 0.066666666666666666 * var_chaste_interface__cell__V;
+            const double var_x276 = exp(0.20000000000000001 + var_x275);
+            const double var_x277 = 1.0 + var_x276;
+            const double var_x278 = 1 / var_x277;
+            const double var_x279 = 1 / (0.5 + 9.0 * var_x278);
             
-            partialF = -var_x280;
+            partialF = -var_x279;
         }
         else
         {
@@ -1702,12 +1699,12 @@
             // Units: mV; Initial value: -87.169816169406
             
             const double var_x11 = 0.10000000000000001 * var_chaste_interface__cell__V;
-            const double var_x285 = exp(6.0 + var_x11);
-            const double var_x286 = 1.0 + var_x285;
-            const double var_x287 = 1 / var_x286;
-            const double var_x288 = 1 / (30.0 + 3000.0 * var_x287);
+            const double var_x284 = exp(6.0 + var_x11);
+            const double var_x285 = 1.0 + var_x284;
+            const double var_x286 = 1 / var_x285;
+            const double var_x287 = 1 / (30.0 + 3000.0 * var_x286);
             
-            partialF = -var_x288;
+            partialF = -var_x287;
         }
         else
         {
@@ -1744,10 +1741,10 @@
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -87.169816169406
             
-            const double var_x291 = exp(-0.0011111111111111111 * pow(var_chaste_interface__cell__V, 2));
-            const double var_x292 = 1 / (1.5 + 3.5 * var_x291);
+            const double var_x289 = exp(-0.0011111111111111111 * pow(var_chaste_interface__cell__V, 2));
+            const double var_x290 = 1 / (1.5 + 3.5 * var_x289);
             
-            partialF = -var_x292;
+            partialF = -var_x290;
         }
         else
         {
@@ -1788,9 +1785,9 @@
             const double var_x12 = exp(3.3500000000000001 + var_x11);
             const double var_x13 = 1.0 + var_x12;
             const double var_x14 = 1 / var_x13;
-            const double var_x293 = 1 / (20.0 + 20.0 * var_x14);
+            const double var_x291 = 1 / (20.0 + 20.0 * var_x14);
             
-            partialF = -var_x293;
+            partialF = -var_x291;
         }
         else
         {
@@ -1899,11 +1896,11 @@
             const double var_x107 = 400000.0 * var_x91 * var_x97;
             const double var_x108 = 16.667000000000002 * var_chaste_interface__Ca__Ca_NSR - 1000.0 * var_chaste_interface__Ca__Ca_i_converted;
             const double var_x109 = 2.069e-5 * var_x108 * var_x95;
-            const double var_x310 = 1 / var_chaste_interface__Ca__Ca_NSR;
-            const double var_x311 = var_x310 * var_chaste_interface__Irel__xir;
-            const double var_x315 = var_x107 - var_x109 - var_chaste_interface__Irel__xir;
+            const double var_x308 = 1.0 / var_chaste_interface__Ca__Ca_NSR;
+            const double var_x309 = var_x308 * var_chaste_interface__Irel__xir;
+            const double var_x313 = var_x107 - var_x109 - var_chaste_interface__Irel__xir;
             
-            partialF = -0.033333333333333333 - var_x311 + var_x310 * var_x315;
+            partialF = -0.033333333333333333 - var_x309 + var_x308 * var_x313;
         }
         else
         {
@@ -2163,22 +2160,21 @@
             const double var_x87 = ((var_x19) ? (var_x74) : (7.8521942756732062e-6 * var_x17 * var_x24));
             const double var_x88 = var_x40 * var_x48;
             const double var_x89 = var_x44 * var_x61 / (pow(var_x45, 2) * pow(var_chaste_interface__Ca__Ca_submem, 4));
-            const double var_x228 = 1.0 - var_chaste_interface__ICaL__c1 - var_chaste_interface__ICaL__c2 - var_chaste_interface__ICaL__xi1ba - var_chaste_interface__ICaL__xi1ca - var_chaste_interface__ICaL__xi2ba - var_chaste_interface__ICaL__xi2ca;
-            const double var_x327 = (-50.0 + 50.0 * var_chaste_interface__ICaL__c1 + 50.0 * var_chaste_interface__ICaL__c2 + 50.0 * var_chaste_interface__ICaL__xi1ba + 50.0 * var_chaste_interface__ICaL__xi1ca + 50.0 * var_chaste_interface__ICaL__xi2ba + 50.0 * var_chaste_interface__ICaL__xi2ca) * mParameters[3];
-            const double var_x328 = 0.29999999999999999 + var_chaste_interface__Ca__Ca_submem;
-            const double var_x329 = pow(var_x328, (-2));
-            const double var_x330 = 1 + 0.076923076923076927 * var_chaste_interface__Ca__Ca_submem;
-            const double var_x331 = pow(var_x330, (-2));
-            const double var_x332 = 0.59999999999999998 + var_chaste_interface__Ca__Ca_submem;
-            const double var_x333 = pow(var_x332, (-2));
-            const double var_x334 = 1 + 0.14285714285714285 * var_chaste_interface__Ca__Ca_submem;
-            const double var_x335 = pow(var_x334, (-2));
-            const double var_x336 = 1 / (1.0 + 4.5 * var_x329 + 3.2307692307692308 * var_x331 + 28.199999999999999 * var_x333 + 3.4285714285714284 * var_x335);
-            const double var_x337 = var_x336;
-            const double var_x340 = 0.0327 * var_chaste_interface__Ca__trops;
-            const double var_x341 = 0.0327 * var_chaste_interface__Ca__Ca_submem;
+            const double var_x227 = 1.0 - var_chaste_interface__ICaL__c1 - var_chaste_interface__ICaL__c2 - var_chaste_interface__ICaL__xi1ba - var_chaste_interface__ICaL__xi1ca - var_chaste_interface__ICaL__xi2ba - var_chaste_interface__ICaL__xi2ca;
+            const double var_x325 = 0.29999999999999999 + var_chaste_interface__Ca__Ca_submem;
+            const double var_x326 = pow(var_x325, (-2));
+            const double var_x327 = 1 + 0.076923076923076927 * var_chaste_interface__Ca__Ca_submem;
+            const double var_x328 = pow(var_x327, (-2));
+            const double var_x329 = 0.59999999999999998 + var_chaste_interface__Ca__Ca_submem;
+            const double var_x330 = pow(var_x329, (-2));
+            const double var_x331 = 1 + 0.14285714285714285 * var_chaste_interface__Ca__Ca_submem;
+            const double var_x332 = pow(var_x331, (-2));
+            const double var_x333 = 1 / (1.0 + 4.5 * var_x326 + 3.2307692307692308 * var_x328 + 28.199999999999999 * var_x330 + 3.4285714285714284 * var_x332);
+            const double var_x334 = (-50.0 + 50.0 * var_chaste_interface__ICaL__c1 + 50.0 * var_chaste_interface__ICaL__c2 + 50.0 * var_chaste_interface__ICaL__xi1ba + 50.0 * var_chaste_interface__ICaL__xi1ca + 50.0 * var_chaste_interface__ICaL__xi2ba + 50.0 * var_chaste_interface__ICaL__xi2ca) * mParameters[3];
+            const double var_x337 = 0.0327 * var_chaste_interface__Ca__trops;
+            const double var_x338 = 0.0327 * var_chaste_interface__Ca__Ca_submem;
             
-            partialF = var_x337 * (-14.789 + var_x340 + 3.4019999999999997 * var_x89 - 0.0011233033614805057 * var_x83 - 105649.152 * var_x88 + var_x327 * var_x87) + 0.0012574820180071425 * (9.0 / pow(var_x328, 3) + 56.399999999999999 / pow(var_x332, 3) + 0.97959183673469385 / pow(var_x334, 3) + 0.49704142011834318 / pow(var_x330, 3)) * (50.0 * var_chaste_interface__Irel__xir + 0.019599999999999999 * var_chaste_interface__Ca__trops + 12500.0 * var_chaste_interface__Ca__Ca_i_converted - 12.5 * var_chaste_interface__Ca__Ca_submem - var_x341 * (70.0 - var_chaste_interface__Ca__trops) + 42.0 * var_x48 * var_x60 - 50.0 * var_x228 * var_x76) / pow((0.035460992907801421 + var_x333 + 0.15957446808510639 * var_x329 + 0.12158054711246201 * var_x335 + 0.11456628477905074 * var_x331), 2);
+            partialF = var_x333 * (-14.789 + var_x337 + 3.4019999999999997 * var_x89 - 0.0011233033614805057 * var_x83 - 105649.152 * var_x88 + var_x334 * var_x87) + 0.0012574820180071425 * (9.0 / pow(var_x325, 3) + 56.399999999999999 / pow(var_x329, 3) + 0.97959183673469385 / pow(var_x331, 3) + 0.49704142011834318 / pow(var_x327, 3)) * (50.0 * var_chaste_interface__Irel__xir + 0.019599999999999999 * var_chaste_interface__Ca__trops + 12500.0 * var_chaste_interface__Ca__Ca_i_converted - 12.5 * var_chaste_interface__Ca__Ca_submem - var_x338 * (70.0 - var_chaste_interface__Ca__trops) + 42.0 * var_x48 * var_x60 - 50.0 * var_x227 * var_x76) / pow((0.035460992907801421 + var_x330 + 0.15957446808510639 * var_x326 + 0.12158054711246201 * var_x332 + 0.11456628477905074 * var_x328), 2);
         }
         else
         {
@@ -2228,9 +2224,9 @@
             const double var_x110 = 0.00034484023000000001 * var_x95;
             const double var_x111 = 4.138e-5 * var_x108 * var_x94 * var_chaste_interface__Ca__Ca_NSR;
             const double var_x112 = 6.6208000000000002e-12 * var_x108 * pow(var_chaste_interface__Ca__Ca_NSR, 3) / pow((1 + 0.00040000000000000002 * var_x93), 2);
-            const double var_x316 = var_x112 - var_x110 - var_x111;
+            const double var_x314 = var_x112 - var_x110 - var_x111;
             
-            partialF = var_x316;
+            partialF = var_x314;
         }
         else
         {
@@ -2305,9 +2301,9 @@
             double var_chaste_interface__Ca__Ca_submem = rY[22];
             // Units: uM; Initial value: 0.226941113355
             
-            const double var_x341 = 0.0327 * var_chaste_interface__Ca__Ca_submem;
+            const double var_x338 = 0.0327 * var_chaste_interface__Ca__Ca_submem;
             
-            partialF = -0.019599999999999999 - var_x341;
+            partialF = -0.019599999999999999 - var_x338;
         }
         else
         {

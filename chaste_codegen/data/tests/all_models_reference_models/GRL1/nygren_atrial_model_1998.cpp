@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
 //! Model: nygren_atrial_model_1998
 //!
@@ -1028,7 +1028,7 @@
             const double var_x63 = 1 / mParameters[0];
             const double var_x64 = 0.001 * var_x63;
             
-            partialF = -var_x64 * (0.13928000000000001 + 0.5 * var_x9 + var_chaste_interface__delayed_rectifier_K_currents_n_gate__n + 3.0 * var_x16 + 2.75 * var_x17 + 7.5 * var_x18 + 0.037484200000000002 * var_x29 - 0.0017706325 * var_x61 - 0.020833333333333332 * var_x32 - 0.17058350483361479 * var_x34 + var_x38 * var_x42 + var_x50 * var_x55 + var_x56 * var_x57 + (6.75 * var_x4 + 6.75 * var_x5) * var_chaste_interface__L_type_Ca_channel_d_L_gate__d_L - var_x56 * var_x62);
+            partialF = -var_x64 * (0.13928000000000001 + 0.5 * var_x9 + 1.0 * var_chaste_interface__delayed_rectifier_K_currents_n_gate__n + 3.0 * var_x16 + 2.75 * var_x17 + 7.5 * var_x18 + 0.037484200000000002 * var_x29 - 0.0017706325 * var_x61 - 0.020833333333333332 * var_x32 - 0.17058350483361479 * var_x34 + var_x38 * var_x42 + var_x50 * var_x55 + var_x56 * var_x57 + (6.75 * var_x4 + 6.75 * var_x5) * var_chaste_interface__L_type_Ca_channel_d_L_gate__d_L - var_x56 * var_x62);
         }
         else
         {

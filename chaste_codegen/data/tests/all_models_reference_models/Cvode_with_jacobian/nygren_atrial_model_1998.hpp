@@ -4,7 +4,7 @@
 
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
 //! Model: nygren_atrial_model_1998
 //!

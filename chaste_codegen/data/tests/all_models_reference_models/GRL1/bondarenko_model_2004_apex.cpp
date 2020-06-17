@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
 //! Model: bondarenko_model_2004_apex
 //!
@@ -134,9 +134,9 @@
         const double var_sodium_calcium_exchange_current__eta = 0.34999999999999998; // dimensionless
         const double var_sodium_calcium_exchange_current__k_NaCa = 292.80000000000001; // picoA_per_picoF
         const double var_sodium_calcium_exchange_current__k_sat = 0.10000000000000001; // dimensionless
-        const double var_fast_sodium_current__E_Na = var_membrane__R * var_membrane__T * log((0.10000000000000001 * var_membrane__Ko + 0.90000000000000002 * var_membrane__Nao) / (0.10000000000000001 * var_chaste_interface__potassium_concentration__Ki + 0.90000000000000002 * var_chaste_interface__sodium_concentration__Nai)) / var_membrane__F; // millivolt
+        const double var_fast_sodium_current__E_Na = var_membrane__R * var_membrane__T * log((0.1111111111111111 * var_membrane__Ko + var_membrane__Nao) / (0.1111111111111111 * var_chaste_interface__potassium_concentration__Ki + var_chaste_interface__sodium_concentration__Nai)) / var_membrane__F; // millivolt
         const double var_fast_sodium_current__i_Na = (-var_fast_sodium_current__E_Na + var_chaste_interface__membrane__V) * var_chaste_interface__fast_sodium_current__O_Na * var_fast_sodium_current__g_Na; // picoA_per_picoF
-        const double var_rapid_delayed_rectifier_potassium_current__i_Kr = (-var_membrane__R * var_membrane__T * log((0.97999999999999998 * var_membrane__Ko + 0.02 * var_membrane__Nao) / (0.97999999999999998 * var_chaste_interface__potassium_concentration__Ki + 0.02 * var_chaste_interface__sodium_concentration__Nai)) / var_membrane__F + var_chaste_interface__membrane__V) * var_chaste_interface__rapid_delayed_rectifier_potassium_current__O_K * var_rapid_delayed_rectifier_potassium_current__g_Kr; // picoA_per_picoF
+        const double var_rapid_delayed_rectifier_potassium_current__i_Kr = (-var_membrane__R * var_membrane__T * log((0.020408163265306124 * var_membrane__Nao + var_membrane__Ko) / (0.020408163265306124 * var_chaste_interface__sodium_concentration__Nai + var_chaste_interface__potassium_concentration__Ki)) / var_membrane__F + var_chaste_interface__membrane__V) * var_chaste_interface__rapid_delayed_rectifier_potassium_current__O_K * var_rapid_delayed_rectifier_potassium_current__g_Kr; // picoA_per_picoF
         const double var_sodium_background_current__i_Nab = (-var_fast_sodium_current__E_Na + var_chaste_interface__membrane__V) * var_sodium_background_current__g_Nab; // picoA_per_picoF
         const double var_sodium_calcium_exchange_current__i_NaCa = (pow(var_chaste_interface__sodium_concentration__Nai, 3) * var_membrane__Cao * exp(var_membrane__F * var_chaste_interface__membrane__V * var_sodium_calcium_exchange_current__eta / (var_membrane__R * var_membrane__T)) - pow(var_membrane__Nao, 3) * var_chaste_interface__calcium_concentration__Cai * exp((-1.0 + var_sodium_calcium_exchange_current__eta) * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * var_sodium_calcium_exchange_current__k_NaCa / ((1.0 + var_sodium_calcium_exchange_current__k_sat * exp((-1.0 + var_sodium_calcium_exchange_current__eta) * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * (pow(var_membrane__Nao, 3) + pow(var_sodium_calcium_exchange_current__K_mNa, 3)) * (var_membrane__Cao + var_sodium_calcium_exchange_current__K_mCa)); // picoA_per_picoF
         const double var_sodium_potassium_pump_current__Km_Ko = 1500.0; // micromolar
@@ -236,9 +236,9 @@
         const double var_sodium_calcium_exchange_current__eta = 0.34999999999999998; // dimensionless
         const double var_sodium_calcium_exchange_current__k_NaCa = 292.80000000000001; // picoA_per_picoF
         const double var_sodium_calcium_exchange_current__k_sat = 0.10000000000000001; // dimensionless
-        const double var_fast_sodium_current__E_Na = var_membrane__R * var_membrane__T * log((0.10000000000000001 * var_membrane__Ko + 0.90000000000000002 * var_membrane__Nao) / (0.10000000000000001 * var_chaste_interface__potassium_concentration__Ki + 0.90000000000000002 * var_chaste_interface__sodium_concentration__Nai)) / var_membrane__F; // millivolt
+        const double var_fast_sodium_current__E_Na = var_membrane__R * var_membrane__T * log((0.1111111111111111 * var_membrane__Ko + var_membrane__Nao) / (0.1111111111111111 * var_chaste_interface__potassium_concentration__Ki + var_chaste_interface__sodium_concentration__Nai)) / var_membrane__F; // millivolt
         const double var_fast_sodium_current__i_Na = (-var_fast_sodium_current__E_Na + var_chaste_interface__membrane__V) * var_chaste_interface__fast_sodium_current__O_Na * var_fast_sodium_current__g_Na; // picoA_per_picoF
-        const double var_rapid_delayed_rectifier_potassium_current__i_Kr = (-var_membrane__R * var_membrane__T * log((0.97999999999999998 * var_membrane__Ko + 0.02 * var_membrane__Nao) / (0.97999999999999998 * var_chaste_interface__potassium_concentration__Ki + 0.02 * var_chaste_interface__sodium_concentration__Nai)) / var_membrane__F + var_chaste_interface__membrane__V) * var_chaste_interface__rapid_delayed_rectifier_potassium_current__O_K * var_rapid_delayed_rectifier_potassium_current__g_Kr; // picoA_per_picoF
+        const double var_rapid_delayed_rectifier_potassium_current__i_Kr = (-var_membrane__R * var_membrane__T * log((0.020408163265306124 * var_membrane__Nao + var_membrane__Ko) / (0.020408163265306124 * var_chaste_interface__sodium_concentration__Nai + var_chaste_interface__potassium_concentration__Ki)) / var_membrane__F + var_chaste_interface__membrane__V) * var_chaste_interface__rapid_delayed_rectifier_potassium_current__O_K * var_rapid_delayed_rectifier_potassium_current__g_Kr; // picoA_per_picoF
         const double var_sodium_background_current__i_Nab = (-var_fast_sodium_current__E_Na + var_chaste_interface__membrane__V) * var_sodium_background_current__g_Nab; // picoA_per_picoF
         const double var_sodium_calcium_exchange_current__i_NaCa = (pow(var_chaste_interface__sodium_concentration__Nai, 3) * var_membrane__Cao * exp(var_membrane__F * var_chaste_interface__membrane__V * var_sodium_calcium_exchange_current__eta / (var_membrane__R * var_membrane__T)) - pow(var_membrane__Nao, 3) * var_chaste_interface__calcium_concentration__Cai * exp((-1.0 + var_sodium_calcium_exchange_current__eta) * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * var_sodium_calcium_exchange_current__k_NaCa / ((1.0 + var_sodium_calcium_exchange_current__k_sat * exp((-1.0 + var_sodium_calcium_exchange_current__eta) * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * (pow(var_membrane__Nao, 3) + pow(var_sodium_calcium_exchange_current__K_mNa, 3)) * (var_membrane__Cao + var_sodium_calcium_exchange_current__K_mCa)); // picoA_per_picoF
         const double var_sodium_potassium_pump_current__Km_Ko = 1500.0; // micromolar
@@ -506,9 +506,9 @@
         const double var_sodium_calcium_exchange_current__eta = 0.34999999999999998; // dimensionless
         const double var_sodium_calcium_exchange_current__k_NaCa = 292.80000000000001; // picoA_per_picoF
         const double var_sodium_calcium_exchange_current__k_sat = 0.10000000000000001; // dimensionless
-        const double var_fast_sodium_current__E_Na = var_membrane__R * var_membrane__T * log((0.10000000000000001 * var_membrane__Ko + 0.90000000000000002 * var_membrane__Nao) / (0.10000000000000001 * var_chaste_interface__potassium_concentration__Ki + 0.90000000000000002 * var_chaste_interface__sodium_concentration__Nai)) / var_membrane__F; // millivolt
+        const double var_fast_sodium_current__E_Na = var_membrane__R * var_membrane__T * log((0.1111111111111111 * var_membrane__Ko + var_membrane__Nao) / (0.1111111111111111 * var_chaste_interface__potassium_concentration__Ki + var_chaste_interface__sodium_concentration__Nai)) / var_membrane__F; // millivolt
         const double var_fast_sodium_current__i_Na = (-var_fast_sodium_current__E_Na + var_chaste_interface__membrane__V) * var_chaste_interface__fast_sodium_current__O_Na * var_fast_sodium_current__g_Na; // picoA_per_picoF
-        const double var_rapid_delayed_rectifier_potassium_current__i_Kr = (-var_membrane__R * var_membrane__T * log((0.97999999999999998 * var_membrane__Ko + 0.02 * var_membrane__Nao) / (0.97999999999999998 * var_chaste_interface__potassium_concentration__Ki + 0.02 * var_chaste_interface__sodium_concentration__Nai)) / var_membrane__F + var_chaste_interface__membrane__V) * var_chaste_interface__rapid_delayed_rectifier_potassium_current__O_K * var_rapid_delayed_rectifier_potassium_current__g_Kr; // picoA_per_picoF
+        const double var_rapid_delayed_rectifier_potassium_current__i_Kr = (-var_membrane__R * var_membrane__T * log((0.020408163265306124 * var_membrane__Nao + var_membrane__Ko) / (0.020408163265306124 * var_chaste_interface__sodium_concentration__Nai + var_chaste_interface__potassium_concentration__Ki)) / var_membrane__F + var_chaste_interface__membrane__V) * var_chaste_interface__rapid_delayed_rectifier_potassium_current__O_K * var_rapid_delayed_rectifier_potassium_current__g_Kr; // picoA_per_picoF
         const double var_sodium_background_current__i_Nab = (-var_fast_sodium_current__E_Na + var_chaste_interface__membrane__V) * var_sodium_background_current__g_Nab; // picoA_per_picoF
         const double var_sodium_calcium_exchange_current__i_NaCa = (pow(var_chaste_interface__sodium_concentration__Nai, 3) * var_membrane__Cao * exp(var_membrane__F * var_chaste_interface__membrane__V * var_sodium_calcium_exchange_current__eta / (var_membrane__R * var_membrane__T)) - pow(var_membrane__Nao, 3) * var_chaste_interface__calcium_concentration__Cai * exp((-1.0 + var_sodium_calcium_exchange_current__eta) * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * var_sodium_calcium_exchange_current__k_NaCa / ((1.0 + var_sodium_calcium_exchange_current__k_sat * exp((-1.0 + var_sodium_calcium_exchange_current__eta) * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * (pow(var_membrane__Nao, 3) + pow(var_sodium_calcium_exchange_current__K_mNa, 3)) * (var_membrane__Cao + var_sodium_calcium_exchange_current__K_mCa)); // picoA_per_picoF
         const double d_dt_chaste_interface_var_calcium_concentration__Cai = (-var_calcium_fluxes__J_trpn - var_calcium_fluxes__J_up - 0.5 * (-2.0 * var_sodium_calcium_exchange_current__i_NaCa + var_calcium_background_current__i_Cab + var_calcium_pump_current__i_pCa) * var_membrane__Acap * var_membrane__Cm / (var_membrane__F * var_membrane__Vmyo) + var_calcium_fluxes__J_leak + var_calcium_fluxes__J_xfer) * var_calcium_concentration__Bi; // micromolar / millisecond
@@ -1090,9 +1090,9 @@
         const double var_sodium_calcium_exchange_current__eta = 0.34999999999999998; // dimensionless
         const double var_sodium_calcium_exchange_current__k_NaCa = 292.80000000000001; // picoA_per_picoF
         const double var_sodium_calcium_exchange_current__k_sat = 0.10000000000000001; // dimensionless
-        const double var_fast_sodium_current__E_Na = var_membrane__R * var_membrane__T * log((0.10000000000000001 * var_membrane__Ko + 0.90000000000000002 * var_membrane__Nao) / (0.10000000000000001 * var_chaste_interface__potassium_concentration__Ki + 0.90000000000000002 * var_chaste_interface__sodium_concentration__Nai)) / var_membrane__F; // millivolt
+        const double var_fast_sodium_current__E_Na = var_membrane__R * var_membrane__T * log((0.1111111111111111 * var_membrane__Ko + var_membrane__Nao) / (0.1111111111111111 * var_chaste_interface__potassium_concentration__Ki + var_chaste_interface__sodium_concentration__Nai)) / var_membrane__F; // millivolt
         const double var_fast_sodium_current__i_Na = (-var_fast_sodium_current__E_Na + var_chaste_interface__membrane__V) * var_chaste_interface__fast_sodium_current__O_Na * var_fast_sodium_current__g_Na; // picoA_per_picoF
-        const double var_rapid_delayed_rectifier_potassium_current__i_Kr = (-var_membrane__R * var_membrane__T * log((0.97999999999999998 * var_membrane__Ko + 0.02 * var_membrane__Nao) / (0.97999999999999998 * var_chaste_interface__potassium_concentration__Ki + 0.02 * var_chaste_interface__sodium_concentration__Nai)) / var_membrane__F + var_chaste_interface__membrane__V) * var_chaste_interface__rapid_delayed_rectifier_potassium_current__O_K * var_rapid_delayed_rectifier_potassium_current__g_Kr; // picoA_per_picoF
+        const double var_rapid_delayed_rectifier_potassium_current__i_Kr = (-var_membrane__R * var_membrane__T * log((0.020408163265306124 * var_membrane__Nao + var_membrane__Ko) / (0.020408163265306124 * var_chaste_interface__sodium_concentration__Nai + var_chaste_interface__potassium_concentration__Ki)) / var_membrane__F + var_chaste_interface__membrane__V) * var_chaste_interface__rapid_delayed_rectifier_potassium_current__O_K * var_rapid_delayed_rectifier_potassium_current__g_Kr; // picoA_per_picoF
         const double var_sodium_background_current__i_Nab = (-var_fast_sodium_current__E_Na + var_chaste_interface__membrane__V) * var_sodium_background_current__g_Nab; // picoA_per_picoF
         const double var_sodium_calcium_exchange_current__i_NaCa = (pow(var_chaste_interface__sodium_concentration__Nai, 3) * var_membrane__Cao * exp(var_membrane__F * var_chaste_interface__membrane__V * var_sodium_calcium_exchange_current__eta / (var_membrane__R * var_membrane__T)) - pow(var_membrane__Nao, 3) * var_chaste_interface__calcium_concentration__Cai * exp((-1.0 + var_sodium_calcium_exchange_current__eta) * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * var_sodium_calcium_exchange_current__k_NaCa / ((1.0 + var_sodium_calcium_exchange_current__k_sat * exp((-1.0 + var_sodium_calcium_exchange_current__eta) * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * (pow(var_membrane__Nao, 3) + pow(var_sodium_calcium_exchange_current__K_mNa, 3)) * (var_membrane__Cao + var_sodium_calcium_exchange_current__K_mCa)); // picoA_per_picoF
         const double var_sodium_potassium_pump_current__Km_Ko = 1500.0; // micromolar
@@ -1287,15 +1287,15 @@
             const double var_x39 = var_x10 * var_x12;
             const double var_x40 = 1 / var_x37;
             const double var_x41 = var_x40 * var_chaste_interface__calcium_concentration__Cai;
-            const double var_x59 = 0.23799999999999999 + var_chaste_interface__calcium_concentration__Cai;
-            const double var_x60 = pow(var_x59, (-2));
-            const double var_x61 = 1 / (1.0 + 11.899999999999999 * var_x60);
-            const double var_x62 = 0.0327 * var_chaste_interface__calcium_buffering__LTRPN_Ca;
-            const double var_x63 = 0.0023700000000000001 * var_chaste_interface__calcium_buffering__HTRPN_Ca;
-            const double var_x64 = 0.0327 * var_chaste_interface__calcium_concentration__Cai;
-            const double var_x65 = 0.0023700000000000001 * var_chaste_interface__calcium_concentration__Cai;
+            const double var_x61 = 0.23799999999999999 + var_chaste_interface__calcium_concentration__Cai;
+            const double var_x62 = pow(var_x61, (-2));
+            const double var_x63 = 1 / (1.0 + 11.899999999999999 * var_x62);
+            const double var_x64 = 0.0327 * var_chaste_interface__calcium_buffering__LTRPN_Ca;
+            const double var_x65 = 0.0023700000000000001 * var_chaste_interface__calcium_buffering__HTRPN_Ca;
+            const double var_x66 = 0.0327 * var_chaste_interface__calcium_concentration__Cai;
+            const double var_x67 = 0.0023700000000000001 * var_chaste_interface__calcium_concentration__Cai;
             
-            partialF = var_x61 * (-2.7458174 + var_x62 + var_x63 + 0.96151847158279735 * var_x38 - 0.0045528151523329874 * var_x39 - 0.96151847158279735 * var_x41 - 0.00014491407891765456 * var_x35) + 0.16806722689075632 * (0.125 * var_chaste_interface__calcium_concentration__Cass + 0.019599999999999999 * var_chaste_interface__calcium_buffering__LTRPN_Ca + 3.1999999999999999e-5 * var_chaste_interface__calcium_buffering__HTRPN_Ca + 1.7399999999999999e-5 * var_chaste_interface__calcium_concentration__CaNSR + 0.00014491407891765456 * log(1800.0 * var_x35) - 0.1250174 * var_chaste_interface__calcium_concentration__Cai - 1.12886395354433e-5 * var_chaste_interface__membrane__V - var_x64 * (70.0 - var_chaste_interface__calcium_buffering__LTRPN_Ca) - var_x65 * (140.0 - var_chaste_interface__calcium_buffering__HTRPN_Ca) + 1.6591891954566281e-18 * var_x12 * var_x25 - 0.48075923579139868 * var_x36 * var_x40) / (pow(var_x59, 3) * pow((0.084033613445378158 + var_x60), 2));
+            partialF = var_x63 * (-2.7458174 + var_x64 + var_x65 + 0.96151847158279735 * var_x38 - 0.0045528151523329874 * var_x39 - 0.96151847158279735 * var_x41 - 0.00014491407891765456 * var_x35) + 0.16806722689075632 * (0.125 * var_chaste_interface__calcium_concentration__Cass + 0.019599999999999999 * var_chaste_interface__calcium_buffering__LTRPN_Ca + 3.1999999999999999e-5 * var_chaste_interface__calcium_buffering__HTRPN_Ca + 1.7399999999999999e-5 * var_chaste_interface__calcium_concentration__CaNSR + 0.00014491407891765456 * log(1800.0 * var_x35) - 0.1250174 * var_chaste_interface__calcium_concentration__Cai - 1.12886395354433e-5 * var_chaste_interface__membrane__V - var_x66 * (70.0 - var_chaste_interface__calcium_buffering__LTRPN_Ca) - var_x67 * (140.0 - var_chaste_interface__calcium_buffering__HTRPN_Ca) + 1.6591891954566281e-18 * var_x12 * var_x25 - 0.48075923579139868 * var_x36 * var_x40) / (pow(var_x61, 3) * pow((0.084033613445378158 + var_x62), 2));
         }
         else
         {
@@ -1372,16 +1372,16 @@
             double var_chaste_interface__L_type_calcium_current__O = rY[11];
             // Units: dimensionless; Initial value: 9.30308e-19
             
-            const double var_x66 = 0.23799999999999999 + var_chaste_interface__calcium_concentration__Cass;
-            const double var_x67 = pow(var_x66, (-2));
-            const double var_x68 = 1 / (1.0 + 11.899999999999999 * var_x67);
-            const double var_x69 = 92.541511836848613 * var_chaste_interface__L_type_calcium_current__O;
-            const double var_x70 = 363.63636363636363 * var_chaste_interface__ryanodine_receptors__P_O1;
-            const double var_x71 = 363.63636363636363 * var_chaste_interface__ryanodine_receptors__P_O2;
-            const double var_x72 = var_chaste_interface__ryanodine_receptors__P_O1 + var_chaste_interface__ryanodine_receptors__P_O2;
-            const double var_x73 = var_x72 * (-var_chaste_interface__calcium_concentration__Cass + var_chaste_interface__calcium_concentration__CaJSR) * var_chaste_interface__calcium_fluxes__P_RyR;
+            const double var_x68 = 0.23799999999999999 + var_chaste_interface__calcium_concentration__Cass;
+            const double var_x69 = pow(var_x68, (-2));
+            const double var_x70 = 1 / (1.0 + 11.899999999999999 * var_x69);
+            const double var_x71 = 92.541511836848613 * var_chaste_interface__L_type_calcium_current__O;
+            const double var_x72 = 363.63636363636363 * var_chaste_interface__ryanodine_receptors__P_O1;
+            const double var_x73 = 363.63636363636363 * var_chaste_interface__ryanodine_receptors__P_O2;
+            const double var_x74 = var_chaste_interface__ryanodine_receptors__P_O1 + var_chaste_interface__ryanodine_receptors__P_O2;
+            const double var_x75 = var_x74 * (-var_chaste_interface__calcium_concentration__Cass + var_chaste_interface__calcium_concentration__CaJSR) * var_chaste_interface__calcium_fluxes__P_RyR;
             
-            partialF = var_x68 * (-2175.0841750841751 + (-var_x70 - var_x71) * var_chaste_interface__calcium_fluxes__P_RyR) + 0.16806722689075632 * (363.63636363636363 * var_x73 + 2175.0841750841751 * var_chaste_interface__calcium_concentration__Cai - 2175.0841750841751 * var_chaste_interface__calcium_concentration__Cass - var_x69 * (-63.0 + var_chaste_interface__membrane__V)) / (pow(var_x66, 3) * pow((0.084033613445378158 + var_x67), 2));
+            partialF = var_x70 * (-2175.0841750841751 + (-var_x72 - var_x73) * var_chaste_interface__calcium_fluxes__P_RyR) + 0.16806722689075632 * (363.63636363636363 * var_x75 + 2175.0841750841751 * var_chaste_interface__calcium_concentration__Cai - 2175.0841750841751 * var_chaste_interface__calcium_concentration__Cass - var_x71 * (-63.0 + var_chaste_interface__membrane__V)) / (pow(var_x68, 3) * pow((0.084033613445378158 + var_x69), 2));
         }
         else
         {
@@ -1441,15 +1441,15 @@
             double var_chaste_interface__ryanodine_receptors__P_O2 = rY[9];
             // Units: dimensionless; Initial value: 9.51726e-11
             
-            const double var_x72 = var_chaste_interface__ryanodine_receptors__P_O1 + var_chaste_interface__ryanodine_receptors__P_O2;
-            const double var_x73 = var_x72 * (-var_chaste_interface__calcium_concentration__Cass + var_chaste_interface__calcium_concentration__CaJSR) * var_chaste_interface__calcium_fluxes__P_RyR;
-            const double var_x77 = 4.5 * var_chaste_interface__ryanodine_receptors__P_O1;
-            const double var_x78 = 4.5 * var_chaste_interface__ryanodine_receptors__P_O2;
-            const double var_x79 = 1 + 0.00125 * var_chaste_interface__calcium_concentration__CaJSR;
-            const double var_x80 = pow(var_x79, (-2));
-            const double var_x81 = 1 / (1.0 + 18.75 * var_x80);
+            const double var_x74 = var_chaste_interface__ryanodine_receptors__P_O1 + var_chaste_interface__ryanodine_receptors__P_O2;
+            const double var_x75 = var_x74 * (-var_chaste_interface__calcium_concentration__Cass + var_chaste_interface__calcium_concentration__CaJSR) * var_chaste_interface__calcium_fluxes__P_RyR;
+            const double var_x79 = 4.5 * var_chaste_interface__ryanodine_receptors__P_O1;
+            const double var_x80 = 4.5 * var_chaste_interface__ryanodine_receptors__P_O2;
+            const double var_x81 = 1 + 0.00125 * var_chaste_interface__calcium_concentration__CaJSR;
+            const double var_x82 = pow(var_x81, (-2));
+            const double var_x83 = 1 / (1.0 + 18.75 * var_x82);
             
-            partialF = var_x81 * (-0.050000000000000003 + (-var_x77 - var_x78) * var_chaste_interface__calcium_fluxes__P_RyR) + 0.00013333333333333334 * (0.050000000000000003 * var_chaste_interface__calcium_concentration__CaNSR - 4.5 * var_x73 - 0.050000000000000003 * var_chaste_interface__calcium_concentration__CaJSR) / (pow(var_x79, 3) * pow((0.053333333333333337 + var_x80), 2));
+            partialF = var_x83 * (-0.050000000000000003 + (-var_x79 - var_x80) * var_chaste_interface__calcium_fluxes__P_RyR) + 0.00013333333333333334 * (0.050000000000000003 * var_chaste_interface__calcium_concentration__CaNSR - 4.5 * var_x75 - 0.050000000000000003 * var_chaste_interface__calcium_concentration__CaJSR) / (pow(var_x81, 3) * pow((0.053333333333333337 + var_x82), 2));
         }
         else
         {
@@ -1573,9 +1573,9 @@
             double var_chaste_interface__calcium_concentration__Cai = rY[1];
             // Units: micromolar; Initial value: 0.115001
             
-            const double var_x64 = 0.0327 * var_chaste_interface__calcium_concentration__Cai;
+            const double var_x66 = 0.0327 * var_chaste_interface__calcium_concentration__Cai;
             
-            partialF = -0.019599999999999999 - var_x64;
+            partialF = -0.019599999999999999 - var_x66;
         }
         else
         {
@@ -1613,9 +1613,9 @@
             double var_chaste_interface__calcium_concentration__Cai = rY[1];
             // Units: micromolar; Initial value: 0.115001
             
-            const double var_x65 = 0.0023700000000000001 * var_chaste_interface__calcium_concentration__Cai;
+            const double var_x67 = 0.0023700000000000001 * var_chaste_interface__calcium_concentration__Cai;
             
-            partialF = -3.1999999999999999e-5 - var_x65;
+            partialF = -3.1999999999999999e-5 - var_x67;
         }
         else
         {
@@ -1663,11 +1663,11 @@
             double var_chaste_interface__calcium_concentration__Cass = rY[2];
             // Units: micromolar; Initial value: 0.115001
             
-            const double var_x88 = pow(var_chaste_interface__calcium_concentration__Cass, 3.0);
-            const double var_x90 = 0.0040499999999999998 * var_x88;
-            const double var_x91 = -0.0060749999999999997 * pow(var_chaste_interface__calcium_concentration__Cass, 4.0);
+            const double var_x90 = pow(var_chaste_interface__calcium_concentration__Cass, 3.0);
+            const double var_x92 = 0.0040499999999999998 * var_x90;
+            const double var_x93 = -0.0060749999999999997 * pow(var_chaste_interface__calcium_concentration__Cass, 4.0);
             
-            partialF = -0.080249999999999988 + var_x91 - var_x90;
+            partialF = -0.080249999999999988 + var_x93 - var_x92;
         }
         else
         {
@@ -1794,16 +1794,16 @@
             double var_chaste_interface__calcium_concentration__Cass = rY[2];
             // Units: micromolar; Initial value: 0.115001
             
-            const double var_x92 = exp(-0.92307692307692313 - 0.076923076923076927 * var_chaste_interface__membrane__V);
-            const double var_x95 = exp(-2.1025 * pow((1 + 0.068965517241379309 * var_chaste_interface__membrane__V), 2));
-            const double var_x96 = 0.013000000000000001 * var_x95;
-            const double var_x120 = 1 / (20.0 + var_chaste_interface__calcium_concentration__Cass);
-            const double var_x121 = 0.23324 * var_x120;
-            const double var_x126 = 0.20000000000000001 * var_x92;
-            const double var_x127 = var_x121 * var_chaste_interface__calcium_concentration__Cass;
-            const double var_x128 = -var_x127;
+            const double var_x94 = exp(-0.92307692307692313 - 0.076923076923076927 * var_chaste_interface__membrane__V);
+            const double var_x97 = exp(-2.1025 * pow((1 + 0.068965517241379309 * var_chaste_interface__membrane__V), 2));
+            const double var_x98 = 0.013000000000000001 * var_x97;
+            const double var_x122 = 1 / (20.0 + var_chaste_interface__calcium_concentration__Cass);
+            const double var_x123 = 0.23324 * var_x122;
+            const double var_x128 = 0.20000000000000001 * var_x94;
+            const double var_x129 = var_x123 * var_chaste_interface__calcium_concentration__Cass;
+            const double var_x130 = -var_x129;
             
-            partialF = -0.013000000000000001 + var_x128 + var_x96 - var_x126;
+            partialF = -0.013000000000000001 + var_x130 + var_x98 - var_x128;
         }
         else
         {
@@ -1853,16 +1853,16 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -82.4202
             
-            const double var_x92 = exp(-0.92307692307692313 - 0.076923076923076927 * var_chaste_interface__membrane__V);
-            const double var_x99 = 0.69999999999999996 * exp(-160.0 * pow((1 + 0.025000000000000001 * var_chaste_interface__membrane__V), 2));
-            const double var_x100 = 0.75 * exp(-1.0 * pow((1 + 0.050000000000000003 * var_chaste_interface__membrane__V), 2));
-            const double var_x101 = exp(1.2 + 0.10000000000000001 * var_chaste_interface__membrane__V);
-            const double var_x102 = 1.0 + 0.12 * var_x101;
-            const double var_x103 = var_x101 / var_x102;
-            const double var_x107 = 1.0 + var_x99 - var_x100;
-            const double var_x108 = var_x103 * var_x107;
+            const double var_x94 = exp(-0.92307692307692313 - 0.076923076923076927 * var_chaste_interface__membrane__V);
+            const double var_x101 = 0.69999999999999996 * exp(-160.0 * pow((1 + 0.025000000000000001 * var_chaste_interface__membrane__V), 2));
+            const double var_x102 = 0.75 * exp(-1.0 * pow((1 + 0.050000000000000003 * var_chaste_interface__membrane__V), 2));
+            const double var_x103 = exp(1.2 + 0.10000000000000001 * var_chaste_interface__membrane__V);
+            const double var_x104 = 1.0 + 0.12 * var_x103;
+            const double var_x105 = var_x103 / var_x104;
+            const double var_x109 = 1.0 + var_x101 - var_x102;
+            const double var_x110 = var_x105 * var_x109;
             
-            partialF = -0.050000000000000003 * var_x92 - 4.4000000000000004 * var_x108;
+            partialF = -0.050000000000000003 * var_x94 - 4.4000000000000004 * var_x110;
         }
         else
         {
@@ -1903,18 +1903,18 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -82.4202
             
-            const double var_x92 = exp(-0.92307692307692313 - 0.076923076923076927 * var_chaste_interface__membrane__V);
-            const double var_x99 = 0.69999999999999996 * exp(-160.0 * pow((1 + 0.025000000000000001 * var_chaste_interface__membrane__V), 2));
-            const double var_x100 = 0.75 * exp(-1.0 * pow((1 + 0.050000000000000003 * var_chaste_interface__membrane__V), 2));
-            const double var_x101 = exp(1.2 + 0.10000000000000001 * var_chaste_interface__membrane__V);
-            const double var_x102 = 1.0 + 0.12 * var_x101;
-            const double var_x103 = var_x101 / var_x102;
-            const double var_x107 = 1.0 + var_x99 - var_x100;
-            const double var_x108 = var_x103 * var_x107;
-            const double var_x137 = 0.10000000000000001 * var_x92;
-            const double var_x142 = 0.80000000000000004 * var_x108;
+            const double var_x94 = exp(-0.92307692307692313 - 0.076923076923076927 * var_chaste_interface__membrane__V);
+            const double var_x101 = 0.69999999999999996 * exp(-160.0 * pow((1 + 0.025000000000000001 * var_chaste_interface__membrane__V), 2));
+            const double var_x102 = 0.75 * exp(-1.0 * pow((1 + 0.050000000000000003 * var_chaste_interface__membrane__V), 2));
+            const double var_x103 = exp(1.2 + 0.10000000000000001 * var_chaste_interface__membrane__V);
+            const double var_x104 = 1.0 + 0.12 * var_x103;
+            const double var_x105 = var_x103 / var_x104;
+            const double var_x109 = 1.0 + var_x101 - var_x102;
+            const double var_x110 = var_x105 * var_x109;
+            const double var_x139 = 0.10000000000000001 * var_x94;
+            const double var_x144 = 0.80000000000000004 * var_x110;
             
-            partialF = -var_x137 - var_x142;
+            partialF = -var_x139 - var_x144;
         }
         else
         {
@@ -1970,28 +1970,28 @@
             double var_chaste_interface__calcium_concentration__Cass = rY[2];
             // Units: micromolar; Initial value: 0.115001
             
-            const double var_x92 = exp(-0.92307692307692313 - 0.076923076923076927 * var_chaste_interface__membrane__V);
-            const double var_x95 = exp(-2.1025 * pow((1 + 0.068965517241379309 * var_chaste_interface__membrane__V), 2));
-            const double var_x99 = 0.69999999999999996 * exp(-160.0 * pow((1 + 0.025000000000000001 * var_chaste_interface__membrane__V), 2));
-            const double var_x100 = 0.75 * exp(-1.0 * pow((1 + 0.050000000000000003 * var_chaste_interface__membrane__V), 2));
-            const double var_x101 = exp(1.2 + 0.10000000000000001 * var_chaste_interface__membrane__V);
-            const double var_x102 = 1.0 + 0.12 * var_x101;
-            const double var_x103 = var_x101 / var_x102;
-            const double var_x107 = 1.0 + var_x99 - var_x100;
-            const double var_x108 = var_x103 * var_x107;
-            const double var_x120 = 1 / (20.0 + var_chaste_interface__calcium_concentration__Cass);
-            const double var_x121 = 0.23324 * var_x120;
-            const double var_x127 = var_x121 * var_chaste_interface__calcium_concentration__Cass;
-            const double var_x129 = 0.40000000000000002 * var_x108;
-            const double var_x143 = 0.15000000000000002 * var_x92;
-            const double var_x147 = 0.026000000000000002 * var_x95;
-            const double var_x150 = var_x120 * var_chaste_interface__calcium_concentration__Cass;
-            const double var_x153 = 0.00093296000000000004 * var_x150;
-            const double var_x156 = 13.0 - 13.0 * var_x95;
-            const double var_x162 = var_x127 * var_x156;
-            const double var_x163 = var_x108 * var_x153;
+            const double var_x94 = exp(-0.92307692307692313 - 0.076923076923076927 * var_chaste_interface__membrane__V);
+            const double var_x97 = exp(-2.1025 * pow((1 + 0.068965517241379309 * var_chaste_interface__membrane__V), 2));
+            const double var_x101 = 0.69999999999999996 * exp(-160.0 * pow((1 + 0.025000000000000001 * var_chaste_interface__membrane__V), 2));
+            const double var_x102 = 0.75 * exp(-1.0 * pow((1 + 0.050000000000000003 * var_chaste_interface__membrane__V), 2));
+            const double var_x103 = exp(1.2 + 0.10000000000000001 * var_chaste_interface__membrane__V);
+            const double var_x104 = 1.0 + 0.12 * var_x103;
+            const double var_x105 = var_x103 / var_x104;
+            const double var_x109 = 1.0 + var_x101 - var_x102;
+            const double var_x110 = var_x105 * var_x109;
+            const double var_x122 = 1 / (20.0 + var_chaste_interface__calcium_concentration__Cass);
+            const double var_x123 = 0.23324 * var_x122;
+            const double var_x129 = var_x123 * var_chaste_interface__calcium_concentration__Cass;
+            const double var_x131 = 0.40000000000000002 * var_x110;
+            const double var_x145 = 0.15000000000000002 * var_x94;
+            const double var_x149 = 0.026000000000000002 * var_x97;
+            const double var_x152 = var_x122 * var_chaste_interface__calcium_concentration__Cass;
+            const double var_x155 = 0.00093296000000000004 * var_x152;
+            const double var_x158 = 13.0 - 13.0 * var_x97;
+            const double var_x164 = var_x129 * var_x158;
+            const double var_x165 = var_x110 * var_x155;
             
-            partialF = -0.026000000000000002 + var_x147 - var_x129 - var_x143 - var_x162 - var_x163;
+            partialF = -0.026000000000000002 + var_x149 - var_x131 - var_x145 - var_x164 - var_x165;
         }
         else
         {
@@ -2041,13 +2041,13 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -82.4202
             
-            const double var_x92 = exp(-0.92307692307692313 - 0.076923076923076927 * var_chaste_interface__membrane__V);
-            const double var_x95 = exp(-2.1025 * pow((1 + 0.068965517241379309 * var_chaste_interface__membrane__V), 2));
-            const double var_x96 = 0.013000000000000001 * var_x95;
-            const double var_x167 = 0.026000000000000002 * var_x95;
-            const double var_x168 = var_x92 * (-0.026000000000000002 + var_x167);
+            const double var_x94 = exp(-0.92307692307692313 - 0.076923076923076927 * var_chaste_interface__membrane__V);
+            const double var_x97 = exp(-2.1025 * pow((1 + 0.068965517241379309 * var_chaste_interface__membrane__V), 2));
+            const double var_x98 = 0.013000000000000001 * var_x97;
+            const double var_x169 = 0.026000000000000002 * var_x97;
+            const double var_x170 = var_x94 * (-0.026000000000000002 + var_x169);
             
-            partialF = -0.0135 + var_x168 + var_x96;
+            partialF = -0.0135 + var_x170 + var_x98;
         }
         else
         {
@@ -2099,23 +2099,23 @@
             double var_chaste_interface__calcium_concentration__Cass = rY[2];
             // Units: micromolar; Initial value: 0.115001
             
-            const double var_x92 = exp(-0.92307692307692313 - 0.076923076923076927 * var_chaste_interface__membrane__V);
-            const double var_x99 = 0.69999999999999996 * exp(-160.0 * pow((1 + 0.025000000000000001 * var_chaste_interface__membrane__V), 2));
-            const double var_x100 = 0.75 * exp(-1.0 * pow((1 + 0.050000000000000003 * var_chaste_interface__membrane__V), 2));
-            const double var_x101 = exp(1.2 + 0.10000000000000001 * var_chaste_interface__membrane__V);
-            const double var_x102 = 1.0 + 0.12 * var_x101;
-            const double var_x103 = var_x101 / var_x102;
-            const double var_x107 = 1.0 + var_x99 - var_x100;
-            const double var_x108 = var_x103 * var_x107;
-            const double var_x120 = 1 / (20.0 + var_chaste_interface__calcium_concentration__Cass);
-            const double var_x121 = 0.23324 * var_x120;
-            const double var_x127 = var_x121 * var_chaste_interface__calcium_concentration__Cass;
-            const double var_x128 = -var_x127;
-            const double var_x130 = 0.00040000000000000002 * var_x108;
-            const double var_x164 = 0.00040000000000000002 * var_x92;
-            const double var_x175 = -var_x130;
+            const double var_x94 = exp(-0.92307692307692313 - 0.076923076923076927 * var_chaste_interface__membrane__V);
+            const double var_x101 = 0.69999999999999996 * exp(-160.0 * pow((1 + 0.025000000000000001 * var_chaste_interface__membrane__V), 2));
+            const double var_x102 = 0.75 * exp(-1.0 * pow((1 + 0.050000000000000003 * var_chaste_interface__membrane__V), 2));
+            const double var_x103 = exp(1.2 + 0.10000000000000001 * var_chaste_interface__membrane__V);
+            const double var_x104 = 1.0 + 0.12 * var_x103;
+            const double var_x105 = var_x103 / var_x104;
+            const double var_x109 = 1.0 + var_x101 - var_x102;
+            const double var_x110 = var_x105 * var_x109;
+            const double var_x122 = 1 / (20.0 + var_chaste_interface__calcium_concentration__Cass);
+            const double var_x123 = 0.23324 * var_x122;
+            const double var_x129 = var_x123 * var_chaste_interface__calcium_concentration__Cass;
+            const double var_x130 = -var_x129;
+            const double var_x132 = 0.00040000000000000002 * var_x110;
+            const double var_x166 = 0.00040000000000000002 * var_x94;
+            const double var_x177 = -var_x132;
             
-            partialF = var_x128 + var_x175 - var_x164;
+            partialF = var_x130 + var_x177 - var_x166;
         }
         else
         {
@@ -2165,19 +2165,19 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -82.4202
             
-            const double var_x92 = exp(-0.92307692307692313 - 0.076923076923076927 * var_chaste_interface__membrane__V);
-            const double var_x99 = 0.69999999999999996 * exp(-160.0 * pow((1 + 0.025000000000000001 * var_chaste_interface__membrane__V), 2));
-            const double var_x100 = 0.75 * exp(-1.0 * pow((1 + 0.050000000000000003 * var_chaste_interface__membrane__V), 2));
-            const double var_x101 = exp(1.2 + 0.10000000000000001 * var_chaste_interface__membrane__V);
-            const double var_x102 = 1.0 + 0.12 * var_x101;
-            const double var_x103 = var_x101 / var_x102;
-            const double var_x107 = 1.0 + var_x99 - var_x100;
-            const double var_x108 = var_x103 * var_x107;
-            const double var_x130 = 0.00040000000000000002 * var_x108;
-            const double var_x165 = 0.0001 * var_x92;
-            const double var_x175 = -var_x130;
+            const double var_x94 = exp(-0.92307692307692313 - 0.076923076923076927 * var_chaste_interface__membrane__V);
+            const double var_x101 = 0.69999999999999996 * exp(-160.0 * pow((1 + 0.025000000000000001 * var_chaste_interface__membrane__V), 2));
+            const double var_x102 = 0.75 * exp(-1.0 * pow((1 + 0.050000000000000003 * var_chaste_interface__membrane__V), 2));
+            const double var_x103 = exp(1.2 + 0.10000000000000001 * var_chaste_interface__membrane__V);
+            const double var_x104 = 1.0 + 0.12 * var_x103;
+            const double var_x105 = var_x103 / var_x104;
+            const double var_x109 = 1.0 + var_x101 - var_x102;
+            const double var_x110 = var_x105 * var_x109;
+            const double var_x132 = 0.00040000000000000002 * var_x110;
+            const double var_x167 = 0.0001 * var_x94;
+            const double var_x177 = -var_x132;
             
-            partialF = -0.00050000000000000001 + var_x175 - var_x165;
+            partialF = -0.00050000000000000001 + var_x177 - var_x167;
         }
         else
         {
@@ -2221,7 +2221,7 @@
         const double var_sodium_calcium_exchange_current__eta = 0.34999999999999998; // dimensionless
         const double var_sodium_calcium_exchange_current__k_NaCa = 292.80000000000001; // picoA_per_picoF
         const double var_sodium_calcium_exchange_current__k_sat = 0.10000000000000001; // dimensionless
-        const double var_fast_sodium_current__E_Na = var_membrane__R * var_membrane__T * log((0.10000000000000001 * var_membrane__Ko + 0.90000000000000002 * var_membrane__Nao) / (0.10000000000000001 * var_chaste_interface__potassium_concentration__Ki + 0.90000000000000002 * var_chaste_interface__sodium_concentration__Nai)) / var_membrane__F; // millivolt
+        const double var_fast_sodium_current__E_Na = var_membrane__R * var_membrane__T * log((0.1111111111111111 * var_membrane__Ko + var_membrane__Nao) / (0.1111111111111111 * var_chaste_interface__potassium_concentration__Ki + var_chaste_interface__sodium_concentration__Nai)) / var_membrane__F; // millivolt
         const double var_fast_sodium_current__i_Na = (-var_fast_sodium_current__E_Na + var_chaste_interface__membrane__V) * var_chaste_interface__fast_sodium_current__O_Na * var_fast_sodium_current__g_Na; // picoA_per_picoF
         const double var_sodium_background_current__i_Nab = (-var_fast_sodium_current__E_Na + var_chaste_interface__membrane__V) * var_sodium_background_current__g_Nab; // picoA_per_picoF
         const double var_sodium_calcium_exchange_current__i_NaCa = (pow(var_chaste_interface__sodium_concentration__Nai, 3) * var_membrane__Cao * exp(var_membrane__F * var_chaste_interface__membrane__V * var_sodium_calcium_exchange_current__eta / (var_membrane__R * var_membrane__T)) - pow(var_membrane__Nao, 3) * var_chaste_interface__calcium_concentration__Cai * exp((-1.0 + var_sodium_calcium_exchange_current__eta) * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * var_sodium_calcium_exchange_current__k_NaCa / ((1.0 + var_sodium_calcium_exchange_current__k_sat * exp((-1.0 + var_sodium_calcium_exchange_current__eta) * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * (pow(var_membrane__Nao, 3) + pow(var_sodium_calcium_exchange_current__K_mNa, 3)) * (var_membrane__Cao + var_sodium_calcium_exchange_current__K_mCa)); // picoA_per_picoF
@@ -2260,12 +2260,13 @@
             const double var_x30 = exp(2.0802377414561666);
             const double var_x31 = exp(-0.038949423064193495 * var_chaste_interface__membrane__V);
             const double var_x32 = 1.0 + 0.1245 * var_x29 + 0.036499999999999998 * var_x31 * (-0.14285714285714285 + 0.14285714285714285 * var_x30);
-            const double var_x42 = (7.1123755334281649e-6 * var_chaste_interface__sodium_concentration__Nai + 7.9026394815868502e-7 * var_chaste_interface__potassium_concentration__Ki) / pow((0.11111111111111112 * var_chaste_interface__potassium_concentration__Ki + var_chaste_interface__sodium_concentration__Nai), 2);
-            const double var_x43 = var_x42 * var_chaste_interface__fast_sodium_current__O_Na;
+            const double var_x42 = 0.1111111111111111 * var_chaste_interface__potassium_concentration__Ki + var_chaste_interface__sodium_concentration__Nai;
+            const double var_x43 = (7.1123755334281649e-6 * var_chaste_interface__sodium_concentration__Nai + 7.9026394815868502e-7 * var_chaste_interface__potassium_concentration__Ki) / pow(var_x42, 2);
             const double var_x44 = var_x12 * var_x13 * pow(var_chaste_interface__sodium_concentration__Nai, 2);
-            const double var_x46 = var_x27 * var_x28 / (var_x32 * pow((3.2860264730588296e-7 + var_x28), 2));
+            const double var_x47 = var_x43 * var_chaste_interface__fast_sodium_current__O_Na;
+            const double var_x48 = var_x27 * var_x28 / (var_x32 * pow((3.2860264730588296e-7 + var_x28), 2));
             
-            partialF = -6.2649332746797061e-8 * var_x46 - 577.38191486798689 * var_x42 - 2886909.5743399346 * var_x43 - 2.6878864966397372e-14 * var_x44;
+            partialF = -577.38191486798689 * var_x43 - 6.2649332746797061e-8 * var_x48 - 2886909.5743399346 * var_x47 - 2.6878864966397372e-14 * var_x44;
         }
         else
         {
@@ -2310,14 +2311,13 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -82.4202
             
-            const double var_x176 = -0.04926108374384236 * var_chaste_interface__membrane__V;
-            const double var_x177 = exp(0.36945812807881773 + var_x176);
-            const double var_x183 = exp(-0.42168674698795178 - 0.060240963855421679 * var_chaste_interface__membrane__V);
-            const double var_x189 = 1 / (0.39395599999999997 + 0.188495 * var_x183);
-            const double var_x202 = var_x189;
-            const double var_x203 = 0.22 * var_x177;
+            const double var_x178 = -0.04926108374384236 * var_chaste_interface__membrane__V;
+            const double var_x179 = exp(0.36945812807881773 + var_x178);
+            const double var_x185 = exp(-0.42168674698795178 - 0.060240963855421679 * var_chaste_interface__membrane__V);
+            const double var_x194 = 1 / (0.39395599999999997 + 0.188495 * var_x185);
+            const double var_x204 = 0.22 * var_x179;
             
-            partialF = -var_x202 - var_x203;
+            partialF = -var_x194 - var_x204;
         }
         else
         {
@@ -2364,18 +2364,18 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -82.4202
             
-            const double var_x176 = -0.04926108374384236 * var_chaste_interface__membrane__V;
-            const double var_x179 = exp(-0.20833333333333334 - 0.083333333333333329 * var_chaste_interface__membrane__V);
-            const double var_x180 = exp(-0.016666666666666666 - 0.0066666666666666671 * var_chaste_interface__membrane__V);
-            const double var_x186 = 2.0000000000000002e-5 * var_chaste_interface__membrane__V;
-            const double var_x190 = 1 / (0.25 * var_x180 + 0.1027 * var_x179);
-            const double var_x204 = 3.802 * var_x190;
-            const double var_x208 = exp(0.12315270935960591 + var_x176);
-            const double var_x216 = 0.20000000000000001 * var_x208;
-            const double var_x217 = -var_x216;
-            const double var_x218 = -0.008539999999999999 - var_x186;
+            const double var_x178 = -0.04926108374384236 * var_chaste_interface__membrane__V;
+            const double var_x181 = exp(-0.20833333333333334 - 0.083333333333333329 * var_chaste_interface__membrane__V);
+            const double var_x182 = exp(-0.016666666666666666 - 0.0066666666666666671 * var_chaste_interface__membrane__V);
+            const double var_x188 = 2.0000000000000002e-5 * var_chaste_interface__membrane__V;
+            const double var_x191 = 1 / (0.25 * var_x182 + 0.1027 * var_x181);
+            const double var_x205 = 3.802 * var_x191;
+            const double var_x209 = exp(0.12315270935960591 + var_x178);
+            const double var_x217 = 0.20000000000000001 * var_x209;
+            const double var_x218 = -var_x217;
+            const double var_x219 = -0.008539999999999999 - var_x188;
             
-            partialF = var_x217 + var_x218 - var_x204;
+            partialF = var_x218 + var_x219 - var_x205;
         }
         else
         {
@@ -2431,21 +2431,21 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -82.4202
             
-            const double var_x176 = -0.04926108374384236 * var_chaste_interface__membrane__V;
-            const double var_x180 = exp(-0.016666666666666666 - 0.0066666666666666671 * var_chaste_interface__membrane__V);
-            const double var_x186 = 2.0000000000000002e-5 * var_chaste_interface__membrane__V;
-            const double var_x213 = exp(-0.16666666666666666 - 0.066666666666666666 * var_chaste_interface__membrane__V);
-            const double var_x218 = -0.008539999999999999 - var_x186;
-            const double var_x219 = 3.802 / (0.1027 * var_x213 + 0.23000000000000001 * var_x180);
-            const double var_x223 = exp(-0.12315270935960591 + var_x176);
-            const double var_x226 = exp(-0.14705882352941177 - 0.058823529411764705 * var_chaste_interface__membrane__V);
-            const double var_x228 = 3.802 / (0.20000000000000001 * var_x180 + 0.1027 * var_x226);
-            const double var_x229 = -var_x228;
-            const double var_x230 = 0.19170000000000001 * var_x223;
-            const double var_x231 = -var_x219 - var_x230;
-            const double var_x232 = var_x218 + var_x229;
+            const double var_x178 = -0.04926108374384236 * var_chaste_interface__membrane__V;
+            const double var_x182 = exp(-0.016666666666666666 - 0.0066666666666666671 * var_chaste_interface__membrane__V);
+            const double var_x188 = 2.0000000000000002e-5 * var_chaste_interface__membrane__V;
+            const double var_x214 = exp(-0.16666666666666666 - 0.066666666666666666 * var_chaste_interface__membrane__V);
+            const double var_x219 = -0.008539999999999999 - var_x188;
+            const double var_x220 = 3.802 / (0.1027 * var_x214 + 0.23000000000000001 * var_x182);
+            const double var_x224 = exp(-0.12315270935960591 + var_x178);
+            const double var_x227 = exp(-0.14705882352941177 - 0.058823529411764705 * var_chaste_interface__membrane__V);
+            const double var_x229 = 3.802 / (0.20000000000000001 * var_x182 + 0.1027 * var_x227);
+            const double var_x230 = -var_x229;
+            const double var_x231 = 0.19170000000000001 * var_x224;
+            const double var_x232 = -var_x220 - var_x231;
+            const double var_x233 = var_x219 + var_x230;
             
-            partialF = var_x231 + var_x232;
+            partialF = var_x232 + var_x233;
         }
         else
         {
@@ -2490,15 +2490,15 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -82.4202
             
-            const double var_x183 = exp(-0.42168674698795178 - 0.060240963855421679 * var_chaste_interface__membrane__V);
-            const double var_x189 = 1 / (0.39395599999999997 + 0.188495 * var_x183);
-            const double var_x191 = -0.12987012987012986 * var_chaste_interface__membrane__V;
-            const double var_x192 = exp(-0.90909090909090906 + var_x191);
-            const double var_x220 = 6.9999999999999997e-7 * var_x192;
-            const double var_x237 = -var_x220;
-            const double var_x238 = 1.0526315789473684e-5 * var_x189;
+            const double var_x185 = exp(-0.42168674698795178 - 0.060240963855421679 * var_chaste_interface__membrane__V);
+            const double var_x192 = -0.12987012987012986 * var_chaste_interface__membrane__V;
+            const double var_x193 = exp(-0.90909090909090906 + var_x192);
+            const double var_x194 = 1 / (0.39395599999999997 + 0.188495 * var_x185);
+            const double var_x221 = 6.9999999999999997e-7 * var_x193;
+            const double var_x238 = -var_x221;
+            const double var_x239 = 1.0526315789473684e-5 * var_x194;
             
-            partialF = var_x237 - var_x238;
+            partialF = var_x238 - var_x239;
         }
         else
         {
@@ -2539,11 +2539,11 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -82.4202
             
-            const double var_x191 = -0.12987012987012986 * var_chaste_interface__membrane__V;
-            const double var_x192 = exp(-0.90909090909090906 + var_x191);
-            const double var_x239 = 1.4e-8 * var_x192;
+            const double var_x192 = -0.12987012987012986 * var_chaste_interface__membrane__V;
+            const double var_x193 = exp(-0.90909090909090906 + var_x192);
+            const double var_x240 = 1.4e-8 * var_x193;
             
-            partialF = -var_x239;
+            partialF = -var_x240;
         }
         else
         {
@@ -2596,30 +2596,30 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -82.4202
             
-            const double var_x176 = -0.04926108374384236 * var_chaste_interface__membrane__V;
-            const double var_x177 = exp(0.36945812807881773 + var_x176);
-            const double var_x179 = exp(-0.20833333333333334 - 0.083333333333333329 * var_chaste_interface__membrane__V);
-            const double var_x180 = exp(-0.016666666666666666 - 0.0066666666666666671 * var_chaste_interface__membrane__V);
-            const double var_x183 = exp(-0.42168674698795178 - 0.060240963855421679 * var_chaste_interface__membrane__V);
-            const double var_x186 = 2.0000000000000002e-5 * var_chaste_interface__membrane__V;
-            const double var_x187 = 0.008539999999999999 + var_x186;
-            const double var_x188 = 1 / var_x187;
-            const double var_x189 = 1 / (0.39395599999999997 + 0.188495 * var_x183);
-            const double var_x190 = 1 / (0.25 * var_x180 + 0.1027 * var_x179);
-            const double var_x191 = -0.12987012987012986 * var_chaste_interface__membrane__V;
-            const double var_x192 = exp(-0.90909090909090906 + var_x191);
-            const double var_x193 = 1 / var_x177;
-            const double var_x194 = var_x189 * var_x190 * var_x192 * var_x193;
-            const double var_x195 = var_x188 * var_x194;
-            const double var_x205 = 1.2097272727272726e-5 * var_x195;
-            const double var_x208 = exp(0.12315270935960591 + var_x176);
-            const double var_x216 = 0.20000000000000001 * var_x208;
-            const double var_x217 = -var_x216;
-            const double var_x220 = 6.9999999999999997e-7 * var_x192;
-            const double var_x237 = -var_x220;
-            const double var_x240 = 0.001 * var_x189;
+            const double var_x178 = -0.04926108374384236 * var_chaste_interface__membrane__V;
+            const double var_x179 = exp(0.36945812807881773 + var_x178);
+            const double var_x181 = exp(-0.20833333333333334 - 0.083333333333333329 * var_chaste_interface__membrane__V);
+            const double var_x182 = exp(-0.016666666666666666 - 0.0066666666666666671 * var_chaste_interface__membrane__V);
+            const double var_x185 = exp(-0.42168674698795178 - 0.060240963855421679 * var_chaste_interface__membrane__V);
+            const double var_x188 = 2.0000000000000002e-5 * var_chaste_interface__membrane__V;
+            const double var_x189 = 0.008539999999999999 + var_x188;
+            const double var_x190 = 1 / var_x189;
+            const double var_x191 = 1 / (0.25 * var_x182 + 0.1027 * var_x181);
+            const double var_x192 = -0.12987012987012986 * var_chaste_interface__membrane__V;
+            const double var_x193 = exp(-0.90909090909090906 + var_x192);
+            const double var_x194 = 1 / (0.39395599999999997 + 0.188495 * var_x185);
+            const double var_x195 = 1 / var_x179;
+            const double var_x196 = var_x191 * var_x193 * var_x194 * var_x195;
+            const double var_x197 = var_x190 * var_x196;
+            const double var_x206 = 1.2097272727272726e-5 * var_x197;
+            const double var_x209 = exp(0.12315270935960591 + var_x178);
+            const double var_x217 = 0.20000000000000001 * var_x209;
+            const double var_x218 = -var_x217;
+            const double var_x221 = 6.9999999999999997e-7 * var_x193;
+            const double var_x238 = -var_x221;
+            const double var_x241 = 0.001 * var_x194;
             
-            partialF = var_x217 + var_x237 - var_x205 - var_x240;
+            partialF = var_x218 + var_x238 - var_x206 - var_x241;
         }
         else
         {
@@ -2666,19 +2666,19 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -82.4202
             
-            const double var_x176 = -0.04926108374384236 * var_chaste_interface__membrane__V;
-            const double var_x180 = exp(-0.016666666666666666 - 0.0066666666666666671 * var_chaste_interface__membrane__V);
-            const double var_x191 = -0.12987012987012986 * var_chaste_interface__membrane__V;
-            const double var_x192 = exp(-0.90909090909090906 + var_x191);
-            const double var_x213 = exp(-0.16666666666666666 - 0.066666666666666666 * var_chaste_interface__membrane__V);
-            const double var_x219 = 3.802 / (0.1027 * var_x213 + 0.23000000000000001 * var_x180);
-            const double var_x220 = 6.9999999999999997e-7 * var_x192;
-            const double var_x223 = exp(-0.12315270935960591 + var_x176);
-            const double var_x230 = 0.19170000000000001 * var_x223;
-            const double var_x231 = -var_x219 - var_x230;
-            const double var_x237 = -var_x220;
+            const double var_x178 = -0.04926108374384236 * var_chaste_interface__membrane__V;
+            const double var_x182 = exp(-0.016666666666666666 - 0.0066666666666666671 * var_chaste_interface__membrane__V);
+            const double var_x192 = -0.12987012987012986 * var_chaste_interface__membrane__V;
+            const double var_x193 = exp(-0.90909090909090906 + var_x192);
+            const double var_x214 = exp(-0.16666666666666666 - 0.066666666666666666 * var_chaste_interface__membrane__V);
+            const double var_x220 = 3.802 / (0.1027 * var_x214 + 0.23000000000000001 * var_x182);
+            const double var_x221 = 6.9999999999999997e-7 * var_x193;
+            const double var_x224 = exp(-0.12315270935960591 + var_x178);
+            const double var_x231 = 0.19170000000000001 * var_x224;
+            const double var_x232 = -var_x220 - var_x231;
+            const double var_x238 = -var_x221;
             
-            partialF = var_x231 + var_x237;
+            partialF = var_x232 + var_x238;
         }
         else
         {
@@ -2732,19 +2732,19 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -82.4202
             
-            const double var_x180 = exp(-0.016666666666666666 - 0.0066666666666666671 * var_chaste_interface__membrane__V);
-            const double var_x186 = 2.0000000000000002e-5 * var_chaste_interface__membrane__V;
-            const double var_x191 = -0.12987012987012986 * var_chaste_interface__membrane__V;
-            const double var_x192 = exp(-0.90909090909090906 + var_x191);
-            const double var_x218 = -0.008539999999999999 - var_x186;
-            const double var_x220 = 6.9999999999999997e-7 * var_x192;
-            const double var_x226 = exp(-0.14705882352941177 - 0.058823529411764705 * var_chaste_interface__membrane__V);
-            const double var_x228 = 3.802 / (0.20000000000000001 * var_x180 + 0.1027 * var_x226);
-            const double var_x229 = -var_x228;
-            const double var_x232 = var_x218 + var_x229;
-            const double var_x237 = -var_x220;
+            const double var_x182 = exp(-0.016666666666666666 - 0.0066666666666666671 * var_chaste_interface__membrane__V);
+            const double var_x188 = 2.0000000000000002e-5 * var_chaste_interface__membrane__V;
+            const double var_x192 = -0.12987012987012986 * var_chaste_interface__membrane__V;
+            const double var_x193 = exp(-0.90909090909090906 + var_x192);
+            const double var_x219 = -0.008539999999999999 - var_x188;
+            const double var_x221 = 6.9999999999999997e-7 * var_x193;
+            const double var_x227 = exp(-0.14705882352941177 - 0.058823529411764705 * var_chaste_interface__membrane__V);
+            const double var_x229 = 3.802 / (0.20000000000000001 * var_x182 + 0.1027 * var_x227);
+            const double var_x230 = -var_x229;
+            const double var_x233 = var_x219 + var_x230;
+            const double var_x238 = -var_x221;
             
-            partialF = var_x232 + var_x237;
+            partialF = var_x233 + var_x238;
         }
         else
         {
@@ -2806,7 +2806,7 @@
         const double var_slow_delayed_rectifier_potassium_current__i_Ks = pow(var_chaste_interface__slow_delayed_rectifier_potassium_current__nKs, 2) * (-var_fast_transient_outward_potassium_current__E_K + var_chaste_interface__membrane__V) * var_slow_delayed_rectifier_potassium_current__g_Ks; // picoA_per_picoF
         const double var_slow_transient_outward_potassium_current__g_Kto_s = 0; // milliS_per_microF
         const double var_slow_transient_outward_potassium_current__i_Kto_s = (-var_fast_transient_outward_potassium_current__E_K + var_chaste_interface__membrane__V) * var_chaste_interface__slow_transient_outward_potassium_current__ato_s * var_slow_transient_outward_potassium_current__g_Kto_s * var_chaste_interface__slow_transient_outward_potassium_current__ito_s; // picoA_per_picoF
-        const double var_rapid_delayed_rectifier_potassium_current__i_Kr = (-var_membrane__R * var_membrane__T * log((0.97999999999999998 * var_membrane__Ko + 0.02 * var_membrane__Nao) / (0.97999999999999998 * var_chaste_interface__potassium_concentration__Ki + 0.02 * var_chaste_interface__sodium_concentration__Nai)) / var_membrane__F + var_chaste_interface__membrane__V) * var_chaste_interface__rapid_delayed_rectifier_potassium_current__O_K * var_rapid_delayed_rectifier_potassium_current__g_Kr; // picoA_per_picoF
+        const double var_rapid_delayed_rectifier_potassium_current__i_Kr = (-var_membrane__R * var_membrane__T * log((0.020408163265306124 * var_membrane__Nao + var_membrane__Ko) / (0.020408163265306124 * var_chaste_interface__sodium_concentration__Nai + var_chaste_interface__potassium_concentration__Ki)) / var_membrane__F + var_chaste_interface__membrane__V) * var_chaste_interface__rapid_delayed_rectifier_potassium_current__O_K * var_rapid_delayed_rectifier_potassium_current__g_Kr; // picoA_per_picoF
         const double var_sodium_potassium_pump_current__Km_Ko = 1500.0; // micromolar
         const double var_sodium_potassium_pump_current__Km_Nai = 21000.0; // micromolar
         const double var_sodium_potassium_pump_current__i_NaK_max = 0.88; // picoA_per_picoF
@@ -2860,15 +2860,16 @@
             const double var_x8 = pow(var_chaste_interface__fast_transient_outward_potassium_current__ato_f, 3);
             const double var_x17 = -25.674321243523316 * var_x2 + var_chaste_interface__membrane__V;
             const double var_x18 = var_x17 * var_x3 / pow(var_x4, 2);
-            const double var_x45 = (2.4715768660405338e-6 * var_chaste_interface__sodium_concentration__Nai + 0.00012110726643598615 * var_chaste_interface__potassium_concentration__Ki) * var_chaste_interface__rapid_delayed_rectifier_potassium_current__O_K / pow((0.020408163265306124 * var_chaste_interface__sodium_concentration__Nai + var_chaste_interface__potassium_concentration__Ki), 2);
-            const double var_x48 = var_x0 * var_x1;
-            const double var_x49 = var_x1 * var_x5;
-            const double var_x50 = var_x1 * var_x7;
-            const double var_x51 = var_x1 * var_x6;
-            const double var_x52 = var_x1 * var_x8 * var_chaste_interface__fast_transient_outward_potassium_current__ito_f;
-            const double var_x53 = var_x1 * var_x18;
+            const double var_x45 = 0.020408163265306124 * var_chaste_interface__sodium_concentration__Nai + var_chaste_interface__potassium_concentration__Ki;
+            const double var_x46 = (2.4715768660405338e-6 * var_chaste_interface__sodium_concentration__Nai + 0.00012110726643598615 * var_chaste_interface__potassium_concentration__Ki) * var_chaste_interface__rapid_delayed_rectifier_potassium_current__O_K / pow(var_x45, 2);
+            const double var_x50 = var_x0 * var_x1;
+            const double var_x51 = var_x1 * var_x5;
+            const double var_x52 = var_x1 * var_x7;
+            const double var_x53 = var_x1 * var_x6;
+            const double var_x54 = var_x1 * var_x8 * var_chaste_interface__fast_transient_outward_potassium_current__ito_f;
+            const double var_x55 = var_x1 * var_x18;
             
-            partialF = 0.040021670080783313 * var_x53 - 0.0090818087605069615 * var_x48 - 1017.2528351768841 * var_x45 - 0.078972250091364882 * var_x51 - 0.642360282243162 * var_x52 - 0.25271120029236765 * var_x50 - 0.44667042500874232 * var_x49;
+            partialF = 0.040021670080783313 * var_x55 - 0.0090818087605069615 * var_x50 - 0.078972250091364882 * var_x53 - 0.642360282243162 * var_x54 - 0.25271120029236765 * var_x52 - 0.44667042500874232 * var_x51 - 1017.2528351768841 * var_x46;
         }
         else
         {
@@ -2905,10 +2906,10 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -82.4202
             
-            const double var_x248 = exp(1.0731000000000002 + 0.035770000000000003 * var_chaste_interface__membrane__V);
-            const double var_x249 = exp(-1.8711 - 0.062370000000000002 * var_chaste_interface__membrane__V);
+            const double var_x249 = exp(1.0731000000000002 + 0.035770000000000003 * var_chaste_interface__membrane__V);
+            const double var_x250 = exp(-1.8711 - 0.062370000000000002 * var_chaste_interface__membrane__V);
             
-            partialF = -0.18064 * var_x248 - 0.39560000000000001 * var_x249;
+            partialF = -0.18064 * var_x249 - 0.39560000000000001 * var_x250;
         }
         else
         {
@@ -2945,17 +2946,17 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -82.4202
             
-            const double var_x250 = 0.14285714285714285 * var_chaste_interface__membrane__V;
-            const double var_x251 = exp(4.7857142857142856 + var_x250);
-            const double var_x252 = 1.0 + 0.051334999999999999 * var_x251;
-            const double var_x253 = var_x251 / var_x252;
-            const double var_x255 = -var_x250;
-            const double var_x256 = exp(-4.7857142857142856 + var_x255);
-            const double var_x257 = 1.0 + 0.0067083000000000004 * var_x256;
-            const double var_x258 = exp(-1.9285714285714286 + var_x255);
-            const double var_x259 = var_x258 / var_x257;
+            const double var_x251 = 0.14285714285714285 * var_chaste_interface__membrane__V;
+            const double var_x252 = exp(4.7857142857142856 + var_x251);
+            const double var_x253 = 1.0 + 0.051334999999999999 * var_x252;
+            const double var_x254 = var_x252 / var_x253;
+            const double var_x256 = -var_x251;
+            const double var_x257 = exp(-4.7857142857142856 + var_x256);
+            const double var_x258 = 1.0 + 0.0067083000000000004 * var_x257;
+            const double var_x259 = exp(-1.9285714285714286 + var_x256);
+            const double var_x260 = var_x259 / var_x258;
             
-            partialF = -0.00015200000000000001 * var_x259 - 0.00095 * var_x253;
+            partialF = -0.00015200000000000001 * var_x260 - 0.00095 * var_x254;
         }
         else
         {
@@ -2992,11 +2993,11 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -82.4202
             
-            const double var_x263 = exp(-0.062899999999999998 * var_chaste_interface__membrane__V);
-            const double var_x265 = 1 / (2.0579999999999998 + 0.49299999999999999 * var_x263);
-            const double var_x268 = -var_x265;
+            const double var_x264 = exp(-0.062899999999999998 * var_chaste_interface__membrane__V);
+            const double var_x266 = 1 / (2.0579999999999998 + 0.49299999999999999 * var_x264);
+            const double var_x269 = -var_x266;
             
-            partialF = var_x268;
+            partialF = var_x269;
         }
         else
         {
@@ -3033,12 +3034,12 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -82.4202
             
-            const double var_x269 = exp(7.9298245614035094 + 0.17543859649122806 * var_chaste_interface__membrane__V);
-            const double var_x270 = 1.0 + var_x269;
-            const double var_x271 = 1 / var_x270;
-            const double var_x272 = 1 / (270.0 + 1050.0 * var_x271);
+            const double var_x270 = exp(7.9298245614035094 + 0.17543859649122806 * var_chaste_interface__membrane__V);
+            const double var_x271 = 1.0 + var_x270;
+            const double var_x272 = 1 / var_x271;
+            const double var_x273 = 1 / (270.0 + 1050.0 * var_x272);
             
-            partialF = -var_x272;
+            partialF = -var_x273;
         }
         else
         {
@@ -3118,11 +3119,11 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -82.4202
             
-            const double var_x263 = exp(-0.062899999999999998 * var_chaste_interface__membrane__V);
-            const double var_x265 = 1 / (2.0579999999999998 + 0.49299999999999999 * var_x263);
-            const double var_x268 = -var_x265;
+            const double var_x264 = exp(-0.062899999999999998 * var_chaste_interface__membrane__V);
+            const double var_x266 = 1 / (2.0579999999999998 + 0.49299999999999999 * var_x264);
+            const double var_x269 = -var_x266;
             
-            partialF = var_x268;
+            partialF = var_x269;
         }
         else
         {
@@ -3159,10 +3160,10 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -82.4202
             
-            const double var_x269 = exp(7.9298245614035094 + 0.17543859649122806 * var_chaste_interface__membrane__V);
-            const double var_x270 = 1.0 + var_x269;
-            const double var_x271 = 1 / var_x270;
-            const double var_x282 = 1 / (1200.0 - 170.0 * var_x271);
+            const double var_x270 = exp(7.9298245614035094 + 0.17543859649122806 * var_chaste_interface__membrane__V);
+            const double var_x271 = 1.0 + var_x270;
+            const double var_x272 = 1 / var_x271;
+            const double var_x282 = 1 / (1200.0 - 170.0 * var_x272);
             
             partialF = -var_x282;
         }

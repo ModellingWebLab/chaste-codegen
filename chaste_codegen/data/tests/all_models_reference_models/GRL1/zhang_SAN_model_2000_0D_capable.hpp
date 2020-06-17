@@ -3,7 +3,7 @@
 
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
 //! Model: zhang_SAN_model_2000_0D_capable
 //!

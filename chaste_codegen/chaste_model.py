@@ -18,7 +18,7 @@ from sympy import (
     sympify,
 )
 from sympy.codegen.cfunctions import log10
-from sympy.codegen.rewriting import ReplaceOptim, optimize
+from sympy.codegen.rewriting import ReplaceOptim, optimize, log1p_opt
 
 import chaste_codegen as cg
 from chaste_codegen._rdf import get_variables_transitively
@@ -175,7 +175,7 @@ class ChasteModel(object):
              'derived_quantities': self._format_derived_quant(),
              'derived_quantity_equations': self._format_derived_quant_eqs()}
 
-    def get_equations_for(self, variables, recurse=True, filter_modifiable_parameters_lhs=True):
+    def get_equations_for(self, variables, recurse=True, filter_modifiable_parameters_lhs=True, optimise=True):
         """Returns equations excluding once where lhs is a modifiable parameter
 
         :param variables: the variables to get defining equations for.
@@ -187,14 +187,15 @@ class ChasteModel(object):
         """
         equations = [eq for eq in self._model.get_equations_for(variables, recurse=recurse)
                      if not filter_modifiable_parameters_lhs or eq.lhs not in self._modifiable_parameters]
-        for i, eq in enumerate(equations):
-            optims = tuple()
-            if len(eq.rhs.atoms(log)) > 0:
-                optims += (self._LOG10_OPT, )
-            if len(eq.rhs.atoms(Pow)) > 0:
-                optims += (self._POW_OPT, )
-            if len(optims) > 0:
-                equations[i] = Eq(eq.lhs, optimize(eq.rhs, optims))
+        if optimise:
+            for i, eq in enumerate(equations):
+                optims = tuple()
+                if len(eq.rhs.atoms(log)) > 0:
+                    optims += (self._LOG10_OPT, log1p_opt)
+                if len(eq.rhs.atoms(Pow)) > 0:
+                    optims += (self._POW_OPT, )
+                if len(optims) > 0:
+                    equations[i] = Eq(eq.lhs, optimize(eq.rhs, optims))
         return equations
 
     def _get_initial_value(self, var):
@@ -204,7 +205,7 @@ class ChasteModel(object):
         if var in self._state_vars:
             initial_value = getattr(var, 'initial_value', 0)
         else:
-            eqs = self._model.get_equations_for([var])
+            eqs = self.get_equations_for([var], filter_modifiable_parameters_lhs=False, optimise=False)
             # If there is a defining equation, there should be just 1 equation and it should be of the form var = value
             if len(eqs) == 1 and isinstance(eqs[0].rhs, Float):
                 initial_value = eqs[0].rhs
@@ -353,7 +354,7 @@ class ChasteModel(object):
         if self._membrane_stimulus_current_orig is None:
             return None, self._stimulus_units
         # get derivative equations
-        d_eqs = self._model.get_equations_for(self._y_derivatives)
+        d_eqs = self.get_equations_for(self._y_derivatives, filter_modifiable_parameters_lhs=False, optimise=False)
 
         # get dv/dt
         deriv_eq_only = [eq for eq in d_eqs if isinstance(eq.lhs, Derivative)
@@ -508,7 +509,7 @@ class ChasteModel(object):
             equations_for_ionic_vars, equations, old_equations = [], self._ionic_derivs, None
             while len(equations_for_ionic_vars) == 0 and old_equations != equations:
                 old_equations = equations
-                equations = self._model.get_equations_for(equations, recurse=False)
+                equations = self.get_equations_for(equations, recurse=False, filter_modifiable_parameters_lhs=False, optimise=False)
                 equations_for_ionic_vars = [eq for eq in equations
                                             if (eq.lhs != self._membrane_stimulus_current_orig
                                                 and eq.lhs not in self._stimulus_params)

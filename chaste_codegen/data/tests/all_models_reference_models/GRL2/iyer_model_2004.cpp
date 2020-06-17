@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
 //! Model: iyer_model_2004
 //!
@@ -2192,19 +2192,18 @@
             const double var_x90 = 0.0023800000000000002 + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai;
             const double var_x91 = 1.0 + 0.00011900000000000002 / pow(var_x90, 2);
             const double var_x92 = 1 / var_x91;
-            const double var_x93 = var_x92;
-            const double var_x94 = 1.5379617895699322e-6 * var_x76;
-            const double var_x95 = pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai, 1.2);
-            const double var_x96 = pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaNSR, 1.0);
-            const double var_x97 = 1 / (1.0 + 33855.471141425078 * var_x95 + 0.303951367781155 * var_x96);
-            const double var_x98 = pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai, 0.19999999999999996);
-            const double var_x99 = var_x97 * var_x98;
-            const double var_x100 = 2.532389241378596 * var_x95 - 9.6656534954407287e-5 * var_x96;
-            const double var_x101 = var_x100 / pow((2.9537323401073989e-5 + var_x95 + 8.9779098483507565e-6 * var_x96), 2);
-            const double var_x102 = var_x101 * var_x98;
-            const double var_x103 = 2.8000000000000003 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai;
+            const double var_x93 = 1.5379617895699322e-6 * var_x76;
+            const double var_x94 = pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai, 1.2);
+            const double var_x95 = pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaNSR, 1.0);
+            const double var_x96 = 1 / (1.0 + 33855.471141425078 * var_x94 + 0.303951367781155 * var_x95);
+            const double var_x97 = pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai, 0.19999999999999996);
+            const double var_x98 = var_x96 * var_x97;
+            const double var_x99 = 2.532389241378596 * var_x94 - 9.6656534954407287e-5 * var_x95;
+            const double var_x100 = var_x99 / pow((2.9537323401073989e-5 + var_x94 + 8.9779098483507565e-6 * var_x95), 2);
+            const double var_x101 = var_x100 * var_x97;
+            const double var_x102 = 2.8000000000000003 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai;
             
-            partialF = var_x93 * (-5.6374531835205994 - var_x94 + 2.8000000000000003 * var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__HTRPNCa + 2.8000000000000003 * var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__LTRPNCa + 1.5379617895699322e-6 * var_x78 + 4.2533745697546539e-5 * var_x102 - 0.03190795213912849 * var_x79 - 3.1566725655651652e-8 * var_x77 - 3.6466405075851775 * var_x99) + 0.00023800000000000004 * (0.0028000000000000004 * var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__LTRPNCa + 9.2400000000000013e-6 * var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__HTRPNCa + 3.1566725655651652e-8 * log(2.0 * var_x77) + 0.037453183520599252 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS - 0.037453183520599252 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai - 2.3635396782110715e-9 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V - var_x103 * (1.0 - var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__HTRPNCa) - var_x103 * (1.0 - var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__LTRPNCa) - var_x94 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai + 1.2141201663854144e-8 * var_x13 * var_x7 - 1.2 * var_x100 * var_x97) / (pow(var_x90, 3) * pow(var_x91, 2));
+            partialF = var_x92 * (-5.6374531835205994 - var_x93 + 2.8000000000000003 * var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__HTRPNCa + 2.8000000000000003 * var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__LTRPNCa + 1.5379617895699322e-6 * var_x78 + 4.2533745697546539e-5 * var_x101 - 0.03190795213912849 * var_x79 - 3.1566725655651652e-8 * var_x77 - 3.6466405075851775 * var_x98) + 0.00023800000000000004 * (0.0028000000000000004 * var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__LTRPNCa + 9.2400000000000013e-6 * var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__HTRPNCa + 3.1566725655651652e-8 * log(2.0 * var_x77) + 0.037453183520599252 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS - 0.037453183520599252 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai - 2.3635396782110715e-9 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V - var_x102 * (1.0 - var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__HTRPNCa) - var_x102 * (1.0 - var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__LTRPNCa) - var_x93 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai + 1.2141201663854144e-8 * var_x13 * var_x7 - 1.2 * var_x96 * var_x99) / (pow(var_x90, 3) * pow(var_x91, 2));
         }
         else
         {
@@ -2299,17 +2298,16 @@
             const double var_x35 = -0.68200000000000005 + 0.001 * var_x32;
             const double var_x36 = var_x34 * var_x35;
             const double var_x38 = var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__Open * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa;
-            const double var_x104 = 16.54232713906077 * var_x36;
-            const double var_x105 = var_x104 * var_x38;
-            const double var_x106 = 0.0023800000000000002 + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS;
-            const double var_x107 = 1.0 + 0.00011900000000000002 / pow(var_x106, 2);
-            const double var_x108 = 1 / var_x107;
-            const double var_x109 = var_x108;
-            const double var_x110 = 240.0 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR;
-            const double var_x111 = 240.0 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O2_RyR;
-            const double var_x112 = (-var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR) * (var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR + var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O2_RyR);
+            const double var_x103 = 0.0023800000000000002 + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS;
+            const double var_x104 = 1.0 + 0.00011900000000000002 / pow(var_x103, 2);
+            const double var_x105 = 1 / var_x104;
+            const double var_x106 = 16.54232713906077 * var_x36;
+            const double var_x107 = var_x106 * var_x38;
+            const double var_x108 = 240.0 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR;
+            const double var_x109 = 240.0 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O2_RyR;
+            const double var_x110 = (-var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR) * (var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR + var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O2_RyR);
             
-            partialF = var_x109 * (-806.49188514357058 - var_x110 - var_x111) + 0.00023800000000000004 * (806.49188514357058 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai + 240.0 * var_x112 - 806.49188514357058 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS - var_x105 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) / (pow(var_x106, 3) * pow(var_x107, 2));
+            partialF = var_x105 * (-806.49188514357058 - var_x108 - var_x109) + 0.00023800000000000004 * (806.49188514357058 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai + 240.0 * var_x110 - 806.49188514357058 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS - var_x107 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) / (pow(var_x103, 3) * pow(var_x104, 2));
         }
         else
         {
@@ -2365,15 +2363,14 @@
             double var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR = rY[12];
             // Units: dimensionless; Initial value: 0.0006601783287
             
-            const double var_x112 = (-var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR) * (var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR + var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O2_RyR);
-            const double var_x115 = 1.8 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR;
-            const double var_x116 = 1.8 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O2_RyR;
-            const double var_x117 = 0.80000000000000004 + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR;
-            const double var_x118 = pow(var_x117, (-2));
-            const double var_x119 = 1 / (1.0 + 12.0 * var_x118);
-            const double var_x120 = var_x119;
+            const double var_x110 = (-var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR) * (var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR + var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O2_RyR);
+            const double var_x113 = 0.80000000000000004 + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR;
+            const double var_x114 = pow(var_x113, (-2));
+            const double var_x115 = 1 / (1.0 + 12.0 * var_x114);
+            const double var_x116 = 1.8 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR;
+            const double var_x117 = 1.8 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O2_RyR;
             
-            partialF = var_x120 * (-1.7400382808421786 - var_x115 - var_x116) + 0.16666666666666666 * (1.7400382808421786 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaNSR - 1.8 * var_x112 - 1.7400382808421786 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR) / (pow(var_x117, 3) * pow((0.083333333333333329 + var_x118), 2));
+            partialF = var_x115 * (-1.7400382808421786 - var_x116 - var_x117) + 0.16666666666666666 * (1.7400382808421786 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaNSR - 1.8 * var_x110 - 1.7400382808421786 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR) / (pow(var_x113, 3) * pow((0.083333333333333329 + var_x114), 2));
         }
         else
         {
@@ -2427,13 +2424,13 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaNSR = rY[6];
             // Units: mM; Initial value: 0.2855294915
             
-            const double var_x95 = pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai, 1.2);
-            const double var_x96 = pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaNSR, 1.0);
-            const double var_x97 = 1 / (1.0 + 33855.471141425078 * var_x95 + 0.303951367781155 * var_x96);
-            const double var_x100 = 2.532389241378596 * var_x95 - 9.6656534954407287e-5 * var_x96;
-            const double var_x101 = var_x100 / pow((2.9537323401073989e-5 + var_x95 + 8.9779098483507565e-6 * var_x96), 2);
+            const double var_x94 = pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai, 1.2);
+            const double var_x95 = pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaNSR, 1.0);
+            const double var_x96 = 1 / (1.0 + 33855.471141425078 * var_x94 + 0.303951367781155 * var_x95);
+            const double var_x99 = 2.532389241378596 * var_x94 - 9.6656534954407287e-5 * var_x95;
+            const double var_x100 = var_x99 / pow((2.9537323401073989e-5 + var_x94 + 8.9779098483507565e-6 * var_x95), 2);
             
-            partialF = -0.13257434520702313 - 3.9156227113154178e-9 * var_x101 - 0.001427202778983934 * var_x97;
+            partialF = -0.13257434520702313 - 3.9156227113154178e-9 * var_x100 - 0.001427202778983934 * var_x96;
         }
         else
         {
@@ -2552,9 +2549,9 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS = rY[4];
             // Units: mM; Initial value: 0.0001420215245
             
-            const double var_x124 = 12150000000.0 * pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS, 4.0);
+            const double var_x121 = 12150000000.0 * pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS, 4.0);
             
-            partialF = -var_x124;
+            partialF = -var_x121;
         }
         else
         {
@@ -2684,10 +2681,10 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS = rY[4];
             // Units: mM; Initial value: 0.0001420215245
             
-            const double var_x122 = pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS, 3.0);
-            const double var_x126 = 4050000.0 * var_x122;
+            const double var_x119 = pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS, 3.0);
+            const double var_x123 = 4050000.0 * var_x119;
             
-            partialF = -0.67599999999999993 - var_x126;
+            partialF = -0.67599999999999993 - var_x123;
         }
         else
         {
@@ -2740,12 +2737,12 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS = rY[4];
             // Units: mM; Initial value: 0.0001420215245
             
-            const double var_x129 = exp(-0.41999999999999998 + 0.012 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x133 = 0.055397999999999996 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS;
-            const double var_x134 = 7.9871999999999996 * var_x129;
-            const double var_x135 = -var_x134;
+            const double var_x126 = exp(-0.41999999999999998 + 0.012 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x130 = 0.055397999999999996 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS;
+            const double var_x131 = 7.9871999999999996 * var_x126;
+            const double var_x132 = -var_x131;
             
-            partialF = var_x135 - var_x133;
+            partialF = var_x132 - var_x130;
         }
         else
         {
@@ -2806,14 +2803,14 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS = rY[4];
             // Units: mM; Initial value: 0.0001420215245
             
-            const double var_x127 = exp(1.4300000000000002 - 0.065000000000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x129 = exp(-0.41999999999999998 + 0.012 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x136 = 0.088200000000000001 * var_x127;
-            const double var_x140 = 5.9903999999999993 * var_x129;
-            const double var_x141 = 0.11079599999999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS;
-            const double var_x142 = -var_x136;
+            const double var_x124 = exp(1.4300000000000002 - 0.065000000000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x126 = exp(-0.41999999999999998 + 0.012 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x133 = 0.088200000000000001 * var_x124;
+            const double var_x137 = 5.9903999999999993 * var_x126;
+            const double var_x138 = 0.11079599999999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS;
+            const double var_x139 = -var_x133;
             
-            partialF = var_x142 - var_x140 - var_x141;
+            partialF = var_x139 - var_x137 - var_x138;
         }
         else
         {
@@ -2876,15 +2873,15 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS = rY[4];
             // Units: mM; Initial value: 0.0001420215245
             
-            const double var_x127 = exp(1.4300000000000002 - 0.065000000000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x129 = exp(-0.41999999999999998 + 0.012 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x143 = 0.1764 * var_x127;
-            const double var_x148 = 0.22159199999999998 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS;
-            const double var_x149 = -var_x143;
-            const double var_x150 = 3.9935999999999998 * var_x129;
-            const double var_x151 = -var_x150;
+            const double var_x124 = exp(1.4300000000000002 - 0.065000000000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x126 = exp(-0.41999999999999998 + 0.012 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x140 = 0.1764 * var_x124;
+            const double var_x145 = 0.22159199999999998 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS;
+            const double var_x146 = -var_x140;
+            const double var_x147 = 3.9935999999999998 * var_x126;
+            const double var_x148 = -var_x147;
             
-            partialF = var_x149 + var_x151 - var_x148;
+            partialF = var_x146 + var_x148 - var_x145;
         }
         else
         {
@@ -2949,13 +2946,13 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS = rY[4];
             // Units: mM; Initial value: 0.0001420215245
             
-            const double var_x127 = exp(1.4300000000000002 - 0.065000000000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x129 = exp(-0.41999999999999998 + 0.012 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x152 = 0.2646 * var_x127;
-            const double var_x156 = 0.44318399999999997 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS;
-            const double var_x157 = 1.9967999999999999 * var_x129;
+            const double var_x124 = exp(1.4300000000000002 - 0.065000000000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x126 = exp(-0.41999999999999998 + 0.012 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x149 = 0.2646 * var_x124;
+            const double var_x153 = 0.44318399999999997 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS;
+            const double var_x154 = 1.9967999999999999 * var_x126;
             
-            partialF = -var_x152 - var_x156 - var_x157;
+            partialF = -var_x149 - var_x153 - var_x154;
         }
         else
         {
@@ -3022,11 +3019,11 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS = rY[4];
             // Units: mM; Initial value: 0.0001420215245
             
-            const double var_x127 = exp(1.4300000000000002 - 0.065000000000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x158 = 0.3528 * var_x127;
-            const double var_x160 = 0.88636799999999993 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS;
+            const double var_x124 = exp(1.4300000000000002 - 0.065000000000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x155 = 0.3528 * var_x124;
+            const double var_x157 = 0.88636799999999993 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS;
             
-            partialF = -0.29999999999999999 - var_x158 - var_x160;
+            partialF = -0.29999999999999999 - var_x155 - var_x157;
         }
         else
         {
@@ -3081,10 +3078,10 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x129 = exp(-0.41999999999999998 + 0.012 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x163 = 15.974399999999999 * var_x129;
+            const double var_x126 = exp(-0.41999999999999998 + 0.012 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x160 = 15.974399999999999 * var_x126;
             
-            partialF = -0.0025000000000000001 - var_x163;
+            partialF = -0.0025000000000000001 - var_x160;
         }
         else
         {
@@ -3145,12 +3142,12 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x127 = exp(1.4300000000000002 - 0.065000000000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x129 = exp(-0.41999999999999998 + 0.012 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x164 = 0.0441 * var_x127;
-            const double var_x166 = 11.980799999999999 * var_x129;
+            const double var_x124 = exp(1.4300000000000002 - 0.065000000000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x126 = exp(-0.41999999999999998 + 0.012 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x161 = 0.0441 * var_x124;
+            const double var_x163 = 11.980799999999999 * var_x126;
             
-            partialF = -0.00125 - var_x164 - var_x166;
+            partialF = -0.00125 - var_x161 - var_x163;
         }
         else
         {
@@ -3213,14 +3210,14 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x127 = exp(1.4300000000000002 - 0.065000000000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x129 = exp(-0.41999999999999998 + 0.012 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x134 = 7.9871999999999996 * var_x129;
-            const double var_x135 = -var_x134;
-            const double var_x136 = 0.088200000000000001 * var_x127;
-            const double var_x142 = -var_x136;
+            const double var_x124 = exp(1.4300000000000002 - 0.065000000000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x126 = exp(-0.41999999999999998 + 0.012 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x131 = 7.9871999999999996 * var_x126;
+            const double var_x132 = -var_x131;
+            const double var_x133 = 0.088200000000000001 * var_x124;
+            const double var_x139 = -var_x133;
             
-            partialF = -0.00062500000000000001 + var_x135 + var_x142;
+            partialF = -0.00062500000000000001 + var_x132 + var_x139;
         }
         else
         {
@@ -3285,13 +3282,13 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x127 = exp(1.4300000000000002 - 0.065000000000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x129 = exp(-0.41999999999999998 + 0.012 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x150 = 3.9935999999999998 * var_x129;
-            const double var_x151 = -var_x150;
-            const double var_x168 = 0.1323 * var_x127;
+            const double var_x124 = exp(1.4300000000000002 - 0.065000000000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x126 = exp(-0.41999999999999998 + 0.012 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x147 = 3.9935999999999998 * var_x126;
+            const double var_x148 = -var_x147;
+            const double var_x165 = 0.1323 * var_x124;
             
-            partialF = -0.00031250000000000001 + var_x151 - var_x168;
+            partialF = -0.00031250000000000001 + var_x148 - var_x165;
         }
         else
         {
@@ -3354,11 +3351,11 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x127 = exp(1.4300000000000002 - 0.065000000000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x143 = 0.1764 * var_x127;
-            const double var_x149 = -var_x143;
+            const double var_x124 = exp(1.4300000000000002 - 0.065000000000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x140 = 0.1764 * var_x124;
+            const double var_x146 = -var_x140;
             
-            partialF = -0.00015625 + var_x149;
+            partialF = -0.00015625 + var_x146;
         }
         else
         {
@@ -3432,13 +3429,13 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x170 = exp(-0.02019777813343069 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x171 = exp(-0.18053804430634462 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x172 = 0.5 + var_x171;
-            const double var_x175 = 0.0033633620945199998 / var_x172;
-            const double var_x176 = 0.0077904657073700001 * var_x170;
+            const double var_x167 = exp(-0.02019777813343069 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x168 = exp(-0.18053804430634462 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x169 = 0.5 + var_x168;
+            const double var_x172 = 0.0033633620945199998 / var_x169;
+            const double var_x173 = 0.0077904657073700001 * var_x167;
             
-            partialF = -var_x175 - var_x176;
+            partialF = -var_x172 - var_x173;
         }
         else
         {
@@ -3495,12 +3492,12 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x177 = exp(5.3739999999999997e-8 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x179 = exp(0.028982999999999998 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x185 = 2.1748319999999999 * var_x179;
-            const double var_x186 = 0.00081948199999999996 * var_x177;
+            const double var_x174 = exp(5.3739999999999997e-8 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x176 = exp(0.028982999999999998 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x182 = 2.1748319999999999 * var_x176;
+            const double var_x183 = 0.00081948199999999996 * var_x174;
             
-            partialF = -var_x185 - var_x186;
+            partialF = -var_x182 - var_x183;
         }
         else
         {
@@ -3563,14 +3560,14 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x177 = exp(5.3739999999999997e-8 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x179 = exp(0.028982999999999998 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x183 = exp(-0.046843700000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x187 = 0.080185000000000006 * var_x183;
-            const double var_x193 = 1.6311239999999998 * var_x179;
-            const double var_x194 = 0.0015517711151999999 * var_x177;
+            const double var_x174 = exp(5.3739999999999997e-8 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x176 = exp(0.028982999999999998 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x180 = exp(-0.046843700000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x184 = 0.080185000000000006 * var_x180;
+            const double var_x190 = 1.6311239999999998 * var_x176;
+            const double var_x191 = 0.0015517711151999999 * var_x174;
             
-            partialF = -var_x187 - var_x193 - var_x194;
+            partialF = -var_x184 - var_x190 - var_x191;
         }
         else
         {
@@ -3633,14 +3630,14 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x177 = exp(5.3739999999999997e-8 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x179 = exp(0.028982999999999998 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x183 = exp(-0.046843700000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x195 = 0.16037000000000001 * var_x183;
-            const double var_x201 = 1.0874159999999999 * var_x179;
-            const double var_x202 = 0.011656842546537791 * var_x177;
+            const double var_x174 = exp(5.3739999999999997e-8 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x176 = exp(0.028982999999999998 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x180 = exp(-0.046843700000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x192 = 0.16037000000000001 * var_x180;
+            const double var_x198 = 1.0874159999999999 * var_x176;
+            const double var_x199 = 0.011656842546537791 * var_x174;
             
-            partialF = -var_x195 - var_x201 - var_x202;
+            partialF = -var_x192 - var_x198 - var_x199;
         }
         else
         {
@@ -3703,14 +3700,14 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x177 = exp(5.3739999999999997e-8 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x179 = exp(0.028982999999999998 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x183 = exp(-0.046843700000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x203 = 0.24055500000000002 * var_x183;
-            const double var_x209 = 0.54370799999999997 * var_x179;
-            const double var_x210 = 0.12994884875097448 * var_x177;
+            const double var_x174 = exp(5.3739999999999997e-8 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x176 = exp(0.028982999999999998 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x180 = exp(-0.046843700000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x200 = 0.24055500000000002 * var_x180;
+            const double var_x206 = 0.54370799999999997 * var_x176;
+            const double var_x207 = 0.12994884875097448 * var_x174;
             
-            partialF = -var_x203 - var_x209 - var_x210;
+            partialF = -var_x200 - var_x206 - var_x207;
         }
         else
         {
@@ -3769,12 +3766,12 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x177 = exp(5.3739999999999997e-8 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x183 = exp(-0.046843700000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x211 = 0.32074000000000003 * var_x183;
-            const double var_x215 = 0.11713400800552819 * var_x177;
+            const double var_x174 = exp(5.3739999999999997e-8 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x180 = exp(-0.046843700000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x208 = 0.32074000000000003 * var_x180;
+            const double var_x212 = 0.11713400800552819 * var_x174;
             
-            partialF = -var_x211 - var_x215;
+            partialF = -var_x208 - var_x212;
         }
         else
         {
@@ -3833,12 +3830,12 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x179 = exp(0.028982999999999998 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x181 = exp(-0.00037301599999999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x188 = 0.049842400000000002 * var_x181;
-            const double var_x219 = 14.731181055359999 * var_x179;
+            const double var_x176 = exp(0.028982999999999998 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x178 = exp(-0.00037301599999999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x185 = 0.049842400000000002 * var_x178;
+            const double var_x216 = 14.731181055359999 * var_x176;
             
-            partialF = -var_x188 - var_x219;
+            partialF = -var_x185 - var_x216;
         }
         else
         {
@@ -3903,14 +3900,14 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x179 = exp(0.028982999999999998 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x181 = exp(-0.00037301599999999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x183 = exp(-0.046843700000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x196 = 0.0073584627104531205 * var_x181;
-            const double var_x220 = 0.042345268272074361 * var_x183;
-            const double var_x223 = 3.7617634137599998 * var_x179;
+            const double var_x176 = exp(0.028982999999999998 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x178 = exp(-0.00037301599999999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x180 = exp(-0.046843700000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x193 = 0.0073584627104531205 * var_x178;
+            const double var_x217 = 0.042345268272074361 * var_x180;
+            const double var_x220 = 3.7617634137599998 * var_x176;
             
-            partialF = -var_x196 - var_x220 - var_x223;
+            partialF = -var_x193 - var_x217 - var_x220;
         }
         else
         {
@@ -3977,14 +3974,14 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x179 = exp(0.028982999999999998 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x181 = exp(-0.00037301599999999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x183 = exp(-0.046843700000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x204 = 0.0031906751727717496 * var_x181;
-            const double var_x224 = 0.021348622729620501 * var_x183;
-            const double var_x227 = 2.0015500855706554 * var_x179;
+            const double var_x176 = exp(0.028982999999999998 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x178 = exp(-0.00037301599999999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x180 = exp(-0.046843700000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x201 = 0.0031906751727717496 * var_x178;
+            const double var_x221 = 0.021348622729620501 * var_x180;
+            const double var_x224 = 2.0015500855706554 * var_x176;
             
-            partialF = -var_x204 - var_x224 - var_x227;
+            partialF = -var_x201 - var_x221 - var_x224;
         }
         else
         {
@@ -4051,14 +4048,14 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x179 = exp(0.028982999999999998 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x181 = exp(-0.00037301599999999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x183 = exp(-0.046843700000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x212 = 0.0017334521172801731 * var_x181;
-            const double var_x228 = 0.021578581001175438 * var_x183;
-            const double var_x231 = 9.9194413744637924 * var_x179;
+            const double var_x176 = exp(0.028982999999999998 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x178 = exp(-0.00037301599999999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x180 = exp(-0.046843700000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x209 = 0.0017334521172801731 * var_x178;
+            const double var_x225 = 0.021578581001175438 * var_x180;
+            const double var_x228 = 9.9194413744637924 * var_x176;
             
-            partialF = -var_x212 - var_x228 - var_x231;
+            partialF = -var_x209 - var_x225 - var_x228;
         }
         else
         {
@@ -4119,12 +4116,12 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x181 = exp(-0.00037301599999999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x183 = exp(-0.046843700000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x216 = 9.5014602960251466e-5 * var_x181;
-            const double var_x232 = 0.35582999726621212 * var_x183;
+            const double var_x178 = exp(-0.00037301599999999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x180 = exp(-0.046843700000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x213 = 9.5014602960251466e-5 * var_x178;
+            const double var_x229 = 0.35582999726621212 * var_x180;
             
-            partialF = -var_x216 - var_x232;
+            partialF = -var_x213 - var_x229;
         }
         else
         {
@@ -4179,10 +4176,10 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x235 = exp(0.0076854803100000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x237 = 7.3600965821599997 * var_x235;
+            const double var_x232 = exp(0.0076854803100000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x234 = 7.3600965821599997 * var_x232;
             
-            partialF = -2.44936e-6 - var_x237;
+            partialF = -2.44936e-6 - var_x234;
         }
         else
         {
@@ -4243,12 +4240,12 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x233 = exp(-0.077933781739999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x235 = exp(0.0076854803100000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x238 = 0.010817483399999999 * var_x233;
-            const double var_x241 = 5.5200724366199996 * var_x235;
+            const double var_x230 = exp(-0.077933781739999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x232 = exp(0.0076854803100000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x235 = 0.010817483399999999 * var_x230;
+            const double var_x238 = 5.5200724366199996 * var_x232;
             
-            partialF = -1.2850585364284256e-6 - var_x238 - var_x241;
+            partialF = -1.2850585364284256e-6 - var_x235 - var_x238;
         }
         else
         {
@@ -4309,12 +4306,12 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x233 = exp(-0.077933781739999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x235 = exp(0.0076854803100000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x242 = 0.021634966799999999 * var_x233;
-            const double var_x245 = 3.6800482910799999 * var_x235;
+            const double var_x230 = exp(-0.077933781739999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x232 = exp(0.0076854803100000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x239 = 0.021634966799999999 * var_x230;
+            const double var_x242 = 3.6800482910799999 * var_x232;
             
-            partialF = -4.290998044504021e-5 - var_x242 - var_x245;
+            partialF = -4.290998044504021e-5 - var_x239 - var_x242;
         }
         else
         {
@@ -4375,12 +4372,12 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x233 = exp(-0.077933781739999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x235 = exp(0.0076854803100000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x246 = 0.032452450199999996 * var_x233;
-            const double var_x249 = 1.8400241455399999 * var_x235;
+            const double var_x230 = exp(-0.077933781739999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x232 = exp(0.0076854803100000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x243 = 0.032452450199999996 * var_x230;
+            const double var_x246 = 1.8400241455399999 * var_x232;
             
-            partialF = -0.0022989390350036006 - var_x246 - var_x249;
+            partialF = -0.0022989390350036006 - var_x243 - var_x246;
         }
         else
         {
@@ -4437,10 +4434,10 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x233 = exp(-0.077933781739999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x250 = 0.043269933599999998 * var_x233;
+            const double var_x230 = exp(-0.077933781739999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x247 = 0.043269933599999998 * var_x230;
             
-            partialF = -0.1341004876120194 - var_x250;
+            partialF = -0.1341004876120194 - var_x247;
         }
         else
         {
@@ -4497,10 +4494,10 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x235 = exp(0.0076854803100000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x253 = 7.4298590445392074 * var_x235;
+            const double var_x232 = exp(0.0076854803100000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x250 = 7.4298590445392074 * var_x232;
             
-            partialF = -0.00305767916 - var_x253;
+            partialF = -0.00305767916 - var_x250;
         }
         else
         {
@@ -4563,12 +4560,12 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x233 = exp(-0.077933781739999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x235 = exp(0.0076854803100000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x254 = 0.020618446856331008 * var_x233;
-            const double var_x257 = 6.4033407827395079 * var_x235;
+            const double var_x230 = exp(-0.077933781739999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x232 = exp(0.0076854803100000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x251 = 0.020618446856331008 * var_x230;
+            const double var_x254 = 6.4033407827395079 * var_x232;
             
-            partialF = -0.0030289691634726814 - var_x254 - var_x257;
+            partialF = -0.0030289691634726814 - var_x251 - var_x254;
         }
         else
         {
@@ -4633,12 +4630,12 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x233 = exp(-0.077933781739999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x235 = exp(0.0076854803100000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x258 = 0.00064791916666788224 * var_x233;
-            const double var_x261 = 2.0082338973371909 * var_x235;
+            const double var_x230 = exp(-0.077933781739999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x232 = exp(0.0076854803100000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x255 = 0.00064791916666788224 * var_x230;
+            const double var_x258 = 2.0082338973371909 * var_x232;
             
-            partialF = -0.0026111571690401588 - var_x258 - var_x261;
+            partialF = -0.0026111571690401588 - var_x255 - var_x258;
         }
         else
         {
@@ -4703,12 +4700,12 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x233 = exp(-0.077933781739999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x235 = exp(0.0076854803100000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x262 = 0.00060572898292340319 * var_x233;
-            const double var_x265 = 6.1053726595326019 * var_x235;
+            const double var_x230 = exp(-0.077933781739999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x232 = exp(0.0076854803100000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x259 = 0.00060572898292340319 * var_x230;
+            const double var_x262 = 6.1053726595326019 * var_x232;
             
-            partialF = -0.0047848930796401661 - var_x262 - var_x265;
+            partialF = -0.0047848930796401661 - var_x259 - var_x262;
         }
         else
         {
@@ -4767,10 +4764,10 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x233 = exp(-0.077933781739999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x266 = 0.00074179401705723523 * var_x233;
+            const double var_x230 = exp(-0.077933781739999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x263 = 0.00074179401705723523 * var_x230;
             
-            partialF = -0.0014420608358145942 - var_x266;
+            partialF = -0.0014420608358145942 - var_x263;
         }
         else
         {
@@ -4824,12 +4821,12 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x269 = exp(-19.657914992626967 + 0.011298360712115747 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x271 = exp(-23.156677820503301);
-            const double var_x272 = 8513540195.0827656 * var_x271;
-            const double var_x273 = 34054160780.331062 * var_x269;
+            const double var_x266 = exp(-19.657914992626967 + 0.011298360712115747 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x268 = exp(-23.156677820503301);
+            const double var_x269 = 8513540195.0827656 * var_x268;
+            const double var_x270 = 34054160780.331062 * var_x266;
             
-            partialF = -var_x272 - var_x273;
+            partialF = -var_x269 - var_x270;
         }
         else
         {
@@ -4890,14 +4887,14 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x267 = exp(-26.232056238852348 - 0.090161609404259865 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x269 = exp(-19.657914992626967 + 0.011298360712115747 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x271 = exp(-23.156677820503301);
-            const double var_x274 = 8513540195.0827656 * var_x267;
-            const double var_x279 = 11922585210.267752 * var_x271;
-            const double var_x280 = 25540620585.248295 * var_x269;
+            const double var_x264 = exp(-26.232056238852348 - 0.090161609404259865 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x266 = exp(-19.657914992626967 + 0.011298360712115747 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x268 = exp(-23.156677820503301);
+            const double var_x271 = 8513540195.0827656 * var_x264;
+            const double var_x276 = 11922585210.267752 * var_x268;
+            const double var_x277 = 25540620585.248295 * var_x266;
             
-            partialF = -var_x274 - var_x279 - var_x280;
+            partialF = -var_x271 - var_x276 - var_x277;
         }
         else
         {
@@ -4960,14 +4957,14 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x267 = exp(-26.232056238852348 - 0.090161609404259865 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x269 = exp(-19.657914992626967 + 0.011298360712115747 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x271 = exp(-23.156677820503301);
-            const double var_x281 = 17027080390.165531 * var_x267;
-            const double var_x285 = 16696701353.239271 * var_x271;
-            const double var_x286 = 17027080390.165531 * var_x269;
+            const double var_x264 = exp(-26.232056238852348 - 0.090161609404259865 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x266 = exp(-19.657914992626967 + 0.011298360712115747 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x268 = exp(-23.156677820503301);
+            const double var_x278 = 17027080390.165531 * var_x264;
+            const double var_x282 = 16696701353.239271 * var_x268;
+            const double var_x283 = 17027080390.165531 * var_x266;
             
-            partialF = -var_x281 - var_x285 - var_x286;
+            partialF = -var_x278 - var_x282 - var_x283;
         }
         else
         {
@@ -5032,14 +5029,14 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x267 = exp(-26.232056238852348 - 0.090161609404259865 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x269 = exp(-19.657914992626967 + 0.011298360712115747 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x271 = exp(-23.156677820503301);
-            const double var_x287 = 25540620585.248295 * var_x267;
-            const double var_x291 = 23382498943.197018 * var_x271;
-            const double var_x292 = 8513540195.0827656 * var_x269;
+            const double var_x264 = exp(-26.232056238852348 - 0.090161609404259865 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x266 = exp(-19.657914992626967 + 0.011298360712115747 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x268 = exp(-23.156677820503301);
+            const double var_x284 = 25540620585.248295 * var_x264;
+            const double var_x288 = 23382498943.197018 * var_x268;
+            const double var_x289 = 8513540195.0827656 * var_x266;
             
-            partialF = -var_x287 - var_x291 - var_x292;
+            partialF = -var_x284 - var_x288 - var_x289;
         }
         else
         {
@@ -5114,16 +5111,16 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x267 = exp(-26.232056238852348 - 0.090161609404259865 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x271 = exp(-23.156677820503301);
-            const double var_x293 = 34054160780.331062 * var_x267;
-            const double var_x295 = exp(-19.672905196314268 + 0.084272054104636354 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x297 = exp(-16.535928437145476 + 0.1097131992444229 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x303 = 32745465422.278648 * var_x271;
-            const double var_x304 = 8513540195.0827656 * var_x297;
-            const double var_x305 = 8513540195.0827656 * var_x295;
+            const double var_x264 = exp(-26.232056238852348 - 0.090161609404259865 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x268 = exp(-23.156677820503301);
+            const double var_x290 = 34054160780.331062 * var_x264;
+            const double var_x292 = exp(-19.672905196314268 + 0.084272054104636354 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x294 = exp(-16.535928437145476 + 0.1097131992444229 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x300 = 32745465422.278648 * var_x268;
+            const double var_x301 = 8513540195.0827656 * var_x294;
+            const double var_x302 = 8513540195.0827656 * var_x292;
             
-            partialF = -var_x293 - var_x303 - var_x304 - var_x305;
+            partialF = -var_x290 - var_x300 - var_x301 - var_x302;
         }
         else
         {
@@ -5183,13 +5180,13 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x299 = exp(-27.092641999412571 - 0.061469636400174388 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x306 = 8513540195.0827656 * var_x299;
-            const double var_x309 = exp(-20.6726464954126 + 0.011394696340402199 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x313 = 8513540195.0827656 * exp(-26.650781465416159);
-            const double var_x314 = 8513540195.0827656 * var_x309;
+            const double var_x296 = exp(-27.092641999412571 - 0.061469636400174388 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x303 = 8513540195.0827656 * var_x296;
+            const double var_x306 = exp(-20.6726464954126 + 0.011394696340402199 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x310 = 8513540195.0827656 * exp(-26.650781465416159);
+            const double var_x311 = 8513540195.0827656 * var_x306;
             
-            partialF = -var_x306 - var_x313 - var_x314;
+            partialF = -var_x303 - var_x310 - var_x311;
         }
         else
         {
@@ -5243,11 +5240,11 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x301 = exp(-26.358496255772213 - 0.068762962366201316 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x307 = 8513540195.0827656 * var_x301;
-            const double var_x315 = 8513540195.0827656 * exp(-22.779658962607588);
+            const double var_x298 = exp(-26.358496255772213 - 0.068762962366201316 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x304 = 8513540195.0827656 * var_x298;
+            const double var_x312 = 8513540195.0827656 * exp(-22.779658962607588);
             
-            partialF = -var_x307 - var_x315;
+            partialF = -var_x304 - var_x312;
         }
         else
         {
@@ -5304,12 +5301,12 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x269 = exp(-19.657914992626967 + 0.011298360712115747 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x275 = exp(-24.35183300086069);
-            const double var_x276 = 8513540195.0827656 * var_x275;
-            const double var_x319 = 47690340841.071007 * var_x269;
+            const double var_x266 = exp(-19.657914992626967 + 0.011298360712115747 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x272 = exp(-24.35183300086069);
+            const double var_x273 = 8513540195.0827656 * var_x272;
+            const double var_x316 = 47690340841.071007 * var_x266;
             
-            partialF = -var_x276 - var_x319;
+            partialF = -var_x273 - var_x316;
         }
         else
         {
@@ -5374,14 +5371,14 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x267 = exp(-26.232056238852348 - 0.090161609404259865 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x269 = exp(-19.657914992626967 + 0.011298360712115747 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x275 = exp(-24.35183300086069);
-            const double var_x282 = 6079249204.347868 * var_x275;
-            const double var_x320 = 6079249204.347868 * var_x267;
-            const double var_x323 = 35767755630.803253 * var_x269;
+            const double var_x264 = exp(-26.232056238852348 - 0.090161609404259865 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x266 = exp(-19.657914992626967 + 0.011298360712115747 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x272 = exp(-24.35183300086069);
+            const double var_x279 = 6079249204.347868 * var_x272;
+            const double var_x317 = 6079249204.347868 * var_x264;
+            const double var_x320 = 35767755630.803253 * var_x266;
             
-            partialF = -var_x282 - var_x320 - var_x323;
+            partialF = -var_x279 - var_x317 - var_x320;
         }
         else
         {
@@ -5448,14 +5445,14 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x267 = exp(-26.232056238852348 - 0.090161609404259865 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x269 = exp(-19.657914992626967 + 0.011298360712115747 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x275 = exp(-24.35183300086069);
-            const double var_x288 = 4340999166.2352047 * var_x275;
-            const double var_x324 = 12158498408.695736 * var_x267;
-            const double var_x327 = 23845170420.535503 * var_x269;
+            const double var_x264 = exp(-26.232056238852348 - 0.090161609404259865 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x266 = exp(-19.657914992626967 + 0.011298360712115747 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x272 = exp(-24.35183300086069);
+            const double var_x285 = 4340999166.2352047 * var_x272;
+            const double var_x321 = 12158498408.695736 * var_x264;
+            const double var_x324 = 23845170420.535503 * var_x266;
             
-            partialF = -var_x288 - var_x324 - var_x327;
+            partialF = -var_x285 - var_x321 - var_x324;
         }
         else
         {
@@ -5524,14 +5521,14 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x267 = exp(-26.232056238852348 - 0.090161609404259865 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x269 = exp(-19.657914992626967 + 0.011298360712115747 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x275 = exp(-24.35183300086069);
-            const double var_x294 = 3099769910.3661275 * var_x275;
-            const double var_x328 = 18237747613.043602 * var_x267;
-            const double var_x331 = 11922585210.267752 * var_x269;
+            const double var_x264 = exp(-26.232056238852348 - 0.090161609404259865 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x266 = exp(-19.657914992626967 + 0.011298360712115747 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x272 = exp(-24.35183300086069);
+            const double var_x291 = 3099769910.3661275 * var_x272;
+            const double var_x325 = 18237747613.043602 * var_x264;
+            const double var_x328 = 11922585210.267752 * var_x266;
             
-            partialF = -var_x294 - var_x328 - var_x331;
+            partialF = -var_x291 - var_x325 - var_x328;
         }
         else
         {
@@ -5602,14 +5599,14 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x267 = exp(-26.232056238852348 - 0.090161609404259865 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x275 = exp(-24.35183300086069);
-            const double var_x308 = 2213447441.3051791 * var_x275;
-            const double var_x332 = 24316996817.391472 * var_x267;
-            const double var_x333 = exp(-21.949261959797553 + 0.030147161449011892 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x337 = 8513540195.0827656 * var_x333;
+            const double var_x264 = exp(-26.232056238852348 - 0.090161609404259865 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x272 = exp(-24.35183300086069);
+            const double var_x305 = 2213447441.3051791 * var_x272;
+            const double var_x329 = 24316996817.391472 * var_x264;
+            const double var_x330 = exp(-21.949261959797553 + 0.030147161449011892 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x334 = 8513540195.0827656 * var_x330;
             
-            partialF = -var_x308 - var_x332 - var_x337;
+            partialF = -var_x305 - var_x329 - var_x334;
         }
         else
         {
@@ -5663,12 +5660,12 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x311 = exp(-39.744904705650839 + 0.0027019947965296331 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x316 = 8513540195.0827656 * var_x311;
-            const double var_x335 = exp(-38.483942906307405 - 0.14399668707161886 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x338 = 8513540195.0827656 * var_x335;
+            const double var_x308 = exp(-39.744904705650839 + 0.0027019947965296331 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x313 = 8513540195.0827656 * var_x308;
+            const double var_x332 = exp(-38.483942906307405 - 0.14399668707161886 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x335 = 8513540195.0827656 * var_x332;
             
-            partialF = -var_x316 - var_x338;
+            partialF = -var_x313 - var_x335;
         }
         else
         {
@@ -5712,10 +5709,10 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x339 = exp(0.033046080388350003 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x343 = 0.091225454037165171 * var_x339;
+            const double var_x336 = exp(0.033046080388350003 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x340 = 0.091225454037165171 * var_x336;
             
-            partialF = -var_x343;
+            partialF = -var_x340;
         }
         else
         {
@@ -5765,10 +5762,10 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x341 = exp(-0.043060541639799998 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x344 = 0.21116826991639448 * var_x341;
+            const double var_x338 = exp(-0.043060541639799998 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x341 = 0.21116826991639448 * var_x338;
             
-            partialF = -0.13876486073161204 - var_x344;
+            partialF = -0.13876486073161204 - var_x341;
         }
         else
         {
@@ -5830,12 +5827,12 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x345 = exp(6.9808923999999997e-7 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x347 = exp(0.026174127151180001 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x355 = 0.10945626585855089 * var_x347;
-            const double var_x356 = 0.00042769471831999382 * var_x345;
+            const double var_x342 = exp(6.9808923999999997e-7 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x344 = exp(0.026174127151180001 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x352 = 0.10945626585855089 * var_x344;
+            const double var_x353 = 0.00042769471831999382 * var_x342;
             
-            partialF = -0.78911443677844384 - var_x355 - var_x356;
+            partialF = -0.78911443677844384 - var_x352 - var_x353;
         }
         else
         {
@@ -5889,12 +5886,12 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x349 = exp(-0.026913854983990002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x352 = exp(0.0056890885971700002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x357 = 0.0071483033566472664 * var_x349;
-            const double var_x361 = 0.56744803744318484 * var_x352;
+            const double var_x346 = exp(-0.026913854983990002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x349 = exp(0.0056890885971700002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x354 = 0.0071483033566472664 * var_x346;
+            const double var_x358 = 0.56744803744318484 * var_x349;
             
-            partialF = -var_x357 - var_x361;
+            partialF = -var_x354 - var_x358;
         }
         else
         {
@@ -5952,16 +5949,16 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x345 = exp(6.9808923999999997e-7 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x347 = exp(0.026174127151180001 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x349 = exp(-0.026913854983990002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x351 = exp(-0.045366429595429997 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x352 = exp(0.0056890885971700002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x353 = var_x345 * var_x349 * var_x351 / (var_x347 * var_x352);
-            const double var_x358 = 1.6926962184371784e-6 * var_x353;
-            const double var_x362 = 0.034388156021070745 * var_x351;
+            const double var_x342 = exp(6.9808923999999997e-7 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x344 = exp(0.026174127151180001 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x346 = exp(-0.026913854983990002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x348 = exp(-0.045366429595429997 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x349 = exp(0.0056890885971700002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x350 = var_x342 * var_x346 * var_x348 / (var_x344 * var_x349);
+            const double var_x355 = 1.6926962184371784e-6 * var_x350;
+            const double var_x359 = 0.034388156021070745 * var_x348;
             
-            partialF = -var_x358 - var_x362;
+            partialF = -var_x355 - var_x359;
         }
         else
         {
@@ -6042,10 +6039,10 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x363 = exp(-1.8891230210000001e-5 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x365 = 0.21625575895849999 * var_x363;
+            const double var_x360 = exp(-1.8891230210000001e-5 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x362 = 0.21625575895849999 * var_x360;
             
-            partialF = -0.039667206760709998 - var_x365;
+            partialF = -0.039667206760709998 - var_x362;
         }
         else
         {
@@ -6088,12 +6085,12 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x366 = exp(-0.14999754700285001 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x368 = 0.0070080662892900002 * var_x366;
-            const double var_x369 = exp(0.08662945914655 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x373 = 0.00767254363063 * var_x369;
+            const double var_x363 = exp(-0.14999754700285001 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x365 = 0.0070080662892900002 * var_x363;
+            const double var_x366 = exp(0.08662945914655 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x370 = 0.00767254363063 * var_x366;
             
-            partialF = -var_x368 - var_x373;
+            partialF = -var_x365 - var_x370;
         }
         else
         {
@@ -6132,10 +6129,10 @@
             double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -90.65755929
             
-            const double var_x371 = exp(-0.014256681268810001 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-            const double var_x374 = 0.0037973799836799999 * var_x371;
+            const double var_x368 = exp(-0.014256681268810001 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+            const double var_x371 = 0.0037973799836799999 * var_x368;
             
-            partialF = -var_x374;
+            partialF = -var_x371;
         }
         else
         {

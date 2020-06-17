@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.0.1
 //!
 //! Model: hodgkin_huxley_squid_axon_model_1952_modified
 //!
@@ -132,7 +132,7 @@
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
         const double d_dt_chaste_interface_var_potassium_channel_n_gate__n = -0.125 * var_chaste_interface__potassium_channel_n_gate__n * exp(0.9375 + 0.012500000000000001 * var_chaste_interface__membrane__V) - 0.01 * (1.0 - var_chaste_interface__potassium_channel_n_gate__n) * (65.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-6.5 - 0.10000000000000001 * var_chaste_interface__membrane__V)); // 1 / millisecond
-        const double d_dt_chaste_interface_var_sodium_channel_h_gate__h = 0.070000000000000007 * (1.0 - var_chaste_interface__sodium_channel_h_gate__h) * exp(-3.75 - 0.050000000000000003 * var_chaste_interface__membrane__V) - 1.0 * var_chaste_interface__sodium_channel_h_gate__h / (1.0 + exp(-4.5 - 0.10000000000000001 * var_chaste_interface__membrane__V)); // 1 / millisecond
+        const double d_dt_chaste_interface_var_sodium_channel_h_gate__h = -var_chaste_interface__sodium_channel_h_gate__h / (1.0 + exp(-4.5 - 0.10000000000000001 * var_chaste_interface__membrane__V)) + 0.070000000000000007 * (1.0 - var_chaste_interface__sodium_channel_h_gate__h) * exp(-3.75 - 0.050000000000000003 * var_chaste_interface__membrane__V); // 1 / millisecond
         const double d_dt_chaste_interface_var_sodium_channel_m_gate__m = -4.0 * var_chaste_interface__sodium_channel_m_gate__m * exp(-4.166666666666667 - 0.055555555555555552 * var_chaste_interface__membrane__V) - 0.10000000000000001 * (1.0 - var_chaste_interface__sodium_channel_m_gate__m) * (50.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-5.0 - 0.10000000000000001 * var_chaste_interface__membrane__V)); // 1 / millisecond
 
         if (mSetVoltageDerivativeToZero)
@@ -304,7 +304,7 @@
         
         
         // Mathematics
-        const double d_dt_chaste_interface_var_sodium_channel_h_gate__h = 0.070000000000000007 * (1.0 - var_chaste_interface__sodium_channel_h_gate__h) * exp(-3.75 - 0.050000000000000003 * var_chaste_interface__membrane__V) - 1.0 * var_chaste_interface__sodium_channel_h_gate__h / (1.0 + exp(-4.5 - 0.10000000000000001 * var_chaste_interface__membrane__V)); // 1 / millisecond
+        const double d_dt_chaste_interface_var_sodium_channel_h_gate__h = -var_chaste_interface__sodium_channel_h_gate__h / (1.0 + exp(-4.5 - 0.10000000000000001 * var_chaste_interface__membrane__V)) + 0.070000000000000007 * (1.0 - var_chaste_interface__sodium_channel_h_gate__h) * exp(-3.75 - 0.050000000000000003 * var_chaste_interface__membrane__V); // 1 / millisecond
 
         return d_dt_chaste_interface_var_sodium_channel_h_gate__h;
     }
@@ -322,7 +322,7 @@
             const double var_x10 = exp(-4.5 + var_x4);
             const double var_x11 = 1.0 + var_x10;
             
-            partialF = -1.0 / var_x11 - 0.070000000000000007 * var_x9;
+            partialF = -1 / var_x11 - 0.070000000000000007 * var_x9;
         }
         else
         {
