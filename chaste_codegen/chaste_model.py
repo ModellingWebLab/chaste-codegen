@@ -17,7 +17,7 @@ from sympy import (
     simplify,
     sympify,
 )
-from sympy.codegen.cfunctions import log2, log10
+from sympy.codegen.cfunctions import log10
 from sympy.codegen.rewriting import ReplaceOptim, optimize
 
 import chaste_codegen as cg
@@ -44,12 +44,6 @@ class ChasteModel(object):
         lambda e: (  # cost function prevents turning log(x) into log(10) * log10(x) as we want normal log in that case
             e.is_Pow and e.exp.is_negative  # division
             or (isinstance(e, (log, log10)) and not e.args[0].is_number))))
-    # log(x)/log(2) --> log2(x)
-    _LOG2_OPT = ReplaceOptim(_V * log(_W) / log(2), _V * log2(_W), cost_function=lambda expr: expr.count(
-        lambda e: (  # cost function prevents turning log(x) into log(2) * log2(x) as we want normal log in that case
-            e.is_Pow and e.exp.is_negative  # division
-            or (isinstance(e, (log, log2)) and not e.args[0].is_number))))
-    _LOG_OPTIMS = (_LOG10_OPT, _LOG2_OPT)
     # For P^n make sure n is passed as int if it is actually a whole number
     _POW_OPT = ReplaceOptim(lambda p: p.is_Pow and (isinstance(p.exp, Float) or isinstance(p.exp, float))
                             and float(p.exp).is_integer(),
@@ -196,7 +190,7 @@ class ChasteModel(object):
         for i, eq in enumerate(equations):
             optims = tuple()
             if len(eq.rhs.atoms(log)) > 0:
-                optims += self._LOG_OPTIMS
+                optims += (self._LOG10_OPT, )
             if len(eq.rhs.atoms(Pow)) > 0:
                 optims += (self._POW_OPT, )
             if len(optims) > 0:
