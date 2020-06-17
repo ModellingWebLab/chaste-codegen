@@ -18,7 +18,7 @@ from sympy import (
     sympify,
 )
 from sympy.codegen.cfunctions import log10
-from sympy.codegen.rewriting import ReplaceOptim, optimize, log1p_opt
+from sympy.codegen.rewriting import ReplaceOptim, log1p_opt, optimize
 
 import chaste_codegen as cg
 from chaste_codegen._rdf import get_variables_transitively
