@@ -21,16 +21,14 @@ class CvodeWithDataClampModel(CvodeChasteModel):
         self._membrane_data_clamp_current = self._model.add_variable(name='membrane_data_clamp_current',
                                                                      units=self.units.get_unit('uA_per_cm2'))
         # add clamp current equation
-        self._in_interface.append(self._membrane_data_clamp_current)
+        self._in_interface.add(self._membrane_data_clamp_current)
         clamp_current = self._membrane_data_clamp_current_conductance * \
             (self._membrane_voltage_var - Function('GetExperimentalVoltageAtTimeT')(self._time_variable))
         self._membrane_data_clamp_current_eq = Eq(self._membrane_data_clamp_current, clamp_current)
         self._model.add_equation(self._membrane_data_clamp_current_eq)
 
         # Add data clamp current as modifiable parameter and re-sort
-        self._modifiable_parameters.append(self._membrane_data_clamp_current_conductance)
-        self._modifiable_parameters = sorted(self._modifiable_parameters,
-                                             key=lambda m: self._model.get_display_name(m, self._OXMETA))
+        self._modifiable_parameters.add(self._membrane_data_clamp_current_conductance)
 
     def _get_derivative_equations(self):
         """ Get equations defining the derivatives including V and add in membrane_data_clamp_current"""
@@ -80,7 +78,7 @@ class CvodeWithDataClampModel(CvodeChasteModel):
         derived_quant = super()._get_derived_quant()
 
         # Add membrane_data_clamp_current to modifiable parameters
-        # (this was set in _get_modifiable_parameters as it's also needed in _get_derivative_equations)
+        # (this was set in _get_modifiable_parameterss as it's also needed in _get_derivative_equations)
         derived_quant.append(self._membrane_data_clamp_current)
         return sorted(derived_quant, key=lambda q: self._model.get_display_name(q, self._OXMETA))
 
