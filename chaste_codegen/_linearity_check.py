@@ -1,7 +1,6 @@
 from enum import Enum
 
 from cellmlmanip.model import Variable
-from cellmlmanip.printer import Printer
 from sympy import (
     Add,
     Derivative,
@@ -114,22 +113,20 @@ def _check_expr(expr, state_var, membrane_voltage_var, state_vars):
     return result
 
 
-def get_non_linear_state_vars(derivative_equations, membrane_voltage_var, state_vars, printer):
+def get_non_linear_state_vars(derivative_equations, membrane_voltage_var, state_vars):
     """Returns the state vars whose derivative expressions are non linear"""
 
-    assert all([isinstance(eq, Eq) for eq in derivative_equations]), (
+    assert all(map(lambda eq: isinstance(eq, Eq), derivative_equations)), (
         "Expecting derivative_equations to be a collection of equations")
     assert isinstance(membrane_voltage_var, Variable), "membrane_voltage_var should be a cellmlmanip.Variable"
-    assert all([isinstance(v, Variable) for v in state_vars]), "state_vars should be cellmlmanip Variables"
+    assert all(map(lambda v: isinstance(v, Variable), state_vars)), "state_vars should be cellmlmanip Variables"
     assert len(state_vars) > 0 and len(derivative_equations) > 0, ("Expecting state_vars and derivative_equations "
                                                                    "not to be empty")
-    assert isinstance(printer, Printer), 'Expecting printer to be a cellmlmanip.printer.Printer'
 
-    return sorted([eq.lhs.args[0] for eq in derivative_equations
-                   if isinstance(eq.lhs, Derivative) and
-                   eq.lhs.args[0] != membrane_voltage_var and
-                   _check_expr(eq.rhs, eq.lhs.args[0], membrane_voltage_var, state_vars) != KINDS.LINEAR],
-                  key=lambda s: printer.doprint(s))
+    return set([eq.lhs.args[0] for eq in derivative_equations
+                if isinstance(eq.lhs, Derivative) and
+                eq.lhs.args[0] != membrane_voltage_var and
+                _check_expr(eq.rhs, eq.lhs.args[0], membrane_voltage_var, state_vars) != KINDS.LINEAR])
 
 
 def subst_deriv_eqs_non_linear_vars(y_derivatives, non_linear_state_vars, membrane_voltage_var, state_vars,
@@ -145,15 +142,16 @@ def subst_deriv_eqs_non_linear_vars(y_derivatives, non_linear_state_vars, membra
     This way we reduce the complexity of equations matched and reduce the chance of floating point errors"""
 
     assert isinstance(membrane_voltage_var, Variable), "membrane_voltage_var should be a cellmlmanip.Variable"
-    assert all([isinstance(eq, Derivative) for eq in y_derivatives]), "Expecting y_derivatives to be Derivatives"
-    assert all([isinstance(eq, Variable) for eq in non_linear_state_vars]), ("Expecting non_linear_state_vars all to be"
-                                                                             " cellmlmanip.Variable")
-    assert all([isinstance(eq, Variable) for eq in state_vars]), "Expecting state_vars all to be cellmlmanip.Variable"
+    assert all(map(lambda eq: isinstance(eq, Derivative), y_derivatives)), "Expecting y_derivatives to be Derivatives"
+    assert all(map(lambda eq: isinstance(eq, Variable), non_linear_state_vars)), ("Expecting non_linear_state_vars all"
+                                                                                  " to be cellmlmanip.Variable")
+    assert all(map(lambda eq: isinstance(eq, Variable), state_vars)), ("Expecting state_vars all to be cellmlmanip."
+                                                                       "Variable")
     assert callable(get_equations_for_func), 'Expecting get_equations_for_func to be a callable'
 
     # get the state vars for which derivative is linear
-    linear_sv = [d for d in y_derivatives if d.args[0] not in non_linear_state_vars
-                 and not d.args[0] == membrane_voltage_var]
+    linear_sv = filter(lambda d: d.args[0] not in non_linear_state_vars and not d.args[0] == membrane_voltage_var,
+                       y_derivatives)
 
     non_lin_sym = set(state_vars)  # state vars and lhs of equations containing state vars
     linear_derivs_eqs = []

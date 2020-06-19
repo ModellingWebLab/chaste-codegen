@@ -14,17 +14,20 @@ class RushLarsenModel(ChasteModel):
         self._cpp_template = 'rush_larsen_model.cpp'
         self._vars_for_template['base_class'] = 'AbstractRushLarsenCardiacCell'
 
-        self._derivative_equations = \
-            partial_eval(self._derivative_equations, self._y_derivatives, keep_multiple_usages=False)
-        self._non_linear_state_vars = \
-            get_non_linear_state_vars(self._derivative_equations, self._membrane_voltage_var,
-                                      self._state_vars, self._printer)
+        self._get_non_linear_state_vars()
 
         self._vars_for_template['derivative_alpha_beta'], self._vars_for_template['derivative_alpha_beta_eqs'], \
             self._vars_in_derivative_alpha_beta = self._get_formatted_alpha_beta()
         self._update_state_vars()
         self._vars_for_template['derivative_alpha_beta_eqs'] = \
             self._format_derivative_equations(self._vars_for_template['derivative_alpha_beta_eqs'])
+
+    def _get_non_linear_state_vars(self):
+        """ Get and store the non_linear state vars """
+        self._derivative_equations = \
+            set(partial_eval(self._derivative_equations, self._y_derivatives, keep_multiple_usages=False))
+        self._non_linear_state_vars = \
+            get_non_linear_state_vars(self._derivative_equations, self._membrane_voltage_var, self._state_vars)
 
     def _get_formatted_alpha_beta(self):
         """Gets the information for r_alpha_or_tau, r_beta_or_inf in the c++ output and formatted equations
@@ -63,14 +66,14 @@ class RushLarsenModel(ChasteModel):
             it = {'tau': None}
             # get match if possible (deiv is linear)
             if deriv.args[0] not in self._non_linear_state_vars and deriv.args[0] is not self._membrane_voltage_var:
-                eq = [e for e in linear_derivs_eqs if e.lhs == deriv][0]
+                eq = next(filter(lambda e: e.lhs == deriv, linear_derivs_eqs))
                 ab = match_alpha_beta(eq.rhs, eq.lhs.args[0])
                 if ab['alpha'] is None:
                     it = match_inf_tau(eq.rhs, eq.lhs.args[0])
 
             # check if there was a match
             if ab['alpha'] is not None or it['tau'] is not None:
-                eq = [e for e in linear_derivs_eqs if e.lhs == deriv][0]
+                eq = next(filter(lambda e: e.lhs == deriv, linear_derivs_eqs))
                 r_alpha_or_tau = ab['alpha'] if ab['alpha'] is not None else it['tau']
                 r_beta_or_inf = ab['beta'] if ab['beta'] is not None else it['inf']
                 derivative_alpha_beta.append({'type': 'alphabeta' if ab['alpha'] is not None else 'inftau',

@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.0.1
+//! This source file was generated from CellML by chaste_codegen version 0.1.0
 //!
 //! Model: espinosa_model_1998_normal
 //!
@@ -123,7 +123,7 @@
         const double var_reversal_potentials__E_K = var_membrane__R * var_membrane__T * log(var_chaste_interface__extracellular_potassium_concentration__K_o / var_chaste_interface__intracellular_potassium_concentration__K_i) / var_membrane__F; // millivolt
         const double var_potassium_background_current__i_b_K = (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * var_potassium_background_current__g_bk; // nanoA
         const double var_reversal_potentials__E_Na = var_membrane__R * var_membrane__T * log(var_extracellular_sodium_concentration__Na_o / var_chaste_interface__intracellular_sodium_concentration__Na_i) / var_membrane__F; // millivolt
-        const double var_reversal_potentials__E_mh = var_membrane__R * var_membrane__T * log((0.12 * var_chaste_interface__extracellular_potassium_concentration__K_o + var_extracellular_sodium_concentration__Na_o) / (0.12 * var_chaste_interface__intracellular_potassium_concentration__K_i + var_chaste_interface__intracellular_sodium_concentration__Na_i)) / var_membrane__F; // millivolt
+        const double var_reversal_potentials__E_mh = var_membrane__R * var_membrane__T * log((var_extracellular_sodium_concentration__Na_o + 0.12 * var_chaste_interface__extracellular_potassium_concentration__K_o) / (var_chaste_interface__intracellular_sodium_concentration__Na_i + 0.12 * var_chaste_interface__intracellular_potassium_concentration__K_i)) / var_membrane__F; // millivolt
         const double var_fast_sodium_current__i_Na = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * (-var_reversal_potentials__E_mh + var_chaste_interface__membrane__V) * var_fast_sodium_current__g_Na * var_chaste_interface__fast_sodium_current_h_gate__h; // nanoA
         const double var_sodium_background_current__g_bna = 0.0001; // microS
         const double var_sodium_background_current__i_b_Na = (-var_reversal_potentials__E_Na + var_chaste_interface__membrane__V) * var_sodium_background_current__g_bna; // nanoA
@@ -264,7 +264,7 @@
         const double var_reversal_potentials__E_K = var_membrane__R * var_membrane__T * log(var_chaste_interface__extracellular_potassium_concentration__K_o / var_chaste_interface__intracellular_potassium_concentration__K_i) / var_membrane__F; // millivolt
         const double var_potassium_background_current__i_b_K = (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * var_potassium_background_current__g_bk; // nanoA
         const double var_reversal_potentials__E_Na = var_membrane__R * var_membrane__T * log(var_extracellular_sodium_concentration__Na_o / var_chaste_interface__intracellular_sodium_concentration__Na_i) / var_membrane__F; // millivolt
-        const double var_reversal_potentials__E_mh = var_membrane__R * var_membrane__T * log((0.12 * var_chaste_interface__extracellular_potassium_concentration__K_o + var_extracellular_sodium_concentration__Na_o) / (0.12 * var_chaste_interface__intracellular_potassium_concentration__K_i + var_chaste_interface__intracellular_sodium_concentration__Na_i)) / var_membrane__F; // millivolt
+        const double var_reversal_potentials__E_mh = var_membrane__R * var_membrane__T * log((var_extracellular_sodium_concentration__Na_o + 0.12 * var_chaste_interface__extracellular_potassium_concentration__K_o) / (var_chaste_interface__intracellular_sodium_concentration__Na_i + 0.12 * var_chaste_interface__intracellular_potassium_concentration__K_i)) / var_membrane__F; // millivolt
         const double var_fast_sodium_current__i_Na = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * (-var_reversal_potentials__E_mh + var_chaste_interface__membrane__V) * var_fast_sodium_current__g_Na * var_chaste_interface__fast_sodium_current_h_gate__h; // nanoA
         const double var_sarcoplasmic_reticulum_calcium_pump__K_cyca = 0.00029999999999999997; // millimolar
         const double var_sarcoplasmic_reticulum_calcium_pump__K_srca = 0.5; // millimolar
@@ -451,7 +451,7 @@
         const double var_x94 = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * var_chaste_interface__fast_sodium_current_h_gate__h;
         const double var_x95 = 0.001215251103539843 * var_x94;
         const double var_x96 = 0.0013268376663538336 * var_x45;
-        const double var_x97 = 1 / (0.12 * var_chaste_interface__intracellular_potassium_concentration__K_i + var_chaste_interface__intracellular_sodium_concentration__Na_i);
+        const double var_x97 = 1 / (var_chaste_interface__intracellular_sodium_concentration__Na_i + 0.12 * var_chaste_interface__intracellular_potassium_concentration__K_i);
         
         
         rJacobian[0][0] = 1.0 - (mDt * (-0.001));
@@ -685,7 +685,7 @@
         const double var_reversal_potentials__E_K = var_membrane__R * var_membrane__T * log(var_chaste_interface__extracellular_potassium_concentration__K_o / var_chaste_interface__intracellular_potassium_concentration__K_i) / var_membrane__F; // millivolt
         const double var_potassium_background_current__i_b_K = (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * var_potassium_background_current__g_bk; // nanoA
         const double var_reversal_potentials__E_Na = var_membrane__R * var_membrane__T * log(var_extracellular_sodium_concentration__Na_o / var_chaste_interface__intracellular_sodium_concentration__Na_i) / var_membrane__F; // millivolt
-        const double var_reversal_potentials__E_mh = var_membrane__R * var_membrane__T * log((0.12 * var_chaste_interface__extracellular_potassium_concentration__K_o + var_extracellular_sodium_concentration__Na_o) / (0.12 * var_chaste_interface__intracellular_potassium_concentration__K_i + var_chaste_interface__intracellular_sodium_concentration__Na_i)) / var_membrane__F; // millivolt
+        const double var_reversal_potentials__E_mh = var_membrane__R * var_membrane__T * log((var_extracellular_sodium_concentration__Na_o + 0.12 * var_chaste_interface__extracellular_potassium_concentration__K_o) / (var_chaste_interface__intracellular_sodium_concentration__Na_i + 0.12 * var_chaste_interface__intracellular_potassium_concentration__K_i)) / var_membrane__F; // millivolt
         const double var_fast_sodium_current__i_Na = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * (-var_reversal_potentials__E_mh + var_chaste_interface__membrane__V) * var_fast_sodium_current__g_Na * var_chaste_interface__fast_sodium_current_h_gate__h; // nanoA
         const double var_sodium_background_current__g_bna = 0.0001; // microS
         const double var_sodium_background_current__i_b_Na = (-var_reversal_potentials__E_Na + var_chaste_interface__membrane__V) * var_sodium_background_current__g_bna; // nanoA

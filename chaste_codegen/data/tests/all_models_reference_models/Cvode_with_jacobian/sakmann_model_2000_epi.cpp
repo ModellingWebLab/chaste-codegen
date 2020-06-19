@@ -1,7 +1,7 @@
 #ifdef CHASTE_CVODE
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.0.1
+//! This source file was generated from CellML by chaste_codegen version 0.1.0
 //!
 //! Model: sakmann_model_2000_epi
 //!
@@ -143,7 +143,7 @@
         const double var_reversal_potentials__E_K = var_membrane__R * var_membrane__T * log(var_extracellular_potassium_concentration__K_o / var_chaste_interface__intracellular_potassium_concentration__K_i) / var_membrane__F; // millivolt
         const double var_rapid_delayed_rectifier_potassium_current__i_Kr = (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * var_rapid_delayed_rectifier_potassium_current__g_Kr * var_chaste_interface__rapid_delayed_rectifier_potassium_current_xr_gate__xr / (1.0 + exp(0.4017857142857143 + 0.044642857142857144 * var_chaste_interface__membrane__V)); // nanoA
         const double var_reversal_potentials__E_Na = var_membrane__R * var_membrane__T * log(var_extracellular_sodium_concentration__Na_o / var_chaste_interface__intracellular_sodium_concentration__Na_i) / var_membrane__F; // millivolt
-        const double var_reversal_potentials__E_mh = var_membrane__R * var_membrane__T * log((0.12 * var_extracellular_potassium_concentration__K_o + var_extracellular_sodium_concentration__Na_o) / (0.12 * var_chaste_interface__intracellular_potassium_concentration__K_i + var_chaste_interface__intracellular_sodium_concentration__Na_i)) / var_membrane__F; // millivolt
+        const double var_reversal_potentials__E_mh = var_membrane__R * var_membrane__T * log((var_extracellular_sodium_concentration__Na_o + 0.12 * var_extracellular_potassium_concentration__K_o) / (var_chaste_interface__intracellular_sodium_concentration__Na_i + 0.12 * var_chaste_interface__intracellular_potassium_concentration__K_i)) / var_membrane__F; // millivolt
         const double var_fast_sodium_current__i_Na = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * (-var_reversal_potentials__E_mh + var_chaste_interface__membrane__V) * var_fast_sodium_current__g_Na * var_chaste_interface__fast_sodium_current_h_gate__h; // nanoA
         const double var_reversal_potentials__P_kna = 0.029999999999999999; // dimensionless
         const double var_reversal_potentials__E_Ks = var_membrane__R * var_membrane__T * log((var_extracellular_sodium_concentration__Na_o * var_reversal_potentials__P_kna + var_extracellular_potassium_concentration__K_o) / (var_chaste_interface__intracellular_sodium_concentration__Na_i * var_reversal_potentials__P_kna + var_chaste_interface__intracellular_potassium_concentration__K_i)) / var_membrane__F; // millivolt
@@ -333,7 +333,7 @@
         const double var_reversal_potentials__E_K = var_membrane__R * var_membrane__T * log(var_extracellular_potassium_concentration__K_o / var_chaste_interface__intracellular_potassium_concentration__K_i) / var_membrane__F; // millivolt
         const double var_rapid_delayed_rectifier_potassium_current__i_Kr = (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * var_rapid_delayed_rectifier_potassium_current__g_Kr * var_chaste_interface__rapid_delayed_rectifier_potassium_current_xr_gate__xr / (1.0 + exp(0.4017857142857143 + 0.044642857142857144 * var_chaste_interface__membrane__V)); // nanoA
         const double var_reversal_potentials__E_Na = var_membrane__R * var_membrane__T * log(var_extracellular_sodium_concentration__Na_o / var_chaste_interface__intracellular_sodium_concentration__Na_i) / var_membrane__F; // millivolt
-        const double var_reversal_potentials__E_mh = var_membrane__R * var_membrane__T * log((0.12 * var_extracellular_potassium_concentration__K_o + var_extracellular_sodium_concentration__Na_o) / (0.12 * var_chaste_interface__intracellular_potassium_concentration__K_i + var_chaste_interface__intracellular_sodium_concentration__Na_i)) / var_membrane__F; // millivolt
+        const double var_reversal_potentials__E_mh = var_membrane__R * var_membrane__T * log((var_extracellular_sodium_concentration__Na_o + 0.12 * var_extracellular_potassium_concentration__K_o) / (var_chaste_interface__intracellular_sodium_concentration__Na_i + 0.12 * var_chaste_interface__intracellular_potassium_concentration__K_i)) / var_membrane__F; // millivolt
         const double var_fast_sodium_current__i_Na = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * (-var_reversal_potentials__E_mh + var_chaste_interface__membrane__V) * var_fast_sodium_current__g_Na * var_chaste_interface__fast_sodium_current_h_gate__h; // nanoA
         const double var_reversal_potentials__P_kna = 0.029999999999999999; // dimensionless
         const double var_reversal_potentials__E_Ks = var_membrane__R * var_membrane__T * log((var_extracellular_sodium_concentration__Na_o * var_reversal_potentials__P_kna + var_extracellular_potassium_concentration__K_o) / (var_chaste_interface__intracellular_sodium_concentration__Na_i * var_reversal_potentials__P_kna + var_chaste_interface__intracellular_potassium_concentration__K_i)) / var_membrane__F; // millivolt
@@ -532,7 +532,7 @@
         const double var_x66 = var_x24 * var_x27;
         const double var_x67 = 0.029999999999999999 * var_chaste_interface__intracellular_sodium_concentration__Na_i + var_chaste_interface__intracellular_potassium_concentration__K_i;
         const double var_x68 = (-26.713760659695652 * log(8.1999999999999993 / var_x67) + var_chaste_interface__membrane__V) * var_chaste_interface__slow_delayed_rectifier_potassium_current_xs_gate__xs;
-        const double var_x69 = 0.12 * var_chaste_interface__intracellular_potassium_concentration__K_i + var_chaste_interface__intracellular_sodium_concentration__Na_i;
+        const double var_x69 = var_chaste_interface__intracellular_sodium_concentration__Na_i + 0.12 * var_chaste_interface__intracellular_potassium_concentration__K_i;
         const double var_x70 = -26.713760659695652 * log(140.47999999999999 / var_x69) + var_chaste_interface__membrane__V;
         const double var_x71 = var_x70 * pow(var_chaste_interface__fast_sodium_current_m_gate__m, 2);
         const double var_x72 = var_x19 * var_x70;

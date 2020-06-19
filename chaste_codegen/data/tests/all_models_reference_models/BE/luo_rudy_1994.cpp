@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.0.1
+//! This source file was generated from CellML by chaste_codegen version 0.1.0
 //!
 //! Model: luo_rudy_1994
 //!
@@ -402,7 +402,7 @@
         rJacobian[1][4] = 0.0;
         rJacobian[2][0] = 0.0;
         rJacobian[2][1] = -(mDt * (2.7058823529411762e-5));
-        rJacobian[2][2] = 1.0 - (mDt * (0.00040588235294117644 * var_x2 - 0.030369936192764058 * var_x7 - 6.0944687335561951e-7 / var_chaste_interface__ionic_concentrations__Cai - 1.7462713310839333e-5 / var_x3 - 0.00040588235294117644 * var_x1 + 1.7462713310839333e-5 * var_chaste_interface__ionic_concentrations__Cai / pow(var_x3, 2) + 8.5932353608719255e-11 * var_x13 * var_x9 * (-0.34000000000000002 * mParameters[0] + 1.0 * var_x8 * var_chaste_interface__ionic_concentrations__Cai) - 0.00011935049112322121 * var_x12 * var_x8 * var_x9));
+        rJacobian[2][2] = 1.0 - (mDt * (0.00040588235294117644 * var_x2 - 0.030369936192764058 * var_x7 - 6.0944687335561951e-7 / var_chaste_interface__ionic_concentrations__Cai - 1.7462713310839333e-5 / var_x3 - 0.00040588235294117644 * var_x1 + 1.7462713310839333e-5 * var_chaste_interface__ionic_concentrations__Cai / pow(var_x3, 2) + 8.5932353608719255e-11 * var_x13 * var_x9 * (-0.34000000000000002 * mParameters[0] + var_x8 * var_chaste_interface__ionic_concentrations__Cai) - 0.00011935049112322121 * var_x12 * var_x8 * var_x9));
         rJacobian[2][3] = 0.0;
         rJacobian[2][4] = -(mDt * (0.091109808578292165 * var_x14));
         rJacobian[3][0] = 0.0;
@@ -556,12 +556,12 @@
         const double var_time_dependent_potassium_current_X_gate__beta_X = 0.00013100000000000001 * (30.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(2.0609999999999999 + 0.068699999999999997 * var_chaste_interface__membrane__V));
         
         
-        rY[5] = (var_chaste_interface__L_type_Ca_channel_d_gate__d + ((1.0 * var_L_type_Ca_channel_d_gate__alpha_d) * mDt)) / (1.0 - ((-var_L_type_Ca_channel_d_gate__alpha_d - var_L_type_Ca_channel_d_gate__beta_d) * mDt));
-        rY[6] = (var_chaste_interface__L_type_Ca_channel_f_gate__f + ((1.0 * var_L_type_Ca_channel_f_gate__alpha_f) * mDt)) / (1.0 - ((-var_L_type_Ca_channel_f_gate__alpha_f - var_L_type_Ca_channel_f_gate__beta_f) * mDt));
-        rY[3] = (var_chaste_interface__fast_sodium_current_h_gate__h + ((1.0 * var_fast_sodium_current_h_gate__alpha_h) * mDt)) / (1.0 - ((-var_fast_sodium_current_h_gate__alpha_h - var_fast_sodium_current_h_gate__beta_h) * mDt));
-        rY[4] = (var_chaste_interface__fast_sodium_current_j_gate__j + ((1.0 * var_fast_sodium_current_j_gate__alpha_j) * mDt)) / (1.0 - ((-var_fast_sodium_current_j_gate__alpha_j - var_fast_sodium_current_j_gate__beta_j) * mDt));
-        rY[2] = (var_chaste_interface__fast_sodium_current_m_gate__m + ((1.0 * var_fast_sodium_current_m_gate__alpha_m) * mDt)) / (1.0 - ((-var_fast_sodium_current_m_gate__alpha_m - var_fast_sodium_current_m_gate__beta_m) * mDt));
-        rY[7] = (var_chaste_interface__time_dependent_potassium_current_X_gate__X + ((1.0 * var_time_dependent_potassium_current_X_gate__alpha_X) * mDt)) / (1.0 - ((-var_time_dependent_potassium_current_X_gate__alpha_X - var_time_dependent_potassium_current_X_gate__beta_X) * mDt));
+        rY[5] = (var_chaste_interface__L_type_Ca_channel_d_gate__d + ((var_L_type_Ca_channel_d_gate__alpha_d) * mDt)) / (1.0 - ((-var_L_type_Ca_channel_d_gate__alpha_d - var_L_type_Ca_channel_d_gate__beta_d) * mDt));
+        rY[6] = (var_chaste_interface__L_type_Ca_channel_f_gate__f + ((var_L_type_Ca_channel_f_gate__alpha_f) * mDt)) / (1.0 - ((-var_L_type_Ca_channel_f_gate__alpha_f - var_L_type_Ca_channel_f_gate__beta_f) * mDt));
+        rY[3] = (var_chaste_interface__fast_sodium_current_h_gate__h + ((var_fast_sodium_current_h_gate__alpha_h) * mDt)) / (1.0 - ((-var_fast_sodium_current_h_gate__alpha_h - var_fast_sodium_current_h_gate__beta_h) * mDt));
+        rY[4] = (var_chaste_interface__fast_sodium_current_j_gate__j + ((var_fast_sodium_current_j_gate__alpha_j) * mDt)) / (1.0 - ((-var_fast_sodium_current_j_gate__alpha_j - var_fast_sodium_current_j_gate__beta_j) * mDt));
+        rY[2] = (var_chaste_interface__fast_sodium_current_m_gate__m + ((var_fast_sodium_current_m_gate__alpha_m) * mDt)) / (1.0 - ((-var_fast_sodium_current_m_gate__alpha_m - var_fast_sodium_current_m_gate__beta_m) * mDt));
+        rY[7] = (var_chaste_interface__time_dependent_potassium_current_X_gate__X + ((var_time_dependent_potassium_current_X_gate__alpha_X) * mDt)) / (1.0 - ((-var_time_dependent_potassium_current_X_gate__alpha_X - var_time_dependent_potassium_current_X_gate__beta_X) * mDt));
         
         double _guess[5] = {rY[10],rY[11],rY[1],rY[9],rY[8]};
         CardiacNewtonSolver<5,Cellluo_rudy_1994FromCellMLBackwardEuler>* _p_solver = CardiacNewtonSolver<5,Cellluo_rudy_1994FromCellMLBackwardEuler>::Instance();

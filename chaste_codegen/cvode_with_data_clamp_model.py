@@ -39,9 +39,10 @@ class CvodeWithDataClampModel(CvodeChasteModel):
             else:
                 found_eq = None
                 for var in eq.rhs.free_symbols:
-                    def_eq = [e for e in derivative_equations if e.lhs == var]
-                    if len(def_eq) == 1:
-                        found_eq = find_ionic_var(def_eq[0], ionic_var, derivative_equations)
+                    def_eqs = filter(lambda e: e.lhs == var, derivative_equations)
+                    def_eq = next(def_eqs, None)
+                    if def_eq is not None and next(def_eqs, None) is None:  # exactly 1
+                        found_eq = find_ionic_var(def_eq, ionic_var, derivative_equations)
                         if found_eq is not None:
                             break
                 return found_eq
@@ -52,10 +53,11 @@ class CvodeWithDataClampModel(CvodeChasteModel):
 
         # piggy-backs on the analysis that finds ionic currents, in order to add in data clamp currents
         # Find dv/dt
-        deriv_eq_only = [eq for eq in derivative_equations if isinstance(eq.lhs, Derivative)
-                         and eq.lhs.args[0] == self._membrane_voltage_var]
-        assert len(deriv_eq_only) == 1, 'Expecting exactly 1 dv/dt equation'
-        dvdt = deriv_eq_only[0]
+
+        deriv_eq_only = filter(lambda eq: isinstance(eq.lhs, Derivative) and
+                               eq.lhs.args[0] == self._membrane_voltage_var, derivative_equations)
+        dvdt = next(deriv_eq_only, None)
+        assert dvdt is not None and next(deriv_eq_only, None) is None, 'Expecting exactly 1 dv/dt equation'
 
         current_index = None
         # We need to add data_clamp to the equation with the correct sign

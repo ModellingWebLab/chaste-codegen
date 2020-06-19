@@ -38,7 +38,7 @@ def membrane_voltage_var(hn_model):
 
 @pytest.fixture(scope='session')
 def non_linear_state_vars(derivatives_eqs, membrane_voltage_var, state_vars):
-    return get_non_linear_state_vars(derivatives_eqs, membrane_voltage_var, state_vars, Printer())
+    return get_non_linear_state_vars(derivatives_eqs, membrane_voltage_var, state_vars)
 
 
 @pytest.fixture(scope='session')
@@ -53,20 +53,16 @@ def test_kinds():
 
 def test_wrong_params_get_non_linear_state_vars1():
     with pytest.raises(TypeError, match="'NoneType' object is not iterable"):
-        get_non_linear_state_vars(None, None, None, None)
+        get_non_linear_state_vars(None, None, None)
 
 
 def test_wrong_params_get_non_linear_state_vars2(derivatives_eqs, membrane_voltage_var):
     with pytest.raises(AssertionError, match="Expecting state_vars and derivative_equations not to be empty"):
-        get_non_linear_state_vars(derivatives_eqs, membrane_voltage_var, [], None)
-
-
-def test_wrong_params_get_non_linear_state_vars3(derivatives_eqs, membrane_voltage_var, state_vars):
-    with pytest.raises(AssertionError, match="Expecting printer to be a cellmlmanip.printer.Printer"):
-        get_non_linear_state_vars(derivatives_eqs, membrane_voltage_var, state_vars, None)
+        get_non_linear_state_vars(derivatives_eqs, membrane_voltage_var, [])
 
 
 def test_get_non_linear_state_vars(non_linear_state_vars):
+    non_linear_state_vars = sorted(non_linear_state_vars, key=lambda s: Printer().doprint(s))
     assert str(non_linear_state_vars) == \
         ("[_calcium_release$ProdFrac, _intracellular_calcium_concentration$Ca_Calmod, "
          "_intracellular_calcium_concentration$Ca_Trop, _intracellular_calcium_concentration$Ca_i, "

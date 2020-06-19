@@ -1,7 +1,7 @@
 #ifdef CHASTE_CVODE
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.0.1
+//! This source file was generated from CellML by chaste_codegen version 0.1.0
 //!
 //! Model: dokos_model_1996
 //!
@@ -718,9 +718,9 @@
         IJth(rJacobian, 0, 0) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x109 * (0.00024000000000000001 + 0.25 * var_x1 + 0.40000000000000002 * var_x82 + 0.085000000000000006 * var_x78 + 0.021600000000000001 * var_x86 + 3.4064840648698382e-7 * var_x101 + 9.7328116139138214e-6 * var_x87 + 2.6203723575921827e-6 * var_x80 + var_x103 * var_x107 + var_x68 * var_x77 + var_x95 * var_x98));
         IJth(rJacobian, 1, 0) = -0.00017619256703361517 * var_x78 - 0.00082914149192289482 * var_x82 + var_x213 * var_x68 + var_x214 * var_x95;
         IJth(rJacobian, 2, 0) = 0.07575757575757576 * var_x231 / pow((1.0 + var_x231), 2);
-        IJth(rJacobian, 3, 0) = -0.00016666666666666666 * var_x232 * var_x237 / pow(var_x233, 2) + 0.00012345679012345679 * var_x234 * (1 / var_x233 - var_chaste_interface__L_type_calcium_current_f_gate__fL) / (pow(var_x235, 2) * pow(var_x236, 2));
-        IJth(rJacobian, 5, 0) = 0.0001639344262295082 * var_x238 * var_x243 / pow(var_x239, 2) + 0.0055555555555555549 * var_x240 * (1 / var_x239 - var_chaste_interface__T_type_calcium_current_d_gate__dT) / (pow(var_x241, 2) * pow((0.11111111111111109 + var_x242), 2));
-        IJth(rJacobian, 6, 0) = -0.00015151515151515152 * var_x244 * var_x249 / pow(var_x245, 2) + 0.002 * var_x246 * (1 / var_x245 - var_chaste_interface__T_type_calcium_current_f_gate__fT) / (pow(var_x247, 2) * pow((0.025000000000000001 + var_x248), 2));
+        IJth(rJacobian, 3, 0) = -0.00016666666666666666 * var_x232 * var_x237 / pow(var_x233, 2) + 0.00012345679012345679 * var_x234 * (-var_chaste_interface__L_type_calcium_current_f_gate__fL + 1 / var_x233) / (pow(var_x235, 2) * pow(var_x236, 2));
+        IJth(rJacobian, 5, 0) = 0.0001639344262295082 * var_x238 * var_x243 / pow(var_x239, 2) + 0.0055555555555555549 * var_x240 * (-var_chaste_interface__T_type_calcium_current_d_gate__dT + 1 / var_x239) / (pow(var_x241, 2) * pow((0.11111111111111109 + var_x242), 2));
+        IJth(rJacobian, 6, 0) = -0.00015151515151515152 * var_x244 * var_x249 / pow(var_x245, 2) + 0.002 * var_x246 * (-var_chaste_interface__T_type_calcium_current_f_gate__fT + 1 / var_x245) / (pow(var_x247, 2) * pow((0.025000000000000001 + var_x248), 2));
         IJth(rJacobian, 7, 0) = var_x251 * var_x254 + 1.2 * var_x250 * var_chaste_interface__fast_sodium_current_m_gate__m - 0.017999999999999999 * var_x251 * var_x252 * var_x255 / pow(var_x253, 2);
         IJth(rJacobian, 8, 0) = -0.14000000000000001 * var_x256 * (0.032399999999999998 - 0.032399999999999998 * var_chaste_interface__fast_sodium_current_h_gate__h) - 0.010128571428571428 * var_x257 * var_chaste_interface__fast_sodium_current_h_gate__h / pow((0.23809523809523808 + var_x257), 2);
         IJth(rJacobian, 9, 0) = (0.67660000000000009 * var_x258 - 0.010761 * var_x259) * (0.001 / var_x261 - 0.001 * var_chaste_interface__delayed_rectifying_potassium_current_x_gate__x) + 0.00013513513513513514 * var_x260 * (17.0 * var_x258 + 0.21099999999999999 * var_x259) / pow(var_x261, 2);

@@ -17,8 +17,8 @@ def partial_eval(equations, required_lhs, keep_multiple_usages=True):
     :return: the equations wit defining equations substituted in to create a minimal set of equations
     """
 
-    assert all([isinstance(eq, Eq) for eq in equations]), "Expecting equations to be a collection of equations"
-    assert all([isinstance(v, Variable) or isinstance(v, Derivative) for v in required_lhs]), \
+    assert all(map(lambda eq: isinstance(eq, Eq), equations)), "Expecting equations to be a collection of equations"
+    assert all(map(lambda v: isinstance(v, Variable) or isinstance(v, Derivative), required_lhs)), \
         "Expecting required_lhs to be a collection of variables or derivatives"
 
     evaluated_eqs = []

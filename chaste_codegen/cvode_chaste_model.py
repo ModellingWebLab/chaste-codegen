@@ -29,8 +29,6 @@ class CvodeChasteModel(ChasteModel):
                 [], Matrix()
 
     def _print_modifiable_parameterss(self, variable):
-        #return 'NV_Ith_S(mParameters, ' + str(self._modifiable_parameters.index(variable)) + ')'
-        assert self._modifiable_parameter_lookup[variable] == str(self._modifiable_parameters.index(variable))
         return 'NV_Ith_S(mParameters, ' + self._modifiable_parameter_lookup[variable] + ')'
 
     def _format_rY_entry(self, index):

@@ -1,7 +1,7 @@
 #ifdef CHASTE_CVODE
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.0.1
+//! This source file was generated from CellML by chaste_codegen version 0.1.0
 //!
 //! Model: viswanathan_model_1999_epi
 //!
@@ -653,7 +653,7 @@
         const double var_x91 = -1.0 + var_x90;
         const double var_x92 = 1 / var_x91;
         const double var_x93 = var_x90 * var_chaste_interface__calcium_dynamics__Cai;
-        const double var_x94 = -0.61380000000000001 + 1.0 * var_x93;
+        const double var_x94 = -0.61380000000000001 + var_x93;
         const double var_x95 = var_x92 * var_x94;
         const double var_x96 = 7.8019226357407252 * var_x95;
         const double var_x97 = var_x71 * var_x96;
@@ -917,7 +917,7 @@
         IJth(rJacobian, 4, 0) = (0.001 - var_x211) * ((var_x206) ? (var_x218 + var_x217 * var_x219 * (1.5254334000000001e-6 * var_x213 - 31073.016 * var_x212) - 311.0 * var_x214 * var_x215 * var_x219 / pow(var_x216, 2)) : (0)) - var_x211 * ((var_x206) ? (-1.2750239999999999 * var_x223 + 16.701360000000001 * var_x220 * var_x222 / pow(var_x221, 2)) : (-7.6049999999999992e-5 * var_x227 + 30.0 * var_x224 * var_x226 / pow(var_x225, 2)));
         IJth(rJacobian, 5, 0) = var_x239 * var_x241 + var_x241 * var_chaste_interface__L_type_Ca_channel_d_gate__d + var_x230 * var_x238 * var_x239 + var_x231 * var_x238 * var_chaste_interface__L_type_Ca_channel_d_gate__d;
         IJth(rJacobian, 6, 0) = var_x244 * (20.0 + var_x243) * (var_x247 - var_x250) + var_x252 * (var_x250 - var_x247) * var_chaste_interface__L_type_Ca_channel_f_gate__f + var_x243 * var_x244 * var_x255 * var_x256 - var_x251 * var_x256 * var_x257 * var_chaste_interface__L_type_Ca_channel_f_gate__f;
-        IJth(rJacobian, 7, 0) = 9.2592592592592588e-5 * var_x258 * var_x263 / pow(var_x259, 2) + 0.036429872495446262 * var_x260 * (1 / var_x259 - var_chaste_interface__T_type_Ca_channel_b_gate__b) / (pow(var_x261, 2) * pow((0.60655737704918034 + var_x262), 2));
+        IJth(rJacobian, 7, 0) = 9.2592592592592588e-5 * var_x258 * var_x263 / pow(var_x259, 2) + 0.036429872495446262 * var_x260 * (-var_chaste_interface__T_type_Ca_channel_b_gate__b + 1 / var_x259) / (pow(var_x261, 2) * pow((0.60655737704918034 + var_x262), 2));
         IJth(rJacobian, 8, 0) = (0.001 / var_x265 - 0.001 * var_chaste_interface__T_type_Ca_channel_g_gate__g) * ((var_x266) ? (6.0763888888888884 / pow((1 - 0.072916666666666671 * var_chaste_interface__membrane__V), 2)) : (0)) - 0.00017857142857142857 * var_x264 * var_x267 / pow(var_x265, 2);
         IJth(rJacobian, 9, 0) = (0.001 / var_x269 - 0.001 * var_chaste_interface__rapid_delayed_rectifier_potassium_current_xr_gate__xr) * (var_x273 + var_x277 - 0.16973999999999997 * var_x274 * var_x278 / pow(var_x275, 2) - 0.088449999999999987 * var_x270 * var_x279 / pow(var_x271, 2)) + 0.00013333333333333334 * var_x268 * (var_x273 * var_x279 + var_x277 * var_x278) / pow(var_x269, 2);
         IJth(rJacobian, 10, 0) = var_x294 * (var_x286 * var_x291 + var_x290 * var_x291) + (var_x282 - var_x140) * (var_x286 + var_x290 - 0.0089997000000000011 * var_x292 - 0.0106412 * var_x293);
@@ -980,7 +980,7 @@
         IJth(rJacobian, 1, 15) = 2.7058823529411762e-5 * var_x164;
         IJth(rJacobian, 14, 15) = 0.0055555555555555558 * var_x331;
         IJth(rJacobian, 15, 15) = -0.00081642512077294684;
-        IJth(rJacobian, 16, 16) = 0.001 * ((1.0 * var_x100 * (var_x186 + var_x187 + 0.0070160275741043606 * var_chaste_interface__membrane__V - 0.10684935482199306 * var_x122 - 7.3656881518639831e-7 * var_x5 + var_x110 * var_x30 + var_x123 * var_x34 + var_x142 * var_x37 + var_x18 * var_x56 + var_x23 * var_x56 + var_x3 * var_x56 + var_x76 * var_chaste_interface__membrane__V + var_x79 * var_chaste_interface__membrane__V + GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted) / HeartConfig::Instance()->GetCapacitance()) < -150000.0) ? (-100500.0) : (-500.0));
+        IJth(rJacobian, 16, 16) = 0.001 * ((var_x100 * (var_x186 + var_x187 + 0.0070160275741043606 * var_chaste_interface__membrane__V - 0.10684935482199306 * var_x122 - 7.3656881518639831e-7 * var_x5 + var_x110 * var_x30 + var_x123 * var_x34 + var_x142 * var_x37 + var_x18 * var_x56 + var_x23 * var_x56 + var_x3 * var_x56 + var_x76 * var_chaste_interface__membrane__V + var_x79 * var_chaste_interface__membrane__V + GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted) / HeartConfig::Instance()->GetCapacitance()) < -150000.0) ? (-100500.0) : (-500.0));
         IJth(rJacobian, 1, 17) = var_x191 * var_x192;
         IJth(rJacobian, 14, 17) = var_x191 * var_x333;
         IJth(rJacobian, 17, 17) = 0.001 * ((var_x334) ? (-100500.0) : (-500.0));

@@ -11,7 +11,7 @@ def get_jacobian(state_vars, derivative_equations):
              The list of common expressions is of the form [('var_x1', <expression>), ..]
              The jacobian Matrix is an sympy.Matrix
     """
-    assert all([len(eq.lhs.args) > 0 and eq.lhs.args[0] in state_vars for eq in derivative_equations]), \
+    assert all(map(lambda eq: len(eq.lhs.args) > 0 and eq.lhs.args[0] in state_vars, derivative_equations)), \
         ("Expecting derivative equations to be reduced to the minimal set defining the state vars: the lhs is a state "
          "var for every eq")
     jacobian_equations, jacobian_matrix = [], Matrix([])
@@ -45,7 +45,7 @@ def format_jacobian(jacobian_equations, jacobian_matrix, printer, print_rhs,
              The jacobian Matrix is a list of the form:
              [{'i': i, 'j': 'entry': <printted jacobian matrix entry for index [i, j])}
     """
-    assert all([isinstance(eq, tuple) and len(eq) == 2 for eq in jacobian_equations]), \
+    assert all(map(lambda eq: isinstance(eq, tuple) and len(eq) == 2, jacobian_equations)), \
         'Expecting list of equation tuples'
     assert isinstance(jacobian_matrix, Matrix), ("Expecting a jacobian as a matrix")
     assert isinstance(printer, Printer), 'Expecting printer to be a cellmlmanip.printer.Printer'

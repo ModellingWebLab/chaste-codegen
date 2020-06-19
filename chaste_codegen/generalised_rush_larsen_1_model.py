@@ -39,8 +39,8 @@ class GeneralisedRushLarsenFirstOrderModel(ChasteModel):
 
             :param eq_to_expand: list containing equations to recurse over and expand definitions for
                        note: expecting equations in [(lhs, rhs)] form.
-            :param equations: for set of equations to look for definitions in.
-            :return: list of equations and list of state vars.
+            :param equations: set of equations to look for definitions in.
+            :return: set of equations and set of used state vars.
             """
             used_state_vars = set()
             for eq in eq_to_expand:
@@ -48,18 +48,17 @@ class GeneralisedRushLarsenFirstOrderModel(ChasteModel):
                     if v in self._state_vars:
                         used_state_vars.add(v)
                     elif v not in [e[0] for e in eq_to_expand]:
-                        eq_to_expand.extend([e for e in equations if e[0] == v])
-            eq_to_expand.reverse()
-            return eq_to_expand, used_state_vars
+                        eq_to_expand.extend(filter(lambda e: e[0] == v, equations))
+            return set(eq_to_expand), used_state_vars
 
         for i, deriv in enumerate(self._y_derivatives):
             equations, used_state_vars = \
                 get_used_eqs_and_state_vars([(d.lhs, d.rhs) for d in self._derivative_equations if d.lhs == deriv],
-                                            [(e.lhs, e.rhs) for e in self._derivative_equations])
+                                            set(map(lambda e: (e.lhs, e.rhs), self._derivative_equations)))
 
             # get all the variables used in jacobian matrix entry and all variables used to define them
             used_jacobian_vars, used_jacobian_state_vars = \
-                get_used_eqs_and_state_vars([(None, self._jacobian_matrix[i, i])], self._jacobian_equations)
+                get_used_eqs_and_state_vars([(None, self._jacobian_matrix[i, i])], set(self._jacobian_equations))
 
             for sv in self._formatted_state_vars:
                 sv.setdefault('in_evaluate_y_derivative', []).append(sv['sympy_var'] in used_state_vars)

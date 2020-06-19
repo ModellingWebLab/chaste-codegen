@@ -13,7 +13,7 @@ class OptChasteModel(NormalChasteModel):
     def _get_extended_equations_for_ionic_vars(self):
         """ Get the partially evaluated equations defining the ionic derivatives and all dependant equations"""
         return partial_eval(super()._get_extended_equations_for_ionic_vars(),
-                            [eq.lhs for eq in self._equations_for_ionic_vars])
+                            set(map(lambda eq: eq.lhs, self._equations_for_ionic_vars)))
 
     def _get_derivative_equations(self):
         """ Get partially evaluated equations defining the derivatives including V (self._membrane_voltage_var)"""
