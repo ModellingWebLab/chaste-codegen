@@ -82,7 +82,8 @@ class CvodeWithDataClampModel(CvodeChasteModel):
         # Add membrane_data_clamp_current to modifiable parameters
         # (this was set in _get_modifiable_parameterss as it's also needed in _get_derivative_equations)
         derived_quant.append(self._membrane_data_clamp_current)
-        return sorted(derived_quant, key=lambda q: self._model.get_display_name(q, self._OXMETA))
+        derived_quant.sort(key=lambda q: self._model.get_display_name(q, self._OXMETA))
+        return derived_quant
 
     def _format_derivative_equations(self, derivative_equations):
         """Format derivative equations for chaste output and add is_data_clamp_current flag"""

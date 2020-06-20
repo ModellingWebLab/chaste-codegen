@@ -131,7 +131,7 @@ class BackwardEulerModel(ChasteModel):
         formatted_nonlinear_state_vars = \
             [s for s in formatted_state_vars if s['sympy_var'] in self._non_linear_state_vars]
         # order by name
-        formatted_nonlinear_state_vars = sorted(formatted_nonlinear_state_vars, key=lambda d: d['var'])
+        formatted_nonlinear_state_vars.sort(key=lambda d: d['var'])
         for sv in formatted_nonlinear_state_vars:
             sv['linear'] = False
             sv['in_jacobian'] = sv['sympy_var'] in jacobian_symbols

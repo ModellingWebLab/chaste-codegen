@@ -19,9 +19,9 @@ def get_jacobian(state_vars, derivative_equations):
         jacobian_equations, jacobian_matrix = [], []
         state_var_matrix = Matrix(state_vars)
         # sort by state var
-        derivative_eqs = sorted(derivative_equations, key=lambda d: state_vars.index(d.lhs.args[0]))
+        derivative_equations.sort(key=lambda d: state_vars.index(d.lhs.args[0]))
         # we're only interested in the rhs
-        derivative_eqs = [eq.rhs for eq in derivative_eqs]
+        derivative_eqs = [eq.rhs for eq in derivative_equations]
         derivative_eq_matrix = Matrix(derivative_eqs)
         jacobian_matrix = derivative_eq_matrix.jacobian(state_var_matrix)
         jacobian_equations, jacobian_matrix = cse(jacobian_matrix, order='none')

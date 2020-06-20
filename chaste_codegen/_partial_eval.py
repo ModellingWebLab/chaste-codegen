@@ -24,7 +24,7 @@ def partial_eval(equations, required_lhs, keep_multiple_usages=True):
     evaluated_eqs = []
     # count usage of variables on rhs of equations
     if keep_multiple_usages:
-        usage_count = dict()
+        usage_count = {}
         for eq in equations:
             usage_count.setdefault(eq.lhs, 0)
             for var in eq.rhs.atoms(Variable):

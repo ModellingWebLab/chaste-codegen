@@ -551,8 +551,9 @@ class ChasteModel(object):
 
     def _get_y_derivatives(self):
         """ Get derivatives for state variables"""
-        return sorted(self._model.get_derivatives(),
-                      key=lambda state_var: self._state_var_key_order(state_var))
+        derivatives = self._model.get_derivatives()
+        derivatives.sort(key=lambda state_var: self._state_var_key_order(state_var))
+        return derivatives
 
     def _get_derivative_equations(self):
         """ Get equations defining the derivatives including V (self._membrane_voltage_var)"""
@@ -794,7 +795,8 @@ class ChasteModel(object):
             value = self._model.get_rdf_value(subject=attr, predicate=(self._PYCMLMETA, 'value'))
             named_attributes.append({'name': name, 'value': value})
 
-        return sorted(named_attributes, key=lambda a: a['name'])
+        named_attributes.sort(key=lambda a: a['name'])
+        return named_attributes
 
     def _format_derived_quant(self):
         return [{'units': self._model.units.format(self._model.units.evaluate_units(quant)),
