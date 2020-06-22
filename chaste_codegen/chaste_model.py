@@ -92,8 +92,6 @@ class ChasteModel(object):
         self._membrane_voltage_var = self._get_membrane_voltage_var()
         self._cytosolic_calcium_concentration_var = self._get_cytosolic_calcium_concentration_var()
 
-        # Sort the state variables, in similar order to pycml to prevent breaking existing code.
-        # V and cytosolic_calcium_concentration need to be set for the sorting
         # Conversions of V or cytosolic_calcium_concentration could have changed the state vars so a new call is needed
         self._state_vars = set(self._model.get_state_variables())
 
@@ -138,6 +136,8 @@ class ChasteModel(object):
         self._derived_quant_eqs = self._get_derived_quant_eqs()
 
         # Sort before printing
+        # Sort the state variables, in similar order to pycml to prevent breaking existing code.
+        # V and cytosolic_calcium_concentration need to be set for the sorting
         # the state variables, in similar order to pycml to prevent breaking existing code.
         self._state_vars = sorted(self._model.get_state_variables(),
                                   key=lambda state_var: self._state_var_key_order(state_var))
