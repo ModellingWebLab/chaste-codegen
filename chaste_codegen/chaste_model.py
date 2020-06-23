@@ -87,13 +87,13 @@ class ChasteModel(object):
         self._in_interface = set()
 
         self._time_variable = self._get_time_variable()
-        self._state_vars = set(self._model.get_state_variables())
+        self._state_vars = set(self._model.get_state_variables(sort=False))
 
         self._membrane_voltage_var = self._get_membrane_voltage_var()
         self._cytosolic_calcium_concentration_var = self._get_cytosolic_calcium_concentration_var()
 
         # Conversions of V or cytosolic_calcium_concentration could have changed the state vars so a new call is needed
-        self._state_vars = set(self._model.get_state_variables())
+        self._state_vars = set(self._model.get_state_variables(sort=False))
 
         self._in_interface.update(self._state_vars)
 
@@ -139,7 +139,7 @@ class ChasteModel(object):
         # Sort the state variables, in similar order to pycml to prevent breaking existing code.
         # V and cytosolic_calcium_concentration need to be set for the sorting
         # the state variables, in similar order to pycml to prevent breaking existing code.
-        self._state_vars = sorted(self._model.get_state_variables(),
+        self._state_vars = sorted(self._state_vars,
                                   key=lambda state_var: self._state_var_key_order(state_var))
         self._modifiable_parameters = sorted(self._modifiable_parameters,
                                              key=lambda v: self._model.get_display_name(v, self._OXMETA))
@@ -231,12 +231,17 @@ class ChasteModel(object):
             var = var.args[0]
         if var == self._membrane_voltage_var:
             return self._MEMBRANE_VOLTAGE_INDEX
-        elif var == self._cytosolic_calcium_concentration_var and \
-                self._model.units.evaluate_units(self._cytosolic_calcium_concentration_var).dimensionality == \
+        elif var == self._cytosolic_calcium_concentration_var and\
+                self._cytosolic_calcium_concentration_var.units.dimensionality == \
                 self.units.get_unit('millimolar').dimensionality:
             return self._CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX
         else:
-            return self._MEMBRANE_VOLTAGE_INDEX + self._CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX + 1
+            order = var.order_added
+            if order >= self._MEMBRANE_VOLTAGE_INDEX:
+                order += self._MEMBRANE_VOLTAGE_INDEX
+            if order >= self._CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX:
+                order += self._CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX
+            return order
 
     def _add_units(self):
         """ Add needed units to the model to allow converting time, voltage and calcium in specific units
@@ -336,11 +341,11 @@ class ChasteModel(object):
         """ Get all modifiable parameters, either annotated as such or with other annotation.
 
         Stimulus currents are ignored and the result is sorted by display name"""
-        tagged = set(self._model.get_variables_by_rdf((self._PYCMLMETA, 'modifiable-parameter'), 'yes'))
+        tagged = set(self._model.get_variables_by_rdf((self._PYCMLMETA, 'modifiable-parameter'), 'yes', sort=False))
         annotated = set(filter(lambda q: self._model.has_ontology_annotation(q, self._OXMETA), self._model.variables()))
 
         return (tagged | annotated) -\
-            set(self._model.get_derived_quantities() + [self._time_variable]) - self._state_vars
+            set(self._model.get_derived_quantities(sort=False) + [self._time_variable]) - self._state_vars
 
     def _get_membrane_stimulus_current(self):
         """ Find the membrane_stimulus_current variable if it exists"""
@@ -494,7 +499,7 @@ class ChasteModel(object):
     def _get_ionic_derivs(self):
         """ Getting the derivatives that define V (self._membrane_voltage_var)"""
         # use the RHS of the ODE defining V
-        return [x for x in self._model.get_derivatives() if x.args[0] == self._membrane_voltage_var]
+        return set(filter(lambda x: x.args[0] == self._membrane_voltage_var, self._model.get_derivatives(sort=False)))
 
     def _get_equations_for_ionic_vars(self):
         """ Get the equations defining the ionic derivatives"""
@@ -551,7 +556,7 @@ class ChasteModel(object):
 
     def _get_y_derivatives(self):
         """ Get derivatives for state variables"""
-        derivatives = self._model.get_derivatives()
+        derivatives = self._model.get_derivatives(sort=False)
         derivatives.sort(key=lambda state_var: self._state_var_key_order(state_var))
         return derivatives
 
@@ -591,11 +596,11 @@ class ChasteModel(object):
         """ Get all derived quantities
 
         Stimulus currents are ignored and the result is sorted by display name"""
-        tagged = set(self._model.get_variables_by_rdf((self._PYCMLMETA, 'derived-quantity'), 'yes'))
+        tagged = set(self._model.get_variables_by_rdf((self._PYCMLMETA, 'derived-quantity'), 'yes', sort=False))
         # Get annotated derived quantities excluding stimulus current params
         annotated = set(filter(lambda q: q not in self._stimulus_params
                                and self._model.has_ontology_annotation(q, self._OXMETA),
-                               self._model.get_derived_quantities()))
+                               self._model.get_derived_quantities(sort=False)))
 
         return sorted(tagged | annotated, key=lambda v: self._model.get_display_name(v, self._OXMETA))
 

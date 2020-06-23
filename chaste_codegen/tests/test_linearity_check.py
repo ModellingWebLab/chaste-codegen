@@ -23,12 +23,12 @@ def hn_model():
 
 @pytest.fixture(scope='session')
 def state_vars(hn_model):
-    return hn_model.get_state_variables()
+    return hn_model.get_state_variables(sort=False)
 
 
 @pytest.fixture(scope='session')
 def derivatives_eqs(hn_model):
-    return hn_model.get_equations_for(hn_model.get_derivatives())
+    return hn_model.get_equations_for(hn_model.get_derivatives(sort=False))
 
 
 @pytest.fixture(scope='session')
