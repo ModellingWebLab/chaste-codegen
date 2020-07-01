@@ -15,7 +15,7 @@ script:
 after_success:
     - codecov
 notifications:
-  if: if [[ $TRAVIS_EVENT_TYPE == "cron" ]]
+  if: [[ $TRAVIS_EVENT_TYPE == "cron" ]]
   slack: cardiac-modelling:4tZiJ5FMb1LaTuyz3cH6PmHX
   on_success: always
   on_failure: always
