@@ -15,4 +15,7 @@ script:
 after_success:
     - codecov
 notifications:
+  if: branch = master
   slack: cardiac-modelling:4tZiJ5FMb1LaTuyz3cH6PmHX
+  on_success: always
+  on_failure: always
