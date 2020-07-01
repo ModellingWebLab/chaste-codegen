@@ -11,9 +11,7 @@ def get_jacobian(state_vars, derivative_equations):
              The list of common expressions is of the form [('var_x1', <expression>), ..]
              The jacobian Matrix is an sympy.Matrix
     """
-    assert len(state_vars) > 0 and len(derivative_equations) > 0, ("Expecting state_vars and derivative_equations "
-                                                                   "not to be empty")
-    assert all([len(eq.lhs.args) > 0 and eq.lhs.args[0] in state_vars for eq in derivative_equations]), \
+    assert all(map(lambda eq: len(eq.lhs.args) > 0 and eq.lhs.args[0] in state_vars, derivative_equations)), \
         ("Expecting derivative equations to be reduced to the minimal set defining the state vars: the lhs is a state "
          "var for every eq")
     jacobian_equations, jacobian_matrix = [], Matrix([])
@@ -21,9 +19,9 @@ def get_jacobian(state_vars, derivative_equations):
         jacobian_equations, jacobian_matrix = [], []
         state_var_matrix = Matrix(state_vars)
         # sort by state var
-        derivative_eqs = sorted(derivative_equations, key=lambda d: state_vars.index(d.lhs.args[0]))
+        derivative_equations.sort(key=lambda d: state_vars.index(d.lhs.args[0]))
         # we're only interested in the rhs
-        derivative_eqs = [eq.rhs for eq in derivative_eqs]
+        derivative_eqs = [eq.rhs for eq in derivative_equations]
         derivative_eq_matrix = Matrix(derivative_eqs)
         jacobian_matrix = derivative_eq_matrix.jacobian(state_var_matrix)
         jacobian_equations, jacobian_matrix = cse(jacobian_matrix, order='none')
@@ -47,10 +45,9 @@ def format_jacobian(jacobian_equations, jacobian_matrix, printer, print_rhs,
              The jacobian Matrix is a list of the form:
              [{'i': i, 'j': 'entry': <printted jacobian matrix entry for index [i, j])}
     """
-    assert all([isinstance(eq, tuple) and len(eq) == 2 for eq in jacobian_equations]), \
+    assert all(map(lambda eq: isinstance(eq, tuple) and len(eq) == 2, jacobian_equations)), \
         'Expecting list of equation tuples'
-    assert isinstance(jacobian_matrix, Matrix) and len(jacobian_matrix) > 0, ("Expecting a non-empty jacobian "
-                                                                              "as a matrix")
+    assert isinstance(jacobian_matrix, Matrix), ("Expecting a jacobian as a matrix")
     assert isinstance(printer, Printer), 'Expecting printer to be a cellmlmanip.printer.Printer'
     assert callable(print_rhs), 'Expecting print_rhs to be a callable'
 

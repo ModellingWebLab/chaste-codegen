@@ -11,7 +11,6 @@ from sympy import (
     Expr,
     Float,
     Function,
-    Mul,
     Pow,
     Wild,
     log,
@@ -19,7 +18,7 @@ from sympy import (
     sympify,
 )
 from sympy.codegen.cfunctions import log10
-from sympy.codegen.rewriting import ReplaceOptim, optimize, optims_c99
+from sympy.codegen.rewriting import ReplaceOptim, log1p_opt, optimize
 
 import chaste_codegen as cg
 from chaste_codegen._rdf import get_variables_transitively
@@ -49,10 +48,6 @@ class ChasteModel(object):
     _POW_OPT = ReplaceOptim(lambda p: p.is_Pow and (isinstance(p.exp, Float) or isinstance(p.exp, float))
                             and float(p.exp).is_integer(),
                             lambda p: Pow(p.base, int(float(p.exp))))
-    # For 1.0 * x * ... remove the 1.0 for neater equations
-    _ONE_OPT = ReplaceOptim(lambda m: isinstance(m, Mul) and 1.0 in m.args,
-                            lambda m: Mul(*[a for a in m.args if a != 1.0]))
-    _OPTIMS = optims_c99 + (_LOG10_OPT, _POW_OPT, _ONE_OPT)
 
     def __init__(self, model, file_name, **kwargs):
         """ Initialise a ChasteModel instance
@@ -89,28 +84,24 @@ class ChasteModel(object):
         self._add_conversion_rules()
 
         # in_interface may have already been set by child class
-        self._in_interface = getattr(self, '_in_interface', [])
+        self._in_interface = set()
 
         self._time_variable = self._get_time_variable()
-        self._state_vars = self._model.get_state_variables()
+        self._state_vars = set(self._model.get_state_variables(sort=False))
 
         self._membrane_voltage_var = self._get_membrane_voltage_var()
         self._cytosolic_calcium_concentration_var = self._get_cytosolic_calcium_concentration_var()
 
-        # Sort the state variables, in similar order to pycml to prevent breaking existing code.
-        # V and cytosolic_calcium_concentration need to be set for the sorting
         # Conversions of V or cytosolic_calcium_concentration could have changed the state vars so a new call is needed
-        self._state_vars = sorted(self._model.get_state_variables(),
-                                  key=lambda state_var: self._state_var_key_order(state_var))
+        self._state_vars = set(self._model.get_state_variables(sort=False))
 
-        self._in_interface.extend(self._state_vars)
+        self._in_interface.update(self._state_vars)
 
         # Retrieve stimulus current parameters so we can exclude these from modifiers etc.
         self._membrane_stimulus_current_orig = self._get_membrane_stimulus_current()
 
-        self._modifiers = self._get_modifiers()
-        self._modifiable_parameters = self._get_modifiable_parameters()
-        self._in_interface.append(self._time_variable)
+        self._modifiable_parameters = set(self._get_modifiable_parameters())
+        self._in_interface.add(self._time_variable)
 
         self._membrane_capacitance = self._get_membrane_capacitance()
         self._stimulus_params, self._stimulus_equations = self._get_stimulus()
@@ -118,13 +109,14 @@ class ChasteModel(object):
         # update modifiable_parameters and modifiers to remove stimulus params
         # couldn't do this earlier as we didn't have stimulus params yet
         # but we need  pre- conversion modifiers / params as the conversion moves metadata
-        self._modifiers = [m for m in self._get_modifiers() if m not in self._stimulus_params]
-        self._modifiable_parameters = [p for p in self._modifiable_parameters if p not in self._stimulus_params]
+        self._modifiers_set = self._get_modifiers()
+        self._modifiers = sorted(self._modifiers_set, key=lambda m: self._model.get_display_name(m, self._OXMETA))
+        self._modifiable_parameters = self._modifiable_parameters - self._stimulus_params
 
         self._y_derivatives = self._get_y_derivatives()
 
         # get capacitance and update stimulus current
-        self._in_interface.extend(self._stimulus_params)
+        self._in_interface.update(self._stimulus_params)
         self._membrane_stimulus_current_converted, self._stimulus_units = self._convert_membrane_stimulus_current()
         # If we don't have a capacitance, update capacitance to allow converting i_ionic
         if self._membrane_capacitance is None:
@@ -143,6 +135,17 @@ class ChasteModel(object):
         self._derived_quant = self._get_derived_quant()
         self._derived_quant_eqs = self._get_derived_quant_eqs()
 
+        # Sort before printing
+        # Sort the state variables, in similar order to pycml to prevent breaking existing code.
+        # V and cytosolic_calcium_concentration need to be set for the sorting
+        # the state variables, in similar order to pycml to prevent breaking existing code.
+        self._state_vars = sorted(self._state_vars,
+                                  key=lambda state_var: self._state_var_key_order(state_var))
+        self._modifiable_parameters = sorted(self._modifiable_parameters,
+                                             key=lambda v: self._model.get_display_name(v, self._OXMETA))
+        self._modifiable_parameter_lookup = {p: str(i) for i, p in enumerate(self._modifiable_parameters)}
+
+        # Printing
         self._add_printers()
         self._formatted_state_vars, self._use_verify_state_variables = self._format_state_variables()
 
@@ -180,7 +183,7 @@ class ChasteModel(object):
              'derived_quantities': self._format_derived_quant(),
              'derived_quantity_equations': self._format_derived_quant_eqs()}
 
-    def get_equations_for(self, variables, recurse=True, filter_modifiable_parameters_lhs=True):
+    def get_equations_for(self, variables, recurse=True, filter_modifiable_parameters_lhs=True, optimise=True):
         """Returns equations excluding once where lhs is a modifiable parameter
 
         :param variables: the variables to get defining equations for.
@@ -192,7 +195,16 @@ class ChasteModel(object):
         """
         equations = [eq for eq in self._model.get_equations_for(variables, recurse=recurse)
                      if not filter_modifiable_parameters_lhs or eq.lhs not in self._modifiable_parameters]
-        return [Eq(eq.lhs, optimize(eq.rhs, self._OPTIMS)) for eq in equations]
+        if optimise:
+            for i, eq in enumerate(equations):
+                optims = tuple()
+                if len(eq.rhs.atoms(log)) > 0:
+                    optims += (self._LOG10_OPT, log1p_opt)
+                if len(eq.rhs.atoms(Pow)) > 0:
+                    optims += (self._POW_OPT, )
+                if len(optims) > 0:
+                    equations[i] = Eq(eq.lhs, optimize(eq.rhs, optims))
+        return equations
 
     def _get_initial_value(self, var):
         """Returns the initial value of a variable if it has one, 0 otherwise"""
@@ -201,7 +213,7 @@ class ChasteModel(object):
         if var in self._state_vars:
             initial_value = getattr(var, 'initial_value', 0)
         else:
-            eqs = self._model.get_equations_for([var])
+            eqs = self.get_equations_for((var,), filter_modifiable_parameters_lhs=False, optimise=False)
             # If there is a defining equation, there should be just 1 equation and it should be of the form var = value
             if len(eqs) == 1 and isinstance(eqs[0].rhs, Float):
                 initial_value = eqs[0].rhs
@@ -219,12 +231,17 @@ class ChasteModel(object):
             var = var.args[0]
         if var == self._membrane_voltage_var:
             return self._MEMBRANE_VOLTAGE_INDEX
-        elif var == self._cytosolic_calcium_concentration_var and \
-                self._model.units.evaluate_units(self._cytosolic_calcium_concentration_var).dimensionality == \
+        elif var == self._cytosolic_calcium_concentration_var and\
+                self._cytosolic_calcium_concentration_var.units.dimensionality == \
                 self.units.get_unit('millimolar').dimensionality:
             return self._CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX
         else:
-            return self._MEMBRANE_VOLTAGE_INDEX + self._CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX + 1
+            order = var.order_added
+            if order >= self._MEMBRANE_VOLTAGE_INDEX:
+                order += self._MEMBRANE_VOLTAGE_INDEX
+            if order >= self._CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX:
+                order += self._CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX
+            return order
 
     def _add_units(self):
         """ Add needed units to the model to allow converting time, voltage and calcium in specific units
@@ -314,26 +331,21 @@ class ChasteModel(object):
         These are all variables with annotation (including state vars)
         except the stimulus current and time (the free variable)
         """
-        modifiers = []
+        modifiers = set()
         if self.use_modifiers:
-            modifiers = [m for m in self._model.variables()
-                         if self._model.has_ontology_annotation(m, self._OXMETA)
-                         and m not in (self._membrane_stimulus_current_orig, self._time_variable)]
-
-        return sorted(modifiers, key=lambda m: self._model.get_display_name(m, self._OXMETA))
+            modifiers = set(filter(lambda m: m not in (self._membrane_stimulus_current_orig, self._time_variable) and
+                                   self._model.has_ontology_annotation(m, self._OXMETA), self._model.variables()))
+        return modifiers - self._stimulus_params
 
     def _get_modifiable_parameters(self):
         """ Get all modifiable parameters, either annotated as such or with other annotation.
 
         Stimulus currents are ignored and the result is sorted by display name"""
-        tagged = self._model.get_variables_by_rdf((self._PYCMLMETA, 'modifiable-parameter'), 'yes')
-        # Get derived quantities excluding stimulus current params
-        annotated = [q for q in self._model.variables()
-                     if self._model.has_ontology_annotation(q, self._OXMETA)]
+        tagged = set(self._model.get_variables_by_rdf((self._PYCMLMETA, 'modifiable-parameter'), 'yes', sort=False))
+        annotated = set(filter(lambda q: self._model.has_ontology_annotation(q, self._OXMETA), self._model.variables()))
 
-        parameters = set(tagged + annotated) -\
-            set(self._model.get_derived_quantities() + self._state_vars + [self._time_variable])
-        return sorted(parameters, key=lambda v: self._model.get_display_name(v, self._OXMETA))
+        return (tagged | annotated) -\
+            set(self._model.get_derived_quantities(sort=False) + [self._time_variable]) - self._state_vars
 
     def _get_membrane_stimulus_current(self):
         """ Find the membrane_stimulus_current variable if it exists"""
@@ -341,8 +353,9 @@ class ChasteModel(object):
             return self._model.get_variable_by_ontology_term((self._OXMETA, 'membrane_stimulus_current'))
         except KeyError:
             self._logger.info(self._model.name + ' has no membrane_stimulus_current')
-            self._is_self_excitatory = len(list(self._model.get_rdf_annotations(subject=self._model.rdf_identity,
-                                                predicate=(self._PYCMLMETA, 'is-self-excitatory'), object_='yes'))) > 0
+            self._is_self_excitatory = \
+                next(self._model.get_rdf_annotations(subject=self._model.rdf_identity,
+                     predicate=(self._PYCMLMETA, 'is-self-excitatory'), object_='yes'), None) is not None
             return None
 
     def _convert_membrane_stimulus_current(self):
@@ -350,13 +363,13 @@ class ChasteModel(object):
         if self._membrane_stimulus_current_orig is None:
             return None, self._stimulus_units
         # get derivative equations
-        d_eqs = self.get_equations_for(self._y_derivatives)
+        d_eqs = self.get_equations_for(self._y_derivatives, filter_modifiable_parameters_lhs=False, optimise=False)
 
         # get dv/dt
-        deriv_eq_only = [eq for eq in d_eqs if isinstance(eq.lhs, Derivative)
-                         and eq.lhs.args[0] == self._membrane_voltage_var]
-        assert len(deriv_eq_only) == 1, 'Expecting exactly 1 dv/dt equation'
-        dvdt = deriv_eq_only[0]
+        deriv_eq_only = filter(lambda eq: isinstance(eq.lhs, Derivative) and
+                               eq.lhs.args[0] == self._membrane_voltage_var, d_eqs)
+        dvdt = next(deriv_eq_only, None)
+        assert dvdt is not None and next(deriv_eq_only, None) is None, 'Expecting exactly 1 dv/dt equation'
 
         # Assign temporary values to variables in order to check the stimulus sign.
         # This will process defining expressions in a breadth first search until the stimulus
@@ -377,9 +390,7 @@ class ChasteModel(object):
                         voltage_rhs = voltage_rhs.xreplace({variable: 0.0})  # other currents = 0
                 else:
                     # For other variables see if we need to follow their definitions first
-                    rhs = None
-                    if variable in [eq.lhs for eq in d_eqs]:
-                        rhs = [eq.rhs for eq in d_eqs if eq.lhs == variable][-1]
+                    rhs = next(map(lambda eq: eq.rhs, filter(lambda eq: eq.lhs == variable, d_eqs)), None)
 
                     if rhs is not None and not isinstance(rhs, Float):
                         voltage_rhs = voltage_rhs.xreplace({variable: rhs})  # Update definition
@@ -444,22 +455,22 @@ class ChasteModel(object):
 
     def _get_stimulus(self):
         """ Store the stimulus currents in the model"""
-        stim_params_orig, stim_params = [], []
+        stim_params_orig, stim_params = set(), set()
         try:  # Get required stimulus parameters
             ampl = self._model.get_variable_by_ontology_term((self._OXMETA, 'membrane_stimulus_current_amplitude'))
             duration = self._model.get_variable_by_ontology_term((self._OXMETA, 'membrane_stimulus_current_duration'))
             period = self._model.get_variable_by_ontology_term((self._OXMETA, 'membrane_stimulus_current_period'))
 
-            stim_params_orig = [ampl, duration, period]  # originals ones
-            stim_params.append(self._model.convert_variable(ampl, self.units.get_unit('uA_per_cm2'),
-                                                            DataDirectionFlow.INPUT))
-            stim_params.append(self._model.convert_variable(duration, self.units.get_unit('millisecond'),
-                                                            DataDirectionFlow.INPUT))
-            stim_params.append(self._model.convert_variable(period, self.units.get_unit('millisecond'),
-                                                            DataDirectionFlow.INPUT))
+            stim_params_orig.update((ampl, duration, period))  # originals ones
+            stim_params.add(self._model.convert_variable(ampl, self.units.get_unit('uA_per_cm2'),
+                                                         DataDirectionFlow.INPUT))
+            stim_params.add(self._model.convert_variable(duration, self.units.get_unit('millisecond'),
+                                                         DataDirectionFlow.INPUT))
+            stim_params.add(self._model.convert_variable(period, self.units.get_unit('millisecond'),
+                                                         DataDirectionFlow.INPUT))
         except KeyError:
             self._logger.info(self._model.name + 'has no default stimulus params tagged')
-            return [], []
+            return set(), []
         except TypeError as e:
             if str(e) == "unsupported operand type(s) for /: 'HeartConfig::Instance()->GetCapacitance' and 'NoneType'":
                 raise KeyError("Membrane capacitance is required to be able to apply conversion to stimulus current!")
@@ -467,28 +478,28 @@ class ChasteModel(object):
         try:  # Get optional stimulus parameter
             offset = self._model.get_variable_by_ontology_term((self._OXMETA, 'membrane_stimulus_current_offset'))
             if offset is not None:
-                stim_params_orig.append(offset)  # originals one
-                stim_params.append(self._model.convert_variable(offset, self.units.get_unit('millisecond'),
-                                                                DataDirectionFlow.INPUT))
+                stim_params_orig.add(offset)  # originals one
+                stim_params.add(self._model.convert_variable(offset, self.units.get_unit('millisecond'),
+                                                             DataDirectionFlow.INPUT))
         except KeyError:
             pass  # Optional Parameter
 
         try:  # Get optional stimulus parameter
             end = self._model.get_variable_by_ontology_term((self._OXMETA, 'membrane_stimulus_current_end'))
             if end is not None:
-                stim_params_orig.append(end)  # originals one
-                stim_params.append(self._model.convert_variable(end, self.units.get_unit('millisecond'),
-                                                                DataDirectionFlow.INPUT))
+                stim_params_orig.add(end)  # originals one
+                stim_params.add(self._model.convert_variable(end, self.units.get_unit('millisecond'),
+                                                             DataDirectionFlow.INPUT))
         except KeyError:
             pass  # Optional Parameter
 
         return_stim_eqs = self.get_equations_for(stim_params, filter_modifiable_parameters_lhs=False)
-        return stim_params + stim_params_orig, return_stim_eqs
+        return stim_params | stim_params_orig, return_stim_eqs
 
     def _get_ionic_derivs(self):
         """ Getting the derivatives that define V (self._membrane_voltage_var)"""
         # use the RHS of the ODE defining V
-        return [x for x in self._model.get_derivatives() if x.args[0] == self._membrane_voltage_var]
+        return set(filter(lambda x: x.args[0] == self._membrane_voltage_var, self._model.get_derivatives(sort=False)))
 
     def _get_equations_for_ionic_vars(self):
         """ Get the equations defining the ionic derivatives"""
@@ -505,7 +516,8 @@ class ChasteModel(object):
             equations_for_ionic_vars, equations, old_equations = [], self._ionic_derivs, None
             while len(equations_for_ionic_vars) == 0 and old_equations != equations:
                 old_equations = equations
-                equations = self.get_equations_for(equations, recurse=False)
+                equations = self.get_equations_for(equations, recurse=False, filter_modifiable_parameters_lhs=False,
+                                                   optimise=False)
                 equations_for_ionic_vars = [eq for eq in equations
                                             if (eq.lhs != self._membrane_stimulus_current_orig
                                                 and eq.lhs not in self._stimulus_params)
@@ -520,7 +532,7 @@ class ChasteModel(object):
         i_ionic_rhs = sympify(0.0, evaluate=False)
 
         # add i_ionic to interface for printing
-        self._in_interface.append(i_ionic_lhs)
+        self._in_interface.add(i_ionic_lhs)
         # convert and sum up all lhs for all ionic equations
         for var in reversed(equations_for_ionic_vars):
             factor = self._model.units.get_conversion_factor(from_unit=self._model.units.evaluate_units(var.lhs),
@@ -540,13 +552,13 @@ class ChasteModel(object):
         # Update equations to include i_ionic_eq & defining eqs, set stimulus current to 0
         return [eq if eq.lhs != self._membrane_stimulus_current_orig else Eq(eq.lhs, 0.0)
                 for eq in self.get_equations_for([eq.lhs for eq in self._equations_for_ionic_vars])
-                if eq.lhs != self._membrane_stimulus_current_converted
-                or self._membrane_stimulus_current_orig == self._membrane_stimulus_current_converted]
+                if eq.lhs != self._membrane_stimulus_current_converted]
 
     def _get_y_derivatives(self):
         """ Get derivatives for state variables"""
-        return sorted(self._model.get_derivatives(),
-                      key=lambda state_var: self._state_var_key_order(state_var))
+        derivatives = self._model.get_derivatives(sort=False)
+        derivatives.sort(key=lambda state_var: self._state_var_key_order(state_var))
+        return derivatives
 
     def _get_derivative_equations(self):
         """ Get equations defining the derivatives including V (self._membrane_voltage_var)"""
@@ -557,42 +569,40 @@ class ChasteModel(object):
     def _get_derivative_eqs_excl_voltage(self):
         """ Get equations defining the derivatives excluding V (self._membrane_voltage_var)"""
         # stat with derivatives without voltage and add all equations used
-        eqs = []
-        deriv_and_eqs = set([deriv for deriv in self._y_derivatives if deriv.args[0] != self._membrane_voltage_var])
+        eqs = set()
+        deriv_and_eqs = set(filter(lambda deriv: deriv.args[0] != self._membrane_voltage_var, self._y_derivatives))
         num_derivatives = -1
         while num_derivatives < len(deriv_and_eqs):
             num_derivatives = len(deriv_and_eqs)
-            eqs = [eq for eq in self._derivative_equations if eq.lhs in deriv_and_eqs]
+            eqs = set(filter(lambda eq: eq.lhs in deriv_and_eqs, self._derivative_equations))
             for eq in eqs:
-                for s in self._model.find_variables_and_derivatives([eq.rhs]):
-                    deriv_and_eqs.add(s)
+                deriv_and_eqs.update(self._model.find_variables_and_derivatives((eq.rhs, )))
         return eqs
 
     def _get_derivative_eqs_voltage(self):
         """ Get equations defining the derivatives for V only (self._membrane_voltage_var)"""
         # start with derivatives for V only and add all equations used
-        eqs = []
-        derivatives = set([deriv for deriv in self._y_derivatives if deriv.args[0] == self._membrane_voltage_var])
+        eqs = set()
+        derivatives = set(filter(lambda deriv: deriv.args[0] == self._membrane_voltage_var, self._y_derivatives))
         num_derivatives = -1
         while num_derivatives < len(derivatives):
             num_derivatives = len(derivatives)
-            eqs = [eq for eq in self._derivative_equations if eq.lhs in derivatives]
+            eqs = set(filter(lambda eq: eq.lhs in derivatives, self._derivative_equations))
             for eq in eqs:
-                for s in self._model.find_variables_and_derivatives([eq.rhs]):
-                    derivatives.add(s)
+                derivatives.update(self._model.find_variables_and_derivatives((eq.rhs, )))
         return eqs
 
     def _get_derived_quant(self):
         """ Get all derived quantities
 
         Stimulus currents are ignored and the result is sorted by display name"""
-        tagged = self._model.get_variables_by_rdf((self._PYCMLMETA, 'derived-quantity'), 'yes')
+        tagged = set(self._model.get_variables_by_rdf((self._PYCMLMETA, 'derived-quantity'), 'yes', sort=False))
         # Get annotated derived quantities excluding stimulus current params
-        annotated = [q for q in self._model.get_derived_quantities()
-                     if self._model.has_ontology_annotation(q, self._OXMETA)
-                     and q not in self._stimulus_params]
+        annotated = set(filter(lambda q: q not in self._stimulus_params
+                               and self._model.has_ontology_annotation(q, self._OXMETA),
+                               self._model.get_derived_quantities(sort=False)))
 
-        return sorted(set(tagged + annotated), key=lambda v: self._model.get_display_name(v, self._OXMETA))
+        return sorted(tagged | annotated, key=lambda v: self._model.get_display_name(v, self._OXMETA))
 
     def _get_derived_quant_eqs(self):
         """ Get the defining equations for derived quantities"""
@@ -616,7 +626,7 @@ class ChasteModel(object):
             cg.ChastePrinter(lambda variable:
                              get_variable_name(variable, variable in self._in_interface)
                              if variable not in self._modifiable_parameters
-                             else self._print_modifiable_parameters(variable),
+                             else self._print_modifiable_parameterss(variable),
                              lambda deriv: 'd_dt_chaste_interface_' +
                                            (get_variable_name(deriv.expr)
                                             if isinstance(deriv, Derivative) else get_variable_name(deriv)))
@@ -626,7 +636,7 @@ class ChasteModel(object):
 
     def _print_rhs_with_modifiers(self, modifier, eq):
         """ Print modifiable parameters in the correct format for the model type"""
-        if modifier in self._modifiers:
+        if modifier in self._modifiers_set:
             return self._format_modifier(modifier) + '->Calc(' + self._printer.doprint(eq) + ', ' +\
                 self._printer.doprint(self._time_variable) + ')'
         return self._printer.doprint(eq)
@@ -641,9 +651,9 @@ class ChasteModel(object):
                  'modifier': self._format_modifier(param)}
                 for param in self._modifiers]
 
-    def _print_modifiable_parameters(self, variable):
+    def _print_modifiable_parameterss(self, variable):
         """ Print modifiable parameters in the correct format for the model type"""
-        return 'mParameters[' + str(self._modifiable_parameters.index(variable)) + ']'
+        return 'mParameters[' + self._modifiable_parameter_lookup[variable] + ']'
 
     def _format_modifiable_parameters(self):
         """ Format the modifiable parameter for printing to chaste code"""
@@ -660,7 +670,7 @@ class ChasteModel(object):
     def _format_rY_lookup(self, index, var, use_modifier=True):
         """ Formatting of rY lookup for printing"""
         entry = self._format_rY_entry(index)
-        if use_modifier and var in self._modifiers:
+        if use_modifier and var in self._modifiers_set:
             entry = self._format_modifier(var) +\
                 '->Calc(' + entry + ', ' + self._printer.doprint(self._time_variable) + ')'
         if var == self._membrane_voltage_var:
@@ -672,11 +682,12 @@ class ChasteModel(object):
         def get_range_annotation(subject, annotation_tag):
             """ Get range-low and range-high annotation for to verify state variables. """
             if subject.cmeta_id is not None:
-                range_annotation = list(self._model.get_rdf_annotations(subject='#' + subject.cmeta_id,
-                                                                        predicate=(self._PYCMLMETA, annotation_tag)))
-                assert len(range_annotation) < 2, 'Expecting 0 or 1 range annotation'
-                if len(range_annotation) == 1:
-                    return float(range_annotation[0][2])
+                range_annotation = self._model.get_rdf_annotations(subject='#' + subject.cmeta_id,
+                                                                   predicate=(self._PYCMLMETA, annotation_tag))
+                annotation = next(range_annotation, None)
+                assert next(range_annotation, None) is None, 'Expecting 0 or 1 range annotation'
+                if annotation is not None:
+                    return float(annotation[2])
             return ''
 
         # Get all used variables for eqs for ionic variables to be able to indicate if a state var is used
@@ -700,7 +711,7 @@ class ChasteModel(object):
             deriv_excl_voltage_variables.update(eq.rhs.free_symbols)
 
         # Get all used variables for eqs for derived quantities variables to be able to indicate if a state var is used
-        derived_quant_variables = set([q for q in self._derived_quant if q in self._state_vars])
+        derived_quant_variables = set(filter(lambda q: q in self._state_vars, self._derived_quant))
         for eq in self._derived_quant_eqs:
             derived_quant_variables.update(eq.rhs.free_symbols)
 
@@ -710,7 +721,7 @@ class ChasteModel(object):
               'rY_lookup': self._format_rY_lookup(var[0], var[1]),
               'rY_lookup_no_modifier': self._format_rY_lookup(var[0], var[1], use_modifier=False),
               'initial_value': str(self._get_initial_value(var[1])),
-              'modifier': self._format_modifier(var[1]) if var[1] in self._modifiers else None,
+              'modifier': self._format_modifier(var[1]) if var[1] in self._modifiers_set else None,
               'units': self._model.units.format(self._model.units.evaluate_units(var[1])),
               'in_ionic': var[1] in ionic_var_variables,
               'in_y_deriv': var[1] in y_deriv_variables,
@@ -723,8 +734,8 @@ class ChasteModel(object):
               'state_var_index': self._state_vars.index(var[1])}
              for var in enumerate(self._state_vars)]
 
-        use_verify_state_variables = \
-            len([eq for eq in formatted_state_vars if eq['range_low'] != '' or eq['range_high'] != '']) > 0
+        use_verify_state_variables = next(filter(lambda eq: eq['range_low'] != '' or eq['range_high'] != '',
+                                                 formatted_state_vars), None) is not None
         return formatted_state_vars, use_verify_state_variables
 
     def _format_default_stimulus(self):
@@ -749,7 +760,7 @@ class ChasteModel(object):
 
     def _format_y_derivatives(self):
         """ Format y_derivatives for writing to chaste output"""
-        self._in_interface.extend(self._y_derivatives)
+        self._in_interface.update(self._y_derivatives)
         return [self._printer.doprint(deriv) for deriv in self._y_derivatives]
 
     def _format_derivative_equations(self, derivative_equations):
@@ -789,7 +800,8 @@ class ChasteModel(object):
             value = self._model.get_rdf_value(subject=attr, predicate=(self._PYCMLMETA, 'value'))
             named_attributes.append({'name': name, 'value': value})
 
-        return sorted(named_attributes, key=lambda a: a['name'])
+        named_attributes.sort(key=lambda a: a['name'])
+        return named_attributes
 
     def _format_derived_quant(self):
         return [{'units': self._model.units.format(self._model.units.evaluate_units(quant)),

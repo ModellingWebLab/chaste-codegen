@@ -1,7 +1,7 @@
 #ifdef CHASTE_CVODE
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.0.1
+//! This source file was generated from CellML by chaste_codegen version 0.1.0
 //!
 //! Model: beeler_reuter_model_1977
 //!
@@ -237,7 +237,7 @@
         const double var_x22 = -0.10000000000000001 * var_chaste_interface__membrane__V;
         const double var_x23 = exp(-4.7000000000000002 + var_x22);
         const double var_x24 = -1.0 + var_x23;
-        const double var_x25 = 1.0 / var_x24;
+        const double var_x25 = 1 / var_x24;
         const double var_x26 = 47.0 + var_chaste_interface__membrane__V;
         const double var_x27 = -0.25 * var_chaste_interface__membrane__V;
         const double var_x28 = exp(-19.25 + var_x27);

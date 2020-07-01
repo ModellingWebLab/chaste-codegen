@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.0.1
+//! This source file was generated from CellML by chaste_codegen version 0.1.0
 //!
 //! Model: zhang_SAN_model_2000_0D_capable
 //!
@@ -135,7 +135,7 @@
         const double var_hyperpolarisation_activated_current__i_f_K = (-var_reversal_and_equilibrium_potentials__E_K + var_chaste_interface__membrane__V) * var_hyperpolarisation_activated_current__g_f_K * var_chaste_interface__hyperpolarisation_activated_current_y_gate__y; // nanoA
         const double var_potassium_background_current__i_b_K = (-var_reversal_and_equilibrium_potentials__E_K + var_chaste_interface__membrane__V) * var_potassium_background_current__g_b_K; // nanoA
         const double var_rapid_delayed_rectifying_potassium_current__i_K_r = (-var_reversal_and_equilibrium_potentials__E_K + var_chaste_interface__membrane__V) * var_rapid_delayed_rectifying_potassium_current__P_a * var_rapid_delayed_rectifying_potassium_current__g_K_r * var_chaste_interface__rapid_delayed_rectifying_potassium_current_P_i_gate__P_i; // nanoA
-        const double var_reversal_and_equilibrium_potentials__E_K_s = var_membrane__R * var_membrane__T * log((0.029999999999999999 * var_ionic_concentrations__Na_o + var_ionic_concentrations__K_o) / (0.029999999999999999 * var_ionic_concentrations__Na_i + var_ionic_concentrations__K_i)) / var_membrane__F; // millivolt
+        const double var_reversal_and_equilibrium_potentials__E_K_s = var_membrane__R * var_membrane__T * log((var_ionic_concentrations__K_o + 0.029999999999999999 * var_ionic_concentrations__Na_o) / (var_ionic_concentrations__K_i + 0.029999999999999999 * var_ionic_concentrations__Na_i)) / var_membrane__F; // millivolt
         const double var_reversal_and_equilibrium_potentials__E_Na = var_membrane__R * var_membrane__T * log(var_ionic_concentrations__Na_o / var_ionic_concentrations__Na_i) / var_membrane__F; // millivolt
         const double var_hyperpolarisation_activated_current__i_f_Na = (-var_reversal_and_equilibrium_potentials__E_Na + var_chaste_interface__membrane__V) * var_hyperpolarisation_activated_current__g_f_Na * var_chaste_interface__hyperpolarisation_activated_current_y_gate__y; // nanoA
         const double var_slow_delayed_rectifying_potassium_current__g_K_s_Centre = 0.00034450000000000003; // microS
@@ -308,7 +308,7 @@
             const double var_hyperpolarisation_activated_current__i_f_K = (-var_reversal_and_equilibrium_potentials__E_K + var_chaste_interface__membrane__V) * var_hyperpolarisation_activated_current__g_f_K * var_chaste_interface__hyperpolarisation_activated_current_y_gate__y; // nanoA
             const double var_potassium_background_current__i_b_K = (-var_reversal_and_equilibrium_potentials__E_K + var_chaste_interface__membrane__V) * var_potassium_background_current__g_b_K; // nanoA
             const double var_rapid_delayed_rectifying_potassium_current__i_K_r = (-var_reversal_and_equilibrium_potentials__E_K + var_chaste_interface__membrane__V) * var_rapid_delayed_rectifying_potassium_current__P_a * var_rapid_delayed_rectifying_potassium_current__g_K_r * var_chaste_interface__rapid_delayed_rectifying_potassium_current_P_i_gate__P_i; // nanoA
-            const double var_reversal_and_equilibrium_potentials__E_K_s = var_membrane__R * var_membrane__T * log((0.029999999999999999 * var_ionic_concentrations__Na_o + var_ionic_concentrations__K_o) / (0.029999999999999999 * var_ionic_concentrations__Na_i + var_ionic_concentrations__K_i)) / var_membrane__F; // millivolt
+            const double var_reversal_and_equilibrium_potentials__E_K_s = var_membrane__R * var_membrane__T * log((var_ionic_concentrations__K_o + 0.029999999999999999 * var_ionic_concentrations__Na_o) / (var_ionic_concentrations__K_i + 0.029999999999999999 * var_ionic_concentrations__Na_i)) / var_membrane__F; // millivolt
             const double var_reversal_and_equilibrium_potentials__E_Na = var_membrane__R * var_membrane__T * log(var_ionic_concentrations__Na_o / var_ionic_concentrations__Na_i) / var_membrane__F; // millivolt
             const double var_hyperpolarisation_activated_current__i_f_Na = (-var_reversal_and_equilibrium_potentials__E_Na + var_chaste_interface__membrane__V) * var_hyperpolarisation_activated_current__g_f_Na * var_chaste_interface__hyperpolarisation_activated_current_y_gate__y; // nanoA
             const double var_slow_delayed_rectifying_potassium_current__g_K_s_Centre = 0.00034450000000000003; // microS

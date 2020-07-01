@@ -1,7 +1,7 @@
 #ifdef CHASTE_CVODE
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.0.1
+//! This source file was generated from CellML by chaste_codegen version 0.1.0
 //!
 //! Model: winslow_model_1999
 //!
@@ -149,7 +149,7 @@
         const double var_Na_Ca_exchanger__i_NaCa = 5000.0 * (pow(var_chaste_interface__intracellular_ion_concentrations__Nai, 3) * var_standard_ionic_concentrations__Cao * exp(var_Na_Ca_exchanger__eta * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T)) - pow(var_standard_ionic_concentrations__Nao, 3) * var_chaste_interface__intracellular_ion_concentrations__Cai * exp((-1.0 + var_Na_Ca_exchanger__eta) * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * var_Na_Ca_exchanger__K_NaCa / ((1.0 + var_Na_Ca_exchanger__K_sat * exp((-1.0 + var_Na_Ca_exchanger__eta) * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * (pow(var_Na_Ca_exchanger__K_mNa, 3) + pow(var_standard_ionic_concentrations__Nao, 3)) * (var_Na_Ca_exchanger__K_mCa + var_standard_ionic_concentrations__Cao)); // microA_per_microF
         const double var_fast_sodium_current__E_Na = var_membrane__R * var_membrane__T * log(var_standard_ionic_concentrations__Nao / var_chaste_interface__intracellular_ion_concentrations__Nai) / var_membrane__F; // millivolt
         const double var_fast_sodium_current__i_Na = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * (-var_fast_sodium_current__E_Na + var_chaste_interface__membrane__V) * var_fast_sodium_current__g_Na * var_chaste_interface__fast_sodium_current_h_gate__h * var_chaste_interface__fast_sodium_current_j_gate__j; // microA_per_microF
-        const double var_slow_activating_delayed_rectifiyer_K_current__E_Ks = var_membrane__R * var_membrane__T * log((0.018329999999999999 * var_standard_ionic_concentrations__Nao + var_standard_ionic_concentrations__Ko) / (0.018329999999999999 * var_chaste_interface__intracellular_ion_concentrations__Nai + var_chaste_interface__intracellular_ion_concentrations__Ki)) / var_membrane__F; // millivolt
+        const double var_slow_activating_delayed_rectifiyer_K_current__E_Ks = var_membrane__R * var_membrane__T * log((var_standard_ionic_concentrations__Ko + 0.018329999999999999 * var_standard_ionic_concentrations__Nao) / (var_chaste_interface__intracellular_ion_concentrations__Ki + 0.018329999999999999 * var_chaste_interface__intracellular_ion_concentrations__Nai)) / var_membrane__F; // millivolt
         const double var_slow_activating_delayed_rectifiyer_K_current__i_Ks = pow(var_chaste_interface__slow_activating_delayed_rectifiyer_K_current_X_ks_gate__X_ks, 2) * (-var_slow_activating_delayed_rectifiyer_K_current__E_Ks + var_chaste_interface__membrane__V) * var_slow_activating_delayed_rectifiyer_K_current__g_Ks; // microA_per_microF
         const double var_sodium_background_current__i_Na_b = (-var_fast_sodium_current__E_Na + var_chaste_interface__membrane__V) * var_sodium_background_current__g_Nab; // microA_per_microF
         const double var_sodium_potassium_pump__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * var_standard_ionic_concentrations__Nao); // dimensionless
@@ -440,7 +440,7 @@
             const double var_rapid_activating_delayed_rectifiyer_K_current__i_Kr = (-var_rapid_activating_delayed_rectifiyer_K_current__E_K + var_chaste_interface__membrane__V) * var_rapid_activating_delayed_rectifiyer_K_current__R_V * var_rapid_activating_delayed_rectifiyer_K_current__f_Ko * var_rapid_activating_delayed_rectifiyer_K_current__g_Kr * var_chaste_interface__rapid_activating_delayed_rectifiyer_K_current_X_kr_gate__X_kr; // microA_per_microF
             const double var_fast_sodium_current__E_Na = var_membrane__R * var_membrane__T * log(var_standard_ionic_concentrations__Nao / var_chaste_interface__intracellular_ion_concentrations__Nai) / var_membrane__F; // millivolt
             const double var_fast_sodium_current__i_Na = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * (-var_fast_sodium_current__E_Na + var_chaste_interface__membrane__V) * var_fast_sodium_current__g_Na * var_chaste_interface__fast_sodium_current_h_gate__h * var_chaste_interface__fast_sodium_current_j_gate__j; // microA_per_microF
-            const double var_slow_activating_delayed_rectifiyer_K_current__E_Ks = var_membrane__R * var_membrane__T * log((0.018329999999999999 * var_standard_ionic_concentrations__Nao + var_standard_ionic_concentrations__Ko) / (0.018329999999999999 * var_chaste_interface__intracellular_ion_concentrations__Nai + var_chaste_interface__intracellular_ion_concentrations__Ki)) / var_membrane__F; // millivolt
+            const double var_slow_activating_delayed_rectifiyer_K_current__E_Ks = var_membrane__R * var_membrane__T * log((var_standard_ionic_concentrations__Ko + 0.018329999999999999 * var_standard_ionic_concentrations__Nao) / (var_chaste_interface__intracellular_ion_concentrations__Ki + 0.018329999999999999 * var_chaste_interface__intracellular_ion_concentrations__Nai)) / var_membrane__F; // millivolt
             const double var_slow_activating_delayed_rectifiyer_K_current__i_Ks = pow(var_chaste_interface__slow_activating_delayed_rectifiyer_K_current_X_ks_gate__X_ks, 2) * (-var_slow_activating_delayed_rectifiyer_K_current__E_Ks + var_chaste_interface__membrane__V) * var_slow_activating_delayed_rectifiyer_K_current__g_Ks; // microA_per_microF
             const double var_sodium_background_current__i_Na_b = (-var_fast_sodium_current__E_Na + var_chaste_interface__membrane__V) * var_sodium_background_current__g_Nab; // microA_per_microF
             const double var_sodium_potassium_pump__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * var_standard_ionic_concentrations__Nao); // dimensionless
@@ -618,7 +618,7 @@
         const double var_x57 = var_x46 * var_x49;
         const double var_x58 = -26.713760659695648 * log(138.0 * var_x23) + var_chaste_interface__membrane__V;
         const double var_x59 = var_x32 * var_x58;
-        const double var_x60 = 0.018329999999999999 * var_chaste_interface__intracellular_ion_concentrations__Nai + var_chaste_interface__intracellular_ion_concentrations__Ki;
+        const double var_x60 = var_chaste_interface__intracellular_ion_concentrations__Ki + 0.018329999999999999 * var_chaste_interface__intracellular_ion_concentrations__Nai;
         const double var_x61 = 6.3618821011065183 * var_x5 - 0.23815 * var_chaste_interface__membrane__V;
         const double var_x62 = var_x50 * var_x56;
         const double var_x63 = var_x45 * var_x62;

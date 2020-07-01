@@ -83,7 +83,9 @@ author = u'chaste_codegen authors'
 # built documents.
 #
 # The short X.Y version.
-version = '0.1.0'
+# Load version number
+with open(os.path.join('..', 'chaste_codegen', 'version.txt'), 'r') as f:
+    version = f.read()
 # The full version, including alpha/beta/rc tags.
 release = version
 

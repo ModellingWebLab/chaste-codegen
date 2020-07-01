@@ -22,8 +22,9 @@ class BackwardEulerModel(ChasteModel):
         # get deriv eqs and substitute in all variables other than state vars
         self._derivative_equations = \
             partial_eval(self._derivative_equations, self._y_derivatives, keep_multiple_usages=False)
-        self._non_linear_state_vars = get_non_linear_state_vars(self._derivative_equations, self._membrane_voltage_var,
-                                                                self._state_vars, self._printer)
+        self._non_linear_state_vars = \
+            sorted(get_non_linear_state_vars(self._derivative_equations, self._membrane_voltage_var, self._state_vars),
+                   key=lambda s: self._printer.doprint(s))
 
         self._jacobian_equations, self._jacobian_matrix = \
             get_jacobian(self._non_linear_state_vars,
@@ -130,7 +131,7 @@ class BackwardEulerModel(ChasteModel):
         formatted_nonlinear_state_vars = \
             [s for s in formatted_state_vars if s['sympy_var'] in self._non_linear_state_vars]
         # order by name
-        formatted_nonlinear_state_vars = sorted(formatted_nonlinear_state_vars, key=lambda d: d['var'])
+        formatted_nonlinear_state_vars.sort(key=lambda d: d['var'])
         for sv in formatted_nonlinear_state_vars:
             sv['linear'] = False
             sv['in_jacobian'] = sv['sympy_var'] in jacobian_symbols
