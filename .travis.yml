@@ -14,9 +14,5 @@ script:
     - python -m pytest -m "not all_models" --cov=chaste_codegen chaste_codegen
 after_success:
     - codecov
-notifications:  
-  email:  
-    recipients:  
-    - maurice.hendrix@nottingham.com
-    on_success: always  
-    on_failure: always
+notifications:
+  slack: cardiac-modelling:4tZiJ5FMb1LaTuyz3cH6PmHX
