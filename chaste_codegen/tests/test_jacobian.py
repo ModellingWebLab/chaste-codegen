@@ -51,6 +51,10 @@ def test_get_jacobian_no_partial_eval(state_vars, derivatives_eqs):
 def test_get_jacobian(jacobian):
     jacobian_equations, jacobian_matrix = jacobian
 
+    print(jacobian_equations)
+    print()
+    print(jacobian_matrix)
+    print()
     assert str(jacobian_equations) == ("[(x0, 120.0*_sodium_channel_m_gate$m**3.0), (x1, _membrane$V - 40.0), "
                                        "(x2, exp_(-0.055555555555555556*_membrane$V - 4.1666666666666667)), "
                                        "(x3, 1.0 - _sodium_channel_m_gate$m), (x4, -0.1*_membrane$V), "
@@ -111,6 +115,7 @@ def test_format_jacobian(jacobian):
     jacobian = [collections.OrderedDict([('i', jac['i']), ('j', jac['j']), ('entry', jac['entry'])])
                 for jac in jacobian]
     print(equations)
+    print()
     print(jacobian)
     assert str(equations) == ("[OrderedDict([('lhs', 'x0'), ('rhs', 'x0120.0*_sodium_channel_m_gate$m**3.0'), ('sympy_"
                               "lhs', x0)]), OrderedDict([('lhs', 'x1'), ('rhs', 'x1_membrane$V - 40.0'), ('sympy_lhs',"
