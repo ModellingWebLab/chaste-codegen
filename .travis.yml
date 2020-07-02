@@ -18,5 +18,5 @@ notifications:
   email:
     recipients:
       - maurice.hendrix@nottingham.ac.uk
-  on_success: always
+  on_success: never
   on_failure: always
