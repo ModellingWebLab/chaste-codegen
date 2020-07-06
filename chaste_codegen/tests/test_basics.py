@@ -10,7 +10,7 @@ logging.getLogger().setLevel(logging.INFO)
 
 
 def test_module_import():
-    import chaste_codegen    # noqa
+    import chaste_codegen  # noqa
 
 
 def test_version():

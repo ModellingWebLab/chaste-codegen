@@ -7,7 +7,7 @@ import sympy as sp
 from cellmlmanip.rdf import create_rdf_node
 
 import chaste_codegen as cg
-import chaste_codegen.tests.chaste_test_utils as test_utils
+from chaste_codegen.tests import chaste_test_utils as test_utils
 
 
 OXMETA = 'https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#'  # oxford metadata uri prefix
