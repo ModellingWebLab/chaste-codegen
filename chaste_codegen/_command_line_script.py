@@ -15,14 +15,14 @@ from chaste_codegen._script_utils import write_file
 TRANSLATORS = OrderedDict([('normal', (cg.NormalChasteModel, 'FromCellML', '')),
                            ('opt', (cg.OptChasteModel, 'FromCellMLOpt', 'Opt')),
                            ('cvode', (cg.CvodeChasteModel, 'FromCellMLCvode', 'Cvode')),
-                           ('cvode-data-clamp', (cg.CvodeWithDataClampModel, 'CvodeDataClamp', 'CvodeDataClamp')),
+                           ('cvode-data-clamp', (cg.CvodeWithDataClampModel, 'FromCellMLCvodeDataClamp', 'CvodeDataClamp')),
                            ('backward-euler', (cg.BackwardEulerModel, 'FromCellMLBackwardEuler', 'BackwardEuler')),
                            ('rush-larsen', (cg.RushLarsenModel, 'FromCellMLRushLarsen', 'RushLarsen')),
                            ('rush-larsen-opt', (cg.RushLarsenOptModel, 'FromCellMLRushLarsen', 'RushLarsen')),
                            ('grl1', (cg.GeneralisedRushLarsenFirstOrderModel, 'FromCellMLGRL1', 'GRL1')),
                            ('grl1-opt', (cg.GeneralisedRushLarsenFirstOrderModelOpt, 'FromCellMLGRL1', 'GRL1')),
                            ('grl2', (cg.GeneralisedRushLarsenSecondOrderModel, 'FromCellMLGRL2', 'GRL2')),
-                           ('grl1-opt', (cg.GeneralisedRushLarsenSecondOrderModelOpt, 'FromCellMLGRL2', 'GRL2'))])
+                           ('grl2-opt', (cg.GeneralisedRushLarsenSecondOrderModelOpt, 'FromCellMLGRL2', 'GRL2'))])
 
 TRANSLATORS_WITH_MODIFIERS = ('--normal', '--ChasteOpt', '--cvode', '--cvode-data-clamp')
 

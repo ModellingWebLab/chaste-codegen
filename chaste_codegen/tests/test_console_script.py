@@ -314,8 +314,7 @@ def test_script_GRL2(capsys, tmp_path):
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'dynamic_winslow_model_1999.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', model_file, '-t', 'GeneralisedRushLarsen2', '-o', outfile,
-                '-c', 'Dynamicwinslow_model_1999FromCellMLGRL2', '--dynamically-loadable']
+    testargs = ['chaste_codegen', model_file, '--grl2', '-o', outfile, '--dynamically-loadable']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
@@ -335,8 +334,7 @@ def test_script_GRL2Opt(capsys, tmp_path):
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'dynamic_viswanathan_model_1999_epi.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', model_file, '-t', 'GeneralisedRushLarsen2Opt', '-o', outfile,
-                '--dynamically-loadable', '-c', 'Dynamicviswanathan_model_1999_epiFromCellMLGRL2']
+    testargs = ['chaste_codegen', model_file, '--grl2-opt', '-o', outfile, '--dynamically-loadable']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
@@ -356,8 +354,7 @@ def test_script_CVODE_DATA_CLAMP(capsys, tmp_path):
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'dynamic_Shannon2004.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', model_file, '-t', 'CVODEWithDataClamp', '-o', outfile, '--dynamically-loadable',
-                '-c', 'DynamicShannon2004FromCellMLCvodeDataClamp']
+    testargs = ['chaste_codegen', model_file, '--cvode-data-clamp', '-o', outfile, '--dynamically-loadable']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
@@ -377,8 +374,7 @@ def test_script_CVODE_DATA_CLAMP_modifiers(capsys, tmp_path):
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'Shannon2004_with_modifiers.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', model_file, '--cvode-data-clamp', '-o', outfile, '--use-modifiers',
-                '-c', 'CellShannon2004FromCellMLCvodeDataClamp']
+    testargs = ['chaste_codegen', model_file, '--cvode-data-clamp', '-o', outfile, '--use-modifiers']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
