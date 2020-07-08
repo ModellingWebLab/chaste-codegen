@@ -72,10 +72,10 @@ def chaste_codegen():
 
     #model = cellmlmanip.load_model(args.cellml_file)
     for model_type in TRANSLATORS:
-        use_translator_class = getattr(args, model_type)
+        use_translator_class = getattr(args, model_type.replace('-', '_'))
         if use_translator_class:
             # Make sure modifiers are only passed to models which can generate them
-            args.use_modifiers = args.modifiers if model_type in TRANSLATORS_WITH_MODIFIERS else False
+            args.use_modifiers = args.modifiers if '--' + model_type in TRANSLATORS_WITH_MODIFIERS else False
             
             translator_class = TRANSLATORS[model_type][0]
             outfile_path, model_name_from_file, outfile_base, ext = get_outfile_parts(args.outfile if args.outfile is not None else args.cellml_file, args.cellml_file)

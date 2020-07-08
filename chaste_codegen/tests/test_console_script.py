@@ -377,7 +377,7 @@ def test_script_CVODE_DATA_CLAMP_modifiers(capsys, tmp_path):
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'Shannon2004_with_modifiers.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', model_file, '-t', 'CVODEWithDataClamp', '-o', outfile, '--use-modifiers',
+    testargs = ['chaste_codegen', model_file, '--cvode-data-clamp', '-o', outfile, '--use-modifiers',
                 '-c', 'CellShannon2004FromCellMLCvodeDataClamp']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
