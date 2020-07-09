@@ -1,7 +1,7 @@
 from sympy import Derivative, Eq, Function
 
 from chaste_codegen.cvode_chaste_model import CvodeChasteModel
-
+from chaste_codegen._rdf import OXMETA
 
 class CvodeWithDataClampModel(CvodeChasteModel):
     """ Holds template and information specific for the CVODE with data clamp model type"""
@@ -9,26 +9,28 @@ class CvodeWithDataClampModel(CvodeChasteModel):
     def __init__(self, model, file_name, **kwargs):
         super().__init__(model, file_name, **kwargs)
         self._vars_for_template['base_class'] = 'AbstractCvodeCellWithDataClamp'
-
+#try other model after dataclamp model
     def _add_data_clamp_to_model(self):
         """ Add add membrane_data_clamp_current_conductance and membrane_data_clamp_current to the model"""
         self._membrane_data_clamp_current_conductance = \
             self._model.add_variable(name='membrane_data_clamp_current_conductance',
-                                     units=self.units.get_unit('dimensionless'))
-        self._model.add_equation(Eq(self._membrane_data_clamp_current_conductance, 0.0))
+                                     units=self._model.conversion_units.get_unit('dimensionless'))
+        self.dataclamp_eq = Eq(self._membrane_data_clamp_current_conductance, 0.0)
+        self._model.add_equation(self.dataclamp_eq)
 
         # add membrane_data_clamp_current
         self._membrane_data_clamp_current = self._model.add_variable(name='membrane_data_clamp_current',
-                                                                     units=self.units.get_unit('uA_per_cm2'))
+                                                                     units=self._model.conversion_units.get_unit('uA_per_cm2'))
         # add clamp current equation
         self._in_interface.add(self._membrane_data_clamp_current)
         clamp_current = self._membrane_data_clamp_current_conductance * \
-            (self._membrane_voltage_var - Function('GetExperimentalVoltageAtTimeT')(self._time_variable))
+            (self._model.membrane_voltage_var - Function('GetExperimentalVoltageAtTimeT')(self._model.time_variable))
         self._membrane_data_clamp_current_eq = Eq(self._membrane_data_clamp_current, clamp_current)
         self._model.add_equation(self._membrane_data_clamp_current_eq)
 
         # Add data clamp current as modifiable parameter and re-sort
-        self._modifiable_parameters.add(self._membrane_data_clamp_current_conductance)
+        self._modifiable_parameters.add(self._membrane_data_clamp_current_conductance)##remove?
+        self._model.modifiable_parameters.add(self._membrane_data_clamp_current_conductance)
 
     def _get_derivative_equations(self):
         """ Get equations defining the derivatives including V and add in membrane_data_clamp_current"""
@@ -55,7 +57,7 @@ class CvodeWithDataClampModel(CvodeChasteModel):
         # Find dv/dt
 
         deriv_eq_only = filter(lambda eq: isinstance(eq.lhs, Derivative) and
-                               eq.lhs.args[0] == self._membrane_voltage_var, derivative_equations)
+                               eq.lhs.args[0] == self._model.membrane_voltage_var, derivative_equations)
         dvdt = next(deriv_eq_only, None)
         assert dvdt is not None and next(deriv_eq_only, None) is None, 'Expecting exactly 1 dv/dt equation'
 
@@ -80,9 +82,9 @@ class CvodeWithDataClampModel(CvodeChasteModel):
         derived_quant = super()._get_derived_quant()
 
         # Add membrane_data_clamp_current to modifiable parameters
-        # (this was set in _get_modifiable_parameterss as it's also needed in _get_derivative_equations)
+        # (this was set in _get_modifiable_parameters as it's also needed in _get_derivative_equations)
         derived_quant.append(self._membrane_data_clamp_current)
-        derived_quant.sort(key=lambda q: self._model.get_display_name(q, self._OXMETA))
+        derived_quant.sort(key=lambda q: self._model.get_display_name(q, OXMETA))
         return derived_quant
 
     def _format_derivative_equations(self, derivative_equations):
@@ -98,3 +100,15 @@ class CvodeWithDataClampModel(CvodeChasteModel):
         for eq in formatted_eqs:
             eq['is_data_clamp_current'] = eq['sympy_lhs'] == self._membrane_data_clamp_current
         return formatted_eqs
+
+    def __del__(self): 
+        """ Destructor, removed the data clamp equation and variable we added to the model, so that te model object can be re-used"""
+        # Remove modifiable parameter
+        self._modifiable_parameters.remove(self._membrane_data_clamp_current_conductance)##remove?
+        self._model.modifiable_parameters.remove(self._membrane_data_clamp_current_conductance)
+        
+        # Remove equation from model
+        self._model.remove_equation(self.dataclamp_eq)
+        
+        # Remove variable from model
+        self._model.remove_variable(self._membrane_data_clamp_current_conductance)

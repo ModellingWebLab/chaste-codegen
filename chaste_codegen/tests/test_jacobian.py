@@ -4,7 +4,7 @@ import os
 
 import pytest
 import sympy as sp
-from cellmlmanip import load_model
+from chaste_codegen.model_with_conversions import load_model
 
 import chaste_codegen as cg
 from chaste_codegen._chaste_printer import ChastePrinter

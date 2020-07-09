@@ -21,11 +21,11 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    double Cellstewart_zhang_model_2008_ssFromCellML::GetIntracellularCalciumConcentration()
+    double Cellstewart_zhang_model_2008_ssFromCellMLOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Cellstewart_zhang_model_2008_ssFromCellML::Cellstewart_zhang_model_2008_ssFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellstewart_zhang_model_2008_ssFromCellMLOpt::Cellstewart_zhang_model_2008_ssFromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 20,
@@ -34,7 +34,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellstewart_zhang_model_2008_ssFromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellstewart_zhang_model_2008_ssFromCellMLOpt>::Instance();
         Init();
         
         this->mParameters[0] = 3.9799999999999998e-5; // (var_L_type_Ca_current__g_CaL) [litre_per_farad_second]
@@ -45,11 +45,11 @@
         this->mParameters[5] = 1000.0; // (var_sodium_calcium_exchanger_current__K_NaCa) [picoA_per_picoF]
     }
 
-    Cellstewart_zhang_model_2008_ssFromCellML::~Cellstewart_zhang_model_2008_ssFromCellML()
+    Cellstewart_zhang_model_2008_ssFromCellMLOpt::~Cellstewart_zhang_model_2008_ssFromCellMLOpt()
     {
     }
     
-    double Cellstewart_zhang_model_2008_ssFromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellstewart_zhang_model_2008_ssFromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -115,7 +115,7 @@
         return i_ionic;
     }
 
-    void Cellstewart_zhang_model_2008_ssFromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Cellstewart_zhang_model_2008_ssFromCellMLOpt::EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -235,7 +235,7 @@
         rDY[19] = d_dt_chaste_interface_var_potassium_dynamics__K_i;
     }
 
-    std::vector<double> Cellstewart_zhang_model_2008_ssFromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Cellstewart_zhang_model_2008_ssFromCellMLOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -302,7 +302,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellstewart_zhang_model_2008_ssFromCellML>::Initialise(void)
+void OdeSystemInformation<Cellstewart_zhang_model_2008_ssFromCellMLOpt>::Initialise(void)
 {
     this->mSystemName = "stewart_zhang_model_2008";
     this->mFreeVariableName = "environment__time";
@@ -457,4 +457,4 @@ void OdeSystemInformation<Cellstewart_zhang_model_2008_ssFromCellML>::Initialise
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellstewart_zhang_model_2008_ssFromCellML)
+CHASTE_CLASS_EXPORT(Cellstewart_zhang_model_2008_ssFromCellMLOpt)

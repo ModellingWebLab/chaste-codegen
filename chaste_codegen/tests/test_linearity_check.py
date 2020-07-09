@@ -12,7 +12,7 @@ from chaste_codegen._linearity_check import KINDS, get_non_linear_state_vars, su
 # Show more logging output
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
-OXMETA = 'https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#'  # oxford metadata uri prefix
+from chaste_codegen._rdf import OXMETA
 
 
 @pytest.fixture(scope='session')
@@ -38,6 +38,10 @@ def membrane_voltage_var(hn_model):
 
 @pytest.fixture(scope='session')
 def non_linear_state_vars(derivatives_eqs, membrane_voltage_var, state_vars):
+    print(derivatives_eqs)
+    print(membrane_voltage_var)
+    print(state_vars)
+    print('--')
     return get_non_linear_state_vars(derivatives_eqs, membrane_voltage_var, state_vars)
 
 

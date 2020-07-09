@@ -5,7 +5,7 @@
 //!
 //! This source file was generated from CellML by chaste_codegen version 0.1.0
 //!
-//! Model: luo_rudy_1994
+//! Model: LivshitzRudy2007
 //!
 //! Processed by chaste_codegen: https://github.com/ModellingWebLab/chaste-codegen
 //!     (translator: chaste_codegen)
@@ -36,14 +36,13 @@ class Dynamiclivshitz_rudy_2007FromCellMLRushLarsen : public AbstractRushLarsenC
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
-    double GetIntracellularCalciumConcentration();
     Dynamiclivshitz_rudy_2007FromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Dynamiclivshitz_rudy_2007FromCellMLRushLarsen();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
-    void EvaluateEquations(double var_chaste_interface__environment__time, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf);
+    void EvaluateEquations(double var_chaste_interface__Environment__time, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf);
     void ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf);
 
-    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY);
+    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__Environment__time, const std::vector<double> & rY);
 };
 
 // Needs to be included last

@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Celldecker_2009FromCellML::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Celldecker_2009FromCellMLOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -80.0 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
@@ -37,11 +37,11 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double Celldecker_2009FromCellML::GetIntracellularCalciumConcentration()
+    double Celldecker_2009FromCellMLOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Celldecker_2009FromCellML::Celldecker_2009FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Celldecker_2009FromCellMLOpt::Celldecker_2009FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 48,
@@ -50,22 +50,22 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Celldecker_2009FromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Celldecker_2009FromCellMLOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
-        this->mHasDefaultStimulusFromCellML = true;
+        this->mHasDefaultStimulusFromCellMLOpt = true;
         
         this->mParameters[0] = 0.00015552; // (var_ICaL__PCa) [L_per_F_ms]
         this->mParameters[1] = 9.0749999999999993; // (var_INa__g_Na) [mS_per_uF]
         this->mParameters[2] = 0.013854200000000001; // (var_IKr__gKr_max) [mS_per_uF]
     }
 
-    Celldecker_2009FromCellML::~Celldecker_2009FromCellML()
+    Celldecker_2009FromCellMLOpt::~Celldecker_2009FromCellMLOpt()
     {
     }
     
-    double Celldecker_2009FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Celldecker_2009FromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -134,7 +134,7 @@
         return i_ionic;
     }
 
-    void Celldecker_2009FromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Celldecker_2009FromCellMLOpt::EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -403,7 +403,7 @@
         rDY[47] = d_dt_chaste_interface_var_CaMK_active__CaMK_trap;
     }
 
-    std::vector<double> Celldecker_2009FromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Celldecker_2009FromCellMLOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -419,7 +419,7 @@
     }
 
 template<>
-void OdeSystemInformation<Celldecker_2009FromCellML>::Initialise(void)
+void OdeSystemInformation<Celldecker_2009FromCellMLOpt>::Initialise(void)
 {
     this->mSystemName = "decker_2009";
     this->mFreeVariableName = "environment__time";
@@ -690,4 +690,4 @@ void OdeSystemInformation<Celldecker_2009FromCellML>::Initialise(void)
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Celldecker_2009FromCellML)
+CHASTE_CLASS_EXPORT(Celldecker_2009FromCellMLOpt)

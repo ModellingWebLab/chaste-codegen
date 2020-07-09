@@ -22,7 +22,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
-    Celliyer_model_2007FromCellML::Celliyer_model_2007FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Celliyer_model_2007FromCellMLOpt::Celliyer_model_2007FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 67,
@@ -31,16 +31,16 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Celliyer_model_2007FromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Celliyer_model_2007FromCellMLOpt>::Instance();
         Init();
         
     }
 
-    Celliyer_model_2007FromCellML::~Celliyer_model_2007FromCellML()
+    Celliyer_model_2007FromCellMLOpt::~Celliyer_model_2007FromCellMLOpt()
     {
     }
     
-    double Celliyer_model_2007FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Celliyer_model_2007FromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -90,7 +90,7 @@
         return i_ionic;
     }
 
-    void Celliyer_model_2007FromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Celliyer_model_2007FromCellMLOpt::EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -537,7 +537,7 @@
         rDY[66] = d_dt_chaste_interface_var_IKs__O2ks;
     }
 
-    std::vector<double> Celliyer_model_2007FromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Celliyer_model_2007FromCellMLOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -553,7 +553,7 @@
     }
 
 template<>
-void OdeSystemInformation<Celliyer_model_2007FromCellML>::Initialise(void)
+void OdeSystemInformation<Celliyer_model_2007FromCellMLOpt>::Initialise(void)
 {
     this->mSystemName = "iyer_model_2007";
     this->mFreeVariableName = "environment__time";
@@ -909,4 +909,4 @@ void OdeSystemInformation<Celliyer_model_2007FromCellML>::Initialise(void)
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Celliyer_model_2007FromCellML)
+CHASTE_CLASS_EXPORT(Celliyer_model_2007FromCellMLOpt)

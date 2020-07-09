@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellwinslow_model_1999FromCellML::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellwinslow_model_1999FromCellMLOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -21.126799999999999 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
@@ -38,7 +38,7 @@
         return p_cellml_stim;
     }
 
-    Cellwinslow_model_1999FromCellML::Cellwinslow_model_1999FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellwinslow_model_1999FromCellMLOpt::Cellwinslow_model_1999FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 33,
@@ -47,19 +47,19 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellwinslow_model_1999FromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellwinslow_model_1999FromCellMLOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
-        this->mHasDefaultStimulusFromCellML = true;
+        this->mHasDefaultStimulusFromCellMLOpt = true;
         
     }
 
-    Cellwinslow_model_1999FromCellML::~Cellwinslow_model_1999FromCellML()
+    Cellwinslow_model_1999FromCellMLOpt::~Cellwinslow_model_1999FromCellMLOpt()
     {
     }
     
-    double Cellwinslow_model_1999FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellwinslow_model_1999FromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -105,7 +105,7 @@
         return i_ionic;
     }
 
-    void Cellwinslow_model_1999FromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Cellwinslow_model_1999FromCellMLOpt::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -276,7 +276,7 @@
         rDY[32] = d_dt_chaste_interface_var_intracellular_ion_concentrations__Ca_NSR;
     }
 
-    std::vector<double> Cellwinslow_model_1999FromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Cellwinslow_model_1999FromCellMLOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -292,7 +292,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellwinslow_model_1999FromCellML>::Initialise(void)
+void OdeSystemInformation<Cellwinslow_model_1999FromCellMLOpt>::Initialise(void)
 {
     this->mSystemName = "winslow_model_1999";
     this->mFreeVariableName = "environment__time";
@@ -478,4 +478,4 @@ void OdeSystemInformation<Cellwinslow_model_1999FromCellML>::Initialise(void)
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellwinslow_model_1999FromCellML)
+CHASTE_CLASS_EXPORT(Cellwinslow_model_1999FromCellMLOpt)

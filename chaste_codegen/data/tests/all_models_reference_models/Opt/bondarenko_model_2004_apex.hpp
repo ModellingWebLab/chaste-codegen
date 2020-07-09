@@ -1,5 +1,5 @@
-#ifndef CELLBONDARENKO_MODEL_2004_APEXFROMCELLML_HPP_
-#define CELLBONDARENKO_MODEL_2004_APEXFROMCELLML_HPP_
+#ifndef CELLBONDARENKO_MODEL_2004_APEXFROMCELLMLOPT_HPP_
+#define CELLBONDARENKO_MODEL_2004_APEXFROMCELLMLOPT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractCardiacCell.hpp"
 
-class Cellbondarenko_model_2004_apexFromCellML : public AbstractCardiacCell
+class Cellbondarenko_model_2004_apexFromCellMLOpt : public AbstractCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -35,8 +35,8 @@ class Cellbondarenko_model_2004_apexFromCellML : public AbstractCardiacCell
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
-    Cellbondarenko_model_2004_apexFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellbondarenko_model_2004_apexFromCellML();
+    Cellbondarenko_model_2004_apexFromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellbondarenko_model_2004_apexFromCellMLOpt();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY);
 
@@ -45,7 +45,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellbondarenko_model_2004_apexFromCellML)
+CHASTE_CLASS_EXPORT(Cellbondarenko_model_2004_apexFromCellMLOpt)
 
 namespace boost
 {
@@ -53,7 +53,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellbondarenko_model_2004_apexFromCellML * t, const unsigned int fileVersion)
+            Archive & ar, const Cellbondarenko_model_2004_apexFromCellMLOpt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -63,17 +63,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellbondarenko_model_2004_apexFromCellML * t, const unsigned int fileVersion)
+            Archive & ar, Cellbondarenko_model_2004_apexFromCellMLOpt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellbondarenko_model_2004_apexFromCellML(p_solver, p_stimulus);
+            ::new(t)Cellbondarenko_model_2004_apexFromCellMLOpt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLBONDARENKO_MODEL_2004_APEXFROMCELLML_HPP_
+#endif // CELLBONDARENKO_MODEL_2004_APEXFROMCELLMLOPT_HPP_

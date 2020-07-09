@@ -21,11 +21,11 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    double Cellnoble_SAN_model_1989FromCellML::GetIntracellularCalciumConcentration()
+    double Cellnoble_SAN_model_1989FromCellMLOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Cellnoble_SAN_model_1989FromCellML::Cellnoble_SAN_model_1989FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellnoble_SAN_model_1989FromCellMLOpt::Cellnoble_SAN_model_1989FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 14,
@@ -34,17 +34,17 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellnoble_SAN_model_1989FromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellnoble_SAN_model_1989FromCellMLOpt>::Instance();
         Init();
         
         this->mParameters[0] = 6.0000000000000002e-5; // (var_membrane__C) [microF]
     }
 
-    Cellnoble_SAN_model_1989FromCellML::~Cellnoble_SAN_model_1989FromCellML()
+    Cellnoble_SAN_model_1989FromCellMLOpt::~Cellnoble_SAN_model_1989FromCellMLOpt()
     {
     }
     
-    double Cellnoble_SAN_model_1989FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellnoble_SAN_model_1989FromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -91,7 +91,7 @@
         return i_ionic;
     }
 
-    void Cellnoble_SAN_model_1989FromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Cellnoble_SAN_model_1989FromCellMLOpt::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -184,7 +184,7 @@
         rDY[13] = d_dt_chaste_interface_var_intracellular_potassium_concentration__Ki;
     }
 
-    std::vector<double> Cellnoble_SAN_model_1989FromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Cellnoble_SAN_model_1989FromCellMLOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -198,7 +198,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellnoble_SAN_model_1989FromCellML>::Initialise(void)
+void OdeSystemInformation<Cellnoble_SAN_model_1989FromCellMLOpt>::Initialise(void)
 {
     this->mSystemName = "Noble_SAN_model_1989";
     this->mFreeVariableName = "environment__time";
@@ -287,4 +287,4 @@ void OdeSystemInformation<Cellnoble_SAN_model_1989FromCellML>::Initialise(void)
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellnoble_SAN_model_1989FromCellML)
+CHASTE_CLASS_EXPORT(Cellnoble_SAN_model_1989FromCellMLOpt)

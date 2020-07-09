@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellmahajan_2008FromCellML::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellmahajan_2008FromCellMLOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__cell__stim_amplitude_converted = -14.999999999999998 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
@@ -37,11 +37,11 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double Cellmahajan_2008FromCellML::GetIntracellularCalciumConcentration()
+    double Cellmahajan_2008FromCellMLOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Cellmahajan_2008FromCellML::Cellmahajan_2008FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellmahajan_2008FromCellMLOpt::Cellmahajan_2008FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 26,
@@ -50,11 +50,11 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellmahajan_2008FromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellmahajan_2008FromCellMLOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
-        this->mHasDefaultStimulusFromCellML = true;
+        this->mHasDefaultStimulusFromCellMLOpt = true;
         
         this->mParameters[0] = 1.0; // (var_IKr__ScaleFactorGkr) [dimensionless]
         this->mParameters[1] = 1.0; // (var_IKs__ScaleFactorGks) [dimensionless]
@@ -64,11 +64,11 @@
         this->mParameters[5] = 0.012500000000000001; // (var_IKr__gkr) [uS_per_nF]
     }
 
-    Cellmahajan_2008FromCellML::~Cellmahajan_2008FromCellML()
+    Cellmahajan_2008FromCellMLOpt::~Cellmahajan_2008FromCellMLOpt()
     {
     }
     
-    double Cellmahajan_2008FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellmahajan_2008FromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -124,7 +124,7 @@
         return i_ionic;
     }
 
-    void Cellmahajan_2008FromCellML::EvaluateYDerivatives(double var_chaste_interface__Environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Cellmahajan_2008FromCellMLOpt::EvaluateYDerivatives(double var_chaste_interface__Environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -287,7 +287,7 @@
         rDY[25] = d_dt_chaste_interface_var_Ca__trops;
     }
 
-    std::vector<double> Cellmahajan_2008FromCellML::ComputeDerivedQuantities(double var_chaste_interface__Environment__time, const std::vector<double> & rY)
+    std::vector<double> Cellmahajan_2008FromCellMLOpt::ComputeDerivedQuantities(double var_chaste_interface__Environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -306,7 +306,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellmahajan_2008FromCellML>::Initialise(void)
+void OdeSystemInformation<Cellmahajan_2008FromCellMLOpt>::Initialise(void)
 {
     this->mSystemName = "mahajan_shiferaw_model_2008";
     this->mFreeVariableName = "Environment__time";
@@ -483,4 +483,4 @@ void OdeSystemInformation<Cellmahajan_2008FromCellML>::Initialise(void)
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellmahajan_2008FromCellML)
+CHASTE_CLASS_EXPORT(Cellmahajan_2008FromCellMLOpt)

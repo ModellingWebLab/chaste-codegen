@@ -1,5 +1,5 @@
-#ifndef CELLGRANDI2010SSFROMCELLMLOPT_HPP_
-#define CELLGRANDI2010SSFROMCELLMLOPT_HPP_
+#ifndef CELLGRANDI2010SSFROMCELLMLBACKWARDEULER_HPP_
+#define CELLGRANDI2010SSFROMCELLMLBACKWARDEULER_HPP_
 
 //! @file
 //!
@@ -16,15 +16,15 @@
 #include "ChasteSerialization.hpp"
 #include <boost/serialization/base_object.hpp>
 #include "AbstractStimulusFunction.hpp"
-#include "AbstractCardiacCell.hpp"
+#include "AbstractBackwardEulerCardiacCell.hpp"
 
-class Cellgrandi2010ssFromCellMLOpt : public AbstractCardiacCell
+class Cellgrandi2010ssFromCellMLBackwardEuler : public AbstractBackwardEulerCardiacCell<26>
 {
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & archive, const unsigned int version)
     {
-        archive & boost::serialization::base_object<AbstractCardiacCell >(*this);
+        archive & boost::serialization::base_object<AbstractBackwardEulerCardiacCell<26> >(*this);
         
     }
 
@@ -36,17 +36,19 @@ public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    Cellgrandi2010ssFromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellgrandi2010ssFromCellMLOpt();
-    double GetIIonic(const std::vector<double>* pStateVariables=NULL);
-    void EvaluateYDerivatives(double var_chaste_interface__cell__time, const std::vector<double>& rY, std::vector<double>& rDY);
+    Cellgrandi2010ssFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellgrandi2010ssFromCellMLBackwardEuler();
+    double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__cell__time, const double rCurrentGuess[26], double rResidual[26]);
+    void ComputeJacobian(double var_chaste_interface__cell__time, const double rCurrentGuess[26], double rJacobian[26][26]);protected:
+    void UpdateTransmembranePotential(double var_chaste_interface__cell__time);
+    void ComputeOneStepExceptVoltage(double var_chaste_interface__cell__time);
 
     std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__cell__time, const std::vector<double> & rY);
 };
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellgrandi2010ssFromCellMLOpt)
+CHASTE_CLASS_EXPORT(Cellgrandi2010ssFromCellMLBackwardEuler)
 
 namespace boost
 {
@@ -54,7 +56,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellgrandi2010ssFromCellMLOpt * t, const unsigned int fileVersion)
+            Archive & ar, const Cellgrandi2010ssFromCellMLBackwardEuler * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -64,17 +66,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellgrandi2010ssFromCellMLOpt * t, const unsigned int fileVersion)
+            Archive & ar, Cellgrandi2010ssFromCellMLBackwardEuler * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellgrandi2010ssFromCellMLOpt(p_solver, p_stimulus);
+            ::new(t)Cellgrandi2010ssFromCellMLBackwardEuler(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLGRANDI2010SSFROMCELLMLOPT_HPP_
+#endif // CELLGRANDI2010SSFROMCELLMLBACKWARDEULER_HPP_

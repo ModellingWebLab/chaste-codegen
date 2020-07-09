@@ -1,5 +1,5 @@
-#ifndef CELLESPINOSA_MODEL_1998_NORMALFROMCELLML_HPP_
-#define CELLESPINOSA_MODEL_1998_NORMALFROMCELLML_HPP_
+#ifndef CELLESPINOSA_MODEL_1998_NORMALFROMCELLMLOPT_HPP_
+#define CELLESPINOSA_MODEL_1998_NORMALFROMCELLMLOPT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractCardiacCell.hpp"
 
-class Cellespinosa_model_1998_normalFromCellML : public AbstractCardiacCell
+class Cellespinosa_model_1998_normalFromCellMLOpt : public AbstractCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -36,8 +36,8 @@ public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    Cellespinosa_model_1998_normalFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellespinosa_model_1998_normalFromCellML();
+    Cellespinosa_model_1998_normalFromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellespinosa_model_1998_normalFromCellMLOpt();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY);
 
@@ -46,7 +46,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellespinosa_model_1998_normalFromCellML)
+CHASTE_CLASS_EXPORT(Cellespinosa_model_1998_normalFromCellMLOpt)
 
 namespace boost
 {
@@ -54,7 +54,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellespinosa_model_1998_normalFromCellML * t, const unsigned int fileVersion)
+            Archive & ar, const Cellespinosa_model_1998_normalFromCellMLOpt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -64,17 +64,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellespinosa_model_1998_normalFromCellML * t, const unsigned int fileVersion)
+            Archive & ar, Cellespinosa_model_1998_normalFromCellMLOpt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellespinosa_model_1998_normalFromCellML(p_solver, p_stimulus);
+            ::new(t)Cellespinosa_model_1998_normalFromCellMLOpt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLESPINOSA_MODEL_1998_NORMALFROMCELLML_HPP_
+#endif // CELLESPINOSA_MODEL_1998_NORMALFROMCELLMLOPT_HPP_

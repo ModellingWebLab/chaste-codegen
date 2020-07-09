@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellsakmann_model_2000_epiFromCellML::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellsakmann_model_2000_epiFromCellMLOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -0.002 * HeartConfig::Instance()->GetCapacitance() / mParameters[0]; // uA_per_cm2
@@ -37,11 +37,11 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double Cellsakmann_model_2000_epiFromCellML::GetIntracellularCalciumConcentration()
+    double Cellsakmann_model_2000_epiFromCellMLOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Cellsakmann_model_2000_epiFromCellML::Cellsakmann_model_2000_epiFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellsakmann_model_2000_epiFromCellMLOpt::Cellsakmann_model_2000_epiFromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 21,
@@ -50,20 +50,20 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellsakmann_model_2000_epiFromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellsakmann_model_2000_epiFromCellMLOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
-        this->mHasDefaultStimulusFromCellML = true;
+        this->mHasDefaultStimulusFromCellMLOpt = true;
         
         this->mParameters[0] = 0.000121; // (var_membrane__Cm) [microF]
     }
 
-    Cellsakmann_model_2000_epiFromCellML::~Cellsakmann_model_2000_epiFromCellML()
+    Cellsakmann_model_2000_epiFromCellMLOpt::~Cellsakmann_model_2000_epiFromCellMLOpt()
     {
     }
     
-    double Cellsakmann_model_2000_epiFromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellsakmann_model_2000_epiFromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -124,7 +124,7 @@
         return i_ionic;
     }
 
-    void Cellsakmann_model_2000_epiFromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Cellsakmann_model_2000_epiFromCellMLOpt::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -253,7 +253,7 @@
         rDY[20] = d_dt_chaste_interface_var_intracellular_calcium_concentration__Ca_Trop;
     }
 
-    std::vector<double> Cellsakmann_model_2000_epiFromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Cellsakmann_model_2000_epiFromCellMLOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -269,7 +269,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellsakmann_model_2000_epiFromCellML>::Initialise(void)
+void OdeSystemInformation<Cellsakmann_model_2000_epiFromCellMLOpt>::Initialise(void)
 {
     this->mSystemName = "sakmann_model_2000_epi";
     this->mFreeVariableName = "environment__time";
@@ -397,4 +397,4 @@ void OdeSystemInformation<Cellsakmann_model_2000_epiFromCellML>::Initialise(void
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellsakmann_model_2000_epiFromCellML)
+CHASTE_CLASS_EXPORT(Cellsakmann_model_2000_epiFromCellMLOpt)

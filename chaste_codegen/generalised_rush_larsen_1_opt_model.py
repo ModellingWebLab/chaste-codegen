@@ -11,6 +11,6 @@ class GeneralisedRushLarsenFirstOrderModelOpt(GeneralisedRushLarsenFirstOrderMod
                             set(map(lambda eq: eq.lhs, self._equations_for_ionic_vars)))
 
     def _get_derivative_equations(self):
-        """ Get partially evaluated equations defining the derivatives including V (self._membrane_voltage_var)"""
+        """ Get partially evaluated equations defining the derivatives including V (self._model.membrane_voltage_var)"""
         return partial_eval(super()._get_derivative_equations(),
                             self._y_derivatives)

@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellearm_noble_model_1990FromCellML::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellearm_noble_model_1990FromCellMLOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -0.0013000000000000002 * HeartConfig::Instance()->GetCapacitance() / mParameters[0]; // uA_per_cm2
@@ -37,11 +37,11 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double Cellearm_noble_model_1990FromCellML::GetIntracellularCalciumConcentration()
+    double Cellearm_noble_model_1990FromCellMLOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Cellearm_noble_model_1990FromCellML::Cellearm_noble_model_1990FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellearm_noble_model_1990FromCellMLOpt::Cellearm_noble_model_1990FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 16,
@@ -50,20 +50,20 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellearm_noble_model_1990FromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellearm_noble_model_1990FromCellMLOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
-        this->mHasDefaultStimulusFromCellML = true;
+        this->mHasDefaultStimulusFromCellMLOpt = true;
         
         this->mParameters[0] = 4.0000000000000003e-5; // (var_membrane__C_m) [microF]
     }
 
-    Cellearm_noble_model_1990FromCellML::~Cellearm_noble_model_1990FromCellML()
+    Cellearm_noble_model_1990FromCellMLOpt::~Cellearm_noble_model_1990FromCellMLOpt()
     {
     }
     
-    double Cellearm_noble_model_1990FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellearm_noble_model_1990FromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -108,7 +108,7 @@
         return i_ionic;
     }
 
-    void Cellearm_noble_model_1990FromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Cellearm_noble_model_1990FromCellMLOpt::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -213,7 +213,7 @@
         rDY[15] = d_dt_chaste_interface_var_intracellular_calcium_concentration__Ca_Trop;
     }
 
-    std::vector<double> Cellearm_noble_model_1990FromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Cellearm_noble_model_1990FromCellMLOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -229,7 +229,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellearm_noble_model_1990FromCellML>::Initialise(void)
+void OdeSystemInformation<Cellearm_noble_model_1990FromCellMLOpt>::Initialise(void)
 {
     this->mSystemName = "earm_noble_model_1990";
     this->mFreeVariableName = "environment__time";
@@ -332,4 +332,4 @@ void OdeSystemInformation<Cellearm_noble_model_1990FromCellML>::Initialise(void)
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellearm_noble_model_1990FromCellML)
+CHASTE_CLASS_EXPORT(Cellearm_noble_model_1990FromCellMLOpt)

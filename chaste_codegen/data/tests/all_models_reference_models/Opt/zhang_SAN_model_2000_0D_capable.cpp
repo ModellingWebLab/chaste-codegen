@@ -22,7 +22,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
-    Cellzhang_SAN_model_2000_0D_capableFromCellML::Cellzhang_SAN_model_2000_0D_capableFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellzhang_SAN_model_2000_0D_capableFromCellMLOpt::Cellzhang_SAN_model_2000_0D_capableFromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 15,
@@ -31,17 +31,17 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellzhang_SAN_model_2000_0D_capableFromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellzhang_SAN_model_2000_0D_capableFromCellMLOpt>::Instance();
         Init();
         
         this->mParameters[0] = 0.0001; // (var_ionic_concentrations__Ca_i) [millimolar]
     }
 
-    Cellzhang_SAN_model_2000_0D_capableFromCellML::~Cellzhang_SAN_model_2000_0D_capableFromCellML()
+    Cellzhang_SAN_model_2000_0D_capableFromCellMLOpt::~Cellzhang_SAN_model_2000_0D_capableFromCellMLOpt()
     {
     }
     
-    double Cellzhang_SAN_model_2000_0D_capableFromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellzhang_SAN_model_2000_0D_capableFromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -101,7 +101,7 @@
         return i_ionic;
     }
 
-    void Cellzhang_SAN_model_2000_0D_capableFromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Cellzhang_SAN_model_2000_0D_capableFromCellMLOpt::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -182,7 +182,7 @@
         rDY[14] = d_dt_chaste_interface_var_hyperpolarisation_activated_current_y_gate__y;
     }
 
-    std::vector<double> Cellzhang_SAN_model_2000_0D_capableFromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Cellzhang_SAN_model_2000_0D_capableFromCellMLOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -203,7 +203,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellzhang_SAN_model_2000_0D_capableFromCellML>::Initialise(void)
+void OdeSystemInformation<Cellzhang_SAN_model_2000_0D_capableFromCellMLOpt>::Initialise(void)
 {
     this->mSystemName = "zhang_SAN_model_2000_0D_capable";
     this->mFreeVariableName = "environment__time";
@@ -301,4 +301,4 @@ void OdeSystemInformation<Cellzhang_SAN_model_2000_0D_capableFromCellML>::Initia
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellzhang_SAN_model_2000_0D_capableFromCellML)
+CHASTE_CLASS_EXPORT(Cellzhang_SAN_model_2000_0D_capableFromCellMLOpt)

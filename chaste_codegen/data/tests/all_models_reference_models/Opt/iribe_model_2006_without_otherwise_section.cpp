@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Celliribe_model_2006_without_otherwise_sectionFromCellML::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Celliribe_model_2006_without_otherwise_sectionFromCellMLOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane_potential__stim_amplitude_converted = -0.0040000000000000001 * HeartConfig::Instance()->GetCapacitance() / mParameters[1]; // uA_per_cm2
@@ -37,11 +37,11 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double Celliribe_model_2006_without_otherwise_sectionFromCellML::GetIntracellularCalciumConcentration()
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Celliribe_model_2006_without_otherwise_sectionFromCellML::Celliribe_model_2006_without_otherwise_sectionFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Celliribe_model_2006_without_otherwise_sectionFromCellMLOpt::Celliribe_model_2006_without_otherwise_sectionFromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 23,
@@ -50,11 +50,11 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Celliribe_model_2006_without_otherwise_sectionFromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Celliribe_model_2006_without_otherwise_sectionFromCellMLOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
-        this->mHasDefaultStimulusFromCellML = true;
+        this->mHasDefaultStimulusFromCellMLOpt = true;
         
         this->mParameters[0] = 0.25; // (var_L_type_Ca_channel__P_Ca_L_Ca) [nanoA_per_millimolar]
         this->mParameters[1] = 9.5000000000000005e-5; // (var_cell_parameters__Cm) [microF]
@@ -65,11 +65,11 @@
         this->mParameters[6] = 0.00050000000000000001; // (var_sodium_calcium_exchanger__i_NaCa_max) [nanoA_per_millimolar4]
     }
 
-    Celliribe_model_2006_without_otherwise_sectionFromCellML::~Celliribe_model_2006_without_otherwise_sectionFromCellML()
+    Celliribe_model_2006_without_otherwise_sectionFromCellMLOpt::~Celliribe_model_2006_without_otherwise_sectionFromCellMLOpt()
     {
     }
     
-    double Celliribe_model_2006_without_otherwise_sectionFromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -116,7 +116,7 @@
         return i_ionic;
     }
 
-    void Celliribe_model_2006_without_otherwise_sectionFromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Celliribe_model_2006_without_otherwise_sectionFromCellMLOpt::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -250,7 +250,7 @@
         rDY[22] = d_dt_chaste_interface_var_Force__P_3;
     }
 
-    std::vector<double> Celliribe_model_2006_without_otherwise_sectionFromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Celliribe_model_2006_without_otherwise_sectionFromCellMLOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -307,7 +307,7 @@
     }
 
 template<>
-void OdeSystemInformation<Celliribe_model_2006_without_otherwise_sectionFromCellML>::Initialise(void)
+void OdeSystemInformation<Celliribe_model_2006_without_otherwise_sectionFromCellMLOpt>::Initialise(void)
 {
     this->mSystemName = "iribe_model_2006";
     this->mFreeVariableName = "environment__time";
@@ -485,4 +485,4 @@ void OdeSystemInformation<Celliribe_model_2006_without_otherwise_sectionFromCell
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Celliribe_model_2006_without_otherwise_sectionFromCellML)
+CHASTE_CLASS_EXPORT(Celliribe_model_2006_without_otherwise_sectionFromCellMLOpt)

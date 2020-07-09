@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellpriebe_beuckelmann_model_1998FromCellML::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellpriebe_beuckelmann_model_1998FromCellMLOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__cell__stim_amplitude_converted = -15.0 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
@@ -37,11 +37,11 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double Cellpriebe_beuckelmann_model_1998FromCellML::GetIntracellularCalciumConcentration()
+    double Cellpriebe_beuckelmann_model_1998FromCellMLOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Cellpriebe_beuckelmann_model_1998FromCellML::Cellpriebe_beuckelmann_model_1998FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellpriebe_beuckelmann_model_1998FromCellMLOpt::Cellpriebe_beuckelmann_model_1998FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 22,
@@ -50,22 +50,22 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellpriebe_beuckelmann_model_1998FromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellpriebe_beuckelmann_model_1998FromCellMLOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
-        this->mHasDefaultStimulusFromCellML = true;
+        this->mHasDefaultStimulusFromCellMLOpt = true;
         
         this->mParameters[0] = 0.064000000000000001; // (var_ICa__g_Ca_max) [mS_per_uF]
         this->mParameters[1] = 16.0; // (var_INa__g_Na) [mS_per_uF]
         this->mParameters[2] = 0.014999999999999999; // (var_IKr__g_Kr_max) [mS_per_uF]
     }
 
-    Cellpriebe_beuckelmann_model_1998FromCellML::~Cellpriebe_beuckelmann_model_1998FromCellML()
+    Cellpriebe_beuckelmann_model_1998FromCellMLOpt::~Cellpriebe_beuckelmann_model_1998FromCellMLOpt()
     {
     }
     
-    double Cellpriebe_beuckelmann_model_1998FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellpriebe_beuckelmann_model_1998FromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -110,7 +110,7 @@
         return i_ionic;
     }
 
-    void Cellpriebe_beuckelmann_model_1998FromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Cellpriebe_beuckelmann_model_1998FromCellMLOpt::EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -237,7 +237,7 @@
         rDY[21] = d_dt_chaste_interface_var_Ionic_concentrations__Ca_NSR;
     }
 
-    std::vector<double> Cellpriebe_beuckelmann_model_1998FromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Cellpriebe_beuckelmann_model_1998FromCellMLOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -253,7 +253,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellpriebe_beuckelmann_model_1998FromCellML>::Initialise(void)
+void OdeSystemInformation<Cellpriebe_beuckelmann_model_1998FromCellMLOpt>::Initialise(void)
 {
     this->mSystemName = "priebe_beuckelmann_model_1998";
     this->mFreeVariableName = "environment__time";
@@ -394,4 +394,4 @@ void OdeSystemInformation<Cellpriebe_beuckelmann_model_1998FromCellML>::Initiali
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellpriebe_beuckelmann_model_1998FromCellML)
+CHASTE_CLASS_EXPORT(Cellpriebe_beuckelmann_model_1998FromCellMLOpt)

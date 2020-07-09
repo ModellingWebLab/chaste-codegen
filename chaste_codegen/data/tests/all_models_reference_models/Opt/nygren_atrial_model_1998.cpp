@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellnygren_atrial_model_1998FromCellML::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellnygren_atrial_model_1998FromCellMLOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -0.27999999999999997 * HeartConfig::Instance()->GetCapacitance() / mParameters[0]; // uA_per_cm2
@@ -37,11 +37,11 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double Cellnygren_atrial_model_1998FromCellML::GetIntracellularCalciumConcentration()
+    double Cellnygren_atrial_model_1998FromCellMLOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Cellnygren_atrial_model_1998FromCellML::Cellnygren_atrial_model_1998FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellnygren_atrial_model_1998FromCellMLOpt::Cellnygren_atrial_model_1998FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 29,
@@ -50,20 +50,20 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellnygren_atrial_model_1998FromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellnygren_atrial_model_1998FromCellMLOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
-        this->mHasDefaultStimulusFromCellML = true;
+        this->mHasDefaultStimulusFromCellMLOpt = true;
         
         this->mParameters[0] = 0.050000000000000003; // (var_membrane__Cm) [nanoF]
     }
 
-    Cellnygren_atrial_model_1998FromCellML::~Cellnygren_atrial_model_1998FromCellML()
+    Cellnygren_atrial_model_1998FromCellMLOpt::~Cellnygren_atrial_model_1998FromCellMLOpt()
     {
     }
     
-    double Cellnygren_atrial_model_1998FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellnygren_atrial_model_1998FromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -131,7 +131,7 @@
         return i_ionic;
     }
 
-    void Cellnygren_atrial_model_1998FromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Cellnygren_atrial_model_1998FromCellMLOpt::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -290,7 +290,7 @@
         rDY[28] = d_dt_chaste_interface_var_Ca_handling_by_the_SR__F2;
     }
 
-    std::vector<double> Cellnygren_atrial_model_1998FromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Cellnygren_atrial_model_1998FromCellMLOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -308,7 +308,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellnygren_atrial_model_1998FromCellML>::Initialise(void)
+void OdeSystemInformation<Cellnygren_atrial_model_1998FromCellMLOpt>::Initialise(void)
 {
     this->mSystemName = "nygren_atrial_model_1998";
     this->mFreeVariableName = "environment__time";
@@ -480,4 +480,4 @@ void OdeSystemInformation<Cellnygren_atrial_model_1998FromCellML>::Initialise(vo
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellnygren_atrial_model_1998FromCellML)
+CHASTE_CLASS_EXPORT(Cellnygren_atrial_model_1998FromCellMLOpt)

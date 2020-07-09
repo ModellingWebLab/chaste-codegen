@@ -45,7 +45,7 @@ class GeneralisedRushLarsenFirstOrderModel(ChasteModel):
             used_state_vars = set()
             for eq in eq_to_expand:
                 for v in eq[1].atoms(Derivative) | eq[1].free_symbols:
-                    if v in self._state_vars:
+                    if v in self._model.state_vars:
                         used_state_vars.add(v)
                     elif v not in [e[0] for e in eq_to_expand]:
                         eq_to_expand.extend(filter(lambda e: e[0] == v, equations))

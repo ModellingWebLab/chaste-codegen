@@ -9,6 +9,7 @@ import cellmlmanip
 
 import chaste_codegen as cg
 from chaste_codegen._script_utils import write_file
+from chaste_codegen.model_with_conversions import load_model
 
 
 # Link names to classes for converting code
@@ -24,7 +25,7 @@ TRANSLATORS = OrderedDict([('normal', (cg.NormalChasteModel, 'FromCellML', '')),
                            ('grl2', (cg.GeneralisedRushLarsenSecondOrderModel, 'FromCellMLGRL2', 'GRL2')),
                            ('grl2-opt', (cg.GeneralisedRushLarsenSecondOrderModelOpt, 'FromCellMLGRL2', 'GRL2'))])
 
-TRANSLATORS_WITH_MODIFIERS = ('--normal', '--ChasteOpt', '--cvode', '--cvode-data-clamp')
+TRANSLATORS_WITH_MODIFIERS = ('--normal', '--opt', '--cvode', '--cvode-data-clamp')
 
 
 # Store extensions we can use and how to use them, based on extension of given outfile
@@ -38,7 +39,7 @@ def chaste_codegen():
                         version='%(prog)s {version}'.format(version=cg.__version__))
     parser.add_argument('cellml_file', metavar='cellml_file', help='The cellml file or URI to convert to chaste code')
 
-    group = parser.add_argument_group('ModelTypes', 'The different types of solver models for which code that can be generated')
+    group = parser.add_argument_group('ModelTypes', 'The different types of solver models for which code that can be generated, if no model type is set, normal models are generated')
     for k in TRANSLATORS:
         group.add_argument('--' + k, help='Generate ' + k + ' model type', action='store_true')
 
@@ -69,8 +70,10 @@ def chaste_codegen():
 
     # process options
     args = parser.parse_args()
+    # if no model type is set assume normal
+    args.normal = args.normal or not any([getattr(args, model_type.replace('-', '_')) for model_type in TRANSLATORS])
 
-    #model = cellmlmanip.load_model(args.cellml_file)
+    #model = load_model(args.cellml_file)
     for model_type in TRANSLATORS:
         use_translator_class = getattr(args, model_type.replace('-', '_'))
         if use_translator_class:
@@ -83,9 +86,8 @@ def chaste_codegen():
             if not args.outfile:
                 outfile_base += TRANSLATORS[model_type][2]
             
-            model = cellmlmanip.load_model(args.cellml_file)
+            model = load_model(args.cellml_file)
             # generate code Based on parameters a different class of translator may be used
-            #cg.ChasteModel(model, outfile_base, header_ext=ext[0], **vars(args))
             chaste_model = translator_class(model, outfile_base, header_ext=ext[0], **vars(args))
             chaste_model.generate_chaste_code()
 

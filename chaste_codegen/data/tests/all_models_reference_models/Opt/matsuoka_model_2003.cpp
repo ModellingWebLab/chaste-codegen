@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellmatsuoka_model_2003FromCellML::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellmatsuoka_model_2003FromCellMLOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -4000.0 * HeartConfig::Instance()->GetCapacitance() / mParameters[0]; // uA_per_cm2
@@ -38,7 +38,7 @@
         return p_cellml_stim;
     }
 
-    Cellmatsuoka_model_2003FromCellML::Cellmatsuoka_model_2003FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellmatsuoka_model_2003FromCellMLOpt::Cellmatsuoka_model_2003FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 37,
@@ -47,20 +47,20 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellmatsuoka_model_2003FromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellmatsuoka_model_2003FromCellMLOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
-        this->mHasDefaultStimulusFromCellML = true;
+        this->mHasDefaultStimulusFromCellMLOpt = true;
         
         this->mParameters[0] = 132.0; // (var_membrane__Cm) [picoF]
     }
 
-    Cellmatsuoka_model_2003FromCellML::~Cellmatsuoka_model_2003FromCellML()
+    Cellmatsuoka_model_2003FromCellMLOpt::~Cellmatsuoka_model_2003FromCellMLOpt()
     {
     }
     
-    double Cellmatsuoka_model_2003FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellmatsuoka_model_2003FromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -132,7 +132,7 @@
         return i_ionic;
     }
 
-    void Cellmatsuoka_model_2003FromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Cellmatsuoka_model_2003FromCellMLOpt::EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -368,7 +368,7 @@
         rDY[36] = d_dt_chaste_interface_var_NL_model__X;
     }
 
-    std::vector<double> Cellmatsuoka_model_2003FromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Cellmatsuoka_model_2003FromCellMLOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -394,7 +394,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellmatsuoka_model_2003FromCellML>::Initialise(void)
+void OdeSystemInformation<Cellmatsuoka_model_2003FromCellMLOpt>::Initialise(void)
 {
     this->mSystemName = "matsuoka_model_2003";
     this->mFreeVariableName = "environment__time";
@@ -610,4 +610,4 @@ void OdeSystemInformation<Cellmatsuoka_model_2003FromCellML>::Initialise(void)
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellmatsuoka_model_2003FromCellML)
+CHASTE_CLASS_EXPORT(Cellmatsuoka_model_2003FromCellMLOpt)

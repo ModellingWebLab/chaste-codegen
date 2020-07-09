@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellfink_noble_giles_model_2008FromCellML::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellfink_noble_giles_model_2008FromCellMLOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__cell__i_Stim_Amplitude_converted = -51.999999999999993 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
@@ -38,7 +38,7 @@
         return p_cellml_stim;
     }
 
-    Cellfink_noble_giles_model_2008FromCellML::Cellfink_noble_giles_model_2008FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellfink_noble_giles_model_2008FromCellMLOpt::Cellfink_noble_giles_model_2008FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 27,
@@ -47,19 +47,19 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellfink_noble_giles_model_2008FromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellfink_noble_giles_model_2008FromCellMLOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
-        this->mHasDefaultStimulusFromCellML = true;
+        this->mHasDefaultStimulusFromCellMLOpt = true;
         
     }
 
-    Cellfink_noble_giles_model_2008FromCellML::~Cellfink_noble_giles_model_2008FromCellML()
+    Cellfink_noble_giles_model_2008FromCellMLOpt::~Cellfink_noble_giles_model_2008FromCellMLOpt()
     {
     }
     
-    double Cellfink_noble_giles_model_2008FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellfink_noble_giles_model_2008FromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -108,7 +108,7 @@
         return i_ionic;
     }
 
-    void Cellfink_noble_giles_model_2008FromCellML::EvaluateYDerivatives(double var_chaste_interface__Environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Cellfink_noble_giles_model_2008FromCellMLOpt::EvaluateYDerivatives(double var_chaste_interface__Environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -265,7 +265,7 @@
         rDY[26] = d_dt_chaste_interface_var_K__K_i;
     }
 
-    std::vector<double> Cellfink_noble_giles_model_2008FromCellML::ComputeDerivedQuantities(double var_chaste_interface__Environment__time, const std::vector<double> & rY)
+    std::vector<double> Cellfink_noble_giles_model_2008FromCellMLOpt::ComputeDerivedQuantities(double var_chaste_interface__Environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -281,7 +281,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellfink_noble_giles_model_2008FromCellML>::Initialise(void)
+void OdeSystemInformation<Cellfink_noble_giles_model_2008FromCellMLOpt>::Initialise(void)
 {
     this->mSystemName = "fink_noble_giles_model_2008";
     this->mFreeVariableName = "Environment__time";
@@ -437,4 +437,4 @@ void OdeSystemInformation<Cellfink_noble_giles_model_2008FromCellML>::Initialise
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellfink_noble_giles_model_2008FromCellML)
+CHASTE_CLASS_EXPORT(Cellfink_noble_giles_model_2008FromCellMLOpt)

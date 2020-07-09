@@ -1,5 +1,5 @@
-#ifndef CELLIRIBE_MODEL_2006_WITHOUT_OTHERWISE_SECTIONFROMCELLML_HPP_
-#define CELLIRIBE_MODEL_2006_WITHOUT_OTHERWISE_SECTIONFROMCELLML_HPP_
+#ifndef CELLIRIBE_MODEL_2006_WITHOUT_OTHERWISE_SECTIONFROMCELLMLOPT_HPP_
+#define CELLIRIBE_MODEL_2006_WITHOUT_OTHERWISE_SECTIONFROMCELLMLOPT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractCardiacCell.hpp"
 
-class Celliribe_model_2006_without_otherwise_sectionFromCellML : public AbstractCardiacCell
+class Celliribe_model_2006_without_otherwise_sectionFromCellMLOpt : public AbstractCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -36,8 +36,8 @@ public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    Celliribe_model_2006_without_otherwise_sectionFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Celliribe_model_2006_without_otherwise_sectionFromCellML();
+    Celliribe_model_2006_without_otherwise_sectionFromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Celliribe_model_2006_without_otherwise_sectionFromCellMLOpt();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY);
 
@@ -46,7 +46,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Celliribe_model_2006_without_otherwise_sectionFromCellML)
+CHASTE_CLASS_EXPORT(Celliribe_model_2006_without_otherwise_sectionFromCellMLOpt)
 
 namespace boost
 {
@@ -54,7 +54,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Celliribe_model_2006_without_otherwise_sectionFromCellML * t, const unsigned int fileVersion)
+            Archive & ar, const Celliribe_model_2006_without_otherwise_sectionFromCellMLOpt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -64,17 +64,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Celliribe_model_2006_without_otherwise_sectionFromCellML * t, const unsigned int fileVersion)
+            Archive & ar, Celliribe_model_2006_without_otherwise_sectionFromCellMLOpt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Celliribe_model_2006_without_otherwise_sectionFromCellML(p_solver, p_stimulus);
+            ::new(t)Celliribe_model_2006_without_otherwise_sectionFromCellMLOpt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLIRIBE_MODEL_2006_WITHOUT_OTHERWISE_SECTIONFROMCELLML_HPP_
+#endif // CELLIRIBE_MODEL_2006_WITHOUT_OTHERWISE_SECTIONFROMCELLMLOPT_HPP_

@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellten_tusscher_model_2006_epiFromCellML::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellten_tusscher_model_2006_epiFromCellMLOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__i_Stim_Amplitude_converted = -52.0 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
@@ -37,11 +37,11 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double Cellten_tusscher_model_2006_epiFromCellML::GetIntracellularCalciumConcentration()
+    double Cellten_tusscher_model_2006_epiFromCellMLOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Cellten_tusscher_model_2006_epiFromCellML::Cellten_tusscher_model_2006_epiFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellten_tusscher_model_2006_epiFromCellMLOpt::Cellten_tusscher_model_2006_epiFromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 19,
@@ -50,11 +50,11 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellten_tusscher_model_2006_epiFromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellten_tusscher_model_2006_epiFromCellMLOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
-        this->mHasDefaultStimulusFromCellML = true;
+        this->mHasDefaultStimulusFromCellMLOpt = true;
         
         this->mParameters[0] = 3.9799999999999998e-5; // (var_L_type_Ca_current__g_CaL) [litre_per_farad_second]
         this->mParameters[1] = 14.837999999999999; // (var_fast_sodium_current__g_Na) [nanoS_per_picoF]
@@ -62,11 +62,11 @@
         this->mParameters[3] = 0.29399999999999998; // (var_transient_outward_current__g_to) [nanoS_per_picoF]
     }
 
-    Cellten_tusscher_model_2006_epiFromCellML::~Cellten_tusscher_model_2006_epiFromCellML()
+    Cellten_tusscher_model_2006_epiFromCellMLOpt::~Cellten_tusscher_model_2006_epiFromCellMLOpt()
     {
     }
     
-    double Cellten_tusscher_model_2006_epiFromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellten_tusscher_model_2006_epiFromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -128,7 +128,7 @@
         return i_ionic;
     }
 
-    void Cellten_tusscher_model_2006_epiFromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Cellten_tusscher_model_2006_epiFromCellMLOpt::EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -242,7 +242,7 @@
         rDY[18] = d_dt_chaste_interface_var_potassium_dynamics__K_i;
     }
 
-    std::vector<double> Cellten_tusscher_model_2006_epiFromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Cellten_tusscher_model_2006_epiFromCellMLOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -258,7 +258,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellten_tusscher_model_2006_epiFromCellML>::Initialise(void)
+void OdeSystemInformation<Cellten_tusscher_model_2006_epiFromCellMLOpt>::Initialise(void)
 {
     this->mSystemName = "tentusscher_panfilov_2006_epi";
     this->mFreeVariableName = "environment__time";
@@ -390,4 +390,4 @@ void OdeSystemInformation<Cellten_tusscher_model_2006_epiFromCellML>::Initialise
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellten_tusscher_model_2006_epiFromCellML)
+CHASTE_CLASS_EXPORT(Cellten_tusscher_model_2006_epiFromCellMLOpt)

@@ -9,11 +9,12 @@ from cellmlmanip.rdf import create_rdf_node
 
 _ONTOLOGY = None  # The 'oxmeta' ontology graph
 
-OXMETA_NS = 'https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#'
-BQBIOL_NS = 'http://biomodels.net/biology-qualifiers/'
+PYCMLMETA = 'https://chaste.comlab.ox.ac.uk/cellml/ns/pycml#'
+OXMETA = 'https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#'
+BQBIOL = 'http://biomodels.net/biology-qualifiers/'
 
-PRED_IS = create_rdf_node((BQBIOL_NS, 'is'))
-PRED_IS_VERSION_OF = create_rdf_node((BQBIOL_NS, 'isVersionOf'))
+PRED_IS = create_rdf_node((BQBIOL, 'is'))
+PRED_IS_VERSION_OF = create_rdf_node((BQBIOL, 'isVersionOf'))
 
 
 def get_variables_transitively(model, term):

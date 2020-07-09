@@ -1,5 +1,6 @@
-usage: chaste_codegen [-h] [--version] [-t TYPE] [-o OUTFILE]
-                      [--use-analytic-jacobian] [-c CLASS_NAME] [-y]
-                      [--use-modifiers]
+usage: chaste_codegen [-h] [--version] [--normal] [--opt] [--cvode]
+                      [--cvode-data-clamp] [--backward-euler] [--rush-larsen]
+                      [--rush-larsen-opt] [--grl1] [--grl1-opt] [--grl2]
+                      [--grl2-opt] [-j] [-o OUTFILE] [-c CLS_NAME] [-y] [-m]
                       cellml_file
 chaste_codegen: error: the following arguments are required: cellml_file
