@@ -54,7 +54,7 @@
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
-        this->mHasDefaultStimulusFromCellMLOpt = true;
+        this->mHasDefaultStimulusFromCellML = true;
         
         this->mParameters[0] = 1.0; // (var_IKr__ScaleFactorGkr) [dimensionless]
         this->mParameters[1] = 1.0; // (var_IKs__ScaleFactorGks) [dimensionless]

@@ -54,7 +54,7 @@
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
-        this->mHasDefaultStimulusFromCellMLOpt = true;
+        this->mHasDefaultStimulusFromCellML = true;
         
         this->mParameters[0] = 0.00015552; // (var_ICaL__PCa) [L_per_F_ms]
         this->mParameters[1] = 9.0749999999999993; // (var_INa__g_Na) [mS_per_uF]

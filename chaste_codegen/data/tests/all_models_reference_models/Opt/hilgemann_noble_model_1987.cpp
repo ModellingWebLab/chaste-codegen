@@ -54,7 +54,7 @@
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
-        this->mHasDefaultStimulusFromCellMLOpt = true;
+        this->mHasDefaultStimulusFromCellML = true;
         
         this->mParameters[0] = 0.0060000000000000001; // (var_membrane__C_m) [microF]
     }

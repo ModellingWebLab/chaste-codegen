@@ -53,7 +53,7 @@
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
-        this->mHasDefaultStimulusFromCellMLOpt = true;
+        this->mHasDefaultStimulusFromCellML = true;
         
         this->mParameters[0] = 1.8; // (var_ionic_concentrations__Cao) [mM]
         this->mParameters[1] = 5.4000000000000004; // (var_ionic_concentrations__Ko) [mM]
