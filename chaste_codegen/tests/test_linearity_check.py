@@ -1,4 +1,3 @@
-import logging
 import os
 
 import pytest
@@ -7,11 +6,6 @@ from cellmlmanip.printer import Printer
 
 import chaste_codegen as cg
 from chaste_codegen._linearity_check import KINDS, get_non_linear_state_vars, subst_deriv_eqs_non_linear_vars
-
-
-# Show more logging output
-LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.DEBUG)
 from chaste_codegen._rdf import OXMETA
 
 

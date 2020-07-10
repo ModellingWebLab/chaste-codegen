@@ -1,3 +1,5 @@
+from functools import partial
+
 from sympy import (
     Derivative,
     Piecewise,
@@ -8,8 +10,9 @@ from sympy import (
 from chaste_codegen._jacobian import format_jacobian, get_jacobian
 from chaste_codegen._linearity_check import get_non_linear_state_vars, subst_deriv_eqs_non_linear_vars
 from chaste_codegen._partial_eval import partial_eval
-from chaste_codegen.chaste_model import ChasteModel
 from chaste_codegen._rdf import OXMETA
+from chaste_codegen.chaste_model import ChasteModel
+from chaste_codegen.model_with_conversions import get_equations_for
 
 
 class BackwardEulerModel(ChasteModel):
@@ -22,10 +25,10 @@ class BackwardEulerModel(ChasteModel):
         self._vars_for_template['base_class'] = 'AbstractBackwardEulerCardiacCell'
         # get deriv eqs and substitute in all variables other than state vars
         self._derivative_equations = \
-            partial_eval(self._derivative_equations, self._y_derivatives, keep_multiple_usages=False)
+            partial_eval(self._derivative_equations, self._model.y_derivatives, keep_multiple_usages=False)
         self._non_linear_state_vars = \
-            sorted(get_non_linear_state_vars(self._derivative_equations, self._model.membrane_voltage_var, self._model.state_vars),
-                   key=lambda s: self._printer.doprint(s))
+            sorted(get_non_linear_state_vars(self._derivative_equations, self._model.membrane_voltage_var,
+                   self._model.state_vars), key=lambda s: self._printer.doprint(s))
 
         self._jacobian_equations, self._jacobian_matrix = \
             get_jacobian(self._non_linear_state_vars,
@@ -89,9 +92,10 @@ class BackwardEulerModel(ChasteModel):
                     'h': self._printer.doprint(gh[1] if gh[1] is not None else 0.0)}
 
         # Substitute non-linear bits into derivative equations, so that we can pattern match
-        linear_derivs_eqs = subst_deriv_eqs_non_linear_vars(self._y_derivatives, self._non_linear_state_vars,
+        linear_derivs_eqs = subst_deriv_eqs_non_linear_vars(self._model.y_derivatives, self._non_linear_state_vars,
                                                             self._model.membrane_voltage_var,
-                                                            self._model.state_vars, self.get_equations_for)
+                                                            self._model.state_vars,
+                                                            partial(get_equations_for, self._model))
 
         # sort the linear derivatives
         linear_derivs = sorted([eq for eq in linear_derivs_eqs if isinstance(eq.lhs, Derivative)],

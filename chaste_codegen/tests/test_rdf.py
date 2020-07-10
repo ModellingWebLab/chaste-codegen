@@ -1,8 +1,7 @@
-import logging
 import os
 
 import pytest
-from chaste_codegen.model_with_conversions import load_model
+from cellmlmanip import load_model
 from cellmlmanip.rdf import create_rdf_node
 
 import chaste_codegen as cg
@@ -13,11 +12,6 @@ from chaste_codegen._rdf import (
     PRED_IS_VERSION_OF,
     get_variables_transitively,
 )
-
-
-# Show more logging output
-LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.DEBUG)
 
 
 @pytest.fixture(scope='session')

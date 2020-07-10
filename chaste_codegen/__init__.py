@@ -1,8 +1,6 @@
 """
 Main module for cardiac Chaste code generation
 """
-import logging
-
 from cellmlmanip.parser import Transpiler
 
 from ._chaste_printer import ChastePrinter  # noqa
@@ -11,6 +9,7 @@ from ._chaste_printer import ChastePrinter  # noqa
 #
 from ._config import (  # noqa
     DATA_DIR,
+    LOGGER,
     MODULE_DIR,
     TEMPLATE_SUBDIR,
     __version__,
@@ -43,10 +42,6 @@ from .opt_chaste_model import OptChasteModel  # noqa
 from .rush_larsen_model import RushLarsenModel  # noqa
 from .rush_larsen_opt_model import RushLarsenOptModel  # noqa
 
-
-# Configure logging
-logging.basicConfig()
-del(logging)
 
 # Set transpiler to prodcue our custom classes in order to avoid premature simplification/canonisation
 Transpiler.set_mathml_handler('exp', exp_)

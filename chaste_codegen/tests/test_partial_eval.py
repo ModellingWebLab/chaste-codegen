@@ -1,16 +1,10 @@
-import logging
 import os
 
 import pytest
-from chaste_codegen.model_with_conversions import load_model
+from cellmlmanip import load_model
 
 import chaste_codegen as cg
 from chaste_codegen._partial_eval import partial_eval
-
-
-# Show more logging output
-LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.DEBUG)
 
 
 @pytest.fixture(scope='session')

@@ -22,7 +22,7 @@ class GeneralisedRushLarsenFirstOrderModel(ChasteModel):
     def _get_jacobian(self):
         """Retrieve jacobian matrix"""
         derivative_eqs_for_jacobian = \
-            partial_eval(self._derivative_equations, self._y_derivatives, keep_multiple_usages=False)
+            partial_eval(self._derivative_equations, self._model.y_derivatives, keep_multiple_usages=False)
         return get_jacobian(self._state_vars, derivative_eqs_for_jacobian)
 
     def _map_state_vars_and_eqs(self):
@@ -51,7 +51,7 @@ class GeneralisedRushLarsenFirstOrderModel(ChasteModel):
                         eq_to_expand.extend(filter(lambda e: e[0] == v, equations))
             return set(eq_to_expand), used_state_vars
 
-        for i, deriv in enumerate(self._y_derivatives):
+        for i, deriv in enumerate(self._model.y_derivatives):
             equations, used_state_vars = \
                 get_used_eqs_and_state_vars([(d.lhs, d.rhs) for d in self._derivative_equations if d.lhs == deriv],
                                             set(map(lambda e: (e.lhs, e.rhs), self._derivative_equations)))

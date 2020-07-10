@@ -1,18 +1,14 @@
-import logging
 import os
-import sys
 import shutil
+import sys
 from unittest import mock
 
+import pytest
+
 import chaste_codegen as cg
+from chaste_codegen import LOGGER
 from chaste_codegen._command_line_script import chaste_codegen
 from chaste_codegen.tests.chaste_test_utils import compare_file_against_reference
-
-
-# Show more logging output
-LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.DEBUG)
-
 
 
 def test_script_help(capsys):
@@ -62,7 +58,51 @@ def test_usage(capsys):
         assert error == expected
 
 
-def test_script_convert(capsys, tmp_path):
+def test_script_double_show_output(capsys, tmp_path):
+    """Convert a normal model via command line script"""
+    LOGGER.info('Testing --show-output\n')
+    tmp_path = str(tmp_path)
+    model_name = 'grandi2010ss'
+    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    target = os.path.join(tmp_path, model_name + '.cellml')
+    shutil.copyfile(model_file, target)
+
+    testargs = ["chaste_codegen", '--cvode-data-clamp', '--backward-euler', target, '--show-output']
+    # Call commandline script
+    with mock.patch.object(sys, 'argv', testargs):
+        chaste_codegen()
+        captured = capsys.readouterr()
+        error = str(captured.out)
+        assert "grandi2010ssCvodeDataClamp.cpp" in error
+        assert "grandi2010ssCvodeDataClamp.hpp" in error
+        assert "grandi2010ssBackwardEuler.cpp" in error
+        assert "grandi2010ssBackwardEuler.hpp" in error
+
+
+def test_non_extsing_cellml():
+    """Test converting non-existing cellml file"""
+    LOGGER.info('Testing non-existing cellml\n')
+
+    testargs = ["chaste_codegen", "bla.cellml"]
+    # Call commandline script
+    with mock.patch.object(sys, 'argv', testargs):
+        with pytest.raises(ValueError, match="Could not find cellml file bla.cellml"):
+            chaste_codegen()
+
+
+def test_non_extsing_cellml2():
+    """Test converting non-existing cellml file"""
+    LOGGER.info('Testing non-existing cellml\n')
+
+    testargs = ["chaste_codegen", "bla.txt"]
+    # Call commandline script
+    with mock.patch.object(sys, 'argv', testargs):
+        with pytest.raises(ValueError, match="Could not find cellml file bla.txt"):
+            chaste_codegen()
+
+
+def test_script_convert(tmp_path):
     """Convert a normal model via command line script"""
     LOGGER.info('Testing regular model conversion for command line script\n')
     tmp_path = str(tmp_path)
@@ -71,7 +111,7 @@ def test_script_convert(capsys, tmp_path):
     assert os.path.isfile(model_file)
     target = os.path.join(tmp_path, model_name + '.cellml')
     shutil.copyfile(model_file, target)
-    
+
     testargs = ["chaste_codegen", target]
     # Call commandline script
     with mock.patch.object(sys, 'argv', testargs):
@@ -83,16 +123,16 @@ def test_script_convert(capsys, tmp_path):
                                    os.path.join(tmp_path, model_name + '.cpp'))
 
 
-def test_script_double_type(capsys, tmp_path):
-    """Convert a normal model via command line script"""
-    LOGGER.info('Testing regular model conversion for command line script\n')
+def test_script_double_type(tmp_path):
+    """Convert multiple model types"""
+    LOGGER.info('Testing multiple models\n')
     tmp_path = str(tmp_path)
     model_name = 'grandi2010ss'
     model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
     assert os.path.isfile(model_file)
     target = os.path.join(tmp_path, model_name + '.cellml')
     shutil.copyfile(model_file, target)
-    
+
     testargs = ["chaste_codegen", '--cvode-data-clamp', '--backward-euler', target]
     # Call commandline script
     with mock.patch.object(sys, 'argv', testargs):
@@ -110,7 +150,7 @@ def test_script_double_type(capsys, tmp_path):
                                    os.path.join(tmp_path, model_name + 'BackwardEuler.cpp'))
 
 
-def test_script_class_convtype_output_dll_loadable(capsys, tmp_path):
+def test_script_class_convtype_output_dll_loadable(tmp_path):
     """Convert a normal model with a given class name and dynamicly loadable via command line script"""
     LOGGER.info('Testing model with options --normal -c --dynamically-loadable and -o for command line script\n')
     tmp_path = str(tmp_path)
@@ -130,7 +170,7 @@ def test_script_class_convtype_output_dll_loadable(capsys, tmp_path):
                                    os.path.join(tmp_path, 'output_class.c'))
 
 
-def test_script_opt(capsys, tmp_path):
+def test_script_opt(tmp_path):
     """Convert an optimised model type"""
     LOGGER.info('Testing model with options --opt and -o for command line script\n')
     tmp_path = str(tmp_path)
@@ -150,7 +190,7 @@ def test_script_opt(capsys, tmp_path):
                                    os.path.join(tmp_path, 'dynamic_aslanidi_model_2009.cpp'))
 
 
-def test_script_cvode(capsys, tmp_path):
+def test_script_cvode(tmp_path):
     """Convert a CVODE model type"""
     LOGGER.info('Testing model with options -t CVODE and -o for command line script\n')
     tmp_path = str(tmp_path)
@@ -170,7 +210,7 @@ def test_script_cvode(capsys, tmp_path):
                                    os.path.join(tmp_path, 'dynamic_mahajan_2008.cpp'))
 
 
-def test_script_cvode_jacobian(capsys, tmp_path):
+def test_script_cvode_jacobian(tmp_path):
     """Convert a CVODE model type with jacobian"""
     LOGGER.info('Testing model with options --cvode and -o for command line script\n')
     tmp_path = str(tmp_path)
@@ -179,7 +219,8 @@ def test_script_cvode_jacobian(capsys, tmp_path):
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'dynamic_Shannon2004.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', model_file, '--cvode', '-o', outfile, '--use-analytic-jacobian', '--dynamically-loadable']
+    testargs = ['chaste_codegen', model_file, '--cvode', '-o', outfile, '--use-analytic-jacobian',
+                '--dynamically-loadable']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
@@ -190,7 +231,7 @@ def test_script_cvode_jacobian(capsys, tmp_path):
                                    os.path.join(tmp_path, 'dynamic_Shannon2004.cpp'))
 
 
-def test_script_dynamic_BE(capsys, tmp_path):
+def test_script_dynamic_BE(tmp_path):
     """Convert a BackwardsEuler model type"""
     LOGGER.info('Testing model with options --backward-euler, and --dynamically-loadable for command line script\n')
     tmp_path = str(tmp_path)
@@ -211,7 +252,7 @@ def test_script_dynamic_BE(capsys, tmp_path):
                                    os.path.join(tmp_path, 'dynamic_courtemanche_ramirez_nattel_model_1998.cpp'))
 
 
-def test_script_dynamic_RL(capsys, tmp_path):
+def test_script_dynamic_RL(tmp_path):
     """Convert a RushLarsen model type"""
     LOGGER.info('Testing model with options --rush-larsen, and --dynamically-loadable for command line script\n')
     tmp_path = str(tmp_path)
@@ -231,7 +272,7 @@ def test_script_dynamic_RL(capsys, tmp_path):
                                    os.path.join(tmp_path, 'dynamic_livshitz_rudy_2007.cpp'))
 
 
-def test_script_RLopt(capsys, tmp_path):
+def test_script_RLopt(tmp_path):
     """Convert a RushLarsen model type"""
     LOGGER.info('Testing model with options --rush-larsen-opt,  for command line script\n')
     tmp_path = str(tmp_path)
@@ -251,7 +292,7 @@ def test_script_RLopt(capsys, tmp_path):
                                    os.path.join(tmp_path, 'dynamic_bondarenko_model_2004_apex.cpp'))
 
 
-def test_script_GRL1(capsys, tmp_path):
+def test_script_GRL1(tmp_path):
     """Convert a Generalised RushLarsen First Order model type"""
     LOGGER.info('Testing model Generalised RushLarsen First Order,  for command line script\n')
     tmp_path = str(tmp_path)
@@ -271,7 +312,7 @@ def test_script_GRL1(capsys, tmp_path):
                                    os.path.join(tmp_path, 'dynamic_demir_model_1994.cpp'))
 
 
-def test_script_GRL1Opt(capsys, tmp_path):
+def test_script_GRL1Opt(tmp_path):
     """Convert a Generalised RushLarsen First Order Opt model type"""
     LOGGER.info('Testing model Generalised RushLarsen First Order Opt ,  for command line script\n')
     tmp_path = str(tmp_path)
@@ -291,7 +332,7 @@ def test_script_GRL1Opt(capsys, tmp_path):
                                    os.path.join(tmp_path, 'dynamic_matsuoka_model_2003.cpp'))
 
 
-def test_script_GRL2(capsys, tmp_path):
+def test_script_GRL2(tmp_path):
     """Convert a Generalised RushLarsen First Order model type"""
     LOGGER.info('Testing model Generalised RushLarsen First Order,  for command line script\n')
     tmp_path = str(tmp_path)
@@ -311,7 +352,7 @@ def test_script_GRL2(capsys, tmp_path):
                                    os.path.join(tmp_path, 'dynamic_winslow_model_1999.cpp'))
 
 
-def test_script_GRL2Opt(capsys, tmp_path):
+def test_script_GRL2Opt(tmp_path):
     """Convert a Generalised RushLarsen First Order Opt model type"""
     LOGGER.info('Testing model Generalised RushLarsen First Order Opt ,  for command line script\n')
     tmp_path = str(tmp_path)
@@ -331,7 +372,7 @@ def test_script_GRL2Opt(capsys, tmp_path):
                                    os.path.join(tmp_path, 'dynamic_viswanathan_model_1999_epi.cpp'))
 
 
-def test_script_CVODE_DATA_CLAMP(capsys, tmp_path):
+def test_script_CVODE_DATA_CLAMP(tmp_path):
     """Convert a CVODE with Data Clamp model type"""
     LOGGER.info('Testing model CVODE with data clamp ,  for command line script\n')
     tmp_path = str(tmp_path)
@@ -351,7 +392,7 @@ def test_script_CVODE_DATA_CLAMP(capsys, tmp_path):
                                    os.path.join(tmp_path, 'dynamic_Shannon2004.cpp'))
 
 
-def test_script_CVODE_DATA_CLAMP_modifiers(capsys, tmp_path):
+def test_script_CVODE_DATA_CLAMP_modifiers(tmp_path):
     """Convert a CVODE with data clamp and modifiers model type with modifiers"""
     LOGGER.info('Testing model CVODE with data clamp ,  for command line script\n')
     tmp_path = str(tmp_path)

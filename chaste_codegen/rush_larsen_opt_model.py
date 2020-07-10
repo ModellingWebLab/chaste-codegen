@@ -18,7 +18,7 @@ class RushLarsenOptModel(RushLarsenModel):
     def _get_extended_equations_for_ionic_vars(self):
         """ Get the partially evaluated equations defining the ionic derivatives and all dependant equations"""
         return partial_eval(super()._get_extended_equations_for_ionic_vars(),
-                            set(map(lambda eq: eq.lhs, self._equations_for_ionic_vars)))
+                            set(map(lambda eq: eq.lhs, self._model.equations_for_ionic_vars)))
 
     def _update_state_vars(self):
         """Updates formatting of state vars to make sure the correct ones are included in the output"""

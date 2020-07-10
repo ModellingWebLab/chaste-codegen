@@ -1,7 +1,8 @@
 from sympy import Derivative, Eq, Function
 
-from chaste_codegen.cvode_chaste_model import CvodeChasteModel
 from chaste_codegen._rdf import OXMETA
+from chaste_codegen.cvode_chaste_model import CvodeChasteModel
+
 
 class CvodeWithDataClampModel(CvodeChasteModel):
     """ Holds template and information specific for the CVODE with data clamp model type"""
@@ -9,7 +10,7 @@ class CvodeWithDataClampModel(CvodeChasteModel):
     def __init__(self, model, file_name, **kwargs):
         super().__init__(model, file_name, **kwargs)
         self._vars_for_template['base_class'] = 'AbstractCvodeCellWithDataClamp'
-#try other model after dataclamp model
+
     def _add_data_clamp_to_model(self):
         """ Add add membrane_data_clamp_current_conductance and membrane_data_clamp_current to the model"""
         self._membrane_data_clamp_current_conductance = \
@@ -19,8 +20,9 @@ class CvodeWithDataClampModel(CvodeChasteModel):
         self._model.add_equation(self.dataclamp_eq)
 
         # add membrane_data_clamp_current
-        self._membrane_data_clamp_current = self._model.add_variable(name='membrane_data_clamp_current',
-                                                                     units=self._model.conversion_units.get_unit('uA_per_cm2'))
+        self._membrane_data_clamp_current = \
+            self._model.add_variable(name='membrane_data_clamp_current',
+                                     units=self._model.conversion_units.get_unit('uA_per_cm2'))
         # add clamp current equation
         self._in_interface.add(self._membrane_data_clamp_current)
         clamp_current = self._membrane_data_clamp_current_conductance * \
@@ -29,7 +31,6 @@ class CvodeWithDataClampModel(CvodeChasteModel):
         self._model.add_equation(self._membrane_data_clamp_current_eq)
 
         # Add data clamp current as modifiable parameter and re-sort
-        self._modifiable_parameters.add(self._membrane_data_clamp_current_conductance)##remove?
         self._model.modifiable_parameters.add(self._membrane_data_clamp_current_conductance)
 
     def _get_derivative_equations(self):
@@ -49,7 +50,8 @@ class CvodeWithDataClampModel(CvodeChasteModel):
                             break
                 return found_eq
 
-        derivative_equations = super()._get_derivative_equations()
+        # make a ciopy of the list of derivative eq, so that the underlying model can be reused
+        derivative_equations = list([eq for eq in self._model.derivative_equations])
 
         self._add_data_clamp_to_model()
 
@@ -65,14 +67,12 @@ class CvodeWithDataClampModel(CvodeChasteModel):
         # We need to add data_clamp to the equation with the correct sign
         # This is achieved by substitution the first of the ionic currents
         # by (ionic_current + data_clamp_current)
-        ionic_var = self._equations_for_ionic_vars[0].lhs
+        ionic_var = self._model.equations_for_ionic_vars[0].lhs
         current_index = find_ionic_var(dvdt, ionic_var, derivative_equations)
         if current_index is not None:
             eq = derivative_equations[current_index]
             rhs = eq.rhs.xreplace({ionic_var: (ionic_var + self._membrane_data_clamp_current)})
             derivative_equations[current_index] = Eq(eq.lhs, rhs)
-        # add the equation for data_clamp_current to derivative_equations just before dv/dt
-        if current_index is not None:
             derivative_equations.insert(current_index, self._membrane_data_clamp_current_eq)
 
         return derivative_equations
@@ -101,14 +101,14 @@ class CvodeWithDataClampModel(CvodeChasteModel):
             eq['is_data_clamp_current'] = eq['sympy_lhs'] == self._membrane_data_clamp_current
         return formatted_eqs
 
-    def __del__(self): 
-        """ Destructor, removed the data clamp equation and variable we added to the model, so that te model object can be re-used"""
+    def __exit__(self, type, value, traceback):
+        """ Clean-up, removed the data clamp we added to the model,so that the model object can be re-used"""
         # Remove modifiable parameter
-        self._modifiable_parameters.remove(self._membrane_data_clamp_current_conductance)##remove?
         self._model.modifiable_parameters.remove(self._membrane_data_clamp_current_conductance)
-        
+
         # Remove equation from model
         self._model.remove_equation(self.dataclamp_eq)
-        
+        self._model.remove_equation(self._membrane_data_clamp_current_eq)
+
         # Remove variable from model
         self._model.remove_variable(self._membrane_data_clamp_current_conductance)

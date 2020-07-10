@@ -18,7 +18,7 @@ class CvodeChasteModel(ChasteModel):
         if self._use_analytic_jacobian:
             # get deriv eqs and substitute in all variables other than state vars
             self._derivative_equations = \
-                partial_eval(self._derivative_equations, self._y_derivatives, keep_multiple_usages=False)
+                partial_eval(self._derivative_equations, self._model.y_derivatives, keep_multiple_usages=False)
             self._jacobian_equations, self._jacobian_matrix = get_jacobian(self._state_vars, self._derivative_equations)
             self._formatted_state_vars = self._update_state_vars()
             self._vars_for_template['jacobian_equations'], self._vars_for_template['jacobian_entries'] = \
