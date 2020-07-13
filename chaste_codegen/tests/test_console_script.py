@@ -58,6 +58,21 @@ def test_usage(capsys):
         assert error == expected
 
 
+def test_script_o_output_dif():
+    """Convert a normal model via command line script"""
+    LOGGER.info('Testing --show-output\n')
+    model_name = 'grandi2010ss'
+    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+    assert os.path.isfile(model_file)
+
+    testargs = ["chaste_codegen", '--cvode-data-clamp', '--backward-euler', model_file, '--show-output',
+                '-o', '/bla.cppp', '--output-dir', '/']
+    # Call commandline script
+    with mock.patch.object(sys, 'argv', testargs):
+        with pytest.raises(ValueError, match="-o and --output-dir cannot be used together!"):
+            chaste_codegen()
+
+
 def test_script_double_show_output(capsys, tmp_path):
     """Convert a normal model via command line script"""
     LOGGER.info('Testing --show-output\n')
@@ -78,6 +93,30 @@ def test_script_double_show_output(capsys, tmp_path):
         assert "grandi2010ssCvodeDataClamp.hpp" in error
         assert "grandi2010ssBackwardEuler.cpp" in error
         assert "grandi2010ssBackwardEuler.hpp" in error
+
+
+def test_script_double_show_output2(capsys, tmp_path):
+    """Convert a normal model via command line script"""
+    LOGGER.info('Testing --show-output\n')
+    tmp_path = str(tmp_path)
+    model_name = 'grandi2010ss'
+    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    target = os.path.join(tmp_path, model_name + '.cellml')
+    shutil.copyfile(model_file, target)
+
+    testargs = ["chaste_codegen", '--cvode-data-clamp', '--backward-euler', target, '--show-output',
+                '--output-dir', '/cellml']
+    # Call commandline script
+    with mock.patch.object(sys, 'argv', testargs):
+        chaste_codegen()
+        captured = capsys.readouterr()
+        error = str(captured.out).replace("\\", "/")
+        print(error)
+        assert "/cellml/grandi2010ssCvodeDataClamp.cpp" in error
+        assert "/cellml/grandi2010ssCvodeDataClamp.hpp" in error
+        assert "/cellml/grandi2010ssBackwardEuler.cpp" in error
+        assert "/cellml/grandi2010ssBackwardEuler.hpp" in error
 
 
 def test_non_extsing_cellml():

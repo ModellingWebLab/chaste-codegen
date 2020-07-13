@@ -57,6 +57,7 @@ def chaste_codegen():
                             '[default action is to use the input filename with a different extension] '
                             'NOTE: expects provided OUTFILE to have an extension relevant to code being generated '
                             '(e.g. for CHASTE/C++ code: .cpp, .c, .hpp, or .h)')
+    group.add_argument('--output-dir', action='store', help="directory to place output files in", default=None)
     group.add_argument('-c', default=None, dest='cls_name',
                        help='explicitly set the name of the generated class')
     group.add_argument('--show-outputs', action='store_true', default=False,
@@ -76,6 +77,8 @@ def chaste_codegen():
     args = parser.parse_args()
     if not os.path.isfile(args.cellml_file):
         raise ValueError("Could not find cellml file %s " % args.cellml_file)
+    if args.outfile is not None and args.output_dir is not None:
+        raise ValueError("-o and --output-dir cannot be used together!")
 
     # if no model type is set assume normal
     args.normal = args.normal or not any([getattr(args, model_type.replace('-', '_')) for model_type in TRANSLATORS])
@@ -90,7 +93,7 @@ def chaste_codegen():
 
             translator_class = TRANSLATORS[model_type][0]
             outfile_path, model_name_from_file, outfile_base, ext = \
-                get_outfile_parts(args.outfile if args.outfile is not None else args.cellml_file, args.cellml_file)
+                get_outfile_parts(args.outfile, args.output_dir, args.cellml_file)
             if args.cls_name is not None:
                 args.class_name = args.cls_name
             else:
@@ -115,8 +118,15 @@ def chaste_codegen():
                     write_file(cpp_gen_file_path, chaste_model.generated_cpp)
 
 
-def get_outfile_parts(outfile, cellml_file):
-    outfile_path = os.path.dirname(os.path.abspath(outfile))
+def get_outfile_parts(outfile, output_dir, cellml_file):
+    if outfile is None:
+        outfile = cellml_file
+
+    if output_dir is None:
+        outfile_path = os.path.dirname(os.path.abspath(outfile))
+    else:
+        outfile_path = os.path.abspath(output_dir)
+
     model_file_base_parts = os.path.splitext(os.path.basename(cellml_file))
     out_file_base_parts = os.path.splitext(os.path.basename(outfile))
     model_name_from_file = model_file_base_parts[0]
