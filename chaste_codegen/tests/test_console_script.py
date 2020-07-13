@@ -106,7 +106,7 @@ def test_script_double_show_output2(capsys, tmp_path):
     shutil.copyfile(model_file, target)
 
     testargs = ["chaste_codegen", '--cvode-data-clamp', '--backward-euler', target, '--show-output',
-                '--output-dir', '/cellml']
+                '--output-dir', '/cellml', '-q']
     # Call commandline script
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()

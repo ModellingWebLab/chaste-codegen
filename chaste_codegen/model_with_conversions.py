@@ -1,3 +1,5 @@
+import logging
+
 import cellmlmanip
 from cellmlmanip.model import DataDirectionFlow
 from cellmlmanip.rdf import create_rdf_node
@@ -40,7 +42,9 @@ _POW_OPT = ReplaceOptim(lambda p: p.is_Pow and (isinstance(p.exp, Float) or isin
                         lambda p: Pow(p.base, int(float(p.exp))))
 
 
-def load_model_with_conversions(model_file, use_modifiers=True):
+def load_model_with_conversions(model_file, use_modifiers=True, quiet=False):
+    if quiet:
+        LOGGER.setLevel(logging.ERROR)
     model = cellmlmanip.load_model(model_file)
     add_conversions(model, use_modifiers)
     return model
@@ -280,7 +284,7 @@ def _get_stimulus(model):
         stim_params.add(model.convert_variable(period, model.conversion_units.get_unit('millisecond'),
                                                DataDirectionFlow.INPUT))
     except KeyError:
-        LOGGER.info(model.name + 'has no default stimulus params tagged')
+        LOGGER.info(model.name + ' has no default stimulus params tagged')
         return set(), []
     except TypeError as e:
         if str(e) == "unsupported operand type(s) for /: 'HeartConfig::Instance()->GetCapacitance' and 'NoneType'":

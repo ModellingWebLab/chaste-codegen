@@ -58,10 +58,12 @@ def chaste_codegen():
                             'NOTE: expects provided OUTFILE to have an extension relevant to code being generated '
                             '(e.g. for CHASTE/C++ code: .cpp, .c, .hpp, or .h)')
     group.add_argument('--output-dir', action='store', help="directory to place output files in", default=None)
-    group.add_argument('-c', default=None, dest='cls_name',
-                       help='explicitly set the name of the generated class')
     group.add_argument('--show-outputs', action='store_true', default=False,
                        help="don't actually run PyCml, just show what files would be generated, one per line")
+    group.add_argument('-c', default=None, dest='cls_name',
+                       help='explicitly set the name of the generated class')
+    group.add_argument('-q', '--quiet', action='store_true', default=False,
+                       help="quiet operation, don't print informational messages to screen")
 
     group = parser.add_argument_group('Chaste options', description='Options specific to Chaste code output')
     group.add_argument('-y', '--dll', '--dynamically-loadable', dest='dynamically_loadable',
@@ -84,7 +86,7 @@ def chaste_codegen():
     args.normal = args.normal or not any([getattr(args, model_type.replace('-', '_')) for model_type in TRANSLATORS])
 
     if not args.show_outputs:
-        model = load_model_with_conversions(args.cellml_file)  # no need to load if we're only showing output paths
+        model = load_model_with_conversions(args.cellml_file, quiet=args.quiet)  # don't load if only showing output
     for model_type in TRANSLATORS:
         use_translator_class = getattr(args, model_type.replace('-', '_'))
         if use_translator_class:

@@ -2,7 +2,7 @@ usage: chaste_codegen [-h] [--version] [--normal] [--opt] [--cvode]
                       [--cvode-data-clamp] [--backward-euler] [--rush-larsen]
                       [--rush-larsen-opt] [--grl1] [--grl1-opt] [--grl2]
                       [--grl2-opt] [-j] [-o OUTFILE] [--output-dir OUTPUT_DIR]
-                      [-c CLS_NAME] [--show-outputs] [-y] [-m]
+                      [--show-outputs] [-c CLS_NAME] [-q] [-y] [-m]
                       cellml_file
 
 Chaste code generation for cellml.
@@ -47,9 +47,11 @@ Generated code options:
                         code: .cpp, .c, .hpp, or .h)
   --output-dir OUTPUT_DIR
                         directory to place output files in
-  -c CLS_NAME           explicitly set the name of the generated class
   --show-outputs        don't actually run PyCml, just show what files would
                         be generated, one per line
+  -c CLS_NAME           explicitly set the name of the generated class
+  -q, --quiet           quiet operation, don't print informational messages to
+                        screen
 
 Chaste options:
   Options specific to Chaste code output
