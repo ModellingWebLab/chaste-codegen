@@ -391,6 +391,8 @@ def _convert_membrane_stimulus_current(model):
     model.remove_equation(eq)
     model.add_equation(Eq(membrane_stimulus_current_converted, GetIntracellularAreaStimulus))
 
+    # Stimulus current can't be a modifiable parameter
+    model.modifiable_parameters -= set((model.membrane_stimulus_current_orig, membrane_stimulus_current_converted))
     # Annotate the converted stimulus current as derived quantity
     set_is_metadata(model, membrane_stimulus_current_converted, 'derived-quantity')
     return membrane_stimulus_current_converted, \
