@@ -2,7 +2,7 @@
 
 # Code generation for cardiac Chaste
 
-The `chaste_codegen` module takes [cellmlmanip](https://github.com/ModellingWebLab/cellmlmanip) models as input, and uses templating to generate code.
+The `chaste_codegen` module takes [CellML](https://www.cellml.org/) models via [cellmlmanip](https://github.com/ModellingWebLab/cellmlmanip) as input, and uses templating to generate C++ code.
 
 The [jinja2](http://jinja.pocoo.org/) templating engine is used.
 
