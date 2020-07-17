@@ -219,7 +219,7 @@ class ChasteModel(object):
 
     def _format_modifiers(self):
         """ Format the modifiers for printing to chaste code"""
-        return [{'name': self._model.get_display_name(param),
+        return [{'name': self._model.modifier_names[param],
                  'modifier': self._format_modifier(param)}
                 for param in self._modifiers]
 

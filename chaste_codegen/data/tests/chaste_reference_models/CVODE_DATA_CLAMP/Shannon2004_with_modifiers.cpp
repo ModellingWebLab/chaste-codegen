@@ -82,7 +82,7 @@
                           mp_extracellular_potassium_concentration_modifier);
         this->AddModifier("extracellular_sodium_concentration",
                           mp_extracellular_sodium_concentration_modifier);
-        this->AddModifier("ICaL__i_CaL",
+        this->AddModifier("membrane_L_type_calcium_current",
                           mp_ICaL__i_CaL_modifier);
         this->AddModifier("membrane_L_type_calcium_current_conductance",
                           mp_membrane_L_type_calcium_current_conductance_modifier);
@@ -94,7 +94,7 @@
                           mp_membrane_L_type_calcium_current_f_gate_modifier);
         this->AddModifier("membrane_L_type_calcium_current_f_gate_tau",
                           mp_membrane_L_type_calcium_current_f_gate_tau_modifier);
-        this->AddModifier("INa__i_Na",
+        this->AddModifier("membrane_fast_sodium_current",
                           mp_INa__i_Na_modifier);
         this->AddModifier("membrane_fast_sodium_current_conductance",
                           mp_membrane_fast_sodium_current_conductance_modifier);
@@ -104,21 +104,21 @@
                           mp_membrane_fast_sodium_current_j_gate_modifier);
         this->AddModifier("membrane_fast_sodium_current_m_gate",
                           mp_membrane_fast_sodium_current_m_gate_modifier);
-        this->AddModifier("IK1__i_K1",
+        this->AddModifier("membrane_inward_rectifier_potassium_current",
                           mp_IK1__i_K1_modifier);
-        this->AddModifier("IKr__i_Kr",
+        this->AddModifier("membrane_rapid_delayed_rectifier_potassium_current",
                           mp_IKr__i_Kr_modifier);
         this->AddModifier("membrane_rapid_delayed_rectifier_potassium_current_conductance",
                           mp_membrane_rapid_delayed_rectifier_potassium_current_conductance_modifier);
-        this->AddModifier("IKs__i_Ks",
+        this->AddModifier("membrane_slow_delayed_rectifier_potassium_current",
                           mp_IKs__i_Ks_modifier);
         this->AddModifier("membrane_slow_delayed_rectifier_potassium_current_conductance",
                           mp_membrane_slow_delayed_rectifier_potassium_current_conductance_modifier);
-        this->AddModifier("INaCa__i_NaCa",
+        this->AddModifier("membrane_sodium_calcium_exchanger_current",
                           mp_INaCa__i_NaCa_modifier);
         this->AddModifier("membrane_sodium_calcium_exchanger_current_conductance",
                           mp_membrane_sodium_calcium_exchanger_current_conductance_modifier);
-        this->AddModifier("Itos__i_tos",
+        this->AddModifier("membrane_transient_outward_current",
                           mp_Itos__i_tos_modifier);
         this->AddModifier("membrane_transient_outward_current_conductance",
                           mp_membrane_transient_outward_current_conductance_modifier);
@@ -1216,4 +1216,5 @@ void OdeSystemInformation<CellShannon2004FromCellMLCvodeDataClamp>::Initialise(v
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(CellShannon2004FromCellMLCvodeDataClamp)
+
 #endif // CHASTE_CVODE

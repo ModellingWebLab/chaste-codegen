@@ -711,4 +711,5 @@ extern "C"
         return new Dynamicmahajan_2008FromCellMLCvode(pSolver, pStimulus);
     }
 
-}#endif // CHASTE_CVODE
+}
+#endif // CHASTE_CVODE

@@ -80,7 +80,7 @@ def add_conversions(model, use_modifiers=True):
     if model.membrane_capacitance is None:
         model.membrane_capacitance = 1
 
-    model.modifiers = _get_modifiers(model) if use_modifiers else ()
+    model.modifiers, model.modifier_names = _get_modifiers(model) if use_modifiers else ()
 
     model.y_derivatives = _get_y_derivatives(model)
     # Convert currents
@@ -321,7 +321,9 @@ def _get_modifiers(model):
     modifiers = set()
     modifiers = set(filter(lambda m: m not in (model.membrane_stimulus_current_orig, model.time_variable) and
                            model.has_ontology_annotation(m, OXMETA), model.variables()))
-    return tuple(sorted(modifiers - model.stimulus_params, key=lambda m: model.get_display_name(m, OXMETA)))
+    modifiers -= model.stimulus_params
+    return tuple(sorted(modifiers, key=lambda m: model.get_display_name(m, OXMETA))), \
+        {m: model.get_display_name(m, OXMETA) for m in modifiers}        
 
 
 def _get_y_derivatives(model):
