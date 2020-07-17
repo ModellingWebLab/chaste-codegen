@@ -323,7 +323,7 @@ def _get_modifiers(model):
                            model.has_ontology_annotation(m, OXMETA), model.variables()))
     modifiers -= model.stimulus_params
     return tuple(sorted(modifiers, key=lambda m: model.get_display_name(m, OXMETA))), \
-        {m: model.get_display_name(m, OXMETA) for m in modifiers}        
+        {m: model.get_display_name(m, OXMETA) for m in modifiers}
 
 
 def _get_y_derivatives(model):
