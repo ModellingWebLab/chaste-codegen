@@ -35,6 +35,7 @@ EXTENSION_LOOKUP = {'.cellml': ['.hpp', '.cpp'], '': ['.hpp', '.cpp'], '.cpp': [
 def chaste_codegen():
     # add options for command line interface
     parser = argparse.ArgumentParser(description='Chaste code generation for cellml.')
+    parser.add_argument('-Wu', action='store_true', help=argparse.SUPPRESS)  # For added compatibility with PyCml args
     parser.add_argument('--version', action='version',
                         version='%(prog)s {version}'.format(version=cg.__version__))
     parser.add_argument('cellml_file', metavar='cellml_file', help='The cellml file or URI to convert to chaste code')
