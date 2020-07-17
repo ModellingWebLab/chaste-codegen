@@ -1160,4 +1160,5 @@ extern "C"
         return new DynamicShannon2004FromCellMLCvodeDataClamp(pSolver, pStimulus);
     }
 
-}#endif // CHASTE_CVODE
+}
+#endif // CHASTE_CVODE

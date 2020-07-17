@@ -13,18 +13,23 @@ from chaste_codegen.model_with_conversions import load_model_with_conversions
 # Link names to classes for converting code
 TRANSLATORS = OrderedDict(
     [('normal', (cg.NormalChasteModel, 'FromCellML', '')),
-     ('opt', (cg.OptChasteModel, 'FromCellMLOpt', 'Opt')),
      ('cvode', (cg.CvodeChasteModel, 'FromCellMLCvode', 'Cvode')),
      ('cvode-data-clamp', (cg.CvodeWithDataClampModel, 'FromCellMLCvodeDataClamp', 'CvodeDataClamp')),
      ('backward-euler', (cg.BackwardEulerModel, 'FromCellMLBackwardEuler', 'BackwardEuler')),
      ('rush-larsen', (cg.RushLarsenModel, 'FromCellMLRushLarsen', 'RushLarsen')),
-     ('rush-larsen-opt', (cg.RushLarsenOptModel, 'FromCellMLRushLarsen', 'RushLarsen')),
      ('grl1', (cg.GeneralisedRushLarsenFirstOrderModel, 'FromCellMLGRL1', 'GRL1')),
-     ('grl1-opt', (cg.GeneralisedRushLarsenFirstOrderModelOpt, 'FromCellMLGRL1', 'GRL1')),
-     ('grl2', (cg.GeneralisedRushLarsenSecondOrderModel, 'FromCellMLGRL2', 'GRL2')),
-     ('grl2-opt', (cg.GeneralisedRushLarsenSecondOrderModelOpt, 'FromCellMLGRL2', 'GRL2'))])
+     ('grl2', (cg.GeneralisedRushLarsenSecondOrderModel, 'FromCellMLGRL2', 'GRL2'))])
 
-TRANSLATORS_WITH_MODIFIERS = ('--normal', '--opt', '--cvode', '--cvode-data-clamp')
+TRANSLATORS_OPT = OrderedDict(
+    [('normal', (cg.OptChasteModel, 'FromCellMLOpt', 'Opt')),
+     ('cvode', (cg.OptCvodeChasteModel, 'FromCellMLCvodeOpt', 'CvodeOpt')),
+     ('cvode-data-clamp', (cg.CvodeWithDataClampModel, 'FromCellMLCvodeDataClamp', 'CvodeDataClamp')),  # No opt version
+     ('backward-euler', (cg.BackwardEulerModel, 'FromCellMLBackwardEuler', 'BackwardEuler')),  # No opt version
+     ('rush-larsen', (cg.RushLarsenOptModel, 'FromCellMLRushLarsen', 'RushLarsen')),
+     ('grl1', (cg.GeneralisedRushLarsenFirstOrderModelOpt, 'FromCellMLGRL1', 'GRL1')),
+     ('grl2', (cg.GeneralisedRushLarsenSecondOrderModelOpt, 'FromCellMLGRL2', 'GRL2'))])
+
+TRANSLATORS_WITH_MODIFIERS = ('--normal', '--cvode', '--cvode-data-clamp')
 
 
 # Store extensions we can use and how to use them, based on extension of given outfile
@@ -35,7 +40,11 @@ EXTENSION_LOOKUP = {'.cellml': ['.hpp', '.cpp'], '': ['.hpp', '.cpp'], '.cpp': [
 def chaste_codegen():
     # add options for command line interface
     parser = argparse.ArgumentParser(description='Chaste code generation for cellml.')
-    parser.add_argument('-Wu', action='store_true', help=argparse.SUPPRESS)  # For added compatibility with PyCml args
+    # Options for added pycml backwards compatibility, these are now always on
+    parser.add_argument('--Wu', '--warn-on-units-errors', action='store_true', help=argparse.SUPPRESS)
+    parser.add_argument('-A', '--fully-automatic', action='store_true', help=argparse.SUPPRESS)
+    parser.add_argument('--expose-annotated-variables', action='store_true', help=argparse.SUPPRESS)
+
     parser.add_argument('--version', action='version',
                         version='%(prog)s {version}'.format(version=cg.__version__))
     parser.add_argument('cellml_file', metavar='cellml_file', help='The cellml file or URI to convert to chaste code')
@@ -70,6 +79,8 @@ def chaste_codegen():
     group.add_argument('-y', '--dll', '--dynamically-loadable', dest='dynamically_loadable',
                        action='store_true', default=False,
                        help='add code to allow the model to be compiled to a shared library and dynamically loaded ')
+    group.add_argument('--opt', action='store_true', default=False,
+                       help="apply default optimisations to all generated code")
     group.add_argument('-m', '--use-modifiers', dest='modifiers',
                        action='store_true', default=False,
                        help='add modifier functions for metadata-annotated variables (except time & stimulus) '
@@ -78,33 +89,34 @@ def chaste_codegen():
 
     # process options
     args = parser.parse_args()
+    translators = TRANSLATORS_OPT if args.opt else TRANSLATORS
     if not os.path.isfile(args.cellml_file):
         raise ValueError("Could not find cellml file %s " % args.cellml_file)
     if args.outfile is not None and args.output_dir is not None:
         raise ValueError("-o and --output-dir cannot be used together!")
 
     # if no model type is set assume normal
-    args.normal = args.normal or not any([getattr(args, model_type.replace('-', '_')) for model_type in TRANSLATORS])
+    args.normal = args.normal or not any([getattr(args, model_type.replace('-', '_')) for model_type in translators])
 
     if not args.show_outputs:
         model = load_model_with_conversions(args.cellml_file, quiet=args.quiet)  # don't load if only showing output
-    for model_type in TRANSLATORS:
+    for model_type in translators:
         use_translator_class = getattr(args, model_type.replace('-', '_'))
         if use_translator_class:
             # Make sure modifiers are only passed to models which can generate them
             args.use_modifiers = args.modifiers if '--' + model_type in TRANSLATORS_WITH_MODIFIERS else False
 
-            translator_class = TRANSLATORS[model_type][0]
+            translator_class = translators[model_type][0]
             outfile_path, model_name_from_file, outfile_base, ext = \
                 get_outfile_parts(args.outfile, args.output_dir, args.cellml_file)
             if args.cls_name is not None:
                 args.class_name = args.cls_name
             else:
                 args.class_name = ('Dynamic' if args.dynamically_loadable else 'Cell') + model_name_from_file +\
-                    TRANSLATORS[model_type][1]
+                    translators[model_type][1]
 
             if not args.outfile:
-                outfile_base += TRANSLATORS[model_type][2]
+                outfile_base += translators[model_type][2]
 
             # generate code Based on parameters a different class of translator may be used
             hpp_gen_file_path = os.path.join(outfile_path, outfile_base + ext[0])

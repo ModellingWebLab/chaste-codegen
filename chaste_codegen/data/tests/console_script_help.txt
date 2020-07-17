@@ -1,8 +1,8 @@
-usage: chaste_codegen [-h] [--version] [--normal] [--opt] [--cvode]
+usage: chaste_codegen [-h] [--version] [--normal] [--cvode]
                       [--cvode-data-clamp] [--backward-euler] [--rush-larsen]
-                      [--rush-larsen-opt] [--grl1] [--grl1-opt] [--grl2]
-                      [--grl2-opt] [-j] [-o OUTFILE] [--output-dir OUTPUT_DIR]
-                      [--show-outputs] [-c CLS_NAME] [-q] [-y] [-m]
+                      [--grl1] [--grl2] [-j] [-o OUTFILE]
+                      [--output-dir OUTPUT_DIR] [--show-outputs] [-c CLS_NAME]
+                      [-q] [-y] [--opt] [-m]
                       cellml_file
 
 Chaste code generation for cellml.
@@ -19,16 +19,12 @@ ModelTypes:
   if no model type is set, normal models are generated
 
   --normal              Generate normal model type
-  --opt                 Generate opt model type
   --cvode               Generate cvode model type
   --cvode-data-clamp    Generate cvode-data-clamp model type
   --backward-euler      Generate backward-euler model type
   --rush-larsen         Generate rush-larsen model type
-  --rush-larsen-opt     Generate rush-larsen-opt model type
   --grl1                Generate grl1 model type
-  --grl1-opt            Generate grl1-opt model type
   --grl2                Generate grl2 model type
-  --grl2-opt            Generate grl2-opt model type
 
 Transformations:
   These options control which transformations (typically optimisations) are
@@ -59,9 +55,9 @@ Chaste options:
   -y, --dll, --dynamically-loadable
                         add code to allow the model to be compiled to a shared
                         library and dynamically loaded
+  --opt                 apply default optimisations to all generated code
   -m, --use-modifiers   add modifier functions for metadata-annotated
                         variables (except time & stimulus) for use in
                         sensitivity analysis. Only works with one of the
-                        following model types: ('--normal', '--opt', '--
-                        cvode', '--cvode-data-clamp') and is ignored for
-                        others
+                        following model types: ('--normal', '--cvode', '--
+                        cvode-data-clamp') and is ignored for others

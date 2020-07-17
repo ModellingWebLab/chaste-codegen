@@ -1,7 +1,7 @@
-usage: chaste_codegen [-h] [--version] [--normal] [--opt] [--cvode]
+usage: chaste_codegen [-h] [--version] [--normal] [--cvode]
                       [--cvode-data-clamp] [--backward-euler] [--rush-larsen]
-                      [--rush-larsen-opt] [--grl1] [--grl1-opt] [--grl2]
-                      [--grl2-opt] [-j] [-o OUTFILE] [--output-dir OUTPUT_DIR]
-                      [--show-outputs] [-c CLS_NAME] [-q] [-y] [-m]
+                      [--grl1] [--grl2] [-j] [-o OUTFILE]
+                      [--output-dir OUTPUT_DIR] [--show-outputs] [-c CLS_NAME]
+                      [-q] [-y] [--opt] [-m]
                       cellml_file
 chaste_codegen: error: the following arguments are required: cellml_file

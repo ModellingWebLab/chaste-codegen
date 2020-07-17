@@ -7,8 +7,21 @@ import pytest
 
 import chaste_codegen as cg
 from chaste_codegen import LOGGER
-from chaste_codegen._command_line_script import chaste_codegen
+from chaste_codegen._command_line_script import (
+    TRANSLATORS,
+    TRANSLATORS_OPT,
+    TRANSLATORS_WITH_MODIFIERS,
+    chaste_codegen,
+)
 from chaste_codegen.tests.chaste_test_utils import compare_file_against_reference
+
+
+def test_script_TRANSLATORS(capsys):
+    """Test TRANSLATORS are still consistent"""
+    LOGGER.info('Testing help for command line script\n')
+    assert TRANSLATORS.keys() == TRANSLATORS_OPT.keys()
+    assert all((k[2:] in TRANSLATORS.keys() for k in TRANSLATORS_WITH_MODIFIERS))
+    assert all((k[2:] in TRANSLATORS_OPT.keys() for k in TRANSLATORS_WITH_MODIFIERS))
 
 
 def test_script_help(capsys):
@@ -210,19 +223,41 @@ def test_script_class_convtype_output_dll_loadable(tmp_path):
 
 
 def test_script_opt(tmp_path):
-    """Convert an optimised model type"""
-    LOGGER.info('Testing model with options --opt and -o for command line script\n')
+    """Convert an optimised normal model type"""
+    LOGGER.info('Testing model with options --normal --opt and -o for command line script\n')
     tmp_path = str(tmp_path)
     model_name = 'aslanidi_model_2009'
     model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'dynamic_aslanidi_model_2009.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', model_file, '--opt', '-o', outfile, '--dynamically-loadable', '--use-modifiers']
+    testargs = ['chaste_codegen', model_file, '--normal', '--opt', '-o', outfile, '--dynamically-loadable',
+                '--use-modifiers']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
     reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Opt')
+    compare_file_against_reference(os.path.join(reference, 'dynamic_aslanidi_model_2009.hpp'),
+                                   os.path.join(tmp_path, 'dynamic_aslanidi_model_2009.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'dynamic_aslanidi_model_2009.cpp'),
+                                   os.path.join(tmp_path, 'dynamic_aslanidi_model_2009.cpp'))
+
+
+def test_script_cvode_opt(tmp_path):
+    """Convert an optimised cvode model type"""
+    LOGGER.info('Testing model with options --normal --opt and -o for command line script\n')
+    tmp_path = str(tmp_path)
+    model_name = 'aslanidi_model_2009'
+    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    outfile = os.path.join(tmp_path, 'dynamic_aslanidi_model_2009.cpp')
+    # Call commandline script
+    testargs = ['chaste_codegen', model_file, '--cvode', '--opt', '-o', outfile, '--dynamically-loadable',
+                '--use-modifiers']
+    with mock.patch.object(sys, 'argv', testargs):
+        chaste_codegen()
+    # Check output
+    reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Cvode')
     compare_file_against_reference(os.path.join(reference, 'dynamic_aslanidi_model_2009.hpp'),
                                    os.path.join(tmp_path, 'dynamic_aslanidi_model_2009.hpp'))
     compare_file_against_reference(os.path.join(reference, 'dynamic_aslanidi_model_2009.cpp'),
@@ -313,14 +348,14 @@ def test_script_dynamic_RL(tmp_path):
 
 def test_script_RLopt(tmp_path):
     """Convert a RushLarsen model type"""
-    LOGGER.info('Testing model with options --rush-larsen-opt,  for command line script\n')
+    LOGGER.info('Testing model with options --rush-larsen --opt,  for command line script\n')
     tmp_path = str(tmp_path)
     model_name = 'bondarenko_model_2004_apex'
     model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'dynamic_bondarenko_model_2004_apex.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', model_file, '--rush-larsen-opt', '-o', outfile, '--dynamically-loadable']
+    testargs = ['chaste_codegen', model_file, '--rush-larsen', '--opt', '-o', outfile, '--dynamically-loadable']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
@@ -360,7 +395,7 @@ def test_script_GRL1Opt(tmp_path):
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'dynamic_matsuoka_model_2003.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', model_file, '--grl1-opt', '-o', outfile, '--dynamically-loadable']
+    testargs = ['chaste_codegen', model_file, '--grl1', '--opt', '-o', outfile, '--dynamically-loadable']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
@@ -400,7 +435,7 @@ def test_script_GRL2Opt(tmp_path):
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'dynamic_viswanathan_model_1999_epi.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', model_file, '--grl2-opt', '-o', outfile, '--dynamically-loadable']
+    testargs = ['chaste_codegen', model_file, '--grl2', '--opt', '-o', outfile, '--dynamically-loadable']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
