@@ -12,24 +12,22 @@ from chaste_codegen.model_with_conversions import load_model_with_conversions
 
 # Link names to classes for converting code
 TRANSLATORS = OrderedDict(
-    [('normal', (cg.NormalChasteModel, 'FromCellML', '')),
-     ('cvode', (cg.CvodeChasteModel, 'FromCellMLCvode', 'Cvode')),
-     ('cvode-data-clamp', (cg.CvodeWithDataClampModel, 'FromCellMLCvodeDataClamp', 'CvodeDataClamp')),
-     ('backward-euler', (cg.BackwardEulerModel, 'FromCellMLBackwardEuler', 'BackwardEuler')),
-     ('rush-larsen', (cg.RushLarsenModel, 'FromCellMLRushLarsen', 'RushLarsen')),
-     ('grl1', (cg.GeneralisedRushLarsenFirstOrderModel, 'FromCellMLGRL1', 'GRL1')),
-     ('grl2', (cg.GeneralisedRushLarsenSecondOrderModel, 'FromCellMLGRL2', 'GRL2'))])
+    [('normal', (cg.NormalChasteModel, 'FromCellML', '', True)),
+     ('cvode', (cg.CvodeChasteModel, 'FromCellMLCvode', 'Cvode', True)),
+     ('cvode-data-clamp', (cg.CvodeWithDataClampModel, 'FromCellMLCvodeDataClamp', 'CvodeDataClamp', True)),
+     ('backward-euler', (cg.BackwardEulerModel, 'FromCellMLBackwardEuler', 'BackwardEuler', False)),
+     ('rush-larsen', (cg.RushLarsenModel, 'FromCellMLRushLarsen', 'RushLarsen', False)),
+     ('grl1', (cg.GeneralisedRushLarsenFirstOrderModel, 'FromCellMLGRL1', 'GRL1', False)),
+     ('grl2', (cg.GeneralisedRushLarsenSecondOrderModel, 'FromCellMLGRL2', 'GRL2', False))])
 
 TRANSLATORS_OPT = OrderedDict(
-    [('normal', (cg.OptChasteModel, 'FromCellMLOpt', 'Opt')),
-     ('cvode', (cg.OptCvodeChasteModel, 'FromCellMLCvodeOpt', 'CvodeOpt')),
-     ('cvode-data-clamp', (cg.CvodeWithDataClampModel, 'FromCellMLCvodeDataClamp', 'CvodeDataClamp')),  # No opt version
-     ('backward-euler', (cg.BackwardEulerModel, 'FromCellMLBackwardEuler', 'BackwardEuler')),  # No opt version
-     ('rush-larsen', (cg.RushLarsenOptModel, 'FromCellMLRushLarsen', 'RushLarsen')),
-     ('grl1', (cg.GeneralisedRushLarsenFirstOrderModelOpt, 'FromCellMLGRL1', 'GRL1')),
-     ('grl2', (cg.GeneralisedRushLarsenSecondOrderModelOpt, 'FromCellMLGRL2', 'GRL2'))])
+    [('normal', (cg.OptChasteModel, 'FromCellMLOpt', 'Opt', True)),
+     ('cvode', (cg.OptCvodeChasteModel, 'FromCellMLCvodeOpt', 'CvodeOpt', True)),
+     ('rush-larsen', (cg.RushLarsenOptModel, 'FromCellMLRushLarsen', 'RushLarsen', False)),
+     ('grl1', (cg.GeneralisedRushLarsenFirstOrderModelOpt, 'FromCellMLGRL1', 'GRL1', False)),
+     ('grl2', (cg.GeneralisedRushLarsenSecondOrderModelOpt, 'FromCellMLGRL2', 'GRL2', False))])
 
-TRANSLATORS_WITH_MODIFIERS = ('--normal', '--cvode', '--cvode-data-clamp')
+TRANSLATORS_WITH_MODIFIERS = tuple('--' + t for t in TRANSLATORS if TRANSLATORS[t][3])
 
 
 # Store extensions we can use and how to use them, based on extension of given outfile
@@ -89,48 +87,61 @@ def chaste_codegen():
 
     # process options
     args = parser.parse_args()
-    translators = TRANSLATORS_OPT if args.opt else TRANSLATORS
     if not os.path.isfile(args.cellml_file):
         raise ValueError("Could not find cellml file %s " % args.cellml_file)
     if args.outfile is not None and args.output_dir is not None:
         raise ValueError("-o and --output-dir cannot be used together!")
 
     # if no model type is set assume normal
-    args.normal = args.normal or not any([getattr(args, model_type.replace('-', '_')) for model_type in translators])
+    args.normal = args.normal or not any([getattr(args, model_type.replace('-', '_')) for model_type in TRANSLATORS])
 
     if not args.show_outputs:
         model = load_model_with_conversions(args.cellml_file, quiet=args.quiet)  # don't load if only showing output
-    for model_type in translators:
+
+    # create list of translators to apply
+    translators = []
+    for model_type in TRANSLATORS:
         use_translator_class = getattr(args, model_type.replace('-', '_'))
         if use_translator_class:
-            # Make sure modifiers are only passed to models which can generate them
-            args.use_modifiers = args.modifiers if '--' + model_type in TRANSLATORS_WITH_MODIFIERS else False
+            if args.opt:
+                translators.append(TRANSLATORS_OPT[model_type])
+            # if -o is selected with opt, only convert opt model type
+            if not args.opt or not args.outfile:
+                translators.append(TRANSLATORS[model_type])
 
-            translator_class = translators[model_type][0]
-            outfile_path, model_name_from_file, outfile_base, ext = \
-                get_outfile_parts(args.outfile, args.output_dir, args.cellml_file)
-            if args.cls_name is not None:
-                args.class_name = args.cls_name
-            else:
-                args.class_name = ('Dynamic' if args.dynamically_loadable else 'Cell') + model_name_from_file +\
-                    translators[model_type][1]
+    # An outfile cannot be set with multiple translations
+    if args.outfile and len(translators) > 1:
+        raise ValueError("-o cannot be used when multiple model types have been selected!")
 
-            if not args.outfile:
-                outfile_base += translators[model_type][2]
+    for translator in translators:
+        # Make sure modifiers are only passed to models which can generate them
+        args.use_modifiers = args.modifiers and translator[3]
 
-            # generate code Based on parameters a different class of translator may be used
-            hpp_gen_file_path = os.path.join(outfile_path, outfile_base + ext[0])
-            cpp_gen_file_path = os.path.join(outfile_path, outfile_base + ext[1])
-            if args.show_outputs:
-                print(cpp_gen_file_path)
-                print(hpp_gen_file_path)
-            else:
-                with translator_class(model, outfile_base, header_ext=ext[0], **vars(args)) as chaste_model:
-                    chaste_model.generate_chaste_code()
+        translator_class = translator[0]
+        outfile_path, model_name_from_file, outfile_base, ext = \
+            get_outfile_parts(args.outfile, args.output_dir, args.cellml_file)
+        if args.cls_name is not None:
+            args.class_name = args.cls_name
+        else:
+            args.class_name = ('Dynamic' if args.dynamically_loadable else 'Cell') + model_name_from_file +\
+                translator[1]
 
-                    # Write generated files
-                    write_file(hpp_gen_file_path, chaste_model.generated_hpp)
-                    write_file(cpp_gen_file_path, chaste_model.generated_cpp)
+        if not args.outfile:
+            outfile_base += translator[2]
+
+        # generate code Based on parameters a different class of translator may be used
+        hpp_gen_file_path = os.path.join(outfile_path, outfile_base + ext[0])
+        cpp_gen_file_path = os.path.join(outfile_path, outfile_base + ext[1])
+        if args.show_outputs:
+            print(cpp_gen_file_path)
+            print(hpp_gen_file_path)
+        else:
+            with translator_class(model, outfile_base, header_ext=ext[0], **vars(args)) as chaste_model:
+                chaste_model.generate_chaste_code()
+
+                # Write generated files
+                write_file(hpp_gen_file_path, chaste_model.generated_hpp)
+                write_file(cpp_gen_file_path, chaste_model.generated_cpp)
 
 
 def get_outfile_parts(outfile, output_dir, cellml_file):
