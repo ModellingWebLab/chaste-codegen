@@ -188,6 +188,20 @@ def test_script_double_type_output():
             chaste_codegen()
 
 
+def test_script_double_type_output2():
+    """Convert multiple model types"""
+    LOGGER.info('Testing multiple models\n')
+    model_name = 'grandi2010ss'
+    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+    assert os.path.isfile(model_file)
+
+    testargs = ["chaste_codegen", '--cvode-data-clamp', '--backward-euler', model_file, '--dynamically-loadable']
+    # Call commandline script
+    with mock.patch.object(sys, 'argv', testargs):
+        with pytest.raises(ValueError, match="Only one output type may be specified if creating a dynamic library!"):
+            chaste_codegen()
+
+
 def test_script_double_type(tmp_path):
     """Convert multiple model types"""
     LOGGER.info('Testing multiple models\n')
@@ -235,9 +249,9 @@ def test_script_class_convtype_output_dll_loadable(tmp_path):
                                    os.path.join(tmp_path, 'output_class.c'))
 
 
-def test_script_opt(tmp_path):
+def test_script_opt_dynamic(tmp_path):
     """Convert an optimised normal model type"""
-    # If using --opt with no output file it will generate both non-opt and opt models
+    # If using --opt with output file and/or dynamicly loadable it will generate only opt models
     LOGGER.info('Testing model with options --normal --opt and -o for command line script\n')
     tmp_path = str(tmp_path)
     model_name = 'aslanidi_model_2009'
@@ -258,15 +272,39 @@ def test_script_opt(tmp_path):
                                    os.path.join(tmp_path, 'aslanidi_model_2009Opt.hpp'))
     compare_file_against_reference(os.path.join(reference, 'Opt', 'dynamic_aslanidi_model_2009.cpp'),
                                    os.path.join(tmp_path, 'aslanidi_model_2009Opt.cpp'))
-    compare_file_against_reference(os.path.join(reference, 'Normal', 'dynamic_aslanidi_model_2009.hpp'),
+
+
+def test_script_opt(tmp_path):
+    """Convert an optimised normal model type"""
+    # If using --opt with no output file and not dynamic it will generate both non-opt and opt models
+    LOGGER.info('Testing model with options --normal --opt and -o for command line script\n')
+    tmp_path = str(tmp_path)
+    model_name = 'aslanidi_model_2009'
+    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    target = os.path.join(tmp_path, model_name + '.cellml')
+    shutil.copyfile(model_file, target)
+
+    # Call commandline script
+    testargs = ['chaste_codegen', target, '--normal', '--opt', '--use-modifiers']
+
+    with mock.patch.object(sys, 'argv', testargs):
+        chaste_codegen()
+    # Check output
+    reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models')
+    compare_file_against_reference(os.path.join(reference, 'Opt', 'non_dynamic_aslanidi_model_2009.hpp'),
+                                   os.path.join(tmp_path, 'aslanidi_model_2009Opt.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'Opt', 'non_dynamic_aslanidi_model_2009.cpp'),
+                                   os.path.join(tmp_path, 'aslanidi_model_2009Opt.cpp'))
+    compare_file_against_reference(os.path.join(reference, 'Normal', 'non_dynamic_aslanidi_model_2009.hpp'),
                                    os.path.join(tmp_path, 'aslanidi_model_2009.hpp'))
-    compare_file_against_reference(os.path.join(reference, 'Normal', 'dynamic_aslanidi_model_2009.cpp'),
+    compare_file_against_reference(os.path.join(reference, 'Normal', 'non_dynamic_aslanidi_model_2009.cpp'),
                                    os.path.join(tmp_path, 'aslanidi_model_2009.cpp'))
 
 
 def test_script_cvode_opt(tmp_path):
     """Convert an optimised cvode model type"""
-    # If using --opt with an output file it will generate only the opt model
+    # If using --opt with an output and/or dynamicly loadable file it will generate only the opt model
     LOGGER.info('Testing model with options --normal --opt and -o for command line script\n')
     tmp_path = str(tmp_path)
     model_name = 'aslanidi_model_2009'

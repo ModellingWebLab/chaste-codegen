@@ -95,9 +95,6 @@ def chaste_codegen():
     # if no model type is set assume normal
     args.normal = args.normal or not any([getattr(args, model_type.replace('-', '_')) for model_type in TRANSLATORS])
 
-    if not args.show_outputs:
-        model = load_model_with_conversions(args.cellml_file, quiet=args.quiet)  # don't load if only showing output
-
     # create list of translators to apply
     translators = []
     for model_type in TRANSLATORS:
@@ -105,13 +102,19 @@ def chaste_codegen():
         if use_translator_class:
             if args.opt and model_type in TRANSLATORS_OPT:
                 translators.append(TRANSLATORS_OPT[model_type])
-            # if -o is selected with opt, only convert opt model type
-            if not args.opt or not args.outfile:
+            # if -o or dynamically_loadable is selected with opt, only convert opt model type
+            if not args.opt or (not args.outfile and not args.dynamically_loadable):
                 translators.append(TRANSLATORS[model_type])
 
     # An outfile cannot be set with multiple translations
     if args.outfile and len(translators) > 1:
         raise ValueError("-o cannot be used when multiple model types have been selected!")
+    # Dynamicly loadable models can only be built one at a time
+    if args.dynamically_loadable and len(translators) > 1:
+        raise ValueError("Only one output type may be specified if creating a dynamic library!")
+
+    if not args.show_outputs:
+        model = load_model_with_conversions(args.cellml_file, quiet=args.quiet)  # don't load if only showing output
 
     for translator in translators:
         # Make sure modifiers are only passed to models which can generate them
