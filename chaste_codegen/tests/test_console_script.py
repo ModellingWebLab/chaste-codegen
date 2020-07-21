@@ -14,6 +14,23 @@ from chaste_codegen._command_line_script import (
     chaste_codegen,
 )
 from chaste_codegen.tests.chaste_test_utils import compare_file_against_reference
+def test_script_opt_dynamic2(tmp_path):#remove
+    """Convert an optimised normal model type"""
+    # If using --opt with output file and/or dynamicly loadable it will generate only opt models
+    LOGGER.info('Testing model with options --normal --opt and -o for command line script\n')
+    tmp_path = str(tmp_path)
+    model_name = 'Shannon2004'
+    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    target = os.path.join(tmp_path, model_name + '.cellml')
+    shutil.copyfile(model_file, target)
+
+    # Call commandline script
+    testargs = ['chaste_codegen', target, '--cvode', '--use-modifiers']
+
+    with mock.patch.object(sys, 'argv', testargs):
+        chaste_codegen()
+    # Check output
 
 
 def test_script_TRANSLATORS(capsys):

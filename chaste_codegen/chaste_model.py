@@ -44,12 +44,13 @@ class ChasteModel(object):
         # Items to print as chaste_interface_...
         self._in_interface = set()
 
-        self.use_modifiers = kwargs.get('use_modifiers', False)
-
         self._model = model
 
         self._stimulus_equations = self._get_stimulus()
+        self.use_modifiers = kwargs.get('use_modifiers', False)
         self._modifiers = self._model.modifiers if self.use_modifiers else ()
+        self._modifier_eq_lhs = set()  # Set of items that shouldn't be printed as modifiers in equations as they appear on the lhs and are thus handled differently 
+
         self._extended_equations_for_ionic_vars = self._get_extended_equations_for_ionic_vars()
         self._derivative_equations = self._get_derivative_equations()
 
@@ -206,12 +207,28 @@ class ChasteModel(object):
         # Printer for printing variable in comments e.g. for ode system information
         self._name_printer = cg.ChastePrinter(lambda variable: get_variable_name(variable))
 
+
+        # Make sure printer doesn't print variables as modifiers if they are state vars or eq lhs as those are handeled by _print_rhs_with_modifiers
+        self._modifier_printer = \
+            cg.ChastePrinter(lambda variable:
+                             self._format_modifier(variable) + '->Calc(' + self._printer.doprint(variable) + ', ' + self._printer.doprint(self._model.time_variable) + ')'
+                             if variable in self._modifiers and variable not in self._modifier_eq_lhs
+                             else self._printer.doprint(variable),
+                             lambda deriv: self._printer.doprint(deriv))
+
+#    def _print_rhs_with_modifiers(self, modifier, eq):
+#        """ Print modifiable parameters in the correct format for the model type"""
+#        if modifier in self._modifiers:
+#            return self._format_modifier(modifier) + '->Calc(' + self._printer.doprint(eq) + ', ' +\
+#                self._printer.doprint(self._model.time_variable) + ')'
+#        return self._printer.doprint(eq)
+
     def _print_rhs_with_modifiers(self, modifier, eq):
         """ Print modifiable parameters in the correct format for the model type"""
         if modifier in self._modifiers:
-            return self._format_modifier(modifier) + '->Calc(' + self._printer.doprint(eq) + ', ' +\
+            return self._format_modifier(modifier) + '->Calc(' + self._modifier_printer.doprint(eq) + ', ' +\
                 self._printer.doprint(self._model.time_variable) + ')'
-        return self._printer.doprint(eq)
+        return self._modifier_printer.doprint(eq)
 
     def _format_modifier(self, var):
         """ Formatting of modifier for printing"""
@@ -337,15 +354,20 @@ class ChasteModel(object):
 
     def _format_derivative_equations(self, derivative_equations):
         """ Format derivative equations for chaste output"""
+        # Make sure printer doesn't print variables as modifiers if they are state vars or eq lhs as those are handeled by _print_rhs_with_modifiers
+        old_modifier_eq_lhs = self._modifier_eq_lhs
+        self._modifier_eq_lhs = set ((eq.lhs for eq in derivative_equations)) | self._model.state_vars
         # exclude ionic currents
-        return [{'lhs': self._printer.doprint(eq.lhs),
-                 'rhs': self._print_rhs_with_modifiers(eq.lhs, eq.rhs),
-                 'sympy_lhs': eq.lhs,
-                 'units': self._model.units.format(self._model.units.evaluate_units(eq.lhs)),
-                 'in_eqs_excl_voltage': eq in self._derivative_eqs_excl_voltage,
-                 'in_membrane_voltage': eq in self._derivative_eqs_voltage,
-                 'is_voltage': isinstance(eq.lhs, Derivative) and eq.lhs.args[0] == self._model.membrane_voltage_var}
-                for eq in derivative_equations]
+        formatted_deriv_eqs = [{'lhs': self._printer.doprint(eq.lhs),
+                                'rhs': self._print_rhs_with_modifiers(eq.lhs, eq.rhs),
+                                'sympy_lhs': eq.lhs,
+                                'units': self._model.units.format(self._model.units.evaluate_units(eq.lhs)),
+                                'in_eqs_excl_voltage': eq in self._derivative_eqs_excl_voltage,
+                                'in_membrane_voltage': eq in self._derivative_eqs_voltage,
+                                'is_voltage': isinstance(eq.lhs, Derivative) and eq.lhs.args[0] == self._model.membrane_voltage_var}
+                                for eq in derivative_equations]
+        self._modifier_eq_lhs = old_modifier_eq_lhs
+        return formatted_deriv_eqs
 
     def _format_free_variable(self):
         """ Format free variable for chaste output"""
