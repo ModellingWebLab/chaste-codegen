@@ -211,7 +211,9 @@ class ChasteModel(object):
         # as those are handled by _print_rhs_with_modifiers
         self._modifier_printer = \
             cg.ChastePrinter(lambda variable:
-                             self._format_modifier_calc(variable, variable)
+                             self._format_modifier(variable) + '->Calc(' +
+                             self._modifier_printer.doprint(variable) + ', ' +
+                             self._printer.doprint(self._model.time_variable) + ')'
                              if variable in self._modifiers and variable not in self._model.state_vars
                              else self._printer.doprint(variable),
                              lambda deriv: self._printer.doprint(deriv))
@@ -219,12 +221,9 @@ class ChasteModel(object):
     def _print_rhs_with_modifiers(self, modifier, eq):
         """ Print modifiable parameters in the correct format for the model type"""
         if modifier in self._modifiers:
-            return self._format_modifier_calc(modifier, eq)
+            return self._format_modifier(modifier) + '->Calc(' + self._modifier_printer.doprint(eq) + ', ' + \
+                self._printer.doprint(self._model.time_variable) + ')'
         return self._modifier_printer.doprint(eq)
-
-    def _format_modifier_calc(self, modifier, expr):
-        return self._format_modifier(modifier) + '->Calc(' + self._modifier_printer.doprint(expr) + ', ' + \
-            self._printer.doprint(self._model.time_variable) + ')'
 
     def _format_modifier(self, var):
         """ Formatting of modifier for printing"""
