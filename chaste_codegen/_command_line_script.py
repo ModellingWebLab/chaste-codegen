@@ -100,11 +100,11 @@ def chaste_codegen():
     for model_type in TRANSLATORS:
         use_translator_class = getattr(args, model_type.replace('-', '_'))
         if use_translator_class:
-            if args.opt and model_type in TRANSLATORS_OPT:
-                translators.append(TRANSLATORS_OPT[model_type])
             # if -o or dynamically_loadable is selected with opt, only convert opt model type
             if not args.opt or (not args.outfile and not args.dynamically_loadable):
                 translators.append(TRANSLATORS[model_type])
+            if args.opt and model_type in TRANSLATORS_OPT:
+                translators.append(TRANSLATORS_OPT[model_type])
 
     # An outfile cannot be set with multiple translations
     if args.outfile and len(translators) > 1:

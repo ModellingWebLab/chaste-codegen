@@ -39,6 +39,7 @@ class BackwardEulerModel(ChasteModel):
             self._update_state_vars()
         self._vars_for_template['linear_deriv_eqs'], self._vars_for_template['linear_equations'] = \
             self._format_rearranged_linear_derivs()
+
         self._vars_for_template['jacobian_equations'], self._vars_for_template['jacobian_entries'] = \
             format_jacobian(self._jacobian_equations, self._jacobian_matrix, self._printer,
                             self._print_rhs_with_modifiers, swap_inner_outer_index=False,
