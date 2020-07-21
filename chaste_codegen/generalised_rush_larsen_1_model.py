@@ -1,3 +1,5 @@
+from functools import partial
+
 from sympy import Derivative
 
 from chaste_codegen._jacobian import format_jacobian, get_jacobian
@@ -14,9 +16,12 @@ class GeneralisedRushLarsenFirstOrderModel(ChasteModel):
         self._cpp_template = 'generalised_rush_larsen_model_1.cpp'
         self._vars_for_template['base_class'] = 'AbstractGeneralizedRushLarsenCardiacCell'
         self._jacobian_equations, self._jacobian_matrix = self._get_jacobian()
+
+        modifiers_with_defining_eqs = set((eq[0] for eq in self._jacobian_equations)) | self._model.state_vars
         self._vars_for_template['jacobian_equations'], self._vars_for_template['jacobian_entries'] = \
             format_jacobian(self._jacobian_equations, self._jacobian_matrix, self._printer,
-                            self._print_rhs_with_modifiers, skip_0_entries=False)
+                            partial(self._print_rhs_with_modifiers,
+                                    modifiers_with_defining_eqs=modifiers_with_defining_eqs), skip_0_entries=False)
         self._map_state_vars_and_eqs()
 
     def _get_jacobian(self):

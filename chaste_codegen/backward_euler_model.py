@@ -40,9 +40,12 @@ class BackwardEulerModel(ChasteModel):
         self._vars_for_template['linear_deriv_eqs'], self._vars_for_template['linear_equations'] = \
             self._format_rearranged_linear_derivs()
 
+        modifiers_with_defining_eqs = set((eq[0] for eq in self._jacobian_equations)) | self._model.state_vars
         self._vars_for_template['jacobian_equations'], self._vars_for_template['jacobian_entries'] = \
             format_jacobian(self._jacobian_equations, self._jacobian_matrix, self._printer,
-                            self._print_rhs_with_modifiers, swap_inner_outer_index=False,
+                            partial(self._print_rhs_with_modifiers,
+                                    modifiers_with_defining_eqs=modifiers_with_defining_eqs),
+                            swap_inner_outer_index=False,
                             skip_0_entries=False)
 
     def _format_rearranged_linear_derivs(self):
