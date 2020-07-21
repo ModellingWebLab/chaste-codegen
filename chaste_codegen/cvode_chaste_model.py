@@ -28,7 +28,7 @@ class CvodeChasteModel(ChasteModel):
             self._vars_for_template['jacobian_equations'], self._vars_for_template['jacobian_entries'] = \
                 [], Matrix()
 
-    def _print_modifiable_parameterss(self, variable):
+    def _print_modifiable_parameters(self, variable):
         return 'NV_Ith_S(mParameters, ' + self._modifiable_parameter_lookup[variable] + ')'
 
     def _format_rY_entry(self, index):
