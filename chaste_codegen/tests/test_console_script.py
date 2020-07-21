@@ -1,3 +1,4 @@
+import logging
 import os
 import shutil
 import sys
@@ -100,11 +101,11 @@ def test_script_double_show_output(capsys, tmp_path):
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
         captured = capsys.readouterr()
-        error = str(captured.out)
-        assert "grandi2010ssCvodeDataClamp.cpp" in error
-        assert "grandi2010ssCvodeDataClamp.hpp" in error
-        assert "grandi2010ssBackwardEuler.cpp" in error
-        assert "grandi2010ssBackwardEuler.hpp" in error
+        output = str(captured.out)
+        assert "grandi2010ssCvodeDataClamp.cpp" in output
+        assert "grandi2010ssCvodeDataClamp.hpp" in output
+        assert "grandi2010ssBackwardEuler.cpp" in output
+        assert "grandi2010ssBackwardEuler.hpp" in output
 
 
 def test_script_double_show_output2(capsys, tmp_path):
@@ -123,12 +124,11 @@ def test_script_double_show_output2(capsys, tmp_path):
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
         captured = capsys.readouterr()
-        error = str(captured.out).replace("\\", "/")
-        print(error)
-        assert "/cellml/grandi2010ssCvodeDataClamp.cpp" in error
-        assert "/cellml/grandi2010ssCvodeDataClamp.hpp" in error
-        assert "/cellml/grandi2010ssBackwardEuler.cpp" in error
-        assert "/cellml/grandi2010ssBackwardEuler.hpp" in error
+        output = str(captured.out).replace("\\", "/")
+        assert "/cellml/grandi2010ssCvodeDataClamp.cpp" in output
+        assert "/cellml/grandi2010ssCvodeDataClamp.hpp" in output
+        assert "/cellml/grandi2010ssBackwardEuler.cpp" in output
+        assert "/cellml/grandi2010ssBackwardEuler.hpp" in output
 
 
 def test_non_extsing_cellml():
@@ -153,9 +153,11 @@ def test_non_extsing_cellml2():
             chaste_codegen()
 
 
-def test_script_convert(tmp_path):
+def test_script_convert(caplog, tmp_path):
     """Convert a normal model via command line script"""
+    caplog.set_level(logging.INFO, logger='chaste_codegen')
     LOGGER.info('Testing regular model conversion for command line script\n')
+
     tmp_path = str(tmp_path)
     model_name = 'grandi2010ss'
     model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
@@ -167,6 +169,32 @@ def test_script_convert(tmp_path):
     # Call commandline script
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
+        assert "grandi2010 has no capacitance tagged" in caplog.text
+
+    reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Normal')
+    compare_file_against_reference(os.path.join(reference, model_name + '_console_script.hpp'),
+                                   os.path.join(tmp_path, model_name + '.hpp'))
+    compare_file_against_reference(os.path.join(reference, model_name + '_console_script.cpp'),
+                                   os.path.join(tmp_path, model_name + '.cpp'))
+
+
+def test_script_convert_quiet(caplog, tmp_path):
+    """Convert a normal model via command line script in quiet mode"""
+    caplog.set_level(logging.INFO, logger='chaste_codegen')
+    LOGGER.info('Testing regular model conversion for command line script in quiet mode\n')
+    tmp_path = str(tmp_path)
+    model_name = 'grandi2010ss'
+    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    target = os.path.join(tmp_path, model_name + '.cellml')
+    shutil.copyfile(model_file, target)
+
+    testargs = ["chaste_codegen", target, '--quiet']
+    # Call commandline script
+    with mock.patch.object(sys, 'argv', testargs):
+        chaste_codegen()
+        assert "grandi2010 has no capacitance tagged" not in caplog.text
+
     reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Normal')
     compare_file_against_reference(os.path.join(reference, model_name + '_console_script.hpp'),
                                    os.path.join(tmp_path, model_name + '.hpp'))
