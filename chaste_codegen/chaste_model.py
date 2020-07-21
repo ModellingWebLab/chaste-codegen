@@ -212,7 +212,7 @@ class ChasteModel(object):
         self._modifier_printer = \
             cg.ChastePrinter(lambda variable:
                              self._format_modifier(variable) + '->Calc(' +
-                             self._modifier_printer.doprint(variable) + ', ' +
+                             self._printer.doprint(variable) + ', ' +
                              self._printer.doprint(self._model.time_variable) + ')'
                              if variable in self._modifiers and variable not in self._model.state_vars
                              else self._printer.doprint(variable),
