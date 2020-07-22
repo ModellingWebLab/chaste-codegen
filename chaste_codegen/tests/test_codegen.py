@@ -338,3 +338,20 @@ def test_other_current_in_wrong_units():
     # check units only converted where possible
     assert str(membrane_sodium_potassium_pump_current.units) == 'dimensionless'
     assert membrane_potassium_pump_current.units == generated_model._model.conversion_units.get_unit('uA_per_cm2')
+
+
+def test_stimulus_not_tagged():
+    """ Check untagged stimulus with time in it throws an error"""
+    LOGGER.info('Testing untagged stimulus\n')
+    model_file = \
+        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'luo_rudy_1994.cellml')
+
+    chaste_model = cellmlmanip.load_model(model_file)
+
+    # Remove membrane_stimulus_current metadata tag
+    stim = chaste_model.get_variable_by_ontology_term((OXMETA, 'membrane_stimulus_current'))
+    chaste_model.rdf.remove((stim.rdf_identity, None, None))
+
+    with pytest.raises(KeyError, match='Ionic variables should not be a function of time. '
+                                       'This is often caused by missing membrane_stimulus_current tag.'):
+        add_conversions(chaste_model)

@@ -86,17 +86,13 @@ def test_script_o_output_dif():
             chaste_codegen()
 
 
-def test_script_double_show_output(capsys, tmp_path):
+def test_script_double_show_output(capsys):
     """Convert a normal model via command line script"""
     LOGGER.info('Testing --show-output\n')
-    tmp_path = str(tmp_path)
     model_name = 'grandi2010ss'
     model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
-    assert os.path.isfile(model_file)
-    target = os.path.join(tmp_path, model_name + '.cellml')
-    shutil.copyfile(model_file, target)
 
-    testargs = ["chaste_codegen", '--cvode-data-clamp', '--backward-euler', target, '--show-output']
+    testargs = ["chaste_codegen", '--cvode-data-clamp', '--backward-euler', model_file, '--show-output']
     # Call commandline script
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
@@ -108,17 +104,14 @@ def test_script_double_show_output(capsys, tmp_path):
         assert "grandi2010ssBackwardEuler.hpp" in output
 
 
-def test_script_double_show_output2(capsys, tmp_path):
+def test_script_double_show_output2(capsys):
     """Convert a normal model via command line script"""
     LOGGER.info('Testing --show-output\n')
-    tmp_path = str(tmp_path)
     model_name = 'grandi2010ss'
     model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
     assert os.path.isfile(model_file)
-    target = os.path.join(tmp_path, model_name + '.cellml')
-    shutil.copyfile(model_file, target)
 
-    testargs = ["chaste_codegen", '--cvode-data-clamp', '--backward-euler', target, '--show-output',
+    testargs = ["chaste_codegen", '--cvode-data-clamp', '--backward-euler', model_file, '--show-output',
                 '--output-dir', '/cellml', '-q']
     # Call commandline script
     with mock.patch.object(sys, 'argv', testargs):

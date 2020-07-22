@@ -474,9 +474,13 @@ def _get_equations_for_ionic_vars(model):
 def _get_extended_equations_for_ionic_vars(model):
     """ Get the equations defining the ionic derivatives and all dependant equations"""
     # Update equations to include i_ionic_eq & defining eqs, set stimulus current to 0
-    return [eq if eq.lhs != model.membrane_stimulus_current_orig else Eq(eq.lhs, 0.0)
-            for eq in get_equations_for(model, [eq.lhs for eq in model.equations_for_ionic_vars])
-            if eq.lhs != model.membrane_stimulus_current_converted]
+    extended_eqs = [eq if eq.lhs != model.membrane_stimulus_current_orig else Eq(eq.lhs, 0.0)
+                    for eq in get_equations_for(model, [eq.lhs for eq in model.equations_for_ionic_vars])
+                    if eq.lhs != model.membrane_stimulus_current_converted]
+    if model.time_variable in model.find_variables_and_derivatives(extended_eqs):
+        raise KeyError('Ionic variables should not be a function of time. '
+                       'This is often caused by missing membrane_stimulus_current tag.')
+    return extended_eqs
 
 
 def _get_derivative_equations(model):
