@@ -97,7 +97,6 @@ def add_conversions(model, use_modifiers=True):
     _convert_other_currents(model)
 
     # Get derivs and eqs
-    model.ionic_derivs = _get_ionic_derivs(model)
     model.i_ionic_lhs, model.ionic_vars = _get_ionic_vars(model)
     model.extended_ionic_vars = _get_extended_ionic_vars(model)
     model.derivative_equations = _get_derivative_equations(model)
@@ -322,19 +321,8 @@ def _get_y_derivatives(model):
     return derivatives
 
 
-def _convert_membrane_stimulus_current(model):
-    """ Find the membrane_stimulus_current and convert it to uA_per_cm2, using GetIntracellularAreaStimulus"""
-    if model.membrane_stimulus_current_orig is None:
-        return None, model.stimulus_units
-    # get derivative equations
-    d_eqs = get_equations_for(model, model.y_derivatives, filter_modifiable_parameters_lhs=False, optimise=False)
-
-    # get dv/dt
-    deriv_eq_only = filter(lambda eq: isinstance(eq.lhs, Derivative) and
-                           eq.lhs.args[0] == model.membrane_voltage_var, d_eqs)
-    dvdt = next(deriv_eq_only, None)
-    assert dvdt is not None and next(deriv_eq_only, None) is None, 'Expecting exactly 1 dv/dt equation'
-
+def _stimulus_sign(model, expr_to_check, equations, stimulus_current=None):
+    """ Retreive what sign the stimulus should have given the provided expression and equations. """
     # Assign temporary values to variables in order to check the stimulus sign.
     # This will process defining expressions in a breadth first search until the stimulus
     # current is found.  Each variable that doesn't have its definitions processed will
@@ -344,39 +332,52 @@ def _convert_membrane_stimulus_current(model):
     # - other variables = 1
     # The stimulus current is then negated from the sign expected by Chaste if evaluating
     # dV/dt gives a positive value.
-    negate_stimulus = False
-    voltage_rhs = dvdt.rhs
-    variables = list(voltage_rhs.free_symbols)
+    expr_to_check = expr_to_check.xreplace({model._config_capacitance_call: 1})
+    variables = list(expr_to_check.free_symbols)
     for variable in variables:
-        if model.membrane_stimulus_current_orig != variable:
-            if model.membrane_stimulus_current_orig.units.dimensionality == variable.units.dimensionality:
-                if isinstance(voltage_rhs, Expr):
-                    voltage_rhs = voltage_rhs.xreplace({variable: 0.0})  # other currents = 0
+        if stimulus_current != variable:
+            if stimulus_current is not None and\
+                    stimulus_current.units.dimensionality == variable.units.dimensionality:
+                if isinstance(expr_to_check, Expr):
+                    expr_to_check = expr_to_check.xreplace({variable: 0.0})  # other currents = 0
             else:
                 # For other variables see if we need to follow their definitions first
-                rhs = next(map(lambda eq: eq.rhs, filter(lambda eq: eq.lhs == variable, d_eqs)), None)
+                rhs = next(map(lambda eq: eq.rhs, filter(lambda eq: eq.lhs == variable, equations)), None)
 
                 if rhs is not None and not isinstance(rhs, Float):
-                    voltage_rhs = voltage_rhs.xreplace({variable: rhs})  # Update definition
+                    expr_to_check = expr_to_check.xreplace({variable: rhs})  # Update definition
                     variables.extend(rhs.free_symbols)
                 else:
-                    if isinstance(voltage_rhs, Expr):
-                        voltage_rhs = voltage_rhs.xreplace({variable: 1.0})  # other variables = 1
-    if isinstance(voltage_rhs, Expr):
-        voltage_rhs = voltage_rhs.xreplace({model.membrane_stimulus_current_orig: 1.0})  # stimulus = 1
+                    if isinstance(expr_to_check, Expr):
+                        expr_to_check = expr_to_check.xreplace({variable: 1.0})  # other variables = 1
+    if isinstance(expr_to_check, Expr):
+        expr_to_check = expr_to_check.xreplace({stimulus_current: 1.0})  # stimulus = 1
         # plug in math functions for sign calculation
-        voltage_rhs = voltage_rhs.subs(MATH_FUNC_SYMPY_MAPPING)
-    negate_stimulus = voltage_rhs > 0.0
+        expr_to_check = expr_to_check.subs(MATH_FUNC_SYMPY_MAPPING)
+    return - 1 if expr_to_check > 0.0 else 1
+
+
+def _convert_membrane_stimulus_current(model):
+    """ Find the membrane_stimulus_current and convert it to uA_per_cm2, using GetIntracellularAreaStimulus"""
+    if model.membrane_stimulus_current_orig is None:
+        return None, model.stimulus_units
+    # get derivative equations
+    d_eqs = get_equations_for(model, model.y_derivatives, filter_modifiable_parameters_lhs=False, optimise=False)
+
+    # get dv/dt
+    dvdt = next(filter(lambda x: x.args[0] == model.membrane_voltage_var, model.get_derivatives(sort=False)), None)
+    deriv_eq_only = filter(lambda eq: eq.lhs is dvdt, d_eqs)
+    dvdt_eq = next(deriv_eq_only, None)
+    assert dvdt_eq is not None and next(deriv_eq_only, None) is None, 'Expecting exactly 1 dv/dt equation'
 
     membrane_stimulus_current_converted = model.convert_variable(model.membrane_stimulus_current_orig,
                                                                  model.conversion_units.get_unit('uA_per_cm2'),
                                                                  DataDirectionFlow.INPUT)
 
     # Replace stim = ... with stim = +/-GetIntracellularAreaStimulus(t)
-    GetIntracellularAreaStimulus = Function('GetIntracellularAreaStimulus', real=True)(model.time_variable)
-    if negate_stimulus:
-        GetIntracellularAreaStimulus = -GetIntracellularAreaStimulus
-
+    GetIntracellularAreaStimulus = simplify(Function('GetIntracellularAreaStimulus', real=True)(model.time_variable) *
+                                            _stimulus_sign(model, dvdt_eq.rhs, d_eqs,
+                                                           stimulus_current=model.membrane_stimulus_current_orig))
     # Get stimulus defining equation
     eq = model.get_definition(membrane_stimulus_current_converted)
     model.remove_equation(eq)
@@ -407,12 +408,6 @@ def _convert_other_currents(model):
             model.convert_variable(current, model.conversion_units.get_unit('uA_per_cm2'), DataDirectionFlow.OUTPUT)
         except DimensionalityError:
             pass  # conversion is optional, convert only if possible
-
-
-def _get_ionic_derivs(model):
-    """ Getting the derivatives that define V (model.membrane_voltage_var)"""
-    # use the RHS of the ODE defining V
-    return set(filter(lambda x: x.args[0] == model.membrane_voltage_var, model.get_derivatives(sort=False)))
 
 
 def _tag_ionic_vars(model):
