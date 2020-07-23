@@ -67,7 +67,7 @@ class CvodeWithDataClampModel(CvodeChasteModel):
         # We need to add data_clamp to the equation with the correct sign
         # This is achieved by substitution the first of the ionic currents
         # by (ionic_current + data_clamp_current)
-        ionic_var = self._model.equations_for_ionic_vars[0].lhs
+        ionic_var = self._model.ionic_vars[0]
         current_index = find_ionic_var(dvdt, ionic_var, derivative_equations)
         if current_index is not None:
             eq = derivative_equations[current_index]

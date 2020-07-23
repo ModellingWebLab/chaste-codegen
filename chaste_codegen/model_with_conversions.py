@@ -29,6 +29,13 @@ from ._math_functions import MATH_FUNC_SYMPY_MAPPING
 MEMBRANE_VOLTAGE_INDEX = 0  # default index for voltage in state vector
 CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX = 1  # default index for cytosolic calcium concentration in state vector
 
+STIM_PARAM_TAGS = (('membrane_stimulus_current_amplitude', 'uA_per_cm2', True),
+                   ('membrane_stimulus_current_duration', 'millisecond', True),
+                   ('membrane_stimulus_current_period', 'millisecond', True),
+                   ('membrane_stimulus_current_offset', 'millisecond', False),
+                   ('membrane_stimulus_current_end', 'millisecond', False))
+
+
 # Optimisations to be applied to equations
 _V, _W = Wild('V'), Wild('W')
 # log(x)/log(10) --> log10(x)
@@ -53,6 +60,8 @@ def load_model_with_conversions(model_file, use_modifiers=True, quiet=False):
 def add_conversions(model, use_modifiers=True):
     # Add units needed for conversions
     model.conversion_units, model.stimulus_units = _add_units(model)
+
+    _tag_ionic_vars(model)  # Tag ionic currents pre-conversion so we can find them later
 
     # Add conversion rules for working with stimulus current & amplitude
     _add_conversion_rules(model)
@@ -89,8 +98,8 @@ def add_conversions(model, use_modifiers=True):
 
     # Get derivs and eqs
     model.ionic_derivs = _get_ionic_derivs(model)
-    model.i_ionic_lhs, model.equations_for_ionic_vars = _get_equations_for_ionic_vars(model)
-    model.extended_equations_for_ionic_vars = _get_extended_equations_for_ionic_vars(model)
+    model.i_ionic_lhs, model.ionic_vars = _get_ionic_vars(model)
+    model.extended_ionic_vars = _get_extended_ionic_vars(model)
     model.derivative_equations = _get_derivative_equations(model)
 
 
@@ -204,11 +213,13 @@ def _get_time_variable(model):
         raise ValueError(warning)
 
 
-def _get_membrane_voltage_var(model):
+def _get_membrane_voltage_var(model, convert=True):
     """ Find the membrane_voltage variable"""
     try:
         # Get and convert V
         voltage = model.get_variable_by_ontology_term((OXMETA, 'membrane_voltage'))
+        if not convert:
+            return voltage
         voltage = model.convert_variable(voltage, model.conversion_units.get_unit('millivolt'),
                                          DataDirectionFlow.INPUT)
     except KeyError:
@@ -272,41 +283,19 @@ def _get_stimulus(model):
     """ Store the stimulus currents in the model"""
     stim_params_orig, stim_params = set(), set()
     try:  # Get required stimulus parameters
-        ampl = model.get_variable_by_ontology_term((OXMETA, 'membrane_stimulus_current_amplitude'))
-        duration = model.get_variable_by_ontology_term((OXMETA, 'membrane_stimulus_current_duration'))
-        period = model.get_variable_by_ontology_term((OXMETA, 'membrane_stimulus_current_period'))
-
-        stim_params_orig.update((ampl, duration, period))  # originals ones
-        stim_params.add(model.convert_variable(ampl, model.conversion_units.get_unit('uA_per_cm2'),
-                                               DataDirectionFlow.INPUT))
-        stim_params.add(model.convert_variable(duration, model.conversion_units.get_unit('millisecond'),
-                                               DataDirectionFlow.INPUT))
-        stim_params.add(model.convert_variable(period, model.conversion_units.get_unit('millisecond'),
-                                               DataDirectionFlow.INPUT))
+        for tag, unit, required in STIM_PARAM_TAGS:
+            param = model.get_variable_by_ontology_term((OXMETA, tag))
+            stim_params_orig.add(param)  # originals ones
+            stim_params.add(model.convert_variable(param, model.conversion_units.get_unit(unit),
+                                                   DataDirectionFlow.INPUT))
     except KeyError:
-        LOGGER.info(model.name + ' has no default stimulus params tagged')
-        return set(), []
+        if required:  # Optional params are allowed to be missing
+            LOGGER.info(model.name + ' has no default stimulus params tagged')
+            return set(), []
     except TypeError as e:
         if str(e) == "unsupported operand type(s) for /: 'HeartConfig::Instance()->GetCapacitance' and 'NoneType'":
-            raise KeyError("Membrane capacitance is required to be able to apply conversion to stimulus current!")
-
-    try:  # Get optional stimulus parameter
-        offset = model.get_variable_by_ontology_term((OXMETA, 'membrane_stimulus_current_offset'))
-        if offset is not None:
-            stim_params_orig.add(offset)  # originals one
-            stim_params.add(model.convert_variable(offset, model.conversion_units.get_unit('millisecond'),
-                            DataDirectionFlow.INPUT))
-    except KeyError:
-        pass  # Optional Parameter
-
-    try:  # Get optional stimulus parameter
-        end = model.get_variable_by_ontology_term((OXMETA, 'membrane_stimulus_current_end'))
-        if end is not None:
-            stim_params_orig.add(end)  # originals one
-            stim_params.add(model.convert_variable(end, model.conversion_units.get_unit('millisecond'),
-                            DataDirectionFlow.INPUT))
-    except KeyError:
-        pass  # Optional Parameter
+            e = KeyError("Membrane capacitance is required to be able to apply conversion to stimulus current!")
+        raise(e)
 
     return_stim_eqs = get_equations_for(model, stim_params, filter_modifiable_parameters_lhs=False)
     return stim_params | stim_params_orig, return_stim_eqs
@@ -426,7 +415,7 @@ def _get_ionic_derivs(model):
     return set(filter(lambda x: x.args[0] == model.membrane_voltage_var, model.get_derivatives(sort=False)))
 
 
-def _get_equations_for_ionic_vars(model):
+def _tag_ionic_vars(model):
     """ Get the equations defining the ionic derivatives"""
     # figure out the currents (by finding variables with the same units as the stimulus)
     # Only equations with the same (lhs) units as the STIMULUS_CURRENT are kept.
@@ -434,48 +423,70 @@ def _get_equations_for_ionic_vars(model):
     # Manually recurse down the equation graph (bfs style) if no currents are found
 
     # If we don't have a stimulus_current we look for a set of default unit dimensions
-    equations_for_ionic_vars = []
-    for unit in model.stimulus_units:
-        if len(equations_for_ionic_vars) > 0:
+
+    stimulus_current = _get_membrane_stimulus_current(model)
+    membrane_voltage = _get_membrane_voltage_var(model, convert=False)
+    ionic_derivs = set(filter(lambda x: x.args[0] == membrane_voltage, model.get_derivatives(sort=False)))
+
+    stimulus_unit_dims = [u.dimensionality for u in model.stimulus_units]
+    if stimulus_current is not None:
+        stimulus_unit_dims = [stimulus_current.units.dimensionality] + stimulus_unit_dims
+
+    stimulus_params = set()
+    for tag, _, _ in STIM_PARAM_TAGS:
+        try:
+            stimulus_params.add(model.get_variable_by_ontology_term((OXMETA, tag)))
+        except KeyError:
+            pass  # doesn't need to have all params
+
+    ionic_var_eqs = []
+    for dim in stimulus_unit_dims:
+        if len(ionic_var_eqs) > 0:
             break
-        equations_for_ionic_vars, equations, old_equations = [], model.ionic_derivs, None
-        while len(equations_for_ionic_vars) == 0 and old_equations != equations:
+        equations, old_equations = ionic_derivs, None
+        while len(ionic_var_eqs) == 0 and old_equations != equations:
             old_equations = equations
             equations = get_equations_for(model, equations, recurse=False, filter_modifiable_parameters_lhs=False,
                                           optimise=False)
-            equations_for_ionic_vars = [eq for eq in equations
-                                        if (eq.lhs != model.membrane_stimulus_current_orig
-                                            and eq.lhs not in model.stimulus_params)
-                                        and model.units.evaluate_units(eq.lhs).dimensionality ==
-                                        unit.dimensionality
-                                        and eq.lhs not in model.ionic_derivs]
+            ionic_var_eqs = [eq for eq in equations
+                             if eq.lhs not in (stimulus_current, stimulus_params)
+                             and model.units.evaluate_units(eq.lhs).dimensionality == dim
+                             and eq.lhs not in ionic_derivs]
 
             equations = [eq.lhs for eq in equations]
 
-    # create the const double var_chaste_interface__i_ionic = .. equation
+    for eq in ionic_var_eqs:
+        set_is_metadata(model, eq.lhs, 'ionic-current_chaste_codegen')
+
+
+def _get_ionic_vars(model):
+    """ Get the equations defining the ionic derivatives"""
+    # retrieve ionic currents by metadata and add equation
+
     i_ionic_lhs = model.add_variable(name='_i_ionic', units=model.conversion_units.get_unit('uA_per_cm2'))
     i_ionic_rhs = sympify(0.0, evaluate=False)
 
+    ionic_vars = model.get_variables_by_rdf((PYCMLMETA, 'ionic-current_chaste_codegen'), 'yes')
     # convert and sum up all lhs for all ionic equations
-    for var in reversed(equations_for_ionic_vars):
-        factor = model.units.get_conversion_factor(from_unit=model.units.evaluate_units(var.lhs),
+    for var in reversed(ionic_vars):
+        factor = model.units.get_conversion_factor(from_unit=model.units.evaluate_units(var),
                                                    to_unit=model.conversion_units.get_unit('uA_per_cm2'))
-        i_ionic_rhs += factor * var.lhs
+        i_ionic_rhs += factor * var
     i_ionic_rhs = simplify(i_ionic_rhs)  # clean up equation
 
     i_ionic_eq = Eq(i_ionic_lhs, i_ionic_rhs)
     model.add_equation(i_ionic_eq)
-    equations_for_ionic_vars.append(i_ionic_eq)
+    ionic_vars.append(i_ionic_lhs)
 
     # Update equations to include i_ionic_eq & defining eqs, set stimulus current to 0
-    return i_ionic_lhs, equations_for_ionic_vars
+    return i_ionic_lhs, ionic_vars
 
 
-def _get_extended_equations_for_ionic_vars(model):
+def _get_extended_ionic_vars(model):
     """ Get the equations defining the ionic derivatives and all dependant equations"""
     # Update equations to include i_ionic_eq & defining eqs, set stimulus current to 0
     extended_eqs = [eq if eq.lhs != model.membrane_stimulus_current_orig else Eq(eq.lhs, 0.0)
-                    for eq in get_equations_for(model, [eq.lhs for eq in model.equations_for_ionic_vars])
+                    for eq in get_equations_for(model, model.ionic_vars)
                     if eq.lhs != model.membrane_stimulus_current_converted]
     if model.time_variable in model.find_variables_and_derivatives(extended_eqs):
         raise KeyError('Ionic variables should not be a function of time. '

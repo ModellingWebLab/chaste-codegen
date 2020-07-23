@@ -50,7 +50,7 @@ class ChasteModel(object):
         self.use_modifiers = kwargs.get('use_modifiers', False)
         self._modifiers = self._model.modifiers if self.use_modifiers else ()
 
-        self._extended_equations_for_ionic_vars = self._get_extended_equations_for_ionic_vars()
+        self._extended_ionic_vars = self._get_extended_ionic_vars()
         self._derivative_equations = self._get_derivative_equations()
 
         self._derivative_eqs_excl_voltage = self._get_derivative_eqs_excl_voltage()
@@ -103,7 +103,7 @@ class ChasteModel(object):
              'state_vars': self._formatted_state_vars,
              'use_verify_state_variables': self._use_verify_state_variables,
              'default_stimulus_equations': self._format_default_stimulus(),
-             'ionic_vars': self._format_equations_for_ionic_vars(),
+             'ionic_vars': self._format_ionic_vars(),
              'y_derivatives': self._format_y_derivatives(),
              'y_derivative_equations': self._format_derivative_equations(self._derivative_equations),
              'free_variable': self._format_free_variable(),
@@ -128,9 +128,9 @@ class ChasteModel(object):
     def _get_stimulus(self):
         return self._model.stimulus_equations
 
-    def _get_extended_equations_for_ionic_vars(self):
+    def _get_extended_ionic_vars(self):
         """ Get the equations defining the ionic derivatives and all dependant equations"""
-        return self._model.extended_equations_for_ionic_vars
+        return self._model.extended_ionic_vars
 
     def _get_derivative_equations(self):
         """ Get equations defining the derivatives including V (self._model.membrane_voltage_var)"""
@@ -274,7 +274,7 @@ class ChasteModel(object):
 
         # Get all used variables for eqs for ionic variables to be able to indicate if a state var is used
         ionic_var_variables = set()
-        for eq in self._extended_equations_for_ionic_vars:
+        for eq in self._extended_ionic_vars:
             ionic_var_variables.update(eq.rhs.free_symbols)
 
         # Get all used variables for y derivs to be able to indicate if a state var is used
@@ -333,12 +333,12 @@ class ChasteModel(object):
 
         return default_stim
 
-    def _format_equations_for_ionic_vars(self):
+    def _format_ionic_vars(self):
         """ Format equations and dependant equations ionic derivatives"""
         # Format the state ionic variables
         return [{'lhs': self._printer.doprint(eq.lhs), 'rhs': self._printer.doprint(eq.rhs),
                  'units': self._model.units.format(self._model.units.evaluate_units(eq.lhs))}
-                for eq in self._extended_equations_for_ionic_vars]
+                for eq in self._extended_ionic_vars]
 
     def _format_y_derivatives(self):
         """ Format y_derivatives for writing to chaste output"""
