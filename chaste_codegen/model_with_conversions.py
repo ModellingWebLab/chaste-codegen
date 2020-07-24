@@ -332,14 +332,13 @@ def _stimulus_sign(model, expr_to_check, equations, stimulus_current=None):
     # - other variables = 1
     # The stimulus current is then negated from the sign expected by Chaste if evaluating
     # dV/dt gives a positive value.
-    expr_to_check = expr_to_check.xreplace({model._config_capacitance_call: 1})
     variables = list(expr_to_check.free_symbols)
     for variable in variables:
         if stimulus_current != variable:
             if stimulus_current is not None and\
                     stimulus_current.units.dimensionality == variable.units.dimensionality:
                 if isinstance(expr_to_check, Expr):
-                    expr_to_check = expr_to_check.xreplace({variable: 0.0})  # other currents = 0
+                    expr_to_check = expr_to_check.xreplace({variable: 0})  # other currents = 0
             else:
                 # For other variables see if we need to follow their definitions first
                 rhs = next(map(lambda eq: eq.rhs, filter(lambda eq: eq.lhs == variable, equations)), None)
@@ -349,12 +348,13 @@ def _stimulus_sign(model, expr_to_check, equations, stimulus_current=None):
                     variables.extend(rhs.free_symbols)
                 else:
                     if isinstance(expr_to_check, Expr):
-                        expr_to_check = expr_to_check.xreplace({variable: 1.0})  # other variables = 1
+                        expr_to_check = expr_to_check.xreplace({variable: 1})  # other variables = 1
     if isinstance(expr_to_check, Expr):
-        expr_to_check = expr_to_check.xreplace({stimulus_current: 1.0})  # stimulus = 1
+        expr_to_check = expr_to_check.xreplace({stimulus_current: 1})  # stimulus = 1
+    if isinstance(expr_to_check, Expr):
         # plug in math functions for sign calculation
-        expr_to_check = expr_to_check.subs(MATH_FUNC_SYMPY_MAPPING)
-    return - 1 if expr_to_check > 0.0 else 1
+        expr_to_check = expr_to_check.xreplace(MATH_FUNC_SYMPY_MAPPING)
+    return - 1 if expr_to_check > 0 else 1
 
 
 def _convert_membrane_stimulus_current(model):
@@ -366,9 +366,8 @@ def _convert_membrane_stimulus_current(model):
 
     # get dv/dt
     dvdt = next(filter(lambda x: x.args[0] == model.membrane_voltage_var, model.get_derivatives(sort=False)), None)
-    deriv_eq_only = filter(lambda eq: eq.lhs is dvdt, d_eqs)
-    dvdt_eq = next(deriv_eq_only, None)
-    assert dvdt_eq is not None and next(deriv_eq_only, None) is None, 'Expecting exactly 1 dv/dt equation'
+    dvdt_eq = [eq for eq in model.equations if eq.lhs is dvdt and eq.lhs is not None]
+    assert len(dvdt_eq) == 1, 'Expecting exactly 1 dv/dt equation'
 
     membrane_stimulus_current_converted = model.convert_variable(model.membrane_stimulus_current_orig,
                                                                  model.conversion_units.get_unit('uA_per_cm2'),
@@ -376,7 +375,7 @@ def _convert_membrane_stimulus_current(model):
 
     # Replace stim = ... with stim = +/-GetIntracellularAreaStimulus(t)
     GetIntracellularAreaStimulus = simplify(Function('GetIntracellularAreaStimulus', real=True)(model.time_variable) *
-                                            _stimulus_sign(model, dvdt_eq.rhs, d_eqs,
+                                            _stimulus_sign(model, dvdt_eq[0].rhs, d_eqs,
                                                            stimulus_current=model.membrane_stimulus_current_orig))
     # Get stimulus defining equation
     eq = model.get_definition(membrane_stimulus_current_converted)
@@ -421,7 +420,7 @@ def _tag_ionic_vars(model):
 
     stimulus_current = _get_membrane_stimulus_current(model)
     membrane_voltage = _get_membrane_voltage_var(model, convert=False)
-    ionic_derivs = set(filter(lambda x: x.args[0] == membrane_voltage, model.get_derivatives(sort=False)))
+    dvdt = next(filter(lambda x: x.args[0] == membrane_voltage, model.get_derivatives(sort=False)), None)
 
     stimulus_unit_dims = [u.dimensionality for u in model.stimulus_units]
     if stimulus_current is not None:
@@ -438,20 +437,27 @@ def _tag_ionic_vars(model):
     for dim in stimulus_unit_dims:
         if len(ionic_var_eqs) > 0:
             break
-        equations, old_equations = ionic_derivs, None
+        equations, old_equations = list(filter(None, [dvdt])), None
         while len(ionic_var_eqs) == 0 and old_equations != equations:
             old_equations = equations
             equations = get_equations_for(model, equations, recurse=False, filter_modifiable_parameters_lhs=False,
                                           optimise=False)
-            ionic_var_eqs = [eq for eq in equations
-                             if eq.lhs not in (stimulus_current, stimulus_params)
-                             and model.units.evaluate_units(eq.lhs).dimensionality == dim
-                             and eq.lhs not in ionic_derivs]
+            ionic_var_eqs = \
+                [eq for eq in equations for eq in equations
+                 if eq.lhs not in (stimulus_current, stimulus_params)
+                 and model.units.evaluate_units(eq.lhs).dimensionality == dim and eq.lhs is not dvdt]
 
             equations = [eq.lhs for eq in equations]
 
     for eq in ionic_var_eqs:
         set_is_metadata(model, eq.lhs, 'ionic-current_chaste_codegen')
+
+    dvdt_eq = [eq for eq in model.equations if eq.lhs is dvdt and eq.lhs is not None]
+    if len(dvdt_eq) == 1:
+        model.ionic_stimulus_sign = _stimulus_sign(model, dvdt_eq[0].rhs, [], stimulus_current=None)
+    else:
+        LOGGER.warning(model.name + ' has no ionic currents you may have trouble generating valid chaste code without.')
+        model.ionic_stimulus_sign = 1
 
 
 def _get_ionic_vars(model):
@@ -467,7 +473,7 @@ def _get_ionic_vars(model):
         factor = model.units.get_conversion_factor(from_unit=model.units.evaluate_units(var),
                                                    to_unit=model.conversion_units.get_unit('uA_per_cm2'))
         i_ionic_rhs += factor * var
-    i_ionic_rhs = simplify(i_ionic_rhs)  # clean up equation
+    i_ionic_rhs = simplify(i_ionic_rhs * model.ionic_stimulus_sign)  # clean up equation
 
     i_ionic_eq = Eq(i_ionic_lhs, i_ionic_rhs)
     model.add_equation(i_ionic_eq)

@@ -753,3 +753,4 @@ void OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLGRL2>::Initialis
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Cellbeeler_reuter_model_1977FromCellMLGRL2)
+

@@ -1942,3 +1942,4 @@ void OdeSystemInformation<Cellnoble_model_1998FromCellMLGRL2>::Initialise(void)
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Cellnoble_model_1998FromCellMLGRL2)
+

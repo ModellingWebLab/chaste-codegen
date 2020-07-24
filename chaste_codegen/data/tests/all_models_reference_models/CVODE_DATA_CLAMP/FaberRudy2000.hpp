@@ -1,6 +1,6 @@
 #ifdef CHASTE_CVODE
-#ifndef CELLFABERRUDY2000FROMCELLMLCVODE_HPP_
-#define CELLFABERRUDY2000FROMCELLMLCVODE_HPP_
+#ifndef CELLFABERRUDY2000FROMCELLMLCVODEDATACLAMP_HPP_
+#define CELLFABERRUDY2000FROMCELLMLCVODEDATACLAMP_HPP_
 
 //! @file
 //!
@@ -17,15 +17,15 @@
 #include "ChasteSerialization.hpp"
 #include <boost/serialization/base_object.hpp>
 #include "AbstractStimulusFunction.hpp"
-#include "AbstractCvodeCell.hpp"
+#include "AbstractCvodeCellWithDataClamp.hpp"
 
-class CellFaberRudy2000FromCellMLCvode : public AbstractCvodeCell
+class CellFaberRudy2000FromCellMLCvodeDataClamp : public AbstractCvodeCellWithDataClamp
 {
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & archive, const unsigned int version)
     {
-        archive & boost::serialization::base_object<AbstractCvodeCell >(*this);
+        archive & boost::serialization::base_object<AbstractCvodeCellWithDataClamp >(*this);
         
     }
 
@@ -37,8 +37,8 @@ public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    CellFaberRudy2000FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~CellFaberRudy2000FromCellMLCvode();
+    CellFaberRudy2000FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~CellFaberRudy2000FromCellMLCvodeDataClamp();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const N_Vector rY, N_Vector rDY);
     N_Vector ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const N_Vector & rY);
@@ -46,7 +46,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(CellFaberRudy2000FromCellMLCvode)
+CHASTE_CLASS_EXPORT(CellFaberRudy2000FromCellMLCvodeDataClamp)
 
 namespace boost
 {
@@ -54,7 +54,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const CellFaberRudy2000FromCellMLCvode * t, const unsigned int fileVersion)
+            Archive & ar, const CellFaberRudy2000FromCellMLCvodeDataClamp * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -64,18 +64,18 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, CellFaberRudy2000FromCellMLCvode * t, const unsigned int fileVersion)
+            Archive & ar, CellFaberRudy2000FromCellMLCvodeDataClamp * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)CellFaberRudy2000FromCellMLCvode(p_solver, p_stimulus);
+            ::new(t)CellFaberRudy2000FromCellMLCvodeDataClamp(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLFABERRUDY2000FROMCELLMLCVODE_HPP_
+#endif // CELLFABERRUDY2000FROMCELLMLCVODEDATACLAMP_HPP_
 #endif // CHASTE_CVODE

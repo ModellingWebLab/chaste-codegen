@@ -145,7 +145,7 @@
         const double var_cell__i_Stim = 0.0; // uA_per_uF
         const double var_cell__I_tot = var_ICa__i_Ca + var_ICab__i_b_Ca + var_IK1__i_K1 + var_IKr__i_Kr + var_IKs__i_Ks + var_INa__i_Na + var_INaCa__i_NaCa + var_INaK__i_NaK + var_INab__i_b_Na + var_Ito__i_to + var_cell__i_Stim; // uA_per_uF
         const double var_cell__dVdt = -1.0 * var_cell__I_tot; // mV_per_ms
-        const double var_chaste_interface__i_ionic = HeartConfig::Instance()->GetCapacitance() * var_cell__dVdt; // uA_per_cm2
+        const double var_chaste_interface__i_ionic = -HeartConfig::Instance()->GetCapacitance() * var_cell__dVdt; // uA_per_cm2
 
         const double i_ionic = var_chaste_interface__i_ionic;
         EXCEPT_IF_NOT(!std::isnan(i_ionic));
@@ -569,3 +569,4 @@ void OdeSystemInformation<Cellpriebe_beuckelmann_model_1998FromCellMLRushLarsen>
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Cellpriebe_beuckelmann_model_1998FromCellMLRushLarsen)
+

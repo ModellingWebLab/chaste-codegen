@@ -2008,3 +2008,4 @@ void OdeSystemInformation<Cellcourtemanche_ramirez_nattel_model_1998FromCellMLGR
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Cellcourtemanche_ramirez_nattel_model_1998FromCellMLGRL2)
+

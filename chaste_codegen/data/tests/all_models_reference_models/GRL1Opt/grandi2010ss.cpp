@@ -3259,3 +3259,4 @@ void OdeSystemInformation<Cellgrandi2010ssFromCellMLGRL1>::Initialise(void)
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Cellgrandi2010ssFromCellMLGRL1)
+

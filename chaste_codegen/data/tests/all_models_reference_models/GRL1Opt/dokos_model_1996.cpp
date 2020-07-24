@@ -2142,3 +2142,4 @@ void OdeSystemInformation<Celldokos_model_1996FromCellMLGRL1>::Initialise(void)
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Celldokos_model_1996FromCellMLGRL1)
+

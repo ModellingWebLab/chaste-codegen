@@ -1950,3 +1950,4 @@ void OdeSystemInformation<Cellespinosa_model_1998_normalFromCellMLGRL2>::Initial
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Cellespinosa_model_1998_normalFromCellMLGRL2)
+

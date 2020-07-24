@@ -1843,3 +1843,4 @@ void OdeSystemInformation<Celllivshitz_rudy_2007FromCellMLGRL1>::Initialise(void
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Celllivshitz_rudy_2007FromCellMLGRL1)
+

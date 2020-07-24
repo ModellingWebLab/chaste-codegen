@@ -116,11 +116,9 @@
         const double var_Na_Ca_exchanger__eta = 0.34999999999999998; // dimensionless
         const double var_calcium_background_current__g_Cab = 0.00038420000000000001; // milliS_per_microF
         const double var_fast_sodium_current__g_Na = 12.800000000000001; // milliS_per_microF
-        const double var_membrane__C_sc = 0.001; // microF_per_cm2
         const double var_membrane__F = 96.485341500000004; // coulomb_per_millimole
         const double var_membrane__R = 8.3144720000000003; // joule_per_mole_kelvin
         const double var_membrane__T = 310.0; // kelvin
-        const double var_membrane__i_Stim = 0.0; // microA_per_microF
         const double var_plateau_potassium_current__g_Kp = 0.0022160000000000001; // milliS_per_microF
         const double var_plateau_potassium_current_Kp_gate__Kp_V = 1 / (1.0 + exp(1.2521739130434781 - 0.16722408026755853 * var_chaste_interface__membrane__V)); // dimensionless
         const double var_rapid_activating_delayed_rectifiyer_K_current__R_V = 1 / (1.0 + 1.4944999999999999 * exp(0.044600000000000001 * var_chaste_interface__membrane__V)); // dimensionless
@@ -161,8 +159,7 @@
         const double var_time_independent_potassium_current__i_K1 = (-var_rapid_activating_delayed_rectifiyer_K_current__E_K + var_chaste_interface__membrane__V) * var_standard_ionic_concentrations__Ko * var_time_independent_potassium_current__g_K1 * var_time_independent_potassium_current_K1_gate__K1_infinity_V / (var_standard_ionic_concentrations__Ko + var_time_independent_potassium_current__K_mK1); // microA_per_microF
         const double var_transient_outward_potassium_current__g_to1 = 0.23815; // milliS_per_microF
         const double var_transient_outward_potassium_current__i_to1 = (-var_rapid_activating_delayed_rectifiyer_K_current__E_K + var_chaste_interface__membrane__V) * var_transient_outward_potassium_current__g_to1 * var_chaste_interface__transient_outward_potassium_current_X_to1_gate__X_to1 * var_chaste_interface__transient_outward_potassium_current_Y_to1_gate__Y_to1; // microA_per_microF
-        const double var_membrane__V_orig_deriv = -1.0 * (var_L_type_Ca_current__i_Ca + var_L_type_Ca_current__i_Ca_K + var_Na_Ca_exchanger__i_NaCa + var_calcium_background_current__i_Ca_b + var_fast_sodium_current__i_Na + var_membrane__i_Stim + var_plateau_potassium_current__i_Kp + var_rapid_activating_delayed_rectifiyer_K_current__i_Kr + var_sarcolemmal_calcium_pump__i_p_Ca + var_slow_activating_delayed_rectifiyer_K_current__i_Ks + var_sodium_background_current__i_Na_b + var_sodium_potassium_pump__i_NaK + var_time_independent_potassium_current__i_K1 + var_transient_outward_potassium_current__i_to1) / var_membrane__C_sc; // millivolt / second
-        const double var_chaste_interface__i_ionic = 0.001 * HeartConfig::Instance()->GetCapacitance() * var_membrane__V_orig_deriv; // uA_per_cm2
+        const double var_chaste_interface__i_ionic = (var_L_type_Ca_current__i_Ca + var_L_type_Ca_current__i_Ca_K + var_Na_Ca_exchanger__i_NaCa + var_calcium_background_current__i_Ca_b + var_fast_sodium_current__i_Na + var_plateau_potassium_current__i_Kp + var_rapid_activating_delayed_rectifiyer_K_current__i_Kr + var_sarcolemmal_calcium_pump__i_p_Ca + var_slow_activating_delayed_rectifiyer_K_current__i_Ks + var_sodium_background_current__i_Na_b + var_sodium_potassium_pump__i_NaK + var_time_independent_potassium_current__i_K1 + var_transient_outward_potassium_current__i_to1) * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
 
         const double i_ionic = var_chaste_interface__i_ionic;
         if (made_new_cvode_vector)
@@ -1117,4 +1114,5 @@ void OdeSystemInformation<Cellwinslow_model_1999FromCellMLCvode>::Initialise(voi
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Cellwinslow_model_1999FromCellMLCvode)
+
 #endif // CHASTE_CVODE

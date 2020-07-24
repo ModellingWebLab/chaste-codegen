@@ -1659,3 +1659,4 @@ void OdeSystemInformation<Cellten_tusscher_model_2004_endoFromCellMLGRL1>::Initi
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Cellten_tusscher_model_2004_endoFromCellMLGRL1)
+

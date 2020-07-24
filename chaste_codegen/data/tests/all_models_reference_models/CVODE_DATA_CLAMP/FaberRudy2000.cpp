@@ -22,7 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> CellFaberRudy2000FromCellMLCvode::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> CellFaberRudy2000FromCellMLCvodeDataClamp::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -25.5 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
@@ -39,13 +39,13 @@
         return p_cellml_stim;
     }
 
-    double CellFaberRudy2000FromCellMLCvode::GetIntracellularCalciumConcentration()
+    double CellFaberRudy2000FromCellMLCvodeDataClamp::GetIntracellularCalciumConcentration()
     {
         return NV_Ith_S(mStateVariables, 1);
     }
     
-    CellFaberRudy2000FromCellMLCvode::CellFaberRudy2000FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
-        : AbstractCvodeCell(
+    CellFaberRudy2000FromCellMLCvodeDataClamp::CellFaberRudy2000FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+        : AbstractCvodeCellWithDataClamp(
                 pOdeSolver,
                 25,
                 0,
@@ -53,7 +53,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<CellFaberRudy2000FromCellMLCvode>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<CellFaberRudy2000FromCellMLCvodeDataClamp>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -63,13 +63,14 @@
         NV_Ith_S(this->mParameters, 1) = 1.0; // (var_slow_delayed_rectifier_potassium_current__ScaleFactorGks) [dimensionless]
         NV_Ith_S(this->mParameters, 2) = 0; // (var_transient_outward_current__ScaleFactorIto) [dimensionless]
         NV_Ith_S(this->mParameters, 3) = 0.001; // (var_membrane__Cm) [microF]
+        NV_Ith_S(this->mParameters, 4) = 0.0; // (var_membrane_data_clamp_current_conductance) [dimensionless]
     }
 
-    CellFaberRudy2000FromCellMLCvode::~CellFaberRudy2000FromCellMLCvode()
+    CellFaberRudy2000FromCellMLCvodeDataClamp::~CellFaberRudy2000FromCellMLCvodeDataClamp()
     {
     }
     
-    double CellFaberRudy2000FromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
+    double CellFaberRudy2000FromCellMLCvodeDataClamp::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -217,7 +218,7 @@
         return i_ionic;
     }
 
-    void CellFaberRudy2000FromCellMLCvode::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const N_Vector rY, N_Vector rDY)
+    void CellFaberRudy2000FromCellMLCvodeDataClamp::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const N_Vector rY, N_Vector rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -485,7 +486,14 @@
         }
         else
         {
-            const double var_membrane__V_orig_deriv = -1.0 * (var_ATP_sensitive_potassium_current__i_K_ATP + var_L_type_Ca_channel__i_Ca_L + var_Na_Ca_exchanger__i_NaCa + var_T_type_Ca_channel__i_Ca_T + var_calcium_background_current__i_Ca_b + var_fast_sodium_current__i_Na + var_membrane__I_st + var_non_specific_calcium_activated_current__i_ns_Ca + var_plateau_potassium_current__i_Kp + var_rapid_delayed_rectifier_potassium_current__i_Kr + var_sarcolemmal_calcium_pump__i_p_Ca + var_slow_delayed_rectifier_potassium_current__i_Ks + var_sodium_activated_potassium_current__i_K_Na + var_sodium_background_current__i_Na_b + var_sodium_potassium_pump__i_NaK + var_time_independent_potassium_current__i_K1 + var_transient_outward_current__i_to) / NV_Ith_S(mParameters, 3); // millivolt / second
+            // Special handling of data clamp current here
+            // (we want to save expense of calling the interpolation method if possible.)
+            double var_chaste_interface__membrane_data_clamp_current = 0.0;
+            if (mDataClampIsOn)
+            {
+                var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time_converted) + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 4); // uA_per_cm2
+            }
+            const double var_membrane__V_orig_deriv = -1.0 * (var_ATP_sensitive_potassium_current__i_K_ATP + var_L_type_Ca_channel__i_Ca_L + var_Na_Ca_exchanger__i_NaCa + var_T_type_Ca_channel__i_Ca_T + var_calcium_background_current__i_Ca_b + var_fast_sodium_current__i_Na + var_membrane__I_st + var_chaste_interface__membrane_data_clamp_current + var_non_specific_calcium_activated_current__i_ns_Ca + var_plateau_potassium_current__i_Kp + var_rapid_delayed_rectifier_potassium_current__i_Kr + var_sarcolemmal_calcium_pump__i_p_Ca + var_slow_delayed_rectifier_potassium_current__i_Ks + var_sodium_activated_potassium_current__i_K_Na + var_sodium_background_current__i_Na_b + var_sodium_potassium_pump__i_NaK + var_time_independent_potassium_current__i_K1 + var_transient_outward_current__i_to) / NV_Ith_S(mParameters, 3); // millivolt / second
             d_dt_chaste_interface_var_membrane__V = 0.001 * var_membrane__V_orig_deriv; // millivolt / millisecond
         }
         
@@ -516,22 +524,32 @@
         NV_Ith_S(rDY,24) = d_dt_chaste_interface_var_ionic_concentrations__Ki;
     }
 
-    N_Vector CellFaberRudy2000FromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const N_Vector & rY)
+    N_Vector CellFaberRudy2000FromCellMLCvodeDataClamp::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const N_Vector & rY)
     {
         // Inputs:
         // Time units: millisecond
+        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
+        // Units: millivolt; Initial value: -90.0
         
         // Mathematics
         const double var_membrane__I_st_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
+        // Special handling of data clamp current here
+        // (we want to save expense of calling the interpolation method if possible.)
+        double var_chaste_interface__membrane_data_clamp_current = 0.0;
+        if (mDataClampIsOn)
+        {
+            var_chaste_interface__membrane_data_clamp_current = (-GetExperimentalVoltageAtTimeT(var_chaste_interface__environment__time_converted) + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 4); // uA_per_cm2
+        }
 
-        N_Vector dqs = N_VNew_Serial(2);
+        N_Vector dqs = N_VNew_Serial(3);
         NV_Ith_S(dqs, 0) = var_chaste_interface__environment__time_converted;
-        NV_Ith_S(dqs, 1) = var_membrane__I_st_converted;
+        NV_Ith_S(dqs, 1) = var_chaste_interface__membrane_data_clamp_current;
+        NV_Ith_S(dqs, 2) = var_membrane__I_st_converted;
         return dqs;
     }
 
 template<>
-void OdeSystemInformation<CellFaberRudy2000FromCellMLCvode>::Initialise(void)
+void OdeSystemInformation<CellFaberRudy2000FromCellMLCvodeDataClamp>::Initialise(void)
 {
     this->mSystemName = "LR_Dynamic_model_2000";
     this->mFreeVariableName = "environment__time";
@@ -678,11 +696,19 @@ void OdeSystemInformation<CellFaberRudy2000FromCellMLCvode>::Initialise(void)
     this->mParameterNames.push_back("membrane_capacitance");
     this->mParameterUnits.push_back("microF");
 
+    // mParameters[4]:
+    this->mParameterNames.push_back("membrane_data_clamp_current_conductance");
+    this->mParameterUnits.push_back("dimensionless");
+
     // Derived Quantity index [0]:
     this->mDerivedQuantityNames.push_back("environment__time");
     this->mDerivedQuantityUnits.push_back("millisecond");
 
     // Derived Quantity index [1]:
+    this->mDerivedQuantityNames.push_back("membrane_data_clamp_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
+
+    // Derived Quantity index [2]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
@@ -691,6 +717,6 @@ void OdeSystemInformation<CellFaberRudy2000FromCellMLCvode>::Initialise(void)
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(CellFaberRudy2000FromCellMLCvode)
+CHASTE_CLASS_EXPORT(CellFaberRudy2000FromCellMLCvodeDataClamp)
 
 #endif // CHASTE_CVODE

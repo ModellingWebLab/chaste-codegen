@@ -2873,3 +2873,4 @@ void OdeSystemInformation<Celljafri_rice_winslow_model_1998FromCellMLGRL1>::Init
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Celljafri_rice_winslow_model_1998FromCellMLGRL1)
+

@@ -2870,3 +2870,4 @@ void OdeSystemInformation<Cellhund_rudy_2004_aFromCellMLGRL2>::Initialise(void)
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Cellhund_rudy_2004_aFromCellMLGRL2)
+

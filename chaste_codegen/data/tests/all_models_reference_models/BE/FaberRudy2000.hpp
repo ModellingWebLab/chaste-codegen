@@ -1,6 +1,5 @@
-#ifdef CHASTE_CVODE
-#ifndef CELLFABERRUDY2000FROMCELLMLCVODE_HPP_
-#define CELLFABERRUDY2000FROMCELLMLCVODE_HPP_
+#ifndef CELLFABERRUDY2000FROMCELLMLBACKWARDEULER_HPP_
+#define CELLFABERRUDY2000FROMCELLMLBACKWARDEULER_HPP_
 
 //! @file
 //!
@@ -17,15 +16,15 @@
 #include "ChasteSerialization.hpp"
 #include <boost/serialization/base_object.hpp>
 #include "AbstractStimulusFunction.hpp"
-#include "AbstractCvodeCell.hpp"
+#include "AbstractBackwardEulerCardiacCell.hpp"
 
-class CellFaberRudy2000FromCellMLCvode : public AbstractCvodeCell
+class CellFaberRudy2000FromCellMLBackwardEuler : public AbstractBackwardEulerCardiacCell<12>
 {
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & archive, const unsigned int version)
     {
-        archive & boost::serialization::base_object<AbstractCvodeCell >(*this);
+        archive & boost::serialization::base_object<AbstractBackwardEulerCardiacCell<12> >(*this);
         
     }
 
@@ -37,16 +36,19 @@ public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    CellFaberRudy2000FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~CellFaberRudy2000FromCellMLCvode();
-    double GetIIonic(const std::vector<double>* pStateVariables=NULL);
-    void EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const N_Vector rY, N_Vector rDY);
-    N_Vector ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const N_Vector & rY);
+    CellFaberRudy2000FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~CellFaberRudy2000FromCellMLBackwardEuler();
+    double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[12], double rResidual[12]);
+    void ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[12], double rJacobian[12][12]);protected:
+    void UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted);
+    void ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted);
+
+    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY);
 };
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(CellFaberRudy2000FromCellMLCvode)
+CHASTE_CLASS_EXPORT(CellFaberRudy2000FromCellMLBackwardEuler)
 
 namespace boost
 {
@@ -54,7 +56,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const CellFaberRudy2000FromCellMLCvode * t, const unsigned int fileVersion)
+            Archive & ar, const CellFaberRudy2000FromCellMLBackwardEuler * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -64,18 +66,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, CellFaberRudy2000FromCellMLCvode * t, const unsigned int fileVersion)
+            Archive & ar, CellFaberRudy2000FromCellMLBackwardEuler * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)CellFaberRudy2000FromCellMLCvode(p_solver, p_stimulus);
+            ::new(t)CellFaberRudy2000FromCellMLBackwardEuler(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLFABERRUDY2000FROMCELLMLCVODE_HPP_
-#endif // CHASTE_CVODE
+#endif // CELLFABERRUDY2000FROMCELLMLBACKWARDEULER_HPP_

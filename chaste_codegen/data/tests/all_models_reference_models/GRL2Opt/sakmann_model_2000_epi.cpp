@@ -1856,3 +1856,4 @@ void OdeSystemInformation<Cellsakmann_model_2000_epiFromCellMLGRL2>::Initialise(
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Cellsakmann_model_2000_epiFromCellMLGRL2)
+
