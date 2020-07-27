@@ -1,10 +1,13 @@
 """
 RDF handling routines, including parsing the 'oxmeta' ontology.
 """
-import pkg_resources
+import os
+
 import rdflib
 from cellmlmanip.model import Model
 from cellmlmanip.rdf import create_rdf_node
+
+from chaste_codegen import MODULE_DIR
 
 
 _ONTOLOGY = None  # The 'oxmeta' ontology graph
@@ -47,9 +50,9 @@ def get_variables_transitively(model, term):
 
     if _ONTOLOGY is None:
         # Load oxmeta ontology
-        g = _ONTOLOGY = rdflib.Graph()
-        oxmeta_ttl = pkg_resources.resource_stream('chaste_codegen', 'ontologies/oxford-metadata.ttl')
-        g.parse(oxmeta_ttl, format='turtle')
+        _ONTOLOGY = rdflib.Graph()
+        ttl_file = os.path.join(MODULE_DIR, 'ontologies', 'oxford-metadata.ttl')
+        _ONTOLOGY.parse(ttl_file, format='turtle')
 
     term = create_rdf_node(term)
 
