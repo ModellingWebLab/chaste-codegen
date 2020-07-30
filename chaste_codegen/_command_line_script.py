@@ -47,8 +47,9 @@ def chaste_codegen():
                         version='%(prog)s {version}'.format(version=cg.__version__))
     parser.add_argument('cellml_file', metavar='cellml_file', help='The cellml file or URI to convert to chaste code')
 
-    group = parser.add_argument_group('ModelTypes', 'The different types of solver models for which code that can be '
-                                      'generated, if no model type is set, normal models are generated')
+    group = parser.add_argument_group('ModelTypes', 'The different types of solver approach for which code can be '
+                                      'generated; if no model type is set, "normal" models are generated')
+
     for k in TRANSLATORS:
         group.add_argument('--' + k, help='Generate ' + k + ' model type', action='store_true')
 
