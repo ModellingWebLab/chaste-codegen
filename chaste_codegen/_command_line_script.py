@@ -68,7 +68,8 @@ def chaste_codegen():
                             '(e.g. for CHASTE/C++ code: .cpp, .c, .hpp, or .h)')
     group.add_argument('--output-dir', action='store', help="directory to place output files in", default=None)
     group.add_argument('--show-outputs', action='store_true', default=False,
-                       help="don't actually run PyCml, just show what files would be generated, one per line")
+                       help="don't actually generate code, just show what files would be generated, one per line")
+
     group.add_argument('-c', default=None, dest='cls_name',
                        help='explicitly set the name of the generated class')
     group.add_argument('-q', '--quiet', action='store_true', default=False,
