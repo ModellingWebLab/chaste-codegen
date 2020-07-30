@@ -125,7 +125,7 @@ def get_equations_for(model, variables, recurse=True, filter_modifiable_paramete
     :param filter_modifiable_parameters_lhs: remove equations where the lhs is a modifiable paramater?
     :return: List of equations defining vars,
             with optimisations around using log10, and powers of whole numbers applied to rhs
-            as well as modifiable parameters filtered out is required.
+            as well as modifiable parameters filtered out if required.
     """
     equations = [eq for eq in model.get_equations_for(variables, recurse=recurse)
                  if not filter_modifiable_parameters_lhs or eq.lhs not in model.modifiable_parameters]
