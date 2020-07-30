@@ -3,7 +3,7 @@
 - The command line interface now has a --show-outputs option
 - Some command line argument names have changed to more closely match what pycml used to use, command line arguments are not backwards compatible with release 0.1.0
 - An issue with generating modifiers that are also parameters has been fixed, by generating the modifier in situ if it doesn't have a defining equation.
-- An issue with getiionic where the sign of the equations was incorrect has been fixed by anlysing the equation before any unit conversion has taken place.
+- An issue with GetIIonic where the sign of the equations was incorrect has been fixed by analysing the equation before any unit conversion has taken place.
 
 # Release 0.1.0
 Initial release of chaste_codegen
