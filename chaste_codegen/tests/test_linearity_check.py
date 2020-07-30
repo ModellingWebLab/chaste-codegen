@@ -32,10 +32,6 @@ def membrane_voltage_var(hn_model):
 
 @pytest.fixture(scope='session')
 def non_linear_state_vars(derivatives_eqs, membrane_voltage_var, state_vars):
-    print(derivatives_eqs)
-    print(membrane_voltage_var)
-    print(state_vars)
-    print('--')
     return get_non_linear_state_vars(derivatives_eqs, membrane_voltage_var, state_vars)
 
 
