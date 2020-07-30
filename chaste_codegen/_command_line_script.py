@@ -119,7 +119,8 @@ def chaste_codegen():
 
 
     if not args.show_outputs:
-        model = load_model_with_conversions(args.cellml_file, quiet=args.quiet)  # don't load if only showing output
+        # Load model once, not once per translator, but only if we're actually generating code
+        model = load_model_with_conversions(args.cellml_file, quiet=args.quiet)
 
     for translator in translators:
         # Make sure modifiers are only passed to models which can generate them
