@@ -84,8 +84,9 @@ def chaste_codegen():
     group.add_argument('-m', '--use-modifiers', dest='modifiers',
                        action='store_true', default=False,
                        help='add modifier functions for metadata-annotated variables (except time & stimulus) '
-                       'for use in sensitivity analysis. Only works with one of the following model types: ' +
-                       str(TRANSLATORS_WITH_MODIFIERS) + ' and is ignored for others')
+                       'for use in sensitivity analysis. Only works with one of the following model types and is ignored for others: ' +
+                       str(TRANSLATORS_WITH_MODIFIERS))
+
 
     # process options
     args = parser.parse_args()
