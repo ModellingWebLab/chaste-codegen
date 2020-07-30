@@ -115,7 +115,8 @@ def chaste_codegen():
     # Dynamically loadable models can only be built one at a time
 
     if args.dynamically_loadable and len(translators) > 1:
-        raise ValueError("Only one output type may be specified if creating a dynamic library!")
+        raise ValueError("Only one model type may be specified if creating a dynamic library!")
+
 
     if not args.show_outputs:
         model = load_model_with_conversions(args.cellml_file, quiet=args.quiet)  # don't load if only showing output
