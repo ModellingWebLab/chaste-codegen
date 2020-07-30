@@ -118,7 +118,7 @@ def annotate_if_not_statevar(model, var):
 
 
 def get_equations_for(model, variables, recurse=True, filter_modifiable_parameters_lhs=True, optimise=True):
-    """Returns equations excluding once where lhs is a modifiable parameter
+    """Returns equations excluding ones where the lhs is a modifiable parameter
 
     :param variables: the variables to get defining equations for.
     :param recurse: recurse and get defining equations for all variables in the defining equations?
