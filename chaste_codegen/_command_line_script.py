@@ -112,7 +112,8 @@ def chaste_codegen():
     # An outfile cannot be set with multiple translations
     if args.outfile and len(translators) > 1:
         raise ValueError("-o cannot be used when multiple model types have been selected!")
-    # Dynamicly loadable models can only be built one at a time
+    # Dynamically loadable models can only be built one at a time
+
     if args.dynamically_loadable and len(translators) > 1:
         raise ValueError("Only one output type may be specified if creating a dynamic library!")
 
