@@ -219,7 +219,7 @@ def test_script_double_type_output2():
     testargs = ["chaste_codegen", '--cvode-data-clamp', '--backward-euler', model_file, '--dynamically-loadable']
     # Call commandline script
     with mock.patch.object(sys, 'argv', testargs):
-        with pytest.raises(ValueError, match="Only one output type may be specified if creating a dynamic library!"):
+        with pytest.raises(ValueError, match="Only one model type may be specified if creating a dynamic library!"):
             chaste_codegen()
 
 

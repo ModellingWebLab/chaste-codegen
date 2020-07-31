@@ -1,5 +1,5 @@
-#ifndef CELLPANDIT_MODEL_2001_EPIFROMCELLMLRUSHLARSEN_HPP_
-#define CELLPANDIT_MODEL_2001_EPIFROMCELLMLRUSHLARSEN_HPP_
+#ifndef CELLPANDIT_MODEL_2001_EPIFROMCELLMLRUSHLARSENOPT_HPP_
+#define CELLPANDIT_MODEL_2001_EPIFROMCELLMLRUSHLARSENOPT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractRushLarsenCardiacCell.hpp"
 
-class Cellpandit_model_2001_epiFromCellMLRushLarsen : public AbstractRushLarsenCardiacCell
+class Cellpandit_model_2001_epiFromCellMLRushLarsenOpt : public AbstractRushLarsenCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -35,8 +35,8 @@ class Cellpandit_model_2001_epiFromCellMLRushLarsen : public AbstractRushLarsenC
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
-    Cellpandit_model_2001_epiFromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellpandit_model_2001_epiFromCellMLRushLarsen();
+    Cellpandit_model_2001_epiFromCellMLRushLarsenOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellpandit_model_2001_epiFromCellMLRushLarsenOpt();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateEquations(double var_chaste_interface__environment__time_converted, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf);
     void ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf);
@@ -46,7 +46,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellpandit_model_2001_epiFromCellMLRushLarsen)
+CHASTE_CLASS_EXPORT(Cellpandit_model_2001_epiFromCellMLRushLarsenOpt)
 
 namespace boost
 {
@@ -54,7 +54,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellpandit_model_2001_epiFromCellMLRushLarsen * t, const unsigned int fileVersion)
+            Archive & ar, const Cellpandit_model_2001_epiFromCellMLRushLarsenOpt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -64,17 +64,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellpandit_model_2001_epiFromCellMLRushLarsen * t, const unsigned int fileVersion)
+            Archive & ar, Cellpandit_model_2001_epiFromCellMLRushLarsenOpt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellpandit_model_2001_epiFromCellMLRushLarsen(p_solver, p_stimulus);
+            ::new(t)Cellpandit_model_2001_epiFromCellMLRushLarsenOpt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLPANDIT_MODEL_2001_EPIFROMCELLMLRUSHLARSEN_HPP_
+#endif // CELLPANDIT_MODEL_2001_EPIFROMCELLMLRUSHLARSENOPT_HPP_

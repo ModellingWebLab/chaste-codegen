@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellgrandi2010ssFromCellMLGRL1::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellgrandi2010ssFromCellMLGRL1Opt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__cell__stim_amplitude_converted = -15.0 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
@@ -37,11 +37,11 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::GetIntracellularCalciumConcentration()
+    double Cellgrandi2010ssFromCellMLGRL1Opt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[37];
     }
-    Cellgrandi2010ssFromCellMLGRL1::Cellgrandi2010ssFromCellMLGRL1(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellgrandi2010ssFromCellMLGRL1Opt::Cellgrandi2010ssFromCellMLGRL1Opt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractGeneralizedRushLarsenCardiacCell(
                 38,
                 0,
@@ -49,7 +49,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellgrandi2010ssFromCellMLGRL1>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellgrandi2010ssFromCellMLGRL1Opt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -60,11 +60,11 @@
         this->mParameters[2] = 1.0; // (var_cell__gkr_mult) [dimensionless]
     }
 
-    Cellgrandi2010ssFromCellMLGRL1::~Cellgrandi2010ssFromCellMLGRL1()
+    Cellgrandi2010ssFromCellMLGRL1Opt::~Cellgrandi2010ssFromCellMLGRL1Opt()
     {
     }
     
-    double Cellgrandi2010ssFromCellMLGRL1::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -131,7 +131,7 @@
         return i_ionic;
     }
 
-    void Cellgrandi2010ssFromCellMLGRL1::UpdateTransmembranePotential(double var_chaste_interface__cell__time)
+    void Cellgrandi2010ssFromCellMLGRL1Opt::UpdateTransmembranePotential(double var_chaste_interface__cell__time)
     {
         std::vector<double>& rY = rGetStateVariables();
         unsigned v_index = GetVoltageIndex();
@@ -212,7 +212,7 @@
         }
     }
 
-    void Cellgrandi2010ssFromCellMLGRL1::ComputeOneStepExceptVoltage(double var_chaste_interface__cell__time)
+    void Cellgrandi2010ssFromCellMLGRL1Opt::ComputeOneStepExceptVoltage(double var_chaste_interface__cell__time)
     {
         std::vector<double>& rY = rGetStateVariables();
         const double delta = 1e-8;
@@ -814,7 +814,7 @@
     }
    
     
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative0(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative0(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         double d_dt_chaste_interface_var_cell__sVm;
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -881,7 +881,7 @@
         return d_dt_chaste_interface_var_cell__sVm;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative0(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative0(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1061,7 +1061,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative1(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative1(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1076,7 +1076,7 @@
         return d_dt_chaste_interface_var_cell__sm;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative1(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative1(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1102,7 +1102,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative2(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative2(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1117,7 +1117,7 @@
         return d_dt_chaste_interface_var_cell__sh;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative2(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative2(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1148,7 +1148,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative3(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative3(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1163,7 +1163,7 @@
         return d_dt_chaste_interface_var_cell__sj;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative3(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative3(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1203,7 +1203,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative4(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative4(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1219,7 +1219,7 @@
         return d_dt_chaste_interface_var_cell__sd;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative4(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative4(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1247,7 +1247,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative5(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative5(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1262,7 +1262,7 @@
         return d_dt_chaste_interface_var_cell__sf;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative5(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative5(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1284,7 +1284,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative6(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative6(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sfcaBj = rY[6];
@@ -1299,7 +1299,7 @@
         return d_dt_chaste_interface_var_cell__sfcaBj;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative6(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative6(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1320,7 +1320,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative7(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative7(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sfcaBsl = rY[7];
@@ -1335,7 +1335,7 @@
         return d_dt_chaste_interface_var_cell__sfcaBsl;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative7(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative7(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1356,7 +1356,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative8(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative8(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1372,7 +1372,7 @@
         return d_dt_chaste_interface_var_cell__sxtos;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative8(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative8(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1397,7 +1397,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative9(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative9(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1413,7 +1413,7 @@
         return d_dt_chaste_interface_var_cell__sytos;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative9(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative9(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1438,7 +1438,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative10(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative10(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1454,7 +1454,7 @@
         return d_dt_chaste_interface_var_cell__sxtof;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative10(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative10(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1477,7 +1477,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative11(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative11(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1493,7 +1493,7 @@
         return d_dt_chaste_interface_var_cell__sytof;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative11(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative11(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1516,7 +1516,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative12(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative12(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1531,7 +1531,7 @@
         return d_dt_chaste_interface_var_cell__sxkr;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative12(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative12(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1565,7 +1565,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative13(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative13(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1580,7 +1580,7 @@
         return d_dt_chaste_interface_var_cell__sxks;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative13(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative13(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1603,7 +1603,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative14(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative14(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sRyRr = rY[14];
@@ -1628,7 +1628,7 @@
         return d_dt_chaste_interface_var_cell__sRyRr;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative14(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative14(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1662,7 +1662,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative15(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative15(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sRyRr = rY[14];
@@ -1686,7 +1686,7 @@
         return d_dt_chaste_interface_var_cell__sRyRo;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative15(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative15(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1716,7 +1716,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative16(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative16(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sRyRr = rY[14];
@@ -1741,7 +1741,7 @@
         return d_dt_chaste_interface_var_cell__sRyRi;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative16(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative16(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1772,7 +1772,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative17(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative17(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sNaBj = rY[17];
@@ -1787,7 +1787,7 @@
         return d_dt_chaste_interface_var_cell__sNaBj;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative17(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative17(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1809,7 +1809,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative18(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative18(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sNaBsl = rY[18];
@@ -1824,7 +1824,7 @@
         return d_dt_chaste_interface_var_cell__sNaBsl;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative18(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative18(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1846,7 +1846,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative19(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative19(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sTnCL = rY[19];
@@ -1861,7 +1861,7 @@
         return d_dt_chaste_interface_var_cell__sTnCL;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative19(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative19(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1883,7 +1883,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative20(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative20(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sTnCHc = rY[20];
@@ -1900,7 +1900,7 @@
         return d_dt_chaste_interface_var_cell__sTnCHc;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative20(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative20(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1923,7 +1923,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative21(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative21(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sTnCHc = rY[20];
@@ -1938,7 +1938,7 @@
         return d_dt_chaste_interface_var_cell__sTnCHm;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative21(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative21(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1957,7 +1957,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative22(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative22(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sCaM = rY[22];
@@ -1972,7 +1972,7 @@
         return d_dt_chaste_interface_var_cell__sCaM;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative22(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative22(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1994,7 +1994,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative23(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative23(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sMyoc = rY[23];
@@ -2011,7 +2011,7 @@
         return d_dt_chaste_interface_var_cell__sMyoc;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative23(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative23(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2034,7 +2034,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative24(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative24(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sMyoc = rY[23];
@@ -2049,7 +2049,7 @@
         return d_dt_chaste_interface_var_cell__sMyom;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative24(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative24(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2068,7 +2068,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative25(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative25(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sSRB = rY[25];
@@ -2083,7 +2083,7 @@
         return d_dt_chaste_interface_var_cell__sSRB;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative25(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative25(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2105,7 +2105,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative26(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative26(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sSLLj = rY[26];
@@ -2123,7 +2123,7 @@
         return d_dt_chaste_interface_var_cell__sSLLj;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative26(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative26(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2146,7 +2146,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative27(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative27(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sSLLsl = rY[27];
@@ -2164,7 +2164,7 @@
         return d_dt_chaste_interface_var_cell__sSLLsl;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative27(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative27(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2187,7 +2187,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative28(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative28(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sSLHj = rY[28];
@@ -2205,7 +2205,7 @@
         return d_dt_chaste_interface_var_cell__sSLHj;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative28(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative28(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2228,7 +2228,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative29(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative29(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sSLHsl = rY[29];
@@ -2246,7 +2246,7 @@
         return d_dt_chaste_interface_var_cell__sSLHsl;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative29(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative29(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2269,7 +2269,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative30(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative30(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sCsqnb = rY[30];
@@ -2287,7 +2287,7 @@
         return d_dt_chaste_interface_var_cell__sCsqnb;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative30(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative30(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2309,7 +2309,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative31(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative31(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sRyRo = rY[15];
@@ -2338,7 +2338,7 @@
         return d_dt_chaste_interface_var_cell__sCa_sr;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative31(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative31(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2376,7 +2376,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative32(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative32(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -2420,7 +2420,7 @@
         return d_dt_chaste_interface_var_cell__sNaj;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative32(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative32(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2509,7 +2509,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative33(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative33(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -2555,7 +2555,7 @@
         return d_dt_chaste_interface_var_cell__sNasl;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative33(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative33(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2642,7 +2642,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative34(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative34(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sNasl = rY[33];
@@ -2659,7 +2659,7 @@
         return d_dt_chaste_interface_var_cell__sNai;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative34(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative34(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2680,7 +2680,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative35(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative35(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -2726,7 +2726,7 @@
         return d_dt_chaste_interface_var_cell__sCaj;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative35(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative35(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2806,7 +2806,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative36(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative36(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -2847,7 +2847,7 @@
         return d_dt_chaste_interface_var_cell__sCasl;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative36(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative36(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2922,7 +2922,7 @@
         }
         return partialF;
     }
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluateYDerivative37(double var_chaste_interface__cell__time, std::vector<double>& rY)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluateYDerivative37(double var_chaste_interface__cell__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__sTnCL = rY[19];
@@ -2965,7 +2965,7 @@
         return d_dt_chaste_interface_var_cell__sCai;
     }
 
-    double Cellgrandi2010ssFromCellMLGRL1::EvaluatePartialDerivative37(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellgrandi2010ssFromCellMLGRL1Opt::EvaluatePartialDerivative37(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -3021,7 +3021,7 @@
         return partialF;
     }
 
-    std::vector<double> Cellgrandi2010ssFromCellMLGRL1::ComputeDerivedQuantities(double var_chaste_interface__cell__time, const std::vector<double> & rY)
+    std::vector<double> Cellgrandi2010ssFromCellMLGRL1Opt::ComputeDerivedQuantities(double var_chaste_interface__cell__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -3037,7 +3037,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellgrandi2010ssFromCellMLGRL1>::Initialise(void)
+void OdeSystemInformation<Cellgrandi2010ssFromCellMLGRL1Opt>::Initialise(void)
 {
     this->mSystemName = "grandi2010";
     this->mFreeVariableName = "cell__time";
@@ -3258,5 +3258,5 @@ void OdeSystemInformation<Cellgrandi2010ssFromCellMLGRL1>::Initialise(void)
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellgrandi2010ssFromCellMLGRL1)
+CHASTE_CLASS_EXPORT(Cellgrandi2010ssFromCellMLGRL1Opt)
 

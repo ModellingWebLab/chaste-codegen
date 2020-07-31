@@ -1,5 +1,5 @@
-#ifndef CELLHODGKIN_HUXLEY_SQUID_AXON_MODEL_1952_MODIFIEDFROMCELLMLGRL1_HPP_
-#define CELLHODGKIN_HUXLEY_SQUID_AXON_MODEL_1952_MODIFIEDFROMCELLMLGRL1_HPP_
+#ifndef CELLHODGKIN_HUXLEY_SQUID_AXON_MODEL_1952_MODIFIEDFROMCELLMLGRL1OPT_HPP_
+#define CELLHODGKIN_HUXLEY_SQUID_AXON_MODEL_1952_MODIFIEDFROMCELLMLGRL1OPT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractGeneralizedRushLarsenCardiacCell.hpp"
 
-class Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL1 : public AbstractGeneralizedRushLarsenCardiacCell
+class Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL1Opt : public AbstractGeneralizedRushLarsenCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -34,8 +34,8 @@ class Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL1 : public A
 
 public:
 
-    Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL1(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL1();
+    Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL1Opt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL1Opt();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time);
     void ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time);
@@ -54,7 +54,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL1)
+CHASTE_CLASS_EXPORT(Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL1Opt)
 
 namespace boost
 {
@@ -62,7 +62,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL1 * t, const unsigned int fileVersion)
+            Archive & ar, const Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL1Opt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -72,17 +72,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL1 * t, const unsigned int fileVersion)
+            Archive & ar, Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL1Opt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL1(p_solver, p_stimulus);
+            ::new(t)Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL1Opt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLHODGKIN_HUXLEY_SQUID_AXON_MODEL_1952_MODIFIEDFROMCELLMLGRL1_HPP_
+#endif // CELLHODGKIN_HUXLEY_SQUID_AXON_MODEL_1952_MODIFIEDFROMCELLMLGRL1OPT_HPP_

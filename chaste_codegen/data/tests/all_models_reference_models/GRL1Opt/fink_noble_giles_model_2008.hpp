@@ -1,5 +1,5 @@
-#ifndef CELLFINK_NOBLE_GILES_MODEL_2008FROMCELLMLGRL1_HPP_
-#define CELLFINK_NOBLE_GILES_MODEL_2008FROMCELLMLGRL1_HPP_
+#ifndef CELLFINK_NOBLE_GILES_MODEL_2008FROMCELLMLGRL1OPT_HPP_
+#define CELLFINK_NOBLE_GILES_MODEL_2008FROMCELLMLGRL1OPT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractGeneralizedRushLarsenCardiacCell.hpp"
 
-class Cellfink_noble_giles_model_2008FromCellMLGRL1 : public AbstractGeneralizedRushLarsenCardiacCell
+class Cellfink_noble_giles_model_2008FromCellMLGRL1Opt : public AbstractGeneralizedRushLarsenCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -35,8 +35,8 @@ class Cellfink_noble_giles_model_2008FromCellMLGRL1 : public AbstractGeneralized
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
-    Cellfink_noble_giles_model_2008FromCellMLGRL1(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellfink_noble_giles_model_2008FromCellMLGRL1();
+    Cellfink_noble_giles_model_2008FromCellMLGRL1Opt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellfink_noble_giles_model_2008FromCellMLGRL1Opt();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void UpdateTransmembranePotential(double var_chaste_interface__Environment__time);
     void ComputeOneStepExceptVoltage(double var_chaste_interface__Environment__time);
@@ -101,7 +101,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellfink_noble_giles_model_2008FromCellMLGRL1)
+CHASTE_CLASS_EXPORT(Cellfink_noble_giles_model_2008FromCellMLGRL1Opt)
 
 namespace boost
 {
@@ -109,7 +109,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellfink_noble_giles_model_2008FromCellMLGRL1 * t, const unsigned int fileVersion)
+            Archive & ar, const Cellfink_noble_giles_model_2008FromCellMLGRL1Opt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -119,17 +119,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellfink_noble_giles_model_2008FromCellMLGRL1 * t, const unsigned int fileVersion)
+            Archive & ar, Cellfink_noble_giles_model_2008FromCellMLGRL1Opt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellfink_noble_giles_model_2008FromCellMLGRL1(p_solver, p_stimulus);
+            ::new(t)Cellfink_noble_giles_model_2008FromCellMLGRL1Opt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLFINK_NOBLE_GILES_MODEL_2008FROMCELLMLGRL1_HPP_
+#endif // CELLFINK_NOBLE_GILES_MODEL_2008FROMCELLMLGRL1OPT_HPP_

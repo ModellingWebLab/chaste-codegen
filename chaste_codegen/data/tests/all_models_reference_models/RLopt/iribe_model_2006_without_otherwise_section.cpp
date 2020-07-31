@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsen::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsenOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane_potential__stim_amplitude_converted = -0.0040000000000000001 * HeartConfig::Instance()->GetCapacitance() / mParameters[1]; // uA_per_cm2
@@ -37,11 +37,11 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsen::GetIntracellularCalciumConcentration()
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsenOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsen::Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsenOpt::Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsenOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractRushLarsenCardiacCell(
                 23,
                 0,
@@ -49,7 +49,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsen>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsenOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -64,11 +64,11 @@
         this->mParameters[6] = 0.00050000000000000001; // (var_sodium_calcium_exchanger__i_NaCa_max) [nanoA_per_millimolar4]
     }
 
-    Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsen::~Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsen()
+    Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsenOpt::~Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsenOpt()
     {
     }
     
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsenOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -115,7 +115,7 @@
         return i_ionic;
     }
 
-    void Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsen::EvaluateEquations(double var_chaste_interface__environment__time_converted, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
+    void Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsenOpt::EvaluateEquations(double var_chaste_interface__environment__time_converted, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane_potential__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -235,7 +235,7 @@
         rDY[21] = d_dt_chaste_interface_var_Force__P_2;
         rDY[22] = d_dt_chaste_interface_var_Force__P_3;
     }
-    void Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsen::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
+    void Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsenOpt::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         
@@ -283,7 +283,7 @@
         rY[22] += mDt * rDY[22];
     }
 
-    std::vector<double> Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsen::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsenOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -340,7 +340,7 @@
     }
 
 template<>
-void OdeSystemInformation<Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsen>::Initialise(void)
+void OdeSystemInformation<Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsenOpt>::Initialise(void)
 {
     this->mSystemName = "iribe_model_2006";
     this->mFreeVariableName = "environment__time";
@@ -518,5 +518,5 @@ void OdeSystemInformation<Celliribe_model_2006_without_otherwise_sectionFromCell
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsen)
+CHASTE_CLASS_EXPORT(Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsenOpt)
 

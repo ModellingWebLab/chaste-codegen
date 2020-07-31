@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellespinosa_model_1998_normalFromCellMLRushLarsen::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellespinosa_model_1998_normalFromCellMLRushLarsenOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -0.0018000000000000002 * HeartConfig::Instance()->GetCapacitance() / mParameters[0]; // uA_per_cm2
@@ -37,11 +37,11 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double Cellespinosa_model_1998_normalFromCellMLRushLarsen::GetIntracellularCalciumConcentration()
+    double Cellespinosa_model_1998_normalFromCellMLRushLarsenOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Cellespinosa_model_1998_normalFromCellMLRushLarsen::Cellespinosa_model_1998_normalFromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellespinosa_model_1998_normalFromCellMLRushLarsenOpt::Cellespinosa_model_1998_normalFromCellMLRushLarsenOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractRushLarsenCardiacCell(
                 21,
                 0,
@@ -49,7 +49,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellespinosa_model_1998_normalFromCellMLRushLarsen>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellespinosa_model_1998_normalFromCellMLRushLarsenOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -58,11 +58,11 @@
         this->mParameters[0] = 9.5000000000000005e-5; // (var_membrane__Cm) [microF]
     }
 
-    Cellespinosa_model_1998_normalFromCellMLRushLarsen::~Cellespinosa_model_1998_normalFromCellMLRushLarsen()
+    Cellespinosa_model_1998_normalFromCellMLRushLarsenOpt::~Cellespinosa_model_1998_normalFromCellMLRushLarsenOpt()
     {
     }
     
-    double Cellespinosa_model_1998_normalFromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellespinosa_model_1998_normalFromCellMLRushLarsenOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -121,7 +121,7 @@
         return i_ionic;
     }
 
-    void Cellespinosa_model_1998_normalFromCellMLRushLarsen::EvaluateEquations(double var_chaste_interface__environment__time_converted, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
+    void Cellespinosa_model_1998_normalFromCellMLRushLarsenOpt::EvaluateEquations(double var_chaste_interface__environment__time_converted, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -235,7 +235,7 @@
         rDY[19] = d_dt_chaste_interface_var_intracellular_calcium_concentration__Ca_Calmod;
         rDY[20] = d_dt_chaste_interface_var_intracellular_calcium_concentration__Ca_Trop;
     }
-    void Cellespinosa_model_1998_normalFromCellMLRushLarsen::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
+    void Cellespinosa_model_1998_normalFromCellMLRushLarsenOpt::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         
@@ -285,7 +285,7 @@
         rY[20] += mDt * rDY[20];
     }
 
-    std::vector<double> Cellespinosa_model_1998_normalFromCellMLRushLarsen::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Cellespinosa_model_1998_normalFromCellMLRushLarsenOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -301,7 +301,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellespinosa_model_1998_normalFromCellMLRushLarsen>::Initialise(void)
+void OdeSystemInformation<Cellespinosa_model_1998_normalFromCellMLRushLarsenOpt>::Initialise(void)
 {
     this->mSystemName = "espinosa_model_1998_normal";
     this->mFreeVariableName = "environment__time";
@@ -429,4 +429,4 @@ void OdeSystemInformation<Cellespinosa_model_1998_normalFromCellMLRushLarsen>::I
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellespinosa_model_1998_normalFromCellMLRushLarsen)
+CHASTE_CLASS_EXPORT(Cellespinosa_model_1998_normalFromCellMLRushLarsenOpt)

@@ -50,7 +50,7 @@ def test_CVODE_DATA_CLAMP(tmp_path, model):
 @pytest.mark.parametrize(('model'), chaste_GRL2Opt)
 def test_GRL2Opt(tmp_path, model):
     """ Check generation of Generalised Rush Larsen Second order Opt models against reference"""
-    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLGRL2'
+    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLGRL2Opt'
     LOGGER.info('Converting: Generalised Rush Larsen: ' + class_name + '\n')
     # Generate chaste code
     chaste_model = cg.GeneralisedRushLarsenSecondOrderModelOpt(load_model_with_conversions(model['model']),
@@ -82,7 +82,7 @@ def test_GRL2(tmp_path, model):
 @pytest.mark.parametrize(('model'), chaste_GRL1Opt)
 def test_GRL1Opt(tmp_path, model):
     """ Check generation of Generalised Rush Larsen First order Opt models against reference"""
-    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLGRL1'
+    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLGRL1Opt'
     LOGGER.info('Converting: Generalised Rush Larsen: ' + class_name + '\n')
     # Generate chaste code
     chaste_model = cg.GeneralisedRushLarsenFirstOrderModelOpt(load_model_with_conversions(model['model']),
@@ -114,7 +114,7 @@ def test_GRL1(tmp_path, model):
 @pytest.mark.parametrize(('model'), chaste_RLopt)
 def test_RLopt(tmp_path, model):
     """ Check generation of Rush Larsen Opt models against reference"""
-    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLRushLarsen'
+    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLRushLarsenOpt'
     LOGGER.info('Converting: RushLarsen Opt: ' + class_name + '\n')
     # Generate chaste code
     chaste_model = cg.RushLarsenOptModel(load_model_with_conversions(model['model']), model['model_name_from_file'],

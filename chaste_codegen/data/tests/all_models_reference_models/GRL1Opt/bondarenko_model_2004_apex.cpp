@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellbondarenko_model_2004_apexFromCellMLGRL1::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -80.0 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
@@ -38,7 +38,7 @@
         return p_cellml_stim;
     }
 
-    Cellbondarenko_model_2004_apexFromCellMLGRL1::Cellbondarenko_model_2004_apexFromCellMLGRL1(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::Cellbondarenko_model_2004_apexFromCellMLGRL1Opt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractGeneralizedRushLarsenCardiacCell(
                 41,
                 0,
@@ -46,7 +46,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellbondarenko_model_2004_apexFromCellMLGRL1>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellbondarenko_model_2004_apexFromCellMLGRL1Opt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -54,11 +54,11 @@
         
     }
 
-    Cellbondarenko_model_2004_apexFromCellMLGRL1::~Cellbondarenko_model_2004_apexFromCellMLGRL1()
+    Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::~Cellbondarenko_model_2004_apexFromCellMLGRL1Opt()
     {
     }
     
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -117,7 +117,7 @@
         return i_ionic;
     }
 
-    void Cellbondarenko_model_2004_apexFromCellMLGRL1::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
+    void Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
     {
         std::vector<double>& rY = rGetStateVariables();
         unsigned v_index = GetVoltageIndex();
@@ -186,7 +186,7 @@
         }
     }
 
-    void Cellbondarenko_model_2004_apexFromCellMLGRL1::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
+    void Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
     {
         std::vector<double>& rY = rGetStateVariables();
         const double delta = 1e-8;
@@ -848,7 +848,7 @@
     }
    
     
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative0(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative0(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         double d_dt_chaste_interface_var_membrane__V;
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -903,7 +903,7 @@
         return d_dt_chaste_interface_var_membrane__V;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative0(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative0(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -985,7 +985,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative1(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative1(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1016,7 +1016,7 @@
         return d_dt_chaste_interface_var_calcium_concentration__Cai;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative1(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative1(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1070,7 +1070,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative2(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative2(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1100,7 +1100,7 @@
         return d_dt_chaste_interface_var_calcium_concentration__Cass;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative2(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative2(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1143,7 +1143,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative3(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative3(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__calcium_concentration__Cass = rY[2];
@@ -1168,7 +1168,7 @@
         return d_dt_chaste_interface_var_calcium_concentration__CaJSR;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative3(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative3(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1206,7 +1206,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative4(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative4(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__calcium_concentration__Cai = rY[1];
@@ -1226,7 +1226,7 @@
         return d_dt_chaste_interface_var_calcium_concentration__CaNSR;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative4(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative4(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1245,7 +1245,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative5(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative5(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1263,7 +1263,7 @@
         return d_dt_chaste_interface_var_calcium_fluxes__P_RyR;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative5(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative5(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1282,7 +1282,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative6(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative6(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__calcium_concentration__Cai = rY[1];
@@ -1297,7 +1297,7 @@
         return d_dt_chaste_interface_var_calcium_buffering__LTRPN_Ca;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative6(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative6(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1319,7 +1319,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative7(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative7(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__calcium_concentration__Cai = rY[1];
@@ -1334,7 +1334,7 @@
         return d_dt_chaste_interface_var_calcium_buffering__HTRPN_Ca;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative7(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative7(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1356,7 +1356,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative8(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative8(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__calcium_concentration__Cass = rY[2];
@@ -1375,7 +1375,7 @@
         return d_dt_chaste_interface_var_ryanodine_receptors__P_O1;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative8(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative8(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1399,7 +1399,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative9(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative9(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__calcium_concentration__Cass = rY[2];
@@ -1416,7 +1416,7 @@
         return d_dt_chaste_interface_var_ryanodine_receptors__P_O2;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative9(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative9(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1435,7 +1435,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative10(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative10(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__ryanodine_receptors__P_O1 = rY[8];
@@ -1450,7 +1450,7 @@
         return d_dt_chaste_interface_var_ryanodine_receptors__P_C2;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative10(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative10(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1469,7 +1469,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative11(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative11(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1496,7 +1496,7 @@
         return d_dt_chaste_interface_var_L_type_calcium_current__O;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative11(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative11(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1527,7 +1527,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative12(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative12(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1556,7 +1556,7 @@
         return d_dt_chaste_interface_var_L_type_calcium_current__C2;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative12(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative12(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1585,7 +1585,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative13(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative13(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1606,7 +1606,7 @@
         return d_dt_chaste_interface_var_L_type_calcium_current__C3;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative13(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative13(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1637,7 +1637,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative14(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative14(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1668,7 +1668,7 @@
         return d_dt_chaste_interface_var_L_type_calcium_current__C4;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative14(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative14(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1711,7 +1711,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative15(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative15(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1738,7 +1738,7 @@
         return d_dt_chaste_interface_var_L_type_calcium_current__I1;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative15(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative15(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1764,7 +1764,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative16(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative16(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1791,7 +1791,7 @@
         return d_dt_chaste_interface_var_L_type_calcium_current__I2;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative16(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative16(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1829,7 +1829,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative17(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative17(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1856,7 +1856,7 @@
         return d_dt_chaste_interface_var_L_type_calcium_current__I3;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative17(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative17(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1888,7 +1888,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative18(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative18(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1914,7 +1914,7 @@
         return d_dt_chaste_interface_var_sodium_concentration__Nai;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative18(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative18(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1956,7 +1956,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative19(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative19(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1981,7 +1981,7 @@
         return d_dt_chaste_interface_var_fast_sodium_current__O_Na;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative19(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative19(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2008,7 +2008,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative20(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative20(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -2035,7 +2035,7 @@
         return d_dt_chaste_interface_var_fast_sodium_current__C_Na1;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative20(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative20(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2066,7 +2066,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative21(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative21(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -2102,7 +2102,7 @@
         return d_dt_chaste_interface_var_fast_sodium_current__C_Na2;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative21(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative21(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2136,7 +2136,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative22(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative22(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -2161,7 +2161,7 @@
         return d_dt_chaste_interface_var_fast_sodium_current__I1_Na;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative22(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative22(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2189,7 +2189,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative23(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative23(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -2210,7 +2210,7 @@
         return d_dt_chaste_interface_var_fast_sodium_current__I2_Na;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative23(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative23(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2234,7 +2234,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative24(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative24(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -2267,7 +2267,7 @@
         return d_dt_chaste_interface_var_fast_sodium_current__IF_Na;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative24(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative24(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2310,7 +2310,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative25(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative25(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -2337,7 +2337,7 @@
         return d_dt_chaste_interface_var_fast_sodium_current__IC_Na2;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative25(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative25(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2369,7 +2369,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative26(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative26(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -2403,7 +2403,7 @@
         return d_dt_chaste_interface_var_fast_sodium_current__IC_Na3;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative26(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative26(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2435,7 +2435,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative27(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative27(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -2477,7 +2477,7 @@
         return d_dt_chaste_interface_var_potassium_concentration__Ki;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative27(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative27(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2537,7 +2537,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative28(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative28(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -2552,7 +2552,7 @@
         return d_dt_chaste_interface_var_fast_transient_outward_potassium_current__ato_f;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative28(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative28(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2575,7 +2575,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative29(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative29(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -2590,7 +2590,7 @@
         return d_dt_chaste_interface_var_fast_transient_outward_potassium_current__ito_f;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative29(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative29(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2620,7 +2620,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative30(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative30(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -2636,7 +2636,7 @@
         return d_dt_chaste_interface_var_slow_transient_outward_potassium_current__ato_s;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative30(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative30(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2660,7 +2660,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative31(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative31(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -2676,7 +2676,7 @@
         return d_dt_chaste_interface_var_slow_transient_outward_potassium_current__ito_s;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative31(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative31(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2701,7 +2701,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative32(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative32(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -2716,7 +2716,7 @@
         return d_dt_chaste_interface_var_slow_delayed_rectifier_potassium_current__nKs;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative32(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative32(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2742,7 +2742,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative33(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative33(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -2758,7 +2758,7 @@
         return d_dt_chaste_interface_var_ultra_rapidly_activating_delayed_rectifier_potassium_current__aur;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative33(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative33(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2782,7 +2782,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative34(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative34(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -2798,7 +2798,7 @@
         return d_dt_chaste_interface_var_ultra_rapidly_activating_delayed_rectifier_potassium_current__iur;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative34(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative34(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2823,7 +2823,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative35(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative35(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -2839,7 +2839,7 @@
         return d_dt_chaste_interface_var_non_inactivating_steady_state_potassium_current__aKss;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative35(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative35(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2862,7 +2862,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative36(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative36(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         
@@ -2873,7 +2873,7 @@
         return d_dt_chaste_interface_var_non_inactivating_steady_state_potassium_current__iKss;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative36(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative36(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2892,7 +2892,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative37(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative37(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -2915,7 +2915,7 @@
         return d_dt_chaste_interface_var_rapid_delayed_rectifier_potassium_current__O_K;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative37(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative37(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2940,7 +2940,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative38(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative38(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -2961,7 +2961,7 @@
         return d_dt_chaste_interface_var_rapid_delayed_rectifier_potassium_current__C_K1;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative38(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative38(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2985,7 +2985,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative39(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative39(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -3006,7 +3006,7 @@
         return d_dt_chaste_interface_var_rapid_delayed_rectifier_potassium_current__C_K2;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative39(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative39(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -3029,7 +3029,7 @@
         }
         return partialF;
     }
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluateYDerivative40(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluateYDerivative40(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -3048,7 +3048,7 @@
         return d_dt_chaste_interface_var_rapid_delayed_rectifier_potassium_current__I_K;
     }
 
-    double Cellbondarenko_model_2004_apexFromCellMLGRL1::EvaluatePartialDerivative40(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::EvaluatePartialDerivative40(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -3072,7 +3072,7 @@
         return partialF;
     }
 
-    std::vector<double> Cellbondarenko_model_2004_apexFromCellMLGRL1::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Cellbondarenko_model_2004_apexFromCellMLGRL1Opt::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -3088,7 +3088,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellbondarenko_model_2004_apexFromCellMLGRL1>::Initialise(void)
+void OdeSystemInformation<Cellbondarenko_model_2004_apexFromCellMLGRL1Opt>::Initialise(void)
 {
     this->mSystemName = "bondarenko_model_2004_apex";
     this->mFreeVariableName = "environment__time";
@@ -3314,5 +3314,5 @@ void OdeSystemInformation<Cellbondarenko_model_2004_apexFromCellMLGRL1>::Initial
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellbondarenko_model_2004_apexFromCellMLGRL1)
+CHASTE_CLASS_EXPORT(Cellbondarenko_model_2004_apexFromCellMLGRL1Opt)
 

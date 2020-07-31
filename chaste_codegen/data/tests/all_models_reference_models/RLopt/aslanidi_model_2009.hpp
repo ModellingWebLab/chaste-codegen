@@ -1,5 +1,5 @@
-#ifndef CELLASLANIDI_MODEL_2009FROMCELLMLRUSHLARSEN_HPP_
-#define CELLASLANIDI_MODEL_2009FROMCELLMLRUSHLARSEN_HPP_
+#ifndef CELLASLANIDI_MODEL_2009FROMCELLMLRUSHLARSENOPT_HPP_
+#define CELLASLANIDI_MODEL_2009FROMCELLMLRUSHLARSENOPT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractRushLarsenCardiacCell.hpp"
 
-class Cellaslanidi_model_2009FromCellMLRushLarsen : public AbstractRushLarsenCardiacCell
+class Cellaslanidi_model_2009FromCellMLRushLarsenOpt : public AbstractRushLarsenCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -35,8 +35,8 @@ class Cellaslanidi_model_2009FromCellMLRushLarsen : public AbstractRushLarsenCar
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
-    Cellaslanidi_model_2009FromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellaslanidi_model_2009FromCellMLRushLarsen();
+    Cellaslanidi_model_2009FromCellMLRushLarsenOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellaslanidi_model_2009FromCellMLRushLarsenOpt();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateEquations(double var_chaste_interface__environment__time_converted, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf);
     void ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf);
@@ -46,7 +46,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellaslanidi_model_2009FromCellMLRushLarsen)
+CHASTE_CLASS_EXPORT(Cellaslanidi_model_2009FromCellMLRushLarsenOpt)
 
 namespace boost
 {
@@ -54,7 +54,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellaslanidi_model_2009FromCellMLRushLarsen * t, const unsigned int fileVersion)
+            Archive & ar, const Cellaslanidi_model_2009FromCellMLRushLarsenOpt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -64,17 +64,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellaslanidi_model_2009FromCellMLRushLarsen * t, const unsigned int fileVersion)
+            Archive & ar, Cellaslanidi_model_2009FromCellMLRushLarsenOpt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellaslanidi_model_2009FromCellMLRushLarsen(p_solver, p_stimulus);
+            ::new(t)Cellaslanidi_model_2009FromCellMLRushLarsenOpt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLASLANIDI_MODEL_2009FROMCELLMLRUSHLARSEN_HPP_
+#endif // CELLASLANIDI_MODEL_2009FROMCELLMLRUSHLARSENOPT_HPP_

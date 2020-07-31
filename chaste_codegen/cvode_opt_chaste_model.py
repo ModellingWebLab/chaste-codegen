@@ -3,7 +3,7 @@ from chaste_codegen.cvode_chaste_model import CvodeChasteModel
 
 
 class OptCvodeChasteModel(CvodeChasteModel):
-    """ Holds information specific for the Optimised model type. Builds on Normal model type"""
+    """ Holds information specific for the Cvode Optimised model type. Builds on Cvode model type"""
 
     def _get_stimulus(self):
         """ Get the partially evaluated stimulus currents in the model"""

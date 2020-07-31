@@ -1,5 +1,5 @@
-#ifndef CELLNOBLE_NOBLE_SAN_MODEL_1984FROMCELLMLGRL2_HPP_
-#define CELLNOBLE_NOBLE_SAN_MODEL_1984FROMCELLMLGRL2_HPP_
+#ifndef CELLNOBLE_NOBLE_SAN_MODEL_1984FROMCELLMLGRL2OPT_HPP_
+#define CELLNOBLE_NOBLE_SAN_MODEL_1984FROMCELLMLGRL2OPT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractGeneralizedRushLarsenCardiacCell.hpp"
 
-class Cellnoble_noble_SAN_model_1984FromCellMLGRL2 : public AbstractGeneralizedRushLarsenCardiacCell
+class Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt : public AbstractGeneralizedRushLarsenCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -35,8 +35,8 @@ class Cellnoble_noble_SAN_model_1984FromCellMLGRL2 : public AbstractGeneralizedR
 public:
 
     double GetIntracellularCalciumConcentration();
-    Cellnoble_noble_SAN_model_1984FromCellMLGRL2(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellnoble_noble_SAN_model_1984FromCellMLGRL2();
+    Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted);
     void ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted);
@@ -77,7 +77,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellnoble_noble_SAN_model_1984FromCellMLGRL2)
+CHASTE_CLASS_EXPORT(Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt)
 
 namespace boost
 {
@@ -85,7 +85,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellnoble_noble_SAN_model_1984FromCellMLGRL2 * t, const unsigned int fileVersion)
+            Archive & ar, const Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -95,17 +95,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellnoble_noble_SAN_model_1984FromCellMLGRL2 * t, const unsigned int fileVersion)
+            Archive & ar, Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellnoble_noble_SAN_model_1984FromCellMLGRL2(p_solver, p_stimulus);
+            ::new(t)Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLNOBLE_NOBLE_SAN_MODEL_1984FROMCELLMLGRL2_HPP_
+#endif // CELLNOBLE_NOBLE_SAN_MODEL_1984FROMCELLMLGRL2OPT_HPP_

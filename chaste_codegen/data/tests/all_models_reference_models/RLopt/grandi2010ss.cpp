@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellgrandi2010ssFromCellMLRushLarsen::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellgrandi2010ssFromCellMLRushLarsenOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__cell__stim_amplitude_converted = -15.0 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
@@ -37,11 +37,11 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double Cellgrandi2010ssFromCellMLRushLarsen::GetIntracellularCalciumConcentration()
+    double Cellgrandi2010ssFromCellMLRushLarsenOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[37];
     }
-    Cellgrandi2010ssFromCellMLRushLarsen::Cellgrandi2010ssFromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellgrandi2010ssFromCellMLRushLarsenOpt::Cellgrandi2010ssFromCellMLRushLarsenOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractRushLarsenCardiacCell(
                 38,
                 0,
@@ -49,7 +49,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellgrandi2010ssFromCellMLRushLarsen>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellgrandi2010ssFromCellMLRushLarsenOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -60,11 +60,11 @@
         this->mParameters[2] = 1.0; // (var_cell__gkr_mult) [dimensionless]
     }
 
-    Cellgrandi2010ssFromCellMLRushLarsen::~Cellgrandi2010ssFromCellMLRushLarsen()
+    Cellgrandi2010ssFromCellMLRushLarsenOpt::~Cellgrandi2010ssFromCellMLRushLarsenOpt()
     {
     }
     
-    double Cellgrandi2010ssFromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellgrandi2010ssFromCellMLRushLarsenOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -131,7 +131,7 @@
         return i_ionic;
     }
 
-    void Cellgrandi2010ssFromCellMLRushLarsen::EvaluateEquations(double var_chaste_interface__cell__time, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
+    void Cellgrandi2010ssFromCellMLRushLarsenOpt::EvaluateEquations(double var_chaste_interface__cell__time, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -319,7 +319,7 @@
         rDY[36] = d_dt_chaste_interface_var_cell__sCasl;
         rDY[37] = d_dt_chaste_interface_var_cell__sCai;
     }
-    void Cellgrandi2010ssFromCellMLRushLarsen::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
+    void Cellgrandi2010ssFromCellMLRushLarsenOpt::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         
@@ -362,7 +362,7 @@
         rY[37] += mDt * rDY[37];
     }
 
-    std::vector<double> Cellgrandi2010ssFromCellMLRushLarsen::ComputeDerivedQuantities(double var_chaste_interface__cell__time, const std::vector<double> & rY)
+    std::vector<double> Cellgrandi2010ssFromCellMLRushLarsenOpt::ComputeDerivedQuantities(double var_chaste_interface__cell__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -378,7 +378,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellgrandi2010ssFromCellMLRushLarsen>::Initialise(void)
+void OdeSystemInformation<Cellgrandi2010ssFromCellMLRushLarsenOpt>::Initialise(void)
 {
     this->mSystemName = "grandi2010";
     this->mFreeVariableName = "cell__time";
@@ -599,4 +599,4 @@ void OdeSystemInformation<Cellgrandi2010ssFromCellMLRushLarsen>::Initialise(void
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellgrandi2010ssFromCellMLRushLarsen)
+CHASTE_CLASS_EXPORT(Cellgrandi2010ssFromCellMLRushLarsenOpt)

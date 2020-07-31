@@ -21,11 +21,11 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    double Celldokos_model_1996FromCellMLRushLarsen::GetIntracellularCalciumConcentration()
+    double Celldokos_model_1996FromCellMLRushLarsenOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Celldokos_model_1996FromCellMLRushLarsen::Celldokos_model_1996FromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Celldokos_model_1996FromCellMLRushLarsenOpt::Celldokos_model_1996FromCellMLRushLarsenOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractRushLarsenCardiacCell(
                 18,
                 0,
@@ -33,17 +33,17 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Celldokos_model_1996FromCellMLRushLarsen>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Celldokos_model_1996FromCellMLRushLarsenOpt>::Instance();
         Init();
         
         this->mParameters[0] = 3.1999999999999999e-5; // (var_membrane__C) [nanoF]
     }
 
-    Celldokos_model_1996FromCellMLRushLarsen::~Celldokos_model_1996FromCellMLRushLarsen()
+    Celldokos_model_1996FromCellMLRushLarsenOpt::~Celldokos_model_1996FromCellMLRushLarsenOpt()
     {
     }
     
-    double Celldokos_model_1996FromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
+    double Celldokos_model_1996FromCellMLRushLarsenOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -103,7 +103,7 @@
         return i_ionic;
     }
 
-    void Celldokos_model_1996FromCellMLRushLarsen::EvaluateEquations(double var_chaste_interface__environment__time_converted, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
+    void Celldokos_model_1996FromCellMLRushLarsenOpt::EvaluateEquations(double var_chaste_interface__environment__time_converted, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__E = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -207,7 +207,7 @@
         rDY[16] = d_dt_chaste_interface_var_ion_concentrations__Ki;
         rDY[17] = d_dt_chaste_interface_var_ion_concentrations__Ko;
     }
-    void Celldokos_model_1996FromCellMLRushLarsen::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
+    void Celldokos_model_1996FromCellMLRushLarsenOpt::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         
@@ -242,7 +242,7 @@
         rY[17] += mDt * rDY[17];
     }
 
-    std::vector<double> Celldokos_model_1996FromCellMLRushLarsen::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Celldokos_model_1996FromCellMLRushLarsenOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -258,7 +258,7 @@
     }
 
 template<>
-void OdeSystemInformation<Celldokos_model_1996FromCellMLRushLarsen>::Initialise(void)
+void OdeSystemInformation<Celldokos_model_1996FromCellMLRushLarsenOpt>::Initialise(void)
 {
     this->mSystemName = "dokos_model_1996";
     this->mFreeVariableName = "environment__time";
@@ -371,4 +371,4 @@ void OdeSystemInformation<Celldokos_model_1996FromCellMLRushLarsen>::Initialise(
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Celldokos_model_1996FromCellMLRushLarsen)
+CHASTE_CLASS_EXPORT(Celldokos_model_1996FromCellMLRushLarsenOpt)

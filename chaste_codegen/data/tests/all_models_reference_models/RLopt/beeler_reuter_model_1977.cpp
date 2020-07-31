@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellbeeler_reuter_model_1977FromCellMLRushLarsen::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellbeeler_reuter_model_1977FromCellMLRushLarsenOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__stimulus_protocol__IstimAmplitude_converted = 50.000000000000007; // uA_per_cm2
@@ -37,11 +37,11 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double Cellbeeler_reuter_model_1977FromCellMLRushLarsen::GetIntracellularCalciumConcentration()
+    double Cellbeeler_reuter_model_1977FromCellMLRushLarsenOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Cellbeeler_reuter_model_1977FromCellMLRushLarsen::Cellbeeler_reuter_model_1977FromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellbeeler_reuter_model_1977FromCellMLRushLarsenOpt::Cellbeeler_reuter_model_1977FromCellMLRushLarsenOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractRushLarsenCardiacCell(
                 8,
                 0,
@@ -49,7 +49,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLRushLarsen>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLRushLarsenOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -57,11 +57,11 @@
         
     }
 
-    Cellbeeler_reuter_model_1977FromCellMLRushLarsen::~Cellbeeler_reuter_model_1977FromCellMLRushLarsen()
+    Cellbeeler_reuter_model_1977FromCellMLRushLarsenOpt::~Cellbeeler_reuter_model_1977FromCellMLRushLarsenOpt()
     {
     }
     
-    double Cellbeeler_reuter_model_1977FromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellbeeler_reuter_model_1977FromCellMLRushLarsenOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -95,7 +95,7 @@
         return i_ionic;
     }
 
-    void Cellbeeler_reuter_model_1977FromCellMLRushLarsen::EvaluateEquations(double var_chaste_interface__environment__time, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
+    void Cellbeeler_reuter_model_1977FromCellMLRushLarsenOpt::EvaluateEquations(double var_chaste_interface__environment__time, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -155,7 +155,7 @@
         rAlphaOrTau[7] = var_time_dependent_outward_current_x1_gate__alpha_x1;
         rBetaOrInf[7] = var_time_dependent_outward_current_x1_gate__beta_x1;
     }
-    void Cellbeeler_reuter_model_1977FromCellMLRushLarsen::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
+    void Cellbeeler_reuter_model_1977FromCellMLRushLarsenOpt::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         
@@ -192,7 +192,7 @@
         }
     }
 
-    std::vector<double> Cellbeeler_reuter_model_1977FromCellMLRushLarsen::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Cellbeeler_reuter_model_1977FromCellMLRushLarsenOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -208,7 +208,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLRushLarsen>::Initialise(void)
+void OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLRushLarsenOpt>::Initialise(void)
 {
     this->mSystemName = "beeler_reuter_model_1977";
     this->mFreeVariableName = "environment__time";
@@ -267,4 +267,4 @@ void OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLRushLarsen>::Ini
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellbeeler_reuter_model_1977FromCellMLRushLarsen)
+CHASTE_CLASS_EXPORT(Cellbeeler_reuter_model_1977FromCellMLRushLarsenOpt)

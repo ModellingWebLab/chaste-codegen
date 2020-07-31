@@ -1,5 +1,5 @@
-#ifndef CELLDOKOS_MODEL_1996FROMCELLMLRUSHLARSEN_HPP_
-#define CELLDOKOS_MODEL_1996FROMCELLMLRUSHLARSEN_HPP_
+#ifndef CELLDOKOS_MODEL_1996FROMCELLMLRUSHLARSENOPT_HPP_
+#define CELLDOKOS_MODEL_1996FROMCELLMLRUSHLARSENOPT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractRushLarsenCardiacCell.hpp"
 
-class Celldokos_model_1996FromCellMLRushLarsen : public AbstractRushLarsenCardiacCell
+class Celldokos_model_1996FromCellMLRushLarsenOpt : public AbstractRushLarsenCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -35,8 +35,8 @@ class Celldokos_model_1996FromCellMLRushLarsen : public AbstractRushLarsenCardia
 public:
 
     double GetIntracellularCalciumConcentration();
-    Celldokos_model_1996FromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Celldokos_model_1996FromCellMLRushLarsen();
+    Celldokos_model_1996FromCellMLRushLarsenOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Celldokos_model_1996FromCellMLRushLarsenOpt();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateEquations(double var_chaste_interface__environment__time_converted, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf);
     void ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf);
@@ -46,7 +46,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Celldokos_model_1996FromCellMLRushLarsen)
+CHASTE_CLASS_EXPORT(Celldokos_model_1996FromCellMLRushLarsenOpt)
 
 namespace boost
 {
@@ -54,7 +54,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Celldokos_model_1996FromCellMLRushLarsen * t, const unsigned int fileVersion)
+            Archive & ar, const Celldokos_model_1996FromCellMLRushLarsenOpt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -64,17 +64,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Celldokos_model_1996FromCellMLRushLarsen * t, const unsigned int fileVersion)
+            Archive & ar, Celldokos_model_1996FromCellMLRushLarsenOpt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Celldokos_model_1996FromCellMLRushLarsen(p_solver, p_stimulus);
+            ::new(t)Celldokos_model_1996FromCellMLRushLarsenOpt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLDOKOS_MODEL_1996FROMCELLMLRUSHLARSEN_HPP_
+#endif // CELLDOKOS_MODEL_1996FROMCELLMLRUSHLARSENOPT_HPP_

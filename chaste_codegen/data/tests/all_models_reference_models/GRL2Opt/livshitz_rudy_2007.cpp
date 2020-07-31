@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Celllivshitz_rudy_2007FromCellMLGRL2::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Celllivshitz_rudy_2007FromCellMLGRL2Opt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__cell__stim_amplitude_converted = -15.0 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
@@ -38,7 +38,7 @@
         return p_cellml_stim;
     }
 
-    Celllivshitz_rudy_2007FromCellMLGRL2::Celllivshitz_rudy_2007FromCellMLGRL2(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Celllivshitz_rudy_2007FromCellMLGRL2Opt::Celllivshitz_rudy_2007FromCellMLGRL2Opt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractGeneralizedRushLarsenCardiacCell(
                 18,
                 0,
@@ -46,7 +46,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Celllivshitz_rudy_2007FromCellMLGRL2>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Celllivshitz_rudy_2007FromCellMLGRL2Opt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -57,11 +57,11 @@
         this->mParameters[2] = 0.02614; // (var_IKr__gkrmax) [mS_per_uF]
     }
 
-    Celllivshitz_rudy_2007FromCellMLGRL2::~Celllivshitz_rudy_2007FromCellMLGRL2()
+    Celllivshitz_rudy_2007FromCellMLGRL2Opt::~Celllivshitz_rudy_2007FromCellMLGRL2Opt()
     {
     }
     
-    double Celllivshitz_rudy_2007FromCellMLGRL2::GetIIonic(const std::vector<double>* pStateVariables)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -112,7 +112,7 @@
         return i_ionic;
     }
 
-    void Celllivshitz_rudy_2007FromCellMLGRL2::UpdateTransmembranePotential(double var_chaste_interface__Environment__time)
+    void Celllivshitz_rudy_2007FromCellMLGRL2Opt::UpdateTransmembranePotential(double var_chaste_interface__Environment__time)
     {
         std::vector<double>& rY = rGetStateVariables();
         const unsigned v_index = GetVoltageIndex();
@@ -189,7 +189,7 @@
         }
     }
 
-    void Celllivshitz_rudy_2007FromCellMLGRL2::ComputeOneStepExceptVoltage(double var_chaste_interface__Environment__time)
+    void Celllivshitz_rudy_2007FromCellMLGRL2Opt::ComputeOneStepExceptVoltage(double var_chaste_interface__Environment__time)
     {
         std::vector<double>& rY = rGetStateVariables();
         const double delta=1e-8;
@@ -474,7 +474,7 @@
     }
    
     
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluateYDerivative0(double var_chaste_interface__Environment__time, std::vector<double>& rY)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluateYDerivative0(double var_chaste_interface__Environment__time, std::vector<double>& rY)
     {
         double d_dt_chaste_interface_var_cell__V;
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -523,7 +523,7 @@
         return d_dt_chaste_interface_var_cell__V;
     }
 
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluatePartialDerivative0(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluatePartialDerivative0(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -678,7 +678,7 @@
         }
         return partialF;
     }
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluateYDerivative1(double var_chaste_interface__Environment__time, std::vector<double>& rY)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluateYDerivative1(double var_chaste_interface__Environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -694,7 +694,7 @@
         return d_dt_chaste_interface_var_INa__H;
     }
 
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluatePartialDerivative1(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluatePartialDerivative1(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -727,7 +727,7 @@
         }
         return partialF;
     }
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluateYDerivative2(double var_chaste_interface__Environment__time, std::vector<double>& rY)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluateYDerivative2(double var_chaste_interface__Environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -742,7 +742,7 @@
         return d_dt_chaste_interface_var_INa__m;
     }
 
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluatePartialDerivative2(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluatePartialDerivative2(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -769,7 +769,7 @@
         }
         return partialF;
     }
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluateYDerivative3(double var_chaste_interface__Environment__time, std::vector<double>& rY)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluateYDerivative3(double var_chaste_interface__Environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -785,7 +785,7 @@
         return d_dt_chaste_interface_var_INa__J;
     }
 
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluatePartialDerivative3(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluatePartialDerivative3(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -832,7 +832,7 @@
         }
         return partialF;
     }
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluateYDerivative4(double var_chaste_interface__Environment__time, std::vector<double>& rY)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluateYDerivative4(double var_chaste_interface__Environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -848,7 +848,7 @@
         return d_dt_chaste_interface_var_ICaL__d;
     }
 
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluatePartialDerivative4(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluatePartialDerivative4(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -876,7 +876,7 @@
         }
         return partialF;
     }
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluateYDerivative5(double var_chaste_interface__Environment__time, std::vector<double>& rY)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluateYDerivative5(double var_chaste_interface__Environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -891,7 +891,7 @@
         return d_dt_chaste_interface_var_ICaL__f;
     }
 
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluatePartialDerivative5(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluatePartialDerivative5(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -913,7 +913,7 @@
         }
         return partialF;
     }
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluateYDerivative6(double var_chaste_interface__Environment__time, std::vector<double>& rY)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluateYDerivative6(double var_chaste_interface__Environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -928,7 +928,7 @@
         return d_dt_chaste_interface_var_IKr__xr;
     }
 
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluatePartialDerivative6(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluatePartialDerivative6(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -959,7 +959,7 @@
         }
         return partialF;
     }
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluateYDerivative7(double var_chaste_interface__Environment__time, std::vector<double>& rY)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluateYDerivative7(double var_chaste_interface__Environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -976,7 +976,7 @@
         return d_dt_chaste_interface_var_IKs__xs1;
     }
 
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluatePartialDerivative7(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluatePartialDerivative7(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1008,7 +1008,7 @@
         }
         return partialF;
     }
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluateYDerivative8(double var_chaste_interface__Environment__time, std::vector<double>& rY)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluateYDerivative8(double var_chaste_interface__Environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1025,7 +1025,7 @@
         return d_dt_chaste_interface_var_IKs__xs2;
     }
 
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluatePartialDerivative8(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluatePartialDerivative8(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1053,7 +1053,7 @@
         }
         return partialF;
     }
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluateYDerivative9(double var_chaste_interface__Environment__time, std::vector<double>& rY)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluateYDerivative9(double var_chaste_interface__Environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1068,7 +1068,7 @@
         return d_dt_chaste_interface_var_ICaT__b;
     }
 
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluatePartialDerivative9(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluatePartialDerivative9(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1093,7 +1093,7 @@
         }
         return partialF;
     }
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluateYDerivative10(double var_chaste_interface__Environment__time, std::vector<double>& rY)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluateYDerivative10(double var_chaste_interface__Environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1108,7 +1108,7 @@
         return d_dt_chaste_interface_var_ICaT__g;
     }
 
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluatePartialDerivative10(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluatePartialDerivative10(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1135,7 +1135,7 @@
         }
         return partialF;
     }
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluateYDerivative11(double var_chaste_interface__Environment__time, std::vector<double>& rY)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluateYDerivative11(double var_chaste_interface__Environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1162,7 +1162,7 @@
         return d_dt_chaste_interface_var_Irel__Rel;
     }
 
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluatePartialDerivative11(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluatePartialDerivative11(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1188,7 +1188,7 @@
         }
         return partialF;
     }
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluateYDerivative12(double var_chaste_interface__Environment__time, std::vector<double>& rY)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluateYDerivative12(double var_chaste_interface__Environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1224,7 +1224,7 @@
         return d_dt_chaste_interface_var_Na__Na_i;
     }
 
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluatePartialDerivative12(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluatePartialDerivative12(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1306,7 +1306,7 @@
         }
         return partialF;
     }
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluateYDerivative13(double var_chaste_interface__Environment__time, std::vector<double>& rY)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluateYDerivative13(double var_chaste_interface__Environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1343,7 +1343,7 @@
         return d_dt_chaste_interface_var_K__K_i;
     }
 
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluatePartialDerivative13(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluatePartialDerivative13(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1445,7 +1445,7 @@
         }
         return partialF;
     }
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluateYDerivative14(double var_chaste_interface__Environment__time, std::vector<double>& rY)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluateYDerivative14(double var_chaste_interface__Environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1486,7 +1486,7 @@
         return d_dt_chaste_interface_var_Ca__Ca_T;
     }
 
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluatePartialDerivative14(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluatePartialDerivative14(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1579,7 +1579,7 @@
         }
         return partialF;
     }
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluateYDerivative15(double var_chaste_interface__Environment__time, std::vector<double>& rY)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluateYDerivative15(double var_chaste_interface__Environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__Irel__Rel = rY[11];
@@ -1598,7 +1598,7 @@
         return d_dt_chaste_interface_var_Ca__Ca_JSR_T;
     }
 
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluatePartialDerivative15(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluatePartialDerivative15(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1622,7 +1622,7 @@
         }
         return partialF;
     }
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluateYDerivative16(double var_chaste_interface__Environment__time, std::vector<double>& rY)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluateYDerivative16(double var_chaste_interface__Environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__Ca__Ca_T = rY[14];
@@ -1647,7 +1647,7 @@
         return d_dt_chaste_interface_var_Ca__Ca_NSR;
     }
 
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluatePartialDerivative16(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluatePartialDerivative16(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1666,7 +1666,7 @@
         }
         return partialF;
     }
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluateYDerivative17(double var_chaste_interface__Environment__time, std::vector<double>& rY)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluateYDerivative17(double var_chaste_interface__Environment__time, std::vector<double>& rY)
     {
         
         
@@ -1677,7 +1677,7 @@
         return d_dt_chaste_interface_var_Ca__Over;
     }
 
-    double Celllivshitz_rudy_2007FromCellMLGRL2::EvaluatePartialDerivative17(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celllivshitz_rudy_2007FromCellMLGRL2Opt::EvaluatePartialDerivative17(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1697,7 +1697,7 @@
         return partialF;
     }
 
-    std::vector<double> Celllivshitz_rudy_2007FromCellMLGRL2::ComputeDerivedQuantities(double var_chaste_interface__Environment__time, const std::vector<double> & rY)
+    std::vector<double> Celllivshitz_rudy_2007FromCellMLGRL2Opt::ComputeDerivedQuantities(double var_chaste_interface__Environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -1724,7 +1724,7 @@
     }
 
 template<>
-void OdeSystemInformation<Celllivshitz_rudy_2007FromCellMLGRL2>::Initialise(void)
+void OdeSystemInformation<Celllivshitz_rudy_2007FromCellMLGRL2Opt>::Initialise(void)
 {
     this->mSystemName = "LivshitzRudy2007";
     this->mFreeVariableName = "Environment__time";
@@ -1849,5 +1849,5 @@ void OdeSystemInformation<Celllivshitz_rudy_2007FromCellMLGRL2>::Initialise(void
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Celllivshitz_rudy_2007FromCellMLGRL2)
+CHASTE_CLASS_EXPORT(Celllivshitz_rudy_2007FromCellMLGRL2Opt)
 

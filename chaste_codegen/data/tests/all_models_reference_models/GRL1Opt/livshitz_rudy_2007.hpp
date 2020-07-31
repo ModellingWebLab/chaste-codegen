@@ -1,5 +1,5 @@
-#ifndef CELLLIVSHITZ_RUDY_2007FROMCELLMLGRL1_HPP_
-#define CELLLIVSHITZ_RUDY_2007FROMCELLMLGRL1_HPP_
+#ifndef CELLLIVSHITZ_RUDY_2007FROMCELLMLGRL1OPT_HPP_
+#define CELLLIVSHITZ_RUDY_2007FROMCELLMLGRL1OPT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractGeneralizedRushLarsenCardiacCell.hpp"
 
-class Celllivshitz_rudy_2007FromCellMLGRL1 : public AbstractGeneralizedRushLarsenCardiacCell
+class Celllivshitz_rudy_2007FromCellMLGRL1Opt : public AbstractGeneralizedRushLarsenCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -35,8 +35,8 @@ class Celllivshitz_rudy_2007FromCellMLGRL1 : public AbstractGeneralizedRushLarse
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
-    Celllivshitz_rudy_2007FromCellMLGRL1(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Celllivshitz_rudy_2007FromCellMLGRL1();
+    Celllivshitz_rudy_2007FromCellMLGRL1Opt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Celllivshitz_rudy_2007FromCellMLGRL1Opt();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void UpdateTransmembranePotential(double var_chaste_interface__Environment__time);
     void ComputeOneStepExceptVoltage(double var_chaste_interface__Environment__time);
@@ -83,7 +83,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Celllivshitz_rudy_2007FromCellMLGRL1)
+CHASTE_CLASS_EXPORT(Celllivshitz_rudy_2007FromCellMLGRL1Opt)
 
 namespace boost
 {
@@ -91,7 +91,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Celllivshitz_rudy_2007FromCellMLGRL1 * t, const unsigned int fileVersion)
+            Archive & ar, const Celllivshitz_rudy_2007FromCellMLGRL1Opt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -101,17 +101,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Celllivshitz_rudy_2007FromCellMLGRL1 * t, const unsigned int fileVersion)
+            Archive & ar, Celllivshitz_rudy_2007FromCellMLGRL1Opt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Celllivshitz_rudy_2007FromCellMLGRL1(p_solver, p_stimulus);
+            ::new(t)Celllivshitz_rudy_2007FromCellMLGRL1Opt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLLIVSHITZ_RUDY_2007FROMCELLMLGRL1_HPP_
+#endif // CELLLIVSHITZ_RUDY_2007FROMCELLMLGRL1OPT_HPP_

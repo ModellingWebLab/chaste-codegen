@@ -22,7 +22,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
-    Cellkurata_model_2002FromCellMLRushLarsen::Cellkurata_model_2002FromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellkurata_model_2002FromCellMLRushLarsenOpt::Cellkurata_model_2002FromCellMLRushLarsenOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractRushLarsenCardiacCell(
                 27,
                 0,
@@ -30,17 +30,17 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellkurata_model_2002FromCellMLRushLarsen>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellkurata_model_2002FromCellMLRushLarsenOpt>::Instance();
         Init();
         
         this->mParameters[0] = 32.0; // (var_membrane__Cm) [picoF]
     }
 
-    Cellkurata_model_2002FromCellMLRushLarsen::~Cellkurata_model_2002FromCellMLRushLarsen()
+    Cellkurata_model_2002FromCellMLRushLarsenOpt::~Cellkurata_model_2002FromCellMLRushLarsenOpt()
     {
     }
     
-    double Cellkurata_model_2002FromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellkurata_model_2002FromCellMLRushLarsenOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -114,7 +114,7 @@
         return i_ionic;
     }
 
-    void Cellkurata_model_2002FromCellMLRushLarsen::EvaluateEquations(double var_chaste_interface__environment__time, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
+    void Cellkurata_model_2002FromCellMLRushLarsenOpt::EvaluateEquations(double var_chaste_interface__environment__time, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -263,7 +263,7 @@
         rDY[25] = d_dt_chaste_interface_var_calcium_buffering__fTMC;
         rDY[26] = d_dt_chaste_interface_var_calcium_buffering__fCQ;
     }
-    void Cellkurata_model_2002FromCellMLRushLarsen::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
+    void Cellkurata_model_2002FromCellMLRushLarsenOpt::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         
@@ -295,7 +295,7 @@
         rY[26] += mDt * rDY[26];
     }
 
-    std::vector<double> Cellkurata_model_2002FromCellMLRushLarsen::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Cellkurata_model_2002FromCellMLRushLarsenOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -311,7 +311,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellkurata_model_2002FromCellMLRushLarsen>::Initialise(void)
+void OdeSystemInformation<Cellkurata_model_2002FromCellMLRushLarsenOpt>::Initialise(void)
 {
     this->mSystemName = "kurata_model_2002";
     this->mFreeVariableName = "environment__time";
@@ -469,4 +469,4 @@ void OdeSystemInformation<Cellkurata_model_2002FromCellMLRushLarsen>::Initialise
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellkurata_model_2002FromCellMLRushLarsen)
+CHASTE_CLASS_EXPORT(Cellkurata_model_2002FromCellMLRushLarsenOpt)

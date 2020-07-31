@@ -1,5 +1,5 @@
-#ifndef DYNAMICMATSUOKA_MODEL_2003FROMCELLMLGRL1_HPP_
-#define DYNAMICMATSUOKA_MODEL_2003FROMCELLMLGRL1_HPP_
+#ifndef DYNAMICMATSUOKA_MODEL_2003FROMCELLMLGRL1OPT_HPP_
+#define DYNAMICMATSUOKA_MODEL_2003FROMCELLMLGRL1OPT_HPP_
 
 //! @file
 //!
@@ -19,7 +19,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractGeneralizedRushLarsenCardiacCell.hpp"
 
-class Dynamicmatsuoka_model_2003FromCellMLGRL1 : public AbstractGeneralizedRushLarsenCardiacCell, public AbstractDynamicallyLoadableEntity
+class Dynamicmatsuoka_model_2003FromCellMLGRL1Opt : public AbstractGeneralizedRushLarsenCardiacCell, public AbstractDynamicallyLoadableEntity
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -36,8 +36,8 @@ class Dynamicmatsuoka_model_2003FromCellMLGRL1 : public AbstractGeneralizedRushL
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
-    Dynamicmatsuoka_model_2003FromCellMLGRL1(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Dynamicmatsuoka_model_2003FromCellMLGRL1();
+    Dynamicmatsuoka_model_2003FromCellMLGRL1Opt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Dynamicmatsuoka_model_2003FromCellMLGRL1Opt();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time);
     void ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time);
@@ -122,7 +122,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Dynamicmatsuoka_model_2003FromCellMLGRL1)
+CHASTE_CLASS_EXPORT(Dynamicmatsuoka_model_2003FromCellMLGRL1Opt)
 
 namespace boost
 {
@@ -130,7 +130,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Dynamicmatsuoka_model_2003FromCellMLGRL1 * t, const unsigned int fileVersion)
+            Archive & ar, const Dynamicmatsuoka_model_2003FromCellMLGRL1Opt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -140,17 +140,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Dynamicmatsuoka_model_2003FromCellMLGRL1 * t, const unsigned int fileVersion)
+            Archive & ar, Dynamicmatsuoka_model_2003FromCellMLGRL1Opt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Dynamicmatsuoka_model_2003FromCellMLGRL1(p_solver, p_stimulus);
+            ::new(t)Dynamicmatsuoka_model_2003FromCellMLGRL1Opt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // DYNAMICMATSUOKA_MODEL_2003FROMCELLMLGRL1_HPP_
+#endif // DYNAMICMATSUOKA_MODEL_2003FROMCELLMLGRL1OPT_HPP_

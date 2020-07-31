@@ -20,7 +20,8 @@ class ChasteModel(object):
     """
 
     def __enter__(self):
-        """ Enter to allow using with with. The setup happens in __init__. """
+        """ Pre analysis preparation. Required to be able to use model in context (with).
+        Defined for overwriting in sub-classes if pre-processing is needed to use the model for code generation. """
         return self
 
     def __init__(self, model, file_name, **kwargs):
@@ -418,5 +419,6 @@ class ChasteModel(object):
         self.generated_cpp = template.render(self._vars_for_template)
 
     def __exit__(self, type, value, traceback):
-        """ Clean-up. e.g. if the model was changed, restore the model for re-use. """
+        """ Clean-up. Required to be able to use model in context (with).
+        Defined for overwriting in sub-classes if state needs to be reset for subsequent code generation. """
         pass

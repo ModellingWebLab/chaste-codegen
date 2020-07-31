@@ -21,11 +21,11 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    double Cellten_tusscher_model_2004_endoFromCellMLRushLarsen::GetIntracellularCalciumConcentration()
+    double Cellten_tusscher_model_2004_endoFromCellMLRushLarsenOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Cellten_tusscher_model_2004_endoFromCellMLRushLarsen::Cellten_tusscher_model_2004_endoFromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellten_tusscher_model_2004_endoFromCellMLRushLarsenOpt::Cellten_tusscher_model_2004_endoFromCellMLRushLarsenOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractRushLarsenCardiacCell(
                 17,
                 0,
@@ -33,7 +33,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellten_tusscher_model_2004_endoFromCellMLRushLarsen>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellten_tusscher_model_2004_endoFromCellMLRushLarsenOpt>::Instance();
         Init();
         
         this->mParameters[0] = 0.000175; // (var_L_type_Ca_current__g_CaL) [litre_per_farad_second]
@@ -42,11 +42,11 @@
         this->mParameters[3] = 0.072999999999999995; // (var_transient_outward_current__g_to) [nanoS_per_picoF]
     }
 
-    Cellten_tusscher_model_2004_endoFromCellMLRushLarsen::~Cellten_tusscher_model_2004_endoFromCellMLRushLarsen()
+    Cellten_tusscher_model_2004_endoFromCellMLRushLarsenOpt::~Cellten_tusscher_model_2004_endoFromCellMLRushLarsenOpt()
     {
     }
     
-    double Cellten_tusscher_model_2004_endoFromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellten_tusscher_model_2004_endoFromCellMLRushLarsenOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -104,7 +104,7 @@
         return i_ionic;
     }
 
-    void Cellten_tusscher_model_2004_endoFromCellMLRushLarsen::EvaluateEquations(double var_chaste_interface__environment__time, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
+    void Cellten_tusscher_model_2004_endoFromCellMLRushLarsenOpt::EvaluateEquations(double var_chaste_interface__environment__time, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -208,7 +208,7 @@
         rDY[15] = d_dt_chaste_interface_var_sodium_dynamics__Na_i;
         rDY[16] = d_dt_chaste_interface_var_potassium_dynamics__K_i;
     }
-    void Cellten_tusscher_model_2004_endoFromCellMLRushLarsen::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
+    void Cellten_tusscher_model_2004_endoFromCellMLRushLarsenOpt::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         
@@ -230,7 +230,7 @@
         rY[16] += mDt * rDY[16];
     }
 
-    std::vector<double> Cellten_tusscher_model_2004_endoFromCellMLRushLarsen::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Cellten_tusscher_model_2004_endoFromCellMLRushLarsenOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -246,7 +246,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellten_tusscher_model_2004_endoFromCellMLRushLarsen>::Initialise(void)
+void OdeSystemInformation<Cellten_tusscher_model_2004_endoFromCellMLRushLarsenOpt>::Initialise(void)
 {
     this->mSystemName = "tentusscher_model_2004_endo";
     this->mFreeVariableName = "environment__time";
@@ -368,4 +368,4 @@ void OdeSystemInformation<Cellten_tusscher_model_2004_endoFromCellMLRushLarsen>:
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellten_tusscher_model_2004_endoFromCellMLRushLarsen)
+CHASTE_CLASS_EXPORT(Cellten_tusscher_model_2004_endoFromCellMLRushLarsenOpt)

@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane_potential__stim_amplitude_converted = -0.0040000000000000001 * HeartConfig::Instance()->GetCapacitance() / mParameters[1]; // uA_per_cm2
@@ -37,11 +37,11 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::GetIntracellularCalciumConcentration()
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractGeneralizedRushLarsenCardiacCell(
                 23,
                 0,
@@ -49,7 +49,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -64,11 +64,11 @@
         this->mParameters[6] = 0.00050000000000000001; // (var_sodium_calcium_exchanger__i_NaCa_max) [nanoA_per_millimolar4]
     }
 
-    Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::~Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1()
+    Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::~Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt()
     {
     }
     
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::GetIIonic(const std::vector<double>* pStateVariables)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -115,7 +115,7 @@
         return i_ionic;
     }
 
-    void Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted)
+    void Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted)
     {
         std::vector<double>& rY = rGetStateVariables();
         unsigned v_index = GetVoltageIndex();
@@ -176,7 +176,7 @@
         }
     }
 
-    void Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted)
+    void Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted)
     {
         std::vector<double>& rY = rGetStateVariables();
         const double delta = 1e-8;
@@ -546,7 +546,7 @@
     }
    
     
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluateYDerivative0(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluateYDerivative0(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
     {
         double d_dt_chaste_interface_var_membrane_potential__V;
         double var_chaste_interface__membrane_potential__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -593,7 +593,7 @@
         return d_dt_chaste_interface_var_membrane_potential__V;
     }
 
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluatePartialDerivative0(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluatePartialDerivative0(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -689,7 +689,7 @@
         }
         return partialF;
     }
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluateYDerivative1(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluateYDerivative1(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane_potential__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -739,7 +739,7 @@
         return d_dt_chaste_interface_var_intracellular_calcium_concentration__Ca_i;
     }
 
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluatePartialDerivative1(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluatePartialDerivative1(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -816,7 +816,7 @@
         }
         return partialF;
     }
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluateYDerivative2(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluateYDerivative2(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane_potential__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -831,7 +831,7 @@
         return d_dt_chaste_interface_var_fast_sodium_current_m_gate__m;
     }
 
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluatePartialDerivative2(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluatePartialDerivative2(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -860,7 +860,7 @@
         }
         return partialF;
     }
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluateYDerivative3(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluateYDerivative3(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane_potential__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -877,7 +877,7 @@
         return d_dt_chaste_interface_var_fast_sodium_current_h_gate__h;
     }
 
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluatePartialDerivative3(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluatePartialDerivative3(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -905,7 +905,7 @@
         }
         return partialF;
     }
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluateYDerivative4(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluateYDerivative4(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane_potential__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -920,7 +920,7 @@
         return d_dt_chaste_interface_var_time_dependent_rectifier_potassium_current_x_gate__x;
     }
 
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluatePartialDerivative4(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluatePartialDerivative4(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -949,7 +949,7 @@
         }
         return partialF;
     }
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluateYDerivative5(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluateYDerivative5(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane_potential__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -964,7 +964,7 @@
         return d_dt_chaste_interface_var_transient_outward_current_s_gate__s;
     }
 
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluatePartialDerivative5(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluatePartialDerivative5(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -989,7 +989,7 @@
         }
         return partialF;
     }
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluateYDerivative6(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluateYDerivative6(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane_potential__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1004,7 +1004,7 @@
         return d_dt_chaste_interface_var_transient_outward_current_r_gate__r;
     }
 
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluatePartialDerivative6(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluatePartialDerivative6(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1023,7 +1023,7 @@
         }
         return partialF;
     }
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluateYDerivative7(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluateYDerivative7(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane_potential__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1039,7 +1039,7 @@
         return d_dt_chaste_interface_var_L_type_Ca_channel_d_gate__d;
     }
 
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluatePartialDerivative7(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluatePartialDerivative7(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1070,7 +1070,7 @@
         }
         return partialF;
     }
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluateYDerivative8(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluateYDerivative8(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane_potential__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1086,7 +1086,7 @@
         return d_dt_chaste_interface_var_L_type_Ca_channel_f_gate__f;
     }
 
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluatePartialDerivative8(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluatePartialDerivative8(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1117,7 +1117,7 @@
         }
         return partialF;
     }
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluateYDerivative9(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluateYDerivative9(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
     {
         
         double var_chaste_interface__CaMKII_factor__F_CaMK = rY[9];
@@ -1132,7 +1132,7 @@
         return d_dt_chaste_interface_var_CaMKII_factor__F_CaMK;
     }
 
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluatePartialDerivative9(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluatePartialDerivative9(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1151,7 +1151,7 @@
         }
         return partialF;
     }
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluateYDerivative10(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluateYDerivative10(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
     {
         
         double var_chaste_interface__RyR__F_SRCa_RyR = rY[10];
@@ -1166,7 +1166,7 @@
         return d_dt_chaste_interface_var_RyR__F_SRCa_RyR;
     }
 
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluatePartialDerivative10(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluatePartialDerivative10(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1185,7 +1185,7 @@
         }
         return partialF;
     }
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluateYDerivative11(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluateYDerivative11(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane_potential__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1221,7 +1221,7 @@
         return d_dt_chaste_interface_var_RyR__F_1;
     }
 
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluatePartialDerivative11(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluatePartialDerivative11(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1289,7 +1289,7 @@
         }
         return partialF;
     }
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluateYDerivative12(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluateYDerivative12(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane_potential__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1323,7 +1323,7 @@
         return d_dt_chaste_interface_var_RyR__F_2;
     }
 
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluatePartialDerivative12(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluatePartialDerivative12(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1345,7 +1345,7 @@
         }
         return partialF;
     }
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluateYDerivative13(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluateYDerivative13(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
     {
         
         double var_chaste_interface__intracellular_calcium_concentration__Ca_i = rY[1];
@@ -1360,7 +1360,7 @@
         return d_dt_chaste_interface_var_calmodulin__Cmdn_Ca;
     }
 
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluatePartialDerivative13(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluatePartialDerivative13(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1382,7 +1382,7 @@
         }
         return partialF;
     }
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluateYDerivative14(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluateYDerivative14(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
     {
         
         double var_chaste_interface__intracellular_calcium_concentration__Ca_i = rY[1];
@@ -1409,7 +1409,7 @@
         return d_dt_chaste_interface_var_troponin__Trpn_Ca;
     }
 
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluatePartialDerivative14(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluatePartialDerivative14(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1443,7 +1443,7 @@
         }
         return partialF;
     }
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluateYDerivative15(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluateYDerivative15(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
     {
         
         double var_chaste_interface__intracellular_calcium_concentration__Ca_i = rY[1];
@@ -1466,7 +1466,7 @@
         return d_dt_chaste_interface_var_SR_calcium_concentration__Ca_SR;
     }
 
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluatePartialDerivative15(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluatePartialDerivative15(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1509,7 +1509,7 @@
         }
         return partialF;
     }
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluateYDerivative16(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluateYDerivative16(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane_potential__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1541,7 +1541,7 @@
         return d_dt_chaste_interface_var_intracellular_sodium_concentration__Na_i;
     }
 
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluatePartialDerivative16(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluatePartialDerivative16(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1603,7 +1603,7 @@
         }
         return partialF;
     }
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluateYDerivative17(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluateYDerivative17(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane_potential__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1637,7 +1637,7 @@
         return d_dt_chaste_interface_var_intracellular_potassium_concentration__K_i;
     }
 
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluatePartialDerivative17(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluatePartialDerivative17(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1693,7 +1693,7 @@
         }
         return partialF;
     }
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluateYDerivative18(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluateYDerivative18(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
     {
         
         double var_chaste_interface__troponin__Trpn_Ca = rY[14];
@@ -1718,7 +1718,7 @@
         return d_dt_chaste_interface_var_Force__N_0;
     }
 
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluatePartialDerivative18(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluatePartialDerivative18(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1741,7 +1741,7 @@
         }
         return partialF;
     }
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluateYDerivative19(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluateYDerivative19(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
     {
         
         double var_chaste_interface__troponin__Trpn_Ca = rY[14];
@@ -1761,7 +1761,7 @@
         return d_dt_chaste_interface_var_Force__P_0;
     }
 
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluatePartialDerivative19(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluatePartialDerivative19(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1780,7 +1780,7 @@
         }
         return partialF;
     }
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluateYDerivative20(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluateYDerivative20(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
     {
         
         double var_chaste_interface__troponin__Trpn_Ca = rY[14];
@@ -1805,7 +1805,7 @@
         return d_dt_chaste_interface_var_Force__P_1;
     }
 
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluatePartialDerivative20(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluatePartialDerivative20(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1828,7 +1828,7 @@
         }
         return partialF;
     }
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluateYDerivative21(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluateYDerivative21(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
     {
         
         double var_chaste_interface__Force__P_1 = rY[20];
@@ -1845,7 +1845,7 @@
         return d_dt_chaste_interface_var_Force__P_2;
     }
 
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluatePartialDerivative21(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluatePartialDerivative21(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1864,7 +1864,7 @@
         }
         return partialF;
     }
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluateYDerivative22(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluateYDerivative22(double var_chaste_interface__environment__time_converted, std::vector<double>& rY)
     {
         
         double var_chaste_interface__Force__P_2 = rY[21];
@@ -1879,7 +1879,7 @@
         return d_dt_chaste_interface_var_Force__P_3;
     }
 
-    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::EvaluatePartialDerivative22(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::EvaluatePartialDerivative22(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1899,7 +1899,7 @@
         return partialF;
     }
 
-    std::vector<double> Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -1956,7 +1956,7 @@
     }
 
 template<>
-void OdeSystemInformation<Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1>::Initialise(void)
+void OdeSystemInformation<Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt>::Initialise(void)
 {
     this->mSystemName = "iribe_model_2006";
     this->mFreeVariableName = "environment__time";
@@ -2134,5 +2134,5 @@ void OdeSystemInformation<Celliribe_model_2006_without_otherwise_sectionFromCell
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1)
+CHASTE_CLASS_EXPORT(Celliribe_model_2006_without_otherwise_sectionFromCellMLGRL1Opt)
 

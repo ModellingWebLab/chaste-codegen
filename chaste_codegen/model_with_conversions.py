@@ -21,9 +21,8 @@ from sympy.codegen.cfunctions import log10
 from sympy.codegen.rewriting import ReplaceOptim, log1p_opt, optimize
 
 from chaste_codegen import LOGGER
+from chaste_codegen._math_functions import MATH_FUNC_SYMPY_MAPPING
 from chaste_codegen._rdf import OXMETA, PYCMLMETA, get_variables_transitively
-
-from ._math_functions import MATH_FUNC_SYMPY_MAPPING
 
 
 MEMBRANE_VOLTAGE_INDEX = 0  # default index for voltage in state vector
@@ -49,7 +48,7 @@ _POW_OPT = ReplaceOptim(lambda p: p.is_Pow and (isinstance(p.exp, Float) or isin
                         lambda p: Pow(p.base, int(float(p.exp))))
 
 
-def load_model_with_conversions(model_file, use_modifiers=True, quiet=False):
+def load_model_with_conversions(model_file, use_modifiers=False, quiet=False):
     if quiet:
         LOGGER.setLevel(logging.ERROR)
     model = cellmlmanip.load_model(model_file)
@@ -58,6 +57,15 @@ def load_model_with_conversions(model_file, use_modifiers=True, quiet=False):
 
 
 def add_conversions(model, use_modifiers=True):
+    # We are adding attributes to the model from cellmlmanip. This could break if the api changes
+    # The check  below guards against this
+    attrs_added = ('conversion_units', 'stimulus_units', 'time_variable', 'state_vars', 'membrane_voltage_var',
+                   'cytosolic_calcium_concentration_var', 'membrane_stimulus_current_orig', 'modifiable_parameters',
+                   'membrane_capacitance', 'stimulus_params', 'stimulus_equations', 'modifiers', 'modifier_names',
+                   'y_derivatives', 'membrane_stimulus_current_converted', 'i_ionic_lhs', 'ionic_vars',
+                   'extended_ionic_vars', 'derivative_equations')
+    assert all((not hasattr(model, a) for a in attrs_added)), 'Cellmlmanip api contains unexpected attribute'
+
     # Add units needed for conversions
     model.conversion_units, model.stimulus_units = _add_units(model)
 
@@ -89,7 +97,7 @@ def add_conversions(model, use_modifiers=True):
     if model.membrane_capacitance is None:
         model.membrane_capacitance = 1
 
-    model.modifiers, model.modifier_names = _get_modifiers(model) if use_modifiers else ()
+    model.modifiers, model.modifier_names = _get_modifiers(model) if use_modifiers else (tuple(), {})
 
     model.y_derivatives = _get_y_derivatives(model)
     # Convert currents

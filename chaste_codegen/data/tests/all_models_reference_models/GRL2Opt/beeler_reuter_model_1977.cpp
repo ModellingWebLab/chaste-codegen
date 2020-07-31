@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellbeeler_reuter_model_1977FromCellMLGRL2::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellbeeler_reuter_model_1977FromCellMLGRL2Opt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__stimulus_protocol__IstimAmplitude_converted = 50.000000000000007; // uA_per_cm2
@@ -37,11 +37,11 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double Cellbeeler_reuter_model_1977FromCellMLGRL2::GetIntracellularCalciumConcentration()
+    double Cellbeeler_reuter_model_1977FromCellMLGRL2Opt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Cellbeeler_reuter_model_1977FromCellMLGRL2::Cellbeeler_reuter_model_1977FromCellMLGRL2(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellbeeler_reuter_model_1977FromCellMLGRL2Opt::Cellbeeler_reuter_model_1977FromCellMLGRL2Opt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractGeneralizedRushLarsenCardiacCell(
                 8,
                 0,
@@ -49,7 +49,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLGRL2>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLGRL2Opt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -57,11 +57,11 @@
         
     }
 
-    Cellbeeler_reuter_model_1977FromCellMLGRL2::~Cellbeeler_reuter_model_1977FromCellMLGRL2()
+    Cellbeeler_reuter_model_1977FromCellMLGRL2Opt::~Cellbeeler_reuter_model_1977FromCellMLGRL2Opt()
     {
     }
     
-    double Cellbeeler_reuter_model_1977FromCellMLGRL2::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellbeeler_reuter_model_1977FromCellMLGRL2Opt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -95,7 +95,7 @@
         return i_ionic;
     }
 
-    void Cellbeeler_reuter_model_1977FromCellMLGRL2::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
+    void Cellbeeler_reuter_model_1977FromCellMLGRL2Opt::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
     {
         std::vector<double>& rY = rGetStateVariables();
         const unsigned v_index = GetVoltageIndex();
@@ -151,7 +151,7 @@
         }
     }
 
-    void Cellbeeler_reuter_model_1977FromCellMLGRL2::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
+    void Cellbeeler_reuter_model_1977FromCellMLGRL2Opt::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
     {
         std::vector<double>& rY = rGetStateVariables();
         const double delta=1e-8;
@@ -296,7 +296,7 @@
     }
    
     
-    double Cellbeeler_reuter_model_1977FromCellMLGRL2::EvaluateYDerivative0(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbeeler_reuter_model_1977FromCellMLGRL2Opt::EvaluateYDerivative0(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         double d_dt_chaste_interface_var_membrane__V;
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -324,7 +324,7 @@
         return d_dt_chaste_interface_var_membrane__V;
     }
 
-    double Cellbeeler_reuter_model_1977FromCellMLGRL2::EvaluatePartialDerivative0(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbeeler_reuter_model_1977FromCellMLGRL2Opt::EvaluatePartialDerivative0(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -371,7 +371,7 @@
         }
         return partialF;
     }
-    double Cellbeeler_reuter_model_1977FromCellMLGRL2::EvaluateYDerivative1(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbeeler_reuter_model_1977FromCellMLGRL2Opt::EvaluateYDerivative1(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -391,7 +391,7 @@
         return d_dt_chaste_interface_var_slow_inward_current__Cai;
     }
 
-    double Cellbeeler_reuter_model_1977FromCellMLGRL2::EvaluatePartialDerivative1(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbeeler_reuter_model_1977FromCellMLGRL2Opt::EvaluatePartialDerivative1(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -418,7 +418,7 @@
         }
         return partialF;
     }
-    double Cellbeeler_reuter_model_1977FromCellMLGRL2::EvaluateYDerivative2(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbeeler_reuter_model_1977FromCellMLGRL2Opt::EvaluateYDerivative2(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -433,7 +433,7 @@
         return d_dt_chaste_interface_var_sodium_current_m_gate__m;
     }
 
-    double Cellbeeler_reuter_model_1977FromCellMLGRL2::EvaluatePartialDerivative2(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbeeler_reuter_model_1977FromCellMLGRL2Opt::EvaluatePartialDerivative2(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -460,7 +460,7 @@
         }
         return partialF;
     }
-    double Cellbeeler_reuter_model_1977FromCellMLGRL2::EvaluateYDerivative3(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbeeler_reuter_model_1977FromCellMLGRL2Opt::EvaluateYDerivative3(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -475,7 +475,7 @@
         return d_dt_chaste_interface_var_sodium_current_h_gate__h;
     }
 
-    double Cellbeeler_reuter_model_1977FromCellMLGRL2::EvaluatePartialDerivative3(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbeeler_reuter_model_1977FromCellMLGRL2Opt::EvaluatePartialDerivative3(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -500,7 +500,7 @@
         }
         return partialF;
     }
-    double Cellbeeler_reuter_model_1977FromCellMLGRL2::EvaluateYDerivative4(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbeeler_reuter_model_1977FromCellMLGRL2Opt::EvaluateYDerivative4(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -515,7 +515,7 @@
         return d_dt_chaste_interface_var_sodium_current_j_gate__j;
     }
 
-    double Cellbeeler_reuter_model_1977FromCellMLGRL2::EvaluatePartialDerivative4(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbeeler_reuter_model_1977FromCellMLGRL2Opt::EvaluatePartialDerivative4(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -544,7 +544,7 @@
         }
         return partialF;
     }
-    double Cellbeeler_reuter_model_1977FromCellMLGRL2::EvaluateYDerivative5(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbeeler_reuter_model_1977FromCellMLGRL2Opt::EvaluateYDerivative5(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -559,7 +559,7 @@
         return d_dt_chaste_interface_var_slow_inward_current_d_gate__d;
     }
 
-    double Cellbeeler_reuter_model_1977FromCellMLGRL2::EvaluatePartialDerivative5(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbeeler_reuter_model_1977FromCellMLGRL2Opt::EvaluatePartialDerivative5(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -588,7 +588,7 @@
         }
         return partialF;
     }
-    double Cellbeeler_reuter_model_1977FromCellMLGRL2::EvaluateYDerivative6(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbeeler_reuter_model_1977FromCellMLGRL2Opt::EvaluateYDerivative6(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -603,7 +603,7 @@
         return d_dt_chaste_interface_var_slow_inward_current_f_gate__f;
     }
 
-    double Cellbeeler_reuter_model_1977FromCellMLGRL2::EvaluatePartialDerivative6(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbeeler_reuter_model_1977FromCellMLGRL2Opt::EvaluatePartialDerivative6(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -632,7 +632,7 @@
         }
         return partialF;
     }
-    double Cellbeeler_reuter_model_1977FromCellMLGRL2::EvaluateYDerivative7(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double Cellbeeler_reuter_model_1977FromCellMLGRL2Opt::EvaluateYDerivative7(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -647,7 +647,7 @@
         return d_dt_chaste_interface_var_time_dependent_outward_current_x1_gate__x1;
     }
 
-    double Cellbeeler_reuter_model_1977FromCellMLGRL2::EvaluatePartialDerivative7(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double Cellbeeler_reuter_model_1977FromCellMLGRL2Opt::EvaluatePartialDerivative7(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -677,7 +677,7 @@
         return partialF;
     }
 
-    std::vector<double> Cellbeeler_reuter_model_1977FromCellMLGRL2::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Cellbeeler_reuter_model_1977FromCellMLGRL2Opt::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -693,7 +693,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLGRL2>::Initialise(void)
+void OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLGRL2Opt>::Initialise(void)
 {
     this->mSystemName = "beeler_reuter_model_1977";
     this->mFreeVariableName = "environment__time";
@@ -752,5 +752,5 @@ void OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLGRL2>::Initialis
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellbeeler_reuter_model_1977FromCellMLGRL2)
+CHASTE_CLASS_EXPORT(Cellbeeler_reuter_model_1977FromCellMLGRL2Opt)
 

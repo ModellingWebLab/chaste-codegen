@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellsakmann_model_2000_epiFromCellMLRushLarsen::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellsakmann_model_2000_epiFromCellMLRushLarsenOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -0.002 * HeartConfig::Instance()->GetCapacitance() / mParameters[0]; // uA_per_cm2
@@ -37,11 +37,11 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double Cellsakmann_model_2000_epiFromCellMLRushLarsen::GetIntracellularCalciumConcentration()
+    double Cellsakmann_model_2000_epiFromCellMLRushLarsenOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Cellsakmann_model_2000_epiFromCellMLRushLarsen::Cellsakmann_model_2000_epiFromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellsakmann_model_2000_epiFromCellMLRushLarsenOpt::Cellsakmann_model_2000_epiFromCellMLRushLarsenOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractRushLarsenCardiacCell(
                 21,
                 0,
@@ -49,7 +49,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellsakmann_model_2000_epiFromCellMLRushLarsen>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellsakmann_model_2000_epiFromCellMLRushLarsenOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -58,11 +58,11 @@
         this->mParameters[0] = 0.000121; // (var_membrane__Cm) [microF]
     }
 
-    Cellsakmann_model_2000_epiFromCellMLRushLarsen::~Cellsakmann_model_2000_epiFromCellMLRushLarsen()
+    Cellsakmann_model_2000_epiFromCellMLRushLarsenOpt::~Cellsakmann_model_2000_epiFromCellMLRushLarsenOpt()
     {
     }
     
-    double Cellsakmann_model_2000_epiFromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellsakmann_model_2000_epiFromCellMLRushLarsenOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -123,7 +123,7 @@
         return i_ionic;
     }
 
-    void Cellsakmann_model_2000_epiFromCellMLRushLarsen::EvaluateEquations(double var_chaste_interface__environment__time_converted, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
+    void Cellsakmann_model_2000_epiFromCellMLRushLarsenOpt::EvaluateEquations(double var_chaste_interface__environment__time_converted, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -239,7 +239,7 @@
         rDY[19] = d_dt_chaste_interface_var_intracellular_calcium_concentration__Ca_Calmod;
         rDY[20] = d_dt_chaste_interface_var_intracellular_calcium_concentration__Ca_Trop;
     }
-    void Cellsakmann_model_2000_epiFromCellMLRushLarsen::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
+    void Cellsakmann_model_2000_epiFromCellMLRushLarsenOpt::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         
@@ -285,7 +285,7 @@
         rY[20] += mDt * rDY[20];
     }
 
-    std::vector<double> Cellsakmann_model_2000_epiFromCellMLRushLarsen::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Cellsakmann_model_2000_epiFromCellMLRushLarsenOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -301,7 +301,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellsakmann_model_2000_epiFromCellMLRushLarsen>::Initialise(void)
+void OdeSystemInformation<Cellsakmann_model_2000_epiFromCellMLRushLarsenOpt>::Initialise(void)
 {
     this->mSystemName = "sakmann_model_2000_epi";
     this->mFreeVariableName = "environment__time";
@@ -429,4 +429,4 @@ void OdeSystemInformation<Cellsakmann_model_2000_epiFromCellMLRushLarsen>::Initi
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellsakmann_model_2000_epiFromCellMLRushLarsen)
+CHASTE_CLASS_EXPORT(Cellsakmann_model_2000_epiFromCellMLRushLarsenOpt)

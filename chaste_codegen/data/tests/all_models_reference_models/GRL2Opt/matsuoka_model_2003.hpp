@@ -1,5 +1,5 @@
-#ifndef CELLMATSUOKA_MODEL_2003FROMCELLMLGRL2_HPP_
-#define CELLMATSUOKA_MODEL_2003FROMCELLMLGRL2_HPP_
+#ifndef CELLMATSUOKA_MODEL_2003FROMCELLMLGRL2OPT_HPP_
+#define CELLMATSUOKA_MODEL_2003FROMCELLMLGRL2OPT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractGeneralizedRushLarsenCardiacCell.hpp"
 
-class Cellmatsuoka_model_2003FromCellMLGRL2 : public AbstractGeneralizedRushLarsenCardiacCell
+class Cellmatsuoka_model_2003FromCellMLGRL2Opt : public AbstractGeneralizedRushLarsenCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -35,8 +35,8 @@ class Cellmatsuoka_model_2003FromCellMLGRL2 : public AbstractGeneralizedRushLars
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
-    Cellmatsuoka_model_2003FromCellMLGRL2(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellmatsuoka_model_2003FromCellMLGRL2();
+    Cellmatsuoka_model_2003FromCellMLGRL2Opt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellmatsuoka_model_2003FromCellMLGRL2Opt();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time);
     void ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time);
@@ -121,7 +121,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellmatsuoka_model_2003FromCellMLGRL2)
+CHASTE_CLASS_EXPORT(Cellmatsuoka_model_2003FromCellMLGRL2Opt)
 
 namespace boost
 {
@@ -129,7 +129,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellmatsuoka_model_2003FromCellMLGRL2 * t, const unsigned int fileVersion)
+            Archive & ar, const Cellmatsuoka_model_2003FromCellMLGRL2Opt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -139,17 +139,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellmatsuoka_model_2003FromCellMLGRL2 * t, const unsigned int fileVersion)
+            Archive & ar, Cellmatsuoka_model_2003FromCellMLGRL2Opt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellmatsuoka_model_2003FromCellMLGRL2(p_solver, p_stimulus);
+            ::new(t)Cellmatsuoka_model_2003FromCellMLGRL2Opt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLMATSUOKA_MODEL_2003FROMCELLMLGRL2_HPP_
+#endif // CELLMATSUOKA_MODEL_2003FROMCELLMLGRL2OPT_HPP_

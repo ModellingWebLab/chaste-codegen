@@ -11,6 +11,9 @@ from chaste_codegen.model_with_conversions import load_model_with_conversions
 
 
 # Link names to classes for converting code
+# The fields in the order dict as as follows:
+# (<name of model type>, <default calss name postfix>, <default file name prostfix>, <can be used with modifiers>)
+# pass --name_of_model_type to select this model type
 TRANSLATORS = OrderedDict(
     [('normal', (cg.NormalChasteModel, 'FromCellML', '', True)),
      ('cvode', (cg.CvodeChasteModel, 'FromCellMLCvode', 'Cvode', True)),
@@ -23,9 +26,9 @@ TRANSLATORS = OrderedDict(
 TRANSLATORS_OPT = OrderedDict(
     [('normal', (cg.OptChasteModel, 'FromCellMLOpt', 'Opt', True)),
      ('cvode', (cg.OptCvodeChasteModel, 'FromCellMLCvodeOpt', 'CvodeOpt', True)),
-     ('rush-larsen', (cg.RushLarsenOptModel, 'FromCellMLRushLarsen', 'RushLarsen', False)),
-     ('grl1', (cg.GeneralisedRushLarsenFirstOrderModelOpt, 'FromCellMLGRL1', 'GRL1', False)),
-     ('grl2', (cg.GeneralisedRushLarsenSecondOrderModelOpt, 'FromCellMLGRL2', 'GRL2', False))])
+     ('rush-larsen', (cg.RushLarsenOptModel, 'FromCellMLRushLarsenOpt', 'RushLarsenOpt', False)),
+     ('grl1', (cg.GeneralisedRushLarsenFirstOrderModelOpt, 'FromCellMLGRL1Opt', 'GRL1', False)),
+     ('grl2', (cg.GeneralisedRushLarsenSecondOrderModelOpt, 'FromCellMLGRL2Opt', 'GRL2', False))])
 
 TRANSLATORS_WITH_MODIFIERS = tuple('--' + t for t in TRANSLATORS if TRANSLATORS[t][3])
 
@@ -84,9 +87,9 @@ def chaste_codegen():
     group.add_argument('-m', '--use-modifiers', dest='modifiers',
                        action='store_true', default=False,
                        help='add modifier functions for metadata-annotated variables (except time & stimulus) '
-                       'for use in sensitivity analysis. Only works with one of the following model types and is ignored for others: ' +
+                       'for use in sensitivity analysis. Only works with one of the following model types and is '
+                       'ignored for others: ' +
                        str(TRANSLATORS_WITH_MODIFIERS))
-
 
     # process options
     args = parser.parse_args()
@@ -117,10 +120,9 @@ def chaste_codegen():
     if args.dynamically_loadable and len(translators) > 1:
         raise ValueError("Only one model type may be specified if creating a dynamic library!")
 
-
     if not args.show_outputs:
         # Load model once, not once per translator, but only if we're actually generating code
-        model = load_model_with_conversions(args.cellml_file, quiet=args.quiet)
+        model = load_model_with_conversions(args.cellml_file, use_modifiers=args.modifiers, quiet=args.quiet)
 
     for translator in translators:
         # Make sure modifiers are only passed to models which can generate them
