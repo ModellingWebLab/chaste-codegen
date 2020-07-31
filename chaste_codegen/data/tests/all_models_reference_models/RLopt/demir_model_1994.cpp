@@ -21,11 +21,11 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    double Celldemir_model_1994FromCellMLRushLarsen::GetIntracellularCalciumConcentration()
+    double Celldemir_model_1994FromCellMLRushLarsenOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Celldemir_model_1994FromCellMLRushLarsen::Celldemir_model_1994FromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Celldemir_model_1994FromCellMLRushLarsenOpt::Celldemir_model_1994FromCellMLRushLarsenOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractRushLarsenCardiacCell(
                 27,
                 0,
@@ -33,17 +33,17 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Celldemir_model_1994FromCellMLRushLarsen>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Celldemir_model_1994FromCellMLRushLarsenOpt>::Instance();
         Init();
         
         this->mParameters[0] = 5.5000000000000002e-5; // (var_membrane__Cm) [microF]
     }
 
-    Celldemir_model_1994FromCellMLRushLarsen::~Celldemir_model_1994FromCellMLRushLarsen()
+    Celldemir_model_1994FromCellMLRushLarsenOpt::~Celldemir_model_1994FromCellMLRushLarsenOpt()
     {
     }
     
-    double Celldemir_model_1994FromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
+    double Celldemir_model_1994FromCellMLRushLarsenOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -102,7 +102,7 @@
         return i_ionic;
     }
 
-    void Celldemir_model_1994FromCellMLRushLarsen::EvaluateEquations(double var_chaste_interface__environment__time_converted, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
+    void Celldemir_model_1994FromCellMLRushLarsenOpt::EvaluateEquations(double var_chaste_interface__environment__time_converted, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -246,7 +246,7 @@
         rDY[25] = d_dt_chaste_interface_var_SR_Ca_uptake_and_release__F2;
         rDY[26] = d_dt_chaste_interface_var_SR_Ca_uptake_and_release__F3;
     }
-    void Celldemir_model_1994FromCellMLRushLarsen::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
+    void Celldemir_model_1994FromCellMLRushLarsenOpt::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         
@@ -282,7 +282,7 @@
         rY[26] += mDt * rDY[26];
     }
 
-    std::vector<double> Celldemir_model_1994FromCellMLRushLarsen::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Celldemir_model_1994FromCellMLRushLarsenOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -296,7 +296,7 @@
     }
 
 template<>
-void OdeSystemInformation<Celldemir_model_1994FromCellMLRushLarsen>::Initialise(void)
+void OdeSystemInformation<Celldemir_model_1994FromCellMLRushLarsenOpt>::Initialise(void)
 {
     this->mSystemName = "demir_model_1994";
     this->mFreeVariableName = "environment__time";
@@ -450,4 +450,4 @@ void OdeSystemInformation<Celldemir_model_1994FromCellMLRushLarsen>::Initialise(
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Celldemir_model_1994FromCellMLRushLarsen)
+CHASTE_CLASS_EXPORT(Celldemir_model_1994FromCellMLRushLarsenOpt)

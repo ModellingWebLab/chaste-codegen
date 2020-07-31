@@ -1,5 +1,5 @@
-#ifndef CELLTEN_TUSSCHER_MODEL_2004_ENDOFROMCELLMLRUSHLARSEN_HPP_
-#define CELLTEN_TUSSCHER_MODEL_2004_ENDOFROMCELLMLRUSHLARSEN_HPP_
+#ifndef CELLTEN_TUSSCHER_MODEL_2004_ENDOFROMCELLMLRUSHLARSENOPT_HPP_
+#define CELLTEN_TUSSCHER_MODEL_2004_ENDOFROMCELLMLRUSHLARSENOPT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractRushLarsenCardiacCell.hpp"
 
-class Cellten_tusscher_model_2004_endoFromCellMLRushLarsen : public AbstractRushLarsenCardiacCell
+class Cellten_tusscher_model_2004_endoFromCellMLRushLarsenOpt : public AbstractRushLarsenCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -35,8 +35,8 @@ class Cellten_tusscher_model_2004_endoFromCellMLRushLarsen : public AbstractRush
 public:
 
     double GetIntracellularCalciumConcentration();
-    Cellten_tusscher_model_2004_endoFromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellten_tusscher_model_2004_endoFromCellMLRushLarsen();
+    Cellten_tusscher_model_2004_endoFromCellMLRushLarsenOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellten_tusscher_model_2004_endoFromCellMLRushLarsenOpt();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateEquations(double var_chaste_interface__environment__time, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf);
     void ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf);
@@ -46,7 +46,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellten_tusscher_model_2004_endoFromCellMLRushLarsen)
+CHASTE_CLASS_EXPORT(Cellten_tusscher_model_2004_endoFromCellMLRushLarsenOpt)
 
 namespace boost
 {
@@ -54,7 +54,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellten_tusscher_model_2004_endoFromCellMLRushLarsen * t, const unsigned int fileVersion)
+            Archive & ar, const Cellten_tusscher_model_2004_endoFromCellMLRushLarsenOpt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -64,17 +64,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellten_tusscher_model_2004_endoFromCellMLRushLarsen * t, const unsigned int fileVersion)
+            Archive & ar, Cellten_tusscher_model_2004_endoFromCellMLRushLarsenOpt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellten_tusscher_model_2004_endoFromCellMLRushLarsen(p_solver, p_stimulus);
+            ::new(t)Cellten_tusscher_model_2004_endoFromCellMLRushLarsenOpt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLTEN_TUSSCHER_MODEL_2004_ENDOFROMCELLMLRUSHLARSEN_HPP_
+#endif // CELLTEN_TUSSCHER_MODEL_2004_ENDOFROMCELLMLRUSHLARSENOPT_HPP_

@@ -21,11 +21,11 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    double Cellnoble_noble_SAN_model_1984FromCellMLRushLarsen::GetIntracellularCalciumConcentration()
+    double Cellnoble_noble_SAN_model_1984FromCellMLRushLarsenOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Cellnoble_noble_SAN_model_1984FromCellMLRushLarsen::Cellnoble_noble_SAN_model_1984FromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellnoble_noble_SAN_model_1984FromCellMLRushLarsenOpt::Cellnoble_noble_SAN_model_1984FromCellMLRushLarsenOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractRushLarsenCardiacCell(
                 15,
                 0,
@@ -33,17 +33,17 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellnoble_noble_SAN_model_1984FromCellMLRushLarsen>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellnoble_noble_SAN_model_1984FromCellMLRushLarsenOpt>::Instance();
         Init();
         
         this->mParameters[0] = 0.0060000000000000001; // (var_membrane__C) [microF]
     }
 
-    Cellnoble_noble_SAN_model_1984FromCellMLRushLarsen::~Cellnoble_noble_SAN_model_1984FromCellMLRushLarsen()
+    Cellnoble_noble_SAN_model_1984FromCellMLRushLarsenOpt::~Cellnoble_noble_SAN_model_1984FromCellMLRushLarsenOpt()
     {
     }
     
-    double Cellnoble_noble_SAN_model_1984FromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellnoble_noble_SAN_model_1984FromCellMLRushLarsenOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -92,7 +92,7 @@
         return i_ionic;
     }
 
-    void Cellnoble_noble_SAN_model_1984FromCellMLRushLarsen::EvaluateEquations(double var_chaste_interface__environment__time_converted, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
+    void Cellnoble_noble_SAN_model_1984FromCellMLRushLarsenOpt::EvaluateEquations(double var_chaste_interface__environment__time_converted, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -183,7 +183,7 @@
         rDY[13] = d_dt_chaste_interface_var_extracellular_potassium_concentration__Kc;
         rDY[14] = d_dt_chaste_interface_var_intracellular_potassium_concentration__Ki;
     }
-    void Cellnoble_noble_SAN_model_1984FromCellMLRushLarsen::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
+    void Cellnoble_noble_SAN_model_1984FromCellMLRushLarsenOpt::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         
@@ -231,7 +231,7 @@
         rY[14] += mDt * rDY[14];
     }
 
-    std::vector<double> Cellnoble_noble_SAN_model_1984FromCellMLRushLarsen::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Cellnoble_noble_SAN_model_1984FromCellMLRushLarsenOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -245,7 +245,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellnoble_noble_SAN_model_1984FromCellMLRushLarsen>::Initialise(void)
+void OdeSystemInformation<Cellnoble_noble_SAN_model_1984FromCellMLRushLarsenOpt>::Initialise(void)
 {
     this->mSystemName = "NN_SAN_model_1984";
     this->mFreeVariableName = "environment__time";
@@ -339,4 +339,4 @@ void OdeSystemInformation<Cellnoble_noble_SAN_model_1984FromCellMLRushLarsen>::I
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellnoble_noble_SAN_model_1984FromCellMLRushLarsen)
+CHASTE_CLASS_EXPORT(Cellnoble_noble_SAN_model_1984FromCellMLRushLarsenOpt)

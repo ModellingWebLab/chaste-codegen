@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellten_tusscher_model_2004_epiFromCellML::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellten_tusscher_model_2004_epiFromCellMLOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__i_Stim_Amplitude_converted = -52.0 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
@@ -37,11 +37,11 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double Cellten_tusscher_model_2004_epiFromCellML::GetIntracellularCalciumConcentration()
+    double Cellten_tusscher_model_2004_epiFromCellMLOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Cellten_tusscher_model_2004_epiFromCellML::Cellten_tusscher_model_2004_epiFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellten_tusscher_model_2004_epiFromCellMLOpt::Cellten_tusscher_model_2004_epiFromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 17,
@@ -50,7 +50,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellten_tusscher_model_2004_epiFromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellten_tusscher_model_2004_epiFromCellMLOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -62,11 +62,11 @@
         this->mParameters[3] = 0.29399999999999998; // (var_transient_outward_current__g_to) [nanoS_per_picoF]
     }
 
-    Cellten_tusscher_model_2004_epiFromCellML::~Cellten_tusscher_model_2004_epiFromCellML()
+    Cellten_tusscher_model_2004_epiFromCellMLOpt::~Cellten_tusscher_model_2004_epiFromCellMLOpt()
     {
     }
     
-    double Cellten_tusscher_model_2004_epiFromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellten_tusscher_model_2004_epiFromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -124,7 +124,7 @@
         return i_ionic;
     }
 
-    void Cellten_tusscher_model_2004_epiFromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Cellten_tusscher_model_2004_epiFromCellMLOpt::EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -230,7 +230,7 @@
         rDY[16] = d_dt_chaste_interface_var_potassium_dynamics__K_i;
     }
 
-    std::vector<double> Cellten_tusscher_model_2004_epiFromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Cellten_tusscher_model_2004_epiFromCellMLOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -246,7 +246,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellten_tusscher_model_2004_epiFromCellML>::Initialise(void)
+void OdeSystemInformation<Cellten_tusscher_model_2004_epiFromCellMLOpt>::Initialise(void)
 {
     this->mSystemName = "tentusscher_model_2004_epi";
     this->mFreeVariableName = "environment__time";
@@ -368,4 +368,4 @@ void OdeSystemInformation<Cellten_tusscher_model_2004_epiFromCellML>::Initialise
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellten_tusscher_model_2004_epiFromCellML)
+CHASTE_CLASS_EXPORT(Cellten_tusscher_model_2004_epiFromCellMLOpt)

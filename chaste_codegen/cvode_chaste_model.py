@@ -1,3 +1,5 @@
+from functools import partial
+
 from sympy import Matrix
 
 from chaste_codegen._jacobian import format_jacobian, get_jacobian
@@ -18,17 +20,20 @@ class CvodeChasteModel(ChasteModel):
         if self._use_analytic_jacobian:
             # get deriv eqs and substitute in all variables other than state vars
             self._derivative_equations = \
-                partial_eval(self._derivative_equations, self._y_derivatives, keep_multiple_usages=False)
+                partial_eval(self._derivative_equations, self._model.y_derivatives, keep_multiple_usages=False)
             self._jacobian_equations, self._jacobian_matrix = get_jacobian(self._state_vars, self._derivative_equations)
             self._formatted_state_vars = self._update_state_vars()
+
+            modifiers_with_defining_eqs = set((eq[0] for eq in self._jacobian_equations)) | self._model.state_vars
             self._vars_for_template['jacobian_equations'], self._vars_for_template['jacobian_entries'] = \
                 format_jacobian(self._jacobian_equations, self._jacobian_matrix, self._printer,
-                                self._print_rhs_with_modifiers)
+                                partial(self._print_rhs_with_modifiers,
+                                        modifiers_with_defining_eqs=modifiers_with_defining_eqs))
         else:
             self._vars_for_template['jacobian_equations'], self._vars_for_template['jacobian_entries'] = \
                 [], Matrix()
 
-    def _print_modifiable_parameterss(self, variable):
+    def _print_modifiable_parameters(self, variable):
         return 'NV_Ith_S(mParameters, ' + self._modifiable_parameter_lookup[variable] + ')'
 
     def _format_rY_entry(self, index):

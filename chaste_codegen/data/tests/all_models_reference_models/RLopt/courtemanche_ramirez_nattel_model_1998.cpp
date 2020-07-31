@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellcourtemanche_ramirez_nattel_model_1998FromCellMLRushLarsen::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellcourtemanche_ramirez_nattel_model_1998FromCellMLRushLarsenOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_membrane__Cm_converted = 9.9999999999999995e-7 * mParameters[0]; // uF
@@ -39,7 +39,7 @@
         return p_cellml_stim;
     }
 
-    Cellcourtemanche_ramirez_nattel_model_1998FromCellMLRushLarsen::Cellcourtemanche_ramirez_nattel_model_1998FromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellcourtemanche_ramirez_nattel_model_1998FromCellMLRushLarsenOpt::Cellcourtemanche_ramirez_nattel_model_1998FromCellMLRushLarsenOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractRushLarsenCardiacCell(
                 21,
                 0,
@@ -47,7 +47,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellcourtemanche_ramirez_nattel_model_1998FromCellMLRushLarsen>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellcourtemanche_ramirez_nattel_model_1998FromCellMLRushLarsenOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -56,11 +56,11 @@
         this->mParameters[0] = 100.0; // (var_membrane__Cm) [picoF]
     }
 
-    Cellcourtemanche_ramirez_nattel_model_1998FromCellMLRushLarsen::~Cellcourtemanche_ramirez_nattel_model_1998FromCellMLRushLarsen()
+    Cellcourtemanche_ramirez_nattel_model_1998FromCellMLRushLarsenOpt::~Cellcourtemanche_ramirez_nattel_model_1998FromCellMLRushLarsenOpt()
     {
     }
     
-    double Cellcourtemanche_ramirez_nattel_model_1998FromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellcourtemanche_ramirez_nattel_model_1998FromCellMLRushLarsenOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -120,7 +120,7 @@
         return i_ionic;
     }
 
-    void Cellcourtemanche_ramirez_nattel_model_1998FromCellMLRushLarsen::EvaluateEquations(double var_chaste_interface__environment__time, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
+    void Cellcourtemanche_ramirez_nattel_model_1998FromCellMLRushLarsenOpt::EvaluateEquations(double var_chaste_interface__environment__time, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -244,7 +244,7 @@
         rDY[19] = d_dt_chaste_interface_var_intracellular_ion_concentrations__Ca_rel;
         rDY[20] = d_dt_chaste_interface_var_intracellular_ion_concentrations__Ca_up;
     }
-    void Cellcourtemanche_ramirez_nattel_model_1998FromCellMLRushLarsen::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
+    void Cellcourtemanche_ramirez_nattel_model_1998FromCellMLRushLarsenOpt::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         
@@ -270,7 +270,7 @@
         rY[20] += mDt * rDY[20];
     }
 
-    std::vector<double> Cellcourtemanche_ramirez_nattel_model_1998FromCellMLRushLarsen::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Cellcourtemanche_ramirez_nattel_model_1998FromCellMLRushLarsenOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -288,7 +288,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellcourtemanche_ramirez_nattel_model_1998FromCellMLRushLarsen>::Initialise(void)
+void OdeSystemInformation<Cellcourtemanche_ramirez_nattel_model_1998FromCellMLRushLarsenOpt>::Initialise(void)
 {
     this->mSystemName = "courtemanche_ramirez_nattel_model_1998";
     this->mFreeVariableName = "environment__time";
@@ -420,4 +420,4 @@ void OdeSystemInformation<Cellcourtemanche_ramirez_nattel_model_1998FromCellMLRu
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellcourtemanche_ramirez_nattel_model_1998FromCellMLRushLarsen)
+CHASTE_CLASS_EXPORT(Cellcourtemanche_ramirez_nattel_model_1998FromCellMLRushLarsenOpt)

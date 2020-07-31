@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Celljafri_rice_winslow_model_1998FromCellML::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Celljafri_rice_winslow_model_1998FromCellMLOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = 51.628900000000009; // uA_per_cm2
@@ -38,7 +38,7 @@
         return p_cellml_stim;
     }
 
-    Celljafri_rice_winslow_model_1998FromCellML::Celljafri_rice_winslow_model_1998FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Celljafri_rice_winslow_model_1998FromCellMLOpt::Celljafri_rice_winslow_model_1998FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 31,
@@ -47,7 +47,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Celljafri_rice_winslow_model_1998FromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Celljafri_rice_winslow_model_1998FromCellMLOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -55,11 +55,11 @@
         
     }
 
-    Celljafri_rice_winslow_model_1998FromCellML::~Celljafri_rice_winslow_model_1998FromCellML()
+    Celljafri_rice_winslow_model_1998FromCellMLOpt::~Celljafri_rice_winslow_model_1998FromCellMLOpt()
     {
     }
     
-    double Celljafri_rice_winslow_model_1998FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Celljafri_rice_winslow_model_1998FromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -113,7 +113,7 @@
         return i_ionic;
     }
 
-    void Celljafri_rice_winslow_model_1998FromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Celljafri_rice_winslow_model_1998FromCellMLOpt::EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -286,7 +286,7 @@
         rDY[30] = d_dt_chaste_interface_var_ionic_concentrations__Ko;
     }
 
-    std::vector<double> Celljafri_rice_winslow_model_1998FromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Celljafri_rice_winslow_model_1998FromCellMLOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -302,7 +302,7 @@
     }
 
 template<>
-void OdeSystemInformation<Celljafri_rice_winslow_model_1998FromCellML>::Initialise(void)
+void OdeSystemInformation<Celljafri_rice_winslow_model_1998FromCellMLOpt>::Initialise(void)
 {
     this->mSystemName = "jafri_rice_winslow_1998";
     this->mFreeVariableName = "environment__time";
@@ -478,4 +478,4 @@ void OdeSystemInformation<Celljafri_rice_winslow_model_1998FromCellML>::Initiali
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Celljafri_rice_winslow_model_1998FromCellML)
+CHASTE_CLASS_EXPORT(Celljafri_rice_winslow_model_1998FromCellMLOpt)

@@ -1,5 +1,5 @@
-#ifndef CELLSAKMANN_MODEL_2000_EPIFROMCELLMLGRL2_HPP_
-#define CELLSAKMANN_MODEL_2000_EPIFROMCELLMLGRL2_HPP_
+#ifndef CELLSAKMANN_MODEL_2000_EPIFROMCELLMLGRL2OPT_HPP_
+#define CELLSAKMANN_MODEL_2000_EPIFROMCELLMLGRL2OPT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractGeneralizedRushLarsenCardiacCell.hpp"
 
-class Cellsakmann_model_2000_epiFromCellMLGRL2 : public AbstractGeneralizedRushLarsenCardiacCell
+class Cellsakmann_model_2000_epiFromCellMLGRL2Opt : public AbstractGeneralizedRushLarsenCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -36,8 +36,8 @@ public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    Cellsakmann_model_2000_epiFromCellMLGRL2(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellsakmann_model_2000_epiFromCellMLGRL2();
+    Cellsakmann_model_2000_epiFromCellMLGRL2Opt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellsakmann_model_2000_epiFromCellMLGRL2Opt();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted);
     void ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted);
@@ -90,7 +90,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellsakmann_model_2000_epiFromCellMLGRL2)
+CHASTE_CLASS_EXPORT(Cellsakmann_model_2000_epiFromCellMLGRL2Opt)
 
 namespace boost
 {
@@ -98,7 +98,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellsakmann_model_2000_epiFromCellMLGRL2 * t, const unsigned int fileVersion)
+            Archive & ar, const Cellsakmann_model_2000_epiFromCellMLGRL2Opt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -108,17 +108,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellsakmann_model_2000_epiFromCellMLGRL2 * t, const unsigned int fileVersion)
+            Archive & ar, Cellsakmann_model_2000_epiFromCellMLGRL2Opt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellsakmann_model_2000_epiFromCellMLGRL2(p_solver, p_stimulus);
+            ::new(t)Cellsakmann_model_2000_epiFromCellMLGRL2Opt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLSAKMANN_MODEL_2000_EPIFROMCELLMLGRL2_HPP_
+#endif // CELLSAKMANN_MODEL_2000_EPIFROMCELLMLGRL2OPT_HPP_

@@ -1,5 +1,5 @@
-#ifndef DYNAMICWINSLOW_MODEL_1999FROMCELLMLGRL2_HPP_
-#define DYNAMICWINSLOW_MODEL_1999FROMCELLMLGRL2_HPP_
+#ifndef DYNAMICWINSLOW_MODEL_1999FROMCELLMLGRL2OPT_HPP_
+#define DYNAMICWINSLOW_MODEL_1999FROMCELLMLGRL2OPT_HPP_
 
 //! @file
 //!
@@ -19,7 +19,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractGeneralizedRushLarsenCardiacCell.hpp"
 
-class Dynamicwinslow_model_1999FromCellMLGRL2 : public AbstractGeneralizedRushLarsenCardiacCell, public AbstractDynamicallyLoadableEntity
+class Dynamicwinslow_model_1999FromCellMLGRL2Opt : public AbstractGeneralizedRushLarsenCardiacCell, public AbstractDynamicallyLoadableEntity
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -36,8 +36,8 @@ class Dynamicwinslow_model_1999FromCellMLGRL2 : public AbstractGeneralizedRushLa
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
-    Dynamicwinslow_model_1999FromCellMLGRL2(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Dynamicwinslow_model_1999FromCellMLGRL2();
+    Dynamicwinslow_model_1999FromCellMLGRL2Opt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Dynamicwinslow_model_1999FromCellMLGRL2Opt();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted);
     void ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted);
@@ -114,7 +114,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Dynamicwinslow_model_1999FromCellMLGRL2)
+CHASTE_CLASS_EXPORT(Dynamicwinslow_model_1999FromCellMLGRL2Opt)
 
 namespace boost
 {
@@ -122,7 +122,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Dynamicwinslow_model_1999FromCellMLGRL2 * t, const unsigned int fileVersion)
+            Archive & ar, const Dynamicwinslow_model_1999FromCellMLGRL2Opt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -132,17 +132,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Dynamicwinslow_model_1999FromCellMLGRL2 * t, const unsigned int fileVersion)
+            Archive & ar, Dynamicwinslow_model_1999FromCellMLGRL2Opt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Dynamicwinslow_model_1999FromCellMLGRL2(p_solver, p_stimulus);
+            ::new(t)Dynamicwinslow_model_1999FromCellMLGRL2Opt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // DYNAMICWINSLOW_MODEL_1999FROMCELLMLGRL2_HPP_
+#endif // DYNAMICWINSLOW_MODEL_1999FROMCELLMLGRL2OPT_HPP_

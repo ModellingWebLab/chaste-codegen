@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellnoble_model_1991FromCellML::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellnoble_model_1991FromCellMLOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -0.0060000000000000001 * HeartConfig::Instance()->GetCapacitance() / mParameters[0]; // uA_per_cm2
@@ -38,7 +38,7 @@
         return p_cellml_stim;
     }
 
-    Cellnoble_model_1991FromCellML::Cellnoble_model_1991FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellnoble_model_1991FromCellMLOpt::Cellnoble_model_1991FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 17,
@@ -47,7 +47,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellnoble_model_1991FromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellnoble_model_1991FromCellMLOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -56,11 +56,11 @@
         this->mParameters[0] = 9.5000000000000005e-5; // (var_membrane__Cm) [microF]
     }
 
-    Cellnoble_model_1991FromCellML::~Cellnoble_model_1991FromCellML()
+    Cellnoble_model_1991FromCellMLOpt::~Cellnoble_model_1991FromCellMLOpt()
     {
     }
     
-    double Cellnoble_model_1991FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellnoble_model_1991FromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -109,7 +109,7 @@
         return i_ionic;
     }
 
-    void Cellnoble_model_1991FromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Cellnoble_model_1991FromCellMLOpt::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -217,7 +217,7 @@
         rDY[16] = d_dt_chaste_interface_var_intracellular_calcium_concentration__Ca_Trop;
     }
 
-    std::vector<double> Cellnoble_model_1991FromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Cellnoble_model_1991FromCellMLOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -233,7 +233,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellnoble_model_1991FromCellML>::Initialise(void)
+void OdeSystemInformation<Cellnoble_model_1991FromCellMLOpt>::Initialise(void)
 {
     this->mSystemName = "noble_model_1991";
     this->mFreeVariableName = "environment__time";
@@ -341,4 +341,4 @@ void OdeSystemInformation<Cellnoble_model_1991FromCellML>::Initialise(void)
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellnoble_model_1991FromCellML)
+CHASTE_CLASS_EXPORT(Cellnoble_model_1991FromCellMLOpt)

@@ -44,7 +44,7 @@
         </math>
     </component>
     <component name="membrane">
-        <variable name="time" public_interface="in" units="second"/>
+        <variable name="time" units="second"/>
         <variable initial_value="-69.1865" name="V1" public_interface="out" units="volt"/>
         <variable cmeta:id="membrane_voltage" name="V" public_interface="out" units="volt"/>
         <math xmlns="http://www.w3.org/1998/Math/MathML">

@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellhund_rudy_2004_aFromCellML::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellhund_rudy_2004_aFromCellMLOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__cell__stim_amplitude_converted = -15.0 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
@@ -37,11 +37,11 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double Cellhund_rudy_2004_aFromCellML::GetIntracellularCalciumConcentration()
+    double Cellhund_rudy_2004_aFromCellMLOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Cellhund_rudy_2004_aFromCellML::Cellhund_rudy_2004_aFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellhund_rudy_2004_aFromCellMLOpt::Cellhund_rudy_2004_aFromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 29,
@@ -50,7 +50,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellhund_rudy_2004_aFromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellhund_rudy_2004_aFromCellMLOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -61,11 +61,11 @@
         this->mParameters[2] = 1.0; // (var_IKr__G_Kr_mult) [dimensionless]
     }
 
-    Cellhund_rudy_2004_aFromCellML::~Cellhund_rudy_2004_aFromCellML()
+    Cellhund_rudy_2004_aFromCellMLOpt::~Cellhund_rudy_2004_aFromCellMLOpt()
     {
     }
     
-    double Cellhund_rudy_2004_aFromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellhund_rudy_2004_aFromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -137,7 +137,7 @@
         return i_ionic;
     }
 
-    void Cellhund_rudy_2004_aFromCellML::EvaluateYDerivatives(double var_chaste_interface__Environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Cellhund_rudy_2004_aFromCellMLOpt::EvaluateYDerivatives(double var_chaste_interface__Environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -303,7 +303,7 @@
         rDY[28] = d_dt_chaste_interface_var_Ca__Ca_ss;
     }
 
-    std::vector<double> Cellhund_rudy_2004_aFromCellML::ComputeDerivedQuantities(double var_chaste_interface__Environment__time, const std::vector<double> & rY)
+    std::vector<double> Cellhund_rudy_2004_aFromCellMLOpt::ComputeDerivedQuantities(double var_chaste_interface__Environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -319,7 +319,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellhund_rudy_2004_aFromCellML>::Initialise(void)
+void OdeSystemInformation<Cellhund_rudy_2004_aFromCellMLOpt>::Initialise(void)
 {
     this->mSystemName = "hund_rudy_2004";
     this->mFreeVariableName = "Environment__time";
@@ -495,4 +495,4 @@ void OdeSystemInformation<Cellhund_rudy_2004_aFromCellML>::Initialise(void)
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellhund_rudy_2004_aFromCellML)
+CHASTE_CLASS_EXPORT(Cellhund_rudy_2004_aFromCellMLOpt)

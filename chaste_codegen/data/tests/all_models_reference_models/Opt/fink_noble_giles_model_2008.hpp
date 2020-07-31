@@ -1,5 +1,5 @@
-#ifndef CELLFINK_NOBLE_GILES_MODEL_2008FROMCELLML_HPP_
-#define CELLFINK_NOBLE_GILES_MODEL_2008FROMCELLML_HPP_
+#ifndef CELLFINK_NOBLE_GILES_MODEL_2008FROMCELLMLOPT_HPP_
+#define CELLFINK_NOBLE_GILES_MODEL_2008FROMCELLMLOPT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractCardiacCell.hpp"
 
-class Cellfink_noble_giles_model_2008FromCellML : public AbstractCardiacCell
+class Cellfink_noble_giles_model_2008FromCellMLOpt : public AbstractCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -35,8 +35,8 @@ class Cellfink_noble_giles_model_2008FromCellML : public AbstractCardiacCell
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
-    Cellfink_noble_giles_model_2008FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellfink_noble_giles_model_2008FromCellML();
+    Cellfink_noble_giles_model_2008FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellfink_noble_giles_model_2008FromCellMLOpt();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__Environment__time, const std::vector<double>& rY, std::vector<double>& rDY);
 
@@ -45,7 +45,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellfink_noble_giles_model_2008FromCellML)
+CHASTE_CLASS_EXPORT(Cellfink_noble_giles_model_2008FromCellMLOpt)
 
 namespace boost
 {
@@ -53,7 +53,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellfink_noble_giles_model_2008FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, const Cellfink_noble_giles_model_2008FromCellMLOpt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -63,17 +63,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellfink_noble_giles_model_2008FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, Cellfink_noble_giles_model_2008FromCellMLOpt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellfink_noble_giles_model_2008FromCellML(p_solver, p_stimulus);
+            ::new(t)Cellfink_noble_giles_model_2008FromCellMLOpt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLFINK_NOBLE_GILES_MODEL_2008FROMCELLML_HPP_
+#endif // CELLFINK_NOBLE_GILES_MODEL_2008FROMCELLMLOPT_HPP_

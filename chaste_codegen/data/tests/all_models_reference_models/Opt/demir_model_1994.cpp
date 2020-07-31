@@ -21,11 +21,11 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    double Celldemir_model_1994FromCellML::GetIntracellularCalciumConcentration()
+    double Celldemir_model_1994FromCellMLOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Celldemir_model_1994FromCellML::Celldemir_model_1994FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Celldemir_model_1994FromCellMLOpt::Celldemir_model_1994FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 27,
@@ -34,17 +34,17 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Celldemir_model_1994FromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Celldemir_model_1994FromCellMLOpt>::Instance();
         Init();
         
         this->mParameters[0] = 5.5000000000000002e-5; // (var_membrane__Cm) [microF]
     }
 
-    Celldemir_model_1994FromCellML::~Celldemir_model_1994FromCellML()
+    Celldemir_model_1994FromCellMLOpt::~Celldemir_model_1994FromCellMLOpt()
     {
     }
     
-    double Celldemir_model_1994FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Celldemir_model_1994FromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -103,7 +103,7 @@
         return i_ionic;
     }
 
-    void Celldemir_model_1994FromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Celldemir_model_1994FromCellMLOpt::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -259,7 +259,7 @@
         rDY[26] = d_dt_chaste_interface_var_SR_Ca_uptake_and_release__F3;
     }
 
-    std::vector<double> Celldemir_model_1994FromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Celldemir_model_1994FromCellMLOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -273,7 +273,7 @@
     }
 
 template<>
-void OdeSystemInformation<Celldemir_model_1994FromCellML>::Initialise(void)
+void OdeSystemInformation<Celldemir_model_1994FromCellMLOpt>::Initialise(void)
 {
     this->mSystemName = "demir_model_1994";
     this->mFreeVariableName = "environment__time";
@@ -427,4 +427,4 @@ void OdeSystemInformation<Celldemir_model_1994FromCellML>::Initialise(void)
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Celldemir_model_1994FromCellML)
+CHASTE_CLASS_EXPORT(Celldemir_model_1994FromCellMLOpt)

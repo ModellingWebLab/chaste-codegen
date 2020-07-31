@@ -1,5 +1,5 @@
-#ifndef CELLESPINOSA_MODEL_1998_NORMALFROMCELLMLGRL1_HPP_
-#define CELLESPINOSA_MODEL_1998_NORMALFROMCELLMLGRL1_HPP_
+#ifndef CELLESPINOSA_MODEL_1998_NORMALFROMCELLMLGRL1OPT_HPP_
+#define CELLESPINOSA_MODEL_1998_NORMALFROMCELLMLGRL1OPT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractGeneralizedRushLarsenCardiacCell.hpp"
 
-class Cellespinosa_model_1998_normalFromCellMLGRL1 : public AbstractGeneralizedRushLarsenCardiacCell
+class Cellespinosa_model_1998_normalFromCellMLGRL1Opt : public AbstractGeneralizedRushLarsenCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -36,8 +36,8 @@ public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    Cellespinosa_model_1998_normalFromCellMLGRL1(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellespinosa_model_1998_normalFromCellMLGRL1();
+    Cellespinosa_model_1998_normalFromCellMLGRL1Opt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellespinosa_model_1998_normalFromCellMLGRL1Opt();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted);
     void ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted);
@@ -90,7 +90,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellespinosa_model_1998_normalFromCellMLGRL1)
+CHASTE_CLASS_EXPORT(Cellespinosa_model_1998_normalFromCellMLGRL1Opt)
 
 namespace boost
 {
@@ -98,7 +98,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellespinosa_model_1998_normalFromCellMLGRL1 * t, const unsigned int fileVersion)
+            Archive & ar, const Cellespinosa_model_1998_normalFromCellMLGRL1Opt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -108,17 +108,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellespinosa_model_1998_normalFromCellMLGRL1 * t, const unsigned int fileVersion)
+            Archive & ar, Cellespinosa_model_1998_normalFromCellMLGRL1Opt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellespinosa_model_1998_normalFromCellMLGRL1(p_solver, p_stimulus);
+            ::new(t)Cellespinosa_model_1998_normalFromCellMLGRL1Opt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLESPINOSA_MODEL_1998_NORMALFROMCELLMLGRL1_HPP_
+#endif // CELLESPINOSA_MODEL_1998_NORMALFROMCELLMLGRL1OPT_HPP_

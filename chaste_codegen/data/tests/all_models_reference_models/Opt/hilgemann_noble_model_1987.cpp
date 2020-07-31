@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellhilgemann_noble_model_1987FromCellML::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellhilgemann_noble_model_1987FromCellMLOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -0.20000000000000001 * HeartConfig::Instance()->GetCapacitance() / mParameters[0]; // uA_per_cm2
@@ -37,11 +37,11 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double Cellhilgemann_noble_model_1987FromCellML::GetIntracellularCalciumConcentration()
+    double Cellhilgemann_noble_model_1987FromCellMLOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Cellhilgemann_noble_model_1987FromCellML::Cellhilgemann_noble_model_1987FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellhilgemann_noble_model_1987FromCellMLOpt::Cellhilgemann_noble_model_1987FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 15,
@@ -50,7 +50,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellhilgemann_noble_model_1987FromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellhilgemann_noble_model_1987FromCellMLOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -59,11 +59,11 @@
         this->mParameters[0] = 0.0060000000000000001; // (var_membrane__C_m) [microF]
     }
 
-    Cellhilgemann_noble_model_1987FromCellML::~Cellhilgemann_noble_model_1987FromCellML()
+    Cellhilgemann_noble_model_1987FromCellMLOpt::~Cellhilgemann_noble_model_1987FromCellMLOpt()
     {
     }
     
-    double Cellhilgemann_noble_model_1987FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellhilgemann_noble_model_1987FromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -105,7 +105,7 @@
         return i_ionic;
     }
 
-    void Cellhilgemann_noble_model_1987FromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Cellhilgemann_noble_model_1987FromCellMLOpt::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -205,7 +205,7 @@
         rDY[14] = d_dt_chaste_interface_var_intracellular_calcium_concentration__Ca_Trop;
     }
 
-    std::vector<double> Cellhilgemann_noble_model_1987FromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Cellhilgemann_noble_model_1987FromCellMLOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -221,7 +221,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellhilgemann_noble_model_1987FromCellML>::Initialise(void)
+void OdeSystemInformation<Cellhilgemann_noble_model_1987FromCellMLOpt>::Initialise(void)
 {
     this->mSystemName = "hilgemann_noble_model_1987";
     this->mFreeVariableName = "environment__time";
@@ -319,4 +319,4 @@ void OdeSystemInformation<Cellhilgemann_noble_model_1987FromCellML>::Initialise(
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellhilgemann_noble_model_1987FromCellML)
+CHASTE_CLASS_EXPORT(Cellhilgemann_noble_model_1987FromCellMLOpt)

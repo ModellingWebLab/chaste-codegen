@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellnoble_model_1998FromCellMLRushLarsen::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellnoble_model_1998FromCellMLRushLarsenOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -0.0030000000000000001 * HeartConfig::Instance()->GetCapacitance() / mParameters[0]; // uA_per_cm2
@@ -37,11 +37,11 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double Cellnoble_model_1998FromCellMLRushLarsen::GetIntracellularCalciumConcentration()
+    double Cellnoble_model_1998FromCellMLRushLarsenOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Cellnoble_model_1998FromCellMLRushLarsen::Cellnoble_model_1998FromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellnoble_model_1998FromCellMLRushLarsenOpt::Cellnoble_model_1998FromCellMLRushLarsenOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractRushLarsenCardiacCell(
                 22,
                 0,
@@ -49,7 +49,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellnoble_model_1998FromCellMLRushLarsen>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellnoble_model_1998FromCellMLRushLarsenOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -58,11 +58,11 @@
         this->mParameters[0] = 9.5000000000000005e-5; // (var_membrane__Cm) [microF]
     }
 
-    Cellnoble_model_1998FromCellMLRushLarsen::~Cellnoble_model_1998FromCellMLRushLarsen()
+    Cellnoble_model_1998FromCellMLRushLarsenOpt::~Cellnoble_model_1998FromCellMLRushLarsenOpt()
     {
     }
     
-    double Cellnoble_model_1998FromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellnoble_model_1998FromCellMLRushLarsenOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -126,7 +126,7 @@
         return i_ionic;
     }
 
-    void Cellnoble_model_1998FromCellMLRushLarsen::EvaluateEquations(double var_chaste_interface__environment__time_converted, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
+    void Cellnoble_model_1998FromCellMLRushLarsenOpt::EvaluateEquations(double var_chaste_interface__environment__time_converted, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -248,7 +248,7 @@
         rDY[20] = d_dt_chaste_interface_var_intracellular_calcium_concentration__Ca_Calmod;
         rDY[21] = d_dt_chaste_interface_var_intracellular_calcium_concentration__Ca_Trop;
     }
-    void Cellnoble_model_1998FromCellMLRushLarsen::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
+    void Cellnoble_model_1998FromCellMLRushLarsenOpt::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         
@@ -307,7 +307,7 @@
         rY[21] += mDt * rDY[21];
     }
 
-    std::vector<double> Cellnoble_model_1998FromCellMLRushLarsen::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Cellnoble_model_1998FromCellMLRushLarsenOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -323,7 +323,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellnoble_model_1998FromCellMLRushLarsen>::Initialise(void)
+void OdeSystemInformation<Cellnoble_model_1998FromCellMLRushLarsenOpt>::Initialise(void)
 {
     this->mSystemName = "noble_model_1998";
     this->mFreeVariableName = "environment__time";
@@ -456,4 +456,4 @@ void OdeSystemInformation<Cellnoble_model_1998FromCellMLRushLarsen>::Initialise(
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellnoble_model_1998FromCellMLRushLarsen)
+CHASTE_CLASS_EXPORT(Cellnoble_model_1998FromCellMLRushLarsenOpt)

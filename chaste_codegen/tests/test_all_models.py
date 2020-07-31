@@ -1,13 +1,6 @@
-import logging
-
 import pytest
 
 from chaste_codegen.tests.test_codegen import get_models
-
-
-# Show more logging output
-LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.DEBUG)
 
 
 chaste_all_normal_models = get_models(ref_folder='all_models_reference_models', type='Normal')

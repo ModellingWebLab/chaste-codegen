@@ -1,12 +1,6 @@
 #
 # Tests the basics of chaste_codegen
 #
-# import pytest
-import logging
-
-
-# Show more logging output
-logging.getLogger().setLevel(logging.INFO)
 
 
 def test_module_import():

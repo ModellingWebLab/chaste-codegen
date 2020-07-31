@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> CellShannon2004FromCellMLGRL2::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> CellShannon2004FromCellMLGRL2Opt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__cell__stim_amplitude_converted = 9.5 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
@@ -37,11 +37,11 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double CellShannon2004FromCellMLGRL2::GetIntracellularCalciumConcentration()
+    double CellShannon2004FromCellMLGRL2Opt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    CellShannon2004FromCellMLGRL2::CellShannon2004FromCellMLGRL2(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    CellShannon2004FromCellMLGRL2Opt::CellShannon2004FromCellMLGRL2Opt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractGeneralizedRushLarsenCardiacCell(
                 39,
                 0,
@@ -49,7 +49,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<CellShannon2004FromCellMLGRL2>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<CellShannon2004FromCellMLGRL2Opt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -70,11 +70,11 @@
         this->mParameters[12] = 0.059999999999999998; // (var_Itos__G_tos) [milliS_per_microF]
     }
 
-    CellShannon2004FromCellMLGRL2::~CellShannon2004FromCellMLGRL2()
+    CellShannon2004FromCellMLGRL2Opt::~CellShannon2004FromCellMLGRL2Opt()
     {
     }
     
-    double CellShannon2004FromCellMLGRL2::GetIIonic(const std::vector<double>* pStateVariables)
+    double CellShannon2004FromCellMLGRL2Opt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -125,36 +125,36 @@
         const double var_ICaL_fCa_gate__fCa_jct = 1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_jct; // dimensionless
         const double var_INa__openProb = pow(var_chaste_interface__INa_m_gate__m, 3) * var_chaste_interface__INa_h_gate__h * var_chaste_interface__INa_j_gate__j; // dimensionless
         const double var_ICaL__temp = 1625.34190074 * var_chaste_interface__ICaL_d_gate__d * var_chaste_interface__ICaL_f_gate__f * var_chaste_interface__cell__V; // coulomb_per_mole
-        const double var_ICaL__i_CaL = 2.7000000000000001e-7 * (0.10000000000000001 * var_ICaL_fCa_gate__fCa_SL + 0.90000000000000002 * var_ICaL_fCa_gate__fCa_jct) * (-0.75 * mParameters[5] + 0.75 * mParameters[3] * exp(0.037434532730821715 * var_chaste_interface__cell__V)) * var_ICaL__temp / (-1.0 + exp(0.037434532730821715 * var_chaste_interface__cell__V)) + 1.5e-9 * (-0.75 * mParameters[6] + 0.75 * var_chaste_interface__Na_buffer__Na_SL * exp(0.037434532730821715 * var_chaste_interface__cell__V)) * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL / (-1.0 + exp(0.037434532730821715 * var_chaste_interface__cell__V)) + 1.3499999999999998e-8 * (-0.75 * mParameters[6] + 0.75 * var_chaste_interface__Na_buffer__Na_jct * exp(0.037434532730821715 * var_chaste_interface__cell__V)) * var_ICaL__temp * var_ICaL_fCa_gate__fCa_jct / (-1.0 + exp(0.037434532730821715 * var_chaste_interface__cell__V)) + 0.40000000000000002 * (-0.34100000000000003 * mParameters[4] + 0.34100000000000003 * var_chaste_interface__Ca_buffer__Ca_SL * exp(0.07486906546164343 * var_chaste_interface__cell__V)) * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL / (-1.0 + exp(0.07486906546164343 * var_chaste_interface__cell__V)) + 3.6000000000000001 * (-0.34100000000000003 * mParameters[4] + 0.34100000000000003 * var_chaste_interface__Ca_buffer__Ca_jct * exp(0.07486906546164343 * var_chaste_interface__cell__V)) * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_jct / (-1.0 + exp(0.07486906546164343 * var_chaste_interface__cell__V)); // microA_per_microF
+        const double var_ICaL__i_CaL_converted = (2.7000000000000001e-7 * (0.10000000000000001 * var_ICaL_fCa_gate__fCa_SL + 0.90000000000000002 * var_ICaL_fCa_gate__fCa_jct) * (-0.75 * mParameters[5] + 0.75 * mParameters[3] * exp(0.037434532730821715 * var_chaste_interface__cell__V)) * var_ICaL__temp / (-1.0 + exp(0.037434532730821715 * var_chaste_interface__cell__V)) + 1.5e-9 * (-0.75 * mParameters[6] + 0.75 * var_chaste_interface__Na_buffer__Na_SL * exp(0.037434532730821715 * var_chaste_interface__cell__V)) * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL / (-1.0 + exp(0.037434532730821715 * var_chaste_interface__cell__V)) + 1.3499999999999998e-8 * (-0.75 * mParameters[6] + 0.75 * var_chaste_interface__Na_buffer__Na_jct * exp(0.037434532730821715 * var_chaste_interface__cell__V)) * var_ICaL__temp * var_ICaL_fCa_gate__fCa_jct / (-1.0 + exp(0.037434532730821715 * var_chaste_interface__cell__V)) + 0.40000000000000002 * (-0.34100000000000003 * mParameters[4] + 0.34100000000000003 * var_chaste_interface__Ca_buffer__Ca_SL * exp(0.07486906546164343 * var_chaste_interface__cell__V)) * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL / (-1.0 + exp(0.07486906546164343 * var_chaste_interface__cell__V)) + 3.6000000000000001 * (-0.34100000000000003 * mParameters[4] + 0.34100000000000003 * var_chaste_interface__Ca_buffer__Ca_jct * exp(0.07486906546164343 * var_chaste_interface__cell__V)) * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_jct / (-1.0 + exp(0.07486906546164343 * var_chaste_interface__cell__V))) * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
         const double var_ICap__Q_SLCaP = 1; // dimensionless
         const double var_ICap__i_Cap = 0.0074029999999999999 * var_ICap__Q_SLCaP / (1.0 + 5.2281977629563632e-6 * pow(1 / var_chaste_interface__Ca_buffer__Ca_jct, 1.6000000000000001)) + 0.059896999999999999 * var_ICap__Q_SLCaP / (1.0 + 5.2281977629563632e-6 * pow(1 / var_chaste_interface__Ca_buffer__Ca_SL, 1.6000000000000001)); // microA_per_microF
         const double var_IKs__E_Ks = 26.713302585894176 * log((0.018329999999999999 * mParameters[6] + mParameters[5]) / (0.018329999999999999 * var_chaste_interface__Na_buffer__Nai + mParameters[3])); // millivolt
-        const double var_IKs__i_Ks = 0.11 * pow(var_chaste_interface__IKs_Xs_gate__Xs, 2) * (0.057000000000000002 + 0.19 / (1.0 + exp(-7.0000000000000009 - 1.6666666666666667 * log10(var_chaste_interface__Ca_buffer__Ca_jct)))) * (-var_IKs__E_Ks + var_chaste_interface__cell__V) * mParameters[10] + 0.89000000000000001 * pow(var_chaste_interface__IKs_Xs_gate__Xs, 2) * (0.057000000000000002 + 0.19 / (1.0 + exp(-7.0000000000000009 - 1.6666666666666667 * log10(var_chaste_interface__Ca_buffer__Ca_SL)))) * (-var_IKs__E_Ks + var_chaste_interface__cell__V) * mParameters[10]; // microA_per_microF
+        const double var_IKs__i_Ks_converted = (0.11 * pow(var_chaste_interface__IKs_Xs_gate__Xs, 2) * (0.057000000000000002 + 0.19 / (1.0 + exp(-7.0000000000000009 - 1.6666666666666667 * log10(var_chaste_interface__Ca_buffer__Ca_jct)))) * (-var_IKs__E_Ks + var_chaste_interface__cell__V) * mParameters[10] + 0.89000000000000001 * pow(var_chaste_interface__IKs_Xs_gate__Xs, 2) * (0.057000000000000002 + 0.19 / (1.0 + exp(-7.0000000000000009 - 1.6666666666666667 * log10(var_chaste_interface__Ca_buffer__Ca_SL)))) * (-var_IKs__E_Ks + var_chaste_interface__cell__V) * mParameters[10]) * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
         const double var_INaCa__Q_NCX = 1; // dimensionless
-        const double var_INaCa__i_NaCa = 0.11 * (pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] * exp(0.013102086455787599 * var_chaste_interface__cell__V) - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 0.27000000000000002 * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * (1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_jct, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) + pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_jct) * var_chaste_interface__Ca_buffer__Ca_jct + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0)))) + 0.89000000000000001 * (pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] * exp(0.013102086455787599 * var_chaste_interface__cell__V) - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 0.27000000000000002 * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * (1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_SL, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) + pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_SL) * var_chaste_interface__Ca_buffer__Ca_SL + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0)))); // microA_per_microF
+        const double var_INaCa__i_NaCa_converted = (0.11 * (pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] * exp(0.013102086455787599 * var_chaste_interface__cell__V) - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 0.27000000000000002 * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * (1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_jct, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) + pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_jct) * var_chaste_interface__Ca_buffer__Ca_jct + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0)))) + 0.89000000000000001 * (pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] * exp(0.013102086455787599 * var_chaste_interface__cell__V) - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 0.27000000000000002 * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * (1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_SL, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) + pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_SL) * var_chaste_interface__Ca_buffer__Ca_SL + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0))))) * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
         const double var_INaK__f_NaK = 1 / (1.0 + 0.1245 * exp(-0.0037434532730821718 * var_chaste_interface__cell__V) + 0.036499999999999998 * (-0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * mParameters[6])) * exp(-0.037434532730821715 * var_chaste_interface__cell__V)); // dimensionless
         const double var_INaK__i_NaK = 0.2097909 * var_INaK__f_NaK * mParameters[5] / ((1.0 + 14641.0 * pow(1 / var_chaste_interface__Na_buffer__Na_jct, 4.0)) * (1.5 + mParameters[5])) + 1.6973990999999999 * var_INaK__f_NaK * mParameters[5] / ((1.0 + 14641.0 * pow(1 / var_chaste_interface__Na_buffer__Na_SL, 4.0)) * (1.5 + mParameters[5])); // microA_per_microF
         const double var_ICab__i_Cab = 0.00025129999999999998 * var_chaste_interface__cell__V - 0.0029873085582266669 * log(mParameters[4] / var_chaste_interface__Ca_buffer__Ca_SL) - 0.00036921791169093637 * log(mParameters[4] / var_chaste_interface__Ca_buffer__Ca_jct); // microA_per_microF
         const double var_ICl_Ca__i_Cl_Ca = 0.109625 * (61.50965231891923 + var_chaste_interface__cell__V) * (0.11 / (1.0 + 0.10000000000000001 / var_chaste_interface__Ca_buffer__Ca_jct) + 0.89000000000000001 / (1.0 + 0.10000000000000001 / var_chaste_interface__Ca_buffer__Ca_SL)); // microA_per_microF
         const double var_IClb__i_Clb = 0.55358687087027303 + 0.0089999999999999993 * var_chaste_interface__cell__V; // microA_per_microF
         const double var_reversal_potentials__E_K = 26.713302585894176 * log(mParameters[5] / mParameters[3]); // millivolt
-        const double var_IK1__i_K1 = 0.39504430131315654 * sqrt(mParameters[5]) * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) / ((1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__V - 0.23849999999999999 * var_reversal_potentials__E_K)) * (1.02 / (1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__V - 0.23849999999999999 * var_reversal_potentials__E_K)) + (exp(-36.698642499999998 + 0.061749999999999999 * var_chaste_interface__cell__V - 0.061749999999999999 * var_reversal_potentials__E_K) + 0.49124000000000001 * exp(0.43983232 + 0.080320000000000003 * var_chaste_interface__cell__V - 0.080320000000000003 * var_reversal_potentials__E_K)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_reversal_potentials__E_K - 0.51429999999999998 * var_chaste_interface__cell__V)))); // microA_per_microF
+        const double var_IK1__i_K1_converted = 0.39504430131315654 * sqrt(mParameters[5]) * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * HeartConfig::Instance()->GetCapacitance() / ((1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__V - 0.23849999999999999 * var_reversal_potentials__E_K)) * (1.02 / (1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__V - 0.23849999999999999 * var_reversal_potentials__E_K)) + (exp(-36.698642499999998 + 0.061749999999999999 * var_chaste_interface__cell__V - 0.061749999999999999 * var_reversal_potentials__E_K) + 0.49124000000000001 * exp(0.43983232 + 0.080320000000000003 * var_chaste_interface__cell__V - 0.080320000000000003 * var_reversal_potentials__E_K)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_reversal_potentials__E_K - 0.51429999999999998 * var_chaste_interface__cell__V)))); // uA_per_cm2
         const double var_IKp__i_Kp = 0.001 * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) / (1.0 + exp(7.4880000000000004 - 0.16722408026755853 * var_chaste_interface__cell__V)); // microA_per_microF
-        const double var_IKr__i_Kr = 0.43033148291193518 * sqrt(mParameters[5]) * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * mParameters[9] * var_chaste_interface__IKr_Xr_gate__Xr / (1.0 + exp(1.4732142857142858 + 0.044642857142857144 * var_chaste_interface__cell__V)); // microA_per_microF
+        const double var_IKr__i_Kr_converted = 0.43033148291193518 * sqrt(mParameters[5]) * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * HeartConfig::Instance()->GetCapacitance() * mParameters[9] * var_chaste_interface__IKr_Xr_gate__Xr / (1.0 + exp(1.4732142857142858 + 0.044642857142857144 * var_chaste_interface__cell__V)); // uA_per_cm2
         const double var_Itof__i_tof = 0.02 * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_chaste_interface__Itof_X_gate__X_tof * var_chaste_interface__Itof_Y_gate__Y_tof; // microA_per_microF
-        const double var_Itos__i_tos = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * (0.5 * var_chaste_interface__Itos_R_gate__R_tos + var_chaste_interface__Itos_Y_gate__Y_tos) * mParameters[12] * var_chaste_interface__Itos_X_gate__X_tos; // microA_per_microF
+        const double var_Itos__i_tos_converted = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * (0.5 * var_chaste_interface__Itos_R_gate__R_tos + var_chaste_interface__Itos_Y_gate__Y_tos) * HeartConfig::Instance()->GetCapacitance() * mParameters[12] * var_chaste_interface__Itos_X_gate__X_tos; // uA_per_cm2
         const double var_reversal_potentials__E_Na_SL = 26.713302585894176 * log(mParameters[6] / var_chaste_interface__Na_buffer__Na_SL); // millivolt
         const double var_reversal_potentials__E_Na_jct = 26.713302585894176 * log(mParameters[6] / var_chaste_interface__Na_buffer__Na_jct); // millivolt
-        const double var_INa__i_Na = 0.11 * (-var_reversal_potentials__E_Na_jct + var_chaste_interface__cell__V) * mParameters[8] * var_INa__openProb + 0.89000000000000001 * (-var_reversal_potentials__E_Na_SL + var_chaste_interface__cell__V) * mParameters[8] * var_INa__openProb; // microA_per_microF
+        const double var_INa__i_Na_converted = (0.11 * (-var_reversal_potentials__E_Na_jct + var_chaste_interface__cell__V) * mParameters[8] * var_INa__openProb + 0.89000000000000001 * (-var_reversal_potentials__E_Na_SL + var_chaste_interface__cell__V) * mParameters[8] * var_INa__openProb) * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
         const double var_INab__i_Nab = 0.00029700000000000001 * var_chaste_interface__cell__V - 0.00026433000000000001 * var_reversal_potentials__E_Na_SL - 3.2670000000000004e-5 * var_reversal_potentials__E_Na_jct; // microA_per_microF
-        const double var_chaste_interface__i_ionic = (var_ICaL__i_CaL + var_ICab__i_Cab + var_ICap__i_Cap + var_ICl_Ca__i_Cl_Ca + var_IClb__i_Clb + var_IK1__i_K1 + var_IKp__i_Kp + var_IKr__i_Kr + var_IKs__i_Ks + var_INa__i_Na + var_INaCa__i_NaCa + var_INaK__i_NaK + var_INab__i_Nab + var_Itof__i_tof + var_Itos__i_tos) * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
+        const double var_chaste_interface__i_ionic = HeartConfig::Instance()->GetCapacitance() * var_ICab__i_Cab + HeartConfig::Instance()->GetCapacitance() * var_ICap__i_Cap + HeartConfig::Instance()->GetCapacitance() * var_ICl_Ca__i_Cl_Ca + HeartConfig::Instance()->GetCapacitance() * var_IClb__i_Clb + HeartConfig::Instance()->GetCapacitance() * var_IKp__i_Kp + HeartConfig::Instance()->GetCapacitance() * var_INaK__i_NaK + HeartConfig::Instance()->GetCapacitance() * var_INab__i_Nab + HeartConfig::Instance()->GetCapacitance() * var_Itof__i_tof + var_ICaL__i_CaL_converted + var_IK1__i_K1_converted + var_IKr__i_Kr_converted + var_IKs__i_Ks_converted + var_INa__i_Na_converted + var_INaCa__i_NaCa_converted + var_Itos__i_tos_converted; // uA_per_cm2
 
         const double i_ionic = var_chaste_interface__i_ionic;
         EXCEPT_IF_NOT(!std::isnan(i_ionic));
         return i_ionic;
     }
 
-    void CellShannon2004FromCellMLGRL2::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
+    void CellShannon2004FromCellMLGRL2Opt::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
     {
         std::vector<double>& rY = rGetStateVariables();
         const unsigned v_index = GetVoltageIndex();
@@ -260,7 +260,7 @@
         }
     }
 
-    void CellShannon2004FromCellMLGRL2::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
+    void CellShannon2004FromCellMLGRL2Opt::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
     {
         std::vector<double>& rY = rGetStateVariables();
         const double delta=1e-8;
@@ -829,7 +829,7 @@
     }
    
     
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative0(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative0(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         double d_dt_chaste_interface_var_cell__V;
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -907,7 +907,7 @@
         return d_dt_chaste_interface_var_cell__V;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative0(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative0(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1111,7 +1111,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative1(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative1(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__Ca_buffer__Cai = rY[1];
@@ -1151,7 +1151,7 @@
         return d_dt_chaste_interface_var_Ca_buffer__Cai;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative1(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative1(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1204,7 +1204,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative2(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative2(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1219,7 +1219,7 @@
         return d_dt_chaste_interface_var_INa_h_gate__h;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative2(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative2(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1246,7 +1246,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative3(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative3(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1261,7 +1261,7 @@
         return d_dt_chaste_interface_var_INa_j_gate__j;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative3(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative3(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1300,7 +1300,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative4(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative4(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1315,7 +1315,7 @@
         return d_dt_chaste_interface_var_INa_m_gate__m;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative4(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative4(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1342,7 +1342,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative5(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative5(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1357,7 +1357,7 @@
         return d_dt_chaste_interface_var_IKr_Xr_gate__Xr;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative5(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative5(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1388,7 +1388,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative6(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative6(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1403,7 +1403,7 @@
         return d_dt_chaste_interface_var_IKs_Xs_gate__Xs;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative6(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative6(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1433,7 +1433,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative7(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative7(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1448,7 +1448,7 @@
         return d_dt_chaste_interface_var_Itos_X_gate__X_tos;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative7(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative7(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1474,7 +1474,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative8(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative8(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1489,7 +1489,7 @@
         return d_dt_chaste_interface_var_Itos_Y_gate__Y_tos;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative8(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative8(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1515,7 +1515,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative9(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative9(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1530,7 +1530,7 @@
         return d_dt_chaste_interface_var_Itos_R_gate__R_tos;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative9(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative9(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1556,7 +1556,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative10(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative10(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1571,7 +1571,7 @@
         return d_dt_chaste_interface_var_Itof_X_gate__X_tof;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative10(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative10(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1594,7 +1594,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative11(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative11(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1609,7 +1609,7 @@
         return d_dt_chaste_interface_var_Itof_Y_gate__Y_tof;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative11(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative11(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1635,7 +1635,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative12(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative12(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1651,7 +1651,7 @@
         return d_dt_chaste_interface_var_ICaL_d_gate__d;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative12(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative12(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1679,7 +1679,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative13(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative13(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1694,7 +1694,7 @@
         return d_dt_chaste_interface_var_ICaL_f_gate__f;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative13(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative13(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1716,7 +1716,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative14(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative14(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__ICaL_fCa_gate__fCaB_SL = rY[14];
@@ -1731,7 +1731,7 @@
         return d_dt_chaste_interface_var_ICaL_fCa_gate__fCaB_SL;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative14(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative14(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1752,7 +1752,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative15(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative15(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__ICaL_fCa_gate__fCaB_jct = rY[15];
@@ -1767,7 +1767,7 @@
         return d_dt_chaste_interface_var_ICaL_fCa_gate__fCaB_jct;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative15(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative15(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1788,7 +1788,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative16(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative16(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__Jrel_SR__R = rY[16];
@@ -1813,7 +1813,7 @@
         return d_dt_chaste_interface_var_Jrel_SR__R;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative16(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative16(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1847,7 +1847,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative17(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative17(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__Jrel_SR__R = rY[16];
@@ -1872,7 +1872,7 @@
         return d_dt_chaste_interface_var_Jrel_SR__I;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative17(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative17(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1903,7 +1903,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative18(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative18(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__Jrel_SR__R = rY[16];
@@ -1927,7 +1927,7 @@
         return d_dt_chaste_interface_var_Jrel_SR__O;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative18(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative18(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -1957,7 +1957,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative19(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative19(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -2006,7 +2006,7 @@
         return d_dt_chaste_interface_var_Na_buffer__Na_SL;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative19(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative19(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2098,7 +2098,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative20(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative20(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -2144,7 +2144,7 @@
         return d_dt_chaste_interface_var_Na_buffer__Na_jct;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative20(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative20(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2235,7 +2235,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative21(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative21(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__Na_buffer__Na_SL = rY[19];
@@ -2251,7 +2251,7 @@
         return d_dt_chaste_interface_var_Na_buffer__Na_SL_buf;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative21(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative21(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2273,7 +2273,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative22(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative22(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__Na_buffer__Na_jct = rY[20];
@@ -2289,7 +2289,7 @@
         return d_dt_chaste_interface_var_Na_buffer__Na_jct_buf;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative22(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative22(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2311,7 +2311,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative23(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative23(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__Na_buffer__Na_SL = rY[19];
@@ -2327,7 +2327,7 @@
         return d_dt_chaste_interface_var_Na_buffer__Nai;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative23(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative23(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2346,7 +2346,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative24(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative24(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__Ca_buffer__Cai = rY[1];
@@ -2371,7 +2371,7 @@
         return d_dt_chaste_interface_var_Ca_buffer__Ca_SR;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative24(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative24(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2410,7 +2410,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative25(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative25(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -2453,7 +2453,7 @@
         return d_dt_chaste_interface_var_Ca_buffer__Ca_SL;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative25(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative25(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2529,7 +2529,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative26(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative26(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -2575,7 +2575,7 @@
         return d_dt_chaste_interface_var_Ca_buffer__Ca_jct;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative26(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative26(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2656,7 +2656,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative27(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative27(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__Ca_buffer__Ca_SL = rY[25];
@@ -2672,7 +2672,7 @@
         return d_dt_chaste_interface_var_Ca_buffer__Ca_SLB_SL;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative27(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative27(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2695,7 +2695,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative28(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative28(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__Ca_buffer__Ca_jct = rY[26];
@@ -2711,7 +2711,7 @@
         return d_dt_chaste_interface_var_Ca_buffer__Ca_SLB_jct;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative28(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative28(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2734,7 +2734,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative29(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative29(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__Ca_buffer__Ca_SL = rY[25];
@@ -2750,7 +2750,7 @@
         return d_dt_chaste_interface_var_Ca_buffer__Ca_SLHigh_SL;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative29(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative29(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2773,7 +2773,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative30(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative30(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__Ca_buffer__Ca_jct = rY[26];
@@ -2789,7 +2789,7 @@
         return d_dt_chaste_interface_var_Ca_buffer__Ca_SLHigh_jct;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative30(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative30(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2812,7 +2812,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative31(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative31(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__Ca_buffer__Ca_SR = rY[24];
@@ -2828,7 +2828,7 @@
         return d_dt_chaste_interface_var_Ca_buffer__Ca_Calsequestrin;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative31(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative31(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2850,7 +2850,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative32(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative32(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__Ca_buffer__Cai = rY[1];
@@ -2866,7 +2866,7 @@
         return d_dt_chaste_interface_var_cytosolic_Ca_buffer__Ca_TroponinC;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative32(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative32(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2888,7 +2888,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative33(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative33(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__Ca_buffer__Cai = rY[1];
@@ -2906,7 +2906,7 @@
         return d_dt_chaste_interface_var_cytosolic_Ca_buffer__Ca_TroponinC_Ca_Mg;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative33(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative33(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2929,7 +2929,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative34(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative34(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cytosolic_Ca_buffer__Ca_TroponinC_Ca_Mg = rY[33];
@@ -2945,7 +2945,7 @@
         return d_dt_chaste_interface_var_cytosolic_Ca_buffer__Mg_TroponinC_Ca_Mg;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative34(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative34(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -2964,7 +2964,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative35(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative35(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__Ca_buffer__Cai = rY[1];
@@ -2980,7 +2980,7 @@
         return d_dt_chaste_interface_var_cytosolic_Ca_buffer__Ca_Calmodulin;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative35(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative35(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -3002,7 +3002,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative36(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative36(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__Ca_buffer__Cai = rY[1];
@@ -3020,7 +3020,7 @@
         return d_dt_chaste_interface_var_cytosolic_Ca_buffer__Ca_Myosin;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative36(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative36(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -3043,7 +3043,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative37(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative37(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__cytosolic_Ca_buffer__Ca_Myosin = rY[36];
@@ -3059,7 +3059,7 @@
         return d_dt_chaste_interface_var_cytosolic_Ca_buffer__Mg_Myosin;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative37(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative37(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -3078,7 +3078,7 @@
         }
         return partialF;
     }
-    double CellShannon2004FromCellMLGRL2::EvaluateYDerivative38(double var_chaste_interface__environment__time, std::vector<double>& rY)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluateYDerivative38(double var_chaste_interface__environment__time, std::vector<double>& rY)
     {
         
         double var_chaste_interface__Ca_buffer__Cai = rY[1];
@@ -3094,7 +3094,7 @@
         return d_dt_chaste_interface_var_cytosolic_Ca_buffer__Ca_SRB;
     }
 
-    double CellShannon2004FromCellMLGRL2::EvaluatePartialDerivative38(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
+    double CellShannon2004FromCellMLGRL2Opt::EvaluatePartialDerivative38(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
@@ -3117,7 +3117,7 @@
         return partialF;
     }
 
-    std::vector<double> CellShannon2004FromCellMLGRL2::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> CellShannon2004FromCellMLGRL2Opt::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -3264,7 +3264,7 @@
     }
 
 template<>
-void OdeSystemInformation<CellShannon2004FromCellMLGRL2>::Initialise(void)
+void OdeSystemInformation<CellShannon2004FromCellMLGRL2Opt>::Initialise(void)
 {
     this->mSystemName = "shannon_2004";
     this->mFreeVariableName = "time";
@@ -3570,4 +3570,5 @@ void OdeSystemInformation<CellShannon2004FromCellMLGRL2>::Initialise(void)
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(CellShannon2004FromCellMLGRL2)
+CHASTE_CLASS_EXPORT(CellShannon2004FromCellMLGRL2Opt)
+

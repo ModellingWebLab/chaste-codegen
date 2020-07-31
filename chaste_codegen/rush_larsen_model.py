@@ -1,8 +1,11 @@
+from functools import partial
+
 from sympy.codegen.rewriting import Wild
 
 from chaste_codegen._linearity_check import get_non_linear_state_vars, subst_deriv_eqs_non_linear_vars
 from chaste_codegen._partial_eval import partial_eval
 from chaste_codegen.chaste_model import ChasteModel
+from chaste_codegen.model_with_conversions import get_equations_for
 
 
 class RushLarsenModel(ChasteModel):
@@ -25,9 +28,10 @@ class RushLarsenModel(ChasteModel):
     def _get_non_linear_state_vars(self):
         """ Get and store the non_linear state vars """
         self._derivative_equations = \
-            set(partial_eval(self._derivative_equations, self._y_derivatives, keep_multiple_usages=False))
+            set(partial_eval(self._derivative_equations, self._model.y_derivatives, keep_multiple_usages=False))
         self._non_linear_state_vars = \
-            get_non_linear_state_vars(self._derivative_equations, self._membrane_voltage_var, self._state_vars)
+            get_non_linear_state_vars(self._derivative_equations, self._model.membrane_voltage_var,
+                                      self._model.state_vars)
 
     def _get_formatted_alpha_beta(self):
         """Gets the information for r_alpha_or_tau, r_beta_or_inf in the c++ output and formatted equations
@@ -57,15 +61,16 @@ class RushLarsenModel(ChasteModel):
         derivative_alpha_beta, vars_in_derivative_alpha_beta = [], set()
 
         # Substitute non-linear bits into derivative equations, so that we can pattern match
-        linear_derivs_eqs = subst_deriv_eqs_non_linear_vars(self._y_derivatives, self._non_linear_state_vars,
-                                                            self._membrane_voltage_var, self._state_vars,
-                                                            self.get_equations_for)
+        linear_derivs_eqs = subst_deriv_eqs_non_linear_vars(self._model.y_derivatives, self._non_linear_state_vars,
+                                                            self._model.membrane_voltage_var, self._model.state_vars,
+                                                            partial(get_equations_for, self._model))
 
-        for deriv in self._y_derivatives:
+        for deriv in self._model.y_derivatives:
             ab = {'alpha': None}
             it = {'tau': None}
             # get match if possible (deiv is linear)
-            if deriv.args[0] not in self._non_linear_state_vars and deriv.args[0] is not self._membrane_voltage_var:
+            if deriv.args[0] not in self._non_linear_state_vars and\
+                    deriv.args[0] is not self._model.membrane_voltage_var:
                 eq = next(filter(lambda e: e.lhs == deriv, linear_derivs_eqs))
                 ab = match_alpha_beta(eq.rhs, eq.lhs.args[0])
                 if ab['alpha'] is None:
@@ -84,7 +89,7 @@ class RushLarsenModel(ChasteModel):
                 derivative_alpha_beta.append({'type': 'non_linear', 'deriv': self._printer.doprint(deriv)})
                 vars_in_derivative_alpha_beta.add(deriv)
 
-        deriv_eqs_EvaluateEquations = self.get_equations_for(vars_in_derivative_alpha_beta)
+        deriv_eqs_EvaluateEquations = get_equations_for(self._model, vars_in_derivative_alpha_beta)
         return derivative_alpha_beta, deriv_eqs_EvaluateEquations, vars_in_derivative_alpha_beta
 
     def _update_state_vars(self):

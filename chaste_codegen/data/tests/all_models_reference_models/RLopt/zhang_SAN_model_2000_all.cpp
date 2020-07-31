@@ -22,7 +22,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
-    Cellzhang_SAN_model_2000_allFromCellMLRushLarsen::Cellzhang_SAN_model_2000_allFromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellzhang_SAN_model_2000_allFromCellMLRushLarsenOpt::Cellzhang_SAN_model_2000_allFromCellMLRushLarsenOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractRushLarsenCardiacCell(
                 15,
                 0,
@@ -30,16 +30,16 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellzhang_SAN_model_2000_allFromCellMLRushLarsen>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellzhang_SAN_model_2000_allFromCellMLRushLarsenOpt>::Instance();
         Init();
         
     }
 
-    Cellzhang_SAN_model_2000_allFromCellMLRushLarsen::~Cellzhang_SAN_model_2000_allFromCellMLRushLarsen()
+    Cellzhang_SAN_model_2000_allFromCellMLRushLarsenOpt::~Cellzhang_SAN_model_2000_allFromCellMLRushLarsenOpt()
     {
     }
     
-    double Cellzhang_SAN_model_2000_allFromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellzhang_SAN_model_2000_allFromCellMLRushLarsenOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -99,7 +99,7 @@
         return i_ionic;
     }
 
-    void Cellzhang_SAN_model_2000_allFromCellMLRushLarsen::EvaluateEquations(double var_chaste_interface__environment__time_converted, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
+    void Cellzhang_SAN_model_2000_allFromCellMLRushLarsenOpt::EvaluateEquations(double var_chaste_interface__environment__time_converted, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -200,7 +200,7 @@
         rAlphaOrTau[14] = 0.001 * var_hyperpolarisation_activated_current_y_gate__alpha_y;
         rBetaOrInf[14] = 0.001 * var_hyperpolarisation_activated_current_y_gate__beta_y;
     }
-    void Cellzhang_SAN_model_2000_allFromCellMLRushLarsen::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
+    void Cellzhang_SAN_model_2000_allFromCellMLRushLarsenOpt::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         
@@ -228,7 +228,7 @@
         }
     }
 
-    std::vector<double> Cellzhang_SAN_model_2000_allFromCellMLRushLarsen::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Cellzhang_SAN_model_2000_allFromCellMLRushLarsenOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -242,7 +242,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellzhang_SAN_model_2000_allFromCellMLRushLarsen>::Initialise(void)
+void OdeSystemInformation<Cellzhang_SAN_model_2000_allFromCellMLRushLarsenOpt>::Initialise(void)
 {
     this->mSystemName = "zhang_SAN_model_2000_all";
     this->mFreeVariableName = "environment__time";
@@ -332,4 +332,4 @@ void OdeSystemInformation<Cellzhang_SAN_model_2000_allFromCellMLRushLarsen>::Ini
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellzhang_SAN_model_2000_allFromCellMLRushLarsen)
+CHASTE_CLASS_EXPORT(Cellzhang_SAN_model_2000_allFromCellMLRushLarsenOpt)

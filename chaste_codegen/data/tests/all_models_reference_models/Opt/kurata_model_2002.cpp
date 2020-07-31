@@ -22,7 +22,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
-    Cellkurata_model_2002FromCellML::Cellkurata_model_2002FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellkurata_model_2002FromCellMLOpt::Cellkurata_model_2002FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 27,
@@ -31,17 +31,17 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellkurata_model_2002FromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellkurata_model_2002FromCellMLOpt>::Instance();
         Init();
         
         this->mParameters[0] = 32.0; // (var_membrane__Cm) [picoF]
     }
 
-    Cellkurata_model_2002FromCellML::~Cellkurata_model_2002FromCellML()
+    Cellkurata_model_2002FromCellMLOpt::~Cellkurata_model_2002FromCellMLOpt()
     {
     }
     
-    double Cellkurata_model_2002FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellkurata_model_2002FromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -115,7 +115,7 @@
         return i_ionic;
     }
 
-    void Cellkurata_model_2002FromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Cellkurata_model_2002FromCellMLOpt::EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -281,7 +281,7 @@
         rDY[26] = d_dt_chaste_interface_var_calcium_buffering__fCQ;
     }
 
-    std::vector<double> Cellkurata_model_2002FromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Cellkurata_model_2002FromCellMLOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -297,7 +297,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellkurata_model_2002FromCellML>::Initialise(void)
+void OdeSystemInformation<Cellkurata_model_2002FromCellMLOpt>::Initialise(void)
 {
     this->mSystemName = "kurata_model_2002";
     this->mFreeVariableName = "environment__time";
@@ -455,4 +455,4 @@ void OdeSystemInformation<Cellkurata_model_2002FromCellML>::Initialise(void)
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellkurata_model_2002FromCellML)
+CHASTE_CLASS_EXPORT(Cellkurata_model_2002FromCellMLOpt)

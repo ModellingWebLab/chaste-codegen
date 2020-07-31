@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellpandit_model_2001_epiFromCellML::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellpandit_model_2001_epiFromCellMLOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -0.00059999999999999995 * HeartConfig::Instance()->GetCapacitance() / mParameters[0]; // uA_per_cm2
@@ -38,7 +38,7 @@
         return p_cellml_stim;
     }
 
-    Cellpandit_model_2001_epiFromCellML::Cellpandit_model_2001_epiFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellpandit_model_2001_epiFromCellMLOpt::Cellpandit_model_2001_epiFromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 26,
@@ -47,7 +47,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellpandit_model_2001_epiFromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellpandit_model_2001_epiFromCellMLOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -56,11 +56,11 @@
         this->mParameters[0] = 0.0001; // (var_membrane__Cm) [microF]
     }
 
-    Cellpandit_model_2001_epiFromCellML::~Cellpandit_model_2001_epiFromCellML()
+    Cellpandit_model_2001_epiFromCellMLOpt::~Cellpandit_model_2001_epiFromCellMLOpt()
     {
     }
     
-    double Cellpandit_model_2001_epiFromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellpandit_model_2001_epiFromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -120,7 +120,7 @@
         return i_ionic;
     }
 
-    void Cellpandit_model_2001_epiFromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Cellpandit_model_2001_epiFromCellMLOpt::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -261,7 +261,7 @@
         rDY[25] = d_dt_chaste_interface_var_intracellular_ion_concentrations__Ca_NSR;
     }
 
-    std::vector<double> Cellpandit_model_2001_epiFromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Cellpandit_model_2001_epiFromCellMLOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -277,7 +277,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellpandit_model_2001_epiFromCellML>::Initialise(void)
+void OdeSystemInformation<Cellpandit_model_2001_epiFromCellMLOpt>::Initialise(void)
 {
     this->mSystemName = "pandit_model_2001_epi";
     this->mFreeVariableName = "environment__time";
@@ -432,4 +432,4 @@ void OdeSystemInformation<Cellpandit_model_2001_epiFromCellML>::Initialise(void)
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellpandit_model_2001_epiFromCellML)
+CHASTE_CLASS_EXPORT(Cellpandit_model_2001_epiFromCellMLOpt)

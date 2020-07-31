@@ -15,10 +15,9 @@ class RushLarsenOptModel(RushLarsenModel):
                                              if eq in self._derivative_eqs_excl_voltage]
         super()._get_non_linear_state_vars()
 
-    def _get_extended_equations_for_ionic_vars(self):
+    def _get_extended_ionic_vars(self):
         """ Get the partially evaluated equations defining the ionic derivatives and all dependant equations"""
-        return partial_eval(super()._get_extended_equations_for_ionic_vars(),
-                            set(map(lambda eq: eq.lhs, self._equations_for_ionic_vars)))
+        return partial_eval(super()._get_extended_ionic_vars(), self._model.ionic_vars)
 
     def _update_state_vars(self):
         """Updates formatting of state vars to make sure the correct ones are included in the output"""

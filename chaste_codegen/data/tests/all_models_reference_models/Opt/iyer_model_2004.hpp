@@ -1,5 +1,5 @@
-#ifndef CELLIYER_MODEL_2004FROMCELLML_HPP_
-#define CELLIYER_MODEL_2004FROMCELLML_HPP_
+#ifndef CELLIYER_MODEL_2004FROMCELLMLOPT_HPP_
+#define CELLIYER_MODEL_2004FROMCELLMLOPT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractCardiacCell.hpp"
 
-class Celliyer_model_2004FromCellML : public AbstractCardiacCell
+class Celliyer_model_2004FromCellMLOpt : public AbstractCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -34,8 +34,8 @@ class Celliyer_model_2004FromCellML : public AbstractCardiacCell
 
 public:
 
-    Celliyer_model_2004FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Celliyer_model_2004FromCellML();
+    Celliyer_model_2004FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Celliyer_model_2004FromCellMLOpt();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY);
 
@@ -44,7 +44,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Celliyer_model_2004FromCellML)
+CHASTE_CLASS_EXPORT(Celliyer_model_2004FromCellMLOpt)
 
 namespace boost
 {
@@ -52,7 +52,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Celliyer_model_2004FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, const Celliyer_model_2004FromCellMLOpt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -62,17 +62,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Celliyer_model_2004FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, Celliyer_model_2004FromCellMLOpt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Celliyer_model_2004FromCellML(p_solver, p_stimulus);
+            ::new(t)Celliyer_model_2004FromCellMLOpt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLIYER_MODEL_2004FROMCELLML_HPP_
+#endif // CELLIYER_MODEL_2004FROMCELLMLOPT_HPP_

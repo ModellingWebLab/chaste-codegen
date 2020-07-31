@@ -1,5 +1,5 @@
-#ifndef CELLKURATA_MODEL_2002FROMCELLML_HPP_
-#define CELLKURATA_MODEL_2002FROMCELLML_HPP_
+#ifndef CELLKURATA_MODEL_2002FROMCELLMLOPT_HPP_
+#define CELLKURATA_MODEL_2002FROMCELLMLOPT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractCardiacCell.hpp"
 
-class Cellkurata_model_2002FromCellML : public AbstractCardiacCell
+class Cellkurata_model_2002FromCellMLOpt : public AbstractCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -34,8 +34,8 @@ class Cellkurata_model_2002FromCellML : public AbstractCardiacCell
 
 public:
 
-    Cellkurata_model_2002FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellkurata_model_2002FromCellML();
+    Cellkurata_model_2002FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellkurata_model_2002FromCellMLOpt();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY);
 
@@ -44,7 +44,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellkurata_model_2002FromCellML)
+CHASTE_CLASS_EXPORT(Cellkurata_model_2002FromCellMLOpt)
 
 namespace boost
 {
@@ -52,7 +52,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellkurata_model_2002FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, const Cellkurata_model_2002FromCellMLOpt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -62,17 +62,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellkurata_model_2002FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, Cellkurata_model_2002FromCellMLOpt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellkurata_model_2002FromCellML(p_solver, p_stimulus);
+            ::new(t)Cellkurata_model_2002FromCellMLOpt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLKURATA_MODEL_2002FROMCELLML_HPP_
+#endif // CELLKURATA_MODEL_2002FROMCELLMLOPT_HPP_

@@ -21,11 +21,11 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    double Celldokos_model_1996FromCellML::GetIntracellularCalciumConcentration()
+    double Celldokos_model_1996FromCellMLOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Celldokos_model_1996FromCellML::Celldokos_model_1996FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Celldokos_model_1996FromCellMLOpt::Celldokos_model_1996FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 18,
@@ -34,17 +34,17 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Celldokos_model_1996FromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Celldokos_model_1996FromCellMLOpt>::Instance();
         Init();
         
         this->mParameters[0] = 3.1999999999999999e-5; // (var_membrane__C) [nanoF]
     }
 
-    Celldokos_model_1996FromCellML::~Celldokos_model_1996FromCellML()
+    Celldokos_model_1996FromCellMLOpt::~Celldokos_model_1996FromCellMLOpt()
     {
     }
     
-    double Celldokos_model_1996FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Celldokos_model_1996FromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -104,7 +104,7 @@
         return i_ionic;
     }
 
-    void Celldokos_model_1996FromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Celldokos_model_1996FromCellMLOpt::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -221,7 +221,7 @@
         rDY[17] = d_dt_chaste_interface_var_ion_concentrations__Ko;
     }
 
-    std::vector<double> Celldokos_model_1996FromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Celldokos_model_1996FromCellMLOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -237,7 +237,7 @@
     }
 
 template<>
-void OdeSystemInformation<Celldokos_model_1996FromCellML>::Initialise(void)
+void OdeSystemInformation<Celldokos_model_1996FromCellMLOpt>::Initialise(void)
 {
     this->mSystemName = "dokos_model_1996";
     this->mFreeVariableName = "environment__time";
@@ -350,4 +350,4 @@ void OdeSystemInformation<Celldokos_model_1996FromCellML>::Initialise(void)
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Celldokos_model_1996FromCellML)
+CHASTE_CLASS_EXPORT(Celldokos_model_1996FromCellMLOpt)

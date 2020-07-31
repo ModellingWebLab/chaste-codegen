@@ -77,6 +77,13 @@ However units of time have been set to dimensionless to create an error
             </rdf:Description>
          </rdf:RDF>
       </variable>
+      <variable name="V" units="mV" initial_value="-89.1374183" public_interface="out" cmeta:id="membrane_voltage">
+         <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+            <rdf:Description rdf:about="#membrane_voltage">
+               <bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_voltage"/>
+            </rdf:Description>
+         </rdf:RDF>
+      </variable>
    </component>
 
    <component name="single_independent_ode">

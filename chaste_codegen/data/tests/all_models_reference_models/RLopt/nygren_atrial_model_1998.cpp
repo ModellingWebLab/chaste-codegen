@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellnygren_atrial_model_1998FromCellMLRushLarsen::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellnygren_atrial_model_1998FromCellMLRushLarsenOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_membrane__Cm_converted = 0.001 * mParameters[0]; // uF
@@ -38,11 +38,11 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double Cellnygren_atrial_model_1998FromCellMLRushLarsen::GetIntracellularCalciumConcentration()
+    double Cellnygren_atrial_model_1998FromCellMLRushLarsenOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Cellnygren_atrial_model_1998FromCellMLRushLarsen::Cellnygren_atrial_model_1998FromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellnygren_atrial_model_1998FromCellMLRushLarsenOpt::Cellnygren_atrial_model_1998FromCellMLRushLarsenOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractRushLarsenCardiacCell(
                 29,
                 0,
@@ -50,7 +50,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellnygren_atrial_model_1998FromCellMLRushLarsen>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellnygren_atrial_model_1998FromCellMLRushLarsenOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -59,11 +59,11 @@
         this->mParameters[0] = 0.050000000000000003; // (var_membrane__Cm) [nanoF]
     }
 
-    Cellnygren_atrial_model_1998FromCellMLRushLarsen::~Cellnygren_atrial_model_1998FromCellMLRushLarsen()
+    Cellnygren_atrial_model_1998FromCellMLRushLarsenOpt::~Cellnygren_atrial_model_1998FromCellMLRushLarsenOpt()
     {
     }
     
-    double Cellnygren_atrial_model_1998FromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellnygren_atrial_model_1998FromCellMLRushLarsenOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -131,7 +131,7 @@
         return i_ionic;
     }
 
-    void Cellnygren_atrial_model_1998FromCellMLRushLarsen::EvaluateEquations(double var_chaste_interface__environment__time_converted, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
+    void Cellnygren_atrial_model_1998FromCellMLRushLarsenOpt::EvaluateEquations(double var_chaste_interface__environment__time_converted, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -285,7 +285,7 @@
         rDY[27] = d_dt_chaste_interface_var_Ca_handling_by_the_SR__F1;
         rDY[28] = d_dt_chaste_interface_var_Ca_handling_by_the_SR__F2;
     }
-    void Cellnygren_atrial_model_1998FromCellMLRushLarsen::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
+    void Cellnygren_atrial_model_1998FromCellMLRushLarsenOpt::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         
@@ -319,7 +319,7 @@
         rY[28] += mDt * rDY[28];
     }
 
-    std::vector<double> Cellnygren_atrial_model_1998FromCellMLRushLarsen::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Cellnygren_atrial_model_1998FromCellMLRushLarsenOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -337,7 +337,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellnygren_atrial_model_1998FromCellMLRushLarsen>::Initialise(void)
+void OdeSystemInformation<Cellnygren_atrial_model_1998FromCellMLRushLarsenOpt>::Initialise(void)
 {
     this->mSystemName = "nygren_atrial_model_1998";
     this->mFreeVariableName = "environment__time";
@@ -509,4 +509,4 @@ void OdeSystemInformation<Cellnygren_atrial_model_1998FromCellMLRushLarsen>::Ini
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellnygren_atrial_model_1998FromCellMLRushLarsen)
+CHASTE_CLASS_EXPORT(Cellnygren_atrial_model_1998FromCellMLRushLarsenOpt)

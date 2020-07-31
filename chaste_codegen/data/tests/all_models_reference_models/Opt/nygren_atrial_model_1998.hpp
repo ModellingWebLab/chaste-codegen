@@ -1,5 +1,5 @@
-#ifndef CELLNYGREN_ATRIAL_MODEL_1998FROMCELLML_HPP_
-#define CELLNYGREN_ATRIAL_MODEL_1998FROMCELLML_HPP_
+#ifndef CELLNYGREN_ATRIAL_MODEL_1998FROMCELLMLOPT_HPP_
+#define CELLNYGREN_ATRIAL_MODEL_1998FROMCELLMLOPT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractCardiacCell.hpp"
 
-class Cellnygren_atrial_model_1998FromCellML : public AbstractCardiacCell
+class Cellnygren_atrial_model_1998FromCellMLOpt : public AbstractCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -36,8 +36,8 @@ public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    Cellnygren_atrial_model_1998FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellnygren_atrial_model_1998FromCellML();
+    Cellnygren_atrial_model_1998FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellnygren_atrial_model_1998FromCellMLOpt();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY);
 
@@ -46,7 +46,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellnygren_atrial_model_1998FromCellML)
+CHASTE_CLASS_EXPORT(Cellnygren_atrial_model_1998FromCellMLOpt)
 
 namespace boost
 {
@@ -54,7 +54,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellnygren_atrial_model_1998FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, const Cellnygren_atrial_model_1998FromCellMLOpt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -64,17 +64,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellnygren_atrial_model_1998FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, Cellnygren_atrial_model_1998FromCellMLOpt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellnygren_atrial_model_1998FromCellML(p_solver, p_stimulus);
+            ::new(t)Cellnygren_atrial_model_1998FromCellMLOpt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLNYGREN_ATRIAL_MODEL_1998FROMCELLML_HPP_
+#endif // CELLNYGREN_ATRIAL_MODEL_1998FROMCELLMLOPT_HPP_

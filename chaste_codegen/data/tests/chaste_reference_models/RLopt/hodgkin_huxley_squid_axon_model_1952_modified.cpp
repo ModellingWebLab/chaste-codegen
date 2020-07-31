@@ -22,7 +22,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
-    Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsen::Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsenOpt::Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsenOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractRushLarsenCardiacCell(
                 4,
                 0,
@@ -30,16 +30,16 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsen>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsenOpt>::Instance();
         Init();
         
     }
 
-    Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsen::~Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsen()
+    Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsenOpt::~Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsenOpt()
     {
     }
     
-    double Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsenOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -64,7 +64,7 @@
         return i_ionic;
     }
 
-    void Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsen::EvaluateEquations(double var_chaste_interface__environment__time, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
+    void Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsenOpt::EvaluateEquations(double var_chaste_interface__environment__time, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -102,7 +102,7 @@
         rAlphaOrTau[3] = var_potassium_channel_n_gate__alpha_n;
         rBetaOrInf[3] = var_potassium_channel_n_gate__beta_n;
     }
-    void Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsen::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
+    void Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsenOpt::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         
@@ -123,7 +123,7 @@
         }
     }
 
-    std::vector<double> Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsen::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsenOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -139,7 +139,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsen>::Initialise(void)
+void OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsenOpt>::Initialise(void)
 {
     this->mSystemName = "hodgkin_huxley_squid_axon_model_1952_modified";
     this->mFreeVariableName = "time";
@@ -178,4 +178,4 @@ void OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromC
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsen)
+CHASTE_CLASS_EXPORT(Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsenOpt)

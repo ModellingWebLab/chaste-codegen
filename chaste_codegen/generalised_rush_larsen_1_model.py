@@ -1,3 +1,5 @@
+from functools import partial
+
 from sympy import Derivative
 
 from chaste_codegen._jacobian import format_jacobian, get_jacobian
@@ -14,15 +16,18 @@ class GeneralisedRushLarsenFirstOrderModel(ChasteModel):
         self._cpp_template = 'generalised_rush_larsen_model_1.cpp'
         self._vars_for_template['base_class'] = 'AbstractGeneralizedRushLarsenCardiacCell'
         self._jacobian_equations, self._jacobian_matrix = self._get_jacobian()
+
+        modifiers_with_defining_eqs = set((eq[0] for eq in self._jacobian_equations)) | self._model.state_vars
         self._vars_for_template['jacobian_equations'], self._vars_for_template['jacobian_entries'] = \
             format_jacobian(self._jacobian_equations, self._jacobian_matrix, self._printer,
-                            self._print_rhs_with_modifiers, skip_0_entries=False)
+                            partial(self._print_rhs_with_modifiers,
+                                    modifiers_with_defining_eqs=modifiers_with_defining_eqs), skip_0_entries=False)
         self._map_state_vars_and_eqs()
 
     def _get_jacobian(self):
         """Retrieve jacobian matrix"""
         derivative_eqs_for_jacobian = \
-            partial_eval(self._derivative_equations, self._y_derivatives, keep_multiple_usages=False)
+            partial_eval(self._derivative_equations, self._model.y_derivatives, keep_multiple_usages=False)
         return get_jacobian(self._state_vars, derivative_eqs_for_jacobian)
 
     def _map_state_vars_and_eqs(self):
@@ -45,13 +50,13 @@ class GeneralisedRushLarsenFirstOrderModel(ChasteModel):
             used_state_vars = set()
             for eq in eq_to_expand:
                 for v in eq[1].atoms(Derivative) | eq[1].free_symbols:
-                    if v in self._state_vars:
+                    if v in self._model.state_vars:
                         used_state_vars.add(v)
                     elif v not in [e[0] for e in eq_to_expand]:
                         eq_to_expand.extend(filter(lambda e: e[0] == v, equations))
             return set(eq_to_expand), used_state_vars
 
-        for i, deriv in enumerate(self._y_derivatives):
+        for i, deriv in enumerate(self._model.y_derivatives):
             equations, used_state_vars = \
                 get_used_eqs_and_state_vars([(d.lhs, d.rhs) for d in self._derivative_equations if d.lhs == deriv],
                                             set(map(lambda e: (e.lhs, e.rhs), self._derivative_equations)))

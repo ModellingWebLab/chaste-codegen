@@ -1,5 +1,5 @@
-#ifndef CELLDECKER_2009FROMCELLMLGRL2_HPP_
-#define CELLDECKER_2009FROMCELLMLGRL2_HPP_
+#ifndef CELLDECKER_2009FROMCELLMLGRL2OPT_HPP_
+#define CELLDECKER_2009FROMCELLMLGRL2OPT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractGeneralizedRushLarsenCardiacCell.hpp"
 
-class Celldecker_2009FromCellMLGRL2 : public AbstractGeneralizedRushLarsenCardiacCell
+class Celldecker_2009FromCellMLGRL2Opt : public AbstractGeneralizedRushLarsenCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -36,8 +36,8 @@ public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    Celldecker_2009FromCellMLGRL2(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Celldecker_2009FromCellMLGRL2();
+    Celldecker_2009FromCellMLGRL2Opt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Celldecker_2009FromCellMLGRL2Opt();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time);
     void ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time);
@@ -144,7 +144,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Celldecker_2009FromCellMLGRL2)
+CHASTE_CLASS_EXPORT(Celldecker_2009FromCellMLGRL2Opt)
 
 namespace boost
 {
@@ -152,7 +152,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Celldecker_2009FromCellMLGRL2 * t, const unsigned int fileVersion)
+            Archive & ar, const Celldecker_2009FromCellMLGRL2Opt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -162,17 +162,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Celldecker_2009FromCellMLGRL2 * t, const unsigned int fileVersion)
+            Archive & ar, Celldecker_2009FromCellMLGRL2Opt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Celldecker_2009FromCellMLGRL2(p_solver, p_stimulus);
+            ::new(t)Celldecker_2009FromCellMLGRL2Opt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLDECKER_2009FROMCELLMLGRL2_HPP_
+#endif // CELLDECKER_2009FROMCELLMLGRL2OPT_HPP_

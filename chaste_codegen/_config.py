@@ -1,8 +1,8 @@
 """
 Constants and version information.
 """
-
 import inspect
+import logging
 #
 # Get package location, find template directory
 #
@@ -23,6 +23,11 @@ TEMPLATE_SUBDIR = os.path.join('templates')
 # Directory for any other data
 DATA_DIR = os.path.join(MODULE_DIR, 'data')
 
+# Configure logging
+logging.basicConfig()
+LOGGER = logging.getLogger('chaste_codegen')
+LOGGER.setLevel(logging.INFO)
+del(logging)
 
 #
 # Version info

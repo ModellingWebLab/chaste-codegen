@@ -1,15 +1,9 @@
-import logging
 import os
 import random
 
 import pytest
 
 from chaste_codegen._script_utils import write_file
-
-
-# Show more logging output
-LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.DEBUG)
 
 
 def test_wrong_params1():

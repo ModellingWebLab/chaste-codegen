@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Celllivshitz_rudy_2007FromCellMLRushLarsen::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Celllivshitz_rudy_2007FromCellMLRushLarsenOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__cell__stim_amplitude_converted = -15.0 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
@@ -38,7 +38,7 @@
         return p_cellml_stim;
     }
 
-    Celllivshitz_rudy_2007FromCellMLRushLarsen::Celllivshitz_rudy_2007FromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Celllivshitz_rudy_2007FromCellMLRushLarsenOpt::Celllivshitz_rudy_2007FromCellMLRushLarsenOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractRushLarsenCardiacCell(
                 18,
                 0,
@@ -46,7 +46,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Celllivshitz_rudy_2007FromCellMLRushLarsen>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Celllivshitz_rudy_2007FromCellMLRushLarsenOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -57,11 +57,11 @@
         this->mParameters[2] = 0.02614; // (var_IKr__gkrmax) [mS_per_uF]
     }
 
-    Celllivshitz_rudy_2007FromCellMLRushLarsen::~Celllivshitz_rudy_2007FromCellMLRushLarsen()
+    Celllivshitz_rudy_2007FromCellMLRushLarsenOpt::~Celllivshitz_rudy_2007FromCellMLRushLarsenOpt()
     {
     }
     
-    double Celllivshitz_rudy_2007FromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
+    double Celllivshitz_rudy_2007FromCellMLRushLarsenOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -112,7 +112,7 @@
         return i_ionic;
     }
 
-    void Celllivshitz_rudy_2007FromCellMLRushLarsen::EvaluateEquations(double var_chaste_interface__Environment__time, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
+    void Celllivshitz_rudy_2007FromCellMLRushLarsenOpt::EvaluateEquations(double var_chaste_interface__Environment__time, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -217,7 +217,7 @@
         rDY[16] = d_dt_chaste_interface_var_Ca__Ca_NSR;
         rDY[17] = d_dt_chaste_interface_var_Ca__Over;
     }
-    void Celllivshitz_rudy_2007FromCellMLRushLarsen::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
+    void Celllivshitz_rudy_2007FromCellMLRushLarsenOpt::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         
@@ -252,7 +252,7 @@
         rY[17] += mDt * rDY[17];
     }
 
-    std::vector<double> Celllivshitz_rudy_2007FromCellMLRushLarsen::ComputeDerivedQuantities(double var_chaste_interface__Environment__time, const std::vector<double> & rY)
+    std::vector<double> Celllivshitz_rudy_2007FromCellMLRushLarsenOpt::ComputeDerivedQuantities(double var_chaste_interface__Environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -279,7 +279,7 @@
     }
 
 template<>
-void OdeSystemInformation<Celllivshitz_rudy_2007FromCellMLRushLarsen>::Initialise(void)
+void OdeSystemInformation<Celllivshitz_rudy_2007FromCellMLRushLarsenOpt>::Initialise(void)
 {
     this->mSystemName = "LivshitzRudy2007";
     this->mFreeVariableName = "Environment__time";
@@ -404,4 +404,4 @@ void OdeSystemInformation<Celllivshitz_rudy_2007FromCellMLRushLarsen>::Initialis
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Celllivshitz_rudy_2007FromCellMLRushLarsen)
+CHASTE_CLASS_EXPORT(Celllivshitz_rudy_2007FromCellMLRushLarsenOpt)

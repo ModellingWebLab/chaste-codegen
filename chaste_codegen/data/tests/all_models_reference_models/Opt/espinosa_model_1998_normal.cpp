@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellespinosa_model_1998_normalFromCellML::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellespinosa_model_1998_normalFromCellMLOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -0.0018000000000000002 * HeartConfig::Instance()->GetCapacitance() / mParameters[0]; // uA_per_cm2
@@ -37,11 +37,11 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double Cellespinosa_model_1998_normalFromCellML::GetIntracellularCalciumConcentration()
+    double Cellespinosa_model_1998_normalFromCellMLOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Cellespinosa_model_1998_normalFromCellML::Cellespinosa_model_1998_normalFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellespinosa_model_1998_normalFromCellMLOpt::Cellespinosa_model_1998_normalFromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 21,
@@ -50,7 +50,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellespinosa_model_1998_normalFromCellML>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellespinosa_model_1998_normalFromCellMLOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -59,11 +59,11 @@
         this->mParameters[0] = 9.5000000000000005e-5; // (var_membrane__Cm) [microF]
     }
 
-    Cellespinosa_model_1998_normalFromCellML::~Cellespinosa_model_1998_normalFromCellML()
+    Cellespinosa_model_1998_normalFromCellMLOpt::~Cellespinosa_model_1998_normalFromCellMLOpt()
     {
     }
     
-    double Cellespinosa_model_1998_normalFromCellML::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellespinosa_model_1998_normalFromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -122,7 +122,7 @@
         return i_ionic;
     }
 
-    void Cellespinosa_model_1998_normalFromCellML::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY)
+    void Cellespinosa_model_1998_normalFromCellMLOpt::EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -251,7 +251,7 @@
         rDY[20] = d_dt_chaste_interface_var_intracellular_calcium_concentration__Ca_Trop;
     }
 
-    std::vector<double> Cellespinosa_model_1998_normalFromCellML::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Cellespinosa_model_1998_normalFromCellMLOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -267,7 +267,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellespinosa_model_1998_normalFromCellML>::Initialise(void)
+void OdeSystemInformation<Cellespinosa_model_1998_normalFromCellMLOpt>::Initialise(void)
 {
     this->mSystemName = "espinosa_model_1998_normal";
     this->mFreeVariableName = "environment__time";
@@ -395,4 +395,4 @@ void OdeSystemInformation<Cellespinosa_model_1998_normalFromCellML>::Initialise(
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellespinosa_model_1998_normalFromCellML)
+CHASTE_CLASS_EXPORT(Cellespinosa_model_1998_normalFromCellMLOpt)

@@ -1,5 +1,5 @@
-#ifndef CELLDOKOS_MODEL_1996FROMCELLML_HPP_
-#define CELLDOKOS_MODEL_1996FROMCELLML_HPP_
+#ifndef CELLDOKOS_MODEL_1996FROMCELLMLOPT_HPP_
+#define CELLDOKOS_MODEL_1996FROMCELLMLOPT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractCardiacCell.hpp"
 
-class Celldokos_model_1996FromCellML : public AbstractCardiacCell
+class Celldokos_model_1996FromCellMLOpt : public AbstractCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -35,8 +35,8 @@ class Celldokos_model_1996FromCellML : public AbstractCardiacCell
 public:
 
     double GetIntracellularCalciumConcentration();
-    Celldokos_model_1996FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Celldokos_model_1996FromCellML();
+    Celldokos_model_1996FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Celldokos_model_1996FromCellMLOpt();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY);
 
@@ -45,7 +45,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Celldokos_model_1996FromCellML)
+CHASTE_CLASS_EXPORT(Celldokos_model_1996FromCellMLOpt)
 
 namespace boost
 {
@@ -53,7 +53,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Celldokos_model_1996FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, const Celldokos_model_1996FromCellMLOpt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -63,17 +63,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Celldokos_model_1996FromCellML * t, const unsigned int fileVersion)
+            Archive & ar, Celldokos_model_1996FromCellMLOpt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Celldokos_model_1996FromCellML(p_solver, p_stimulus);
+            ::new(t)Celldokos_model_1996FromCellMLOpt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLDOKOS_MODEL_1996FROMCELLML_HPP_
+#endif // CELLDOKOS_MODEL_1996FROMCELLMLOPT_HPP_

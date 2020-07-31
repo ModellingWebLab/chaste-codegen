@@ -1,5 +1,5 @@
-#ifndef CELLTEN_TUSSCHER_MODEL_2006_EPIFROMCELLML_HPP_
-#define CELLTEN_TUSSCHER_MODEL_2006_EPIFROMCELLML_HPP_
+#ifndef CELLTEN_TUSSCHER_MODEL_2006_EPIFROMCELLMLOPT_HPP_
+#define CELLTEN_TUSSCHER_MODEL_2006_EPIFROMCELLMLOPT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractCardiacCell.hpp"
 
-class Cellten_tusscher_model_2006_epiFromCellML : public AbstractCardiacCell
+class Cellten_tusscher_model_2006_epiFromCellMLOpt : public AbstractCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -36,8 +36,8 @@ public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    Cellten_tusscher_model_2006_epiFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellten_tusscher_model_2006_epiFromCellML();
+    Cellten_tusscher_model_2006_epiFromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellten_tusscher_model_2006_epiFromCellMLOpt();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY);
 
@@ -46,7 +46,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellten_tusscher_model_2006_epiFromCellML)
+CHASTE_CLASS_EXPORT(Cellten_tusscher_model_2006_epiFromCellMLOpt)
 
 namespace boost
 {
@@ -54,7 +54,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellten_tusscher_model_2006_epiFromCellML * t, const unsigned int fileVersion)
+            Archive & ar, const Cellten_tusscher_model_2006_epiFromCellMLOpt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -64,17 +64,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellten_tusscher_model_2006_epiFromCellML * t, const unsigned int fileVersion)
+            Archive & ar, Cellten_tusscher_model_2006_epiFromCellMLOpt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellten_tusscher_model_2006_epiFromCellML(p_solver, p_stimulus);
+            ::new(t)Cellten_tusscher_model_2006_epiFromCellMLOpt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLTEN_TUSSCHER_MODEL_2006_EPIFROMCELLML_HPP_
+#endif // CELLTEN_TUSSCHER_MODEL_2006_EPIFROMCELLMLOPT_HPP_

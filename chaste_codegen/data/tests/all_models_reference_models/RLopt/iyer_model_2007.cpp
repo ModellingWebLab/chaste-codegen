@@ -22,7 +22,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
-    Celliyer_model_2007FromCellMLRushLarsen::Celliyer_model_2007FromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Celliyer_model_2007FromCellMLRushLarsenOpt::Celliyer_model_2007FromCellMLRushLarsenOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractRushLarsenCardiacCell(
                 67,
                 0,
@@ -30,16 +30,16 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Celliyer_model_2007FromCellMLRushLarsen>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Celliyer_model_2007FromCellMLRushLarsenOpt>::Instance();
         Init();
         
     }
 
-    Celliyer_model_2007FromCellMLRushLarsen::~Celliyer_model_2007FromCellMLRushLarsen()
+    Celliyer_model_2007FromCellMLRushLarsenOpt::~Celliyer_model_2007FromCellMLRushLarsenOpt()
     {
     }
     
-    double Celliyer_model_2007FromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
+    double Celliyer_model_2007FromCellMLRushLarsenOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -89,7 +89,7 @@
         return i_ionic;
     }
 
-    void Celliyer_model_2007FromCellMLRushLarsen::EvaluateEquations(double var_chaste_interface__environment__time, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
+    void Celliyer_model_2007FromCellMLRushLarsenOpt::EvaluateEquations(double var_chaste_interface__environment__time, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -375,7 +375,7 @@
         rDY[65] = d_dt_chaste_interface_var_IKs__O1ks;
         rDY[66] = d_dt_chaste_interface_var_IKs__O2ks;
     }
-    void Celliyer_model_2007FromCellMLRushLarsen::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
+    void Celliyer_model_2007FromCellMLRushLarsenOpt::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)
     {
         std::vector<double>& rY = rGetStateVariables();
         
@@ -447,7 +447,7 @@
         rY[66] += mDt * rDY[66];
     }
 
-    std::vector<double> Celliyer_model_2007FromCellMLRushLarsen::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Celliyer_model_2007FromCellMLRushLarsenOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -463,7 +463,7 @@
     }
 
 template<>
-void OdeSystemInformation<Celliyer_model_2007FromCellMLRushLarsen>::Initialise(void)
+void OdeSystemInformation<Celliyer_model_2007FromCellMLRushLarsenOpt>::Initialise(void)
 {
     this->mSystemName = "iyer_model_2007";
     this->mFreeVariableName = "environment__time";
@@ -819,4 +819,4 @@ void OdeSystemInformation<Celliyer_model_2007FromCellMLRushLarsen>::Initialise(v
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Celliyer_model_2007FromCellMLRushLarsen)
+CHASTE_CLASS_EXPORT(Celliyer_model_2007FromCellMLRushLarsenOpt)
