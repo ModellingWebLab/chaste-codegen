@@ -1,3 +1,7 @@
+# Release 0.3.0
+- This release includes the required ontology ttl files in the release itself.
+- Removed test data from release package to save space.
+
 # Release 0.2.0
 - The command line interface now allows generating multiple model types in one go.
 - The command line interface now has a --show-outputs option
