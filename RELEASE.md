@@ -1,3 +1,6 @@
+# Release 0.3.1
+- This release explicitly adds versions for dependancies, rather than leaving it up to the cellmlmanip and Jinja2 packages. Versions are semi-strict allowing for minor updates (which should not breat compatibility)
+
 # Release 0.3.0
 - This release includes the required ontology ttl files in the release itself.
 - Removed test data from release package to save space.
