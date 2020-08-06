@@ -506,5 +506,4 @@ def _get_extended_ionic_vars(model):
 def _get_derivative_equations(model):
     """ Get equations defining the derivatives including V (model.membrane_voltage_var)"""
     # Remove equations where lhs is a modifiable parameter or default stimulus
-    return [eq for eq in get_equations_for(model, model.y_derivatives)
-            if eq.lhs not in model.stimulus_params]
+    return [eq for eq in get_equations_for(model, model.y_derivatives)]

@@ -4,7 +4,7 @@
         // Time units: millisecond
         {{vector_decl}} rY = rGetStateVariables();
         {% for state_var in state_vars %}
-        {%- if state_var.in_y_deriv and state_var.linear %}double {{ state_var.var }} = {{state_var.rY_lookup}};
+        {%- if state_var.in_y_deriv and state_var.linear and state_var.in_one_step_except_v %}double {{ state_var.var }} = {{state_var.rY_lookup}};
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}
         {% for eq in linear_equations %}const double {{eq.lhs}} = {{eq.rhs}};

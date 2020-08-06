@@ -4,7 +4,6 @@ from sympy import (
     Derivative,
     Piecewise,
     Wild,
-    piecewise_fold,
 )
 
 from chaste_codegen._jacobian import format_jacobian, get_jacobian
@@ -34,11 +33,12 @@ class BackwardEulerModel(ChasteModel):
             get_jacobian(self._non_linear_state_vars,
                          [d for d in self._derivative_equations if d.lhs.args[0] in self._non_linear_state_vars])
 
+        self._vars_for_template['linear_deriv_eqs'], self._vars_for_template['linear_equations'], vars_in_one_step = \
+            self._format_rearranged_linear_derivs()
+
         self._vars_for_template['state_vars'], self._vars_for_template['nonlinear_state_vars'], \
             self._vars_for_template['residual_equations'], self._vars_for_template['y_derivative_equations'] = \
-            self._update_state_vars()
-        self._vars_for_template['linear_deriv_eqs'], self._vars_for_template['linear_equations'] = \
-            self._format_rearranged_linear_derivs()
+            self._update_state_vars(vars_in_one_step)
 
         modifiers_with_defining_eqs = set((eq[0] for eq in self._jacobian_equations)) | self._model.state_vars
         self._vars_for_template['jacobian_equations'], self._vars_for_template['jacobian_entries'] = \
@@ -86,10 +86,8 @@ class BackwardEulerModel(ChasteModel):
                     gh = (match[g], match[h])
             return gh
 
-        def print_rearrange_expr(expr, var):
-            """Print out the rearanged expression"""
-            expr = piecewise_fold(expr)
-            gh = rearrange_expr(expr, var)
+        def print_rearrange_expr(gh, var):
+            """Print out the rearranged expression"""
             return {'state_var_index': self._state_vars.index(var),
                     'var': self._printer.doprint(var),
                     'g': self._printer.doprint(gh[0] if gh[0] is not None else 0.0),
@@ -104,18 +102,25 @@ class BackwardEulerModel(ChasteModel):
         # sort the linear derivatives
         linear_derivs = sorted([eq for eq in linear_derivs_eqs if isinstance(eq.lhs, Derivative)],
                                key=lambda d: self._model.get_display_name(d.lhs.args[0], OXMETA))
-        formatted_expr = [print_rearrange_expr(d.rhs, d.lhs.args[0]) for d in linear_derivs]
+        rearranged_expr = [(rearrange_expr(d.rhs, d.lhs.args[0]), d.lhs.args[0]) for d in linear_derivs]
+        formatted_expr = [print_rearrange_expr(r[0], r[1]) for r in rearranged_expr]
 
         # remove eqs for which the lhs doesn't appear in other equations (e.g. derivatives)
-        # to prevent unused variable comple errors
+        # to prevent unused variable compile errors
         used_vars = set()
         for eq in linear_derivs_eqs:
             used_vars.update(self._model.find_variables_and_derivatives([eq.rhs]))
         linear_derivs_eqs = [eq for eq in linear_derivs_eqs if eq.lhs in used_vars]
 
-        return formatted_expr, self._format_derivative_equations(linear_derivs_eqs)
+        for r_expr in rearranged_expr:
+            # add variables used in g, h and the derivative var
+            used_vars.update(self._model.find_variables_and_derivatives([r_expr[0][0]]))
+            used_vars.update(self._model.find_variables_and_derivatives([r_expr[0][1]]))
+            used_vars.add(r_expr[1])
 
-    def _update_state_vars(self):
+        return formatted_expr, self._format_derivative_equations(linear_derivs_eqs), used_vars
+
+    def _update_state_vars(self, vars_in_computse_one_step):
         """Update the state vars, savings residual and jacobian info for outputing"""
         formatted_state_vars = self._vars_for_template['state_vars']
         residual_equations = []
@@ -150,6 +155,7 @@ class BackwardEulerModel(ChasteModel):
             sv['linear'] = sv['sympy_var'] not in self._non_linear_state_vars
             sv['in_jacobian'] = sv['sympy_var'] in jacobian_symbols
             sv['in_residual_eqs'] = sv['sympy_var'] in residual_eq_symbols
+            sv['in_one_step_except_v'] = sv['sympy_var'] in vars_in_computse_one_step
             if not sv['linear']:
                 residual_equations.append({'residual_index': formatted_nonlinear_state_vars.index(sv),
                                            'state_var_index': i, 'var': self._vars_for_template['y_derivatives'][i]})
