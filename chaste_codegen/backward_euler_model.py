@@ -4,6 +4,7 @@ from sympy import (
     Derivative,
     Piecewise,
     Wild,
+    piecewise_fold,
 )
 
 from chaste_codegen._jacobian import format_jacobian, get_jacobian
@@ -102,7 +103,7 @@ class BackwardEulerModel(ChasteModel):
         # sort the linear derivatives
         linear_derivs = sorted([eq for eq in linear_derivs_eqs if isinstance(eq.lhs, Derivative)],
                                key=lambda d: self._model.get_display_name(d.lhs.args[0], OXMETA))
-        rearranged_expr = [(rearrange_expr(d.rhs, d.lhs.args[0]), d.lhs.args[0]) for d in linear_derivs]
+        rearranged_expr = [(rearrange_expr(piecewise_fold(d.rhs), d.lhs.args[0]), d.lhs.args[0]) for d in linear_derivs]
         formatted_expr = [print_rearrange_expr(r[0], r[1]) for r in rearranged_expr]
 
         # remove eqs for which the lhs doesn't appear in other equations (e.g. derivatives)
@@ -114,8 +115,8 @@ class BackwardEulerModel(ChasteModel):
 
         for r_expr in rearranged_expr:
             # add variables used in g, h and the derivative var
-            used_vars.update(self._model.find_variables_and_derivatives([r_expr[0][0]]))
-            used_vars.update(self._model.find_variables_and_derivatives([r_expr[0][1]]))
+            for exp in filter(None, r_expr[0]):
+                used_vars.update(self._model.find_variables_and_derivatives([exp]))
             used_vars.add(r_expr[1])
 
         return formatted_expr, self._format_derivative_equations(linear_derivs_eqs), used_vars
