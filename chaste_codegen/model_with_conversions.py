@@ -63,27 +63,41 @@ def add_conversions(model, use_modifiers=True):
                    'cytosolic_calcium_concentration_var', 'membrane_stimulus_current_orig', 'modifiable_parameters',
                    'membrane_capacitance', 'stimulus_params', 'stimulus_equations', 'modifiers', 'modifier_names',
                    'y_derivatives', 'membrane_stimulus_current_converted', 'i_ionic_lhs', 'ionic_vars',
-                   'extended_ionic_vars', 'derivative_equations')
+                   'extended_ionic_vars', 'derivative_equations', 'stimulus_sign', 'dvdt', 'dvdt_eq')
     assert all((not hasattr(model, a) for a in attrs_added)), 'Cellmlmanip api contains unexpected attribute'
 
     # Add units needed for conversions
     model.conversion_units, model.stimulus_units = _add_units(model)
 
+    model.membrane_stimulus_current_orig = _get_membrane_stimulus_current(model)
+    model.cytosolic_calcium_concentration_var = _get_cytosolic_calcium_concentration_var(model, convert=False)
+    model.membrane_voltage_var = _get_membrane_voltage_var(model, convert=False)
+
+    # get dv/dt
+    dvdt_symbols = tuple(filter(lambda x: x.args[0] == model.membrane_voltage_var, model.get_derivatives(sort=False)))
+    assert len(dvdt_symbols) < 2, 'Unexpectedly got multiple dv/dt symbols'
+    model.dvdt = None
+    model.dvdt_eq = []
+    if len(dvdt_symbols) > 0:
+        model.dvdt = dvdt_symbols[0]
+        model.dvdt_eq = [eq for eq in model.equations if eq.lhs is model.dvdt and eq.lhs is not None]
+
+    # Fin stimuus and ionic current signs
     _tag_ionic_vars(model)  # Tag ionic currents pre-conversion so we can find them later
+    model.stimulus_sign = _get_stimulus_sign(model)
 
     # Add conversion rules for working with stimulus current & amplitude
     _add_conversion_rules(model)
 
     model.time_variable = _get_time_variable(model)
     model.state_vars = set(model.get_state_variables(sort=False))
-    model.membrane_voltage_var = _get_membrane_voltage_var(model)
-    model.cytosolic_calcium_concentration_var = _get_cytosolic_calcium_concentration_var(model)
+    model.membrane_voltage_var = _get_membrane_voltage_var(model)  # apply unit conversions if needed
+    model.cytosolic_calcium_concentration_var = _get_cytosolic_calcium_concentration_var(model)  # apply conversions
 
     # Conversions of V or cytosolic_calcium_concentration could have changed the state vars so a new call is needed
     model.state_vars = set(model.get_state_variables(sort=False))
 
     # Retrieve stimulus current parameters so we can exclude these from modifiers etc.
-    model.membrane_stimulus_current_orig = _get_membrane_stimulus_current(model)
     model.modifiable_parameters = _get_modifiable_parameters(model)
     model.membrane_capacitance = _get_membrane_capacitance(model)
     model.stimulus_params, model.stimulus_equations = _get_stimulus(model)
@@ -238,10 +252,12 @@ def _get_membrane_voltage_var(model, convert=True):
     return voltage
 
 
-def _get_cytosolic_calcium_concentration_var(model):
+def _get_cytosolic_calcium_concentration_var(model, convert=True):
     """ Find the cytosolic_calcium_concentration variable if it exists"""
     try:
         calcium = model.get_variable_by_ontology_term((OXMETA, 'cytosolic_calcium_concentration'))
+        if not convert:
+            return calcium
         calcium = model.convert_variable(calcium, model.conversion_units.get_unit('millimolar'),
                                          DataDirectionFlow.INPUT)
     except KeyError:
@@ -361,7 +377,7 @@ def _stimulus_sign(model, expr_to_check, equations, stimulus_current=None):
         expr_to_check = expr_to_check.xreplace({stimulus_current: 1})  # stimulus = 1
     if isinstance(expr_to_check, Expr):
         # plug in math functions for sign calculation
-        expr_to_check = expr_to_check.xreplace(MATH_FUNC_SYMPY_MAPPING)
+        expr_to_check = expr_to_check.subs(MATH_FUNC_SYMPY_MAPPING)
     return - 1 if expr_to_check > 0 else 1
 
 
@@ -369,13 +385,6 @@ def _convert_membrane_stimulus_current(model):
     """ Find the membrane_stimulus_current and convert it to uA_per_cm2, using GetIntracellularAreaStimulus"""
     if model.membrane_stimulus_current_orig is None:
         return None, model.stimulus_units
-    # get derivative equations
-    d_eqs = get_equations_for(model, model.y_derivatives, filter_modifiable_parameters_lhs=False, optimise=False)
-
-    # get dv/dt
-    dvdt = next(filter(lambda x: x.args[0] == model.membrane_voltage_var, model.get_derivatives(sort=False)), None)
-    dvdt_eq = [eq for eq in model.equations if eq.lhs is dvdt and eq.lhs is not None]
-    assert len(dvdt_eq) == 1, 'Expecting exactly 1 dv/dt equation'
 
     membrane_stimulus_current_converted = model.convert_variable(model.membrane_stimulus_current_orig,
                                                                  model.conversion_units.get_unit('uA_per_cm2'),
@@ -383,8 +392,7 @@ def _convert_membrane_stimulus_current(model):
 
     # Replace stim = ... with stim = +/-GetIntracellularAreaStimulus(t)
     GetIntracellularAreaStimulus = simplify(Function('GetIntracellularAreaStimulus', real=True)(model.time_variable) *
-                                            _stimulus_sign(model, dvdt_eq[0].rhs, d_eqs,
-                                                           stimulus_current=model.membrane_stimulus_current_orig))
+                                            model.stimulus_sign)
     # Get stimulus defining equation
     eq = model.get_definition(membrane_stimulus_current_converted)
     model.remove_equation(eq)
@@ -418,21 +426,16 @@ def _convert_other_currents(model):
 
 
 def _tag_ionic_vars(model):
-    """ Get the equations defining the ionic derivatives"""
+    """ Get the ionic variables, defining the ionic derivatives"""
     # figure out the currents (by finding variables with the same units as the stimulus)
     # Only equations with the same (lhs) units as the STIMULUS_CURRENT are kept.
     # Also exclude membrane_stimulus_current variable itself, and default_stimulus equations (if model has those)
     # Manually recurse down the equation graph (bfs style) if no currents are found
 
     # If we don't have a stimulus_current we look for a set of default unit dimensions
-
-    stimulus_current = _get_membrane_stimulus_current(model)
-    membrane_voltage = _get_membrane_voltage_var(model, convert=False)
-    dvdt = next(filter(lambda x: x.args[0] == membrane_voltage, model.get_derivatives(sort=False)), None)
-
     stimulus_unit_dims = [u.dimensionality for u in model.stimulus_units]
-    if stimulus_current is not None:
-        stimulus_unit_dims = [stimulus_current.units.dimensionality] + stimulus_unit_dims
+    if model.membrane_stimulus_current_orig is not None:
+        stimulus_unit_dims = [model.membrane_stimulus_current_orig.units.dimensionality] + stimulus_unit_dims
 
     stimulus_params = set()
     for tag, _, _ in STIM_PARAM_TAGS:
@@ -445,27 +448,36 @@ def _tag_ionic_vars(model):
     for dim in stimulus_unit_dims:
         if len(ionic_var_eqs) > 0:
             break
-        equations, old_equations = list(filter(None, [dvdt])), None
+        equations, old_equations = list(filter(None, [model.dvdt])), None
         while len(ionic_var_eqs) == 0 and old_equations != equations:
             old_equations = equations
             equations = get_equations_for(model, equations, recurse=False, filter_modifiable_parameters_lhs=False,
                                           optimise=False)
             ionic_var_eqs = \
                 [eq for eq in equations for eq in equations
-                 if eq.lhs not in (stimulus_current, stimulus_params)
-                 and model.units.evaluate_units(eq.lhs).dimensionality == dim and eq.lhs is not dvdt]
+                 if eq.lhs not in (model.membrane_stimulus_current_orig, stimulus_params)
+                 and model.units.evaluate_units(eq.lhs).dimensionality == dim and eq.lhs is not model.dvdt]
 
             equations = [eq.lhs for eq in equations]
 
     for eq in ionic_var_eqs:
         set_is_metadata(model, eq.lhs, 'ionic-current_chaste_codegen')
 
-    dvdt_eq = [eq for eq in model.equations if eq.lhs is dvdt and eq.lhs is not None]
-    if len(dvdt_eq) == 1:
-        model.ionic_stimulus_sign = _stimulus_sign(model, dvdt_eq[0].rhs, [], stimulus_current=None)
+    assert len(model.dvdt_eq) <= 1, "Multiple dvdt equations found"
+    if len(model.dvdt_eq) == 1:
+        model.ionic_stimulus_sign = _stimulus_sign(model, model.dvdt_eq[0].rhs, [], stimulus_current=None)
     else:
         LOGGER.warning(model.name + ' has no ionic currents you may have trouble generating valid chaste code without.')
         model.ionic_stimulus_sign = 1
+
+
+def _get_stimulus_sign(model):
+    """ Get the stimulus sign prior to any unit conversions"""
+    # get derivative equations
+    d_eqs = get_equations_for(model, _get_y_derivatives(model), filter_modifiable_parameters_lhs=False, optimise=False)
+    if len(model.dvdt_eq) == 0:
+        return 1
+    return _stimulus_sign(model, model.dvdt_eq[0].rhs, d_eqs, stimulus_current=model.membrane_stimulus_current_orig)
 
 
 def _get_ionic_vars(model):
