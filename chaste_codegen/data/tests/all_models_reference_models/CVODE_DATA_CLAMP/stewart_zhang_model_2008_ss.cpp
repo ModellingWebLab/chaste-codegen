@@ -1,7 +1,7 @@
 #ifdef CHASTE_CVODE
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.4.0
 //!
 //! Model: stewart_zhang_model_2008
 //!

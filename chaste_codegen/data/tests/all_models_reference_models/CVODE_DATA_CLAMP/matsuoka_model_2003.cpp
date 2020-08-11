@@ -1,7 +1,7 @@
 #ifdef CHASTE_CVODE
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.4.0
 //!
 //! Model: matsuoka_model_2003
 //!
@@ -891,4 +891,5 @@ void OdeSystemInformation<Cellmatsuoka_model_2003FromCellMLCvodeDataClamp>::Init
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Cellmatsuoka_model_2003FromCellMLCvodeDataClamp)
+
 #endif // CHASTE_CVODE

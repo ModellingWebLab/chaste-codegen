@@ -1,7 +1,7 @@
 #ifdef CHASTE_CVODE
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.4.0
 //!
 //! Model: beeler_reuter_model_1977
 //!
@@ -292,4 +292,5 @@ void OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLCvodeDataClamp>:
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Cellbeeler_reuter_model_1977FromCellMLCvodeDataClamp)
+
 #endif // CHASTE_CVODE
