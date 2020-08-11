@@ -1,7 +1,7 @@
 #ifdef CHASTE_CVODE
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.4.0
 //!
 //! Model: nygren_atrial_model_1998
 //!
@@ -1067,4 +1067,5 @@ void OdeSystemInformation<Cellnygren_atrial_model_1998FromCellMLCvode>::Initiali
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Cellnygren_atrial_model_1998FromCellMLCvode)
+
 #endif // CHASTE_CVODE

@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.4.0
 //!
 //! Model: NN_SAN_model_1984
 //!
@@ -656,3 +656,4 @@ void OdeSystemInformation<Cellnoble_noble_SAN_model_1984FromCellMLBackwardEuler>
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Cellnoble_noble_SAN_model_1984FromCellMLBackwardEuler)
+

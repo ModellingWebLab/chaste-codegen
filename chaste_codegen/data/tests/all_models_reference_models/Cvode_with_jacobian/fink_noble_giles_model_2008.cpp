@@ -1,7 +1,7 @@
 #ifdef CHASTE_CVODE
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.4.0
 //!
 //! Model: fink_noble_giles_model_2008
 //!
@@ -1058,4 +1058,5 @@ void OdeSystemInformation<Cellfink_noble_giles_model_2008FromCellMLCvode>::Initi
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Cellfink_noble_giles_model_2008FromCellMLCvode)
+
 #endif // CHASTE_CVODE

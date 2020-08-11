@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.4.0
 //!
 //! Model: dokos_model_1996
 //!
@@ -897,3 +897,4 @@ void OdeSystemInformation<Celldokos_model_1996FromCellMLBackwardEuler>::Initiali
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Celldokos_model_1996FromCellMLBackwardEuler)
+

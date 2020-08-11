@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.4.0
 //!
 //! Model: jafri_rice_winslow_1998
 //!
@@ -1569,3 +1569,4 @@ void OdeSystemInformation<Celljafri_rice_winslow_model_1998FromCellMLBackwardEul
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler)
+

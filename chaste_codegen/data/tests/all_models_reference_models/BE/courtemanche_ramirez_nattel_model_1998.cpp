@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.4.0
 //!
 //! Model: courtemanche_ramirez_nattel_model_1998
 //!
@@ -780,3 +780,4 @@ void OdeSystemInformation<Cellcourtemanche_ramirez_nattel_model_1998FromCellMLBa
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Cellcourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler)
+

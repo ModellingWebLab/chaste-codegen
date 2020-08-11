@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.4.0
 //!
 //! Model: aslanidi_model_2009
 //!
@@ -1057,3 +1057,4 @@ void OdeSystemInformation<Cellaslanidi_model_2009FromCellMLBackwardEuler>::Initi
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Cellaslanidi_model_2009FromCellMLBackwardEuler)
+

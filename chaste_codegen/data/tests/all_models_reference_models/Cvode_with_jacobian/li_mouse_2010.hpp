@@ -4,7 +4,7 @@
 
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.3.1
+//! This source file was generated from CellML by chaste_codegen version 0.4.0
 //!
 //! Model: Li_Mouse_2010
 //!

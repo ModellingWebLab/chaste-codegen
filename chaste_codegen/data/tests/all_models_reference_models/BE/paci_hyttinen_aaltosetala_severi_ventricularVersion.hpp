@@ -3,7 +3,7 @@
 
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.3.2
+//! This source file was generated from CellML by chaste_codegen version 0.4.0
 //!
 //! Model: paci_hyttinen_aaltosetala_severi_ventricularVersion
 //!

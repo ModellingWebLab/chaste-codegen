@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.4.0
 //!
 //! Model: espinosa_model_1998_normal
 //!
@@ -931,3 +931,4 @@ void OdeSystemInformation<Cellespinosa_model_1998_normalFromCellMLBackwardEuler>
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Cellespinosa_model_1998_normalFromCellMLBackwardEuler)
+

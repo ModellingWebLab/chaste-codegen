@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.1.0
+//! This source file was generated from CellML by chaste_codegen version 0.4.0
 //!
 //! Model: kurata_model_2002
 //!
@@ -1045,3 +1045,4 @@ void OdeSystemInformation<Cellkurata_model_2002FromCellMLBackwardEuler>::Initial
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Cellkurata_model_2002FromCellMLBackwardEuler)
+
