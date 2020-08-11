@@ -15,6 +15,7 @@ class GeneralisedRushLarsenFirstOrderModel(ChasteModel):
         self._hpp_template = 'generalised_rush_larsen_model.hpp'
         self._cpp_template = 'generalised_rush_larsen_model_1.cpp'
         self._vars_for_template['base_class'] = 'AbstractGeneralizedRushLarsenCardiacCell'
+        self._vars_for_template['model_type'] = 'GeneralizedRushLarsenFirstOrder'
         self._jacobian_equations, self._jacobian_matrix = self._get_jacobian()
 
         modifiers_with_defining_eqs = set((eq[0] for eq in self._jacobian_equations)) | self._model.state_vars

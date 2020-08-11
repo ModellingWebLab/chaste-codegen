@@ -82,6 +82,7 @@ class ChasteModel(object):
         # dict of variables to pass to the jinja2 templates
         self._vars_for_template = \
             {'base_class': '',
+             'model_type': '',
              # indicate how to declare state vars and values
              'vector_decl': 'std::vector<double>&',
              'converter_version': cg.__version__,

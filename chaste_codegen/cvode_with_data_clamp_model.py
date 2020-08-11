@@ -10,6 +10,7 @@ class CvodeWithDataClampModel(CvodeChasteModel):
     def __init__(self, model, file_name, **kwargs):
         super().__init__(model, file_name, **kwargs)
         self._vars_for_template['base_class'] = 'AbstractCvodeCellWithDataClamp'
+        self._vars_for_template['model_type'] = 'CvodeCellWithDataClamp'
 
     def _add_data_clamp_to_model(self):
         """ Add add membrane_data_clamp_current_conductance and membrane_data_clamp_current to the model"""
