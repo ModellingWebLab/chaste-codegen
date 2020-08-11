@@ -46,8 +46,22 @@ setup(
 
     # List of dependencies
     install_requires=[
-        'cellmlmanip>=0.2.0',
-        'Jinja2>=2.11',
+        'decorator>=4.4.2, <5',
+        'importlib-metadata>=1.7, <2',
+        'isodate>=0.6.0, <1',
+        'lxml>=4.5.2, <5',
+        'MarkupSafe>=1.1.1, <2',
+        'mpmath>=1.1.0, <2',
+        'networkx>=2.4, <3',
+        'packaging>=20.4, <21',
+        'Pint>=0.9, <1',
+        'pyparsing>=2.4.7, <3',
+        'rdflib>=5.0.0, <6',
+        'six>=1.15.0, <2',
+        'sympy>=1.6.1, <2',
+        'zipp>=1.2.0, <2',
+        'cellmlmanip>=0.2.0, <0.3',
+        'Jinja2>=2.11.2, <3',
     ],
     extras_require={
         'docs': [
