@@ -121,7 +121,7 @@ class BackwardEulerModel(ChasteModel):
 
         return formatted_expr, self._format_derivative_equations(linear_derivs_eqs), used_vars
 
-    def _update_state_vars(self, vars_in_computse_one_step):
+    def _update_state_vars(self, vars_in_compute_one_step):
         """Update the state vars, savings residual and jacobian info for outputing"""
         formatted_state_vars = self._vars_for_template['state_vars']
         residual_equations = []
