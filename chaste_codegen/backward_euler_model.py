@@ -156,7 +156,7 @@ class BackwardEulerModel(ChasteModel):
             sv['linear'] = sv['sympy_var'] not in self._non_linear_state_vars
             sv['in_jacobian'] = sv['sympy_var'] in jacobian_symbols
             sv['in_residual_eqs'] = sv['sympy_var'] in residual_eq_symbols
-            sv['in_one_step_except_v'] = sv['sympy_var'] in vars_in_computse_one_step
+            sv['in_one_step_except_v'] = sv['sympy_var'] in vars_in_compute_one_step
             if not sv['linear']:
                 residual_equations.append({'residual_index': formatted_nonlinear_state_vars.index(sv),
                                            'state_var_index': i, 'var': self._vars_for_template['y_derivatives'][i]})
