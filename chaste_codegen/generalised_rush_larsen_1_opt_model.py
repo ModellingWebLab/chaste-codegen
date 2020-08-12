@@ -5,6 +5,10 @@ from chaste_codegen.generalised_rush_larsen_1_model import GeneralisedRushLarsen
 class GeneralisedRushLarsenFirstOrderModelOpt(GeneralisedRushLarsenFirstOrderModel):
     """ Holds template and information specific for the GeneralisedRushLarsenOpt model type"""
 
+    def __init__(self, model, file_name, **kwargs):
+        super().__init__(model, file_name, **kwargs)
+        self._vars_for_template['model_type'] = 'GeneralizedRushLarsenFirstOrderOpt'
+
     def _get_extended_ionic_vars(self):
         """ Get the partially evaluated equations defining the ionic derivatives and all dependant equations"""
         return partial_eval(super()._get_extended_ionic_vars(), self._model.ionic_vars)

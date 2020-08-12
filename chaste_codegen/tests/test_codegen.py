@@ -231,6 +231,7 @@ def test_chaste_model_base_class(tmp_path):
     chaste_model._hpp_template = 'normal_model.hpp'
     chaste_model._cpp_template = 'normal_model.cpp'
     chaste_model._vars_for_template['base_class'] = 'AbstractCardiacCell'
+    chaste_model._vars_for_template['model_type'] = 'Normal'
     chaste_model.generate_chaste_code()
 
     reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Normal')

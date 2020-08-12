@@ -5,6 +5,10 @@ from chaste_codegen.cvode_chaste_model import CvodeChasteModel
 class OptCvodeChasteModel(CvodeChasteModel):
     """ Holds information specific for the Cvode Optimised model type. Builds on Cvode model type"""
 
+    def __init__(self, model, file_name, **kwargs):
+        super().__init__(model, file_name, **kwargs)
+        self._vars_for_template['model_type'] += 'Opt'
+
     def _get_stimulus(self):
         """ Get the partially evaluated stimulus currents in the model"""
         return_stim_eqs = super()._get_stimulus()

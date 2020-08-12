@@ -23,6 +23,7 @@ class BackwardEulerModel(ChasteModel):
         self._hpp_template = 'backward_euler_model.hpp'
         self._cpp_template = 'backward_euler_model.cpp'
         self._vars_for_template['base_class'] = 'AbstractBackwardEulerCardiacCell'
+        self._vars_for_template['model_type'] = 'BackwardEuler'
         # get deriv eqs and substitute in all variables other than state vars
         self._derivative_equations = \
             partial_eval(self._derivative_equations, self._model.y_derivatives, keep_multiple_usages=False)

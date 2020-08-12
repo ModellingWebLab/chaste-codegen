@@ -14,9 +14,14 @@ class CvodeChasteModel(ChasteModel):
         self._hpp_template = 'cvode_model.hpp'
         self._cpp_template = 'cvode_model.cpp'
         self._vars_for_template['base_class'] = 'AbstractCvodeCell'
-        self._vars_for_template['vector_decl'] = "N_Vector"  # indicate how to declare state vars and values
 
         self._use_analytic_jacobian = kwargs.get('use_analytic_jacobian', False)  # store if jacobians are needed
+
+        self._vars_for_template['model_type'] = 'Analytic' if self._use_analytic_jacobian else 'Numeric'
+        self._vars_for_template['model_type'] += 'Cvode'
+
+        self._vars_for_template['vector_decl'] = "N_Vector"  # indicate how to declare state vars and values
+
         if self._use_analytic_jacobian:
             # get deriv eqs and substitute in all variables other than state vars
             self._derivative_equations = \

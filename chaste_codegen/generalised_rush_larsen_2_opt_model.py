@@ -7,3 +7,4 @@ class GeneralisedRushLarsenSecondOrderModelOpt(GeneralisedRushLarsenFirstOrderMo
     def __init__(self, model, file_name, **kwargs):
         super().__init__(model, file_name, **kwargs)
         self._cpp_template = 'generalised_rush_larsen_model_2.cpp'
+        self._vars_for_template['model_type'] = 'GeneralizedRushLarsenSecondOrderOpt'

@@ -7,6 +7,7 @@ class RushLarsenOptModel(RushLarsenModel):
 
     def __init__(self, model, file_name, **kwargs):
         super().__init__(model, file_name, **kwargs)
+        self._vars_for_template['model_type'] = 'RushLarsenOpt'
 
     def _get_non_linear_state_vars(self):
         """ Get and store the non_linear state vars """

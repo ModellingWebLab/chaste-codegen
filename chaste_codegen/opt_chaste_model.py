@@ -5,6 +5,10 @@ from chaste_codegen.normal_chaste_model import NormalChasteModel
 class OptChasteModel(NormalChasteModel):
     """ Holds information specific for the Optimised model type. Builds on Normal model type"""
 
+    def __init__(self, model, file_name, **kwargs):
+        super().__init__(model, file_name, **kwargs)
+        self._vars_for_template['model_type'] = 'NormalOpt'
+
     def _get_stimulus(self):
         """ Get the partially evaluated stimulus currents in the model"""
         return_stim_eqs = super()._get_stimulus()

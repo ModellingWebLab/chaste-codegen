@@ -9,3 +9,4 @@ class NormalChasteModel(ChasteModel):
         self._hpp_template = 'normal_model.hpp'
         self._cpp_template = 'normal_model.cpp'
         self._vars_for_template['base_class'] = 'AbstractCardiacCell'
+        self._vars_for_template['model_type'] = 'Normal'
