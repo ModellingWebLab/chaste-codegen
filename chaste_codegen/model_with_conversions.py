@@ -82,7 +82,7 @@ def add_conversions(model, use_modifiers=True):
         model.dvdt = dvdt_symbols[0]
         model.dvdt_eq = [eq for eq in model.equations if eq.lhs is model.dvdt and eq.lhs is not None]
 
-    # Fin stimuus and ionic current signs
+    # Find stimulus and ionic current signs
     _tag_ionic_vars(model)  # Tag ionic currents pre-conversion so we can find them later
     model.stimulus_sign = _get_stimulus_sign(model)
 
