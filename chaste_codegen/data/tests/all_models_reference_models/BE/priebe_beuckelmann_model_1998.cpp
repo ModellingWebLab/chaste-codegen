@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.4.0
+//! This source file was generated from CellML by chaste_codegen version 0.4.1
 //!
 //! Model: priebe_beuckelmann_model_1998
 //!

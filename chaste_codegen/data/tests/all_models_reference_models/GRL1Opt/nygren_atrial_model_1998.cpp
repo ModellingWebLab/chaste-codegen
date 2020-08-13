@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.4.0
+//! This source file was generated from CellML by chaste_codegen version 0.4.1
 //!
 //! Model: nygren_atrial_model_1998
 //!
@@ -1533,7 +1533,7 @@
             const double var_x84 = pow(var_chaste_interface__intracellular_ion_concentrations__Na_i, 2) * var_chaste_interface__cleft_space_ion_concentrations__Ca_c;
             const double var_x85 = var_x25 * var_x84;
             const double var_x87 = var_x38 * var_x59;
-            const double var_x88 = var_x40 * var_x87 * pow(var_chaste_interface__intracellular_ion_concentrations__Na_i, 0.5);
+            const double var_x88 = var_x40 * var_x87 * sqrt(var_chaste_interface__intracellular_ion_concentrations__Na_i);
             const double var_x89 = var_x87 * pow(var_chaste_interface__intracellular_ion_concentrations__Na_i, 2.0) / pow((1 + 0.027410122234342148 * var_x39), 2);
             const double var_x186 = 1.0307938958145768e-5 * var_x49;
             const double var_x191 = 1.7826683054846602e-10 * var_x71;

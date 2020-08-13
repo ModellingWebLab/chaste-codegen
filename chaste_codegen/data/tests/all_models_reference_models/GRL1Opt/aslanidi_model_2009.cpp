@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.4.0
+//! This source file was generated from CellML by chaste_codegen version 0.4.1
 //!
 //! Model: aslanidi_model_2009
 //!
@@ -1520,7 +1520,7 @@
             const double var_x80 = 1 / (1.5 + var_x48);
             const double var_x81 = var_x50 * var_x80;
             const double var_x82 = var_x52 * var_x81;
-            const double var_x83 = var_x82 * pow(var_chaste_interface__intracellular_ion_concentrations__Na_i, 0.5) * var_chaste_interface__cleft_space_ion_concentrations__K_c;
+            const double var_x83 = var_x82 * sqrt(var_chaste_interface__intracellular_ion_concentrations__Na_i) * var_chaste_interface__cleft_space_ion_concentrations__K_c;
             const double var_x84 = var_x81 * pow(var_chaste_interface__intracellular_ion_concentrations__Na_i, 2.0) * var_chaste_interface__cleft_space_ion_concentrations__K_c / pow((1 + 0.027410122234342148 * var_x51), 2);
             const double var_x85 = var_x36 * var_x44;
             const double var_x86 = var_x37 * var_x85;

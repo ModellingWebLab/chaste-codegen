@@ -1,7 +1,7 @@
 #ifdef CHASTE_CVODE
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.4.0
+//! This source file was generated from CellML by chaste_codegen version 0.4.1
 //!
 //! Model: sakmann_model_2000_epi
 //!
