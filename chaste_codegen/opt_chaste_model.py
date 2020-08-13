@@ -1,5 +1,6 @@
 from chaste_codegen._partial_eval import partial_eval
 from chaste_codegen.normal_chaste_model import NormalChasteModel
+from chaste_codegen._lookup_tables import calc_lookup_tables
 
 
 class OptChasteModel(NormalChasteModel):
@@ -12,13 +13,18 @@ class OptChasteModel(NormalChasteModel):
     def _get_stimulus(self):
         """ Get the partially evaluated stimulus currents in the model"""
         return_stim_eqs = super()._get_stimulus()
-        return partial_eval(return_stim_eqs, self._model.stimulus_params | self._model.modifiable_parameters)
+        return_stim_eqs =  partial_eval(return_stim_eqs, self._model.stimulus_params | self._model.modifiable_parameters)
+        calc_lookup_tables(self._model, return_stim_eqs)
+        return return_stim_eqs
 
     def _get_extended_ionic_vars(self):
         """ Get the partially evaluated equations defining the ionic derivatives and all dependant equations"""
-        return partial_eval(super()._get_extended_ionic_vars(), self._model.ionic_vars)
+        extended_ionic_vars =  partial_eval(super()._get_extended_ionic_vars(), self._model.ionic_vars)
+        calc_lookup_tables(self._model, extended_ionic_vars)
+        return extended_ionic_vars
 
     def _get_derivative_equations(self):
         """ Get partially evaluated equations defining the derivatives including V (self._model.membrane_voltage_var)"""
-        return partial_eval(super()._get_derivative_equations(),
-                            self._model.y_derivatives)
+        derivative_equations = partial_eval(super()._get_derivative_equations(), self._model.y_derivatives)
+        calc_lookup_tables(self._model, derivative_equations)
+        return derivative_equations

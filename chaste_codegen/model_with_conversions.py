@@ -85,7 +85,7 @@ def add_conversions(model, use_modifiers=True):
     # Find stimulus and ionic current signs
     _tag_ionic_vars(model)  # Tag ionic currents pre-conversion so we can find them later
     model.stimulus_sign = _get_stimulus_sign(model)
-
+    
     # Add conversion rules for working with stimulus current & amplitude
     _add_conversion_rules(model)
 
