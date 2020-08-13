@@ -1,3 +1,6 @@
+# Release 0.5.0
+- Now implements lookup tables
+
 # Release 0.4.1
 - Now outputs sqrt(x) instead of pow(x, 0.5)
 
