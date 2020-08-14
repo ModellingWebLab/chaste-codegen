@@ -104,6 +104,8 @@ class ChastePrinter(Printer):
         """ Handles Pow(), handles just ordinary powers without division.
         For C++ printing we need to write ``x**y`` as ``pow(x, y)`` with lowercase ``p``."""
         p = precedence(expr)
+        if expr.exp == 0.5:
+            return 'sqrt(' + self._bracket(expr.base, p) + ')'
         return 'pow(' + self._bracket(expr.base, p) + ', ' + self._bracket(expr.exp, p) + ')'
 
     def _print_ternary(self, cond, expr):
