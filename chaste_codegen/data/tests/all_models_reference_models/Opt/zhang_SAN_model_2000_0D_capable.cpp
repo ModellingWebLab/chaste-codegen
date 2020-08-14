@@ -1,6 +1,6 @@
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.4.0
+//! This source file was generated from CellML by chaste_codegen version (version omitted as unimportant)
 //!
 //! Model: zhang_SAN_model_2000_0D_capable
 //!
