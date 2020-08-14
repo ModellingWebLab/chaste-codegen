@@ -3,6 +3,7 @@ import time
 from sympy import Derivative, Float
 
 import chaste_codegen as cg
+from chaste_codegen._lookup_tables import LookupTables
 from chaste_codegen._rdf import OXMETA, PYCMLMETA
 from chaste_codegen.model_with_conversions import (
     CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX,
@@ -46,6 +47,7 @@ class ChasteModel(object):
         self._in_interface = set()
 
         self._model = model
+        self._lookup_tables = LookupTables(model)
 
         self._stimulus_equations = self._get_stimulus()
         self.use_modifiers = kwargs.get('use_modifiers', False)
