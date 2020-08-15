@@ -80,7 +80,7 @@ class LookupTables:
         elif len(expr.args) == 0:
             return False, set()  # other leaf
         elif expr in self._lookup_table_expr:  # expr already set for lookup table, no need to analyse
-            return True, expr.free_symbols
+            return True, self._lookup_table_expr[expr]
         else:
             expensive_func = isinstance(expr, self._lut_expensive_functions)
             vars_used_in_lut = set()
