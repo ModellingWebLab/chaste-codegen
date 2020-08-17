@@ -1,3 +1,4 @@
+python 3.5 test
 # Release 0.4.1
 - Now outputs sqrt(x) instead of pow(x, 0.5).
 
