@@ -1,3 +1,4 @@
+import collections
 from cellmlmanip.model import Variable
 from sympy import (
     acos,
@@ -27,6 +28,7 @@ from sympy import (
     sinh,
     tan,
     tanh,
+    Piecewise, simplify, Symbol
 )
 
 from chaste_codegen._math_functions import (
@@ -37,42 +39,51 @@ from chaste_codegen._math_functions import (
 )
 from chaste_codegen._rdf import OXMETA
 
+_EXPENSIVE_FUNCTIONS = (exp, log, ln, sin, cos, tan, sec, csc, cot, sinh, cosh, tanh, sech, csch, coth, asin, acos,
+                        atan, asinh, acosh, atanh, asec, acsc, acot, asech, acsch, acoth, exp_, acos_, cos_, sin_)
 
+# Lookup vars is a tuple of [<metadata tag>, variable, printed var, [<lookup epxrs>], mTableMins, mTableSteps, mTableStepInverses, mTableMaxs]
+_LOOKUP_VARS = (['membrane_voltage', None, [], -150.0001, 0.001, 1000.0, 199.9999],
+                ['cytosolic_calcium_concentration', None, [], 0.00001, 0.001, 1000.0, 30.00001])
+                                         
+#lookup_parameters
 class LookupTables:
     """ Holds information about lookuptables and methods to analyse the model for lookup tables.
     """
 
-    def __init__(self, model, lookup_metadata_tags=('membrane_voltage', 'cytosolic_calcium_concentration'),
-                 expensive_functions=(exp, log, ln, sin, cos, tan, sec, csc, cot, sinh, cosh, tanh, sech, csch, coth,
-                                      asin, acos, atan, asinh, acosh, atanh, asec, acsc, acot, asech, acsch, acoth,
-                                      exp_, acos_, cos_, sin_)):
+    def __init__(self, model):
         """ Initialise a LookUpTables instance
-        Arguments
-
         ``model``
             A :class:`cellmlmanip.Model` object.
-        ``lookup_metadata_tags``
-            The metadata tags of the variables for which lookup tables are generated.
-            (By default V and cytosolic_calcium_concentration).
-        ``expensive_functions``
-            The expensive functions for which lookup tables are generated.
+        ``printer``
+            A :class:`sympy.printing.printer.Printer` object.
         """
-        self._model = model
-        self._lut_expensive_functions = expensive_functions
-        self._lookup_variables = set()
-        self._lookup_table_expr = {}
 
-        for tag in lookup_metadata_tags:
+        self._model = model
+
+        self._lookup_variables = set()
+        self._lookup_parameters = []
+        self._lookup_table_expr = collections.OrderedDict()
+        self._lookup_params_processed, self._lookup_params_printed = False, False
+
+        for tag in _LOOKUP_VARS:
             try:
-                self._lookup_variables.add(self._model.get_variable_by_ontology_term((OXMETA, tag)))
+                var = self._model.get_variable_by_ontology_term((OXMETA, tag[0]))
+                self._lookup_variables.add(var)
+                tag[1] = var
+                self._lookup_parameters.append(tag)
             except KeyError:
                 pass  # variable not tagged in model
 
     def calc_lookup_tables(self, equations):
 
+        if self._lookup_params_processed:
+            raise ValueError('Cannot calculate lookup tables after printing has started')
+
         for equation in equations:
             exp_func, vars_used = self._analyse_for_lut(equation.rhs)
             self._set_lookup_table_if_appropriate(exp_func, vars_used, equation.rhs)
+        pass
 
     def _analyse_for_lut(self, expr):
         if isinstance(expr, Variable):
@@ -82,7 +93,7 @@ class LookupTables:
         elif expr in self._lookup_table_expr:  # expr already set for lookup table, no need to analyse
             return True, self._lookup_table_expr[expr]
         else:
-            expensive_func = isinstance(expr, self._lut_expensive_functions)
+            expensive_func = isinstance(expr, _EXPENSIVE_FUNCTIONS)
             vars_used_in_lut = set()
             args_func_vars = []
             for ex in expr.args:
@@ -107,3 +118,45 @@ class LookupTables:
         if exp_func and expr not in self._lookup_table_expr and \
                 len(vars_used) == 1 and list(vars_used)[0] in self._lookup_variables:
             self._lookup_table_expr[expr] = vars_used
+
+    def _process_lookup_parameters(self):
+        # Stick in a list of all expressions for the variable
+        if not self._lookup_params_processed:
+            for param in self._lookup_parameters:
+                param[2] = list(filter(lambda k: param[1] in self._lookup_table_expr[k], self._lookup_table_expr))
+            self._lookup_params_processed = True
+
+    def print_lookup_parameters(self, printer):
+        # Don't use lookup tables to print these expressions
+        if not self._lookup_params_printed:
+            self._process_lookup_parameters()
+            old_lookup_tables = printer.lookup_tables
+            printer.lookup_tables = None
+            for param in self._lookup_parameters:
+                param[2] = list(map(lambda e: printer.doprint(e), param[2]))
+                param[1] = printer.doprint(param[1])
+
+            # reinstate lookup tables
+            printer.lookup_tables = old_lookup_tables
+            self._lookup_params_printed = True
+        return self._lookup_parameters
+
+    def is_lut_expr(self, expr):
+        if self._lookup_params_printed:
+            raise ValueError('Cannot process lookup expression after main table has been printed')
+        self._process_lookup_parameters()
+        return self._lookup_table_expr
+
+    def print_lut_expr(self, expr):
+        if self._lookup_params_printed:
+            raise ValueError('Cannot print lookup expression after main table has been printed')
+
+        self._process_lookup_parameters()
+        if expr in self._lookup_table_expr:
+            variables = expr.free_symbols
+            assert len(variables) == 1, "Lookup table expressions should have exactly 1 (lookup) variable"
+            var = tuple(variables)[0]
+            for i, param in enumerate(self._lookup_parameters):
+                if param[1] is var:
+                    return '_lt_' + str(i) + '_row[' + str(param[2].index(expr)) + ']'
+        return None

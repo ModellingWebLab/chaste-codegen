@@ -3,7 +3,6 @@ import time
 from sympy import Derivative, Float
 
 import chaste_codegen as cg
-from chaste_codegen._lookup_tables import LookupTables
 from chaste_codegen._rdf import OXMETA, PYCMLMETA
 from chaste_codegen.model_with_conversions import (
     CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX,
@@ -47,7 +46,6 @@ class ChasteModel(object):
         self._in_interface = set()
 
         self._model = model
-        self._lookup_tables = LookupTables(model)
 
         self._stimulus_equations = self._get_stimulus()
         self.use_modifiers = kwargs.get('use_modifiers', False)
@@ -222,6 +220,7 @@ class ChasteModel(object):
                              if variable in self._modifiers and variable not in modifiers_with_defining_eqs
                              else self._printer.doprint(variable),
                              lambda deriv: self._printer.doprint(deriv))
+        modifier_printer.lookup_tables = self._printer.lookup_tables
         if modifier in self._modifiers:
             return self._format_modifier(modifier) + '->Calc(' + modifier_printer.doprint(eq) + ', ' + \
                 self._printer.doprint(self._model.time_variable) + ')'

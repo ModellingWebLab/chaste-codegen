@@ -1,6 +1,7 @@
 #ifdef CHASTE_CVODE{% with %}{% set is_cvode = True %}
 {% include "Shared/cpp/header_comments" %}
 {% include "Shared/cpp/includes" %}
+{% include "Shared/cpp/lookup_tables" %}
 {% include "Shared/cpp/UseCellMLDefaultStimulus" %}
 {% include "Cvode/cpp/GetIntracellularCalciumConcentration" %}
 {%- include "Shared/cpp/constructor_declaration" %}
