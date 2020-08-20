@@ -1,6 +1,6 @@
+from chaste_codegen._lookup_tables import LookupTables
 from chaste_codegen._partial_eval import partial_eval
 from chaste_codegen.normal_chaste_model import NormalChasteModel
-from chaste_codegen._lookup_tables import LookupTables
 
 
 class OptChasteModel(NormalChasteModel):
@@ -17,7 +17,6 @@ class OptChasteModel(NormalChasteModel):
         """ Get the partially evaluated stimulus currents in the model"""
         return_stim_eqs = super()._get_stimulus()
         return_stim_eqs = partial_eval(return_stim_eqs, self._model.stimulus_params | self._model.modifiable_parameters)
-        self._lookup_tables.calc_lookup_tables(return_stim_eqs)
         return return_stim_eqs
 
     def _get_extended_ionic_vars(self):
@@ -36,3 +35,18 @@ class OptChasteModel(NormalChasteModel):
         """ Initialises Printers for outputting chaste code. """
         super()._add_printers()
         self._printer.lookup_tables = self._lookup_tables
+
+    def _format_ionic_vars(self):
+        """ Format equations and dependant equations ionic derivatives"""
+        with self._lookup_tables.method_being_printed('GetIIonic'):
+            return super()._format_ionic_vars()
+
+    def _format_derivative_equations(self, derivative_equations):
+        """ Format derivative equations for chaste output"""
+        with self._lookup_tables.method_being_printed('EvaluateYDerivatives'):
+            return super()._format_derivative_equations(derivative_equations)
+
+    def _format_derived_quant_eqs(self):
+        """ Format equations for derived quantities based on current settings"""
+        with self._lookup_tables.method_being_printed('ComputeDerivedQuantities'):
+            return super()._format_derived_quant_eqs()

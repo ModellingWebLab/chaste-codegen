@@ -321,7 +321,7 @@ class ChasteModel(object):
 
         use_verify_state_variables = next(filter(lambda eq: eq['range_low'] != '' or eq['range_high'] != '',
                                                  formatted_state_vars), None) is not None
-        return formatted_state_vars, use_verify_state_variables
+        return (formatted_state_vars, use_verify_state_variables)
 
     def _format_default_stimulus(self):
         """ Format eqs for stimulus_current for outputting to chaste code"""

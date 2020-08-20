@@ -1,8 +1,13 @@
 from cellmlmanip.printer import Printer
-from sympy import Pow, Mul, S
+from sympy import (
+    Mul,
+    Pow,
+    Rational,
+    S,
+)
+from sympy.core.mul import _keep_coeff
 from sympy.printing.cxxcode import cxxcode
 from sympy.printing.precedence import precedence
-from sympy.core.mul import _keep_coeff
 
 
 class ChastePrinter(Printer):

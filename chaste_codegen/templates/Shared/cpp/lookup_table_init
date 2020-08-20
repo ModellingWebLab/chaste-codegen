@@ -1,0 +1,13 @@
+{%- if lookup_parameters is defined %}
+{%- for param in lookup_parameters%}
+        {%- if method in param[7] %}
+        // Lookup table indexing
+        const bool _oob_{{loop.index0}} = {{class_name}}_LookupTables::Instance()->CheckIndex{{loop.index0}}({{param[1]}});
+// LCOV_EXCL_START
+        if (_oob_{{loop.index0}})
+            EXCEPTION(DumpState("{{param[0]}} outside lookup table range", rY{% if method != "GetIIonic" %} , var_chaste_interface__environment__time{% endif %}));
+// LCOV_EXCL_STOP
+        const double* const _lt_{{loop.index0}}_row = {{class_name}}_LookupTables::Instance()->IndexTable{{loop.index0}}({{param[1]}});
+        {%- endif %}
+{% endfor %}
+{%- endif %}

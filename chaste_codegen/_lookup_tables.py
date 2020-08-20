@@ -1,4 +1,5 @@
 import collections
+
 from cellmlmanip.model import Variable
 from sympy import (
     acos,
@@ -28,7 +29,6 @@ from sympy import (
     sinh,
     tan,
     tanh,
-    Piecewise, simplify, Symbol
 )
 
 from chaste_codegen._math_functions import (
@@ -39,14 +39,11 @@ from chaste_codegen._math_functions import (
 )
 from chaste_codegen._rdf import OXMETA
 
+
 _EXPENSIVE_FUNCTIONS = (exp, log, ln, sin, cos, tan, sec, csc, cot, sinh, cosh, tanh, sech, csch, coth, asin, acos,
                         atan, asinh, acosh, atanh, asec, acsc, acot, asech, acsch, acoth, exp_, acos_, cos_, sin_)
 
-# Lookup vars is a tuple of [<metadata tag>, variable, printed var, [<lookup epxrs>], mTableMins, mTableSteps, mTableStepInverses, mTableMaxs]
-_LOOKUP_VARS = (['membrane_voltage', None, [], -150.0001, 0.001, 1000.0, 199.9999],
-                ['cytosolic_calcium_concentration', None, [], 0.00001, 0.001, 1000.0, 30.00001])
-                                         
-#lookup_parameters
+
 class LookupTables:
     """ Holds information about lookuptables and methods to analyse the model for lookup tables.
     """
@@ -58,20 +55,23 @@ class LookupTables:
         ``printer``
             A :class:`sympy.printing.printer.Printer` object.
         """
+        # Lookup vars is a tuple of [<metadata tag>, variable, [<lookup epxrs>], mTableMins, mTableSteps, mTableStepInverses,
+        #                            mTableMaxs, <set_of_method_names_table_is_used_in>]
+        self._lookup_parameters = (['membrane_voltage', None, [], -150.0001, 0.001, 1000.0, 199.9999, set()],
+                                   ['cytosolic_calcium_concentration', None, [], 0.00001, 0.001, 1000.0, 30.00001, set()])
 
         self._model = model
-
         self._lookup_variables = set()
-        self._lookup_parameters = []
         self._lookup_table_expr = collections.OrderedDict()
         self._lookup_params_processed, self._lookup_params_printed = False, False
 
-        for tag in _LOOKUP_VARS:
+        self._method_printed = None
+
+        for tag in self._lookup_parameters:
             try:
                 var = self._model.get_variable_by_ontology_term((OXMETA, tag[0]))
                 self._lookup_variables.add(var)
                 tag[1] = var
-                self._lookup_parameters.append(tag)
             except KeyError:
                 pass  # variable not tagged in model
 
@@ -83,7 +83,6 @@ class LookupTables:
         for equation in equations:
             exp_func, vars_used = self._analyse_for_lut(equation.rhs)
             self._set_lookup_table_if_appropriate(exp_func, vars_used, equation.rhs)
-        pass
 
     def _analyse_for_lut(self, expr):
         if isinstance(expr, Variable):
@@ -120,10 +119,13 @@ class LookupTables:
             self._lookup_table_expr[expr] = vars_used
 
     def _process_lookup_parameters(self):
-        # Stick in a list of all expressions for the variable
         if not self._lookup_params_processed:
+            # Stick in a list of all expressions for the variable for easy access in the template
             for param in self._lookup_parameters:
                 param[2] = list(filter(lambda k: param[1] in self._lookup_table_expr[k], self._lookup_table_expr))
+
+            # Filter out the parameter set for which we didn't find any complicated expressions
+            self._lookup_parameters = list(filter(lambda p: len(p[2]) > 0, self._lookup_parameters))
             self._lookup_params_processed = True
 
     def print_lookup_parameters(self, printer):
@@ -152,11 +154,22 @@ class LookupTables:
             raise ValueError('Cannot print lookup expression after main table has been printed')
 
         self._process_lookup_parameters()
-        if expr in self._lookup_table_expr:
+        if self._method_printed and expr in self._lookup_table_expr:
             variables = expr.free_symbols
             assert len(variables) == 1, "Lookup table expressions should have exactly 1 (lookup) variable"
             var = tuple(variables)[0]
             for i, param in enumerate(self._lookup_parameters):
                 if param[1] is var:
+                    param[7].add(self._method_printed)
                     return '_lt_' + str(i) + '_row[' + str(param[2].index(expr)) + ']'
         return None
+
+    def method_being_printed(self, method_name):
+        self._method_printed = method_name
+        return self
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, traceback):##
+        self._method_printed = None

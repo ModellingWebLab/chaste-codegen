@@ -134,10 +134,10 @@ private:
     static std::shared_ptr<{{class_name}}_LookupTables> mpInstance;
 {% for param in lookup_parameters%}
     // Row lookup methods memory
-    double _lookup_table_0_row[{{param[2]|length}}];
+    double _lookup_table_{{loop.index0}}_row[{{param[2]|length}}];
 {% endfor %}{% for param in lookup_parameters%}
     // Lookup tables
-    double (*_lookup_table_0)[{{param[2]|length}}];
+    double (*_lookup_table_{{loop.index0}})[{{param[2]|length}}];
 {% endfor %}
 };
 

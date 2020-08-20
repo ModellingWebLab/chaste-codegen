@@ -1,0 +1,6 @@
+{%- if lookup_parameters is defined %}
+    AbstractLookupTableCollection* {{class_name}}::GetLookupTableCollection()
+    {
+        return {{class_name}}_LookupTables::Instance();
+    }
+{%- endif %}
