@@ -58,8 +58,8 @@ class LookupTables:
         # Lookup vars is a tuple of [<metadata tag>, variable, [<lookup epxrs>], mTableMins, mTableSteps,
         #                            mTableStepInverses, mTableMaxs, <set_of_method_names_table_is_used_in>]
         self._lookup_parameters = \
-            (['membrane_voltage', None, [], -150.0001, 0.001, 1000.0, 199.9999, set()],
-             ['cytosolic_calcium_concentration', None, [], 0.00001, 0.001, 1000.0, 30.00001, set()])
+            (['membrane_voltage', None, [], -250.0001, 0.001, 1000.0, 549.9999, set()],
+             ['cytosolic_calcium_concentration', None, [], 0.00001, 0.001, 10000.0, 30.00001, set()])
 
         self._model = model
         self._lookup_variables = set()
