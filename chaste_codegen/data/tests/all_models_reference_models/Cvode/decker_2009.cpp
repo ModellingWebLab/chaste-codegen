@@ -162,7 +162,7 @@
         const double var_Ito1__gto1 = 0.4975; // mS_per_uF
         const double var_Ito2__PCl = 8.9999999999999996e-7; // L_per_F_ms
         const double var_Ito2__kCa_ito2 = 0.40000000000000002; // mM_per_ms
-        const double var_Ito2__KCa_ito2 = 1.0 - 1.0 / (1.0 + pow(var_chaste_interface__Irel__Irel, 2) / pow(var_Ito2__kCa_ito2, 2)); // dimensionless
+        const double var_Ito2__KCa_ito2 = 1.0 - 1 / (1.0 + pow(var_chaste_interface__Irel__Irel, 2) / pow(var_Ito2__kCa_ito2, 2)); // dimensionless
         const double var_Ito2__zCl = -1.0; // dimensionless
         const double var_INaK__PNa = pow(var_chaste_interface__Na__Na_i, 3) / pow((var_INaK__kmnai + var_chaste_interface__Na__Na_i), 3); // dimensionless
         const double var_IKp__Kp = 1 / (1.0 + exp(1.2521739130434781 - 0.16722408026755853 * var_chaste_interface__membrane__Vm)); // dimensionless
@@ -412,7 +412,7 @@
         const double var_Ito1__gto1 = 0.4975; // mS_per_uF
         const double var_Ito2__PCl = 8.9999999999999996e-7; // L_per_F_ms
         const double var_Ito2__kCa_ito2 = 0.40000000000000002; // mM_per_ms
-        const double var_Ito2__KCa_ito2 = 1.0 - 1.0 / (1.0 + pow(var_chaste_interface__Irel__Irel, 2) / pow(var_Ito2__kCa_ito2, 2)); // dimensionless
+        const double var_Ito2__KCa_ito2 = 1.0 - 1 / (1.0 + pow(var_chaste_interface__Irel__Irel, 2) / pow(var_Ito2__kCa_ito2, 2)); // dimensionless
         const double var_Ito2__zCl = -1.0; // dimensionless
         const double var_Ito2_i2f_gate__tau_i2f = 8.0; // ms
         const double var_Itr__tautr = 25.0; // ms

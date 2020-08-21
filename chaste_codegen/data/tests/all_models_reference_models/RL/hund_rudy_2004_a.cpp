@@ -320,7 +320,7 @@
         const double var_Ito__gitodv = 0.19; // mS_per_uF
         const double var_Ito2__Kmto2 = 0.1502; // mM
         const double var_Ito2__AAss = 1 / (1.0 + var_Ito2__Kmto2 / var_chaste_interface__Ca__Ca_ss); // dimensionless
-        const double d_dt_chaste_interface_var_Ito2__AA = var_Ito2__AAss - 1.0 * var_chaste_interface__Ito2__AA; // 1 / ms
+        const double d_dt_chaste_interface_var_Ito2__AA = var_Ito2__AAss - var_chaste_interface__Ito2__AA; // 1 / ms
         const double var_Ito2__PCl = 3.9999999999999998e-7; // L_per_F_ms
         const double var_Iup_Ileak__Kmup = 0.00092000000000000003; // mM
         const double var_Iup_Ileak__dJupmax = 0.75; // dimensionless

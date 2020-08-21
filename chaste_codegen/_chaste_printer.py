@@ -150,7 +150,7 @@ class ChastePrinter(Printer):
         a, b = [], []
         for item in Mul.make_args(expr):
             if item != 1.0:  # In multiplications remove 1.0 * ...
-                # Check if this is a negative power and it's not in a lookup table, so we can write it as a division
+                # Check if this is a negative power, so we can write it as a division
                 if (item.is_commutative and item.is_Pow and item.exp.is_Rational and item.exp.is_negative):
                     if item.exp != -1:
                         # E.g. x * y**(-2 / 3) --> x / y**(2 / 3)
@@ -162,8 +162,7 @@ class ChastePrinter(Printer):
 
                         # Check if it's a negative power that needs brackets
                         # Sympy issue #14160
-                        if (len(item.args[0].args) != 1
-                                and isinstance(item.base, Mul)):
+                        if (len(item.args[0].args) != 1 and isinstance(item.base, Mul)):
                             pow_brackets.append(item)
 
                 # Split Rationals over a and b, ignoring any 1s
@@ -187,8 +186,7 @@ class ChastePrinter(Printer):
         # Fix brackets for Pow with exp -1 with more than one Symbol
         for item in pow_brackets:
             assert item.base in b, "item.base should be kept in b for powers"
-            b_str[b.index(item.base)] = \
-                '(' + b_str[b.index(item.base)] + ')'
+            b_str[b.index(item.base)] = '(' + b_str[b.index(item.base)] + ')'
 
         # Combine numerator and denomenator and return
         a_str = sign + ' * '.join(a_str)

@@ -799,7 +799,7 @@
             const double var_x35 = 1 / var_x34;
             const double var_x36 = pow(var_chaste_interface__sodium_current_m_gate__m, 3);
             const double var_x37 = 1 / var_chaste_interface__intracellular_ion_concentrations__Na_i;
-            const double var_x38 = exp(var_x32 - 1.0 * log(140.0 * var_x37));
+            const double var_x38 = exp(var_x32 - log(140.0 * var_x37));
             const double var_x39 = -1.0 + var_x38;
             const double var_x40 = var_x35 * var_x36 * var_x39;
             const double var_x41 = var_x31 * var_x40;
@@ -1479,7 +1479,7 @@
             const double var_x35 = 1 / var_x34;
             const double var_x36 = pow(var_chaste_interface__sodium_current_m_gate__m, 3);
             const double var_x37 = 1 / var_chaste_interface__intracellular_ion_concentrations__Na_i;
-            const double var_x38 = exp(var_x32 - 1.0 * log(140.0 * var_x37));
+            const double var_x38 = exp(var_x32 - log(140.0 * var_x37));
             const double var_x43 = var_x31 * var_x35 * var_chaste_interface__membrane__V;
             const double var_x44 = var_x38 * var_x43;
             const double var_x48 = exp(-1.5 - 0.025000000000000001 * var_chaste_interface__membrane__V);
