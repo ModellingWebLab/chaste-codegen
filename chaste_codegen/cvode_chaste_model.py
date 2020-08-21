@@ -29,14 +29,17 @@ class CvodeChasteModel(ChasteModel):
             self._jacobian_equations, self._jacobian_matrix = get_jacobian(self._state_vars, self._derivative_equations)
             self._formatted_state_vars = self._update_state_vars()
 
-            modifiers_with_defining_eqs = set((eq[0] for eq in self._jacobian_equations)) | self._model.state_vars
             self._vars_for_template['jacobian_equations'], self._vars_for_template['jacobian_entries'] = \
-                format_jacobian(self._jacobian_equations, self._jacobian_matrix, self._printer,
-                                partial(self._print_rhs_with_modifiers,
-                                        modifiers_with_defining_eqs=modifiers_with_defining_eqs))
+                self._print_jacobian()
         else:
             self._vars_for_template['jacobian_equations'], self._vars_for_template['jacobian_entries'] = \
                 [], Matrix()
+
+    def _print_jacobian(self):
+        modifiers_with_defining_eqs = set((eq[0] for eq in self._jacobian_equations)) | self._model.state_vars
+        return format_jacobian(self._jacobian_equations, self._jacobian_matrix, self._printer,
+                               partial(self._print_rhs_with_modifiers,
+                                       modifiers_with_defining_eqs=modifiers_with_defining_eqs))
 
     def _print_modifiable_parameters(self, variable):
         return 'NV_Ith_S(mParameters, ' + self._modifiable_parameter_lookup[variable] + ')'

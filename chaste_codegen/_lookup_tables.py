@@ -40,6 +40,7 @@ from chaste_codegen._math_functions import (
 from chaste_codegen._rdf import OXMETA
 
 
+# The expensive functions the lookup table analysis searches for
 _EXPENSIVE_FUNCTIONS = (exp, log, ln, sin, cos, tan, sec, csc, cot, sinh, cosh, tanh, sech, csch, coth, asin, acos,
                         atan, asinh, acosh, atanh, asec, acsc, acot, asech, acsch, acoth, exp_, acos_, cos_, sin_)
 
@@ -50,10 +51,7 @@ class LookupTables:
 
     def __init__(self, model):
         """ Initialise a LookUpTables instance
-        ``model``
-            A :class:`cellmlmanip.Model` object.
-        ``printer``
-            A :class:`sympy.printing.printer.Printer` object.
+        :param model: A :class:`cellmlmanip.Model` object.
         """
         # Lookup vars is a tuple of [<metadata tag>, variable, [<lookup epxrs>], mTableMins, mTableSteps,
         #                            mTableStepInverses, mTableMaxs, <set_of_method_names_table_is_used_in>]
@@ -77,7 +75,9 @@ class LookupTables:
                 pass  # variable not tagged in model
 
     def calc_lookup_tables(self, equations):
-
+        """ Calculates and stores the lookup table expressions for equations.
+            *Please Note:* cannot been called after `_process_lookup_parameters` has been calledt
+            to prepare table for printing. """
         if self._lookup_params_processed:
             raise ValueError('Cannot calculate lookup tables after printing has started')
 
@@ -86,6 +86,7 @@ class LookupTables:
             self._set_lookup_table_if_appropriate(exp_func, vars_used, equation.rhs)
 
     def _analyse_for_lut(self, expr):
+        """ Analyse whether an expression contains lookup table suitable (sub-_ expressions. """
         if isinstance(expr, Variable):
             return False, set([expr])
         elif len(expr.args) == 0:
@@ -111,6 +112,7 @@ class LookupTables:
             return expensive_func, vars_used_in_lut
 
     def _set_lookup_table_if_appropriate(self, exp_func, vars_used, expr):
+        """ Store an expression to the lookup table if it's suitable. """
         # Expressions are suitable for lut if:
         # - they have an expensive function
         # - they're not already set as suitable
@@ -120,6 +122,8 @@ class LookupTables:
             self._lookup_table_expr[expr] = vars_used
 
     def _process_lookup_parameters(self):
+        """ Prepare the stored lookup table parameters for generating chaste code.
+            *Please Note:* no more calls to `calc_lookup_tables` can be made after this. """
         if not self._lookup_params_processed:
             # Stick in a list of all expressions for the variable for easy access in the template
             for param in self._lookup_parameters:
@@ -129,22 +133,16 @@ class LookupTables:
             self._lookup_parameters = list(filter(lambda p: len(p[2]) > 0, self._lookup_parameters))
             self._lookup_params_processed = True
 
-    def print_lookup_parameters(self, printer):
-        # Don't use lookup tables to print these expressions
-        if not self._lookup_params_printed:
-            self._process_lookup_parameters()
-            old_lookup_table_func = printer.lookup_table_function
-            printer.lookup_table_function = lambda e: None
-            for param in self._lookup_parameters:
-                param[2] = list(map(lambda e: printer.doprint(e), param[2]))
-                param[1] = printer.doprint(param[1])
-
-            # reinstate lookup tables
-            printer.lookup_table_function = old_lookup_table_func
-            self._lookup_params_printed = True
-        return self._lookup_parameters
-
     def print_lut_expr(self, expr):
+        """ prints an individual lookup expression e.g. `lt_row_0[0].
+            *Please Note:* cannot be called after `print_lookup_parameters` has been called.
+            :param expr: the expression to print.
+            :return: a string with the printed lookup table expression if expr is in the lookup table
+                     and a method hass been associated, else None.
+
+            *Please Note:* in order to print lookup table expressions
+                           please associate a method_name via `method_being_printed`,
+                           if no method name is associated, None is returned."""
         if self._lookup_params_printed:
             raise ValueError('Cannot print lookup expression after main table has been printed')
 
@@ -159,12 +157,46 @@ class LookupTables:
                     return '_lt_' + str(i) + '_row[' + str(param[2].index(expr)) + ']'
         return None
 
+    def print_lookup_parameters(self, printer):
+        """ Formats the expressions int he table for printing to chaste code.
+            *Please Note:* no more individual lookup table expressions can be priinted after this.
+            :param printer: A :class:`sympy.printing.printer.Printer` object to print the lookup table with.
+            :return: a list with which the lookup table can be generated:
+                    [<metadata tag>, printed_variable, [<printed lookup epxrs>], mTableMins, mTableSteps,
+                     mTableStepInverses, mTableMaxs, <set_of_method_names_table_is_used_in>]."""
+        # Don't use lookup tables to print these expressions
+        if not self._lookup_params_printed:
+            self._process_lookup_parameters()
+            old_lookup_table_func = printer.lookup_table_function
+            printer.lookup_table_function = lambda e: None
+            for param in self._lookup_parameters:
+                param[2] = list(map(lambda e: printer.doprint(e), param[2]))
+                param[1] = printer.doprint(param[1])
+
+            # reinstate lookup tables
+            printer.lookup_table_function = old_lookup_table_func
+            self._lookup_params_printed = True
+        return self._lookup_parameters
+
     def method_being_printed(self, method_name):
+        """ method_name to associate pints of lookup table expressions with a particular string, so as to allow checking
+            whether the lookup table is used in certain parts of the code. to change Formats the expressions
+            in the table for printing to chaste code.
+            This can also be used with the with statement to auto-reset the associated printing method_name
+
+            For example:
+            ``with self._lookup_tables.method_being_printed('GetIIonic'):
+                  return super()._format_ionic_vars()``
+
+            *Please Note:* associating a method_name is required,
+                           without it printing individual lookup table expressions is disabled."""
         self._method_printed = method_name
         return self
 
     def __enter__(self):
+        """ enter method, needed to allow using with statements"""
         return self
 
-    def __exit__(self, type, value, traceback):##
+    def __exit__(self, type, value, traceback):
+        """ exit resets method_method_printed, this is called when a with statement goes out of scope."""
         self._method_printed = None
