@@ -1,3 +1,6 @@
+# Release 0.5.0
+- Multiplication equations x * y * y now have 1.0 tersm removed in a way that works more genericly.
+
 # Release 0.4.1
 - Now outputs sqrt(x) instead of pow(x, 0.5).
 
