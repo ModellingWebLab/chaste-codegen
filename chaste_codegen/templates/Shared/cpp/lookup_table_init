@@ -5,7 +5,7 @@
         const bool _oob_{{loop.index0}} = {{class_name}}_LookupTables::Instance()->CheckIndex{{loop.index0}}({{param[1]}});
 // LCOV_EXCL_START
         if (_oob_{{loop.index0}})
-            EXCEPTION(DumpState("{{param[0]}} outside lookup table range", rY{% if method != "GetIIonic" %} , var_chaste_interface__environment__time{% endif %}));
+            EXCEPTION(DumpState("{{param[0]}} outside lookup table range", rY{% if method != "GetIIonic" %} , {{free_variable.var_name}}{% endif %}));
 // LCOV_EXCL_STOP
         const double* const _lt_{{loop.index0}}_row = {{class_name}}_LookupTables::Instance()->IndexTable{{loop.index0}}({{param[1]}});
         {%- endif %}
