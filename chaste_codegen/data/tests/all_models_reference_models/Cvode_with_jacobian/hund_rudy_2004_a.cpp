@@ -340,7 +340,7 @@
         const double var_Ito__gitodv = 0.19; // mS_per_uF
         const double var_Ito2__Kmto2 = 0.1502; // mM
         const double var_Ito2__AAss = 1 / (1.0 + var_Ito2__Kmto2 / var_chaste_interface__Ca__Ca_ss); // dimensionless
-        const double d_dt_chaste_interface_var_Ito2__AA = var_Ito2__AAss - 1.0 * var_chaste_interface__Ito2__AA; // 1 / ms
+        const double d_dt_chaste_interface_var_Ito2__AA = var_Ito2__AAss - var_chaste_interface__Ito2__AA; // 1 / ms
         const double var_Ito2__PCl = 3.9999999999999998e-7; // L_per_F_ms
         const double var_Iup_Ileak__Kmup = 0.00092000000000000003; // mM
         const double var_Iup_Ileak__dJupmax = 0.75; // dimensionless
@@ -870,7 +870,7 @@
         const double var_x303 = exp(-1.6000000000000001 + var_x302);
         const double var_x304 = 1.0 + var_x303;
         const double var_x305 = var_x303 / var_x304;
-        const double var_x306 = 1.0 - 1.0 * var_chaste_interface__Ito__ydv;
+        const double var_x306 = 1.0 - var_chaste_interface__Ito__ydv;
         const double var_x307 = exp(-3.6000000000000001 - var_x302);
         const double var_x308 = 1.0 + var_x307;
         const double var_x309 = var_x307 / var_x308;
@@ -1144,7 +1144,7 @@
         IJth(rJacobian, 17, 28) = 0.1502 * var_x188 / pow((1.0 + 0.1502 * var_x165), 2);
         IJth(rJacobian, 20, 28) = 3.7500000000000005e-6 * var_x169 * var_x189 + 1.8750000000000003e-7 * var_x188 * pow(var_x164, 2) / pow(var_x166, 3);
         IJth(rJacobian, 21, 28) = var_x329 * var_x338 * var_x347 * var_x95 - 0.00020267697647483301 * var_x165 * var_x339 * var_x340 * var_x342 * var_x353 * (1.8999999999999999 * var_x341 - 1.8999999999999999 * var_chaste_interface__Ca__Ca_ss / pow(var_x340, 2));
-        IJth(rJacobian, 22, 28) = var_x377 * (var_x260 + var_x370 * (5000.0 - 3510.8651860830805 * var_x378) - var_x260 * var_x361) - 1.0 * var_x365 * (40000.0 - 18724.614325776431 * var_x378);
+        IJth(rJacobian, 22, 28) = var_x377 * (var_x260 + var_x370 * (5000.0 - 3510.8651860830805 * var_x378) - var_x260 * var_x361) - var_x365 * (40000.0 - 18724.614325776431 * var_x378);
         IJth(rJacobian, 26, 28) = var_x419 * (var_x418 + 2106.5191116498486 * var_x420);
         IJth(rJacobian, 27, 28) = var_x192 * var_x423 + var_x193 * var_x422;
         IJth(rJacobian, 28, 28) = var_x429 * (-5.0 - var_x432 - 0.0036718475849305066 * var_x259 - 505.56458679596358 * var_x420) + (0.019557600000000001 / pow(var_x425, 3) + 8.1780000000000006e-5 / pow(var_x426, 3)) * (5.0 * var_chaste_interface__Ca__Ca_i - 5.0 * var_chaste_interface__Ca__Ca_ss - 0.0036718475849305066 * var_x244 + var_x409 * var_x432) / pow(var_x427, 2);

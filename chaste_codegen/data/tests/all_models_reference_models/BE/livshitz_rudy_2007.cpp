@@ -653,7 +653,7 @@
         const double var_ICaL__fss = 1 / (1.0 + exp(4.0 + 0.125 * var_chaste_interface__cell__V)) + 0.59999999999999998 / (1.0 + exp(2.5 - 0.050000000000000003 * var_chaste_interface__cell__V));
         const double var_ICaL__taud = 28.571428571428569 * (1.0 - exp(-1.6025641025641024 - 0.16025641025641024 * var_chaste_interface__cell__V)) * var_ICaL__dss0 / (10.0 + var_chaste_interface__cell__V);
         const double var_ICaL__tauf = 1 / (0.02 + 0.019699999999999999 * exp(-0.113569 * pow((1 + 0.10000000000000001 * var_chaste_interface__cell__V), 2)));
-        const double var_ICaT__aa = 1.0 - 1.0 / (1.0 + exp(-416.66666666666669 * var_chaste_interface__cell__V));
+        const double var_ICaT__aa = 1.0 - 1 / (1.0 + exp(-416.66666666666669 * var_chaste_interface__cell__V));
         const double var_ICaT__bss = 1 / (1.0 + exp(-1.2962962962962963 - 0.092592592592592587 * var_chaste_interface__cell__V));
         const double var_ICaT__gss = 1 / (1.0 + exp(10.714285714285715 + 0.17857142857142858 * var_chaste_interface__cell__V));
         const double var_ICaT__taub = 3.7000000000000002 + 6.0999999999999996 / (1.0 + exp(5.5555555555555554 + 0.22222222222222221 * var_chaste_interface__cell__V));
@@ -662,7 +662,7 @@
         const double var_IKr__xrss = 1 / (1.0 + exp(-2.3729411764705883 - 0.23529411764705882 * var_chaste_interface__cell__V));
         const double var_IKs__tauxs = 1 / (0.00013100000000000001 * (30.0 + var_chaste_interface__cell__V) / (-1.0 + exp(2.0609999999999999 + 0.068699999999999997 * var_chaste_interface__cell__V)) + 7.1899999999999999e-5 * (30.0 + var_chaste_interface__cell__V) / (1.0 - exp(-4.4399999999999995 - 0.14799999999999999 * var_chaste_interface__cell__V)));
         const double var_IKs__xss = 1 / (1.0 + exp(0.089820359281437126 - 0.059880239520958084 * var_chaste_interface__cell__V));
-        const double var_INa__a = 1.0 - 1.0 / (1.0 + exp(-1666.6666666666667 - 41.666666666666664 * var_chaste_interface__cell__V));
+        const double var_INa__a = 1.0 - 1 / (1.0 + exp(-1666.6666666666667 - 41.666666666666664 * var_chaste_interface__cell__V));
         const double var_INa__aH = 0.13500000000000001 * var_INa__a * exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__cell__V);
         const double var_INa__aj = (37.780000000000001 + var_chaste_interface__cell__V) * (-127140.0 * exp(0.24440000000000001 * var_chaste_interface__cell__V) - 3.4740000000000003e-5 * exp(-0.043909999999999998 * var_chaste_interface__cell__V)) * var_INa__a / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__V));
         const double var_INa__am = 0.32000000000000001 * (47.130000000000003 + var_chaste_interface__cell__V) / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__cell__V));

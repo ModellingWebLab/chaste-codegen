@@ -375,7 +375,7 @@
             const double var_x10 = exp(-4.5 + var_x4);
             const double var_x11 = 1.0 + var_x10;
             
-            partialF = -1.0 / var_x11 - 0.070000000000000007 * var_x9;
+            partialF = -1 / var_x11 - 0.070000000000000007 * var_x9;
         }
         else
         {
@@ -488,3 +488,4 @@ void OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromC
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL2)
+

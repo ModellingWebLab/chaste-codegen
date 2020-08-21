@@ -178,7 +178,7 @@
         IJth(rJacobian, 0, 1) = mSetVoltageDerivativeToZero ? 0.0 : (-360.0 * var_x1 * pow(var_chaste_interface__sodium_channel_m_gate__m, 2) * var_chaste_interface__sodium_channel_h_gate__h);
         IJth(rJacobian, 1, 1) = -4.0 * var_x2 + var_x7 * var_x8;
         IJth(rJacobian, 0, 2) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x0 * var_x1);
-        IJth(rJacobian, 2, 2) = -1.0 / var_x11 - 0.070000000000000007 * var_x9;
+        IJth(rJacobian, 2, 2) = -1 / var_x11 - 0.070000000000000007 * var_x9;
         IJth(rJacobian, 0, 3) = mSetVoltageDerivativeToZero ? 0.0 : (-144.0 * pow(var_chaste_interface__potassium_channel_n_gate__n, 3) * (87.0 + var_chaste_interface__membrane__V));
         IJth(rJacobian, 3, 3) = -0.125 * var_x16 + var_x15 * var_x17;
     }

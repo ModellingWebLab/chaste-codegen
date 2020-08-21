@@ -144,7 +144,7 @@
         const double var_Ito__i_to = (-var_Ito__E_to + var_chaste_interface__cell__V) * var_Ito__g_to_max * var_chaste_interface__Ito_r_gate__r * var_chaste_interface__Ito_t_gate__t; // uA_per_uF
         const double var_cell__i_Stim = 0.0; // uA_per_uF
         const double var_cell__I_tot = var_ICa__i_Ca + var_ICab__i_b_Ca + var_IK1__i_K1 + var_IKr__i_Kr + var_IKs__i_Ks + var_INa__i_Na + var_INaCa__i_NaCa + var_INaK__i_NaK + var_INab__i_b_Na + var_Ito__i_to + var_cell__i_Stim; // uA_per_uF
-        const double var_cell__dVdt = -1.0 * var_cell__I_tot; // mV_per_ms
+        const double var_cell__dVdt = -var_cell__I_tot; // mV_per_ms
         const double var_chaste_interface__i_ionic = -HeartConfig::Instance()->GetCapacitance() * var_cell__dVdt; // uA_per_cm2
 
         const double i_ionic = var_chaste_interface__i_ionic;
@@ -237,7 +237,7 @@
         const double var_cell__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
         const double var_cell__i_Stim = var_cell__i_Stim_converted / HeartConfig::Instance()->GetCapacitance(); // uA_per_uF
         const double var_cell__I_tot = var_ICa__i_Ca + var_ICab__i_b_Ca + var_IK1__i_K1 + var_IKr__i_Kr + var_IKs__i_Ks + var_INa__i_Na + var_INaCa__i_NaCa + var_INaK__i_NaK + var_INab__i_b_Na + var_Ito__i_to + var_cell__i_Stim; // uA_per_uF
-        const double var_cell__dVdt = -1.0 * var_cell__I_tot; // mV_per_ms
+        const double var_cell__dVdt = -var_cell__I_tot; // mV_per_ms
         d_dt_chaste_interface_var_cell__V = var_cell__dVdt; // mV / ms
 
         double evalF = d_dt_chaste_interface_var_cell__V;
@@ -417,20 +417,20 @@
         const double var_INaK__i_NaK = var_INaK__I_NaK_max * var_INaK__f_NaK * var_Ionic_concentrations__Ko / ((1.0 + pow((var_INaK__K_mNai / var_chaste_interface__Ionic_concentrations__Nai), 1.5)) * (var_INaK__K_mKo + var_Ionic_concentrations__Ko)); // uA_per_uF
         const double var_INab__g_b_Na_max = ((var_cell__failing == 0) ? (0.001) : (0)); // mS_per_uF
         const double var_INab__i_b_Na = (-var_INa__E_Na + var_chaste_interface__cell__V) * var_INab__g_b_Na_max; // uA_per_uF
-        const double d_dt_chaste_interface_var_Ionic_concentrations__Nai = -1.0 * (3.0 * var_INaCa__i_NaCa + 3.0 * var_INaK__i_NaK + var_INa__i_Na + var_INab__i_b_Na) * var_cell__Cm / (var_Ionic_concentrations__V_myo * var_cell__F); // mM / ms
+        const double d_dt_chaste_interface_var_Ionic_concentrations__Nai = -(3.0 * var_INaCa__i_NaCa + 3.0 * var_INaK__i_NaK + var_INa__i_Na + var_INab__i_b_Na) * var_cell__Cm / (var_Ionic_concentrations__V_myo * var_cell__F); // mM / ms
         const double var_Ileak__K_leak = ((var_cell__failing == 0) ? (0.00025999999999999998) : (0.00017000000000000001)); // per_ms
         const double var_Ileak__i_leak = var_Ileak__K_leak * var_chaste_interface__Ionic_concentrations__Ca_NSR; // mM_per_ms
         const double var_Ito__g_to_max = ((var_cell__failing == 0) ? (0.29999999999999999) : (0.191)); // mS_per_uF
         const double var_Ito__i_to = (-var_Ito__E_to + var_chaste_interface__cell__V) * var_Ito__g_to_max * var_chaste_interface__Ito_r_gate__r * var_chaste_interface__Ito_t_gate__t; // uA_per_uF
         const double var_Iup__I_up_max = ((var_cell__failing == 0) ? (0.0044999999999999997) : (0.0015)); // mM_per_ms
         const double var_Iup__i_up = var_chaste_interface__Ionic_concentrations__Cai * var_Iup__I_up_max / (var_chaste_interface__Ionic_concentrations__Cai + var_Iup__K_mup); // mM_per_ms
-        const double d_dt_chaste_interface_var_Ionic_concentrations__Ca_NSR = var_Iup__i_up - 1.0 * var_Ileak__i_leak - 1.0 * var_Ionic_concentrations__V_JSR * var_Itr__i_tr / var_Ionic_concentrations__V_NSR; // mM / ms
+        const double d_dt_chaste_interface_var_Ionic_concentrations__Ca_NSR = var_Iup__i_up - var_Ileak__i_leak - var_Ionic_concentrations__V_JSR * var_Itr__i_tr / var_Ionic_concentrations__V_NSR; // mM / ms
         const double d_dt_chaste_interface_var_Ionic_concentrations__Cai = ((-var_Iup__i_up + var_Ileak__i_leak) * var_Ionic_concentrations__V_NSR / var_Ionic_concentrations__V_myo + var_Ionic_concentrations__V_JSR * var_Irel__i_rel / var_Ionic_concentrations__V_myo - 0.5 * (-2.0 * var_INaCa__i_NaCa + var_ICa__i_Ca + var_ICab__i_b_Ca) * var_cell__Cm / (var_Ionic_concentrations__V_myo * var_cell__F)) * var_calcium_buffers_in_the_myoplasm__Cai_bufc; // mM / ms
         const double var_cell__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
         const double var_cell__i_Stim = var_cell__i_Stim_converted / HeartConfig::Instance()->GetCapacitance(); // uA_per_uF
-        const double d_dt_chaste_interface_var_Ionic_concentrations__Ki = -1.0 * (-2.0 * var_INaK__i_NaK + var_IK1__i_K1 + var_IKr__i_Kr + var_IKs__i_Ks + var_Ito__i_to + var_cell__i_Stim) * var_cell__Cm / (var_Ionic_concentrations__V_myo * var_cell__F); // mM / ms
+        const double d_dt_chaste_interface_var_Ionic_concentrations__Ki = -(-2.0 * var_INaK__i_NaK + var_IK1__i_K1 + var_IKr__i_Kr + var_IKs__i_Ks + var_Ito__i_to + var_cell__i_Stim) * var_cell__Cm / (var_Ionic_concentrations__V_myo * var_cell__F); // mM / ms
         const double var_cell__I_tot = var_ICa__i_Ca + var_ICab__i_b_Ca + var_IK1__i_K1 + var_IKr__i_Kr + var_IKs__i_Ks + var_INa__i_Na + var_INaCa__i_NaCa + var_INaK__i_NaK + var_INab__i_b_Na + var_Ito__i_to + var_cell__i_Stim; // uA_per_uF
-        const double var_cell__dVdt = -1.0 * var_cell__I_tot; // mV_per_ms
+        const double var_cell__dVdt = -var_cell__I_tot; // mV_per_ms
         const double d_dt_chaste_interface_var_Irel__APtrack = ((var_cell__dVdt > 150.0) ? (100.0 - 100.5 * var_chaste_interface__Irel__APtrack) : (-0.5 * var_chaste_interface__Irel__APtrack)); // 1 / ms
 
         if (mSetVoltageDerivativeToZero)
@@ -747,7 +747,7 @@
         const double var_cell__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
         const double var_cell__i_Stim = var_cell__i_Stim_converted / HeartConfig::Instance()->GetCapacitance(); // uA_per_uF
         const double var_cell__I_tot = var_ICa__i_Ca + var_ICab__i_b_Ca + var_IK1__i_K1 + var_IKr__i_Kr + var_IKs__i_Ks + var_INa__i_Na + var_INaCa__i_NaCa + var_INaK__i_NaK + var_INab__i_b_Na + var_Ito__i_to + var_cell__i_Stim; // uA_per_uF
-        const double var_cell__dVdt = -1.0 * var_cell__I_tot; // mV_per_ms
+        const double var_cell__dVdt = -var_cell__I_tot; // mV_per_ms
         d_dt_chaste_interface_var_cell__V = var_cell__dVdt; // mV / ms
 
         return d_dt_chaste_interface_var_cell__V;
@@ -1509,7 +1509,7 @@
         const double var_cell__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
         const double var_cell__i_Stim = var_cell__i_Stim_converted / HeartConfig::Instance()->GetCapacitance(); // uA_per_uF
         const double var_cell__I_tot = var_ICa__i_Ca + var_ICab__i_b_Ca + var_IK1__i_K1 + var_IKr__i_Kr + var_IKs__i_Ks + var_INa__i_Na + var_INaCa__i_NaCa + var_INaK__i_NaK + var_INab__i_b_Na + var_Ito__i_to + var_cell__i_Stim; // uA_per_uF
-        const double var_cell__dVdt = -1.0 * var_cell__I_tot; // mV_per_ms
+        const double var_cell__dVdt = -var_cell__I_tot; // mV_per_ms
         const double d_dt_chaste_interface_var_Irel__APtrack = ((var_cell__dVdt > 150.0) ? (100.0 - 100.5 * var_chaste_interface__Irel__APtrack) : (-0.5 * var_chaste_interface__Irel__APtrack)); // 1 / ms
 
         return d_dt_chaste_interface_var_Irel__APtrack;
@@ -1909,7 +1909,7 @@
         const double var_INaK__i_NaK = var_INaK__I_NaK_max * var_INaK__f_NaK * var_Ionic_concentrations__Ko / ((1.0 + pow((var_INaK__K_mNai / var_chaste_interface__Ionic_concentrations__Nai), 1.5)) * (var_INaK__K_mKo + var_Ionic_concentrations__Ko)); // uA_per_uF
         const double var_INab__g_b_Na_max = ((var_cell__failing == 0) ? (0.001) : (0)); // mS_per_uF
         const double var_INab__i_b_Na = (-var_INa__E_Na + var_chaste_interface__cell__V) * var_INab__g_b_Na_max; // uA_per_uF
-        const double d_dt_chaste_interface_var_Ionic_concentrations__Nai = -1.0 * (3.0 * var_INaCa__i_NaCa + 3.0 * var_INaK__i_NaK + var_INa__i_Na + var_INab__i_b_Na) * var_cell__Cm / (var_Ionic_concentrations__V_myo * var_cell__F); // mM / ms
+        const double d_dt_chaste_interface_var_Ionic_concentrations__Nai = -(3.0 * var_INaCa__i_NaCa + 3.0 * var_INaK__i_NaK + var_INa__i_Na + var_INab__i_b_Na) * var_cell__Cm / (var_Ionic_concentrations__V_myo * var_cell__F); // mM / ms
 
         return d_dt_chaste_interface_var_Ionic_concentrations__Nai;
     }
@@ -2018,7 +2018,7 @@
         const double var_Ito__i_to = (-var_Ito__E_to + var_chaste_interface__cell__V) * var_Ito__g_to_max * var_chaste_interface__Ito_r_gate__r * var_chaste_interface__Ito_t_gate__t; // uA_per_uF
         const double var_cell__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
         const double var_cell__i_Stim = var_cell__i_Stim_converted / HeartConfig::Instance()->GetCapacitance(); // uA_per_uF
-        const double d_dt_chaste_interface_var_Ionic_concentrations__Ki = -1.0 * (-2.0 * var_INaK__i_NaK + var_IK1__i_K1 + var_IKr__i_Kr + var_IKs__i_Ks + var_Ito__i_to + var_cell__i_Stim) * var_cell__Cm / (var_Ionic_concentrations__V_myo * var_cell__F); // mM / ms
+        const double d_dt_chaste_interface_var_Ionic_concentrations__Ki = -(-2.0 * var_INaK__i_NaK + var_IK1__i_K1 + var_IKr__i_Kr + var_IKs__i_Ks + var_Ito__i_to + var_cell__i_Stim) * var_cell__Cm / (var_Ionic_concentrations__V_myo * var_cell__F); // mM / ms
 
         return d_dt_chaste_interface_var_Ionic_concentrations__Ki;
     }
@@ -2193,7 +2193,7 @@
         const double var_Ileak__i_leak = var_Ileak__K_leak * var_chaste_interface__Ionic_concentrations__Ca_NSR; // mM_per_ms
         const double var_Iup__I_up_max = ((var_cell__failing == 0) ? (0.0044999999999999997) : (0.0015)); // mM_per_ms
         const double var_Iup__i_up = var_chaste_interface__Ionic_concentrations__Cai * var_Iup__I_up_max / (var_chaste_interface__Ionic_concentrations__Cai + var_Iup__K_mup); // mM_per_ms
-        const double d_dt_chaste_interface_var_Ionic_concentrations__Ca_NSR = var_Iup__i_up - 1.0 * var_Ileak__i_leak - 1.0 * var_Ionic_concentrations__V_JSR * var_Itr__i_tr / var_Ionic_concentrations__V_NSR; // mM / ms
+        const double d_dt_chaste_interface_var_Ionic_concentrations__Ca_NSR = var_Iup__i_up - var_Ileak__i_leak - var_Ionic_concentrations__V_JSR * var_Itr__i_tr / var_Ionic_concentrations__V_NSR; // mM / ms
 
         return d_dt_chaste_interface_var_Ionic_concentrations__Ca_NSR;
     }

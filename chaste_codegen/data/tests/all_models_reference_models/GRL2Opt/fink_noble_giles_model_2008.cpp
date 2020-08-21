@@ -1390,7 +1390,7 @@
             const double var_x156 = 1.0 + var_x155;
             const double var_x157 = var_x151 * var_x156;
             
-            partialF = -1.0 * var_x157;
+            partialF = -var_x157;
         }
         else
         {

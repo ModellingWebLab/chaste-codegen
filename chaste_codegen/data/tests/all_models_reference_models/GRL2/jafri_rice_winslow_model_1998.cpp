@@ -1002,7 +1002,7 @@
             const double var_x35 = 1 / (var_chaste_interface__ionic_concentrations__Ki + var_chaste_interface__ionic_concentrations__Nai);
             const double var_x36 = 140.0 + var_chaste_interface__ionic_concentrations__Ko;
             const double var_x37 = log(var_x35 * var_x36);
-            const double var_x38 = exp(var_x34 - 1.0 * var_x37);
+            const double var_x38 = exp(var_x34 - var_x37);
             const double var_x39 = 0.75 * var_x38;
             const double var_x40 = var_x39 * var_chaste_interface__ionic_concentrations__Nai;
             const double var_x41 = -105.0 + var_x40;
@@ -2631,7 +2631,7 @@
             const double var_x35 = 1 / (var_chaste_interface__ionic_concentrations__Ki + var_chaste_interface__ionic_concentrations__Nai);
             const double var_x36 = 140.0 + var_chaste_interface__ionic_concentrations__Ko;
             const double var_x37 = log(var_x35 * var_x36);
-            const double var_x38 = exp(var_x34 - 1.0 * var_x37);
+            const double var_x38 = exp(var_x34 - var_x37);
             const double var_x39 = 0.75 * var_x38;
             const double var_x40 = var_x39 * var_chaste_interface__ionic_concentrations__Nai;
             const double var_x41 = -105.0 + var_x40;
@@ -2802,7 +2802,7 @@
             const double var_x35 = 1 / (var_chaste_interface__ionic_concentrations__Ki + var_chaste_interface__ionic_concentrations__Nai);
             const double var_x36 = 140.0 + var_chaste_interface__ionic_concentrations__Ko;
             const double var_x37 = log(var_x35 * var_x36);
-            const double var_x38 = exp(var_x34 - 1.0 * var_x37);
+            const double var_x38 = exp(var_x34 - var_x37);
             const double var_x39 = 0.75 * var_x38;
             const double var_x42 = pow(var_chaste_interface__calcium_subsystem__Cai, 3);
             const double var_x43 = 1.0 + 1.7279999999999996e-9 / var_x42;
@@ -3001,7 +3001,7 @@
             const double var_x35 = 1 / (var_chaste_interface__ionic_concentrations__Ki + var_chaste_interface__ionic_concentrations__Nai);
             const double var_x36 = 140.0 + var_chaste_interface__ionic_concentrations__Ko;
             const double var_x37 = log(var_x35 * var_x36);
-            const double var_x38 = exp(var_x34 - 1.0 * var_x37);
+            const double var_x38 = exp(var_x34 - var_x37);
             const double var_x39 = 0.75 * var_x38;
             const double var_x42 = pow(var_chaste_interface__calcium_subsystem__Cai, 3);
             const double var_x43 = 1.0 + 1.7279999999999996e-9 / var_x42;

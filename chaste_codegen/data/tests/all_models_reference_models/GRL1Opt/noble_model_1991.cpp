@@ -910,7 +910,7 @@
             const double var_x120 = pow(var_chaste_interface__intracellular_calcium_concentration__Ca_i, 2);
             const double var_x121 = var_x119 * var_x120;
             
-            partialF = -0.059999999999999998 - 1.0 * var_x121;
+            partialF = -0.059999999999999998 - var_x121;
         }
         else
         {
