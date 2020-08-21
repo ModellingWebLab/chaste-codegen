@@ -33,8 +33,7 @@ class OptChasteModel(NormalChasteModel):
 
     def _add_printers(self):
         """ Initialises Printers for outputting chaste code. """
-        super()._add_printers()
-        self._printer.lookup_tables = self._lookup_tables
+        super()._add_printers(self._lookup_tables.print_lut_expr)
 
     def _format_ionic_vars(self):
         """ Format equations and dependant equations ionic derivatives"""

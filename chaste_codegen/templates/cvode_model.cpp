@@ -7,6 +7,7 @@
 {%- include "Shared/cpp/constructor_declaration" %}
 {% include "Shared/cpp/constructor_body" %}
 {% include "Shared/cpp/destructor" %}
+{% include "Shared/cpp/GetLookupTableCollection" %}
 {% include "Cvode/cpp/VerifyStateVariables" %}
 {% include "Cvode/cpp/GetIIonic" %}
 {% include "Shared/cpp/EvaluateYDerivatives" %}

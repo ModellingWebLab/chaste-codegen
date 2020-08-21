@@ -70,26 +70,14 @@ class ChastePrinter(Printer):
         'pi': 'M_PI',
     }
 
-    def __init__(self, symbol_function=None, derivative_function=None):
+    def __init__(self, symbol_function=None, derivative_function=None, lookup_table_function=lambda e: None):
         super().__init__(symbol_function, derivative_function)
-        self.lookup_tables = None
-
-    def _print_lookup_table_item(self, expr):
-        if self.lookup_tables is not None:
-            printed_expr = self.lookup_tables.print_lut_expr(expr)
-            if printed_expr is not None:
-                return printed_expr
-        return False
-
-    def _is_lookup_table_item(self, expr):
-        if self.lookup_tables is not None:
-            return self.lookup_tables.is_lut_expr(expr)
-        return False
+        self.lookup_table_function = lookup_table_function
 
     def _print(self, expr, **kwargs):
         """Internal dispatcher.
         Here we intercept lookup table expressions if we have lookup tables"""
-        printed_expr = self._print_lookup_table_item(expr)
+        printed_expr = self.lookup_table_function(expr)
         if printed_expr:
             return printed_expr
         return super()._print(expr, **kwargs)
@@ -156,14 +144,15 @@ class ChastePrinter(Printer):
         Subtraction is specified as ``x - y --> x + (-1 * y)``.
         """
         # This method is mostly copied from sympy.printing.Str
-        # With a tweak to prevet pritnting 1.0 * ...
-        # And to deal with lookup tables
 
         # Check overall sign of multiplication
+        if 1.0 in expr.args:
+            expr = Mul(*[a for a in expr.args if a != 1.0])
+
         sign = ''
         c, e = expr.as_coeff_Mul()
         if c < 0:
-            expr *= -1 #= _keep_coeff(-c, e)
+            expr = _keep_coeff(-c, e)
             sign = '-'
 
         # Collect all pows with more than one base element and exp = -1
@@ -172,13 +161,81 @@ class ChastePrinter(Printer):
         # Gather terms for numerator and denominator
         a, b = [], []
         for item in Mul.make_args(expr):
-            if item != 1.0:  # don't print 1.0 *...
-                # Check if this is a negative power that we can write as a division
-                negative_power = (
-                    not self._is_lookup_table_item and  # don't turn lookup tabe expressions into devisions
-                    item.is_commutative and item.is_Pow
-                    and item.exp.is_Rational and item.exp.is_negative)
-                if negative_power:
+
+            # Check if this is a negative power and it's not in a lookup table, so we can write it as a division
+            if (item.is_commutative and item.is_Pow and item.exp.is_Rational and item.exp.is_negative
+                    and not self.lookup_table_function(item)):
+                if item.exp != -1:
+                    # E.g. x * y**(-2 / 3) --> x / y**(2 / 3)
+                    # Add as power
+                    b.append(Pow(item.base, -item.exp, evaluate=False))
+                else:
+                    # Add without power
+                    b.append(Pow(item.base, -item.exp))
+
+                    # Check if it's a negative power that needs brackets
+                    # Sympy issue #14160
+                    if (len(item.args[0].args) != 1
+                            and isinstance(item.base, Mul)):
+                        pow_brackets.append(item)
+
+            # Split Rationals over a and b, ignoring any 1s
+            elif item.is_Rational:
+                if item.p != 1:
+                    a.append(Rational(item.p))
+                if item.q != 1:
+                    b.append(Rational(item.q))
+
+            else:
+                a.append(item)
+
+        # Replace empty numerator with one
+        a = a or [S.One]
+
+        # Convert terms to code
+        my_prec = precedence(expr)
+        a_str = [self._bracket(x, my_prec) for x in a]
+        b_str = [self._bracket(x, my_prec) for x in b]
+
+        # Fix brackets for Pow with exp -1 with more than one Symbol
+        for item in pow_brackets:
+            assert item.base in b, "item.base should be kept in b for powers"
+            b_str[b.index(item.base)] = \
+                '(' + b_str[b.index(item.base)] + ')'
+
+        # Combine numerator and denomenator and return
+        a_str = sign + ' * '.join(a_str)
+        if len(b) == 0:
+            return a_str
+        b_str = ' * '.join(b_str)
+        return a_str + ' / ' + (b_str if len(b) == 1 else '(' + b_str + ')')
+
+    def _print_Mul(self, expr):
+        """
+        Handles multiplication & division, with n terms.
+
+        Division is specified as a power: ``x / y --> x * y**-1``.
+        Subtraction is specified as ``x - y --> x + (-1 * y)``.
+        """
+        # This method is mostly copied from sympy.printing.Str
+
+        # Check overall sign of multiplication
+        sign = ''
+        c, e = expr.as_coeff_Mul()
+        if c < 0:
+            expr = _keep_coeff(-c, e)
+            sign = '-'
+
+        # Collect all pows with more than one base element and exp = -1
+        pow_brackets = []
+
+        # Gather terms for numerator and denominator
+        a, b = [], []
+        for item in Mul.make_args(expr):
+            if item != 1.0:  # In multiplications remove 1.0 * ...
+            # Check if this is a negative power and it's not in a lookup table, so we can write it as a division
+                if (item.is_commutative and item.is_Pow and item.exp.is_Rational and item.exp.is_negative
+                        and not self.lookup_table_function(item)):
                     if item.exp != -1:
                         # E.g. x * y**(-2 / 3) --> x / y**(2 / 3)
                         # Add as power
@@ -189,8 +246,7 @@ class ChastePrinter(Printer):
 
                         # Check if it's a negative power that needs brackets
                         # Sympy issue #14160
-                        if (len(item.args[0].args) != 1
-                                and isinstance(item.base, Mul)):
+                        if (len(item.args[0].args) != 1 and isinstance(item.base, Mul)):
                             pow_brackets.append(item)
 
                 # Split Rationals over a and b, ignoring any 1s
@@ -214,8 +270,7 @@ class ChastePrinter(Printer):
         # Fix brackets for Pow with exp -1 with more than one Symbol
         for item in pow_brackets:
             assert item.base in b, "item.base should be kept in b for powers"
-            b_str[b.index(item.base)] = \
-                '(' + b_str[b.index(item.base)] + ')'
+            b_str[b.index(item.base)] = '(' + b_str[b.index(item.base)] + ')'
 
         # Combine numerator and denomenator and return
         a_str = sign + ' * '.join(a_str)

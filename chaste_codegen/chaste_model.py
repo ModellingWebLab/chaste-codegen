@@ -182,7 +182,7 @@ class ChasteModel(object):
         """ Get the defining equations for derived quantities"""
         return get_equations_for(self._model, self._derived_quant)
 
-    def _add_printers(self):
+    def _add_printers(self, lookup_table_function=lambda e: None):
         """ Initialises Printers for outputting chaste code. """
         def get_variable_name(s, interface=False):
             """Get the correct variable name based on the variable and whether it should be in the chaste_interface."""
@@ -203,7 +203,8 @@ class ChasteModel(object):
                              else self._print_modifiable_parameters(variable),
                              lambda deriv: 'd_dt_chaste_interface_' +
                                            (get_variable_name(deriv.expr)
-                                            if isinstance(deriv, Derivative) else get_variable_name(deriv)))
+                                            if isinstance(deriv, Derivative) else get_variable_name(deriv)),
+                             lookup_table_function)
 
         # Printer for printing variable in comments e.g. for ode system information
         self._name_printer = cg.ChastePrinter(lambda variable: get_variable_name(variable))
@@ -219,8 +220,8 @@ class ChasteModel(object):
                              self._printer.doprint(self._model.time_variable) + ')'
                              if variable in self._modifiers and variable not in modifiers_with_defining_eqs
                              else self._printer.doprint(variable),
-                             lambda deriv: self._printer.doprint(deriv))
-        modifier_printer.lookup_tables = self._printer.lookup_tables
+                             lambda deriv: self._printer.doprint(deriv),
+                             self._printer.lookup_table_function)
         if modifier in self._modifiers:
             return self._format_modifier(modifier) + '->Calc(' + modifier_printer.doprint(eq) + ', ' + \
                 self._printer.doprint(self._model.time_variable) + ')'

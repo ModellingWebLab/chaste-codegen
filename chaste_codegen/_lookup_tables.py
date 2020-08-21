@@ -55,10 +55,11 @@ class LookupTables:
         ``printer``
             A :class:`sympy.printing.printer.Printer` object.
         """
-        # Lookup vars is a tuple of [<metadata tag>, variable, [<lookup epxrs>], mTableMins, mTableSteps, mTableStepInverses,
-        #                            mTableMaxs, <set_of_method_names_table_is_used_in>]
-        self._lookup_parameters = (['membrane_voltage', None, [], -150.0001, 0.001, 1000.0, 199.9999, set()],
-                                   ['cytosolic_calcium_concentration', None, [], 0.00001, 0.001, 1000.0, 30.00001, set()])
+        # Lookup vars is a tuple of [<metadata tag>, variable, [<lookup epxrs>], mTableMins, mTableSteps,
+        #                            mTableStepInverses, mTableMaxs, <set_of_method_names_table_is_used_in>]
+        self._lookup_parameters = \
+            (['membrane_voltage', None, [], -150.0001, 0.001, 1000.0, 199.9999, set()],
+             ['cytosolic_calcium_concentration', None, [], 0.00001, 0.001, 1000.0, 30.00001, set()])
 
         self._model = model
         self._lookup_variables = set()
@@ -132,22 +133,16 @@ class LookupTables:
         # Don't use lookup tables to print these expressions
         if not self._lookup_params_printed:
             self._process_lookup_parameters()
-            old_lookup_tables = printer.lookup_tables
-            printer.lookup_tables = None
+            old_lookup_table_func = printer.lookup_table_function
+            printer.lookup_table_function = lambda e: None
             for param in self._lookup_parameters:
                 param[2] = list(map(lambda e: printer.doprint(e), param[2]))
                 param[1] = printer.doprint(param[1])
 
             # reinstate lookup tables
-            printer.lookup_tables = old_lookup_tables
+            printer.lookup_table_function = old_lookup_table_func
             self._lookup_params_printed = True
         return self._lookup_parameters
-
-    def is_lut_expr(self, expr):
-        if self._lookup_params_printed:
-            raise ValueError('Cannot process lookup expression after main table has been printed')
-        self._process_lookup_parameters()
-        return self._lookup_table_expr
 
     def print_lut_expr(self, expr):
         if self._lookup_params_printed:
