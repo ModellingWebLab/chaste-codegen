@@ -139,7 +139,7 @@ class TestChastePrinter(object):
         assert printer.doprint(x * y * z) == 'x * y * z'
         assert printer.doprint(x + y > x * z), 'x + y > x * z'
         assert printer.doprint(x**2 + 3 * y**2) == 'pow(x, 2) + 3 * pow(y, 2)'
-        assert printer.doprint(x**(2 + 3 * y**2)) == 'pow(x*, (2 + 3 * pow(y, 2))'
+        assert printer.doprint(x**(2 + 3 * y**2)) == 'pow(x, (2 + 3 * pow(y, 2)))'
         assert printer.doprint(x**-1 * y**-1) == '1 / (x * y)'
         assert printer.doprint(x / y / z) == 'x / (y * z)'
         assert printer.doprint(x / y * z) == 'x * z / y'
