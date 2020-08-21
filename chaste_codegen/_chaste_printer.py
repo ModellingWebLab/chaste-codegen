@@ -1,5 +1,11 @@
 from cellmlmanip.printer import Printer
-from sympy import Mul
+from sympy import (
+    Mul,
+    Pow,
+    Rational,
+    S,
+)
+from sympy.core.mul import _keep_coeff
 from sympy.printing.cxxcode import cxxcode
 from sympy.printing.precedence import precedence
 
@@ -122,7 +128,74 @@ class ChastePrinter(Printer):
         return cxxcode(expr, standard='C++11')
 
     def _print_Mul(self, expr):
-        # In multiplications remove 1.0 * ...
+        """
+        Handles multiplication & division, with n terms.
+
+        Division is specified as a power: ``x / y --> x * y**-1``.
+        Subtraction is specified as ``x - y --> x + (-1 * y)``.
+        """
+        # This method is mostly copied from sympy.printing.Str
+
+        # Check overall sign of multiplication
         if 1.0 in expr.args:
             expr = Mul(*[a for a in expr.args if a != 1.0])
-        return super()._print_Mul(expr)
+
+        sign = ''
+        c, e = expr.as_coeff_Mul()
+        if c < 0:
+            expr = _keep_coeff(-c, e)
+            sign = '-'
+
+        # Collect all pows with more than one base element and exp = -1
+        pow_brackets = []
+
+        # Gather terms for numerator and denominator
+        a, b = [], []
+        for item in Mul.make_args(expr):
+            if item != 1.0:  # In multiplications remove 1.0 * ...
+                # Check if this is a negative power and it's not in a lookup table, so we can write it as a division
+                if (item.is_commutative and item.is_Pow and item.exp.is_Rational and item.exp.is_negative):
+                    if item.exp != -1:
+                        # E.g. x * y**(-2 / 3) --> x / y**(2 / 3)
+                        # Add as power
+                        b.append(Pow(item.base, -item.exp, evaluate=False))
+                    else:
+                        # Add without power
+                        b.append(Pow(item.base, -item.exp))
+
+                        # Check if it's a negative power that needs brackets
+                        # Sympy issue #14160
+                        if (len(item.args[0].args) != 1
+                                and isinstance(item.base, Mul)):
+                            pow_brackets.append(item)
+
+                # Split Rationals over a and b, ignoring any 1s
+                elif item.is_Rational:
+                    if item.p != 1:
+                        a.append(Rational(item.p))
+                    if item.q != 1:
+                        b.append(Rational(item.q))
+
+                else:
+                    a.append(item)
+
+        # Replace empty numerator with one
+        a = a or [S.One]
+
+        # Convert terms to code
+        my_prec = precedence(expr)
+        a_str = [self._bracket(x, my_prec) for x in a]
+        b_str = [self._bracket(x, my_prec) for x in b]
+
+        # Fix brackets for Pow with exp -1 with more than one Symbol
+        for item in pow_brackets:
+            assert item.base in b, "item.base should be kept in b for powers"
+            b_str[b.index(item.base)] = \
+                '(' + b_str[b.index(item.base)] + ')'
+
+        # Combine numerator and denomenator and return
+        a_str = sign + ' * '.join(a_str)
+        if len(b) == 0:
+            return a_str
+        b_str = ' * '.join(b_str)
+        return a_str + ' / ' + (b_str if len(b) == 1 else '(' + b_str + ')')
