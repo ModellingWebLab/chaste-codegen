@@ -120,3 +120,39 @@ class TestChastePrinter(object):
         with pytest.raises(ValueError) as err:
             printer.doprint(f(1))
         assert str(err.value) == 'Unsupported function: f'
+
+    def test_multiplication(self, printer, x, y, z):
+
+        # Multiplication and division
+        assert printer.doprint(x * y) == 'x * y'
+        assert printer.doprint(x * y * z) == 'x * y * z'
+        assert printer.doprint(x / y) == 'x / y'
+        assert printer.doprint(2 * z) == '2 * z'
+        assert printer.doprint(z * 5) == '5 * z'
+        assert printer.doprint(4 / z) == '4 / z'
+        assert printer.doprint(z / 3) == 'z / 3'
+        assert printer.doprint(1 / x) == '1 / x'  # Uses pow
+        assert printer.doprint(1 / (x * y)) == '1 / (x * y)'
+        assert printer.doprint(1 / -(x * y)) == '-1 / (x * y)'
+        assert printer.doprint(x + (y + z)) == 'x + y + z'
+        assert printer.doprint(x * (y + z)) == 'x * (y + z)'
+        assert printer.doprint(x * y * z) == 'x * y * z'
+        assert printer.doprint(x + y > x * z), 'x + y > x * z'
+#        assert printer.doprint(x**2 + y**2) == 'pow(x, 2) + pow(y, 2)'
+        assert printer.doprint(x**2 + 3 * y**2) == 'pow(x, 2) + 3 * pow(y, 2)'
+#        assert printer.doprint(x**(2 + y**2)) == 'pow(x, (2 + pow(y, 2))'
+#        assert printer.doprint(x**(2 + 3 * y**2)) == 'pow(x*, (2 + 3 * pow(y, 2))'
+        assert printer.doprint(x**-1 * y**-1) == '1 / (x * y)'
+        assert printer.doprint(x / y / z) == 'x / (y * z)'
+        assert printer.doprint(x / y * z) == 'x * z / y'
+        assert printer.doprint(x / (y * z)) == 'x / (y * z)'
+        assert printer.doprint(x * y**(-2 / (3 * x / x))) == 'x / pow(y, (2 / 3))'
+
+        # Sympy issue #14160
+        d = sp.Mul(
+            -2,
+            x,
+            sp.Pow(sp.Mul(y, y, evaluate=False), -1, evaluate=False),
+            evaluate=False
+        )
+        assert printer.doprint(d) == '-2 * x / (y * y)'
