@@ -137,9 +137,6 @@ class ChastePrinter(Printer):
         # This method is mostly copied from sympy.printing.Str
 
         # Check overall sign of multiplication
-        if 1.0 in expr.args:
-            expr = Mul(*[a for a in expr.args if a != 1.0])
-
         sign = ''
         c, e = expr.as_coeff_Mul()
         if c < 0:
