@@ -36,7 +36,7 @@ class OptCvodeChasteModel(CvodeChasteModel):
 
     def _print_jacobian(self):
         with self._lookup_tables.method_being_printed('EvaluateAnalyticJacobian'):
-            return super()._print_jacobian
+            return super()._print_jacobian()
 
     def _format_ionic_vars(self):
         """ Format equations and dependant equations ionic derivatives"""
