@@ -118,7 +118,7 @@ protected:
 
             for (unsigned i=0 ; i<_table_size_{{outer_index}}; i++)
             {
-                const double var_chaste_interface__membrane__V = mTableMins[{{outer_index}}] + i*mTableSteps[{{outer_index}}];
+                const double {{param[1]}} = mTableMins[{{outer_index}}] + i*mTableSteps[{{outer_index}}];
                 _lookup_table_{{outer_index}}[i][{{loop.index0}}] = {{expr}};
             }
     {%- endfor %}
