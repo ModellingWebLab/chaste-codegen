@@ -1,4 +1,4 @@
-from chaste_codegen._lookup_tables import LookupTables
+from chaste_codegen._lookup_tables import _DEFAULT_LOOKUP_PARAMETERS, LookupTables
 from chaste_codegen._partial_eval import partial_eval
 from chaste_codegen.cvode_chaste_model import CvodeChasteModel
 
@@ -7,7 +7,7 @@ class OptCvodeChasteModel(CvodeChasteModel):
     """ Holds information specific for the Cvode Optimised model type. Builds on Cvode model type"""
 
     def __init__(self, model, file_name, **kwargs):
-        self._lookup_tables = LookupTables(model)
+        self._lookup_tables = LookupTables(model, lookup_params=kwargs.get('lookup_table', _DEFAULT_LOOKUP_PARAMETERS))
 
         super().__init__(model, file_name, **kwargs)
         self._vars_for_template['model_type'] += 'Opt'

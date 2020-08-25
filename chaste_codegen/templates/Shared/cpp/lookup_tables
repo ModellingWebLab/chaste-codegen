@@ -28,7 +28,7 @@ public:
 {% for param in lookup_parameters%}
     double* _lookup_{{loop.index0}}_row(unsigned i, double _factor_)
     {
-        for (unsigned j=0; j<{{param[2]|length}}; j++)
+        for (unsigned j=0; j<{{param[6]|length}}; j++)
         {
             const double y1 = _lookup_table_{{loop.index0}}[i][j];
             const double y2 = _lookup_table_{{loop.index0}}[i+1][j];
@@ -38,9 +38,9 @@ public:
     }
 {% endfor %}
 {% for param in lookup_parameters%}
-    const double * IndexTable{{loop.index0}}(double {{param[1]}})
+    const double * IndexTable{{loop.index0}}(double {{param[5]}})
     {
-        const double _offset_{{loop.index0}} = {{param[1]}} - mTableMins[{{loop.index0}}];
+        const double _offset_{{loop.index0}} = {{param[5]}} - mTableMins[{{loop.index0}}];
         const double _offset_{{loop.index0}}_over_table_step = _offset_{{loop.index0}} * mTableStepInverses[{{loop.index0}}];
         const unsigned _table_index_{{loop.index0}} = (unsigned)(_offset_{{loop.index0}}_over_table_step);
         const double _factor_{{loop.index0}} = _offset_{{loop.index0}}_over_table_step - _table_index_{{loop.index0}};
@@ -50,10 +50,10 @@ public:
 {% endfor %}
 {% for param in lookup_parameters%}
 // LCOV_EXCL_START
-    bool CheckIndex{{loop.index0}}(double& {{param[1]}})
+    bool CheckIndex{{loop.index0}}(double& {{param[5]}})
     {
         bool _oob_{{loop.index0}} = false;
-        if ({{param[1]}}>mTableMaxs[{{loop.index0}}] || {{param[1]}}<mTableMins[{{loop.index0}}])
+        if ({{param[5]}}>mTableMaxs[{{loop.index0}}] || {{param[5]}}<mTableMins[{{loop.index0}}])
         {
 // LCOV_EXCL_START
             _oob_{{loop.index0}} = true;
@@ -89,11 +89,11 @@ protected:
         mNeedsRegeneration.resize({{lookup_parameters|length}});
 {% for param in lookup_parameters%}
         mKeyingVariableNames[{{loop.index0}}] = "{{param[0]}}";
-        mNumberOfTables[{{loop.index0}}] = {{param[2]|length}};
-        mTableMins[{{loop.index0}}] = {{param[3]}};
-        mTableSteps[{{loop.index0}}] = {{param[4]}};
-        mTableStepInverses[{{loop.index0}}] = {{param[5]}};
-        mTableMaxs[{{loop.index0}}] = {{param[6]}};
+        mNumberOfTables[{{loop.index0}}] = {{param[6]|length}};
+        mTableMins[{{loop.index0}}] = {{param[1]}};
+        mTableMaxs[{{loop.index0}}] = {{param[2]}};
+        mTableSteps[{{loop.index0}}] = {{param[3]}};
+        mTableStepInverses[{{loop.index0}}] = {{1 / param[3]}};
         mNeedsRegeneration[{{loop.index0}}] = true;
         _lookup_table_{{loop.index0}} = NULL;
 {% endfor %}
@@ -113,12 +113,12 @@ protected:
                 _lookup_table_{{outer_index}} = NULL;
             }
             const unsigned _table_size_{{outer_index}} = 1 + (unsigned)((mTableMaxs[{{outer_index}}]-mTableMins[{{outer_index}}])/mTableSteps[{{outer_index}}]+0.5);
-            _lookup_table_{{outer_index}} = new double[_table_size_{{outer_index}}][{{param[2]|length}}];
-    {%- for expr in param[2]%}
+            _lookup_table_{{outer_index}} = new double[_table_size_{{outer_index}}][{{param[6]|length}}];
+    {%- for expr in param[6]%}
 
             for (unsigned i=0 ; i<_table_size_{{outer_index}}; i++)
             {
-                const double {{param[1]}} = mTableMins[{{outer_index}}] + i*mTableSteps[{{outer_index}}];
+                const double {{param[5]}} = mTableMins[{{outer_index}}] + i*mTableSteps[{{outer_index}}];
                 _lookup_table_{{outer_index}}[i][{{loop.index0}}] = {{expr}};
             }
     {%- endfor %}
@@ -134,10 +134,10 @@ private:
     static std::shared_ptr<{{class_name}}_LookupTables> mpInstance;
 {% for param in lookup_parameters%}
     // Row lookup methods memory
-    double _lookup_table_{{loop.index0}}_row[{{param[2]|length}}];
+    double _lookup_table_{{loop.index0}}_row[{{param[6]|length}}];
 {% endfor %}{% for param in lookup_parameters%}
     // Lookup tables
-    double (*_lookup_table_{{loop.index0}})[{{param[2]|length}}];
+    double (*_lookup_table_{{loop.index0}})[{{param[6]|length}}];
 {% endfor %}
 };
 

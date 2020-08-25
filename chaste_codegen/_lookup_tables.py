@@ -45,19 +45,22 @@ _EXPENSIVE_FUNCTIONS = (exp, log, ln, sin, cos, tan, sec, csc, cot, sinh, cosh, 
                         atan, asinh, acosh, atanh, asec, acsc, acot, asech, acsch, acoth, exp_, acos_, cos_, sin_)
 
 
+# tuple of ([<metadata tag>, mTableMins, mTableMaxs, mTableSteps], )
+_DEFAULT_LOOKUP_PARAMETERS = (['membrane_voltage', -250.0001, 549.9999, 0.001], )
+
+
 class LookupTables:
     """ Holds information about lookuptables and methods to analyse the model for lookup tables.
     """
 
-    def __init__(self, model):
+    def __init__(self, model, lookup_params=_DEFAULT_LOOKUP_PARAMETERS):
         """ Initialise a LookUpTables instance
         :param model: A :class:`cellmlmanip.Model` object.
+        :param lookup_params: Optional collection of lists: [[<metadata tag>, mTableMins, mTableMaxs, mTableSteps]]
         """
-        # Lookup vars is a tuple of [<metadata tag>, variable, [<lookup epxrs>], mTableMins, mTableSteps,
-        #                            mTableStepInverses, mTableMaxs, <set_of_method_names_table_is_used_in>]
-        self._lookup_parameters = \
-            (['membrane_voltage', None, [], -250.0001, 0.001, 1000.0, 549.9999, set()],
-             ['cytosolic_calcium_concentration', None, [], 0.00001, 0.001, 10000.0, 30.00001, set()])
+        # Lookup vars is a tuple of [<metadata tag>, mTableMins, mTableMaxs, mTableSteps,
+        #                            <set_of_method_names_table_is_used_in>, variable, [<lookup epxrs>]]
+        self._lookup_parameters = list(map(lambda p: p + [set(), None, []], lookup_params))
 
         self._model = model
         self._lookup_variables = set()
@@ -70,7 +73,7 @@ class LookupTables:
             try:
                 var = self._model.get_variable_by_ontology_term((OXMETA, tag[0]))
                 self._lookup_variables.add(var)
-                tag[1] = var
+                tag[5] = var
             except KeyError:
                 pass  # variable not tagged in model
 
@@ -127,10 +130,10 @@ class LookupTables:
         if not self._lookup_params_processed:
             # Stick in a list of all expressions for the variable for easy access in the template
             for param in self._lookup_parameters:
-                param[2] = list(filter(lambda k: param[1] in self._lookup_table_expr[k], self._lookup_table_expr))
+                param[6] = list(filter(lambda k: param[5] in self._lookup_table_expr[k], self._lookup_table_expr))
 
             # Filter out the parameter set for which we didn't find any complicated expressions
-            self._lookup_parameters = list(filter(lambda p: len(p[2]) > 0, self._lookup_parameters))
+            self._lookup_parameters = list(filter(lambda p: len(p[6]) > 0, self._lookup_parameters))
             self._lookup_params_processed = True
 
     def print_lut_expr(self, expr):
@@ -152,9 +155,9 @@ class LookupTables:
             assert len(variables) == 1, "Lookup table expressions should have exactly 1 (lookup) variable"
             var = tuple(variables)[0]
             for i, param in enumerate(self._lookup_parameters):
-                if param[1] is var:
-                    param[7].add(self._method_printed)
-                    return '_lt_' + str(i) + '_row[' + str(param[2].index(expr)) + ']'
+                if param[5] is var:
+                    param[4].add(self._method_printed)
+                    return '_lt_' + str(i) + '_row[' + str(param[6].index(expr)) + ']'
         return None
 
     def print_lookup_parameters(self, printer):
@@ -170,8 +173,8 @@ class LookupTables:
             old_lookup_table_func = printer.lookup_table_function
             printer.lookup_table_function = lambda e: None
             for param in self._lookup_parameters:
-                param[2] = list(map(lambda e: printer.doprint(e), param[2]))
-                param[1] = printer.doprint(param[1])
+                param[6] = list(map(lambda e: printer.doprint(e), param[6]))
+                param[5] = printer.doprint(param[5])
 
             # reinstate lookup tables
             printer.lookup_table_function = old_lookup_table_func
