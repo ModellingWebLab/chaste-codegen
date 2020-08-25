@@ -46,7 +46,7 @@ _EXPENSIVE_FUNCTIONS = (exp, log, ln, sin, cos, tan, sec, csc, cot, sinh, cosh, 
 
 
 # tuple of ([<metadata tag>, mTableMins, mTableMaxs, mTableSteps], )
-_DEFAULT_LOOKUP_PARAMETERS = (['membrane_voltage', -250.0001, 549.9999, 0.001], )
+_DEFAULT_LOOKUP_PARAMETERS = (['membrane_voltage', -250.0005, 549.9999, 0.001], )
 
 
 class LookupTables:
