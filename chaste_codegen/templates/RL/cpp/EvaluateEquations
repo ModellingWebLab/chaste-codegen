@@ -6,7 +6,7 @@
         {% if state_var.in_ab %}double {{ state_var.var }} = {{state_var.rY_lookup}};
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {%- endif %}{%- endfor %}
-
+{% set method =  "EvaluateEquations" %}{% include "Shared/cpp/lookup_table_init" %}
         // Mathematics
         {% for deriv in derivative_alpha_beta_eqs %}{%- if deriv.is_voltage%}double {{deriv.lhs}};{%- endif %}{%- endfor %}
         {%- for deriv in derivative_alpha_beta_eqs %}{%- if deriv.in_eqs_excl_voltage %}

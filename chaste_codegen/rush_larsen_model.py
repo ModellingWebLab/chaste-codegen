@@ -17,14 +17,11 @@ class RushLarsenModel(ChasteModel):
         self._cpp_template = 'rush_larsen_model.cpp'
         self._vars_for_template['base_class'] = 'AbstractRushLarsenCardiacCell'
         self._vars_for_template['model_type'] = 'RushLarsen'
-
+       
         self._get_non_linear_state_vars()
 
         self._vars_for_template['derivative_alpha_beta'], self._vars_for_template['derivative_alpha_beta_eqs'], \
             self._vars_in_derivative_alpha_beta = self._get_formatted_alpha_beta()
-        self._update_state_vars()
-        self._vars_for_template['derivative_alpha_beta_eqs'] = \
-            self._format_derivative_equations(self._vars_for_template['derivative_alpha_beta_eqs'])
 
     def _get_non_linear_state_vars(self):
         """ Get and store the non_linear state vars """
@@ -91,14 +88,19 @@ class RushLarsenModel(ChasteModel):
                 vars_in_derivative_alpha_beta.add(deriv)
 
         deriv_eqs_EvaluateEquations = get_equations_for(self._model, vars_in_derivative_alpha_beta)
-        return derivative_alpha_beta, deriv_eqs_EvaluateEquations, vars_in_derivative_alpha_beta
+        # pull the relevant equations from self._derivative_equations
+        # in case these have been modified by the rest of the code (e.g. in opt model)
+        deriv_eqs_EvaluateEquations = partial_eval(self._derivative_equations,
+                                                   [e.lhs for e in deriv_eqs_EvaluateEquations])
 
-    def _update_state_vars(self):
-        """Updates formatting of state vars to make sure the correct ones are included in the output"""
-        # Get all used variables for derivative eqs
+        # Update state vars
         deriv_variables = set()
-        for eq in self._vars_for_template['derivative_alpha_beta_eqs']:
+        for eq in deriv_eqs_EvaluateEquations:
             deriv_variables.update(eq.rhs.free_symbols)
 
         for sv in self._formatted_state_vars:
             sv['in_ab'] = sv['sympy_var'] in deriv_variables
+
+        # format deriv_eqs_EvaluateEquations
+        deriv_eqs_EvaluateEquations = self._format_derivative_equations(deriv_eqs_EvaluateEquations)
+        return derivative_alpha_beta, deriv_eqs_EvaluateEquations, vars_in_derivative_alpha_beta

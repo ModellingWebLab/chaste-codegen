@@ -192,8 +192,10 @@ class LookupTables:
                   return super()._format_ionic_vars()``
 
             *Please Note:* associating a method_name is required,
-                           without it printing individual lookup table expressions is disabled."""
-        self._method_printed = method_name
+                           without it printing individual lookup table expressions is disabled.
+            *Please Note: The method is only saved if it's not already set, therfore only reccording the other method."""
+        if not self._method_printed:
+            self._method_printed = method_name
         return self
 
     def __enter__(self):
