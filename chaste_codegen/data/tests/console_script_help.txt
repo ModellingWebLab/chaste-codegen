@@ -3,6 +3,7 @@ usage: chaste_codegen [-h] [--version] [--normal] [--cvode]
                       [--grl1] [--grl2] [-j] [-o OUTFILE]
                       [--output-dir OUTPUT_DIR] [--show-outputs] [-c CLS_NAME]
                       [-q] [-y] [--opt] [-m]
+                      [--lookup-table <metadata tag> min max step]
                       cellml_file
 
 Chaste code generation for cellml.
@@ -61,3 +62,11 @@ Chaste options:
                         sensitivity analysis. Only works with one of the
                         following model types and is ignored for others: ('--
                         normal', '--cvode', '--cvode-data-clamp')
+  --lookup-table <metadata tag> min max step
+                        Specify variable (using a metadata tag) and ranges for
+                        which to generate lookup tables (optional). --lookup-
+                        table can be added multiple times to indicate multiple
+                        lookup tables. Please note: Can only be used in
+                        combination with --opt. If the option is omitted,
+                        following defaults will be used: --lookup-table
+                        membrane_voltage -250.0001 549.9999 0.001.

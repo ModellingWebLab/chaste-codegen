@@ -25,10 +25,10 @@ class RushLarsenModel(ChasteModel):
 
     def _get_non_linear_state_vars(self):
         """ Get and store the non_linear state vars """
-        self._derivative_equations = \
+        derivative_equations = \
             set(partial_eval(self._derivative_equations, self._model.y_derivatives, keep_multiple_usages=False))
         self._non_linear_state_vars = \
-            get_non_linear_state_vars(self._derivative_equations, self._model.membrane_voltage_var,
+            get_non_linear_state_vars(derivative_equations, self._model.membrane_voltage_var,
                                       self._model.state_vars)
 
     def _get_formatted_alpha_beta(self):
@@ -90,8 +90,8 @@ class RushLarsenModel(ChasteModel):
         deriv_eqs_EvaluateEquations = get_equations_for(self._model, vars_in_derivative_alpha_beta)
         # pull the relevant equations from self._derivative_equations
         # in case these have been modified by the rest of the code (e.g. in opt model)
-        deriv_eqs_EvaluateEquations = partial_eval(self._derivative_equations,
-                                                   [e.lhs for e in deriv_eqs_EvaluateEquations])
+        deriv_eq_lhs = [e.lhs for e in deriv_eqs_EvaluateEquations]
+        deriv_eqs_EvaluateEquations = [eq for eq in self._derivative_equations if eq.lhs in deriv_eq_lhs]
 
         # Update state vars
         deriv_variables = set()

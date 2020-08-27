@@ -3,5 +3,6 @@ usage: chaste_codegen [-h] [--version] [--normal] [--cvode]
                       [--grl1] [--grl2] [-j] [-o OUTFILE]
                       [--output-dir OUTPUT_DIR] [--show-outputs] [-c CLS_NAME]
                       [-q] [-y] [--opt] [-m]
+                      [--lookup-table <metadata tag> min max step]
                       cellml_file
 chaste_codegen: error: the following arguments are required: cellml_file

@@ -21,6 +21,8 @@ chaste_normal_models = get_models(ref_folder='chaste_reference_models', type='No
 chaste_opt_models = get_models(ref_folder='chaste_reference_models', type='Opt')
 chaste_cvode_models = get_models(ref_folder='chaste_reference_models', type='Cvode')
 chaste_cvode_models_with_jacobians = get_models(ref_folder='chaste_reference_models', type='Cvode_with_jacobian')
+chaste_cvode_opt_models = get_models(ref_folder='chaste_reference_models', type='Cvode_opt')
+chaste_cvode_opt_models_with_jacobians = get_models(ref_folder='chaste_reference_models', type='Cvode_opt_with_jacobian')
 chaste_BE = get_models(ref_folder='chaste_reference_models', type='BE')
 chaste_RL = get_models(ref_folder='chaste_reference_models', type='RL')
 chaste_RLopt = get_models(ref_folder='chaste_reference_models', type='RLopt')
@@ -29,6 +31,42 @@ chaste_GRL1Opt = get_models(ref_folder='chaste_reference_models', type='GRL1Opt'
 chaste_GRL2 = get_models(ref_folder='chaste_reference_models', type='GRL2')
 chaste_GRL2Opt = get_models(ref_folder='chaste_reference_models', type='GRL2Opt')
 chaste_CVODE_DATA_CLAMP = get_models(ref_folder='chaste_reference_models', type='CVODE_DATA_CLAMP')
+
+
+cg.__version__ = "(version omitted as unimportant)"
+cg.chaste_model.TIME_STAMP = "(date omitted as unimportant)"
+
+
+@pytest.mark.parametrize(('model'), chaste_cvode_opt_models_with_jacobians)
+def test_Cvode_opt_jacobian(tmp_path, model):
+    """ Check generation of Cvode models against reference"""
+    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLCvodeOpt'
+    LOGGER.info('Converting: Cvode opt with jacobian: ' + class_name + ' with jacobian\n')
+    # Generate chaste code
+    chaste_model = cg.OptCvodeChasteModel(load_model_with_conversions(model['model']), model['model_name_from_file'],
+                                          class_name=class_name, use_analytic_jacobian=True)
+    chaste_model.generate_chaste_code()
+
+    # Compare against reference
+    test_utils.compare_model_against_reference(chaste_model,
+                                               tmp_path, model['expected_hpp_path'],
+                                               model['expected_cpp_path'])
+
+
+@pytest.mark.parametrize(('model'), chaste_cvode_opt_models)
+def test_Cvode_opt(tmp_path, model):
+    """ Check generation of Cvode models against reference"""
+    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLCvodeOpt'
+    LOGGER.info('Converting: Cvode opt: ' + class_name + '\n')
+    # Generate chaste code
+    chaste_model = cg.OptCvodeChasteModel(load_model_with_conversions(model['model']), model['model_name_from_file'],
+                                          class_name=class_name)
+    chaste_model.generate_chaste_code()
+
+    # Compare against reference
+    test_utils.compare_model_against_reference(chaste_model,
+                                               tmp_path, model['expected_hpp_path'],
+                                               model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_CVODE_DATA_CLAMP)

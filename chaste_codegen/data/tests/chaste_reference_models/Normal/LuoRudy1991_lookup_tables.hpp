@@ -1,11 +1,11 @@
-#ifndef CELLASLANIDI_MODEL_2009FROMCELLMLOPT_HPP_
-#define CELLASLANIDI_MODEL_2009FROMCELLMLOPT_HPP_
+#ifndef CELLLUORUDY1991FROMCELLMLOPT_HPP_
+#define CELLLUORUDY1991FROMCELLMLOPT_HPP_
 
 //! @file
 //!
 //! This source file was generated from CellML by chaste_codegen version (version omitted as unimportant)
 //!
-//! Model: aslanidi_model_2009
+//! Model: luo_rudy_1991
 //!
 //! Processed by chaste_codegen: https://github.com/ModellingWebLab/chaste-codegen
 //!     (translator: chaste_codegen, model type: NormalOpt)
@@ -15,44 +15,40 @@
 
 #include "ChasteSerialization.hpp"
 #include <boost/serialization/base_object.hpp>
-#include "AbstractCardiacCellWithModifiers.hpp"
-#include "AbstractModifier.hpp"
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractCardiacCell.hpp"
 
-class Cellaslanidi_model_2009FromCellMLOpt : public AbstractCardiacCellWithModifiers<AbstractCardiacCell >
+class CellLuoRudy1991FromCellMLOpt : public AbstractCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & archive, const unsigned int version)
     {
-        archive & boost::serialization::base_object<AbstractCardiacCellWithModifiers<AbstractCardiacCell > >(*this);
+        archive & boost::serialization::base_object<AbstractCardiacCell >(*this);
         
-        // Despite this class having modifier member variables, they are all added to the
-        // abstract class by the constructor, and archived via that, instead of here.
     }
 
     //
     // Settable parameters and readable variables
     //
-    boost::shared_ptr<AbstractModifier> mp_membrane_capacitance_modifier;
-    boost::shared_ptr<AbstractModifier> mp_membrane_voltage_modifier;
 
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
-    Cellaslanidi_model_2009FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellaslanidi_model_2009FromCellMLOpt();
+    double GetIntracellularCalciumConcentration();
+    CellLuoRudy1991FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~CellLuoRudy1991FromCellMLOpt();
+    void VerifyStateVariables();
     AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
-    void EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY);
+    void EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY);
 
-    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY);
+    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY);
 };
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellaslanidi_model_2009FromCellMLOpt)
+CHASTE_CLASS_EXPORT(CellLuoRudy1991FromCellMLOpt)
 
 namespace boost
 {
@@ -60,7 +56,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellaslanidi_model_2009FromCellMLOpt * t, const unsigned int fileVersion)
+            Archive & ar, const CellLuoRudy1991FromCellMLOpt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -70,17 +66,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellaslanidi_model_2009FromCellMLOpt * t, const unsigned int fileVersion)
+            Archive & ar, CellLuoRudy1991FromCellMLOpt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellaslanidi_model_2009FromCellMLOpt(p_solver, p_stimulus);
+            ::new(t)CellLuoRudy1991FromCellMLOpt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLASLANIDI_MODEL_2009FROMCELLMLOPT_HPP_
+#endif // CELLLUORUDY1991FROMCELLMLOPT_HPP_

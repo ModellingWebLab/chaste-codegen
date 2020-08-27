@@ -12,6 +12,9 @@ from chaste_codegen.model_with_conversions import (
 )
 
 
+TIME_STAMP = time.strftime('%Y-%m-%d %H:%M:%S')
+
+
 class ChasteModel(object):
     """ Holds information about a cellml model for which chaste code is to be generated.
 
@@ -92,7 +95,7 @@ class ChasteModel(object):
              'header_ext': kwargs.get('header_ext', '.hpp'),
              'dynamically_loadable': kwargs.get('dynamically_loadable', False),
              'modifiers': self._format_modifiers(),
-             'generation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
+             'generation_date': TIME_STAMP,
              'use_get_intracellular_calcium_concentration':
                  self._model.cytosolic_calcium_concentration_var in self._model.state_vars,
              'membrane_voltage_index': MEMBRANE_VOLTAGE_INDEX,
