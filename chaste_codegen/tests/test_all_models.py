@@ -17,6 +17,9 @@ chaste_all_GRL2Opt = get_models(ref_folder='all_models_reference_models', type='
 chaste_CVODE_DATA_CLAMP = get_models(ref_folder='all_models_reference_models', type='CVODE_DATA_CLAMP')
 
 
+cg.__version__ = "(version omitted as unimportant)"
+
+
 @pytest.mark.all_models
 @pytest.mark.parametrize(('model'), chaste_all_normal_models)
 def test_Normal_all_models(tmp_path, model, request):
