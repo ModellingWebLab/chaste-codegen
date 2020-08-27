@@ -1,5 +1,6 @@
 import pytest
 
+import chaste_codegen as cg
 from chaste_codegen.tests.test_codegen import get_models
 
 
@@ -15,6 +16,10 @@ chaste_all_GRL1Opt = get_models(ref_folder='all_models_reference_models', type='
 chaste_all_GRL2 = get_models(ref_folder='all_models_reference_models', type='GRL2')
 chaste_all_GRL2Opt = get_models(ref_folder='all_models_reference_models', type='GRL2Opt')
 chaste_CVODE_DATA_CLAMP = get_models(ref_folder='all_models_reference_models', type='CVODE_DATA_CLAMP')
+
+
+cg.__version__ = "(version omitted as unimportant)"
+cg.chaste_model.TIME_STAMP = "(date omitted as unimportant)"
 
 
 @pytest.mark.all_models
