@@ -31,6 +31,9 @@ chaste_GRL2Opt = get_models(ref_folder='chaste_reference_models', type='GRL2Opt'
 chaste_CVODE_DATA_CLAMP = get_models(ref_folder='chaste_reference_models', type='CVODE_DATA_CLAMP')
 
 
+cg.__version__ = "(version omitted as unimportant)"
+
+
 @pytest.mark.parametrize(('model'), chaste_CVODE_DATA_CLAMP)
 def test_CVODE_DATA_CLAMP(tmp_path, model):
     """ Check generation of CVODE with Data Clamp models against reference"""
