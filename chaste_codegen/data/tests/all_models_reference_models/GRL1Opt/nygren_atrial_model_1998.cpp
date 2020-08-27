@@ -835,7 +835,7 @@
             const double var_x50 = 5.8521211132021298 * var_x49;
             const double var_x51 = 1 / var_chaste_interface__intracellular_ion_concentrations__Na_i;
             const double var_x52 = var_x51 * var_chaste_interface__cleft_space_ion_concentrations__Na_c;
-            const double var_x53 = exp(var_x43 - 1.0 * log(var_x52));
+            const double var_x53 = exp(var_x43 - log(var_x52));
             const double var_x54 = -1.0 + var_x53;
             const double var_x55 = var_x54 * var_chaste_interface__cleft_space_ion_concentrations__Na_c;
             const double var_x56 = 0.22183896226684771 * var_chaste_interface__membrane__V;
@@ -1527,7 +1527,7 @@
             const double var_x49 = var_x46 * var_x47 * var_x48;
             const double var_x51 = 1 / var_chaste_interface__intracellular_ion_concentrations__Na_i;
             const double var_x52 = var_x51 * var_chaste_interface__cleft_space_ion_concentrations__Na_c;
-            const double var_x53 = exp(var_x43 - 1.0 * log(var_x52));
+            const double var_x53 = exp(var_x43 - log(var_x52));
             const double var_x59 = 150.0 + var_chaste_interface__membrane__V;
             const double var_x71 = (var_x26 - var_x28) / pow(var_x23, 2);
             const double var_x84 = pow(var_chaste_interface__intracellular_ion_concentrations__Na_i, 2) * var_chaste_interface__cleft_space_ion_concentrations__Ca_c;
@@ -1935,7 +1935,7 @@
             const double var_x49 = var_x46 * var_x47 * var_x48;
             const double var_x51 = 1 / var_chaste_interface__intracellular_ion_concentrations__Na_i;
             const double var_x52 = var_x51 * var_chaste_interface__cleft_space_ion_concentrations__Na_c;
-            const double var_x53 = exp(var_x43 - 1.0 * log(var_x52));
+            const double var_x53 = exp(var_x43 - log(var_x52));
             const double var_x54 = -1.0 + var_x53;
             const double var_x71 = (var_x26 - var_x28) / pow(var_x23, 2);
             const double var_x100 = 1 / var_chaste_interface__cleft_space_ion_concentrations__Na_c;

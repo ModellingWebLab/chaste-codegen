@@ -341,7 +341,7 @@
         const double var_x16 = 0.037573302761014088 * var_chaste_interface__membrane__V;
         const double var_x17 = 1 / (var_chaste_interface__ionic_concentrations__Ki + var_chaste_interface__ionic_concentrations__Nai);
         const double var_x18 = log(var_x17 * (mParameters[1] + mParameters[2]));
-        const double var_x19 = exp(var_x16 - 1.0 * var_x18);
+        const double var_x19 = exp(var_x16 - var_x18);
         const double var_x20 = 0.75 * var_x19;
         const double var_x21 = var_x20 * var_chaste_interface__ionic_concentrations__Ki;
         const double var_x22 = var_x15 + var_x21;

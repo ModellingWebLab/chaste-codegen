@@ -167,7 +167,7 @@
         const double d_dt_chaste_interface_var_slow_inward_current__Cai = 7.0000000000000007e-6 - 0.070000000000000007 * var_chaste_interface__slow_inward_current__Cai - 0.01 * var_slow_inward_current__i_s; // concentration_units / ms
         const double d_dt_chaste_interface_var_sodium_current_h_gate__h = 0.126 * (1.0 - var_chaste_interface__sodium_current_h_gate__h) * exp(-19.25 - 0.25 * var_chaste_interface__membrane__V) - 1.7 * var_chaste_interface__sodium_current_h_gate__h / (1.0 + exp(-1.845 - 0.082000000000000003 * var_chaste_interface__membrane__V)); // 1 / ms
         const double d_dt_chaste_interface_var_sodium_current_j_gate__j = -0.29999999999999999 * var_chaste_interface__sodium_current_j_gate__j / (1.0 + exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__membrane__V)) + 0.055 * (1.0 - var_chaste_interface__sodium_current_j_gate__j) * exp(-19.5 - 0.25 * var_chaste_interface__membrane__V) / (1.0 + exp(-15.600000000000001 - 0.20000000000000001 * var_chaste_interface__membrane__V)); // 1 / ms
-        const double d_dt_chaste_interface_var_sodium_current_m_gate__m = -40.0 * var_chaste_interface__sodium_current_m_gate__m * exp(-4.032 - 0.056000000000000001 * var_chaste_interface__membrane__V) - 1.0 * (1.0 - var_chaste_interface__sodium_current_m_gate__m) * (47.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-4.7000000000000002 - 0.10000000000000001 * var_chaste_interface__membrane__V)); // 1 / ms
+        const double d_dt_chaste_interface_var_sodium_current_m_gate__m = -40.0 * var_chaste_interface__sodium_current_m_gate__m * exp(-4.032 - 0.056000000000000001 * var_chaste_interface__membrane__V) - (1.0 - var_chaste_interface__sodium_current_m_gate__m) * (47.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-4.7000000000000002 - 0.10000000000000001 * var_chaste_interface__membrane__V)); // 1 / ms
         const double d_dt_chaste_interface_var_time_dependent_outward_current_x1_gate__x1 = 0.00050000000000000001 * (1.0 - var_chaste_interface__time_dependent_outward_current_x1_gate__x1) * exp(4.1322314049586781 + 0.082644628099173556 * var_chaste_interface__membrane__V) / (1.0 + exp(2.8571428571428572 + 0.057142857142857141 * var_chaste_interface__membrane__V)) - 0.0012999999999999999 * var_chaste_interface__time_dependent_outward_current_x1_gate__x1 * exp(-1.1997600479904018 - 0.059988002399520089 * var_chaste_interface__membrane__V) / (1.0 + exp(-0.80000000000000004 - 0.040000000000000001 * var_chaste_interface__membrane__V)); // 1 / ms
         
         mEvalF[1] = d_dt_chaste_interface_var_slow_inward_current__Cai;
@@ -391,7 +391,7 @@
         
         
         // Mathematics
-        const double d_dt_chaste_interface_var_sodium_current_m_gate__m = -40.0 * var_chaste_interface__sodium_current_m_gate__m * exp(-4.032 - 0.056000000000000001 * var_chaste_interface__membrane__V) - 1.0 * (1.0 - var_chaste_interface__sodium_current_m_gate__m) * (47.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-4.7000000000000002 - 0.10000000000000001 * var_chaste_interface__membrane__V)); // 1 / ms
+        const double d_dt_chaste_interface_var_sodium_current_m_gate__m = -40.0 * var_chaste_interface__sodium_current_m_gate__m * exp(-4.032 - 0.056000000000000001 * var_chaste_interface__membrane__V) - (1.0 - var_chaste_interface__sodium_current_m_gate__m) * (47.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-4.7000000000000002 - 0.10000000000000001 * var_chaste_interface__membrane__V)); // 1 / ms
 
         return d_dt_chaste_interface_var_sodium_current_m_gate__m;
     }

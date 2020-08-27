@@ -1107,7 +1107,7 @@
             const double var_x126 = 1.0 + var_x125;
             const double var_x127 = var_x121 * var_x126;
             
-            partialF = -1.0 * var_x127;
+            partialF = -var_x127;
         }
         else
         {

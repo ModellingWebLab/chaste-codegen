@@ -909,7 +909,7 @@
         const double var_x321 = 1 / (270.0 + 1050.0 * var_x320);
         
         // Matrix entries
-        IJth(rJacobian, 0, 0) = mSetVoltageDerivativeToZero ? 0.0 : (-0.0033 - var_x15 - var_x16 - var_x17 - var_x18 - var_x23 - var_x38 + 0.089599999999999999 * var_x68 - 0.25 * var_x19 - 1.0 * var_x53 - 2.4860000000000002 * var_x61 - 0.0066136879117995317 * var_x63 - var_x21 * var_chaste_interface__fast_transient_outward_K_I__ito_f - var_x27 * var_x30 - 256.41025641025641 * var_x24 * var_x29 * var_x64 * var_chaste_interface__calcium_concentration__Cai_converted / pow(var_x25, 2));
+        IJth(rJacobian, 0, 0) = mSetVoltageDerivativeToZero ? 0.0 : (-0.0033 - var_x15 - var_x16 - var_x17 - var_x18 - var_x23 - var_x38 + 0.089599999999999999 * var_x68 - 0.25 * var_x19 - var_x53 - 2.4860000000000002 * var_x61 - 0.0066136879117995317 * var_x63 - var_x21 * var_chaste_interface__fast_transient_outward_K_I__ito_f - var_x27 * var_x30 - 256.41025641025641 * var_x24 * var_x29 * var_x64 * var_chaste_interface__calcium_concentration__Cai_converted / pow(var_x25, 2));
         IJth(rJacobian, 1, 0) = var_x123 * (-2.2859632595383892e-5 + 0.065313235986811116 * var_x53 + 0.00043196135932648281 * var_x63);
         IJth(rJacobian, 2, 0) = -var_x15 * var_x153;
         IJth(rJacobian, 5, 0) = -var_x15 * var_x173 - var_x161 * var_x173 * (0.015432098765432098 - 0.0030864197530864196 * var_chaste_interface__cell__V);

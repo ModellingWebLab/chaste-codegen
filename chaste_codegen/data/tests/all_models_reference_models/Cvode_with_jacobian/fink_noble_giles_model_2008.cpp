@@ -840,7 +840,7 @@
         IJth(rJacobian, 13, 13) = -var_x144;
         IJth(rJacobian, 26, 13) = var_x273 * var_chaste_interface__ito_s_gate__s;
         IJth(rJacobian, 0, 14) = mSetVoltageDerivativeToZero ? 0.0 : (-33.0 * var_x62);
-        IJth(rJacobian, 14, 14) = -1.0 * var_x157;
+        IJth(rJacobian, 14, 14) = -var_x157;
         IJth(rJacobian, 25, 14) = -0.0023977322313516419 * var_x62;
         IJth(rJacobian, 0, 15) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x33 * var_x60);
         IJth(rJacobian, 15, 15) = -var_x167 - var_x168;

@@ -315,7 +315,7 @@
         const double var_IpCa__IpCa = 0.057500000000000002 * var_chaste_interface__Ca__Ca_i / (0.00050000000000000001 + var_chaste_interface__Ca__Ca_i); // uA_per_uF
         const double var_Irel__CaMKactive = 0.050000000000000003 * (1.0 - var_chaste_interface__Irel__CaMKtrap) / (1.0 + 0.0015 / var_chaste_interface__Ca__Ca_ss) + var_chaste_interface__Irel__CaMKtrap; // dimensionless
         const double d_dt_chaste_interface_var_Irel__CaMKtrap = -0.00068000000000000005 * var_chaste_interface__Irel__CaMKtrap + 0.050000000000000003 * (-var_chaste_interface__Irel__CaMKtrap + var_Irel__CaMKactive) * var_Irel__CaMKactive; // 1 / ms
-        const double d_dt_chaste_interface_var_Ito2__AA = 1 / (1.0 + 0.1502 / var_chaste_interface__Ca__Ca_ss) - 1.0 * var_chaste_interface__Ito2__AA; // 1 / ms
+        const double d_dt_chaste_interface_var_Ito2__AA = 1 / (1.0 + 0.1502 / var_chaste_interface__Ca__Ca_ss) - var_chaste_interface__Ito2__AA; // 1 / ms
         const double var_Iup_Ileak__iup = 0.0043750000000000004 * (1.0 + 0.75 * var_Irel__CaMKactive / (0.14999999999999999 + var_Irel__CaMKactive)) * var_chaste_interface__Ca__Ca_i / (0.00092000000000000003 - 0.00017000000000000001 * var_Irel__CaMKactive / (0.14999999999999999 + var_Irel__CaMKactive) + var_chaste_interface__Ca__Ca_i); // mM_per_ms
         const double var_Iup_Ileak__ileak = 0.00029166666666666669 * var_chaste_interface__Ca__Ca_nsr; // mM_per_ms
         const double d_dt_chaste_interface_var_ICaL__dp = 0.90000000000000002 - 0.10000000000000001 * var_chaste_interface__ICaL__dp - 0.80000000000000004 / (1.0 + exp(-19.117647058823529 - 0.29411764705882354 * var_chaste_interface__cell__V)); // 1 / ms
@@ -1793,7 +1793,7 @@
         
         
         // Mathematics
-        const double d_dt_chaste_interface_var_Ito2__AA = 1 / (1.0 + 0.1502 / var_chaste_interface__Ca__Ca_ss) - 1.0 * var_chaste_interface__Ito2__AA; // 1 / ms
+        const double d_dt_chaste_interface_var_Ito2__AA = 1 / (1.0 + 0.1502 / var_chaste_interface__Ca__Ca_ss) - var_chaste_interface__Ito2__AA; // 1 / ms
 
         return d_dt_chaste_interface_var_Ito2__AA;
     }

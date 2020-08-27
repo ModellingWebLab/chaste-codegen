@@ -711,7 +711,7 @@
             const double var_x5 = 0.037573302761014088 * var_chaste_interface__membrane__V;
             const double var_x6 = 1 / (var_chaste_interface__ionic_concentrations__Ki + var_chaste_interface__ionic_concentrations__Nai);
             const double var_x7 = log(var_x6 * (mParameters[1] + mParameters[2]));
-            const double var_x8 = exp(var_x5 - 1.0 * var_x7);
+            const double var_x8 = exp(var_x5 - var_x7);
             const double var_x9 = 0.75 * var_x8;
             const double var_x10 = var_x9 * var_chaste_interface__ionic_concentrations__Ki;
             const double var_x11 = var_x10 + var_x4;
@@ -1128,7 +1128,7 @@
             const double var_x191 = 0.035000000000000003 * var_x190;
             const double var_x192 = 1.0 + var_x188;
             const double var_x193 = 1 / var_x192;
-            const double var_x194 = 1.0 - 1.0 * var_x193;
+            const double var_x194 = 1.0 - var_x193;
             const double var_x195 = var_x192 * var_x194;
             const double var_x197 = 10.0 + var_chaste_interface__membrane__V;
             const double var_x201 = var_x191 * var_x197;
@@ -1331,7 +1331,7 @@
             const double var_x5 = 0.037573302761014088 * var_chaste_interface__membrane__V;
             const double var_x6 = 1 / (var_chaste_interface__ionic_concentrations__Ki + var_chaste_interface__ionic_concentrations__Nai);
             const double var_x7 = log(var_x6 * (mParameters[1] + mParameters[2]));
-            const double var_x8 = exp(var_x5 - 1.0 * var_x7);
+            const double var_x8 = exp(var_x5 - var_x7);
             const double var_x9 = 0.75 * var_x8;
             const double var_x12 = 1.0 + 1.7279999999999996e-9 / pow(var_chaste_interface__ionic_concentrations__Cai, 3);
             const double var_x13 = 1 / var_x12;
@@ -1485,7 +1485,7 @@
             const double var_x5 = 0.037573302761014088 * var_chaste_interface__membrane__V;
             const double var_x6 = 1 / (var_chaste_interface__ionic_concentrations__Ki + var_chaste_interface__ionic_concentrations__Nai);
             const double var_x7 = log(var_x6 * (mParameters[1] + mParameters[2]));
-            const double var_x8 = exp(var_x5 - 1.0 * var_x7);
+            const double var_x8 = exp(var_x5 - var_x7);
             const double var_x9 = 0.75 * var_x8;
             const double var_x10 = var_x9 * var_chaste_interface__ionic_concentrations__Ki;
             const double var_x11 = var_x10 + var_x4;

@@ -309,7 +309,7 @@
         const double var_Ito__gitodv = 0.19; // mS_per_uF
         const double var_Ito2__Kmto2 = 0.1502; // mM
         const double var_Ito2__AAss = 1 / (1.0 + var_Ito2__Kmto2 / var_chaste_interface__Ca__Ca_ss); // dimensionless
-        const double d_dt_chaste_interface_var_Ito2__AA = var_Ito2__AAss - 1.0 * var_chaste_interface__Ito2__AA; // 1 / ms
+        const double d_dt_chaste_interface_var_Ito2__AA = var_Ito2__AAss - var_chaste_interface__Ito2__AA; // 1 / ms
         const double var_Ito2__PCl = 3.9999999999999998e-7; // L_per_F_ms
         const double var_Iup_Ileak__Kmup = 0.00092000000000000003; // mM
         const double var_Iup_Ileak__dJupmax = 0.75; // dimensionless
@@ -757,7 +757,7 @@
         rJacobian[8][0] = 0.0;
         rJacobian[8][1] = 0.0;
         rJacobian[8][2] = 0.0;
-        rJacobian[8][3] = -(mDt * (var_x146 * (var_x121 + var_x141 * (5000.0 - 3510.8651860830805 * var_x139) - var_x121 * var_x137) - 1.0 * var_x148 * (40000.0 - 18724.614325776431 * var_x139)));
+        rJacobian[8][3] = -(mDt * (var_x146 * (var_x121 + var_x141 * (5000.0 - 3510.8651860830805 * var_x139) - var_x121 * var_x137) - var_x148 * (40000.0 - 18724.614325776431 * var_x139)));
         rJacobian[8][4] = 0.0;
         rJacobian[8][5] = -(mDt * (var_x149 * var_x150 - var_x149 * var_x151));
         rJacobian[8][6] = -(mDt * (var_x150 * var_x152 - var_x151 * var_x152));

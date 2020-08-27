@@ -637,7 +637,7 @@
         const double var_x59 = 0.01 * var_chaste_interface__membrane__Vm;
         const double var_x60 = 0.13513513513513511 * var_chaste_interface__membrane__Vm;
         const double var_x61 = 1 / (2.0 * exp(-var_x59) + 0.0018 * exp(-var_x60));
-        const double var_x62 = -1.0 * var_x61;
+        const double var_x62 = -var_x61;
         const double var_x63 = 11.0 * exp(var_x59) + 2200000.0 * exp(var_x60);
         const double var_x64 = 0.015384615384615385 * var_chaste_interface__membrane__Vm;
         const double var_x65 = 1 / (480.0 * exp(0.14285714285714285 * var_chaste_interface__membrane__Vm) + 2.2000000000000002 * exp(var_x64));
@@ -778,7 +778,7 @@
         const double var_x200 = exp(-0.0025000000000000001 * var_chaste_interface__membrane__Vm);
         const double var_x201 = exp(-0.125 * var_chaste_interface__membrane__Vm);
         const double var_x202 = 1 / (5.0 * var_x200 + 0.0001027 * var_x201);
-        const double var_x203 = -1.0 * var_x202;
+        const double var_x203 = -var_x202;
         const double var_x204 = exp(0.00125 * var_chaste_interface__membrane__Vm);
         const double var_x205 = 1300.0 * exp(0.050000000000000003 * var_chaste_interface__membrane__Vm) + 0.040000000000000001 * var_x204;
         const double var_x206 = 1.25 / var_x200;
@@ -954,7 +954,7 @@
         rJacobian[6][3] = 0.0;
         rJacobian[6][4] = 0.0;
         rJacobian[6][5] = 0.0;
-        rJacobian[6][6] = 1.0 - (mDt * (-0.001 + var_x62 - 1.0 / var_x63));
+        rJacobian[6][6] = 1.0 - (mDt * (-0.001 + var_x62 - 1 / var_x63));
         rJacobian[6][7] = -(mDt * (0.0040000000000000001 + var_x62));
         rJacobian[6][8] = -(mDt * (var_x62));
         rJacobian[6][9] = 0.0;
@@ -1162,7 +1162,7 @@
         rJacobian[14][11] = 0.0;
         rJacobian[14][12] = 0.0;
         rJacobian[14][13] = 0.0;
-        rJacobian[14][14] = 1.0 - (mDt * (-1.01 + 0.01 * var_x4 + 0.98999999999999999 * var_x20 - 1.0 * var_x22));
+        rJacobian[14][14] = 1.0 - (mDt * (-1.01 + 0.01 * var_x4 + 0.98999999999999999 * var_x20 - var_x22));
         rJacobian[14][15] = -(mDt * (var_x5 * (3.2000000000000005e-5 * var_x28 - 0.0032000000000000002 * var_x29)));
         rJacobian[14][16] = 0.0;
         rJacobian[14][17] = 0.0;
@@ -1292,7 +1292,7 @@
         rJacobian[19][16] = 0.0;
         rJacobian[19][17] = -(mDt * ((-0.0044781341107871719 * var_x112 + 6.1798250728862972e-6 * var_x199 * var_x2 * pow(var_chaste_interface__internal_ion_concentrations__Nai, 2)) * var_chaste_interface__sodium_calcium_exchanger_y_gate__y));
         rJacobian[19][18] = 0.0;
-        rJacobian[19][19] = 1.0 - (mDt * (-0.20379327210477693 - 1.0 * var_x115 - 1.0 / var_x198 - 0.6399652192815608 * var_x114));
+        rJacobian[19][19] = 1.0 - (mDt * (-0.20379327210477693 - var_x115 - 1 / var_x198 - 0.6399652192815608 * var_x114));
         rJacobian[19][20] = 0.0;
         rJacobian[19][21] = 0.0;
         rJacobian[19][22] = 0.0;
@@ -1318,7 +1318,7 @@
         rJacobian[20][17] = 0.0;
         rJacobian[20][18] = 0.0;
         rJacobian[20][19] = 0.0;
-        rJacobian[20][20] = 1.0 - (mDt * (-8.7499999999999999e-5 + var_x203 - 1.0 / var_x205));
+        rJacobian[20][20] = 1.0 - (mDt * (-8.7499999999999999e-5 + var_x203 - 1 / var_x205));
         rJacobian[20][21] = -(mDt * (var_x203 + var_x206));
         rJacobian[20][22] = -(mDt * (var_x203));
         rJacobian[20][23] = 0.0;
@@ -1422,7 +1422,7 @@
         rJacobian[24][21] = 0.0;
         rJacobian[24][22] = 0.0;
         rJacobian[24][23] = 0.0;
-        rJacobian[24][24] = 1.0 - (mDt * (-1.0 / (7.0 * var_x215 + 8000.0 * var_x216) - var_x190 * var_x219));
+        rJacobian[24][24] = 1.0 - (mDt * (-1 / (7.0 * var_x215 + 8000.0 * var_x216) - var_x190 * var_x219));
     }
 
     void Cellmatsuoka_model_2003FromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
