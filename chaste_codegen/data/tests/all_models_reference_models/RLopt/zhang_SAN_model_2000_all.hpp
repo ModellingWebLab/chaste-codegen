@@ -3,7 +3,7 @@
 
 //! @file
 //!
-//! This source file was generated from CellML by chaste_codegen version 0.5.0
+//! This source file was generated from CellML by chaste_codegen version 0.5.0 on 2020-08-27 12:31:03
 //!
 //! Model: zhang_SAN_model_2000_all
 //!
@@ -78,5 +78,3 @@ namespace boost
 }
 
 #endif // CELLZHANG_SAN_MODEL_2000_ALLFROMCELLMLRUSHLARSENOPT_HPP_
-
-
