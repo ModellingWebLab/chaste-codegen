@@ -151,7 +151,7 @@ class LookupTables:
 
         self._process_lookup_parameters()
         if self._method_printed and expr in self._lookup_table_expr:
-            variables = expr.free_symbols
+            variables = expr.free_symbols & self._lookup_variables
             assert len(variables) == 1, "Lookup table expressions should have exactly 1 (lookup) variable"
             var = tuple(variables)[0]
             for i, param in enumerate(self._lookup_parameters):
