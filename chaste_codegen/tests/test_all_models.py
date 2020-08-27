@@ -1,5 +1,6 @@
 import pytest
 
+import chaste_codegen as cg
 from chaste_codegen.tests.test_codegen import get_models
 
 
