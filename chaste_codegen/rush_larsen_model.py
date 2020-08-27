@@ -17,7 +17,7 @@ class RushLarsenModel(ChasteModel):
         self._cpp_template = 'rush_larsen_model.cpp'
         self._vars_for_template['base_class'] = 'AbstractRushLarsenCardiacCell'
         self._vars_for_template['model_type'] = 'RushLarsen'
-       
+
         self._get_non_linear_state_vars()
 
         self._vars_for_template['derivative_alpha_beta'], self._vars_for_template['derivative_alpha_beta_eqs'], \

@@ -2,11 +2,6 @@ from chaste_codegen._lookup_tables import _DEFAULT_LOOKUP_PARAMETERS, LookupTabl
 from chaste_codegen._partial_eval import partial_eval
 from chaste_codegen.rush_larsen_model import RushLarsenModel
 
-from chaste_codegen._linearity_check import get_non_linear_state_vars, subst_deriv_eqs_non_linear_vars
-from functools import partial
-from chaste_codegen.model_with_conversions import get_equations_for
-from sympy.codegen.rewriting import Wild
-
 
 class RushLarsenOptModel(RushLarsenModel):
     """ Holds template and information specific for the RushLarsen model type"""

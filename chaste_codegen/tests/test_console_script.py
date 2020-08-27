@@ -583,7 +583,7 @@ def test_script_lookup_table(tmp_path):
     testargs = ['chaste_codegen', model_file, '--opt', '-o', outfile,
                 '--lookup-table', 'membrane_voltage', '-150.0001', '199.9999', '0.01',
                 '--lookup-table', 'cytosolic_calcium_concentration', '0.00001', '30.00001', '0.0001']
-      
+
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
