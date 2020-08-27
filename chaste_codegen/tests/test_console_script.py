@@ -17,6 +17,10 @@ from chaste_codegen._command_line_script import (
 from chaste_codegen.tests.chaste_test_utils import compare_file_against_reference
 
 
+cg.__version__ = "(version omitted as unimportant)"
+cg.chaste_model.TIME_STAMP = "(date omitted as unimportant)"
+
+
 def test_script_TRANSLATORS(capsys):
     """Test TRANSLATORS are still consistent"""
     LOGGER.info('Testing help for command line script\n')
