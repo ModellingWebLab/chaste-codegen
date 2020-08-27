@@ -32,6 +32,7 @@ chaste_CVODE_DATA_CLAMP = get_models(ref_folder='chaste_reference_models', type=
 
 
 cg.__version__ = "(version omitted as unimportant)"
+cg.chaste_model.TIME_STAMP = "(date omitted as unimportant)"
 
 
 @pytest.mark.parametrize(('model'), chaste_CVODE_DATA_CLAMP)
