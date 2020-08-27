@@ -18,6 +18,7 @@ from chaste_codegen.tests.chaste_test_utils import compare_file_against_referenc
 
 
 cg.__version__ = "(version omitted as unimportant)"
+cg.chaste_model.TIME_STAMP = "(date omitted as unimportant)"
 
 
 def test_script_TRANSLATORS(capsys):
