@@ -29,6 +29,14 @@ class RushLarsenOptModel(RushLarsenModel):
         """ Initialises Printers for outputting chaste code. """
         super()._add_printers(self._lookup_tables.print_lut_expr)
 
+    def _get_formatted_alpha_beta(self):
+        """Gets the information for r_alpha_or_tau, r_beta_or_inf in the c++ output and formatted equations
+
+        Rearranges in the form (inf-x)/tau
+        """
+        formatted_ab = super()._get_formatted_alpha_beta()
+        return formatted_ab
+
     def _format_ionic_vars(self):
         """ Format equations and dependant equations ionic derivatives"""
         with self._lookup_tables.method_being_printed('GetIIonic'):
@@ -51,3 +59,9 @@ class RushLarsenOptModel(RushLarsenModel):
         """
         with self._lookup_tables.method_being_printed('EvaluateEquations'):
             return super()._get_formatted_alpha_beta()
+
+    def format_deriv_eqs_EvaluateEquations(deriv_eqs_EvaluateEquations):
+        """ Format derivative equations beloning to EvaluateEquations, to update what equation belongs were"""
+        voltage_eqs = set(get_equations_for(self._model, [d for d in self._model.y_derivatives if d.args[0] == self._model.membrane_voltage_var]))
+        self._derivative_eqs_voltage |= voltage_eqs
+        return super().format_deriv_eqs_EvaluateEquations(deriv_eqs_EvaluateEquations)

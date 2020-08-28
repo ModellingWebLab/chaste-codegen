@@ -98,6 +98,9 @@ class RushLarsenModel(ChasteModel):
         for sv in self._formatted_state_vars:
             sv['in_ab'] = sv['sympy_var'] in deriv_variables
 
-        # format deriv_eqs_EvaluateEquations
-        deriv_eqs_EvaluateEquations = self._format_derivative_equations(deriv_eqs_EvaluateEquations)
-        return derivative_alpha_beta, deriv_eqs_EvaluateEquations, vars_in_derivative_alpha_beta
+        return derivative_alpha_beta, self.format_deriv_eqs_EvaluateEquations(deriv_eqs_EvaluateEquations), vars_in_derivative_alpha_beta
+
+    def format_deriv_eqs_EvaluateEquations(self, deriv_eqs_EvaluateEquations):
+        """ Format derivative equations beloning to EvaluateEquations, to update what equation belongs were"""
+        return self._format_derivative_equations(deriv_eqs_EvaluateEquations)
+    
