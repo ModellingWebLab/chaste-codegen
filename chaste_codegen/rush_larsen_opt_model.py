@@ -1,7 +1,7 @@
 from chaste_codegen._lookup_tables import _DEFAULT_LOOKUP_PARAMETERS, LookupTables
 from chaste_codegen._partial_eval import partial_eval
-from chaste_codegen.rush_larsen_model import RushLarsenModel
 from chaste_codegen.model_with_conversions import get_equations_for
+from chaste_codegen.rush_larsen_model import RushLarsenModel
 
 
 class RushLarsenOptModel(RushLarsenModel):
@@ -58,7 +58,7 @@ class RushLarsenOptModel(RushLarsenModel):
         voltage_eqs = set(get_equations_for(self._model, [d for d in self._model.y_derivatives
                                                           if d.args[0] is self._model.membrane_voltage_var]))
         other_eqs = set(get_equations_for(self._model, [d for d in self._model.y_derivatives
-                                                          if d.args[0] is not self._model.membrane_voltage_var]))
+                                                        if d.args[0] is not self._model.membrane_voltage_var]))
         voltage_eqs -= set(other_eqs)
         self._derivative_eqs_voltage |= voltage_eqs
         return super().format_deriv_eqs_EvaluateEquations(deriv_eqs_EvaluateEquations)
