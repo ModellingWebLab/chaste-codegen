@@ -88,10 +88,7 @@ class RushLarsenModel(ChasteModel):
                 vars_in_derivative_alpha_beta.add(deriv)
 
         deriv_eqs_EvaluateEquations = get_equations_for(self._model, vars_in_derivative_alpha_beta)
-        # pull the relevant equations from self._derivative_equations
-        # in case these have been modified by the rest of the code (e.g. in opt model)
-        deriv_eq_lhs = [e.lhs for e in deriv_eqs_EvaluateEquations]
-        deriv_eqs_EvaluateEquations = [eq for eq in self._derivative_equations if eq.lhs in deriv_eq_lhs]
+
 
         # Update state vars
         deriv_variables = set()

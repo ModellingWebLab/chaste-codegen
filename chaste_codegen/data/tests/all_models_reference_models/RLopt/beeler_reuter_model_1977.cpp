@@ -418,7 +418,6 @@ std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLRushLarsenOpt_LookupTables
 
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
-        const double var_slow_inward_current__i_s = 0.00089999999999999998 * (-7.6990712032745758 + 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai) + var_chaste_interface__membrane__V) * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f; // uA_per_mm2
         const double d_dt_chaste_interface_var_slow_inward_current__Cai = 7.0000000000000007e-6 - 0.070000000000000007 * var_chaste_interface__slow_inward_current__Cai - 0.01 * var_slow_inward_current__i_s; // concentration_units / ms
 
         if (mSetVoltageDerivativeToZero)
@@ -427,7 +426,31 @@ std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLRushLarsenOpt_LookupTables
         }
         else
         {
-            d_dt_chaste_interface_var_membrane__V = -0.99999999999999989 * GetIntracellularAreaStimulus(var_chaste_interface__environment__time) - 100.0 * var_slow_inward_current__i_s + _lt_0_row[22] + _lt_0_row[23] - 100.0 * (3.0000000000000001e-5 + 0.040000000000000001 * pow(var_chaste_interface__sodium_current_m_gate__m, 3) * var_chaste_interface__sodium_current_h_gate__h * var_chaste_interface__sodium_current_j_gate__j) * (-50.0 + var_chaste_interface__membrane__V) - 0.80000000000000004 * _lt_0_row[0] * (_lt_0_row[1]) * var_chaste_interface__time_dependent_outward_current_x1_gate__x1; // mV / ms
+            const double var_membrane__C = 0.01; // uF_per_mm2
+            const double var_slow_inward_current__E_s = 7.6990712032745758 - 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai); // mV
+            const double var_slow_inward_current__g_s = 0.00089999999999999998; // mS_per_mm2
+            const double var_slow_inward_current_d_gate__alpha_d = 0.095000000000000001 * _lt_0_row[3] * _lt_0_row[4]; // per_ms
+            const double var_slow_inward_current_d_gate__beta_d = 0.070000000000000007 * _lt_0_row[5] * _lt_0_row[6]; // per_ms
+            const double var_slow_inward_current_f_gate__alpha_f = 0.012 * _lt_0_row[7] * _lt_0_row[8]; // per_ms
+            const double var_slow_inward_current_f_gate__beta_f = 0.0064999999999999997 * _lt_0_row[9] * _lt_0_row[10]; // per_ms
+            const double var_slow_inward_current__i_s = (-var_slow_inward_current__E_s + var_chaste_interface__membrane__V) * var_slow_inward_current__g_s * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f; // uA_per_mm2
+            const double var_sodium_current__E_Na = 50.0; // mV
+            const double var_sodium_current__g_Na = 0.040000000000000001; // mS_per_mm2
+            const double var_sodium_current__g_Nac = 3.0000000000000001e-5; // mS_per_mm2
+            const double var_sodium_current_h_gate__alpha_h = 0.126 * _lt_0_row[11]; // per_ms
+            const double var_sodium_current_h_gate__beta_h = 1.7 * _lt_0_row[12]; // per_ms
+            const double var_sodium_current_j_gate__alpha_j = 0.055 * _lt_0_row[14] * _lt_0_row[15]; // per_ms
+            const double var_sodium_current_j_gate__beta_j = 0.29999999999999999 * _lt_0_row[13]; // per_ms
+            const double var_sodium_current_m_gate__alpha_m = -_lt_0_row[17] * (47.0 + var_chaste_interface__membrane__V); // per_ms
+            const double var_sodium_current_m_gate__beta_m = 40.0 * _lt_0_row[16]; // per_ms
+            const double var_sodium_current__i_Na = (-var_sodium_current__E_Na + var_chaste_interface__membrane__V) * (pow(var_chaste_interface__sodium_current_m_gate__m, 3) * var_sodium_current__g_Na * var_chaste_interface__sodium_current_h_gate__h * var_chaste_interface__sodium_current_j_gate__j + var_sodium_current__g_Nac); // uA_per_mm2
+            const double var_stimulus_protocol__Istim_converted = -GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
+            const double var_stimulus_protocol__Istim = 0.0099999999999999985 * var_stimulus_protocol__Istim_converted; // uA_per_mm2
+            const double var_time_dependent_outward_current_x1_gate__alpha_x1 = 0.00050000000000000001 * _lt_0_row[18] * _lt_0_row[19]; // per_ms
+            const double var_time_dependent_outward_current_x1_gate__beta_x1 = 0.0012999999999999999 * _lt_0_row[20] * _lt_0_row[21]; // per_ms
+            const double var_time_dependent_outward_current__i_x1 = 0.0080000000000000002 * _lt_0_row[0] * (_lt_0_row[1]) * var_chaste_interface__time_dependent_outward_current_x1_gate__x1; // uA_per_mm2
+            const double var_time_independent_outward_current__i_K1 = _lt_0_row[2]; // uA_per_mm2
+            d_dt_chaste_interface_var_membrane__V = (-var_slow_inward_current__i_s - var_sodium_current__i_Na - var_time_dependent_outward_current__i_x1 - var_time_independent_outward_current__i_K1 + var_stimulus_protocol__Istim) / var_membrane__C; // mV / ms
         }
         
         rDY[0] = d_dt_chaste_interface_var_membrane__V;
