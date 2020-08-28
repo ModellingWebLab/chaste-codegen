@@ -9,7 +9,7 @@
 {% set method =  "EvaluateEquations" %}{% include "Shared/cpp/lookup_table_init" %}
         // Mathematics
         {% for deriv in derivative_alpha_beta_eqs %}{%- if deriv.is_voltage%}double {{deriv.lhs}};{%- endif %}{%- endfor %}
-        {%- for deriv in derivative_alpha_beta_eqs %}{%- if not deriv.in_membrane_voltage %}
+        {%- for deriv in derivative_alpha_beta_eqs %}{%- if not deriv.in_membrane_voltage or deriv.in_eqs_excl_voltage %}
         const double {{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
         {%- endfor %}
 
@@ -19,7 +19,7 @@
         }
         else
         {
-            {%- for deriv in derivative_alpha_beta_eqs %}{% if deriv.in_membrane_voltage %}
+            {%- for deriv in derivative_alpha_beta_eqs %}{% if deriv.in_membrane_voltage and not deriv.in_eqs_excl_voltage%}
             {% if not deriv.is_voltage%}const double {% endif %}{{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
             {%- endfor %}
         }

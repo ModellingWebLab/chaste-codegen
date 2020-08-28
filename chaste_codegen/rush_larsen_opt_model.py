@@ -56,6 +56,9 @@ class RushLarsenOptModel(RushLarsenModel):
     def format_deriv_eqs_EvaluateEquations(self, deriv_eqs_EvaluateEquations):
         """ Format derivative equations beloning to EvaluateEquations, to update what equation belongs were"""
         voltage_eqs = set(get_equations_for(self._model, [d for d in self._model.y_derivatives
-                                                          if d.args[0] == self._model.membrane_voltage_var]))
+                                                          if d.args[0] is self._model.membrane_voltage_var]))
+        other_eqs = set(get_equations_for(self._model, [d for d in self._model.y_derivatives
+                                                          if d.args[0] is not self._model.membrane_voltage_var]))
+        voltage_eqs -= set(other_eqs)
         self._derivative_eqs_voltage |= voltage_eqs
         return super().format_deriv_eqs_EvaluateEquations(deriv_eqs_EvaluateEquations)
