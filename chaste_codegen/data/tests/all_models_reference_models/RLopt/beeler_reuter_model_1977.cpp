@@ -418,10 +418,13 @@ std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLRushLarsenOpt_LookupTables
 
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
+        const double var_slow_inward_current__E_s = 7.6990712032745758 - 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai); // mV
+        const double var_slow_inward_current__g_s = 0.00089999999999999998; // mS_per_mm2
         const double var_slow_inward_current_d_gate__alpha_d = 0.095000000000000001 * _lt_0_row[3] * _lt_0_row[4]; // per_ms
         const double var_slow_inward_current_d_gate__beta_d = 0.070000000000000007 * _lt_0_row[5] * _lt_0_row[6]; // per_ms
         const double var_slow_inward_current_f_gate__alpha_f = 0.012 * _lt_0_row[7] * _lt_0_row[8]; // per_ms
         const double var_slow_inward_current_f_gate__beta_f = 0.0064999999999999997 * _lt_0_row[9] * _lt_0_row[10]; // per_ms
+        const double var_slow_inward_current__i_s = (-var_slow_inward_current__E_s + var_chaste_interface__membrane__V) * var_slow_inward_current__g_s * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f; // uA_per_mm2
         const double d_dt_chaste_interface_var_slow_inward_current__Cai = 7.0000000000000007e-6 - 0.070000000000000007 * var_chaste_interface__slow_inward_current__Cai - 0.01 * var_slow_inward_current__i_s; // concentration_units / ms
         const double var_sodium_current_h_gate__alpha_h = 0.126 * _lt_0_row[11]; // per_ms
         const double var_sodium_current_h_gate__beta_h = 1.7 * _lt_0_row[12]; // per_ms
@@ -439,9 +442,6 @@ std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLRushLarsenOpt_LookupTables
         else
         {
             const double var_membrane__C = 0.01; // uF_per_mm2
-            const double var_slow_inward_current__E_s = 7.6990712032745758 - 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai); // mV
-            const double var_slow_inward_current__g_s = 0.00089999999999999998; // mS_per_mm2
-            const double var_slow_inward_current__i_s = (-var_slow_inward_current__E_s + var_chaste_interface__membrane__V) * var_slow_inward_current__g_s * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f; // uA_per_mm2
             const double var_sodium_current__E_Na = 50.0; // mV
             const double var_sodium_current__g_Na = 0.040000000000000001; // mS_per_mm2
             const double var_sodium_current__g_Nac = 3.0000000000000001e-5; // mS_per_mm2

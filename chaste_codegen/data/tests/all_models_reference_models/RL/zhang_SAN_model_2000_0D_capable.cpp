@@ -209,6 +209,7 @@
 
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
+        const double var_membrane__FCellConstant = 1.0309347; // dimensionless
         const double var_L_type_Ca_channel_d_gate__alpha_d_L = -28.390000000000001 * (35.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-14.0 - 0.40000000000000002 * var_chaste_interface__membrane__V)) - 84.900000000000006 * var_chaste_interface__membrane__V / (-1.0 + exp(-0.20799999999999999 * var_chaste_interface__membrane__V)); // per_second
         const double var_L_type_Ca_channel_d_gate__beta_d_L = 11.43 * (-5.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-2.0 + 0.40000000000000002 * var_chaste_interface__membrane__V)); // per_second
         const double var_L_type_Ca_channel_d_gate__tau_d_L = 2.0 / (var_L_type_Ca_channel_d_gate__alpha_d_L + var_L_type_Ca_channel_d_gate__beta_d_L); // second
@@ -226,6 +227,8 @@
         const double var_four_AP_sensitive_currents_r_gate__tau_r = 0.0029775000000000001 + 0.019595000000000001 / (1.0369999999999999 * exp(2.7585732000000003 + 0.090120000000000006 * var_chaste_interface__membrane__V) + 0.36899999999999999 * exp(-2.8369599999999999 - 0.11899999999999999 * var_chaste_interface__membrane__V)); // second
         const double var_hyperpolarisation_activated_current_y_gate__alpha_y = exp(-2.9631993991738641 - 0.037551633496057078 * var_chaste_interface__membrane__V); // per_second
         const double var_hyperpolarisation_activated_current_y_gate__beta_y = exp(3.5355294117647058 + 0.047058823529411764 * var_chaste_interface__membrane__V); // per_second
+        const double var_membrane__dCell = 0; // dimensionless
+        const double var_membrane__FCell = var_membrane__FCellConstant * var_membrane__dCell / (1.0 + 0.77449999999999997 * exp(6.9491525423728815 - 10.16949152542373 * var_membrane__dCell)); // dimensionless
         const double var_L_type_Ca_channel_d_gate__d_L_infinity = 1 / (1.0 + exp(-3.7166666666666668 - 0.13333333333333333 * var_membrane__FCell - 0.16666666666666666 * var_chaste_interface__membrane__V)); // dimensionless
         const double var_L_type_Ca_channel_f_gate__tau_f_L = (1.2 - 0.20000000000000001 * var_membrane__FCell) / (var_L_type_Ca_channel_f_gate__alpha_f_L + var_L_type_Ca_channel_f_gate__beta_f_L); // second
         const double var_T_type_Ca_channel_f_gate__alpha_f_T = 15.300000000000001 * exp(-0.85234093637454988 - 0.0084033613445378148 * var_membrane__FCell - 0.012004801920768308 * var_chaste_interface__membrane__V); // per_second
@@ -276,11 +279,8 @@
             const double var_membrane__CmCentre = 2.0000000000000002e-5; // microF
             const double var_membrane__CmPeriphery = 6.4999999999999994e-5; // microF
             const double var_membrane__F = 96845.0; // coulomb_per_mole
-            const double var_membrane__FCellConstant = 1.0309347; // dimensionless
             const double var_membrane__R = 8314.0; // millijoule_per_mole_kelvin
             const double var_membrane__T = 310.0; // kelvin
-            const double var_membrane__dCell = 0; // dimensionless
-            const double var_membrane__FCell = var_membrane__FCellConstant * var_membrane__dCell / (1.0 + 0.77449999999999997 * exp(6.9491525423728815 - 10.16949152542373 * var_membrane__dCell)); // dimensionless
             const double var_L_type_Ca_channel__g_Ca_L = (-var_L_type_Ca_channel__g_Ca_L_Centre + var_L_type_Ca_channel__g_Ca_L_Periphery) * var_membrane__FCell + var_L_type_Ca_channel__g_Ca_L_Centre; // microS
             const double var_L_type_Ca_channel__i_Ca_L = (-var_L_type_Ca_channel__E_Ca_L + var_chaste_interface__membrane__V) * (0.0060000000000000001 / (1.0 + exp(-2.3500000000000001 - 0.16666666666666666 * var_chaste_interface__membrane__V)) + var_chaste_interface__L_type_Ca_channel_d_gate__d_L * var_chaste_interface__L_type_Ca_channel_f_gate__f_L) * var_L_type_Ca_channel__g_Ca_L; // nanoA
             const double var_T_type_Ca_channel__g_Ca_T = (-var_T_type_Ca_channel__g_Ca_T_Centre + var_T_type_Ca_channel__g_Ca_T_Periphery) * var_membrane__FCell + var_T_type_Ca_channel__g_Ca_T_Centre; // microS

@@ -180,6 +180,8 @@ std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLRushLarsenOpt_Lookup
         const double var_I_Shkr__kv0 = 30.0; // first_order_rate_constant
         const double var_I_Shkr__z_v = -1.53; // dimensionless
         const double var_I_Shkr__zv = 1.28; // dimensionless
+        const double var_model_parameters__F = 96500.0; // coulomb_per_mole
+        const double var_model_parameters__R = 8310.0; // millijoule_per_kelvin_mole
         const double var_I_Shkr__k_v = var_I_Shkr__k_v0 * exp(var_I_Shkr__z_v * var_chaste_interface__membrane__Vm * var_model_parameters__F / (var_model_parameters__R * mParameters[6])); // first_order_rate_constant
         const double var_I_Shkr__kv = var_I_Shkr__kv0 * exp(var_I_Shkr__zv * var_chaste_interface__membrane__Vm * var_model_parameters__F / (var_model_parameters__R * mParameters[6])); // first_order_rate_constant
         const double var_I_Shkr__C0Shkr_orig_deriv = var_chaste_interface__I_Shkr__C1Shkr * var_I_Shkr__k_v - 4.0 * var_chaste_interface__I_Shkr__C0Shkr * var_I_Shkr__kv; // 1 / second
@@ -205,8 +207,6 @@ std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLRushLarsenOpt_Lookup
             const double var_I_stim__I_stim_converted = -GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
             const double var_I_stim__I_stim = 1000.0 * var_I_stim__I_stim_converted * mParameters[2] / HeartConfig::Instance()->GetCapacitance(); // nanoampere
             const double var_I_b__I_b = (-var_I_b__Eb + var_chaste_interface__membrane__Vm) * mParameters[5]; // nanoampere
-            const double var_model_parameters__F = 96500.0; // coulomb_per_mole
-            const double var_model_parameters__R = 8310.0; // millijoule_per_kelvin_mole
             const double var_I_Kir__EK = var_model_parameters__R * mParameters[6] * log(mParameters[1] / mParameters[0]) / var_model_parameters__F; // millivolt
             const double var_I_Kir__OKir = 1 / (var_I_Kir__aKir + exp((-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * var_I_Kir__bKir * var_model_parameters__F / (var_model_parameters__R * mParameters[6]))); // dimensionless
             const double var_I_Kir__I_Kir = 0.031622776601683791 * sqrt(mParameters[1]) * (-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * mParameters[4] * var_I_Kir__OKir; // nanoampere
