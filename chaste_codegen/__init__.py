@@ -30,6 +30,7 @@ from ._math_functions import (
     sqrt_,
 )
 from .backward_euler_model import BackwardEulerModel  # noqa
+from .backward_euler_opt_model import BackwardEulerOptModel  # noqa
 from .chaste_model import ChasteModel  # noqa
 from .cvode_chaste_model import CvodeChasteModel  # noqa
 from .cvode_opt_chaste_model import OptCvodeChasteModel  # noqa

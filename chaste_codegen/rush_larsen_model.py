@@ -101,5 +101,5 @@ class RushLarsenModel(ChasteModel):
                 vars_in_derivative_alpha_beta)
 
     def format_deriv_eqs_EvaluateEquations(self, deriv_eqs_EvaluateEquations):
-        """ Format derivative equations beloning to EvaluateEquations, to update what equation belongs were"""
+        """ Format derivative equations beloning to EvaluateEquations, to allow opt model to update what belongs were"""
         return self._format_derivative_equations(deriv_eqs_EvaluateEquations)

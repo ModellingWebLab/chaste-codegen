@@ -27,6 +27,7 @@ TRANSLATORS = OrderedDict(
 TRANSLATORS_OPT = OrderedDict(
     [('normal', (cg.OptChasteModel, 'FromCellMLOpt', 'Opt', True)),
      ('cvode', (cg.OptCvodeChasteModel, 'FromCellMLCvodeOpt', 'CvodeOpt', True)),
+     ('backward-euler', (cg.BackwardEulerOptModel, 'FromCellMLBackwardEuler', 'BackwardEuler', False)),
      ('rush-larsen', (cg.RushLarsenOptModel, 'FromCellMLRushLarsenOpt', 'RushLarsenOpt', False)),
      ('grl1', (cg.GeneralisedRushLarsenFirstOrderModelOpt, 'FromCellMLGRL1Opt', 'GRL1', False)),
      ('grl2', (cg.GeneralisedRushLarsenSecondOrderModelOpt, 'FromCellMLGRL2Opt', 'GRL2', False))])

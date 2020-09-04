@@ -7,6 +7,7 @@
         {%- if state_var.in_y_deriv and state_var.linear and state_var.in_one_step_except_v %}double {{ state_var.var }} = {{state_var.rY_lookup}};
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}
+        {%- set method =  "ComputeOneStepExceptVoltage" %}{% include "Shared/cpp/lookup_table_init" %}
         {% for eq in linear_equations %}const double {{eq.lhs}} = {{eq.rhs}};
         {% endfor %}
         {% for deriv in linear_deriv_eqs %}

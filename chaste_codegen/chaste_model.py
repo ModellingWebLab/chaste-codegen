@@ -361,6 +361,7 @@ class ChasteModel(object):
         formatted_deriv_eqs = [{'lhs': self._printer.doprint(eq.lhs),
                                 'rhs': self._print_rhs_with_modifiers(eq.lhs, eq.rhs, modifiers_with_defining_eqs),
                                 'sympy_lhs': eq.lhs,
+                                'sympy_rhs': eq.rhs,
                                 'units': self._model.units.format(self._model.units.evaluate_units(eq.lhs)),
                                 'in_eqs_excl_voltage': eq in self._derivative_eqs_excl_voltage,
                                 'in_membrane_voltage': eq in self._derivative_eqs_voltage,

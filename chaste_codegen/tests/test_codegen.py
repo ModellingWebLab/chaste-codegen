@@ -25,6 +25,7 @@ chaste_cvode_opt_models = get_models(ref_folder='chaste_reference_models', type=
 chaste_cvode_opt_models_with_jacobians = get_models(ref_folder='chaste_reference_models',
                                                     type='Cvode_opt_with_jacobian')
 chaste_BE = get_models(ref_folder='chaste_reference_models', type='BE')
+chaste_BEopt = get_models(ref_folder='chaste_reference_models', type='BEopt')
 chaste_RL = get_models(ref_folder='chaste_reference_models', type='RL')
 chaste_RLopt = get_models(ref_folder='chaste_reference_models', type='RLopt')
 chaste_GRL1 = get_models(ref_folder='chaste_reference_models', type='GRL1')
@@ -174,6 +175,22 @@ def test_RL(tmp_path, model):
     # Generate chaste code
     chaste_model = cg.RushLarsenModel(load_model_with_conversions(model['model']), model['model_name_from_file'],
                                       class_name=class_name)
+
+    chaste_model.generate_chaste_code()
+    # Compare against reference
+    test_utils.compare_model_against_reference(chaste_model,
+                                               tmp_path, model['expected_hpp_path'],
+                                               model['expected_cpp_path'])
+
+
+@pytest.mark.parametrize(('model'), chaste_BEopt)
+def test_BEopt(tmp_path, model):
+    """ Check generation of Backwards Euler opt models against reference"""
+    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLBackwardEuler'
+    LOGGER.info('Converting: BE opt: ' + class_name + '\n')
+    # Generate chaste code
+    chaste_model = cg.BackwardEulerOptModel(load_model_with_conversions(model['model']), model['model_name_from_file'],
+                                            class_name=class_name)
 
     chaste_model.generate_chaste_code()
     # Compare against reference

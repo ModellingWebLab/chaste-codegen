@@ -411,6 +411,27 @@ def test_script_dynamic_BE(tmp_path):
                                    os.path.join(tmp_path, 'dynamic_courtemanche_ramirez_nattel_model_1998.cpp'))
 
 
+def test_script_dynamic_BEopt(tmp_path):
+    """Convert a BackwardsEuler model type"""
+    LOGGER.info('Testing model with options --backward-euler, --dynamically-loadable, --opt for command line script\n')
+    tmp_path = str(tmp_path)
+    model_name = 'courtemanche_ramirez_nattel_model_1998'
+    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    outfile = os.path.join(tmp_path, 'dynamic_courtemanche_ramirez_nattel_model_1998.cpp')
+    # Call commandline script
+    testargs = ['chaste_codegen', model_file, '--backward-euler', '--opt', '-o', outfile,
+                '-c', 'Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler', '--dynamically-loadable']
+    with mock.patch.object(sys, 'argv', testargs):
+        chaste_codegen()
+    # Check output
+    reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'BEopt')
+    compare_file_against_reference(os.path.join(reference, 'dynamic_courtemanche_ramirez_nattel_model_1998.hpp'),
+                                   os.path.join(tmp_path, 'dynamic_courtemanche_ramirez_nattel_model_1998.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'dynamic_courtemanche_ramirez_nattel_model_1998.cpp'),
+                                   os.path.join(tmp_path, 'dynamic_courtemanche_ramirez_nattel_model_1998.cpp'))
+
+
 def test_script_dynamic_RL(tmp_path):
     """Convert a RushLarsen model type"""
     LOGGER.info('Testing model with options --rush-larsen, and --dynamically-loadable for command line script\n')

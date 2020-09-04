@@ -12,6 +12,7 @@ chaste_all_cvode_opt_models = get_models(ref_folder='all_models_reference_models
 chaste_all_cvode_opt_models_with_jacobians = get_models(ref_folder='all_models_reference_models',
                                                         type='Cvode_opt_with_jacobian')
 chaste_all_BE = get_models(ref_folder='all_models_reference_models', type='BE')
+chaste_all_BEopt = get_models(ref_folder='all_models_reference_models', type='BEopt')
 chaste_all_RL = get_models(ref_folder='all_models_reference_models', type='RL')
 chaste_all_RLopt = get_models(ref_folder='all_models_reference_models', type='RLopt')
 chaste_all_GRL1 = get_models(ref_folder='all_models_reference_models', type='GRL1')
@@ -83,6 +84,16 @@ def test_Cvode_jacobian_all_models(tmp_path, model, request):
         pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
     from chaste_codegen.tests.test_codegen import test_Cvode_jacobian
     test_Cvode_jacobian(tmp_path, model)
+
+
+@pytest.mark.all_models
+@pytest.mark.parametrize(('model'), chaste_all_BEopt)
+def test_BEopt_all_models(tmp_path, model, request):
+    """ Check generation of Cvode models against reference"""
+    if request.config.option.markexpr != 'all_models':
+        pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
+    from chaste_codegen.tests.test_codegen import test_BEopt
+    test_BEopt(tmp_path, model)
 
 
 @pytest.mark.all_models
