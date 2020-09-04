@@ -37,6 +37,7 @@ public:
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     Cellpandit_model_2001_epiFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellpandit_model_2001_epiFromCellMLBackwardEuler();
+    AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[13], double rResidual[13]);
     void ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[13], double rJacobian[13][13]);protected:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted);

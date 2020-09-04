@@ -22,6 +22,316 @@
 #include "MathsCustomFunctions.hpp"
 #include "CardiacNewtonSolver.hpp"
 
+class Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler_LookupTables : public AbstractLookupTableCollection
+{
+public:
+    static Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler_LookupTables* Instance()
+    {
+        if (mpInstance.get() == NULL)
+        {
+            mpInstance.reset(new Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler_LookupTables);
+        }
+        return mpInstance.get();
+    }
+
+    void FreeMemory()
+    {
+
+        if (_lookup_table_0)
+        {
+            delete[] _lookup_table_0;
+            _lookup_table_0 = NULL;
+        }
+
+        mNeedsRegeneration.assign(mNeedsRegeneration.size(), true);
+    }
+
+    // Row lookup methods
+    // using linear-interpolation
+
+    double* _lookup_0_row(unsigned i, double _factor_)
+    {
+        for (unsigned j=0; j<29; j++)
+        {
+            const double y1 = _lookup_table_0[i][j];
+            const double y2 = _lookup_table_0[i+1][j];
+            _lookup_table_0_row[j] = y1 + (y2-y1)*_factor_;
+        }
+        return _lookup_table_0_row;
+    }
+
+
+    const double * IndexTable0(double var_chaste_interface__membrane__V)
+    {
+        const double _offset_0 = var_chaste_interface__membrane__V - mTableMins[0];
+        const double _offset_0_over_table_step = _offset_0 * mTableStepInverses[0];
+        const unsigned _table_index_0 = (unsigned)(_offset_0_over_table_step);
+        const double _factor_0 = _offset_0_over_table_step - _table_index_0;
+        const double* const _lt_0_row = Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler_LookupTables::Instance()->_lookup_0_row(_table_index_0, _factor_0);
+        return _lt_0_row;
+    }
+
+
+// LCOV_EXCL_START
+    bool CheckIndex0(double& var_chaste_interface__membrane__V)
+    {
+        bool _oob_0 = false;
+        if (var_chaste_interface__membrane__V>mTableMaxs[0] || var_chaste_interface__membrane__V<mTableMins[0])
+        {
+// LCOV_EXCL_START
+            _oob_0 = true;
+// LCOV_EXCL_STOP
+        }
+        return _oob_0;
+    }
+// LCOV_EXCL_STOP
+
+    ~Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler_LookupTables()
+    {
+
+        if (_lookup_table_0)
+        {
+            delete[] _lookup_table_0;
+            _lookup_table_0 = NULL;
+        }
+
+    }
+
+protected:
+    Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler_LookupTables(const Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler_LookupTables&);
+    Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler_LookupTables& operator= (const Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler_LookupTables&);
+    Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler_LookupTables()
+    {
+        assert(mpInstance.get() == NULL);
+        mKeyingVariableNames.resize(1);
+        mNumberOfTables.resize(1);
+        mTableMins.resize(1);
+        mTableSteps.resize(1);
+        mTableStepInverses.resize(1);
+        mTableMaxs.resize(1);
+        mNeedsRegeneration.resize(1);
+
+        mKeyingVariableNames[0] = "membrane_voltage";
+        mNumberOfTables[0] = 29;
+        mTableMins[0] = -250.0001;
+        mTableMaxs[0] = 549.9999;
+        mTableSteps[0] = 0.001;
+        mTableStepInverses[0] = 1000.0;
+        mNeedsRegeneration[0] = true;
+        _lookup_table_0 = NULL;
+
+        Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler_LookupTables::RegenerateTables();
+    }
+
+    void RegenerateTables()
+    {
+        AbstractLookupTableCollection::EventHandler::BeginEvent(AbstractLookupTableCollection::EventHandler::GENERATE_TABLES);
+
+
+        if (mNeedsRegeneration[0])
+        {
+            if (_lookup_table_0)
+            {
+                delete[] _lookup_table_0;
+                _lookup_table_0 = NULL;
+            }
+            const unsigned _table_size_0 = 1 + (unsigned)((mTableMaxs[0]-mTableMins[0])/mTableSteps[0]+0.5);
+            _lookup_table_0 = new double[_table_size_0][29];
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][0] = exp(0.074867781645490947 * var_chaste_interface__membrane__V);
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][1] = 1 / (-1.0 + exp(0.074867781645490947 * var_chaste_interface__membrane__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][2] = 1 / (1.0 + exp(4.1806020066889626 - 0.16722408026755853 * var_chaste_interface__membrane__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][3] = exp(0.013101861787960915 * var_chaste_interface__membrane__V);
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][4] = exp(-0.024332029034784559 * var_chaste_interface__membrane__V);
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][5] = 1 / (1.0 + 0.10000000000000001 * exp(-0.024332029034784559 * var_chaste_interface__membrane__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][6] = 1 / (1.0 + 0.035299999999999998 * exp(-0.037433890822745473 * var_chaste_interface__membrane__V) + 0.1245 * exp(-0.0037433890822745472 * var_chaste_interface__membrane__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][7] = 1 / (1.0 + exp(-0.66666666666666663 - 0.13333333333333333 * var_chaste_interface__membrane__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][8] = 1 / (1 / (1.0 + exp(2.5 - 0.050000000000000003 * var_chaste_interface__membrane__V)) + 1.3999999999999999 * (0.25 + 1.3999999999999999 / (1.0 + exp(-2.6923076923076925 - 0.076923076923076927 * var_chaste_interface__membrane__V))) / (1.0 + exp(1.0 + 0.20000000000000001 * var_chaste_interface__membrane__V)));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][9] = 1 / (1.0 + exp(2.8571428571428572 + 0.14285714285714285 * var_chaste_interface__membrane__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][10] = 1 / (80.0 + 165.0 / (1.0 + exp(2.5 - 0.10000000000000001 * var_chaste_interface__membrane__V)) + 1125.0 * exp(-3.0375000000000001 * pow((1 + 0.037037037037037035 * var_chaste_interface__membrane__V), 2)));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][11] = 1 / pow((1.0 + exp(9.6298788694481825 + 0.13458950201884254 * var_chaste_interface__membrane__V)), 2);
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][12] = ((var_chaste_interface__membrane__V < -40.0) ? (0.057000000000000002 * exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__membrane__V)) : (0)) + ((var_chaste_interface__membrane__V < -40.0) ? (310000.0 * exp(0.34849999999999998 * var_chaste_interface__membrane__V) + 2.7000000000000002 * exp(0.079000000000000001 * var_chaste_interface__membrane__V)) : (5.9230769230769234 / (1.0 + exp(-0.96036036036036043 - 0.0900900900900901 * var_chaste_interface__membrane__V))));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][13] = ((var_chaste_interface__membrane__V < -40.0) ? (0.024240000000000001 * exp(-0.01052 * var_chaste_interface__membrane__V) / (1.0 + exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__membrane__V))) : (0.59999999999999998 * exp(0.057000000000000002 * var_chaste_interface__membrane__V) / (1.0 + exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__membrane__V)))) + ((var_chaste_interface__membrane__V < -40.0) ? ((37.780000000000001 + var_chaste_interface__membrane__V) * (-25428.0 * exp(0.24440000000000001 * var_chaste_interface__membrane__V) - 6.9480000000000002e-6 * exp(-0.043909999999999998 * var_chaste_interface__membrane__V)) / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__membrane__V))) : (0));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][14] = 1 / pow((1.0 + exp(-6.2967884828349945 - 0.11074197120708749 * var_chaste_interface__membrane__V)), 2);
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][15] = 1 / (0.10000000000000001 / (1.0 + exp(7.0 + 0.20000000000000001 * var_chaste_interface__membrane__V)) + 0.10000000000000001 / (1.0 + exp(-0.25 + 0.0050000000000000001 * var_chaste_interface__membrane__V)));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][16] = 1.0 + exp(-12.0 - 0.20000000000000001 * var_chaste_interface__membrane__V);
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][17] = 1 / (1.0 + exp(-3.7142857142857144 - 0.14285714285714285 * var_chaste_interface__membrane__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][18] = 1.0 + exp(2.6086956521739131 + 0.086956521739130432 * var_chaste_interface__membrane__V);
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][19] = 1.0 + exp(-4.5 - 0.10000000000000001 * var_chaste_interface__membrane__V);
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][20] = 1 / (1.0 + exp(3.6666666666666665 + 0.041666666666666664 * var_chaste_interface__membrane__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][21] = 1.0 + exp(-3.0 + 0.050000000000000003 * var_chaste_interface__membrane__V);
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][22] = 1.0 + exp(-3.0 - 0.050000000000000003 * var_chaste_interface__membrane__V);
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][23] = 1 / (1.0 + exp(-0.35714285714285715 - 0.071428571428571425 * var_chaste_interface__membrane__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][24] = sqrt(1.0 + exp(-1.6666666666666667 - 0.16666666666666666 * var_chaste_interface__membrane__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][25] = 1 / (1.0 + exp(3.3333333333333335 - 0.16666666666666666 * var_chaste_interface__membrane__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][26] = 1 / (0.80000000000000004 + 9.5 * exp(-0.88888888888888884 * pow((1 + 0.025000000000000001 * var_chaste_interface__membrane__V), 2)));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][27] = 1 / (1.0 + exp(4.0 + 0.20000000000000001 * var_chaste_interface__membrane__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][28] = 1 / (3.0 + 5.0 / (1.0 + exp(-4.0 + 0.20000000000000001 * var_chaste_interface__membrane__V)) + 85.0 * exp(-6.328125 * pow((1 + 0.022222222222222223 * var_chaste_interface__membrane__V), 2)));
+            }
+
+            mNeedsRegeneration[0] = false;
+        }
+
+        AbstractLookupTableCollection::EventHandler::EndEvent(AbstractLookupTableCollection::EventHandler::GENERATE_TABLES);
+    }
+
+private:
+    /** The single instance of the class */
+    static std::shared_ptr<Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler_LookupTables> mpInstance;
+
+    // Row lookup methods memory
+    double _lookup_table_0_row[29];
+
+    // Lookup tables
+    double (*_lookup_table_0)[29];
+
+};
+
+std::shared_ptr<Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler_LookupTables> Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler_LookupTables::mpInstance;
+
     boost::shared_ptr<RegularStimulus> Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -65,6 +375,11 @@
     Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler::~Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler()
     {
     }
+
+    AbstractLookupTableCollection* Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler::GetLookupTableCollection()
+    {
+        return Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler_LookupTables::Instance();
+    }
     
     double Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -103,47 +418,27 @@
         double var_chaste_interface__potassium_dynamics__K_i = rY[16];
         // Units: millimolar; Initial value: 138.549719318763
         
-        const double var_calcium_background_current__g_bca = 0.00059199999999999997; // nanoS_per_picoF
-        const double var_calcium_dynamics__Ca_o = 2.0; // millimolar
-        const double var_calcium_pump_current__K_pCa = 0.00050000000000000001; // millimolar
-        const double var_calcium_pump_current__g_pCa = 0.82499999999999996; // picoA_per_picoF
-        const double var_calcium_pump_current__i_p_Ca = var_chaste_interface__calcium_dynamics__Ca_i * var_calcium_pump_current__g_pCa / (var_chaste_interface__calcium_dynamics__Ca_i + var_calcium_pump_current__K_pCa); // picoA_per_picoF
-        const double var_inward_rectifier_potassium_current__g_K1 = 5.4050000000000002; // nanoS_per_picoF
-        const double var_membrane__F = 96485.341499999995; // coulomb_per_millimole
-        const double var_membrane__R = 8314.4719999999998; // joule_per_mole_kelvin
-        const double var_membrane__T = 310.0; // kelvin
-        const double var_L_type_Ca_current__i_CaL = 4.0 * pow(var_membrane__F, 2) * (-0.34100000000000003 * var_calcium_dynamics__Ca_o + var_chaste_interface__calcium_dynamics__Ca_i * exp(2.0 * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * mParameters[0] * var_chaste_interface__L_type_Ca_current_d_gate__d * var_chaste_interface__L_type_Ca_current_fCa_gate__fCa * var_chaste_interface__L_type_Ca_current_f_gate__f * var_chaste_interface__membrane__V / ((-1.0 + exp(2.0 * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * var_membrane__R * var_membrane__T); // picoA_per_picoF
-        const double var_potassium_dynamics__K_o = 5.4000000000000004; // millimolar
-        const double var_potassium_pump_current__g_pK = 0.0146; // nanoS_per_picoF
-        const double var_reversal_potentials__E_Ca = 0.5 * var_membrane__R * var_membrane__T * log(var_calcium_dynamics__Ca_o / var_chaste_interface__calcium_dynamics__Ca_i) / var_membrane__F; // millivolt
-        const double var_calcium_background_current__i_b_Ca = (-var_reversal_potentials__E_Ca + var_chaste_interface__membrane__V) * var_calcium_background_current__g_bca; // picoA_per_picoF
-        const double var_reversal_potentials__E_K = var_membrane__R * var_membrane__T * log(var_potassium_dynamics__K_o / var_chaste_interface__potassium_dynamics__K_i) / var_membrane__F; // millivolt
-        const double var_inward_rectifier_potassium_current__alpha_K1 = 0.10000000000000001 / (1.0 + exp(-12.0 + 0.059999999999999998 * var_chaste_interface__membrane__V - 0.059999999999999998 * var_reversal_potentials__E_K)); // per_millisecond
-        const double var_inward_rectifier_potassium_current__beta_K1 = (exp(-1.0 + 0.10000000000000001 * var_chaste_interface__membrane__V - 0.10000000000000001 * var_reversal_potentials__E_K) + 3.0 * exp(0.02 + 0.00020000000000000001 * var_chaste_interface__membrane__V - 0.00020000000000000001 * var_reversal_potentials__E_K)) / (1.0 + exp(0.5 * var_reversal_potentials__E_K - 0.5 * var_chaste_interface__membrane__V)); // per_millisecond
-        const double var_inward_rectifier_potassium_current__xK1_inf = var_inward_rectifier_potassium_current__alpha_K1 / (var_inward_rectifier_potassium_current__alpha_K1 + var_inward_rectifier_potassium_current__beta_K1); // dimensionless
-        const double var_inward_rectifier_potassium_current__i_K1 = 0.43033148291193518 * sqrt(var_potassium_dynamics__K_o) * (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * var_inward_rectifier_potassium_current__g_K1 * var_inward_rectifier_potassium_current__xK1_inf; // picoA_per_picoF
-        const double var_potassium_pump_current__i_p_K = (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * var_potassium_pump_current__g_pK / (1.0 + exp(4.1806020066889626 - 0.16722408026755853 * var_chaste_interface__membrane__V)); // picoA_per_picoF
-        const double var_rapid_time_dependent_potassium_current__i_Kr = 0.43033148291193518 * sqrt(var_potassium_dynamics__K_o) * (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * mParameters[2] * var_chaste_interface__rapid_time_dependent_potassium_current_Xr1_gate__Xr1 * var_chaste_interface__rapid_time_dependent_potassium_current_Xr2_gate__Xr2; // picoA_per_picoF
-        const double var_reversal_potentials__P_kna = 0.029999999999999999; // dimensionless
-        const double var_slow_time_dependent_potassium_current__g_Ks = 0.245; // nanoS_per_picoF
-        const double var_sodium_background_current__g_bna = 0.00029; // nanoS_per_picoF
-        const double var_sodium_calcium_exchanger_current__K_NaCa = 1000.0; // picoA_per_picoF
-        const double var_sodium_calcium_exchanger_current__K_sat = 0.10000000000000001; // dimensionless
-        const double var_sodium_calcium_exchanger_current__Km_Ca = 1.3799999999999999; // millimolar
-        const double var_sodium_calcium_exchanger_current__Km_Nai = 87.5; // millimolar
-        const double var_sodium_calcium_exchanger_current__alpha = 2.5; // dimensionless
-        const double var_sodium_calcium_exchanger_current__gamma = 0.34999999999999998; // dimensionless
-        const double var_sodium_dynamics__Na_o = 140.0; // millimolar
-        const double var_reversal_potentials__E_Ks = var_membrane__R * var_membrane__T * log((var_reversal_potentials__P_kna * var_sodium_dynamics__Na_o + var_potassium_dynamics__K_o) / (var_reversal_potentials__P_kna * var_chaste_interface__sodium_dynamics__Na_i + var_chaste_interface__potassium_dynamics__K_i)) / var_membrane__F; // millivolt
-        const double var_reversal_potentials__E_Na = var_membrane__R * var_membrane__T * log(var_sodium_dynamics__Na_o / var_chaste_interface__sodium_dynamics__Na_i) / var_membrane__F; // millivolt
+        // Lookup table indexing
+        const bool _oob_0 = Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
+        const double var_calcium_pump_current__i_p_Ca = 0.82499999999999996 * var_chaste_interface__calcium_dynamics__Ca_i / (0.00050000000000000001 + var_chaste_interface__calcium_dynamics__Ca_i); // picoA_per_picoF
+        const double var_L_type_Ca_current__i_CaL = 14447.286958825251 * _lt_0_row[1] * (-0.68200000000000005 + var_chaste_interface__calcium_dynamics__Ca_i * _lt_0_row[0]) * mParameters[0] * var_chaste_interface__L_type_Ca_current_d_gate__d * var_chaste_interface__L_type_Ca_current_fCa_gate__fCa * var_chaste_interface__L_type_Ca_current_f_gate__f * var_chaste_interface__membrane__V; // picoA_per_picoF
+        const double var_calcium_background_current__i_b_Ca = 0.00059199999999999997 * var_chaste_interface__membrane__V - 0.0079072731552699126 * log(2.0 / var_chaste_interface__calcium_dynamics__Ca_i); // picoA_per_picoF
+        const double var_reversal_potentials__E_K = 26.713760659695652 * log(5.4000000000000004 / var_chaste_interface__potassium_dynamics__K_i); // millivolt
+        const double var_inward_rectifier_potassium_current__i_K1 = 0.54050000000000009 * (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) / ((1.0 + exp(-12.0 + 0.059999999999999998 * var_chaste_interface__membrane__V - 0.059999999999999998 * var_reversal_potentials__E_K)) * (0.10000000000000001 / (1.0 + exp(-12.0 + 0.059999999999999998 * var_chaste_interface__membrane__V - 0.059999999999999998 * var_reversal_potentials__E_K)) + (exp(-1.0 + 0.10000000000000001 * var_chaste_interface__membrane__V - 0.10000000000000001 * var_reversal_potentials__E_K) + 3.0 * exp(0.02 + 0.00020000000000000001 * var_chaste_interface__membrane__V - 0.00020000000000000001 * var_reversal_potentials__E_K)) / (1.0 + exp(0.5 * var_reversal_potentials__E_K - 0.5 * var_chaste_interface__membrane__V)))); // picoA_per_picoF
+        const double var_potassium_pump_current__i_p_K = 0.0146 * _lt_0_row[2] * (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V); // picoA_per_picoF
+        const double var_rapid_time_dependent_potassium_current__i_Kr = 1.0 * (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * mParameters[2] * var_chaste_interface__rapid_time_dependent_potassium_current_Xr1_gate__Xr1 * var_chaste_interface__rapid_time_dependent_potassium_current_Xr2_gate__Xr2; // picoA_per_picoF
+        const double var_reversal_potentials__E_Na = 26.713760659695652 * log(140.0 / var_chaste_interface__sodium_dynamics__Na_i); // millivolt
         const double var_fast_sodium_current__i_Na = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * (-var_reversal_potentials__E_Na + var_chaste_interface__membrane__V) * mParameters[1] * var_chaste_interface__fast_sodium_current_h_gate__h * var_chaste_interface__fast_sodium_current_j_gate__j; // picoA_per_picoF
-        const double var_slow_time_dependent_potassium_current__i_Ks = pow(var_chaste_interface__slow_time_dependent_potassium_current_Xs_gate__Xs, 2) * (-var_reversal_potentials__E_Ks + var_chaste_interface__membrane__V) * var_slow_time_dependent_potassium_current__g_Ks; // picoA_per_picoF
-        const double var_sodium_background_current__i_b_Na = (-var_reversal_potentials__E_Na + var_chaste_interface__membrane__V) * var_sodium_background_current__g_bna; // picoA_per_picoF
-        const double var_sodium_calcium_exchanger_current__i_NaCa = (pow(var_chaste_interface__sodium_dynamics__Na_i, 3) * var_calcium_dynamics__Ca_o * exp(var_membrane__F * var_chaste_interface__membrane__V * var_sodium_calcium_exchanger_current__gamma / (var_membrane__R * var_membrane__T)) - pow(var_sodium_dynamics__Na_o, 3) * var_chaste_interface__calcium_dynamics__Ca_i * var_sodium_calcium_exchanger_current__alpha * exp((-1.0 + var_sodium_calcium_exchanger_current__gamma) * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * var_sodium_calcium_exchanger_current__K_NaCa / ((1.0 + var_sodium_calcium_exchanger_current__K_sat * exp((-1.0 + var_sodium_calcium_exchanger_current__gamma) * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * (pow(var_sodium_calcium_exchanger_current__Km_Nai, 3) + pow(var_sodium_dynamics__Na_o, 3)) * (var_calcium_dynamics__Ca_o + var_sodium_calcium_exchanger_current__Km_Ca)); // picoA_per_picoF
-        const double var_sodium_potassium_pump_current__K_mNa = 40.0; // millimolar
-        const double var_sodium_potassium_pump_current__K_mk = 1.0; // millimolar
-        const double var_sodium_potassium_pump_current__P_NaK = 1.3620000000000001; // picoA_per_picoF
-        const double var_sodium_potassium_pump_current__i_NaK = var_potassium_dynamics__K_o * var_chaste_interface__sodium_dynamics__Na_i * var_sodium_potassium_pump_current__P_NaK / ((var_potassium_dynamics__K_o + var_sodium_potassium_pump_current__K_mk) * (var_chaste_interface__sodium_dynamics__Na_i + var_sodium_potassium_pump_current__K_mNa) * (1.0 + 0.035299999999999998 * exp(-var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T)) + 0.1245 * exp(-0.10000000000000001 * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T)))); // picoA_per_picoF
+        const double var_slow_time_dependent_potassium_current__i_Ks = 0.245 * pow(var_chaste_interface__slow_time_dependent_potassium_current_Xs_gate__Xs, 2) * (-26.713760659695652 * log(9.5999999999999996 / (0.029999999999999999 * var_chaste_interface__sodium_dynamics__Na_i + var_chaste_interface__potassium_dynamics__K_i)) + var_chaste_interface__membrane__V); // picoA_per_picoF
+        const double var_sodium_background_current__i_b_Na = 0.00029 * var_chaste_interface__membrane__V - 0.00029 * var_reversal_potentials__E_Na; // picoA_per_picoF
+        const double var_sodium_calcium_exchanger_current__i_NaCa = 8.6662202299424464e-5 * _lt_0_row[5] * (2.0 * pow(var_chaste_interface__sodium_dynamics__Na_i, 3) * _lt_0_row[3] - 6860000.0 * var_chaste_interface__calcium_dynamics__Ca_i * _lt_0_row[4]); // picoA_per_picoF
+        const double var_sodium_potassium_pump_current__i_NaK = 1.1491875 * _lt_0_row[6] * var_chaste_interface__sodium_dynamics__Na_i / (40.0 + var_chaste_interface__sodium_dynamics__Na_i); // picoA_per_picoF
         const double var_transient_outward_current__i_to = (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * mParameters[3] * var_chaste_interface__transient_outward_current_r_gate__r * var_chaste_interface__transient_outward_current_s_gate__s; // picoA_per_picoF
         const double var_chaste_interface__i_ionic = (var_L_type_Ca_current__i_CaL + var_calcium_background_current__i_b_Ca + var_calcium_pump_current__i_p_Ca + var_fast_sodium_current__i_Na + var_inward_rectifier_potassium_current__i_K1 + var_potassium_pump_current__i_p_K + var_rapid_time_dependent_potassium_current__i_Kr + var_slow_time_dependent_potassium_current__i_Ks + var_sodium_background_current__i_b_Na + var_sodium_calcium_exchanger_current__i_NaCa + var_sodium_potassium_pump_current__i_NaK + var_transient_outward_current__i_to) * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
 
@@ -178,6 +473,14 @@
         double var_chaste_interface__transient_outward_current_r_gate__r = rY[12];
         // Units: dimensionless; Initial value: 2.01549207399881e-08
         
+        // Lookup table indexing
+        const bool _oob_0 = Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
         //output_nonlinear_state_assignments
         double var_chaste_interface__L_type_Ca_current_fCa_gate__fCa = rCurrentGuess[0];
         double var_chaste_interface__calcium_dynamics__Ca_SR = rCurrentGuess[1];
@@ -187,83 +490,32 @@
         double var_chaste_interface__sodium_dynamics__Na_i = rCurrentGuess[5];
         
         //output_equations
-        const double var_L_type_Ca_current_fCa_gate__tau_fCa = 2.0; // millisecond
-        const double var_calcium_background_current__g_bca = 0.00059199999999999997; // nanoS_per_picoF
-        const double var_calcium_dynamics__Buf_c = 0.14999999999999999; // millimolar
-        const double var_calcium_dynamics__Buf_sr = 10.0; // millimolar
-        const double var_L_type_Ca_current_fCa_gate__alpha_fCa = 1 / (1.0 + 8.034023767017109e+27 * pow(var_chaste_interface__calcium_dynamics__Ca_i, 8)); // dimensionless
-        const double var_L_type_Ca_current_fCa_gate__beta_fCa = 0.10000000000000001 / (1.0 + exp(-5.0 + 10000.0 * var_chaste_interface__calcium_dynamics__Ca_i)); // dimensionless
-        const double var_L_type_Ca_current_fCa_gate__gama_fCa = 0.20000000000000001 / (1.0 + exp(-0.9375 + 1250.0 * var_chaste_interface__calcium_dynamics__Ca_i)); // dimensionless
-        const double var_L_type_Ca_current_fCa_gate__fCa_inf = 0.15753424657534248 + 0.68493150684931503 * var_L_type_Ca_current_fCa_gate__alpha_fCa + 0.68493150684931503 * var_L_type_Ca_current_fCa_gate__beta_fCa + 0.68493150684931503 * var_L_type_Ca_current_fCa_gate__gama_fCa; // dimensionless
-        const double var_L_type_Ca_current_fCa_gate__d_fCa = (-var_chaste_interface__L_type_Ca_current_fCa_gate__fCa + var_L_type_Ca_current_fCa_gate__fCa_inf) / var_L_type_Ca_current_fCa_gate__tau_fCa; // per_millisecond
-        const double var_calcium_dynamics__Ca_o = 2.0; // millimolar
-        const double var_calcium_dynamics__K_buf_c = 0.001; // millimolar
-        const double var_calcium_dynamics__Ca_i_bufc = 1 / (1.0 + var_calcium_dynamics__Buf_c * var_calcium_dynamics__K_buf_c / pow((var_chaste_interface__calcium_dynamics__Ca_i + var_calcium_dynamics__K_buf_c), 2)); // dimensionless
-        const double var_calcium_dynamics__K_buf_sr = 0.29999999999999999; // millimolar
-        const double var_calcium_dynamics__Ca_sr_bufsr = 1 / (1.0 + var_calcium_dynamics__Buf_sr * var_calcium_dynamics__K_buf_sr / pow((var_chaste_interface__calcium_dynamics__Ca_SR + var_calcium_dynamics__K_buf_sr), 2)); // dimensionless
-        const double var_calcium_dynamics__K_up = 0.00025000000000000001; // millimolar
-        const double var_calcium_dynamics__V_leak = 8.0000000000000007e-5; // per_millisecond
-        const double var_calcium_dynamics__V_sr = 0.0010939999999999999; // micrometre3
-        const double var_calcium_dynamics__Vmax_up = 0.00042499999999999998; // millimolar_per_millisecond
-        const double var_calcium_dynamics__a_rel = 0.016463999999999999; // millimolar_per_millisecond
-        const double var_calcium_dynamics__b_rel = 0.25; // millimolar
-        const double var_calcium_dynamics__c_rel = 0.0082319999999999997; // millimolar_per_millisecond
+        const double var_L_type_Ca_current_fCa_gate__fCa_inf = 0.15753424657534248 + 0.068493150684931517 / (1.0 + exp(-5.0 + 10000.0 * var_chaste_interface__calcium_dynamics__Ca_i)) + 0.13698630136986303 / (1.0 + exp(-0.9375 + 1250.0 * var_chaste_interface__calcium_dynamics__Ca_i)) + 0.68493150684931503 / (1.0 + 8.034023767017109e+27 * pow(var_chaste_interface__calcium_dynamics__Ca_i, 8)); // dimensionless
         const double var_calcium_dynamics__g_inf = ((var_chaste_interface__calcium_dynamics__Ca_i < 0.00035) ? (1 / (1.0 + 5.439910241481016e+20 * pow(var_chaste_interface__calcium_dynamics__Ca_i, 6))) : (1 / (1.0 + 1.9720198874049176e+55 * pow(var_chaste_interface__calcium_dynamics__Ca_i, 16)))); // dimensionless
-        const double var_calcium_dynamics__i_leak = (-var_chaste_interface__calcium_dynamics__Ca_i + var_chaste_interface__calcium_dynamics__Ca_SR) * var_calcium_dynamics__V_leak; // millimolar_per_millisecond
-        const double var_calcium_dynamics__i_rel = (pow(var_chaste_interface__calcium_dynamics__Ca_SR, 2) * var_calcium_dynamics__a_rel / (pow(var_chaste_interface__calcium_dynamics__Ca_SR, 2) + pow(var_calcium_dynamics__b_rel, 2)) + var_calcium_dynamics__c_rel) * var_chaste_interface__L_type_Ca_current_d_gate__d * var_chaste_interface__calcium_dynamics__g; // millimolar_per_millisecond
-        const double var_calcium_dynamics__i_up = var_calcium_dynamics__Vmax_up / (1.0 + pow(var_calcium_dynamics__K_up, 2) / pow(var_chaste_interface__calcium_dynamics__Ca_i, 2)); // millimolar_per_millisecond
-        const double var_calcium_dynamics__tau_g = 2.0; // millisecond
-        const double var_calcium_dynamics__d_g = (-var_chaste_interface__calcium_dynamics__g + var_calcium_dynamics__g_inf) / var_calcium_dynamics__tau_g; // per_millisecond
-        const double var_calcium_pump_current__K_pCa = 0.00050000000000000001; // millimolar
-        const double var_calcium_pump_current__g_pCa = 0.82499999999999996; // picoA_per_picoF
-        const double var_calcium_pump_current__i_p_Ca = var_chaste_interface__calcium_dynamics__Ca_i * var_calcium_pump_current__g_pCa / (var_chaste_interface__calcium_dynamics__Ca_i + var_calcium_pump_current__K_pCa); // picoA_per_picoF
-        const double var_inward_rectifier_potassium_current__g_K1 = 5.4050000000000002; // nanoS_per_picoF
-        const double var_membrane__Cm = 0.185; // microF
-        const double var_membrane__F = 96485.341499999995; // coulomb_per_millimole
-        const double var_membrane__R = 8314.4719999999998; // joule_per_mole_kelvin
-        const double var_membrane__T = 310.0; // kelvin
-        const double d_dt_chaste_interface_var_L_type_Ca_current_fCa_gate__fCa = (((var_chaste_interface__membrane__V > -60.0) && (var_chaste_interface__L_type_Ca_current_fCa_gate__fCa < var_L_type_Ca_current_fCa_gate__fCa_inf)) ? (0) : (var_L_type_Ca_current_fCa_gate__d_fCa)); // 1 / millisecond
-        const double d_dt_chaste_interface_var_calcium_dynamics__g = (((var_chaste_interface__membrane__V > -60.0) && (var_chaste_interface__calcium_dynamics__g < var_calcium_dynamics__g_inf)) ? (0) : (var_calcium_dynamics__d_g)); // 1 / millisecond
-        const double var_L_type_Ca_current__i_CaL = 4.0 * pow(var_membrane__F, 2) * (-0.34100000000000003 * var_calcium_dynamics__Ca_o + var_chaste_interface__calcium_dynamics__Ca_i * exp(2.0 * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * mParameters[0] * var_chaste_interface__L_type_Ca_current_d_gate__d * var_chaste_interface__L_type_Ca_current_fCa_gate__fCa * var_chaste_interface__L_type_Ca_current_f_gate__f * var_chaste_interface__membrane__V / ((-1.0 + exp(2.0 * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * var_membrane__R * var_membrane__T); // picoA_per_picoF
-        const double var_membrane__V_c = 0.016403999999999998; // micrometre3
-        const double d_dt_chaste_interface_var_calcium_dynamics__Ca_SR = (-var_calcium_dynamics__i_leak - var_calcium_dynamics__i_rel + var_calcium_dynamics__i_up) * var_calcium_dynamics__Ca_sr_bufsr * var_membrane__V_c / var_calcium_dynamics__V_sr; // millimolar / millisecond
-        const double var_membrane__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
-        const double var_membrane__i_Stim = var_membrane__i_Stim_converted / HeartConfig::Instance()->GetCapacitance(); // picoA_per_picoF
-        const double var_potassium_dynamics__K_o = 5.4000000000000004; // millimolar
-        const double var_potassium_pump_current__g_pK = 0.0146; // nanoS_per_picoF
-        const double var_reversal_potentials__E_Ca = 0.5 * var_membrane__R * var_membrane__T * log(var_calcium_dynamics__Ca_o / var_chaste_interface__calcium_dynamics__Ca_i) / var_membrane__F; // millivolt
-        const double var_calcium_background_current__i_b_Ca = (-var_reversal_potentials__E_Ca + var_chaste_interface__membrane__V) * var_calcium_background_current__g_bca; // picoA_per_picoF
-        const double var_reversal_potentials__E_K = var_membrane__R * var_membrane__T * log(var_potassium_dynamics__K_o / var_chaste_interface__potassium_dynamics__K_i) / var_membrane__F; // millivolt
-        const double var_inward_rectifier_potassium_current__alpha_K1 = 0.10000000000000001 / (1.0 + exp(-12.0 + 0.059999999999999998 * var_chaste_interface__membrane__V - 0.059999999999999998 * var_reversal_potentials__E_K)); // per_millisecond
-        const double var_inward_rectifier_potassium_current__beta_K1 = (exp(-1.0 + 0.10000000000000001 * var_chaste_interface__membrane__V - 0.10000000000000001 * var_reversal_potentials__E_K) + 3.0 * exp(0.02 + 0.00020000000000000001 * var_chaste_interface__membrane__V - 0.00020000000000000001 * var_reversal_potentials__E_K)) / (1.0 + exp(0.5 * var_reversal_potentials__E_K - 0.5 * var_chaste_interface__membrane__V)); // per_millisecond
-        const double var_inward_rectifier_potassium_current__xK1_inf = var_inward_rectifier_potassium_current__alpha_K1 / (var_inward_rectifier_potassium_current__alpha_K1 + var_inward_rectifier_potassium_current__beta_K1); // dimensionless
-        const double var_inward_rectifier_potassium_current__i_K1 = 0.43033148291193518 * sqrt(var_potassium_dynamics__K_o) * (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * var_inward_rectifier_potassium_current__g_K1 * var_inward_rectifier_potassium_current__xK1_inf; // picoA_per_picoF
-        const double var_potassium_pump_current__i_p_K = (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * var_potassium_pump_current__g_pK / (1.0 + exp(4.1806020066889626 - 0.16722408026755853 * var_chaste_interface__membrane__V)); // picoA_per_picoF
-        const double var_rapid_time_dependent_potassium_current__i_Kr = 0.43033148291193518 * sqrt(var_potassium_dynamics__K_o) * (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * mParameters[2] * var_chaste_interface__rapid_time_dependent_potassium_current_Xr1_gate__Xr1 * var_chaste_interface__rapid_time_dependent_potassium_current_Xr2_gate__Xr2; // picoA_per_picoF
-        const double var_reversal_potentials__P_kna = 0.029999999999999999; // dimensionless
-        const double var_slow_time_dependent_potassium_current__g_Ks = 0.245; // nanoS_per_picoF
-        const double var_sodium_background_current__g_bna = 0.00029; // nanoS_per_picoF
-        const double var_sodium_calcium_exchanger_current__K_NaCa = 1000.0; // picoA_per_picoF
-        const double var_sodium_calcium_exchanger_current__K_sat = 0.10000000000000001; // dimensionless
-        const double var_sodium_calcium_exchanger_current__Km_Ca = 1.3799999999999999; // millimolar
-        const double var_sodium_calcium_exchanger_current__Km_Nai = 87.5; // millimolar
-        const double var_sodium_calcium_exchanger_current__alpha = 2.5; // dimensionless
-        const double var_sodium_calcium_exchanger_current__gamma = 0.34999999999999998; // dimensionless
-        const double var_sodium_dynamics__Na_o = 140.0; // millimolar
-        const double var_reversal_potentials__E_Ks = var_membrane__R * var_membrane__T * log((var_reversal_potentials__P_kna * var_sodium_dynamics__Na_o + var_potassium_dynamics__K_o) / (var_reversal_potentials__P_kna * var_chaste_interface__sodium_dynamics__Na_i + var_chaste_interface__potassium_dynamics__K_i)) / var_membrane__F; // millivolt
-        const double var_reversal_potentials__E_Na = var_membrane__R * var_membrane__T * log(var_sodium_dynamics__Na_o / var_chaste_interface__sodium_dynamics__Na_i) / var_membrane__F; // millivolt
+        const double var_calcium_dynamics__i_leak = 8.0000000000000007e-5 * var_chaste_interface__calcium_dynamics__Ca_SR - 8.0000000000000007e-5 * var_chaste_interface__calcium_dynamics__Ca_i; // millimolar_per_millisecond
+        const double var_calcium_dynamics__i_rel = (0.0082319999999999997 + 0.016463999999999999 * pow(var_chaste_interface__calcium_dynamics__Ca_SR, 2) / (0.0625 + pow(var_chaste_interface__calcium_dynamics__Ca_SR, 2))) * var_chaste_interface__L_type_Ca_current_d_gate__d * var_chaste_interface__calcium_dynamics__g; // millimolar_per_millisecond
+        const double var_calcium_dynamics__i_up = 0.00042499999999999998 / (1.0 + 6.2499999999999997e-8 / pow(var_chaste_interface__calcium_dynamics__Ca_i, 2)); // millimolar_per_millisecond
+        const double var_calcium_pump_current__i_p_Ca = 0.82499999999999996 * var_chaste_interface__calcium_dynamics__Ca_i / (0.00050000000000000001 + var_chaste_interface__calcium_dynamics__Ca_i); // picoA_per_picoF
+        const double d_dt_chaste_interface_var_L_type_Ca_current_fCa_gate__fCa = (((var_chaste_interface__membrane__V > -60.0) && (var_chaste_interface__L_type_Ca_current_fCa_gate__fCa < var_L_type_Ca_current_fCa_gate__fCa_inf)) ? (0) : (0.5 * var_L_type_Ca_current_fCa_gate__fCa_inf - 0.5 * var_chaste_interface__L_type_Ca_current_fCa_gate__fCa)); // 1 / millisecond
+        const double d_dt_chaste_interface_var_calcium_dynamics__g = (((var_chaste_interface__membrane__V > -60.0) && (var_chaste_interface__calcium_dynamics__g < var_calcium_dynamics__g_inf)) ? (0) : (0.5 * var_calcium_dynamics__g_inf - 0.5 * var_chaste_interface__calcium_dynamics__g)); // 1 / millisecond
+        const double var_L_type_Ca_current__i_CaL = 14447.286958825251 * _lt_0_row[1] * (-0.68200000000000005 + var_chaste_interface__calcium_dynamics__Ca_i * _lt_0_row[0]) * mParameters[0] * var_chaste_interface__L_type_Ca_current_d_gate__d * var_chaste_interface__L_type_Ca_current_fCa_gate__fCa * var_chaste_interface__L_type_Ca_current_f_gate__f * var_chaste_interface__membrane__V; // picoA_per_picoF
+        const double d_dt_chaste_interface_var_calcium_dynamics__Ca_SR = 14.994515539305301 * (-var_calcium_dynamics__i_leak - var_calcium_dynamics__i_rel + var_calcium_dynamics__i_up) / (1.0 + 3.0 / pow((0.29999999999999999 + var_chaste_interface__calcium_dynamics__Ca_SR), 2)); // millimolar / millisecond
+        const double var_membrane__i_Stim = GetIntracellularAreaStimulus(var_chaste_interface__environment__time) / HeartConfig::Instance()->GetCapacitance(); // picoA_per_picoF
+        const double var_calcium_background_current__i_b_Ca = 0.00059199999999999997 * var_chaste_interface__membrane__V - 0.0079072731552699126 * log(2.0 / var_chaste_interface__calcium_dynamics__Ca_i); // picoA_per_picoF
+        const double var_reversal_potentials__E_K = 26.713760659695652 * log(5.4000000000000004 / var_chaste_interface__potassium_dynamics__K_i); // millivolt
+        const double var_inward_rectifier_potassium_current__i_K1 = 0.54050000000000009 * (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) / ((1.0 + exp(-12.0 + 0.059999999999999998 * var_chaste_interface__membrane__V - 0.059999999999999998 * var_reversal_potentials__E_K)) * (0.10000000000000001 / (1.0 + exp(-12.0 + 0.059999999999999998 * var_chaste_interface__membrane__V - 0.059999999999999998 * var_reversal_potentials__E_K)) + (exp(-1.0 + 0.10000000000000001 * var_chaste_interface__membrane__V - 0.10000000000000001 * var_reversal_potentials__E_K) + 3.0 * exp(0.02 + 0.00020000000000000001 * var_chaste_interface__membrane__V - 0.00020000000000000001 * var_reversal_potentials__E_K)) / (1.0 + exp(0.5 * var_reversal_potentials__E_K - 0.5 * var_chaste_interface__membrane__V)))); // picoA_per_picoF
+        const double var_potassium_pump_current__i_p_K = 0.0146 * _lt_0_row[2] * (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V); // picoA_per_picoF
+        const double var_rapid_time_dependent_potassium_current__i_Kr = 1.0 * (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * mParameters[2] * var_chaste_interface__rapid_time_dependent_potassium_current_Xr1_gate__Xr1 * var_chaste_interface__rapid_time_dependent_potassium_current_Xr2_gate__Xr2; // picoA_per_picoF
+        const double var_reversal_potentials__E_Na = 26.713760659695652 * log(140.0 / var_chaste_interface__sodium_dynamics__Na_i); // millivolt
         const double var_fast_sodium_current__i_Na = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * (-var_reversal_potentials__E_Na + var_chaste_interface__membrane__V) * mParameters[1] * var_chaste_interface__fast_sodium_current_h_gate__h * var_chaste_interface__fast_sodium_current_j_gate__j; // picoA_per_picoF
-        const double var_slow_time_dependent_potassium_current__i_Ks = pow(var_chaste_interface__slow_time_dependent_potassium_current_Xs_gate__Xs, 2) * (-var_reversal_potentials__E_Ks + var_chaste_interface__membrane__V) * var_slow_time_dependent_potassium_current__g_Ks; // picoA_per_picoF
-        const double var_sodium_background_current__i_b_Na = (-var_reversal_potentials__E_Na + var_chaste_interface__membrane__V) * var_sodium_background_current__g_bna; // picoA_per_picoF
-        const double var_sodium_calcium_exchanger_current__i_NaCa = (pow(var_chaste_interface__sodium_dynamics__Na_i, 3) * var_calcium_dynamics__Ca_o * exp(var_membrane__F * var_chaste_interface__membrane__V * var_sodium_calcium_exchanger_current__gamma / (var_membrane__R * var_membrane__T)) - pow(var_sodium_dynamics__Na_o, 3) * var_chaste_interface__calcium_dynamics__Ca_i * var_sodium_calcium_exchanger_current__alpha * exp((-1.0 + var_sodium_calcium_exchanger_current__gamma) * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * var_sodium_calcium_exchanger_current__K_NaCa / ((1.0 + var_sodium_calcium_exchanger_current__K_sat * exp((-1.0 + var_sodium_calcium_exchanger_current__gamma) * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * (pow(var_sodium_calcium_exchanger_current__Km_Nai, 3) + pow(var_sodium_dynamics__Na_o, 3)) * (var_calcium_dynamics__Ca_o + var_sodium_calcium_exchanger_current__Km_Ca)); // picoA_per_picoF
-        const double d_dt_chaste_interface_var_calcium_dynamics__Ca_i = (-var_calcium_dynamics__i_up - 0.5 * (-2.0 * var_sodium_calcium_exchanger_current__i_NaCa + var_L_type_Ca_current__i_CaL + var_calcium_background_current__i_b_Ca + var_calcium_pump_current__i_p_Ca) * var_membrane__Cm / (var_membrane__F * var_membrane__V_c) + var_calcium_dynamics__i_leak + var_calcium_dynamics__i_rel) * var_calcium_dynamics__Ca_i_bufc; // millimolar / millisecond
-        const double var_sodium_potassium_pump_current__K_mNa = 40.0; // millimolar
-        const double var_sodium_potassium_pump_current__K_mk = 1.0; // millimolar
-        const double var_sodium_potassium_pump_current__P_NaK = 1.3620000000000001; // picoA_per_picoF
-        const double var_sodium_potassium_pump_current__i_NaK = var_potassium_dynamics__K_o * var_chaste_interface__sodium_dynamics__Na_i * var_sodium_potassium_pump_current__P_NaK / ((var_potassium_dynamics__K_o + var_sodium_potassium_pump_current__K_mk) * (var_chaste_interface__sodium_dynamics__Na_i + var_sodium_potassium_pump_current__K_mNa) * (1.0 + 0.035299999999999998 * exp(-var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T)) + 0.1245 * exp(-0.10000000000000001 * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T)))); // picoA_per_picoF
-        const double d_dt_chaste_interface_var_sodium_dynamics__Na_i = -(3.0 * var_sodium_calcium_exchanger_current__i_NaCa + 3.0 * var_sodium_potassium_pump_current__i_NaK + var_fast_sodium_current__i_Na + var_sodium_background_current__i_b_Na) * var_membrane__Cm / (var_membrane__F * var_membrane__V_c); // millimolar / millisecond
+        const double var_slow_time_dependent_potassium_current__i_Ks = 0.245 * pow(var_chaste_interface__slow_time_dependent_potassium_current_Xs_gate__Xs, 2) * (-26.713760659695652 * log(9.5999999999999996 / (0.029999999999999999 * var_chaste_interface__sodium_dynamics__Na_i + var_chaste_interface__potassium_dynamics__K_i)) + var_chaste_interface__membrane__V); // picoA_per_picoF
+        const double var_sodium_background_current__i_b_Na = 0.00029 * var_chaste_interface__membrane__V - 0.00029 * var_reversal_potentials__E_Na; // picoA_per_picoF
+        const double var_sodium_calcium_exchanger_current__i_NaCa = 8.6662202299424464e-5 * _lt_0_row[5] * (2.0 * pow(var_chaste_interface__sodium_dynamics__Na_i, 3) * _lt_0_row[3] - 6860000.0 * var_chaste_interface__calcium_dynamics__Ca_i * _lt_0_row[4]); // picoA_per_picoF
+        const double d_dt_chaste_interface_var_calcium_dynamics__Ca_i = (-var_calcium_dynamics__i_up + 0.00011688549744401942 * var_sodium_calcium_exchanger_current__i_NaCa - 5.8442748722009712e-5 * var_L_type_Ca_current__i_CaL - 5.8442748722009712e-5 * var_calcium_background_current__i_b_Ca - 5.8442748722009712e-5 * var_calcium_pump_current__i_p_Ca + var_calcium_dynamics__i_leak + var_calcium_dynamics__i_rel) / (1.0 + 0.00014999999999999999 / pow((0.001 + var_chaste_interface__calcium_dynamics__Ca_i), 2)); // millimolar / millisecond
+        const double var_sodium_potassium_pump_current__i_NaK = 1.1491875 * _lt_0_row[6] * var_chaste_interface__sodium_dynamics__Na_i / (40.0 + var_chaste_interface__sodium_dynamics__Na_i); // picoA_per_picoF
+        const double d_dt_chaste_interface_var_sodium_dynamics__Na_i = -0.00035065649233205829 * var_sodium_calcium_exchanger_current__i_NaCa - 0.00035065649233205829 * var_sodium_potassium_pump_current__i_NaK - 0.00011688549744401942 * var_fast_sodium_current__i_Na - 0.00011688549744401942 * var_sodium_background_current__i_b_Na; // millimolar / millisecond
         const double var_transient_outward_current__i_to = (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * mParameters[3] * var_chaste_interface__transient_outward_current_r_gate__r * var_chaste_interface__transient_outward_current_s_gate__s; // picoA_per_picoF
-        const double d_dt_chaste_interface_var_potassium_dynamics__K_i = -(-2.0 * var_sodium_potassium_pump_current__i_NaK + var_inward_rectifier_potassium_current__i_K1 + var_membrane__i_Stim + var_potassium_pump_current__i_p_K + var_rapid_time_dependent_potassium_current__i_Kr + var_slow_time_dependent_potassium_current__i_Ks + var_transient_outward_current__i_to) * var_membrane__Cm / (var_membrane__F * var_membrane__V_c); // millimolar / millisecond
+        const double d_dt_chaste_interface_var_potassium_dynamics__K_i = 0.00023377099488803885 * var_sodium_potassium_pump_current__i_NaK - 0.00011688549744401942 * var_inward_rectifier_potassium_current__i_K1 - 0.00011688549744401942 * var_membrane__i_Stim - 0.00011688549744401942 * var_potassium_pump_current__i_p_K - 0.00011688549744401942 * var_rapid_time_dependent_potassium_current__i_Kr - 0.00011688549744401942 * var_slow_time_dependent_potassium_current__i_Ks - 0.00011688549744401942 * var_transient_outward_current__i_to; // millimolar / millisecond
         
         rResidual[2] = rCurrentGuess[2] - rY[1] - mDt*d_dt_chaste_interface_var_calcium_dynamics__Ca_i;
         rResidual[0] = rCurrentGuess[0] - rY[10] - mDt*d_dt_chaste_interface_var_L_type_Ca_current_fCa_gate__fCa;
@@ -299,6 +551,14 @@
         double var_chaste_interface__transient_outward_current_r_gate__r = rY[12];
         // Units: dimensionless; Initial value: 2.01549207399881e-08
         
+        // Lookup table indexing
+        const bool _oob_0 = Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
         double var_chaste_interface__L_type_Ca_current_fCa_gate__fCa = rCurrentGuess[0];
         double var_chaste_interface__calcium_dynamics__Ca_SR = rCurrentGuess[1];
         double var_chaste_interface__calcium_dynamics__Ca_i = rCurrentGuess[2];
@@ -333,17 +593,17 @@
         const double var_x24 = 0.001 + var_chaste_interface__calcium_dynamics__Ca_i;
         const double var_x25 = 1.0 + 0.00014999999999999999 / pow(var_x24, 2);
         const double var_x26 = 1 / var_x25;
-        const double var_x27 = exp(0.074867781645490947 * var_chaste_interface__membrane__V);
+        const double var_x27 = _lt_0_row[0];
         const double var_x28 = 0.84433916144939192 * mParameters[0] * var_chaste_interface__L_type_Ca_current_d_gate__d * var_chaste_interface__L_type_Ca_current_f_gate__f * var_chaste_interface__membrane__V / (-1.0 + var_x27);
         const double var_x29 = var_x28 * (-0.68200000000000005 + var_x27 * var_chaste_interface__calcium_dynamics__Ca_i);
         const double var_x30 = var_x26;
         const double var_x31 = 0.00050000000000000001 + var_chaste_interface__calcium_dynamics__Ca_i;
         const double var_x32 = 4.8215267695658011e-5 / var_x31;
         const double var_x33 = 1 / var_chaste_interface__calcium_dynamics__Ca_i;
-        const double var_x34 = exp(-0.024332029034784559 * var_chaste_interface__membrane__V);
+        const double var_x34 = _lt_0_row[4];
         const double var_x35 = 1 / (1.0 + 0.10000000000000001 * var_x34);
         const double var_x36 = var_x34 * var_x35;
-        const double var_x37 = exp(0.013101861787960915 * var_chaste_interface__membrane__V);
+        const double var_x37 = _lt_0_row[3];
         const double var_x38 = var_x35 * var_x37 * pow(var_chaste_interface__sodium_dynamics__Na_i, 2);
         const double var_x39 = var_chaste_interface__calcium_dynamics__Ca_i >= 0.00035;
         const double var_x40 = var_chaste_interface__calcium_dynamics__Ca_i < 0.00035;
@@ -366,7 +626,7 @@
         const double var_x57 = var_x44 / var_x56;
         const double var_x58 = -26.713760659695652 * var_x46 + var_chaste_interface__membrane__V;
         const double var_x59 = var_x47 / pow(var_x48, 2);
-        const double var_x60 = 1 / (1.0 + 0.035299999999999998 * exp(-0.037433890822745473 * var_chaste_interface__membrane__V) + 0.1245 * exp(-0.0037433890822745472 * var_chaste_interface__membrane__V));
+        const double var_x60 = _lt_0_row[6];
         const double var_x61 = var_x60 / (40.0 + var_chaste_interface__sodium_dynamics__Na_i);
         const double var_x62 = var_x60 * var_chaste_interface__sodium_dynamics__Na_i / pow((1 + 0.025000000000000001 * var_chaste_interface__sodium_dynamics__Na_i), 2);
         const double var_x63 = 1 / var_chaste_interface__sodium_dynamics__Na_i;
@@ -400,14 +660,14 @@
         rJacobian[4][1] = 0.0;
         rJacobian[4][2] = 0.0;
         rJacobian[4][3] = 0.0;
-        rJacobian[4][4] = 1.0 - (mDt * (-0.0073440052301827737 * var_x45 - 0.0016876848753885161 * var_x49 * var_x57 - 4.5587787568311439e-5 * var_x44 / (1.0 + exp(4.1806020066889626 - 0.16722408026755853 * var_chaste_interface__membrane__V)) + 0.00010126109252331096 * var_x57 * var_x58 * var_x59 - 0.0031224512033090025 * var_x44 * mParameters[2] * var_chaste_interface__rapid_time_dependent_potassium_current_Xr1_gate__Xr1 * var_chaste_interface__rapid_time_dependent_potassium_current_Xr2_gate__Xr2 - 6.3176611368492499e-5 * var_x49 * var_x58 * (-var_x52 * (2.6713760659695653 * var_x44 * var_x53 + 0.01602825639581739 * var_x44 * var_x54) + 0.16028256395817389 * var_x44 * var_x59 - 13.356880329847826 * var_x44 * var_x50 * var_x55 / pow(var_x51, 2)) / pow(var_x56, 2) - 0.0031224512033090025 * var_x44 * mParameters[3] * var_chaste_interface__transient_outward_current_r_gate__r * var_chaste_interface__transient_outward_current_s_gate__s));
+        rJacobian[4][4] = 1.0 - (mDt * (-0.0073440052301827737 * var_x45 - 0.0016876848753885161 * var_x49 * var_x57 - 4.5587787568311439e-5 * var_x44 * _lt_0_row[2] + 0.00010126109252331096 * var_x57 * var_x58 * var_x59 - 0.0031224512033090025 * var_x44 * mParameters[2] * var_chaste_interface__rapid_time_dependent_potassium_current_Xr1_gate__Xr1 * var_chaste_interface__rapid_time_dependent_potassium_current_Xr2_gate__Xr2 - 6.3176611368492499e-5 * var_x49 * var_x58 * (-var_x52 * (2.6713760659695653 * var_x44 * var_x53 + 0.01602825639581739 * var_x44 * var_x54) + 0.16028256395817389 * var_x44 * var_x59 - 13.356880329847826 * var_x44 * var_x50 * var_x55 / pow(var_x51, 2)) / pow(var_x56, 2) - 0.0031224512033090025 * var_x44 * mParameters[3] * var_chaste_interface__transient_outward_current_r_gate__r * var_chaste_interface__transient_outward_current_s_gate__s));
         rJacobian[4][5] = -(mDt * (0.00026864670518789814 * var_x61 - 0.00022032015690548321 * var_x45 - 1.6790419074243634e-7 * var_x62));
         rJacobian[5][0] = 0.0;
         rJacobian[5][1] = 0.0;
         rJacobian[5][2] = -(mDt * (0.20846623418995969 * var_x36));
         rJacobian[5][3] = 0.0;
         rJacobian[5][4] = 0.0;
-        rJacobian[5][5] = 1.0 - (mDt * (2.5185628611365452e-7 * var_x62 - 9.0551084895961074e-7 * var_x63 - 1.823319832565245e-7 * var_x38 - 0.00040297005778184723 * var_x61 - 0.0031224512033090025 * var_x63 * pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * mParameters[1] * var_chaste_interface__fast_sodium_current_h_gate__h * var_chaste_interface__fast_sodium_current_j_gate__j));
+        rJacobian[5][5] = 1.0 - (mDt * (2.5185628611365452e-7 * var_x62 - 1.823319832565245e-7 * var_x38 - 9.0551084895961074e-7 * var_x63 - 0.00040297005778184723 * var_x61 - 0.0031224512033090025 * var_x63 * pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * mParameters[1] * var_chaste_interface__fast_sodium_current_h_gate__h * var_chaste_interface__fast_sodium_current_j_gate__j));
     }
 
     void Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
@@ -445,49 +705,28 @@
         double var_chaste_interface__potassium_dynamics__K_i = rY[16];
         // Units: millimolar; Initial value: 138.549719318763
         
-        const double var_calcium_background_current__g_bca = 0.00059199999999999997; // nanoS_per_picoF
-        const double var_calcium_dynamics__Ca_o = 2.0; // millimolar
-        const double var_calcium_pump_current__K_pCa = 0.00050000000000000001; // millimolar
-        const double var_calcium_pump_current__g_pCa = 0.82499999999999996; // picoA_per_picoF
-        const double var_calcium_pump_current__i_p_Ca = var_chaste_interface__calcium_dynamics__Ca_i * var_calcium_pump_current__g_pCa / (var_chaste_interface__calcium_dynamics__Ca_i + var_calcium_pump_current__K_pCa); // picoA_per_picoF
-        const double var_inward_rectifier_potassium_current__g_K1 = 5.4050000000000002; // nanoS_per_picoF
-        const double var_membrane__F = 96485.341499999995; // coulomb_per_millimole
-        const double var_membrane__R = 8314.4719999999998; // joule_per_mole_kelvin
-        const double var_membrane__T = 310.0; // kelvin
-        const double var_L_type_Ca_current__i_CaL = 4.0 * pow(var_membrane__F, 2) * (-0.34100000000000003 * var_calcium_dynamics__Ca_o + var_chaste_interface__calcium_dynamics__Ca_i * exp(2.0 * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * mParameters[0] * var_chaste_interface__L_type_Ca_current_d_gate__d * var_chaste_interface__L_type_Ca_current_fCa_gate__fCa * var_chaste_interface__L_type_Ca_current_f_gate__f * var_chaste_interface__membrane__V / ((-1.0 + exp(2.0 * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * var_membrane__R * var_membrane__T); // picoA_per_picoF
-        const double var_membrane__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
-        const double var_membrane__i_Stim = var_membrane__i_Stim_converted / HeartConfig::Instance()->GetCapacitance(); // picoA_per_picoF
-        const double var_potassium_dynamics__K_o = 5.4000000000000004; // millimolar
-        const double var_potassium_pump_current__g_pK = 0.0146; // nanoS_per_picoF
-        const double var_reversal_potentials__E_Ca = 0.5 * var_membrane__R * var_membrane__T * log(var_calcium_dynamics__Ca_o / var_chaste_interface__calcium_dynamics__Ca_i) / var_membrane__F; // millivolt
-        const double var_calcium_background_current__i_b_Ca = (-var_reversal_potentials__E_Ca + var_chaste_interface__membrane__V) * var_calcium_background_current__g_bca; // picoA_per_picoF
-        const double var_reversal_potentials__E_K = var_membrane__R * var_membrane__T * log(var_potassium_dynamics__K_o / var_chaste_interface__potassium_dynamics__K_i) / var_membrane__F; // millivolt
-        const double var_inward_rectifier_potassium_current__alpha_K1 = 0.10000000000000001 / (1.0 + exp(-12.0 + 0.059999999999999998 * var_chaste_interface__membrane__V - 0.059999999999999998 * var_reversal_potentials__E_K)); // per_millisecond
-        const double var_inward_rectifier_potassium_current__beta_K1 = (exp(-1.0 + 0.10000000000000001 * var_chaste_interface__membrane__V - 0.10000000000000001 * var_reversal_potentials__E_K) + 3.0 * exp(0.02 + 0.00020000000000000001 * var_chaste_interface__membrane__V - 0.00020000000000000001 * var_reversal_potentials__E_K)) / (1.0 + exp(0.5 * var_reversal_potentials__E_K - 0.5 * var_chaste_interface__membrane__V)); // per_millisecond
-        const double var_inward_rectifier_potassium_current__xK1_inf = var_inward_rectifier_potassium_current__alpha_K1 / (var_inward_rectifier_potassium_current__alpha_K1 + var_inward_rectifier_potassium_current__beta_K1); // dimensionless
-        const double var_inward_rectifier_potassium_current__i_K1 = 0.43033148291193518 * sqrt(var_potassium_dynamics__K_o) * (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * var_inward_rectifier_potassium_current__g_K1 * var_inward_rectifier_potassium_current__xK1_inf; // picoA_per_picoF
-        const double var_potassium_pump_current__i_p_K = (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * var_potassium_pump_current__g_pK / (1.0 + exp(4.1806020066889626 - 0.16722408026755853 * var_chaste_interface__membrane__V)); // picoA_per_picoF
-        const double var_rapid_time_dependent_potassium_current__i_Kr = 0.43033148291193518 * sqrt(var_potassium_dynamics__K_o) * (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * mParameters[2] * var_chaste_interface__rapid_time_dependent_potassium_current_Xr1_gate__Xr1 * var_chaste_interface__rapid_time_dependent_potassium_current_Xr2_gate__Xr2; // picoA_per_picoF
-        const double var_reversal_potentials__P_kna = 0.029999999999999999; // dimensionless
-        const double var_slow_time_dependent_potassium_current__g_Ks = 0.245; // nanoS_per_picoF
-        const double var_sodium_background_current__g_bna = 0.00029; // nanoS_per_picoF
-        const double var_sodium_calcium_exchanger_current__K_NaCa = 1000.0; // picoA_per_picoF
-        const double var_sodium_calcium_exchanger_current__K_sat = 0.10000000000000001; // dimensionless
-        const double var_sodium_calcium_exchanger_current__Km_Ca = 1.3799999999999999; // millimolar
-        const double var_sodium_calcium_exchanger_current__Km_Nai = 87.5; // millimolar
-        const double var_sodium_calcium_exchanger_current__alpha = 2.5; // dimensionless
-        const double var_sodium_calcium_exchanger_current__gamma = 0.34999999999999998; // dimensionless
-        const double var_sodium_dynamics__Na_o = 140.0; // millimolar
-        const double var_reversal_potentials__E_Ks = var_membrane__R * var_membrane__T * log((var_reversal_potentials__P_kna * var_sodium_dynamics__Na_o + var_potassium_dynamics__K_o) / (var_reversal_potentials__P_kna * var_chaste_interface__sodium_dynamics__Na_i + var_chaste_interface__potassium_dynamics__K_i)) / var_membrane__F; // millivolt
-        const double var_reversal_potentials__E_Na = var_membrane__R * var_membrane__T * log(var_sodium_dynamics__Na_o / var_chaste_interface__sodium_dynamics__Na_i) / var_membrane__F; // millivolt
+        // Lookup table indexing
+        const bool _oob_0 = Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
+        const double var_calcium_pump_current__i_p_Ca = 0.82499999999999996 * var_chaste_interface__calcium_dynamics__Ca_i / (0.00050000000000000001 + var_chaste_interface__calcium_dynamics__Ca_i); // picoA_per_picoF
+        const double var_L_type_Ca_current__i_CaL = 14447.286958825251 * _lt_0_row[1] * (-0.68200000000000005 + var_chaste_interface__calcium_dynamics__Ca_i * _lt_0_row[0]) * mParameters[0] * var_chaste_interface__L_type_Ca_current_d_gate__d * var_chaste_interface__L_type_Ca_current_fCa_gate__fCa * var_chaste_interface__L_type_Ca_current_f_gate__f * var_chaste_interface__membrane__V; // picoA_per_picoF
+        const double var_membrane__i_Stim = GetIntracellularAreaStimulus(var_chaste_interface__environment__time) / HeartConfig::Instance()->GetCapacitance(); // picoA_per_picoF
+        const double var_calcium_background_current__i_b_Ca = 0.00059199999999999997 * var_chaste_interface__membrane__V - 0.0079072731552699126 * log(2.0 / var_chaste_interface__calcium_dynamics__Ca_i); // picoA_per_picoF
+        const double var_reversal_potentials__E_K = 26.713760659695652 * log(5.4000000000000004 / var_chaste_interface__potassium_dynamics__K_i); // millivolt
+        const double var_inward_rectifier_potassium_current__i_K1 = 0.54050000000000009 * (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) / ((1.0 + exp(-12.0 + 0.059999999999999998 * var_chaste_interface__membrane__V - 0.059999999999999998 * var_reversal_potentials__E_K)) * (0.10000000000000001 / (1.0 + exp(-12.0 + 0.059999999999999998 * var_chaste_interface__membrane__V - 0.059999999999999998 * var_reversal_potentials__E_K)) + (exp(-1.0 + 0.10000000000000001 * var_chaste_interface__membrane__V - 0.10000000000000001 * var_reversal_potentials__E_K) + 3.0 * exp(0.02 + 0.00020000000000000001 * var_chaste_interface__membrane__V - 0.00020000000000000001 * var_reversal_potentials__E_K)) / (1.0 + exp(0.5 * var_reversal_potentials__E_K - 0.5 * var_chaste_interface__membrane__V)))); // picoA_per_picoF
+        const double var_potassium_pump_current__i_p_K = 0.0146 * _lt_0_row[2] * (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V); // picoA_per_picoF
+        const double var_rapid_time_dependent_potassium_current__i_Kr = 1.0 * (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * mParameters[2] * var_chaste_interface__rapid_time_dependent_potassium_current_Xr1_gate__Xr1 * var_chaste_interface__rapid_time_dependent_potassium_current_Xr2_gate__Xr2; // picoA_per_picoF
+        const double var_reversal_potentials__E_Na = 26.713760659695652 * log(140.0 / var_chaste_interface__sodium_dynamics__Na_i); // millivolt
         const double var_fast_sodium_current__i_Na = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * (-var_reversal_potentials__E_Na + var_chaste_interface__membrane__V) * mParameters[1] * var_chaste_interface__fast_sodium_current_h_gate__h * var_chaste_interface__fast_sodium_current_j_gate__j; // picoA_per_picoF
-        const double var_slow_time_dependent_potassium_current__i_Ks = pow(var_chaste_interface__slow_time_dependent_potassium_current_Xs_gate__Xs, 2) * (-var_reversal_potentials__E_Ks + var_chaste_interface__membrane__V) * var_slow_time_dependent_potassium_current__g_Ks; // picoA_per_picoF
-        const double var_sodium_background_current__i_b_Na = (-var_reversal_potentials__E_Na + var_chaste_interface__membrane__V) * var_sodium_background_current__g_bna; // picoA_per_picoF
-        const double var_sodium_calcium_exchanger_current__i_NaCa = (pow(var_chaste_interface__sodium_dynamics__Na_i, 3) * var_calcium_dynamics__Ca_o * exp(var_membrane__F * var_chaste_interface__membrane__V * var_sodium_calcium_exchanger_current__gamma / (var_membrane__R * var_membrane__T)) - pow(var_sodium_dynamics__Na_o, 3) * var_chaste_interface__calcium_dynamics__Ca_i * var_sodium_calcium_exchanger_current__alpha * exp((-1.0 + var_sodium_calcium_exchanger_current__gamma) * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * var_sodium_calcium_exchanger_current__K_NaCa / ((1.0 + var_sodium_calcium_exchanger_current__K_sat * exp((-1.0 + var_sodium_calcium_exchanger_current__gamma) * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * (pow(var_sodium_calcium_exchanger_current__Km_Nai, 3) + pow(var_sodium_dynamics__Na_o, 3)) * (var_calcium_dynamics__Ca_o + var_sodium_calcium_exchanger_current__Km_Ca)); // picoA_per_picoF
-        const double var_sodium_potassium_pump_current__K_mNa = 40.0; // millimolar
-        const double var_sodium_potassium_pump_current__K_mk = 1.0; // millimolar
-        const double var_sodium_potassium_pump_current__P_NaK = 1.3620000000000001; // picoA_per_picoF
-        const double var_sodium_potassium_pump_current__i_NaK = var_potassium_dynamics__K_o * var_chaste_interface__sodium_dynamics__Na_i * var_sodium_potassium_pump_current__P_NaK / ((var_potassium_dynamics__K_o + var_sodium_potassium_pump_current__K_mk) * (var_chaste_interface__sodium_dynamics__Na_i + var_sodium_potassium_pump_current__K_mNa) * (1.0 + 0.035299999999999998 * exp(-var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T)) + 0.1245 * exp(-0.10000000000000001 * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T)))); // picoA_per_picoF
+        const double var_slow_time_dependent_potassium_current__i_Ks = 0.245 * pow(var_chaste_interface__slow_time_dependent_potassium_current_Xs_gate__Xs, 2) * (-26.713760659695652 * log(9.5999999999999996 / (0.029999999999999999 * var_chaste_interface__sodium_dynamics__Na_i + var_chaste_interface__potassium_dynamics__K_i)) + var_chaste_interface__membrane__V); // picoA_per_picoF
+        const double var_sodium_background_current__i_b_Na = 0.00029 * var_chaste_interface__membrane__V - 0.00029 * var_reversal_potentials__E_Na; // picoA_per_picoF
+        const double var_sodium_calcium_exchanger_current__i_NaCa = 8.6662202299424464e-5 * _lt_0_row[5] * (2.0 * pow(var_chaste_interface__sodium_dynamics__Na_i, 3) * _lt_0_row[3] - 6860000.0 * var_chaste_interface__calcium_dynamics__Ca_i * _lt_0_row[4]); // picoA_per_picoF
+        const double var_sodium_potassium_pump_current__i_NaK = 1.1491875 * _lt_0_row[6] * var_chaste_interface__sodium_dynamics__Na_i / (40.0 + var_chaste_interface__sodium_dynamics__Na_i); // picoA_per_picoF
         const double var_transient_outward_current__i_to = (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * mParameters[3] * var_chaste_interface__transient_outward_current_r_gate__r * var_chaste_interface__transient_outward_current_s_gate__s; // picoA_per_picoF
         const double d_dt_chaste_interface_var_membrane__V = -var_L_type_Ca_current__i_CaL - var_calcium_background_current__i_b_Ca - var_calcium_pump_current__i_p_Ca - var_fast_sodium_current__i_Na - var_inward_rectifier_potassium_current__i_K1 - var_membrane__i_Stim - var_potassium_pump_current__i_p_K - var_rapid_time_dependent_potassium_current__i_Kr - var_slow_time_dependent_potassium_current__i_Ks - var_sodium_background_current__i_b_Na - var_sodium_calcium_exchanger_current__i_NaCa - var_sodium_potassium_pump_current__i_NaK - var_transient_outward_current__i_to; // millivolt / millisecond
         
@@ -521,38 +760,46 @@
         double var_chaste_interface__transient_outward_current_r_gate__r = rY[12];
         // Units: dimensionless; Initial value: 2.01549207399881e-08
         
+        // Lookup table indexing
+        const bool _oob_0 = Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellten_tusscher_model_2004_epiFromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
         const double var_L_type_Ca_current_d_gate__alpha_d = 0.25 + 1.3999999999999999 / (1.0 + exp(-2.6923076923076925 - 0.076923076923076927 * var_chaste_interface__membrane__V));
         const double var_L_type_Ca_current_d_gate__beta_d = 1.3999999999999999 / (1.0 + exp(1.0 + 0.20000000000000001 * var_chaste_interface__membrane__V));
-        const double var_L_type_Ca_current_d_gate__d_inf = 1 / (1.0 + exp(-0.66666666666666663 - 0.13333333333333333 * var_chaste_interface__membrane__V));
+        const double var_L_type_Ca_current_d_gate__d_inf = _lt_0_row[7];
         const double var_L_type_Ca_current_d_gate__gamma_d = 1 / (1.0 + exp(2.5 - 0.050000000000000003 * var_chaste_interface__membrane__V));
         const double var_L_type_Ca_current_d_gate__tau_d = var_L_type_Ca_current_d_gate__alpha_d * var_L_type_Ca_current_d_gate__beta_d + var_L_type_Ca_current_d_gate__gamma_d;
-        const double var_L_type_Ca_current_f_gate__f_inf = 1 / (1.0 + exp(2.8571428571428572 + 0.14285714285714285 * var_chaste_interface__membrane__V));
+        const double var_L_type_Ca_current_f_gate__f_inf = _lt_0_row[9];
         const double var_L_type_Ca_current_f_gate__tau_f = 80.0 + 165.0 / (1.0 + exp(2.5 - 0.10000000000000001 * var_chaste_interface__membrane__V)) + 1125.0 * exp(-3.0375000000000001 * pow((1 + 0.037037037037037035 * var_chaste_interface__membrane__V), 2));
         const double var_fast_sodium_current_h_gate__alpha_h = ((var_chaste_interface__membrane__V < -40.0) ? (0.057000000000000002 * exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__membrane__V)) : (0));
         const double var_fast_sodium_current_h_gate__beta_h = ((var_chaste_interface__membrane__V < -40.0) ? (310000.0 * exp(0.34849999999999998 * var_chaste_interface__membrane__V) + 2.7000000000000002 * exp(0.079000000000000001 * var_chaste_interface__membrane__V)) : (5.9230769230769234 / (1.0 + exp(-0.96036036036036043 - 0.0900900900900901 * var_chaste_interface__membrane__V))));
-        const double var_fast_sodium_current_h_gate__h_inf = 1 / pow((1.0 + exp(9.6298788694481825 + 0.13458950201884254 * var_chaste_interface__membrane__V)), 2);
+        const double var_fast_sodium_current_h_gate__h_inf = _lt_0_row[11];
         const double var_fast_sodium_current_h_gate__tau_h = 1 / (var_fast_sodium_current_h_gate__alpha_h + var_fast_sodium_current_h_gate__beta_h);
         const double var_fast_sodium_current_j_gate__alpha_j = ((var_chaste_interface__membrane__V < -40.0) ? ((37.780000000000001 + var_chaste_interface__membrane__V) * (-25428.0 * exp(0.24440000000000001 * var_chaste_interface__membrane__V) - 6.9480000000000002e-6 * exp(-0.043909999999999998 * var_chaste_interface__membrane__V)) / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__membrane__V))) : (0));
         const double var_fast_sodium_current_j_gate__beta_j = ((var_chaste_interface__membrane__V < -40.0) ? (0.024240000000000001 * exp(-0.01052 * var_chaste_interface__membrane__V) / (1.0 + exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__membrane__V))) : (0.59999999999999998 * exp(0.057000000000000002 * var_chaste_interface__membrane__V) / (1.0 + exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__membrane__V))));
-        const double var_fast_sodium_current_j_gate__j_inf = 1 / pow((1.0 + exp(9.6298788694481825 + 0.13458950201884254 * var_chaste_interface__membrane__V)), 2);
+        const double var_fast_sodium_current_j_gate__j_inf = _lt_0_row[11];
         const double var_fast_sodium_current_j_gate__tau_j = 1 / (var_fast_sodium_current_j_gate__alpha_j + var_fast_sodium_current_j_gate__beta_j);
-        const double var_fast_sodium_current_m_gate__alpha_m = 1 / (1.0 + exp(-12.0 - 0.20000000000000001 * var_chaste_interface__membrane__V));
+        const double var_fast_sodium_current_m_gate__alpha_m = 1 / (_lt_0_row[16]);
         const double var_fast_sodium_current_m_gate__beta_m = 0.10000000000000001 / (1.0 + exp(7.0 + 0.20000000000000001 * var_chaste_interface__membrane__V)) + 0.10000000000000001 / (1.0 + exp(-0.25 + 0.0050000000000000001 * var_chaste_interface__membrane__V));
-        const double var_fast_sodium_current_m_gate__m_inf = 1 / pow((1.0 + exp(-6.2967884828349945 - 0.11074197120708749 * var_chaste_interface__membrane__V)), 2);
+        const double var_fast_sodium_current_m_gate__m_inf = _lt_0_row[14];
         const double var_fast_sodium_current_m_gate__tau_m = var_fast_sodium_current_m_gate__alpha_m * var_fast_sodium_current_m_gate__beta_m;
-        const double var_rapid_time_dependent_potassium_current_Xr1_gate__alpha_xr1 = 450.0 / (1.0 + exp(-4.5 - 0.10000000000000001 * var_chaste_interface__membrane__V));
-        const double var_rapid_time_dependent_potassium_current_Xr1_gate__beta_xr1 = 6.0 / (1.0 + exp(2.6086956521739131 + 0.086956521739130432 * var_chaste_interface__membrane__V));
+        const double var_rapid_time_dependent_potassium_current_Xr1_gate__alpha_xr1 = 450.0 / (_lt_0_row[19]);
+        const double var_rapid_time_dependent_potassium_current_Xr1_gate__beta_xr1 = 6.0 / (_lt_0_row[18]);
         const double var_rapid_time_dependent_potassium_current_Xr1_gate__tau_xr1 = var_rapid_time_dependent_potassium_current_Xr1_gate__alpha_xr1 * var_rapid_time_dependent_potassium_current_Xr1_gate__beta_xr1;
-        const double var_rapid_time_dependent_potassium_current_Xr1_gate__xr1_inf = 1 / (1.0 + exp(-3.7142857142857144 - 0.14285714285714285 * var_chaste_interface__membrane__V));
-        const double var_rapid_time_dependent_potassium_current_Xr2_gate__alpha_xr2 = 3.0 / (1.0 + exp(-3.0 - 0.050000000000000003 * var_chaste_interface__membrane__V));
-        const double var_rapid_time_dependent_potassium_current_Xr2_gate__beta_xr2 = 1.1200000000000001 / (1.0 + exp(-3.0 + 0.050000000000000003 * var_chaste_interface__membrane__V));
+        const double var_rapid_time_dependent_potassium_current_Xr1_gate__xr1_inf = _lt_0_row[17];
+        const double var_rapid_time_dependent_potassium_current_Xr2_gate__alpha_xr2 = 3.0 / (_lt_0_row[22]);
+        const double var_rapid_time_dependent_potassium_current_Xr2_gate__beta_xr2 = 1.1200000000000001 / (_lt_0_row[21]);
         const double var_rapid_time_dependent_potassium_current_Xr2_gate__tau_xr2 = var_rapid_time_dependent_potassium_current_Xr2_gate__alpha_xr2 * var_rapid_time_dependent_potassium_current_Xr2_gate__beta_xr2;
-        const double var_rapid_time_dependent_potassium_current_Xr2_gate__xr2_inf = 1 / (1.0 + exp(3.6666666666666665 + 0.041666666666666664 * var_chaste_interface__membrane__V));
-        const double var_slow_time_dependent_potassium_current_Xs_gate__alpha_xs = 1100.0 / sqrt(1.0 + exp(-1.6666666666666667 - 0.16666666666666666 * var_chaste_interface__membrane__V));
-        const double var_slow_time_dependent_potassium_current_Xs_gate__beta_xs = 1 / (1.0 + exp(-3.0 + 0.050000000000000003 * var_chaste_interface__membrane__V));
+        const double var_rapid_time_dependent_potassium_current_Xr2_gate__xr2_inf = _lt_0_row[20];
+        const double var_slow_time_dependent_potassium_current_Xs_gate__alpha_xs = 1100.0 / _lt_0_row[24];
+        const double var_slow_time_dependent_potassium_current_Xs_gate__beta_xs = 1 / (_lt_0_row[21]);
         const double var_slow_time_dependent_potassium_current_Xs_gate__tau_xs = var_slow_time_dependent_potassium_current_Xs_gate__alpha_xs * var_slow_time_dependent_potassium_current_Xs_gate__beta_xs;
-        const double var_slow_time_dependent_potassium_current_Xs_gate__xs_inf = 1 / (1.0 + exp(-0.35714285714285715 - 0.071428571428571425 * var_chaste_interface__membrane__V));
-        const double var_transient_outward_current_r_gate__r_inf = 1 / (1.0 + exp(3.3333333333333335 - 0.16666666666666666 * var_chaste_interface__membrane__V));
+        const double var_slow_time_dependent_potassium_current_Xs_gate__xs_inf = _lt_0_row[23];
+        const double var_transient_outward_current_r_gate__r_inf = _lt_0_row[25];
         const double var_transient_outward_current_r_gate__tau_r = 0.80000000000000004 + 9.5 * exp(-0.88888888888888884 * pow((1 + 0.025000000000000001 * var_chaste_interface__membrane__V), 2));
         const double var_transient_outward_current_s_gate__s_gateparam = 20.0;
         const double var_transient_outward_current_s_gate__s_inf = 1 / (1.0 + exp(0.20000000000000001 * var_chaste_interface__membrane__V + 0.20000000000000001 * var_transient_outward_current_s_gate__s_gateparam));

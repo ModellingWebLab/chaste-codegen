@@ -36,6 +36,7 @@ public:
 
     Cellkurata_model_2002FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellkurata_model_2002FromCellMLBackwardEuler();
+    AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[13], double rResidual[13]);
     void ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[13], double rJacobian[13][13]);protected:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time);

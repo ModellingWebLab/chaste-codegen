@@ -38,6 +38,7 @@ public:
     double GetIntracellularCalciumConcentration();
     Cellnygren_atrial_model_1998FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellnygren_atrial_model_1998FromCellMLBackwardEuler();
+    AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[16], double rResidual[16]);
     void ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[16], double rJacobian[16][16]);protected:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted);

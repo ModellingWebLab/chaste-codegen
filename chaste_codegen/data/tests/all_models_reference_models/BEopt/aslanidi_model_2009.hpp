@@ -37,6 +37,7 @@ public:
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     Cellaslanidi_model_2009FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellaslanidi_model_2009FromCellMLBackwardEuler();
+    AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[14], double rResidual[14]);
     void ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[14], double rJacobian[14][14]);protected:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted);

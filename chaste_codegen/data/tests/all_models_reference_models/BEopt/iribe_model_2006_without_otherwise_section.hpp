@@ -38,6 +38,7 @@ public:
     double GetIntracellularCalciumConcentration();
     Celliribe_model_2006_without_otherwise_sectionFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Celliribe_model_2006_without_otherwise_sectionFromCellMLBackwardEuler();
+    AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[15], double rResidual[15]);
     void ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[15], double rJacobian[15][15]);protected:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted);

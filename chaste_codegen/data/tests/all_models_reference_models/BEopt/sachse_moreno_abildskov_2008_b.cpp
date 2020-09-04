@@ -22,6 +22,66 @@
 #include "MathsCustomFunctions.hpp"
 #include "CardiacNewtonSolver.hpp"
 
+class Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables : public AbstractLookupTableCollection
+{
+public:
+    static Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables* Instance()
+    {
+        if (mpInstance.get() == NULL)
+        {
+            mpInstance.reset(new Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables);
+        }
+        return mpInstance.get();
+    }
+
+    void FreeMemory()
+    {
+
+        mNeedsRegeneration.assign(mNeedsRegeneration.size(), true);
+    }
+
+    // Row lookup methods
+    // using linear-interpolation
+
+
+
+    ~Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables()
+    {
+
+    }
+
+protected:
+    Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables(const Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables&);
+    Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables& operator= (const Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables&);
+    Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables()
+    {
+        assert(mpInstance.get() == NULL);
+        mKeyingVariableNames.resize(0);
+        mNumberOfTables.resize(0);
+        mTableMins.resize(0);
+        mTableSteps.resize(0);
+        mTableStepInverses.resize(0);
+        mTableMaxs.resize(0);
+        mNeedsRegeneration.resize(0);
+
+        Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables::RegenerateTables();
+    }
+
+    void RegenerateTables()
+    {
+        AbstractLookupTableCollection::EventHandler::BeginEvent(AbstractLookupTableCollection::EventHandler::GENERATE_TABLES);
+
+        AbstractLookupTableCollection::EventHandler::EndEvent(AbstractLookupTableCollection::EventHandler::GENERATE_TABLES);
+    }
+
+private:
+    /** The single instance of the class */
+    static std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables> mpInstance;
+
+};
+
+std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables> Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables::mpInstance;
+
     boost::shared_ptr<RegularStimulus> Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -65,6 +125,11 @@
     Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler::~Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler()
     {
     }
+
+    AbstractLookupTableCollection* Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler::GetLookupTableCollection()
+    {
+        return Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables::Instance();
+    }
     
     double Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -77,19 +142,10 @@
         double var_chaste_interface__I_Shkr__OShkr = rY[6];
         // Units: dimensionless; Initial value: 0.0
         
-        const double var_I_Kir__aKir = 0.93999999999999995; // dimensionless
-        const double var_I_Kir__bKir = 1.26; // dimensionless
-        const double var_I_b__Eb = 0; // millivolt
-        const double var_I_b__I_b = (-var_I_b__Eb + var_chaste_interface__membrane__Vm) * mParameters[5]; // nanoampere
-        const double var_I_b__I_b_converted = 0.001 * HeartConfig::Instance()->GetCapacitance() * var_I_b__I_b / mParameters[2]; // uA_per_cm2
-        const double var_model_parameters__F = 96500.0; // coulomb_per_mole
-        const double var_model_parameters__R = 8310.0; // millijoule_per_kelvin_mole
-        const double var_I_Kir__EK = var_model_parameters__R * mParameters[6] * log(mParameters[1] / mParameters[0]) / var_model_parameters__F; // millivolt
-        const double var_I_Kir__OKir = 1 / (var_I_Kir__aKir + exp((-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * var_I_Kir__bKir * var_model_parameters__F / (var_model_parameters__R * mParameters[6]))); // dimensionless
-        const double var_I_Kir__I_Kir = 0.031622776601683791 * sqrt(mParameters[1]) * (-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * mParameters[4] * var_I_Kir__OKir; // nanoampere
-        const double var_I_Kir__I_Kir_converted = 0.001 * HeartConfig::Instance()->GetCapacitance() * var_I_Kir__I_Kir / mParameters[2]; // uA_per_cm2
-        const double var_I_Shkr__I_Shkr = pow(var_model_parameters__F, 2) * (-mParameters[1] * exp(-var_chaste_interface__membrane__Vm * var_model_parameters__F / (var_model_parameters__R * mParameters[6])) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] * var_chaste_interface__membrane__Vm / ((1.0 - exp(-var_chaste_interface__membrane__Vm * var_model_parameters__F / (var_model_parameters__R * mParameters[6]))) * var_model_parameters__R * mParameters[6]); // nanoampere
-        const double var_I_Shkr__I_Shkr_converted = 0.001 * HeartConfig::Instance()->GetCapacitance() * var_I_Shkr__I_Shkr / mParameters[2]; // uA_per_cm2
+        const double var_I_b__I_b_converted = 0.001 * HeartConfig::Instance()->GetCapacitance() * mParameters[5] * var_chaste_interface__membrane__Vm / mParameters[2]; // uA_per_cm2
+        const double var_I_Kir__EK = 0.086113989637305696 * mParameters[6] * log(mParameters[1] / mParameters[0]); // millivolt
+        const double var_I_Kir__I_Kir_converted = 3.1622776601683795e-5 * sqrt(mParameters[1]) * (-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * HeartConfig::Instance()->GetCapacitance() * mParameters[4] / ((0.93999999999999995 + exp(14.631768953068592 * (-var_I_Kir__EK + var_chaste_interface__membrane__Vm) / mParameters[6])) * mParameters[2]); // uA_per_cm2
+        const double var_I_Shkr__I_Shkr_converted = 1120.6077015643802 * (-mParameters[1] * exp(-11.612515042117931 * var_chaste_interface__membrane__Vm / mParameters[6]) + mParameters[0]) * HeartConfig::Instance()->GetCapacitance() * var_chaste_interface__I_Shkr__OShkr * mParameters[3] * var_chaste_interface__membrane__Vm / ((1.0 - exp(-11.612515042117931 * var_chaste_interface__membrane__Vm / mParameters[6])) * mParameters[2] * mParameters[6]); // uA_per_cm2
         const double var_chaste_interface__i_ionic = var_I_Kir__I_Kir_converted + var_I_Shkr__I_Shkr_converted + var_I_b__I_b_converted; // uA_per_cm2
 
         const double i_ionic = var_chaste_interface__i_ionic;
@@ -112,28 +168,14 @@
         double var_chaste_interface__I_Shkr__OShkr = rCurrentGuess[5];
         
         //output_equations
-        const double var_I_Shkr__k_o = 18.0; // first_order_rate_constant
-        const double var_I_Shkr__k_v0 = 2.0; // first_order_rate_constant
-        const double var_I_Shkr__ko = 77.0; // first_order_rate_constant
-        const double var_I_Shkr__OShkr_orig_deriv = var_chaste_interface__I_Shkr__C4Shkr * var_I_Shkr__ko - var_chaste_interface__I_Shkr__OShkr * var_I_Shkr__k_o; // 1 / second
-        const double d_dt_chaste_interface_var_I_Shkr__OShkr = 0.001 * var_I_Shkr__OShkr_orig_deriv; // 1 / millisecond
-        const double var_I_Shkr__kv0 = 30.0; // first_order_rate_constant
-        const double var_I_Shkr__z_v = -1.53; // dimensionless
-        const double var_I_Shkr__zv = 1.28; // dimensionless
-        const double var_model_parameters__F = 96500.0; // coulomb_per_mole
-        const double var_model_parameters__R = 8310.0; // millijoule_per_kelvin_mole
-        const double var_I_Shkr__k_v = var_I_Shkr__k_v0 * exp(var_I_Shkr__z_v * var_chaste_interface__membrane__Vm * var_model_parameters__F / (var_model_parameters__R * mParameters[6])); // first_order_rate_constant
-        const double var_I_Shkr__kv = var_I_Shkr__kv0 * exp(var_I_Shkr__zv * var_chaste_interface__membrane__Vm * var_model_parameters__F / (var_model_parameters__R * mParameters[6])); // first_order_rate_constant
-        const double var_I_Shkr__C0Shkr_orig_deriv = var_chaste_interface__I_Shkr__C1Shkr * var_I_Shkr__k_v - 4.0 * var_chaste_interface__I_Shkr__C0Shkr * var_I_Shkr__kv; // 1 / second
-        const double d_dt_chaste_interface_var_I_Shkr__C0Shkr = 0.001 * var_I_Shkr__C0Shkr_orig_deriv; // 1 / millisecond
-        const double var_I_Shkr__C1Shkr_orig_deriv = -(3.0 * var_I_Shkr__kv + var_I_Shkr__k_v) * var_chaste_interface__I_Shkr__C1Shkr + 2.0 * var_chaste_interface__I_Shkr__C2Shkr * var_I_Shkr__k_v + 4.0 * var_chaste_interface__I_Shkr__C0Shkr * var_I_Shkr__kv; // 1 / second
-        const double d_dt_chaste_interface_var_I_Shkr__C1Shkr = 0.001 * var_I_Shkr__C1Shkr_orig_deriv; // 1 / millisecond
-        const double var_I_Shkr__C2Shkr_orig_deriv = -(2.0 * var_I_Shkr__k_v + 2.0 * var_I_Shkr__kv) * var_chaste_interface__I_Shkr__C2Shkr + 3.0 * var_chaste_interface__I_Shkr__C1Shkr * var_I_Shkr__kv + 3.0 * var_chaste_interface__I_Shkr__C3Shkr * var_I_Shkr__k_v; // 1 / second
-        const double d_dt_chaste_interface_var_I_Shkr__C2Shkr = 0.001 * var_I_Shkr__C2Shkr_orig_deriv; // 1 / millisecond
-        const double var_I_Shkr__C3Shkr_orig_deriv = -(3.0 * var_I_Shkr__k_v + var_I_Shkr__kv) * var_chaste_interface__I_Shkr__C3Shkr + 2.0 * var_chaste_interface__I_Shkr__C2Shkr * var_I_Shkr__kv + 4.0 * var_chaste_interface__I_Shkr__C4Shkr * var_I_Shkr__k_v; // 1 / second
-        const double d_dt_chaste_interface_var_I_Shkr__C3Shkr = 0.001 * var_I_Shkr__C3Shkr_orig_deriv; // 1 / millisecond
-        const double var_I_Shkr__C4Shkr_orig_deriv = var_chaste_interface__I_Shkr__C3Shkr * var_I_Shkr__kv + var_chaste_interface__I_Shkr__OShkr * var_I_Shkr__k_o - (4.0 * var_I_Shkr__k_v + var_I_Shkr__ko) * var_chaste_interface__I_Shkr__C4Shkr; // 1 / second
-        const double d_dt_chaste_interface_var_I_Shkr__C4Shkr = 0.001 * var_I_Shkr__C4Shkr_orig_deriv; // 1 / millisecond
+        const double d_dt_chaste_interface_var_I_Shkr__OShkr = 0.076999999999999999 * var_chaste_interface__I_Shkr__C4Shkr - 0.017999999999999999 * var_chaste_interface__I_Shkr__OShkr; // 1 / millisecond
+        const double var_I_Shkr__k_v = 2.0 * exp(-17.767148014440433 * var_chaste_interface__membrane__Vm / mParameters[6]); // first_order_rate_constant
+        const double var_I_Shkr__kv = 30.0 * exp(14.864019253910952 * var_chaste_interface__membrane__Vm / mParameters[6]); // first_order_rate_constant
+        const double d_dt_chaste_interface_var_I_Shkr__C0Shkr = 0.001 * var_chaste_interface__I_Shkr__C1Shkr * var_I_Shkr__k_v - 0.0040000000000000001 * var_chaste_interface__I_Shkr__C0Shkr * var_I_Shkr__kv; // 1 / millisecond
+        const double d_dt_chaste_interface_var_I_Shkr__C1Shkr = 0.002 * var_chaste_interface__I_Shkr__C2Shkr * var_I_Shkr__k_v + 0.0040000000000000001 * var_chaste_interface__I_Shkr__C0Shkr * var_I_Shkr__kv - 0.001 * (3.0 * var_I_Shkr__kv + var_I_Shkr__k_v) * var_chaste_interface__I_Shkr__C1Shkr; // 1 / millisecond
+        const double d_dt_chaste_interface_var_I_Shkr__C2Shkr = 0.0030000000000000001 * var_chaste_interface__I_Shkr__C1Shkr * var_I_Shkr__kv + 0.0030000000000000001 * var_chaste_interface__I_Shkr__C3Shkr * var_I_Shkr__k_v - 0.001 * (2.0 * var_I_Shkr__k_v + 2.0 * var_I_Shkr__kv) * var_chaste_interface__I_Shkr__C2Shkr; // 1 / millisecond
+        const double d_dt_chaste_interface_var_I_Shkr__C3Shkr = 0.002 * var_chaste_interface__I_Shkr__C2Shkr * var_I_Shkr__kv + 0.0040000000000000001 * var_chaste_interface__I_Shkr__C4Shkr * var_I_Shkr__k_v - 0.001 * (3.0 * var_I_Shkr__k_v + var_I_Shkr__kv) * var_chaste_interface__I_Shkr__C3Shkr; // 1 / millisecond
+        const double d_dt_chaste_interface_var_I_Shkr__C4Shkr = 0.017999999999999999 * var_chaste_interface__I_Shkr__OShkr + 0.001 * var_chaste_interface__I_Shkr__C3Shkr * var_I_Shkr__kv - 0.001 * (77.0 + 4.0 * var_I_Shkr__k_v) * var_chaste_interface__I_Shkr__C4Shkr; // 1 / millisecond
         
         rResidual[0] = rCurrentGuess[0] - rY[1] - mDt*d_dt_chaste_interface_var_I_Shkr__C0Shkr;
         rResidual[1] = rCurrentGuess[1] - rY[2] - mDt*d_dt_chaste_interface_var_I_Shkr__C1Shkr;
@@ -210,20 +252,8 @@
         double var_chaste_interface__I_Shkr__OShkr = rY[6];
         // Units: dimensionless; Initial value: 0.0
         
-        const double var_I_Kir__aKir = 0.93999999999999995; // dimensionless
-        const double var_I_Kir__bKir = 1.26; // dimensionless
-        const double var_I_b__Eb = 0; // millivolt
-        const double var_I_stim__I_stim_converted = -GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
-        const double var_I_stim__I_stim = 1000.0 * var_I_stim__I_stim_converted * mParameters[2] / HeartConfig::Instance()->GetCapacitance(); // nanoampere
-        const double var_I_b__I_b = (-var_I_b__Eb + var_chaste_interface__membrane__Vm) * mParameters[5]; // nanoampere
-        const double var_model_parameters__F = 96500.0; // coulomb_per_mole
-        const double var_model_parameters__R = 8310.0; // millijoule_per_kelvin_mole
-        const double var_I_Kir__EK = var_model_parameters__R * mParameters[6] * log(mParameters[1] / mParameters[0]) / var_model_parameters__F; // millivolt
-        const double var_I_Kir__OKir = 1 / (var_I_Kir__aKir + exp((-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * var_I_Kir__bKir * var_model_parameters__F / (var_model_parameters__R * mParameters[6]))); // dimensionless
-        const double var_I_Kir__I_Kir = 0.031622776601683791 * sqrt(mParameters[1]) * (-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * mParameters[4] * var_I_Kir__OKir; // nanoampere
-        const double var_I_Shkr__I_Shkr = pow(var_model_parameters__F, 2) * (-mParameters[1] * exp(-var_chaste_interface__membrane__Vm * var_model_parameters__F / (var_model_parameters__R * mParameters[6])) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] * var_chaste_interface__membrane__Vm / ((1.0 - exp(-var_chaste_interface__membrane__Vm * var_model_parameters__F / (var_model_parameters__R * mParameters[6]))) * var_model_parameters__R * mParameters[6]); // nanoampere
-        const double var_membrane__Vm_orig_deriv = (-var_I_Kir__I_Kir - var_I_Shkr__I_Shkr - var_I_b__I_b + var_I_stim__I_stim) / mParameters[2]; // millivolt / second
-        const double d_dt_chaste_interface_var_membrane__Vm = 0.001 * var_membrane__Vm_orig_deriv; // millivolt / millisecond
+        const double var_I_Kir__EK = 0.086113989637305696 * mParameters[6] * log(mParameters[1] / mParameters[0]); // millivolt
+        const double d_dt_chaste_interface_var_membrane__Vm = 0.001 * (-mParameters[5] * var_chaste_interface__membrane__Vm - 1000.0 * GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted) * mParameters[2] / HeartConfig::Instance()->GetCapacitance() - 0.031622776601683791 * sqrt(mParameters[1]) * (-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * mParameters[4] / (0.93999999999999995 + exp(14.631768953068592 * (-var_I_Kir__EK + var_chaste_interface__membrane__Vm) / mParameters[6])) - 1120607.7015643802 * (-mParameters[1] * exp(-11.612515042117931 * var_chaste_interface__membrane__Vm / mParameters[6]) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] * var_chaste_interface__membrane__Vm / ((1.0 - exp(-11.612515042117931 * var_chaste_interface__membrane__Vm / mParameters[6])) * mParameters[6])) / mParameters[2]; // millivolt / millisecond
         
         rY[0] += mDt*d_dt_chaste_interface_var_membrane__Vm;
     }
@@ -256,7 +286,6 @@
         double var_chaste_interface__I_Shkr__OShkr = rY[6];
         // Units: dimensionless; Initial value: 0.0
         
-
         // Mathematics
         const double var_I_Kir__aKir = 0.93999999999999995; // dimensionless
         const double var_I_Kir__bKir = 1.26; // dimensionless

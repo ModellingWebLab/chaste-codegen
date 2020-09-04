@@ -38,6 +38,7 @@ public:
     double GetIntracellularCalciumConcentration();
     Celldecker_2009FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Celldecker_2009FromCellMLBackwardEuler();
+    AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[37], double rResidual[37]);
     void ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[37], double rJacobian[37][37]);protected:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time);
