@@ -21,6 +21,66 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+class Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt_LookupTables : public AbstractLookupTableCollection
+{
+public:
+    static Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt_LookupTables* Instance()
+    {
+        if (mpInstance.get() == NULL)
+        {
+            mpInstance.reset(new Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt_LookupTables);
+        }
+        return mpInstance.get();
+    }
+
+    void FreeMemory()
+    {
+
+        mNeedsRegeneration.assign(mNeedsRegeneration.size(), true);
+    }
+
+    // Row lookup methods
+    // using linear-interpolation
+
+
+
+    ~Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt_LookupTables()
+    {
+
+    }
+
+protected:
+    Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt_LookupTables(const Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt_LookupTables&);
+    Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt_LookupTables& operator= (const Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt_LookupTables&);
+    Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt_LookupTables()
+    {
+        assert(mpInstance.get() == NULL);
+        mKeyingVariableNames.resize(0);
+        mNumberOfTables.resize(0);
+        mTableMins.resize(0);
+        mTableSteps.resize(0);
+        mTableStepInverses.resize(0);
+        mTableMaxs.resize(0);
+        mNeedsRegeneration.resize(0);
+
+        Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt_LookupTables::RegenerateTables();
+    }
+
+    void RegenerateTables()
+    {
+        AbstractLookupTableCollection::EventHandler::BeginEvent(AbstractLookupTableCollection::EventHandler::GENERATE_TABLES);
+
+        AbstractLookupTableCollection::EventHandler::EndEvent(AbstractLookupTableCollection::EventHandler::GENERATE_TABLES);
+    }
+
+private:
+    /** The single instance of the class */
+    static std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt_LookupTables> mpInstance;
+
+};
+
+std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt_LookupTables> Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt_LookupTables::mpInstance;
+
     boost::shared_ptr<RegularStimulus> Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -72,6 +132,11 @@
 
     Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::~Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt()
     {
+    }
+
+    AbstractLookupTableCollection* Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::GetLookupTableCollection()
+    {
+        return Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt_LookupTables::Instance();
     }
     
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::GetIIonic(const std::vector<double>* pStateVariables)
@@ -261,7 +326,7 @@
         double var_chaste_interface__calcium_dynamics__g = rY[17];
         // Units: dimensionless; Initial value: 0.999999981028517
         
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_Membrane__Vm_converted;
         const double var_Membrane__Vm = 0.001 * var_chaste_interface__Membrane__Vm_converted; // volt
@@ -532,7 +597,7 @@
         double var_chaste_interface__sodium_dynamics__Nai = rY[15];
         // Units: millimolar; Initial value: 10.9248496211574
         
-        
+
         // Mathematics
         const double var_Membrane__Vm = 0.001 * var_chaste_interface__Membrane__Vm_converted; // volt
         const double var_i_PCa__i_PCa = 0.41249999999999998 * var_chaste_interface__calcium_dynamics__Cai / (0.00050000000000000001 + var_chaste_interface__calcium_dynamics__Cai); // A_per_F
@@ -551,6 +616,7 @@
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative0(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -682,7 +748,7 @@
         double var_chaste_interface__calcium_dynamics__g = rY[17];
         // Units: dimensionless; Initial value: 0.999999981028517
         
-        
+
         // Mathematics
         const double var_Membrane__Vm = 0.001 * var_chaste_interface__Membrane__Vm_converted; // volt
         const double var_calcium_dynamics__i_leak = 0.00044443999999999999 * var_chaste_interface__calcium_dynamics__Ca_SR - 0.00044443999999999999 * var_chaste_interface__calcium_dynamics__Cai; // millimolar_per_second
@@ -699,6 +765,7 @@
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative1(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -785,7 +852,7 @@
         double var_chaste_interface__i_Na_m_gate__m = rY[2];
         // Units: dimensionless; Initial value: 0.102953468725004
         
-        
+
         // Mathematics
         const double var_Membrane__Vm = 0.001 * var_chaste_interface__Membrane__Vm_converted; // volt
         const double d_dt_chaste_interface_var_i_Na_m_gate__m = (1.0 + exp(-12.0 - 200.0 * var_Membrane__Vm)) * (-var_chaste_interface__i_Na_m_gate__m + pow((1.0 + exp(-5.7796610169491522 - 169.4915254237288 * var_Membrane__Vm)), (-0.33333333333333331))) / (0.10000000000000001 / (1.0 + exp(7.0 + 200.0 * var_Membrane__Vm)) + 0.10000000000000001 / (1.0 + exp(-0.25 + 5.0 * var_Membrane__Vm))); // 1 / millisecond
@@ -795,6 +862,7 @@
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative2(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -833,7 +901,7 @@
         double var_chaste_interface__i_Na_h_gate__h = rY[3];
         // Units: dimensionless; Initial value: 0.786926637881461
         
-        
+
         // Mathematics
         const double var_Membrane__Vm = 0.001 * var_chaste_interface__Membrane__Vm_converted; // volt
         const double d_dt_chaste_interface_var_i_Na_h_gate__h = 0.001 * (-var_chaste_interface__i_Na_h_gate__h + 1 / sqrt(1.0 + exp(12.649122807017543 + 175.43859649122805 * var_Membrane__Vm))) * ((var_Membrane__Vm < -0.040000000000000001) ? (38.0 * exp(-11.764705882352942 - 147.05882352941177 * var_Membrane__Vm) + 206666666.66666669 * exp(348.5 * var_Membrane__Vm) + 1800.0000000000002 * exp(79.0 * var_Membrane__Vm)) : (393.39103068450044)); // 1 / millisecond
@@ -843,6 +911,7 @@
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative3(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -875,7 +944,7 @@
         double var_chaste_interface__i_Na_j_gate__j = rY[4];
         // Units: dimensionless; Initial value: 0.253943221774722
         
-        
+
         // Mathematics
         const double var_Membrane__Vm = 0.001 * var_chaste_interface__Membrane__Vm_converted; // volt
         const double d_dt_chaste_interface_var_i_Na_j_gate__j = 0.001 * (-var_chaste_interface__i_Na_j_gate__j + 1 / sqrt(1.0 + exp(12.649122807017543 + 175.43859649122805 * var_Membrane__Vm))) * (142.85714285714286 * ((var_Membrane__Vm < -0.040000000000000001) ? (0.024240000000000001 * exp(-10.52 * var_Membrane__Vm) / (1.0 + exp(-5.5312920000000005 - 137.80000000000001 * var_Membrane__Vm))) : (0.59999999999999998 * exp(57.0 * var_Membrane__Vm) / (1.0 + exp(-3.2000000000000002 - 100.0 * var_Membrane__Vm)))) + 142.85714285714286 * ((var_Membrane__Vm < -0.040000000000000001) ? ((37.780000000000001 + 1000.0 * var_Membrane__Vm) * (-25428.0 * exp(244.40000000000001 * var_Membrane__Vm) - 6.9480000000000002e-6 * exp(-43.909999999999997 * var_Membrane__Vm)) / (1.0 + exp(24.640530000000002 + 311.0 * var_Membrane__Vm))) : (0))); // 1 / millisecond
@@ -885,6 +954,7 @@
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative4(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -931,7 +1001,7 @@
         double var_chaste_interface__i_CaL_d_gate__d = rY[5];
         // Units: dimensionless; Initial value: 8.96088425225182e-05
         
-        
+
         // Mathematics
         const double var_Membrane__Vm = 0.001 * var_chaste_interface__Membrane__Vm_converted; // volt
         const double d_dt_chaste_interface_var_i_CaL_d_gate__d = 0.001 * (-var_chaste_interface__i_CaL_d_gate__d + 1 / (1.0 + exp(-1.3 - 142.85714285714286 * var_Membrane__Vm))) / (0.001 / (1.0 + exp(2.5 - 50.0 * var_Membrane__Vm)) + 0.0014 * (0.25 + 1.3999999999999999 / (1.0 + exp(-2.6923076923076925 - 76.92307692307692 * var_Membrane__Vm))) / (1.0 + exp(1.0 + 200.0 * var_Membrane__Vm))); // 1 / millisecond
@@ -941,6 +1011,7 @@
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative5(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -985,7 +1056,7 @@
         double var_chaste_interface__i_CaL_f1_gate__f1 = rY[6];
         // Units: dimensionless; Initial value: 0.970411811263976
         
-        
+
         // Mathematics
         const double var_Membrane__Vm = 0.001 * var_chaste_interface__Membrane__Vm_converted; // volt
         const double var_i_CaL_f1_gate__f1_inf = 1 / (1.0 + exp(8.6666666666666661 + 333.33333333333331 * var_Membrane__Vm)); // dimensionless
@@ -996,6 +1067,7 @@
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative6(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1044,7 +1116,7 @@
         double var_chaste_interface__i_CaL_f2_gate__f2 = rY[7];
         // Units: dimensionless; Initial value: 0.999965815466749
         
-        
+
         // Mathematics
         const double var_Membrane__Vm = 0.001 * var_chaste_interface__Membrane__Vm_converted; // volt
         const double d_dt_chaste_interface_var_i_CaL_f2_gate__f2 = 0.001 * (0.33000000000000002 - var_chaste_interface__i_CaL_f2_gate__f2 + 0.67000000000000004 / (1.0 + exp(8.75 + 250.0 * var_Membrane__Vm))) / (0.016 / (1.0 + exp(3.0 + 100.0 * var_Membrane__Vm)) + 0.59999999999999998 * exp(-5882.3529411764703 * pow((0.025000000000000001 + var_Membrane__Vm), 2)) + 0.031 / (1.0 + exp(2.5 - 100.0 * var_Membrane__Vm))); // 1 / millisecond
@@ -1054,6 +1126,7 @@
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative7(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1094,7 +1167,7 @@
         double var_chaste_interface__i_CaL_fCa_gate__fCa = rY[8];
         // Units: dimensionless; Initial value: 0.998925296531804
         
-        
+
         // Mathematics
         const double var_Membrane__Vm = 0.001 * var_chaste_interface__Membrane__Vm_converted; // volt
         const double var_i_CaL_fCa_gate__fCa_inf = 0.22803283672848887 / (1.0 + exp(-0.9375 + 1250.0 * var_chaste_interface__calcium_dynamics__Cai)) + 0.076010945576162961 / (1.0 + exp(-9.0 + 10000.0 * var_chaste_interface__calcium_dynamics__Cai)) + 0.76010945576162958 / (1.0 + 5.9537418076512766e+25 * pow(var_chaste_interface__calcium_dynamics__Cai, 8)); // dimensionless
@@ -1105,6 +1178,7 @@
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative8(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1143,7 +1217,7 @@
         double var_chaste_interface__i_Kr_Xr1_gate__Xr1 = rY[9];
         // Units: dimensionless; Initial value: 0.00778547011240132
         
-        
+
         // Mathematics
         const double var_Membrane__Vm = 0.001 * var_chaste_interface__Membrane__Vm_converted; // volt
         const double d_dt_chaste_interface_var_i_Kr_Xr1_gate__Xr1 = 0.00037037037037037035 * (1.0 + exp(2.6086956521739131 + 86.956521739130437 * var_Membrane__Vm)) * (1.0 + exp(-4.5 - 100.0 * var_Membrane__Vm)) * (-var_chaste_interface__i_Kr_Xr1_gate__Xr1 + 1 / (1.0 + exp(-3.8775510204081627 - 204.08163265306121 * var_Membrane__Vm - 0.0076462663250123509 * (-2.1789087017666886 + log(40.0 * pow((1.0 + 0.38461538461538458 * mParameters[1]), 4) / pow((0.57999999999999996 + mParameters[1]), 4))) * mParameters[12]))); // 1 / millisecond
@@ -1153,6 +1227,7 @@
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative9(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1187,7 +1262,7 @@
         double var_chaste_interface__i_Kr_Xr2_gate__Xr2 = rY[10];
         // Units: dimensionless; Initial value: 0.432162576531617
         
-        
+
         // Mathematics
         const double var_Membrane__Vm = 0.001 * var_chaste_interface__Membrane__Vm_converted; // volt
         const double d_dt_chaste_interface_var_i_Kr_Xr2_gate__Xr2 = 0.29761904761904762 * (1.0 + exp(-3.0 + 50.0 * var_Membrane__Vm)) * (1.0 + exp(-3.0 - 50.0 * var_Membrane__Vm)) * (-var_chaste_interface__i_Kr_Xr2_gate__Xr2 + 1 / (1.0 + exp(1.76 + 20.0 * var_Membrane__Vm))); // 1 / millisecond
@@ -1197,6 +1272,7 @@
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative10(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1231,7 +1307,7 @@
         double var_chaste_interface__i_Ks_Xs_gate__Xs = rY[11];
         // Units: dimensionless; Initial value: 0.0322944866983666
         
-        
+
         // Mathematics
         const double var_Membrane__Vm = 0.001 * var_chaste_interface__Membrane__Vm_converted; // volt
         const double d_dt_chaste_interface_var_i_Ks_Xs_gate__Xs = 0.00090909090909090909 * sqrt(1.0 + exp(-1.6666666666666667 - 166.66666666666666 * var_Membrane__Vm)) * (1.0 + exp(-3.0 + 50.0 * var_Membrane__Vm)) * (-var_chaste_interface__i_Ks_Xs_gate__Xs + 1 / (1.0 + exp(-1.25 - 62.5 * var_Membrane__Vm))); // 1 / millisecond
@@ -1241,6 +1317,7 @@
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative11(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1274,7 +1351,7 @@
         double var_chaste_interface__i_f_Xf_gate__Xf = rY[12];
         // Units: dimensionless; Initial value: 0.100615100568753
         
-        
+
         // Mathematics
         const double var_Membrane__Vm = 0.001 * var_chaste_interface__Membrane__Vm_converted; // volt
         const double d_dt_chaste_interface_var_i_f_Xf_gate__Xf = 0.001 * (0.52631578947368418 + 0.52631578947368418 * exp(1.5 + 100.0 * var_Membrane__Vm)) * (-var_chaste_interface__i_f_Xf_gate__Xf + 1 / (1.0 + exp(15.569999999999999 + 200.0 * var_Membrane__Vm))); // 1 / millisecond
@@ -1284,6 +1361,7 @@
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative12(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1314,7 +1392,7 @@
         double var_chaste_interface__i_to_q_gate__q = rY[13];
         // Units: dimensionless; Initial value: 0.839295925773219
         
-        
+
         // Mathematics
         const double var_Membrane__Vm = 0.001 * var_chaste_interface__Membrane__Vm_converted; // volt
         const double d_dt_chaste_interface_var_i_to_q_gate__q = 0.001 * (-var_chaste_interface__i_to_q_gate__q + 1 / (1.0 + exp(4.0769230769230766 + 76.92307692307692 * var_Membrane__Vm))) / (0.0060599999999999994 + 0.039101999999999998 / (0.065000000000000002 * exp(4.593 + 100.0 * var_Membrane__Vm) + 0.56999999999999995 * exp(-3.52 - 80.0 * var_Membrane__Vm))); // 1 / millisecond
@@ -1324,6 +1402,7 @@
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative13(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1356,7 +1435,7 @@
         double var_chaste_interface__i_to_r_gate__r = rY[14];
         // Units: dimensionless; Initial value: 0.00573289893326379
         
-        
+
         // Mathematics
         const double var_Membrane__Vm = 0.001 * var_chaste_interface__Membrane__Vm_converted; // volt
         const double d_dt_chaste_interface_var_i_to_r_gate__r = 0.001 * (-var_chaste_interface__i_to_r_gate__r + 1 / (1.0 + exp(1.1893333333333334 - 53.333333333333336 * var_Membrane__Vm))) / (0.0027535199999999998 + 0.01440516 / (1.0369999999999999 * exp(2.7548999999999997 + 90.0 * var_Membrane__Vm) + 0.36899999999999999 * exp(-2.8607999999999998 - 120.0 * var_Membrane__Vm))); // 1 / millisecond
@@ -1366,6 +1445,7 @@
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative14(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1405,7 +1485,7 @@
         double var_chaste_interface__sodium_dynamics__Nai = rY[15];
         // Units: millimolar; Initial value: 10.9248496211574
         
-        
+
         // Mathematics
         const double var_Membrane__Vm = 0.001 * var_chaste_interface__Membrane__Vm_converted; // volt
         const double var_electric_potentials__E_Na = 8.6173421482889202e-5 * mParameters[12] * log(mParameters[3] / var_chaste_interface__sodium_dynamics__Nai); // volt
@@ -1420,6 +1500,7 @@
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative15(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1481,7 +1562,7 @@
         double var_chaste_interface__calcium_dynamics__g = rY[17];
         // Units: dimensionless; Initial value: 0.999999981028517
         
-        
+
         // Mathematics
         const double var_calcium_dynamics__i_leak = 0.00044443999999999999 * var_chaste_interface__calcium_dynamics__Ca_SR - 0.00044443999999999999 * var_chaste_interface__calcium_dynamics__Cai; // millimolar_per_second
         const double var_calcium_dynamics__i_up = 0.56064000000000003 / (1.0 + 6.2499999999999997e-8 / pow(var_chaste_interface__calcium_dynamics__Cai, 2)); // millimolar_per_second
@@ -1493,6 +1574,7 @@
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative16(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1543,7 +1625,7 @@
         double var_chaste_interface__calcium_dynamics__g = rY[17];
         // Units: dimensionless; Initial value: 0.999999981028517
         
-        
+
         // Mathematics
         const double var_Membrane__Vm = 0.001 * var_chaste_interface__Membrane__Vm_converted; // volt
         const double var_calcium_dynamics__g_inf = ((var_chaste_interface__calcium_dynamics__Cai <= 0.00035) ? (1 / (1.0 + 5.439910241481016e+20 * pow(var_chaste_interface__calcium_dynamics__Cai, 6))) : (1 / (1.0 + 1.9720198874049176e+55 * pow(var_chaste_interface__calcium_dynamics__Cai, 16)))); // dimensionless
@@ -1554,6 +1636,7 @@
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative17(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1626,7 +1709,6 @@
         double var_chaste_interface__sodium_dynamics__Nai = rY[15];
         // Units: millimolar; Initial value: 10.9248496211574
         
-
         // Mathematics
         const double var_Membrane__Vm = 0.001 * var_chaste_interface__Membrane__Vm_converted; // volt
         const double var_calcium_dynamics__Buf_C = 0.25; // millimolar

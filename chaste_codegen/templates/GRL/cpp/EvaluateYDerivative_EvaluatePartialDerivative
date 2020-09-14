@@ -5,7 +5,7 @@
         {% for state_var in state_vars %}{%- if state_var.in_evaluate_y_derivative[statevarloop.index0] %}double {{ state_var.var }} = {{state_var.rY_lookup}};
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}
-        
+{% set method =  "ComputeOneStepExceptVoltage" + statevarloop.index0|string %}{% include "Shared/cpp/lookup_table_init" %}
         // Mathematics
         {%- for deriv in y_derivative_equations %}{% if deriv.in_evaluate_y_derivative[statevarloop.index0] %}
         {% if not deriv.is_voltage%}const double {% endif %}{{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
@@ -16,6 +16,7 @@
 
     double {{class_name}}::EvaluatePartialDerivative{{statevarloop.index0}}(double {{free_variable.var_name}}, {{vector_decl}} rY, double delta, bool forceNumerical)
     {
+{% set method =  "EvaluatePartialDerivative" + statevarloop.index0|string %}{% include "Shared/cpp/lookup_table_init" %}
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {

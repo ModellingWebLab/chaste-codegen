@@ -21,6 +21,340 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+class CellShannon2004FromCellMLGRL1Opt_LookupTables : public AbstractLookupTableCollection
+{
+public:
+    static CellShannon2004FromCellMLGRL1Opt_LookupTables* Instance()
+    {
+        if (mpInstance.get() == NULL)
+        {
+            mpInstance.reset(new CellShannon2004FromCellMLGRL1Opt_LookupTables);
+        }
+        return mpInstance.get();
+    }
+
+    void FreeMemory()
+    {
+
+        if (_lookup_table_0)
+        {
+            delete[] _lookup_table_0;
+            _lookup_table_0 = NULL;
+        }
+
+        mNeedsRegeneration.assign(mNeedsRegeneration.size(), true);
+    }
+
+    // Row lookup methods
+    // using linear-interpolation
+
+    double* _lookup_0_row(unsigned i, double _factor_)
+    {
+        for (unsigned j=0; j<33; j++)
+        {
+            const double y1 = _lookup_table_0[i][j];
+            const double y2 = _lookup_table_0[i+1][j];
+            _lookup_table_0_row[j] = y1 + (y2-y1)*_factor_;
+        }
+        return _lookup_table_0_row;
+    }
+
+
+    const double * IndexTable0(double var_chaste_interface__cell__V)
+    {
+        const double _offset_0 = var_chaste_interface__cell__V - mTableMins[0];
+        const double _offset_0_over_table_step = _offset_0 * mTableStepInverses[0];
+        const unsigned _table_index_0 = (unsigned)(_offset_0_over_table_step);
+        const double _factor_0 = _offset_0_over_table_step - _table_index_0;
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->_lookup_0_row(_table_index_0, _factor_0);
+        return _lt_0_row;
+    }
+
+
+// LCOV_EXCL_START
+    bool CheckIndex0(double& var_chaste_interface__cell__V)
+    {
+        bool _oob_0 = false;
+        if (var_chaste_interface__cell__V>mTableMaxs[0] || var_chaste_interface__cell__V<mTableMins[0])
+        {
+// LCOV_EXCL_START
+            _oob_0 = true;
+// LCOV_EXCL_STOP
+        }
+        return _oob_0;
+    }
+// LCOV_EXCL_STOP
+
+    ~CellShannon2004FromCellMLGRL1Opt_LookupTables()
+    {
+
+        if (_lookup_table_0)
+        {
+            delete[] _lookup_table_0;
+            _lookup_table_0 = NULL;
+        }
+
+    }
+
+protected:
+    CellShannon2004FromCellMLGRL1Opt_LookupTables(const CellShannon2004FromCellMLGRL1Opt_LookupTables&);
+    CellShannon2004FromCellMLGRL1Opt_LookupTables& operator= (const CellShannon2004FromCellMLGRL1Opt_LookupTables&);
+    CellShannon2004FromCellMLGRL1Opt_LookupTables()
+    {
+        assert(mpInstance.get() == NULL);
+        mKeyingVariableNames.resize(1);
+        mNumberOfTables.resize(1);
+        mTableMins.resize(1);
+        mTableSteps.resize(1);
+        mTableStepInverses.resize(1);
+        mTableMaxs.resize(1);
+        mNeedsRegeneration.resize(1);
+
+        mKeyingVariableNames[0] = "membrane_voltage";
+        mNumberOfTables[0] = 33;
+        mTableMins[0] = -250.0001;
+        mTableMaxs[0] = 549.9999;
+        mTableSteps[0] = 0.001;
+        mTableStepInverses[0] = 1000.0;
+        mNeedsRegeneration[0] = true;
+        _lookup_table_0 = NULL;
+
+        CellShannon2004FromCellMLGRL1Opt_LookupTables::RegenerateTables();
+    }
+
+    void RegenerateTables()
+    {
+        AbstractLookupTableCollection::EventHandler::BeginEvent(AbstractLookupTableCollection::EventHandler::GENERATE_TABLES);
+
+
+        if (mNeedsRegeneration[0])
+        {
+            if (_lookup_table_0)
+            {
+                delete[] _lookup_table_0;
+                _lookup_table_0 = NULL;
+            }
+            const unsigned _table_size_0 = 1 + (unsigned)((mTableMaxs[0]-mTableMins[0])/mTableSteps[0]+0.5);
+            _lookup_table_0 = new double[_table_size_0][33];
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][0] = exp(0.037434532730821715 * var_chaste_interface__cell__V);
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][1] = 1 / (-1.0 + exp(0.037434532730821715 * var_chaste_interface__cell__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][2] = exp(0.07486906546164343 * var_chaste_interface__cell__V);
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][3] = 1 / (-1.0 + exp(0.07486906546164343 * var_chaste_interface__cell__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][4] = exp(0.013102086455787599 * var_chaste_interface__cell__V);
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][5] = exp(-0.024332446275034118 * var_chaste_interface__cell__V);
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][6] = 1 / (1.0 + 0.27000000000000002 * exp(-0.024332446275034118 * var_chaste_interface__cell__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][7] = exp(-0.037434532730821715 * var_chaste_interface__cell__V);
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][8] = 0.1245 * exp(-0.0037434532730821718 * var_chaste_interface__cell__V);
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][9] = 1 / (1.0 + exp(7.4880000000000004 - 0.16722408026755853 * var_chaste_interface__cell__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][10] = 1 / (1.0 + exp(1.4732142857142858 + 0.044642857142857144 * var_chaste_interface__cell__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][11] = 1 / (1.0 + exp(-2.4166666666666665 - 0.16666666666666666 * var_chaste_interface__cell__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][12] = 1 / (1.0 - exp(-2.4166666666666665 - 0.16666666666666666 * var_chaste_interface__cell__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][13] = 1 / (1.0 + exp(9.7388888888888889 + 0.27777777777777779 * var_chaste_interface__cell__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][14] = 0.59999999999999998 / (1.0 + exp(2.5 - 0.050000000000000003 * var_chaste_interface__cell__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][15] = 0.02 + 0.019699999999999999 * exp(-0.23877882250000002 * pow((1 + 0.068965517241379309 * var_chaste_interface__cell__V), 2));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][16] = 1 / (1.0 + exp(-6.666666666666667 - 0.13333333333333333 * var_chaste_interface__cell__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][17] = 0.00060999999999999997 * (10.0 + var_chaste_interface__cell__V) / (-1.0 + exp(1.45 + 0.14499999999999999 * var_chaste_interface__cell__V)) + 0.0013799999999999999 * (7.0 + var_chaste_interface__cell__V) / (1.0 - exp(-0.86099999999999999 - 0.123 * var_chaste_interface__cell__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][18] = 1 / (1.0 + exp(0.089820359281437126 - 0.059880239520958084 * var_chaste_interface__cell__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][19] = 0.00013100000000000001 * (30.0 + var_chaste_interface__cell__V) / (-1.0 + exp(2.0609999999999999 + 0.068699999999999997 * var_chaste_interface__cell__V)) + 7.1899999999999999e-5 * (30.0 + var_chaste_interface__cell__V) / (1.0 - exp(-4.4399999999999995 - 0.14799999999999999 * var_chaste_interface__cell__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][20] = ((var_chaste_interface__cell__V < -40.0) ? (0.13500000000000001 * exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__cell__V)) : (0));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][21] = ((var_chaste_interface__cell__V < -40.0) ? (310000.0 * exp(0.34999999999999998 * var_chaste_interface__cell__V) + 3.5600000000000001 * exp(0.079000000000000001 * var_chaste_interface__cell__V)) : (7.6923076923076916 / (1.0 + exp(-0.96036036036036043 - 0.0900900900900901 * var_chaste_interface__cell__V))));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][22] = ((var_chaste_interface__cell__V < -40.0) ? ((37.780000000000001 + var_chaste_interface__cell__V) * (-127140.0 * exp(0.24440000000000001 * var_chaste_interface__cell__V) - 3.4740000000000003e-5 * exp(-0.043909999999999998 * var_chaste_interface__cell__V)) / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__V))) : (0));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][23] = ((var_chaste_interface__cell__V < -40.0) ? (0.1212 * exp(-0.01052 * var_chaste_interface__cell__V) / (1.0 + exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__cell__V))) : (0.29999999999999999 * exp(-2.5349999999999999e-7 * var_chaste_interface__cell__V) / (1.0 + exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__cell__V))));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][24] = exp(-0.090909090909090912 * var_chaste_interface__cell__V);
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][25] = 1 / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__cell__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][26] = 1 / (1.0 + exp(-0.20000000000000001 - 0.066666666666666666 * var_chaste_interface__cell__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][27] = 1 / (1.5 + 3.5 * exp(-0.0011111111111111111 * pow(var_chaste_interface__cell__V, 2)));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][28] = 1 / (1.0 + exp(3.3500000000000001 + 0.10000000000000001 * var_chaste_interface__cell__V));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][29] = 1 / (20.0 + 20.0 / (1.0 + exp(3.3500000000000001 + 0.10000000000000001 * var_chaste_interface__cell__V)));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][30] = 1 / (220.0 + 2800.0 / (1.0 + exp(6.0 + 0.10000000000000001 * var_chaste_interface__cell__V)));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][31] = 1 / (0.5 + 9.0 / (1.0 + exp(0.20000000000000001 + 0.066666666666666666 * var_chaste_interface__cell__V)));
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
+                _lookup_table_0[i][32] = 1 / (30.0 + 3000.0 / (1.0 + exp(6.0 + 0.10000000000000001 * var_chaste_interface__cell__V)));
+            }
+
+            mNeedsRegeneration[0] = false;
+        }
+
+        AbstractLookupTableCollection::EventHandler::EndEvent(AbstractLookupTableCollection::EventHandler::GENERATE_TABLES);
+    }
+
+private:
+    /** The single instance of the class */
+    static std::shared_ptr<CellShannon2004FromCellMLGRL1Opt_LookupTables> mpInstance;
+
+    // Row lookup methods memory
+    double _lookup_table_0_row[33];
+
+    // Lookup tables
+    double (*_lookup_table_0)[33];
+
+};
+
+std::shared_ptr<CellShannon2004FromCellMLGRL1Opt_LookupTables> CellShannon2004FromCellMLGRL1Opt_LookupTables::mpInstance;
+
     boost::shared_ptr<RegularStimulus> CellShannon2004FromCellMLGRL1Opt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -73,6 +407,11 @@
     CellShannon2004FromCellMLGRL1Opt::~CellShannon2004FromCellMLGRL1Opt()
     {
     }
+
+    AbstractLookupTableCollection* CellShannon2004FromCellMLGRL1Opt::GetLookupTableCollection()
+    {
+        return CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance();
+    }
     
     double CellShannon2004FromCellMLGRL1Opt::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -121,26 +460,34 @@
         double var_chaste_interface__Ca_buffer__Ca_jct = rY[26];
         // Units: millimolar; Initial value: 0.0001737475
         
+        // Lookup table indexing
+        const bool _oob_0 = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         const double var_ICaL_fCa_gate__fCa_SL = 1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_SL; // dimensionless
         const double var_ICaL_fCa_gate__fCa_jct = 1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_jct; // dimensionless
         const double var_INa__openProb = pow(var_chaste_interface__INa_m_gate__m, 3) * var_chaste_interface__INa_h_gate__h * var_chaste_interface__INa_j_gate__j; // dimensionless
         const double var_ICaL__temp = 1625.34190074 * var_chaste_interface__ICaL_d_gate__d * var_chaste_interface__ICaL_f_gate__f * var_chaste_interface__cell__V; // coulomb_per_mole
-        const double var_ICaL__i_CaL_converted = (2.7000000000000001e-7 * (0.10000000000000001 * var_ICaL_fCa_gate__fCa_SL + 0.90000000000000002 * var_ICaL_fCa_gate__fCa_jct) * (-0.75 * mParameters[5] + 0.75 * mParameters[3] * exp(0.037434532730821715 * var_chaste_interface__cell__V)) * var_ICaL__temp / (-1.0 + exp(0.037434532730821715 * var_chaste_interface__cell__V)) + 1.5e-9 * (-0.75 * mParameters[6] + 0.75 * var_chaste_interface__Na_buffer__Na_SL * exp(0.037434532730821715 * var_chaste_interface__cell__V)) * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL / (-1.0 + exp(0.037434532730821715 * var_chaste_interface__cell__V)) + 1.3499999999999998e-8 * (-0.75 * mParameters[6] + 0.75 * var_chaste_interface__Na_buffer__Na_jct * exp(0.037434532730821715 * var_chaste_interface__cell__V)) * var_ICaL__temp * var_ICaL_fCa_gate__fCa_jct / (-1.0 + exp(0.037434532730821715 * var_chaste_interface__cell__V)) + 0.40000000000000002 * (-0.34100000000000003 * mParameters[4] + 0.34100000000000003 * var_chaste_interface__Ca_buffer__Ca_SL * exp(0.07486906546164343 * var_chaste_interface__cell__V)) * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL / (-1.0 + exp(0.07486906546164343 * var_chaste_interface__cell__V)) + 3.6000000000000001 * (-0.34100000000000003 * mParameters[4] + 0.34100000000000003 * var_chaste_interface__Ca_buffer__Ca_jct * exp(0.07486906546164343 * var_chaste_interface__cell__V)) * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_jct / (-1.0 + exp(0.07486906546164343 * var_chaste_interface__cell__V))) * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
+        const double var_ICaL__i_CaL_converted = (2.7000000000000001e-7 * _lt_0_row[1] * (0.10000000000000001 * var_ICaL_fCa_gate__fCa_SL + 0.90000000000000002 * var_ICaL_fCa_gate__fCa_jct) * (-0.75 * mParameters[5] + 0.75 * mParameters[3] * _lt_0_row[0]) * var_ICaL__temp + 1.5e-9 * _lt_0_row[1] * (-0.75 * mParameters[6] + 0.75 * var_chaste_interface__Na_buffer__Na_SL * _lt_0_row[0]) * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL + 1.3499999999999998e-8 * _lt_0_row[1] * (-0.75 * mParameters[6] + 0.75 * var_chaste_interface__Na_buffer__Na_jct * _lt_0_row[0]) * var_ICaL__temp * var_ICaL_fCa_gate__fCa_jct + 0.40000000000000002 * _lt_0_row[3] * (-0.34100000000000003 * mParameters[4] + 0.34100000000000003 * var_chaste_interface__Ca_buffer__Ca_SL * _lt_0_row[2]) * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL + 3.6000000000000001 * _lt_0_row[3] * (-0.34100000000000003 * mParameters[4] + 0.34100000000000003 * var_chaste_interface__Ca_buffer__Ca_jct * _lt_0_row[2]) * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_jct) * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
         const double var_ICap__Q_SLCaP = 1; // dimensionless
         const double var_ICap__i_Cap = 0.0074029999999999999 * var_ICap__Q_SLCaP / (1.0 + 5.2281977629563632e-6 * pow(1 / var_chaste_interface__Ca_buffer__Ca_jct, 1.6000000000000001)) + 0.059896999999999999 * var_ICap__Q_SLCaP / (1.0 + 5.2281977629563632e-6 * pow(1 / var_chaste_interface__Ca_buffer__Ca_SL, 1.6000000000000001)); // microA_per_microF
         const double var_IKs__E_Ks = 26.713302585894176 * log((0.018329999999999999 * mParameters[6] + mParameters[5]) / (0.018329999999999999 * var_chaste_interface__Na_buffer__Nai + mParameters[3])); // millivolt
         const double var_IKs__i_Ks_converted = (0.11 * pow(var_chaste_interface__IKs_Xs_gate__Xs, 2) * (0.057000000000000002 + 0.19 / (1.0 + exp(-7.0000000000000009 - 1.6666666666666667 * log10(var_chaste_interface__Ca_buffer__Ca_jct)))) * (-var_IKs__E_Ks + var_chaste_interface__cell__V) * mParameters[10] + 0.89000000000000001 * pow(var_chaste_interface__IKs_Xs_gate__Xs, 2) * (0.057000000000000002 + 0.19 / (1.0 + exp(-7.0000000000000009 - 1.6666666666666667 * log10(var_chaste_interface__Ca_buffer__Ca_SL)))) * (-var_IKs__E_Ks + var_chaste_interface__cell__V) * mParameters[10]) * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
         const double var_INaCa__Q_NCX = 1; // dimensionless
-        const double var_INaCa__i_NaCa_converted = (0.11 * (pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] * exp(0.013102086455787599 * var_chaste_interface__cell__V) - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 0.27000000000000002 * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * (1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_jct, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) + pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_jct) * var_chaste_interface__Ca_buffer__Ca_jct + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0)))) + 0.89000000000000001 * (pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] * exp(0.013102086455787599 * var_chaste_interface__cell__V) - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 0.27000000000000002 * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * (1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_SL, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) + pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_SL) * var_chaste_interface__Ca_buffer__Ca_SL + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0))))) * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
-        const double var_INaK__f_NaK = 1 / (1.0 + 0.1245 * exp(-0.0037434532730821718 * var_chaste_interface__cell__V) + 0.036499999999999998 * (-0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * mParameters[6])) * exp(-0.037434532730821715 * var_chaste_interface__cell__V)); // dimensionless
+        const double var_INaCa__i_NaCa_converted = (0.11 * _lt_0_row[6] * (pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] * _lt_0_row[4] - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct * _lt_0_row[5]) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_jct, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) + pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_jct) * var_chaste_interface__Ca_buffer__Ca_jct + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0)))) + 0.89000000000000001 * _lt_0_row[6] * (pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] * _lt_0_row[4] - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL * _lt_0_row[5]) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_SL, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) + pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_SL) * var_chaste_interface__Ca_buffer__Ca_SL + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0))))) * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
+        const double var_INaK__f_NaK = 1 / (1.0 + _lt_0_row[8] + 0.036499999999999998 * (-0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * mParameters[6])) * _lt_0_row[7]); // dimensionless
         const double var_INaK__i_NaK = 0.2097909 * var_INaK__f_NaK * mParameters[5] / ((1.0 + 14641.0 * pow(1 / var_chaste_interface__Na_buffer__Na_jct, 4.0)) * (1.5 + mParameters[5])) + 1.6973990999999999 * var_INaK__f_NaK * mParameters[5] / ((1.0 + 14641.0 * pow(1 / var_chaste_interface__Na_buffer__Na_SL, 4.0)) * (1.5 + mParameters[5])); // microA_per_microF
         const double var_ICab__i_Cab = 0.00025129999999999998 * var_chaste_interface__cell__V - 0.0029873085582266669 * log(mParameters[4] / var_chaste_interface__Ca_buffer__Ca_SL) - 0.00036921791169093637 * log(mParameters[4] / var_chaste_interface__Ca_buffer__Ca_jct); // microA_per_microF
         const double var_ICl_Ca__i_Cl_Ca = 0.109625 * (61.50965231891923 + var_chaste_interface__cell__V) * (0.11 / (1.0 + 0.10000000000000001 / var_chaste_interface__Ca_buffer__Ca_jct) + 0.89000000000000001 / (1.0 + 0.10000000000000001 / var_chaste_interface__Ca_buffer__Ca_SL)); // microA_per_microF
         const double var_IClb__i_Clb = 0.55358687087027303 + 0.0089999999999999993 * var_chaste_interface__cell__V; // microA_per_microF
         const double var_reversal_potentials__E_K = 26.713302585894176 * log(mParameters[5] / mParameters[3]); // millivolt
         const double var_IK1__i_K1_converted = 0.39504430131315654 * sqrt(mParameters[5]) * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * HeartConfig::Instance()->GetCapacitance() / ((1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__V - 0.23849999999999999 * var_reversal_potentials__E_K)) * (1.02 / (1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__V - 0.23849999999999999 * var_reversal_potentials__E_K)) + (exp(-36.698642499999998 + 0.061749999999999999 * var_chaste_interface__cell__V - 0.061749999999999999 * var_reversal_potentials__E_K) + 0.49124000000000001 * exp(0.43983232 + 0.080320000000000003 * var_chaste_interface__cell__V - 0.080320000000000003 * var_reversal_potentials__E_K)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_reversal_potentials__E_K - 0.51429999999999998 * var_chaste_interface__cell__V)))); // uA_per_cm2
-        const double var_IKp__i_Kp = 0.001 * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) / (1.0 + exp(7.4880000000000004 - 0.16722408026755853 * var_chaste_interface__cell__V)); // microA_per_microF
-        const double var_IKr__i_Kr_converted = 0.43033148291193518 * sqrt(mParameters[5]) * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * HeartConfig::Instance()->GetCapacitance() * mParameters[9] * var_chaste_interface__IKr_Xr_gate__Xr / (1.0 + exp(1.4732142857142858 + 0.044642857142857144 * var_chaste_interface__cell__V)); // uA_per_cm2
+        const double var_IKp__i_Kp = 0.001 * _lt_0_row[9] * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V); // microA_per_microF
+        const double var_IKr__i_Kr_converted = 0.43033148291193518 * _lt_0_row[10] * sqrt(mParameters[5]) * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * HeartConfig::Instance()->GetCapacitance() * mParameters[9] * var_chaste_interface__IKr_Xr_gate__Xr; // uA_per_cm2
         const double var_Itof__i_tof = 0.02 * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_chaste_interface__Itof_X_gate__X_tof * var_chaste_interface__Itof_Y_gate__Y_tof; // microA_per_microF
         const double var_Itos__i_tos_converted = (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * (0.5 * var_chaste_interface__Itos_R_gate__R_tos + var_chaste_interface__Itos_Y_gate__Y_tos) * HeartConfig::Instance()->GetCapacitance() * mParameters[12] * var_chaste_interface__Itos_X_gate__X_tos; // uA_per_cm2
         const double var_reversal_potentials__E_Na_SL = 26.713302585894176 * log(mParameters[6] / var_chaste_interface__Na_buffer__Na_SL); // millivolt
@@ -203,23 +550,31 @@
         // Units: millimolar; Initial value: 0.0001737475
         
 
+        // Lookup table indexing
+        const bool _oob_0 = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         // Mathematics
         const double var_ICaL_fCa_gate__fCa_SL = 1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_SL; // dimensionless
         const double var_ICaL_fCa_gate__fCa_jct = 1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_jct; // dimensionless
         const double var_INa__openProb = pow(var_chaste_interface__INa_m_gate__m, 3) * var_chaste_interface__INa_h_gate__h * var_chaste_interface__INa_j_gate__j; // dimensionless
         const double var_ICaL__temp = 1625.34190074 * var_chaste_interface__ICaL_d_gate__d * var_chaste_interface__ICaL_f_gate__f * var_chaste_interface__cell__V; // coulomb_per_mole
-        const double var_ICaL__i_CaL_Ca_SL = 0.40000000000000002 * (-0.34100000000000003 * mParameters[4] + 0.34100000000000003 * var_chaste_interface__Ca_buffer__Ca_SL * exp(0.07486906546164343 * var_chaste_interface__cell__V)) * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL / (-1.0 + exp(0.07486906546164343 * var_chaste_interface__cell__V)); // microA_per_microF
-        const double var_ICaL__i_CaL_Ca_jct = 3.6000000000000001 * (-0.34100000000000003 * mParameters[4] + 0.34100000000000003 * var_chaste_interface__Ca_buffer__Ca_jct * exp(0.07486906546164343 * var_chaste_interface__cell__V)) * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_jct / (-1.0 + exp(0.07486906546164343 * var_chaste_interface__cell__V)); // microA_per_microF
-        const double var_ICaL__i_CaL_Na_SL = 1.5e-9 * (-0.75 * mParameters[6] + 0.75 * var_chaste_interface__Na_buffer__Na_SL * exp(0.037434532730821715 * var_chaste_interface__cell__V)) * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL / (-1.0 + exp(0.037434532730821715 * var_chaste_interface__cell__V)); // microA_per_microF
-        const double var_ICaL__i_CaL_Na_jct = 1.3499999999999998e-8 * (-0.75 * mParameters[6] + 0.75 * var_chaste_interface__Na_buffer__Na_jct * exp(0.037434532730821715 * var_chaste_interface__cell__V)) * var_ICaL__temp * var_ICaL_fCa_gate__fCa_jct / (-1.0 + exp(0.037434532730821715 * var_chaste_interface__cell__V)); // microA_per_microF
+        const double var_ICaL__i_CaL_Ca_SL = 0.40000000000000002 * _lt_0_row[3] * (-0.34100000000000003 * mParameters[4] + 0.34100000000000003 * var_chaste_interface__Ca_buffer__Ca_SL * _lt_0_row[2]) * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL; // microA_per_microF
+        const double var_ICaL__i_CaL_Ca_jct = 3.6000000000000001 * _lt_0_row[3] * (-0.34100000000000003 * mParameters[4] + 0.34100000000000003 * var_chaste_interface__Ca_buffer__Ca_jct * _lt_0_row[2]) * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_jct; // microA_per_microF
+        const double var_ICaL__i_CaL_Na_SL = 1.5e-9 * _lt_0_row[1] * (-0.75 * mParameters[6] + 0.75 * var_chaste_interface__Na_buffer__Na_SL * _lt_0_row[0]) * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL; // microA_per_microF
+        const double var_ICaL__i_CaL_Na_jct = 1.3499999999999998e-8 * _lt_0_row[1] * (-0.75 * mParameters[6] + 0.75 * var_chaste_interface__Na_buffer__Na_jct * _lt_0_row[0]) * var_ICaL__temp * var_ICaL_fCa_gate__fCa_jct; // microA_per_microF
         const double var_ICap__Q_SLCaP = 1; // dimensionless
         const double var_ICap__i_Cap_SL = 0.059896999999999999 * var_ICap__Q_SLCaP / (1.0 + 5.2281977629563632e-6 * pow(1 / var_chaste_interface__Ca_buffer__Ca_SL, 1.6000000000000001)); // microA_per_microF
         const double var_ICap__i_Cap_jct = 0.0074029999999999999 * var_ICap__Q_SLCaP / (1.0 + 5.2281977629563632e-6 * pow(1 / var_chaste_interface__Ca_buffer__Ca_jct, 1.6000000000000001)); // microA_per_microF
         const double var_IKs__E_Ks = 26.713302585894176 * log((0.018329999999999999 * mParameters[6] + mParameters[5]) / (0.018329999999999999 * var_chaste_interface__Na_buffer__Nai + mParameters[3])); // millivolt
         const double var_INaCa__Q_NCX = 1; // dimensionless
-        const double var_INaCa__i_NaCa_SL = 0.89000000000000001 * (pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] * exp(0.013102086455787599 * var_chaste_interface__cell__V) - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 0.27000000000000002 * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * (1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_SL, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) + pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_SL) * var_chaste_interface__Ca_buffer__Ca_SL + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0)))); // microA_per_microF
-        const double var_INaCa__i_NaCa_jct = 0.11 * (pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] * exp(0.013102086455787599 * var_chaste_interface__cell__V) - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 0.27000000000000002 * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * (1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_jct, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) + pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_jct) * var_chaste_interface__Ca_buffer__Ca_jct + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0)))); // microA_per_microF
-        const double var_INaK__f_NaK = 1 / (1.0 + 0.1245 * exp(-0.0037434532730821718 * var_chaste_interface__cell__V) + 0.036499999999999998 * (-0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * mParameters[6])) * exp(-0.037434532730821715 * var_chaste_interface__cell__V)); // dimensionless
+        const double var_INaCa__i_NaCa_SL = 0.89000000000000001 * _lt_0_row[6] * (pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] * _lt_0_row[4] - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL * _lt_0_row[5]) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_SL, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) + pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_SL) * var_chaste_interface__Ca_buffer__Ca_SL + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0)))); // microA_per_microF
+        const double var_INaCa__i_NaCa_jct = 0.11 * _lt_0_row[6] * (pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] * _lt_0_row[4] - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct * _lt_0_row[5]) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_jct, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) + pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_jct) * var_chaste_interface__Ca_buffer__Ca_jct + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0)))); // microA_per_microF
+        const double var_INaK__f_NaK = 1 / (1.0 + _lt_0_row[8] + 0.036499999999999998 * (-0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * mParameters[6])) * _lt_0_row[7]); // dimensionless
         const double var_INaK__i_NaK_SL = 1.6973990999999999 * var_INaK__f_NaK * mParameters[5] / ((1.0 + 14641.0 * pow(1 / var_chaste_interface__Na_buffer__Na_SL, 4.0)) * (1.5 + mParameters[5])); // microA_per_microF
         const double var_INaK__i_NaK_jct = 0.2097909 * var_INaK__f_NaK * mParameters[5] / ((1.0 + 14641.0 * pow(1 / var_chaste_interface__Na_buffer__Na_jct, 4.0)) * (1.5 + mParameters[5])); // microA_per_microF
         const double var_ICab__i_Cab_SL = 0.00022365699999999999 * var_chaste_interface__cell__V - 0.0029873085582266669 * log(mParameters[4] / var_chaste_interface__Ca_buffer__Ca_SL); // microA_per_microF
@@ -231,7 +586,7 @@
         const double var_reversal_potentials__E_Na_jct = 26.713302585894176 * log(mParameters[6] / var_chaste_interface__Na_buffer__Na_jct); // millivolt
         const double var_INa__i_Na_jct = 0.11 * (-var_reversal_potentials__E_Na_jct + var_chaste_interface__cell__V) * mParameters[8] * var_INa__openProb; // microA_per_microF
         const double var_INab__i_Nab_jct = 3.2670000000000004e-5 * var_chaste_interface__cell__V - 3.2670000000000004e-5 * var_reversal_potentials__E_Na_jct; // microA_per_microF
-        d_dt_chaste_interface_var_cell__V = -0.55358687087027303 - var_ICaL__i_CaL_Ca_SL - var_ICaL__i_CaL_Ca_jct - var_ICaL__i_CaL_Na_SL - var_ICaL__i_CaL_Na_jct - var_ICab__i_Cab_SL - var_ICab__i_Cab_jct - var_ICap__i_Cap_SL - var_ICap__i_Cap_jct - var_INa__i_Na_SL - var_INa__i_Na_jct - var_INaCa__i_NaCa_SL - var_INaCa__i_NaCa_jct - var_INaK__i_NaK_SL - var_INaK__i_NaK_jct - var_INab__i_Nab_SL - var_INab__i_Nab_jct - 0.0089999999999999993 * var_chaste_interface__cell__V - GetIntracellularAreaStimulus(var_chaste_interface__environment__time) / HeartConfig::Instance()->GetCapacitance() - 0.001 * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) / (1.0 + exp(7.4880000000000004 - 0.16722408026755853 * var_chaste_interface__cell__V)) - 0.109625 * (61.50965231891923 + var_chaste_interface__cell__V) * (0.11 / (1.0 + 0.10000000000000001 / var_chaste_interface__Ca_buffer__Ca_jct) + 0.89000000000000001 / (1.0 + 0.10000000000000001 / var_chaste_interface__Ca_buffer__Ca_SL)) - 0.02 * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_chaste_interface__Itof_X_gate__X_tof * var_chaste_interface__Itof_Y_gate__Y_tof - (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * (0.5 * var_chaste_interface__Itos_R_gate__R_tos + var_chaste_interface__Itos_Y_gate__Y_tos) * mParameters[12] * var_chaste_interface__Itos_X_gate__X_tos - 2.7000000000000001e-7 * (0.10000000000000001 * var_ICaL_fCa_gate__fCa_SL + 0.90000000000000002 * var_ICaL_fCa_gate__fCa_jct) * (-0.75 * mParameters[5] + 0.75 * mParameters[3] * exp(0.037434532730821715 * var_chaste_interface__cell__V)) * var_ICaL__temp / (-1.0 + exp(0.037434532730821715 * var_chaste_interface__cell__V)) - 0.11 * pow(var_chaste_interface__IKs_Xs_gate__Xs, 2) * (0.057000000000000002 + 0.19 / (1.0 + exp(-7.0000000000000009 - 1.6666666666666667 * log10(var_chaste_interface__Ca_buffer__Ca_jct)))) * (-var_IKs__E_Ks + var_chaste_interface__cell__V) * mParameters[10] - 0.89000000000000001 * pow(var_chaste_interface__IKs_Xs_gate__Xs, 2) * (0.057000000000000002 + 0.19 / (1.0 + exp(-7.0000000000000009 - 1.6666666666666667 * log10(var_chaste_interface__Ca_buffer__Ca_SL)))) * (-var_IKs__E_Ks + var_chaste_interface__cell__V) * mParameters[10] - 0.39504430131315654 * sqrt(mParameters[5]) * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) / ((1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__V - 0.23849999999999999 * var_reversal_potentials__E_K)) * (1.02 / (1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__V - 0.23849999999999999 * var_reversal_potentials__E_K)) + (exp(-36.698642499999998 + 0.061749999999999999 * var_chaste_interface__cell__V - 0.061749999999999999 * var_reversal_potentials__E_K) + 0.49124000000000001 * exp(0.43983232 + 0.080320000000000003 * var_chaste_interface__cell__V - 0.080320000000000003 * var_reversal_potentials__E_K)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_reversal_potentials__E_K - 0.51429999999999998 * var_chaste_interface__cell__V)))) - 0.43033148291193518 * sqrt(mParameters[5]) * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * mParameters[9] * var_chaste_interface__IKr_Xr_gate__Xr / (1.0 + exp(1.4732142857142858 + 0.044642857142857144 * var_chaste_interface__cell__V)); // millivolt / millisecond
+        d_dt_chaste_interface_var_cell__V = -0.55358687087027303 - var_ICaL__i_CaL_Ca_SL - var_ICaL__i_CaL_Ca_jct - var_ICaL__i_CaL_Na_SL - var_ICaL__i_CaL_Na_jct - var_ICab__i_Cab_SL - var_ICab__i_Cab_jct - var_ICap__i_Cap_SL - var_ICap__i_Cap_jct - var_INa__i_Na_SL - var_INa__i_Na_jct - var_INaCa__i_NaCa_SL - var_INaCa__i_NaCa_jct - var_INaK__i_NaK_SL - var_INaK__i_NaK_jct - var_INab__i_Nab_SL - var_INab__i_Nab_jct - 0.0089999999999999993 * var_chaste_interface__cell__V - GetIntracellularAreaStimulus(var_chaste_interface__environment__time) / HeartConfig::Instance()->GetCapacitance() - 0.001 * _lt_0_row[9] * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) - 0.109625 * (61.50965231891923 + var_chaste_interface__cell__V) * (0.11 / (1.0 + 0.10000000000000001 / var_chaste_interface__Ca_buffer__Ca_jct) + 0.89000000000000001 / (1.0 + 0.10000000000000001 / var_chaste_interface__Ca_buffer__Ca_SL)) - 0.02 * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_chaste_interface__Itof_X_gate__X_tof * var_chaste_interface__Itof_Y_gate__Y_tof - (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * (0.5 * var_chaste_interface__Itos_R_gate__R_tos + var_chaste_interface__Itos_Y_gate__Y_tos) * mParameters[12] * var_chaste_interface__Itos_X_gate__X_tos - 2.7000000000000001e-7 * _lt_0_row[1] * (0.10000000000000001 * var_ICaL_fCa_gate__fCa_SL + 0.90000000000000002 * var_ICaL_fCa_gate__fCa_jct) * (-0.75 * mParameters[5] + 0.75 * mParameters[3] * _lt_0_row[0]) * var_ICaL__temp - 0.11 * pow(var_chaste_interface__IKs_Xs_gate__Xs, 2) * (0.057000000000000002 + 0.19 / (1.0 + exp(-7.0000000000000009 - 1.6666666666666667 * log10(var_chaste_interface__Ca_buffer__Ca_jct)))) * (-var_IKs__E_Ks + var_chaste_interface__cell__V) * mParameters[10] - 0.89000000000000001 * pow(var_chaste_interface__IKs_Xs_gate__Xs, 2) * (0.057000000000000002 + 0.19 / (1.0 + exp(-7.0000000000000009 - 1.6666666666666667 * log10(var_chaste_interface__Ca_buffer__Ca_SL)))) * (-var_IKs__E_Ks + var_chaste_interface__cell__V) * mParameters[10] - 0.39504430131315654 * sqrt(mParameters[5]) * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) / ((1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__V - 0.23849999999999999 * var_reversal_potentials__E_K)) * (1.02 / (1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__V - 0.23849999999999999 * var_reversal_potentials__E_K)) + (exp(-36.698642499999998 + 0.061749999999999999 * var_chaste_interface__cell__V - 0.061749999999999999 * var_reversal_potentials__E_K) + 0.49124000000000001 * exp(0.43983232 + 0.080320000000000003 * var_chaste_interface__cell__V - 0.080320000000000003 * var_reversal_potentials__E_K)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_reversal_potentials__E_K - 0.51429999999999998 * var_chaste_interface__cell__V)))) - 0.43033148291193518 * _lt_0_row[10] * sqrt(mParameters[5]) * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * mParameters[9] * var_chaste_interface__IKr_Xr_gate__Xr; // millivolt / millisecond
 
         double evalF = d_dt_chaste_interface_var_cell__V;
         mEvalF[0] = d_dt_chaste_interface_var_cell__V;
@@ -330,7 +685,15 @@
         double var_chaste_interface__cytosolic_Ca_buffer__Ca_SRB = rY[38];
         // Units: millimolar; Initial value: 0.002143165
         
-        
+
+        // Lookup table indexing
+        const bool _oob_0 = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         // Mathematics
         const double d_dt_chaste_interface_var_ICaL_fCa_gate__fCaB_SL = -0.011900000000000001 * var_chaste_interface__ICaL_fCa_gate__fCaB_SL + 1.7 * (1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_SL) * var_chaste_interface__Ca_buffer__Ca_SL; // 1 / millisecond
         const double d_dt_chaste_interface_var_ICaL_fCa_gate__fCaB_jct = -0.011900000000000001 * var_chaste_interface__ICaL_fCa_gate__fCaB_jct + 1.7 * (1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_jct) * var_chaste_interface__Ca_buffer__Ca_jct; // 1 / millisecond
@@ -350,19 +713,19 @@
         const double d_dt_chaste_interface_var_Na_buffer__Na_SL_buf = var_Na_buffer__dNa_SL_buf; // millimolar / millisecond
         const double var_Na_buffer__dNa_jct_buf = -0.001 * var_chaste_interface__Na_buffer__Na_jct_buf + 0.0001 * (7.5609999999999999 - var_chaste_interface__Na_buffer__Na_jct_buf) * var_chaste_interface__Na_buffer__Na_jct; // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_Na_buffer__Na_jct_buf = var_Na_buffer__dNa_jct_buf; // millimolar / millisecond
-        const double var_ICaL_d_gate__d_infinity = 1 / (1.0 + exp(-2.4166666666666665 - 0.16666666666666666 * var_chaste_interface__cell__V)); // dimensionless
-        const double d_dt_chaste_interface_var_ICaL_d_gate__d = 0.035000000000000003 * (14.5 + var_chaste_interface__cell__V) * (-var_chaste_interface__ICaL_d_gate__d + var_ICaL_d_gate__d_infinity) / ((1.0 - exp(-2.4166666666666665 - 0.16666666666666666 * var_chaste_interface__cell__V)) * var_ICaL_d_gate__d_infinity); // 1 / millisecond
-        const double d_dt_chaste_interface_var_ICaL_f_gate__f = (0.02 + 0.019699999999999999 * exp(-0.23877882250000002 * pow((1 + 0.068965517241379309 * var_chaste_interface__cell__V), 2))) * (-var_chaste_interface__ICaL_f_gate__f + 1 / (1.0 + exp(9.7388888888888889 + 0.27777777777777779 * var_chaste_interface__cell__V)) + 0.59999999999999998 / (1.0 + exp(2.5 - 0.050000000000000003 * var_chaste_interface__cell__V))); // 1 / millisecond
-        const double d_dt_chaste_interface_var_IKr_Xr_gate__Xr = (-var_chaste_interface__IKr_Xr_gate__Xr + 1 / (1.0 + exp(-6.666666666666667 - 0.13333333333333333 * var_chaste_interface__cell__V))) * (0.00060999999999999997 * (10.0 + var_chaste_interface__cell__V) / (-1.0 + exp(1.45 + 0.14499999999999999 * var_chaste_interface__cell__V)) + 0.0013799999999999999 * (7.0 + var_chaste_interface__cell__V) / (1.0 - exp(-0.86099999999999999 - 0.123 * var_chaste_interface__cell__V))); // 1 / millisecond
-        const double d_dt_chaste_interface_var_IKs_Xs_gate__Xs = (-var_chaste_interface__IKs_Xs_gate__Xs + 1 / (1.0 + exp(0.089820359281437126 - 0.059880239520958084 * var_chaste_interface__cell__V))) * (0.00013100000000000001 * (30.0 + var_chaste_interface__cell__V) / (-1.0 + exp(2.0609999999999999 + 0.068699999999999997 * var_chaste_interface__cell__V)) + 7.1899999999999999e-5 * (30.0 + var_chaste_interface__cell__V) / (1.0 - exp(-4.4399999999999995 - 0.14799999999999999 * var_chaste_interface__cell__V))); // 1 / millisecond
-        const double d_dt_chaste_interface_var_INa_h_gate__h = (1.0 - var_chaste_interface__INa_h_gate__h) * ((var_chaste_interface__cell__V < -40.0) ? (0.13500000000000001 * exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__cell__V)) : (0)) - ((var_chaste_interface__cell__V < -40.0) ? (310000.0 * exp(0.34999999999999998 * var_chaste_interface__cell__V) + 3.5600000000000001 * exp(0.079000000000000001 * var_chaste_interface__cell__V)) : (7.6923076923076916 / (1.0 + exp(-0.96036036036036043 - 0.0900900900900901 * var_chaste_interface__cell__V)))) * var_chaste_interface__INa_h_gate__h; // 1 / millisecond
-        const double d_dt_chaste_interface_var_INa_j_gate__j = (1.0 - var_chaste_interface__INa_j_gate__j) * ((var_chaste_interface__cell__V < -40.0) ? ((37.780000000000001 + var_chaste_interface__cell__V) * (-127140.0 * exp(0.24440000000000001 * var_chaste_interface__cell__V) - 3.4740000000000003e-5 * exp(-0.043909999999999998 * var_chaste_interface__cell__V)) / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__V))) : (0)) - ((var_chaste_interface__cell__V < -40.0) ? (0.1212 * exp(-0.01052 * var_chaste_interface__cell__V) / (1.0 + exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__cell__V))) : (0.29999999999999999 * exp(-2.5349999999999999e-7 * var_chaste_interface__cell__V) / (1.0 + exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__cell__V)))) * var_chaste_interface__INa_j_gate__j; // 1 / millisecond
-        const double d_dt_chaste_interface_var_INa_m_gate__m = -0.080000000000000002 * var_chaste_interface__INa_m_gate__m * exp(-0.090909090909090912 * var_chaste_interface__cell__V) + 0.32000000000000001 * (1.0 - var_chaste_interface__INa_m_gate__m) * (47.130000000000003 + var_chaste_interface__cell__V) / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__cell__V)); // 1 / millisecond
-        const double d_dt_chaste_interface_var_Itof_X_gate__X_tof = (-var_chaste_interface__Itof_X_gate__X_tof + 1 / (1.0 + exp(-0.20000000000000001 - 0.066666666666666666 * var_chaste_interface__cell__V))) / (1.5 + 3.5 * exp(-0.0011111111111111111 * pow(var_chaste_interface__cell__V, 2))); // 1 / millisecond
-        const double d_dt_chaste_interface_var_Itof_Y_gate__Y_tof = (-var_chaste_interface__Itof_Y_gate__Y_tof + 1 / (1.0 + exp(3.3500000000000001 + 0.10000000000000001 * var_chaste_interface__cell__V))) / (20.0 + 20.0 / (1.0 + exp(3.3500000000000001 + 0.10000000000000001 * var_chaste_interface__cell__V))); // 1 / millisecond
-        const double d_dt_chaste_interface_var_Itos_R_gate__R_tos = (-var_chaste_interface__Itos_R_gate__R_tos + 1 / (1.0 + exp(3.3500000000000001 + 0.10000000000000001 * var_chaste_interface__cell__V))) / (220.0 + 2800.0 / (1.0 + exp(6.0 + 0.10000000000000001 * var_chaste_interface__cell__V))); // 1 / millisecond
-        const double d_dt_chaste_interface_var_Itos_X_gate__X_tos = (-var_chaste_interface__Itos_X_gate__X_tos + 1 / (1.0 + exp(-0.20000000000000001 - 0.066666666666666666 * var_chaste_interface__cell__V))) / (0.5 + 9.0 / (1.0 + exp(0.20000000000000001 + 0.066666666666666666 * var_chaste_interface__cell__V))); // 1 / millisecond
-        const double d_dt_chaste_interface_var_Itos_Y_gate__Y_tos = (-var_chaste_interface__Itos_Y_gate__Y_tos + 1 / (1.0 + exp(3.3500000000000001 + 0.10000000000000001 * var_chaste_interface__cell__V))) / (30.0 + 3000.0 / (1.0 + exp(6.0 + 0.10000000000000001 * var_chaste_interface__cell__V))); // 1 / millisecond
+        const double var_ICaL_d_gate__d_infinity = _lt_0_row[11]; // dimensionless
+        const double d_dt_chaste_interface_var_ICaL_d_gate__d = 0.035000000000000003 * _lt_0_row[12] * (14.5 + var_chaste_interface__cell__V) * (-var_chaste_interface__ICaL_d_gate__d + var_ICaL_d_gate__d_infinity) / var_ICaL_d_gate__d_infinity; // 1 / millisecond
+        const double d_dt_chaste_interface_var_ICaL_f_gate__f = (_lt_0_row[15]) * (-var_chaste_interface__ICaL_f_gate__f + _lt_0_row[13] + _lt_0_row[14]); // 1 / millisecond
+        const double d_dt_chaste_interface_var_IKr_Xr_gate__Xr = (-var_chaste_interface__IKr_Xr_gate__Xr + _lt_0_row[16]) * (_lt_0_row[17]); // 1 / millisecond
+        const double d_dt_chaste_interface_var_IKs_Xs_gate__Xs = (-var_chaste_interface__IKs_Xs_gate__Xs + _lt_0_row[18]) * (_lt_0_row[19]); // 1 / millisecond
+        const double d_dt_chaste_interface_var_INa_h_gate__h = (1.0 - var_chaste_interface__INa_h_gate__h) * _lt_0_row[20] - _lt_0_row[21] * var_chaste_interface__INa_h_gate__h; // 1 / millisecond
+        const double d_dt_chaste_interface_var_INa_j_gate__j = (1.0 - var_chaste_interface__INa_j_gate__j) * _lt_0_row[22] - _lt_0_row[23] * var_chaste_interface__INa_j_gate__j; // 1 / millisecond
+        const double d_dt_chaste_interface_var_INa_m_gate__m = -0.080000000000000002 * var_chaste_interface__INa_m_gate__m * _lt_0_row[24] + 0.32000000000000001 * _lt_0_row[25] * (1.0 - var_chaste_interface__INa_m_gate__m) * (47.130000000000003 + var_chaste_interface__cell__V); // 1 / millisecond
+        const double d_dt_chaste_interface_var_Itof_X_gate__X_tof = _lt_0_row[27] * (-var_chaste_interface__Itof_X_gate__X_tof + _lt_0_row[26]); // 1 / millisecond
+        const double d_dt_chaste_interface_var_Itof_Y_gate__Y_tof = _lt_0_row[29] * (-var_chaste_interface__Itof_Y_gate__Y_tof + _lt_0_row[28]); // 1 / millisecond
+        const double d_dt_chaste_interface_var_Itos_R_gate__R_tos = _lt_0_row[30] * (-var_chaste_interface__Itos_R_gate__R_tos + _lt_0_row[28]); // 1 / millisecond
+        const double d_dt_chaste_interface_var_Itos_X_gate__X_tos = _lt_0_row[31] * (-var_chaste_interface__Itos_X_gate__X_tos + _lt_0_row[26]); // 1 / millisecond
+        const double d_dt_chaste_interface_var_Itos_Y_gate__Y_tos = _lt_0_row[32] * (-var_chaste_interface__Itos_Y_gate__Y_tos + _lt_0_row[28]); // 1 / millisecond
         const double var_cytosolic_Ca_buffer__dCa_Calmodulin = -0.23799999999999999 * var_chaste_interface__cytosolic_Ca_buffer__Ca_Calmodulin + 34.0 * (0.024 - var_chaste_interface__cytosolic_Ca_buffer__Ca_Calmodulin) * var_chaste_interface__Ca_buffer__Cai; // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_cytosolic_Ca_buffer__Ca_Calmodulin = var_cytosolic_Ca_buffer__dCa_Calmodulin; // millimolar / millisecond
         const double var_cytosolic_Ca_buffer__dCa_Myosin = -0.00046000000000000001 * var_chaste_interface__cytosolic_Ca_buffer__Ca_Myosin + 13.800000000000001 * (0.14000000000000001 - var_chaste_interface__cytosolic_Ca_buffer__Ca_Myosin - var_chaste_interface__cytosolic_Ca_buffer__Mg_Myosin) * var_chaste_interface__Ca_buffer__Cai; // millimolar_per_millisecond
@@ -382,17 +745,17 @@
         const double var_cytosolic_Ca_buffer__dMg_TroponinC_Ca_Mg = 0.00042000000000000007 - 0.0030000000000000001 * var_chaste_interface__cytosolic_Ca_buffer__Ca_TroponinC_Ca_Mg - 0.0063300000000000006 * var_chaste_interface__cytosolic_Ca_buffer__Mg_TroponinC_Ca_Mg; // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_cytosolic_Ca_buffer__Mg_TroponinC_Ca_Mg = var_cytosolic_Ca_buffer__dMg_TroponinC_Ca_Mg; // millimolar / millisecond
         const double var_ICaL__temp = 1625.34190074 * var_chaste_interface__ICaL_d_gate__d * var_chaste_interface__ICaL_f_gate__f * var_chaste_interface__cell__V; // coulomb_per_mole
-        const double var_ICaL__i_CaL_Ca_SL = 0.40000000000000002 * (-0.34100000000000003 * mParameters[4] + 0.34100000000000003 * var_chaste_interface__Ca_buffer__Ca_SL * exp(0.07486906546164343 * var_chaste_interface__cell__V)) * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL / (-1.0 + exp(0.07486906546164343 * var_chaste_interface__cell__V)); // microA_per_microF
-        const double var_ICaL__i_CaL_Ca_jct = 3.6000000000000001 * (-0.34100000000000003 * mParameters[4] + 0.34100000000000003 * var_chaste_interface__Ca_buffer__Ca_jct * exp(0.07486906546164343 * var_chaste_interface__cell__V)) * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_jct / (-1.0 + exp(0.07486906546164343 * var_chaste_interface__cell__V)); // microA_per_microF
-        const double var_ICaL__i_CaL_Na_SL = 1.5e-9 * (-0.75 * mParameters[6] + 0.75 * var_chaste_interface__Na_buffer__Na_SL * exp(0.037434532730821715 * var_chaste_interface__cell__V)) * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL / (-1.0 + exp(0.037434532730821715 * var_chaste_interface__cell__V)); // microA_per_microF
-        const double var_ICaL__i_CaL_Na_jct = 1.3499999999999998e-8 * (-0.75 * mParameters[6] + 0.75 * var_chaste_interface__Na_buffer__Na_jct * exp(0.037434532730821715 * var_chaste_interface__cell__V)) * var_ICaL__temp * var_ICaL_fCa_gate__fCa_jct / (-1.0 + exp(0.037434532730821715 * var_chaste_interface__cell__V)); // microA_per_microF
+        const double var_ICaL__i_CaL_Ca_SL = 0.40000000000000002 * _lt_0_row[3] * (-0.34100000000000003 * mParameters[4] + 0.34100000000000003 * var_chaste_interface__Ca_buffer__Ca_SL * _lt_0_row[2]) * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL; // microA_per_microF
+        const double var_ICaL__i_CaL_Ca_jct = 3.6000000000000001 * _lt_0_row[3] * (-0.34100000000000003 * mParameters[4] + 0.34100000000000003 * var_chaste_interface__Ca_buffer__Ca_jct * _lt_0_row[2]) * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_jct; // microA_per_microF
+        const double var_ICaL__i_CaL_Na_SL = 1.5e-9 * _lt_0_row[1] * (-0.75 * mParameters[6] + 0.75 * var_chaste_interface__Na_buffer__Na_SL * _lt_0_row[0]) * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL; // microA_per_microF
+        const double var_ICaL__i_CaL_Na_jct = 1.3499999999999998e-8 * _lt_0_row[1] * (-0.75 * mParameters[6] + 0.75 * var_chaste_interface__Na_buffer__Na_jct * _lt_0_row[0]) * var_ICaL__temp * var_ICaL_fCa_gate__fCa_jct; // microA_per_microF
         const double var_ICap__Q_SLCaP = 1; // dimensionless
         const double var_ICap__i_Cap_SL = 0.059896999999999999 * var_ICap__Q_SLCaP / (1.0 + 5.2281977629563632e-6 * pow(1 / var_chaste_interface__Ca_buffer__Ca_SL, 1.6000000000000001)); // microA_per_microF
         const double var_ICap__i_Cap_jct = 0.0074029999999999999 * var_ICap__Q_SLCaP / (1.0 + 5.2281977629563632e-6 * pow(1 / var_chaste_interface__Ca_buffer__Ca_jct, 1.6000000000000001)); // microA_per_microF
         const double var_INaCa__Q_NCX = 1; // dimensionless
-        const double var_INaCa__i_NaCa_SL = 0.89000000000000001 * (pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] * exp(0.013102086455787599 * var_chaste_interface__cell__V) - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 0.27000000000000002 * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * (1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_SL, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) + pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_SL) * var_chaste_interface__Ca_buffer__Ca_SL + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0)))); // microA_per_microF
-        const double var_INaCa__i_NaCa_jct = 0.11 * (pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] * exp(0.013102086455787599 * var_chaste_interface__cell__V) - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 0.27000000000000002 * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * (1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_jct, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) + pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_jct) * var_chaste_interface__Ca_buffer__Ca_jct + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0)))); // microA_per_microF
-        const double var_INaK__f_NaK = 1 / (1.0 + 0.1245 * exp(-0.0037434532730821718 * var_chaste_interface__cell__V) + 0.036499999999999998 * (-0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * mParameters[6])) * exp(-0.037434532730821715 * var_chaste_interface__cell__V)); // dimensionless
+        const double var_INaCa__i_NaCa_SL = 0.89000000000000001 * _lt_0_row[6] * (pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] * _lt_0_row[4] - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL * _lt_0_row[5]) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_SL, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) + pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_SL) * var_chaste_interface__Ca_buffer__Ca_SL + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0)))); // microA_per_microF
+        const double var_INaCa__i_NaCa_jct = 0.11 * _lt_0_row[6] * (pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] * _lt_0_row[4] - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct * _lt_0_row[5]) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_jct, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) + pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_jct) * var_chaste_interface__Ca_buffer__Ca_jct + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0)))); // microA_per_microF
+        const double var_INaK__f_NaK = 1 / (1.0 + _lt_0_row[8] + 0.036499999999999998 * (-0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * mParameters[6])) * _lt_0_row[7]); // dimensionless
         const double var_INaK__i_NaK_SL = 1.6973990999999999 * var_INaK__f_NaK * mParameters[5] / ((1.0 + 14641.0 * pow(1 / var_chaste_interface__Na_buffer__Na_SL, 4.0)) * (1.5 + mParameters[5])); // microA_per_microF
         const double var_INaK__i_NaK_jct = 0.2097909 * var_INaK__f_NaK * mParameters[5] / ((1.0 + 14641.0 * pow(1 / var_chaste_interface__Na_buffer__Na_jct, 4.0)) * (1.5 + mParameters[5])); // microA_per_microF
         const double var_Jpump_SR__j_pump_SR = (2814485.1633595936 * pow(var_chaste_interface__Ca_buffer__Cai, 1.7869999999999999) - 0.38742512113256738 * pow(var_chaste_interface__Ca_buffer__Ca_SR, 1.7869999999999999)) * mParameters[2] / (1.0 + 0.38742512113256738 * pow(var_chaste_interface__Ca_buffer__Ca_SR, 1.7869999999999999) + 2814485.1633595936 * pow(var_chaste_interface__Ca_buffer__Cai, 1.7869999999999999)); // millimolar_per_millisecond
@@ -927,24 +1290,32 @@
         double var_chaste_interface__Ca_buffer__Ca_jct = rY[26];
         // Units: millimolar; Initial value: 0.0001737475
         
-        
+
+        // Lookup table indexing
+        const bool _oob_0 = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         // Mathematics
         const double var_ICaL_fCa_gate__fCa_SL = 1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_SL; // dimensionless
         const double var_ICaL_fCa_gate__fCa_jct = 1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_jct; // dimensionless
         const double var_INa__openProb = pow(var_chaste_interface__INa_m_gate__m, 3) * var_chaste_interface__INa_h_gate__h * var_chaste_interface__INa_j_gate__j; // dimensionless
         const double var_ICaL__temp = 1625.34190074 * var_chaste_interface__ICaL_d_gate__d * var_chaste_interface__ICaL_f_gate__f * var_chaste_interface__cell__V; // coulomb_per_mole
-        const double var_ICaL__i_CaL_Ca_SL = 0.40000000000000002 * (-0.34100000000000003 * mParameters[4] + 0.34100000000000003 * var_chaste_interface__Ca_buffer__Ca_SL * exp(0.07486906546164343 * var_chaste_interface__cell__V)) * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL / (-1.0 + exp(0.07486906546164343 * var_chaste_interface__cell__V)); // microA_per_microF
-        const double var_ICaL__i_CaL_Ca_jct = 3.6000000000000001 * (-0.34100000000000003 * mParameters[4] + 0.34100000000000003 * var_chaste_interface__Ca_buffer__Ca_jct * exp(0.07486906546164343 * var_chaste_interface__cell__V)) * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_jct / (-1.0 + exp(0.07486906546164343 * var_chaste_interface__cell__V)); // microA_per_microF
-        const double var_ICaL__i_CaL_Na_SL = 1.5e-9 * (-0.75 * mParameters[6] + 0.75 * var_chaste_interface__Na_buffer__Na_SL * exp(0.037434532730821715 * var_chaste_interface__cell__V)) * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL / (-1.0 + exp(0.037434532730821715 * var_chaste_interface__cell__V)); // microA_per_microF
-        const double var_ICaL__i_CaL_Na_jct = 1.3499999999999998e-8 * (-0.75 * mParameters[6] + 0.75 * var_chaste_interface__Na_buffer__Na_jct * exp(0.037434532730821715 * var_chaste_interface__cell__V)) * var_ICaL__temp * var_ICaL_fCa_gate__fCa_jct / (-1.0 + exp(0.037434532730821715 * var_chaste_interface__cell__V)); // microA_per_microF
+        const double var_ICaL__i_CaL_Ca_SL = 0.40000000000000002 * _lt_0_row[3] * (-0.34100000000000003 * mParameters[4] + 0.34100000000000003 * var_chaste_interface__Ca_buffer__Ca_SL * _lt_0_row[2]) * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL; // microA_per_microF
+        const double var_ICaL__i_CaL_Ca_jct = 3.6000000000000001 * _lt_0_row[3] * (-0.34100000000000003 * mParameters[4] + 0.34100000000000003 * var_chaste_interface__Ca_buffer__Ca_jct * _lt_0_row[2]) * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_jct; // microA_per_microF
+        const double var_ICaL__i_CaL_Na_SL = 1.5e-9 * _lt_0_row[1] * (-0.75 * mParameters[6] + 0.75 * var_chaste_interface__Na_buffer__Na_SL * _lt_0_row[0]) * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL; // microA_per_microF
+        const double var_ICaL__i_CaL_Na_jct = 1.3499999999999998e-8 * _lt_0_row[1] * (-0.75 * mParameters[6] + 0.75 * var_chaste_interface__Na_buffer__Na_jct * _lt_0_row[0]) * var_ICaL__temp * var_ICaL_fCa_gate__fCa_jct; // microA_per_microF
         const double var_ICap__Q_SLCaP = 1; // dimensionless
         const double var_ICap__i_Cap_SL = 0.059896999999999999 * var_ICap__Q_SLCaP / (1.0 + 5.2281977629563632e-6 * pow(1 / var_chaste_interface__Ca_buffer__Ca_SL, 1.6000000000000001)); // microA_per_microF
         const double var_ICap__i_Cap_jct = 0.0074029999999999999 * var_ICap__Q_SLCaP / (1.0 + 5.2281977629563632e-6 * pow(1 / var_chaste_interface__Ca_buffer__Ca_jct, 1.6000000000000001)); // microA_per_microF
         const double var_IKs__E_Ks = 26.713302585894176 * log((0.018329999999999999 * mParameters[6] + mParameters[5]) / (0.018329999999999999 * var_chaste_interface__Na_buffer__Nai + mParameters[3])); // millivolt
         const double var_INaCa__Q_NCX = 1; // dimensionless
-        const double var_INaCa__i_NaCa_SL = 0.89000000000000001 * (pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] * exp(0.013102086455787599 * var_chaste_interface__cell__V) - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 0.27000000000000002 * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * (1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_SL, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) + pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_SL) * var_chaste_interface__Ca_buffer__Ca_SL + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0)))); // microA_per_microF
-        const double var_INaCa__i_NaCa_jct = 0.11 * (pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] * exp(0.013102086455787599 * var_chaste_interface__cell__V) - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 0.27000000000000002 * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * (1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_jct, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) + pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_jct) * var_chaste_interface__Ca_buffer__Ca_jct + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0)))); // microA_per_microF
-        const double var_INaK__f_NaK = 1 / (1.0 + 0.1245 * exp(-0.0037434532730821718 * var_chaste_interface__cell__V) + 0.036499999999999998 * (-0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * mParameters[6])) * exp(-0.037434532730821715 * var_chaste_interface__cell__V)); // dimensionless
+        const double var_INaCa__i_NaCa_SL = 0.89000000000000001 * _lt_0_row[6] * (pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] * _lt_0_row[4] - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL * _lt_0_row[5]) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_SL, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) + pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_SL) * var_chaste_interface__Ca_buffer__Ca_SL + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0)))); // microA_per_microF
+        const double var_INaCa__i_NaCa_jct = 0.11 * _lt_0_row[6] * (pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] * _lt_0_row[4] - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct * _lt_0_row[5]) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_jct, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) + pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_jct) * var_chaste_interface__Ca_buffer__Ca_jct + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0)))); // microA_per_microF
+        const double var_INaK__f_NaK = 1 / (1.0 + _lt_0_row[8] + 0.036499999999999998 * (-0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * mParameters[6])) * _lt_0_row[7]); // dimensionless
         const double var_INaK__i_NaK_SL = 1.6973990999999999 * var_INaK__f_NaK * mParameters[5] / ((1.0 + 14641.0 * pow(1 / var_chaste_interface__Na_buffer__Na_SL, 4.0)) * (1.5 + mParameters[5])); // microA_per_microF
         const double var_INaK__i_NaK_jct = 0.2097909 * var_INaK__f_NaK * mParameters[5] / ((1.0 + 14641.0 * pow(1 / var_chaste_interface__Na_buffer__Na_jct, 4.0)) * (1.5 + mParameters[5])); // microA_per_microF
         const double var_ICab__i_Cab_SL = 0.00022365699999999999 * var_chaste_interface__cell__V - 0.0029873085582266669 * log(mParameters[4] / var_chaste_interface__Ca_buffer__Ca_SL); // microA_per_microF
@@ -956,13 +1327,22 @@
         const double var_reversal_potentials__E_Na_jct = 26.713302585894176 * log(mParameters[6] / var_chaste_interface__Na_buffer__Na_jct); // millivolt
         const double var_INa__i_Na_jct = 0.11 * (-var_reversal_potentials__E_Na_jct + var_chaste_interface__cell__V) * mParameters[8] * var_INa__openProb; // microA_per_microF
         const double var_INab__i_Nab_jct = 3.2670000000000004e-5 * var_chaste_interface__cell__V - 3.2670000000000004e-5 * var_reversal_potentials__E_Na_jct; // microA_per_microF
-        d_dt_chaste_interface_var_cell__V = -0.55358687087027303 - var_ICaL__i_CaL_Ca_SL - var_ICaL__i_CaL_Ca_jct - var_ICaL__i_CaL_Na_SL - var_ICaL__i_CaL_Na_jct - var_ICab__i_Cab_SL - var_ICab__i_Cab_jct - var_ICap__i_Cap_SL - var_ICap__i_Cap_jct - var_INa__i_Na_SL - var_INa__i_Na_jct - var_INaCa__i_NaCa_SL - var_INaCa__i_NaCa_jct - var_INaK__i_NaK_SL - var_INaK__i_NaK_jct - var_INab__i_Nab_SL - var_INab__i_Nab_jct - 0.0089999999999999993 * var_chaste_interface__cell__V - GetIntracellularAreaStimulus(var_chaste_interface__environment__time) / HeartConfig::Instance()->GetCapacitance() - 0.001 * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) / (1.0 + exp(7.4880000000000004 - 0.16722408026755853 * var_chaste_interface__cell__V)) - 0.109625 * (61.50965231891923 + var_chaste_interface__cell__V) * (0.11 / (1.0 + 0.10000000000000001 / var_chaste_interface__Ca_buffer__Ca_jct) + 0.89000000000000001 / (1.0 + 0.10000000000000001 / var_chaste_interface__Ca_buffer__Ca_SL)) - 0.02 * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_chaste_interface__Itof_X_gate__X_tof * var_chaste_interface__Itof_Y_gate__Y_tof - (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * (0.5 * var_chaste_interface__Itos_R_gate__R_tos + var_chaste_interface__Itos_Y_gate__Y_tos) * mParameters[12] * var_chaste_interface__Itos_X_gate__X_tos - 2.7000000000000001e-7 * (0.10000000000000001 * var_ICaL_fCa_gate__fCa_SL + 0.90000000000000002 * var_ICaL_fCa_gate__fCa_jct) * (-0.75 * mParameters[5] + 0.75 * mParameters[3] * exp(0.037434532730821715 * var_chaste_interface__cell__V)) * var_ICaL__temp / (-1.0 + exp(0.037434532730821715 * var_chaste_interface__cell__V)) - 0.11 * pow(var_chaste_interface__IKs_Xs_gate__Xs, 2) * (0.057000000000000002 + 0.19 / (1.0 + exp(-7.0000000000000009 - 1.6666666666666667 * log10(var_chaste_interface__Ca_buffer__Ca_jct)))) * (-var_IKs__E_Ks + var_chaste_interface__cell__V) * mParameters[10] - 0.89000000000000001 * pow(var_chaste_interface__IKs_Xs_gate__Xs, 2) * (0.057000000000000002 + 0.19 / (1.0 + exp(-7.0000000000000009 - 1.6666666666666667 * log10(var_chaste_interface__Ca_buffer__Ca_SL)))) * (-var_IKs__E_Ks + var_chaste_interface__cell__V) * mParameters[10] - 0.39504430131315654 * sqrt(mParameters[5]) * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) / ((1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__V - 0.23849999999999999 * var_reversal_potentials__E_K)) * (1.02 / (1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__V - 0.23849999999999999 * var_reversal_potentials__E_K)) + (exp(-36.698642499999998 + 0.061749999999999999 * var_chaste_interface__cell__V - 0.061749999999999999 * var_reversal_potentials__E_K) + 0.49124000000000001 * exp(0.43983232 + 0.080320000000000003 * var_chaste_interface__cell__V - 0.080320000000000003 * var_reversal_potentials__E_K)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_reversal_potentials__E_K - 0.51429999999999998 * var_chaste_interface__cell__V)))) - 0.43033148291193518 * sqrt(mParameters[5]) * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * mParameters[9] * var_chaste_interface__IKr_Xr_gate__Xr / (1.0 + exp(1.4732142857142858 + 0.044642857142857144 * var_chaste_interface__cell__V)); // millivolt / millisecond
+        d_dt_chaste_interface_var_cell__V = -0.55358687087027303 - var_ICaL__i_CaL_Ca_SL - var_ICaL__i_CaL_Ca_jct - var_ICaL__i_CaL_Na_SL - var_ICaL__i_CaL_Na_jct - var_ICab__i_Cab_SL - var_ICab__i_Cab_jct - var_ICap__i_Cap_SL - var_ICap__i_Cap_jct - var_INa__i_Na_SL - var_INa__i_Na_jct - var_INaCa__i_NaCa_SL - var_INaCa__i_NaCa_jct - var_INaK__i_NaK_SL - var_INaK__i_NaK_jct - var_INab__i_Nab_SL - var_INab__i_Nab_jct - 0.0089999999999999993 * var_chaste_interface__cell__V - GetIntracellularAreaStimulus(var_chaste_interface__environment__time) / HeartConfig::Instance()->GetCapacitance() - 0.001 * _lt_0_row[9] * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) - 0.109625 * (61.50965231891923 + var_chaste_interface__cell__V) * (0.11 / (1.0 + 0.10000000000000001 / var_chaste_interface__Ca_buffer__Ca_jct) + 0.89000000000000001 / (1.0 + 0.10000000000000001 / var_chaste_interface__Ca_buffer__Ca_SL)) - 0.02 * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * var_chaste_interface__Itof_X_gate__X_tof * var_chaste_interface__Itof_Y_gate__Y_tof - (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * (0.5 * var_chaste_interface__Itos_R_gate__R_tos + var_chaste_interface__Itos_Y_gate__Y_tos) * mParameters[12] * var_chaste_interface__Itos_X_gate__X_tos - 2.7000000000000001e-7 * _lt_0_row[1] * (0.10000000000000001 * var_ICaL_fCa_gate__fCa_SL + 0.90000000000000002 * var_ICaL_fCa_gate__fCa_jct) * (-0.75 * mParameters[5] + 0.75 * mParameters[3] * _lt_0_row[0]) * var_ICaL__temp - 0.11 * pow(var_chaste_interface__IKs_Xs_gate__Xs, 2) * (0.057000000000000002 + 0.19 / (1.0 + exp(-7.0000000000000009 - 1.6666666666666667 * log10(var_chaste_interface__Ca_buffer__Ca_jct)))) * (-var_IKs__E_Ks + var_chaste_interface__cell__V) * mParameters[10] - 0.89000000000000001 * pow(var_chaste_interface__IKs_Xs_gate__Xs, 2) * (0.057000000000000002 + 0.19 / (1.0 + exp(-7.0000000000000009 - 1.6666666666666667 * log10(var_chaste_interface__Ca_buffer__Ca_SL)))) * (-var_IKs__E_Ks + var_chaste_interface__cell__V) * mParameters[10] - 0.39504430131315654 * sqrt(mParameters[5]) * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) / ((1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__V - 0.23849999999999999 * var_reversal_potentials__E_K)) * (1.02 / (1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__V - 0.23849999999999999 * var_reversal_potentials__E_K)) + (exp(-36.698642499999998 + 0.061749999999999999 * var_chaste_interface__cell__V - 0.061749999999999999 * var_reversal_potentials__E_K) + 0.49124000000000001 * exp(0.43983232 + 0.080320000000000003 * var_chaste_interface__cell__V - 0.080320000000000003 * var_reversal_potentials__E_K)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_reversal_potentials__E_K - 0.51429999999999998 * var_chaste_interface__cell__V)))) - 0.43033148291193518 * _lt_0_row[10] * sqrt(mParameters[5]) * (-var_reversal_potentials__E_K + var_chaste_interface__cell__V) * mParameters[9] * var_chaste_interface__IKr_Xr_gate__Xr; // millivolt / millisecond
 
         return d_dt_chaste_interface_var_cell__V;
     }
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative0(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+        // Lookup table indexing
+        const bool _oob_0 = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1045,11 +1425,11 @@
             const double var_x37 = var_x36 * mParameters[8] * var_chaste_interface__INa_j_gate__j;
             const double var_x38 = var_x37 * var_chaste_interface__INa_h_gate__h;
             const double var_x39 = var_x20 / pow(var_x21, 2);
-            const double var_x40 = exp(0.013102086455787599 * var_chaste_interface__cell__V);
+            const double var_x40 = _lt_0_row[4];
             const double var_x41 = pow(var_chaste_interface__Na_buffer__Na_jct, 3.0);
             const double var_x42 = var_x41 * mParameters[4];
             const double var_x43 = var_x40 * var_x42;
-            const double var_x44 = exp(-0.024332446275034118 * var_chaste_interface__cell__V);
+            const double var_x44 = _lt_0_row[5];
             const double var_x45 = pow(mParameters[6], 3.0);
             const double var_x46 = var_x45 * var_chaste_interface__Ca_buffer__Ca_jct;
             const double var_x47 = var_x44 * var_x46;
@@ -1114,7 +1494,7 @@
             const double var_x106 = var_x43 - var_x47;
             const double var_x107 = var_x44 * mParameters[11] / pow(var_x48, 2);
             const double var_x108 = var_x106 * var_x107 * var_x56;
-            const double var_x109 = exp(0.07486906546164343 * var_chaste_interface__cell__V);
+            const double var_x109 = _lt_0_row[2];
             const double var_x110 = -1.0 + var_x109;
             const double var_x111 = mParameters[7] / var_x110;
             const double var_x112 = var_chaste_interface__ICaL_d_gate__d * var_chaste_interface__ICaL_f_gate__f;
@@ -1189,7 +1569,8 @@
         double var_chaste_interface__cytosolic_Ca_buffer__Ca_SRB = rY[38];
         // Units: millimolar; Initial value: 0.002143165
         
-        
+
+
         // Mathematics
         const double var_cytosolic_Ca_buffer__dCa_Calmodulin = -0.23799999999999999 * var_chaste_interface__cytosolic_Ca_buffer__Ca_Calmodulin + 34.0 * (0.024 - var_chaste_interface__cytosolic_Ca_buffer__Ca_Calmodulin) * var_chaste_interface__Ca_buffer__Cai; // millimolar_per_millisecond
         const double var_cytosolic_Ca_buffer__dCa_Myosin = -0.00046000000000000001 * var_chaste_interface__cytosolic_Ca_buffer__Ca_Myosin + 13.800000000000001 * (0.14000000000000001 - var_chaste_interface__cytosolic_Ca_buffer__Ca_Myosin - var_chaste_interface__cytosolic_Ca_buffer__Mg_Myosin) * var_chaste_interface__Ca_buffer__Cai; // millimolar_per_millisecond
@@ -1207,6 +1588,8 @@
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative1(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1266,15 +1649,25 @@
         double var_chaste_interface__INa_h_gate__h = rY[2];
         // Units: dimensionless; Initial value: 0.9867005
         
-        
+
+        // Lookup table indexing
+        const bool _oob_0 = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         // Mathematics
-        const double d_dt_chaste_interface_var_INa_h_gate__h = (1.0 - var_chaste_interface__INa_h_gate__h) * ((var_chaste_interface__cell__V < -40.0) ? (0.13500000000000001 * exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__cell__V)) : (0)) - ((var_chaste_interface__cell__V < -40.0) ? (310000.0 * exp(0.34999999999999998 * var_chaste_interface__cell__V) + 3.5600000000000001 * exp(0.079000000000000001 * var_chaste_interface__cell__V)) : (7.6923076923076916 / (1.0 + exp(-0.96036036036036043 - 0.0900900900900901 * var_chaste_interface__cell__V)))) * var_chaste_interface__INa_h_gate__h; // 1 / millisecond
+        const double d_dt_chaste_interface_var_INa_h_gate__h = (1.0 - var_chaste_interface__INa_h_gate__h) * _lt_0_row[20] - _lt_0_row[21] * var_chaste_interface__INa_h_gate__h; // 1 / millisecond
 
         return d_dt_chaste_interface_var_INa_h_gate__h;
     }
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative2(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1308,15 +1701,25 @@
         double var_chaste_interface__INa_j_gate__j = rY[3];
         // Units: dimensionless; Initial value: 0.991562
         
-        
+
+        // Lookup table indexing
+        const bool _oob_0 = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         // Mathematics
-        const double d_dt_chaste_interface_var_INa_j_gate__j = (1.0 - var_chaste_interface__INa_j_gate__j) * ((var_chaste_interface__cell__V < -40.0) ? ((37.780000000000001 + var_chaste_interface__cell__V) * (-127140.0 * exp(0.24440000000000001 * var_chaste_interface__cell__V) - 3.4740000000000003e-5 * exp(-0.043909999999999998 * var_chaste_interface__cell__V)) / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__V))) : (0)) - ((var_chaste_interface__cell__V < -40.0) ? (0.1212 * exp(-0.01052 * var_chaste_interface__cell__V) / (1.0 + exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__cell__V))) : (0.29999999999999999 * exp(-2.5349999999999999e-7 * var_chaste_interface__cell__V) / (1.0 + exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__cell__V)))) * var_chaste_interface__INa_j_gate__j; // 1 / millisecond
+        const double d_dt_chaste_interface_var_INa_j_gate__j = (1.0 - var_chaste_interface__INa_j_gate__j) * _lt_0_row[22] - _lt_0_row[23] * var_chaste_interface__INa_j_gate__j; // 1 / millisecond
 
         return d_dt_chaste_interface_var_INa_j_gate__j;
     }
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative3(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1362,15 +1765,32 @@
         double var_chaste_interface__INa_m_gate__m = rY[4];
         // Units: dimensionless; Initial value: 0.001405627
         
-        
+
+        // Lookup table indexing
+        const bool _oob_0 = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         // Mathematics
-        const double d_dt_chaste_interface_var_INa_m_gate__m = -0.080000000000000002 * var_chaste_interface__INa_m_gate__m * exp(-0.090909090909090912 * var_chaste_interface__cell__V) + 0.32000000000000001 * (1.0 - var_chaste_interface__INa_m_gate__m) * (47.130000000000003 + var_chaste_interface__cell__V) / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__cell__V)); // 1 / millisecond
+        const double d_dt_chaste_interface_var_INa_m_gate__m = -0.080000000000000002 * var_chaste_interface__INa_m_gate__m * _lt_0_row[24] + 0.32000000000000001 * _lt_0_row[25] * (1.0 - var_chaste_interface__INa_m_gate__m) * (47.130000000000003 + var_chaste_interface__cell__V); // 1 / millisecond
 
         return d_dt_chaste_interface_var_INa_m_gate__m;
     }
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative4(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+        // Lookup table indexing
+        const bool _oob_0 = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1381,7 +1801,7 @@
             const double var_x260 = exp(-4.7130000000000001 + var_x254);
             const double var_x261 = 1.0 - var_x260;
             const double var_x262 = 0.32000000000000001 / var_x261;
-            const double var_x263 = exp(-0.090909090909090912 * var_chaste_interface__cell__V);
+            const double var_x263 = _lt_0_row[24];
             const double var_x264 = 47.130000000000003 + var_chaste_interface__cell__V;
             
             partialF = -0.080000000000000002 * var_x263 - var_x262 * var_x264;
@@ -1404,15 +1824,25 @@
         double var_chaste_interface__IKr_Xr_gate__Xr = rY[5];
         // Units: dimensionless; Initial value: 0.008641386
         
-        
+
+        // Lookup table indexing
+        const bool _oob_0 = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         // Mathematics
-        const double d_dt_chaste_interface_var_IKr_Xr_gate__Xr = (-var_chaste_interface__IKr_Xr_gate__Xr + 1 / (1.0 + exp(-6.666666666666667 - 0.13333333333333333 * var_chaste_interface__cell__V))) * (0.00060999999999999997 * (10.0 + var_chaste_interface__cell__V) / (-1.0 + exp(1.45 + 0.14499999999999999 * var_chaste_interface__cell__V)) + 0.0013799999999999999 * (7.0 + var_chaste_interface__cell__V) / (1.0 - exp(-0.86099999999999999 - 0.123 * var_chaste_interface__cell__V))); // 1 / millisecond
+        const double d_dt_chaste_interface_var_IKr_Xr_gate__Xr = (-var_chaste_interface__IKr_Xr_gate__Xr + _lt_0_row[16]) * (_lt_0_row[17]); // 1 / millisecond
 
         return d_dt_chaste_interface_var_IKr_Xr_gate__Xr;
     }
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative5(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1450,15 +1880,25 @@
         double var_chaste_interface__IKs_Xs_gate__Xs = rY[6];
         // Units: dimensionless; Initial value: 0.005412034
         
-        
+
+        // Lookup table indexing
+        const bool _oob_0 = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         // Mathematics
-        const double d_dt_chaste_interface_var_IKs_Xs_gate__Xs = (-var_chaste_interface__IKs_Xs_gate__Xs + 1 / (1.0 + exp(0.089820359281437126 - 0.059880239520958084 * var_chaste_interface__cell__V))) * (0.00013100000000000001 * (30.0 + var_chaste_interface__cell__V) / (-1.0 + exp(2.0609999999999999 + 0.068699999999999997 * var_chaste_interface__cell__V)) + 7.1899999999999999e-5 * (30.0 + var_chaste_interface__cell__V) / (1.0 - exp(-4.4399999999999995 - 0.14799999999999999 * var_chaste_interface__cell__V))); // 1 / millisecond
+        const double d_dt_chaste_interface_var_IKs_Xs_gate__Xs = (-var_chaste_interface__IKs_Xs_gate__Xs + _lt_0_row[18]) * (_lt_0_row[19]); // 1 / millisecond
 
         return d_dt_chaste_interface_var_IKs_Xs_gate__Xs;
     }
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative6(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1495,15 +1935,25 @@
         double var_chaste_interface__Itos_X_gate__X_tos = rY[7];
         // Units: dimensionless; Initial value: 0.004051574
         
-        
+
+        // Lookup table indexing
+        const bool _oob_0 = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         // Mathematics
-        const double d_dt_chaste_interface_var_Itos_X_gate__X_tos = (-var_chaste_interface__Itos_X_gate__X_tos + 1 / (1.0 + exp(-0.20000000000000001 - 0.066666666666666666 * var_chaste_interface__cell__V))) / (0.5 + 9.0 / (1.0 + exp(0.20000000000000001 + 0.066666666666666666 * var_chaste_interface__cell__V))); // 1 / millisecond
+        const double d_dt_chaste_interface_var_Itos_X_gate__X_tos = _lt_0_row[31] * (-var_chaste_interface__Itos_X_gate__X_tos + _lt_0_row[26]); // 1 / millisecond
 
         return d_dt_chaste_interface_var_Itos_X_gate__X_tos;
     }
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative7(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1536,15 +1986,25 @@
         double var_chaste_interface__Itos_Y_gate__Y_tos = rY[8];
         // Units: dimensionless; Initial value: 0.9945511
         
-        
+
+        // Lookup table indexing
+        const bool _oob_0 = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         // Mathematics
-        const double d_dt_chaste_interface_var_Itos_Y_gate__Y_tos = (-var_chaste_interface__Itos_Y_gate__Y_tos + 1 / (1.0 + exp(3.3500000000000001 + 0.10000000000000001 * var_chaste_interface__cell__V))) / (30.0 + 3000.0 / (1.0 + exp(6.0 + 0.10000000000000001 * var_chaste_interface__cell__V))); // 1 / millisecond
+        const double d_dt_chaste_interface_var_Itos_Y_gate__Y_tos = _lt_0_row[32] * (-var_chaste_interface__Itos_Y_gate__Y_tos + _lt_0_row[28]); // 1 / millisecond
 
         return d_dt_chaste_interface_var_Itos_Y_gate__Y_tos;
     }
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative8(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1577,15 +2037,25 @@
         double var_chaste_interface__Itos_R_gate__R_tos = rY[9];
         // Units: dimensionless; Initial value: 0.9946
         
-        
+
+        // Lookup table indexing
+        const bool _oob_0 = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         // Mathematics
-        const double d_dt_chaste_interface_var_Itos_R_gate__R_tos = (-var_chaste_interface__Itos_R_gate__R_tos + 1 / (1.0 + exp(3.3500000000000001 + 0.10000000000000001 * var_chaste_interface__cell__V))) / (220.0 + 2800.0 / (1.0 + exp(6.0 + 0.10000000000000001 * var_chaste_interface__cell__V))); // 1 / millisecond
+        const double d_dt_chaste_interface_var_Itos_R_gate__R_tos = _lt_0_row[30] * (-var_chaste_interface__Itos_R_gate__R_tos + _lt_0_row[28]); // 1 / millisecond
 
         return d_dt_chaste_interface_var_Itos_R_gate__R_tos;
     }
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative9(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1618,15 +2088,25 @@
         double var_chaste_interface__Itof_X_gate__X_tof = rY[10];
         // Units: dimensionless; Initial value: 0.004051574
         
-        
+
+        // Lookup table indexing
+        const bool _oob_0 = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         // Mathematics
-        const double d_dt_chaste_interface_var_Itof_X_gate__X_tof = (-var_chaste_interface__Itof_X_gate__X_tof + 1 / (1.0 + exp(-0.20000000000000001 - 0.066666666666666666 * var_chaste_interface__cell__V))) / (1.5 + 3.5 * exp(-0.0011111111111111111 * pow(var_chaste_interface__cell__V, 2))); // 1 / millisecond
+        const double d_dt_chaste_interface_var_Itof_X_gate__X_tof = _lt_0_row[27] * (-var_chaste_interface__Itof_X_gate__X_tof + _lt_0_row[26]); // 1 / millisecond
 
         return d_dt_chaste_interface_var_Itof_X_gate__X_tof;
     }
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative10(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1656,15 +2136,25 @@
         double var_chaste_interface__Itof_Y_gate__Y_tof = rY[11];
         // Units: dimensionless; Initial value: 0.9945511
         
-        
+
+        // Lookup table indexing
+        const bool _oob_0 = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         // Mathematics
-        const double d_dt_chaste_interface_var_Itof_Y_gate__Y_tof = (-var_chaste_interface__Itof_Y_gate__Y_tof + 1 / (1.0 + exp(3.3500000000000001 + 0.10000000000000001 * var_chaste_interface__cell__V))) / (20.0 + 20.0 / (1.0 + exp(3.3500000000000001 + 0.10000000000000001 * var_chaste_interface__cell__V))); // 1 / millisecond
+        const double d_dt_chaste_interface_var_Itof_Y_gate__Y_tof = _lt_0_row[29] * (-var_chaste_interface__Itof_Y_gate__Y_tof + _lt_0_row[28]); // 1 / millisecond
 
         return d_dt_chaste_interface_var_Itof_Y_gate__Y_tof;
     }
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative11(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1697,16 +2187,26 @@
         double var_chaste_interface__ICaL_d_gate__d = rY[12];
         // Units: dimensionless; Initial value: 7.175662e-06
         
-        
+
+        // Lookup table indexing
+        const bool _oob_0 = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         // Mathematics
-        const double var_ICaL_d_gate__d_infinity = 1 / (1.0 + exp(-2.4166666666666665 - 0.16666666666666666 * var_chaste_interface__cell__V)); // dimensionless
-        const double d_dt_chaste_interface_var_ICaL_d_gate__d = 0.035000000000000003 * (14.5 + var_chaste_interface__cell__V) * (-var_chaste_interface__ICaL_d_gate__d + var_ICaL_d_gate__d_infinity) / ((1.0 - exp(-2.4166666666666665 - 0.16666666666666666 * var_chaste_interface__cell__V)) * var_ICaL_d_gate__d_infinity); // 1 / millisecond
+        const double var_ICaL_d_gate__d_infinity = _lt_0_row[11]; // dimensionless
+        const double d_dt_chaste_interface_var_ICaL_d_gate__d = 0.035000000000000003 * _lt_0_row[12] * (14.5 + var_chaste_interface__cell__V) * (-var_chaste_interface__ICaL_d_gate__d + var_ICaL_d_gate__d_infinity) / var_ICaL_d_gate__d_infinity; // 1 / millisecond
 
         return d_dt_chaste_interface_var_ICaL_d_gate__d;
     }
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative12(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1741,15 +2241,25 @@
         double var_chaste_interface__ICaL_f_gate__f = rY[13];
         // Units: dimensionless; Initial value: 1.000681
         
-        
+
+        // Lookup table indexing
+        const bool _oob_0 = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         // Mathematics
-        const double d_dt_chaste_interface_var_ICaL_f_gate__f = (0.02 + 0.019699999999999999 * exp(-0.23877882250000002 * pow((1 + 0.068965517241379309 * var_chaste_interface__cell__V), 2))) * (-var_chaste_interface__ICaL_f_gate__f + 1 / (1.0 + exp(9.7388888888888889 + 0.27777777777777779 * var_chaste_interface__cell__V)) + 0.59999999999999998 / (1.0 + exp(2.5 - 0.050000000000000003 * var_chaste_interface__cell__V))); // 1 / millisecond
+        const double d_dt_chaste_interface_var_ICaL_f_gate__f = (_lt_0_row[15]) * (-var_chaste_interface__ICaL_f_gate__f + _lt_0_row[13] + _lt_0_row[14]); // 1 / millisecond
 
         return d_dt_chaste_interface_var_ICaL_f_gate__f;
     }
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative13(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1778,7 +2288,8 @@
         double var_chaste_interface__Ca_buffer__Ca_SL = rY[25];
         // Units: millimolar; Initial value: 0.0001031812
         
-        
+
+
         // Mathematics
         const double d_dt_chaste_interface_var_ICaL_fCa_gate__fCaB_SL = -0.011900000000000001 * var_chaste_interface__ICaL_fCa_gate__fCaB_SL + 1.7 * (1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_SL) * var_chaste_interface__Ca_buffer__Ca_SL; // 1 / millisecond
 
@@ -1787,6 +2298,8 @@
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative14(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1814,7 +2327,8 @@
         double var_chaste_interface__Ca_buffer__Ca_jct = rY[26];
         // Units: millimolar; Initial value: 0.0001737475
         
-        
+
+
         // Mathematics
         const double d_dt_chaste_interface_var_ICaL_fCa_gate__fCaB_jct = -0.011900000000000001 * var_chaste_interface__ICaL_fCa_gate__fCaB_jct + 1.7 * (1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_jct) * var_chaste_interface__Ca_buffer__Ca_jct; // 1 / millisecond
 
@@ -1823,6 +2337,8 @@
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative15(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1856,7 +2372,8 @@
         double var_chaste_interface__Ca_buffer__Ca_jct = rY[26];
         // Units: millimolar; Initial value: 0.0001737475
         
-        
+
+
         // Mathematics
         const double var_Jrel_SR__RI = 1.0 - var_chaste_interface__Jrel_SR__I - var_chaste_interface__Jrel_SR__O - var_chaste_interface__Jrel_SR__R; // dimensionless
         const double var_Jrel_SR__kCaSR = 15.0 - 14.0 / (1.0 + 0.13584112963311223 * pow(1 / var_chaste_interface__Ca_buffer__Ca_SR, 2.5)); // dimensionless
@@ -1869,6 +2386,8 @@
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative16(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1915,7 +2434,8 @@
         double var_chaste_interface__Ca_buffer__Ca_jct = rY[26];
         // Units: millimolar; Initial value: 0.0001737475
         
-        
+
+
         // Mathematics
         const double var_Jrel_SR__RI = 1.0 - var_chaste_interface__Jrel_SR__I - var_chaste_interface__Jrel_SR__O - var_chaste_interface__Jrel_SR__R; // dimensionless
         const double var_Jrel_SR__kCaSR = 15.0 - 14.0 / (1.0 + 0.13584112963311223 * pow(1 / var_chaste_interface__Ca_buffer__Ca_SR, 2.5)); // dimensionless
@@ -1928,6 +2448,8 @@
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative17(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1971,7 +2493,8 @@
         double var_chaste_interface__Ca_buffer__Ca_jct = rY[26];
         // Units: millimolar; Initial value: 0.0001737475
         
-        
+
+
         // Mathematics
         const double var_Jrel_SR__kCaSR = 15.0 - 14.0 / (1.0 + 0.13584112963311223 * pow(1 / var_chaste_interface__Ca_buffer__Ca_SR, 2.5)); // dimensionless
         const double var_Jrel_SR__kiSRCa = 0.5 * var_Jrel_SR__kCaSR; // per_millimolar_per_millisecond
@@ -1983,6 +2506,8 @@
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative18(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2039,7 +2564,15 @@
         double var_chaste_interface__Ca_buffer__Ca_SL = rY[25];
         // Units: millimolar; Initial value: 0.0001031812
         
-        
+
+        // Lookup table indexing
+        const bool _oob_0 = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         // Mathematics
         const double var_ICaL_fCa_gate__fCa_SL = 1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_SL; // dimensionless
         const double var_INa__openProb = pow(var_chaste_interface__INa_m_gate__m, 3) * var_chaste_interface__INa_h_gate__h * var_chaste_interface__INa_j_gate__j; // dimensionless
@@ -2047,10 +2580,10 @@
         const double var_ion_diffusion__J_Na_SL_myo = 1.6385999999999999e-12 * var_chaste_interface__Na_buffer__Na_SL - 1.6385999999999999e-12 * var_chaste_interface__Na_buffer__Nai; // millimole_per_millisecond
         const double var_ion_diffusion__J_Na_jct_SL = 1.8312999999999999e-14 * var_chaste_interface__Na_buffer__Na_jct - 1.8312999999999999e-14 * var_chaste_interface__Na_buffer__Na_SL; // millimole_per_millisecond
         const double var_ICaL__temp = 1625.34190074 * var_chaste_interface__ICaL_d_gate__d * var_chaste_interface__ICaL_f_gate__f * var_chaste_interface__cell__V; // coulomb_per_mole
-        const double var_ICaL__i_CaL_Na_SL = 1.5e-9 * (-0.75 * mParameters[6] + 0.75 * var_chaste_interface__Na_buffer__Na_SL * exp(0.037434532730821715 * var_chaste_interface__cell__V)) * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL / (-1.0 + exp(0.037434532730821715 * var_chaste_interface__cell__V)); // microA_per_microF
+        const double var_ICaL__i_CaL_Na_SL = 1.5e-9 * _lt_0_row[1] * (-0.75 * mParameters[6] + 0.75 * var_chaste_interface__Na_buffer__Na_SL * _lt_0_row[0]) * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL; // microA_per_microF
         const double var_INaCa__Q_NCX = 1; // dimensionless
-        const double var_INaCa__i_NaCa_SL = 0.89000000000000001 * (pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] * exp(0.013102086455787599 * var_chaste_interface__cell__V) - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 0.27000000000000002 * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * (1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_SL, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) + pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_SL) * var_chaste_interface__Ca_buffer__Ca_SL + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0)))); // microA_per_microF
-        const double var_INaK__f_NaK = 1 / (1.0 + 0.1245 * exp(-0.0037434532730821718 * var_chaste_interface__cell__V) + 0.036499999999999998 * (-0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * mParameters[6])) * exp(-0.037434532730821715 * var_chaste_interface__cell__V)); // dimensionless
+        const double var_INaCa__i_NaCa_SL = 0.89000000000000001 * _lt_0_row[6] * (pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] * _lt_0_row[4] - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL * _lt_0_row[5]) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_SL, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) + pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_SL) * var_chaste_interface__Ca_buffer__Ca_SL + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0)))); // microA_per_microF
+        const double var_INaK__f_NaK = 1 / (1.0 + _lt_0_row[8] + 0.036499999999999998 * (-0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * mParameters[6])) * _lt_0_row[7]); // dimensionless
         const double var_INaK__i_NaK_SL = 1.6973990999999999 * var_INaK__f_NaK * mParameters[5] / ((1.0 + 14641.0 * pow(1 / var_chaste_interface__Na_buffer__Na_SL, 4.0)) * (1.5 + mParameters[5])); // microA_per_microF
         const double var_reversal_potentials__E_Na_SL = 26.713302585894176 * log(mParameters[6] / var_chaste_interface__Na_buffer__Na_SL); // millivolt
         const double var_INa__i_Na_SL = 0.89000000000000001 * (-var_reversal_potentials__E_Na_SL + var_chaste_interface__cell__V) * mParameters[8] * var_INa__openProb; // microA_per_microF
@@ -2062,6 +2595,15 @@
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative19(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+        // Lookup table indexing
+        const bool _oob_0 = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2089,8 +2631,8 @@
             const double var_x36 = pow(var_chaste_interface__INa_m_gate__m, 3);
             const double var_x37 = var_x36 * mParameters[8] * var_chaste_interface__INa_j_gate__j;
             const double var_x38 = var_x37 * var_chaste_interface__INa_h_gate__h;
-            const double var_x40 = exp(0.013102086455787599 * var_chaste_interface__cell__V);
-            const double var_x44 = exp(-0.024332446275034118 * var_chaste_interface__cell__V);
+            const double var_x40 = _lt_0_row[4];
+            const double var_x44 = _lt_0_row[5];
             const double var_x45 = pow(mParameters[6], 3.0);
             const double var_x48 = 1.0 + 0.27000000000000002 * var_x44;
             const double var_x49 = mParameters[11] / var_x48;
@@ -2178,17 +2720,25 @@
         double var_chaste_interface__Ca_buffer__Ca_jct = rY[26];
         // Units: millimolar; Initial value: 0.0001737475
         
-        
+
+        // Lookup table indexing
+        const bool _oob_0 = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         // Mathematics
         const double var_ICaL_fCa_gate__fCa_jct = 1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_jct; // dimensionless
         const double var_INa__openProb = pow(var_chaste_interface__INa_m_gate__m, 3) * var_chaste_interface__INa_h_gate__h * var_chaste_interface__INa_j_gate__j; // dimensionless
         const double var_Na_buffer__dNa_jct_buf = -0.001 * var_chaste_interface__Na_buffer__Na_jct_buf + 0.0001 * (7.5609999999999999 - var_chaste_interface__Na_buffer__Na_jct_buf) * var_chaste_interface__Na_buffer__Na_jct; // millimolar_per_millisecond
         const double var_ion_diffusion__J_Na_jct_SL = 1.8312999999999999e-14 * var_chaste_interface__Na_buffer__Na_jct - 1.8312999999999999e-14 * var_chaste_interface__Na_buffer__Na_SL; // millimole_per_millisecond
         const double var_ICaL__temp = 1625.34190074 * var_chaste_interface__ICaL_d_gate__d * var_chaste_interface__ICaL_f_gate__f * var_chaste_interface__cell__V; // coulomb_per_mole
-        const double var_ICaL__i_CaL_Na_jct = 1.3499999999999998e-8 * (-0.75 * mParameters[6] + 0.75 * var_chaste_interface__Na_buffer__Na_jct * exp(0.037434532730821715 * var_chaste_interface__cell__V)) * var_ICaL__temp * var_ICaL_fCa_gate__fCa_jct / (-1.0 + exp(0.037434532730821715 * var_chaste_interface__cell__V)); // microA_per_microF
+        const double var_ICaL__i_CaL_Na_jct = 1.3499999999999998e-8 * _lt_0_row[1] * (-0.75 * mParameters[6] + 0.75 * var_chaste_interface__Na_buffer__Na_jct * _lt_0_row[0]) * var_ICaL__temp * var_ICaL_fCa_gate__fCa_jct; // microA_per_microF
         const double var_INaCa__Q_NCX = 1; // dimensionless
-        const double var_INaCa__i_NaCa_jct = 0.11 * (pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] * exp(0.013102086455787599 * var_chaste_interface__cell__V) - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 0.27000000000000002 * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * (1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_jct, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) + pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_jct) * var_chaste_interface__Ca_buffer__Ca_jct + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0)))); // microA_per_microF
-        const double var_INaK__f_NaK = 1 / (1.0 + 0.1245 * exp(-0.0037434532730821718 * var_chaste_interface__cell__V) + 0.036499999999999998 * (-0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * mParameters[6])) * exp(-0.037434532730821715 * var_chaste_interface__cell__V)); // dimensionless
+        const double var_INaCa__i_NaCa_jct = 0.11 * _lt_0_row[6] * (pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] * _lt_0_row[4] - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct * _lt_0_row[5]) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_jct, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) + pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_jct) * var_chaste_interface__Ca_buffer__Ca_jct + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0)))); // microA_per_microF
+        const double var_INaK__f_NaK = 1 / (1.0 + _lt_0_row[8] + 0.036499999999999998 * (-0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * mParameters[6])) * _lt_0_row[7]); // dimensionless
         const double var_INaK__i_NaK_jct = 0.2097909 * var_INaK__f_NaK * mParameters[5] / ((1.0 + 14641.0 * pow(1 / var_chaste_interface__Na_buffer__Na_jct, 4.0)) * (1.5 + mParameters[5])); // microA_per_microF
         const double var_reversal_potentials__E_Na_jct = 26.713302585894176 * log(mParameters[6] / var_chaste_interface__Na_buffer__Na_jct); // millivolt
         const double var_INa__i_Na_jct = 0.11 * (-var_reversal_potentials__E_Na_jct + var_chaste_interface__cell__V) * mParameters[8] * var_INa__openProb; // microA_per_microF
@@ -2200,6 +2750,15 @@
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative20(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+        // Lookup table indexing
+        const bool _oob_0 = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2227,11 +2786,11 @@
             const double var_x36 = pow(var_chaste_interface__INa_m_gate__m, 3);
             const double var_x37 = var_x36 * mParameters[8] * var_chaste_interface__INa_j_gate__j;
             const double var_x38 = var_x37 * var_chaste_interface__INa_h_gate__h;
-            const double var_x40 = exp(0.013102086455787599 * var_chaste_interface__cell__V);
+            const double var_x40 = _lt_0_row[4];
             const double var_x41 = pow(var_chaste_interface__Na_buffer__Na_jct, 3.0);
             const double var_x42 = var_x41 * mParameters[4];
             const double var_x43 = var_x40 * var_x42;
-            const double var_x44 = exp(-0.024332446275034118 * var_chaste_interface__cell__V);
+            const double var_x44 = _lt_0_row[5];
             const double var_x45 = pow(mParameters[6], 3.0);
             const double var_x46 = var_x45 * var_chaste_interface__Ca_buffer__Ca_jct;
             const double var_x47 = var_x44 * var_x46;
@@ -2297,7 +2856,8 @@
         double var_chaste_interface__Na_buffer__Na_SL_buf = rY[21];
         // Units: millimolar; Initial value: 0.7720854
         
-        
+
+
         // Mathematics
         const double var_Na_buffer__dNa_SL_buf = -0.001 * var_chaste_interface__Na_buffer__Na_SL_buf + 0.0001 * (1.6499999999999999 - var_chaste_interface__Na_buffer__Na_SL_buf) * var_chaste_interface__Na_buffer__Na_SL; // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_Na_buffer__Na_SL_buf = var_Na_buffer__dNa_SL_buf; // millimolar / millisecond
@@ -2307,6 +2867,8 @@
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative21(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2335,7 +2897,8 @@
         double var_chaste_interface__Na_buffer__Na_jct_buf = rY[22];
         // Units: millimolar; Initial value: 3.539892
         
-        
+
+
         // Mathematics
         const double var_Na_buffer__dNa_jct_buf = -0.001 * var_chaste_interface__Na_buffer__Na_jct_buf + 0.0001 * (7.5609999999999999 - var_chaste_interface__Na_buffer__Na_jct_buf) * var_chaste_interface__Na_buffer__Na_jct; // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_Na_buffer__Na_jct_buf = var_Na_buffer__dNa_jct_buf; // millimolar / millisecond
@@ -2345,6 +2908,8 @@
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative22(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2373,7 +2938,8 @@
         double var_chaste_interface__Na_buffer__Nai = rY[23];
         // Units: millimolar; Initial value: 8.80853
         
-        
+
+
         // Mathematics
         const double var_ion_diffusion__J_Na_SL_myo = 1.6385999999999999e-12 * var_chaste_interface__Na_buffer__Na_SL - 1.6385999999999999e-12 * var_chaste_interface__Na_buffer__Nai; // millimole_per_millisecond
         const double d_dt_chaste_interface_var_Na_buffer__Nai = 46611066473.945435 * var_ion_diffusion__J_Na_SL_myo; // millimolar / millisecond
@@ -2383,6 +2949,8 @@
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative23(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2414,7 +2982,8 @@
         double var_chaste_interface__Ca_buffer__Ca_Calsequestrin = rY[31];
         // Units: millimolar; Initial value: 1.242988
         
-        
+
+
         // Mathematics
         const double var_Jleak_SR__j_leak_SR = (-var_chaste_interface__Ca_buffer__Ca_jct + var_chaste_interface__Ca_buffer__Ca_SR) * mParameters[0]; // millimolar_per_millisecond
         const double var_Jrel_SR__j_rel_SR = (-var_chaste_interface__Ca_buffer__Ca_jct + var_chaste_interface__Ca_buffer__Ca_SR) * var_chaste_interface__Jrel_SR__O * mParameters[1]; // millimolar_per_millisecond
@@ -2427,6 +2996,8 @@
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative24(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2488,17 +3059,25 @@
         double var_chaste_interface__Ca_buffer__Ca_SLHigh_SL = rY[29];
         // Units: millimolar; Initial value: 0.07297378
         
-        
+
+        // Lookup table indexing
+        const bool _oob_0 = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         // Mathematics
         const double var_ICaL_fCa_gate__fCa_SL = 1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_SL; // dimensionless
         const double var_ion_diffusion__J_Ca_SL_myo = 3.7243000000000002e-12 * var_chaste_interface__Ca_buffer__Ca_SL - 3.7243000000000002e-12 * var_chaste_interface__Ca_buffer__Cai; // millimole_per_millisecond
         const double var_ion_diffusion__J_Ca_jct_SL = 8.2413000000000004e-13 * var_chaste_interface__Ca_buffer__Ca_jct - 8.2413000000000004e-13 * var_chaste_interface__Ca_buffer__Ca_SL; // millimole_per_millisecond
         const double var_ICaL__temp = 1625.34190074 * var_chaste_interface__ICaL_d_gate__d * var_chaste_interface__ICaL_f_gate__f * var_chaste_interface__cell__V; // coulomb_per_mole
-        const double var_ICaL__i_CaL_Ca_SL = 0.40000000000000002 * (-0.34100000000000003 * mParameters[4] + 0.34100000000000003 * var_chaste_interface__Ca_buffer__Ca_SL * exp(0.07486906546164343 * var_chaste_interface__cell__V)) * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL / (-1.0 + exp(0.07486906546164343 * var_chaste_interface__cell__V)); // microA_per_microF
+        const double var_ICaL__i_CaL_Ca_SL = 0.40000000000000002 * _lt_0_row[3] * (-0.34100000000000003 * mParameters[4] + 0.34100000000000003 * var_chaste_interface__Ca_buffer__Ca_SL * _lt_0_row[2]) * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_SL; // microA_per_microF
         const double var_ICap__Q_SLCaP = 1; // dimensionless
         const double var_ICap__i_Cap_SL = 0.059896999999999999 * var_ICap__Q_SLCaP / (1.0 + 5.2281977629563632e-6 * pow(1 / var_chaste_interface__Ca_buffer__Ca_SL, 1.6000000000000001)); // microA_per_microF
         const double var_INaCa__Q_NCX = 1; // dimensionless
-        const double var_INaCa__i_NaCa_SL = 0.89000000000000001 * (pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] * exp(0.013102086455787599 * var_chaste_interface__cell__V) - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 0.27000000000000002 * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * (1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_SL, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) + pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_SL) * var_chaste_interface__Ca_buffer__Ca_SL + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0)))); // microA_per_microF
+        const double var_INaCa__i_NaCa_SL = 0.89000000000000001 * _lt_0_row[6] * (pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] * _lt_0_row[4] - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL * _lt_0_row[5]) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_SL, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) + pow(var_chaste_interface__Na_buffer__Na_SL, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_SL + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_SL) * var_chaste_interface__Ca_buffer__Ca_SL + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_SL, 3.0)))); // microA_per_microF
         const double var_Ca_buffer__dCa_SLB_SL = -1.3 * var_chaste_interface__Ca_buffer__Ca_SLB_SL + 100.0 * (1.2155 - var_chaste_interface__Ca_buffer__Ca_SLB_SL) * var_chaste_interface__Ca_buffer__Ca_SL; // millimolar_per_millisecond
         const double var_Ca_buffer__dCa_SLHigh_SL = -0.029999999999999999 * var_chaste_interface__Ca_buffer__Ca_SLHigh_SL + 100.0 * (0.4355 - var_chaste_interface__Ca_buffer__Ca_SLHigh_SL) * var_chaste_interface__Ca_buffer__Ca_SL; // millimolar_per_millisecond
         const double var_ICab__i_Cab_SL = 0.00022365699999999999 * var_chaste_interface__cell__V - 0.0029873085582266669 * log(mParameters[4] / var_chaste_interface__Ca_buffer__Ca_SL); // microA_per_microF
@@ -2509,6 +3088,15 @@
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative25(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+        // Lookup table indexing
+        const bool _oob_0 = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2530,8 +3118,8 @@
             // Units: millimolar; Initial value: 0.07297378
             
             const double var_x4 = 1 / var_chaste_interface__Ca_buffer__Ca_SL;
-            const double var_x40 = exp(0.013102086455787599 * var_chaste_interface__cell__V);
-            const double var_x44 = exp(-0.024332446275034118 * var_chaste_interface__cell__V);
+            const double var_x40 = _lt_0_row[4];
+            const double var_x44 = _lt_0_row[5];
             const double var_x45 = pow(mParameters[6], 3.0);
             const double var_x48 = 1.0 + 0.27000000000000002 * var_x44;
             const double var_x49 = mParameters[11] / var_x48;
@@ -2549,7 +3137,7 @@
             const double var_x69 = var_x65 * var_x68;
             const double var_x70 = var_x49 * var_x69;
             const double var_x101 = 1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_SL;
-            const double var_x109 = exp(0.07486906546164343 * var_chaste_interface__cell__V);
+            const double var_x109 = _lt_0_row[2];
             const double var_x110 = -1.0 + var_x109;
             const double var_x111 = mParameters[7] / var_x110;
             const double var_x112 = var_chaste_interface__ICaL_d_gate__d * var_chaste_interface__ICaL_f_gate__f;
@@ -2609,18 +3197,26 @@
         double var_chaste_interface__Ca_buffer__Ca_SLHigh_jct = rY[30];
         // Units: millimolar; Initial value: 0.007347888
         
-        
+
+        // Lookup table indexing
+        const bool _oob_0 = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         // Mathematics
         const double var_ICaL_fCa_gate__fCa_jct = 1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_jct; // dimensionless
         const double var_Jleak_SR__j_leak_SR = (-var_chaste_interface__Ca_buffer__Ca_jct + var_chaste_interface__Ca_buffer__Ca_SR) * mParameters[0]; // millimolar_per_millisecond
         const double var_Jrel_SR__j_rel_SR = (-var_chaste_interface__Ca_buffer__Ca_jct + var_chaste_interface__Ca_buffer__Ca_SR) * var_chaste_interface__Jrel_SR__O * mParameters[1]; // millimolar_per_millisecond
         const double var_ion_diffusion__J_Ca_jct_SL = 8.2413000000000004e-13 * var_chaste_interface__Ca_buffer__Ca_jct - 8.2413000000000004e-13 * var_chaste_interface__Ca_buffer__Ca_SL; // millimole_per_millisecond
         const double var_ICaL__temp = 1625.34190074 * var_chaste_interface__ICaL_d_gate__d * var_chaste_interface__ICaL_f_gate__f * var_chaste_interface__cell__V; // coulomb_per_mole
-        const double var_ICaL__i_CaL_Ca_jct = 3.6000000000000001 * (-0.34100000000000003 * mParameters[4] + 0.34100000000000003 * var_chaste_interface__Ca_buffer__Ca_jct * exp(0.07486906546164343 * var_chaste_interface__cell__V)) * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_jct / (-1.0 + exp(0.07486906546164343 * var_chaste_interface__cell__V)); // microA_per_microF
+        const double var_ICaL__i_CaL_Ca_jct = 3.6000000000000001 * _lt_0_row[3] * (-0.34100000000000003 * mParameters[4] + 0.34100000000000003 * var_chaste_interface__Ca_buffer__Ca_jct * _lt_0_row[2]) * mParameters[7] * var_ICaL__temp * var_ICaL_fCa_gate__fCa_jct; // microA_per_microF
         const double var_ICap__Q_SLCaP = 1; // dimensionless
         const double var_ICap__i_Cap_jct = 0.0074029999999999999 * var_ICap__Q_SLCaP / (1.0 + 5.2281977629563632e-6 * pow(1 / var_chaste_interface__Ca_buffer__Ca_jct, 1.6000000000000001)); // microA_per_microF
         const double var_INaCa__Q_NCX = 1; // dimensionless
-        const double var_INaCa__i_NaCa_jct = 0.11 * (pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] * exp(0.013102086455787599 * var_chaste_interface__cell__V) - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 0.27000000000000002 * exp(-0.024332446275034118 * var_chaste_interface__cell__V)) * (1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_jct, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) + pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_jct) * var_chaste_interface__Ca_buffer__Ca_jct + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0)))); // microA_per_microF
+        const double var_INaCa__i_NaCa_jct = 0.11 * _lt_0_row[6] * (pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] * _lt_0_row[4] - pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct * _lt_0_row[5]) * var_INaCa__Q_NCX * mParameters[11] / ((1.0 + 1.6777215999999998e-11 / pow(var_chaste_interface__Ca_buffer__Ca_jct, 3)) * (1.3 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) + pow(var_chaste_interface__Na_buffer__Na_jct, 3.0) * mParameters[4] + pow(mParameters[6], 3.0) * var_chaste_interface__Ca_buffer__Ca_jct + 669921.875 * (1.0 + 278.55153203342621 * var_chaste_interface__Ca_buffer__Ca_jct) * var_chaste_interface__Ca_buffer__Ca_jct + 0.0035899999999999999 * pow(mParameters[6], 3.0) * (1.0 + 0.00053869674493876331 * pow(var_chaste_interface__Na_buffer__Na_jct, 3.0)))); // microA_per_microF
         const double var_Ca_buffer__dCa_SLB_jct = -1.3 * var_chaste_interface__Ca_buffer__Ca_SLB_jct + 100.0 * (0.55473098330241188 - var_chaste_interface__Ca_buffer__Ca_SLB_jct) * var_chaste_interface__Ca_buffer__Ca_jct; // millimolar_per_millisecond
         const double var_Ca_buffer__dCa_SLHigh_jct = -0.029999999999999999 * var_chaste_interface__Ca_buffer__Ca_SLHigh_jct + 100.0 * (0.19897959183673469 - var_chaste_interface__Ca_buffer__Ca_SLHigh_jct) * var_chaste_interface__Ca_buffer__Ca_jct; // millimolar_per_millisecond
         const double var_ICab__i_Cab_jct = 2.7642999999999999e-5 * var_chaste_interface__cell__V - 0.00036921791169093637 * log(mParameters[4] / var_chaste_interface__Ca_buffer__Ca_jct); // microA_per_microF
@@ -2631,6 +3227,15 @@
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative26(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+        // Lookup table indexing
+        const bool _oob_0 = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2654,11 +3259,11 @@
             // Units: millimolar; Initial value: 0.007347888
             
             const double var_x2 = 1 / var_chaste_interface__Ca_buffer__Ca_jct;
-            const double var_x40 = exp(0.013102086455787599 * var_chaste_interface__cell__V);
+            const double var_x40 = _lt_0_row[4];
             const double var_x41 = pow(var_chaste_interface__Na_buffer__Na_jct, 3.0);
             const double var_x42 = var_x41 * mParameters[4];
             const double var_x43 = var_x40 * var_x42;
-            const double var_x44 = exp(-0.024332446275034118 * var_chaste_interface__cell__V);
+            const double var_x44 = _lt_0_row[5];
             const double var_x45 = pow(mParameters[6], 3.0);
             const double var_x46 = var_x45 * var_chaste_interface__Ca_buffer__Ca_jct;
             const double var_x47 = var_x44 * var_x46;
@@ -2675,7 +3280,7 @@
             const double var_x85 = 1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_jct;
             const double var_x86 = var_x85 * var_chaste_interface__ICaL_d_gate__d;
             const double var_x106 = var_x43 - var_x47;
-            const double var_x109 = exp(0.07486906546164343 * var_chaste_interface__cell__V);
+            const double var_x109 = _lt_0_row[2];
             const double var_x110 = -1.0 + var_x109;
             const double var_x111 = mParameters[7] / var_x110;
             const double var_x121 = var_x111 * var_chaste_interface__ICaL_f_gate__f;
@@ -2718,7 +3323,8 @@
         double var_chaste_interface__Ca_buffer__Ca_SLB_SL = rY[27];
         // Units: millimolar; Initial value: 0.1110363
         
-        
+
+
         // Mathematics
         const double var_Ca_buffer__dCa_SLB_SL = -1.3 * var_chaste_interface__Ca_buffer__Ca_SLB_SL + 100.0 * (1.2155 - var_chaste_interface__Ca_buffer__Ca_SLB_SL) * var_chaste_interface__Ca_buffer__Ca_SL; // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_Ca_buffer__Ca_SLB_SL = var_Ca_buffer__dCa_SLB_SL; // millimolar / millisecond
@@ -2728,6 +3334,8 @@
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative27(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2757,7 +3365,8 @@
         double var_chaste_interface__Ca_buffer__Ca_SLB_jct = rY[28];
         // Units: millimolar; Initial value: 0.009566355
         
-        
+
+
         // Mathematics
         const double var_Ca_buffer__dCa_SLB_jct = -1.3 * var_chaste_interface__Ca_buffer__Ca_SLB_jct + 100.0 * (0.55473098330241188 - var_chaste_interface__Ca_buffer__Ca_SLB_jct) * var_chaste_interface__Ca_buffer__Ca_jct; // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_Ca_buffer__Ca_SLB_jct = var_Ca_buffer__dCa_SLB_jct; // millimolar / millisecond
@@ -2767,6 +3376,8 @@
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative28(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2796,7 +3407,8 @@
         double var_chaste_interface__Ca_buffer__Ca_SLHigh_SL = rY[29];
         // Units: millimolar; Initial value: 0.07297378
         
-        
+
+
         // Mathematics
         const double var_Ca_buffer__dCa_SLHigh_SL = -0.029999999999999999 * var_chaste_interface__Ca_buffer__Ca_SLHigh_SL + 100.0 * (0.4355 - var_chaste_interface__Ca_buffer__Ca_SLHigh_SL) * var_chaste_interface__Ca_buffer__Ca_SL; // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_Ca_buffer__Ca_SLHigh_SL = var_Ca_buffer__dCa_SLHigh_SL; // millimolar / millisecond
@@ -2806,6 +3418,8 @@
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative29(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2835,7 +3449,8 @@
         double var_chaste_interface__Ca_buffer__Ca_SLHigh_jct = rY[30];
         // Units: millimolar; Initial value: 0.007347888
         
-        
+
+
         // Mathematics
         const double var_Ca_buffer__dCa_SLHigh_jct = -0.029999999999999999 * var_chaste_interface__Ca_buffer__Ca_SLHigh_jct + 100.0 * (0.19897959183673469 - var_chaste_interface__Ca_buffer__Ca_SLHigh_jct) * var_chaste_interface__Ca_buffer__Ca_jct; // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_Ca_buffer__Ca_SLHigh_jct = var_Ca_buffer__dCa_SLHigh_jct; // millimolar / millisecond
@@ -2845,6 +3460,8 @@
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative30(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2874,7 +3491,8 @@
         double var_chaste_interface__Ca_buffer__Ca_Calsequestrin = rY[31];
         // Units: millimolar; Initial value: 1.242988
         
-        
+
+
         // Mathematics
         const double var_Ca_buffer__dCalsequestrin = -65.0 * var_chaste_interface__Ca_buffer__Ca_Calsequestrin + 100.0 * (2.6000000000000001 - var_chaste_interface__Ca_buffer__Ca_Calsequestrin) * var_chaste_interface__Ca_buffer__Ca_SR; // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_Ca_buffer__Ca_Calsequestrin = var_Ca_buffer__dCalsequestrin; // millimolar / millisecond
@@ -2884,6 +3502,8 @@
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative31(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2912,7 +3532,8 @@
         double var_chaste_interface__cytosolic_Ca_buffer__Ca_TroponinC = rY[32];
         // Units: millimolar; Initial value: 0.008773191
         
-        
+
+
         // Mathematics
         const double var_cytosolic_Ca_buffer__dCa_TroponinC = -0.019599999999999999 * var_chaste_interface__cytosolic_Ca_buffer__Ca_TroponinC + 32.700000000000003 * (0.070000000000000007 - var_chaste_interface__cytosolic_Ca_buffer__Ca_TroponinC) * var_chaste_interface__Ca_buffer__Cai; // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_cytosolic_Ca_buffer__Ca_TroponinC = var_cytosolic_Ca_buffer__dCa_TroponinC; // millimolar / millisecond
@@ -2922,6 +3543,8 @@
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative32(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2952,7 +3575,8 @@
         double var_chaste_interface__cytosolic_Ca_buffer__Mg_TroponinC_Ca_Mg = rY[34];
         // Units: millimolar; Initial value: 0.01524002
         
-        
+
+
         // Mathematics
         const double var_cytosolic_Ca_buffer__dCa_TroponinC_Ca_Mg = -3.1999999999999999e-5 * var_chaste_interface__cytosolic_Ca_buffer__Ca_TroponinC_Ca_Mg + 2.3700000000000001 * (0.14000000000000001 - var_chaste_interface__cytosolic_Ca_buffer__Ca_TroponinC_Ca_Mg - var_chaste_interface__cytosolic_Ca_buffer__Mg_TroponinC_Ca_Mg) * var_chaste_interface__Ca_buffer__Cai; // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_cytosolic_Ca_buffer__Ca_TroponinC_Ca_Mg = var_cytosolic_Ca_buffer__dCa_TroponinC_Ca_Mg; // millimolar / millisecond
@@ -2962,6 +3586,8 @@
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative33(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2991,7 +3617,8 @@
         double var_chaste_interface__cytosolic_Ca_buffer__Mg_TroponinC_Ca_Mg = rY[34];
         // Units: millimolar; Initial value: 0.01524002
         
-        
+
+
         // Mathematics
         const double var_cytosolic_Ca_buffer__dMg_TroponinC_Ca_Mg = 0.00042000000000000007 - 0.0030000000000000001 * var_chaste_interface__cytosolic_Ca_buffer__Ca_TroponinC_Ca_Mg - 0.0063300000000000006 * var_chaste_interface__cytosolic_Ca_buffer__Mg_TroponinC_Ca_Mg; // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_cytosolic_Ca_buffer__Mg_TroponinC_Ca_Mg = var_cytosolic_Ca_buffer__dMg_TroponinC_Ca_Mg; // millimolar / millisecond
@@ -3001,6 +3628,8 @@
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative34(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -3026,7 +3655,8 @@
         double var_chaste_interface__cytosolic_Ca_buffer__Ca_Calmodulin = rY[35];
         // Units: millimolar; Initial value: 0.0002911916
         
-        
+
+
         // Mathematics
         const double var_cytosolic_Ca_buffer__dCa_Calmodulin = -0.23799999999999999 * var_chaste_interface__cytosolic_Ca_buffer__Ca_Calmodulin + 34.0 * (0.024 - var_chaste_interface__cytosolic_Ca_buffer__Ca_Calmodulin) * var_chaste_interface__Ca_buffer__Cai; // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_cytosolic_Ca_buffer__Ca_Calmodulin = var_cytosolic_Ca_buffer__dCa_Calmodulin; // millimolar / millisecond
@@ -3036,6 +3666,8 @@
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative35(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -3066,7 +3698,8 @@
         double var_chaste_interface__cytosolic_Ca_buffer__Mg_Myosin = rY[37];
         // Units: millimolar; Initial value: 0.1381982
         
-        
+
+
         // Mathematics
         const double var_cytosolic_Ca_buffer__dCa_Myosin = -0.00046000000000000001 * var_chaste_interface__cytosolic_Ca_buffer__Ca_Myosin + 13.800000000000001 * (0.14000000000000001 - var_chaste_interface__cytosolic_Ca_buffer__Ca_Myosin - var_chaste_interface__cytosolic_Ca_buffer__Mg_Myosin) * var_chaste_interface__Ca_buffer__Cai; // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_cytosolic_Ca_buffer__Ca_Myosin = var_cytosolic_Ca_buffer__dCa_Myosin; // millimolar / millisecond
@@ -3076,6 +3709,8 @@
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative36(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -3105,7 +3740,8 @@
         double var_chaste_interface__cytosolic_Ca_buffer__Mg_Myosin = rY[37];
         // Units: millimolar; Initial value: 0.1381982
         
-        
+
+
         // Mathematics
         const double var_cytosolic_Ca_buffer__dMg_Myosin = 0.0021979999999999999 - 0.015699999999999999 * var_chaste_interface__cytosolic_Ca_buffer__Ca_Myosin - 0.015757 * var_chaste_interface__cytosolic_Ca_buffer__Mg_Myosin; // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_cytosolic_Ca_buffer__Mg_Myosin = var_cytosolic_Ca_buffer__dMg_Myosin; // millimolar / millisecond
@@ -3115,6 +3751,8 @@
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative37(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -3140,7 +3778,8 @@
         double var_chaste_interface__cytosolic_Ca_buffer__Ca_SRB = rY[38];
         // Units: millimolar; Initial value: 0.002143165
         
-        
+
+
         // Mathematics
         const double var_cytosolic_Ca_buffer__dCa_SRB = -0.059999999999999998 * var_chaste_interface__cytosolic_Ca_buffer__Ca_SRB + 100.0 * (0.017100000000000001 - var_chaste_interface__cytosolic_Ca_buffer__Ca_SRB) * var_chaste_interface__Ca_buffer__Cai; // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_cytosolic_Ca_buffer__Ca_SRB = var_cytosolic_Ca_buffer__dCa_SRB; // millimolar / millisecond
@@ -3150,6 +3789,8 @@
 
     double CellShannon2004FromCellMLGRL1Opt::EvaluatePartialDerivative38(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+
+
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -3216,6 +3857,13 @@
         double var_chaste_interface__Ca_buffer__Ca_jct = rY[26];
         // Units: millimolar; Initial value: 0.0001737475
         
+        // Lookup table indexing
+        const bool _oob_0 = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = CellShannon2004FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
 
         // Mathematics
         const double var_ICaL__Fx_ICaL_SL = 0.10000000000000001; // dimensionless
@@ -3255,8 +3903,8 @@
         const double var_INaCa__ksat = 0.27000000000000002; // dimensionless
         const double var_INa__openProb = pow(var_chaste_interface__INa_m_gate__m, 3) * var_chaste_interface__INa_h_gate__h * var_chaste_interface__INa_j_gate__j; // dimensionless
         const double var_Jrel_SR__j_rel_SR = (-var_chaste_interface__Ca_buffer__Ca_jct + var_chaste_interface__Ca_buffer__Ca_SR) * var_chaste_interface__Jrel_SR__O * mParameters[1]; // millimolar_per_millisecond
-        const double var_ICaL_f_gate__tau_f = 1 / (0.02 + 0.019699999999999999 * exp(-0.23877882250000002 * pow((1 + 0.068965517241379309 * var_chaste_interface__cell__V), 2))); // millisecond
-        const double var_IKr_Rr_gate__Rr = 1 / (1.0 + exp(1.4732142857142858 + 0.044642857142857144 * var_chaste_interface__cell__V)); // dimensionless
+        const double var_ICaL_f_gate__tau_f = 1 / (_lt_0_row[15]); // millisecond
+        const double var_IKr_Rr_gate__Rr = _lt_0_row[10]; // dimensionless
         const double var_cell__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
         const double var_model_parameters__F = 96485.0; // coulomb_per_mole
         const double var_IK1__G_K1 = 0.3872983346207417 * sqrt(mParameters[5]); // milliS_per_microF

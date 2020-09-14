@@ -51,8 +51,8 @@ def format_jacobian(jacobian_equations, jacobian_matrix, printer, print_rhs,
     assert isinstance(printer, Printer), 'Expecting printer to be a cellmlmanip.printer.Printer'
     assert callable(print_rhs), 'Expecting print_rhs to be a callable'
 
-    equations = [{'lhs': printer.doprint(eq[0]), 'rhs': print_rhs(eq[0], eq[1]), 'sympy_lhs': eq[0]}
-                 for eq in jacobian_equations]
+    equations = [{'lhs': printer.doprint(eq[0]), 'rhs': print_rhs(eq[0], eq[1]), 'sympy_lhs': eq[0],
+                  'sympy_rhs': eq[1]} for eq in jacobian_equations]
     rows, cols = jacobian_matrix.shape
     jacobian = []
     for i in range(cols if swap_inner_outer_index else rows):

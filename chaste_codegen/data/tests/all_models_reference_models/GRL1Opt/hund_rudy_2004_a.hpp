@@ -38,6 +38,7 @@ public:
     double GetIntracellularCalciumConcentration();
     Cellhund_rudy_2004_aFromCellMLGRL1Opt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellhund_rudy_2004_aFromCellMLGRL1Opt();
+    AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void UpdateTransmembranePotential(double var_chaste_interface__Environment__time);
     void ComputeOneStepExceptVoltage(double var_chaste_interface__Environment__time);

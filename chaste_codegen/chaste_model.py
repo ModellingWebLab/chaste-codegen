@@ -358,17 +358,22 @@ class ChasteModel(object):
         # as those are handled by _print_rhs_with_modifiers
         modifiers_with_defining_eqs = set((eq.lhs for eq in derivative_equations)) | self._model.state_vars
         # exclude ionic currents
-        formatted_deriv_eqs = [{'lhs': self._printer.doprint(eq.lhs),
-                                'rhs': self._print_rhs_with_modifiers(eq.lhs, eq.rhs, modifiers_with_defining_eqs),
-                                'sympy_lhs': eq.lhs,
-                                'sympy_rhs': eq.rhs,
-                                'units': self._model.units.format(self._model.units.evaluate_units(eq.lhs)),
-                                'in_eqs_excl_voltage': eq in self._derivative_eqs_excl_voltage,
-                                'in_membrane_voltage': eq in self._derivative_eqs_voltage,
-                                'is_voltage': isinstance(eq.lhs, Derivative) and
-                                eq.lhs.args[0] == self._model.membrane_voltage_var}
+        formatted_deriv_eqs = [self.format_derivative_equation(eq, modifiers_with_defining_eqs)
                                for eq in derivative_equations]
         return formatted_deriv_eqs
+
+    def format_derivative_equation(self, eq, modifiers_with_defining_eqs):
+        """ Format an individual derivative equation
+            specified so that other model types can specify more detailed printing """
+        return {'lhs': self._printer.doprint(eq.lhs),
+                'rhs': self._print_rhs_with_modifiers(eq.lhs, eq.rhs, modifiers_with_defining_eqs),
+                'sympy_lhs': eq.lhs,
+                'sympy_rhs': eq.rhs,
+                'units': self._model.units.format(self._model.units.evaluate_units(eq.lhs)),
+                'in_eqs_excl_voltage': eq in self._derivative_eqs_excl_voltage,
+                'in_membrane_voltage': eq in self._derivative_eqs_voltage,
+                'is_voltage': isinstance(eq.lhs, Derivative) and
+                eq.lhs.args[0] == self._model.membrane_voltage_var}
 
     def _format_free_variable(self):
         """ Format free variable for chaste output"""

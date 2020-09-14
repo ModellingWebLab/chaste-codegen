@@ -32,7 +32,7 @@ class OptCvodeChasteModel(CvodeChasteModel):
 
     def _add_printers(self):
         """ Initialises Printers for outputting chaste code. """
-        super()._add_printers(self._lookup_tables.print_lut_expr)
+        super()._add_printers(lookup_table_function=self._lookup_tables.print_lut_expr)
 
     def _print_jacobian(self):
         with self._lookup_tables.method_being_printed('EvaluateAnalyticJacobian'):
