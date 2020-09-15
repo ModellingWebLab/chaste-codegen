@@ -1035,15 +1035,6 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative0(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1086,6 +1077,15 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
             double var_chaste_interface__cleft_space_ion_concentrations__K_c = rY[22];
             // Units: millimolar; Initial value: 5.0
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
             const double var_x0 = 0.083333333333333329 * var_chaste_interface__membrane__V;
             const double var_x1 = exp(1.9166666666666667 - var_x0);
             const double var_x2 = 1.0 + var_x1;
@@ -1176,14 +1176,14 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative1(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -80.0
             
+
+
             const double var_x105 = exp(-3.5035114021936398 - 0.078907914463820727 * var_chaste_interface__membrane__V);
             const double var_x107 = -1.0 + var_x105;
             const double var_x108 = 0.46000000000000002 / var_x107;
@@ -1227,14 +1227,14 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative2(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -80.0
             
+
+
             const double var_x117 = exp(6.666666666666667 + 0.16666666666666666 * var_chaste_interface__membrane__V);
             const double var_x118 = 1.0 + var_x117;
             const double var_x119 = 1 / var_x118;
@@ -1278,14 +1278,14 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative3(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -80.0
             
+
+
             const double var_x122 = exp(30.0 + 0.5 * var_chaste_interface__membrane__V);
             const double var_x123 = 1.0 + var_x122;
             const double var_x124 = 1 / var_x123;
@@ -1329,14 +1329,14 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative4(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -80.0
             
+
+
             const double var_x128 = 0.40000000000000002 * var_chaste_interface__membrane__V;
             const double var_x129 = exp(2.0 + var_x128);
             const double var_x130 = -1.0 + var_x129;
@@ -1384,14 +1384,14 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative5(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -80.0
             
+
+
             const double var_x144 = 0.25 * var_chaste_interface__membrane__V;
             const double var_x145 = exp(-4.5 - var_x144);
             const double var_x146 = 1.0 + var_x145;
@@ -1433,14 +1433,14 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative6(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -80.0
             
+
+
             const double var_x163 = 0.033333333333333333 * var_chaste_interface__membrane__V;
             const double var_x164 = exp(0.77666666666666673 + var_x163);
             const double var_x165 = exp(-0.77666666666666673 - var_x163);
@@ -1478,14 +1478,14 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative7(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -80.0
             
+
+
             const double var_x166 = exp(4.876462938881664 + 0.065019505851755519 * var_chaste_interface__membrane__V);
             const double var_x167 = exp(-0.9003601440576231 - 0.012004801920768308 * var_chaste_interface__membrane__V);
             const double var_x172 = 0.0096369999999999997 * var_x167;
@@ -1527,14 +1527,14 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative8(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -80.0
             
+
+
             const double var_x0 = 0.083333333333333329 * var_chaste_interface__membrane__V;
             const double var_x175 = exp(-0.1388888888888889 * var_chaste_interface__membrane__V);
             const double var_x176 = exp(var_x0);
@@ -1578,14 +1578,14 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative9(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -80.0
             
+
+
             const double var_x179 = exp(327.99999999999994 + 10.0 * var_chaste_interface__membrane__V);
             const double var_x180 = 1.0 + var_x179;
             const double var_x181 = 1 / var_x180;
@@ -1628,14 +1628,14 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative10(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -80.0
             
+
+
             const double var_x179 = exp(327.99999999999994 + 10.0 * var_chaste_interface__membrane__V);
             const double var_x180 = 1.0 + var_x179;
             const double var_x181 = 1 / var_x180;
@@ -1681,14 +1681,14 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative11(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -80.0
             
+
+
             const double var_x192 = exp(46.0 + 2.0 * var_chaste_interface__membrane__V);
             const double var_x193 = 1.0 + var_x192;
             const double var_x194 = 1 / var_x193;
@@ -1731,14 +1731,14 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative12(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -80.0
             
+
+
             const double var_x200 = exp(-0.045816915605241454 * var_chaste_interface__membrane__V);
             const double var_x201 = exp(0.014398433450440593 * var_chaste_interface__membrane__V);
             const double var_x202 = 0.059999999999999998 + 1 / (0.29999999999999999 * var_x200 + 1.6599999999999999 * var_x201);
@@ -1781,14 +1781,14 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative13(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -80.0
             
+
+
             const double var_x206 = exp(0.03941508020968823 * var_chaste_interface__membrane__V);
             const double var_x207 = exp(-0.076769537847382163 * var_chaste_interface__membrane__V);
             
@@ -1829,14 +1829,14 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative14(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -80.0
             
+
+
             const double var_x208 = exp(0.009420009985210585 * var_chaste_interface__membrane__V);
             const double var_x209 = exp(-0.018299935950224173 * var_chaste_interface__membrane__V);
             
@@ -1893,15 +1893,6 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative15(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1920,6 +1911,15 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
             double var_chaste_interface__cleft_space_ion_concentrations__K_c = rY[22];
             // Units: millimolar; Initial value: 5.0
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
             const double var_x5 = pow(var_chaste_interface__intracellular_ion_concentrations__Na_i, 3);
             const double var_x6 = 1 / (1.0 + 0.00074999999999999991 * var_x5 + 823.19999999999993 * var_chaste_interface__intracellular_ion_concentrations__Ca_i);
             const double var_x7 = _lt_0_row[1];
@@ -2025,15 +2025,6 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative16(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2056,6 +2047,15 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
             double var_chaste_interface__Ca_handling_by_the_SR__F2 = rY[27];
             // Units: dimensionless; Initial value: 0.002262
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
             const double var_x5 = pow(var_chaste_interface__intracellular_ion_concentrations__Na_i, 3);
             const double var_x6 = 1 / (1.0 + 0.00074999999999999991 * var_x5 + 823.19999999999993 * var_chaste_interface__intracellular_ion_concentrations__Ca_i);
             const double var_x7 = _lt_0_row[1];
@@ -2140,8 +2140,6 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative17(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2166,6 +2164,8 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
             double var_chaste_interface__cleft_space_ion_concentrations__K_c = rY[22];
             // Units: millimolar; Initial value: 5.0
             
+
+
             const double var_x12 = var_chaste_interface__delayed_rectifier_K_current_pa_gate__p_a * var_chaste_interface__delayed_rectifier_K_current_pi_gate__p_i;
             const double var_x14 = pow(var_chaste_interface__Ca_independent_transient_outward_K_current_s3_gate__s3, 6);
             const double var_x16 = 0.58999999999999997 * pow(var_chaste_interface__Ca_independent_transient_outward_K_current_s1_gate__s1, 3) + 0.40999999999999998 * pow(var_chaste_interface__Ca_independent_transient_outward_K_current_s2_gate__s2, 3);
@@ -2222,14 +2222,14 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative18(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_ion_concentrations__Ca_i = rY[16];
             // Units: millimolar; Initial value: 7.1e-05
             
+
+
             const double var_x237 = -200.0 * var_chaste_interface__intracellular_ion_concentrations__Ca_i;
             
             partialF = -0.47599999999999998 + var_x237;
@@ -2263,14 +2263,14 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative19(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_ion_concentrations__Ca_i = rY[16];
             // Units: millimolar; Initial value: 7.1e-05
             
+
+
             
             partialF = -0.39200000000000002 - 78.400000000000006 * var_chaste_interface__intracellular_ion_concentrations__Ca_i;
         }
@@ -2305,14 +2305,14 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative20(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_ion_concentrations__Ca_i = rY[16];
             // Units: millimolar; Initial value: 7.1e-05
             
+
+
             const double var_x237 = -200.0 * var_chaste_interface__intracellular_ion_concentrations__Ca_i;
             
             partialF = -0.0066 + var_x237;
@@ -2345,12 +2345,12 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative21(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
+
             
             partialF = -5.6660000000000004;
         }
@@ -2415,8 +2415,6 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative22(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2443,6 +2441,8 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
             double var_chaste_interface__cleft_space_ion_concentrations__K_c = rY[22];
             // Units: millimolar; Initial value: 5.0
             
+
+
             const double var_x12 = var_chaste_interface__delayed_rectifier_K_current_pa_gate__p_a * var_chaste_interface__delayed_rectifier_K_current_pi_gate__p_i;
             const double var_x14 = pow(var_chaste_interface__Ca_independent_transient_outward_K_current_s3_gate__s3, 6);
             const double var_x16 = 0.58999999999999997 * pow(var_chaste_interface__Ca_independent_transient_outward_K_current_s1_gate__s1, 3) + 0.40999999999999998 * pow(var_chaste_interface__Ca_independent_transient_outward_K_current_s2_gate__s2, 3);
@@ -2520,8 +2520,6 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative23(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2530,6 +2528,8 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
             double var_chaste_interface__Ca_handling_by_the_SR__F2 = rY[27];
             // Units: dimensionless; Initial value: 0.002262
             
+
+
             const double var_x217 = 0.25 + var_chaste_interface__Ca_handling_by_the_SR__F2;
             const double var_x218 = pow(var_x217, (-2));
             const double var_x219 = pow(var_chaste_interface__Ca_handling_by_the_SR__F2, 2);
@@ -2570,8 +2570,6 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative24(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2580,6 +2578,8 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
             double var_chaste_interface__Ca_handling_by_the_SR__Ca_up = rY[24];
             // Units: millimolar; Initial value: 0.730866
             
+
+
             const double var_x214 = 3333.3333333333335 * var_chaste_interface__intracellular_ion_concentrations__Ca_i;
             const double var_x215 = 1 / (1.3999999999999999 + var_x214 + 0.80000000000000004 * var_chaste_interface__Ca_handling_by_the_SR__Ca_up);
             const double var_x216 = (var_x214 - 0.32000000000000006 * var_chaste_interface__Ca_handling_by_the_SR__Ca_up) / pow((0.00041999999999999996 + 0.00023999999999999998 * var_chaste_interface__Ca_handling_by_the_SR__Ca_up + var_chaste_interface__intracellular_ion_concentrations__Ca_i), 2);
@@ -2615,14 +2615,14 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative25(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__Ca_handling_by_the_SR__Ca_rel = rY[23];
             // Units: millimolar; Initial value: 0.726776
             
+
+
             
             partialF = -0.40000000000000002 - 0.47999999999999998 * var_chaste_interface__Ca_handling_by_the_SR__Ca_rel;
         }
@@ -2666,8 +2666,6 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative26(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2676,6 +2674,8 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
             double var_chaste_interface__intracellular_ion_concentrations__Ca_i = rY[16];
             // Units: millimolar; Initial value: 7.1e-05
             
+
+
             const double var_x248 = exp(-1.6000000000000001 + 0.080000000000000002 * var_chaste_interface__membrane__V);
             const double var_x250 = 0.00029999999999999997 + var_chaste_interface__intracellular_ion_concentrations__Ca_i;
             const double var_x251 = pow(var_chaste_interface__intracellular_ion_concentrations__Ca_i, 4);
@@ -2727,14 +2727,14 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative27(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_ion_concentrations__Ca_i = rY[16];
             // Units: millimolar; Initial value: 7.1e-05
             
+
+
             const double var_x250 = 0.00029999999999999997 + var_chaste_interface__intracellular_ion_concentrations__Ca_i;
             const double var_x251 = pow(var_chaste_interface__intracellular_ion_concentrations__Ca_i, 4);
             const double var_x254 = pow(var_x250, (-4));
@@ -2774,12 +2774,12 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLGRL2Opt_LookupTables> Cellaslan
 
     double Cellaslanidi_model_2009FromCellMLGRL2Opt::EvaluatePartialDerivative28(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
+
             
             partialF = -0.00081499999999999997;
         }

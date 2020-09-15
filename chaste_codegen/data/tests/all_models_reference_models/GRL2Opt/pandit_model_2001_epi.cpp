@@ -965,8 +965,6 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
 
     double Cellpandit_model_2001_epiFromCellMLGRL2Opt::EvaluatePartialDerivative0(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1005,6 +1003,8 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
             double var_chaste_interface__intracellular_ion_concentrations__K_i = rY[22];
             // Units: millimolar; Initial value: 139.2751
             
+
+
             const double var_x0 = -0.0039900000000000005 * var_chaste_interface__Ca_independent_transient_outward_K_current_s_slow_gate__s_slow - 0.031010000000000003 * var_chaste_interface__Ca_independent_transient_outward_K_current_s_gate__s;
             const double var_x1 = var_x0 * var_chaste_interface__Ca_independent_transient_outward_K_current_r_gate__r;
             const double var_x2 = 0.10000000000000001 * var_chaste_interface__L_type_Ca_channel_Ca_inact_gate__Ca_inact;
@@ -1088,14 +1088,14 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
 
     double Cellpandit_model_2001_epiFromCellMLGRL2Opt::EvaluatePartialDerivative1(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -80.50146
             
+
+
             const double var_x80 = -0.10000000000000001 * var_chaste_interface__membrane__V;
             const double var_x81 = exp(-4.7130000000000001 + var_x80);
             const double var_x82 = 1.0 - var_x81;
@@ -1140,14 +1140,14 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
 
     double Cellpandit_model_2001_epiFromCellMLGRL2Opt::EvaluatePartialDerivative2(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -80.50146
             
+
+
             const double var_x87 = exp(-0.96036036036036043 - 0.0900900900900901 * var_chaste_interface__membrane__V);
             const double var_x92 = 1 / (0.00045370000000000002 + 0.00045370000000000002 * var_x87);
             const double var_x95 = var_chaste_interface__membrane__V >= -40.0;
@@ -1192,14 +1192,14 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
 
     double Cellpandit_model_2001_epiFromCellMLGRL2Opt::EvaluatePartialDerivative3(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -80.50146
             
+
+
             const double var_x80 = -0.10000000000000001 * var_chaste_interface__membrane__V;
             const double var_x95 = var_chaste_interface__membrane__V >= -40.0;
             const double var_x101 = exp(-3.2000000000000002 + var_x80);
@@ -1256,14 +1256,14 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
 
     double Cellpandit_model_2001_epiFromCellMLGRL2Opt::EvaluatePartialDerivative4(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -80.50146
             
+
+
             const double var_x119 = exp(-0.64800000000000002 * pow((-1 + 0.055555555555555552 * var_chaste_interface__membrane__V), 2));
             const double var_x120 = exp(-0.22049999999999997 * pow((1 + 0.14285714285714285 * var_chaste_interface__membrane__V), 2));
             const double var_x124 = 0.0010499999999999999 * var_x119;
@@ -1307,14 +1307,14 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
 
     double Cellpandit_model_2001_epiFromCellMLGRL2Opt::EvaluatePartialDerivative5(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -80.50146
             
+
+
             const double var_x27 = 0.040000000000000001 * var_chaste_interface__membrane__V;
             const double var_x29 = -var_x27;
             const double var_x127 = exp(1.0 + var_x29);
@@ -1365,14 +1365,14 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
 
     double Cellpandit_model_2001_epiFromCellMLGRL2Opt::EvaluatePartialDerivative6(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -80.50146
             
+
+
             const double var_x27 = 0.040000000000000001 * var_chaste_interface__membrane__V;
             const double var_x121 = -0.20000000000000001 * var_chaste_interface__membrane__V;
             const double var_x130 = exp(3.0 + var_x27);
@@ -1416,12 +1416,12 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
 
     double Cellpandit_model_2001_epiFromCellMLGRL2Opt::EvaluatePartialDerivative7(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
+
             
             partialF = -0.11111111111111112;
         }
@@ -1460,14 +1460,14 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
 
     double Cellpandit_model_2001_epiFromCellMLGRL2Opt::EvaluatePartialDerivative8(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -80.50146
             
+
+
             const double var_x80 = -0.10000000000000001 * var_chaste_interface__membrane__V;
             const double var_x150 = exp(1.7885000000000002 + 0.035770000000000003 * var_chaste_interface__membrane__V);
             const double var_x151 = exp(-3.8000000000000003 + var_x80);
@@ -1509,14 +1509,14 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
 
     double Cellpandit_model_2001_epiFromCellMLGRL2Opt::EvaluatePartialDerivative9(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -80.50146
             
+
+
             const double var_x152 = pow((1 + 0.014285714285714285 * var_chaste_interface__membrane__V), 2);
             const double var_x153 = exp(-21.777777777777779 * var_x152);
             const double var_x154 = 1 / (0.035000000000000003 + 0.34999999999999998 * var_x153);
@@ -1558,14 +1558,14 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
 
     double Cellpandit_model_2001_epiFromCellMLGRL2Opt::EvaluatePartialDerivative10(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -80.50146
             
+
+
             const double var_x152 = pow((1 + 0.014285714285714285 * var_chaste_interface__membrane__V), 2);
             const double var_x159 = exp(-5.4444444444444446 * var_x152);
             const double var_x160 = 1 / (0.035000000000000003 + 3.7000000000000002 * var_x159);
@@ -1607,14 +1607,14 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
 
     double Cellpandit_model_2001_epiFromCellMLGRL2Opt::EvaluatePartialDerivative11(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -80.50146
             
+
+
             const double var_x80 = -0.10000000000000001 * var_chaste_interface__membrane__V;
             const double var_x150 = exp(1.7885000000000002 + 0.035770000000000003 * var_chaste_interface__membrane__V);
             const double var_x151 = exp(-3.8000000000000003 + var_x80);
@@ -1656,12 +1656,12 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
 
     double Cellpandit_model_2001_epiFromCellMLGRL2Opt::EvaluatePartialDerivative12(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
+
             
             partialF = -0.00047619047619047619;
         }
@@ -1700,14 +1700,14 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
 
     double Cellpandit_model_2001_epiFromCellMLGRL2Opt::EvaluatePartialDerivative13(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -80.50146
             
+
+
             const double var_x166 = exp(2.8198801550934083 + 0.035248501938667604 * var_chaste_interface__membrane__V);
             const double var_x167 = exp(-5.6377730796335452 - 0.070472163495419307 * var_chaste_interface__membrane__V);
             
@@ -1747,14 +1747,14 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
 
     double Cellpandit_model_2001_epiFromCellMLGRL2Opt::EvaluatePartialDerivative14(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_ion_concentrations__Ca_ss = rY[23];
             // Units: millimolar; Initial value: 8.737212e-05
             
+
+
             const double var_x168 = pow(var_chaste_interface__intracellular_ion_concentrations__Ca_ss, 3.0);
             const double var_x169 = 4050000.0 * var_x168;
             
@@ -1790,12 +1790,12 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
 
     double Cellpandit_model_2001_epiFromCellMLGRL2Opt::EvaluatePartialDerivative15(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
+
             
             partialF = -1.9299999999999999;
         }
@@ -1829,14 +1829,14 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
 
     double Cellpandit_model_2001_epiFromCellMLGRL2Opt::EvaluatePartialDerivative16(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_ion_concentrations__Ca_ss = rY[23];
             // Units: millimolar; Initial value: 8.737212e-05
             
+
+
             const double var_x170 = 12150000000.0 * pow(var_chaste_interface__intracellular_ion_concentrations__Ca_ss, 4.0);
             
             partialF = -var_x170;
@@ -1869,12 +1869,12 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
 
     double Cellpandit_model_2001_epiFromCellMLGRL2Opt::EvaluatePartialDerivative17(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
+
             
             partialF = -0.00080000000000000004;
         }
@@ -1906,14 +1906,14 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
 
     double Cellpandit_model_2001_epiFromCellMLGRL2Opt::EvaluatePartialDerivative18(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_ion_concentrations__Ca_i = rY[21];
             // Units: millimolar; Initial value: 7.901351e-05
             
+
+
             
             partialF = -6.6000000000000005e-5 - 200.0 * var_chaste_interface__intracellular_ion_concentrations__Ca_i;
         }
@@ -1945,14 +1945,14 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
 
     double Cellpandit_model_2001_epiFromCellMLGRL2Opt::EvaluatePartialDerivative19(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_ion_concentrations__Ca_i = rY[21];
             // Units: millimolar; Initial value: 7.901351e-05
             
+
+
             
             partialF = -0.040000000000000001 - 40.0 * var_chaste_interface__intracellular_ion_concentrations__Ca_i;
         }
@@ -2007,8 +2007,6 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
 
     double Cellpandit_model_2001_epiFromCellMLGRL2Opt::EvaluatePartialDerivative20(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2027,6 +2025,8 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
             double var_chaste_interface__intracellular_ion_concentrations__Ca_i = rY[21];
             // Units: millimolar; Initial value: 7.901351e-05
             
+
+
             const double var_x13 = pow(var_chaste_interface__intracellular_ion_concentrations__Na_i, 3);
             const double var_x14 = 1 / (1.0 + 0.00012 * var_x13 + 274.40000000000003 * var_chaste_interface__intracellular_ion_concentrations__Ca_i);
             const double var_x15 = 0.018714999999999999 * var_chaste_interface__membrane__V;
@@ -2104,8 +2104,6 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
 
     double Cellpandit_model_2001_epiFromCellMLGRL2Opt::EvaluatePartialDerivative21(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2124,6 +2122,8 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
             double var_chaste_interface__intracellular_ion_concentrations__Ca_NSR = rY[25];
             // Units: millimolar; Initial value: 0.06600742
             
+
+
             const double var_x13 = pow(var_chaste_interface__intracellular_ion_concentrations__Na_i, 3);
             const double var_x14 = 1 / (1.0 + 0.00012 * var_x13 + 274.40000000000003 * var_chaste_interface__intracellular_ion_concentrations__Ca_i);
             const double var_x15 = 0.018714999999999999 * var_chaste_interface__membrane__V;
@@ -2214,8 +2214,6 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
 
     double Cellpandit_model_2001_epiFromCellMLGRL2Opt::EvaluatePartialDerivative22(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2236,6 +2234,8 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
             double var_chaste_interface__intracellular_ion_concentrations__K_i = rY[22];
             // Units: millimolar; Initial value: 139.2751
             
+
+
             const double var_x7 = 1 / (1.0 + exp(-35.49354838709678));
             const double var_x8 = 1 / var_chaste_interface__intracellular_ion_concentrations__K_i;
             const double var_x9 = log(5.4000000000000004 * var_x8);
@@ -2311,8 +2311,6 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
 
     double Cellpandit_model_2001_epiFromCellMLGRL2Opt::EvaluatePartialDerivative23(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2337,6 +2335,8 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
             double var_chaste_interface__intracellular_ion_concentrations__Ca_JSR = rY[24];
             // Units: millimolar; Initial value: 0.06607948
             
+
+
             const double var_x2 = 0.10000000000000001 * var_chaste_interface__L_type_Ca_channel_Ca_inact_gate__Ca_inact;
             const double var_x3 = 0.10000000000000001 - var_x2;
             const double var_x4 = var_x3 * var_chaste_interface__L_type_Ca_channel_f_12_gate__f_12;
@@ -2389,8 +2389,6 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
 
     double Cellpandit_model_2001_epiFromCellMLGRL2Opt::EvaluatePartialDerivative24(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2405,6 +2403,8 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
             double var_chaste_interface__intracellular_ion_concentrations__Ca_NSR = rY[25];
             // Units: millimolar; Initial value: 0.06600742
             
+
+
             const double var_x204 = (-var_chaste_interface__intracellular_ion_concentrations__Ca_ss + var_chaste_interface__intracellular_ion_concentrations__Ca_JSR) * (var_chaste_interface__SR_Ca_release_channel__P_O1 + var_chaste_interface__SR_Ca_release_channel__P_O2);
             const double var_x205 = 0.80000000000000004 + var_chaste_interface__intracellular_ion_concentrations__Ca_JSR;
             const double var_x206 = pow(var_x205, (-2));
@@ -2447,8 +2447,6 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
 
     double Cellpandit_model_2001_epiFromCellMLGRL2Opt::EvaluatePartialDerivative25(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2457,6 +2455,8 @@ std::shared_ptr<Cellpandit_model_2001_epiFromCellMLGRL2Opt_LookupTables> Cellpan
             double var_chaste_interface__intracellular_ion_concentrations__Ca_NSR = rY[25];
             // Units: millimolar; Initial value: 0.06600742
             
+
+
             const double var_x183 = pow(var_chaste_interface__intracellular_ion_concentrations__Ca_i, 1.2);
             const double var_x184 = pow(var_chaste_interface__intracellular_ion_concentrations__Ca_NSR, 1.0);
             const double var_x185 = 1 / (1.0 + 33855.471141425078 * var_x183 + 0.303951367781155 * var_x184);

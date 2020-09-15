@@ -1040,15 +1040,6 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative0(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1093,6 +1084,15 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
             double var_chaste_interface__cleft_space_ion_concentrations__K_c = rY[23];
             // Units: millimolar; Initial value: 5.3581
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
             const double var_x0 = 0.025000000000000001 + var_chaste_interface__intracellular_ion_concentrations__Ca_d;
             const double var_x1 = 1 / var_x0;
             const double var_x2 = var_x1 * var_chaste_interface__intracellular_ion_concentrations__Ca_d;
@@ -1227,15 +1227,6 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative1(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1262,6 +1253,15 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
             double var_chaste_interface__Ca_handling_by_the_SR__F2 = rY[28];
             // Units: dimensionless; Initial value: 0.0028
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
             const double var_x19 = pow(var_chaste_interface__cleft_space_ion_concentrations__Na_c, 3);
             const double var_x20 = var_x19 * var_chaste_interface__intracellular_ion_concentrations__Ca_i;
             const double var_x21 = pow(var_chaste_interface__intracellular_ion_concentrations__Na_i, 3);
@@ -1326,14 +1326,14 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative2(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -74.2525
             
+
+
             const double var_x131 = exp(-0.78827269000771605 * pow((1 + 0.039108330074305829 * var_chaste_interface__membrane__V), 2));
             const double var_x132 = 1 / (2.4000000000000001e-5 + 4.1999999999999998e-5 * var_x131);
             
@@ -1375,14 +1375,14 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative3(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -74.2525
             
+
+
             const double var_x133 = exp(10.96875 + 0.3125 * var_chaste_interface__membrane__V);
             const double var_x134 = 1.0 + var_x133;
             const double var_x135 = 1 / var_x134;
@@ -1426,14 +1426,14 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative4(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -74.2525
             
+
+
             const double var_x133 = exp(10.96875 + 0.3125 * var_chaste_interface__membrane__V);
             const double var_x134 = 1.0 + var_x133;
             const double var_x135 = 1 / var_x134;
@@ -1476,14 +1476,14 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative5(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -74.2525
             
+
+
             const double var_x145 = exp(-1.3611111111111112 * pow((1 + 0.028571428571428571 * var_chaste_interface__membrane__V), 2));
             const double var_x146 = 1 / (0.002 + 0.0027000000000000001 * var_x145);
             
@@ -1525,14 +1525,14 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative6(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -74.2525
             
+
+
             const double var_x147 = pow((1 + 0.025000000000000001 * var_chaste_interface__membrane__V), 2);
             const double var_x148 = exp(-7.716049382716049 * var_x147);
             const double var_x149 = 1 / (0.01 + 0.161 * var_x148);
@@ -1575,14 +1575,14 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative7(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -74.2525
             
+
+
             const double var_x147 = pow((1 + 0.025000000000000001 * var_chaste_interface__membrane__V), 2);
             const double var_x154 = exp(-7.9349335449315621 * var_x147);
             const double var_x155 = 1 / (0.062600000000000003 + 1.3323 * var_x154);
@@ -1624,14 +1624,14 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative8(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -74.2525
             
+
+
             const double var_x158 = exp(-0.0011111111111111111 * pow(var_chaste_interface__membrane__V, 2));
             const double var_x159 = 1 / (0.0015 + 0.0035000000000000001 * var_x158);
             
@@ -1672,14 +1672,14 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative9(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -74.2525
             
+
+
             const double var_x162 = exp(-12.275731601256398 * pow((1 + 0.019065776930409912 * var_chaste_interface__membrane__V), 2));
             const double var_x163 = 1 / (0.01414 + 0.48120000000000002 * var_x162);
             
@@ -1720,14 +1720,14 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative10(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -74.2525
             
+
+
             const double var_x166 = exp(0.41666666666666669 + 0.083333333333333329 * var_chaste_interface__membrane__V);
             const double var_x167 = 1.0 + var_x166;
             const double var_x168 = 1 / var_x167;
@@ -1770,14 +1770,14 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative11(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -74.2525
             
+
+
             const double var_x170 = 0.10000000000000001 * var_chaste_interface__membrane__V;
             const double var_x173 = exp(6.0 + var_x170);
             const double var_x174 = 1.0 + var_x173;
@@ -1821,14 +1821,14 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative12(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -74.2525
             
+
+
             const double var_x179 = exp(-pow((-1.0 + 0.050000000000000003 * var_chaste_interface__membrane__V), 2));
             const double var_x180 = 1 / (0.69999999999999996 + 0.40000000000000002 * var_x179);
             
@@ -1869,14 +1869,14 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative13(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -74.2525
             
+
+
             const double var_x183 = exp(-0.82285842787521646 * pow((1 + 0.049658350548228189 * var_chaste_interface__membrane__V), 2));
             const double var_x184 = 1 / (0.031179999999999999 + 0.21718000000000001 * var_x183);
             
@@ -1936,15 +1936,6 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative14(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1967,6 +1958,15 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
             double var_chaste_interface__cleft_space_ion_concentrations__K_c = rY[23];
             // Units: millimolar; Initial value: 5.3581
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
             const double var_x19 = pow(var_chaste_interface__cleft_space_ion_concentrations__Na_c, 3);
             const double var_x20 = var_x19 * var_chaste_interface__intracellular_ion_concentrations__Ca_i;
             const double var_x21 = pow(var_chaste_interface__intracellular_ion_concentrations__Na_i, 3);
@@ -2066,8 +2066,6 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative15(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2090,6 +2088,8 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
             double var_chaste_interface__cleft_space_ion_concentrations__K_c = rY[23];
             // Units: millimolar; Initial value: 5.3581
             
+
+
             const double var_x6 = exp(2.2916666666666665 + 0.041666666666666664 * var_chaste_interface__membrane__V);
             const double var_x7 = 1.0 + var_x6;
             const double var_x8 = 1 / var_x7;
@@ -2154,8 +2154,6 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative16(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2170,6 +2168,8 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
             double var_chaste_interface__intracellular_ion_concentrations__Ca_d = rY[16];
             // Units: millimolar; Initial value: 7.2495e-05
             
+
+
             const double var_x0 = 0.025000000000000001 + var_chaste_interface__intracellular_ion_concentrations__Ca_d;
             const double var_x1 = 1 / var_x0;
             const double var_x98 = var_chaste_interface__intracellular_ion_concentrations__Ca_d / pow(var_x0, 2);
@@ -2208,14 +2208,14 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative17(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_ion_concentrations__Ca_i = rY[1];
             // Units: millimolar; Initial value: 6.729e-05
             
+
+
             const double var_x204 = -200.0 * var_chaste_interface__intracellular_ion_concentrations__Ca_i;
             
             partialF = -0.47599999999999998 + var_x204;
@@ -2249,14 +2249,14 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative18(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_ion_concentrations__Ca_i = rY[1];
             // Units: millimolar; Initial value: 6.729e-05
             
+
+
             
             partialF = -0.39200000000000002 - 78.400000000000006 * var_chaste_interface__intracellular_ion_concentrations__Ca_i;
         }
@@ -2291,14 +2291,14 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative19(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_ion_concentrations__Ca_i = rY[1];
             // Units: millimolar; Initial value: 6.729e-05
             
+
+
             const double var_x204 = -200.0 * var_chaste_interface__intracellular_ion_concentrations__Ca_i;
             
             partialF = -0.0066 + var_x204;
@@ -2331,12 +2331,12 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative20(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
+
             
             partialF = -5.6660000000000004;
         }
@@ -2394,15 +2394,6 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative21(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2423,6 +2414,15 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
             double var_chaste_interface__cleft_space_ion_concentrations__Ca_c = rY[22];
             // Units: millimolar; Initial value: 1.8147
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
             const double var_x19 = pow(var_chaste_interface__cleft_space_ion_concentrations__Na_c, 3);
             const double var_x20 = var_x19 * var_chaste_interface__intracellular_ion_concentrations__Ca_i;
             const double var_x21 = pow(var_chaste_interface__intracellular_ion_concentrations__Na_i, 3);
@@ -2509,15 +2509,6 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative22(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2532,6 +2523,15 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
             double var_chaste_interface__cleft_space_ion_concentrations__Ca_c = rY[22];
             // Units: millimolar; Initial value: 1.8147
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
             const double var_x19 = pow(var_chaste_interface__cleft_space_ion_concentrations__Na_c, 3);
             const double var_x20 = var_x19 * var_chaste_interface__intracellular_ion_concentrations__Ca_i;
             const double var_x21 = pow(var_chaste_interface__intracellular_ion_concentrations__Na_i, 3);
@@ -2608,8 +2608,6 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative23(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2634,6 +2632,8 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
             double var_chaste_interface__cleft_space_ion_concentrations__K_c = rY[23];
             // Units: millimolar; Initial value: 5.3581
             
+
+
             const double var_x6 = exp(2.2916666666666665 + 0.041666666666666664 * var_chaste_interface__membrane__V);
             const double var_x7 = 1.0 + var_x6;
             const double var_x8 = 1 / var_x7;
@@ -2708,8 +2708,6 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative24(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2718,6 +2716,8 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
             double var_chaste_interface__Ca_handling_by_the_SR__F2 = rY[28];
             // Units: dimensionless; Initial value: 0.0028
             
+
+
             const double var_x115 = 0.25 + var_chaste_interface__Ca_handling_by_the_SR__F2;
             const double var_x116 = pow(var_x115, (-2));
             const double var_x117 = pow(var_chaste_interface__Ca_handling_by_the_SR__F2, 2);
@@ -2758,8 +2758,6 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative25(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2768,6 +2766,8 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
             double var_chaste_interface__Ca_handling_by_the_SR__Ca_up = rY[25];
             // Units: millimolar; Initial value: 0.6646
             
+
+
             const double var_x112 = 3333.3333333333335 * var_chaste_interface__intracellular_ion_concentrations__Ca_i;
             const double var_x113 = 1 / (1.3999999999999999 + var_x112 + 0.80000000000000004 * var_chaste_interface__Ca_handling_by_the_SR__Ca_up);
             const double var_x114 = (var_x112 - 0.32000000000000006 * var_chaste_interface__Ca_handling_by_the_SR__Ca_up) / pow((0.00041999999999999996 + 0.00023999999999999998 * var_chaste_interface__Ca_handling_by_the_SR__Ca_up + var_chaste_interface__intracellular_ion_concentrations__Ca_i), 2);
@@ -2803,14 +2803,14 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative26(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__Ca_handling_by_the_SR__Ca_rel = rY[24];
             // Units: millimolar; Initial value: 0.6465
             
+
+
             
             partialF = -0.40000000000000002 - 0.47999999999999998 * var_chaste_interface__Ca_handling_by_the_SR__Ca_rel;
         }
@@ -2847,8 +2847,6 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative27(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2857,6 +2855,8 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
             double var_chaste_interface__intracellular_ion_concentrations__Ca_d = rY[16];
             // Units: millimolar; Initial value: 7.2495e-05
             
+
+
             const double var_x227 = 0.00029999999999999997 + var_chaste_interface__intracellular_ion_concentrations__Ca_i;
             const double var_x228 = pow(var_chaste_interface__intracellular_ion_concentrations__Ca_i, 4);
             const double var_x231 = pow(var_x227, (-4));
@@ -2902,14 +2902,14 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLGRL2Opt_LookupTables> Cell
 
     double Cellnygren_atrial_model_1998FromCellMLGRL2Opt::EvaluatePartialDerivative28(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_ion_concentrations__Ca_i = rY[1];
             // Units: millimolar; Initial value: 6.729e-05
             
+
+
             const double var_x227 = 0.00029999999999999997 + var_chaste_interface__intracellular_ion_concentrations__Ca_i;
             const double var_x228 = pow(var_chaste_interface__intracellular_ion_concentrations__Ca_i, 4);
             const double var_x231 = pow(var_x227, (-4));

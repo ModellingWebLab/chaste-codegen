@@ -1398,15 +1398,6 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative0(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__Vm);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__Vm);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1457,6 +1448,15 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
             double var_chaste_interface__sodium_potassium_pump_y_gate__y = rY[27];
             // Units: dimensionless; Initial value: 0.5910747147428818
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__Vm);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__Vm);
+
             const double var_x0 = 1 / mParameters[0];
             const double var_x1 = 0.037435192301797954 * var_chaste_interface__membrane__Vm;
             const double var_x2 = exp(-var_x1);
@@ -1698,15 +1698,6 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative1(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__Vm);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__Vm);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1745,6 +1736,15 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
             double var_chaste_interface__sodium_potassium_pump_y_gate__y = rY[27];
             // Units: dimensionless; Initial value: 0.5910747147428818
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__Vm);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__Vm);
+
             const double var_x1 = 0.037435192301797954 * var_chaste_interface__membrane__Vm;
             const double var_x2 = exp(-var_x1);
             const double var_x3 = 1.0 - var_x2;
@@ -1891,8 +1891,6 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative2(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1937,6 +1935,8 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
             double var_chaste_interface__sodium_potassium_pump_y_gate__y = rY[27];
             // Units: dimensionless; Initial value: 0.5910747147428818
             
+
+
             const double var_x1 = 0.037435192301797954 * var_chaste_interface__membrane__Vm;
             const double var_x2 = exp(-var_x1);
             const double var_x3 = 1.0 - var_x2;
@@ -2163,15 +2163,6 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative3(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__Vm);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__Vm);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2208,6 +2199,15 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
             double var_chaste_interface__NL_model__pCB = rY[35];
             // Units: dimensionless; Initial value: 0.00042941813853474524
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__Vm);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__Vm);
+
             const double var_x19 = var_chaste_interface__membrane__Vm == 0;
             const double var_x26 = 0.074870384603595908 * var_chaste_interface__membrane__Vm;
             const double var_x27 = exp(-var_x26);
@@ -2311,8 +2311,6 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative4(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2329,6 +2327,8 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
             double var_chaste_interface__SR_calcium_pump_y_gate__y = rY[28];
             // Units: dimensionless; Initial value: 0.46108441538480216
             
+
+
             const double var_x30 = sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total);
             const double var_x31 = -0.026190000000000001 + 0.5 * var_x30 + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total;
             const double var_x36 = pow(var_chaste_interface__ATP_production__ATPi, 2);
@@ -2392,14 +2392,14 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative5(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
+
             const double var_x284 = exp(-0.0025000000000000001 * var_chaste_interface__membrane__Vm);
             const double var_x285 = 1 / var_x284;
             const double var_x287 = exp(0.00125 * var_chaste_interface__membrane__Vm);
@@ -2457,14 +2457,14 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative6(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
+
             const double var_x292 = exp(-0.125 * var_chaste_interface__membrane__Vm);
             const double var_x293 = exp(-0.02 * var_chaste_interface__membrane__Vm);
             const double var_x300 = 0.25 * var_x293 + 0.1027 * var_x292;
@@ -2515,14 +2515,14 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative7(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
+
             const double var_x284 = exp(-0.0025000000000000001 * var_chaste_interface__membrane__Vm);
             const double var_x287 = exp(0.00125 * var_chaste_interface__membrane__Vm);
             const double var_x292 = exp(-0.125 * var_chaste_interface__membrane__Vm);
@@ -2568,14 +2568,14 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative8(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
+
             const double var_x317 = 0.01 * var_chaste_interface__membrane__Vm;
             const double var_x318 = exp(var_x317);
             const double var_x319 = 0.20000000000000001 * var_chaste_interface__membrane__Vm;
@@ -2626,14 +2626,14 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative9(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
+
             const double var_x324 = 0.015384615384615385 * var_chaste_interface__membrane__Vm;
             const double var_x329 = exp(var_x324);
             const double var_x330 = exp(0.14285714285714285 * var_chaste_interface__membrane__Vm);
@@ -2687,14 +2687,14 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative10(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
+
             const double var_x323 = exp(-0.16949152542372881 * var_chaste_interface__membrane__Vm);
             const double var_x324 = 0.015384615384615385 * var_chaste_interface__membrane__Vm;
             const double var_x325 = exp(-var_x324);
@@ -2745,14 +2745,14 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative11(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
+
             const double var_x317 = 0.01 * var_chaste_interface__membrane__Vm;
             const double var_x318 = exp(var_x317);
             const double var_x322 = exp(-var_x317);
@@ -2813,8 +2813,6 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative12(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2825,6 +2823,8 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
             double var_chaste_interface__L_type_Ca_channel_voltage_dependent_gate__p_AP_CaL = rY[9];
             // Units: dimensionless; Initial value: 1.5445004166497696e-06
             
+
+
             const double var_x19 = var_chaste_interface__membrane__Vm == 0;
             const double var_x26 = 0.074870384603595908 * var_chaste_interface__membrane__Vm;
             const double var_x27 = exp(-var_x26);
@@ -2892,12 +2892,12 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative13(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
+
             
             partialF = -2.3523000000000001;
         }
@@ -2949,8 +2949,6 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative14(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2961,6 +2959,8 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
             double var_chaste_interface__L_type_Ca_channel_voltage_dependent_gate__p_AP_CaL = rY[9];
             // Units: dimensionless; Initial value: 1.5445004166497696e-06
             
+
+
             const double var_x19 = var_chaste_interface__membrane__Vm == 0;
             const double var_x26 = 0.074870384603595908 * var_chaste_interface__membrane__Vm;
             const double var_x27 = exp(-var_x26);
@@ -3012,14 +3012,14 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative15(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
+
             const double var_x324 = 0.015384615384615385 * var_chaste_interface__membrane__Vm;
             const double var_x325 = exp(-var_x324);
             const double var_x329 = exp(var_x324);
@@ -3063,14 +3063,14 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative16(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
+
             const double var_x366 = exp(-0.17857142857142858 * var_chaste_interface__membrane__Vm);
             const double var_x367 = exp(-0.0040000000000000001 * var_chaste_interface__membrane__Vm);
             const double var_x368 = exp(0.0001 * var_chaste_interface__membrane__Vm);
@@ -3113,14 +3113,14 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative17(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
+
             const double var_x370 = exp(0.00033333333333333332 * var_chaste_interface__membrane__Vm);
             const double var_x371 = exp(0.099009900990099015 * var_chaste_interface__membrane__Vm);
             const double var_x372 = exp(-0.14925373134328357 * var_chaste_interface__membrane__Vm);
@@ -3162,8 +3162,6 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative18(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -3172,6 +3170,8 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
             double var_chaste_interface__internal_ion_concentrations__Ki = rY[2];
             // Units: millimolar; Initial value: 143.1837333000449
             
+
+
             const double var_x55 = 1 / var_chaste_interface__internal_ion_concentrations__Ki;
             const double var_x56 = log(5.4000000000000004 * var_x55);
             const double var_x57 = exp(-2.1000000000000001 + 0.014999999999999999 * var_chaste_interface__membrane__Vm - 0.40069247885978065 * var_x56);
@@ -3238,14 +3238,14 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative19(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
+
             const double var_x303 = exp(0.050000000000000003 * var_chaste_interface__membrane__Vm);
             const double var_x374 = 0.0033333333333333335 * var_chaste_interface__membrane__Vm;
             const double var_x384 = 1 / var_x303;
@@ -3292,14 +3292,14 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative20(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
+
             const double var_x12 = -0.076923076923076927 * var_chaste_interface__membrane__Vm;
             const double var_x303 = exp(0.050000000000000003 * var_chaste_interface__membrane__Vm);
             const double var_x374 = 0.0033333333333333335 * var_chaste_interface__membrane__Vm;
@@ -3347,14 +3347,14 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative21(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
+
             const double var_x288 = 0.058823529411764705 * var_chaste_interface__membrane__Vm;
             const double var_x289 = exp(var_x288);
             const double var_x374 = 0.0033333333333333335 * var_chaste_interface__membrane__Vm;
@@ -3399,14 +3399,14 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative22(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
+
             const double var_x303 = exp(0.050000000000000003 * var_chaste_interface__membrane__Vm);
             const double var_x317 = 0.01 * var_chaste_interface__membrane__Vm;
             const double var_x318 = exp(var_x317);
@@ -3444,14 +3444,14 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative23(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__internal_ion_concentrations__Ca_Total = rY[3];
             // Units: millimolar; Initial value: 0.00040180173572968586
             
+
+
             const double var_x30 = sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total);
             
             partialF = 0.092459000000000013 - 1.8500000000000001 * var_x30 - 1.8500000000000001 * var_chaste_interface__internal_ion_concentrations__Ca_Total;
@@ -3491,14 +3491,14 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative24(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
+
             const double var_x284 = exp(-0.0025000000000000001 * var_chaste_interface__membrane__Vm);
             const double var_x379 = 0.002 * var_chaste_interface__membrane__Vm;
             const double var_x385 = 0.035714285714285712 * var_chaste_interface__membrane__Vm;
@@ -3543,14 +3543,14 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative25(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
+
             const double var_x400 = 0.088495575221238937 * var_chaste_interface__membrane__Vm;
             const double var_x401 = exp(-1.1946902654867255 - var_x400);
             const double var_x402 = 1.0 + 0.051334999999999999 * var_x401;
@@ -3604,15 +3604,6 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative26(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__Vm);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__Vm);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -3623,6 +3614,15 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
             double var_chaste_interface__internal_ion_concentrations__Ca_Total = rY[3];
             // Units: millimolar; Initial value: 0.00040180173572968586
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__Vm);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__Vm);
+
             const double var_x30 = sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total);
             const double var_x31 = -0.026190000000000001 + 0.5 * var_x30 + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total;
             const double var_x39 = _lt_0_row[6];
@@ -3683,8 +3683,6 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative27(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -3697,6 +3695,8 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
             double var_chaste_interface__ATP_production__ATPi = rY[4];
             // Units: millimolar; Initial value: 4.657102729020499
             
+
+
             const double var_x55 = 1 / var_chaste_interface__internal_ion_concentrations__Ki;
             const double var_x140 = exp(-0.030696857687474322 * var_chaste_interface__membrane__Vm);
             const double var_x141 = pow(1 / var_x140, 1.0600000000000001);
@@ -3751,8 +3751,6 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative28(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -3763,6 +3761,8 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
             double var_chaste_interface__Ca_concentrations_in_SR__Caup = rY[32];
             // Units: millimolar; Initial value: 2.611712901567567
             
+
+
             const double var_x30 = sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total);
             const double var_x31 = -0.026190000000000001 + 0.5 * var_x30 + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total;
             const double var_x163 = 1 / var_chaste_interface__ATP_production__ATPi;
@@ -3834,14 +3834,14 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative29(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__Ca_concentrations_in_SR__Ca_Total = rY[31];
             // Units: millimolar; Initial value: 9.455741736977666
             
+
+
             const double var_x278 = 0.092592592592592587 * var_chaste_interface__Ca_concentrations_in_SR__Ca_Total;
             const double var_x279 = sqrt(pow((1 - var_x278), 2) + 0.027434842249657067 * var_chaste_interface__Ca_concentrations_in_SR__Ca_Total);
             const double var_x425 = 1.0 + 0.35999999999999999 / (-5.4000000000000004 + 0.5 * var_chaste_interface__Ca_concentrations_in_SR__Ca_Total + 5.4000000000000004 * var_x279);
@@ -3905,8 +3905,6 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative30(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -3927,6 +3925,8 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
             double var_chaste_interface__Ca_concentrations_in_SR__Ca_Total = rY[31];
             // Units: millimolar; Initial value: 9.455741736977666
             
+
+
             const double var_x19 = var_chaste_interface__membrane__Vm == 0;
             const double var_x26 = 0.074870384603595908 * var_chaste_interface__membrane__Vm;
             const double var_x27 = exp(-var_x26);
@@ -3992,8 +3992,6 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative31(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -4002,6 +4000,8 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
             double var_chaste_interface__Ca_concentrations_in_SR__Ca_Total = rY[31];
             // Units: millimolar; Initial value: 9.455741736977666
             
+
+
             const double var_x278 = 0.092592592592592587 * var_chaste_interface__Ca_concentrations_in_SR__Ca_Total;
             const double var_x279 = sqrt(pow((1 - var_x278), 2) + 0.027434842249657067 * var_chaste_interface__Ca_concentrations_in_SR__Ca_Total);
             const double var_x280 = (-0.078875171467764058 + 0.0085733882030178329 * var_chaste_interface__Ca_concentrations_in_SR__Ca_Total) / var_x279;
@@ -4050,8 +4050,6 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative32(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -4060,6 +4058,8 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
             double var_chaste_interface__Ca_concentrations_in_SR__Caup = rY[32];
             // Units: millimolar; Initial value: 2.611712901567567
             
+
+
             const double var_x275 = 1.0 + 0.080000000000000002 / var_chaste_interface__Ca_concentrations_in_SR__Caup;
             const double var_x281 = var_chaste_interface__SR_calcium_pump_y_gate__y / (pow(var_x275, 2) * pow(var_chaste_interface__Ca_concentrations_in_SR__Caup, 2));
             
@@ -4100,14 +4100,14 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative33(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__internal_ion_concentrations__Ca_Total = rY[3];
             // Units: millimolar; Initial value: 0.00040180173572968586
             
+
+
             const double var_x30 = sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total);
             const double var_x431 = 0.0038999999999999998 * exp(-0.86212130841993795);
             const double var_x432 = -19.5 * var_x30 - 19.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total;
@@ -4153,14 +4153,14 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative34(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__NL_model__X = rY[36];
             // Units: micrometre; Initial value: 0.9573749975411884
             
+
+
             const double var_x283 = pow((0.95737999754118841 - var_chaste_interface__NL_model__X), 2);
             const double var_x434 = -0.038879999999999998 * var_x283;
             
@@ -4201,8 +4201,6 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative35(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -4211,6 +4209,8 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
             double var_chaste_interface__NL_model__X = rY[36];
             // Units: micrometre; Initial value: 0.9573749975411884
             
+
+
             const double var_x30 = sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total);
             const double var_x283 = pow((0.95737999754118841 - var_chaste_interface__NL_model__X), 2);
             const double var_x434 = -0.038879999999999998 * var_x283;
@@ -4245,12 +4245,12 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
 
     double Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::EvaluatePartialDerivative36(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
+
             
             partialF = -1.2;
         }

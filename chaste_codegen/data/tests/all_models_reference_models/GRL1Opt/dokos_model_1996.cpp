@@ -838,15 +838,6 @@ std::shared_ptr<Celldokos_model_1996FromCellMLGRL1Opt_LookupTables> Celldokos_mo
 
     double Celldokos_model_1996FromCellMLGRL1Opt::EvaluatePartialDerivative0(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__E);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__E);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -881,6 +872,15 @@ std::shared_ptr<Celldokos_model_1996FromCellMLGRL1Opt_LookupTables> Celldokos_mo
             double var_chaste_interface__ion_concentrations__Ko = rY[17];
             // Units: millimolar; Initial value: 5.4243
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__E);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__E);
+
             const double var_x0 = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3);
             const double var_x1 = var_x0 * var_chaste_interface__fast_sodium_current_h_gate__h;
             const double var_x2 = pow(var_chaste_interface__ion_concentrations__Nai, 2);
@@ -1064,15 +1064,6 @@ std::shared_ptr<Celldokos_model_1996FromCellMLGRL1Opt_LookupTables> Celldokos_mo
 
     double Celldokos_model_1996FromCellMLGRL1Opt::EvaluatePartialDerivative1(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__E);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__E);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1099,6 +1090,15 @@ std::shared_ptr<Celldokos_model_1996FromCellMLGRL1Opt_LookupTables> Celldokos_mo
             double var_chaste_interface__ion_concentrations__Nao = rY[15];
             // Units: millimolar; Initial value: 139.9929
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__E);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__E);
+
             const double var_x2 = pow(var_chaste_interface__ion_concentrations__Nai, 2);
             const double var_x3 = pow(var_chaste_interface__ion_concentrations__Nai, 3);
             const double var_x4 = 0.0011051656880977081 * var_x2 + 4.1799004844845232e-5 * var_x3;
@@ -1232,12 +1232,12 @@ std::shared_ptr<Celldokos_model_1996FromCellMLGRL1Opt_LookupTables> Celldokos_mo
 
     double Celldokos_model_1996FromCellMLGRL1Opt::EvaluatePartialDerivative2(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
+
             
             partialF = -0.5;
         }
@@ -1276,14 +1276,14 @@ std::shared_ptr<Celldokos_model_1996FromCellMLGRL1Opt_LookupTables> Celldokos_mo
 
     double Celldokos_model_1996FromCellMLGRL1Opt::EvaluatePartialDerivative3(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__E = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -64.9
             
+
+
             const double var_x234 = exp(4.6419753086419755 + 0.1234567901234568 * var_chaste_interface__membrane__E);
             const double var_x235 = 1.0 + var_x234;
             const double var_x236 = 0.031 + 1 / var_x235;
@@ -1319,14 +1319,14 @@ std::shared_ptr<Celldokos_model_1996FromCellMLGRL1Opt_LookupTables> Celldokos_mo
 
     double Celldokos_model_1996FromCellMLGRL1Opt::EvaluatePartialDerivative4(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__ion_concentrations__Cai = rY[1];
             // Units: millimolar; Initial value: 3.4e-05
             
+
+
             
             partialF = -0.0030000000000000001 - 40.0 * var_chaste_interface__ion_concentrations__Cai;
         }
@@ -1365,14 +1365,14 @@ std::shared_ptr<Celldokos_model_1996FromCellMLGRL1Opt_LookupTables> Celldokos_mo
 
     double Celldokos_model_1996FromCellMLGRL1Opt::EvaluatePartialDerivative5(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__E = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -64.9
             
+
+
             const double var_x240 = exp(3.0 + 0.029999999999999999 * var_chaste_interface__membrane__E);
             const double var_x241 = 1.0 + var_x240;
             const double var_x242 = 1 / var_x241;
@@ -1415,14 +1415,14 @@ std::shared_ptr<Celldokos_model_1996FromCellMLGRL1Opt_LookupTables> Celldokos_mo
 
     double Celldokos_model_1996FromCellMLGRL1Opt::EvaluatePartialDerivative6(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__E = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -64.9
             
+
+
             const double var_x246 = exp(5.2000000000000002 + 0.080000000000000002 * var_chaste_interface__membrane__E);
             const double var_x247 = 1.0 + var_x246;
             const double var_x248 = 1 / var_x247;
@@ -1465,6 +1465,12 @@ std::shared_ptr<Celldokos_model_1996FromCellMLGRL1Opt_LookupTables> Celldokos_mo
 
     double Celldokos_model_1996FromCellMLGRL1Opt::EvaluatePartialDerivative7(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__membrane__E = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: millivolt; Initial value: -64.9
+            
 
         // Lookup table indexing
         const bool _oob_0 = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__E);
@@ -1474,12 +1480,6 @@ std::shared_ptr<Celldokos_model_1996FromCellMLGRL1Opt_LookupTables> Celldokos_mo
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__E);
 
-        double partialF;
-        if (!forceNumerical && this->mUseAnalyticJacobian)
-        {
-            double var_chaste_interface__membrane__E = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
-            // Units: millivolt; Initial value: -64.9
-            
             const double var_x250 = _lt_0_row[15];
             const double var_x252 = exp(-3.0869999999999997 - 0.089999999999999997 * var_chaste_interface__membrane__E);
             const double var_x253 = 1.0 - var_x252;
@@ -1523,6 +1523,12 @@ std::shared_ptr<Celldokos_model_1996FromCellMLGRL1Opt_LookupTables> Celldokos_mo
 
     double Celldokos_model_1996FromCellMLGRL1Opt::EvaluatePartialDerivative8(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__membrane__E = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: millivolt; Initial value: -64.9
+            
 
         // Lookup table indexing
         const bool _oob_0 = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__E);
@@ -1532,12 +1538,6 @@ std::shared_ptr<Celldokos_model_1996FromCellMLGRL1Opt_LookupTables> Celldokos_mo
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__E);
 
-        double partialF;
-        if (!forceNumerical && this->mUseAnalyticJacobian)
-        {
-            double var_chaste_interface__membrane__E = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
-            // Units: millivolt; Initial value: -64.9
-            
             const double var_x256 = _lt_0_row[13];
             const double var_x257 = exp(-2.7239999999999998 - 0.059999999999999998 * var_chaste_interface__membrane__E);
             
@@ -1578,14 +1578,14 @@ std::shared_ptr<Celldokos_model_1996FromCellMLGRL1Opt_LookupTables> Celldokos_mo
 
     double Celldokos_model_1996FromCellMLGRL1Opt::EvaluatePartialDerivative9(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__E = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -64.9
             
+
+
             const double var_x258 = exp(0.039800000000000002 * var_chaste_interface__membrane__E);
             const double var_x259 = exp(-0.050999999999999997 * var_chaste_interface__membrane__E);
             
@@ -1626,14 +1626,14 @@ std::shared_ptr<Celldokos_model_1996FromCellMLGRL1Opt_LookupTables> Celldokos_mo
 
     double Celldokos_model_1996FromCellMLGRL1Opt::EvaluatePartialDerivative10(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__E = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -64.9
             
+
+
             const double var_x263 = exp(9.0948000000000011 + 0.066000000000000003 * var_chaste_interface__membrane__E);
             const double var_x264 = -1.0 + var_x263;
             const double var_x265 = 0.00035999999999999997 / var_x264;
@@ -1711,15 +1711,6 @@ std::shared_ptr<Celldokos_model_1996FromCellMLGRL1Opt_LookupTables> Celldokos_mo
 
     double Celldokos_model_1996FromCellMLGRL1Opt::EvaluatePartialDerivative11(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__E);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__E);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1744,6 +1735,15 @@ std::shared_ptr<Celldokos_model_1996FromCellMLGRL1Opt_LookupTables> Celldokos_mo
             double var_chaste_interface__ion_concentrations__Nao = rY[15];
             // Units: millimolar; Initial value: 139.9929
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__E);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__E);
+
             const double var_x2 = pow(var_chaste_interface__ion_concentrations__Nai, 2);
             const double var_x3 = pow(var_chaste_interface__ion_concentrations__Nai, 3);
             const double var_x4 = 0.0011051656880977081 * var_x2 + 4.1799004844845232e-5 * var_x3;
@@ -1857,12 +1857,12 @@ std::shared_ptr<Celldokos_model_1996FromCellMLGRL1Opt_LookupTables> Celldokos_mo
 
     double Celldokos_model_1996FromCellMLGRL1Opt::EvaluatePartialDerivative12(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
+
             
             partialF = -0.0010714285714285713;
         }
@@ -1898,14 +1898,14 @@ std::shared_ptr<Celldokos_model_1996FromCellMLGRL1Opt_LookupTables> Celldokos_mo
 
     double Celldokos_model_1996FromCellMLGRL1Opt::EvaluatePartialDerivative13(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__ion_concentrations__Cai = rY[1];
             // Units: millimolar; Initial value: 3.4e-05
             
+
+
             const double var_x18 = pow(var_chaste_interface__ion_concentrations__Cai, 2);
             const double var_x220 = 9.9999999999999995e-7 + var_x18;
             const double var_x221 = 1 / var_x220;
@@ -1982,15 +1982,6 @@ std::shared_ptr<Celldokos_model_1996FromCellMLGRL1Opt_LookupTables> Celldokos_mo
 
     double Celldokos_model_1996FromCellMLGRL1Opt::EvaluatePartialDerivative14(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__E);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__E);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2015,6 +2006,15 @@ std::shared_ptr<Celldokos_model_1996FromCellMLGRL1Opt_LookupTables> Celldokos_mo
             double var_chaste_interface__ion_concentrations__Ko = rY[17];
             // Units: millimolar; Initial value: 5.4243
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__E);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__E);
+
             const double var_x0 = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3);
             const double var_x1 = var_x0 * var_chaste_interface__fast_sodium_current_h_gate__h;
             const double var_x2 = pow(var_chaste_interface__ion_concentrations__Nai, 2);
@@ -2192,15 +2192,6 @@ std::shared_ptr<Celldokos_model_1996FromCellMLGRL1Opt_LookupTables> Celldokos_mo
 
     double Celldokos_model_1996FromCellMLGRL1Opt::EvaluatePartialDerivative15(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__E);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__E);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2225,6 +2216,15 @@ std::shared_ptr<Celldokos_model_1996FromCellMLGRL1Opt_LookupTables> Celldokos_mo
             double var_chaste_interface__ion_concentrations__Ko = rY[17];
             // Units: millimolar; Initial value: 5.4243
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__E);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__E);
+
             const double var_x0 = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3);
             const double var_x1 = var_x0 * var_chaste_interface__fast_sodium_current_h_gate__h;
             const double var_x2 = pow(var_chaste_interface__ion_concentrations__Nai, 2);
@@ -2366,8 +2366,6 @@ std::shared_ptr<Celldokos_model_1996FromCellMLGRL1Opt_LookupTables> Celldokos_mo
 
     double Celldokos_model_1996FromCellMLGRL1Opt::EvaluatePartialDerivative16(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2380,6 +2378,8 @@ std::shared_ptr<Celldokos_model_1996FromCellMLGRL1Opt_LookupTables> Celldokos_mo
             double var_chaste_interface__ion_concentrations__Ko = rY[17];
             // Units: millimolar; Initial value: 5.4243
             
+
+
             const double var_x83 = pow(var_chaste_interface__ion_concentrations__Ko, 1.8300000000000001);
             const double var_x84 = 1 / (71.36612580598495 + var_x83);
             const double var_x85 = var_x83 * var_x84;
@@ -2441,15 +2441,6 @@ std::shared_ptr<Celldokos_model_1996FromCellMLGRL1Opt_LookupTables> Celldokos_mo
 
     double Celldokos_model_1996FromCellMLGRL1Opt::EvaluatePartialDerivative17(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__E);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__E);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2466,6 +2457,15 @@ std::shared_ptr<Celldokos_model_1996FromCellMLGRL1Opt_LookupTables> Celldokos_mo
             double var_chaste_interface__ion_concentrations__Ko = rY[17];
             // Units: millimolar; Initial value: 5.4243
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__E);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Celldokos_model_1996FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__E);
+
             const double var_x79 = _lt_0_row[3];
             const double var_x83 = pow(var_chaste_interface__ion_concentrations__Ko, 1.8300000000000001);
             const double var_x84 = 1 / (71.36612580598495 + var_x83);

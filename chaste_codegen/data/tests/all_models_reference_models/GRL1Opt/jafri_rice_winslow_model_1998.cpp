@@ -1034,15 +1034,6 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative0(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1071,6 +1062,15 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
             double var_chaste_interface__ionic_concentrations__Ko = rY[30];
             // Units: mM; Initial value: 5.4
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
             const double var_x0 = exp(1.2521739130434781 - 0.16722408026755853 * var_chaste_interface__membrane__V);
             const double var_x1 = 1.0 + var_x0;
             const double var_x2 = 1 / var_x1;
@@ -1222,6 +1222,12 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative1(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: mV; Initial value: -84.1638
+            
 
         // Lookup table indexing
         const bool _oob_0 = Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
@@ -1231,12 +1237,6 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
-        double partialF;
-        if (!forceNumerical && this->mUseAnalyticJacobian)
-        {
-            double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
-            // Units: mV; Initial value: -84.1638
-            
             const double var_x169 = -0.10000000000000001 * var_chaste_interface__membrane__V;
             const double var_x170 = exp(-4.7130000000000001 + var_x169);
             const double var_x171 = 1.0 - var_x170;
@@ -1281,14 +1281,14 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative2(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -84.1638
             
+
+
             const double var_x175 = exp(0.079000000000000001 * var_chaste_interface__membrane__V);
             const double var_x176 = exp(0.34999999999999998 * var_chaste_interface__membrane__V);
             const double var_x177 = exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__membrane__V);
@@ -1333,14 +1333,14 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative3(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -84.1638
             
+
+
             const double var_x169 = -0.10000000000000001 * var_chaste_interface__membrane__V;
             const double var_x178 = var_chaste_interface__membrane__V < -40.0;
             const double var_x182 = exp(24.640530000000002 + 0.311 * var_chaste_interface__membrane__V);
@@ -1390,12 +1390,12 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative4(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
+
             
             partialF = -2.0;
         }
@@ -1429,12 +1429,12 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative5(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
+
             
             partialF = 0;
         }
@@ -1482,8 +1482,6 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative6(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1492,6 +1490,8 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
             double var_chaste_interface__calcium_subsystem__Ca_SS = rY[19];
             // Units: mM; Initial value: 0.000136058
             
+
+
             const double var_x199 = exp(1.2 + 0.10000000000000001 * var_chaste_interface__membrane__V);
             const double var_x204 = 0.1875 * var_chaste_interface__calcium_subsystem__Ca_SS;
             const double var_x205 = 1.6000000000000001 * var_x199;
@@ -1545,8 +1545,6 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative7(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1555,6 +1553,8 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
             double var_chaste_interface__calcium_subsystem__Ca_SS = rY[19];
             // Units: mM; Initial value: 0.000136058
             
+
+
             const double var_x199 = exp(1.2 + 0.10000000000000001 * var_chaste_interface__membrane__V);
             const double var_x202 = exp(-0.92307692307692313 - 0.076923076923076927 * var_chaste_interface__membrane__V);
             const double var_x207 = 0.050000000000000003 * var_x202;
@@ -1610,8 +1610,6 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative8(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1620,6 +1618,8 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
             double var_chaste_interface__calcium_subsystem__Ca_SS = rY[19];
             // Units: mM; Initial value: 0.000136058
             
+
+
             const double var_x199 = exp(1.2 + 0.10000000000000001 * var_chaste_interface__membrane__V);
             const double var_x202 = exp(-0.92307692307692313 - 0.076923076923076927 * var_chaste_interface__membrane__V);
             const double var_x213 = 0.10000000000000001 * var_x202;
@@ -1676,8 +1676,6 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative9(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1686,6 +1684,8 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
             double var_chaste_interface__calcium_subsystem__Ca_SS = rY[19];
             // Units: mM; Initial value: 0.000136058
             
+
+
             const double var_x199 = exp(1.2 + 0.10000000000000001 * var_chaste_interface__membrane__V);
             const double var_x202 = exp(-0.92307692307692313 - 0.076923076923076927 * var_chaste_interface__membrane__V);
             const double var_x222 = 0.15000000000000002 * var_x202;
@@ -1740,8 +1740,6 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative10(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1750,6 +1748,8 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
             double var_chaste_interface__calcium_subsystem__Ca_SS = rY[19];
             // Units: mM; Initial value: 0.000136058
             
+
+
             const double var_x202 = exp(-0.92307692307692313 - 0.076923076923076927 * var_chaste_interface__membrane__V);
             const double var_x228 = 0.20000000000000001 * var_x202;
             const double var_x230 = 3.0 * var_chaste_interface__calcium_subsystem__Ca_SS;
@@ -1800,8 +1800,6 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative11(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1810,6 +1808,8 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
             double var_chaste_interface__calcium_subsystem__Ca_SS = rY[19];
             // Units: mM; Initial value: 0.000136058
             
+
+
             const double var_x199 = exp(1.2 + 0.10000000000000001 * var_chaste_interface__membrane__V);
             const double var_x204 = 0.1875 * var_chaste_interface__calcium_subsystem__Ca_SS;
             const double var_x234 = 3.2000000000000002 * var_x199;
@@ -1864,14 +1864,14 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative12(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -84.1638
             
+
+
             const double var_x199 = exp(1.2 + 0.10000000000000001 * var_chaste_interface__membrane__V);
             const double var_x202 = exp(-0.92307692307692313 - 0.076923076923076927 * var_chaste_interface__membrane__V);
             const double var_x235 = 0.025000000000000001 * var_x202;
@@ -1927,14 +1927,14 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative13(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -84.1638
             
+
+
             const double var_x199 = exp(1.2 + 0.10000000000000001 * var_chaste_interface__membrane__V);
             const double var_x202 = exp(-0.92307692307692313 - 0.076923076923076927 * var_chaste_interface__membrane__V);
             const double var_x205 = 1.6000000000000001 * var_x199;
@@ -1992,14 +1992,14 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative14(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -84.1638
             
+
+
             const double var_x199 = exp(1.2 + 0.10000000000000001 * var_chaste_interface__membrane__V);
             const double var_x202 = exp(-0.92307692307692313 - 0.076923076923076927 * var_chaste_interface__membrane__V);
             const double var_x220 = 0.80000000000000004 * var_x199;
@@ -2058,14 +2058,14 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative15(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -84.1638
             
+
+
             const double var_x202 = exp(-0.92307692307692313 - 0.076923076923076927 * var_chaste_interface__membrane__V);
             const double var_x213 = 0.10000000000000001 * var_x202;
             const double var_x219 = -var_x213;
@@ -2107,14 +2107,14 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative16(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -84.1638
             
+
+
             const double var_x241 = exp(3.1578947368421053 + 0.10526315789473684 * var_chaste_interface__membrane__V);
             const double var_x242 = 1.0 + var_x241;
             const double var_x243 = 1 / var_x242;
@@ -2157,14 +2157,14 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative17(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -84.1638
             
+
+
             const double var_x250 = exp(-4.4399999999999995 - 0.14799999999999999 * var_chaste_interface__membrane__V);
             const double var_x251 = 1.0 - var_x250;
             const double var_x252 = 7.1899999999999999e-5 / var_x251;
@@ -2228,15 +2228,6 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative18(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2255,6 +2246,15 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
             double var_chaste_interface__ionic_concentrations__Nai = rY[28];
             // Units: mM; Initial value: 10.2042
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
             const double var_x3 = _lt_0_row[4];
             const double var_x4 = 1.0 + 0.10000000000000001 * var_x3;
             const double var_x5 = 1 / var_x4;
@@ -2338,8 +2338,6 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative19(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2362,6 +2360,8 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
             double var_chaste_interface__calcium_subsystem__Ca_JSR = rY[24];
             // Units: mM; Initial value: 1.17504
             
+
+
             const double var_x57 = var_chaste_interface__L_type_Ca_channel__O + var_chaste_interface__L_type_Ca_channel__O_Ca;
             const double var_x58 = exp(0.075146605522028176 * var_chaste_interface__membrane__V);
             const double var_x59 = -1.0 + var_x58;
@@ -2415,14 +2415,14 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative20(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__calcium_subsystem__Ca_SS = rY[19];
             // Units: mM; Initial value: 0.000136058
             
+
+
             const double var_x281 = pow(var_chaste_interface__calcium_subsystem__Ca_SS, 3.0);
             const double var_x284 = 40500000.0 * var_x281;
             
@@ -2458,12 +2458,12 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative21(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
+
             
             partialF = -1.9299999999999999;
         }
@@ -2497,14 +2497,14 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative22(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__calcium_subsystem__Ca_SS = rY[19];
             // Units: mM; Initial value: 0.000136058
             
+
+
             const double var_x285 = 12150000000.0 * pow(var_chaste_interface__calcium_subsystem__Ca_SS, 4.0);
             
             partialF = -var_x285;
@@ -2537,12 +2537,12 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative23(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
+
             
             partialF = -0.00080000000000000004;
         }
@@ -2582,8 +2582,6 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative24(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2598,6 +2596,8 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
             double var_chaste_interface__calcium_subsystem__Ca_NSR = rY[25];
             // Units: mM; Initial value: 1.243891
             
+
+
             const double var_x279 = (-var_chaste_interface__calcium_subsystem__Ca_SS + var_chaste_interface__calcium_subsystem__Ca_JSR) * (var_chaste_interface__calcium_subsystem__P_O1 + var_chaste_interface__calcium_subsystem__P_O2);
             const double var_x286 = 1.8 * var_chaste_interface__calcium_subsystem__P_O1;
             const double var_x287 = 1.8 * var_chaste_interface__calcium_subsystem__P_O2;
@@ -2641,12 +2641,12 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative25(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
+
             
             partialF = -0.0023774168600154679;
         }
@@ -2679,14 +2679,14 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative26(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__calcium_subsystem__Cai = rY[18];
             // Units: mM; Initial value: 9.94893e-11
             
+
+
             const double var_x269 = 20.0 * var_chaste_interface__calcium_subsystem__Cai;
             
             partialF = -6.6000000000000005e-5 - var_x269;
@@ -2720,14 +2720,14 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative27(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__calcium_subsystem__Cai = rY[18];
             // Units: mM; Initial value: 9.94893e-11
             
+
+
             const double var_x270 = 40.0 * var_chaste_interface__calcium_subsystem__Cai;
             
             partialF = -0.040000000000000001 - var_x270;
@@ -2786,15 +2786,6 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative28(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2815,6 +2806,15 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
             double var_chaste_interface__ionic_concentrations__Ko = rY[30];
             // Units: mM; Initial value: 5.4
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
             const double var_x3 = _lt_0_row[4];
             const double var_x4 = 1.0 + 0.10000000000000001 * var_x3;
             const double var_x5 = 1 / var_x4;
@@ -2918,8 +2918,6 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative29(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2942,6 +2940,8 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
             double var_chaste_interface__ionic_concentrations__Ko = rY[30];
             // Units: mM; Initial value: 5.4
             
+
+
             const double var_x0 = exp(1.2521739130434781 - 0.16722408026755853 * var_chaste_interface__membrane__V);
             const double var_x1 = 1.0 + var_x0;
             const double var_x2 = 1 / var_x1;
@@ -3095,8 +3095,6 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
 
     double Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt::EvaluatePartialDerivative30(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -3119,6 +3117,8 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLGRL1Opt_LookupTables>
             double var_chaste_interface__ionic_concentrations__Ko = rY[30];
             // Units: mM; Initial value: 5.4
             
+
+
             const double var_x0 = exp(1.2521739130434781 - 0.16722408026755853 * var_chaste_interface__membrane__V);
             const double var_x1 = 1.0 + var_x0;
             const double var_x2 = 1 / var_x1;

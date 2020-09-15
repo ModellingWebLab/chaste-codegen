@@ -730,8 +730,6 @@ std::shared_ptr<Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables> Cellnobl
 
     double Cellnoble_SAN_model_1989FromCellMLGRL2Opt::EvaluatePartialDerivative0(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -758,6 +756,8 @@ std::shared_ptr<Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables> Cellnobl
             double var_chaste_interface__intracellular_potassium_concentration__Ki = rY[13];
             // Units: millimolar; Initial value: 140.0
             
+
+
             const double var_x0 = pow(var_chaste_interface__hyperpolarising_activated_current_y_gate__y, 2);
             const double var_x1 = 0.074867781645490947 * var_chaste_interface__membrane__V;
             const double var_x2 = 1 / var_chaste_interface__intracellular_potassium_concentration__Ki;
@@ -866,8 +866,6 @@ std::shared_ptr<Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables> Cellnobl
 
     double Cellnoble_SAN_model_1989FromCellMLGRL2Opt::EvaluatePartialDerivative1(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -888,6 +886,8 @@ std::shared_ptr<Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables> Cellnobl
             double var_chaste_interface__intracellular_calcium_concentration__Ca_rel = rY[11];
             // Units: millimolar; Initial value: 0.2207
             
+
+
             const double var_x1 = 0.074867781645490947 * var_chaste_interface__membrane__V;
             const double var_x14 = pow(var_chaste_interface__intracellular_sodium_concentration__Nai, 3.0);
             const double var_x15 = 0.018716945411372737 * var_chaste_interface__membrane__V;
@@ -957,6 +957,12 @@ std::shared_ptr<Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables> Cellnobl
 
     double Cellnoble_SAN_model_1989FromCellMLGRL2Opt::EvaluatePartialDerivative2(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: millivolt; Initial value: -69.1865
+            
 
         // Lookup table indexing
         const bool _oob_0 = Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
@@ -966,12 +972,6 @@ std::shared_ptr<Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables> Cellnobl
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
-        double partialF;
-        if (!forceNumerical && this->mUseAnalyticJacobian)
-        {
-            double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
-            // Units: millivolt; Initial value: -69.1865
-            
             const double var_x90 = _lt_0_row[12];
             const double var_x91 = _lt_0_row[13];
             
@@ -1012,6 +1012,12 @@ std::shared_ptr<Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables> Cellnobl
 
     double Cellnoble_SAN_model_1989FromCellMLGRL2Opt::EvaluatePartialDerivative3(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: millivolt; Initial value: -69.1865
+            
 
         // Lookup table indexing
         const bool _oob_0 = Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
@@ -1021,12 +1027,6 @@ std::shared_ptr<Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables> Cellnobl
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
-        double partialF;
-        if (!forceNumerical && this->mUseAnalyticJacobian)
-        {
-            double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
-            // Units: millivolt; Initial value: -69.1865
-            
             const double var_x92 = _lt_0_row[16];
             const double var_x93 = _lt_0_row[17];
             
@@ -1067,6 +1067,12 @@ std::shared_ptr<Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables> Cellnobl
 
     double Cellnoble_SAN_model_1989FromCellMLGRL2Opt::EvaluatePartialDerivative4(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: millivolt; Initial value: -69.1865
+            
 
         // Lookup table indexing
         const bool _oob_0 = Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
@@ -1076,12 +1082,6 @@ std::shared_ptr<Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables> Cellnobl
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
-        double partialF;
-        if (!forceNumerical && this->mUseAnalyticJacobian)
-        {
-            double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
-            // Units: millivolt; Initial value: -69.1865
-            
             const double var_x94 = _lt_0_row[11];
             const double var_x96 = 41.0 + var_chaste_interface__membrane__V;
             const double var_x97 = fabs(var_x96) < 1.0000000000000001e-5;
@@ -1128,6 +1128,12 @@ std::shared_ptr<Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables> Cellnobl
 
     double Cellnoble_SAN_model_1989FromCellMLGRL2Opt::EvaluatePartialDerivative5(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: millivolt; Initial value: -69.1865
+            
 
         // Lookup table indexing
         const bool _oob_0 = Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
@@ -1137,12 +1143,6 @@ std::shared_ptr<Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables> Cellnobl
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
-        double partialF;
-        if (!forceNumerical && this->mUseAnalyticJacobian)
-        {
-            double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
-            // Units: millivolt; Initial value: -69.1865
-            
             const double var_x99 = -0.10000000000000001 * var_chaste_interface__membrane__V;
             const double var_x104 = _lt_0_row[8];
             const double var_x105 = exp(-7.5 + var_x99);
@@ -1178,14 +1178,14 @@ std::shared_ptr<Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables> Cellnobl
 
     double Cellnoble_SAN_model_1989FromCellMLGRL2Opt::EvaluatePartialDerivative6(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -69.1865
             
+
+
             const double var_x106 = 19.0 + var_chaste_interface__membrane__V;
             const double var_x107 = fabs(var_x106) < 0.0001;
             const double var_x109 = 0.25 * var_chaste_interface__membrane__V;
@@ -1234,14 +1234,14 @@ std::shared_ptr<Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables> Cellnobl
 
     double Cellnoble_SAN_model_1989FromCellMLGRL2Opt::EvaluatePartialDerivative7(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -69.1865
             
+
+
             const double var_x109 = 0.25 * var_chaste_interface__membrane__V;
             const double var_x110 = -var_x109;
             const double var_x117 = exp(-8.5 + var_x110);
@@ -1283,14 +1283,14 @@ std::shared_ptr<Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables> Cellnobl
 
     double Cellnoble_SAN_model_1989FromCellMLGRL2Opt::EvaluatePartialDerivative8(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_calcium_concentration__Cai = rY[1];
             // Units: millimolar; Initial value: 5.6e-05
             
+
+
             
             partialF = -0.01 - 20.0 * var_chaste_interface__intracellular_calcium_concentration__Cai;
         }
@@ -1352,8 +1352,6 @@ std::shared_ptr<Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables> Cellnobl
 
     double Cellnoble_SAN_model_1989FromCellMLGRL2Opt::EvaluatePartialDerivative9(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1378,6 +1376,8 @@ std::shared_ptr<Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables> Cellnobl
             double var_chaste_interface__intracellular_potassium_concentration__Ki = rY[13];
             // Units: millimolar; Initial value: 140.0
             
+
+
             const double var_x0 = pow(var_chaste_interface__hyperpolarising_activated_current_y_gate__y, 2);
             const double var_x7 = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3);
             const double var_x8 = var_x7 * var_chaste_interface__fast_sodium_current_h_gate__h;
@@ -1450,8 +1450,6 @@ std::shared_ptr<Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables> Cellnobl
 
     double Cellnoble_SAN_model_1989FromCellMLGRL2Opt::EvaluatePartialDerivative10(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1460,6 +1458,8 @@ std::shared_ptr<Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables> Cellnobl
             double var_chaste_interface__intracellular_calcium_concentration__p = rY[12];
             // Units: dimensionless; Initial value: 0.237
             
+
+
             const double var_x134 = 0.002 * var_chaste_interface__intracellular_calcium_concentration__p;
             
             partialF = -var_x134 - 0.79999999999999993 * var_chaste_interface__intracellular_calcium_concentration__Cai;
@@ -1498,8 +1498,6 @@ std::shared_ptr<Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables> Cellnobl
 
     double Cellnoble_SAN_model_1989FromCellMLGRL2Opt::EvaluatePartialDerivative11(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1508,6 +1506,8 @@ std::shared_ptr<Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables> Cellnobl
             double var_chaste_interface__intracellular_calcium_concentration__p = rY[12];
             // Units: dimensionless; Initial value: 0.237
             
+
+
             const double var_x84 = pow(var_chaste_interface__intracellular_calcium_concentration__Cai, 2.0);
             const double var_x85 = 3.9999999999999998e-6 + var_x84;
             const double var_x86 = 1 / var_x85;
@@ -1545,14 +1545,14 @@ std::shared_ptr<Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables> Cellnobl
 
     double Cellnoble_SAN_model_1989FromCellMLGRL2Opt::EvaluatePartialDerivative12(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -69.1865
             
+
+
             const double var_x109 = 0.25 * var_chaste_interface__membrane__V;
             const double var_x110 = -var_x109;
             const double var_x138 = exp(16.0 + var_x109);
@@ -1617,8 +1617,6 @@ std::shared_ptr<Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables> Cellnobl
 
     double Cellnoble_SAN_model_1989FromCellMLGRL2Opt::EvaluatePartialDerivative13(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1637,6 +1635,8 @@ std::shared_ptr<Cellnoble_SAN_model_1989FromCellMLGRL2Opt_LookupTables> Cellnobl
             double var_chaste_interface__intracellular_potassium_concentration__Ki = rY[13];
             // Units: millimolar; Initial value: 140.0
             
+
+
             const double var_x0 = pow(var_chaste_interface__hyperpolarising_activated_current_y_gate__y, 2);
             const double var_x1 = 0.074867781645490947 * var_chaste_interface__membrane__V;
             const double var_x2 = 1 / var_chaste_interface__intracellular_potassium_concentration__Ki;

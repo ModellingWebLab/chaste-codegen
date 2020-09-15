@@ -616,7 +616,6 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative0(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -653,6 +652,7 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
             double var_chaste_interface__sodium_dynamics__Nai = rY[15];
             // Units: millimolar; Initial value: 10.9248496211574
             
+
             const double var_x0 = pow(var_chaste_interface__i_Ks_Xs_gate__Xs, 2);
             const double var_x1 = 1 / var_chaste_interface__calcium_dynamics__Cai;
             const double var_x2 = pow(var_x1, 1.3999999999999999);
@@ -765,7 +765,6 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative1(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -788,6 +787,7 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
             double var_chaste_interface__calcium_dynamics__g = rY[17];
             // Units: dimensionless; Initial value: 0.999999981028517
             
+
             const double var_x1 = 1 / var_chaste_interface__calcium_dynamics__Cai;
             const double var_x6 = 1 / mParameters[12];
             const double var_x7 = var_x6 * var_chaste_interface__Membrane__Vm_converted;
@@ -862,13 +862,13 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative2(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__Membrane__Vm_converted = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -74.3340057623841
             
+
             const double var_x114 = 0.20000000000000001 * var_chaste_interface__Membrane__Vm_converted;
             const double var_x115 = exp(7.0 + var_x114);
             const double var_x116 = 1.0 + var_x115;
@@ -911,13 +911,13 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative3(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__Membrane__Vm_converted = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -74.3340057623841
             
+
             const double var_x35 = 0.001 * var_chaste_interface__Membrane__Vm_converted;
             const double var_x132 = exp(0.34849999999999998 * var_chaste_interface__Membrane__Vm_converted);
             const double var_x133 = exp(0.079000000000000001 * var_chaste_interface__Membrane__Vm_converted);
@@ -954,13 +954,13 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative4(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__Membrane__Vm_converted = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -74.3340057623841
             
+
             const double var_x35 = 0.001 * var_chaste_interface__Membrane__Vm_converted;
             const double var_x137 = var_x35 < -0.040000000000000001;
             const double var_x138 = exp(0.24440000000000001 * var_chaste_interface__Membrane__Vm_converted);
@@ -1011,13 +1011,13 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative5(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__Membrane__Vm_converted = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -74.3340057623841
             
+
             const double var_x114 = 0.20000000000000001 * var_chaste_interface__Membrane__Vm_converted;
             const double var_x160 = 0.050000000000000003 * var_chaste_interface__Membrane__Vm_converted;
             const double var_x161 = -var_x160;
@@ -1067,7 +1067,6 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative6(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1078,6 +1077,7 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
             double var_chaste_interface__i_CaL_f1_gate__f1 = rY[6];
             // Units: dimensionless; Initial value: 0.970411811263976
             
+
             const double var_x174 = 1 / (0.92835000000000001 + 1433.0 * var_chaste_interface__calcium_dynamics__Cai);
             const double var_x175 = 0.10000000000000001 * var_chaste_interface__Membrane__Vm_converted;
             const double var_x176 = exp(3.0 + var_x175);
@@ -1126,13 +1126,13 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative7(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__Membrane__Vm_converted = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -74.3340057623841
             
+
             const double var_x175 = 0.10000000000000001 * var_chaste_interface__Membrane__Vm_converted;
             const double var_x176 = exp(3.0 + var_x175);
             const double var_x177 = 1.0 + var_x176;
@@ -1178,7 +1178,6 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative8(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1189,6 +1188,7 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
             double var_chaste_interface__i_CaL_fCa_gate__fCa = rY[8];
             // Units: dimensionless; Initial value: 0.998925296531804
             
+
             const double var_x35 = 0.001 * var_chaste_interface__Membrane__Vm_converted;
             const double var_x203 = exp(-0.9375 + 1250.0 * var_chaste_interface__calcium_dynamics__Cai);
             const double var_x204 = 1.0 + var_x203;
@@ -1227,13 +1227,13 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative9(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__Membrane__Vm_converted = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -74.3340057623841
             
+
             const double var_x175 = 0.10000000000000001 * var_chaste_interface__Membrane__Vm_converted;
             const double var_x179 = -var_x175;
             const double var_x209 = exp(-4.5 + var_x179);
@@ -1272,13 +1272,13 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative10(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__Membrane__Vm_converted = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -74.3340057623841
             
+
             const double var_x160 = 0.050000000000000003 * var_chaste_interface__Membrane__Vm_converted;
             const double var_x161 = -var_x160;
             const double var_x217 = exp(-3.0 + var_x161);
@@ -1317,13 +1317,13 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative11(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__Membrane__Vm_converted = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -74.3340057623841
             
+
             const double var_x160 = 0.050000000000000003 * var_chaste_interface__Membrane__Vm_converted;
             const double var_x222 = exp(-3.0 + var_x160);
             const double var_x225 = exp(-1.6666666666666667 - 0.16666666666666666 * var_chaste_interface__Membrane__Vm_converted);
@@ -1361,13 +1361,13 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative12(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__Membrane__Vm_converted = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -74.3340057623841
             
+
             const double var_x175 = 0.10000000000000001 * var_chaste_interface__Membrane__Vm_converted;
             const double var_x234 = exp(1.5 + var_x175);
             const double var_x235 = 0.0005263157894736842 * var_x234;
@@ -1402,13 +1402,13 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative13(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__Membrane__Vm_converted = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -74.3340057623841
             
+
             const double var_x153 = 0.10000000000000001 * var_chaste_interface__Membrane__Vm_converted;
             const double var_x238 = exp(4.593 + var_x153);
             const double var_x239 = exp(-3.52 - 0.080000000000000002 * var_chaste_interface__Membrane__Vm_converted);
@@ -1445,13 +1445,13 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative14(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__Membrane__Vm_converted = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -74.3340057623841
             
+
             const double var_x244 = exp(2.7548999999999997 + 0.089999999999999997 * var_chaste_interface__Membrane__Vm_converted);
             const double var_x245 = exp(-2.8607999999999998 - 0.12 * var_chaste_interface__Membrane__Vm_converted);
             const double var_x246 = 1 / (1.0369999999999999 * var_x244 + 0.36899999999999999 * var_x245);
@@ -1500,7 +1500,6 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative15(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1515,6 +1514,7 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
             double var_chaste_interface__sodium_dynamics__Nai = rY[15];
             // Units: millimolar; Initial value: 10.9248496211574
             
+
             const double var_x6 = 1 / mParameters[12];
             const double var_x7 = var_x6 * var_chaste_interface__Membrane__Vm_converted;
             const double var_x8 = mParameters[1] * exp(4.0615771542678836 * var_x7);
@@ -1574,7 +1574,6 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative16(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1587,6 +1586,7 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
             double var_chaste_interface__calcium_dynamics__g = rY[17];
             // Units: dimensionless; Initial value: 0.999999981028517
             
+
             const double var_x95 = 1.0 + 6.2499999999999997e-8 / pow(var_chaste_interface__calcium_dynamics__Cai, 2);
             const double var_x97 = 0.00044443999999999999 * var_chaste_interface__calcium_dynamics__Ca_SR;
             const double var_x98 = 0.56064000000000003 / var_x95;
@@ -1636,7 +1636,6 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
 
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL2Opt::EvaluatePartialDerivative17(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1647,6 +1646,7 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
             double var_chaste_interface__calcium_dynamics__g = rY[17];
             // Units: dimensionless; Initial value: 0.999999981028517
             
+
             const double var_x253 = var_chaste_interface__calcium_dynamics__Cai <= 0.00035;
             const double var_x254 = var_chaste_interface__Membrane__Vm_converted > -60.0;
             const double var_x255 = (var_x253) || (var_x254);

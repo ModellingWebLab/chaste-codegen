@@ -884,15 +884,6 @@ std::shared_ptr<Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables> C
 
     double Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt::EvaluatePartialDerivative0(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -927,6 +918,15 @@ std::shared_ptr<Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables> C
             double var_chaste_interface__potassium_dynamics__K_i = rY[16];
             // Units: millimolar; Initial value: 138.549719318763
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
             const double var_x0 = pow(var_chaste_interface__slow_time_dependent_potassium_current_Xs_gate__Xs, 2);
             const double var_x1 = exp(4.1806020066889626 - 0.16722408026755853 * var_chaste_interface__membrane__V);
             const double var_x2 = 1.0 + var_x1;
@@ -1046,15 +1046,6 @@ std::shared_ptr<Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables> C
 
     double Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt::EvaluatePartialDerivative1(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1075,6 +1066,15 @@ std::shared_ptr<Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables> C
             double var_chaste_interface__sodium_dynamics__Na_i = rY[15];
             // Units: millimolar; Initial value: 11.0366188978916
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
             const double var_x4 = _lt_0_row[4];
             const double var_x5 = 1.0 + 0.10000000000000001 * var_x4;
             const double var_x6 = 1 / var_x5;
@@ -1153,14 +1153,14 @@ std::shared_ptr<Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables> C
 
     double Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt::EvaluatePartialDerivative2(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.3189802410563
             
+
+
             const double var_x116 = -0.10000000000000001 * var_chaste_interface__membrane__V;
             const double var_x117 = exp(-4.5 + var_x116);
             const double var_x118 = 1.0 + var_x117;
@@ -1205,14 +1205,14 @@ std::shared_ptr<Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables> C
 
     double Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt::EvaluatePartialDerivative3(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.3189802410563
             
+
+
             const double var_x126 = 0.050000000000000003 * var_chaste_interface__membrane__V;
             const double var_x127 = -var_x126;
             const double var_x128 = exp(-3.0 + var_x127);
@@ -1258,14 +1258,14 @@ std::shared_ptr<Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables> C
 
     double Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt::EvaluatePartialDerivative4(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.3189802410563
             
+
+
             const double var_x126 = 0.050000000000000003 * var_chaste_interface__membrane__V;
             const double var_x133 = exp(-3.0 + var_x126);
             const double var_x136 = -0.16666666666666666 * var_chaste_interface__membrane__V;
@@ -1311,14 +1311,14 @@ std::shared_ptr<Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables> C
 
     double Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt::EvaluatePartialDerivative5(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.3189802410563
             
+
+
             const double var_x144 = 0.20000000000000001 * var_chaste_interface__membrane__V;
             const double var_x145 = exp(7.0 + var_x144);
             const double var_x146 = 1.0 + var_x145;
@@ -1368,14 +1368,14 @@ std::shared_ptr<Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables> C
 
     double Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt::EvaluatePartialDerivative6(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.3189802410563
             
+
+
             const double var_x162 = exp(0.34849999999999998 * var_chaste_interface__membrane__V);
             const double var_x163 = exp(0.079000000000000001 * var_chaste_interface__membrane__V);
             const double var_x164 = exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__membrane__V);
@@ -1424,14 +1424,14 @@ std::shared_ptr<Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables> C
 
     double Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt::EvaluatePartialDerivative7(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.3189802410563
             
+
+
             const double var_x19 = 0.10000000000000001 * var_chaste_interface__membrane__V;
             const double var_x170 = var_chaste_interface__membrane__V < -40.0;
             const double var_x175 = exp(0.24440000000000001 * var_chaste_interface__membrane__V);
@@ -1490,14 +1490,14 @@ std::shared_ptr<Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables> C
 
     double Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt::EvaluatePartialDerivative8(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.3189802410563
             
+
+
             const double var_x126 = 0.050000000000000003 * var_chaste_interface__membrane__V;
             const double var_x127 = -var_x126;
             const double var_x144 = 0.20000000000000001 * var_chaste_interface__membrane__V;
@@ -1550,14 +1550,14 @@ std::shared_ptr<Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables> C
 
     double Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt::EvaluatePartialDerivative9(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.3189802410563
             
+
+
             const double var_x116 = -0.10000000000000001 * var_chaste_interface__membrane__V;
             const double var_x206 = exp(2.5 + var_x116);
             const double var_x207 = 1.0 + var_x206;
@@ -1599,8 +1599,6 @@ std::shared_ptr<Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables> C
 
     double Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt::EvaluatePartialDerivative10(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1611,6 +1609,8 @@ std::shared_ptr<Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables> C
             double var_chaste_interface__L_type_Ca_current_fCa_gate__fCa = rY[10];
             // Units: dimensionless; Initial value: 1.00617783424632
             
+
+
             const double var_x214 = var_chaste_interface__membrane__V > -60.0;
             const double var_x215 = exp(-5.0 + 10000.0 * var_chaste_interface__calcium_dynamics__Ca_i);
             const double var_x216 = 1.0 + var_x215;
@@ -1656,14 +1656,14 @@ std::shared_ptr<Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables> C
 
     double Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt::EvaluatePartialDerivative11(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.3189802410563
             
+
+
             const double var_x144 = 0.20000000000000001 * var_chaste_interface__membrane__V;
             const double var_x221 = exp(-4.0 + var_x144);
             const double var_x222 = 1.0 + var_x221;
@@ -1709,14 +1709,14 @@ std::shared_ptr<Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables> C
 
     double Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt::EvaluatePartialDerivative12(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.3189802410563
             
+
+
             const double var_x231 = exp(-0.88888888888888884 * pow((1 + 0.025000000000000001 * var_chaste_interface__membrane__V), 2));
             const double var_x232 = 1 / (0.80000000000000004 + 9.5 * var_x231);
             
@@ -1757,8 +1757,6 @@ std::shared_ptr<Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables> C
 
     double Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt::EvaluatePartialDerivative13(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1771,6 +1769,8 @@ std::shared_ptr<Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables> C
             double var_chaste_interface__calcium_dynamics__g = rY[14];
             // Units: dimensionless; Initial value: 0.999954183531273
             
+
+
             const double var_x100 = 1.0 + 6.2499999999999997e-8 / pow(var_chaste_interface__calcium_dynamics__Ca_i, 2);
             const double var_x102 = 8.0000000000000007e-5 * var_chaste_interface__calcium_dynamics__Ca_SR;
             const double var_x103 = 8.0000000000000007e-5 * var_chaste_interface__calcium_dynamics__Ca_i;
@@ -1822,8 +1822,6 @@ std::shared_ptr<Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables> C
 
     double Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt::EvaluatePartialDerivative14(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1834,6 +1832,8 @@ std::shared_ptr<Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables> C
             double var_chaste_interface__calcium_dynamics__g = rY[14];
             // Units: dimensionless; Initial value: 0.999954183531273
             
+
+
             const double var_x214 = var_chaste_interface__membrane__V > -60.0;
             const double var_x237 = var_chaste_interface__calcium_dynamics__Ca_i >= 0.00035;
             const double var_x238 = var_chaste_interface__calcium_dynamics__Ca_i < 0.00035;
@@ -1891,15 +1891,6 @@ std::shared_ptr<Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables> C
 
     double Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt::EvaluatePartialDerivative15(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1914,6 +1905,15 @@ std::shared_ptr<Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables> C
             double var_chaste_interface__sodium_dynamics__Na_i = rY[15];
             // Units: millimolar; Initial value: 11.0366188978916
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
             const double var_x4 = _lt_0_row[4];
             const double var_x5 = 1.0 + 0.10000000000000001 * var_x4;
             const double var_x6 = 1 / var_x5;
@@ -1989,8 +1989,6 @@ std::shared_ptr<Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables> C
 
     double Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt::EvaluatePartialDerivative16(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2011,6 +2009,8 @@ std::shared_ptr<Cellten_tusscher_model_2004_epiFromCellMLGRL2Opt_LookupTables> C
             double var_chaste_interface__potassium_dynamics__K_i = rY[16];
             // Units: millimolar; Initial value: 138.549719318763
             
+
+
             const double var_x0 = pow(var_chaste_interface__slow_time_dependent_potassium_current_Xs_gate__Xs, 2);
             const double var_x1 = exp(4.1806020066889626 - 0.16722408026755853 * var_chaste_interface__membrane__V);
             const double var_x2 = 1.0 + var_x1;

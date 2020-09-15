@@ -46,14 +46,15 @@ class GeneralisedRushLarsenFirstOrderModelOpt(GeneralisedRushLarsenFirstOrderMod
         formatted_eq = None
         if isinstance(eq.lhs, Derivative) and eq.lhs.args[0] is self._model.membrane_voltage_var:
             formatted_eq = super().format_derivative_equation(eq, modifiers_with_defining_eqs)
-        else:
-            # Indicate use of lookup table
-            if eq in self._derivative_eqs_voltage:
-                with self._lookup_tables.method_being_printed('UpdateTransmembranePotential'):
-                    formatted_eq = super().format_derivative_equation(eq, modifiers_with_defining_eqs)
-            if eq in self._derivative_eqs_excl_voltage:
+
+        elif eq in self._derivative_eqs_excl_voltage: # Indicate use of lookup table
                 with self._lookup_tables.method_being_printed('ComputeOneStepExceptVoltage'):
                     formatted_eq = super().format_derivative_equation(eq, modifiers_with_defining_eqs)
+
+        if eq in self._derivative_eqs_voltage: # Indicate use of lookup table
+            with self._lookup_tables.method_being_printed('UpdateTransmembranePotential'):
+                formatted_eq = super().format_derivative_equation(eq, modifiers_with_defining_eqs)
+
 
         assert formatted_eq is not None, ('Derivative equation should be dvdt or in _derivative_eqs_voltage '
                                           'or in _derivative_eqs_excl_voltage')

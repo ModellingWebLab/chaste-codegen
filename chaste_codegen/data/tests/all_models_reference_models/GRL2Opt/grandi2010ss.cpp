@@ -1203,15 +1203,6 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative0(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__sVm);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__cell__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__sVm);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1252,6 +1243,15 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
             double var_chaste_interface__cell__sCasl = rY[36];
             // Units: dimensionless; Initial value: 0.000105614570409386
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__sVm);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__cell__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__sVm);
+
             const double var_x0 = exp(7.4880000000000004 - 0.16722408026755853 * var_chaste_interface__cell__sVm);
             const double var_x1 = 1.0 + var_x0;
             const double var_x2 = pow(var_chaste_interface__cell__sxks, 2);
@@ -1415,14 +1415,14 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative1(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
+
+
             const double var_x187 = exp(-0.0089012876052174655 * pow((-1 + 0.2073398299813394 * var_chaste_interface__cell__sVm), 2));
             const double var_x188 = exp(-8.682389366752302 * pow((1 + 0.021838829438742085 * var_chaste_interface__cell__sVm), 2));
             const double var_x191 = 0.12920000000000001 * var_x188;
@@ -1466,14 +1466,14 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative2(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
+
+
             const double var_x194 = exp(-0.96036036036036043 - 0.0900900900900901 * var_chaste_interface__cell__sVm);
             const double var_x195 = 1.0 + var_x194;
             const double var_x200 = 1 / var_x195;
@@ -1522,14 +1522,14 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative3(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
+
+
             const double var_x202 = var_chaste_interface__cell__sVm >= -40.0;
             const double var_x211 = exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__cell__sVm);
             const double var_x212 = 1.0 + var_x211;
@@ -1588,14 +1588,14 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative4(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
+
+
             const double var_x229 = exp(-0.83333333333333337 - 0.16666666666666666 * var_chaste_interface__cell__sVm);
             const double var_x230 = 1.0 - var_x229;
             const double var_x231 = 1 / var_x230;
@@ -1641,14 +1641,14 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative5(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
+
+
             const double var_x241 = 0.019699999999999999 * exp(-0.23877882250000002 * pow((1 + 0.068965517241379309 * var_chaste_interface__cell__sVm), 2));
             
             partialF = -0.02 - var_x241;
@@ -1681,14 +1681,14 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative6(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sCaj = rY[35];
             // Units: dimensionless; Initial value: 0.000175648385857736
             
+
+
             
             partialF = -0.011900000000000001 - 1.7 * var_chaste_interface__cell__sCaj;
         }
@@ -1720,14 +1720,14 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative7(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sCasl = rY[36];
             // Units: dimensionless; Initial value: 0.000105614570409386
             
+
+
             
             partialF = -0.011900000000000001 - 1.7 * var_chaste_interface__cell__sCasl;
         }
@@ -1767,14 +1767,14 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative8(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
+
+
             const double var_x248 = exp(0.20000000000000001 + 0.066666666666666666 * var_chaste_interface__cell__sVm);
             const double var_x249 = 1.0 + var_x248;
             const double var_x250 = 1 / var_x249;
@@ -1818,14 +1818,14 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative9(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
+
+
             const double var_x256 = exp(6.0 + 0.10000000000000001 * var_chaste_interface__cell__sVm);
             const double var_x257 = 1.0 + var_x256;
             const double var_x258 = 1 / var_x257;
@@ -1869,14 +1869,14 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative10(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
+
+
             const double var_x265 = exp(-0.81000000000000005 * pow((1 + 0.022222222222222223 * var_chaste_interface__cell__sVm), 2));
             const double var_x266 = 1 / (0.5 + 8.5 * var_x265);
             
@@ -1918,14 +1918,14 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative11(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
+
+
             const double var_x267 = exp(-7.2727272727272725 * pow((1 + 0.025000000000000001 * var_chaste_interface__cell__sVm), 2));
             const double var_x268 = 1 / (7.0 + 85.0 * var_x267);
             
@@ -1966,14 +1966,14 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative12(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
+
+
             const double var_x242 = 0.050000000000000003 * var_chaste_interface__cell__sVm;
             const double var_x245 = 0.1111111111111111 * var_chaste_interface__cell__sVm;
             const double var_x269 = exp(2.0 + var_x242);
@@ -2025,14 +2025,14 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative13(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
+
+
             const double var_x284 = exp(-0.17252124645892353 - 0.070821529745042494 * var_chaste_interface__cell__sVm);
             const double var_x285 = 0.00100999899000101 * var_x284;
             
@@ -2076,8 +2076,6 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative14(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2086,6 +2084,8 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
             double var_chaste_interface__cell__sCaj = rY[35];
             // Units: dimensionless; Initial value: 0.000175648385857736
             
+
+
             const double var_x44 = pow(var_chaste_interface__cell__sCaj, 2);
             const double var_x286 = 1 / var_chaste_interface__cell__sCa_sr;
             const double var_x287 = pow(var_x286, 2.5);
@@ -2137,8 +2137,6 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative15(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2147,6 +2145,8 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
             double var_chaste_interface__cell__sCaj = rY[35];
             // Units: dimensionless; Initial value: 0.000175648385857736
             
+
+
             const double var_x286 = 1 / var_chaste_interface__cell__sCa_sr;
             const double var_x287 = pow(var_x286, 2.5);
             const double var_x288 = 1.0 + 0.13584112963311223 * var_x287;
@@ -2195,8 +2195,6 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative16(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2205,6 +2203,8 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
             double var_chaste_interface__cell__sCaj = rY[35];
             // Units: dimensionless; Initial value: 0.000175648385857736
             
+
+
             const double var_x44 = pow(var_chaste_interface__cell__sCaj, 2);
             const double var_x286 = 1 / var_chaste_interface__cell__sCa_sr;
             const double var_x287 = pow(var_x286, 2.5);
@@ -2244,14 +2244,14 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative17(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sNaj = rY[32];
             // Units: dimensionless; Initial value: 8.21411036389602
             
+
+
             const double var_x306 = 0.0001 * var_chaste_interface__cell__sNaj;
             
             partialF = -0.001 - var_x306;
@@ -2284,14 +2284,14 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative18(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sNasl = rY[33];
             // Units: dimensionless; Initial value: 8.21322794157889
             
+
+
             const double var_x308 = 0.0001 * var_chaste_interface__cell__sNasl;
             
             partialF = -0.001 - var_x308;
@@ -2324,14 +2324,14 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative19(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sCai = rY[37];
             // Units: dimensionless; Initial value: 8.85230799863012e-05
             
+
+
             const double var_x310 = 32.700000000000003 * var_chaste_interface__cell__sCai;
             
             partialF = -0.019599999999999999 - var_x310;
@@ -2366,14 +2366,14 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative20(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sCai = rY[37];
             // Units: dimensionless; Initial value: 8.85230799863012e-05
             
+
+
             const double var_x312 = 2.3700000000000001 * var_chaste_interface__cell__sCai;
             const double var_x313 = -var_x312;
             
@@ -2407,12 +2407,12 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative21(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
+
             
             partialF = -0.0063300000000000006;
         }
@@ -2444,14 +2444,14 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative22(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sCai = rY[37];
             // Units: dimensionless; Initial value: 8.85230799863012e-05
             
+
+
             const double var_x316 = 34.0 * var_chaste_interface__cell__sCai;
             
             partialF = -0.23799999999999999 - var_x316;
@@ -2486,14 +2486,14 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative23(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sCai = rY[37];
             // Units: dimensionless; Initial value: 8.85230799863012e-05
             
+
+
             const double var_x318 = 13.800000000000001 * var_chaste_interface__cell__sCai;
             const double var_x319 = -var_x318;
             
@@ -2527,12 +2527,12 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative24(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
+
             
             partialF = -0.015757;
         }
@@ -2564,14 +2564,14 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative25(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sCai = rY[37];
             // Units: dimensionless; Initial value: 8.85230799863012e-05
             
+
+
             const double var_x322 = 100.0 * var_chaste_interface__cell__sCai;
             
             partialF = -0.059999999999999998 - var_x322;
@@ -2607,14 +2607,14 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative26(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sCaj = rY[35];
             // Units: dimensionless; Initial value: 0.000175648385857736
             
+
+
             const double var_x324 = 100.0 * var_chaste_interface__cell__sCaj;
             const double var_x325 = -var_x324;
             
@@ -2651,14 +2651,14 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative27(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sCasl = rY[36];
             // Units: dimensionless; Initial value: 0.000105614570409386
             
+
+
             const double var_x327 = 100.0 * var_chaste_interface__cell__sCasl;
             const double var_x328 = -var_x327;
             
@@ -2695,14 +2695,14 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative28(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sCaj = rY[35];
             // Units: dimensionless; Initial value: 0.000175648385857736
             
+
+
             const double var_x324 = 100.0 * var_chaste_interface__cell__sCaj;
             const double var_x325 = -var_x324;
             
@@ -2739,14 +2739,14 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative29(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sCasl = rY[36];
             // Units: dimensionless; Initial value: 0.000105614570409386
             
+
+
             const double var_x327 = 100.0 * var_chaste_interface__cell__sCasl;
             const double var_x328 = -var_x327;
             
@@ -2783,14 +2783,14 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative30(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__sCa_sr = rY[31];
             // Units: dimensionless; Initial value: 0.563755421404699
             
+
+
             const double var_x332 = 100.0 * var_chaste_interface__cell__sCa_sr;
             
             partialF = -65.0 - var_x332;
@@ -2837,8 +2837,6 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative31(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2851,6 +2849,8 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
             double var_chaste_interface__cell__sCai = rY[37];
             // Units: dimensionless; Initial value: 8.85230799863012e-05
             
+
+
             const double var_x333 = 100.0 * var_chaste_interface__cell__sCsqnb;
             const double var_x334 = 25.0 * var_chaste_interface__cell__sRyRo;
             const double var_x335 = pow(var_chaste_interface__cell__sCa_sr, 1.7869999999999999);
@@ -2929,15 +2929,6 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative32(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__sVm);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__cell__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__sVm);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2962,6 +2953,15 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
             double var_chaste_interface__cell__sCaj = rY[35];
             // Units: dimensionless; Initial value: 0.000175648385857736
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__sVm);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__cell__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__sVm);
+
             const double var_x23 = pow(var_chaste_interface__cell__sNaj, (-4));
             const double var_x24 = exp(-0.003743588350780262 * var_chaste_interface__cell__sVm);
             const double var_x25 = exp(2.0802377414561666);
@@ -3081,15 +3081,6 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative33(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__sVm);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__cell__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__sVm);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -3114,6 +3105,15 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
             double var_chaste_interface__cell__sCasl = rY[36];
             // Units: dimensionless; Initial value: 0.000105614570409386
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__sVm);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__cell__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__sVm);
+
             const double var_x24 = exp(-0.003743588350780262 * var_chaste_interface__cell__sVm);
             const double var_x25 = exp(2.0802377414561666);
             const double var_x26 = 0.037435883507802616 * var_chaste_interface__cell__sVm;
@@ -3195,12 +3195,12 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative34(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
+
             const double var_x347 = 1 / M_PI;
             const double var_x361 = 0.23994917636495411 * var_x347;
             
@@ -3272,15 +3272,6 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative35(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__sVm);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__cell__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__sVm);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -3303,6 +3294,15 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
             double var_chaste_interface__cell__sCaj = rY[35];
             // Units: dimensionless; Initial value: 0.000175648385857736
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__sVm);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__cell__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__sVm);
+
             const double var_x3 = 1 / var_chaste_interface__cell__sCaj;
             const double var_x37 = _lt_0_row[2];
             const double var_x39 = pow(var_chaste_interface__cell__sNaj, 3);
@@ -3410,15 +3410,6 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative36(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__sVm);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__cell__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__sVm);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -3439,6 +3430,15 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
             double var_chaste_interface__cell__sCasl = rY[36];
             // Units: dimensionless; Initial value: 0.000105614570409386
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__sVm);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__cell__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__sVm);
+
             const double var_x5 = 1 / var_chaste_interface__cell__sCasl;
             const double var_x37 = _lt_0_row[2];
             const double var_x40 = _lt_0_row[1];
@@ -3538,8 +3538,6 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
     double Cellgrandi2010ssFromCellMLGRL2Opt::EvaluatePartialDerivative37(double var_chaste_interface__cell__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -3562,6 +3560,8 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
             double var_chaste_interface__cell__sCai = rY[37];
             // Units: dimensionless; Initial value: 8.85230799863012e-05
             
+
+
             const double var_x311 = 32.700000000000003 * var_chaste_interface__cell__sTnCL;
             const double var_x314 = 2.3700000000000001 * var_chaste_interface__cell__sTnCHc;
             const double var_x315 = 2.3700000000000001 * var_chaste_interface__cell__sTnCHm;

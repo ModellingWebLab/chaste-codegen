@@ -753,8 +753,6 @@ std::shared_ptr<Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables> Cellear
 
     double Cellearm_noble_model_1990FromCellMLGRL2Opt::EvaluatePartialDerivative0(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -779,6 +777,8 @@ std::shared_ptr<Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables> Cellear
             double var_chaste_interface__intracellular_potassium_concentration__K_i = rY[11];
             // Units: millimolar; Initial value: 140.0
             
+
+
             const double var_x0 = 0.074867781645490947 * var_chaste_interface__membrane__V;
             const double var_x1 = 1 / var_chaste_interface__intracellular_potassium_concentration__K_i;
             const double var_x2 = log(4.0 * var_x1);
@@ -897,8 +897,6 @@ std::shared_ptr<Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables> Cellear
 
     double Cellearm_noble_model_1990FromCellMLGRL2Opt::EvaluatePartialDerivative1(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -919,6 +917,8 @@ std::shared_ptr<Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables> Cellear
             double var_chaste_interface__intracellular_calcium_concentration__Ca_Trop = rY[15];
             // Units: millimolar; Initial value: 0.0015
             
+
+
             const double var_x0 = 0.074867781645490947 * var_chaste_interface__membrane__V;
             const double var_x9 = pow(var_chaste_interface__intracellular_sodium_concentration__Na_i, 3.0);
             const double var_x10 = 0.018716945411372737 * var_chaste_interface__membrane__V;
@@ -1001,6 +1001,12 @@ std::shared_ptr<Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables> Cellear
 
     double Cellearm_noble_model_1990FromCellMLGRL2Opt::EvaluatePartialDerivative2(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: millivolt; Initial value: -91.6
+            
 
         // Lookup table indexing
         const bool _oob_0 = Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
@@ -1010,12 +1016,6 @@ std::shared_ptr<Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables> Cellear
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
-        double partialF;
-        if (!forceNumerical && this->mUseAnalyticJacobian)
-        {
-            double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
-            // Units: millivolt; Initial value: -91.6
-            
             const double var_x102 = _lt_0_row[11];
             const double var_x104 = 41.0 + var_chaste_interface__membrane__V;
             const double var_x105 = fabs(var_x104) < 1.0000000000000001e-5;
@@ -1062,14 +1062,14 @@ std::shared_ptr<Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables> Cellear
 
     double Cellearm_noble_model_1990FromCellMLGRL2Opt::EvaluatePartialDerivative3(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -91.6
             
+
+
             const double var_x107 = -0.10000000000000001 * var_chaste_interface__membrane__V;
             const double var_x112 = -0.125 * var_chaste_interface__membrane__V;
             const double var_x113 = exp(-9.375 + var_x112);
@@ -1112,12 +1112,12 @@ std::shared_ptr<Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables> Cellear
 
     double Cellearm_noble_model_1990FromCellMLGRL2Opt::EvaluatePartialDerivative4(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
+
             
             partialF = -0.33300000000000002;
         }
@@ -1156,6 +1156,12 @@ std::shared_ptr<Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables> Cellear
 
     double Cellearm_noble_model_1990FromCellMLGRL2Opt::EvaluatePartialDerivative5(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: millivolt; Initial value: -91.6
+            
 
         // Lookup table indexing
         const bool _oob_0 = Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
@@ -1165,12 +1171,6 @@ std::shared_ptr<Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables> Cellear
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
-        double partialF;
-        if (!forceNumerical && this->mUseAnalyticJacobian)
-        {
-            double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
-            // Units: millivolt; Initial value: -91.6
-            
             const double var_x112 = -0.125 * var_chaste_interface__membrane__V;
             const double var_x116 = _lt_0_row[13];
             const double var_x117 = exp(-1.25 + var_x112);
@@ -1207,14 +1207,14 @@ std::shared_ptr<Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables> Cellear
 
     double Cellearm_noble_model_1990FromCellMLGRL2Opt::EvaluatePartialDerivative6(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -91.6
             
+
+
             const double var_x119 = 19.0 + var_chaste_interface__membrane__V;
             const double var_x120 = fabs(var_x119) < 0.0001;
             const double var_x122 = 0.25 * var_chaste_interface__membrane__V;
@@ -1260,8 +1260,6 @@ std::shared_ptr<Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables> Cellear
 
     double Cellearm_noble_model_1990FromCellMLGRL2Opt::EvaluatePartialDerivative7(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1270,6 +1268,8 @@ std::shared_ptr<Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables> Cellear
             double var_chaste_interface__intracellular_calcium_concentration__Ca_i = rY[1];
             // Units: millimolar; Initial value: 1e-05
             
+
+
             const double var_x24 = 0.001 + var_chaste_interface__intracellular_calcium_concentration__Ca_i;
             const double var_x25 = 1 / var_x24;
             const double var_x26 = var_x25 * var_chaste_interface__intracellular_calcium_concentration__Ca_i;
@@ -1328,8 +1328,6 @@ std::shared_ptr<Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables> Cellear
 
     double Cellearm_noble_model_1990FromCellMLGRL2Opt::EvaluatePartialDerivative8(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1338,6 +1336,8 @@ std::shared_ptr<Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables> Cellear
             double var_chaste_interface__intracellular_calcium_concentration__Ca_i = rY[1];
             // Units: millimolar; Initial value: 1e-05
             
+
+
             const double var_x142 = exp(-3.2000000000000002 + 0.080000000000000002 * var_chaste_interface__membrane__V);
             const double var_x143 = 0.00050000000000000001 + var_chaste_interface__intracellular_calcium_concentration__Ca_i;
             const double var_x144 = pow(var_chaste_interface__intracellular_calcium_concentration__Ca_i, 2);
@@ -1379,12 +1379,12 @@ std::shared_ptr<Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables> Cellear
 
     double Cellearm_noble_model_1990FromCellMLGRL2Opt::EvaluatePartialDerivative9(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
+
             
             partialF = -0.00059999999999999995;
         }
@@ -1442,8 +1442,6 @@ std::shared_ptr<Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables> Cellear
 
     double Cellearm_noble_model_1990FromCellMLGRL2Opt::EvaluatePartialDerivative10(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1464,6 +1462,8 @@ std::shared_ptr<Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables> Cellear
             double var_chaste_interface__intracellular_potassium_concentration__K_i = rY[11];
             // Units: millimolar; Initial value: 140.0
             
+
+
             const double var_x6 = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3);
             const double var_x7 = var_x6 * var_chaste_interface__fast_sodium_current_h_gate__h;
             const double var_x9 = pow(var_chaste_interface__intracellular_sodium_concentration__Na_i, 3.0);
@@ -1558,8 +1558,6 @@ std::shared_ptr<Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables> Cellear
 
     double Cellearm_noble_model_1990FromCellMLGRL2Opt::EvaluatePartialDerivative11(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1578,6 +1576,8 @@ std::shared_ptr<Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables> Cellear
             double var_chaste_interface__intracellular_potassium_concentration__K_i = rY[11];
             // Units: millimolar; Initial value: 140.0
             
+
+
             const double var_x0 = 0.074867781645490947 * var_chaste_interface__membrane__V;
             const double var_x1 = 1 / var_chaste_interface__intracellular_potassium_concentration__K_i;
             const double var_x2 = log(4.0 * var_x1);
@@ -1639,8 +1639,6 @@ std::shared_ptr<Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables> Cellear
 
     double Cellearm_noble_model_1990FromCellMLGRL2Opt::EvaluatePartialDerivative12(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1649,6 +1647,8 @@ std::shared_ptr<Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables> Cellear
             double var_chaste_interface__intracellular_calcium_concentration__Ca_up = rY[12];
             // Units: millimolar; Initial value: 0.3
             
+
+
             const double var_x89 = 0.00041999999999999996 + 0.00023999999999999998 * var_chaste_interface__intracellular_calcium_concentration__Ca_up + var_chaste_interface__intracellular_calcium_concentration__Ca_i;
             const double var_x90 = 1 / var_x89;
             const double var_x91 = pow(var_x89, (-2));
@@ -1689,14 +1689,14 @@ std::shared_ptr<Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables> Cellear
 
     double Cellearm_noble_model_1990FromCellMLGRL2Opt::EvaluatePartialDerivative13(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__calcium_release__ActFrac = rY[8];
             // Units: dimensionless; Initial value: 0.0
             
+
+
             const double var_x95 = 0.25 + var_chaste_interface__calcium_release__ActFrac;
             const double var_x96 = pow(var_x95, (-2));
             const double var_x98 = pow(var_chaste_interface__calcium_release__ActFrac, 2);
@@ -1733,14 +1733,14 @@ std::shared_ptr<Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables> Cellear
 
     double Cellearm_noble_model_1990FromCellMLGRL2Opt::EvaluatePartialDerivative14(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_calcium_concentration__Ca_i = rY[1];
             // Units: millimolar; Initial value: 1e-05
             
+
+
             const double var_x101 = 100.0 * var_chaste_interface__intracellular_calcium_concentration__Ca_i;
             const double var_x156 = -var_x101;
             
@@ -1775,14 +1775,14 @@ std::shared_ptr<Cellearm_noble_model_1990FromCellMLGRL2Opt_LookupTables> Cellear
 
     double Cellearm_noble_model_1990FromCellMLGRL2Opt::EvaluatePartialDerivative15(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_calcium_concentration__Ca_i = rY[1];
             // Units: millimolar; Initial value: 1e-05
             
+
+
             const double var_x101 = 100.0 * var_chaste_interface__intracellular_calcium_concentration__Ca_i;
             const double var_x156 = -var_x101;
             

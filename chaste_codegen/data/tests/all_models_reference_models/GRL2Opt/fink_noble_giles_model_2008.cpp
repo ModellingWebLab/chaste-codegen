@@ -997,15 +997,6 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
 
     double Cellfink_noble_giles_model_2008FromCellMLGRL2Opt::EvaluatePartialDerivative0(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__Environment__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1042,6 +1033,15 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
             double var_chaste_interface__K__K_i = rY[26];
             // Units: millimolar; Initial value: 141.0167
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__Environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
             const double var_x0 = pow(var_chaste_interface__iKs_Xs_gate__Xs, 2);
             const double var_x1 = exp(4.1806020066889626 - 0.16722408026755853 * var_chaste_interface__cell__V);
             const double var_x2 = 1.0 + var_x1;
@@ -1140,14 +1140,14 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
 
     double Cellfink_noble_giles_model_2008FromCellMLGRL2Opt::EvaluatePartialDerivative1(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
+
             const double var_x87 = exp(-1.5790000000000006 + 0.0112 * var_chaste_interface__cell__V);
             const double var_x93 = var_x87;
             const double var_x94 = -var_x93;
@@ -1197,14 +1197,14 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
 
     double Cellfink_noble_giles_model_2008FromCellMLGRL2Opt::EvaluatePartialDerivative2(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
+
             const double var_x90 = exp(-2.0190000000000001 - 0.060299999999999999 * var_chaste_interface__cell__V);
             const double var_x95 = var_x90;
             const double var_x96 = exp(-3.1680000000000028);
@@ -1255,14 +1255,14 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
 
     double Cellfink_noble_giles_model_2008FromCellMLGRL2Opt::EvaluatePartialDerivative3(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
+
             const double var_x98 = exp(-2.5140000000000011);
             const double var_x99 = exp(-3.8160000000000025 + 0.036499999999999998 * var_chaste_interface__cell__V);
             const double var_x104 = var_x99;
@@ -1317,14 +1317,14 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
 
     double Cellfink_noble_giles_model_2008FromCellMLGRL2Opt::EvaluatePartialDerivative4(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
+
             const double var_x102 = exp(-8.3940000000000019 - 0.039899999999999998 * var_chaste_interface__cell__V);
             const double var_x106 = var_x102;
             const double var_x107 = exp(-0.87200000000000344 + 0.0223 * var_chaste_interface__cell__V);
@@ -1372,14 +1372,14 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
 
     double Cellfink_noble_giles_model_2008FromCellMLGRL2Opt::EvaluatePartialDerivative5(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
+
             const double var_x110 = exp(-3.1820000000000022 - 0.031199999999999999 * var_chaste_interface__cell__V);
             const double var_x115 = var_x110;
             const double var_x116 = -var_x115;
@@ -1425,14 +1425,14 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
 
     double Cellfink_noble_giles_model_2008FromCellMLGRL2Opt::EvaluatePartialDerivative6(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
+
             const double var_x87 = exp(-1.5790000000000006 + 0.0112 * var_chaste_interface__cell__V);
             const double var_x93 = var_x87;
             const double var_x94 = -var_x93;
@@ -1482,14 +1482,14 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
 
     double Cellfink_noble_giles_model_2008FromCellMLGRL2Opt::EvaluatePartialDerivative7(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
+
             const double var_x90 = exp(-2.0190000000000001 - 0.060299999999999999 * var_chaste_interface__cell__V);
             const double var_x95 = var_x90;
             const double var_x96 = exp(-3.1680000000000028);
@@ -1540,14 +1540,14 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
 
     double Cellfink_noble_giles_model_2008FromCellMLGRL2Opt::EvaluatePartialDerivative8(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
+
             const double var_x98 = exp(-2.5140000000000011);
             const double var_x99 = exp(-3.8160000000000025 + 0.036499999999999998 * var_chaste_interface__cell__V);
             const double var_x104 = var_x99;
@@ -1600,14 +1600,14 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
 
     double Cellfink_noble_giles_model_2008FromCellMLGRL2Opt::EvaluatePartialDerivative9(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
+
             const double var_x102 = exp(-8.3940000000000019 - 0.039899999999999998 * var_chaste_interface__cell__V);
             const double var_x106 = var_x102;
             const double var_x107 = exp(-0.87200000000000344 + 0.0223 * var_chaste_interface__cell__V);
@@ -1655,14 +1655,14 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
 
     double Cellfink_noble_giles_model_2008FromCellMLGRL2Opt::EvaluatePartialDerivative10(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
+
             const double var_x110 = exp(-3.1820000000000022 - 0.031199999999999999 * var_chaste_interface__cell__V);
             const double var_x115 = var_x110;
             const double var_x116 = -var_x115;
@@ -1704,14 +1704,14 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
 
     double Cellfink_noble_giles_model_2008FromCellMLGRL2Opt::EvaluatePartialDerivative11(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
+
             const double var_x121 = -0.16666666666666666 * var_chaste_interface__cell__V;
             const double var_x122 = exp(0.83333333333333337 + var_x121);
             const double var_x123 = 1.0 + var_x122;
@@ -1759,14 +1759,14 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
 
     double Cellfink_noble_giles_model_2008FromCellMLGRL2Opt::EvaluatePartialDerivative12(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
+
             const double var_x132 = 0.20000000000000001 * var_chaste_interface__cell__V;
             const double var_x133 = exp(-4.0 + var_x132);
             const double var_x134 = 1.0 + var_x133;
@@ -1812,14 +1812,14 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
 
     double Cellfink_noble_giles_model_2008FromCellMLGRL2Opt::EvaluatePartialDerivative13(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
+
             const double var_x143 = exp(-0.88888888888888884 * pow((1 + 0.025000000000000001 * var_chaste_interface__cell__V), 2));
             const double var_x144 = 1 / (0.80000000000000004 + 9.5 * var_x143);
             
@@ -1860,14 +1860,14 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
 
     double Cellfink_noble_giles_model_2008FromCellMLGRL2Opt::EvaluatePartialDerivative14(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
+
             const double var_x132 = 0.20000000000000001 * var_chaste_interface__cell__V;
             const double var_x145 = exp(7.0 + var_x132);
             const double var_x146 = 1.0 + var_x145;
@@ -1911,14 +1911,14 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
 
     double Cellfink_noble_giles_model_2008FromCellMLGRL2Opt::EvaluatePartialDerivative15(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
+
             const double var_x162 = exp(0.34849999999999998 * var_chaste_interface__cell__V);
             const double var_x163 = exp(0.079000000000000001 * var_chaste_interface__cell__V);
             const double var_x164 = exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__cell__V);
@@ -1961,14 +1961,14 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
 
     double Cellfink_noble_giles_model_2008FromCellMLGRL2Opt::EvaluatePartialDerivative16(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
+
             const double var_x170 = var_chaste_interface__cell__V < -40.0;
             const double var_x175 = exp(0.24440000000000001 * var_chaste_interface__cell__V);
             const double var_x176 = exp(-0.043909999999999998 * var_chaste_interface__cell__V);
@@ -2026,14 +2026,14 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
 
     double Cellfink_noble_giles_model_2008FromCellMLGRL2Opt::EvaluatePartialDerivative17(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
+
             const double var_x10 = -0.050000000000000003 * var_chaste_interface__cell__V;
             const double var_x132 = 0.20000000000000001 * var_chaste_interface__cell__V;
             const double var_x193 = exp(2.5 + var_x10);
@@ -2085,14 +2085,14 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
 
     double Cellfink_noble_giles_model_2008FromCellMLGRL2Opt::EvaluatePartialDerivative18(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
+
             const double var_x206 = 0.10000000000000001 * var_chaste_interface__cell__V;
             const double var_x207 = exp(3.0 + var_x206);
             const double var_x208 = 1.0 + var_x207;
@@ -2143,14 +2143,14 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
 
     double Cellfink_noble_giles_model_2008FromCellMLGRL2Opt::EvaluatePartialDerivative19(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
+
             const double var_x206 = 0.10000000000000001 * var_chaste_interface__cell__V;
             const double var_x207 = exp(3.0 + var_x206);
             const double var_x208 = 1.0 + var_x207;
@@ -2194,14 +2194,14 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
 
     double Cellfink_noble_giles_model_2008FromCellMLGRL2Opt::EvaluatePartialDerivative20(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__Ca__Ca_ss = rY[23];
             // Units: millimolar; Initial value: 0.0001893
             
+
+
             const double var_x230 = pow(var_chaste_interface__Ca__Ca_ss, 2);
             const double var_x231 = 1 / (1.0 + 399.99999999999994 * var_x230);
             const double var_x232 = 1 / (2.0 + 80.0 * var_x231);
@@ -2255,15 +2255,6 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
 
     double Cellfink_noble_giles_model_2008FromCellMLGRL2Opt::EvaluatePartialDerivative21(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__Environment__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2278,6 +2269,15 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
             double var_chaste_interface__Na__Na_i = rY[25];
             // Units: millimolar; Initial value: 7.940167
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__Environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
             const double var_x24 = _lt_0_row[2];
             const double var_x25 = 1.0 + 0.10000000000000001 * var_x24;
             const double var_x26 = 1 / var_x25;
@@ -2337,8 +2337,6 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
 
     double Cellfink_noble_giles_model_2008FromCellMLGRL2Opt::EvaluatePartialDerivative22(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2351,6 +2349,8 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
             double var_chaste_interface__Irel__R_prime = rY[24];
             // Units: dimensionless; Initial value: 0.9864
             
+
+
             const double var_x230 = pow(var_chaste_interface__Ca__Ca_ss, 2);
             const double var_x239 = 1.0 + 6.2499999999999997e-8 / pow(var_chaste_interface__Ca__Ca_i, 2);
             const double var_x241 = 1 / var_x239;
@@ -2429,15 +2429,6 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
 
     double Cellfink_noble_giles_model_2008FromCellMLGRL2Opt::EvaluatePartialDerivative23(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__Environment__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2460,6 +2451,15 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
             double var_chaste_interface__Irel__R_prime = rY[24];
             // Units: dimensionless; Initial value: 0.9864
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__Environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
             const double var_x42 = _lt_0_row[5];
             const double var_x43 = -1.0 + var_x42;
             const double var_x44 = 1 / var_x43;
@@ -2523,8 +2523,6 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
 
     double Cellfink_noble_giles_model_2008FromCellMLGRL2Opt::EvaluatePartialDerivative24(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2533,6 +2531,8 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
             double var_chaste_interface__Ca__Ca_ss = rY[23];
             // Units: millimolar; Initial value: 0.0001893
             
+
+
             const double var_x246 = pow(var_chaste_interface__Ca__Ca_SR, (-2));
             const double var_x247 = 1 / (1.0 + 2.25 * var_x246);
             const double var_x274 = -0.11249999999999999 + 0.067500000000000004 * var_x247;
@@ -2587,15 +2587,6 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
 
     double Cellfink_noble_giles_model_2008FromCellMLGRL2Opt::EvaluatePartialDerivative25(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-        // Lookup table indexing
-        const bool _oob_0 = Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__Environment__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2610,6 +2601,15 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
             double var_chaste_interface__Na__Na_i = rY[25];
             // Units: millimolar; Initial value: 7.940167
             
+
+        // Lookup table indexing
+        const bool _oob_0 = Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__Environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
             const double var_x24 = _lt_0_row[2];
             const double var_x25 = 1.0 + 0.10000000000000001 * var_x24;
             const double var_x26 = 1 / var_x25;
@@ -2682,8 +2682,6 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
 
     double Cellfink_noble_giles_model_2008FromCellMLGRL2Opt::EvaluatePartialDerivative26(double var_chaste_interface__Environment__time, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2702,6 +2700,8 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLGRL2Opt_LookupTables> C
             double var_chaste_interface__K__K_i = rY[26];
             // Units: millimolar; Initial value: 141.0167
             
+
+
             const double var_x0 = pow(var_chaste_interface__iKs_Xs_gate__Xs, 2);
             const double var_x1 = exp(4.1806020066889626 - 0.16722408026755853 * var_chaste_interface__cell__V);
             const double var_x2 = 1.0 + var_x1;

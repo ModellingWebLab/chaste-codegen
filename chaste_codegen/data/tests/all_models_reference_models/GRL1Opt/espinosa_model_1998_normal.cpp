@@ -853,8 +853,6 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
 
     double Cellespinosa_model_1998_normalFromCellMLGRL1Opt::EvaluatePartialDerivative0(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -887,6 +885,8 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
             double var_chaste_interface__intracellular_calcium_concentration__Ca_ds = rY[16];
             // Units: millimolar; Initial value: 0.0008364
             
+
+
             const double var_x0 = 0.012 + 0.068000000000000005 * var_chaste_interface__transient_outward_current_s_gate__s;
             const double var_x1 = var_x0 * var_chaste_interface__transient_outward_current_r_gate__r;
             const double var_x2 = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3);
@@ -1013,8 +1013,6 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
 
     double Cellespinosa_model_1998_normalFromCellMLGRL1Opt::EvaluatePartialDerivative1(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1031,6 +1029,8 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
             double var_chaste_interface__intracellular_calcium_concentration__Ca_Trop = rY[20];
             // Units: millimolar; Initial value: 0.0017012
             
+
+
             const double var_x17 = pow(var_chaste_interface__intracellular_sodium_concentration__Na_i, 3.0);
             const double var_x18 = 0.018716945411372737 * var_chaste_interface__membrane__V;
             const double var_x19 = exp(var_x18);
@@ -1087,14 +1087,14 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
 
     double Cellespinosa_model_1998_normalFromCellMLGRL1Opt::EvaluatePartialDerivative2(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.27784
             
+
+
             const double var_x126 = -18.0 + var_chaste_interface__membrane__V;
             const double var_x127 = fabs(var_x126) < 0.0001;
             const double var_x129 = exp(3.6000000000000001 - 0.20000000000000001 * var_chaste_interface__membrane__V);
@@ -1141,6 +1141,12 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
 
     double Cellespinosa_model_1998_normalFromCellMLGRL1Opt::EvaluatePartialDerivative3(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: millivolt; Initial value: -86.27784
+            
 
         // Lookup table indexing
         const bool _oob_0 = Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
@@ -1150,12 +1156,6 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
-        double partialF;
-        if (!forceNumerical && this->mUseAnalyticJacobian)
-        {
-            double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
-            // Units: millivolt; Initial value: -86.27784
-            
             const double var_x135 = _lt_0_row[11];
             const double var_x137 = 41.0 + var_chaste_interface__membrane__V;
             const double var_x138 = fabs(var_x137) < 1.0000000000000001e-5;
@@ -1196,14 +1196,14 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
 
     double Cellespinosa_model_1998_normalFromCellMLGRL1Opt::EvaluatePartialDerivative4(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.27784
             
+
+
             const double var_x140 = -0.10000000000000001 * var_chaste_interface__membrane__V;
             const double var_x145 = exp(-9.375 - 0.125 * var_chaste_interface__membrane__V);
             const double var_x146 = exp(-7.5 + var_x140);
@@ -1239,14 +1239,14 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
 
     double Cellespinosa_model_1998_normalFromCellMLGRL1Opt::EvaluatePartialDerivative5(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.27784
             
+
+
             const double var_x147 = 4.0 + var_chaste_interface__membrane__V;
             const double var_x148 = fabs(var_x147) < 0.0001;
             const double var_x150 = exp(-1.3333333333333333 - 0.33333333333333331 * var_chaste_interface__membrane__V);
@@ -1293,14 +1293,14 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
 
     double Cellespinosa_model_1998_normalFromCellMLGRL1Opt::EvaluatePartialDerivative6(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.27784
             
+
+
             const double var_x156 = 0.18181818181818182 * var_chaste_interface__membrane__V;
             const double var_x157 = exp(-6.1818181818181817 - var_x156);
             const double var_x158 = 1.0 + var_x157;
@@ -1341,12 +1341,12 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
 
     double Cellespinosa_model_1998_normalFromCellMLGRL1Opt::EvaluatePartialDerivative7(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
+
             
             partialF = -0.001;
         }
@@ -1378,12 +1378,12 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
 
     double Cellespinosa_model_1998_normalFromCellMLGRL1Opt::EvaluatePartialDerivative8(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
+
             
             partialF = -0.02;
         }
@@ -1422,6 +1422,12 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
 
     double Cellespinosa_model_1998_normalFromCellMLGRL1Opt::EvaluatePartialDerivative9(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: millivolt; Initial value: -86.27784
+            
 
         // Lookup table indexing
         const bool _oob_0 = Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
@@ -1431,12 +1437,6 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
-        double partialF;
-        if (!forceNumerical && this->mUseAnalyticJacobian)
-        {
-            double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
-            // Units: millivolt; Initial value: -86.27784
-            
             const double var_x168 = _lt_0_row[13];
             const double var_x169 = exp(-1.4285714285714286 - 0.14285714285714285 * var_chaste_interface__membrane__V);
             const double var_x170 = 1.0 + var_x169;
@@ -1478,12 +1478,12 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
 
     double Cellespinosa_model_1998_normalFromCellMLGRL1Opt::EvaluatePartialDerivative10(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
+
             
             partialF = -0.33300000000000002;
         }
@@ -1524,8 +1524,6 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
 
     double Cellespinosa_model_1998_normalFromCellMLGRL1Opt::EvaluatePartialDerivative11(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1536,6 +1534,8 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
             double var_chaste_interface__intracellular_calcium_concentration__Ca_ds = rY[16];
             // Units: millimolar; Initial value: 0.0008364
             
+
+
             const double var_x173 = 0.00050000000000000001 + var_chaste_interface__intracellular_calcium_concentration__Ca_i;
             const double var_x174 = 1 / var_x173;
             const double var_x176 = 0.01 + var_chaste_interface__intracellular_calcium_concentration__Ca_ds;
@@ -1587,14 +1587,14 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
 
     double Cellespinosa_model_1998_normalFromCellMLGRL1Opt::EvaluatePartialDerivative12(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.27784
             
+
+
             const double var_x179 = ((var_chaste_interface__membrane__V < -50.0) ? (5.0) : (1.0));
             
             partialF = -0.001 * var_x179;
@@ -1656,8 +1656,6 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
 
     double Cellespinosa_model_1998_normalFromCellMLGRL1Opt::EvaluatePartialDerivative13(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1682,6 +1680,8 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
             double var_chaste_interface__intracellular_potassium_concentration__K_i = rY[15];
             // Units: millimolar; Initial value: 140.1333
             
+
+
             const double var_x2 = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3);
             const double var_x3 = var_x2 * var_chaste_interface__fast_sodium_current_h_gate__h;
             const double var_x13 = -0.037433890822745473 * var_chaste_interface__membrane__V;
@@ -1785,8 +1785,6 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
 
     double Cellespinosa_model_1998_normalFromCellMLGRL1Opt::EvaluatePartialDerivative14(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1811,6 +1809,8 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
             double var_chaste_interface__intracellular_potassium_concentration__K_i = rY[15];
             // Units: millimolar; Initial value: 140.1333
             
+
+
             const double var_x4 = 1 / var_chaste_interface__intracellular_potassium_concentration__K_i;
             const double var_x5 = var_x4 * var_chaste_interface__extracellular_potassium_concentration__K_o;
             const double var_x6 = log(var_x5);
@@ -1910,8 +1910,6 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
 
     double Cellespinosa_model_1998_normalFromCellMLGRL1Opt::EvaluatePartialDerivative15(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1934,6 +1932,8 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
             double var_chaste_interface__intracellular_potassium_concentration__K_i = rY[15];
             // Units: millimolar; Initial value: 140.1333
             
+
+
             const double var_x4 = 1 / var_chaste_interface__intracellular_potassium_concentration__K_i;
             const double var_x5 = var_x4 * var_chaste_interface__extracellular_potassium_concentration__K_o;
             const double var_x6 = log(var_x5);
@@ -2008,12 +2008,12 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
 
     double Cellespinosa_model_1998_normalFromCellMLGRL1Opt::EvaluatePartialDerivative16(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
+
             
             partialF = -0.01;
         }
@@ -2049,8 +2049,6 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
 
     double Cellespinosa_model_1998_normalFromCellMLGRL1Opt::EvaluatePartialDerivative17(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2059,6 +2057,8 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
             double var_chaste_interface__intracellular_calcium_concentration__Ca_up = rY[17];
             // Units: millimolar; Initial value: 0.479749
             
+
+
             const double var_x114 = 0.00041999999999999996 + 0.00023999999999999998 * var_chaste_interface__intracellular_calcium_concentration__Ca_up + var_chaste_interface__intracellular_calcium_concentration__Ca_i;
             const double var_x115 = 1 / var_x114;
             const double var_x116 = pow(var_x114, (-2));
@@ -2099,14 +2099,14 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
 
     double Cellespinosa_model_1998_normalFromCellMLGRL1Opt::EvaluatePartialDerivative18(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__calcium_release__ActFrac = rY[11];
             // Units: dimensionless; Initial value: 0.0113161
             
+
+
             const double var_x119 = 0.25 + var_chaste_interface__calcium_release__ActFrac;
             const double var_x120 = pow(var_x119, (-2));
             const double var_x122 = pow(var_chaste_interface__calcium_release__ActFrac, 2);
@@ -2143,14 +2143,14 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
 
     double Cellespinosa_model_1998_normalFromCellMLGRL1Opt::EvaluatePartialDerivative19(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_calcium_concentration__Ca_i = rY[1];
             // Units: millimolar; Initial value: 7.07933e-05
             
+
+
             const double var_x125 = 100.0 * var_chaste_interface__intracellular_calcium_concentration__Ca_i;
             const double var_x212 = -var_x125;
             
@@ -2185,14 +2185,14 @@ std::shared_ptr<Cellespinosa_model_1998_normalFromCellMLGRL1Opt_LookupTables> Ce
 
     double Cellespinosa_model_1998_normalFromCellMLGRL1Opt::EvaluatePartialDerivative20(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_calcium_concentration__Ca_i = rY[1];
             // Units: millimolar; Initial value: 7.07933e-05
             
+
+
             const double var_x125 = 100.0 * var_chaste_interface__intracellular_calcium_concentration__Ca_i;
             const double var_x212 = -var_x125;
             

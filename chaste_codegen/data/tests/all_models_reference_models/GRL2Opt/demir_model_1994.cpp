@@ -971,8 +971,6 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 
     double Celldemir_model_1994FromCellMLGRL2Opt::EvaluatePartialDerivative0(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1009,6 +1007,8 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
             double var_chaste_interface__cleft_space_equations__K_c = rY[20];
             // Units: millimolar; Initial value: 5.389014
             
+
+
             const double var_x0 = pow(var_chaste_interface__hyperpolarisation_activated_current_y_gate__y, 2);
             const double var_x1 = -0.16666666666666666 * var_chaste_interface__membrane__V;
             const double var_x2 = exp(-2.3500000000000001 + var_x1);
@@ -1136,8 +1136,6 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 
     double Celldemir_model_1994FromCellMLGRL2Opt::EvaluatePartialDerivative1(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1162,6 +1160,8 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
             double var_chaste_interface__SR_Ca_uptake_and_release__Ca_up = rY[21];
             // Units: millimolar; Initial value: 16.95311
             
+
+
             const double var_x7 = pow(var_chaste_interface__cleft_space_equations__Na_c, 3);
             const double var_x8 = var_x7 * var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i;
             const double var_x9 = pow(var_chaste_interface__intracellular_concentrations_and_buffer_equations__Na_i, 3);
@@ -1224,14 +1224,14 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 
     double Celldemir_model_1994FromCellMLGRL2Opt::EvaluatePartialDerivative2(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -49.54105
             
+
+
             const double var_x112 = exp(-5.8314606741573032 - 0.11235955056179775 * var_chaste_interface__membrane__V);
             const double var_x113 = 51.899999999999999 + var_chaste_interface__membrane__V;
             const double var_x114 = -1.0 + var_x112;
@@ -1283,14 +1283,14 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 
     double Celldemir_model_1994FromCellMLGRL2Opt::EvaluatePartialDerivative3(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -49.54105
             
+
+
             const double var_x124 = exp(-8.0396825396825395 - 0.079365079365079361 * var_chaste_interface__membrane__V);
             const double var_x125 = 1 / (1.0 + 320.0 * var_x124);
             const double var_x132 = 0.16500000000000001 * var_x124;
@@ -1336,14 +1336,14 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 
     double Celldemir_model_1994FromCellMLGRL2Opt::EvaluatePartialDerivative4(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -49.54105
             
+
+
             const double var_x124 = exp(-8.0396825396825395 - 0.079365079365079361 * var_chaste_interface__membrane__V);
             const double var_x125 = 1 / (1.0 + 320.0 * var_x124);
             const double var_x134 = 0.0082500000000000004 * var_x124;
@@ -1386,14 +1386,14 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 
     double Celldemir_model_1994FromCellMLGRL2Opt::EvaluatePartialDerivative5(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -49.54105
             
+
+
             const double var_x135 = exp(-2.0 + 0.40000000000000002 * var_chaste_interface__membrane__V);
             const double var_x136 = -1.0 + var_x135;
             const double var_x137 = 1 / var_x136;
@@ -1443,14 +1443,14 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 
     double Celldemir_model_1994FromCellMLGRL2Opt::EvaluatePartialDerivative6(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -49.54105
             
+
+
             const double var_x151 = 0.25 * var_chaste_interface__membrane__V;
             const double var_x152 = exp(7.0 + var_x151);
             const double var_x153 = -1.0 + var_x152;
@@ -1497,14 +1497,14 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 
     double Celldemir_model_1994FromCellMLGRL2Opt::EvaluatePartialDerivative7(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -49.54105
             
+
+
             const double var_x162 = 0.033333333333333333 * var_chaste_interface__membrane__V;
             const double var_x163 = exp(0.87666666666666671 + var_x162);
             const double var_x164 = exp(-0.87666666666666671 - var_x162);
@@ -1546,14 +1546,14 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 
     double Celldemir_model_1994FromCellMLGRL2Opt::EvaluatePartialDerivative8(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -49.54105
             
+
+
             const double var_x167 = exp(4.0117035110533159 + 0.065019505851755519 * var_chaste_interface__membrane__V);
             const double var_x168 = exp(-0.74069627851140463 - 0.012004801920768308 * var_chaste_interface__membrane__V);
             
@@ -1594,14 +1594,14 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 
     double Celldemir_model_1994FromCellMLGRL2Opt::EvaluatePartialDerivative9(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -49.54105
             
+
+
             const double var_x169 = exp(0.039800000000000002 * var_chaste_interface__membrane__V);
             const double var_x170 = exp(-0.050999999999999997 * var_chaste_interface__membrane__V);
             
@@ -1642,6 +1642,12 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 
     double Celldemir_model_1994FromCellMLGRL2Opt::EvaluatePartialDerivative10(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
+        double partialF;
+        if (!forceNumerical && this->mUseAnalyticJacobian)
+        {
+            double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+            // Units: millivolt; Initial value: -49.54105
+            
 
         // Lookup table indexing
         const bool _oob_0 = Celldemir_model_1994FromCellMLGRL2Opt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
@@ -1651,12 +1657,6 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Celldemir_model_1994FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
-        double partialF;
-        if (!forceNumerical && this->mUseAnalyticJacobian)
-        {
-            double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
-            // Units: millivolt; Initial value: -49.54105
-            
             const double var_x173 = _lt_0_row[16];
             const double var_x174 = _lt_0_row[17];
             
@@ -1697,14 +1697,14 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 
     double Celldemir_model_1994FromCellMLGRL2Opt::EvaluatePartialDerivative11(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -49.54105
             
+
+
             const double var_x177 = exp(-2.2219482120838472 - 0.041101520756267988 * var_chaste_interface__membrane__V);
             const double var_x178 = exp(-10.909090909090908 - 0.18181818181818182 * var_chaste_interface__membrane__V);
             const double var_x179 = 0.69999999999999996 + var_x178;
@@ -1769,8 +1769,6 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 
     double Celldemir_model_1994FromCellMLGRL2Opt::EvaluatePartialDerivative12(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1793,6 +1791,8 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
             double var_chaste_interface__cleft_space_equations__K_c = rY[20];
             // Units: millimolar; Initial value: 5.389014
             
+
+
             const double var_x7 = pow(var_chaste_interface__cleft_space_equations__Na_c, 3);
             const double var_x8 = var_x7 * var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i;
             const double var_x9 = pow(var_chaste_interface__intracellular_concentrations_and_buffer_equations__Na_i, 3);
@@ -1885,8 +1885,6 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 
     double Celldemir_model_1994FromCellMLGRL2Opt::EvaluatePartialDerivative13(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -1897,6 +1895,8 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
             double var_chaste_interface__intracellular_concentrations_and_buffer_equations__K_i = rY[13];
             // Units: millimolar; Initial value: 140.7347
             
+
+
             const double var_x19 = var_chaste_interface__delayed_rectifying_potassium_current_P_a_gate__P_a * var_chaste_interface__delayed_rectifying_potassium_current_P_i_gate__P_i;
             const double var_x68 = 1 / var_chaste_interface__intracellular_concentrations_and_buffer_equations__K_i;
             const double var_x192 = 0.0031913222489694526 * var_x19;
@@ -1932,14 +1932,14 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 
     double Celldemir_model_1994FromCellMLGRL2Opt::EvaluatePartialDerivative14(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i = rY[1];
             // Units: millimolar; Initial value: 0.0003787018
             
+
+
             const double var_x194 = -129.0 * var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i;
             
             partialF = -0.307 + var_x194;
@@ -1973,14 +1973,14 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 
     double Celldemir_model_1994FromCellMLGRL2Opt::EvaluatePartialDerivative15(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i = rY[1];
             // Units: millimolar; Initial value: 0.0003787018
             
+
+
             
             partialF = -0.252 - 50.5 * var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i;
         }
@@ -2015,14 +2015,14 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 
     double Celldemir_model_1994FromCellMLGRL2Opt::EvaluatePartialDerivative16(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i = rY[1];
             // Units: millimolar; Initial value: 0.0003787018
             
+
+
             const double var_x194 = -129.0 * var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i;
             
             partialF = -0.0042500000000000003 + var_x194;
@@ -2055,12 +2055,12 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 
     double Celldemir_model_1994FromCellMLGRL2Opt::EvaluatePartialDerivative17(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
+
             
             partialF = -3.6539999999999999;
         }
@@ -2121,8 +2121,6 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 
     double Celldemir_model_1994FromCellMLGRL2Opt::EvaluatePartialDerivative18(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2143,6 +2141,8 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
             double var_chaste_interface__cleft_space_equations__Ca_c = rY[19];
             // Units: millimolar; Initial value: 2.00474
             
+
+
             const double var_x7 = pow(var_chaste_interface__cleft_space_equations__Na_c, 3);
             const double var_x8 = var_x7 * var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i;
             const double var_x9 = pow(var_chaste_interface__intracellular_concentrations_and_buffer_equations__Na_i, 3);
@@ -2232,8 +2232,6 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 
     double Celldemir_model_1994FromCellMLGRL2Opt::EvaluatePartialDerivative19(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2248,6 +2246,8 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
             double var_chaste_interface__cleft_space_equations__Ca_c = rY[19];
             // Units: millimolar; Initial value: 2.00474
             
+
+
             const double var_x7 = pow(var_chaste_interface__cleft_space_equations__Na_c, 3);
             const double var_x8 = var_x7 * var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i;
             const double var_x9 = pow(var_chaste_interface__intracellular_concentrations_and_buffer_equations__Na_i, 3);
@@ -2317,8 +2317,6 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 
     double Celldemir_model_1994FromCellMLGRL2Opt::EvaluatePartialDerivative20(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2333,6 +2331,8 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
             double var_chaste_interface__cleft_space_equations__K_c = rY[20];
             // Units: millimolar; Initial value: 5.389014
             
+
+
             const double var_x9 = pow(var_chaste_interface__intracellular_concentrations_and_buffer_equations__Na_i, 3);
             const double var_x19 = var_chaste_interface__delayed_rectifying_potassium_current_P_a_gate__P_a * var_chaste_interface__delayed_rectifying_potassium_current_P_i_gate__P_i;
             const double var_x35 = exp(-1.5 - 0.025000000000000001 * var_chaste_interface__membrane__V);
@@ -2383,8 +2383,6 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 
     double Celldemir_model_1994FromCellMLGRL2Opt::EvaluatePartialDerivative21(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2393,6 +2391,8 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
             double var_chaste_interface__SR_Ca_uptake_and_release__Ca_up = rY[21];
             // Units: millimolar; Initial value: 16.95311
             
+
+
             const double var_x96 = 9.5000000000000005e-5 + 2.0454545454545457e-6 * var_chaste_interface__SR_Ca_uptake_and_release__Ca_up + var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i;
             const double var_x97 = 1 / var_x96;
             const double var_x98 = (0.080000000000000002 * var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i - 1.4727272727272728e-7 * var_chaste_interface__SR_Ca_uptake_and_release__Ca_up) / pow(var_x96, 2);
@@ -2434,8 +2434,6 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 
     double Celldemir_model_1994FromCellMLGRL2Opt::EvaluatePartialDerivative22(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2444,6 +2442,8 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
             double var_chaste_interface__SR_Ca_uptake_and_release__F2 = rY[25];
             // Units: dimensionless; Initial value: 0.0007594214
             
+
+
             const double var_x105 = 0.25 + var_chaste_interface__SR_Ca_uptake_and_release__F2;
             const double var_x106 = pow(var_x105, (-2));
             const double var_x107 = pow(var_chaste_interface__SR_Ca_uptake_and_release__F2, 2);
@@ -2480,14 +2480,14 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 
     double Celldemir_model_1994FromCellMLGRL2Opt::EvaluatePartialDerivative23(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__SR_Ca_uptake_and_release__Ca_rel = rY[22];
             // Units: millimolar; Initial value: 16.85024
             
+
+
             
             partialF = -0.64100000000000001 - 0.77000000000000002 * var_chaste_interface__SR_Ca_uptake_and_release__Ca_rel;
         }
@@ -2531,8 +2531,6 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 
     double Celldemir_model_1994FromCellMLGRL2Opt::EvaluatePartialDerivative24(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -2541,6 +2539,8 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
             double var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i = rY[1];
             // Units: millimolar; Initial value: 0.0003787018
             
+
+
             const double var_x213 = exp(-3.2000000000000002 + 0.080000000000000002 * var_chaste_interface__membrane__V);
             const double var_x215 = 0.0040000000000000001 + var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i;
             const double var_x216 = pow(var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i, 4);
@@ -2592,14 +2592,14 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 
     double Celldemir_model_1994FromCellMLGRL2Opt::EvaluatePartialDerivative25(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i = rY[1];
             // Units: millimolar; Initial value: 0.0003787018
             
+
+
             const double var_x215 = 0.0040000000000000001 + var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i;
             const double var_x216 = pow(var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i, 4);
             const double var_x218 = pow(var_x215, (-4));
@@ -2639,12 +2639,12 @@ std::shared_ptr<Celldemir_model_1994FromCellMLGRL2Opt_LookupTables> Celldemir_mo
 
     double Celldemir_model_1994FromCellMLGRL2Opt::EvaluatePartialDerivative26(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
+
             
             partialF = -0.00095999999999999992;
         }

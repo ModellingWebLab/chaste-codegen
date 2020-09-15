@@ -308,7 +308,6 @@ std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt_LookupTables
 
     double Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt::EvaluatePartialDerivative0(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
@@ -317,6 +316,7 @@ std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt_LookupTables
             double var_chaste_interface__I_Shkr__OShkr = rY[6];
             // Units: dimensionless; Initial value: 0.0
             
+
             const double var_x0 = 1 / mParameters[2];
             const double var_x1 = 1 / mParameters[6];
             const double var_x2 = var_x1 * (-0.086113989637305696 * mParameters[6] * log(mParameters[1] / mParameters[0]) + var_chaste_interface__membrane__Vm);
@@ -365,13 +365,13 @@ std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt_LookupTables
 
     double Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt::EvaluatePartialDerivative1(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -58.0
             
+
             const double var_x1 = 1 / mParameters[6];
             const double var_x6 = var_x1 * var_chaste_interface__membrane__Vm;
             const double var_x17 = exp(14.864019253910952 * var_x6);
@@ -412,13 +412,13 @@ std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt_LookupTables
 
     double Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt::EvaluatePartialDerivative2(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -58.0
             
+
             const double var_x1 = 1 / mParameters[6];
             const double var_x6 = var_x1 * var_chaste_interface__membrane__Vm;
             const double var_x14 = exp(-17.767148014440433 * var_x6);
@@ -461,13 +461,13 @@ std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt_LookupTables
 
     double Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt::EvaluatePartialDerivative3(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -58.0
             
+
             const double var_x1 = 1 / mParameters[6];
             const double var_x6 = var_x1 * var_chaste_interface__membrane__Vm;
             const double var_x14 = exp(-17.767148014440433 * var_x6);
@@ -510,13 +510,13 @@ std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt_LookupTables
 
     double Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt::EvaluatePartialDerivative4(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -58.0
             
+
             const double var_x1 = 1 / mParameters[6];
             const double var_x6 = var_x1 * var_chaste_interface__membrane__Vm;
             const double var_x14 = exp(-17.767148014440433 * var_x6);
@@ -559,13 +559,13 @@ std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt_LookupTables
 
     double Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt::EvaluatePartialDerivative5(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -58.0
             
+
             const double var_x1 = 1 / mParameters[6];
             const double var_x6 = var_x1 * var_chaste_interface__membrane__Vm;
             const double var_x14 = exp(-17.767148014440433 * var_x6);
@@ -600,11 +600,11 @@ std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt_LookupTables
 
     double Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt::EvaluatePartialDerivative6(double var_chaste_interface__environment__time_converted, std::vector<double>& rY, double delta, bool forceNumerical)
     {
-
         double partialF;
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
             
             partialF = -0.017999999999999999;
         }
