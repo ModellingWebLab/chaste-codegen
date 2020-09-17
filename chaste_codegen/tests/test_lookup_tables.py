@@ -94,7 +94,8 @@ def test_change_lookup_table():
     model = load_model(model_folder)
 
     lut = LookupTables(model, lookup_params=[['membrane_voltage', -25.0001, 54.9999, 0.01],
-                                             ['cytosolic_calcium_concentration', 0.0, 50.0, 0.01]])
+                                             ['cytosolic_calcium_concentration', 0.0, 50.0, 0.01],
+                                             ['unknown_tag', 0.0, 50.0, 0.01]])
     lut.calc_lookup_tables(model.equations)
     printer = ChastePrinter(lookup_table_function=lut.print_lut_expr)
 

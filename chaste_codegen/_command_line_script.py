@@ -127,18 +127,19 @@ def chaste_codegen():
             assert len(lut) == len(lut_metavar), lut_params_mgs
             try:  # first argument is a string
                 float(lut[0])
-                if_float = True
+                is_float = True
             except ValueError:
-                if_float = False  # We are expecting this to be a string
+                is_float = False  # We are expecting this to be a string
 
-            if if_float:
+            if is_float:
                 raise ValueError(lut_params_mgs)
 
             for i in range(1, len(lut)):  # next 3 arguments are floats
                 try:
                     lut[i] = float(lut[i])
-                except ValueError:
-                    raise ValueError(lut_params_mgs)
+                except ValueError as e:
+                    e.args = (lut_params_mgs, )
+                    raise
 
     # if no model type is set assume normal
     args.normal = args.normal or not any([getattr(args, model_type.replace('-', '_')) for model_type in TRANSLATORS])
