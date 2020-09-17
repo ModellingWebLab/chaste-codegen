@@ -645,3 +645,55 @@ def test_script_lookup_table(tmp_path):
                                    os.path.join(tmp_path, 'LuoRudy1991_lookup_tables.hpp'))
     compare_file_against_reference(os.path.join(reference, 'LuoRudy1991_lookup_tables.cpp'),
                                    os.path.join(tmp_path, 'LuoRudy1991_lookup_tables.cpp'))
+
+
+def test_script_lookup_table_no_opt(tmp_path):
+    """Convert a model with custom lookup table"""
+    LOGGER.info('Testing custom lookup tables,  for command line script\n')
+    tmp_path = str(tmp_path)
+    model_name = 'LuoRudy1991'
+    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    outfile = os.path.join(tmp_path, 'LuoRudy1991_lookup_tables.cpp')
+    # Call commandline script
+    testargs = ['chaste_codegen', model_file, '-o', outfile,
+                '--lookup-table', 'membrane_voltage', '-150.0001', '199.9999', '0.01',
+                '--lookup-table', 'cytosolic_calcium_concentration', '0.00001', '30.00001', '0.0001']
+
+    with mock.patch.object(sys, 'argv', testargs):
+        with pytest.raises(ValueError, match="Can only use lookup tables in combination with --opt"):
+            chaste_codegen()
+
+
+def test_script_lookup_table_wrong_args(tmp_path):
+    """Convert a model with custom lookup table"""
+    LOGGER.info('Testing custom lookup tables,  for command line script\n')
+    tmp_path = str(tmp_path)
+    model_name = 'LuoRudy1991'
+    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    outfile = os.path.join(tmp_path, 'LuoRudy1991_lookup_tables.cpp')
+    # Call commandline script
+    testargs = ['chaste_codegen', model_file, '-o', outfile,
+                '--lookup-table', '-150.0001', 'membrane_voltage', '199.9999', '0.01']
+
+    with mock.patch.object(sys, 'argv', testargs):
+        with pytest.raises(ValueError, match="Can only use lookup tables in combination with --opt"):
+            chaste_codegen()
+
+
+def test_script_lookup_table_wrong_args2(tmp_path):
+    """Convert a model with custom lookup table"""
+    LOGGER.info('Testing custom lookup tables,  for command line script\n')
+    tmp_path = str(tmp_path)
+    model_name = 'LuoRudy1991'
+    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    outfile = os.path.join(tmp_path, 'LuoRudy1991_lookup_tables.cpp')
+    # Call commandline script
+    testargs = ['chaste_codegen', model_file, '-o', outfile,
+                '--lookup-table', 'membrane_voltage', 'membrane_voltage', '199.9999', '0.01']
+
+    with mock.patch.object(sys, 'argv', testargs):
+        with pytest.raises(ValueError, match="Can only use lookup tables in combination with --opt"):
+            chaste_codegen()
