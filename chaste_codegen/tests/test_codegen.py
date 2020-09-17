@@ -33,6 +33,7 @@ chaste_GRL1Opt = get_models(ref_folder='chaste_reference_models', type='GRL1Opt'
 chaste_GRL2 = get_models(ref_folder='chaste_reference_models', type='GRL2')
 chaste_GRL2Opt = get_models(ref_folder='chaste_reference_models', type='GRL2Opt')
 chaste_CVODE_DATA_CLAMP = get_models(ref_folder='chaste_reference_models', type='CVODE_DATA_CLAMP')
+chaste_CVODE_DATA_CLAMP_OPT = get_models(ref_folder='chaste_reference_models', type='CVODE_DATA_CLAMP_OPT')
 
 
 cg.__version__ = "(version omitted as unimportant)"
@@ -77,8 +78,24 @@ def test_CVODE_DATA_CLAMP(tmp_path, model):
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLCvodeDataClamp'
     LOGGER.info('Converting: CVODE with Data Clamp: ' + class_name + '\n')
     # Generate chaste code
-    chaste_model = cg.CvodeWithDataClampModel(load_model_with_conversions(model['model']),
-                                              model['model_name_from_file'], class_name=class_name)
+    chaste_model = cg.CvodeChasteModel(load_model_with_conversions(model['model']),
+                                       model['model_name_from_file'], class_name=class_name, cvode_data_clamp=True)
+
+    chaste_model.generate_chaste_code()
+    # Compare against reference
+    test_utils.compare_model_against_reference(chaste_model,
+                                               tmp_path, model['expected_hpp_path'],
+                                               model['expected_cpp_path'])
+
+
+@pytest.mark.parametrize(('model'), chaste_CVODE_DATA_CLAMP_OPT)
+def test_CVODE_DATA_CLAMP_OPT(tmp_path, model):
+    """ Check generation of CVODE with Data Clamp opt models against reference"""
+    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLCvodeDataClampOpt'
+    LOGGER.info('Converting: CVODE with Data Clamp opt: ' + class_name + '\n')
+    # Generate chaste code
+    chaste_model = cg.OptCvodeChasteModel(load_model_with_conversions(model['model']),
+                                          model['model_name_from_file'], class_name=class_name, cvode_data_clamp=True)
 
     chaste_model.generate_chaste_code()
     # Compare against reference

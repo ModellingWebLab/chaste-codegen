@@ -254,6 +254,38 @@ def test_script_double_type(tmp_path):
                                    os.path.join(tmp_path, model_name + 'BackwardEuler.cpp'))
 
 
+def test_script_data_clamp_opt(tmp_path):
+    """Convert code with data clamp opt"""
+    LOGGER.info('Testing multiple models\n')
+    tmp_path = str(tmp_path)
+    model_name = 'grandi2010ss'
+    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    target = os.path.join(tmp_path, model_name + '.cellml')
+    shutil.copyfile(model_file, target)
+
+    testargs = ["chaste_codegen", '--cvode-data-clamp', '--opt', target]
+    # Call commandline script
+    with mock.patch.object(sys, 'argv', testargs):
+        chaste_codegen()
+    reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models')
+    reference_opt = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models')
+
+    compare_file_against_reference(os.path.join(reference, 'CVODE_DATA_CLAMP',
+                                                model_name + 'CvodeDataClamp.hpp'),
+                                   os.path.join(tmp_path, model_name + 'CvodeDataClamp.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'CVODE_DATA_CLAMP',
+                                                model_name + 'CvodeDataClamp.cpp'),
+                                   os.path.join(tmp_path, model_name + 'CvodeDataClamp.cpp'))
+
+    compare_file_against_reference(os.path.join(reference_opt, 'CVODE_DATA_CLAMP_OPT',
+                                                model_name + 'CvodeDataClampOpt.hpp'),
+                                   os.path.join(tmp_path, model_name + 'CvodeDataClampOpt.hpp'))
+    compare_file_against_reference(os.path.join(reference_opt, 'CVODE_DATA_CLAMP_OPT',
+                                                model_name + 'CvodeDataClampOpt.cpp'),
+                                   os.path.join(tmp_path, model_name + 'CvodeDataClampOpt.cpp'))
+
+
 def test_script_class_convtype_output_dll_loadable(tmp_path):
     """Convert a normal model with a given class name and dynamicly loadable via command line script"""
     LOGGER.info('Testing model with options --normal -c --dynamically-loadable and -o for command line script\n')

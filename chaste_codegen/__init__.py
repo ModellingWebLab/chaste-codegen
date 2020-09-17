@@ -34,7 +34,6 @@ from .backward_euler_opt_model import BackwardEulerOptModel  # noqa
 from .chaste_model import ChasteModel  # noqa
 from .cvode_chaste_model import CvodeChasteModel  # noqa
 from .cvode_opt_chaste_model import OptCvodeChasteModel  # noqa
-from .cvode_with_data_clamp_model import CvodeWithDataClampModel  # noqa
 from .generalised_rush_larsen_1_model import GeneralisedRushLarsenFirstOrderModel  # noqa
 from .generalised_rush_larsen_1_opt_model import GeneralisedRushLarsenFirstOrderModelOpt  # noqa
 from .generalised_rush_larsen_2_model import GeneralisedRushLarsenSecondOrderModel  # noqa

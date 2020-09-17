@@ -18,7 +18,7 @@ from chaste_codegen.model_with_conversions import load_model_with_conversions
 TRANSLATORS = OrderedDict(
     [('normal', (cg.NormalChasteModel, 'FromCellML', '', True)),
      ('cvode', (cg.CvodeChasteModel, 'FromCellMLCvode', 'Cvode', True)),
-     ('cvode-data-clamp', (cg.CvodeWithDataClampModel, 'FromCellMLCvodeDataClamp', 'CvodeDataClamp', True)),
+     ('cvode-data-clamp', (cg.CvodeChasteModel, 'FromCellMLCvodeDataClamp', 'CvodeDataClamp', True)),
      ('backward-euler', (cg.BackwardEulerModel, 'FromCellMLBackwardEuler', 'BackwardEuler', False)),
      ('rush-larsen', (cg.RushLarsenModel, 'FromCellMLRushLarsen', 'RushLarsen', False)),
      ('grl1', (cg.GeneralisedRushLarsenFirstOrderModel, 'FromCellMLGRL1', 'GRL1', False)),
@@ -27,6 +27,7 @@ TRANSLATORS = OrderedDict(
 TRANSLATORS_OPT = OrderedDict(
     [('normal', (cg.OptChasteModel, 'FromCellMLOpt', 'Opt', True)),
      ('cvode', (cg.OptCvodeChasteModel, 'FromCellMLCvodeOpt', 'CvodeOpt', True)),
+     ('cvode-data-clamp', (cg.OptCvodeChasteModel, 'FromCellMLCvodeDataClampOpt', 'CvodeDataClampOpt', True)),
      ('backward-euler', (cg.BackwardEulerOptModel, 'FromCellMLBackwardEuler', 'BackwardEuler', False)),
      ('rush-larsen', (cg.RushLarsenOptModel, 'FromCellMLRushLarsenOpt', 'RushLarsenOpt', False)),
      ('grl1', (cg.GeneralisedRushLarsenFirstOrderModelOpt, 'FromCellMLGRL1Opt', 'GRL1', False)),
