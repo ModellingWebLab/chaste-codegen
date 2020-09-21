@@ -38,7 +38,7 @@ class BackwardEulerOptModel(BackwardEulerModel):
     def update_formatted_deriv_eq(self, eq, non_linear_eqs):
         """Update derivatibve equation information"""
         super().update_formatted_deriv_eq(eq, non_linear_eqs)
-        if eq['linear']:
+        if not eq['linear']:
             with self._lookup_tables.method_being_printed('ComputeResidual'):
                 eq['rhs'] = self._printer.doprint(eq['sympy_rhs'])
         if eq['in_membrane_voltage']:

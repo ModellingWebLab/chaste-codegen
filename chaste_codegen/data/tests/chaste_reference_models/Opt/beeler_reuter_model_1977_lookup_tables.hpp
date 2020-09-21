@@ -1,11 +1,11 @@
-#ifndef CELLLUORUDY1991FROMCELLMLOPT_HPP_
-#define CELLLUORUDY1991FROMCELLMLOPT_HPP_
+#ifndef CELLBEELER_REUTER_MODEL_1977FROMCELLMLOPT_HPP_
+#define CELLBEELER_REUTER_MODEL_1977FROMCELLMLOPT_HPP_
 
 //! @file
 //!
 //! This source file was generated from CellML by chaste_codegen version (version omitted as unimportant)
 //!
-//! Model: luo_rudy_1991
+//! Model: beeler_reuter_model_1977
 //!
 //! Processed by chaste_codegen: https://github.com/ModellingWebLab/chaste-codegen
 //!     (translator: chaste_codegen, model type: NormalOpt)
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractCardiacCell.hpp"
 
-class CellLuoRudy1991FromCellMLOpt : public AbstractCardiacCell
+class Cellbeeler_reuter_model_1977FromCellMLOpt : public AbstractCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -36,9 +36,8 @@ public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    CellLuoRudy1991FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~CellLuoRudy1991FromCellMLOpt();
-    void VerifyStateVariables();
+    Cellbeeler_reuter_model_1977FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellbeeler_reuter_model_1977FromCellMLOpt();
     AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY);
@@ -48,7 +47,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(CellLuoRudy1991FromCellMLOpt)
+CHASTE_CLASS_EXPORT(Cellbeeler_reuter_model_1977FromCellMLOpt)
 
 namespace boost
 {
@@ -56,7 +55,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const CellLuoRudy1991FromCellMLOpt * t, const unsigned int fileVersion)
+            Archive & ar, const Cellbeeler_reuter_model_1977FromCellMLOpt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -66,17 +65,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, CellLuoRudy1991FromCellMLOpt * t, const unsigned int fileVersion)
+            Archive & ar, Cellbeeler_reuter_model_1977FromCellMLOpt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)CellLuoRudy1991FromCellMLOpt(p_solver, p_stimulus);
+            ::new(t)Cellbeeler_reuter_model_1977FromCellMLOpt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLLUORUDY1991FROMCELLMLOPT_HPP_
+#endif // CELLBEELER_REUTER_MODEL_1977FROMCELLMLOPT_HPP_

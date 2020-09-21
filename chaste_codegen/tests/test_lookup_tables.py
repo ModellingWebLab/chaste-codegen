@@ -90,7 +90,7 @@ def test_multiple_methods_printed_for(hn_model):
 
 
 def test_change_lookup_table():
-    model_folder = os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'LuoRudy1991.cellml')
+    model_folder = os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'beeler_reuter_model_1977.cellml')
     model = load_model(model_folder)
 
     lut = LookupTables(model, lookup_params=[['membrane_voltage', -25.0001, 54.9999, 0.01],
@@ -105,30 +105,28 @@ def test_change_lookup_table():
             output += printer.doprint(eq.rhs)
     assert '_lt_0_row[0]' in output
     assert '_lt_1_row[0]' in output
+    assert '_lt_2_row[0]' not in output
 
     assert lut.print_lookup_parameters(printer) == \
         [['membrane_voltage', -25.0001, 54.9999, 0.01, {'template_method'}, 'membrane$V',
-          ['(47.13 + membrane$V) * 0.32 / (-exp(-(47.13 + membrane$V) * 0.1) + 1.0)',
-           '0.08 * exp(-membrane$V / 11.0)',
-           '((40.0 < -membrane$V) ? (0.135 * exp(-(80.0 + membrane$V) / 6.8)) : (0.0))',
-           '((40.0 < -membrane$V) ? (3.56 * exp(0.079 * membrane$V) + 310000.0 * exp(0.35 * membrane$V)) : '
-           '(1.0 / ((1.0 + exp(-(10.66 + membrane$V) / 11.1)) * 0.13)))',
-           '((40.0 < -membrane$V) ? ((-127140.0 * exp(0.2444 * membrane$V) - 3.474e-05 * exp(-0.04391 * membrane$V)) *'
-           ' (37.78 + membrane$V) / (1.0 + exp((79.23 + membrane$V) * 0.311))) : (0.0))',
-           '((40.0 < -membrane$V) ? (0.1212 * exp(-0.01052 * membrane$V) / (1.0 + exp(-(40.14 + membrane$V) * 0.1378))'
-           ') : (0.3 * exp(-2.535e-07 * membrane$V) / (1.0 + exp(-(32.0 + membrane$V) * 0.1))))',
-           '0.095 * exp(-(-5.0 + membrane$V) * 0.01) / (1.0 + exp(-(-5.0 + membrane$V) * 0.072))',
-           '0.07 * exp(-(44.0 + membrane$V) * 0.017) / (1.0 + exp((44.0 + membrane$V) * 0.05))',
-           '0.012 * exp(-(28.0 + membrane$V) * 0.008) / (1.0 + exp((28.0 + membrane$V) * 0.15))',
-           '0.0065 * exp(-(30.0 + membrane$V) * 0.02) / (1.0 + exp(-(30.0 + membrane$V) * 0.2))',
-           '0.0005 * exp((50.0 + membrane$V) * 0.083) / (1.0 + exp((50.0 + membrane$V) * 0.057))',
-           '0.0013 * exp(-(20.0 + membrane$V) * 0.06) / (1.0 + exp(-(20.0 + membrane$V) * 0.04))',
-           '((100.0 > -membrane$V) ? ((-1.0 + exp((77.0 + membrane$V) * 0.04)) * 2.837 / ((77.0 + membrane$V) * '
-           'exp((35.0 + membrane$V) * 0.04))) : (1.0))',
-           '1.0 / (1.0 + exp((-membrane$V + 7.488) / 5.98))']],
-         ['cytosolic_calcium_concentration', 0.0, 50.0, 0.01, {'template_method'},
-          'intracellular_calcium_concentration$Cai',
-          ['-13.0287 * log(intracellular_calcium_concentration$Cai / 1.0) + 7.7']]]
+          ['-(47.0 + membrane$V) * 1.0 / (-1.0 + exp(-(47.0 + membrane$V) * 0.1))',
+           '40.0 * exp(-(72.0 + membrane$V) * 0.056)',
+           '0.126 * exp(-(77.0 + membrane$V) * 0.25)',
+           '1.7 / (1.0 + exp(-(22.5 + membrane$V) * 0.082))',
+           '0.055 * exp(-(78.0 + membrane$V) * 0.25) / (1.0 + exp(-(78.0 + membrane$V) * 0.2))',
+           '0.3 / (1.0 + exp(-(32.0 + membrane$V) * 0.1))',
+           '0.095 * exp((-membrane$V + 5.0) / 100.0) / (1.0 + exp((-membrane$V + 5.0) / 13.89))',
+           '0.07 * exp((-44.0 - membrane$V) / 59.0) / (1.0 + exp((44.0 + membrane$V) / 20.0))',
+           '0.012 * exp((-28.0 - membrane$V) / 125.0) / (1.0 + exp((28.0 + membrane$V) / 6.67))',
+           '0.0065 * exp((-30.0 - membrane$V) / 50.0) / (1.0 + exp((-30.0 - membrane$V) / 5.0))',
+           '1 / exp((35.0 + membrane$V) * 0.04)',
+           '-1.0 + exp((77.0 + membrane$V) * 0.04)',
+           '0.0005 * exp((50.0 + membrane$V) / 12.1) / (1.0 + exp((50.0 + membrane$V) / 17.5))',
+           '0.0013 * exp((-20.0 - membrane$V) / 16.67) / (1.0 + exp((-20.0 - membrane$V) / 25.0))',
+           '((23.0 + membrane$V) * 0.2 / (-exp(-(23.0 + membrane$V) * 0.04) + 1.0) + (-1.0 + exp((85.0 + membrane$V) *'
+            ' 0.04)) * 4.0 / (exp((53.0 + membrane$V) * 0.08) + exp((53.0 + membrane$V) * 0.04))) * 0.0035']],
+         ['cytosolic_calcium_concentration', 0.0, 50.0, 0.01, {'template_method'}, 'slow_inward_current$Cai',
+          ['-82.3 - 13.0287 * log(0.001 * slow_inward_current$Cai)']]]
 
 
 def test_no_print_after_table(hn_model):
