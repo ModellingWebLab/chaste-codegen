@@ -1,5 +1,5 @@
-#ifndef CELLGRANDI2010SSFROMCELLMLBACKWARDEULEROPT_HPP_
-#define CELLGRANDI2010SSFROMCELLMLBACKWARDEULEROPT_HPP_
+#ifndef CELLGRANDI2010SSFROMCELLMLBACKWARDEULER_HPP_
+#define CELLGRANDI2010SSFROMCELLMLBACKWARDEULER_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractBackwardEulerCardiacCell.hpp"
 
-class Cellgrandi2010ssFromCellMLBackwardEulerOpt : public AbstractBackwardEulerCardiacCell<26>
+class Cellgrandi2010ssFromCellMLBackwardEuler : public AbstractBackwardEulerCardiacCell<26>
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -36,8 +36,8 @@ public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    Cellgrandi2010ssFromCellMLBackwardEulerOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellgrandi2010ssFromCellMLBackwardEulerOpt();
+    Cellgrandi2010ssFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellgrandi2010ssFromCellMLBackwardEuler();
     AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__cell__time, const double rCurrentGuess[26], double rResidual[26]);
     void ComputeJacobian(double var_chaste_interface__cell__time, const double rCurrentGuess[26], double rJacobian[26][26]);protected:
@@ -49,7 +49,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellgrandi2010ssFromCellMLBackwardEulerOpt)
+CHASTE_CLASS_EXPORT(Cellgrandi2010ssFromCellMLBackwardEuler)
 
 namespace boost
 {
@@ -57,7 +57,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellgrandi2010ssFromCellMLBackwardEulerOpt * t, const unsigned int fileVersion)
+            Archive & ar, const Cellgrandi2010ssFromCellMLBackwardEuler * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -67,17 +67,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellgrandi2010ssFromCellMLBackwardEulerOpt * t, const unsigned int fileVersion)
+            Archive & ar, Cellgrandi2010ssFromCellMLBackwardEuler * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellgrandi2010ssFromCellMLBackwardEulerOpt(p_solver, p_stimulus);
+            ::new(t)Cellgrandi2010ssFromCellMLBackwardEuler(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLGRANDI2010SSFROMCELLMLBACKWARDEULEROPT_HPP_
+#endif // CELLGRANDI2010SSFROMCELLMLBACKWARDEULER_HPP_

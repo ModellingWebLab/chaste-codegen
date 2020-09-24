@@ -1,5 +1,5 @@
-#ifndef CELLJAFRI_RICE_WINSLOW_MODEL_1998FROMCELLMLBACKWARDEULER_HPP_
-#define CELLJAFRI_RICE_WINSLOW_MODEL_1998FROMCELLMLBACKWARDEULER_HPP_
+#ifndef CELLJAFRI_RICE_WINSLOW_MODEL_1998FROMCELLMLBACKWARDEULERNOLUT_HPP_
+#define CELLJAFRI_RICE_WINSLOW_MODEL_1998FROMCELLMLBACKWARDEULERNOLUT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractBackwardEulerCardiacCell.hpp"
 
-class Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler : public AbstractBackwardEulerCardiacCell<25>
+class Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerNoLut : public AbstractBackwardEulerCardiacCell<25>
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -35,8 +35,8 @@ class Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler : public Abstract
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
-    Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler();
+    Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerNoLut(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerNoLut();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[25], double rResidual[25]);
     void ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[25], double rJacobian[25][25]);protected:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time);
@@ -47,7 +47,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerNoLut)
 
 namespace boost
 {
@@ -55,7 +55,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler * t, const unsigned int fileVersion)
+            Archive & ar, const Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerNoLut * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -65,17 +65,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler * t, const unsigned int fileVersion)
+            Archive & ar, Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerNoLut * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler(p_solver, p_stimulus);
+            ::new(t)Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerNoLut(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLJAFRI_RICE_WINSLOW_MODEL_1998FROMCELLMLBACKWARDEULER_HPP_
+#endif // CELLJAFRI_RICE_WINSLOW_MODEL_1998FROMCELLMLBACKWARDEULERNOLUT_HPP_

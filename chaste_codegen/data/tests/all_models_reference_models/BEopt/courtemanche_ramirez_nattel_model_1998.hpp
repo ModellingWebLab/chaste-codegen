@@ -1,5 +1,5 @@
-#ifndef CELLCOURTEMANCHE_RAMIREZ_NATTEL_MODEL_1998FROMCELLMLBACKWARDEULEROPT_HPP_
-#define CELLCOURTEMANCHE_RAMIREZ_NATTEL_MODEL_1998FROMCELLMLBACKWARDEULEROPT_HPP_
+#ifndef CELLCOURTEMANCHE_RAMIREZ_NATTEL_MODEL_1998FROMCELLMLBACKWARDEULER_HPP_
+#define CELLCOURTEMANCHE_RAMIREZ_NATTEL_MODEL_1998FROMCELLMLBACKWARDEULER_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractBackwardEulerCardiacCell.hpp"
 
-class Cellcourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEulerOpt : public AbstractBackwardEulerCardiacCell<8>
+class Cellcourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler : public AbstractBackwardEulerCardiacCell<8>
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -35,8 +35,8 @@ class Cellcourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEulerOpt : pub
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
-    Cellcourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEulerOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellcourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEulerOpt();
+    Cellcourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellcourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler();
     AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[8], double rResidual[8]);
     void ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[8], double rJacobian[8][8]);protected:
@@ -48,7 +48,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellcourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEulerOpt)
+CHASTE_CLASS_EXPORT(Cellcourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler)
 
 namespace boost
 {
@@ -56,7 +56,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellcourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEulerOpt * t, const unsigned int fileVersion)
+            Archive & ar, const Cellcourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -66,17 +66,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellcourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEulerOpt * t, const unsigned int fileVersion)
+            Archive & ar, Cellcourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellcourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEulerOpt(p_solver, p_stimulus);
+            ::new(t)Cellcourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLCOURTEMANCHE_RAMIREZ_NATTEL_MODEL_1998FROMCELLMLBACKWARDEULEROPT_HPP_
+#endif // CELLCOURTEMANCHE_RAMIREZ_NATTEL_MODEL_1998FROMCELLMLBACKWARDEULER_HPP_

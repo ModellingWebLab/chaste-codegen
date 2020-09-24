@@ -22,14 +22,14 @@
 #include "MathsCustomFunctions.hpp"
 #include "CardiacNewtonSolver.hpp"
 
-class Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables : public AbstractLookupTableCollection
+class Cellkurata_model_2002FromCellMLBackwardEuler_LookupTables : public AbstractLookupTableCollection
 {
 public:
-    static Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables* Instance()
+    static Cellkurata_model_2002FromCellMLBackwardEuler_LookupTables* Instance()
     {
         if (mpInstance.get() == NULL)
         {
-            mpInstance.reset(new Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables);
+            mpInstance.reset(new Cellkurata_model_2002FromCellMLBackwardEuler_LookupTables);
         }
         return mpInstance.get();
     }
@@ -67,7 +67,7 @@ public:
         const double _offset_0_over_table_step = _offset_0 * mTableStepInverses[0];
         const unsigned _table_index_0 = (unsigned)(_offset_0_over_table_step);
         const double _factor_0 = _offset_0_over_table_step - _table_index_0;
-        const double* const _lt_0_row = Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables::Instance()->_lookup_0_row(_table_index_0, _factor_0);
+        const double* const _lt_0_row = Cellkurata_model_2002FromCellMLBackwardEuler_LookupTables::Instance()->_lookup_0_row(_table_index_0, _factor_0);
         return _lt_0_row;
     }
 
@@ -86,7 +86,7 @@ public:
     }
 // LCOV_EXCL_STOP
 
-    ~Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables()
+    ~Cellkurata_model_2002FromCellMLBackwardEuler_LookupTables()
     {
 
         if (_lookup_table_0)
@@ -98,9 +98,9 @@ public:
     }
 
 protected:
-    Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables(const Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables&);
-    Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables& operator= (const Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables&);
-    Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables()
+    Cellkurata_model_2002FromCellMLBackwardEuler_LookupTables(const Cellkurata_model_2002FromCellMLBackwardEuler_LookupTables&);
+    Cellkurata_model_2002FromCellMLBackwardEuler_LookupTables& operator= (const Cellkurata_model_2002FromCellMLBackwardEuler_LookupTables&);
+    Cellkurata_model_2002FromCellMLBackwardEuler_LookupTables()
     {
         assert(mpInstance.get() == NULL);
         mKeyingVariableNames.resize(1);
@@ -120,7 +120,7 @@ protected:
         mNeedsRegeneration[0] = true;
         _lookup_table_0 = NULL;
 
-        Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables::RegenerateTables();
+        Cellkurata_model_2002FromCellMLBackwardEuler_LookupTables::RegenerateTables();
     }
 
     void RegenerateTables()
@@ -320,7 +320,7 @@ protected:
 
 private:
     /** The single instance of the class */
-    static std::shared_ptr<Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables> mpInstance;
+    static std::shared_ptr<Cellkurata_model_2002FromCellMLBackwardEuler_LookupTables> mpInstance;
 
     // Row lookup methods memory
     double _lookup_table_0_row[29];
@@ -330,10 +330,10 @@ private:
 
 };
 
-std::shared_ptr<Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables> Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables::mpInstance;
+std::shared_ptr<Cellkurata_model_2002FromCellMLBackwardEuler_LookupTables> Cellkurata_model_2002FromCellMLBackwardEuler_LookupTables::mpInstance;
 
 
-    Cellkurata_model_2002FromCellMLBackwardEulerOpt::Cellkurata_model_2002FromCellMLBackwardEulerOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellkurata_model_2002FromCellMLBackwardEuler::Cellkurata_model_2002FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<13>(
                 27,
                 0,
@@ -341,22 +341,22 @@ std::shared_ptr<Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables> Ce
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellkurata_model_2002FromCellMLBackwardEulerOpt>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellkurata_model_2002FromCellMLBackwardEuler>::Instance();
         Init();
         
         this->mParameters[0] = 32.0; // (var_membrane__Cm) [picoF]
     }
 
-    Cellkurata_model_2002FromCellMLBackwardEulerOpt::~Cellkurata_model_2002FromCellMLBackwardEulerOpt()
+    Cellkurata_model_2002FromCellMLBackwardEuler::~Cellkurata_model_2002FromCellMLBackwardEuler()
     {
     }
 
-    AbstractLookupTableCollection* Cellkurata_model_2002FromCellMLBackwardEulerOpt::GetLookupTableCollection()
+    AbstractLookupTableCollection* Cellkurata_model_2002FromCellMLBackwardEuler::GetLookupTableCollection()
     {
-        return Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables::Instance();
+        return Cellkurata_model_2002FromCellMLBackwardEuler_LookupTables::Instance();
     }
     
-    double Cellkurata_model_2002FromCellMLBackwardEulerOpt::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellkurata_model_2002FromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -400,12 +400,12 @@ std::shared_ptr<Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables> Ce
         // Units: millimolar; Initial value: 139.984146485614
         
         // Lookup table indexing
-        const bool _oob_0 = Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+        const bool _oob_0 = Cellkurata_model_2002FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+        const double* const _lt_0_row = Cellkurata_model_2002FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         const double var_L_type_calcium_channel_current__i_CaL = 0.57999999999999996 * (-45.0 + var_chaste_interface__membrane__V) * var_chaste_interface__L_type_calcium_channel_current_d_gate__d * var_chaste_interface__L_type_calcium_channel_current_fCa_gate__fCa * var_chaste_interface__L_type_calcium_channel_current_f_gate__f; // picoA
         const double var_T_type_calcium_channel_current__i_CaT = 0.45800000000000002 * (-45.0 + var_chaste_interface__membrane__V) * var_chaste_interface__T_type_calcium_channel_current_d_gate__d * var_chaste_interface__T_type_calcium_channel_current_f_gate__f; // picoA
@@ -438,7 +438,7 @@ std::shared_ptr<Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables> Ce
         return i_ionic;
     }
 
-    void Cellkurata_model_2002FromCellMLBackwardEulerOpt::ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[13], double rResidual[13])
+    void Cellkurata_model_2002FromCellMLBackwardEuler::ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[13], double rResidual[13])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -471,12 +471,12 @@ std::shared_ptr<Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables> Ce
         // Units: dimensionless; Initial value: 0.333330378068
         
         // Lookup table indexing
-        const bool _oob_0 = Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+        const bool _oob_0 = Cellkurata_model_2002FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+        const double* const _lt_0_row = Cellkurata_model_2002FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         //output_nonlinear_state_assignments
         double var_chaste_interface__L_type_calcium_channel_current_fCa_gate__fCa = rCurrentGuess[0];
@@ -558,7 +558,7 @@ std::shared_ptr<Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables> Ce
         rResidual[3] = rCurrentGuess[3] - rY[26] - mDt*d_dt_chaste_interface_var_calcium_buffering__fCQ;
     }
 
-    void Cellkurata_model_2002FromCellMLBackwardEulerOpt::ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[13], double rJacobian[13][13])
+    void Cellkurata_model_2002FromCellMLBackwardEuler::ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[13], double rJacobian[13][13])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -583,12 +583,12 @@ std::shared_ptr<Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables> Ce
         // Units: dimensionless; Initial value: 0.067156687129
         
         // Lookup table indexing
-        const bool _oob_0 = Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+        const bool _oob_0 = Cellkurata_model_2002FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+        const double* const _lt_0_row = Cellkurata_model_2002FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         double var_chaste_interface__L_type_calcium_channel_current_fCa_gate__fCa = rCurrentGuess[0];
         double var_chaste_interface__calcium_buffering__fCMi = rCurrentGuess[1];
@@ -881,7 +881,7 @@ std::shared_ptr<Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables> Ce
         rJacobian[12][12] = 1.0 - (mDt * ((-2.4287088639502301e-6 * var_x102 - 5.1430434785105685e-5 * var_x101 - 9.2414019019544699e-7 * var_x97 - var_x103 * var_x89 - var_x104 * var_x90 - 2.4598814923744084e-5 * var_x95 * var_x97) * mParameters[0]));
     }
 
-    void Cellkurata_model_2002FromCellMLBackwardEulerOpt::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
+    void Cellkurata_model_2002FromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -923,12 +923,12 @@ std::shared_ptr<Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables> Ce
         // Units: millimolar; Initial value: 139.984146485614
         
         // Lookup table indexing
-        const bool _oob_0 = Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+        const bool _oob_0 = Cellkurata_model_2002FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+        const double* const _lt_0_row = Cellkurata_model_2002FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         const double var_L_type_calcium_channel_current__i_CaL = 0.57999999999999996 * (-45.0 + var_chaste_interface__membrane__V) * var_chaste_interface__L_type_calcium_channel_current_d_gate__d * var_chaste_interface__L_type_calcium_channel_current_fCa_gate__fCa * var_chaste_interface__L_type_calcium_channel_current_f_gate__f; // picoA
         const double var_T_type_calcium_channel_current__i_CaT = 0.45800000000000002 * (-45.0 + var_chaste_interface__membrane__V) * var_chaste_interface__T_type_calcium_channel_current_d_gate__d * var_chaste_interface__T_type_calcium_channel_current_f_gate__f; // picoA
@@ -960,7 +960,7 @@ std::shared_ptr<Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables> Ce
         rY[0] += mDt*d_dt_chaste_interface_var_membrane__V;
     }
     
-    void Cellkurata_model_2002FromCellMLBackwardEulerOpt::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
+    void Cellkurata_model_2002FromCellMLBackwardEuler::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -994,12 +994,12 @@ std::shared_ptr<Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables> Ce
         // Units: dimensionless; Initial value: 0.333330378068
         
         // Lookup table indexing
-        const bool _oob_0 = Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+        const bool _oob_0 = Cellkurata_model_2002FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+        const double* const _lt_0_row = Cellkurata_model_2002FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         const double var_AP_sensitive_currents_q_gate__q_infinity = _lt_0_row[4];
         const double var_AP_sensitive_currents_q_gate__tau_q = 6.0599999999999996 + 39.101999999999997 / (0.065000000000000002 * exp(4.593 + 0.10000000000000001 * var_chaste_interface__membrane__V) + 0.56999999999999995 * exp(-3.52 - 0.080000000000000002 * var_chaste_interface__membrane__V));
@@ -1051,7 +1051,7 @@ std::shared_ptr<Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables> Ce
         rY[14] = (var_chaste_interface__sustained_inward_current_qi_gate__qi + ((var_sustained_inward_current_qi_gate__qi_infinity / var_sustained_inward_current_qi_gate__tau_qi) * mDt)) / (1.0 - ((-1 / var_sustained_inward_current_qi_gate__tau_qi) * mDt));
         
         double _guess[13] = {rY[3],rY[22],rY[23],rY[26],rY[24],rY[25],rY[21],rY[17],rY[18],rY[16],rY[15],rY[20],rY[19]};
-        CardiacNewtonSolver<13,Cellkurata_model_2002FromCellMLBackwardEulerOpt>* _p_solver = CardiacNewtonSolver<13,Cellkurata_model_2002FromCellMLBackwardEulerOpt>::Instance();
+        CardiacNewtonSolver<13,Cellkurata_model_2002FromCellMLBackwardEuler>* _p_solver = CardiacNewtonSolver<13,Cellkurata_model_2002FromCellMLBackwardEuler>::Instance();
         _p_solver->Solve(*this, var_chaste_interface__environment__time, _guess);
         rY[3] = _guess[0];
         rY[22] = _guess[1];
@@ -1068,7 +1068,7 @@ std::shared_ptr<Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables> Ce
         rY[19] = _guess[12];
     }
 
-    std::vector<double> Cellkurata_model_2002FromCellMLBackwardEulerOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Cellkurata_model_2002FromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -1084,7 +1084,7 @@ std::shared_ptr<Cellkurata_model_2002FromCellMLBackwardEulerOpt_LookupTables> Ce
     }
 
 template<>
-void OdeSystemInformation<Cellkurata_model_2002FromCellMLBackwardEulerOpt>::Initialise(void)
+void OdeSystemInformation<Cellkurata_model_2002FromCellMLBackwardEuler>::Initialise(void)
 {
     this->mSystemName = "kurata_model_2002";
     this->mFreeVariableName = "environment__time";
@@ -1242,5 +1242,5 @@ void OdeSystemInformation<Cellkurata_model_2002FromCellMLBackwardEulerOpt>::Init
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellkurata_model_2002FromCellMLBackwardEulerOpt)
+CHASTE_CLASS_EXPORT(Cellkurata_model_2002FromCellMLBackwardEuler)
 

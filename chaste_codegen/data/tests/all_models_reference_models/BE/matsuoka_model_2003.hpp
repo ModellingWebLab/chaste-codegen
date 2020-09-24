@@ -1,5 +1,5 @@
-#ifndef CELLMATSUOKA_MODEL_2003FROMCELLMLBACKWARDEULER_HPP_
-#define CELLMATSUOKA_MODEL_2003FROMCELLMLBACKWARDEULER_HPP_
+#ifndef CELLMATSUOKA_MODEL_2003FROMCELLMLBACKWARDEULERNOLUT_HPP_
+#define CELLMATSUOKA_MODEL_2003FROMCELLMLBACKWARDEULERNOLUT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractBackwardEulerCardiacCell.hpp"
 
-class Cellmatsuoka_model_2003FromCellMLBackwardEuler : public AbstractBackwardEulerCardiacCell<25>
+class Cellmatsuoka_model_2003FromCellMLBackwardEulerNoLut : public AbstractBackwardEulerCardiacCell<25>
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -35,8 +35,8 @@ class Cellmatsuoka_model_2003FromCellMLBackwardEuler : public AbstractBackwardEu
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
-    Cellmatsuoka_model_2003FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellmatsuoka_model_2003FromCellMLBackwardEuler();
+    Cellmatsuoka_model_2003FromCellMLBackwardEulerNoLut(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellmatsuoka_model_2003FromCellMLBackwardEulerNoLut();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[25], double rResidual[25]);
     void ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[25], double rJacobian[25][25]);protected:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time);
@@ -47,7 +47,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellmatsuoka_model_2003FromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Cellmatsuoka_model_2003FromCellMLBackwardEulerNoLut)
 
 namespace boost
 {
@@ -55,7 +55,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellmatsuoka_model_2003FromCellMLBackwardEuler * t, const unsigned int fileVersion)
+            Archive & ar, const Cellmatsuoka_model_2003FromCellMLBackwardEulerNoLut * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -65,17 +65,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellmatsuoka_model_2003FromCellMLBackwardEuler * t, const unsigned int fileVersion)
+            Archive & ar, Cellmatsuoka_model_2003FromCellMLBackwardEulerNoLut * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellmatsuoka_model_2003FromCellMLBackwardEuler(p_solver, p_stimulus);
+            ::new(t)Cellmatsuoka_model_2003FromCellMLBackwardEulerNoLut(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLMATSUOKA_MODEL_2003FROMCELLMLBACKWARDEULER_HPP_
+#endif // CELLMATSUOKA_MODEL_2003FROMCELLMLBACKWARDEULERNOLUT_HPP_

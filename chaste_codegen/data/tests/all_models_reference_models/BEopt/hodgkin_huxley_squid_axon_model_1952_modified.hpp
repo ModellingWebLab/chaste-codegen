@@ -1,5 +1,5 @@
-#ifndef CELLHODGKIN_HUXLEY_SQUID_AXON_MODEL_1952_MODIFIEDFROMCELLMLBACKWARDEULEROPT_HPP_
-#define CELLHODGKIN_HUXLEY_SQUID_AXON_MODEL_1952_MODIFIEDFROMCELLMLBACKWARDEULEROPT_HPP_
+#ifndef CELLHODGKIN_HUXLEY_SQUID_AXON_MODEL_1952_MODIFIEDFROMCELLMLBACKWARDEULER_HPP_
+#define CELLHODGKIN_HUXLEY_SQUID_AXON_MODEL_1952_MODIFIEDFROMCELLMLBACKWARDEULER_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractBackwardEulerCardiacCell.hpp"
 
-class Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt : public AbstractBackwardEulerCardiacCell<0>
+class Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler : public AbstractBackwardEulerCardiacCell<0>
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -34,8 +34,8 @@ class Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOp
 
 public:
 
-    Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt();
+    Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler();
     AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);protected:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time);
@@ -46,7 +46,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt)
+CHASTE_CLASS_EXPORT(Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler)
 
 namespace boost
 {
@@ -54,7 +54,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt * t, const unsigned int fileVersion)
+            Archive & ar, const Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -64,17 +64,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt * t, const unsigned int fileVersion)
+            Archive & ar, Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt(p_solver, p_stimulus);
+            ::new(t)Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLHODGKIN_HUXLEY_SQUID_AXON_MODEL_1952_MODIFIEDFROMCELLMLBACKWARDEULEROPT_HPP_
+#endif // CELLHODGKIN_HUXLEY_SQUID_AXON_MODEL_1952_MODIFIEDFROMCELLMLBACKWARDEULER_HPP_

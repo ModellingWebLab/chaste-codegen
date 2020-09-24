@@ -23,7 +23,8 @@
 #include "CardiacNewtonSolver.hpp"
 
 
-    Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler::Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+
+    Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerNoLut::Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerNoLut(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<0>(
                 4,
                 0,
@@ -31,16 +32,17 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerNoLut>::Instance();
         Init();
         
     }
 
-    Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler::~Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler()
+    Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerNoLut::~Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerNoLut()
     {
     }
+
     
-    double Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerNoLut::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -74,7 +76,7 @@
 
 
 
-    void Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
+    void Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerNoLut::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -104,7 +106,7 @@
         rY[0] += mDt*d_dt_chaste_interface_var_membrane__V;
     }
     
-    void Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
+    void Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerNoLut::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -131,12 +133,11 @@
         
     }
 
-    std::vector<double> Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerNoLut::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_membrane__i_Stim = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // microA_per_cm2
 
@@ -147,7 +148,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler>::Initialise(void)
+void OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerNoLut>::Initialise(void)
 {
     this->mSystemName = "hodgkin_huxley_squid_axon_model_1952_modified";
     this->mFreeVariableName = "time";
@@ -186,5 +187,5 @@ void OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromC
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerNoLut)
 

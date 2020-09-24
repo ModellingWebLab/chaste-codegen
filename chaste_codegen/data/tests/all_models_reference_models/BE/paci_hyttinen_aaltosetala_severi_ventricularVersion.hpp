@@ -1,5 +1,5 @@
-#ifndef CELLPACI_HYTTINEN_AALTOSETALA_SEVERI_VENTRICULARVERSIONFROMCELLMLBACKWARDEULER_HPP_
-#define CELLPACI_HYTTINEN_AALTOSETALA_SEVERI_VENTRICULARVERSIONFROMCELLMLBACKWARDEULER_HPP_
+#ifndef CELLPACI_HYTTINEN_AALTOSETALA_SEVERI_VENTRICULARVERSIONFROMCELLMLBACKWARDEULERNOLUT_HPP_
+#define CELLPACI_HYTTINEN_AALTOSETALA_SEVERI_VENTRICULARVERSIONFROMCELLMLBACKWARDEULERNOLUT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractBackwardEulerCardiacCell.hpp"
 
-class Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler : public AbstractBackwardEulerCardiacCell<6>
+class Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerNoLut : public AbstractBackwardEulerCardiacCell<6>
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -36,8 +36,8 @@ public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler();
+    Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerNoLut(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerNoLut();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[6], double rResidual[6]);
     void ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[6], double rJacobian[6][6]);protected:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted);
@@ -48,7 +48,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerNoLut)
 
 namespace boost
 {
@@ -56,7 +56,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler * t, const unsigned int fileVersion)
+            Archive & ar, const Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerNoLut * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -66,17 +66,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler * t, const unsigned int fileVersion)
+            Archive & ar, Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerNoLut * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler(p_solver, p_stimulus);
+            ::new(t)Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerNoLut(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLPACI_HYTTINEN_AALTOSETALA_SEVERI_VENTRICULARVERSIONFROMCELLMLBACKWARDEULER_HPP_
+#endif // CELLPACI_HYTTINEN_AALTOSETALA_SEVERI_VENTRICULARVERSIONFROMCELLMLBACKWARDEULERNOLUT_HPP_

@@ -1,5 +1,5 @@
-#ifndef CELLTEN_TUSSCHER_MODEL_2006_EPIFROMCELLMLBACKWARDEULER_HPP_
-#define CELLTEN_TUSSCHER_MODEL_2006_EPIFROMCELLMLBACKWARDEULER_HPP_
+#ifndef CELLTEN_TUSSCHER_MODEL_2006_EPIFROMCELLMLBACKWARDEULERNOLUT_HPP_
+#define CELLTEN_TUSSCHER_MODEL_2006_EPIFROMCELLMLBACKWARDEULERNOLUT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractBackwardEulerCardiacCell.hpp"
 
-class Cellten_tusscher_model_2006_epiFromCellMLBackwardEuler : public AbstractBackwardEulerCardiacCell<7>
+class Cellten_tusscher_model_2006_epiFromCellMLBackwardEulerNoLut : public AbstractBackwardEulerCardiacCell<7>
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -36,8 +36,8 @@ public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    Cellten_tusscher_model_2006_epiFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellten_tusscher_model_2006_epiFromCellMLBackwardEuler();
+    Cellten_tusscher_model_2006_epiFromCellMLBackwardEulerNoLut(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellten_tusscher_model_2006_epiFromCellMLBackwardEulerNoLut();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[7], double rResidual[7]);
     void ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[7], double rJacobian[7][7]);protected:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time);
@@ -48,7 +48,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellten_tusscher_model_2006_epiFromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Cellten_tusscher_model_2006_epiFromCellMLBackwardEulerNoLut)
 
 namespace boost
 {
@@ -56,7 +56,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellten_tusscher_model_2006_epiFromCellMLBackwardEuler * t, const unsigned int fileVersion)
+            Archive & ar, const Cellten_tusscher_model_2006_epiFromCellMLBackwardEulerNoLut * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -66,17 +66,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellten_tusscher_model_2006_epiFromCellMLBackwardEuler * t, const unsigned int fileVersion)
+            Archive & ar, Cellten_tusscher_model_2006_epiFromCellMLBackwardEulerNoLut * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellten_tusscher_model_2006_epiFromCellMLBackwardEuler(p_solver, p_stimulus);
+            ::new(t)Cellten_tusscher_model_2006_epiFromCellMLBackwardEulerNoLut(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLTEN_TUSSCHER_MODEL_2006_EPIFROMCELLMLBACKWARDEULER_HPP_
+#endif // CELLTEN_TUSSCHER_MODEL_2006_EPIFROMCELLMLBACKWARDEULERNOLUT_HPP_

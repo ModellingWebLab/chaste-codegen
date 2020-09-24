@@ -1,5 +1,5 @@
-#ifndef CELLSTEWART_ZHANG_MODEL_2008_SSFROMCELLMLBACKWARDEULEROPT_HPP_
-#define CELLSTEWART_ZHANG_MODEL_2008_SSFROMCELLMLBACKWARDEULEROPT_HPP_
+#ifndef CELLSTEWART_ZHANG_MODEL_2008_SSFROMCELLMLBACKWARDEULER_HPP_
+#define CELLSTEWART_ZHANG_MODEL_2008_SSFROMCELLMLBACKWARDEULER_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractBackwardEulerCardiacCell.hpp"
 
-class Cellstewart_zhang_model_2008_ssFromCellMLBackwardEulerOpt : public AbstractBackwardEulerCardiacCell<7>
+class Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler : public AbstractBackwardEulerCardiacCell<7>
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -35,8 +35,8 @@ class Cellstewart_zhang_model_2008_ssFromCellMLBackwardEulerOpt : public Abstrac
 public:
 
     double GetIntracellularCalciumConcentration();
-    Cellstewart_zhang_model_2008_ssFromCellMLBackwardEulerOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellstewart_zhang_model_2008_ssFromCellMLBackwardEulerOpt();
+    Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler();
     AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[7], double rResidual[7]);
     void ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[7], double rJacobian[7][7]);protected:
@@ -48,7 +48,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellstewart_zhang_model_2008_ssFromCellMLBackwardEulerOpt)
+CHASTE_CLASS_EXPORT(Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler)
 
 namespace boost
 {
@@ -56,7 +56,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellstewart_zhang_model_2008_ssFromCellMLBackwardEulerOpt * t, const unsigned int fileVersion)
+            Archive & ar, const Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -66,17 +66,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellstewart_zhang_model_2008_ssFromCellMLBackwardEulerOpt * t, const unsigned int fileVersion)
+            Archive & ar, Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellstewart_zhang_model_2008_ssFromCellMLBackwardEulerOpt(p_solver, p_stimulus);
+            ::new(t)Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLSTEWART_ZHANG_MODEL_2008_SSFROMCELLMLBACKWARDEULEROPT_HPP_
+#endif // CELLSTEWART_ZHANG_MODEL_2008_SSFROMCELLMLBACKWARDEULER_HPP_

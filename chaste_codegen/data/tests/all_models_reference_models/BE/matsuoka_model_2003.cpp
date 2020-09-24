@@ -22,7 +22,8 @@
 #include "MathsCustomFunctions.hpp"
 #include "CardiacNewtonSolver.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellmatsuoka_model_2003FromCellMLBackwardEuler::UseCellMLDefaultStimulus()
+
+    boost::shared_ptr<RegularStimulus> Cellmatsuoka_model_2003FromCellMLBackwardEulerNoLut::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_membrane__Cm_converted = 9.9999999999999995e-7 * mParameters[0]; // uF
@@ -40,7 +41,7 @@
         return p_cellml_stim;
     }
 
-    Cellmatsuoka_model_2003FromCellMLBackwardEuler::Cellmatsuoka_model_2003FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellmatsuoka_model_2003FromCellMLBackwardEulerNoLut::Cellmatsuoka_model_2003FromCellMLBackwardEulerNoLut(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<25>(
                 37,
                 0,
@@ -48,7 +49,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellmatsuoka_model_2003FromCellMLBackwardEuler>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellmatsuoka_model_2003FromCellMLBackwardEulerNoLut>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -57,11 +58,12 @@
         this->mParameters[0] = 132.0; // (var_membrane__Cm) [picoF]
     }
 
-    Cellmatsuoka_model_2003FromCellMLBackwardEuler::~Cellmatsuoka_model_2003FromCellMLBackwardEuler()
+    Cellmatsuoka_model_2003FromCellMLBackwardEulerNoLut::~Cellmatsuoka_model_2003FromCellMLBackwardEulerNoLut()
     {
     }
+
     
-    double Cellmatsuoka_model_2003FromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellmatsuoka_model_2003FromCellMLBackwardEulerNoLut::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -215,7 +217,7 @@
         return i_ionic;
     }
 
-    void Cellmatsuoka_model_2003FromCellMLBackwardEuler::ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[25], double rResidual[25])
+    void Cellmatsuoka_model_2003FromCellMLBackwardEulerNoLut::ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[25], double rResidual[25])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -525,7 +527,7 @@
         rResidual[9] = rCurrentGuess[9] - rY[35] - mDt*d_dt_chaste_interface_var_NL_model__pCB;
     }
 
-    void Cellmatsuoka_model_2003FromCellMLBackwardEuler::ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[25], double rJacobian[25][25])
+    void Cellmatsuoka_model_2003FromCellMLBackwardEulerNoLut::ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[25], double rJacobian[25][25])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1425,7 +1427,7 @@
         rJacobian[24][24] = 1.0 - (mDt * (-1 / (7.0 * var_x215 + 8000.0 * var_x216) - var_x190 * var_x219));
     }
 
-    void Cellmatsuoka_model_2003FromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
+    void Cellmatsuoka_model_2003FromCellMLBackwardEulerNoLut::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -1577,7 +1579,7 @@
         rY[0] += mDt*d_dt_chaste_interface_var_membrane__Vm;
     }
     
-    void Cellmatsuoka_model_2003FromCellMLBackwardEuler::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
+    void Cellmatsuoka_model_2003FromCellMLBackwardEulerNoLut::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -1644,7 +1646,7 @@
         rY[25] = (var_chaste_interface__transient_outward_current_y2_gate__y2 + ((var_transient_outward_current_y2_gate__alpha_y2) * mDt)) / (1.0 - ((-var_transient_outward_current_y2_gate__alpha_y2 - var_transient_outward_current_y2_gate__beta_y2) * mDt));
         
         double _guess[25] = {rY[4],rY[31],rY[32],rY[14],rY[12],rY[13],rY[11],rY[9],rY[10],rY[35],rY[33],rY[34],rY[30],rY[29],rY[28],rY[3],rY[2],rY[1],rY[23],rY[26],rY[7],rY[5],rY[6],rY[27],rY[18]};
-        CardiacNewtonSolver<25,Cellmatsuoka_model_2003FromCellMLBackwardEuler>* _p_solver = CardiacNewtonSolver<25,Cellmatsuoka_model_2003FromCellMLBackwardEuler>::Instance();
+        CardiacNewtonSolver<25,Cellmatsuoka_model_2003FromCellMLBackwardEulerNoLut>* _p_solver = CardiacNewtonSolver<25,Cellmatsuoka_model_2003FromCellMLBackwardEulerNoLut>::Instance();
         _p_solver->Solve(*this, var_chaste_interface__environment__time, _guess);
         rY[4] = _guess[0];
         rY[31] = _guess[1];
@@ -1673,14 +1675,13 @@
         rY[18] = _guess[24];
     }
 
-    std::vector<double> Cellmatsuoka_model_2003FromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Cellmatsuoka_model_2003FromCellMLBackwardEulerNoLut::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
         double var_chaste_interface__internal_ion_concentrations__Ca_Total = rY[3];
         // Units: millimolar; Initial value: 0.00040180173572968586
         
-
         // Mathematics
         const double var_internal_ion_concentrations__CMDN_max = 0.050000000000000003; // millimolar
         const double var_internal_ion_concentrations__K_mCMDN = 0.0023800000000000002; // millimolar
@@ -1699,7 +1700,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellmatsuoka_model_2003FromCellMLBackwardEuler>::Initialise(void)
+void OdeSystemInformation<Cellmatsuoka_model_2003FromCellMLBackwardEulerNoLut>::Initialise(void)
 {
     this->mSystemName = "matsuoka_model_2003";
     this->mFreeVariableName = "environment__time";
@@ -1915,5 +1916,5 @@ void OdeSystemInformation<Cellmatsuoka_model_2003FromCellMLBackwardEuler>::Initi
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellmatsuoka_model_2003FromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Cellmatsuoka_model_2003FromCellMLBackwardEulerNoLut)
 

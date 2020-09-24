@@ -22,7 +22,8 @@
 #include "MathsCustomFunctions.hpp"
 #include "CardiacNewtonSolver.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellpandit_model_2001_epiFromCellMLBackwardEuler::UseCellMLDefaultStimulus()
+
+    boost::shared_ptr<RegularStimulus> Cellpandit_model_2001_epiFromCellMLBackwardEulerNoLut::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -0.00059999999999999995 * HeartConfig::Instance()->GetCapacitance() / mParameters[0]; // uA_per_cm2
@@ -39,7 +40,7 @@
         return p_cellml_stim;
     }
 
-    Cellpandit_model_2001_epiFromCellMLBackwardEuler::Cellpandit_model_2001_epiFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellpandit_model_2001_epiFromCellMLBackwardEulerNoLut::Cellpandit_model_2001_epiFromCellMLBackwardEulerNoLut(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<13>(
                 26,
                 0,
@@ -47,7 +48,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellpandit_model_2001_epiFromCellMLBackwardEuler>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellpandit_model_2001_epiFromCellMLBackwardEulerNoLut>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -56,11 +57,12 @@
         this->mParameters[0] = 0.0001; // (var_membrane__Cm) [microF]
     }
 
-    Cellpandit_model_2001_epiFromCellMLBackwardEuler::~Cellpandit_model_2001_epiFromCellMLBackwardEuler()
+    Cellpandit_model_2001_epiFromCellMLBackwardEulerNoLut::~Cellpandit_model_2001_epiFromCellMLBackwardEulerNoLut()
     {
     }
+
     
-    double Cellpandit_model_2001_epiFromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellpandit_model_2001_epiFromCellMLBackwardEulerNoLut::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -154,7 +156,7 @@
         return i_ionic;
     }
 
-    void Cellpandit_model_2001_epiFromCellMLBackwardEuler::ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[13], double rResidual[13])
+    void Cellpandit_model_2001_epiFromCellMLBackwardEulerNoLut::ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[13], double rResidual[13])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -334,7 +336,7 @@
         rResidual[8] = rCurrentGuess[8] - rY[25] - mDt*d_dt_chaste_interface_var_intracellular_ion_concentrations__Ca_NSR;
     }
 
-    void Cellpandit_model_2001_epiFromCellMLBackwardEuler::ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[13], double rJacobian[13][13])
+    void Cellpandit_model_2001_epiFromCellMLBackwardEulerNoLut::ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[13], double rJacobian[13][13])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -611,7 +613,7 @@
         rJacobian[12][12] = 1.0 - (mDt * (1.5856796826686865e-16 * var_x42 - 2.2560474246135324e-6 * var_x58 - 1.193943225512245e-7 * var_x41 - 9.8651233004461501e-6 * var_x60 - 8.1628665394625614e-6 * var_x58 * var_chaste_interface__hyperpolarisation_activated_current_y_gate__y - 0.022518252522655345 * var_x58 * pow(var_chaste_interface__sodium_current_m_gate__m, 3) * var_chaste_interface__sodium_current_h_gate__h * var_chaste_interface__sodium_current_j_gate__j));
     }
 
-    void Cellpandit_model_2001_epiFromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted)
+    void Cellpandit_model_2001_epiFromCellMLBackwardEulerNoLut::UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -704,7 +706,7 @@
         rY[0] += mDt*d_dt_chaste_interface_var_membrane__V;
     }
     
-    void Cellpandit_model_2001_epiFromCellMLBackwardEuler::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted)
+    void Cellpandit_model_2001_epiFromCellMLBackwardEulerNoLut::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -775,7 +777,7 @@
         rY[12] = (var_chaste_interface__steady_state_outward_K_current_s_ss_gate__s_ss + ((0.001 * var_steady_state_outward_K_current_s_ss_gate__s_ss_infinity / var_steady_state_outward_K_current_s_ss_gate__tau_s_ss) * mDt)) / (1.0 - ((-0.001 / var_steady_state_outward_K_current_s_ss_gate__tau_s_ss) * mDt));
         
         double _guess[13] = {rY[7],rY[16],rY[17],rY[14],rY[15],rY[18],rY[19],rY[24],rY[25],rY[21],rY[23],rY[22],rY[20]};
-        CardiacNewtonSolver<13,Cellpandit_model_2001_epiFromCellMLBackwardEuler>* _p_solver = CardiacNewtonSolver<13,Cellpandit_model_2001_epiFromCellMLBackwardEuler>::Instance();
+        CardiacNewtonSolver<13,Cellpandit_model_2001_epiFromCellMLBackwardEulerNoLut>* _p_solver = CardiacNewtonSolver<13,Cellpandit_model_2001_epiFromCellMLBackwardEulerNoLut>::Instance();
         _p_solver->Solve(*this, var_chaste_interface__environment__time_converted, _guess);
         rY[7] = _guess[0];
         rY[16] = _guess[1];
@@ -792,12 +794,11 @@
         rY[20] = _guess[12];
     }
 
-    std::vector<double> Cellpandit_model_2001_epiFromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Cellpandit_model_2001_epiFromCellMLBackwardEulerNoLut::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_membrane__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
 
@@ -808,7 +809,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellpandit_model_2001_epiFromCellMLBackwardEuler>::Initialise(void)
+void OdeSystemInformation<Cellpandit_model_2001_epiFromCellMLBackwardEulerNoLut>::Initialise(void)
 {
     this->mSystemName = "pandit_model_2001_epi";
     this->mFreeVariableName = "environment__time";
@@ -963,5 +964,5 @@ void OdeSystemInformation<Cellpandit_model_2001_epiFromCellMLBackwardEuler>::Ini
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellpandit_model_2001_epiFromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Cellpandit_model_2001_epiFromCellMLBackwardEulerNoLut)
 

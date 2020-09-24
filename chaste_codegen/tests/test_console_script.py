@@ -104,8 +104,7 @@ def test_script_double_show_output(capsys):
         output = str(captured.out)
         assert "grandi2010ssCvodeDataClamp.cpp" in output
         assert "grandi2010ssCvodeDataClamp.hpp" in output
-        assert "grandi2010ssBackwardEuler.cpp" in output
-        assert "grandi2010ssBackwardEuler.hpp" in output
+        assert "grandi2010ssBackwardEulerNoLut.hpp" in output
 
 
 def test_script_double_show_output2(capsys):
@@ -124,8 +123,7 @@ def test_script_double_show_output2(capsys):
         output = str(captured.out).replace("\\", "/")
         assert "/cellml/grandi2010ssCvodeDataClamp.cpp" in output
         assert "/cellml/grandi2010ssCvodeDataClamp.hpp" in output
-        assert "/cellml/grandi2010ssBackwardEuler.cpp" in output
-        assert "/cellml/grandi2010ssBackwardEuler.hpp" in output
+        assert "/cellml/grandi2010ssBackwardEulerNoLut.hpp" in output
 
 
 def test_non_extsing_cellml():
@@ -248,10 +246,10 @@ def test_script_double_type(tmp_path):
     compare_file_against_reference(os.path.join(reference, 'CVODE_DATA_CLAMP', model_name + 'CvodeDataClamp.cpp'),
                                    os.path.join(tmp_path, model_name + 'CvodeDataClamp.cpp'))
 
-    compare_file_against_reference(os.path.join(reference, 'BE', model_name + 'BackwardEuler.hpp'),
-                                   os.path.join(tmp_path, model_name + 'BackwardEuler.hpp'))
-    compare_file_against_reference(os.path.join(reference, 'BE', model_name + 'BackwardEuler.cpp'),
-                                   os.path.join(tmp_path, model_name + 'BackwardEuler.cpp'))
+    compare_file_against_reference(os.path.join(reference, 'BE', model_name + 'BackwardEulerNoLut.hpp'),
+                                   os.path.join(tmp_path, model_name + 'BackwardEulerNoLut.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'BE', model_name + 'BackwardEulerNoLut.cpp'),
+                                   os.path.join(tmp_path, model_name + 'BackwardEulerNoLut.cpp'))
 
 
 def test_script_data_clamp_opt(tmp_path):
@@ -431,8 +429,7 @@ def test_script_dynamic_BE(tmp_path):
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'dynamic_courtemanche_ramirez_nattel_model_1998.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', model_file, '--backward-euler', '-o', outfile,
-                '-c', 'Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler', '--dynamically-loadable']
+    testargs = ['chaste_codegen', model_file, '--backward-euler', '-o', outfile, '--dynamically-loadable']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output

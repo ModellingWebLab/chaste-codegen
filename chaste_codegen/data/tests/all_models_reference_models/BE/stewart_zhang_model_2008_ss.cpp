@@ -22,11 +22,12 @@
 #include "MathsCustomFunctions.hpp"
 #include "CardiacNewtonSolver.hpp"
 
-    double Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler::GetIntracellularCalciumConcentration()
+
+    double Cellstewart_zhang_model_2008_ssFromCellMLBackwardEulerNoLut::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler::Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellstewart_zhang_model_2008_ssFromCellMLBackwardEulerNoLut::Cellstewart_zhang_model_2008_ssFromCellMLBackwardEulerNoLut(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<7>(
                 20,
                 0,
@@ -34,7 +35,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellstewart_zhang_model_2008_ssFromCellMLBackwardEulerNoLut>::Instance();
         Init();
         
         this->mParameters[0] = 3.9799999999999998e-5; // (var_L_type_Ca_current__g_CaL) [litre_per_farad_second]
@@ -45,11 +46,12 @@
         this->mParameters[5] = 1000.0; // (var_sodium_calcium_exchanger_current__K_NaCa) [picoA_per_picoF]
     }
 
-    Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler::~Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler()
+    Cellstewart_zhang_model_2008_ssFromCellMLBackwardEulerNoLut::~Cellstewart_zhang_model_2008_ssFromCellMLBackwardEulerNoLut()
     {
     }
+
     
-    double Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellstewart_zhang_model_2008_ssFromCellMLBackwardEulerNoLut::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -151,7 +153,7 @@
         return i_ionic;
     }
 
-    void Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler::ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[7], double rResidual[7])
+    void Cellstewart_zhang_model_2008_ssFromCellMLBackwardEulerNoLut::ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[7], double rResidual[7])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -290,7 +292,7 @@
         rResidual[5] = rCurrentGuess[5] - rY[19] - mDt*d_dt_chaste_interface_var_potassium_dynamics__K_i;
     }
 
-    void Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler::ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[7], double rJacobian[7][7])
+    void Cellstewart_zhang_model_2008_ssFromCellMLBackwardEulerNoLut::ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[7], double rJacobian[7][7])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -436,7 +438,7 @@
         rJacobian[6][6] = 1.0 - (mDt * (5.0371257222730904e-7 * var_x53 - 1.823319832565245e-10 * var_x39 - 9.0551084895961074e-7 * var_x54 - 0.00080594011556369446 * var_x52 - 4.5479750756676942e-5 * var_x54 * var_chaste_interface__hyperpolarization_activated_current_y_gate__y - 0.0031224512033090025 * var_x54 * pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * mParameters[1] * var_chaste_interface__fast_sodium_current_h_gate__h * var_chaste_interface__fast_sodium_current_j_gate__j));
     }
 
-    void Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
+    void Cellstewart_zhang_model_2008_ssFromCellMLBackwardEulerNoLut::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -530,7 +532,7 @@
         rY[0] += mDt*d_dt_chaste_interface_var_membrane__V;
     }
     
-    void Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
+    void Cellstewart_zhang_model_2008_ssFromCellMLBackwardEulerNoLut::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -618,7 +620,7 @@
         rY[13] = (var_chaste_interface__transient_outward_current_s_gate__s + ((var_transient_outward_current_s_gate__s_inf / var_transient_outward_current_s_gate__tau_s) * mDt)) / (1.0 - ((-1 / var_transient_outward_current_s_gate__tau_s) * mDt));
         
         double _guess[7] = {rY[12],rY[15],rY[1],rY[16],rY[17],rY[19],rY[18]};
-        CardiacNewtonSolver<7,Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler>* _p_solver = CardiacNewtonSolver<7,Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler>::Instance();
+        CardiacNewtonSolver<7,Cellstewart_zhang_model_2008_ssFromCellMLBackwardEulerNoLut>* _p_solver = CardiacNewtonSolver<7,Cellstewart_zhang_model_2008_ssFromCellMLBackwardEulerNoLut>::Instance();
         _p_solver->Solve(*this, var_chaste_interface__environment__time, _guess);
         rY[12] = _guess[0];
         rY[15] = _guess[1];
@@ -629,7 +631,7 @@
         rY[18] = _guess[6];
     }
 
-    std::vector<double> Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Cellstewart_zhang_model_2008_ssFromCellMLBackwardEulerNoLut::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -662,7 +664,6 @@
         double var_chaste_interface__potassium_dynamics__K_i = rY[19];
         // Units: millimolar; Initial value: 136.781894160227
         
-
         // Mathematics
         const double var_calcium_dynamics__Ca_o = 2.0; // millimolar
         const double var_membrane__F = 96485.341499999995; // coulomb_per_millimole
@@ -696,7 +697,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler>::Initialise(void)
+void OdeSystemInformation<Cellstewart_zhang_model_2008_ssFromCellMLBackwardEulerNoLut>::Initialise(void)
 {
     this->mSystemName = "stewart_zhang_model_2008";
     this->mFreeVariableName = "environment__time";
@@ -851,5 +852,5 @@ void OdeSystemInformation<Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Cellstewart_zhang_model_2008_ssFromCellMLBackwardEulerNoLut)
 

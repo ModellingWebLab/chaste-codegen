@@ -1,5 +1,5 @@
-#ifndef CELLZHANG_SAN_MODEL_2000_ALLFROMCELLMLBACKWARDEULEROPT_HPP_
-#define CELLZHANG_SAN_MODEL_2000_ALLFROMCELLMLBACKWARDEULEROPT_HPP_
+#ifndef CELLZHANG_SAN_MODEL_2000_ALLFROMCELLMLBACKWARDEULER_HPP_
+#define CELLZHANG_SAN_MODEL_2000_ALLFROMCELLMLBACKWARDEULER_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractBackwardEulerCardiacCell.hpp"
 
-class Cellzhang_SAN_model_2000_allFromCellMLBackwardEulerOpt : public AbstractBackwardEulerCardiacCell<0>
+class Cellzhang_SAN_model_2000_allFromCellMLBackwardEuler : public AbstractBackwardEulerCardiacCell<0>
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -34,8 +34,8 @@ class Cellzhang_SAN_model_2000_allFromCellMLBackwardEulerOpt : public AbstractBa
 
 public:
 
-    Cellzhang_SAN_model_2000_allFromCellMLBackwardEulerOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellzhang_SAN_model_2000_allFromCellMLBackwardEulerOpt();
+    Cellzhang_SAN_model_2000_allFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellzhang_SAN_model_2000_allFromCellMLBackwardEuler();
     AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);protected:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted);
@@ -46,7 +46,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellzhang_SAN_model_2000_allFromCellMLBackwardEulerOpt)
+CHASTE_CLASS_EXPORT(Cellzhang_SAN_model_2000_allFromCellMLBackwardEuler)
 
 namespace boost
 {
@@ -54,7 +54,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellzhang_SAN_model_2000_allFromCellMLBackwardEulerOpt * t, const unsigned int fileVersion)
+            Archive & ar, const Cellzhang_SAN_model_2000_allFromCellMLBackwardEuler * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -64,17 +64,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellzhang_SAN_model_2000_allFromCellMLBackwardEulerOpt * t, const unsigned int fileVersion)
+            Archive & ar, Cellzhang_SAN_model_2000_allFromCellMLBackwardEuler * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellzhang_SAN_model_2000_allFromCellMLBackwardEulerOpt(p_solver, p_stimulus);
+            ::new(t)Cellzhang_SAN_model_2000_allFromCellMLBackwardEuler(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLZHANG_SAN_MODEL_2000_ALLFROMCELLMLBACKWARDEULEROPT_HPP_
+#endif // CELLZHANG_SAN_MODEL_2000_ALLFROMCELLMLBACKWARDEULER_HPP_

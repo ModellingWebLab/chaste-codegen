@@ -22,7 +22,8 @@
 #include "MathsCustomFunctions.hpp"
 #include "CardiacNewtonSolver.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellwinslow_model_1999FromCellMLBackwardEuler::UseCellMLDefaultStimulus()
+
+    boost::shared_ptr<RegularStimulus> Cellwinslow_model_1999FromCellMLBackwardEulerNoLut::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -21.126799999999999 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
@@ -39,7 +40,7 @@
         return p_cellml_stim;
     }
 
-    Cellwinslow_model_1999FromCellMLBackwardEuler::Cellwinslow_model_1999FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellwinslow_model_1999FromCellMLBackwardEulerNoLut::Cellwinslow_model_1999FromCellMLBackwardEulerNoLut(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<25>(
                 33,
                 0,
@@ -47,7 +48,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellwinslow_model_1999FromCellMLBackwardEuler>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellwinslow_model_1999FromCellMLBackwardEulerNoLut>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -55,11 +56,12 @@
         
     }
 
-    Cellwinslow_model_1999FromCellMLBackwardEuler::~Cellwinslow_model_1999FromCellMLBackwardEuler()
+    Cellwinslow_model_1999FromCellMLBackwardEulerNoLut::~Cellwinslow_model_1999FromCellMLBackwardEulerNoLut()
     {
     }
+
     
-    double Cellwinslow_model_1999FromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellwinslow_model_1999FromCellMLBackwardEulerNoLut::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -154,7 +156,7 @@
         return i_ionic;
     }
 
-    void Cellwinslow_model_1999FromCellMLBackwardEuler::ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[25], double rResidual[25])
+    void Cellwinslow_model_1999FromCellMLBackwardEulerNoLut::ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[25], double rResidual[25])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -349,7 +351,7 @@
         rResidual[20] = rCurrentGuess[20] - rY[32] - mDt*d_dt_chaste_interface_var_intracellular_ion_concentrations__Ca_NSR;
     }
 
-    void Cellwinslow_model_1999FromCellMLBackwardEuler::ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[25], double rJacobian[25][25])
+    void Cellwinslow_model_1999FromCellMLBackwardEulerNoLut::ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[25], double rJacobian[25][25])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1077,7 +1079,7 @@
         rJacobian[24][24] = 1.0;
     }
 
-    void Cellwinslow_model_1999FromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted)
+    void Cellwinslow_model_1999FromCellMLBackwardEulerNoLut::UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -1172,7 +1174,7 @@
         rY[0] += mDt*d_dt_chaste_interface_var_membrane__V;
     }
     
-    void Cellwinslow_model_1999FromCellMLBackwardEuler::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted)
+    void Cellwinslow_model_1999FromCellMLBackwardEulerNoLut::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -1221,7 +1223,7 @@
         rY[7] = (var_chaste_interface__transient_outward_potassium_current_Y_to1_gate__Y_to1 + ((0.001 * var_transient_outward_potassium_current_Y_to1_gate__alpha_Y_to1) * mDt)) / (1.0 - ((-0.001 * var_transient_outward_potassium_current_Y_to1_gate__alpha_Y_to1 - 0.001 * var_transient_outward_potassium_current_Y_to1_gate__beta_Y_to1) * mDt));
         
         double _guess[25] = {rY[10],rY[11],rY[12],rY[13],rY[14],rY[15],rY[16],rY[17],rY[18],rY[19],rY[8],rY[9],rY[23],rY[24],rY[21],rY[22],rY[1],rY[25],rY[26],rY[31],rY[32],rY[30],rY[28],rY[29],rY[27]};
-        CardiacNewtonSolver<25,Cellwinslow_model_1999FromCellMLBackwardEuler>* _p_solver = CardiacNewtonSolver<25,Cellwinslow_model_1999FromCellMLBackwardEuler>::Instance();
+        CardiacNewtonSolver<25,Cellwinslow_model_1999FromCellMLBackwardEulerNoLut>* _p_solver = CardiacNewtonSolver<25,Cellwinslow_model_1999FromCellMLBackwardEulerNoLut>::Instance();
         _p_solver->Solve(*this, var_chaste_interface__environment__time_converted, _guess);
         rY[10] = _guess[0];
         rY[11] = _guess[1];
@@ -1250,12 +1252,11 @@
         rY[27] = _guess[24];
     }
 
-    std::vector<double> Cellwinslow_model_1999FromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Cellwinslow_model_1999FromCellMLBackwardEulerNoLut::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_membrane__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
 
@@ -1266,7 +1267,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellwinslow_model_1999FromCellMLBackwardEuler>::Initialise(void)
+void OdeSystemInformation<Cellwinslow_model_1999FromCellMLBackwardEulerNoLut>::Initialise(void)
 {
     this->mSystemName = "winslow_model_1999";
     this->mFreeVariableName = "environment__time";
@@ -1452,5 +1453,5 @@ void OdeSystemInformation<Cellwinslow_model_1999FromCellMLBackwardEuler>::Initia
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellwinslow_model_1999FromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Cellwinslow_model_1999FromCellMLBackwardEulerNoLut)
 

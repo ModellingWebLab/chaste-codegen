@@ -22,14 +22,14 @@
 #include "MathsCustomFunctions.hpp"
 #include "CardiacNewtonSolver.hpp"
 
-class Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt_LookupTables : public AbstractLookupTableCollection
+class Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler_LookupTables : public AbstractLookupTableCollection
 {
 public:
-    static Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt_LookupTables* Instance()
+    static Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler_LookupTables* Instance()
     {
         if (mpInstance.get() == NULL)
         {
-            mpInstance.reset(new Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt_LookupTables);
+            mpInstance.reset(new Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler_LookupTables);
         }
         return mpInstance.get();
     }
@@ -45,15 +45,15 @@ public:
 
 
 
-    ~Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt_LookupTables()
+    ~Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler_LookupTables()
     {
 
     }
 
 protected:
-    Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt_LookupTables(const Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt_LookupTables&);
-    Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt_LookupTables& operator= (const Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt_LookupTables&);
-    Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt_LookupTables()
+    Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler_LookupTables(const Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler_LookupTables&);
+    Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler_LookupTables& operator= (const Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler_LookupTables&);
+    Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler_LookupTables()
     {
         assert(mpInstance.get() == NULL);
         mKeyingVariableNames.resize(0);
@@ -64,7 +64,7 @@ protected:
         mTableMaxs.resize(0);
         mNeedsRegeneration.resize(0);
 
-        Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt_LookupTables::RegenerateTables();
+        Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler_LookupTables::RegenerateTables();
     }
 
     void RegenerateTables()
@@ -76,13 +76,13 @@ protected:
 
 private:
     /** The single instance of the class */
-    static std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt_LookupTables> mpInstance;
+    static std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler_LookupTables> mpInstance;
 
 };
 
-std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt_LookupTables> Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt_LookupTables::mpInstance;
+std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler_LookupTables> Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler_LookupTables::mpInstance;
 
-    boost::shared_ptr<RegularStimulus> Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__stim_mode__i_stim_Amplitude_converted = 5.5718264182641404 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
@@ -98,11 +98,11 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt::GetIntracellularCalciumConcentration()
+    double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt::Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler::Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<6>(
                 18,
                 0,
@@ -110,7 +110,7 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -131,16 +131,16 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
         this->mParameters[12] = 310.0; // (var_model_parameters__T) [kelvin]
     }
 
-    Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt::~Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt()
+    Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler::~Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler()
     {
     }
 
-    AbstractLookupTableCollection* Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt::GetLookupTableCollection()
+    AbstractLookupTableCollection* Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler::GetLookupTableCollection()
     {
-        return Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt_LookupTables::Instance();
+        return Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler_LookupTables::Instance();
     }
     
-    double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -201,7 +201,7 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
         return i_ionic;
     }
 
-    void Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt::ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[6], double rResidual[6])
+    void Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler::ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[6], double rResidual[6])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__Membrane__Vm_converted = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -256,7 +256,7 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
         rResidual[2] = rCurrentGuess[2] - rY[17] - mDt*d_dt_chaste_interface_var_calcium_dynamics__g;
     }
 
-    void Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt::ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[6], double rJacobian[6][6])
+    void Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler::ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[6], double rJacobian[6][6])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__Membrane__Vm_converted = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -382,7 +382,7 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
         rJacobian[5][5] = 1.0 - (mDt * ((-51939119025.283607 * var_x38 - 91.342277453381911 * var_x61 - 6506254.4429941392 * var_x62 / (40.0 + var_chaste_interface__sodium_dynamics__Nai) + 4066.4090268713371 * var_x62 * var_chaste_interface__sodium_dynamics__Nai / pow((1 + 0.025000000000000001 * var_chaste_interface__sodium_dynamics__Nai), 2) - 101.49141939264658 * var_x61 * pow(var_chaste_interface__i_Na_m_gate__m, 3) * mParameters[5] * var_chaste_interface__i_Na_h_gate__h * var_chaste_interface__i_Na_j_gate__j) * mParameters[11]));
     }
 
-    void Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt::UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted)
+    void Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -434,7 +434,7 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
         rY[0] += mDt*d_dt_chaste_interface_var_Membrane__Vm_converted;
     }
     
-    void Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted)
+    void Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -522,7 +522,7 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
         rY[12] = (var_chaste_interface__i_f_Xf_gate__Xf + ((0.001 * var_i_f_Xf_gate__Xf_infinity / var_i_f_Xf_gate__tau_Xf) * mDt)) / (1.0 - ((-0.001 / var_i_f_Xf_gate__tau_Xf) * mDt));
         
         double _guess[6] = {rY[16],rY[1],rY[17],rY[6],rY[8],rY[15]};
-        CardiacNewtonSolver<6,Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt>* _p_solver = CardiacNewtonSolver<6,Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt>::Instance();
+        CardiacNewtonSolver<6,Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler>* _p_solver = CardiacNewtonSolver<6,Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler>::Instance();
         _p_solver->Solve(*this, var_chaste_interface__environment__time_converted, _guess);
         rY[16] = _guess[0];
         rY[1] = _guess[1];
@@ -532,7 +532,7 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
         rY[15] = _guess[5];
     }
 
-    std::vector<double> Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -656,7 +656,7 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
     }
 
 template<>
-void OdeSystemInformation<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt>::Initialise(void)
+void OdeSystemInformation<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler>::Initialise(void)
 {
     this->mSystemName = "paci_hyttinen_aaltosetala_severi_ventricularVersion";
     this->mFreeVariableName = "time";
@@ -881,5 +881,5 @@ void OdeSystemInformation<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersio
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEulerOpt)
+CHASTE_CLASS_EXPORT(Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler)
 

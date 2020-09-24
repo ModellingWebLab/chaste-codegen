@@ -1,5 +1,5 @@
-#ifndef CELLFINK_NOBLE_GILES_MODEL_2008FROMCELLMLBACKWARDEULEROPT_HPP_
-#define CELLFINK_NOBLE_GILES_MODEL_2008FROMCELLMLBACKWARDEULEROPT_HPP_
+#ifndef CELLFINK_NOBLE_GILES_MODEL_2008FROMCELLMLBACKWARDEULER_HPP_
+#define CELLFINK_NOBLE_GILES_MODEL_2008FROMCELLMLBACKWARDEULER_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractBackwardEulerCardiacCell.hpp"
 
-class Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt : public AbstractBackwardEulerCardiacCell<17>
+class Cellfink_noble_giles_model_2008FromCellMLBackwardEuler : public AbstractBackwardEulerCardiacCell<17>
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -35,8 +35,8 @@ class Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt : public Abstrac
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
-    Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt();
+    Cellfink_noble_giles_model_2008FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellfink_noble_giles_model_2008FromCellMLBackwardEuler();
     AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__Environment__time, const double rCurrentGuess[17], double rResidual[17]);
     void ComputeJacobian(double var_chaste_interface__Environment__time, const double rCurrentGuess[17], double rJacobian[17][17]);protected:
@@ -48,7 +48,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt)
+CHASTE_CLASS_EXPORT(Cellfink_noble_giles_model_2008FromCellMLBackwardEuler)
 
 namespace boost
 {
@@ -56,7 +56,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt * t, const unsigned int fileVersion)
+            Archive & ar, const Cellfink_noble_giles_model_2008FromCellMLBackwardEuler * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -66,17 +66,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt * t, const unsigned int fileVersion)
+            Archive & ar, Cellfink_noble_giles_model_2008FromCellMLBackwardEuler * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt(p_solver, p_stimulus);
+            ::new(t)Cellfink_noble_giles_model_2008FromCellMLBackwardEuler(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLFINK_NOBLE_GILES_MODEL_2008FROMCELLMLBACKWARDEULEROPT_HPP_
+#endif // CELLFINK_NOBLE_GILES_MODEL_2008FROMCELLMLBACKWARDEULER_HPP_

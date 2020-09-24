@@ -22,14 +22,14 @@
 #include "MathsCustomFunctions.hpp"
 #include "CardiacNewtonSolver.hpp"
 
-class Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt_LookupTables : public AbstractLookupTableCollection
+class Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler_LookupTables : public AbstractLookupTableCollection
 {
 public:
-    static Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt_LookupTables* Instance()
+    static Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler_LookupTables* Instance()
     {
         if (mpInstance.get() == NULL)
         {
-            mpInstance.reset(new Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt_LookupTables);
+            mpInstance.reset(new Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler_LookupTables);
         }
         return mpInstance.get();
     }
@@ -67,7 +67,7 @@ public:
         const double _offset_0_over_table_step = _offset_0 * mTableStepInverses[0];
         const unsigned _table_index_0 = (unsigned)(_offset_0_over_table_step);
         const double _factor_0 = _offset_0_over_table_step - _table_index_0;
-        const double* const _lt_0_row = Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt_LookupTables::Instance()->_lookup_0_row(_table_index_0, _factor_0);
+        const double* const _lt_0_row = Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler_LookupTables::Instance()->_lookup_0_row(_table_index_0, _factor_0);
         return _lt_0_row;
     }
 
@@ -86,7 +86,7 @@ public:
     }
 // LCOV_EXCL_STOP
 
-    ~Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt_LookupTables()
+    ~Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler_LookupTables()
     {
 
         if (_lookup_table_0)
@@ -98,9 +98,9 @@ public:
     }
 
 protected:
-    Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt_LookupTables(const Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt_LookupTables&);
-    Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt_LookupTables& operator= (const Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt_LookupTables&);
-    Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt_LookupTables()
+    Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler_LookupTables(const Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler_LookupTables&);
+    Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler_LookupTables& operator= (const Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler_LookupTables&);
+    Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler_LookupTables()
     {
         assert(mpInstance.get() == NULL);
         mKeyingVariableNames.resize(1);
@@ -120,7 +120,7 @@ protected:
         mNeedsRegeneration[0] = true;
         _lookup_table_0 = NULL;
 
-        Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt_LookupTables::RegenerateTables();
+        Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler_LookupTables::RegenerateTables();
     }
 
     void RegenerateTables()
@@ -182,7 +182,7 @@ protected:
 
 private:
     /** The single instance of the class */
-    static std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt_LookupTables> mpInstance;
+    static std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler_LookupTables> mpInstance;
 
     // Row lookup methods memory
     double _lookup_table_0_row[6];
@@ -192,10 +192,10 @@ private:
 
 };
 
-std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt_LookupTables> Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt_LookupTables::mpInstance;
+std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler_LookupTables> Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler_LookupTables::mpInstance;
 
 
-    Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt::Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler::Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<0>(
                 4,
                 0,
@@ -203,21 +203,21 @@ std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackw
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler>::Instance();
         Init();
         
     }
 
-    Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt::~Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt()
+    Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler::~Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler()
     {
     }
 
-    AbstractLookupTableCollection* Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt::GetLookupTableCollection()
+    AbstractLookupTableCollection* Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler::GetLookupTableCollection()
     {
-        return Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt_LookupTables::Instance();
+        return Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler_LookupTables::Instance();
     }
     
-    double Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -245,7 +245,7 @@ std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackw
 
 
 
-    void Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
+    void Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -264,7 +264,7 @@ std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackw
         rY[0] += mDt*d_dt_chaste_interface_var_membrane__V;
     }
     
-    void Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
+    void Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -278,12 +278,12 @@ std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackw
         // Units: dimensionless; Initial value: 0.325
         
         // Lookup table indexing
-        const bool _oob_0 = Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+        const bool _oob_0 = Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+        const double* const _lt_0_row = Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         const double var_potassium_channel_n_gate__alpha_n = -0.01 * _lt_0_row[1] * (65.0 + var_chaste_interface__membrane__V);
         const double var_potassium_channel_n_gate__beta_n = 0.125 * _lt_0_row[0];
@@ -299,7 +299,7 @@ std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackw
         
     }
 
-    std::vector<double> Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -315,7 +315,7 @@ std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackw
     }
 
 template<>
-void OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt>::Initialise(void)
+void OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler>::Initialise(void)
 {
     this->mSystemName = "hodgkin_huxley_squid_axon_model_1952_modified";
     this->mFreeVariableName = "time";
@@ -354,5 +354,5 @@ void OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromC
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerOpt)
+CHASTE_CLASS_EXPORT(Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler)
 
