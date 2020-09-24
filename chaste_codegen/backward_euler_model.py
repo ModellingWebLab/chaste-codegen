@@ -127,7 +127,7 @@ class BackwardEulerModel(ChasteModel):
         residual_equations = []
         formatted_derivative_eqs = self._vars_for_template['y_derivative_equations']
         jacobian_symbols = set()
-        residual_eq_symbols = set()
+        non_linear_eq_symbols = set()
 
         for eq in self._jacobian_equations:
             jacobian_symbols.update(eq[1].free_symbols)
@@ -136,29 +136,33 @@ class BackwardEulerModel(ChasteModel):
 
         non_linear_derivs = [eq.lhs for eq in self._derivative_equations if isinstance(eq.lhs, Derivative)
                              and eq.lhs.args[0] in self._non_linear_state_vars]
-        non_linear_eqs = self._model.get_equations_for(non_linear_derivs)
+
+        # Pick the formatted equations that are for non-linear derivatives
+        non_linear_eqs = [eq for eq in formatted_derivative_eqs if eq['sympy_lhs'] in [e.lhs for e in self._model.get_equations_for(non_linear_derivs)]]
+
+        # store symbols used in non-linear equations
         for eq in non_linear_eqs:
-            residual_eq_symbols.update(eq.rhs.free_symbols)
-        non_linear_eqs = [self._printer.doprint(eq.lhs) for eq in non_linear_eqs]
+            non_linear_eq_symbols.update(eq['sympy_rhs'].free_symbols)
+
+        # update formatting of derivative equations
+        non_linear_eqs = [eq['lhs'] for eq in non_linear_eqs]
         for d in formatted_derivative_eqs:
             self.update_formatted_deriv_eq(d, non_linear_eqs)
 
         formatted_nonlinear_state_vars = []
-        for sv in formatted_state_vars:
+        for i, sv in enumerate(formatted_state_vars):
+            sv['in_non_linear_eq'] = sv['sympy_var'] in non_linear_eq_symbols
+            sv['linear'] = sv['sympy_var'] not in self._non_linear_state_vars
+            sv['in_jacobian'] = sv['sympy_var'] in jacobian_symbols
+            sv['in_residual_eqs'] = sv['sympy_var'] in non_linear_eq_symbols
+            sv['in_one_step_except_v'] = sv['sympy_var'] in vars_in_compute_one_step
             if sv['sympy_var'] in self._non_linear_state_vars:
-                sv['linear'] = False
-                sv['in_jacobian'] = sv['sympy_var'] in jacobian_symbols
-                sv['in_residual_eqs'] = sv['sympy_var'] in residual_eq_symbols
                 formatted_nonlinear_state_vars.append(sv)
 
         # order by name
         formatted_nonlinear_state_vars.sort(key=lambda d: d['var'])
 
         for i, sv in enumerate(formatted_state_vars):
-            sv['linear'] = sv['sympy_var'] not in self._non_linear_state_vars
-            sv['in_jacobian'] = sv['sympy_var'] in jacobian_symbols
-            sv['in_residual_eqs'] = sv['sympy_var'] in residual_eq_symbols
-            sv['in_one_step_except_v'] = sv['sympy_var'] in vars_in_compute_one_step
             if not sv['linear']:
                 residual_equations.append({'residual_index': formatted_nonlinear_state_vars.index(sv),
                                            'state_var_index': i, 'var': self._vars_for_template['y_derivatives'][i]})

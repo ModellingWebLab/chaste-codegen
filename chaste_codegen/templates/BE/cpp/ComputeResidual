@@ -3,13 +3,13 @@
     {
         {{vector_decl}} rY = rGetStateVariables();
         {% for state_var in state_vars %}
-        {%- if state_var.linear and state_var.in_residual_eqs %}double {{ state_var.var }} = {{state_var.rY_lookup}};
+        {%- if state_var.linear and state_var.in_non_linear_eq %}double {{ state_var.var }} = {{state_var.rY_lookup}};
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}
         {%- set method =  "ComputeResidual" %}{% include "Shared/cpp/lookup_table_init" %}
         //output_nonlinear_state_assignments
         {% for state_var in nonlinear_state_vars %}
-        {%- if state_var.in_residual_eqs %}double {{ state_var.var }} = rCurrentGuess[{{loop.index0}}];
+        {%- if state_var.in_non_linear_eq %}double {{ state_var.var }} = rCurrentGuess[{{loop.index0}}];
         {% endif %}{%- endfor %}
         //output_equations
         {%- for deriv in y_derivative_equations %}{%- if not deriv.linear %}

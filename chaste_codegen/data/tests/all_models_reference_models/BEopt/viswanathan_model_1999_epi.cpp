@@ -473,10 +473,6 @@ std::shared_ptr<Cellviswanathan_model_1999_epiFromCellMLBackwardEuler_LookupTabl
         // Units: dimensionless; Initial value: 0.0272635
         double var_chaste_interface__slow_delayed_rectifier_potassium_current_xs2_gate__xs2 = rY[11];
         // Units: dimensionless; Initial value: 0.0631269
-        double var_chaste_interface__transient_outward_current_zdv_gate__zdv = rY[12];
-        // Units: dimensionless; Initial value: 0.011528
-        double var_chaste_interface__transient_outward_current_ydv_gate__ydv = rY[13];
-        // Units: dimensionless; Initial value: 0.985232
         
         // Lookup table indexing
         const bool _oob_0 = Cellviswanathan_model_1999_epiFromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);

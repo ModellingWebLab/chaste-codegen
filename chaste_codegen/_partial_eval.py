@@ -8,6 +8,16 @@ from sympy import (
 )
 
 
+def get_usage_count(equations):
+    usage_count = {}
+    for eq in equations:
+        usage_count.setdefault(eq.lhs, 0)
+        for var in eq.rhs.atoms(Variable):
+            usage_count.setdefault(var, 0)
+            usage_count[var] += 1
+    return usage_count
+
+
 def partial_eval(equations, required_lhs, keep_multiple_usages=True):
     """Partially evaluate the list of equations given.
 
@@ -24,12 +34,8 @@ def partial_eval(equations, required_lhs, keep_multiple_usages=True):
     evaluated_eqs = []
     # count usage of variables on rhs of equations
     if keep_multiple_usages:
-        usage_count = {}
-        for eq in equations:
-            usage_count.setdefault(eq.lhs, 0)
-            for var in eq.rhs.atoms(Variable):
-                usage_count.setdefault(var, 0)
-                usage_count[var] += 1
+        usage_count = get_usage_count(equations)
+
     # subs in all constants and expressions only used once
     subs_dict = {}
     for i, eq in enumerate(equations):
@@ -45,4 +51,9 @@ def partial_eval(equations, required_lhs, keep_multiple_usages=True):
             if not keep_multiple_usages:
                 subs_dict[new_eq.lhs] = new_eq.rhs
             evaluated_eqs.append(new_eq)
+
+    # re check variable usage as substitution process may have changed things
+#    if keep_multiple_usages:
+#        usage_count = get_usage_count(equations)
+#    return [eq for eq in evaluated_eqs if eq.lhs in required_lhs or (keep_multiple_usages and usage_count[new_eq.lhs] >= 1)]
     return evaluated_eqs
