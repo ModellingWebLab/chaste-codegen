@@ -52,8 +52,4 @@ def partial_eval(equations, required_lhs, keep_multiple_usages=True):
                 subs_dict[new_eq.lhs] = new_eq.rhs
             evaluated_eqs.append(new_eq)
 
-    # re check variable usage as substitution process may have changed things
-#    if keep_multiple_usages:
-#        usage_count = get_usage_count(equations)
-#    return [eq for eq in evaluated_eqs if eq.lhs in required_lhs or (keep_multiple_usages and usage_count[new_eq.lhs] >= 1)]
     return evaluated_eqs

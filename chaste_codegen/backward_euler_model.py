@@ -124,7 +124,6 @@ class BackwardEulerModel(ChasteModel):
     def update_state_vars(self, vars_in_compute_one_step):
         """Update the state vars, savings residual and jacobian info for outputing"""
         formatted_state_vars = self._vars_for_template['state_vars']
-        residual_equations = []
         formatted_derivative_eqs = self._vars_for_template['y_derivative_equations']
         jacobian_symbols = set()
         non_linear_eq_symbols = set()
@@ -138,7 +137,8 @@ class BackwardEulerModel(ChasteModel):
                              and eq.lhs.args[0] in self._non_linear_state_vars]
 
         # Pick the formatted equations that are for non-linear derivatives
-        non_linear_eqs = [eq for eq in formatted_derivative_eqs if eq['sympy_lhs'] in [e.lhs for e in self._model.get_equations_for(non_linear_derivs)]]
+        non_linear_eqs = [eq for eq in formatted_derivative_eqs
+                          if eq['sympy_lhs'] in [e.lhs for e in self._model.get_equations_for(non_linear_derivs)]]
 
         # store symbols used in non-linear equations
         for eq in non_linear_eqs:
@@ -162,10 +162,9 @@ class BackwardEulerModel(ChasteModel):
         # order by name
         formatted_nonlinear_state_vars.sort(key=lambda d: d['var'])
 
-        for i, sv in enumerate(formatted_state_vars):
-            if not sv['linear']:
-                residual_equations.append({'residual_index': formatted_nonlinear_state_vars.index(sv),
-                                           'state_var_index': i, 'var': self._vars_for_template['y_derivatives'][i]})
+        residual_equations = [{'residual_index': formatted_nonlinear_state_vars.index(sv), 'state_var_index': i,
+                               'var': self._vars_for_template['y_derivatives'][i]}
+                              for i, sv in enumerate(formatted_state_vars) if not sv['linear']]
 
         return formatted_state_vars, formatted_nonlinear_state_vars, residual_equations, formatted_derivative_eqs
 
