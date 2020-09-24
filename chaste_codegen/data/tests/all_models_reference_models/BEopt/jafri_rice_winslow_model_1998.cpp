@@ -22,14 +22,14 @@
 #include "MathsCustomFunctions.hpp"
 #include "CardiacNewtonSolver.hpp"
 
-class Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables : public AbstractLookupTableCollection
+class Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt_LookupTables : public AbstractLookupTableCollection
 {
 public:
-    static Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables* Instance()
+    static Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt_LookupTables* Instance()
     {
         if (mpInstance.get() == NULL)
         {
-            mpInstance.reset(new Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables);
+            mpInstance.reset(new Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt_LookupTables);
         }
         return mpInstance.get();
     }
@@ -67,7 +67,7 @@ public:
         const double _offset_0_over_table_step = _offset_0 * mTableStepInverses[0];
         const unsigned _table_index_0 = (unsigned)(_offset_0_over_table_step);
         const double _factor_0 = _offset_0_over_table_step - _table_index_0;
-        const double* const _lt_0_row = Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->_lookup_0_row(_table_index_0, _factor_0);
+        const double* const _lt_0_row = Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt_LookupTables::Instance()->_lookup_0_row(_table_index_0, _factor_0);
         return _lt_0_row;
     }
 
@@ -86,7 +86,7 @@ public:
     }
 // LCOV_EXCL_STOP
 
-    ~Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables()
+    ~Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt_LookupTables()
     {
 
         if (_lookup_table_0)
@@ -98,9 +98,9 @@ public:
     }
 
 protected:
-    Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables(const Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables&);
-    Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables& operator= (const Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables&);
-    Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables()
+    Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt_LookupTables(const Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt_LookupTables&);
+    Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt_LookupTables& operator= (const Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt_LookupTables&);
+    Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt_LookupTables()
     {
         assert(mpInstance.get() == NULL);
         mKeyingVariableNames.resize(1);
@@ -120,7 +120,7 @@ protected:
         mNeedsRegeneration[0] = true;
         _lookup_table_0 = NULL;
 
-        Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables::RegenerateTables();
+        Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt_LookupTables::RegenerateTables();
     }
 
     void RegenerateTables()
@@ -278,7 +278,7 @@ protected:
 
 private:
     /** The single instance of the class */
-    static std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables> mpInstance;
+    static std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt_LookupTables> mpInstance;
 
     // Row lookup methods memory
     double _lookup_table_0_row[22];
@@ -288,9 +288,9 @@ private:
 
 };
 
-std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables> Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables::mpInstance;
+std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt_LookupTables> Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt_LookupTables::mpInstance;
 
-    boost::shared_ptr<RegularStimulus> Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = 51.628900000000009; // uA_per_cm2
@@ -307,7 +307,7 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupT
         return p_cellml_stim;
     }
 
-    Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler::Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt::Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<25>(
                 31,
                 0,
@@ -315,7 +315,7 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupT
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -323,16 +323,16 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupT
         
     }
 
-    Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler::~Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler()
+    Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt::~Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt()
     {
     }
 
-    AbstractLookupTableCollection* Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler::GetLookupTableCollection()
+    AbstractLookupTableCollection* Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt::GetLookupTableCollection()
     {
-        return Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables::Instance();
+        return Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt_LookupTables::Instance();
     }
     
-    double Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
+    double Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -364,12 +364,12 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupT
         // Units: mM; Initial value: 5.4
         
         // Lookup table indexing
-        const bool _oob_0 = Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+        const bool _oob_0 = Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+        const double* const _lt_0_row = Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         const double var_fast_sodium_current__E_Na = 26.614641953637257 * log(140.0 / var_chaste_interface__ionic_concentrations__Nai); // mV
         const double var_L_type_Ca_channel__i_Ca_L_Ca_max = _lt_0_row[0]; // uA_per_mm2
@@ -394,7 +394,7 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupT
         return i_ionic;
     }
 
-    void Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler::ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[25], double rResidual[25])
+    void Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt::ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[25], double rResidual[25])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -411,12 +411,12 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupT
         // Units: dimensionless; Initial value: 0.000928836
         
         // Lookup table indexing
-        const bool _oob_0 = Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+        const bool _oob_0 = Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+        const double* const _lt_0_row = Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         //output_nonlinear_state_assignments
         double var_chaste_interface__L_type_Ca_channel__C0 = rCurrentGuess[0];
@@ -530,7 +530,7 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupT
         rResidual[23] = rCurrentGuess[23] - rY[30] - mDt*d_dt_chaste_interface_var_ionic_concentrations__Ko;
     }
 
-    void Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler::ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[25], double rJacobian[25][25])
+    void Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt::ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[25], double rJacobian[25][25])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -547,12 +547,12 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupT
         // Units: dimensionless; Initial value: 0.000928836
         
         // Lookup table indexing
-        const bool _oob_0 = Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+        const bool _oob_0 = Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+        const double* const _lt_0_row = Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         double var_chaste_interface__L_type_Ca_channel__C0 = rCurrentGuess[0];
         double var_chaste_interface__L_type_Ca_channel__C1 = rCurrentGuess[1];
@@ -1380,7 +1380,7 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupT
         rJacobian[24][24] = 1.0 - (mDt * (var_x175 - 4.5780488190019227e-7 * var_x68 - 2.3025858935932891e-6 * var_x142 - 1.1350943583223629e-5 * var_x166 - var_x103 * (var_x83 + var_x172 * var_x79) - 0.020902907402832696 * var_x142 * pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * var_chaste_interface__fast_sodium_current_h_gate__h * var_chaste_interface__fast_sodium_current_j_gate__j));
     }
 
-    void Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
+    void Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -1410,12 +1410,12 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupT
         // Units: mM; Initial value: 5.4
         
         // Lookup table indexing
-        const bool _oob_0 = Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+        const bool _oob_0 = Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+        const double* const _lt_0_row = Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         const double var_fast_sodium_current__E_Na = 26.614641953637257 * log(140.0 / var_chaste_interface__ionic_concentrations__Nai); // mV
         const double var_L_type_Ca_channel__i_Ca_L_Ca_max = _lt_0_row[0]; // uA_per_mm2
@@ -1439,7 +1439,7 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupT
         rY[0] += mDt*d_dt_chaste_interface_var_membrane__V;
     }
     
-    void Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
+    void Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -1457,12 +1457,12 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupT
         // Units: dimensionless; Initial value: 0.000928836
         
         // Lookup table indexing
-        const bool _oob_0 = Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+        const bool _oob_0 = Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+        const double* const _lt_0_row = Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         const double var_L_type_Ca_channel_y_gate__tau_y = 20.0 + 600.0 / (1.0 + exp(3.1578947368421053 + 0.10526315789473684 * var_chaste_interface__membrane__V));
         const double var_L_type_Ca_channel_y_gate__y_infinity = _lt_0_row[11] + _lt_0_row[12];
@@ -1483,7 +1483,7 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupT
         rY[17] = (var_chaste_interface__time_dependent_potassium_current_X_gate__X + ((var_time_dependent_potassium_current_X_gate__alpha_X) * mDt)) / (1.0 - ((-var_time_dependent_potassium_current_X_gate__alpha_X - var_time_dependent_potassium_current_X_gate__beta_X) * mDt));
         
         double _guess[25] = {rY[6],rY[7],rY[8],rY[9],rY[10],rY[11],rY[12],rY[13],rY[14],rY[15],rY[4],rY[5],rY[24],rY[25],rY[19],rY[18],rY[26],rY[27],rY[22],rY[23],rY[20],rY[21],rY[29],rY[30],rY[28]};
-        CardiacNewtonSolver<25,Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler>* _p_solver = CardiacNewtonSolver<25,Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler>::Instance();
+        CardiacNewtonSolver<25,Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt>* _p_solver = CardiacNewtonSolver<25,Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt>::Instance();
         _p_solver->Solve(*this, var_chaste_interface__environment__time, _guess);
         rY[6] = _guess[0];
         rY[7] = _guess[1];
@@ -1512,7 +1512,7 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupT
         rY[28] = _guess[24];
     }
 
-    std::vector<double> Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -1528,7 +1528,7 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupT
     }
 
 template<>
-void OdeSystemInformation<Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler>::Initialise(void)
+void OdeSystemInformation<Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt>::Initialise(void)
 {
     this->mSystemName = "jafri_rice_winslow_1998";
     this->mFreeVariableName = "environment__time";
@@ -1704,5 +1704,5 @@ void OdeSystemInformation<Celljafri_rice_winslow_model_1998FromCellMLBackwardEul
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerOpt)
 

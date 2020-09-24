@@ -452,8 +452,7 @@ def test_script_dynamic_BEopt(tmp_path):
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'dynamic_courtemanche_ramirez_nattel_model_1998.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', model_file, '--backward-euler', '--opt', '-o', outfile,
-                '-c', 'Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler', '--dynamically-loadable']
+    testargs = ['chaste_codegen', model_file, '--backward-euler', '--opt', '-o', outfile, '--dynamically-loadable']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output

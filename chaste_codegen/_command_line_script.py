@@ -13,7 +13,7 @@ from chaste_codegen.model_with_conversions import load_model_with_conversions
 
 # Link names to classes for converting code
 # The fields in the order dict as as follows:
-# (<name of model type>, <default calss name postfix>, <default file name prostfix>, <can be used with modifiers>)
+# (command line tag (<class name>, <default calss postfix>, <default file postfix>, <can be used with modifiers>))
 # pass --name_of_model_type to select this model type
 TRANSLATORS = OrderedDict(
     [('normal', (cg.NormalChasteModel, 'FromCellML', '', True)),
@@ -28,7 +28,7 @@ TRANSLATORS_OPT = OrderedDict(
     [('normal', (cg.OptChasteModel, 'FromCellMLOpt', 'Opt', True)),
      ('cvode', (cg.OptCvodeChasteModel, 'FromCellMLCvodeOpt', 'CvodeOpt', True)),
      ('cvode-data-clamp', (cg.OptCvodeChasteModel, 'FromCellMLCvodeDataClampOpt', 'CvodeDataClampOpt', True)),
-     ('backward-euler', (cg.BackwardEulerOptModel, 'FromCellMLBackwardEuler', 'BackwardEuler', False)),
+     ('backward-euler', (cg.BackwardEulerOptModel, 'FromCellMLBackwardEulerOpt', 'BackwardEulerOpt', False)),
      ('rush-larsen', (cg.RushLarsenOptModel, 'FromCellMLRushLarsenOpt', 'RushLarsenOpt', False)),
      ('grl1', (cg.GeneralisedRushLarsenFirstOrderModelOpt, 'FromCellMLGRL1Opt', 'GRL1', False)),
      ('grl2', (cg.GeneralisedRushLarsenSecondOrderModelOpt, 'FromCellMLGRL2Opt', 'GRL2', False))])

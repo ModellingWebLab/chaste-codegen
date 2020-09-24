@@ -22,14 +22,14 @@
 #include "MathsCustomFunctions.hpp"
 #include "CardiacNewtonSolver.hpp"
 
-class Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables : public AbstractLookupTableCollection
+class Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt_LookupTables : public AbstractLookupTableCollection
 {
 public:
-    static Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables* Instance()
+    static Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt_LookupTables* Instance()
     {
         if (mpInstance.get() == NULL)
         {
-            mpInstance.reset(new Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables);
+            mpInstance.reset(new Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt_LookupTables);
         }
         return mpInstance.get();
     }
@@ -67,7 +67,7 @@ public:
         const double _offset_0_over_table_step = _offset_0 * mTableStepInverses[0];
         const unsigned _table_index_0 = (unsigned)(_offset_0_over_table_step);
         const double _factor_0 = _offset_0_over_table_step - _table_index_0;
-        const double* const _lt_0_row = Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables::Instance()->_lookup_0_row(_table_index_0, _factor_0);
+        const double* const _lt_0_row = Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt_LookupTables::Instance()->_lookup_0_row(_table_index_0, _factor_0);
         return _lt_0_row;
     }
 
@@ -86,7 +86,7 @@ public:
     }
 // LCOV_EXCL_STOP
 
-    ~Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables()
+    ~Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt_LookupTables()
     {
 
         if (_lookup_table_0)
@@ -98,9 +98,9 @@ public:
     }
 
 protected:
-    Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables(const Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables&);
-    Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables& operator= (const Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables&);
-    Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables()
+    Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt_LookupTables(const Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt_LookupTables&);
+    Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt_LookupTables& operator= (const Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt_LookupTables&);
+    Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt_LookupTables()
     {
         assert(mpInstance.get() == NULL);
         mKeyingVariableNames.resize(1);
@@ -120,7 +120,7 @@ protected:
         mNeedsRegeneration[0] = true;
         _lookup_table_0 = NULL;
 
-        Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables::RegenerateTables();
+        Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt_LookupTables::RegenerateTables();
     }
 
     void RegenerateTables()
@@ -314,7 +314,7 @@ protected:
 
 private:
     /** The single instance of the class */
-    static std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables> mpInstance;
+    static std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt_LookupTables> mpInstance;
 
     // Row lookup methods memory
     double _lookup_table_0_row[28];
@@ -324,9 +324,9 @@ private:
 
 };
 
-std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables> Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables::mpInstance;
+std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt_LookupTables> Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt_LookupTables::mpInstance;
 
-    boost::shared_ptr<RegularStimulus> Cellfink_noble_giles_model_2008FromCellMLBackwardEuler::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__cell__i_Stim_Amplitude_converted = -51.999999999999993 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
@@ -343,7 +343,7 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTab
         return p_cellml_stim;
     }
 
-    Cellfink_noble_giles_model_2008FromCellMLBackwardEuler::Cellfink_noble_giles_model_2008FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt::Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<17>(
                 27,
                 0,
@@ -351,7 +351,7 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTab
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellfink_noble_giles_model_2008FromCellMLBackwardEuler>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -359,16 +359,16 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTab
         
     }
 
-    Cellfink_noble_giles_model_2008FromCellMLBackwardEuler::~Cellfink_noble_giles_model_2008FromCellMLBackwardEuler()
+    Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt::~Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt()
     {
     }
 
-    AbstractLookupTableCollection* Cellfink_noble_giles_model_2008FromCellMLBackwardEuler::GetLookupTableCollection()
+    AbstractLookupTableCollection* Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt::GetLookupTableCollection()
     {
-        return Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables::Instance();
+        return Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt_LookupTables::Instance();
     }
     
-    double Cellfink_noble_giles_model_2008FromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -408,12 +408,12 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTab
         // Units: millimolar; Initial value: 141.0167
         
         // Lookup table indexing
-        const bool _oob_0 = Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+        const bool _oob_0 = Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+        const double* const _lt_0_row = Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
 
         const double var_reversal_potentials__E_K = 26.713760659695652 * log(5.4000000000000004 / var_chaste_interface__K__K_i); // millivolt
         const double var_reversal_potentials__E_Na = 26.713760659695652 * log(140.0 / var_chaste_interface__Na__Na_i); // millivolt
@@ -425,7 +425,7 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTab
         return i_ionic;
     }
 
-    void Cellfink_noble_giles_model_2008FromCellMLBackwardEuler::ComputeResidual(double var_chaste_interface__Environment__time, const double rCurrentGuess[17], double rResidual[17])
+    void Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt::ComputeResidual(double var_chaste_interface__Environment__time, const double rCurrentGuess[17], double rResidual[17])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -450,12 +450,12 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTab
         // Units: dimensionless; Initial value: 0.9995
         
         // Lookup table indexing
-        const bool _oob_0 = Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+        const bool _oob_0 = Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__Environment__time));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+        const double* const _lt_0_row = Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
 
         //output_nonlinear_state_assignments
         double var_chaste_interface__Ca__Ca_SR = rCurrentGuess[0];
@@ -544,7 +544,7 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTab
         rResidual[4] = rCurrentGuess[4] - rY[26] - mDt*d_dt_chaste_interface_var_K__K_i;
     }
 
-    void Cellfink_noble_giles_model_2008FromCellMLBackwardEuler::ComputeJacobian(double var_chaste_interface__Environment__time, const double rCurrentGuess[17], double rJacobian[17][17])
+    void Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt::ComputeJacobian(double var_chaste_interface__Environment__time, const double rCurrentGuess[17], double rJacobian[17][17])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -569,12 +569,12 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTab
         // Units: dimensionless; Initial value: 0.9995
         
         // Lookup table indexing
-        const bool _oob_0 = Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+        const bool _oob_0 = Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__Environment__time));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+        const double* const _lt_0_row = Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
 
         double var_chaste_interface__Ca__Ca_SR = rCurrentGuess[0];
         double var_chaste_interface__Ca__Ca_i = rCurrentGuess[1];
@@ -958,7 +958,7 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTab
         rJacobian[16][16] = 1.0 - (mDt * (var_x79));
     }
 
-    void Cellfink_noble_giles_model_2008FromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__Environment__time)
+    void Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt::UpdateTransmembranePotential(double var_chaste_interface__Environment__time)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -996,12 +996,12 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTab
         // Units: millimolar; Initial value: 141.0167
         
         // Lookup table indexing
-        const bool _oob_0 = Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+        const bool _oob_0 = Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__Environment__time));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+        const double* const _lt_0_row = Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
 
         const double var_IpCa__i_p_Ca = 0.061899999999999997 * var_chaste_interface__Ca__Ca_i / (0.00050000000000000001 + var_chaste_interface__Ca__Ca_i); // nanoA_per_nanoF
         const double var_INaCa__i_NaCa = 1.7332440459884893e-5 * _lt_0_row[3] * (2.0 * pow(var_chaste_interface__Na__Na_i, 3) * _lt_0_row[1] - 6860000.0 * var_chaste_interface__Ca__Ca_i * _lt_0_row[2]); // nanoA_per_nanoF
@@ -1023,7 +1023,7 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTab
         rY[0] += mDt*d_dt_chaste_interface_var_cell__V;
     }
     
-    void Cellfink_noble_giles_model_2008FromCellMLBackwardEuler::ComputeOneStepExceptVoltage(double var_chaste_interface__Environment__time)
+    void Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt::ComputeOneStepExceptVoltage(double var_chaste_interface__Environment__time)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -1049,12 +1049,12 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTab
         // Units: dimensionless; Initial value: 0.9995
         
         // Lookup table indexing
-        const bool _oob_0 = Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+        const bool _oob_0 = Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__Environment__time));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+        const double* const _lt_0_row = Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
 
         const double var_INa__shift_INa_inact = 0;
         const double var_iCaL_d_gate__alpha_d = 0.25 + 1.3999999999999999 / (1.0 + exp(-2.6923076923076925 - 0.076923076923076927 * var_chaste_interface__cell__V));
@@ -1100,7 +1100,7 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTab
         rY[12] = (var_chaste_interface__ito_s_gate__s + ((var_ito_s_gate__s_inf / var_ito_s_gate__tau_s) * mDt)) / (1.0 - ((-1 / var_ito_s_gate__tau_s) * mDt));
         
         double _guess[17] = {rY[22],rY[21],rY[23],rY[24],rY[26],rY[25],rY[20],rY[6],rY[7],rY[8],rY[10],rY[9],rY[1],rY[2],rY[3],rY[5],rY[4]};
-        CardiacNewtonSolver<17,Cellfink_noble_giles_model_2008FromCellMLBackwardEuler>* _p_solver = CardiacNewtonSolver<17,Cellfink_noble_giles_model_2008FromCellMLBackwardEuler>::Instance();
+        CardiacNewtonSolver<17,Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt>* _p_solver = CardiacNewtonSolver<17,Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt>::Instance();
         _p_solver->Solve(*this, var_chaste_interface__Environment__time, _guess);
         rY[22] = _guess[0];
         rY[21] = _guess[1];
@@ -1121,7 +1121,7 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTab
         rY[4] = _guess[16];
     }
 
-    std::vector<double> Cellfink_noble_giles_model_2008FromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__Environment__time, const std::vector<double> & rY)
+    std::vector<double> Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt::ComputeDerivedQuantities(double var_chaste_interface__Environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -1137,7 +1137,7 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTab
     }
 
 template<>
-void OdeSystemInformation<Cellfink_noble_giles_model_2008FromCellMLBackwardEuler>::Initialise(void)
+void OdeSystemInformation<Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt>::Initialise(void)
 {
     this->mSystemName = "fink_noble_giles_model_2008";
     this->mFreeVariableName = "Environment__time";
@@ -1293,5 +1293,5 @@ void OdeSystemInformation<Cellfink_noble_giles_model_2008FromCellMLBackwardEuler
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellfink_noble_giles_model_2008FromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Cellfink_noble_giles_model_2008FromCellMLBackwardEulerOpt)
 

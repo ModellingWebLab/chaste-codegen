@@ -1,5 +1,5 @@
-#ifndef CELLNYGREN_ATRIAL_MODEL_1998FROMCELLMLBACKWARDEULER_HPP_
-#define CELLNYGREN_ATRIAL_MODEL_1998FROMCELLMLBACKWARDEULER_HPP_
+#ifndef CELLNYGREN_ATRIAL_MODEL_1998FROMCELLMLBACKWARDEULEROPT_HPP_
+#define CELLNYGREN_ATRIAL_MODEL_1998FROMCELLMLBACKWARDEULEROPT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractBackwardEulerCardiacCell.hpp"
 
-class Cellnygren_atrial_model_1998FromCellMLBackwardEuler : public AbstractBackwardEulerCardiacCell<16>
+class Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt : public AbstractBackwardEulerCardiacCell<16>
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -36,8 +36,8 @@ public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    Cellnygren_atrial_model_1998FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellnygren_atrial_model_1998FromCellMLBackwardEuler();
+    Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt();
     AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[16], double rResidual[16]);
     void ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[16], double rJacobian[16][16]);protected:
@@ -49,7 +49,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellnygren_atrial_model_1998FromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt)
 
 namespace boost
 {
@@ -57,7 +57,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellnygren_atrial_model_1998FromCellMLBackwardEuler * t, const unsigned int fileVersion)
+            Archive & ar, const Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -67,17 +67,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellnygren_atrial_model_1998FromCellMLBackwardEuler * t, const unsigned int fileVersion)
+            Archive & ar, Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellnygren_atrial_model_1998FromCellMLBackwardEuler(p_solver, p_stimulus);
+            ::new(t)Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLNYGREN_ATRIAL_MODEL_1998FROMCELLMLBACKWARDEULER_HPP_
+#endif // CELLNYGREN_ATRIAL_MODEL_1998FROMCELLMLBACKWARDEULEROPT_HPP_

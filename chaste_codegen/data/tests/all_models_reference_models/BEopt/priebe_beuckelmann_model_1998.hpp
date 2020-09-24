@@ -1,5 +1,5 @@
-#ifndef CELLPRIEBE_BEUCKELMANN_MODEL_1998FROMCELLMLBACKWARDEULER_HPP_
-#define CELLPRIEBE_BEUCKELMANN_MODEL_1998FROMCELLMLBACKWARDEULER_HPP_
+#ifndef CELLPRIEBE_BEUCKELMANN_MODEL_1998FROMCELLMLBACKWARDEULEROPT_HPP_
+#define CELLPRIEBE_BEUCKELMANN_MODEL_1998FROMCELLMLBACKWARDEULEROPT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractBackwardEulerCardiacCell.hpp"
 
-class Cellpriebe_beuckelmann_model_1998FromCellMLBackwardEuler : public AbstractBackwardEulerCardiacCell<12>
+class Cellpriebe_beuckelmann_model_1998FromCellMLBackwardEulerOpt : public AbstractBackwardEulerCardiacCell<12>
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -36,8 +36,8 @@ public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    Cellpriebe_beuckelmann_model_1998FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellpriebe_beuckelmann_model_1998FromCellMLBackwardEuler();
+    Cellpriebe_beuckelmann_model_1998FromCellMLBackwardEulerOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellpriebe_beuckelmann_model_1998FromCellMLBackwardEulerOpt();
     AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[12], double rResidual[12]);
     void ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[12], double rJacobian[12][12]);protected:
@@ -49,7 +49,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellpriebe_beuckelmann_model_1998FromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Cellpriebe_beuckelmann_model_1998FromCellMLBackwardEulerOpt)
 
 namespace boost
 {
@@ -57,7 +57,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellpriebe_beuckelmann_model_1998FromCellMLBackwardEuler * t, const unsigned int fileVersion)
+            Archive & ar, const Cellpriebe_beuckelmann_model_1998FromCellMLBackwardEulerOpt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -67,17 +67,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellpriebe_beuckelmann_model_1998FromCellMLBackwardEuler * t, const unsigned int fileVersion)
+            Archive & ar, Cellpriebe_beuckelmann_model_1998FromCellMLBackwardEulerOpt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellpriebe_beuckelmann_model_1998FromCellMLBackwardEuler(p_solver, p_stimulus);
+            ::new(t)Cellpriebe_beuckelmann_model_1998FromCellMLBackwardEulerOpt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLPRIEBE_BEUCKELMANN_MODEL_1998FROMCELLMLBACKWARDEULER_HPP_
+#endif // CELLPRIEBE_BEUCKELMANN_MODEL_1998FROMCELLMLBACKWARDEULEROPT_HPP_

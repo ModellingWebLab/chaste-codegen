@@ -22,14 +22,14 @@
 #include "MathsCustomFunctions.hpp"
 #include "CardiacNewtonSolver.hpp"
 
-class Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables : public AbstractLookupTableCollection
+class Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt_LookupTables : public AbstractLookupTableCollection
 {
 public:
-    static Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables* Instance()
+    static Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt_LookupTables* Instance()
     {
         if (mpInstance.get() == NULL)
         {
-            mpInstance.reset(new Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables);
+            mpInstance.reset(new Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt_LookupTables);
         }
         return mpInstance.get();
     }
@@ -67,7 +67,7 @@ public:
         const double _offset_0_over_table_step = _offset_0 * mTableStepInverses[0];
         const unsigned _table_index_0 = (unsigned)(_offset_0_over_table_step);
         const double _factor_0 = _offset_0_over_table_step - _table_index_0;
-        const double* const _lt_0_row = Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables::Instance()->_lookup_0_row(_table_index_0, _factor_0);
+        const double* const _lt_0_row = Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt_LookupTables::Instance()->_lookup_0_row(_table_index_0, _factor_0);
         return _lt_0_row;
     }
 
@@ -86,7 +86,7 @@ public:
     }
 // LCOV_EXCL_STOP
 
-    ~Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables()
+    ~Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt_LookupTables()
     {
 
         if (_lookup_table_0)
@@ -98,9 +98,9 @@ public:
     }
 
 protected:
-    Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables(const Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables&);
-    Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables& operator= (const Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables&);
-    Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables()
+    Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt_LookupTables(const Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt_LookupTables&);
+    Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt_LookupTables& operator= (const Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt_LookupTables&);
+    Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt_LookupTables()
     {
         assert(mpInstance.get() == NULL);
         mKeyingVariableNames.resize(1);
@@ -120,7 +120,7 @@ protected:
         mNeedsRegeneration[0] = true;
         _lookup_table_0 = NULL;
 
-        Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables::RegenerateTables();
+        Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt_LookupTables::RegenerateTables();
     }
 
     void RegenerateTables()
@@ -290,7 +290,7 @@ protected:
 
 private:
     /** The single instance of the class */
-    static std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables> mpInstance;
+    static std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt_LookupTables> mpInstance;
 
     // Row lookup methods memory
     double _lookup_table_0_row[24];
@@ -300,9 +300,9 @@ private:
 
 };
 
-std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables> Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables::mpInstance;
+std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt_LookupTables> Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt_LookupTables::mpInstance;
 
-    boost::shared_ptr<RegularStimulus> Cellbeeler_reuter_model_1977FromCellMLBackwardEuler::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__stimulus_protocol__IstimAmplitude_converted = 50.000000000000007; // uA_per_cm2
@@ -318,11 +318,11 @@ std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double Cellbeeler_reuter_model_1977FromCellMLBackwardEuler::GetIntracellularCalciumConcentration()
+    double Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Cellbeeler_reuter_model_1977FromCellMLBackwardEuler::Cellbeeler_reuter_model_1977FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt::Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<1>(
                 8,
                 0,
@@ -330,7 +330,7 @@ std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLBackwardEuler>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -338,16 +338,16 @@ std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables
         
     }
 
-    Cellbeeler_reuter_model_1977FromCellMLBackwardEuler::~Cellbeeler_reuter_model_1977FromCellMLBackwardEuler()
+    Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt::~Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt()
     {
     }
 
-    AbstractLookupTableCollection* Cellbeeler_reuter_model_1977FromCellMLBackwardEuler::GetLookupTableCollection()
+    AbstractLookupTableCollection* Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt::GetLookupTableCollection()
     {
-        return Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables::Instance();
+        return Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt_LookupTables::Instance();
     }
     
-    double Cellbeeler_reuter_model_1977FromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -371,12 +371,12 @@ std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables
         // Units: dimensionless; Initial value: 0.0001
         
         // Lookup table indexing
-        const bool _oob_0 = Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+        const bool _oob_0 = Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+        const double* const _lt_0_row = Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         const double var_slow_inward_current__i_s = 0.00089999999999999998 * (-7.6990712032745758 + 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai) + var_chaste_interface__membrane__V) * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f; // uA_per_mm2
         const double var_sodium_current__i_Na = (3.0000000000000001e-5 + 0.040000000000000001 * pow(var_chaste_interface__sodium_current_m_gate__m, 3) * var_chaste_interface__sodium_current_h_gate__h * var_chaste_interface__sodium_current_j_gate__j) * (-50.0 + var_chaste_interface__membrane__V); // uA_per_mm2
@@ -389,7 +389,7 @@ std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables
         return i_ionic;
     }
 
-    void Cellbeeler_reuter_model_1977FromCellMLBackwardEuler::ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[1], double rResidual[1])
+    void Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt::ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[1], double rResidual[1])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -410,7 +410,7 @@ std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables
         rResidual[0] = rCurrentGuess[0] - rY[1] - mDt*d_dt_chaste_interface_var_slow_inward_current__Cai;
     }
 
-    void Cellbeeler_reuter_model_1977FromCellMLBackwardEuler::ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[1], double rJacobian[1][1])
+    void Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt::ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[1], double rJacobian[1][1])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__slow_inward_current_d_gate__d = rY[5];
@@ -426,7 +426,7 @@ std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables
         rJacobian[0][0] = 1.0 - (mDt * (-0.070000000000000007 - 0.0001172583 * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f / var_chaste_interface__slow_inward_current__Cai));
     }
 
-    void Cellbeeler_reuter_model_1977FromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
+    void Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -448,12 +448,12 @@ std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables
         // Units: dimensionless; Initial value: 0.0001
         
         // Lookup table indexing
-        const bool _oob_0 = Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+        const bool _oob_0 = Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+        const double* const _lt_0_row = Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         const double var_slow_inward_current__i_s = 0.00089999999999999998 * (-7.6990712032745758 + 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai) + var_chaste_interface__membrane__V) * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f; // uA_per_mm2
         const double d_dt_chaste_interface_var_membrane__V = -0.99999999999999989 * GetIntracellularAreaStimulus(var_chaste_interface__environment__time) - 100.0 * var_slow_inward_current__i_s + _lt_0_row[22] + _lt_0_row[23] - 100.0 * (3.0000000000000001e-5 + 0.040000000000000001 * pow(var_chaste_interface__sodium_current_m_gate__m, 3) * var_chaste_interface__sodium_current_h_gate__h * var_chaste_interface__sodium_current_j_gate__j) * (-50.0 + var_chaste_interface__membrane__V) - 0.80000000000000004 * _lt_0_row[0] * (_lt_0_row[1]) * var_chaste_interface__time_dependent_outward_current_x1_gate__x1; // mV / ms
@@ -461,7 +461,7 @@ std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables
         rY[0] += mDt*d_dt_chaste_interface_var_membrane__V;
     }
     
-    void Cellbeeler_reuter_model_1977FromCellMLBackwardEuler::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
+    void Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -481,12 +481,12 @@ std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables
         // Units: dimensionless; Initial value: 0.0001
         
         // Lookup table indexing
-        const bool _oob_0 = Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+        const bool _oob_0 = Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+        const double* const _lt_0_row = Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         const double var_slow_inward_current_d_gate__alpha_d = 0.095000000000000001 * _lt_0_row[3] * _lt_0_row[4];
         const double var_slow_inward_current_d_gate__beta_d = 0.070000000000000007 * _lt_0_row[5] * _lt_0_row[6];
@@ -510,12 +510,12 @@ std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables
         rY[7] = (var_chaste_interface__time_dependent_outward_current_x1_gate__x1 + ((var_time_dependent_outward_current_x1_gate__alpha_x1) * mDt)) / (1.0 - ((-var_time_dependent_outward_current_x1_gate__alpha_x1 - var_time_dependent_outward_current_x1_gate__beta_x1) * mDt));
         
         double _guess[1] = {rY[1]};
-        CardiacNewtonSolver<1,Cellbeeler_reuter_model_1977FromCellMLBackwardEuler>* _p_solver = CardiacNewtonSolver<1,Cellbeeler_reuter_model_1977FromCellMLBackwardEuler>::Instance();
+        CardiacNewtonSolver<1,Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt>* _p_solver = CardiacNewtonSolver<1,Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt>::Instance();
         _p_solver->Solve(*this, var_chaste_interface__environment__time, _guess);
         rY[1] = _guess[0];
     }
 
-    std::vector<double> Cellbeeler_reuter_model_1977FromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -531,7 +531,7 @@ std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables
     }
 
 template<>
-void OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLBackwardEuler>::Initialise(void)
+void OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt>::Initialise(void)
 {
     this->mSystemName = "beeler_reuter_model_1977";
     this->mFreeVariableName = "environment__time";
@@ -590,5 +590,5 @@ void OdeSystemInformation<Cellbeeler_reuter_model_1977FromCellMLBackwardEuler>::
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellbeeler_reuter_model_1977FromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt)
 

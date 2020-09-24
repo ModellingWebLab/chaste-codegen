@@ -22,14 +22,14 @@
 #include "MathsCustomFunctions.hpp"
 #include "CardiacNewtonSolver.hpp"
 
-class CellFaberRudy2000FromCellMLBackwardEuler_LookupTables : public AbstractLookupTableCollection
+class CellFaberRudy2000FromCellMLBackwardEulerOpt_LookupTables : public AbstractLookupTableCollection
 {
 public:
-    static CellFaberRudy2000FromCellMLBackwardEuler_LookupTables* Instance()
+    static CellFaberRudy2000FromCellMLBackwardEulerOpt_LookupTables* Instance()
     {
         if (mpInstance.get() == NULL)
         {
-            mpInstance.reset(new CellFaberRudy2000FromCellMLBackwardEuler_LookupTables);
+            mpInstance.reset(new CellFaberRudy2000FromCellMLBackwardEulerOpt_LookupTables);
         }
         return mpInstance.get();
     }
@@ -67,7 +67,7 @@ public:
         const double _offset_0_over_table_step = _offset_0 * mTableStepInverses[0];
         const unsigned _table_index_0 = (unsigned)(_offset_0_over_table_step);
         const double _factor_0 = _offset_0_over_table_step - _table_index_0;
-        const double* const _lt_0_row = CellFaberRudy2000FromCellMLBackwardEuler_LookupTables::Instance()->_lookup_0_row(_table_index_0, _factor_0);
+        const double* const _lt_0_row = CellFaberRudy2000FromCellMLBackwardEulerOpt_LookupTables::Instance()->_lookup_0_row(_table_index_0, _factor_0);
         return _lt_0_row;
     }
 
@@ -86,7 +86,7 @@ public:
     }
 // LCOV_EXCL_STOP
 
-    ~CellFaberRudy2000FromCellMLBackwardEuler_LookupTables()
+    ~CellFaberRudy2000FromCellMLBackwardEulerOpt_LookupTables()
     {
 
         if (_lookup_table_0)
@@ -98,9 +98,9 @@ public:
     }
 
 protected:
-    CellFaberRudy2000FromCellMLBackwardEuler_LookupTables(const CellFaberRudy2000FromCellMLBackwardEuler_LookupTables&);
-    CellFaberRudy2000FromCellMLBackwardEuler_LookupTables& operator= (const CellFaberRudy2000FromCellMLBackwardEuler_LookupTables&);
-    CellFaberRudy2000FromCellMLBackwardEuler_LookupTables()
+    CellFaberRudy2000FromCellMLBackwardEulerOpt_LookupTables(const CellFaberRudy2000FromCellMLBackwardEulerOpt_LookupTables&);
+    CellFaberRudy2000FromCellMLBackwardEulerOpt_LookupTables& operator= (const CellFaberRudy2000FromCellMLBackwardEulerOpt_LookupTables&);
+    CellFaberRudy2000FromCellMLBackwardEulerOpt_LookupTables()
     {
         assert(mpInstance.get() == NULL);
         mKeyingVariableNames.resize(1);
@@ -120,7 +120,7 @@ protected:
         mNeedsRegeneration[0] = true;
         _lookup_table_0 = NULL;
 
-        CellFaberRudy2000FromCellMLBackwardEuler_LookupTables::RegenerateTables();
+        CellFaberRudy2000FromCellMLBackwardEulerOpt_LookupTables::RegenerateTables();
     }
 
     void RegenerateTables()
@@ -320,7 +320,7 @@ protected:
 
 private:
     /** The single instance of the class */
-    static std::shared_ptr<CellFaberRudy2000FromCellMLBackwardEuler_LookupTables> mpInstance;
+    static std::shared_ptr<CellFaberRudy2000FromCellMLBackwardEulerOpt_LookupTables> mpInstance;
 
     // Row lookup methods memory
     double _lookup_table_0_row[29];
@@ -330,9 +330,9 @@ private:
 
 };
 
-std::shared_ptr<CellFaberRudy2000FromCellMLBackwardEuler_LookupTables> CellFaberRudy2000FromCellMLBackwardEuler_LookupTables::mpInstance;
+std::shared_ptr<CellFaberRudy2000FromCellMLBackwardEulerOpt_LookupTables> CellFaberRudy2000FromCellMLBackwardEulerOpt_LookupTables::mpInstance;
 
-    boost::shared_ptr<RegularStimulus> CellFaberRudy2000FromCellMLBackwardEuler::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> CellFaberRudy2000FromCellMLBackwardEulerOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -25.5 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
@@ -348,11 +348,11 @@ std::shared_ptr<CellFaberRudy2000FromCellMLBackwardEuler_LookupTables> CellFaber
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double CellFaberRudy2000FromCellMLBackwardEuler::GetIntracellularCalciumConcentration()
+    double CellFaberRudy2000FromCellMLBackwardEulerOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    CellFaberRudy2000FromCellMLBackwardEuler::CellFaberRudy2000FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    CellFaberRudy2000FromCellMLBackwardEulerOpt::CellFaberRudy2000FromCellMLBackwardEulerOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<12>(
                 25,
                 0,
@@ -360,7 +360,7 @@ std::shared_ptr<CellFaberRudy2000FromCellMLBackwardEuler_LookupTables> CellFaber
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<CellFaberRudy2000FromCellMLBackwardEuler>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<CellFaberRudy2000FromCellMLBackwardEulerOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -372,16 +372,16 @@ std::shared_ptr<CellFaberRudy2000FromCellMLBackwardEuler_LookupTables> CellFaber
         this->mParameters[3] = 0.001; // (var_membrane__Cm) [microF]
     }
 
-    CellFaberRudy2000FromCellMLBackwardEuler::~CellFaberRudy2000FromCellMLBackwardEuler()
+    CellFaberRudy2000FromCellMLBackwardEulerOpt::~CellFaberRudy2000FromCellMLBackwardEulerOpt()
     {
     }
 
-    AbstractLookupTableCollection* CellFaberRudy2000FromCellMLBackwardEuler::GetLookupTableCollection()
+    AbstractLookupTableCollection* CellFaberRudy2000FromCellMLBackwardEulerOpt::GetLookupTableCollection()
     {
-        return CellFaberRudy2000FromCellMLBackwardEuler_LookupTables::Instance();
+        return CellFaberRudy2000FromCellMLBackwardEulerOpt_LookupTables::Instance();
     }
     
-    double CellFaberRudy2000FromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
+    double CellFaberRudy2000FromCellMLBackwardEulerOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -421,12 +421,12 @@ std::shared_ptr<CellFaberRudy2000FromCellMLBackwardEuler_LookupTables> CellFaber
         // Units: millimolar; Initial value: 141.2
         
         // Lookup table indexing
-        const bool _oob_0 = CellFaberRudy2000FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+        const bool _oob_0 = CellFaberRudy2000FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = CellFaberRudy2000FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+        const double* const _lt_0_row = CellFaberRudy2000FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         const double var_L_type_Ca_channel_f_Ca_gate__f_Ca = 1 / (1.0 + 1666.6666666666667 * var_chaste_interface__calcium_dynamics__Cai); // dimensionless
         const double var_calcium_background_current__E_Ca = 13.356169352749133 * log(1.8 / var_chaste_interface__calcium_dynamics__Cai); // millivolt
@@ -456,7 +456,7 @@ std::shared_ptr<CellFaberRudy2000FromCellMLBackwardEuler_LookupTables> CellFaber
         return i_ionic;
     }
 
-    void CellFaberRudy2000FromCellMLBackwardEuler::ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[12], double rResidual[12])
+    void CellFaberRudy2000FromCellMLBackwardEulerOpt::ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[12], double rResidual[12])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -487,12 +487,12 @@ std::shared_ptr<CellFaberRudy2000FromCellMLBackwardEuler_LookupTables> CellFaber
         // Units: dimensionless; Initial value: 0.5
         
         // Lookup table indexing
-        const bool _oob_0 = CellFaberRudy2000FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+        const bool _oob_0 = CellFaberRudy2000FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = CellFaberRudy2000FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+        const double* const _lt_0_row = CellFaberRudy2000FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         //output_nonlinear_state_assignments
         double var_chaste_interface__calcium_dynamics__APtrack = rCurrentGuess[0];
@@ -570,7 +570,7 @@ std::shared_ptr<CellFaberRudy2000FromCellMLBackwardEuler_LookupTables> CellFaber
         rResidual[10] = rCurrentGuess[10] - rY[24] - mDt*d_dt_chaste_interface_var_ionic_concentrations__Ki;
     }
 
-    void CellFaberRudy2000FromCellMLBackwardEuler::ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[12], double rJacobian[12][12])
+    void CellFaberRudy2000FromCellMLBackwardEulerOpt::ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[12], double rJacobian[12][12])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -601,12 +601,12 @@ std::shared_ptr<CellFaberRudy2000FromCellMLBackwardEuler_LookupTables> CellFaber
         // Units: dimensionless; Initial value: 0.5
         
         // Lookup table indexing
-        const bool _oob_0 = CellFaberRudy2000FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+        const bool _oob_0 = CellFaberRudy2000FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = CellFaberRudy2000FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+        const double* const _lt_0_row = CellFaberRudy2000FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         double var_chaste_interface__calcium_dynamics__APtrack = rCurrentGuess[0];
         double var_chaste_interface__calcium_dynamics__APtrack2 = rCurrentGuess[1];
@@ -876,7 +876,7 @@ std::shared_ptr<CellFaberRudy2000FromCellMLBackwardEuler_LookupTables> CellFaber
         rJacobian[11][11] = 1.0 - (mDt * (var_x102 * (4.0500000000000004e-7 * var_x97 - 0.0040499999999999998 * var_x96 - 0.10684935482199306 * var_x0 - 0.0018285756177517324 * var_x105 - 0.10125000000000001 * var_x106 - 427.39741928797224 * var_x0 * var_x31)));
     }
 
-    void CellFaberRudy2000FromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted)
+    void CellFaberRudy2000FromCellMLBackwardEulerOpt::UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -914,12 +914,12 @@ std::shared_ptr<CellFaberRudy2000FromCellMLBackwardEuler_LookupTables> CellFaber
         // Units: millimolar; Initial value: 141.2
         
         // Lookup table indexing
-        const bool _oob_0 = CellFaberRudy2000FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+        const bool _oob_0 = CellFaberRudy2000FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = CellFaberRudy2000FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+        const double* const _lt_0_row = CellFaberRudy2000FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         const double var_L_type_Ca_channel_f_Ca_gate__f_Ca = 1 / (1.0 + 1666.6666666666667 * var_chaste_interface__calcium_dynamics__Cai); // dimensionless
         const double var_membrane__I_st = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted) / HeartConfig::Instance()->GetCapacitance(); // microA_per_microF
@@ -953,7 +953,7 @@ std::shared_ptr<CellFaberRudy2000FromCellMLBackwardEuler_LookupTables> CellFaber
         rY[0] += mDt*d_dt_chaste_interface_var_membrane__V;
     }
     
-    void CellFaberRudy2000FromCellMLBackwardEuler::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted)
+    void CellFaberRudy2000FromCellMLBackwardEulerOpt::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -985,12 +985,12 @@ std::shared_ptr<CellFaberRudy2000FromCellMLBackwardEuler_LookupTables> CellFaber
         // Units: dimensionless; Initial value: 0.5
         
         // Lookup table indexing
-        const bool _oob_0 = CellFaberRudy2000FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+        const bool _oob_0 = CellFaberRudy2000FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = CellFaberRudy2000FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+        const double* const _lt_0_row = CellFaberRudy2000FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         const double var_fast_sodium_current_m_gate__delta_m = 1.0000000000000001e-5;
         const double var_L_type_Ca_channel_d_gate__E0_d = 10.0 + var_chaste_interface__membrane__V;
@@ -1043,7 +1043,7 @@ std::shared_ptr<CellFaberRudy2000FromCellMLBackwardEuler_LookupTables> CellFaber
         rY[12] = (var_chaste_interface__transient_outward_current_zdv_gate__zdv + ((0.001 * var_transient_outward_current_zdv_gate__zdv_ss / var_transient_outward_current_zdv_gate__tau_zdv) * mDt)) / (1.0 - ((-0.001 / var_transient_outward_current_zdv_gate__tau_zdv) * mDt));
         
         double _guess[12] = {rY[16],rY[17],rY[18],rY[14],rY[15],rY[1],rY[19],rY[20],rY[21],rY[22],rY[24],rY[23]};
-        CardiacNewtonSolver<12,CellFaberRudy2000FromCellMLBackwardEuler>* _p_solver = CardiacNewtonSolver<12,CellFaberRudy2000FromCellMLBackwardEuler>::Instance();
+        CardiacNewtonSolver<12,CellFaberRudy2000FromCellMLBackwardEulerOpt>* _p_solver = CardiacNewtonSolver<12,CellFaberRudy2000FromCellMLBackwardEulerOpt>::Instance();
         _p_solver->Solve(*this, var_chaste_interface__environment__time_converted, _guess);
         rY[16] = _guess[0];
         rY[17] = _guess[1];
@@ -1059,7 +1059,7 @@ std::shared_ptr<CellFaberRudy2000FromCellMLBackwardEuler_LookupTables> CellFaber
         rY[23] = _guess[11];
     }
 
-    std::vector<double> CellFaberRudy2000FromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> CellFaberRudy2000FromCellMLBackwardEulerOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -1075,7 +1075,7 @@ std::shared_ptr<CellFaberRudy2000FromCellMLBackwardEuler_LookupTables> CellFaber
     }
 
 template<>
-void OdeSystemInformation<CellFaberRudy2000FromCellMLBackwardEuler>::Initialise(void)
+void OdeSystemInformation<CellFaberRudy2000FromCellMLBackwardEulerOpt>::Initialise(void)
 {
     this->mSystemName = "LR_Dynamic_model_2000";
     this->mFreeVariableName = "environment__time";
@@ -1235,5 +1235,5 @@ void OdeSystemInformation<CellFaberRudy2000FromCellMLBackwardEuler>::Initialise(
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(CellFaberRudy2000FromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(CellFaberRudy2000FromCellMLBackwardEulerOpt)
 

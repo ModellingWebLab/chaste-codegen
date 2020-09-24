@@ -22,14 +22,14 @@
 #include "MathsCustomFunctions.hpp"
 #include "CardiacNewtonSolver.hpp"
 
-class Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables : public AbstractLookupTableCollection
+class Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt_LookupTables : public AbstractLookupTableCollection
 {
 public:
-    static Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables* Instance()
+    static Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt_LookupTables* Instance()
     {
         if (mpInstance.get() == NULL)
         {
-            mpInstance.reset(new Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables);
+            mpInstance.reset(new Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt_LookupTables);
         }
         return mpInstance.get();
     }
@@ -45,15 +45,15 @@ public:
 
 
 
-    ~Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables()
+    ~Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt_LookupTables()
     {
 
     }
 
 protected:
-    Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables(const Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables&);
-    Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables& operator= (const Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables&);
-    Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables()
+    Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt_LookupTables(const Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt_LookupTables&);
+    Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt_LookupTables& operator= (const Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt_LookupTables&);
+    Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt_LookupTables()
     {
         assert(mpInstance.get() == NULL);
         mKeyingVariableNames.resize(0);
@@ -64,7 +64,7 @@ protected:
         mTableMaxs.resize(0);
         mNeedsRegeneration.resize(0);
 
-        Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables::RegenerateTables();
+        Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt_LookupTables::RegenerateTables();
     }
 
     void RegenerateTables()
@@ -76,13 +76,13 @@ protected:
 
 private:
     /** The single instance of the class */
-    static std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables> mpInstance;
+    static std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt_LookupTables> mpInstance;
 
 };
 
-std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables> Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables::mpInstance;
+std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt_LookupTables> Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt_LookupTables::mpInstance;
 
-    boost::shared_ptr<RegularStimulus> Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__I_stim__stim_duration_converted = 1.0; // millisecond
@@ -99,7 +99,7 @@ std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_Lookup
         return p_cellml_stim;
     }
 
-    Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler::Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt::Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<6>(
                 7,
                 0,
@@ -107,7 +107,7 @@ std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_Lookup
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -122,16 +122,16 @@ std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_Lookup
         this->mParameters[6] = 295.0; // (var_model_parameters__T) [kelvin]
     }
 
-    Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler::~Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler()
+    Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt::~Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt()
     {
     }
 
-    AbstractLookupTableCollection* Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler::GetLookupTableCollection()
+    AbstractLookupTableCollection* Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt::GetLookupTableCollection()
     {
-        return Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_LookupTables::Instance();
+        return Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt_LookupTables::Instance();
     }
     
-    double Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -153,7 +153,7 @@ std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_Lookup
         return i_ionic;
     }
 
-    void Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler::ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[6], double rResidual[6])
+    void Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt::ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[6], double rResidual[6])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -185,7 +185,7 @@ std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_Lookup
         rResidual[5] = rCurrentGuess[5] - rY[6] - mDt*d_dt_chaste_interface_var_I_Shkr__OShkr;
     }
 
-    void Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler::ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[6], double rJacobian[6][6])
+    void Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt::ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[6], double rJacobian[6][6])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -243,7 +243,7 @@ std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_Lookup
         rJacobian[5][5] = 1.0 - (mDt * (-0.017999999999999999));
     }
 
-    void Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted)
+    void Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt::UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -258,7 +258,7 @@ std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_Lookup
         rY[0] += mDt*d_dt_chaste_interface_var_membrane__Vm;
     }
     
-    void Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted)
+    void Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -267,7 +267,7 @@ std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_Lookup
         
         
         double _guess[6] = {rY[1],rY[2],rY[3],rY[4],rY[5],rY[6]};
-        CardiacNewtonSolver<6,Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler>* _p_solver = CardiacNewtonSolver<6,Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler>::Instance();
+        CardiacNewtonSolver<6,Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt>* _p_solver = CardiacNewtonSolver<6,Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt>::Instance();
         _p_solver->Solve(*this, var_chaste_interface__environment__time_converted, _guess);
         rY[1] = _guess[0];
         rY[2] = _guess[1];
@@ -277,7 +277,7 @@ std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_Lookup
         rY[6] = _guess[5];
     }
 
-    std::vector<double> Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -312,7 +312,7 @@ std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler_Lookup
     }
 
 template<>
-void OdeSystemInformation<Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler>::Initialise(void)
+void OdeSystemInformation<Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt>::Initialise(void)
 {
     this->mSystemName = "sachse_model_2007";
     this->mFreeVariableName = "time";
@@ -406,5 +406,5 @@ void OdeSystemInformation<Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEu
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerOpt)
 

@@ -22,14 +22,14 @@
 #include "MathsCustomFunctions.hpp"
 #include "CardiacNewtonSolver.hpp"
 
-class Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables : public AbstractLookupTableCollection
+class Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt_LookupTables : public AbstractLookupTableCollection
 {
 public:
-    static Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables* Instance()
+    static Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt_LookupTables* Instance()
     {
         if (mpInstance.get() == NULL)
         {
-            mpInstance.reset(new Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables);
+            mpInstance.reset(new Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt_LookupTables);
         }
         return mpInstance.get();
     }
@@ -67,7 +67,7 @@ public:
         const double _offset_0_over_table_step = _offset_0 * mTableStepInverses[0];
         const unsigned _table_index_0 = (unsigned)(_offset_0_over_table_step);
         const double _factor_0 = _offset_0_over_table_step - _table_index_0;
-        const double* const _lt_0_row = Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->_lookup_0_row(_table_index_0, _factor_0);
+        const double* const _lt_0_row = Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt_LookupTables::Instance()->_lookup_0_row(_table_index_0, _factor_0);
         return _lt_0_row;
     }
 
@@ -86,7 +86,7 @@ public:
     }
 // LCOV_EXCL_STOP
 
-    ~Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables()
+    ~Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt_LookupTables()
     {
 
         if (_lookup_table_0)
@@ -98,9 +98,9 @@ public:
     }
 
 protected:
-    Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables(const Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables&);
-    Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables& operator= (const Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables&);
-    Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables()
+    Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt_LookupTables(const Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt_LookupTables&);
+    Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt_LookupTables& operator= (const Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt_LookupTables&);
+    Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt_LookupTables()
     {
         assert(mpInstance.get() == NULL);
         mKeyingVariableNames.resize(1);
@@ -120,7 +120,7 @@ protected:
         mNeedsRegeneration[0] = true;
         _lookup_table_0 = NULL;
 
-        Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables::RegenerateTables();
+        Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt_LookupTables::RegenerateTables();
     }
 
     void RegenerateTables()
@@ -302,7 +302,7 @@ protected:
 
 private:
     /** The single instance of the class */
-    static std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables> mpInstance;
+    static std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt_LookupTables> mpInstance;
 
     // Row lookup methods memory
     double _lookup_table_0_row[26];
@@ -312,9 +312,9 @@ private:
 
 };
 
-std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables> Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables::mpInstance;
+std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt_LookupTables> Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt_LookupTables::mpInstance;
 
-    boost::shared_ptr<RegularStimulus> Cellnygren_atrial_model_1998FromCellMLBackwardEuler::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -0.27999999999999997 * HeartConfig::Instance()->GetCapacitance() / mParameters[0]; // uA_per_cm2
@@ -330,11 +330,11 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double Cellnygren_atrial_model_1998FromCellMLBackwardEuler::GetIntracellularCalciumConcentration()
+    double Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Cellnygren_atrial_model_1998FromCellMLBackwardEuler::Cellnygren_atrial_model_1998FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt::Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<16>(
                 29,
                 0,
@@ -342,7 +342,7 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellnygren_atrial_model_1998FromCellMLBackwardEuler>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -351,16 +351,16 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables
         this->mParameters[0] = 0.050000000000000003; // (var_membrane__Cm) [nanoF]
     }
 
-    Cellnygren_atrial_model_1998FromCellMLBackwardEuler::~Cellnygren_atrial_model_1998FromCellMLBackwardEuler()
+    Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt::~Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt()
     {
     }
 
-    AbstractLookupTableCollection* Cellnygren_atrial_model_1998FromCellMLBackwardEuler::GetLookupTableCollection()
+    AbstractLookupTableCollection* Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt::GetLookupTableCollection()
     {
-        return Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables::Instance();
+        return Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt_LookupTables::Instance();
     }
     
-    double Cellnygren_atrial_model_1998FromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -408,12 +408,12 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables
         // Units: millimolar; Initial value: 5.3581
         
         // Lookup table indexing
-        const bool _oob_0 = Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+        const bool _oob_0 = Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+        const double* const _lt_0_row = Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         const double var_Ca_independent_transient_outward_K_current__E_K = 26.380041870925616 * log(var_chaste_interface__cleft_space_ion_concentrations__K_c / var_chaste_interface__intracellular_ion_concentrations__K_i); // millivolt
         const double var_Ca_independent_transient_outward_K_current__i_t = 7.5 * (-var_Ca_independent_transient_outward_K_current__E_K + var_chaste_interface__membrane__V) * var_chaste_interface__Ca_independent_transient_outward_K_current_r_gate__r * var_chaste_interface__Ca_independent_transient_outward_K_current_s_gate__s; // picoA
@@ -436,7 +436,7 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables
         return i_ionic;
     }
 
-    void Cellnygren_atrial_model_1998FromCellMLBackwardEuler::ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[16], double rResidual[16])
+    void Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt::ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[16], double rResidual[16])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -467,12 +467,12 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables
         // Units: dimensionless; Initial value: 0.0001
         
         // Lookup table indexing
-        const bool _oob_0 = Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+        const bool _oob_0 = Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+        const double* const _lt_0_row = Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         //output_nonlinear_state_assignments
         double var_chaste_interface__Ca_handling_by_the_SR__Ca_rel = rCurrentGuess[0];
@@ -551,7 +551,7 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables
         rResidual[3] = rCurrentGuess[3] - rY[28] - mDt*d_dt_chaste_interface_var_Ca_handling_by_the_SR__F2;
     }
 
-    void Cellnygren_atrial_model_1998FromCellMLBackwardEuler::ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[16], double rJacobian[16][16])
+    void Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt::ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[16], double rJacobian[16][16])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -582,12 +582,12 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables
         // Units: dimensionless; Initial value: 0.0001
         
         // Lookup table indexing
-        const bool _oob_0 = Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+        const bool _oob_0 = Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+        const double* const _lt_0_row = Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         double var_chaste_interface__Ca_handling_by_the_SR__Ca_rel = rCurrentGuess[0];
         double var_chaste_interface__Ca_handling_by_the_SR__Ca_up = rCurrentGuess[1];
@@ -984,7 +984,7 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables
         rJacobian[15][15] = 1.0 - (mDt * (4.2177556280432989e-7 * var_x86 - 2.8157848672826448e-6 * var_x93 - 0.00056138327409256303 * var_x87 + var_x115 * var_x53 - var_x114 * var_x54 - var_x117 * var_x94));
     }
 
-    void Cellnygren_atrial_model_1998FromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted)
+    void Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt::UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -1030,12 +1030,12 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables
         // Units: millimolar; Initial value: 5.3581
         
         // Lookup table indexing
-        const bool _oob_0 = Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+        const bool _oob_0 = Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+        const double* const _lt_0_row = Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         const double var_Ca_independent_transient_outward_K_current__E_K = 26.380041870925616 * log(var_chaste_interface__cleft_space_ion_concentrations__K_c / var_chaste_interface__intracellular_ion_concentrations__K_i); // millivolt
         const double var_Ca_independent_transient_outward_K_current__i_t = 7.5 * (-var_Ca_independent_transient_outward_K_current__E_K + var_chaste_interface__membrane__V) * var_chaste_interface__Ca_independent_transient_outward_K_current_r_gate__r * var_chaste_interface__Ca_independent_transient_outward_K_current_s_gate__s; // picoA
@@ -1056,7 +1056,7 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables
         rY[0] += mDt*d_dt_chaste_interface_var_membrane__V;
     }
     
-    void Cellnygren_atrial_model_1998FromCellMLBackwardEuler::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted)
+    void Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -1088,12 +1088,12 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables
         // Units: dimensionless; Initial value: 0.0001
         
         // Lookup table indexing
-        const bool _oob_0 = Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+        const bool _oob_0 = Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
 // LCOV_EXCL_START
         if (_oob_0)
             EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
 // LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+        const double* const _lt_0_row = Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         const double var_Ca_independent_transient_outward_K_current_r_gate__r_infinity = _lt_0_row[4];
         const double var_Ca_independent_transient_outward_K_current_r_gate__tau_r = 0.0015 + 0.0035000000000000001 * exp(-0.0011111111111111111 * pow(var_chaste_interface__membrane__V, 2));
@@ -1133,7 +1133,7 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables
         rY[11] = (var_chaste_interface__sustained_outward_K_current_s_sus_gate__s_sus + ((0.001 * var_sustained_outward_K_current_s_sus_gate__s_sus_infinity / var_sustained_outward_K_current_s_sus_gate__tau_s_sus) * mDt)) / (1.0 - ((-0.001 / var_sustained_outward_K_current_s_sus_gate__tau_s_sus) * mDt));
         
         double _guess[16] = {rY[24],rY[25],rY[27],rY[28],rY[26],rY[22],rY[23],rY[21],rY[17],rY[18],rY[19],rY[20],rY[16],rY[1],rY[15],rY[14]};
-        CardiacNewtonSolver<16,Cellnygren_atrial_model_1998FromCellMLBackwardEuler>* _p_solver = CardiacNewtonSolver<16,Cellnygren_atrial_model_1998FromCellMLBackwardEuler>::Instance();
+        CardiacNewtonSolver<16,Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt>* _p_solver = CardiacNewtonSolver<16,Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt>::Instance();
         _p_solver->Solve(*this, var_chaste_interface__environment__time_converted, _guess);
         rY[24] = _guess[0];
         rY[25] = _guess[1];
@@ -1153,7 +1153,7 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables
         rY[14] = _guess[15];
     }
 
-    std::vector<double> Cellnygren_atrial_model_1998FromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -1171,7 +1171,7 @@ std::shared_ptr<Cellnygren_atrial_model_1998FromCellMLBackwardEuler_LookupTables
     }
 
 template<>
-void OdeSystemInformation<Cellnygren_atrial_model_1998FromCellMLBackwardEuler>::Initialise(void)
+void OdeSystemInformation<Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt>::Initialise(void)
 {
     this->mSystemName = "nygren_atrial_model_1998";
     this->mFreeVariableName = "environment__time";
@@ -1343,5 +1343,5 @@ void OdeSystemInformation<Cellnygren_atrial_model_1998FromCellMLBackwardEuler>::
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellnygren_atrial_model_1998FromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Cellnygren_atrial_model_1998FromCellMLBackwardEulerOpt)
 

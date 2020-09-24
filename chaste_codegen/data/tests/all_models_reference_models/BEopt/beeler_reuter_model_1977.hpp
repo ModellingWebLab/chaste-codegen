@@ -1,5 +1,5 @@
-#ifndef CELLBEELER_REUTER_MODEL_1977FROMCELLMLBACKWARDEULER_HPP_
-#define CELLBEELER_REUTER_MODEL_1977FROMCELLMLBACKWARDEULER_HPP_
+#ifndef CELLBEELER_REUTER_MODEL_1977FROMCELLMLBACKWARDEULEROPT_HPP_
+#define CELLBEELER_REUTER_MODEL_1977FROMCELLMLBACKWARDEULEROPT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractBackwardEulerCardiacCell.hpp"
 
-class Cellbeeler_reuter_model_1977FromCellMLBackwardEuler : public AbstractBackwardEulerCardiacCell<1>
+class Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt : public AbstractBackwardEulerCardiacCell<1>
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -36,8 +36,8 @@ public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    Cellbeeler_reuter_model_1977FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellbeeler_reuter_model_1977FromCellMLBackwardEuler();
+    Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt();
     AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[1], double rResidual[1]);
     void ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[1], double rJacobian[1][1]);protected:
@@ -49,7 +49,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellbeeler_reuter_model_1977FromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt)
 
 namespace boost
 {
@@ -57,7 +57,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellbeeler_reuter_model_1977FromCellMLBackwardEuler * t, const unsigned int fileVersion)
+            Archive & ar, const Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -67,17 +67,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellbeeler_reuter_model_1977FromCellMLBackwardEuler * t, const unsigned int fileVersion)
+            Archive & ar, Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellbeeler_reuter_model_1977FromCellMLBackwardEuler(p_solver, p_stimulus);
+            ::new(t)Cellbeeler_reuter_model_1977FromCellMLBackwardEulerOpt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLBEELER_REUTER_MODEL_1977FROMCELLMLBACKWARDEULER_HPP_
+#endif // CELLBEELER_REUTER_MODEL_1977FROMCELLMLBACKWARDEULEROPT_HPP_

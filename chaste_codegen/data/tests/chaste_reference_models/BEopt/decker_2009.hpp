@@ -1,5 +1,5 @@
-#ifndef CELLDECKER_2009FROMCELLMLBACKWARDEULER_HPP_
-#define CELLDECKER_2009FROMCELLMLBACKWARDEULER_HPP_
+#ifndef CELLDECKER_2009FROMCELLMLBACKWARDEULEROPT_HPP_
+#define CELLDECKER_2009FROMCELLMLBACKWARDEULEROPT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractBackwardEulerCardiacCell.hpp"
 
-class Celldecker_2009FromCellMLBackwardEuler : public AbstractBackwardEulerCardiacCell<37>
+class Celldecker_2009FromCellMLBackwardEulerOpt : public AbstractBackwardEulerCardiacCell<37>
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -36,8 +36,8 @@ public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    Celldecker_2009FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Celldecker_2009FromCellMLBackwardEuler();
+    Celldecker_2009FromCellMLBackwardEulerOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Celldecker_2009FromCellMLBackwardEulerOpt();
     AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[37], double rResidual[37]);
     void ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[37], double rJacobian[37][37]);protected:
@@ -49,7 +49,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Celldecker_2009FromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Celldecker_2009FromCellMLBackwardEulerOpt)
 
 namespace boost
 {
@@ -57,7 +57,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Celldecker_2009FromCellMLBackwardEuler * t, const unsigned int fileVersion)
+            Archive & ar, const Celldecker_2009FromCellMLBackwardEulerOpt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -67,17 +67,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Celldecker_2009FromCellMLBackwardEuler * t, const unsigned int fileVersion)
+            Archive & ar, Celldecker_2009FromCellMLBackwardEulerOpt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Celldecker_2009FromCellMLBackwardEuler(p_solver, p_stimulus);
+            ::new(t)Celldecker_2009FromCellMLBackwardEulerOpt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLDECKER_2009FROMCELLMLBACKWARDEULER_HPP_
+#endif // CELLDECKER_2009FROMCELLMLBACKWARDEULEROPT_HPP_
