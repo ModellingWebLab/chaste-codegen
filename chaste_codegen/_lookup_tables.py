@@ -58,10 +58,13 @@ class LookupTables:
         :param model: A :class:`cellmlmanip.Model` object.
         :param lookup_params: Optional collection of lists: [[<metadata tag>, mTableMins, mTableMaxs, mTableSteps]]
         """
-        # Lookup vars is a tuple of [<metadata tag>, mTableMins, mTableMaxs, mTableSteps,
-        #                            <set_of_method_names_table_is_used_in>, variable, [<lookup epxrs>]]
-        self._lookup_parameters = list(map(lambda p: p + [set(), None, []], lookup_params))
-
+        self._lookup_parameters = tuple({'metadata_tag': param[0],
+                                         'mTableMins': param[1],
+                                         'mTableMaxs': param[2],
+                                         'mTableSteps': param[3],
+                                         'table_used_in_methods': set(),
+                                         'var': None,
+                                         'lookup_epxrs': []} for param in lookup_params)
         self._model = model
         self._lookup_variables = set()
         self._lookup_table_expr = collections.OrderedDict()
@@ -69,11 +72,11 @@ class LookupTables:
 
         self._method_printed = None
 
-        for tag in self._lookup_parameters:
+        for param in self._lookup_parameters:
             try:
-                var = self._model.get_variable_by_ontology_term((OXMETA, tag[0]))
+                var = self._model.get_variable_by_ontology_term((OXMETA, param['metadata_tag']))
                 self._lookup_variables.add(var)
-                tag[5] = var
+                param['var'] = var
             except KeyError:
                 pass  # variable not tagged in model
 
@@ -130,10 +133,11 @@ class LookupTables:
         if not self._lookup_params_processed:
             # Stick in a list of all expressions for the variable for easy access in the template
             for param in self._lookup_parameters:
-                param[6] = list(filter(lambda k: param[5] in self._lookup_table_expr[k], self._lookup_table_expr))
+                param['lookup_epxrs'] = list(filter(lambda e: param['var'] in self._lookup_table_expr[e],
+                                             self._lookup_table_expr))
 
             # Filter out the parameter set for which we didn't find any complicated expressions
-            self._lookup_parameters = list(filter(lambda p: len(p[6]) > 0, self._lookup_parameters))
+            self._lookup_parameters = list(filter(lambda p: len(p['lookup_epxrs']) > 0, self._lookup_parameters))
             self._lookup_params_processed = True
 
     def print_lut_expr(self, expr):
@@ -154,10 +158,11 @@ class LookupTables:
             variables = expr.free_symbols & self._lookup_variables
             assert len(variables) == 1, "Lookup table expressions should have exactly 1 (lookup) variable"
             var = tuple(variables)[0]
+
             for i, param in enumerate(self._lookup_parameters):
-                if param[5] is var:
-                    param[4].add(self._method_printed)
-                    return '_lt_{}_row[{}]'.format(i, param[6].index(expr))
+                if param['var'] is var:
+                    param['table_used_in_methods'].add(self._method_printed)
+                    return '_lt_{}_row[{}]'.format(i, param['lookup_epxrs'].index(expr))
         return None
 
     def print_lookup_parameters(self, printer):
@@ -172,9 +177,10 @@ class LookupTables:
             self._process_lookup_parameters()
             old_lookup_table_func = printer.lookup_table_function
             printer.lookup_table_function = lambda e: None
+
             for param in self._lookup_parameters:
-                param[6] = list(map(lambda e: printer.doprint(e), param[6]))
-                param[5] = printer.doprint(param[5])
+                param['lookup_epxrs'] = list(map(lambda e: printer.doprint(e), param['lookup_epxrs']))
+                param['var'] = printer.doprint(param['var'])
 
             # reinstate lookup tables
             printer.lookup_table_function = old_lookup_table_func
