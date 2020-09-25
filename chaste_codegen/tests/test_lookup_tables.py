@@ -31,9 +31,11 @@ def test_no_method_printed_for(hn_model):
         output += printer.doprint(eq)
     assert '_lt_0_row[0]' not in output
     assert lut.print_lookup_parameters(printer) == \
-        [['membrane_voltage', -250.0001, 549.9999, 0.001, set(), 'membrane$V',
-         ['8000.0 * exp(-(66.0 + membrane$V) * 0.056)', '20.0 * exp(-(75.0 + membrane$V) * 0.125)',
-          '2000.0 / (320.0 * exp(-(75.0 + membrane$V) * 0.1) + 1.0)', 'exp((-40.0 + membrane$V) * 0.08)']]]
+        [{'metadata_tag': 'membrane_voltage', 'mTableMins': -250.0001, 'mTableMaxs': 549.9999, 'mTableSteps': 0.001,
+          'table_used_in_methods': set(), 'var': 'membrane$V',
+          'lookup_epxrs': ['8000.0 * exp(-(66.0 + membrane$V) * 0.056)', '20.0 * exp(-(75.0 + membrane$V) * 0.125)',
+                           '2000.0 / (320.0 * exp(-(75.0 + membrane$V) * 0.1) + 1.0)',
+                           'exp((-40.0 + membrane$V) * 0.08)']}]
 
 
 def test_method_printed_for(hn_model):
@@ -46,11 +48,12 @@ def test_method_printed_for(hn_model):
         with lut.method_being_printed('template_method'):
             output += printer.doprint(eq.rhs)
     assert '_lt_0_row[0]' in output
-
     assert lut.print_lookup_parameters(printer) == \
-        [['membrane_voltage', -250.0001, 549.9999, 0.001, {'template_method'}, 'membrane$V',
-         ['8000.0 * exp(-(66.0 + membrane$V) * 0.056)', '20.0 * exp(-(75.0 + membrane$V) * 0.125)',
-          '2000.0 / (320.0 * exp(-(75.0 + membrane$V) * 0.1) + 1.0)', 'exp((-40.0 + membrane$V) * 0.08)']]]
+        [{'metadata_tag': 'membrane_voltage', 'mTableMins': -250.0001, 'mTableMaxs': 549.9999, 'mTableSteps': 0.001,
+          'table_used_in_methods': {'template_method'}, 'var': 'membrane$V',
+          'lookup_epxrs': ['8000.0 * exp(-(66.0 + membrane$V) * 0.056)', '20.0 * exp(-(75.0 + membrane$V) * 0.125)',
+                           '2000.0 / (320.0 * exp(-(75.0 + membrane$V) * 0.1) + 1.0)',
+                           'exp((-40.0 + membrane$V) * 0.08)']}]
 
 
 def test_nested_method_printed_for(hn_model):
@@ -64,11 +67,13 @@ def test_nested_method_printed_for(hn_model):
             with lut.method_being_printed('innter_method'):
                 output += printer.doprint(eq.rhs)
     assert '_lt_0_row[0]' in output
-
     assert lut.print_lookup_parameters(printer) == \
-        [['membrane_voltage', -250.0001, 549.9999, 0.001, {'outer_method'}, 'membrane$V',
-         ['8000.0 * exp(-(66.0 + membrane$V) * 0.056)', '20.0 * exp(-(75.0 + membrane$V) * 0.125)',
-          '2000.0 / (320.0 * exp(-(75.0 + membrane$V) * 0.1) + 1.0)', 'exp((-40.0 + membrane$V) * 0.08)']]]
+        [{'metadata_tag': 'membrane_voltage', 'mTableMins': -250.0001, 'mTableMaxs': 549.9999, 'mTableSteps': 0.001,
+          'table_used_in_methods': {'outer_method'}, 'var': 'membrane$V',
+          'lookup_epxrs': ['8000.0 * exp(-(66.0 + membrane$V) * 0.056)',
+                           '20.0 * exp(-(75.0 + membrane$V) * 0.125)',
+                           '2000.0 / (320.0 * exp(-(75.0 + membrane$V) * 0.1) + 1.0)',
+                           'exp((-40.0 + membrane$V) * 0.08)']}]
 
 
 def test_multiple_methods_printed_for(hn_model):
@@ -84,9 +89,11 @@ def test_multiple_methods_printed_for(hn_model):
         with lut.method_being_printed('method2'):
             printer.doprint(eq.rhs)
     assert lut.print_lookup_parameters(printer) == \
-        [['membrane_voltage', -250.0001, 549.9999, 0.001, {'method1', 'method2'}, 'membrane$V',
-         ['8000.0 * exp(-(66.0 + membrane$V) * 0.056)', '20.0 * exp(-(75.0 + membrane$V) * 0.125)',
-          '2000.0 / (320.0 * exp(-(75.0 + membrane$V) * 0.1) + 1.0)', 'exp((-40.0 + membrane$V) * 0.08)']]]
+        [{'metadata_tag': 'membrane_voltage', 'mTableMins': -250.0001, 'mTableMaxs': 549.9999, 'mTableSteps': 0.001,
+          'table_used_in_methods': {'method1', 'method2'}, 'var': 'membrane$V',
+          'lookup_epxrs': ['8000.0 * exp(-(66.0 + membrane$V) * 0.056)', '20.0 * exp(-(75.0 + membrane$V) * 0.125)',
+                           '2000.0 / (320.0 * exp(-(75.0 + membrane$V) * 0.1) + 1.0)',
+                           'exp((-40.0 + membrane$V) * 0.08)']}]
 
 
 def test_change_lookup_table():
@@ -106,27 +113,27 @@ def test_change_lookup_table():
     assert '_lt_0_row[0]' in output
     assert '_lt_1_row[0]' in output
     assert '_lt_2_row[0]' not in output
-
     assert lut.print_lookup_parameters(printer) == \
-        [['membrane_voltage', -25.0001, 54.9999, 0.01, {'template_method'}, 'membrane$V',
-          ['-(47.0 + membrane$V) * 1.0 / (-1.0 + exp(-(47.0 + membrane$V) * 0.1))',
-           '40.0 * exp(-(72.0 + membrane$V) * 0.056)',
-           '0.126 * exp(-(77.0 + membrane$V) * 0.25)',
-           '1.7 / (1.0 + exp(-(22.5 + membrane$V) * 0.082))',
-           '0.055 * exp(-(78.0 + membrane$V) * 0.25) / (1.0 + exp(-(78.0 + membrane$V) * 0.2))',
-           '0.3 / (1.0 + exp(-(32.0 + membrane$V) * 0.1))',
-           '0.095 * exp((-membrane$V + 5.0) / 100.0) / (1.0 + exp((-membrane$V + 5.0) / 13.89))',
-           '0.07 * exp((-44.0 - membrane$V) / 59.0) / (1.0 + exp((44.0 + membrane$V) / 20.0))',
-           '0.012 * exp((-28.0 - membrane$V) / 125.0) / (1.0 + exp((28.0 + membrane$V) / 6.67))',
-           '0.0065 * exp((-30.0 - membrane$V) / 50.0) / (1.0 + exp((-30.0 - membrane$V) / 5.0))',
-           '1 / exp((35.0 + membrane$V) * 0.04)',
-           '-1.0 + exp((77.0 + membrane$V) * 0.04)',
-           '0.0005 * exp((50.0 + membrane$V) / 12.1) / (1.0 + exp((50.0 + membrane$V) / 17.5))',
-           '0.0013 * exp((-20.0 - membrane$V) / 16.67) / (1.0 + exp((-20.0 - membrane$V) / 25.0))',
-           '((23.0 + membrane$V) * 0.2 / (-exp(-(23.0 + membrane$V) * 0.04) + 1.0) + (-1.0 + exp((85.0 + membrane$V) *'
-            ' 0.04)) * 4.0 / (exp((53.0 + membrane$V) * 0.08) + exp((53.0 + membrane$V) * 0.04))) * 0.0035']],
-         ['cytosolic_calcium_concentration', 0.0, 50.0, 0.01, {'template_method'}, 'slow_inward_current$Cai',
-          ['-82.3 - 13.0287 * log(0.001 * slow_inward_current$Cai)']]]
+        [{'metadata_tag': 'membrane_voltage', 'mTableMins': -25.0001, 'mTableMaxs': 54.9999, 'mTableSteps': 0.01,
+          'table_used_in_methods': {'template_method'}, 'var': 'membrane$V',
+          'lookup_epxrs': ['-(47.0 + membrane$V) * 1.0 / (-1.0 + exp(-(47.0 + membrane$V) * 0.1))',
+                           '40.0 * exp(-(72.0 + membrane$V) * 0.056)', '0.126 * exp(-(77.0 + membrane$V) * 0.25)',
+                           '1.7 / (1.0 + exp(-(22.5 + membrane$V) * 0.082))',
+                           '0.055 * exp(-(78.0 + membrane$V) * 0.25) / (1.0 + exp(-(78.0 + membrane$V) * 0.2))',
+                           '0.3 / (1.0 + exp(-(32.0 + membrane$V) * 0.1))',
+                           '0.095 * exp((-membrane$V + 5.0) / 100.0) / (1.0 + exp((-membrane$V + 5.0) / 13.89))',
+                           '0.07 * exp((-44.0 - membrane$V) / 59.0) / (1.0 + exp((44.0 + membrane$V) / 20.0))',
+                           '0.012 * exp((-28.0 - membrane$V) / 125.0) / (1.0 + exp((28.0 + membrane$V) / 6.67))',
+                           '0.0065 * exp((-30.0 - membrane$V) / 50.0) / (1.0 + exp((-30.0 - membrane$V) / 5.0))',
+                           '1 / exp((35.0 + membrane$V) * 0.04)', '-1.0 + exp((77.0 + membrane$V) * 0.04)',
+                           '0.0005 * exp((50.0 + membrane$V) / 12.1) / (1.0 + exp((50.0 + membrane$V) / 17.5))',
+                           '0.0013 * exp((-20.0 - membrane$V) / 16.67) / (1.0 + exp((-20.0 - membrane$V) / 25.0))',
+                           ("((23.0 + membrane$V) * 0.2 / (-exp(-(23.0 + membrane$V) * 0.04) + 1.0) + (-1.0 + exp((85."
+                            "0 + membrane$V) * 0.04)) * 4.0 / (exp((53.0 + membrane$V) * 0.08) + exp((53.0 + membrane$V"
+                            ") * 0.04))) * 0.0035")]},
+         {'metadata_tag': 'cytosolic_calcium_concentration', 'mTableMins': 0.0, 'mTableMaxs': 50.0,
+          'mTableSteps': 0.01, 'table_used_in_methods': {'template_method'}, 'var': 'slow_inward_current$Cai',
+          'lookup_epxrs': ['-82.3 - 13.0287 * log(0.001 * slow_inward_current$Cai)']}]
 
 
 def test_no_print_after_table(hn_model):
