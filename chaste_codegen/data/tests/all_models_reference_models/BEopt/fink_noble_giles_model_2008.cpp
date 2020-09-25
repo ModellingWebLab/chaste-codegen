@@ -449,14 +449,6 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTab
         double var_chaste_interface__iCaL_f2_gate__f2 = rY[19];
         // Units: dimensionless; Initial value: 0.9995
         
-        // Lookup table indexing
-        const bool _oob_0 = Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__Environment__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
-
         //output_nonlinear_state_assignments
         double var_chaste_interface__Ca__Ca_SR = rCurrentGuess[0];
         double var_chaste_interface__Ca__Ca_i = rCurrentGuess[1];
@@ -476,6 +468,14 @@ std::shared_ptr<Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTab
         double var_chaste_interface__iKr_Markov__Ir5 = rCurrentGuess[15];
         double var_chaste_interface__iKr_Markov__Or4 = rCurrentGuess[16];
         
+        // Lookup table indexing
+        const bool _oob_0 = Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__Environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellfink_noble_giles_model_2008FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         //output_equations
         const double var_Ileak_Iup_Ixfer__i_leak = 0.00036000000000000002 * var_chaste_interface__Ca__Ca_SR - 0.00036000000000000002 * var_chaste_interface__Ca__Ca_i; // millimolar_per_millisecond
         const double var_Ileak_Iup_Ixfer__i_up = 0.0063749999999999996 / (1.0 + 6.2499999999999997e-8 / pow(var_chaste_interface__Ca__Ca_i, 2)); // millimolar_per_millisecond

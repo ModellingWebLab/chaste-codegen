@@ -479,14 +479,6 @@ std::shared_ptr<Cellcourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEule
         double var_chaste_interface__Ca_release_current_from_JSR_w_gate__w = rY[15];
         // Units: dimensionless; Initial value: 0.9992
         
-        // Lookup table indexing
-        const bool _oob_0 = Cellcourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellcourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
-
         //output_nonlinear_state_assignments
         double var_chaste_interface__Ca_release_current_from_JSR_u_gate__u = rCurrentGuess[0];
         double var_chaste_interface__Ca_release_current_from_JSR_v_gate__v = rCurrentGuess[1];
@@ -497,6 +489,14 @@ std::shared_ptr<Cellcourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEule
         double var_chaste_interface__intracellular_ion_concentrations__K_i = rCurrentGuess[6];
         double var_chaste_interface__intracellular_ion_concentrations__Na_i = rCurrentGuess[7];
         
+        // Lookup table indexing
+        const bool _oob_0 = Cellcourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellcourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
         //output_equations
         const double var_Ca_uptake_current_by_the_NSR__i_up = 0.0050000000000000001 / (1.0 + 0.00092000000000000003 / var_chaste_interface__intracellular_ion_concentrations__Ca_i); // millimolar_per_millisecond
         const double d_dt_chaste_interface_var_L_type_Ca_channel_f_Ca_gate__f_Ca = 0.5 / (1.0 + 2857.1428571428573 * var_chaste_interface__intracellular_ion_concentrations__Ca_i) - 0.5 * var_chaste_interface__L_type_Ca_channel_f_Ca_gate__f_Ca; // 1 / millisecond

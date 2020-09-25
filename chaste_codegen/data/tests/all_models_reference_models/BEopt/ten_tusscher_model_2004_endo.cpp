@@ -454,14 +454,6 @@ std::shared_ptr<Cellten_tusscher_model_2004_endoFromCellMLBackwardEuler_LookupTa
         double var_chaste_interface__transient_outward_current_r_gate__r = rY[12];
         // Units: dimensionless; Initial value: 0.0
         
-        // Lookup table indexing
-        const bool _oob_0 = Cellten_tusscher_model_2004_endoFromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellten_tusscher_model_2004_endoFromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
-
         //output_nonlinear_state_assignments
         double var_chaste_interface__L_type_Ca_current_fCa_gate__fCa = rCurrentGuess[0];
         double var_chaste_interface__calcium_dynamics__Ca_SR = rCurrentGuess[1];
@@ -470,6 +462,14 @@ std::shared_ptr<Cellten_tusscher_model_2004_endoFromCellMLBackwardEuler_LookupTa
         double var_chaste_interface__potassium_dynamics__K_i = rCurrentGuess[4];
         double var_chaste_interface__sodium_dynamics__Na_i = rCurrentGuess[5];
         
+        // Lookup table indexing
+        const bool _oob_0 = Cellten_tusscher_model_2004_endoFromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellten_tusscher_model_2004_endoFromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
         //output_equations
         const double var_L_type_Ca_current_fCa_gate__fCa_inf = 0.15753424657534248 + 0.068493150684931517 / (1.0 + exp(-5.0 + 10000.0 * var_chaste_interface__calcium_dynamics__Ca_i)) + 0.13698630136986303 / (1.0 + exp(-0.9375 + 1250.0 * var_chaste_interface__calcium_dynamics__Ca_i)) + 0.68493150684931503 / (1.0 + 8.034023767017109e+27 * pow(var_chaste_interface__calcium_dynamics__Ca_i, 8)); // dimensionless
         const double var_calcium_dynamics__g_inf = ((var_chaste_interface__calcium_dynamics__Ca_i < 0.00035) ? (1 / (1.0 + 5.439910241481016e+20 * pow(var_chaste_interface__calcium_dynamics__Ca_i, 6))) : (1 / (1.0 + 1.9720198874049176e+55 * pow(var_chaste_interface__calcium_dynamics__Ca_i, 16)))); // dimensionless

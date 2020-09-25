@@ -486,14 +486,6 @@ std::shared_ptr<Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler_LookupTab
         double var_chaste_interface__transient_outward_current_r_gate__r = rY[14];
         // Units: dimensionless; Initial value: 0.00103618091196912
         
-        // Lookup table indexing
-        const bool _oob_0 = Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
-
         //output_nonlinear_state_assignments
         double var_chaste_interface__L_type_Ca_current_fCass_gate__fCass = rCurrentGuess[0];
         double var_chaste_interface__calcium_dynamics__Ca_SR = rCurrentGuess[1];
@@ -503,6 +495,14 @@ std::shared_ptr<Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler_LookupTab
         double var_chaste_interface__potassium_dynamics__K_i = rCurrentGuess[5];
         double var_chaste_interface__sodium_dynamics__Na_i = rCurrentGuess[6];
         
+        // Lookup table indexing
+        const bool _oob_0 = Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
         //output_equations
         const double d_dt_chaste_interface_var_L_type_Ca_current_fCass_gate__fCass = (0.40000000000000002 - var_chaste_interface__L_type_Ca_current_fCass_gate__fCass + 0.59999999999999998 / (1.0 + 399.99999999999994 * pow(var_chaste_interface__calcium_dynamics__Ca_ss, 2))) / (2.0 + 80.0 / (1.0 + 399.99999999999994 * pow(var_chaste_interface__calcium_dynamics__Ca_ss, 2))); // 1 / millisecond
         const double var_calcium_dynamics__i_leak = 0.00036000000000000002 * var_chaste_interface__calcium_dynamics__Ca_SR - 0.00036000000000000002 * var_chaste_interface__calcium_dynamics__Ca_i; // millimolar_per_millisecond

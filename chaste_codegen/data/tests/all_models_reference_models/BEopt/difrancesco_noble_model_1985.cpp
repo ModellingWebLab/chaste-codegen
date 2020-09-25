@@ -429,14 +429,6 @@ std::shared_ptr<Celldifrancesco_noble_model_1985FromCellMLBackwardEuler_LookupTa
         double var_chaste_interface__intracellular_calcium_concentration__p = rY[13];
         // Units: dimensionless; Initial value: 1.0
         
-        // Lookup table indexing
-        const bool _oob_0 = Celldifrancesco_noble_model_1985FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Celldifrancesco_noble_model_1985FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
-
         //output_nonlinear_state_assignments
         double var_chaste_interface__extracellular_potassium_concentration__Kc = rCurrentGuess[0];
         double var_chaste_interface__intracellular_calcium_concentration__Ca_rel = rCurrentGuess[1];
@@ -446,6 +438,14 @@ std::shared_ptr<Celldifrancesco_noble_model_1985FromCellMLBackwardEuler_LookupTa
         double var_chaste_interface__intracellular_sodium_concentration__Nai = rCurrentGuess[5];
         double var_chaste_interface__second_inward_current_f2_gate__f2 = rCurrentGuess[6];
         
+        // Lookup table indexing
+        const bool _oob_0 = Celldifrancesco_noble_model_1985FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Celldifrancesco_noble_model_1985FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
         //output_equations
         const double var_intracellular_calcium_concentration__i_rel = 1091.2235042702928 * pow(var_chaste_interface__intracellular_calcium_concentration__Cai, 2.0) * var_chaste_interface__intracellular_calcium_concentration__Ca_rel * mParameters[0] / (pow(var_chaste_interface__intracellular_calcium_concentration__Cai, 2.0) + pow(mParameters[1], 2.0)); // nanoA
         const double var_intracellular_calcium_concentration__i_tr = 27.280587606757322 * (-var_chaste_interface__intracellular_calcium_concentration__Ca_rel + var_chaste_interface__intracellular_calcium_concentration__Ca_up) * var_chaste_interface__intracellular_calcium_concentration__p; // nanoA

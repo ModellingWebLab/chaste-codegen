@@ -474,14 +474,6 @@ std::shared_ptr<Cellviswanathan_model_1999_epiFromCellMLBackwardEuler_LookupTabl
         double var_chaste_interface__slow_delayed_rectifier_potassium_current_xs2_gate__xs2 = rY[11];
         // Units: dimensionless; Initial value: 0.0631269
         
-        // Lookup table indexing
-        const bool _oob_0 = Cellviswanathan_model_1999_epiFromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellviswanathan_model_1999_epiFromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
-
         //output_nonlinear_state_assignments
         double var_chaste_interface__calcium_dynamics__APtrack = rCurrentGuess[0];
         double var_chaste_interface__calcium_dynamics__APtrack2 = rCurrentGuess[1];
@@ -496,6 +488,14 @@ std::shared_ptr<Cellviswanathan_model_1999_epiFromCellMLBackwardEuler_LookupTabl
         double var_chaste_interface__ionic_concentrations__Ki = rCurrentGuess[10];
         double var_chaste_interface__ionic_concentrations__Nai = rCurrentGuess[11];
         
+        // Lookup table indexing
+        const bool _oob_0 = Cellviswanathan_model_1999_epiFromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellviswanathan_model_1999_epiFromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
         //output_equations
         const double d_dt_chaste_interface_var_calcium_dynamics__APtrack2 = 0.001 * (((var_chaste_interface__calcium_dynamics__APtrack > 0.17999999999999999) && (var_chaste_interface__calcium_dynamics__APtrack < 0.20000000000000001)) ? (100000.0 - 100500.0 * var_chaste_interface__calcium_dynamics__APtrack2) : (-500.0 * var_chaste_interface__calcium_dynamics__APtrack2)); // 1 / millisecond
         const double d_dt_chaste_interface_var_calcium_dynamics__APtrack3 = 0.001 * (((var_chaste_interface__calcium_dynamics__APtrack > 0.17999999999999999) && (var_chaste_interface__calcium_dynamics__APtrack < 0.20000000000000001)) ? (100000.0 - 100500.0 * var_chaste_interface__calcium_dynamics__APtrack3) : (-10.0 * var_chaste_interface__calcium_dynamics__APtrack3)); // 1 / millisecond

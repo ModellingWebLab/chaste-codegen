@@ -448,14 +448,6 @@ std::shared_ptr<Cellwinslow_model_1999FromCellMLBackwardEuler_LookupTables> Cell
         double var_chaste_interface__L_type_Ca_current_y_gate__y = rY[20];
         // Units: dimensionless; Initial value: 0.798
         
-        // Lookup table indexing
-        const bool _oob_0 = Cellwinslow_model_1999FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellwinslow_model_1999FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
-
         //output_nonlinear_state_assignments
         double var_chaste_interface__L_type_Ca_current__C0 = rCurrentGuess[0];
         double var_chaste_interface__L_type_Ca_current__C1 = rCurrentGuess[1];
@@ -482,6 +474,14 @@ std::shared_ptr<Cellwinslow_model_1999FromCellMLBackwardEuler_LookupTables> Cell
         double var_chaste_interface__intracellular_ion_concentrations__Cai = rCurrentGuess[22];
         double var_chaste_interface__intracellular_ion_concentrations__Nai = rCurrentGuess[24];
         
+        // Lookup table indexing
+        const bool _oob_0 = Cellwinslow_model_1999FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellwinslow_model_1999FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
         //output_equations
         const double d_dt_chaste_interface_var_L_type_Ca_current__O = 0.29999999999999999 * var_chaste_interface__L_type_Ca_current__C4 - 2.0 * var_chaste_interface__L_type_Ca_current__O; // 1 / millisecond
         const double d_dt_chaste_interface_var_L_type_Ca_current__O_Ca = 0.0070000000000000001 * var_chaste_interface__L_type_Ca_current__C_Ca4 - 7.0 * var_chaste_interface__L_type_Ca_current__O_Ca; // 1 / millisecond

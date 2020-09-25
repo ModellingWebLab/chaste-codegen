@@ -492,14 +492,6 @@ std::shared_ptr<Celllivshitz_rudy_2007FromCellMLBackwardEuler_LookupTables> Cell
         double var_chaste_interface__ICaT__g = rY[10];
         // Units: dimensionless; Initial value: 0.952834331760863
         
-        // Lookup table indexing
-        const bool _oob_0 = Celllivshitz_rudy_2007FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__Environment__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Celllivshitz_rudy_2007FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
-
         //output_nonlinear_state_assignments
         double var_chaste_interface__Ca__Ca_JSR_T = rCurrentGuess[0];
         double var_chaste_interface__Ca__Ca_NSR = rCurrentGuess[1];
@@ -508,6 +500,14 @@ std::shared_ptr<Celllivshitz_rudy_2007FromCellMLBackwardEuler_LookupTables> Cell
         double var_chaste_interface__K__K_i = rCurrentGuess[5];
         double var_chaste_interface__Na__Na_i = rCurrentGuess[6];
         
+        // Lookup table indexing
+        const bool _oob_0 = Celllivshitz_rudy_2007FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__Environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Celllivshitz_rudy_2007FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         //output_equations
         const double var_Ca__Ca_i = -0.040960000000000003 + 0.33333333333333331 * var_chaste_interface__Ca__Ca_T + 0.66666666666666663 * sqrt(-0.00057837000000000014 + pow((0.12288 - var_chaste_interface__Ca__Ca_T), 2) + 0.0086400000000000001 * var_chaste_interface__Ca__Ca_T) * cos(0.33333333333333331 * acos(0.5 * pow((-0.00057837000000000014 + pow((0.12288 - var_chaste_interface__Ca__Ca_T), 2) + 0.0086400000000000001 * var_chaste_interface__Ca__Ca_T), (-1.5)) * (3.2130000000000006e-5 * var_chaste_interface__Ca__Ca_T - 2.0 * pow((0.12288 - var_chaste_interface__Ca__Ca_T), 3) + 9.0 * (0.12288 - var_chaste_interface__Ca__Ca_T) * (0.00019279000000000003 - 0.0028800000000000002 * var_chaste_interface__Ca__Ca_T)))); // mM
         const double d_dt_chaste_interface_var_Ca__Over = 0; // 1 / ms

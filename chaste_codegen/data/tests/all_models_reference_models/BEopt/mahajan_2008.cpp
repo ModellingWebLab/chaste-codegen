@@ -471,14 +471,6 @@ std::shared_ptr<Cellmahajan_2008FromCellMLBackwardEuler_LookupTables> Cellmahaja
         double var_chaste_interface__INa__xj = rY[4];
         // Units: dimensionless; Initial value: 0.993888937283
         
-        // Lookup table indexing
-        const bool _oob_0 = Cellmahajan_2008FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__Environment__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellmahajan_2008FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
-
         //output_nonlinear_state_assignments
         double var_chaste_interface__Ca__Ca_NSR = rCurrentGuess[0];
         double var_chaste_interface__Ca__Ca_dyad = rCurrentGuess[1];
@@ -496,6 +488,14 @@ std::shared_ptr<Cellmahajan_2008FromCellMLBackwardEuler_LookupTables> Cellmahaja
         double var_chaste_interface__Irel__xir = rCurrentGuess[13];
         double var_chaste_interface__Na__Na_i = rCurrentGuess[14];
         
+        // Lookup table indexing
+        const bool _oob_0 = Cellmahajan_2008FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__Environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellmahajan_2008FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         //output_equations
         const double var_Ca__Ca_i = 1000.0 * var_chaste_interface__Ca__Ca_i_converted; // uM
         const double var_Ca__csm = 0.001 * var_chaste_interface__Ca__Ca_submem; // mM

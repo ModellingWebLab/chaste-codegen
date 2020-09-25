@@ -541,14 +541,6 @@ std::shared_ptr<Cellli_mouse_2010FromCellMLBackwardEuler_LookupTables> Cellli_mo
         double var_chaste_interface__fast_transient_outward_K_I__ito_f = rY[33];
         // Units: dimensionless; Initial value: 0.996989882138174
         
-        // Lookup table indexing
-        const bool _oob_0 = Cellli_mouse_2010FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellli_mouse_2010FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
-
         //output_nonlinear_state_assignments
         double var_chaste_interface__L_type_calcium_current__I = rCurrentGuess[0];
         double var_chaste_interface__L_type_calcium_current__O = rCurrentGuess[1];
@@ -577,6 +569,14 @@ std::shared_ptr<Cellli_mouse_2010FromCellMLBackwardEuler_LookupTables> Cellli_mo
         double var_chaste_interface__ryanodine_receptors__P_O2 = rCurrentGuess[24];
         double var_chaste_interface__sodium_concentration__Nai = rCurrentGuess[25];
         
+        // Lookup table indexing
+        const bool _oob_0 = Cellli_mouse_2010FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellli_mouse_2010FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         //output_equations
         const double d_dt_chaste_interface_var_non_inactivating_steady_state_K_I__iKss = 0; // 1 / millisecond
         const double var_L_type_calcium_current__C = 1.0 - var_chaste_interface__L_type_calcium_current__I - var_chaste_interface__L_type_calcium_current__O; // dimensionless

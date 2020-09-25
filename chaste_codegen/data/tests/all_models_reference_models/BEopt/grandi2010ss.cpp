@@ -495,14 +495,6 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLBackwardEuler_LookupTables> Cellgrandi
         double var_chaste_interface__cell__sf = rY[5];
         // Units: dimensionless; Initial value: 0.995094078386247
         
-        // Lookup table indexing
-        const bool _oob_0 = Cellgrandi2010ssFromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__sVm);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__cell__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellgrandi2010ssFromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__sVm);
-
         //output_nonlinear_state_assignments
         double var_chaste_interface__cell__sCaM = rCurrentGuess[0];
         double var_chaste_interface__cell__sCa_sr = rCurrentGuess[1];
@@ -531,6 +523,14 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLBackwardEuler_LookupTables> Cellgrandi
         double var_chaste_interface__cell__sfcaBj = rCurrentGuess[24];
         double var_chaste_interface__cell__sfcaBsl = rCurrentGuess[25];
         
+        // Lookup table indexing
+        const bool _oob_0 = Cellgrandi2010ssFromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__sVm);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__cell__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellgrandi2010ssFromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__sVm);
+
         //output_equations
         const double var_cell__Qpow = 0; // dimensionless
         const double var_cell__Vcell = 1.0506250000000001e-11 * M_PI; // dimensionless

@@ -338,14 +338,6 @@ std::shared_ptr<Cellhilgemann_noble_model_1987FromCellMLBackwardEuler_LookupTabl
         double var_chaste_interface__second_inward_calcium_current_d_gate__d = rY[4];
         // Units: dimensionless; Initial value: 0.0011
         
-        // Lookup table indexing
-        const bool _oob_0 = Cellhilgemann_noble_model_1987FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellhilgemann_noble_model_1987FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
-
         //output_nonlinear_state_assignments
         double var_chaste_interface__calcium_release__ActFrac = rCurrentGuess[0];
         double var_chaste_interface__calcium_release__ProdFrac = rCurrentGuess[1];
@@ -359,6 +351,14 @@ std::shared_ptr<Cellhilgemann_noble_model_1987FromCellMLBackwardEuler_LookupTabl
         double var_chaste_interface__intracellular_sodium_concentration__Na_i = rCurrentGuess[9];
         double var_chaste_interface__second_inward_calcium_current_f_Ca_gate__f_Ca = rCurrentGuess[10];
         
+        // Lookup table indexing
+        const bool _oob_0 = Cellhilgemann_noble_model_1987FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellhilgemann_noble_model_1987FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
         //output_equations
         const double var_calcium_release__RegBindSite = pow(var_chaste_interface__intracellular_calcium_concentration__Ca_i, 2) / pow((0.00050000000000000001 + var_chaste_interface__intracellular_calcium_concentration__Ca_i), 2); // dimensionless
         const double var_calcium_release__InactRate = 60.0 + 500.0 * var_calcium_release__RegBindSite; // per_second

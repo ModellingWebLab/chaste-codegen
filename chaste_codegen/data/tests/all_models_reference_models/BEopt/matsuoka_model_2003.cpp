@@ -567,14 +567,6 @@ std::shared_ptr<Cellmatsuoka_model_2003FromCellMLBackwardEuler_LookupTables> Cel
         double var_chaste_interface__NL_model__X = rY[36];
         // Units: micrometre; Initial value: 0.9573749975411884
         
-        // Lookup table indexing
-        const bool _oob_0 = Cellmatsuoka_model_2003FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__Vm);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellmatsuoka_model_2003FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__Vm);
-
         //output_nonlinear_state_assignments
         double var_chaste_interface__ATP_production__ATPi = rCurrentGuess[0];
         double var_chaste_interface__Ca_concentrations_in_SR__Ca_Total = rCurrentGuess[1];
@@ -602,6 +594,14 @@ std::shared_ptr<Cellmatsuoka_model_2003FromCellMLBackwardEuler_LookupTables> Cel
         double var_chaste_interface__sodium_potassium_pump_y_gate__y = rCurrentGuess[23];
         double var_chaste_interface__time_independent_potassium_current_y_gate__y = rCurrentGuess[24];
         
+        // Lookup table indexing
+        const bool _oob_0 = Cellmatsuoka_model_2003FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__Vm);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellmatsuoka_model_2003FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__Vm);
+
         //output_equations
         const double var_Ca_concentrations_in_SR__Carel = -5.4000000000000004 + 0.5 * var_chaste_interface__Ca_concentrations_in_SR__Ca_Total + 5.4000000000000004 * sqrt(pow((1 - 0.092592592592592587 * var_chaste_interface__Ca_concentrations_in_SR__Ca_Total), 2) + 0.027434842249657067 * var_chaste_interface__Ca_concentrations_in_SR__Ca_Total); // millimolar
         const double var_L_type_Ca_channel_Ca_dependent_gate__p_CCa = 1.0 - var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_C - var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_U - var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_UCa; // dimensionless

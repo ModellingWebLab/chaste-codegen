@@ -455,14 +455,6 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLBackwardEuler_LookupTables> Cel
         double var_chaste_interface__delayed_rectifier_K_current_pi_gate__p_i = rY[14];
         // Units: dimensionless; Initial value: 0.76898
         
-        // Lookup table indexing
-        const bool _oob_0 = Cellaslanidi_model_2009FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellaslanidi_model_2009FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
-
         //output_nonlinear_state_assignments
         double var_chaste_interface__Ca_handling_by_the_SR__Ca_rel = rCurrentGuess[0];
         double var_chaste_interface__Ca_handling_by_the_SR__Ca_up = rCurrentGuess[1];
@@ -479,6 +471,14 @@ std::shared_ptr<Cellaslanidi_model_2009FromCellMLBackwardEuler_LookupTables> Cel
         double var_chaste_interface__intracellular_ion_concentrations__K_i = rCurrentGuess[12];
         double var_chaste_interface__intracellular_ion_concentrations__Na_i = rCurrentGuess[13];
         
+        // Lookup table indexing
+        const bool _oob_0 = Cellaslanidi_model_2009FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellaslanidi_model_2009FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
         //output_equations
         const double var_Ca_handling_by_the_SR__O_Calse_orig_deriv = -400.0 * var_chaste_interface__Ca_handling_by_the_SR__O_Calse + 480.0 * (1.0 - var_chaste_interface__Ca_handling_by_the_SR__O_Calse) * var_chaste_interface__Ca_handling_by_the_SR__Ca_rel; // 1 / second
         const double d_dt_chaste_interface_var_Ca_handling_by_the_SR__O_Calse = 0.001 * var_Ca_handling_by_the_SR__O_Calse_orig_deriv; // 1 / millisecond

@@ -389,14 +389,6 @@ std::shared_ptr<Celldokos_model_1996FromCellMLBackwardEuler_LookupTables> Celldo
         double var_chaste_interface__hyperpolarising_activated_current_y_gate__y = rY[10];
         // Units: dimensionless; Initial value: 0.0287
         
-        // Lookup table indexing
-        const bool _oob_0 = Celldokos_model_1996FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__E);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Celldokos_model_1996FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__E);
-
         //output_nonlinear_state_assignments
         double var_chaste_interface__L_type_calcium_current_f2_gate__fL2 = rCurrentGuess[0];
         double var_chaste_interface__ion_concentrations__Cai = rCurrentGuess[1];
@@ -408,6 +400,14 @@ std::shared_ptr<Celldokos_model_1996FromCellMLBackwardEuler_LookupTables> Celldo
         double var_chaste_interface__ion_concentrations__Nai = rCurrentGuess[7];
         double var_chaste_interface__ion_concentrations__Nao = rCurrentGuess[8];
         
+        // Lookup table indexing
+        const bool _oob_0 = Celldokos_model_1996FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__E);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Celldokos_model_1996FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__E);
+
         //output_equations
         const double d_dt_chaste_interface_var_L_type_calcium_current_f2_gate__fL2 = 0.0030000000000000001 - 0.0030000000000000001 * var_chaste_interface__L_type_calcium_current_f2_gate__fL2 - 40.0 * var_chaste_interface__L_type_calcium_current_f2_gate__fL2 * var_chaste_interface__ion_concentrations__Cai; // 1 / millisecond
         const double var_background_potassium_current__i_bK = 6.9999999999999994e-5 * pow(var_chaste_interface__ion_concentrations__Ko, 0.40999999999999998) * (-var_chaste_interface__ion_concentrations__Ko * _lt_0_row[3] + var_chaste_interface__ion_concentrations__Ki); // picoA

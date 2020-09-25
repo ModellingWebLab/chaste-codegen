@@ -399,10 +399,10 @@ std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLBackwardEuler_LookupTables
         double var_chaste_interface__slow_inward_current_f_gate__f = rY[6];
         // Units: dimensionless; Initial value: 0.994
         
-
         //output_nonlinear_state_assignments
         double var_chaste_interface__slow_inward_current__Cai = rCurrentGuess[0];
         
+
         //output_equations
         const double var_slow_inward_current__i_s = 0.00089999999999999998 * (-7.6990712032745758 + 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai) + var_chaste_interface__membrane__V) * var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f; // uA_per_mm2
         const double d_dt_chaste_interface_var_slow_inward_current__Cai = 7.0000000000000007e-6 - 0.070000000000000007 * var_chaste_interface__slow_inward_current__Cai - 0.01 * var_slow_inward_current__i_s; // concentration_units / ms

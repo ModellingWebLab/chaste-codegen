@@ -550,14 +550,6 @@ std::shared_ptr<Cellhund_rudy_2004_aFromCellMLBackwardEuler_LookupTables> Cellhu
         double var_chaste_interface__INal__hL = rY[19];
         // Units: dimensionless; Initial value: 0.26130711759
         
-        // Lookup table indexing
-        const bool _oob_0 = Cellhund_rudy_2004_aFromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__Environment__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellhund_rudy_2004_aFromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
-
         //output_nonlinear_state_assignments
         double var_chaste_interface__Ca__Ca_i = rCurrentGuess[0];
         double var_chaste_interface__Ca__Ca_jsr = rCurrentGuess[1];
@@ -573,6 +565,14 @@ std::shared_ptr<Cellhund_rudy_2004_aFromCellMLBackwardEuler_LookupTables> Cellhu
         double var_chaste_interface__K__K_i = rCurrentGuess[11];
         double var_chaste_interface__Na__Na_i = rCurrentGuess[12];
         
+        // Lookup table indexing
+        const bool _oob_0 = Cellhund_rudy_2004_aFromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__Environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellhund_rudy_2004_aFromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         //output_equations
         const double var_Environment__tissue = 0; // dimensionless
         const double var_INaCa__ca_i_NaCa = 1.5 * var_chaste_interface__Ca__Ca_i; // mM

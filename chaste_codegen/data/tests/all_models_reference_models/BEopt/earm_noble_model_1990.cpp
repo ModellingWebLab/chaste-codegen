@@ -363,14 +363,6 @@ std::shared_ptr<Cellearm_noble_model_1990FromCellMLBackwardEuler_LookupTables> C
         double var_chaste_interface__L_type_calcium_current_d_gate__d = rY[6];
         // Units: dimensionless; Initial value: 0.0011
         
-        // Lookup table indexing
-        const bool _oob_0 = Cellearm_noble_model_1990FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellearm_noble_model_1990FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
-
         //output_nonlinear_state_assignments
         double var_chaste_interface__L_type_calcium_current_f_Ca_gate__f_Ca = rCurrentGuess[0];
         double var_chaste_interface__calcium_release__ActFrac = rCurrentGuess[1];
@@ -383,6 +375,14 @@ std::shared_ptr<Cellearm_noble_model_1990FromCellMLBackwardEuler_LookupTables> C
         double var_chaste_interface__intracellular_potassium_concentration__K_i = rCurrentGuess[8];
         double var_chaste_interface__intracellular_sodium_concentration__Na_i = rCurrentGuess[9];
         
+        // Lookup table indexing
+        const bool _oob_0 = Cellearm_noble_model_1990FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellearm_noble_model_1990FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
         //output_equations
         const double var_L_type_calcium_current_f_Ca_gate__CaChoff = var_chaste_interface__intracellular_calcium_concentration__Ca_i / (0.001 + var_chaste_interface__intracellular_calcium_concentration__Ca_i); // dimensionless
         const double var_L_type_calcium_current_f_Ca_gate__CaChon = (1.0 - var_L_type_calcium_current_f_Ca_gate__CaChoff) * (1.0 - var_chaste_interface__L_type_calcium_current_f_Ca_gate__f_Ca); // dimensionless

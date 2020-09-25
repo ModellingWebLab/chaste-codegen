@@ -393,14 +393,6 @@ std::shared_ptr<Celliribe_model_2006_without_otherwise_sectionFromCellMLBackward
         double var_chaste_interface__L_type_Ca_channel_f_gate__f = rY[8];
         // Units: dimensionless; Initial value: 1.0
         
-        // Lookup table indexing
-        const bool _oob_0 = Celliribe_model_2006_without_otherwise_sectionFromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane_potential__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Celliribe_model_2006_without_otherwise_sectionFromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane_potential__V);
-
         //output_nonlinear_state_assignments
         double var_chaste_interface__CaMKII_factor__F_CaMK = rCurrentGuess[0];
         double var_chaste_interface__Force__N_0 = rCurrentGuess[1];
@@ -418,6 +410,14 @@ std::shared_ptr<Celliribe_model_2006_without_otherwise_sectionFromCellMLBackward
         double var_chaste_interface__intracellular_sodium_concentration__Na_i = rCurrentGuess[13];
         double var_chaste_interface__troponin__Trpn_Ca = rCurrentGuess[14];
         
+        // Lookup table indexing
+        const bool _oob_0 = Celliribe_model_2006_without_otherwise_sectionFromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane_potential__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Celliribe_model_2006_without_otherwise_sectionFromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane_potential__V);
+
         //output_equations
         const double var_Force__N_1 = 1.0 - var_chaste_interface__Force__N_0 - var_chaste_interface__Force__P_0 - var_chaste_interface__Force__P_1 - var_chaste_interface__Force__P_2 - var_chaste_interface__Force__P_3; // dimensionless
         const double d_dt_chaste_interface_var_Force__P_2 = 0.12214285714285715 * var_chaste_interface__Force__P_3 + 0.10000000000000001 * var_chaste_interface__Force__P_1 - 0.15142857142857144 * var_chaste_interface__Force__P_2; // 1 / millisecond

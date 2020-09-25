@@ -426,14 +426,6 @@ std::shared_ptr<Celliyer_model_2004FromCellMLBackwardEuler_LookupTables> Celliye
         double var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa = rY[24];
         // Units: dimensionless; Initial value: 0.9997157074
         
-        // Lookup table indexing
-        const bool _oob_0 = Celliyer_model_2004FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Celliyer_model_2004FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-
         //output_nonlinear_state_assignments
         double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR = rCurrentGuess[0];
         double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaNSR = rCurrentGuess[1];
@@ -501,6 +493,14 @@ std::shared_ptr<Celliyer_model_2004FromCellMLBackwardEuler_LookupTables> Celliye
         double var_chaste_interface__INa__na8 = rCurrentGuess[63];
         double var_chaste_interface__INa__na9 = rCurrentGuess[64];
         
+        // Lookup table indexing
+        const bool _oob_0 = Celliyer_model_2004FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Celliyer_model_2004FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+
         //output_equations
         const double var_COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__alpha_act14 = _lt_0_row[0]; // per_ms
         const double var_COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C0Kv14_to_C1Kv14 = 4.0 * var_COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__alpha_act14; // per_ms

@@ -422,14 +422,6 @@ std::shared_ptr<Celldemir_model_1994FromCellMLBackwardEuler_LookupTables> Cellde
         double var_chaste_interface__hyperpolarisation_activated_current_y_gate__y = rY[11];
         // Units: dimensionless; Initial value: 0.09227776
         
-        // Lookup table indexing
-        const bool _oob_0 = Celldemir_model_1994FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Celldemir_model_1994FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
-
         //output_nonlinear_state_assignments
         double var_chaste_interface__SR_Ca_uptake_and_release__Ca_Calse = rCurrentGuess[0];
         double var_chaste_interface__SR_Ca_uptake_and_release__Ca_rel = rCurrentGuess[1];
@@ -448,6 +440,14 @@ std::shared_ptr<Celldemir_model_1994FromCellMLBackwardEuler_LookupTables> Cellde
         double var_chaste_interface__intracellular_concentrations_and_buffer_equations__Mg_Mg_Trop = rCurrentGuess[14];
         double var_chaste_interface__intracellular_concentrations_and_buffer_equations__Na_i = rCurrentGuess[15];
         
+        // Lookup table indexing
+        const bool _oob_0 = Celldemir_model_1994FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Celldemir_model_1994FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
         //output_equations
         const double var_SR_Ca_uptake_and_release__i_rel = 0.5 * pow(var_chaste_interface__SR_Ca_uptake_and_release__F2, 2) * var_chaste_interface__SR_Ca_uptake_and_release__Ca_rel / pow((0.25 + var_chaste_interface__SR_Ca_uptake_and_release__F2), 2); // nanoA
         const double var_SR_Ca_uptake_and_release__phi_Calse = -641.0 * var_chaste_interface__SR_Ca_uptake_and_release__Ca_Calse + 770.0 * (1.0 - var_chaste_interface__SR_Ca_uptake_and_release__Ca_Calse) * var_chaste_interface__SR_Ca_uptake_and_release__Ca_rel; // per_second

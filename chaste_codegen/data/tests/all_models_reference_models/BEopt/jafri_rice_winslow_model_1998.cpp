@@ -410,14 +410,6 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupT
         double var_chaste_interface__time_dependent_potassium_current_X_gate__X = rY[17];
         // Units: dimensionless; Initial value: 0.000928836
         
-        // Lookup table indexing
-        const bool _oob_0 = Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
-
         //output_nonlinear_state_assignments
         double var_chaste_interface__L_type_Ca_channel__C0 = rCurrentGuess[0];
         double var_chaste_interface__L_type_Ca_channel__C1 = rCurrentGuess[1];
@@ -445,6 +437,14 @@ std::shared_ptr<Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupT
         double var_chaste_interface__ionic_concentrations__Ko = rCurrentGuess[23];
         double var_chaste_interface__ionic_concentrations__Nai = rCurrentGuess[24];
         
+        // Lookup table indexing
+        const bool _oob_0 = Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Celljafri_rice_winslow_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
+
         //output_equations
         const double var_L_type_Ca_channel__f_ = 0; // per_ms
         const double d_dt_chaste_interface_var_L_type_Ca_channel__O = 0.29999999999999999 * var_chaste_interface__L_type_Ca_channel__C4 - 2.0 * var_chaste_interface__L_type_Ca_channel__O; // 1 / ms

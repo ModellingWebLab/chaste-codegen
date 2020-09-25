@@ -421,6 +421,13 @@ std::shared_ptr<Cellluo_rudy_1994FromCellMLBackwardEuler_LookupTables> Cellluo_r
         double var_chaste_interface__time_dependent_potassium_current_X_gate__X = rY[7];
         // Units: dimensionless; Initial value: 0.0
         
+        //output_nonlinear_state_assignments
+        double var_chaste_interface__ionic_concentrations__Ca_JSR = rCurrentGuess[0];
+        double var_chaste_interface__ionic_concentrations__Ca_NSR = rCurrentGuess[1];
+        double var_chaste_interface__ionic_concentrations__Cai = rCurrentGuess[2];
+        double var_chaste_interface__ionic_concentrations__Ki = rCurrentGuess[3];
+        double var_chaste_interface__ionic_concentrations__Nai = rCurrentGuess[4];
+        
         // Lookup table indexing
         const bool _oob_0 = Cellluo_rudy_1994FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__V);
 // LCOV_EXCL_START
@@ -429,13 +436,6 @@ std::shared_ptr<Cellluo_rudy_1994FromCellMLBackwardEuler_LookupTables> Cellluo_r
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Cellluo_rudy_1994FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
-        //output_nonlinear_state_assignments
-        double var_chaste_interface__ionic_concentrations__Ca_JSR = rCurrentGuess[0];
-        double var_chaste_interface__ionic_concentrations__Ca_NSR = rCurrentGuess[1];
-        double var_chaste_interface__ionic_concentrations__Cai = rCurrentGuess[2];
-        double var_chaste_interface__ionic_concentrations__Ki = rCurrentGuess[3];
-        double var_chaste_interface__ionic_concentrations__Nai = rCurrentGuess[4];
-        
         //output_equations
         const double var_calcium_fluxes_in_the_SR__delta_Ca_i2 = 0; // mM
         const double var_calcium_fluxes_in_the_SR__i_leak = 0.00033333333333333332 * var_chaste_interface__ionic_concentrations__Ca_NSR; // mM_per_ms

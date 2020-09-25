@@ -457,14 +457,6 @@ std::shared_ptr<Cellpriebe_beuckelmann_model_1998FromCellMLBackwardEuler_LookupT
         double var_chaste_interface__IKr_Xr_gate__Xr = rY[10];
         // Units: dimensionless; Initial value: 0.000215523048438941
         
-        // Lookup table indexing
-        const bool _oob_0 = Cellpriebe_beuckelmann_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Cellpriebe_beuckelmann_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
-
         //output_nonlinear_state_assignments
         double var_chaste_interface__Ionic_concentrations__Ca_JSR = rCurrentGuess[0];
         double var_chaste_interface__Ionic_concentrations__Ca_NSR = rCurrentGuess[1];
@@ -476,6 +468,14 @@ std::shared_ptr<Cellpriebe_beuckelmann_model_1998FromCellMLBackwardEuler_LookupT
         double var_chaste_interface__Irel__APtrack3 = rCurrentGuess[7];
         double var_chaste_interface__Irel__Cainfluxtrack = rCurrentGuess[8];
         
+        // Lookup table indexing
+        const bool _oob_0 = Cellpriebe_beuckelmann_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellpriebe_beuckelmann_model_1998FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
+
         //output_equations
         const double d_dt_chaste_interface_var_Irel__OVRLDtrack = 0; // 1 / ms
         const double d_dt_chaste_interface_var_Irel__OVRLDtrack2 = 0; // 1 / ms

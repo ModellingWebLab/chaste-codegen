@@ -447,7 +447,6 @@ std::shared_ptr<CellShannon2004FromCellMLBackwardEuler_LookupTables> CellShannon
         double var_chaste_interface__ICaL_f_gate__f = rY[13];
         // Units: dimensionless; Initial value: 1.00067601563206
         
-
         //output_nonlinear_state_assignments
         double var_chaste_interface__Ca_buffer__Ca_Calsequestrin = rCurrentGuess[0];
         double var_chaste_interface__Ca_buffer__Ca_SL = rCurrentGuess[1];
@@ -482,6 +481,7 @@ std::shared_ptr<CellShannon2004FromCellMLBackwardEuler_LookupTables> CellShannon
         double var_chaste_interface__indo_fluo_Ca_buffer_not_connected__Ca_Indo1_SL = rCurrentGuess[30];
         double var_chaste_interface__indo_fluo_Ca_buffer_not_connected__Ca_Indo1_jct = rCurrentGuess[31];
         
+
         //output_equations
         const double d_dt_chaste_interface_var_ICaL_fCa_gate__fCaB_SL = -0.011900000000000001 * var_chaste_interface__ICaL_fCa_gate__fCaB_SL + 1.7 * (1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_SL) * var_chaste_interface__Ca_buffer__Ca_SL; // 1 / millisecond
         const double d_dt_chaste_interface_var_ICaL_fCa_gate__fCaB_jct = -0.011900000000000001 * var_chaste_interface__ICaL_fCa_gate__fCaB_jct + 1.7 * (1.0 - var_chaste_interface__ICaL_fCa_gate__fCaB_jct) * var_chaste_interface__Ca_buffer__Ca_jct; // 1 / millisecond

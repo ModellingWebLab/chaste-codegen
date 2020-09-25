@@ -561,14 +561,6 @@ std::shared_ptr<Celldecker_2009FromCellMLBackwardEuler_LookupTables> Celldecker_
         double var_chaste_interface__Ito2_i2f_gate__i2f = rY[36];
         // Units: dimensionless; Initial value: 0.9960352
         
-        // Lookup table indexing
-        const bool _oob_0 = Celldecker_2009FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__Vm);
-// LCOV_EXCL_START
-        if (_oob_0)
-            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
-// LCOV_EXCL_STOP
-        const double* const _lt_0_row = Celldecker_2009FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__Vm);
-
         //output_nonlinear_state_assignments
         double var_chaste_interface__CaMK_active__CaMK_trap = rCurrentGuess[0];
         double var_chaste_interface__Ca__Ca_JSR = rCurrentGuess[1];
@@ -608,6 +600,14 @@ std::shared_ptr<Celldecker_2009FromCellMLBackwardEuler_LookupTables> Celldecker_
         double var_chaste_interface__Na__Na_i = rCurrentGuess[35];
         double var_chaste_interface__Na__Na_ss_sr = rCurrentGuess[36];
         
+        // Lookup table indexing
+        const bool _oob_0 = Celldecker_2009FromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__membrane__Vm);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Celldecker_2009FromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__Vm);
+
         //output_equations
         const double var_Ca__Idiff = 5.0 * var_chaste_interface__Ca__Ca_ss_sr - 5.0 * var_chaste_interface__Ca__Ca_i; // mM_per_ms
         const double var_Ca__Idiff_ss = 0.5 * var_chaste_interface__Ca__Ca_ss_sr - 0.5 * var_chaste_interface__Ca__Ca_ss_CaL; // mM_per_ms
