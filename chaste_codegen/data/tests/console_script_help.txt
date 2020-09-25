@@ -67,6 +67,6 @@ Chaste options:
                         which to generate lookup tables (optional). --lookup-
                         table can be added multiple times to indicate multiple
                         lookup tables. Please note: Can only be used in
-                        combination with --opt. If the option is omitted,
+                        combination with --opt. If the arguments are omitted,
                         following defaults will be used: --lookup-table
                         membrane_voltage -250.0001 549.9999 0.001.
