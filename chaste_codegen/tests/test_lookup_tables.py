@@ -5,7 +5,7 @@ from cellmlmanip import load_model
 
 import chaste_codegen as cg
 from chaste_codegen._chaste_printer import ChastePrinter
-from chaste_codegen._lookup_tables import DEFAULT_LOOKUP_PARAMETERS, _EXPENSIVE_FUNCTIONS, LookupTables
+from chaste_codegen._lookup_tables import _EXPENSIVE_FUNCTIONS, DEFAULT_LOOKUP_PARAMETERS, LookupTables
 
 
 @pytest.fixture(scope='session')

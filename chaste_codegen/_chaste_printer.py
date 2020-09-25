@@ -76,7 +76,7 @@ class ChastePrinter(Printer):
 
     def _print(self, expr, **kwargs):
         """Internal dispatcher.
-        
+
         Here we intercept lookup table expressions if we have lookup tables.
         Otherwise the base class method is used.
         """

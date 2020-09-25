@@ -10,7 +10,7 @@ from sympy import (
 
 def get_usage_count(equations):
     """Counts the amount of times the lhs for each eq is used on the rhs in the set of equations following it.
-    :param: equations set of equations to check usage for. 
+    :param: equations set of equations to check usage for.
            *Please note:* only counts usages of variables after they have been defined.
     :return: {var1: usage, var2: usage, ...}
     """

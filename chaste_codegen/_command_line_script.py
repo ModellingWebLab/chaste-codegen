@@ -17,7 +17,7 @@ from chaste_codegen.model_with_conversions import load_model_with_conversions
 
 # pass --<command_line_tag> to select this model type
 
-# Pycml generated BackwardEuler with lookup tables by default, 
+# Pycml generated BackwardEuler with lookup tables by default,
 # so we introduced BackwardEulerNoLut for the version without lookup table
 TRANSLATORS = OrderedDict(
     [('normal', (cg.NormalChasteModel, 'FromCellML', '', True)),
