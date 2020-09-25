@@ -1,6 +1,6 @@
 from sympy import Derivative
 
-from chaste_codegen._lookup_tables import _DEFAULT_LOOKUP_PARAMETERS, LookupTables
+from chaste_codegen._lookup_tables import DEFAULT_LOOKUP_PARAMETERS, LookupTables
 from chaste_codegen._partial_eval import partial_eval
 from chaste_codegen.generalised_rush_larsen_1_model import GeneralisedRushLarsenFirstOrderModel
 
@@ -9,7 +9,7 @@ class GeneralisedRushLarsenFirstOrderModelOpt(GeneralisedRushLarsenFirstOrderMod
     """ Holds template and information specific for the GeneralisedRushLarsenOpt model type"""
 
     def __init__(self, model, file_name, **kwargs):
-        self._lookup_tables = LookupTables(model, lookup_params=kwargs.get('lookup_table', _DEFAULT_LOOKUP_PARAMETERS))
+        self._lookup_tables = LookupTables(model, lookup_params=kwargs.get('lookup_table', DEFAULT_LOOKUP_PARAMETERS))
 
         super().__init__(model, file_name, **kwargs)
         self._vars_for_template['model_type'] = 'GeneralizedRushLarsenFirstOrderOpt'

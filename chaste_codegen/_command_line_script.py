@@ -6,16 +6,19 @@ import os
 from collections import OrderedDict
 
 import chaste_codegen as cg
-from chaste_codegen._lookup_tables import _DEFAULT_LOOKUP_PARAMETERS
+from chaste_codegen._lookup_tables import DEFAULT_LOOKUP_PARAMETERS
 from chaste_codegen._script_utils import write_file
 from chaste_codegen.model_with_conversions import load_model_with_conversions
 
 
 # Link names to classes for converting code
 # The fields in the order dict as as follows:
-# (command line tag (<class name>, <default class postfix>, <default file postfix>, <can be used with modifiers>))
+# (<command_line_tag> (<class name>, <default class postfix>, <default file postfix>, <can be used with modifiers>))
 
-# pass --name_of_model_type to select this model type
+# pass --<command_line_tag> to select this model type
+
+# Pycml generated BackwardEuler with lookup tables by default, 
+# so we introduced BackwardEulerNoLut for the version without lookup table
 TRANSLATORS = OrderedDict(
     [('normal', (cg.NormalChasteModel, 'FromCellML', '', True)),
      ('cvode', (cg.CvodeChasteModel, 'FromCellMLCvode', 'Cvode', True)),
@@ -44,7 +47,7 @@ EXTENSION_LOOKUP = {'.cellml': ['.hpp', '.cpp'], '': ['.hpp', '.cpp'], '.cpp': [
 
 def print_default_lookup_params():
     params = ''
-    for param in _DEFAULT_LOOKUP_PARAMETERS:
+    for param in DEFAULT_LOOKUP_PARAMETERS:
         params += '--lookup-table %s' % (" ".join(map(str, param)))
     return params
 
@@ -120,7 +123,7 @@ def chaste_codegen():
 
     # make sure --lookup-table entries are 1 string and 3 floats
     if args.lookup_table is None:
-        args.lookup_table = _DEFAULT_LOOKUP_PARAMETERS
+        args.lookup_table = DEFAULT_LOOKUP_PARAMETERS
     else:
         for _, lut in enumerate(args.lookup_table):
             lut_params_mgs = \

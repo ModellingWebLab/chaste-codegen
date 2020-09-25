@@ -1,4 +1,4 @@
-from chaste_codegen._lookup_tables import _DEFAULT_LOOKUP_PARAMETERS, LookupTables
+from chaste_codegen._lookup_tables import DEFAULT_LOOKUP_PARAMETERS, LookupTables
 from chaste_codegen._partial_eval import partial_eval
 from chaste_codegen.backward_euler_model import BackwardEulerModel
 
@@ -7,7 +7,7 @@ class BackwardEulerOptModel(BackwardEulerModel):
     """ Holds information specific for the Optimised Backward Euler model type."""
 
     def __init__(self, model, file_name, **kwargs):
-        self._lookup_tables = LookupTables(model, lookup_params=kwargs.get('lookup_table', _DEFAULT_LOOKUP_PARAMETERS))
+        self._lookup_tables = LookupTables(model, lookup_params=kwargs.get('lookup_table', DEFAULT_LOOKUP_PARAMETERS))
 
         super().__init__(model, file_name, **kwargs)
         self._vars_for_template['lookup_parameters'] = self._lookup_tables.print_lookup_parameters(self._printer)

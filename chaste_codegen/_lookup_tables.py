@@ -46,14 +46,14 @@ _EXPENSIVE_FUNCTIONS = (exp, log, ln, sin, cos, tan, sec, csc, cot, sinh, cosh, 
 
 
 # tuple of ([<metadata tag>, mTableMins, mTableMaxs, mTableSteps], )
-_DEFAULT_LOOKUP_PARAMETERS = (['membrane_voltage', -250.0001, 549.9999, 0.001], )
+DEFAULT_LOOKUP_PARAMETERS = (['membrane_voltage', -250.0001, 549.9999, 0.001], )
 
 
 class LookupTables:
     """ Holds information about lookuptables and methods to analyse the model for lookup tables.
     """
 
-    def __init__(self, model, lookup_params=_DEFAULT_LOOKUP_PARAMETERS):
+    def __init__(self, model, lookup_params=DEFAULT_LOOKUP_PARAMETERS):
         """ Initialise a LookUpTables instance
         :param model: A :class:`cellmlmanip.Model` object.
         :param lookup_params: Optional collection of lists: [[<metadata tag>, mTableMins, mTableMaxs, mTableSteps]]
@@ -182,9 +182,8 @@ class LookupTables:
         return self._lookup_parameters
 
     def method_being_printed(self, method_name):
-        """ method_name to associate pints of lookup table expressions with a particular string, so as to allow checking
-            whether the lookup table is used in certain parts of the code. to change Formats the expressions
-            in the table for printing to chaste code.
+        """ Method to associate a string with a set of lookup table expressions are being used.
+            This method is intended to facilitate the template correctly initialising the required lookup table.
             This can also be used with the with statement to auto-reset the associated printing method_name
 
             For example:
@@ -193,7 +192,8 @@ class LookupTables:
 
             *Please Note:* associating a method_name is required,
                            without it printing individual lookup table expressions is disabled.
-            *Please Note: The method is only saved if not already set, therfore only reccording the other method."""
+            *Please Note: The method is only saved if not already set,
+                          therfore only reccording the outer most method when using in a nested scenario."""
         if not self._method_printed:
             self._method_printed = method_name
         return self

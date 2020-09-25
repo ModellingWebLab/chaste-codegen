@@ -5,7 +5,7 @@ from cellmlmanip import load_model
 
 import chaste_codegen as cg
 from chaste_codegen._chaste_printer import ChastePrinter
-from chaste_codegen._lookup_tables import _DEFAULT_LOOKUP_PARAMETERS, _EXPENSIVE_FUNCTIONS, LookupTables
+from chaste_codegen._lookup_tables import DEFAULT_LOOKUP_PARAMETERS, _EXPENSIVE_FUNCTIONS, LookupTables
 
 
 @pytest.fixture(scope='session')
@@ -19,7 +19,7 @@ def test_defaults(hn_model):
     assert str(_EXPENSIVE_FUNCTIONS) == ("(exp, log, log, sin, cos, tan, sec, csc, cot, sinh, cosh, tanh, sech, csch, "
                                          "coth, asin, acos, atan, asinh, acosh, atanh, asec, acsc, acot, asech, acsch,"
                                          " acoth, exp_, acos_, cos_, sin_)")
-    assert _DEFAULT_LOOKUP_PARAMETERS == (['membrane_voltage', -250.0001, 549.9999, 0.001], )
+    assert DEFAULT_LOOKUP_PARAMETERS == (['membrane_voltage', -250.0001, 549.9999, 0.001], )
 
 
 def test_no_method_printed_for(hn_model):

@@ -9,6 +9,11 @@ from sympy import (
 
 
 def get_usage_count(equations):
+    """Counts the amount of times the lhs for each eq is used on the rhs in the set of equations following it.
+    :param: equations set of equations to check usage for. 
+           *Please note:* only counts usages of variables after they have been defined.
+    :return: {var1: usage, var2: usage, ...}
+    """
     usage_count = {}
     for eq in equations:
         usage_count.setdefault(eq.lhs, 0)
@@ -38,7 +43,7 @@ def partial_eval(equations, required_lhs, keep_multiple_usages=True):
 
     # subs in all constants and expressions only used once
     subs_dict = {}
-    for i, eq in enumerate(equations):
+    for eq in enumerate(equations):
         new_rhs = eq.rhs.xreplace(subs_dict)
         # only apply piecewise_fold if needed to speed things up
         if len(eq.rhs.atoms(Piecewise)) > 0:
