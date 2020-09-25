@@ -357,7 +357,7 @@ protected:
                 _lookup_table_1[i][0] = 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai);
             }
 
-            mNeedsRegeneration[0] = false;
+            mNeedsRegeneration[1] = false;
         }
 
         AbstractLookupTableCollection::EventHandler::EndEvent(AbstractLookupTableCollection::EventHandler::GENERATE_TABLES);
