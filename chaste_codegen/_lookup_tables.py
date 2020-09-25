@@ -157,7 +157,7 @@ class LookupTables:
             for i, param in enumerate(self._lookup_parameters):
                 if param[5] is var:
                     param[4].add(self._method_printed)
-                    return '_lt_' + str(i) + '_row[' + str(param[6].index(expr)) + ']'
+                    return '_lt_{}_row[{}]'.format(i, param[6].index(expr))
         return None
 
     def print_lookup_parameters(self, printer):
