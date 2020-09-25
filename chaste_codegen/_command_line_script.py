@@ -13,7 +13,8 @@ from chaste_codegen.model_with_conversions import load_model_with_conversions
 
 # Link names to classes for converting code
 # The fields in the order dict as as follows:
-# (command line tag (<class name>, <default calss postfix>, <default file postfix>, <can be used with modifiers>))
+# (command line tag (<class name>, <default class postfix>, <default file postfix>, <can be used with modifiers>))
+
 # pass --name_of_model_type to select this model type
 TRANSLATORS = OrderedDict(
     [('normal', (cg.NormalChasteModel, 'FromCellML', '', True)),
