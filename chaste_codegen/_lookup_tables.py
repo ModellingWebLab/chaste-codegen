@@ -203,5 +203,5 @@ class LookupTables:
         return self
 
     def __exit__(self, type, value, traceback):
-        """ exit resets method_method_printed, this is called when a with statement goes out of scope."""
+        """Resets self._method_printed when a with statement goes out of scope."""
         self._method_printed = None
