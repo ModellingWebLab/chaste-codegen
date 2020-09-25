@@ -43,7 +43,7 @@ def partial_eval(equations, required_lhs, keep_multiple_usages=True):
 
     # subs in all constants and expressions only used once
     subs_dict = {}
-    for eq in enumerate(equations):
+    for eq in equations:
         new_rhs = eq.rhs.xreplace(subs_dict)
         # only apply piecewise_fold if needed to speed things up
         if len(eq.rhs.atoms(Piecewise)) > 0:
