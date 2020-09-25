@@ -121,7 +121,7 @@ class LookupTables:
         # - they're not already set as suitable
         # - they only contain 1 variable and this variable is one of the lookup variables
         if exp_func and expr not in self._lookup_table_expr and \
-                len(vars_used) == 1 and list(vars_used)[0] in self._lookup_variables:
+                len(vars_used) == 1 and next(iter(vars_used)) in self._lookup_variables:
             self._lookup_table_expr[expr] = vars_used
 
     def _process_lookup_parameters(self):

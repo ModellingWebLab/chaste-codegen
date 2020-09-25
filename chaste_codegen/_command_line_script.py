@@ -108,7 +108,7 @@ def chaste_codegen():
     group.add_argument('--lookup-table', nargs=4, default=None, action='append', metavar=lut_metavar,
                        help='Specify variable (using a metadata tag) and ranges for which to generate lookup tables '
                             '(optional). --lookup-table can be added multiple times to indicate multiple lookup tables'
-                            '. Please note: Can only be used in combination with --opt. If the option is omitted, '
+                            '. Please note: Can only be used in combination with --opt. If the arguments are omitted, '
                             'following defaults will be used: %s.' % print_default_lookup_params())
 
     # process options
