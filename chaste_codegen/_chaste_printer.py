@@ -23,6 +23,8 @@ class ChastePrinter(Printer):
         A function that converts symbols to strings (variable names).
     ``derivative_function``
         A function that converts derivatives to strings.
+    ``lookup_table_function``
+        A function that prints lookup table expressions or returns None if the expression is not in the lookup table.
 
     """
     _function_names = {
