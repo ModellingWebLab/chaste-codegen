@@ -2,3 +2,4 @@ include chaste_codegen/version.txt
 graft chaste_codegen/templates
 graft chaste_codegen/ontologies
 prune chaste_codegen/data
+prune chaste_codegen/tests
