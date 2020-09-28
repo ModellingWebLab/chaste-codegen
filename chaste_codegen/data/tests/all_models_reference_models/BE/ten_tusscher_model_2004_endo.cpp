@@ -22,11 +22,12 @@
 #include "MathsCustomFunctions.hpp"
 #include "CardiacNewtonSolver.hpp"
 
-    double Cellten_tusscher_model_2004_endoFromCellMLBackwardEuler::GetIntracellularCalciumConcentration()
+
+    double Cellten_tusscher_model_2004_endoFromCellMLBackwardEulerNoLut::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Cellten_tusscher_model_2004_endoFromCellMLBackwardEuler::Cellten_tusscher_model_2004_endoFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellten_tusscher_model_2004_endoFromCellMLBackwardEulerNoLut::Cellten_tusscher_model_2004_endoFromCellMLBackwardEulerNoLut(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<6>(
                 17,
                 0,
@@ -34,7 +35,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellten_tusscher_model_2004_endoFromCellMLBackwardEuler>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellten_tusscher_model_2004_endoFromCellMLBackwardEulerNoLut>::Instance();
         Init();
         
         this->mParameters[0] = 0.000175; // (var_L_type_Ca_current__g_CaL) [litre_per_farad_second]
@@ -43,11 +44,12 @@
         this->mParameters[3] = 0.072999999999999995; // (var_transient_outward_current__g_to) [nanoS_per_picoF]
     }
 
-    Cellten_tusscher_model_2004_endoFromCellMLBackwardEuler::~Cellten_tusscher_model_2004_endoFromCellMLBackwardEuler()
+    Cellten_tusscher_model_2004_endoFromCellMLBackwardEulerNoLut::~Cellten_tusscher_model_2004_endoFromCellMLBackwardEulerNoLut()
     {
     }
+
     
-    double Cellten_tusscher_model_2004_endoFromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellten_tusscher_model_2004_endoFromCellMLBackwardEulerNoLut::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -133,7 +135,7 @@
         return i_ionic;
     }
 
-    void Cellten_tusscher_model_2004_endoFromCellMLBackwardEuler::ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[6], double rResidual[6])
+    void Cellten_tusscher_model_2004_endoFromCellMLBackwardEulerNoLut::ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[6], double rResidual[6])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -254,7 +256,7 @@
         rResidual[4] = rCurrentGuess[4] - rY[16] - mDt*d_dt_chaste_interface_var_potassium_dynamics__K_i;
     }
 
-    void Cellten_tusscher_model_2004_endoFromCellMLBackwardEuler::ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[6], double rJacobian[6][6])
+    void Cellten_tusscher_model_2004_endoFromCellMLBackwardEulerNoLut::ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[6], double rJacobian[6][6])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -391,7 +393,7 @@
         rJacobian[5][5] = 1.0 - (mDt * (2.5185628611365452e-7 * var_x62 - 9.0551084895961074e-7 * var_x63 - 1.823319832565245e-7 * var_x38 - 0.00040297005778184723 * var_x61 - 0.0031224512033090025 * var_x63 * pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * mParameters[1] * var_chaste_interface__fast_sodium_current_h_gate__h * var_chaste_interface__fast_sodium_current_j_gate__j));
     }
 
-    void Cellten_tusscher_model_2004_endoFromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
+    void Cellten_tusscher_model_2004_endoFromCellMLBackwardEulerNoLut::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -475,7 +477,7 @@
         rY[0] += mDt*d_dt_chaste_interface_var_membrane__V;
     }
     
-    void Cellten_tusscher_model_2004_endoFromCellMLBackwardEuler::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
+    void Cellten_tusscher_model_2004_endoFromCellMLBackwardEulerNoLut::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -557,7 +559,7 @@
         rY[11] = (var_chaste_interface__transient_outward_current_s_gate__s + ((var_transient_outward_current_s_gate__s_inf / var_transient_outward_current_s_gate__tau_s) * mDt)) / (1.0 - ((-1 / var_transient_outward_current_s_gate__tau_s) * mDt));
         
         double _guess[6] = {rY[10],rY[13],rY[1],rY[14],rY[16],rY[15]};
-        CardiacNewtonSolver<6,Cellten_tusscher_model_2004_endoFromCellMLBackwardEuler>* _p_solver = CardiacNewtonSolver<6,Cellten_tusscher_model_2004_endoFromCellMLBackwardEuler>::Instance();
+        CardiacNewtonSolver<6,Cellten_tusscher_model_2004_endoFromCellMLBackwardEulerNoLut>* _p_solver = CardiacNewtonSolver<6,Cellten_tusscher_model_2004_endoFromCellMLBackwardEulerNoLut>::Instance();
         _p_solver->Solve(*this, var_chaste_interface__environment__time, _guess);
         rY[10] = _guess[0];
         rY[13] = _guess[1];
@@ -567,12 +569,11 @@
         rY[15] = _guess[5];
     }
 
-    std::vector<double> Cellten_tusscher_model_2004_endoFromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Cellten_tusscher_model_2004_endoFromCellMLBackwardEulerNoLut::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_membrane__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
 
@@ -583,7 +584,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellten_tusscher_model_2004_endoFromCellMLBackwardEuler>::Initialise(void)
+void OdeSystemInformation<Cellten_tusscher_model_2004_endoFromCellMLBackwardEulerNoLut>::Initialise(void)
 {
     this->mSystemName = "tentusscher_model_2004_endo";
     this->mFreeVariableName = "environment__time";
@@ -705,5 +706,5 @@ void OdeSystemInformation<Cellten_tusscher_model_2004_endoFromCellMLBackwardEule
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellten_tusscher_model_2004_endoFromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Cellten_tusscher_model_2004_endoFromCellMLBackwardEulerNoLut)
 

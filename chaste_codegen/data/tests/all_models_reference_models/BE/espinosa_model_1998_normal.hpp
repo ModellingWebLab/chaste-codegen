@@ -1,5 +1,5 @@
-#ifndef CELLESPINOSA_MODEL_1998_NORMALFROMCELLMLBACKWARDEULER_HPP_
-#define CELLESPINOSA_MODEL_1998_NORMALFROMCELLMLBACKWARDEULER_HPP_
+#ifndef CELLESPINOSA_MODEL_1998_NORMALFROMCELLMLBACKWARDEULERNOLUT_HPP_
+#define CELLESPINOSA_MODEL_1998_NORMALFROMCELLMLBACKWARDEULERNOLUT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractBackwardEulerCardiacCell.hpp"
 
-class Cellespinosa_model_1998_normalFromCellMLBackwardEuler : public AbstractBackwardEulerCardiacCell<13>
+class Cellespinosa_model_1998_normalFromCellMLBackwardEulerNoLut : public AbstractBackwardEulerCardiacCell<13>
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -36,8 +36,8 @@ public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    Cellespinosa_model_1998_normalFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellespinosa_model_1998_normalFromCellMLBackwardEuler();
+    Cellespinosa_model_1998_normalFromCellMLBackwardEulerNoLut(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellespinosa_model_1998_normalFromCellMLBackwardEulerNoLut();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[13], double rResidual[13]);
     void ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[13], double rJacobian[13][13]);protected:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted);
@@ -48,7 +48,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellespinosa_model_1998_normalFromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Cellespinosa_model_1998_normalFromCellMLBackwardEulerNoLut)
 
 namespace boost
 {
@@ -56,7 +56,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellespinosa_model_1998_normalFromCellMLBackwardEuler * t, const unsigned int fileVersion)
+            Archive & ar, const Cellespinosa_model_1998_normalFromCellMLBackwardEulerNoLut * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -66,17 +66,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellespinosa_model_1998_normalFromCellMLBackwardEuler * t, const unsigned int fileVersion)
+            Archive & ar, Cellespinosa_model_1998_normalFromCellMLBackwardEulerNoLut * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellespinosa_model_1998_normalFromCellMLBackwardEuler(p_solver, p_stimulus);
+            ::new(t)Cellespinosa_model_1998_normalFromCellMLBackwardEulerNoLut(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLESPINOSA_MODEL_1998_NORMALFROMCELLMLBACKWARDEULER_HPP_
+#endif // CELLESPINOSA_MODEL_1998_NORMALFROMCELLMLBACKWARDEULERNOLUT_HPP_

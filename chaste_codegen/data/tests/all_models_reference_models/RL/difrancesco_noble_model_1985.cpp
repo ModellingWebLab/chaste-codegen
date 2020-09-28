@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Celldifrancesco_noble_model_1985FromCellMLRushLarsen::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -78,6 +79,7 @@
     Celldifrancesco_noble_model_1985FromCellMLRushLarsen::~Celldifrancesco_noble_model_1985FromCellMLRushLarsen()
     {
     }
+
     
     double Celldifrancesco_noble_model_1985FromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -417,7 +419,6 @@
         double var_chaste_interface__intracellular_potassium_concentration__Ki = rY[15];
         // Units: millimolar; Initial value: 140.0
         
-
         // Mathematics
         const double var_Na_Ca_exchanger__d_NaCa = 0.001; // dimensionless
         const double var_Na_Ca_exchanger__gamma = 0.5; // dimensionless

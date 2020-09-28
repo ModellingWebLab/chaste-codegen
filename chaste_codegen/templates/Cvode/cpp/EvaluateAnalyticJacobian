@@ -5,8 +5,7 @@
         {% for state_var in state_vars %}
         {%- if state_var.in_jacobian %}double {{ state_var.var }} = {{state_var.rY_lookup}};
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
-        {% endif %}{%- endfor %}
-        {% for equation in jacobian_equations %}const double {{equation.lhs}} = {{equation.rhs}};
+        {% endif %}{%- endfor %}{% set method =  "EvaluateAnalyticJacobian" %}{% include "Shared/cpp/lookup_table_init" %}{% for equation in jacobian_equations %}const double {{equation.lhs}} = {{equation.rhs}};
         {% endfor %}
         // Matrix entries{% for entry in jacobian_entries %}
         IJth(rJacobian, {{entry.i}}, {{entry.j}}) = {% if membrane_voltage_index == entry.i %}mSetVoltageDerivativeToZero ? 0.0 : ({{entry.entry}});{%- else %}{{entry.entry}};{%- endif %}

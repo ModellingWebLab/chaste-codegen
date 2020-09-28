@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellbeeler_reuter_model_1977FromCellMLRushLarsen::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -60,6 +61,7 @@
     Cellbeeler_reuter_model_1977FromCellMLRushLarsen::~Cellbeeler_reuter_model_1977FromCellMLRushLarsen()
     {
     }
+
     
     double Cellbeeler_reuter_model_1977FromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -214,7 +216,6 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_stimulus_protocol__Istim_converted = -GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
 

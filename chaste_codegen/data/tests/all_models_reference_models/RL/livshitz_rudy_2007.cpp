@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Celllivshitz_rudy_2007FromCellMLRushLarsen::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -60,6 +61,7 @@
     Celllivshitz_rudy_2007FromCellMLRushLarsen::~Celllivshitz_rudy_2007FromCellMLRushLarsen()
     {
     }
+
     
     double Celllivshitz_rudy_2007FromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -431,7 +433,6 @@
         double var_chaste_interface__Ca__Ca_T = rY[14];
         // Units: mM; Initial value: 0.0257059808595638
         
-
         // Mathematics
         const double var_Ca__cmdnbar = 0.050000000000000003; // mM
         const double var_Ca__kmcmdn = 0.0023800000000000002; // mM

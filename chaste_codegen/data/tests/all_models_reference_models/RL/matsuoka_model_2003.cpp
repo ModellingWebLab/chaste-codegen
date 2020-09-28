@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellmatsuoka_model_2003FromCellMLRushLarsen::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -59,6 +60,7 @@
     Cellmatsuoka_model_2003FromCellMLRushLarsen::~Cellmatsuoka_model_2003FromCellMLRushLarsen()
     {
     }
+
     
     double Cellmatsuoka_model_2003FromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -695,7 +697,6 @@
         double var_chaste_interface__internal_ion_concentrations__Ca_Total = rY[3];
         // Units: millimolar; Initial value: 0.00040180173572968586
         
-
         // Mathematics
         const double var_internal_ion_concentrations__CMDN_max = 0.050000000000000003; // millimolar
         const double var_internal_ion_concentrations__K_mCMDN = 0.0023800000000000002; // millimolar

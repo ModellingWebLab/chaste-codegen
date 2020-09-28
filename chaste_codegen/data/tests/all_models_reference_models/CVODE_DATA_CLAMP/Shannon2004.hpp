@@ -6,7 +6,7 @@
 //!
 //! This source file was generated from CellML by chaste_codegen version (version omitted as unimportant)
 //!
-//! Model: shannon_2004
+//! Model: shannon_wang_puglisi_weber_bers_2004_model_updated
 //!
 //! Processed by chaste_codegen: https://github.com/ModellingWebLab/chaste-codegen
 //!     (translator: chaste_codegen, model type: CvodeCellWithDataClamp)

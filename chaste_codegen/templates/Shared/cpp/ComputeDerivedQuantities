@@ -7,8 +7,7 @@
         {% for state_var in state_vars %}
         {%- if state_var.in_derived_quant %}double {{ state_var.var }} = {{state_var.rY_lookup}};
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
-        {% endif %}{%- endfor %}
-
+        {% endif %}{%- endfor %}{% set method =  "ComputeDerivedQuantities" %}{% include "Shared/cpp/lookup_table_init" %}
         // Mathematics
         {%- for eq in derived_quantity_equations %}
         const double {{eq.lhs}} = {{eq.rhs}}; // {{eq.units}}

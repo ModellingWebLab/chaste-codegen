@@ -22,7 +22,8 @@
 #include "MathsCustomFunctions.hpp"
 #include "CardiacNewtonSolver.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellnygren_atrial_model_1998FromCellMLBackwardEuler::UseCellMLDefaultStimulus()
+
+    boost::shared_ptr<RegularStimulus> Cellnygren_atrial_model_1998FromCellMLBackwardEulerNoLut::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_membrane__Cm_converted = 0.001 * mParameters[0]; // uF
@@ -39,11 +40,11 @@
         mpIntracellularStimulus = p_cellml_stim;
         return p_cellml_stim;
     }
-    double Cellnygren_atrial_model_1998FromCellMLBackwardEuler::GetIntracellularCalciumConcentration()
+    double Cellnygren_atrial_model_1998FromCellMLBackwardEulerNoLut::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Cellnygren_atrial_model_1998FromCellMLBackwardEuler::Cellnygren_atrial_model_1998FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellnygren_atrial_model_1998FromCellMLBackwardEulerNoLut::Cellnygren_atrial_model_1998FromCellMLBackwardEulerNoLut(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<16>(
                 29,
                 0,
@@ -51,7 +52,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellnygren_atrial_model_1998FromCellMLBackwardEuler>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellnygren_atrial_model_1998FromCellMLBackwardEulerNoLut>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -60,11 +61,12 @@
         this->mParameters[0] = 0.050000000000000003; // (var_membrane__Cm) [nanoF]
     }
 
-    Cellnygren_atrial_model_1998FromCellMLBackwardEuler::~Cellnygren_atrial_model_1998FromCellMLBackwardEuler()
+    Cellnygren_atrial_model_1998FromCellMLBackwardEulerNoLut::~Cellnygren_atrial_model_1998FromCellMLBackwardEulerNoLut()
     {
     }
+
     
-    double Cellnygren_atrial_model_1998FromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellnygren_atrial_model_1998FromCellMLBackwardEulerNoLut::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -158,7 +160,7 @@
         return i_ionic;
     }
 
-    void Cellnygren_atrial_model_1998FromCellMLBackwardEuler::ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[16], double rResidual[16])
+    void Cellnygren_atrial_model_1998FromCellMLBackwardEulerNoLut::ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[16], double rResidual[16])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -329,7 +331,7 @@
         rResidual[3] = rCurrentGuess[3] - rY[28] - mDt*d_dt_chaste_interface_var_Ca_handling_by_the_SR__F2;
     }
 
-    void Cellnygren_atrial_model_1998FromCellMLBackwardEuler::ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[16], double rJacobian[16][16])
+    void Cellnygren_atrial_model_1998FromCellMLBackwardEulerNoLut::ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[16], double rJacobian[16][16])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -752,7 +754,7 @@
         rJacobian[15][15] = 1.0 - (mDt * (4.2177556280432989e-7 * var_x86 - 0.00056138327409256303 * var_x87 - 2.8157848672826448e-6 * var_x93 + var_x113 * var_x53 - var_x112 * var_x54 - var_x115 * var_x94));
     }
 
-    void Cellnygren_atrial_model_1998FromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted)
+    void Cellnygren_atrial_model_1998FromCellMLBackwardEulerNoLut::UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -845,7 +847,7 @@
         rY[0] += mDt*d_dt_chaste_interface_var_membrane__V;
     }
     
-    void Cellnygren_atrial_model_1998FromCellMLBackwardEuler::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted)
+    void Cellnygren_atrial_model_1998FromCellMLBackwardEulerNoLut::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -914,7 +916,7 @@
         rY[11] = (var_chaste_interface__sustained_outward_K_current_s_sus_gate__s_sus + ((0.001 * var_sustained_outward_K_current_s_sus_gate__s_sus_infinity / var_sustained_outward_K_current_s_sus_gate__tau_s_sus) * mDt)) / (1.0 - ((-0.001 / var_sustained_outward_K_current_s_sus_gate__tau_s_sus) * mDt));
         
         double _guess[16] = {rY[24],rY[25],rY[27],rY[28],rY[26],rY[22],rY[23],rY[21],rY[17],rY[18],rY[19],rY[20],rY[16],rY[1],rY[15],rY[14]};
-        CardiacNewtonSolver<16,Cellnygren_atrial_model_1998FromCellMLBackwardEuler>* _p_solver = CardiacNewtonSolver<16,Cellnygren_atrial_model_1998FromCellMLBackwardEuler>::Instance();
+        CardiacNewtonSolver<16,Cellnygren_atrial_model_1998FromCellMLBackwardEulerNoLut>* _p_solver = CardiacNewtonSolver<16,Cellnygren_atrial_model_1998FromCellMLBackwardEulerNoLut>::Instance();
         _p_solver->Solve(*this, var_chaste_interface__environment__time_converted, _guess);
         rY[24] = _guess[0];
         rY[25] = _guess[1];
@@ -934,12 +936,11 @@
         rY[14] = _guess[15];
     }
 
-    std::vector<double> Cellnygren_atrial_model_1998FromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Cellnygren_atrial_model_1998FromCellMLBackwardEulerNoLut::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_membrane__Cm_converted = 0.001 * mParameters[0]; // uF
         const double var_membrane__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
@@ -952,7 +953,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellnygren_atrial_model_1998FromCellMLBackwardEuler>::Initialise(void)
+void OdeSystemInformation<Cellnygren_atrial_model_1998FromCellMLBackwardEulerNoLut>::Initialise(void)
 {
     this->mSystemName = "nygren_atrial_model_1998";
     this->mFreeVariableName = "environment__time";
@@ -1124,5 +1125,5 @@ void OdeSystemInformation<Cellnygren_atrial_model_1998FromCellMLBackwardEuler>::
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellnygren_atrial_model_1998FromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Cellnygren_atrial_model_1998FromCellMLBackwardEulerNoLut)
 

@@ -22,6 +22,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
+
     Cellzhang_SAN_model_2000_allFromCellMLRushLarsen::Cellzhang_SAN_model_2000_allFromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractRushLarsenCardiacCell(
                 15,
@@ -38,6 +39,7 @@
     Cellzhang_SAN_model_2000_allFromCellMLRushLarsen::~Cellzhang_SAN_model_2000_allFromCellMLRushLarsen()
     {
     }
+
     
     double Cellzhang_SAN_model_2000_allFromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -524,7 +526,6 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
 
         std::vector<double> dqs(1);

@@ -1,0 +1,145 @@
+{%- if lookup_parameters is defined %}
+class {{class_name}}_LookupTables : public AbstractLookupTableCollection
+{
+public:
+    static {{class_name}}_LookupTables* Instance()
+    {
+        if (mpInstance.get() == NULL)
+        {
+            mpInstance.reset(new {{class_name}}_LookupTables);
+        }
+        return mpInstance.get();
+    }
+
+    void FreeMemory()
+    {
+{% for param in lookup_parameters%}
+        if (_lookup_table_{{loop.index0}})
+        {
+            delete[] _lookup_table_{{loop.index0}};
+            _lookup_table_{{loop.index0}} = NULL;
+        }
+{% endfor %}
+        mNeedsRegeneration.assign(mNeedsRegeneration.size(), true);
+    }
+
+    // Row lookup methods
+    // using linear-interpolation
+{% for param in lookup_parameters%}
+    double* _lookup_{{loop.index0}}_row(unsigned i, double _factor_)
+    {
+        for (unsigned j=0; j<{{param.lookup_epxrs|length}}; j++)
+        {
+            const double y1 = _lookup_table_{{loop.index0}}[i][j];
+            const double y2 = _lookup_table_{{loop.index0}}[i+1][j];
+            _lookup_table_{{loop.index0}}_row[j] = y1 + (y2-y1)*_factor_;
+        }
+        return _lookup_table_{{loop.index0}}_row;
+    }
+{% endfor %}
+{% for param in lookup_parameters%}
+    const double * IndexTable{{loop.index0}}(double {{param.var}})
+    {
+        const double _offset_{{loop.index0}} = {{param.var}} - mTableMins[{{loop.index0}}];
+        const double _offset_{{loop.index0}}_over_table_step = _offset_{{loop.index0}} * mTableStepInverses[{{loop.index0}}];
+        const unsigned _table_index_{{loop.index0}} = (unsigned)(_offset_{{loop.index0}}_over_table_step);
+        const double _factor_{{loop.index0}} = _offset_{{loop.index0}}_over_table_step - _table_index_{{loop.index0}};
+        const double* const _lt_{{loop.index0}}_row = {{class_name}}_LookupTables::Instance()->_lookup_{{loop.index0}}_row(_table_index_{{loop.index0}}, _factor_{{loop.index0}});
+        return _lt_{{loop.index0}}_row;
+    }
+{% endfor %}
+{% for param in lookup_parameters%}
+// LCOV_EXCL_START
+    bool CheckIndex{{loop.index0}}(double& {{param.var}})
+    {
+        bool _oob_{{loop.index0}} = false;
+        if ({{param.var}}>mTableMaxs[{{loop.index0}}] || {{param.var}}<mTableMins[{{loop.index0}}])
+        {
+// LCOV_EXCL_START
+            _oob_{{loop.index0}} = true;
+// LCOV_EXCL_STOP
+        }
+        return _oob_{{loop.index0}};
+    }
+// LCOV_EXCL_STOP
+{% endfor %}
+    ~{{class_name}}_LookupTables()
+    {
+{% for param in lookup_parameters%}
+        if (_lookup_table_{{loop.index0}})
+        {
+            delete[] _lookup_table_{{loop.index0}};
+            _lookup_table_{{loop.index0}} = NULL;
+        }
+{% endfor %}
+    }
+
+protected:
+    {{class_name}}_LookupTables(const {{class_name}}_LookupTables&);
+    {{class_name}}_LookupTables& operator= (const {{class_name}}_LookupTables&);
+    {{class_name}}_LookupTables()
+    {
+        assert(mpInstance.get() == NULL);
+        mKeyingVariableNames.resize({{lookup_parameters|length}});
+        mNumberOfTables.resize({{lookup_parameters|length}});
+        mTableMins.resize({{lookup_parameters|length}});
+        mTableSteps.resize({{lookup_parameters|length}});
+        mTableStepInverses.resize({{lookup_parameters|length}});
+        mTableMaxs.resize({{lookup_parameters|length}});
+        mNeedsRegeneration.resize({{lookup_parameters|length}});
+{% for param in lookup_parameters%}
+        mKeyingVariableNames[{{loop.index0}}] = "{{param.metadata_tag}}";
+        mNumberOfTables[{{loop.index0}}] = {{param.lookup_epxrs|length}};
+        mTableMins[{{loop.index0}}] = {{param.mTableMins}};
+        mTableMaxs[{{loop.index0}}] = {{param.mTableMaxs}};
+        mTableSteps[{{loop.index0}}] = {{param.mTableSteps}};
+        mTableStepInverses[{{loop.index0}}] = {{1 / param.mTableSteps}};
+        mNeedsRegeneration[{{loop.index0}}] = true;
+        _lookup_table_{{loop.index0}} = NULL;
+{% endfor %}
+        {{class_name}}_LookupTables::RegenerateTables();
+    }
+
+    void RegenerateTables()
+    {
+        AbstractLookupTableCollection::EventHandler::BeginEvent(AbstractLookupTableCollection::EventHandler::GENERATE_TABLES);
+{% for param in lookup_parameters%}
+{% set outer_index = loop.index0 %}
+        if (mNeedsRegeneration[{{outer_index}}])
+        {
+            if (_lookup_table_{{outer_index}})
+            {
+                delete[] _lookup_table_{{outer_index}};
+                _lookup_table_{{outer_index}} = NULL;
+            }
+            const unsigned _table_size_{{outer_index}} = 1 + (unsigned)((mTableMaxs[{{outer_index}}]-mTableMins[{{outer_index}}])/mTableSteps[{{outer_index}}]+0.5);
+            _lookup_table_{{outer_index}} = new double[_table_size_{{outer_index}}][{{param.lookup_epxrs|length}}];
+    {%- for expr in param.lookup_epxrs%}
+
+            for (unsigned i=0 ; i<_table_size_{{outer_index}}; i++)
+            {
+                const double {{param.var}} = mTableMins[{{outer_index}}] + i*mTableSteps[{{outer_index}}];
+                _lookup_table_{{outer_index}}[i][{{loop.index0}}] = {{expr}};
+            }
+    {%- endfor %}
+
+            mNeedsRegeneration[{{outer_index}}] = false;
+        }
+{% endfor %}
+        AbstractLookupTableCollection::EventHandler::EndEvent(AbstractLookupTableCollection::EventHandler::GENERATE_TABLES);
+    }
+
+private:
+    /** The single instance of the class */
+    static std::shared_ptr<{{class_name}}_LookupTables> mpInstance;
+{% for param in lookup_parameters%}
+    // Row lookup methods memory
+    double _lookup_table_{{loop.index0}}_row[{{param.lookup_epxrs|length}}];
+{% endfor %}{% for param in lookup_parameters%}
+    // Lookup tables
+    double (*_lookup_table_{{loop.index0}})[{{param.lookup_epxrs|length}}];
+{% endfor %}
+};
+
+std::shared_ptr<{{class_name}}_LookupTables> {{class_name}}_LookupTables::mpInstance;
+{%- endif %}

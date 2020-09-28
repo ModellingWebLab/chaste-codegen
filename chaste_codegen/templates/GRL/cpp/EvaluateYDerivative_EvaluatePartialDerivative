@@ -5,7 +5,7 @@
         {% for state_var in state_vars %}{%- if state_var.in_evaluate_y_derivative[statevarloop.index0] %}double {{ state_var.var }} = {{state_var.rY_lookup}};
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}
-        
+{% set method =  "ComputeOneStepExceptVoltage" + statevarloop.index0|string %}{% include "Shared/cpp/lookup_table_init" %}
         // Mathematics
         {%- for deriv in y_derivative_equations %}{% if deriv.in_evaluate_y_derivative[statevarloop.index0] %}
         {% if not deriv.is_voltage%}const double {% endif %}{{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
@@ -22,6 +22,7 @@
             {% for state_var in state_vars %}{%- if state_var.in_evaluate_partial_derivative[statevarloop.index0] %}double {{ state_var.var }} = {{state_var.rY_lookup}};
             // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
             {% endif %}{%- endfor %}
+{% set method =  "EvaluatePartialDerivative" + statevarloop.index0|string %}{% include "Shared/cpp/lookup_table_init" %}
             {% for equation in jacobian_equations if equation.in_evaluate_partial_derivative[loop.index0] %}const double {{equation.lhs}} = {{equation.rhs}};
             {% endfor %}
             partialF = {% for entry in jacobian_entries %}{% if statevarloop.index0 == entry.i == entry.j %}{{entry.entry}};{%- endif %}{%- endfor %}

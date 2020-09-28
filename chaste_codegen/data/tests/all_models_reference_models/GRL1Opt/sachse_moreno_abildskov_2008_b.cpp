@@ -21,6 +21,66 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+class Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt_LookupTables : public AbstractLookupTableCollection
+{
+public:
+    static Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt_LookupTables* Instance()
+    {
+        if (mpInstance.get() == NULL)
+        {
+            mpInstance.reset(new Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt_LookupTables);
+        }
+        return mpInstance.get();
+    }
+
+    void FreeMemory()
+    {
+
+        mNeedsRegeneration.assign(mNeedsRegeneration.size(), true);
+    }
+
+    // Row lookup methods
+    // using linear-interpolation
+
+
+
+    ~Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt_LookupTables()
+    {
+
+    }
+
+protected:
+    Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt_LookupTables(const Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt_LookupTables&);
+    Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt_LookupTables& operator= (const Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt_LookupTables&);
+    Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt_LookupTables()
+    {
+        assert(mpInstance.get() == NULL);
+        mKeyingVariableNames.resize(0);
+        mNumberOfTables.resize(0);
+        mTableMins.resize(0);
+        mTableSteps.resize(0);
+        mTableStepInverses.resize(0);
+        mTableMaxs.resize(0);
+        mNeedsRegeneration.resize(0);
+
+        Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt_LookupTables::RegenerateTables();
+    }
+
+    void RegenerateTables()
+    {
+        AbstractLookupTableCollection::EventHandler::BeginEvent(AbstractLookupTableCollection::EventHandler::GENERATE_TABLES);
+
+        AbstractLookupTableCollection::EventHandler::EndEvent(AbstractLookupTableCollection::EventHandler::GENERATE_TABLES);
+    }
+
+private:
+    /** The single instance of the class */
+    static std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt_LookupTables> mpInstance;
+
+};
+
+std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt_LookupTables> Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt_LookupTables::mpInstance;
+
     boost::shared_ptr<RegularStimulus> Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -63,6 +123,11 @@
 
     Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt::~Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt()
     {
+    }
+
+    AbstractLookupTableCollection* Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt::GetLookupTableCollection()
+    {
+        return Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt_LookupTables::Instance();
     }
     
     double Cellsachse_moreno_abildskov_2008_bFromCellMLGRL1Opt::GetIIonic(const std::vector<double>* pStateVariables)
@@ -137,7 +202,7 @@
         double var_chaste_interface__I_Shkr__OShkr = rY[6];
         // Units: dimensionless; Initial value: 0.0
         
-        
+
         // Mathematics
         const double d_dt_chaste_interface_var_I_Shkr__OShkr = 0.076999999999999999 * var_chaste_interface__I_Shkr__C4Shkr - 0.017999999999999999 * var_chaste_interface__I_Shkr__OShkr; // 1 / millisecond
         const double var_I_Shkr__k_v = 2.0 * exp(-17.767148014440433 * var_chaste_interface__membrane__Vm / mParameters[6]); // first_order_rate_constant
@@ -233,7 +298,7 @@
         double var_chaste_interface__I_Shkr__OShkr = rY[6];
         // Units: dimensionless; Initial value: 0.0
         
-        
+
         // Mathematics
         const double var_I_Kir__EK = 0.086113989637305696 * mParameters[6] * log(mParameters[1] / mParameters[0]); // millivolt
         d_dt_chaste_interface_var_membrane__Vm = 0.001 * (-mParameters[5] * var_chaste_interface__membrane__Vm - 1000.0 * GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted) * mParameters[2] / HeartConfig::Instance()->GetCapacitance() - 0.031622776601683791 * sqrt(mParameters[1]) * (-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * mParameters[4] / (0.93999999999999995 + exp(14.631768953068592 * (-var_I_Kir__EK + var_chaste_interface__membrane__Vm) / mParameters[6])) - 1120607.7015643802 * (-mParameters[1] * exp(-11.612515042117931 * var_chaste_interface__membrane__Vm / mParameters[6]) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] * var_chaste_interface__membrane__Vm / ((1.0 - exp(-11.612515042117931 * var_chaste_interface__membrane__Vm / mParameters[6])) * mParameters[6])) / mParameters[2]; // millivolt / millisecond
@@ -251,6 +316,7 @@
             double var_chaste_interface__I_Shkr__OShkr = rY[6];
             // Units: dimensionless; Initial value: 0.0
             
+
             const double var_x0 = 1 / mParameters[2];
             const double var_x1 = 1 / mParameters[6];
             const double var_x2 = var_x1 * (-0.086113989637305696 * mParameters[6] * log(mParameters[1] / mParameters[0]) + var_chaste_interface__membrane__Vm);
@@ -288,7 +354,7 @@
         double var_chaste_interface__I_Shkr__C1Shkr = rY[2];
         // Units: dimensionless; Initial value: 0.0857
         
-        
+
         // Mathematics
         const double var_I_Shkr__k_v = 2.0 * exp(-17.767148014440433 * var_chaste_interface__membrane__Vm / mParameters[6]); // first_order_rate_constant
         const double var_I_Shkr__kv = 30.0 * exp(14.864019253910952 * var_chaste_interface__membrane__Vm / mParameters[6]); // first_order_rate_constant
@@ -305,6 +371,7 @@
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -58.0
             
+
             const double var_x1 = 1 / mParameters[6];
             const double var_x6 = var_x1 * var_chaste_interface__membrane__Vm;
             const double var_x17 = exp(14.864019253910952 * var_x6);
@@ -334,7 +401,7 @@
         double var_chaste_interface__I_Shkr__C2Shkr = rY[3];
         // Units: dimensionless; Initial value: 0.00302
         
-        
+
         // Mathematics
         const double var_I_Shkr__k_v = 2.0 * exp(-17.767148014440433 * var_chaste_interface__membrane__Vm / mParameters[6]); // first_order_rate_constant
         const double var_I_Shkr__kv = 30.0 * exp(14.864019253910952 * var_chaste_interface__membrane__Vm / mParameters[6]); // first_order_rate_constant
@@ -351,6 +418,7 @@
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -58.0
             
+
             const double var_x1 = 1 / mParameters[6];
             const double var_x6 = var_x1 * var_chaste_interface__membrane__Vm;
             const double var_x14 = exp(-17.767148014440433 * var_x6);
@@ -382,7 +450,7 @@
         double var_chaste_interface__I_Shkr__C3Shkr = rY[4];
         // Units: dimensionless; Initial value: 4.74e-05
         
-        
+
         // Mathematics
         const double var_I_Shkr__k_v = 2.0 * exp(-17.767148014440433 * var_chaste_interface__membrane__Vm / mParameters[6]); // first_order_rate_constant
         const double var_I_Shkr__kv = 30.0 * exp(14.864019253910952 * var_chaste_interface__membrane__Vm / mParameters[6]); // first_order_rate_constant
@@ -399,6 +467,7 @@
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -58.0
             
+
             const double var_x1 = 1 / mParameters[6];
             const double var_x6 = var_x1 * var_chaste_interface__membrane__Vm;
             const double var_x14 = exp(-17.767148014440433 * var_x6);
@@ -430,7 +499,7 @@
         double var_chaste_interface__I_Shkr__C4Shkr = rY[5];
         // Units: dimensionless; Initial value: 2.79e-07
         
-        
+
         // Mathematics
         const double var_I_Shkr__k_v = 2.0 * exp(-17.767148014440433 * var_chaste_interface__membrane__Vm / mParameters[6]); // first_order_rate_constant
         const double var_I_Shkr__kv = 30.0 * exp(14.864019253910952 * var_chaste_interface__membrane__Vm / mParameters[6]); // first_order_rate_constant
@@ -447,6 +516,7 @@
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -58.0
             
+
             const double var_x1 = 1 / mParameters[6];
             const double var_x6 = var_x1 * var_chaste_interface__membrane__Vm;
             const double var_x14 = exp(-17.767148014440433 * var_x6);
@@ -478,7 +548,7 @@
         double var_chaste_interface__I_Shkr__OShkr = rY[6];
         // Units: dimensionless; Initial value: 0.0
         
-        
+
         // Mathematics
         const double var_I_Shkr__k_v = 2.0 * exp(-17.767148014440433 * var_chaste_interface__membrane__Vm / mParameters[6]); // first_order_rate_constant
         const double var_I_Shkr__kv = 30.0 * exp(14.864019253910952 * var_chaste_interface__membrane__Vm / mParameters[6]); // first_order_rate_constant
@@ -495,6 +565,7 @@
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -58.0
             
+
             const double var_x1 = 1 / mParameters[6];
             const double var_x6 = var_x1 * var_chaste_interface__membrane__Vm;
             const double var_x14 = exp(-17.767148014440433 * var_x6);
@@ -520,7 +591,7 @@
         double var_chaste_interface__I_Shkr__OShkr = rY[6];
         // Units: dimensionless; Initial value: 0.0
         
-        
+
         // Mathematics
         const double d_dt_chaste_interface_var_I_Shkr__OShkr = 0.076999999999999999 * var_chaste_interface__I_Shkr__C4Shkr - 0.017999999999999999 * var_chaste_interface__I_Shkr__OShkr; // 1 / millisecond
 
@@ -533,6 +604,7 @@
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
             
             partialF = -0.017999999999999999;
         }
@@ -556,7 +628,6 @@
         double var_chaste_interface__I_Shkr__OShkr = rY[6];
         // Units: dimensionless; Initial value: 0.0
         
-
         // Mathematics
         const double var_I_Kir__aKir = 0.93999999999999995; // dimensionless
         const double var_I_Kir__bKir = 1.26; // dimensionless

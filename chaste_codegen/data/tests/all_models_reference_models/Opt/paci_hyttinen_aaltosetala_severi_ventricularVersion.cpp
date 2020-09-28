@@ -21,6 +21,66 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+class Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLOpt_LookupTables : public AbstractLookupTableCollection
+{
+public:
+    static Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLOpt_LookupTables* Instance()
+    {
+        if (mpInstance.get() == NULL)
+        {
+            mpInstance.reset(new Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLOpt_LookupTables);
+        }
+        return mpInstance.get();
+    }
+
+    void FreeMemory()
+    {
+
+        mNeedsRegeneration.assign(mNeedsRegeneration.size(), true);
+    }
+
+    // Row lookup methods
+    // using linear-interpolation
+
+
+
+    ~Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLOpt_LookupTables()
+    {
+
+    }
+
+protected:
+    Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLOpt_LookupTables(const Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLOpt_LookupTables&);
+    Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLOpt_LookupTables& operator= (const Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLOpt_LookupTables&);
+    Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLOpt_LookupTables()
+    {
+        assert(mpInstance.get() == NULL);
+        mKeyingVariableNames.resize(0);
+        mNumberOfTables.resize(0);
+        mTableMins.resize(0);
+        mTableSteps.resize(0);
+        mTableStepInverses.resize(0);
+        mTableMaxs.resize(0);
+        mNeedsRegeneration.resize(0);
+
+        Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLOpt_LookupTables::RegenerateTables();
+    }
+
+    void RegenerateTables()
+    {
+        AbstractLookupTableCollection::EventHandler::BeginEvent(AbstractLookupTableCollection::EventHandler::GENERATE_TABLES);
+
+        AbstractLookupTableCollection::EventHandler::EndEvent(AbstractLookupTableCollection::EventHandler::GENERATE_TABLES);
+    }
+
+private:
+    /** The single instance of the class */
+    static std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLOpt_LookupTables> mpInstance;
+
+};
+
+std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLOpt_LookupTables> Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLOpt_LookupTables::mpInstance;
+
     boost::shared_ptr<RegularStimulus> Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -73,6 +133,11 @@
 
     Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLOpt::~Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLOpt()
     {
+    }
+
+    AbstractLookupTableCollection* Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLOpt::GetLookupTableCollection()
+    {
+        return Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLOpt_LookupTables::Instance();
     }
     
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
@@ -279,7 +344,6 @@
         double var_chaste_interface__sodium_dynamics__Nai = rY[15];
         // Units: millimolar; Initial value: 10.9248496211574
         
-
         // Mathematics
         const double var_Membrane__Vm = 0.001 * var_chaste_interface__Membrane__Vm_converted; // volt
         const double var_calcium_dynamics__Buf_C = 0.25; // millimolar

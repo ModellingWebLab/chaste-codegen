@@ -22,6 +22,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
+
     Celliyer_model_2004FromCellMLRushLarsen::Celliyer_model_2004FromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractRushLarsenCardiacCell(
                 67,
@@ -38,6 +39,7 @@
     Celliyer_model_2004FromCellMLRushLarsen::~Celliyer_model_2004FromCellMLRushLarsen()
     {
     }
+
     
     double Celliyer_model_2004FromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -939,7 +941,6 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_I_stimulus__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
 

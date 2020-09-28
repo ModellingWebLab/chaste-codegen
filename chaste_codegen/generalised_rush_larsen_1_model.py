@@ -18,11 +18,9 @@ class GeneralisedRushLarsenFirstOrderModel(ChasteModel):
         self._vars_for_template['model_type'] = 'GeneralizedRushLarsenFirstOrder'
         self._jacobian_equations, self._jacobian_matrix = self._get_jacobian()
 
-        modifiers_with_defining_eqs = set((eq[0] for eq in self._jacobian_equations)) | self._model.state_vars
         self._vars_for_template['jacobian_equations'], self._vars_for_template['jacobian_entries'] = \
-            format_jacobian(self._jacobian_equations, self._jacobian_matrix, self._printer,
-                            partial(self._print_rhs_with_modifiers,
-                                    modifiers_with_defining_eqs=modifiers_with_defining_eqs), skip_0_entries=False)
+            self._print_jacobian()
+
         self._map_state_vars_and_eqs()
 
     def _get_jacobian(self):
@@ -71,9 +69,26 @@ class GeneralisedRushLarsenFirstOrderModel(ChasteModel):
                 sv.setdefault('in_evaluate_partial_derivative', []).append(sv['sympy_var'] in used_jacobian_state_vars)
 
             for eq in self._vars_for_template['y_derivative_equations']:
-                eq.setdefault('in_evaluate_y_derivative', []).append(eq['sympy_lhs'] in [eq[0] for eq in equations])
+                self.eq_in_evaluate_y_derivative(eq, equations)
 
             for je in self._vars_for_template['jacobian_equations']:
-                je.setdefault('in_evaluate_partial_derivative', []).append(je['sympy_lhs']
-                                                                           in [v[0] for v in used_jacobian_vars
-                                                                           if v[0] is not None])
+                self.eq_in_evaluate_partial_derivative(je, used_jacobian_vars)
+
+    def eq_in_evaluate_y_derivative(self, eq, used_equations):
+        """Indicate if the lhs of equation eq appears in used_equations
+           specified here so derived model types can specify in detail what happens here"""
+        eq.setdefault('in_evaluate_y_derivative', []).append(eq['sympy_lhs'] in [eq[0] for eq in used_equations])
+
+    def eq_in_evaluate_partial_derivative(self, eq, used_jacobian_vars):
+        """Indicate if the lhs of equation eq appears in used_jacobian_vars
+           specified here so derived model types can specify in detail what happens here"""
+        eq.setdefault('in_evaluate_partial_derivative', []).append(eq['sympy_lhs']
+                                                                   in [v[0] for v in used_jacobian_vars
+                                                                   if v[0] is not None])
+
+    def _print_jacobian(self):
+        modifiers_with_defining_eqs = set((eq[0] for eq in self._jacobian_equations)) | self._model.state_vars
+        return format_jacobian(self._jacobian_equations, self._jacobian_matrix, self._printer,
+                               partial(self._print_rhs_with_modifiers,
+                                       modifiers_with_defining_eqs=modifiers_with_defining_eqs),
+                               skip_0_entries=False)

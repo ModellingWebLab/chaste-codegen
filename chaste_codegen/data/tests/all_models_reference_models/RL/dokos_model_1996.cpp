@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     double Celldokos_model_1996FromCellMLRushLarsen::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
@@ -42,6 +43,7 @@
     Celldokos_model_1996FromCellMLRushLarsen::~Celldokos_model_1996FromCellMLRushLarsen()
     {
     }
+
     
     double Celldokos_model_1996FromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -382,7 +384,6 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_membrane__C_converted = 0.001 * mParameters[0]; // uF
 

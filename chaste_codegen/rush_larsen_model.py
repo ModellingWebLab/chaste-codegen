@@ -22,16 +22,13 @@ class RushLarsenModel(ChasteModel):
 
         self._vars_for_template['derivative_alpha_beta'], self._vars_for_template['derivative_alpha_beta_eqs'], \
             self._vars_in_derivative_alpha_beta = self._get_formatted_alpha_beta()
-        self._update_state_vars()
-        self._vars_for_template['derivative_alpha_beta_eqs'] = \
-            self._format_derivative_equations(self._vars_for_template['derivative_alpha_beta_eqs'])
 
     def _get_non_linear_state_vars(self):
         """ Get and store the non_linear state vars """
-        self._derivative_equations = \
+        derivative_equations = \
             set(partial_eval(self._derivative_equations, self._model.y_derivatives, keep_multiple_usages=False))
         self._non_linear_state_vars = \
-            get_non_linear_state_vars(self._derivative_equations, self._model.membrane_voltage_var,
+            get_non_linear_state_vars(derivative_equations, self._model.membrane_voltage_var,
                                       self._model.state_vars)
 
     def _get_formatted_alpha_beta(self):
@@ -91,14 +88,18 @@ class RushLarsenModel(ChasteModel):
                 vars_in_derivative_alpha_beta.add(deriv)
 
         deriv_eqs_EvaluateEquations = get_equations_for(self._model, vars_in_derivative_alpha_beta)
-        return derivative_alpha_beta, deriv_eqs_EvaluateEquations, vars_in_derivative_alpha_beta
 
-    def _update_state_vars(self):
-        """Updates formatting of state vars to make sure the correct ones are included in the output"""
-        # Get all used variables for derivative eqs
+        # Update state vars
         deriv_variables = set()
-        for eq in self._vars_for_template['derivative_alpha_beta_eqs']:
+        for eq in deriv_eqs_EvaluateEquations:
             deriv_variables.update(eq.rhs.free_symbols)
 
         for sv in self._formatted_state_vars:
             sv['in_ab'] = sv['sympy_var'] in deriv_variables
+
+        return (derivative_alpha_beta, self.format_deriv_eqs_EvaluateEquations(deriv_eqs_EvaluateEquations),
+                vars_in_derivative_alpha_beta)
+
+    def format_deriv_eqs_EvaluateEquations(self, deriv_eqs_EvaluateEquations):
+        """ Format derivative equations beloning to EvaluateEquations, to allow opt model to update what belongs were"""
+        return self._format_derivative_equations(deriv_eqs_EvaluateEquations)

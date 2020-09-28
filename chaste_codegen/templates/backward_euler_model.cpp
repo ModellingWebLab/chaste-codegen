@@ -1,11 +1,13 @@
 {% include "Shared/cpp/header_comments" %}
 {% include "Shared/cpp/includes" %}
 #include "CardiacNewtonSolver.hpp"
+{% include "Shared/cpp/lookup_tables" %}
 {% include "Shared/cpp/UseCellMLDefaultStimulus" %}
 {% include "Shared/cpp/GetIntracellularCalciumConcentration" %}
 {% include "BE/cpp/constructor_declaration" %}
 {% include "Shared/cpp/constructor_body" %}
 {% include "Shared/cpp/destructor" %}
+{% include "Shared/cpp/GetLookupTableCollection" %}
 {% include "Shared/cpp/VerifyStateVariables" %}
 {% include "Shared/cpp/GetIIonic" %}
 {% include "BE/cpp/ComputeResidual" %}

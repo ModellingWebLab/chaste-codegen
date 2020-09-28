@@ -6,7 +6,7 @@
 //!
 //! This source file was generated from CellML by chaste_codegen version (version omitted as unimportant)
 //!
-//! Model: shannon_2004
+//! Model: shannon_wang_puglisi_weber_bers_2004_model_updated
 //!
 //! Processed by chaste_codegen: https://github.com/ModellingWebLab/chaste-codegen
 //!     (translator: chaste_codegen, model type: CvodeCellWithDataClamp)
@@ -41,33 +41,59 @@ class CellShannon2004FromCellMLCvodeDataClamp : public AbstractCardiacCellWithMo
     boost::shared_ptr<AbstractModifier> mp_SR_release_current_modifier;
     boost::shared_ptr<AbstractModifier> mp_SR_release_current_max_modifier;
     boost::shared_ptr<AbstractModifier> mp_SR_uptake_current_max_modifier;
+    boost::shared_ptr<AbstractModifier> mp_chloride_reversal_potential_modifier;
+    boost::shared_ptr<AbstractModifier> mp_concentration_clamp_onoff_modifier;
     boost::shared_ptr<AbstractModifier> mp_cytosolic_calcium_concentration_modifier;
+    boost::shared_ptr<AbstractModifier> mp_cytosolic_chloride_concentration_modifier;
     boost::shared_ptr<AbstractModifier> mp_cytosolic_potassium_concentration_modifier;
     boost::shared_ptr<AbstractModifier> mp_cytosolic_sodium_concentration_modifier;
+    boost::shared_ptr<AbstractModifier> mp_dyadic_space_calcium_concentration_modifier;
+    boost::shared_ptr<AbstractModifier> mp_dyadic_space_sodium_concentration_modifier;
     boost::shared_ptr<AbstractModifier> mp_extracellular_calcium_concentration_modifier;
+    boost::shared_ptr<AbstractModifier> mp_extracellular_chloride_concentration_modifier;
     boost::shared_ptr<AbstractModifier> mp_extracellular_potassium_concentration_modifier;
     boost::shared_ptr<AbstractModifier> mp_extracellular_sodium_concentration_modifier;
+    boost::shared_ptr<AbstractModifier> mp_faraday_constant_modifier;
+    boost::shared_ptr<AbstractModifier> mp_gas_constant_modifier;
     boost::shared_ptr<AbstractModifier> mp_ICaL__i_CaL_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_L_type_calcium_current_conductance_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_L_type_calcium_current_d_gate_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_L_type_calcium_current_fCa_gate_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_L_type_calcium_current_f_gate_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_L_type_calcium_current_f_gate_tau_modifier;
+    boost::shared_ptr<AbstractModifier> mp_ICab__i_Cab_modifier;
+    boost::shared_ptr<AbstractModifier> mp_IClb__i_Clb_modifier;
+    boost::shared_ptr<AbstractModifier> mp_membrane_background_chloride_current_conductance_modifier;
+    boost::shared_ptr<AbstractModifier> mp_INab__i_Nab_modifier;
+    boost::shared_ptr<AbstractModifier> mp_ICap__i_Cap_modifier;
+    boost::shared_ptr<AbstractModifier> mp_membrane_capacitance_modifier;
     boost::shared_ptr<AbstractModifier> mp_INa__i_Na_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_fast_sodium_current_conductance_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_fast_sodium_current_h_gate_modifier;
+    boost::shared_ptr<AbstractModifier> mp_membrane_fast_sodium_current_h_gate_tau_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_fast_sodium_current_j_gate_modifier;
+    boost::shared_ptr<AbstractModifier> mp_membrane_fast_sodium_current_j_gate_tau_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_fast_sodium_current_m_gate_modifier;
+    boost::shared_ptr<AbstractModifier> mp_membrane_fast_sodium_current_reduced_inactivation_modifier;
+    boost::shared_ptr<AbstractModifier> mp_membrane_fast_sodium_current_shift_inactivation_modifier;
+    boost::shared_ptr<AbstractModifier> mp_Itof__i_tof_modifier;
+    boost::shared_ptr<AbstractModifier> mp_membrane_fast_transient_outward_current_conductance_modifier;
     boost::shared_ptr<AbstractModifier> mp_IK1__i_K1_modifier;
+    boost::shared_ptr<AbstractModifier> mp_membrane_inward_rectifier_potassium_current_conductance_modifier;
+    boost::shared_ptr<AbstractModifier> mp_membrane_inward_rectifier_potassium_current_conductance_scaling_factor_modifier;
     boost::shared_ptr<AbstractModifier> mp_IKr__i_Kr_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_rapid_delayed_rectifier_potassium_current_conductance_modifier;
     boost::shared_ptr<AbstractModifier> mp_IKs__i_Ks_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_slow_delayed_rectifier_potassium_current_conductance_modifier;
+    boost::shared_ptr<AbstractModifier> mp_Itos__i_tos_modifier;
+    boost::shared_ptr<AbstractModifier> mp_membrane_slow_transient_outward_current_conductance_modifier;
     boost::shared_ptr<AbstractModifier> mp_INaCa__i_NaCa_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_sodium_calcium_exchanger_current_conductance_modifier;
-    boost::shared_ptr<AbstractModifier> mp_Itos__i_tos_modifier;
-    boost::shared_ptr<AbstractModifier> mp_membrane_transient_outward_current_conductance_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_voltage_modifier;
+    boost::shared_ptr<AbstractModifier> mp_potassium_reversal_potential_modifier;
+    boost::shared_ptr<AbstractModifier> mp_submembrane_space_calcium_concentration_modifier;
+    boost::shared_ptr<AbstractModifier> mp_submembrane_space_sodium_concentration_modifier;
+    boost::shared_ptr<AbstractModifier> mp_temperature_modifier;
 
 public:
 

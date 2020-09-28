@@ -38,6 +38,7 @@ public:
     double GetIntracellularCalciumConcentration();
     Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL1Opt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLGRL1Opt();
+    AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted);
     void ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted);

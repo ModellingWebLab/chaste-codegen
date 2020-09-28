@@ -23,7 +23,8 @@
 #include "CardiacNewtonSolver.hpp"
 
 
-    Cellzhang_SAN_model_2000_allFromCellMLBackwardEuler::Cellzhang_SAN_model_2000_allFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+
+    Cellzhang_SAN_model_2000_allFromCellMLBackwardEulerNoLut::Cellzhang_SAN_model_2000_allFromCellMLBackwardEulerNoLut(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<0>(
                 15,
                 0,
@@ -31,16 +32,17 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellzhang_SAN_model_2000_allFromCellMLBackwardEuler>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellzhang_SAN_model_2000_allFromCellMLBackwardEulerNoLut>::Instance();
         Init();
         
     }
 
-    Cellzhang_SAN_model_2000_allFromCellMLBackwardEuler::~Cellzhang_SAN_model_2000_allFromCellMLBackwardEuler()
+    Cellzhang_SAN_model_2000_allFromCellMLBackwardEulerNoLut::~Cellzhang_SAN_model_2000_allFromCellMLBackwardEulerNoLut()
     {
     }
+
     
-    double Cellzhang_SAN_model_2000_allFromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellzhang_SAN_model_2000_allFromCellMLBackwardEulerNoLut::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -232,7 +234,7 @@
 
 
 
-    void Cellzhang_SAN_model_2000_allFromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted)
+    void Cellzhang_SAN_model_2000_allFromCellMLBackwardEulerNoLut::UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -422,7 +424,7 @@
         rY[0] += mDt*d_dt_chaste_interface_var_membrane__V;
     }
     
-    void Cellzhang_SAN_model_2000_allFromCellMLBackwardEuler::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted)
+    void Cellzhang_SAN_model_2000_allFromCellMLBackwardEulerNoLut::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -516,12 +518,11 @@
         
     }
 
-    std::vector<double> Cellzhang_SAN_model_2000_allFromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Cellzhang_SAN_model_2000_allFromCellMLBackwardEulerNoLut::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
 
         std::vector<double> dqs(1);
@@ -530,7 +531,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellzhang_SAN_model_2000_allFromCellMLBackwardEuler>::Initialise(void)
+void OdeSystemInformation<Cellzhang_SAN_model_2000_allFromCellMLBackwardEulerNoLut>::Initialise(void)
 {
     this->mSystemName = "zhang_SAN_model_2000_all";
     this->mFreeVariableName = "environment__time";
@@ -620,5 +621,5 @@ void OdeSystemInformation<Cellzhang_SAN_model_2000_allFromCellMLBackwardEuler>::
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellzhang_SAN_model_2000_allFromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Cellzhang_SAN_model_2000_allFromCellMLBackwardEulerNoLut)
 

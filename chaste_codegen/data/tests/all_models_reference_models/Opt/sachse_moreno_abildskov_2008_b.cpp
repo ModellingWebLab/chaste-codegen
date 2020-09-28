@@ -21,6 +21,66 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+class Cellsachse_moreno_abildskov_2008_bFromCellMLOpt_LookupTables : public AbstractLookupTableCollection
+{
+public:
+    static Cellsachse_moreno_abildskov_2008_bFromCellMLOpt_LookupTables* Instance()
+    {
+        if (mpInstance.get() == NULL)
+        {
+            mpInstance.reset(new Cellsachse_moreno_abildskov_2008_bFromCellMLOpt_LookupTables);
+        }
+        return mpInstance.get();
+    }
+
+    void FreeMemory()
+    {
+
+        mNeedsRegeneration.assign(mNeedsRegeneration.size(), true);
+    }
+
+    // Row lookup methods
+    // using linear-interpolation
+
+
+
+    ~Cellsachse_moreno_abildskov_2008_bFromCellMLOpt_LookupTables()
+    {
+
+    }
+
+protected:
+    Cellsachse_moreno_abildskov_2008_bFromCellMLOpt_LookupTables(const Cellsachse_moreno_abildskov_2008_bFromCellMLOpt_LookupTables&);
+    Cellsachse_moreno_abildskov_2008_bFromCellMLOpt_LookupTables& operator= (const Cellsachse_moreno_abildskov_2008_bFromCellMLOpt_LookupTables&);
+    Cellsachse_moreno_abildskov_2008_bFromCellMLOpt_LookupTables()
+    {
+        assert(mpInstance.get() == NULL);
+        mKeyingVariableNames.resize(0);
+        mNumberOfTables.resize(0);
+        mTableMins.resize(0);
+        mTableSteps.resize(0);
+        mTableStepInverses.resize(0);
+        mTableMaxs.resize(0);
+        mNeedsRegeneration.resize(0);
+
+        Cellsachse_moreno_abildskov_2008_bFromCellMLOpt_LookupTables::RegenerateTables();
+    }
+
+    void RegenerateTables()
+    {
+        AbstractLookupTableCollection::EventHandler::BeginEvent(AbstractLookupTableCollection::EventHandler::GENERATE_TABLES);
+
+        AbstractLookupTableCollection::EventHandler::EndEvent(AbstractLookupTableCollection::EventHandler::GENERATE_TABLES);
+    }
+
+private:
+    /** The single instance of the class */
+    static std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLOpt_LookupTables> mpInstance;
+
+};
+
+std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLOpt_LookupTables> Cellsachse_moreno_abildskov_2008_bFromCellMLOpt_LookupTables::mpInstance;
+
     boost::shared_ptr<RegularStimulus> Cellsachse_moreno_abildskov_2008_bFromCellMLOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -64,6 +124,11 @@
 
     Cellsachse_moreno_abildskov_2008_bFromCellMLOpt::~Cellsachse_moreno_abildskov_2008_bFromCellMLOpt()
     {
+    }
+
+    AbstractLookupTableCollection* Cellsachse_moreno_abildskov_2008_bFromCellMLOpt::GetLookupTableCollection()
+    {
+        return Cellsachse_moreno_abildskov_2008_bFromCellMLOpt_LookupTables::Instance();
     }
     
     double Cellsachse_moreno_abildskov_2008_bFromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
@@ -146,7 +211,6 @@
         double var_chaste_interface__I_Shkr__OShkr = rY[6];
         // Units: dimensionless; Initial value: 0.0
         
-
         // Mathematics
         const double var_I_Kir__aKir = 0.93999999999999995; // dimensionless
         const double var_I_Kir__bKir = 1.26; // dimensionless

@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLRushLarsen::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -73,6 +74,7 @@
     Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLRushLarsen::~Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLRushLarsen()
     {
     }
+
     
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -462,7 +464,6 @@
         double var_chaste_interface__sodium_dynamics__Nai = rY[15];
         // Units: millimolar; Initial value: 10.9248496211574
         
-
         // Mathematics
         const double var_Membrane__Vm = 0.001 * var_chaste_interface__Membrane__Vm_converted; // volt
         const double var_calcium_dynamics__Buf_C = 0.25; // millimolar

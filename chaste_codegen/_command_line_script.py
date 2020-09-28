@@ -6,19 +6,24 @@ import os
 from collections import OrderedDict
 
 import chaste_codegen as cg
+from chaste_codegen._lookup_tables import DEFAULT_LOOKUP_PARAMETERS
 from chaste_codegen._script_utils import write_file
 from chaste_codegen.model_with_conversions import load_model_with_conversions
 
 
 # Link names to classes for converting code
 # The fields in the order dict as as follows:
-# (<name of model type>, <default calss name postfix>, <default file name prostfix>, <can be used with modifiers>)
-# pass --name_of_model_type to select this model type
+# (<command_line_tag> (<class name>, <default class postfix>, <default file postfix>, <can be used with modifiers>))
+
+# pass --<command_line_tag> to select this model type
+
+# Pycml generated BackwardEuler with lookup tables by default,
+# so we introduced BackwardEulerNoLut for the version without lookup table
 TRANSLATORS = OrderedDict(
     [('normal', (cg.NormalChasteModel, 'FromCellML', '', True)),
      ('cvode', (cg.CvodeChasteModel, 'FromCellMLCvode', 'Cvode', True)),
-     ('cvode-data-clamp', (cg.CvodeWithDataClampModel, 'FromCellMLCvodeDataClamp', 'CvodeDataClamp', True)),
-     ('backward-euler', (cg.BackwardEulerModel, 'FromCellMLBackwardEuler', 'BackwardEuler', False)),
+     ('cvode-data-clamp', (cg.CvodeChasteModel, 'FromCellMLCvodeDataClamp', 'CvodeDataClamp', True)),
+     ('backward-euler', (cg.BackwardEulerModel, 'FromCellMLBackwardEulerNoLut', 'BackwardEulerNoLut', False)),
      ('rush-larsen', (cg.RushLarsenModel, 'FromCellMLRushLarsen', 'RushLarsen', False)),
      ('grl1', (cg.GeneralisedRushLarsenFirstOrderModel, 'FromCellMLGRL1', 'GRL1', False)),
      ('grl2', (cg.GeneralisedRushLarsenSecondOrderModel, 'FromCellMLGRL2', 'GRL2', False))])
@@ -26,6 +31,8 @@ TRANSLATORS = OrderedDict(
 TRANSLATORS_OPT = OrderedDict(
     [('normal', (cg.OptChasteModel, 'FromCellMLOpt', 'Opt', True)),
      ('cvode', (cg.OptCvodeChasteModel, 'FromCellMLCvodeOpt', 'CvodeOpt', True)),
+     ('cvode-data-clamp', (cg.OptCvodeChasteModel, 'FromCellMLCvodeDataClampOpt', 'CvodeDataClampOpt', True)),
+     ('backward-euler', (cg.BackwardEulerOptModel, 'FromCellMLBackwardEuler', 'BackwardEuler', False)),
      ('rush-larsen', (cg.RushLarsenOptModel, 'FromCellMLRushLarsenOpt', 'RushLarsenOpt', False)),
      ('grl1', (cg.GeneralisedRushLarsenFirstOrderModelOpt, 'FromCellMLGRL1Opt', 'GRL1', False)),
      ('grl2', (cg.GeneralisedRushLarsenSecondOrderModelOpt, 'FromCellMLGRL2Opt', 'GRL2', False))])
@@ -36,6 +43,13 @@ TRANSLATORS_WITH_MODIFIERS = tuple('--' + t for t in TRANSLATORS if TRANSLATORS[
 # Store extensions we can use and how to use them, based on extension of given outfile
 EXTENSION_LOOKUP = {'.cellml': ['.hpp', '.cpp'], '': ['.hpp', '.cpp'], '.cpp': ['.hpp', '.cpp'],
                     '.hpp': ['.hpp', '.cpp'], '.c': ['.h', '.c'], '.h': ['.h', '.c']}
+
+
+def print_default_lookup_params():
+    params = ''
+    for param in DEFAULT_LOOKUP_PARAMETERS:
+        params += '--lookup-table %s' % (" ".join(map(str, param)))
+    return params
 
 
 def chaste_codegen():
@@ -90,13 +104,46 @@ def chaste_codegen():
                        'for use in sensitivity analysis. Only works with one of the following model types and is '
                        'ignored for others: ' +
                        str(TRANSLATORS_WITH_MODIFIERS))
+    lut_metavar = ("<metadata tag>", "min", "max", "step")
+    group.add_argument('--lookup-table', nargs=4, default=None, action='append', metavar=lut_metavar,
+                       help='Specify variable (using a metadata tag) and ranges for which to generate lookup tables '
+                            '(optional). --lookup-table can be added multiple times to indicate multiple lookup tables'
+                            '. Please note: Can only be used in combination with --opt. If the arguments are omitted, '
+                            'following defaults will be used: %s.' % print_default_lookup_params())
 
     # process options
     args = parser.parse_args()
+
     if not os.path.isfile(args.cellml_file):
         raise ValueError("Could not find cellml file %s " % args.cellml_file)
     if args.outfile is not None and args.output_dir is not None:
         raise ValueError("-o and --output-dir cannot be used together!")
+    if args.lookup_table and not args.opt:
+        raise ValueError("Can only use lookup tables in combination with --opt")
+
+    # make sure --lookup-table entries are 1 string and 3 floats
+    if args.lookup_table is None:
+        args.lookup_table = DEFAULT_LOOKUP_PARAMETERS
+    else:
+        for _, lut in enumerate(args.lookup_table):
+            lut_params_mgs = \
+                'Lookup tables are expecting the following %s values: %s' % (len(lut_metavar), " ".join(lut_metavar))
+            assert len(lut) == len(lut_metavar), lut_params_mgs
+            try:  # first argument is a string
+                float(lut[0])
+                is_float = True
+            except ValueError:
+                is_float = False  # We are expecting this to be a string
+
+            if is_float:
+                raise ValueError(lut_params_mgs)
+
+            for i in range(1, len(lut)):  # next 3 arguments are floats
+                try:
+                    lut[i] = float(lut[i])
+                except ValueError as e:
+                    e.args = (lut_params_mgs, )
+                    raise
 
     # if no model type is set assume normal
     args.normal = args.normal or not any([getattr(args, model_type.replace('-', '_')) for model_type in TRANSLATORS])

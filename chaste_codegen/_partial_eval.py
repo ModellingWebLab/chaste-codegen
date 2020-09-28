@@ -8,6 +8,21 @@ from sympy import (
 )
 
 
+def get_usage_count(equations):
+    """Counts the amount of times the lhs for each eq is used on the rhs in the set of equations following it.
+    :param: equations set of equations to check usage for.
+           *Please note:* only counts usages of variables after they have been defined.
+    :return: {var1: usage, var2: usage, ...}
+    """
+    usage_count = {}
+    for eq in equations:
+        usage_count.setdefault(eq.lhs, 0)
+        for var in eq.rhs.atoms(Variable):
+            usage_count.setdefault(var, 0)
+            usage_count[var] += 1
+    return usage_count
+
+
 def partial_eval(equations, required_lhs, keep_multiple_usages=True):
     """Partially evaluate the list of equations given.
 
@@ -24,12 +39,8 @@ def partial_eval(equations, required_lhs, keep_multiple_usages=True):
     evaluated_eqs = []
     # count usage of variables on rhs of equations
     if keep_multiple_usages:
-        usage_count = {}
-        for eq in equations:
-            usage_count.setdefault(eq.lhs, 0)
-            for var in eq.rhs.atoms(Variable):
-                usage_count.setdefault(var, 0)
-                usage_count[var] += 1
+        usage_count = get_usage_count(equations)
+
     # subs in all constants and expressions only used once
     subs_dict = {}
     for eq in equations:
@@ -45,4 +56,5 @@ def partial_eval(equations, required_lhs, keep_multiple_usages=True):
             if not keep_multiple_usages:
                 subs_dict[new_eq.lhs] = new_eq.rhs
             evaluated_eqs.append(new_eq)
+
     return evaluated_eqs

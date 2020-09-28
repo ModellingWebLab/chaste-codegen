@@ -22,6 +22,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
+
     Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsen::Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractRushLarsenCardiacCell(
                 4,
@@ -38,6 +39,7 @@
     Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsen::~Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsen()
     {
     }
+
     
     double Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -147,7 +149,6 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_membrane__i_Stim = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // microA_per_cm2
 
@@ -198,3 +199,4 @@ void OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromC
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsen)
+

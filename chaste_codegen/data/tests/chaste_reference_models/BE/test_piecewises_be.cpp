@@ -23,7 +23,8 @@
 #include "CardiacNewtonSolver.hpp"
 
 
-    Celltest_piecewises_beFromCellMLBackwardEuler::Celltest_piecewises_beFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+
+    Celltest_piecewises_beFromCellMLBackwardEulerNoLut::Celltest_piecewises_beFromCellMLBackwardEulerNoLut(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<2>(
                 4,
                 0,
@@ -31,16 +32,17 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Celltest_piecewises_beFromCellMLBackwardEuler>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Celltest_piecewises_beFromCellMLBackwardEulerNoLut>::Instance();
         Init();
         
     }
 
-    Celltest_piecewises_beFromCellMLBackwardEuler::~Celltest_piecewises_beFromCellMLBackwardEuler()
+    Celltest_piecewises_beFromCellMLBackwardEulerNoLut::~Celltest_piecewises_beFromCellMLBackwardEulerNoLut()
     {
     }
+
     
-    double Celltest_piecewises_beFromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
+    double Celltest_piecewises_beFromCellMLBackwardEulerNoLut::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -54,7 +56,7 @@
         return i_ionic;
     }
 
-    void Celltest_piecewises_beFromCellMLBackwardEuler::ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[2], double rResidual[2])
+    void Celltest_piecewises_beFromCellMLBackwardEulerNoLut::ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[2], double rResidual[2])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -76,7 +78,7 @@
         rResidual[0] = rCurrentGuess[0] - rY[3] - mDt*d_dt_chaste_interface_var_fast_sodium_current_m_gate2__m;
     }
 
-    void Celltest_piecewises_beFromCellMLBackwardEuler::ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[2], double rJacobian[2][2])
+    void Celltest_piecewises_beFromCellMLBackwardEulerNoLut::ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[2], double rJacobian[2][2])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -92,7 +94,7 @@
         rJacobian[1][1] = 1.0;
     }
 
-    void Celltest_piecewises_beFromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted)
+    void Celltest_piecewises_beFromCellMLBackwardEulerNoLut::UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -105,7 +107,7 @@
         rY[0] += mDt*d_dt_chaste_interface_var_membrane__V;
     }
     
-    void Celltest_piecewises_beFromCellMLBackwardEuler::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted)
+    void Celltest_piecewises_beFromCellMLBackwardEulerNoLut::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -119,18 +121,17 @@
         rY[1] = (var_chaste_interface__fast_sodium_current_h_gate__h + ((((var_chaste_interface__membrane__V > 9999999.0) ? (0.001 * var_chaste_interface__membrane__V) : (0))) * mDt)) / (1.0 - ((0.001) * mDt));
         
         double _guess[2] = {rY[3],rY[2]};
-        CardiacNewtonSolver<2,Celltest_piecewises_beFromCellMLBackwardEuler>* _p_solver = CardiacNewtonSolver<2,Celltest_piecewises_beFromCellMLBackwardEuler>::Instance();
+        CardiacNewtonSolver<2,Celltest_piecewises_beFromCellMLBackwardEulerNoLut>* _p_solver = CardiacNewtonSolver<2,Celltest_piecewises_beFromCellMLBackwardEulerNoLut>::Instance();
         _p_solver->Solve(*this, var_chaste_interface__environment__time_converted, _guess);
         rY[3] = _guess[0];
         rY[2] = _guess[1];
     }
 
-    std::vector<double> Celltest_piecewises_beFromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Celltest_piecewises_beFromCellMLBackwardEulerNoLut::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
 
         std::vector<double> dqs(1);
@@ -139,7 +140,7 @@
     }
 
 template<>
-void OdeSystemInformation<Celltest_piecewises_beFromCellMLBackwardEuler>::Initialise(void)
+void OdeSystemInformation<Celltest_piecewises_beFromCellMLBackwardEulerNoLut>::Initialise(void)
 {
     this->mSystemName = "test_piecewise_BE";
     this->mFreeVariableName = "environment__time";
@@ -174,5 +175,5 @@ void OdeSystemInformation<Celltest_piecewises_beFromCellMLBackwardEuler>::Initia
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Celltest_piecewises_beFromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Celltest_piecewises_beFromCellMLBackwardEulerNoLut)
 

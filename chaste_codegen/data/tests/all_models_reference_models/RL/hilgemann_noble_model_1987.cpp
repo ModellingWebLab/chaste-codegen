@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellhilgemann_noble_model_1987FromCellMLRushLarsen::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -61,6 +62,7 @@
     Cellhilgemann_noble_model_1987FromCellMLRushLarsen::~Cellhilgemann_noble_model_1987FromCellMLRushLarsen()
     {
     }
+
     
     double Cellhilgemann_noble_model_1987FromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -344,7 +346,6 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_membrane__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
 

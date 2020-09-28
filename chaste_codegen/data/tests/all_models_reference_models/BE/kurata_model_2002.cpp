@@ -23,7 +23,8 @@
 #include "CardiacNewtonSolver.hpp"
 
 
-    Cellkurata_model_2002FromCellMLBackwardEuler::Cellkurata_model_2002FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+
+    Cellkurata_model_2002FromCellMLBackwardEulerNoLut::Cellkurata_model_2002FromCellMLBackwardEulerNoLut(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<13>(
                 27,
                 0,
@@ -31,17 +32,18 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellkurata_model_2002FromCellMLBackwardEuler>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellkurata_model_2002FromCellMLBackwardEulerNoLut>::Instance();
         Init();
         
         this->mParameters[0] = 32.0; // (var_membrane__Cm) [picoF]
     }
 
-    Cellkurata_model_2002FromCellMLBackwardEuler::~Cellkurata_model_2002FromCellMLBackwardEuler()
+    Cellkurata_model_2002FromCellMLBackwardEulerNoLut::~Cellkurata_model_2002FromCellMLBackwardEulerNoLut()
     {
     }
+
     
-    double Cellkurata_model_2002FromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellkurata_model_2002FromCellMLBackwardEulerNoLut::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -159,7 +161,7 @@
         return i_ionic;
     }
 
-    void Cellkurata_model_2002FromCellMLBackwardEuler::ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[13], double rResidual[13])
+    void Cellkurata_model_2002FromCellMLBackwardEulerNoLut::ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[13], double rResidual[13])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -342,7 +344,7 @@
         rResidual[3] = rCurrentGuess[3] - rY[26] - mDt*d_dt_chaste_interface_var_calcium_buffering__fCQ;
     }
 
-    void Cellkurata_model_2002FromCellMLBackwardEuler::ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[13], double rJacobian[13][13])
+    void Cellkurata_model_2002FromCellMLBackwardEulerNoLut::ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[13], double rJacobian[13][13])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -657,7 +659,7 @@
         rJacobian[12][12] = 1.0 - (mDt * ((-2.4287088639502301e-6 * var_x102 - 5.1430434785105685e-5 * var_x101 - 9.2414019019544699e-7 * var_x97 - var_x103 * var_x89 - var_x104 * var_x90 - 2.4598814923744084e-5 * var_x95 * var_x97) * mParameters[0]));
     }
 
-    void Cellkurata_model_2002FromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
+    void Cellkurata_model_2002FromCellMLBackwardEulerNoLut::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -770,7 +772,7 @@
         rY[0] += mDt*d_dt_chaste_interface_var_membrane__V;
     }
     
-    void Cellkurata_model_2002FromCellMLBackwardEuler::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
+    void Cellkurata_model_2002FromCellMLBackwardEulerNoLut::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -853,7 +855,7 @@
         rY[14] = (var_chaste_interface__sustained_inward_current_qi_gate__qi + ((var_sustained_inward_current_qi_gate__qi_infinity / var_sustained_inward_current_qi_gate__tau_qi) * mDt)) / (1.0 - ((-1 / var_sustained_inward_current_qi_gate__tau_qi) * mDt));
         
         double _guess[13] = {rY[3],rY[22],rY[23],rY[26],rY[24],rY[25],rY[21],rY[17],rY[18],rY[16],rY[15],rY[20],rY[19]};
-        CardiacNewtonSolver<13,Cellkurata_model_2002FromCellMLBackwardEuler>* _p_solver = CardiacNewtonSolver<13,Cellkurata_model_2002FromCellMLBackwardEuler>::Instance();
+        CardiacNewtonSolver<13,Cellkurata_model_2002FromCellMLBackwardEulerNoLut>* _p_solver = CardiacNewtonSolver<13,Cellkurata_model_2002FromCellMLBackwardEulerNoLut>::Instance();
         _p_solver->Solve(*this, var_chaste_interface__environment__time, _guess);
         rY[3] = _guess[0];
         rY[22] = _guess[1];
@@ -870,12 +872,11 @@
         rY[19] = _guess[12];
     }
 
-    std::vector<double> Cellkurata_model_2002FromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Cellkurata_model_2002FromCellMLBackwardEulerNoLut::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_membrane__Cm_converted = 9.9999999999999995e-7 * mParameters[0]; // uF
 
@@ -886,7 +887,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellkurata_model_2002FromCellMLBackwardEuler>::Initialise(void)
+void OdeSystemInformation<Cellkurata_model_2002FromCellMLBackwardEulerNoLut>::Initialise(void)
 {
     this->mSystemName = "kurata_model_2002";
     this->mFreeVariableName = "environment__time";
@@ -1044,5 +1045,5 @@ void OdeSystemInformation<Cellkurata_model_2002FromCellMLBackwardEuler>::Initial
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellkurata_model_2002FromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Cellkurata_model_2002FromCellMLBackwardEulerNoLut)
 

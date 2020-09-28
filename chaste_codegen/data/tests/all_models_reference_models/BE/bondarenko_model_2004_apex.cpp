@@ -22,7 +22,8 @@
 #include "MathsCustomFunctions.hpp"
 #include "CardiacNewtonSolver.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellbondarenko_model_2004_apexFromCellMLBackwardEuler::UseCellMLDefaultStimulus()
+
+    boost::shared_ptr<RegularStimulus> Cellbondarenko_model_2004_apexFromCellMLBackwardEulerNoLut::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -80.0 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
@@ -39,7 +40,7 @@
         return p_cellml_stim;
     }
 
-    Cellbondarenko_model_2004_apexFromCellMLBackwardEuler::Cellbondarenko_model_2004_apexFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellbondarenko_model_2004_apexFromCellMLBackwardEulerNoLut::Cellbondarenko_model_2004_apexFromCellMLBackwardEulerNoLut(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<32>(
                 41,
                 0,
@@ -47,7 +48,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellbondarenko_model_2004_apexFromCellMLBackwardEuler>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellbondarenko_model_2004_apexFromCellMLBackwardEulerNoLut>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -55,11 +56,12 @@
         
     }
 
-    Cellbondarenko_model_2004_apexFromCellMLBackwardEuler::~Cellbondarenko_model_2004_apexFromCellMLBackwardEuler()
+    Cellbondarenko_model_2004_apexFromCellMLBackwardEulerNoLut::~Cellbondarenko_model_2004_apexFromCellMLBackwardEulerNoLut()
     {
     }
+
     
-    double Cellbondarenko_model_2004_apexFromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellbondarenko_model_2004_apexFromCellMLBackwardEulerNoLut::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -156,7 +158,7 @@
         return i_ionic;
     }
 
-    void Cellbondarenko_model_2004_apexFromCellMLBackwardEuler::ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[32], double rResidual[32])
+    void Cellbondarenko_model_2004_apexFromCellMLBackwardEulerNoLut::ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[32], double rResidual[32])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -399,7 +401,7 @@
         rResidual[26] = rCurrentGuess[26] - rY[40] - mDt*d_dt_chaste_interface_var_rapid_delayed_rectifier_potassium_current__I_K;
     }
 
-    void Cellbondarenko_model_2004_apexFromCellMLBackwardEuler::ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[32], double rJacobian[32][32])
+    void Cellbondarenko_model_2004_apexFromCellMLBackwardEulerNoLut::ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[32], double rJacobian[32][32])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -1583,7 +1585,7 @@
         rJacobian[31][31] = 1.0 - (mDt * (-577.38191486798689 * var_x117 - 6.2649332746797061e-8 * var_x106 - 2886909.5743399346 * var_x118 - 2.6878864966397372e-14 * var_x63));
     }
 
-    void Cellbondarenko_model_2004_apexFromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
+    void Cellbondarenko_model_2004_apexFromCellMLBackwardEulerNoLut::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -1678,7 +1680,7 @@
         rY[0] += mDt*d_dt_chaste_interface_var_membrane__V;
     }
     
-    void Cellbondarenko_model_2004_apexFromCellMLBackwardEuler::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
+    void Cellbondarenko_model_2004_apexFromCellMLBackwardEulerNoLut::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -1726,7 +1728,7 @@
         rY[34] = (var_chaste_interface__ultra_rapidly_activating_delayed_rectifier_potassium_current__iur + ((var_slow_transient_outward_potassium_current__iss / var_ultra_rapidly_activating_delayed_rectifier_potassium_current__tau_iur) * mDt)) / (1.0 - ((-1 / var_ultra_rapidly_activating_delayed_rectifier_potassium_current__tau_iur) * mDt));
         
         double _guess[32] = {rY[12],rY[13],rY[14],rY[15],rY[16],rY[17],rY[11],rY[7],rY[6],rY[3],rY[4],rY[1],rY[2],rY[5],rY[20],rY[21],rY[22],rY[23],rY[25],rY[26],rY[24],rY[19],rY[36],rY[27],rY[38],rY[39],rY[40],rY[37],rY[10],rY[8],rY[9],rY[18]};
-        CardiacNewtonSolver<32,Cellbondarenko_model_2004_apexFromCellMLBackwardEuler>* _p_solver = CardiacNewtonSolver<32,Cellbondarenko_model_2004_apexFromCellMLBackwardEuler>::Instance();
+        CardiacNewtonSolver<32,Cellbondarenko_model_2004_apexFromCellMLBackwardEulerNoLut>* _p_solver = CardiacNewtonSolver<32,Cellbondarenko_model_2004_apexFromCellMLBackwardEulerNoLut>::Instance();
         _p_solver->Solve(*this, var_chaste_interface__environment__time, _guess);
         rY[12] = _guess[0];
         rY[13] = _guess[1];
@@ -1762,12 +1764,11 @@
         rY[18] = _guess[31];
     }
 
-    std::vector<double> Cellbondarenko_model_2004_apexFromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Cellbondarenko_model_2004_apexFromCellMLBackwardEulerNoLut::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_membrane__i_stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
 
@@ -1778,7 +1779,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellbondarenko_model_2004_apexFromCellMLBackwardEuler>::Initialise(void)
+void OdeSystemInformation<Cellbondarenko_model_2004_apexFromCellMLBackwardEulerNoLut>::Initialise(void)
 {
     this->mSystemName = "bondarenko_model_2004_apex";
     this->mFreeVariableName = "environment__time";
@@ -2004,5 +2005,5 @@ void OdeSystemInformation<Cellbondarenko_model_2004_apexFromCellMLBackwardEuler>
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellbondarenko_model_2004_apexFromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Cellbondarenko_model_2004_apexFromCellMLBackwardEulerNoLut)
 

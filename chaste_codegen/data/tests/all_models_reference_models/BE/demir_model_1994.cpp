@@ -22,11 +22,12 @@
 #include "MathsCustomFunctions.hpp"
 #include "CardiacNewtonSolver.hpp"
 
-    double Celldemir_model_1994FromCellMLBackwardEuler::GetIntracellularCalciumConcentration()
+
+    double Celldemir_model_1994FromCellMLBackwardEulerNoLut::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
     }
-    Celldemir_model_1994FromCellMLBackwardEuler::Celldemir_model_1994FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Celldemir_model_1994FromCellMLBackwardEulerNoLut::Celldemir_model_1994FromCellMLBackwardEulerNoLut(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<16>(
                 27,
                 0,
@@ -34,17 +35,18 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Celldemir_model_1994FromCellMLBackwardEuler>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Celldemir_model_1994FromCellMLBackwardEulerNoLut>::Instance();
         Init();
         
         this->mParameters[0] = 5.5000000000000002e-5; // (var_membrane__Cm) [microF]
     }
 
-    Celldemir_model_1994FromCellMLBackwardEuler::~Celldemir_model_1994FromCellMLBackwardEuler()
+    Celldemir_model_1994FromCellMLBackwardEulerNoLut::~Celldemir_model_1994FromCellMLBackwardEulerNoLut()
     {
     }
+
     
-    double Celldemir_model_1994FromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
+    double Celldemir_model_1994FromCellMLBackwardEulerNoLut::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -132,7 +134,7 @@
         return i_ionic;
     }
 
-    void Celldemir_model_1994FromCellMLBackwardEuler::ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[16], double rResidual[16])
+    void Celldemir_model_1994FromCellMLBackwardEulerNoLut::ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[16], double rResidual[16])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -298,7 +300,7 @@
         rResidual[5] = rCurrentGuess[5] - rY[26] - mDt*d_dt_chaste_interface_var_SR_Ca_uptake_and_release__F3;
     }
 
-    void Celldemir_model_1994FromCellMLBackwardEuler::ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[16], double rJacobian[16][16])
+    void Celldemir_model_1994FromCellMLBackwardEulerNoLut::ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[16], double rJacobian[16][16])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -680,7 +682,7 @@
         rJacobian[15][15] = 1.0 - (mDt * (2.2637191644542304e-5 * var_x61 - 0.00012359906637920097 * var_x62 - 2.7242382709912566e-5 * var_x68 + var_x44 * var_x87 - var_x45 * var_x88 - var_x69 * var_x89));
     }
 
-    void Celldemir_model_1994FromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted)
+    void Celldemir_model_1994FromCellMLBackwardEulerNoLut::UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -765,7 +767,7 @@
         rY[0] += mDt*d_dt_chaste_interface_var_membrane__V;
     }
     
-    void Celldemir_model_1994FromCellMLBackwardEuler::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted)
+    void Celldemir_model_1994FromCellMLBackwardEulerNoLut::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -838,7 +840,7 @@
         rY[2] = (var_chaste_interface__sodium_current_m_gate__m + ((0.001 * var_sodium_current_m_gate__m_infinity / var_sodium_current_m_gate__tau_m) * mDt)) / (1.0 - ((-0.001 / var_sodium_current_m_gate__tau_m) * mDt));
         
         double _guess[16] = {rY[23],rY[22],rY[21],rY[24],rY[25],rY[26],rY[19],rY[20],rY[18],rY[14],rY[16],rY[15],rY[1],rY[13],rY[17],rY[12]};
-        CardiacNewtonSolver<16,Celldemir_model_1994FromCellMLBackwardEuler>* _p_solver = CardiacNewtonSolver<16,Celldemir_model_1994FromCellMLBackwardEuler>::Instance();
+        CardiacNewtonSolver<16,Celldemir_model_1994FromCellMLBackwardEulerNoLut>* _p_solver = CardiacNewtonSolver<16,Celldemir_model_1994FromCellMLBackwardEulerNoLut>::Instance();
         _p_solver->Solve(*this, var_chaste_interface__environment__time_converted, _guess);
         rY[23] = _guess[0];
         rY[22] = _guess[1];
@@ -858,12 +860,11 @@
         rY[12] = _guess[15];
     }
 
-    std::vector<double> Celldemir_model_1994FromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
+    std::vector<double> Celldemir_model_1994FromCellMLBackwardEulerNoLut::ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
 
         std::vector<double> dqs(1);
@@ -872,7 +873,7 @@
     }
 
 template<>
-void OdeSystemInformation<Celldemir_model_1994FromCellMLBackwardEuler>::Initialise(void)
+void OdeSystemInformation<Celldemir_model_1994FromCellMLBackwardEulerNoLut>::Initialise(void)
 {
     this->mSystemName = "demir_model_1994";
     this->mFreeVariableName = "environment__time";
@@ -1026,5 +1027,5 @@ void OdeSystemInformation<Celldemir_model_1994FromCellMLBackwardEuler>::Initiali
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Celldemir_model_1994FromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Celldemir_model_1994FromCellMLBackwardEulerNoLut)
 

@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellmahajan_2008FromCellMLRushLarsen::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -66,6 +67,7 @@
     Cellmahajan_2008FromCellMLRushLarsen::~Cellmahajan_2008FromCellMLRushLarsen()
     {
     }
+
     
     double Cellmahajan_2008FromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -537,7 +539,6 @@
         double var_chaste_interface__Ca__Ca_i_converted = rY[1];
         // Units: millimolar; Initial value: 0.000256752008084
         
-
         // Mathematics
         const double var_cell__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__Environment__time); // uA_per_cm2
 

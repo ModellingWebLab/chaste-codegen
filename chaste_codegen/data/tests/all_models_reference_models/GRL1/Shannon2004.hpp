@@ -5,7 +5,7 @@
 //!
 //! This source file was generated from CellML by chaste_codegen version (version omitted as unimportant)
 //!
-//! Model: shannon_2004
+//! Model: shannon_wang_puglisi_weber_bers_2004_model_updated
 //!
 //! Processed by chaste_codegen: https://github.com/ModellingWebLab/chaste-codegen
 //!     (translator: chaste_codegen, model type: GeneralizedRushLarsenFirstOrder)
@@ -120,6 +120,18 @@ public:
     double EvaluatePartialDerivative37(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical=false);
     double EvaluateYDerivative38(double var_chaste_interface__environment__time, std::vector<double>& rY);
     double EvaluatePartialDerivative38(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical=false);
+    double EvaluateYDerivative39(double var_chaste_interface__environment__time, std::vector<double>& rY);
+    double EvaluatePartialDerivative39(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical=false);
+    double EvaluateYDerivative40(double var_chaste_interface__environment__time, std::vector<double>& rY);
+    double EvaluatePartialDerivative40(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical=false);
+    double EvaluateYDerivative41(double var_chaste_interface__environment__time, std::vector<double>& rY);
+    double EvaluatePartialDerivative41(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical=false);
+    double EvaluateYDerivative42(double var_chaste_interface__environment__time, std::vector<double>& rY);
+    double EvaluatePartialDerivative42(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical=false);
+    double EvaluateYDerivative43(double var_chaste_interface__environment__time, std::vector<double>& rY);
+    double EvaluatePartialDerivative43(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical=false);
+    double EvaluateYDerivative44(double var_chaste_interface__environment__time, std::vector<double>& rY);
+    double EvaluatePartialDerivative44(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical=false);
 
     std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY);
 };

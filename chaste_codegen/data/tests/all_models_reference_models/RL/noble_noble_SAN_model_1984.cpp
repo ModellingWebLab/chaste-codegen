@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     double Cellnoble_noble_SAN_model_1984FromCellMLRushLarsen::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
@@ -42,6 +43,7 @@
     Cellnoble_noble_SAN_model_1984FromCellMLRushLarsen::~Cellnoble_noble_SAN_model_1984FromCellMLRushLarsen()
     {
     }
+
     
     double Cellnoble_noble_SAN_model_1984FromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -351,7 +353,6 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
 
         std::vector<double> dqs(1);

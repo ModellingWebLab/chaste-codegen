@@ -8,7 +8,7 @@
         {%- if state_var.in_deriv_excl_voltage %}double {{ state_var.var }} = {{state_var.rY_lookup}};
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}
-        
+{% set method =  "ComputeOneStepExceptVoltage" %}{% include "Shared/cpp/lookup_table_init" %}
         // Mathematics
         {%- for deriv in y_derivative_equations %}{% if deriv.in_eqs_excl_voltage %}
         {% if not deriv.is_voltage%}const double {% endif %}{{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}

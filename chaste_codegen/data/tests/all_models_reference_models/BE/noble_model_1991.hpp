@@ -1,5 +1,5 @@
-#ifndef CELLNOBLE_MODEL_1991FROMCELLMLBACKWARDEULER_HPP_
-#define CELLNOBLE_MODEL_1991FROMCELLMLBACKWARDEULER_HPP_
+#ifndef CELLNOBLE_MODEL_1991FROMCELLMLBACKWARDEULERNOLUT_HPP_
+#define CELLNOBLE_MODEL_1991FROMCELLMLBACKWARDEULERNOLUT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractBackwardEulerCardiacCell.hpp"
 
-class Cellnoble_model_1991FromCellMLBackwardEuler : public AbstractBackwardEulerCardiacCell<9>
+class Cellnoble_model_1991FromCellMLBackwardEulerNoLut : public AbstractBackwardEulerCardiacCell<9>
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -35,8 +35,8 @@ class Cellnoble_model_1991FromCellMLBackwardEuler : public AbstractBackwardEuler
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
-    Cellnoble_model_1991FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellnoble_model_1991FromCellMLBackwardEuler();
+    Cellnoble_model_1991FromCellMLBackwardEulerNoLut(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellnoble_model_1991FromCellMLBackwardEulerNoLut();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[9], double rResidual[9]);
     void ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[9], double rJacobian[9][9]);protected:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted);
@@ -47,7 +47,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellnoble_model_1991FromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Cellnoble_model_1991FromCellMLBackwardEulerNoLut)
 
 namespace boost
 {
@@ -55,7 +55,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellnoble_model_1991FromCellMLBackwardEuler * t, const unsigned int fileVersion)
+            Archive & ar, const Cellnoble_model_1991FromCellMLBackwardEulerNoLut * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -65,17 +65,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellnoble_model_1991FromCellMLBackwardEuler * t, const unsigned int fileVersion)
+            Archive & ar, Cellnoble_model_1991FromCellMLBackwardEulerNoLut * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellnoble_model_1991FromCellMLBackwardEuler(p_solver, p_stimulus);
+            ::new(t)Cellnoble_model_1991FromCellMLBackwardEulerNoLut(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLNOBLE_MODEL_1991FROMCELLMLBACKWARDEULER_HPP_
+#endif // CELLNOBLE_MODEL_1991FROMCELLMLBACKWARDEULERNOLUT_HPP_

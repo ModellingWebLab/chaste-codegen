@@ -8,7 +8,11 @@ chaste_all_normal_models = get_models(ref_folder='all_models_reference_models', 
 chaste_all_opt_models = get_models(ref_folder='all_models_reference_models', type='Opt')
 chaste_all_cvode_models = get_models(ref_folder='all_models_reference_models', type='Cvode')
 chaste_all_cvode_models_jacobian = get_models(ref_folder='all_models_reference_models', type='Cvode_with_jacobian')
+chaste_all_cvode_opt_models = get_models(ref_folder='all_models_reference_models', type='Cvode_opt')
+chaste_all_cvode_opt_models_with_jacobians = get_models(ref_folder='all_models_reference_models',
+                                                        type='Cvode_opt_with_jacobian')
 chaste_all_BE = get_models(ref_folder='all_models_reference_models', type='BE')
+chaste_all_BEopt = get_models(ref_folder='all_models_reference_models', type='BEopt')
 chaste_all_RL = get_models(ref_folder='all_models_reference_models', type='RL')
 chaste_all_RLopt = get_models(ref_folder='all_models_reference_models', type='RLopt')
 chaste_all_GRL1 = get_models(ref_folder='all_models_reference_models', type='GRL1')
@@ -16,10 +20,31 @@ chaste_all_GRL1Opt = get_models(ref_folder='all_models_reference_models', type='
 chaste_all_GRL2 = get_models(ref_folder='all_models_reference_models', type='GRL2')
 chaste_all_GRL2Opt = get_models(ref_folder='all_models_reference_models', type='GRL2Opt')
 chaste_CVODE_DATA_CLAMP = get_models(ref_folder='all_models_reference_models', type='CVODE_DATA_CLAMP')
+chaste_CVODE_DATA_CLAMP_OPT = get_models(ref_folder='all_models_reference_models', type='CVODE_DATA_CLAMP_OPT')
 
 
 cg.__version__ = "(version omitted as unimportant)"
 cg.chaste_model.TIME_STAMP = "(date omitted as unimportant)"
+
+
+@pytest.mark.all_models
+@pytest.mark.parametrize(('model'), chaste_all_cvode_opt_models_with_jacobians)
+def test_Cvode_opt_jacobian(tmp_path, model, request):
+    """ Check generation of Cvode models against reference"""
+    if request.config.option.markexpr != 'all_models':
+        pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
+    from chaste_codegen.tests.test_codegen import test_Cvode_opt_jacobian
+    test_Cvode_opt_jacobian(tmp_path, model)
+
+
+@pytest.mark.all_models
+@pytest.mark.parametrize(('model'), chaste_all_cvode_opt_models)
+def test_Cvode_opt(tmp_path, model, request):
+    """ Check generation of Cvode models against reference"""
+    if request.config.option.markexpr != 'all_models':
+        pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
+    from chaste_codegen.tests.test_codegen import test_Cvode_opt
+    test_Cvode_opt(tmp_path, model)
 
 
 @pytest.mark.all_models
@@ -60,6 +85,16 @@ def test_Cvode_jacobian_all_models(tmp_path, model, request):
         pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
     from chaste_codegen.tests.test_codegen import test_Cvode_jacobian
     test_Cvode_jacobian(tmp_path, model)
+
+
+@pytest.mark.all_models
+@pytest.mark.parametrize(('model'), chaste_all_BEopt)
+def test_BEopt_all_models(tmp_path, model, request):
+    """ Check generation of Cvode models against reference"""
+    if request.config.option.markexpr != 'all_models':
+        pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
+    from chaste_codegen.tests.test_codegen import test_BEopt
+    test_BEopt(tmp_path, model)
 
 
 @pytest.mark.all_models
@@ -140,3 +175,13 @@ def test_CVODE_DATA_CLAMP_all_models(tmp_path, model, request):
         pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
     from chaste_codegen.tests.test_codegen import test_CVODE_DATA_CLAMP
     test_CVODE_DATA_CLAMP(tmp_path, model)
+
+
+@pytest.mark.all_models
+@pytest.mark.parametrize(('model'), chaste_CVODE_DATA_CLAMP_OPT)
+def test_CVODE_DATA_CLAMP_OPT_all_models(tmp_path, model, request):
+    """ Check generation of CVODE with Data Clamp opt models against reference"""
+    if request.config.option.markexpr != 'all_models':
+        pytest.skip('Skip if not explicitly set to run all_models with -m all_models')
+    from chaste_codegen.tests.test_codegen import test_CVODE_DATA_CLAMP_OPT
+    test_CVODE_DATA_CLAMP_OPT(tmp_path, model)

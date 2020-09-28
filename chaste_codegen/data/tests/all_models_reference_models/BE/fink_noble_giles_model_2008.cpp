@@ -22,7 +22,8 @@
 #include "MathsCustomFunctions.hpp"
 #include "CardiacNewtonSolver.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellfink_noble_giles_model_2008FromCellMLBackwardEuler::UseCellMLDefaultStimulus()
+
+    boost::shared_ptr<RegularStimulus> Cellfink_noble_giles_model_2008FromCellMLBackwardEulerNoLut::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__cell__i_Stim_Amplitude_converted = -51.999999999999993 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
@@ -39,7 +40,7 @@
         return p_cellml_stim;
     }
 
-    Cellfink_noble_giles_model_2008FromCellMLBackwardEuler::Cellfink_noble_giles_model_2008FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellfink_noble_giles_model_2008FromCellMLBackwardEulerNoLut::Cellfink_noble_giles_model_2008FromCellMLBackwardEulerNoLut(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<17>(
                 27,
                 0,
@@ -47,7 +48,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Cellfink_noble_giles_model_2008FromCellMLBackwardEuler>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Cellfink_noble_giles_model_2008FromCellMLBackwardEulerNoLut>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -55,11 +56,12 @@
         
     }
 
-    Cellfink_noble_giles_model_2008FromCellMLBackwardEuler::~Cellfink_noble_giles_model_2008FromCellMLBackwardEuler()
+    Cellfink_noble_giles_model_2008FromCellMLBackwardEulerNoLut::~Cellfink_noble_giles_model_2008FromCellMLBackwardEulerNoLut()
     {
     }
+
     
-    double Cellfink_noble_giles_model_2008FromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
+    double Cellfink_noble_giles_model_2008FromCellMLBackwardEulerNoLut::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -163,7 +165,7 @@
         return i_ionic;
     }
 
-    void Cellfink_noble_giles_model_2008FromCellMLBackwardEuler::ComputeResidual(double var_chaste_interface__Environment__time, const double rCurrentGuess[17], double rResidual[17])
+    void Cellfink_noble_giles_model_2008FromCellMLBackwardEulerNoLut::ComputeResidual(double var_chaste_interface__Environment__time, const double rCurrentGuess[17], double rResidual[17])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -351,7 +353,7 @@
         rResidual[4] = rCurrentGuess[4] - rY[26] - mDt*d_dt_chaste_interface_var_K__K_i;
     }
 
-    void Cellfink_noble_giles_model_2008FromCellMLBackwardEuler::ComputeJacobian(double var_chaste_interface__Environment__time, const double rCurrentGuess[17], double rJacobian[17][17])
+    void Cellfink_noble_giles_model_2008FromCellMLBackwardEulerNoLut::ComputeJacobian(double var_chaste_interface__Environment__time, const double rCurrentGuess[17], double rJacobian[17][17])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -757,7 +759,7 @@
         rJacobian[16][16] = 1.0 - (mDt * (var_x79));
     }
 
-    void Cellfink_noble_giles_model_2008FromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__Environment__time)
+    void Cellfink_noble_giles_model_2008FromCellMLBackwardEulerNoLut::UpdateTransmembranePotential(double var_chaste_interface__Environment__time)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -858,7 +860,7 @@
         rY[0] += mDt*d_dt_chaste_interface_var_cell__V;
     }
     
-    void Cellfink_noble_giles_model_2008FromCellMLBackwardEuler::ComputeOneStepExceptVoltage(double var_chaste_interface__Environment__time)
+    void Cellfink_noble_giles_model_2008FromCellMLBackwardEulerNoLut::ComputeOneStepExceptVoltage(double var_chaste_interface__Environment__time)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -927,7 +929,7 @@
         rY[12] = (var_chaste_interface__ito_s_gate__s + ((var_ito_s_gate__s_inf / var_ito_s_gate__tau_s) * mDt)) / (1.0 - ((-1 / var_ito_s_gate__tau_s) * mDt));
         
         double _guess[17] = {rY[22],rY[21],rY[23],rY[24],rY[26],rY[25],rY[20],rY[6],rY[7],rY[8],rY[10],rY[9],rY[1],rY[2],rY[3],rY[5],rY[4]};
-        CardiacNewtonSolver<17,Cellfink_noble_giles_model_2008FromCellMLBackwardEuler>* _p_solver = CardiacNewtonSolver<17,Cellfink_noble_giles_model_2008FromCellMLBackwardEuler>::Instance();
+        CardiacNewtonSolver<17,Cellfink_noble_giles_model_2008FromCellMLBackwardEulerNoLut>* _p_solver = CardiacNewtonSolver<17,Cellfink_noble_giles_model_2008FromCellMLBackwardEulerNoLut>::Instance();
         _p_solver->Solve(*this, var_chaste_interface__Environment__time, _guess);
         rY[22] = _guess[0];
         rY[21] = _guess[1];
@@ -948,12 +950,11 @@
         rY[4] = _guess[16];
     }
 
-    std::vector<double> Cellfink_noble_giles_model_2008FromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__Environment__time, const std::vector<double> & rY)
+    std::vector<double> Cellfink_noble_giles_model_2008FromCellMLBackwardEulerNoLut::ComputeDerivedQuantities(double var_chaste_interface__Environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_cell__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__Environment__time); // uA_per_cm2
 
@@ -964,7 +965,7 @@
     }
 
 template<>
-void OdeSystemInformation<Cellfink_noble_giles_model_2008FromCellMLBackwardEuler>::Initialise(void)
+void OdeSystemInformation<Cellfink_noble_giles_model_2008FromCellMLBackwardEulerNoLut>::Initialise(void)
 {
     this->mSystemName = "fink_noble_giles_model_2008";
     this->mFreeVariableName = "Environment__time";
@@ -1120,5 +1121,5 @@ void OdeSystemInformation<Cellfink_noble_giles_model_2008FromCellMLBackwardEuler
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Cellfink_noble_giles_model_2008FromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Cellfink_noble_giles_model_2008FromCellMLBackwardEulerNoLut)
 

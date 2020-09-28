@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsen::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -67,6 +68,7 @@
     Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsen::~Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsen()
     {
     }
+
     
     double Celliribe_model_2006_without_otherwise_sectionFromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -446,7 +448,6 @@
         double var_chaste_interface__intracellular_potassium_concentration__K_i = rY[17];
         // Units: millimolar; Initial value: 138.22
         
-
         // Mathematics
         const double var_cell_parameters__Ca_o = 2.0; // millimolar
         const double var_cell_parameters__F = 96485.341499999995; // coulomb_per_mole

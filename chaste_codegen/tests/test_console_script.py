@@ -104,8 +104,7 @@ def test_script_double_show_output(capsys):
         output = str(captured.out)
         assert "grandi2010ssCvodeDataClamp.cpp" in output
         assert "grandi2010ssCvodeDataClamp.hpp" in output
-        assert "grandi2010ssBackwardEuler.cpp" in output
-        assert "grandi2010ssBackwardEuler.hpp" in output
+        assert "grandi2010ssBackwardEulerNoLut.hpp" in output
 
 
 def test_script_double_show_output2(capsys):
@@ -124,8 +123,7 @@ def test_script_double_show_output2(capsys):
         output = str(captured.out).replace("\\", "/")
         assert "/cellml/grandi2010ssCvodeDataClamp.cpp" in output
         assert "/cellml/grandi2010ssCvodeDataClamp.hpp" in output
-        assert "/cellml/grandi2010ssBackwardEuler.cpp" in output
-        assert "/cellml/grandi2010ssBackwardEuler.hpp" in output
+        assert "/cellml/grandi2010ssBackwardEulerNoLut.hpp" in output
 
 
 def test_non_extsing_cellml():
@@ -248,10 +246,42 @@ def test_script_double_type(tmp_path):
     compare_file_against_reference(os.path.join(reference, 'CVODE_DATA_CLAMP', model_name + 'CvodeDataClamp.cpp'),
                                    os.path.join(tmp_path, model_name + 'CvodeDataClamp.cpp'))
 
-    compare_file_against_reference(os.path.join(reference, 'BE', model_name + 'BackwardEuler.hpp'),
-                                   os.path.join(tmp_path, model_name + 'BackwardEuler.hpp'))
-    compare_file_against_reference(os.path.join(reference, 'BE', model_name + 'BackwardEuler.cpp'),
-                                   os.path.join(tmp_path, model_name + 'BackwardEuler.cpp'))
+    compare_file_against_reference(os.path.join(reference, 'BE', model_name + 'BackwardEulerNoLut.hpp'),
+                                   os.path.join(tmp_path, model_name + 'BackwardEulerNoLut.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'BE', model_name + 'BackwardEulerNoLut.cpp'),
+                                   os.path.join(tmp_path, model_name + 'BackwardEulerNoLut.cpp'))
+
+
+def test_script_data_clamp_opt(tmp_path):
+    """Convert code with data clamp opt"""
+    LOGGER.info('Testing multiple models\n')
+    tmp_path = str(tmp_path)
+    model_name = 'grandi2010ss'
+    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    target = os.path.join(tmp_path, model_name + '.cellml')
+    shutil.copyfile(model_file, target)
+
+    testargs = ["chaste_codegen", '--cvode-data-clamp', '--opt', target]
+    # Call commandline script
+    with mock.patch.object(sys, 'argv', testargs):
+        chaste_codegen()
+    reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models')
+    reference_opt = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models')
+
+    compare_file_against_reference(os.path.join(reference, 'CVODE_DATA_CLAMP',
+                                                model_name + 'CvodeDataClamp.hpp'),
+                                   os.path.join(tmp_path, model_name + 'CvodeDataClamp.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'CVODE_DATA_CLAMP',
+                                                model_name + 'CvodeDataClamp.cpp'),
+                                   os.path.join(tmp_path, model_name + 'CvodeDataClamp.cpp'))
+
+    compare_file_against_reference(os.path.join(reference_opt, 'CVODE_DATA_CLAMP_OPT',
+                                                model_name + 'CvodeDataClampOpt.hpp'),
+                                   os.path.join(tmp_path, model_name + 'CvodeDataClampOpt.hpp'))
+    compare_file_against_reference(os.path.join(reference_opt, 'CVODE_DATA_CLAMP_OPT',
+                                                model_name + 'CvodeDataClampOpt.cpp'),
+                                   os.path.join(tmp_path, model_name + 'CvodeDataClampOpt.cpp'))
 
 
 def test_script_class_convtype_output_dll_loadable(tmp_path):
@@ -342,7 +372,7 @@ def test_script_cvode_opt(tmp_path):
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
-    reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Cvode')
+    reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Cvode_opt')
     compare_file_against_reference(os.path.join(reference, 'dynamic_aslanidi_model_2009.hpp'),
                                    os.path.join(tmp_path, 'dynamic_aslanidi_model_2009.hpp'))
     compare_file_against_reference(os.path.join(reference, 'dynamic_aslanidi_model_2009.cpp'),
@@ -399,12 +429,31 @@ def test_script_dynamic_BE(tmp_path):
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'dynamic_courtemanche_ramirez_nattel_model_1998.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', model_file, '--backward-euler', '-o', outfile,
-                '-c', 'Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler', '--dynamically-loadable']
+    testargs = ['chaste_codegen', model_file, '--backward-euler', '-o', outfile, '--dynamically-loadable']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
     reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'BE')
+    compare_file_against_reference(os.path.join(reference, 'dynamic_courtemanche_ramirez_nattel_model_1998.hpp'),
+                                   os.path.join(tmp_path, 'dynamic_courtemanche_ramirez_nattel_model_1998.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'dynamic_courtemanche_ramirez_nattel_model_1998.cpp'),
+                                   os.path.join(tmp_path, 'dynamic_courtemanche_ramirez_nattel_model_1998.cpp'))
+
+
+def test_script_dynamic_BEopt(tmp_path):
+    """Convert a BackwardsEuler model type"""
+    LOGGER.info('Testing model with options --backward-euler, --dynamically-loadable, --opt for command line script\n')
+    tmp_path = str(tmp_path)
+    model_name = 'courtemanche_ramirez_nattel_model_1998'
+    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    outfile = os.path.join(tmp_path, 'dynamic_courtemanche_ramirez_nattel_model_1998.cpp')
+    # Call commandline script
+    testargs = ['chaste_codegen', model_file, '--backward-euler', '--opt', '-o', outfile, '--dynamically-loadable']
+    with mock.patch.object(sys, 'argv', testargs):
+        chaste_codegen()
+    # Check output
+    reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'BEopt')
     compare_file_against_reference(os.path.join(reference, 'dynamic_courtemanche_ramirez_nattel_model_1998.hpp'),
                                    os.path.join(tmp_path, 'dynamic_courtemanche_ramirez_nattel_model_1998.hpp'))
     compare_file_against_reference(os.path.join(reference, 'dynamic_courtemanche_ramirez_nattel_model_1998.cpp'),
@@ -569,3 +618,102 @@ def test_script_CVODE_DATA_CLAMP_modifiers(tmp_path):
                                    os.path.join(tmp_path, 'Shannon2004_with_modifiers.hpp'))
     compare_file_against_reference(os.path.join(reference, 'Shannon2004_with_modifiers.cpp'),
                                    os.path.join(tmp_path, 'Shannon2004_with_modifiers.cpp'))
+
+
+def test_script_lookup_table(tmp_path):
+    """Convert a model with custom lookup table"""
+    LOGGER.info('Testing custom lookup tables,  for command line script\n')
+    tmp_path = str(tmp_path)
+    model_name = 'beeler_reuter_model_1977'
+    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    outfile = os.path.join(tmp_path, 'beeler_reuter_model_1977_lookup_tables.cpp')
+    # Call commandline script
+    testargs = ['chaste_codegen', model_file, '--opt', '-o', outfile,
+                '--lookup-table', 'membrane_voltage', '-150.0001', '199.9999', '0.01',
+                '--lookup-table', 'cytosolic_calcium_concentration', '0.00001', '30.00001', '0.0001']
+
+    with mock.patch.object(sys, 'argv', testargs):
+        chaste_codegen()
+    # Check output
+    reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Opt')
+    compare_file_against_reference(os.path.join(reference, 'beeler_reuter_model_1977_lookup_tables.hpp'),
+                                   os.path.join(tmp_path, 'beeler_reuter_model_1977_lookup_tables.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'beeler_reuter_model_1977_lookup_tables.cpp'),
+                                   os.path.join(tmp_path, 'beeler_reuter_model_1977_lookup_tables.cpp'))
+
+
+def test_script_lookup_table_no_opt():
+    """Convert a model with custom lookup table"""
+    LOGGER.info('Testing custom lookup tables,  for command line script\n')
+    model_name = 'beeler_reuter_model_1977'
+    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    outfile = 'beeler_reuter_model_1977_lookup_tables.cpp'
+    # Call commandline script
+    testargs = ['chaste_codegen', model_file, '-o', outfile,
+                '--lookup-table', 'membrane_voltage', '-150.0001', '199.9999', '0.01',
+                '--lookup-table', 'cytosolic_calcium_concentration', '0.00001', '30.00001', '0.0001']
+
+    with mock.patch.object(sys, 'argv', testargs):
+        with pytest.raises(ValueError, match="Can only use lookup tables in combination with --opt"):
+            chaste_codegen()
+
+
+def test_script_lookup_table_wrong_args():
+    """Convert a model with custom lookup table"""
+    LOGGER.info('Testing custom lookup tables,  for command line script\n')
+    model_name = 'beeler_reuter_model_1977'
+    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    outfile = 'beeler_reuter_model_1977_lookup_tables.cpp'
+    # Call commandline script
+    testargs = ['chaste_codegen', model_file, '--opt', '-o', outfile,
+                '--lookup-table', '-150.0001', '-150.0001', '199.9999', '0.01']
+
+    with mock.patch.object(sys, 'argv', testargs):
+        with pytest.raises(ValueError,
+                           match="Lookup tables are expecting the following 4 values: <metadata tag> min max step"):
+            chaste_codegen()
+
+
+def test_script_lookup_table_wrong_args2():
+    """Convert a model with custom lookup table"""
+    LOGGER.info('Testing custom lookup tables,  for command line script\n')
+    model_name = 'beeler_reuter_model_1977'
+    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    outfile = 'beeler_reuter_model_1977_lookup_tables.cpp'
+    # Call commandline script
+    testargs = ['chaste_codegen', model_file, '--opt', '-o', outfile,
+                '--lookup-table', 'membrane_voltage', 'membrane_voltage', '199.9999', '0.01']
+
+    with mock.patch.object(sys, 'argv', testargs):
+        with pytest.raises(ValueError,
+                           match="Lookup tables are expecting the following 4 values: <metadata tag> min max step"):
+            chaste_codegen()
+
+
+def test_script_lookup_table_check_non_existing_tag_ignored(tmp_path):
+    """Check non-existing metadata tags are ignored"""
+    LOGGER.info('Testing custom lookup tables,  for command line script\n')
+    tmp_path = str(tmp_path)
+    model_name = 'beeler_reuter_model_1977'
+    model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    outfile = os.path.join(tmp_path, 'beeler_reuter_model_1977_lookup_tables.cpp')
+    # Call commandline script
+    testargs = ['chaste_codegen', model_file, '--opt', '-o', outfile,
+                '--lookup-table', 'membrane_voltage', '-150.0001', '199.9999', '0.01',
+                '--lookup-table', 'cytosolic_calcium_concentration', '0.00001', '30.00001', '0.0001',
+                '--lookup-table', 'non_existing_tag', '-150.0001', '199.9999', '0.01']
+
+    with mock.patch.object(sys, 'argv', testargs):
+        chaste_codegen()
+
+    # Check output
+    reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Opt')
+    compare_file_against_reference(os.path.join(reference, 'beeler_reuter_model_1977_lookup_tables.hpp'),
+                                   os.path.join(tmp_path, 'beeler_reuter_model_1977_lookup_tables.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'beeler_reuter_model_1977_lookup_tables.cpp'),
+                                   os.path.join(tmp_path, 'beeler_reuter_model_1977_lookup_tables.cpp'))

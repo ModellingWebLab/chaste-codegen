@@ -7,6 +7,7 @@
         {%- if state_var.in_voltage_deriv %}double {{ state_var.var }} = {{state_var.rY_lookup}};
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}
+        {%- set method =  "UpdateTransmembranePotential" %}{% include "Shared/cpp/lookup_table_init" %}
         {% for deriv in y_derivative_equations %}
         {%- if deriv.in_membrane_voltage %}const double {{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}
         {% endif %}{%- endfor %}

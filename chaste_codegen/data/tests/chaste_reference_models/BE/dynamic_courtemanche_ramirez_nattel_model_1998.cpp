@@ -22,7 +22,8 @@
 #include "MathsCustomFunctions.hpp"
 #include "CardiacNewtonSolver.hpp"
 
-    boost::shared_ptr<RegularStimulus> Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler::UseCellMLDefaultStimulus()
+
+    boost::shared_ptr<RegularStimulus> Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEulerNoLut::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_membrane__Cm_converted = 9.9999999999999995e-7 * mParameters[0]; // uF
@@ -40,7 +41,7 @@
         return p_cellml_stim;
     }
 
-    Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler::Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEulerNoLut::Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEulerNoLut(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<8>(
                 21,
                 0,
@@ -48,7 +49,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEulerNoLut>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -57,11 +58,12 @@
         this->mParameters[0] = 100.0; // (var_membrane__Cm) [picoF]
     }
 
-    Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler::~Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler()
+    Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEulerNoLut::~Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEulerNoLut()
     {
     }
+
     
-    double Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
+    double Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEulerNoLut::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -149,7 +151,7 @@
         return i_ionic;
     }
 
-    void Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler::ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[8], double rResidual[8])
+    void Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEulerNoLut::ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[8], double rResidual[8])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -280,7 +282,7 @@
         rResidual[5] = rCurrentGuess[5] - rY[20] - mDt*d_dt_chaste_interface_var_intracellular_ion_concentrations__Ca_up;
     }
 
-    void Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler::ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[8], double rJacobian[8][8])
+    void Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEulerNoLut::ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[8], double rJacobian[8][8])
     {
         std::vector<double>& rY = rGetStateVariables();
         double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
@@ -441,7 +443,7 @@
         rJacobian[7][7] = 1.0 - (mDt * (-1.3661211601158392e-8 * var_x52 - 1.8104305755161864e-9 * var_x23 - 5.0612420794952582e-8 * var_x53 - 0.00015799455173983574 * var_x52 * pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * var_chaste_interface__fast_sodium_current_h_gate__h * var_chaste_interface__fast_sodium_current_j_gate__j));
     }
 
-    void Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
+    void Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEulerNoLut::UpdateTransmembranePotential(double var_chaste_interface__environment__time)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -527,7 +529,7 @@
         rY[0] += mDt*d_dt_chaste_interface_var_membrane__V;
     }
     
-    void Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
+    void Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEulerNoLut::ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
@@ -617,7 +619,7 @@
         rY[7] = (var_chaste_interface__ultrarapid_delayed_rectifier_K_current_ui_gate__ui + ((var_ultrarapid_delayed_rectifier_K_current_ui_gate__ui_infinity / var_ultrarapid_delayed_rectifier_K_current_ui_gate__tau_ui) * mDt)) / (1.0 - ((-1 / var_ultrarapid_delayed_rectifier_K_current_ui_gate__tau_ui) * mDt));
         
         double _guess[8] = {rY[13],rY[14],rY[12],rY[17],rY[19],rY[20],rY[18],rY[16]};
-        CardiacNewtonSolver<8,Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler>* _p_solver = CardiacNewtonSolver<8,Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler>::Instance();
+        CardiacNewtonSolver<8,Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEulerNoLut>* _p_solver = CardiacNewtonSolver<8,Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEulerNoLut>::Instance();
         _p_solver->Solve(*this, var_chaste_interface__environment__time, _guess);
         rY[13] = _guess[0];
         rY[14] = _guess[1];
@@ -629,12 +631,11 @@
         rY[16] = _guess[7];
     }
 
-    std::vector<double> Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
+    std::vector<double> Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEulerNoLut::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY)
     {
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_membrane__Cm_converted = 9.9999999999999995e-7 * mParameters[0]; // uF
         const double var_membrane__i_st_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
@@ -647,7 +648,7 @@
     }
 
 template<>
-void OdeSystemInformation<Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler>::Initialise(void)
+void OdeSystemInformation<Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEulerNoLut>::Initialise(void)
 {
     this->mSystemName = "courtemanche_ramirez_nattel_model_1998";
     this->mFreeVariableName = "environment__time";
@@ -779,14 +780,14 @@ void OdeSystemInformation<Dynamiccourtemanche_ramirez_nattel_model_1998FromCellM
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEulerNoLut)
 extern "C"
 {
     AbstractCardiacCellInterface* MakeCardiacCell(
             boost::shared_ptr<AbstractIvpOdeSolver> pSolver,
             boost::shared_ptr<AbstractStimulusFunction> pStimulus)
     {
-        return new Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEuler(pSolver, pStimulus);
+        return new Dynamiccourtemanche_ramirez_nattel_model_1998FromCellMLBackwardEulerNoLut(pSolver, pStimulus);
     }
 
 }

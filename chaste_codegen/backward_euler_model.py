@@ -40,15 +40,10 @@ class BackwardEulerModel(ChasteModel):
 
         self._vars_for_template['state_vars'], self._vars_for_template['nonlinear_state_vars'], \
             self._vars_for_template['residual_equations'], self._vars_for_template['y_derivative_equations'] = \
-            self._update_state_vars(vars_in_one_step)
+            self.update_state_vars(vars_in_one_step)
 
-        modifiers_with_defining_eqs = set((eq[0] for eq in self._jacobian_equations)) | self._model.state_vars
         self._vars_for_template['jacobian_equations'], self._vars_for_template['jacobian_entries'] = \
-            format_jacobian(self._jacobian_equations, self._jacobian_matrix, self._printer,
-                            partial(self._print_rhs_with_modifiers,
-                                    modifiers_with_defining_eqs=modifiers_with_defining_eqs),
-                            swap_inner_outer_index=False,
-                            skip_0_entries=False)
+            self.format_jacobian()
 
     def _format_rearranged_linear_derivs(self):
         """Formats the rearranged linear derivative expressions
@@ -120,15 +115,18 @@ class BackwardEulerModel(ChasteModel):
                 used_vars.update(self._model.find_variables_and_derivatives([exp]))
             used_vars.add(r_expr[1])
 
-        return formatted_expr, self._format_derivative_equations(linear_derivs_eqs), used_vars
+        return formatted_expr, self.format_linear_deriv_eqs(linear_derivs_eqs), used_vars
 
-    def _update_state_vars(self, vars_in_compute_one_step):
+    def update_formatted_deriv_eq(self, eq, non_linear_eqs):
+        """Update derivatibve equation information"""
+        eq['linear'] = eq['lhs'] not in non_linear_eqs
+
+    def update_state_vars(self, vars_in_compute_one_step):
         """Update the state vars, savings residual and jacobian info for outputing"""
         formatted_state_vars = self._vars_for_template['state_vars']
-        residual_equations = []
         formatted_derivative_eqs = self._vars_for_template['y_derivative_equations']
         jacobian_symbols = set()
-        residual_eq_symbols = set()
+        non_linear_eq_symbols = set()
 
         for eq in self._jacobian_equations:
             jacobian_symbols.update(eq[1].free_symbols)
@@ -137,29 +135,48 @@ class BackwardEulerModel(ChasteModel):
 
         non_linear_derivs = [eq.lhs for eq in self._derivative_equations if isinstance(eq.lhs, Derivative)
                              and eq.lhs.args[0] in self._non_linear_state_vars]
-        non_linear_eqs = self._model.get_equations_for(non_linear_derivs)
+
+        # Pick the formatted equations that are for non-linear derivatives
+        non_linear_eqs = [eq for eq in formatted_derivative_eqs
+                          if eq['sympy_lhs'] in [e.lhs for e in self._model.get_equations_for(non_linear_derivs)]]
+
+        # store symbols used in non-linear equations
         for eq in non_linear_eqs:
-            residual_eq_symbols.update(eq.rhs.free_symbols)
-        non_linear_eqs = [self._printer.doprint(eq.lhs) for eq in non_linear_eqs]
+            non_linear_eq_symbols.update(eq['sympy_rhs'].free_symbols)
+
+        # update formatting of derivative equations
+        non_linear_eqs = [eq['lhs'] for eq in non_linear_eqs]
         for d in formatted_derivative_eqs:
-            d['linear'] = d['lhs'] not in non_linear_eqs
+            self.update_formatted_deriv_eq(d, non_linear_eqs)
 
-        formatted_nonlinear_state_vars = \
-            [s for s in formatted_state_vars if s['sympy_var'] in self._non_linear_state_vars]
-        # order by name
-        formatted_nonlinear_state_vars.sort(key=lambda d: d['var'])
-        for sv in formatted_nonlinear_state_vars:
-            sv['linear'] = False
-            sv['in_jacobian'] = sv['sympy_var'] in jacobian_symbols
-            sv['in_residual_eqs'] = sv['sympy_var'] in residual_eq_symbols
-
+        formatted_nonlinear_state_vars = []
         for i, sv in enumerate(formatted_state_vars):
+            sv['in_non_linear_eq'] = sv['sympy_var'] in non_linear_eq_symbols
             sv['linear'] = sv['sympy_var'] not in self._non_linear_state_vars
             sv['in_jacobian'] = sv['sympy_var'] in jacobian_symbols
-            sv['in_residual_eqs'] = sv['sympy_var'] in residual_eq_symbols
+            sv['in_residual_eqs'] = sv['sympy_var'] in non_linear_eq_symbols
             sv['in_one_step_except_v'] = sv['sympy_var'] in vars_in_compute_one_step
-            if not sv['linear']:
-                residual_equations.append({'residual_index': formatted_nonlinear_state_vars.index(sv),
-                                           'state_var_index': i, 'var': self._vars_for_template['y_derivatives'][i]})
+            if sv['sympy_var'] in self._non_linear_state_vars:
+                formatted_nonlinear_state_vars.append(sv)
+
+        # order by name
+        formatted_nonlinear_state_vars.sort(key=lambda d: d['var'])
+
+        residual_equations = [{'residual_index': formatted_nonlinear_state_vars.index(sv), 'state_var_index': i,
+                               'var': self._vars_for_template['y_derivatives'][i]}
+                              for i, sv in enumerate(formatted_state_vars) if not sv['linear']]
 
         return formatted_state_vars, formatted_nonlinear_state_vars, residual_equations, formatted_derivative_eqs
+
+    def format_linear_deriv_eqs(self, linear_deriv_eqs):
+        """ Format linear derivative equations beloning, to allow opt model to update what belongs were"""
+        return self._format_derivative_equations(linear_deriv_eqs)
+
+    def format_jacobian(self):
+        """Format the jacobian to allow opt model to update what belongs were"""
+        modifiers_with_defining_eqs = set((eq[0] for eq in self._jacobian_equations)) | self._model.state_vars
+        return format_jacobian(self._jacobian_equations, self._jacobian_matrix, self._printer,
+                               partial(self._print_rhs_with_modifiers,
+                                       modifiers_with_defining_eqs=modifiers_with_defining_eqs),
+                               swap_inner_outer_index=False,
+                               skip_0_entries=False)

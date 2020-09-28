@@ -70,8 +70,20 @@ class ChastePrinter(Printer):
         'pi': 'M_PI',
     }
 
-    def __init__(self, symbol_function=None, derivative_function=None):
+    def __init__(self, symbol_function=None, derivative_function=None, lookup_table_function=lambda e: None):
         super().__init__(symbol_function, derivative_function)
+        self.lookup_table_function = lookup_table_function
+
+    def _print(self, expr, **kwargs):
+        """Internal dispatcher.
+
+        Here we intercept lookup table expressions if we have lookup tables.
+        Otherwise the base class method is used.
+        """
+        printed_expr = self.lookup_table_function(expr)
+        if printed_expr:
+            return printed_expr
+        return super()._print(expr, **kwargs)
 
     def _print_Function(self, expr):
         """ Handles function calls. """
@@ -150,8 +162,9 @@ class ChastePrinter(Printer):
         a, b = [], []
         for item in Mul.make_args(expr):
             if item != 1.0:  # In multiplications remove 1.0 * ...
-                # Check if this is a negative power, so we can write it as a division
-                if (item.is_commutative and item.is_Pow and item.exp.is_Rational and item.exp.is_negative):
+                # Check if this is a negative power and it's not in a lookup table, so we can write it as a division
+                if (item.is_commutative and item.is_Pow and item.exp.is_Rational and item.exp.is_negative
+                        and not self.lookup_table_function(item)):
                     if item.exp != -1:
                         # E.g. x * y**(-2 / 3) --> x / y**(2 / 3)
                         # Add as power
