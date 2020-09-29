@@ -18,14 +18,19 @@ pip install chaste_codegen
 ## Using `chaste_codegen`
 After installation, chaste_codegen can be called using the `chaste_codegen` command:
 ```
-usage: chaste_codegen [-h] [--version] [-t TYPE] [-o OUTFILE]
-                      [--use-analytic-jacobian] [-c CLASS_NAME] [-y]
-                      [--use-modifiers]
+usage: chaste_codegen [-h] [--version] [--normal] [--cvode]
+                      [--cvode-data-clamp] [--backward-euler] [--rush-larsen]
+                      [--grl1] [--grl2] [-j] [-o OUTFILE]
+                      [--output-dir OUTPUT_DIR] [--show-outputs] [-c CLS_NAME]
+                      [-q] [-y] [--opt] [-m]
+                      [--lookup-table <metadata tag> min max step]
                       cellml_file
+chaste_codegen: error: the following arguments are required: cellml_file
 ```
 
 For more information about the available options call
-`chaste_codegen -h`
+`chaste_codegen -h` or see the [CodeGenerationFromCellML guide](https://chaste.cs.ox.ac.uk/trac/wiki/ChasteGuides/CodeGenerationFromCellML) 
+
 
 ## Release notes
 For release notes see [RELEASE.md](./RELEASE.md)
