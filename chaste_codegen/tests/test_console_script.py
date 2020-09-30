@@ -153,7 +153,7 @@ def test_script_convert(caplog, tmp_path):
     # Call commandline script
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
-        assert "The Model has no capacitance tagged." in caplog.text
+        assert "The model has no capacitance tagged." in caplog.text
 
     reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Normal')
     compare_file_against_reference(os.path.join(reference, model_name + '_console_script.hpp'),
