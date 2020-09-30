@@ -125,7 +125,7 @@ def test_script_double_show_output2(capsys):
         assert "/cellml/grandi2010ssBackwardEulerNoLut.hpp" in output
 
 
-def test_non_extsing_cellml(caplog):
+def test_non_existing_cellml(caplog):
     """Test converting non-existing cellml file"""
     LOGGER.info('Testing non-existing cellml\n')
 
