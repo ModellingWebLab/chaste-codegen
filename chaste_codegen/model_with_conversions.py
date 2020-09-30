@@ -264,7 +264,7 @@ def _get_cytosolic_calcium_concentration_var(model, convert=True):
         calcium = model.convert_variable(calcium, model.conversion_units.get_unit('millimolar'),
                                          DataDirectionFlow.INPUT)
     except KeyError:
-        LOGGER.info(model.name + ' has no cytosolic_calcium_concentration')
+        LOGGER.info('The model has no cytosolic_calcium_concentration tagged.')
         return None
     except DimensionalityError:
         pass  # Conversion is optional
@@ -277,7 +277,7 @@ def _get_membrane_stimulus_current(model):
     try:  # get membrane_stimulus_current
         return model.get_variable_by_ontology_term((OXMETA, 'membrane_stimulus_current'))
     except KeyError:
-        LOGGER.info(model.name + ' has no membrane_stimulus_current')
+        LOGGER.info('The model has no membrane_stimulus_current tagged.')
         return None
 
 
@@ -298,10 +298,10 @@ def _get_membrane_capacitance(model):
         capacitance = model.get_variable_by_ontology_term((OXMETA, 'membrane_capacitance'))
         return model.convert_variable(capacitance, model.conversion_units.get_unit('uF'), DataDirectionFlow.OUTPUT)
     except KeyError:
-        LOGGER.info(model.name + ' has no capacitance tagged')
+        LOGGER.info('The model has no capacitance tagged.')
         return None
     except DimensionalityError:
-        LOGGER.info(model.name + ' has capacitance in incompatible units, skipping')
+        LOGGER.warning('The model has capacitance in incompatible units, skipping.')
         return None
 
 
@@ -316,7 +316,7 @@ def _get_stimulus(model):
                                                    DataDirectionFlow.INPUT))
     except KeyError:
         if required:  # Optional params are allowed to be missing
-            LOGGER.info(model.name + ' has no default stimulus params tagged')
+            LOGGER.info('The model has no default stimulus params tagged.')
             return set(), []
     except TypeError as e:
         if str(e) == "unsupported operand type(s) for /: 'HeartConfig::Instance()->GetCapacitance' and 'NoneType'":
