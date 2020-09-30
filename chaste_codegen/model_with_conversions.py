@@ -233,8 +233,8 @@ def _get_time_variable(model):
         return model.convert_variable(model.get_free_variable(), model.conversion_units.get_unit('millisecond'),
                                       DataDirectionFlow.INPUT)
     except DimensionalityError:
-        warning = 'Incorrect definition of free variable (time): time needs to be dimensionally equivalent to second!'
-        raise CodegenError(warning)
+        raise CodegenError(("Incorrect definition of free variable (time): "
+                            "time needs to be dimensionally equivalent to second!"))
 
 
 def _get_membrane_voltage_var(model, convert=True):
