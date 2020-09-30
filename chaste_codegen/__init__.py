@@ -12,6 +12,7 @@ from ._config import (  # noqa
     LOGGER,
     MODULE_DIR,
     TEMPLATE_SUBDIR,
+    CodegenError,
     __version__,
     __version_int__,
     version,
@@ -38,6 +39,7 @@ from .generalised_rush_larsen_1_model import GeneralisedRushLarsenFirstOrderMode
 from .generalised_rush_larsen_1_opt_model import GeneralisedRushLarsenFirstOrderModelOpt  # noqa
 from .generalised_rush_larsen_2_model import GeneralisedRushLarsenSecondOrderModel  # noqa
 from .generalised_rush_larsen_2_opt_model import GeneralisedRushLarsenSecondOrderModelOpt  # noqa
+from .model_with_conversions import add_conversions, load_model_with_conversions  # noqa
 from .normal_chaste_model import NormalChasteModel  # noqa
 from .opt_chaste_model import OptChasteModel  # noqa
 from .rush_larsen_model import RushLarsenModel  # noqa

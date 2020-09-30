@@ -20,7 +20,7 @@ from sympy import (
 from sympy.codegen.cfunctions import log10
 from sympy.codegen.rewriting import ReplaceOptim, log1p_opt, optimize
 
-from chaste_codegen import LOGGER
+from chaste_codegen import LOGGER, CodegenError
 from chaste_codegen._math_functions import MATH_FUNC_SYMPY_MAPPING
 from chaste_codegen._rdf import OXMETA, PYCMLMETA, get_variables_transitively
 
@@ -222,7 +222,10 @@ def _add_conversion_rules(model):
 
 def _get_time_variable(model):
     """ Get the variable representing time (the free variable) and convert to milliseconds"""
-    time_variable = model.get_free_variable()
+    try:
+        time_variable = model.get_free_variable()
+    except ValueError:
+        raise CodegenError('The model has no free variable (time)!')
     # Annotate as quantity and not modifiable parameter
     set_is_metadata(model, time_variable, 'derived-quantity')
     try:
@@ -230,8 +233,8 @@ def _get_time_variable(model):
         return model.convert_variable(model.get_free_variable(), model.conversion_units.get_unit('millisecond'),
                                       DataDirectionFlow.INPUT)
     except DimensionalityError:
-        warning = 'Incorrect definition of time variable: time needs to be dimensionally equivalent to second'
-        raise ValueError(warning)
+        raise CodegenError(("Incorrect definition of free variable (time): "
+                            "time needs to be dimensionally equivalent to second!"))
 
 
 def _get_membrane_voltage_var(model, convert=True):
@@ -244,10 +247,10 @@ def _get_membrane_voltage_var(model, convert=True):
         voltage = model.convert_variable(voltage, model.conversion_units.get_unit('millivolt'),
                                          DataDirectionFlow.INPUT)
     except KeyError:
-        raise KeyError('Voltage not tagged in the model!')
+        raise CodegenError('Voltage not tagged in the model!')
     except DimensionalityError:
-        raise ValueError('Incorrect definition of membrane_voltage variable: '
-                         'units of membrane_voltage need to be dimensionally equivalent to Volt')
+        raise CodegenError('Incorrect definition of membrane_voltage variable: '
+                           'units of membrane_voltage need to be dimensionally equivalent to Volt')
     annotate_if_not_statevar(model, voltage)  # If V is not state var annotate as appropriate.
     return voltage
 
@@ -261,7 +264,7 @@ def _get_cytosolic_calcium_concentration_var(model, convert=True):
         calcium = model.convert_variable(calcium, model.conversion_units.get_unit('millimolar'),
                                          DataDirectionFlow.INPUT)
     except KeyError:
-        LOGGER.info(model.name + ' has no cytosolic_calcium_concentration')
+        LOGGER.info('The model has no cytosolic_calcium_concentration tagged.')
         return None
     except DimensionalityError:
         pass  # Conversion is optional
@@ -274,7 +277,7 @@ def _get_membrane_stimulus_current(model):
     try:  # get membrane_stimulus_current
         return model.get_variable_by_ontology_term((OXMETA, 'membrane_stimulus_current'))
     except KeyError:
-        LOGGER.info(model.name + ' has no membrane_stimulus_current')
+        LOGGER.info('The model has no membrane_stimulus_current tagged.')
         return None
 
 
@@ -295,10 +298,10 @@ def _get_membrane_capacitance(model):
         capacitance = model.get_variable_by_ontology_term((OXMETA, 'membrane_capacitance'))
         return model.convert_variable(capacitance, model.conversion_units.get_unit('uF'), DataDirectionFlow.OUTPUT)
     except KeyError:
-        LOGGER.info(model.name + ' has no capacitance tagged')
+        LOGGER.info('The model has no capacitance tagged.')
         return None
     except DimensionalityError:
-        LOGGER.info(model.name + ' has capacitance in incompatible units, skipping')
+        LOGGER.warning('The model has capacitance in incompatible units, skipping.')
         return None
 
 
@@ -313,11 +316,11 @@ def _get_stimulus(model):
                                                    DataDirectionFlow.INPUT))
     except KeyError:
         if required:  # Optional params are allowed to be missing
-            LOGGER.info(model.name + ' has no default stimulus params tagged')
+            LOGGER.info('The model has no default stimulus params tagged.')
             return set(), []
     except TypeError as e:
         if str(e) == "unsupported operand type(s) for /: 'HeartConfig::Instance()->GetCapacitance' and 'NoneType'":
-            e = KeyError("Membrane capacitance is required to be able to apply conversion to stimulus current!")
+            e = CodegenError("Membrane capacitance is required to be able to apply conversion to stimulus current!")
         raise(e)
 
     return_stim_eqs = get_equations_for(model, stim_params, filter_modifiable_parameters_lhs=False)
@@ -510,8 +513,8 @@ def _get_extended_ionic_vars(model):
                     for eq in get_equations_for(model, model.ionic_vars)
                     if eq.lhs != model.membrane_stimulus_current_converted]
     if model.time_variable in model.find_variables_and_derivatives(extended_eqs):
-        raise KeyError('Ionic variables should not be a function of time. '
-                       'This is often caused by missing membrane_stimulus_current tag.')
+        raise CodegenError('Ionic variables should not be a function of time. '
+                           'This is often caused by missing membrane_stimulus_current tag.')
     return extended_eqs
 
 

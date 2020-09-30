@@ -4,8 +4,6 @@ import shutil
 import sys
 from unittest import mock
 
-import pytest
-
 import chaste_codegen as cg
 from chaste_codegen import LOGGER
 from chaste_codegen._command_line_script import (
@@ -75,7 +73,7 @@ def test_usage(capsys):
         assert error == expected
 
 
-def test_script_o_output_dif():
+def test_script_o_output_dif(caplog):
     """Convert a normal model via command line script"""
     LOGGER.info('Testing --show-output\n')
     model_name = 'grandi2010ss'
@@ -86,8 +84,9 @@ def test_script_o_output_dif():
                 '-o', '/bla.cppp', '--output-dir', '/']
     # Call commandline script
     with mock.patch.object(sys, 'argv', testargs):
-        with pytest.raises(ValueError, match="-o and --output-dir cannot be used together!"):
-            chaste_codegen()
+        chaste_codegen()
+    assert 'ERROR' in caplog.text
+    assert "-o and --output-dir cannot be used together!" in caplog.text
 
 
 def test_script_double_show_output(capsys):
@@ -126,26 +125,16 @@ def test_script_double_show_output2(capsys):
         assert "/cellml/grandi2010ssBackwardEulerNoLut.hpp" in output
 
 
-def test_non_extsing_cellml():
+def test_non_existing_cellml(caplog):
     """Test converting non-existing cellml file"""
     LOGGER.info('Testing non-existing cellml\n')
 
     testargs = ["chaste_codegen", "bla.cellml"]
     # Call commandline script
     with mock.patch.object(sys, 'argv', testargs):
-        with pytest.raises(ValueError, match="Could not find cellml file bla.cellml"):
-            chaste_codegen()
-
-
-def test_non_extsing_cellml2():
-    """Test converting non-existing cellml file"""
-    LOGGER.info('Testing non-existing cellml\n')
-
-    testargs = ["chaste_codegen", "bla.txt"]
-    # Call commandline script
-    with mock.patch.object(sys, 'argv', testargs):
-        with pytest.raises(ValueError, match="Could not find cellml file bla.txt"):
-            chaste_codegen()
+        chaste_codegen()
+    assert 'ERROR' in caplog.text
+    assert "Could not find cellml file bla.cellml" in caplog.text
 
 
 def test_script_convert(caplog, tmp_path):
@@ -164,7 +153,7 @@ def test_script_convert(caplog, tmp_path):
     # Call commandline script
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
-        assert "grandi2010 has no capacitance tagged" in caplog.text
+        assert "The model has no capacitance tagged." in caplog.text
 
     reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Normal')
     compare_file_against_reference(os.path.join(reference, model_name + '_console_script.hpp'),
@@ -188,7 +177,7 @@ def test_script_convert_quiet(caplog, tmp_path):
     # Call commandline script
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
-        assert "grandi2010 has no capacitance tagged" not in caplog.text
+        assert "The model has no capacitance tagged." not in caplog.text
 
     reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Normal')
     compare_file_against_reference(os.path.join(reference, model_name + '_console_script.hpp'),
@@ -197,7 +186,7 @@ def test_script_convert_quiet(caplog, tmp_path):
                                    os.path.join(tmp_path, model_name + '.cpp'))
 
 
-def test_script_double_type_output():
+def test_script_double_type_output(caplog):
     """Convert multiple model types"""
     LOGGER.info('Testing multiple models\n')
     model_name = 'grandi2010ss'
@@ -207,11 +196,12 @@ def test_script_double_type_output():
     testargs = ["chaste_codegen", '--cvode-data-clamp', '--backward-euler', model_file, '-o', 'bla.cpp']
     # Call commandline script
     with mock.patch.object(sys, 'argv', testargs):
-        with pytest.raises(ValueError, match="-o cannot be used when multiple model types have been selected!"):
-            chaste_codegen()
+        chaste_codegen()
+    assert 'ERROR' in caplog.text
+    assert "-o cannot be used when multiple model types have been selected!" in caplog.text
 
 
-def test_script_double_type_output2():
+def test_script_double_type_output2(caplog):
     """Convert multiple model types"""
     LOGGER.info('Testing multiple models\n')
     model_name = 'grandi2010ss'
@@ -221,8 +211,9 @@ def test_script_double_type_output2():
     testargs = ["chaste_codegen", '--cvode-data-clamp', '--backward-euler', model_file, '--dynamically-loadable']
     # Call commandline script
     with mock.patch.object(sys, 'argv', testargs):
-        with pytest.raises(ValueError, match="Only one model type may be specified if creating a dynamic library!"):
-            chaste_codegen()
+        chaste_codegen()
+    assert 'ERROR' in caplog.text
+    assert "Only one model type may be specified if creating a dynamic library!" in caplog.text
 
 
 def test_script_double_type(tmp_path):
@@ -643,7 +634,7 @@ def test_script_lookup_table(tmp_path):
                                    os.path.join(tmp_path, 'beeler_reuter_model_1977_lookup_tables.cpp'))
 
 
-def test_script_lookup_table_no_opt():
+def test_script_lookup_table_no_opt(caplog):
     """Convert a model with custom lookup table"""
     LOGGER.info('Testing custom lookup tables,  for command line script\n')
     model_name = 'beeler_reuter_model_1977'
@@ -656,11 +647,12 @@ def test_script_lookup_table_no_opt():
                 '--lookup-table', 'cytosolic_calcium_concentration', '0.00001', '30.00001', '0.0001']
 
     with mock.patch.object(sys, 'argv', testargs):
-        with pytest.raises(ValueError, match="Can only use lookup tables in combination with --opt"):
-            chaste_codegen()
+        chaste_codegen()
+    assert 'ERROR' in caplog.text
+    assert "Can only use lookup tables in combination with --opt" in caplog.text
 
 
-def test_script_lookup_table_wrong_args():
+def test_script_lookup_table_wrong_args(caplog):
     """Convert a model with custom lookup table"""
     LOGGER.info('Testing custom lookup tables,  for command line script\n')
     model_name = 'beeler_reuter_model_1977'
@@ -672,12 +664,12 @@ def test_script_lookup_table_wrong_args():
                 '--lookup-table', '-150.0001', '-150.0001', '199.9999', '0.01']
 
     with mock.patch.object(sys, 'argv', testargs):
-        with pytest.raises(ValueError,
-                           match="Lookup tables are expecting the following 4 values: <metadata tag> min max step"):
-            chaste_codegen()
+        chaste_codegen()
+    assert 'ERROR' in caplog.text
+    assert "Lookup tables are expecting the following 4 values: <metadata tag> min max step" in caplog.text
 
 
-def test_script_lookup_table_wrong_args2():
+def test_script_lookup_table_wrong_args2(caplog):
     """Convert a model with custom lookup table"""
     LOGGER.info('Testing custom lookup tables,  for command line script\n')
     model_name = 'beeler_reuter_model_1977'
@@ -689,9 +681,9 @@ def test_script_lookup_table_wrong_args2():
                 '--lookup-table', 'membrane_voltage', 'membrane_voltage', '199.9999', '0.01']
 
     with mock.patch.object(sys, 'argv', testargs):
-        with pytest.raises(ValueError,
-                           match="Lookup tables are expecting the following 4 values: <metadata tag> min max step"):
-            chaste_codegen()
+        chaste_codegen()
+    assert 'ERROR' in caplog.text
+    assert "Lookup tables are expecting the following 4 values: <metadata tag> min max step" in caplog.text
 
 
 def test_script_lookup_table_check_non_existing_tag_ignored(tmp_path):

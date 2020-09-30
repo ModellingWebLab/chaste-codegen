@@ -1,3 +1,6 @@
+# Release 0.5.2
+- Error messages have been improved, especially for errors caused by invalid or missing metadata.
+
 # Release 0.5.1
 - Corrected usage mentioned in the readme
 
