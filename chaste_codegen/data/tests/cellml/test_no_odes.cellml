@@ -1,0 +1,17 @@
+<?xml version='1.0'?>
+<!--
+This is a version of the test_simple_odes.cellml file used by cellmlmanip. 
+However units of time have been set to dimensionless to create an error
+
+-->
+<model cmeta:id="test_no_odes" name="test_no_odes" xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">
+    <component name="single_independent_ode">
+        <variable cmeta:id="t" initial_value="0" name="t" units="dimensionless"/>
+        <variable cmeta:id="membrane_voltage" initial_value="1" name="sv1" units="volt"/>
+    </component>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:about="#membrane_voltage">
+            <bqbiol:is xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_voltage" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+        </rdf:Description>
+    </rdf:RDF>
+</model>

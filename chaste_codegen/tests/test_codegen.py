@@ -6,9 +6,13 @@ import sympy as sp
 from cellmlmanip.rdf import create_rdf_node
 
 import chaste_codegen as cg
-from chaste_codegen import LOGGER
+from chaste_codegen import (
+    LOGGER,
+    CodegenError,
+    add_conversions,
+    load_model_with_conversions,
+)
 from chaste_codegen._rdf import OXMETA
-from chaste_codegen.model_with_conversions import add_conversions, load_model_with_conversions
 from chaste_codegen.tests import chaste_test_utils as test_utils
 
 
@@ -324,7 +328,7 @@ def test_missing_V():
     voltage = chaste_model.get_variable_by_ontology_term((OXMETA, 'membrane_voltage'))
     chaste_model.rdf.remove((voltage.rdf_identity, None, None))
 
-    with pytest.raises(KeyError, match='Voltage not tagged in the model!'):
+    with pytest.raises(CodegenError, match='Voltage not tagged in the model!'):
         add_conversions(chaste_model)
 
 
@@ -338,8 +342,19 @@ def test_missing_capacitance():
     capacitance = chaste_model.get_variable_by_ontology_term((OXMETA, 'membrane_capacitance'))
     chaste_model.rdf.remove((capacitance.rdf_identity, None, None))
 
-    with pytest.raises(KeyError, match='Membrane capacitance is required to be able to apply conversion '
-                                       'to stimulus current!'):
+    with pytest.raises(CodegenError, match='Membrane capacitance is required to be able to apply conversion '
+                                           'to stimulus current!'):
+        add_conversions(chaste_model)
+
+
+def test_no_time():
+    LOGGER.info('Testing missing time\n')
+    model_file = \
+        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'test_no_odes.cellml')
+
+    chaste_model = cellmlmanip.load_model(model_file)
+
+    with pytest.raises(CodegenError, match=r"The model has no free variable \(time\)!"):
         add_conversions(chaste_model)
 
 
@@ -348,8 +363,8 @@ def test_wrong_units_time():
     model_file = \
         os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'test_wrong_units_time_odes.cellml')
 
-    with pytest.raises(ValueError, match='Incorrect definition of time variable: '
-                                         'time needs to be dimensionally equivalent to second'):
+    with pytest.raises(CodegenError, match=(r"Incorrect definition of free variable \(time\): "
+                                            "time needs to be dimensionally equivalent to second!")):
         load_model_with_conversions(model_file)
 
 
@@ -358,8 +373,8 @@ def test_wrong_units_voltage():
     model_file = \
         os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'test_wrong_units_voltage.cellml')
 
-    with pytest.raises(ValueError, match='Incorrect definition of membrane_voltage variable: '
-                                         'units of membrane_voltage need to be dimensionally equivalent to Volt'):
+    with pytest.raises(CodegenError, match=("Incorrect definition of membrane_voltage variable: "
+                                            "units of membrane_voltage need to be dimensionally equivalent to Volt")):
         load_model_with_conversions(model_file)
 
 
@@ -426,6 +441,6 @@ def test_stimulus_not_tagged():
     stim = chaste_model.get_variable_by_ontology_term((OXMETA, 'membrane_stimulus_current'))
     chaste_model.rdf.remove((stim.rdf_identity, None, None))
 
-    with pytest.raises(KeyError, match='Ionic variables should not be a function of time. '
-                                       'This is often caused by missing membrane_stimulus_current tag.'):
+    with pytest.raises(CodegenError, match='Ionic variables should not be a function of time. '
+                                           'This is often caused by missing membrane_stimulus_current tag.'):
         add_conversions(chaste_model)

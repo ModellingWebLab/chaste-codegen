@@ -6,9 +6,9 @@ import os
 from collections import OrderedDict
 
 import chaste_codegen as cg
+from chaste_codegen import LOGGER, CodegenError, load_model_with_conversions
 from chaste_codegen._lookup_tables import DEFAULT_LOOKUP_PARAMETERS
 from chaste_codegen._script_utils import write_file
-from chaste_codegen.model_with_conversions import load_model_with_conversions
 
 
 # Link names to classes for converting code
@@ -52,7 +52,7 @@ def print_default_lookup_params():
     return params
 
 
-def chaste_codegen():
+def process_command_line():
     # add options for command line interface
     parser = argparse.ArgumentParser(description='Chaste code generation for cellml.')
     # Options for added pycml backwards compatibility, these are now always on
@@ -115,11 +115,11 @@ def chaste_codegen():
     args = parser.parse_args()
 
     if not os.path.isfile(args.cellml_file):
-        raise ValueError("Could not find cellml file %s " % args.cellml_file)
+        raise CodegenError("Could not find cellml file %s " % args.cellml_file)
     if args.outfile is not None and args.output_dir is not None:
-        raise ValueError("-o and --output-dir cannot be used together!")
+        raise CodegenError("-o and --output-dir cannot be used together!")
     if args.lookup_table and not args.opt:
-        raise ValueError("Can only use lookup tables in combination with --opt")
+        raise CodegenError("Can only use lookup tables in combination with --opt")
 
     # make sure --lookup-table entries are 1 string and 3 floats
     if args.lookup_table is None:
@@ -136,14 +136,13 @@ def chaste_codegen():
                 is_float = False  # We are expecting this to be a string
 
             if is_float:
-                raise ValueError(lut_params_mgs)
+                raise CodegenError(lut_params_mgs)
 
             for i in range(1, len(lut)):  # next 3 arguments are floats
                 try:
                     lut[i] = float(lut[i])
-                except ValueError as e:
-                    e.args = (lut_params_mgs, )
-                    raise
+                except ValueError:
+                    raise CodegenError(lut_params_mgs)
 
     # if no model type is set assume normal
     args.normal = args.normal or not any([getattr(args, model_type.replace('-', '_')) for model_type in TRANSLATORS])
@@ -161,11 +160,11 @@ def chaste_codegen():
 
     # An outfile cannot be set with multiple translations
     if args.outfile and len(translators) > 1:
-        raise ValueError("-o cannot be used when multiple model types have been selected!")
+        raise CodegenError("-o cannot be used when multiple model types have been selected!")
     # Dynamically loadable models can only be built one at a time
 
     if args.dynamically_loadable and len(translators) > 1:
-        raise ValueError("Only one model type may be specified if creating a dynamic library!")
+        raise CodegenError("Only one model type may be specified if creating a dynamic library!")
 
     if not args.show_outputs:
         # Load model once, not once per translator, but only if we're actually generating code
@@ -218,3 +217,10 @@ def get_outfile_parts(outfile, output_dir, cellml_file):
     outfile_extension = out_file_base_parts[1] if len(out_file_base_parts) > 1 else ''
     ext = EXTENSION_LOOKUP[outfile_extension]
     return outfile_path, model_name_from_file, outfile_base, ext
+
+
+def chaste_codegen():
+    try:
+        process_command_line()
+    except CodegenError as e:
+        LOGGER.error(e, exc_info=False)

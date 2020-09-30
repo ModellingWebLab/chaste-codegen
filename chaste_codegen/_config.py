@@ -9,6 +9,10 @@ import logging
 import os  # noqa
 
 
+class CodegenError(Exception):
+    pass
+
+
 try:
     frame = inspect.currentframe()
     MODULE_DIR = os.path.dirname(inspect.getfile(frame))
