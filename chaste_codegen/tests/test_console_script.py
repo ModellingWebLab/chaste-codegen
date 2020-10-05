@@ -686,9 +686,9 @@ def test_script_lookup_table_wrong_args2(caplog):
     assert "Lookup tables are expecting the following 4 values: <metadata tag> min max step" in caplog.text
 
 
-def test_script_lookup_table_check_non_existing_tag_ignored(tmp_path):
+def test_script_lookup_table_check_non_existing_tag_ignored(caplog, tmp_path):
     """Check non-existing metadata tags are ignored"""
-    LOGGER.info('Testing custom lookup tables,  for command line script\n')
+    LOGGER.info('Testing custom lookup tables, for command line script\n')
     tmp_path = str(tmp_path)
     model_name = 'beeler_reuter_model_1977'
     model_file = os.path.join(cg.DATA_DIR, 'tests', 'cellml', model_name + '.cellml')
@@ -703,9 +703,40 @@ def test_script_lookup_table_check_non_existing_tag_ignored(tmp_path):
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
 
+    assert 'WARNING' in caplog.text
+    assert "A lookup table was specified for non_existing_tag but it is not tagged the model, skipping!" in caplog.text
+
     # Check output
     reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Opt')
     compare_file_against_reference(os.path.join(reference, 'beeler_reuter_model_1977_lookup_tables.hpp'),
                                    os.path.join(tmp_path, 'beeler_reuter_model_1977_lookup_tables.hpp'))
     compare_file_against_reference(os.path.join(reference, 'beeler_reuter_model_1977_lookup_tables.cpp'),
                                    os.path.join(tmp_path, 'beeler_reuter_model_1977_lookup_tables.cpp'))
+
+
+def test_script_load_non_cellml_file(caplog):
+    """Check non-existing metadata tags are ignored"""
+    LOGGER.info('Testing loading a file that is not a cellml file\n')
+    model_file = os.path.join(cg.DATA_DIR, 'tests', 'usage.txt')
+    # Call commandline script
+    testargs = ['chaste_codegen', model_file]
+
+    with mock.patch.object(sys, 'argv', testargs):
+        chaste_codegen()
+
+    assert 'ERROR' in caplog.text
+    assert "Could not load cellml model:" in caplog.text
+
+
+def test_script_load_non_existing_file(caplog):
+    """Check non-existing metadata tags are ignored"""
+    LOGGER.info('Testing loading a file that does not exist\n')
+    model_file = "bla.txt"
+    # Call commandline script
+    testargs = ['chaste_codegen', model_file]
+
+    with mock.patch.object(sys, 'argv', testargs):
+        chaste_codegen()
+    print(caplog.text)
+    assert 'ERROR' in caplog.text
+    assert "Could not find cellml file bla.txt" in caplog.text

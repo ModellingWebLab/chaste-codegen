@@ -1,3 +1,6 @@
+# Release 0.5.3
+- Added an additional error messages if cellml files can't be loaded and a warning if a lookup table is specified for a tag not present in the model.
+
 # Release 0.5.2
 - Error messages have been improved, especially for errors caused by invalid or missing metadata.
 
