@@ -74,7 +74,6 @@ class LookupTables:
         self._method_printed = None
 
         for param in self._lookup_parameters:
-            print(param['metadata_tag'])
             try:
                 var = self._model.get_variable_by_ontology_term((OXMETA, param['metadata_tag']))
                 self._lookup_variables.add(var)
