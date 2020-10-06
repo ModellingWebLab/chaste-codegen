@@ -704,7 +704,7 @@ def test_script_lookup_table_check_non_existing_tag_ignored(caplog, tmp_path):
         chaste_codegen()
 
     assert 'WARNING' in caplog.text
-    assert "A lookup table was specified for non_existing_tag but it is not tagged the model, skipping!" in caplog.text
+    assert "A lookup table was specified for non_existing_tag but it is not tagged in the model, skipping!" in caplog.text
 
     # Check output
     reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Opt')
