@@ -80,9 +80,8 @@ class LookupTables:
                 self._lookup_variables.add(var)
                 param['var'] = var
             except KeyError:
-                # variable not tagged in model
                 LOGGER.warning('A lookup table was specified for ' + param['metadata_tag'] +
-                               ' but it is not tagged the model, skipping!')
+                               ' but it is not tagged in the model, skipping!')
 
     def calc_lookup_tables(self, equations):
         """ Calculates and stores the lookup table expressions for equations.
