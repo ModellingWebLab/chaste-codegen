@@ -51,7 +51,10 @@ _POW_OPT = ReplaceOptim(lambda p: p.is_Pow and (isinstance(p.exp, Float) or isin
 def load_model_with_conversions(model_file, use_modifiers=False, quiet=False):
     if quiet:
         LOGGER.setLevel(logging.ERROR)
-    model = cellmlmanip.load_model(model_file)
+    try:
+        model = cellmlmanip.load_model(model_file)
+    except Exception as e:
+        raise CodegenError('Could not load cellml model: \n    ' + str(e))
     add_conversions(model, use_modifiers)
     return model
 

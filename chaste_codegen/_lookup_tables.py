@@ -31,6 +31,7 @@ from sympy import (
     tanh,
 )
 
+from chaste_codegen import LOGGER
 from chaste_codegen._math_functions import (
     acos_,
     cos_,
@@ -78,7 +79,8 @@ class LookupTables:
                 self._lookup_variables.add(var)
                 param['var'] = var
             except KeyError:
-                pass  # variable not tagged in model
+                LOGGER.warning('A lookup table was specified for ' + param['metadata_tag'] +
+                               ' but it is not tagged in the model, skipping!')
 
     def calc_lookup_tables(self, equations):
         """ Calculates and stores the lookup table expressions for equations.
