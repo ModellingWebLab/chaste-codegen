@@ -10,6 +10,8 @@ branches:
 install:
     - if [[ $TRAVIS_EVENT_TYPE == "cron" ]] ; then pip install -e git://github.com/ModellingWebLab/cellmlmanip.git@develop#egg=cellmlmanip ; fi
     - pip install .[test]
+    - pip uninstall -y pint
+    - pip install pint>=0.16.0
 script:
     - python -m flake8
     - python -m isort --verbose --check-only --diff chaste_codegen setup.py
