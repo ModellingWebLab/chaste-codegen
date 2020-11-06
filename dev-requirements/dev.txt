@@ -1,4 +1,4 @@
-cellmlmanip==0.2.0
+cellmlmanip==0.2.1
 atomicwrites==1.3.0       # via pytest
 attrs==19.1.0             # via packaging, pytest
 click==7.0                # via pip-tools

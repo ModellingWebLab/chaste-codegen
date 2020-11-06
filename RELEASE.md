@@ -1,3 +1,6 @@
+# (unreleased)
+- Improved support for secondary trigonometric functions such as sec and acoth.
+
 # Release 0.5.3
 - Added an additional error messages if cellml files can't be loaded and a warning if a lookup table is specified for a tag not present in the model.
 

@@ -65,6 +65,22 @@ class ChastePrinter(Printer):
         'HeartConfig::Instance()->GetCapacitance': 'HeartConfig::Instance()->GetCapacitance',
         'GetExperimentalVoltageAtTimeT': 'GetExperimentalVoltageAtTimeT'
     }
+    _extra_trig_names = {
+        'sec': 'cos',
+        'csc': 'sin',
+        'cot': 'tan',
+        'sech': 'cosh',
+        'csch': 'sinh',
+        'coth': 'tanh',
+    }
+    _extra_inverse_trig_names = {
+        'asec': 'acos',
+        'acsc': 'asin',
+        'acot': 'atan',
+        'asech': 'acosh',
+        'acsch': 'asinh',
+        'acoth': 'atanh',
+    }
 
     _literal_names = {
         'e': 'e',
@@ -86,21 +102,6 @@ class ChastePrinter(Printer):
         if printed_expr:
             return printed_expr
         return super()._print(expr, **kwargs)
-
-    def _print_Function(self, expr):
-        """ Handles function calls. """
-
-        # Check if function is known to python math
-        name = expr.func.__name__
-        # Convert arguments
-        args = self._bracket_args(expr.args, 0)
-
-        if name in self._function_names:
-            name = self._function_names[name]
-        else:
-            raise ValueError('Unsupported function: ' + str(name))
-
-        return name + '(' + args + ')'
 
     def _print_And(self, expr):
         """ Handles logical And. """
