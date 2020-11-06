@@ -90,6 +90,21 @@ class TestChastePrinter(object):
         assert printer.doprint(sp.tan(x)) == 'tan(x)'
         assert printer.doprint(sp.tanh(x)) == 'tanh(x)'
 
+        # extra trig functions
+        assert printer.doprint(sp.sec(x)) == '1 / cos(x)'
+        assert printer.doprint(sp.csc(x)) == '1 / sin(x)'
+        assert printer.doprint(sp.cot(x)) == '1 / tan(x)'
+        assert printer.doprint(sp.asec(x)) == 'acos(1 / x)'
+        assert printer.doprint(sp.acsc(x)) == 'asin(1 / x)'
+        assert printer.doprint(sp.acot(x)) == 'atan(1 / x)'
+        assert printer.doprint(sp.sech(x)) == '1 / cosh(x)'
+        assert printer.doprint(sp.csch(x)) == '1 / sinh(x)'
+        assert printer.doprint(sp.coth(x)) == '1 / tanh(x)'
+        assert printer.doprint(sp.asech(x)) == 'acosh(1 / x)'
+        assert printer.doprint(sp.acsch(x)) == 'asinh(1 / x)'
+        assert printer.doprint(sp.acoth(x)) == 'atanh(1 / x)'
+
+
     def test_custom_math_functions(self, printer, x):
         assert printer.doprint(acos_(x)) == 'acos(x)'
         assert printer.doprint(cos_(x)) == 'cos(x)'
