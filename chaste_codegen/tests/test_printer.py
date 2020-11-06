@@ -104,7 +104,6 @@ class TestChastePrinter(object):
         assert printer.doprint(sp.acsch(x)) == 'asinh(1 / x)'
         assert printer.doprint(sp.acoth(x)) == 'atanh(1 / x)'
 
-
     def test_custom_math_functions(self, printer, x):
         assert printer.doprint(acos_(x)) == 'acos(x)'
         assert printer.doprint(cos_(x)) == 'cos(x)'
