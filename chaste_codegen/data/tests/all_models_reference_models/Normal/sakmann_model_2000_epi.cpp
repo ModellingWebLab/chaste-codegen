@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellsakmann_model_2000_epiFromCellML::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -62,6 +63,7 @@
     Cellsakmann_model_2000_epiFromCellML::~Cellsakmann_model_2000_epiFromCellML()
     {
     }
+
     
     double Cellsakmann_model_2000_epiFromCellML::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -407,7 +409,6 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_membrane__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
 

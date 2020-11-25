@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellsakmann_model_2000_epiFromCellMLCvodeDataClamp::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -66,6 +67,7 @@
     Cellsakmann_model_2000_epiFromCellMLCvodeDataClamp::~Cellsakmann_model_2000_epiFromCellMLCvodeDataClamp()
     {
     }
+
     
     double Cellsakmann_model_2000_epiFromCellMLCvodeDataClamp::GetIIonic(const std::vector<double>* pStateVariables)
     {

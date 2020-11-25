@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Celljafri_rice_winslow_model_1998FromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -61,6 +62,7 @@
     Celljafri_rice_winslow_model_1998FromCellMLCvode::~Celljafri_rice_winslow_model_1998FromCellMLCvode()
     {
     }
+
     
     double Celljafri_rice_winslow_model_1998FromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -507,7 +509,6 @@
         // Units: mM; Initial value: 143.727
         double var_chaste_interface__ionic_concentrations__Ko = NV_Ith_S(rY, 30);
         // Units: mM; Initial value: 5.4
-        
         const double var_x0 = exp(1.2521739130434781 - 0.16722408026755853 * var_chaste_interface__membrane__V);
         const double var_x1 = 1.0 + var_x0;
         const double var_x2 = 1 / var_x1;

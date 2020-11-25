@@ -23,6 +23,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
+
     double Cellnoble_SAN_model_1989FromCellMLCvode::GetIntracellularCalciumConcentration()
     {
         return NV_Ith_S(mStateVariables, 1);
@@ -48,6 +49,7 @@
     Cellnoble_SAN_model_1989FromCellMLCvode::~Cellnoble_SAN_model_1989FromCellMLCvode()
     {
     }
+
     
     double Cellnoble_SAN_model_1989FromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -344,7 +346,6 @@
         // Units: dimensionless; Initial value: 0.237
         double var_chaste_interface__intracellular_potassium_concentration__Ki = NV_Ith_S(rY, 13);
         // Units: millimolar; Initial value: 140.0
-        
         const double var_x0 = pow(var_chaste_interface__hyperpolarising_activated_current_y_gate__y, 2);
         const double var_x1 = 0.074867781645490947 * var_chaste_interface__membrane__V;
         const double var_x2 = 1 / var_chaste_interface__intracellular_potassium_concentration__Ki;

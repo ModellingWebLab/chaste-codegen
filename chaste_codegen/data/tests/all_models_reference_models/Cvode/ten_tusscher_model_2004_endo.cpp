@@ -23,6 +23,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
+
     double Cellten_tusscher_model_2004_endoFromCellMLCvode::GetIntracellularCalciumConcentration()
     {
         return NV_Ith_S(mStateVariables, 1);
@@ -49,6 +50,7 @@
     Cellten_tusscher_model_2004_endoFromCellMLCvode::~Cellten_tusscher_model_2004_endoFromCellMLCvode()
     {
     }
+
     
     double Cellten_tusscher_model_2004_endoFromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {

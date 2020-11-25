@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     double Cellten_tusscher_model_2004_endoFromCellML::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
@@ -46,6 +47,7 @@
     Cellten_tusscher_model_2004_endoFromCellML::~Cellten_tusscher_model_2004_endoFromCellML()
     {
     }
+
     
     double Cellten_tusscher_model_2004_endoFromCellML::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -336,7 +338,6 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_membrane__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
 

@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellnygren_atrial_model_1998FromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -66,6 +67,7 @@
     Cellnygren_atrial_model_1998FromCellMLCvode::~Cellnygren_atrial_model_1998FromCellMLCvode()
     {
     }
+
     
     double Cellnygren_atrial_model_1998FromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {

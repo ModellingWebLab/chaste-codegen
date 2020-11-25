@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellsakmann_model_2000_epiFromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -67,6 +68,7 @@
     Cellsakmann_model_2000_epiFromCellMLCvode::~Cellsakmann_model_2000_epiFromCellMLCvode()
     {
     }
+
     
     double Cellsakmann_model_2000_epiFromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -462,7 +464,6 @@
         // Units: millimolar; Initial value: 0.0018544
         double var_chaste_interface__intracellular_calcium_concentration__Ca_Trop = NV_Ith_S(rY, 20);
         // Units: millimolar; Initial value: 0.0012852
-        
         const double var_x0 = 1 / var_chaste_interface__intracellular_potassium_concentration__K_i;
         const double var_x1 = log(4.0 * var_x0);
         const double var_x2 = exp(-0.56150836234118207 + 0.056150836234118207 * var_chaste_interface__membrane__V - 1.5 * var_x1);

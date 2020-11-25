@@ -23,6 +23,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
+
     double Cellstewart_zhang_model_2008_ssFromCellMLCvode::GetIntracellularCalciumConcentration()
     {
         return NV_Ith_S(mStateVariables, 1);
@@ -53,6 +54,7 @@
     Cellstewart_zhang_model_2008_ssFromCellMLCvode::~Cellstewart_zhang_model_2008_ssFromCellMLCvode()
     {
     }
+
     
     double Cellstewart_zhang_model_2008_ssFromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -433,7 +435,6 @@
         // Units: millimolar; Initial value: 8.80420286531673
         double var_chaste_interface__potassium_dynamics__K_i = NV_Ith_S(rY, 19);
         // Units: millimolar; Initial value: 136.781894160227
-        
         const double var_x0 = 0.10000000000000001 * var_chaste_interface__membrane__V;
         const double var_x1 = exp(7.5440000000000005 + var_x0);
         const double var_x2 = 1.0 + var_x1;

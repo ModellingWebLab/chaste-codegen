@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellbondarenko_model_2004_apexFromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -61,6 +62,7 @@
     Cellbondarenko_model_2004_apexFromCellMLCvode::~Cellbondarenko_model_2004_apexFromCellMLCvode()
     {
     }
+
     
     double Cellbondarenko_model_2004_apexFromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -577,7 +579,6 @@
         // Units: dimensionless; Initial value: 0.000641229
         double var_chaste_interface__rapid_delayed_rectifier_potassium_current__I_K = NV_Ith_S(rY, 40);
         // Units: dimensionless; Initial value: 3.19129e-05
-        
         const double var_x0 = pow(var_chaste_interface__slow_delayed_rectifier_potassium_current__nKs, 2);
         const double var_x1 = 1 / var_chaste_interface__potassium_concentration__Ki;
         const double var_x2 = log(5400.0 * var_x1);

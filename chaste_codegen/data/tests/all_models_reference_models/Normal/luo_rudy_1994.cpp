@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellluo_rudy_1994FromCellML::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -66,6 +67,7 @@
     Cellluo_rudy_1994FromCellML::~Cellluo_rudy_1994FromCellML()
     {
     }
+
     
     double Cellluo_rudy_1994FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -365,7 +367,6 @@
         double var_chaste_interface__ionic_concentrations__Ki = rY[9];
         // Units: mM; Initial value: 145.0
         
-
         // Mathematics
         const double var_membrane__F = 96845.0; // faradays_constant_units
         const double var_membrane__I_st_converted = -GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2

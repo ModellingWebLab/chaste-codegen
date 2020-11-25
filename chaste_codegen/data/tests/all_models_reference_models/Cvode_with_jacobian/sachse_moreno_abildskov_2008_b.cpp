@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellsachse_moreno_abildskov_2008_bFromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -68,6 +69,7 @@
     Cellsachse_moreno_abildskov_2008_bFromCellMLCvode::~Cellsachse_moreno_abildskov_2008_bFromCellMLCvode()
     {
     }
+
     
     double Cellsachse_moreno_abildskov_2008_bFromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -202,7 +204,6 @@
         // Units: dimensionless; Initial value: 2.79e-07
         double var_chaste_interface__I_Shkr__OShkr = NV_Ith_S(rY, 6);
         // Units: dimensionless; Initial value: 0.0
-        
         const double var_x0 = 1 / NV_Ith_S(mParameters, 2);
         const double var_x1 = 1 / NV_Ith_S(mParameters, 6);
         const double var_x2 = var_x1 * (-0.086113989637305696 * NV_Ith_S(mParameters, 6) * log(NV_Ith_S(mParameters, 1) / NV_Ith_S(mParameters, 0)) + var_chaste_interface__membrane__Vm);

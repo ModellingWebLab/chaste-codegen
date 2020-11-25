@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellviswanathan_model_1999_epiFromCellML::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -62,6 +63,7 @@
     Cellviswanathan_model_1999_epiFromCellML::~Cellviswanathan_model_1999_epiFromCellML()
     {
     }
+
     
     double Cellviswanathan_model_1999_epiFromCellML::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -163,7 +165,7 @@
         const double var_sarcolemmal_calcium_pump__i_p_Ca = var_chaste_interface__calcium_dynamics__Cai * var_sarcolemmal_calcium_pump__I_pCa / (var_chaste_interface__calcium_dynamics__Cai + var_sarcolemmal_calcium_pump__K_mpCa); // microA_per_microF
         const double var_slow_delayed_rectifier_potassium_current__PNaK = 0.018329999999999999; // dimensionless
         const double var_slow_delayed_rectifier_potassium_current__E_Ks = var_membrane__R * var_membrane__T * log((var_ionic_concentrations__Nao * var_slow_delayed_rectifier_potassium_current__PNaK + var_ionic_concentrations__Ko) / (var_chaste_interface__ionic_concentrations__Nai * var_slow_delayed_rectifier_potassium_current__PNaK + var_chaste_interface__ionic_concentrations__Ki)) / var_membrane__F; // millivolt
-        const double var_slow_delayed_rectifier_potassium_current__g_Ks = 0.433 + 0.25979999999999998 / (1.0 + 6.4818210260626455e-7 * pow(1 / var_chaste_interface__calcium_dynamics__Cai, 1.3999999999999999)); // milliS_per_microF
+        const double var_slow_delayed_rectifier_potassium_current__g_Ks = 0.433 + 0.25979999999999998 / (1.0 + 6.4818210260626455e-7 * pow((1 / var_chaste_interface__calcium_dynamics__Cai), 1.3999999999999999)); // milliS_per_microF
         const double var_slow_delayed_rectifier_potassium_current__i_Ks = (-var_slow_delayed_rectifier_potassium_current__E_Ks + var_chaste_interface__membrane__V) * var_slow_delayed_rectifier_potassium_current__g_Ks * var_chaste_interface__slow_delayed_rectifier_potassium_current_xs1_gate__xs1 * var_chaste_interface__slow_delayed_rectifier_potassium_current_xs2_gate__xs2; // microA_per_microF
         const double var_sodium_background_current__g_Nab = 0.0040000000000000001; // milliS_per_microF
         const double var_sodium_background_current__i_Na_b = (-var_fast_sodium_current__E_Na + var_chaste_interface__membrane__V) * var_sodium_background_current__g_Nab; // microA_per_microF
@@ -398,7 +400,7 @@
         const double d_dt_chaste_interface_var_calcium_dynamics__Cainfluxtrack = 0.001 * var_calcium_dynamics__Cainfluxtrack_orig_deriv; // 1 / millisecond
         const double var_slow_delayed_rectifier_potassium_current__PNaK = 0.018329999999999999; // dimensionless
         const double var_slow_delayed_rectifier_potassium_current__E_Ks = var_membrane__R * var_membrane__T * log((var_ionic_concentrations__Nao * var_slow_delayed_rectifier_potassium_current__PNaK + var_ionic_concentrations__Ko) / (var_chaste_interface__ionic_concentrations__Nai * var_slow_delayed_rectifier_potassium_current__PNaK + var_chaste_interface__ionic_concentrations__Ki)) / var_membrane__F; // millivolt
-        const double var_slow_delayed_rectifier_potassium_current__g_Ks = 0.433 + 0.25979999999999998 / (1.0 + 6.4818210260626455e-7 * pow(1 / var_chaste_interface__calcium_dynamics__Cai, 1.3999999999999999)); // milliS_per_microF
+        const double var_slow_delayed_rectifier_potassium_current__g_Ks = 0.433 + 0.25979999999999998 / (1.0 + 6.4818210260626455e-7 * pow((1 / var_chaste_interface__calcium_dynamics__Cai), 1.3999999999999999)); // milliS_per_microF
         const double var_slow_delayed_rectifier_potassium_current_xs1_gate__tau_xs1 = 0.001 / (0.00013100000000000001 * (30.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(2.0609999999999999 + 0.068699999999999997 * var_chaste_interface__membrane__V)) + 7.1899999999999999e-5 * (30.0 + var_chaste_interface__membrane__V) / (1.0 - exp(-4.4399999999999995 - 0.14799999999999999 * var_chaste_interface__membrane__V))); // second
         const double var_slow_delayed_rectifier_potassium_current_xs1_gate__xs1_infinity = 1 / (1.0 + exp(0.089820359281437126 - 0.059880239520958084 * var_chaste_interface__membrane__V)); // dimensionless
         const double var_slow_delayed_rectifier_potassium_current_xs1_gate__xs1_orig_deriv = (-var_chaste_interface__slow_delayed_rectifier_potassium_current_xs1_gate__xs1 + var_slow_delayed_rectifier_potassium_current_xs1_gate__xs1_infinity) / var_slow_delayed_rectifier_potassium_current_xs1_gate__tau_xs1; // 1 / second
@@ -490,7 +492,6 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_membrane__I_st_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
 

@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Celllivshitz_rudy_2007FromCellMLCvodeDataClamp::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -63,6 +64,7 @@
     Celllivshitz_rudy_2007FromCellMLCvodeDataClamp::~Celllivshitz_rudy_2007FromCellMLCvodeDataClamp()
     {
     }
+
     
     double Celllivshitz_rudy_2007FromCellMLCvodeDataClamp::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -140,7 +142,7 @@
         const double var_IK1__GK1_ = 0.43033148291193518 * sqrt(var_Environment__K_o) * var_IK1__GK1max; // mS_per_uF
         const double var_IKp__GKpmax = 0.0055199999999999997; // mS_per_uF
         const double var_IKs__GKsmax = 0.433; // mS_per_uF
-        const double var_IKs__gks = (1.0 + 0.59999999999999998 / (1.0 + 6.4818210260626455e-7 * pow(1 / var_Ca__Ca_i, 1.3999999999999999))) * var_IKs__GKsmax; // mS_per_uF
+        const double var_IKs__gks = (1.0 + 0.59999999999999998 / (1.0 + 6.4818210260626455e-7 * pow((1 / var_Ca__Ca_i), 1.3999999999999999))) * var_IKs__GKsmax; // mS_per_uF
         const double var_INaCa__c1 = 0.00025000000000000001; // uA_per_uF
         const double var_INaCa__c2 = 0.0001; // dimensionless
         const double var_INaCa__gammas = 0.14999999999999999; // dimensionless
@@ -268,7 +270,7 @@
         const double var_IK1__GK1_ = 0.43033148291193518 * sqrt(var_Environment__K_o) * var_IK1__GK1max; // mS_per_uF
         const double var_IKp__GKpmax = 0.0055199999999999997; // mS_per_uF
         const double var_IKs__GKsmax = 0.433; // mS_per_uF
-        const double var_IKs__gks = (1.0 + 0.59999999999999998 / (1.0 + 6.4818210260626455e-7 * pow(1 / var_Ca__Ca_i, 1.3999999999999999))) * var_IKs__GKsmax; // mS_per_uF
+        const double var_IKs__gks = (1.0 + 0.59999999999999998 / (1.0 + 6.4818210260626455e-7 * pow((1 / var_Ca__Ca_i), 1.3999999999999999))) * var_IKs__GKsmax; // mS_per_uF
         const double var_INaCa__c1 = 0.00025000000000000001; // uA_per_uF
         const double var_INaCa__c2 = 0.0001; // dimensionless
         const double var_INaCa__gammas = 0.14999999999999999; // dimensionless

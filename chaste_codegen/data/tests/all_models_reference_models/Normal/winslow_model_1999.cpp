@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellwinslow_model_1999FromCellML::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -58,6 +59,7 @@
     Cellwinslow_model_1999FromCellML::~Cellwinslow_model_1999FromCellML()
     {
     }
+
     
     double Cellwinslow_model_1999FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -477,7 +479,6 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_membrane__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
 

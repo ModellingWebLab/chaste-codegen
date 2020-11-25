@@ -23,6 +23,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
+
     Cellkurata_model_2002FromCellMLCvodeDataClamp::Cellkurata_model_2002FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCellWithDataClamp(
                 pOdeSolver,
@@ -42,6 +43,7 @@
     Cellkurata_model_2002FromCellMLCvodeDataClamp::~Cellkurata_model_2002FromCellMLCvodeDataClamp()
     {
     }
+
     
     double Cellkurata_model_2002FromCellMLCvodeDataClamp::GetIIonic(const std::vector<double>* pStateVariables)
     {

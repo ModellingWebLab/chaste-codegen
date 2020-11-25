@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellnygren_atrial_model_1998FromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -68,6 +69,7 @@
     Cellnygren_atrial_model_1998FromCellMLCvode::~Cellnygren_atrial_model_1998FromCellMLCvode()
     {
     }
+
     
     double Cellnygren_atrial_model_1998FromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -495,7 +497,6 @@
         // Units: dimensionless; Initial value: 0.4284
         double var_chaste_interface__Ca_handling_by_the_SR__F2 = NV_Ith_S(rY, 28);
         // Units: dimensionless; Initial value: 0.0028
-        
         const double var_x0 = 0.025000000000000001 + var_chaste_interface__intracellular_ion_concentrations__Ca_d;
         const double var_x1 = 1 / var_x0;
         const double var_x2 = var_x1 * var_chaste_interface__intracellular_ion_concentrations__Ca_d;

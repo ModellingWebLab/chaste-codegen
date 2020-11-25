@@ -23,6 +23,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
+
     Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvode::Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -40,6 +41,7 @@
     Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvode::~Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvode()
     {
     }
+
     
     double Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {

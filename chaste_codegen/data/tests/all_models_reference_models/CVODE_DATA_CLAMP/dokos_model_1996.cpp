@@ -23,6 +23,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
+
     double Celldokos_model_1996FromCellMLCvodeDataClamp::GetIntracellularCalciumConcentration()
     {
         return NV_Ith_S(mStateVariables, 1);
@@ -47,6 +48,7 @@
     Celldokos_model_1996FromCellMLCvodeDataClamp::~Celldokos_model_1996FromCellMLCvodeDataClamp()
     {
     }
+
     
     double Celldokos_model_1996FromCellMLCvodeDataClamp::GetIIonic(const std::vector<double>* pStateVariables)
     {

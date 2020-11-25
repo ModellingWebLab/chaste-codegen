@@ -23,6 +23,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
+
     double Cellnoble_SAN_model_1989FromCellMLCvode::GetIntracellularCalciumConcentration()
     {
         return NV_Ith_S(mStateVariables, 1);
@@ -46,6 +47,7 @@
     Cellnoble_SAN_model_1989FromCellMLCvode::~Cellnoble_SAN_model_1989FromCellMLCvode()
     {
     }
+
     
     double Cellnoble_SAN_model_1989FromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {

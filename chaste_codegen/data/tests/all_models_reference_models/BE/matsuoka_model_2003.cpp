@@ -616,7 +616,7 @@
         const double var_x36 = var_x11 * var_x13 * var_x32;
         const double var_x37 = var_x34 * var_x36;
         const double var_x38 = exp(-0.030696857687474322 * var_chaste_interface__membrane__Vm);
-        const double var_x39 = 1 / (1.0 + 14.894617648090152 * pow(1 / var_x38, 1.0600000000000001));
+        const double var_x39 = 1 / (1.0 + 14.894617648090152 * pow((1 / var_x38), 1.0600000000000001));
         const double var_x40 = var_x14 * var_x31;
         const double var_x41 = 0.092592592592592587 * var_chaste_interface__Ca_concentrations_in_SR__Ca_Total;
         const double var_x42 = sqrt(pow((1 - var_x41), 2) + 0.027434842249657067 * var_chaste_interface__Ca_concentrations_in_SR__Ca_Total);

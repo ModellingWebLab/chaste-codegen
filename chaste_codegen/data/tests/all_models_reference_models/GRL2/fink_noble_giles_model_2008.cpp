@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellfink_noble_giles_model_2008FromCellMLGRL2::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -57,6 +58,7 @@
     Cellfink_noble_giles_model_2008FromCellMLGRL2::~Cellfink_noble_giles_model_2008FromCellMLGRL2()
     {
     }
+
     
     double Cellfink_noble_giles_model_2008FromCellMLGRL2::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -355,7 +357,7 @@
         double var_chaste_interface__K__K_i = rY[26];
         // Units: millimolar; Initial value: 141.0167
         
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_cell__V;
         const double var_Ca__V_sr = 0.0010939999999999999; // nanolitre
@@ -452,7 +454,7 @@
         const double var_iKr_Markov__alpha_xr1 = var_Environment__T * exp(24.335000000000001 + (-25.914000000000001 + 0.0112 * var_chaste_interface__cell__V) * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
         const double var_iKr_Markov__alpha_xr2 = var_Environment__T * exp(22.745999999999999 - 25.914000000000001 * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
         const double var_iKr_Markov__alpha_xr3 = var_Environment__T * exp(22.097999999999999 + (-25.914000000000001 + 0.036499999999999998 * var_chaste_interface__cell__V) * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
-        const double var_iKr_Markov__alpha_xr4 = 1.9631681698237122 * pow(1 / var_Environment__K_o, 0.40000000000000002) * var_Environment__T * exp(30.015999999999998 + (-30.888000000000002 + 0.0223 * var_chaste_interface__cell__V) * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
+        const double var_iKr_Markov__alpha_xr4 = 1.9631681698237122 * pow((1 / var_Environment__K_o), 0.40000000000000002) * var_Environment__T * exp(30.015999999999998 + (-30.888000000000002 + 0.0223 * var_chaste_interface__cell__V) * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
         const double var_iKr_Markov__beta_xr1 = var_Environment__T * exp(13.688000000000001 + (-15.707000000000001 - 0.060299999999999999 * var_chaste_interface__cell__V) * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
         const double d_dt_chaste_interface_var_iKr_Markov__Cr1 = var_chaste_interface__iKr_Markov__Cr2 * var_iKr_Markov__beta_xr1 - var_chaste_interface__iKr_Markov__Cr1 * var_iKr_Markov__alpha_xr1; // 1 / millisecond
         const double var_iKr_Markov__beta_xr2 = var_Environment__T * exp(13.193 - 15.707000000000001 * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
@@ -839,7 +841,7 @@
         double var_chaste_interface__K__K_i = rY[26];
         // Units: millimolar; Initial value: 141.0167
         
-        
+
         // Mathematics
         const double var_Environment__Ca_o = 2.0; // millimolar
         const double var_Environment__F = 96485.341499999995; // coulomb_per_mole
@@ -943,6 +945,7 @@
             double var_chaste_interface__K__K_i = rY[26];
             // Units: millimolar; Initial value: 141.0167
             
+
             const double var_x0 = pow(var_chaste_interface__iKs_Xs_gate__Xs, 2);
             const double var_x1 = exp(4.1806020066889626 - 0.16722408026755853 * var_chaste_interface__cell__V);
             const double var_x2 = 1.0 + var_x1;
@@ -1022,7 +1025,7 @@
         double var_chaste_interface__iKr_Markov__Cr2 = rY[2];
         // Units: dimensionless; Initial value: 0.0031
         
-        
+
         // Mathematics
         const double var_Environment__T = 310.0; // kelvin
         const double var_iKr_Markov__T_Base = 310.0; // kelvin
@@ -1041,6 +1044,7 @@
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
             const double var_x87 = exp(-1.5790000000000006 + 0.0112 * var_chaste_interface__cell__V);
             const double var_x93 = var_x87;
             const double var_x94 = -var_x93;
@@ -1069,7 +1073,7 @@
         double var_chaste_interface__iKr_Markov__Cr3 = rY[3];
         // Units: dimensionless; Initial value: 0.0029
         
-        
+
         // Mathematics
         const double var_Environment__T = 310.0; // kelvin
         const double var_iKr_Markov__T_Base = 310.0; // kelvin
@@ -1090,6 +1094,7 @@
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
             const double var_x90 = exp(-2.0190000000000001 - 0.060299999999999999 * var_chaste_interface__cell__V);
             const double var_x95 = var_x90;
             const double var_x96 = exp(-3.1680000000000028);
@@ -1119,7 +1124,7 @@
         double var_chaste_interface__iKr_Markov__Or4 = rY[4];
         // Units: dimensionless; Initial value: 0.014
         
-        
+
         // Mathematics
         const double var_Environment__T = 310.0; // kelvin
         const double var_iKr_Markov__T_Base = 310.0; // kelvin
@@ -1140,6 +1145,7 @@
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
             const double var_x98 = exp(-2.5140000000000011);
             const double var_x99 = exp(-3.8160000000000025 + 0.036499999999999998 * var_chaste_interface__cell__V);
             const double var_x104 = var_x99;
@@ -1171,13 +1177,13 @@
         double var_chaste_interface__iKr_Markov_Sotalol_block__BOr4 = rY[9];
         // Units: dimensionless; Initial value: 0.0
         
-        
+
         // Mathematics
         const double var_Environment__K_o = 5.4000000000000004; // millimolar
         const double var_Environment__T = 310.0; // kelvin
         const double var_iKr_Markov__T_Base = 310.0; // kelvin
         const double var_iKr_Markov__alpha_xr3 = var_Environment__T * exp(22.097999999999999 + (-25.914000000000001 + 0.036499999999999998 * var_chaste_interface__cell__V) * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
-        const double var_iKr_Markov__alpha_xr4 = 1.9631681698237122 * pow(1 / var_Environment__K_o, 0.40000000000000002) * var_Environment__T * exp(30.015999999999998 + (-30.888000000000002 + 0.0223 * var_chaste_interface__cell__V) * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
+        const double var_iKr_Markov__alpha_xr4 = 1.9631681698237122 * pow((1 / var_Environment__K_o), 0.40000000000000002) * var_Environment__T * exp(30.015999999999998 + (-30.888000000000002 + 0.0223 * var_chaste_interface__cell__V) * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
         const double var_iKr_Markov__beta_xr3 = var_Environment__T * exp(7.3129999999999997 + (-15.707000000000001 - 0.039899999999999998 * var_chaste_interface__cell__V) * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
         const double var_iKr_Markov__beta_xr4 = var_Environment__T * exp(30.061 + (-33.243000000000002 - 0.031199999999999999 * var_chaste_interface__cell__V) * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
         const double var_iKr_Markov_Sotalol_block__Sotalol_mM = 0; // millimolar
@@ -1198,6 +1204,7 @@
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
             const double var_x102 = exp(-8.3940000000000019 - 0.039899999999999998 * var_chaste_interface__cell__V);
             const double var_x106 = var_x102;
             const double var_x107 = exp(-0.87200000000000344 + 0.0223 * var_chaste_interface__cell__V);
@@ -1226,12 +1233,12 @@
         double var_chaste_interface__iKr_Markov__Ir5 = rY[5];
         // Units: dimensionless; Initial value: 0.0014
         
-        
+
         // Mathematics
         const double var_Environment__K_o = 5.4000000000000004; // millimolar
         const double var_Environment__T = 310.0; // kelvin
         const double var_iKr_Markov__T_Base = 310.0; // kelvin
-        const double var_iKr_Markov__alpha_xr4 = 1.9631681698237122 * pow(1 / var_Environment__K_o, 0.40000000000000002) * var_Environment__T * exp(30.015999999999998 + (-30.888000000000002 + 0.0223 * var_chaste_interface__cell__V) * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
+        const double var_iKr_Markov__alpha_xr4 = 1.9631681698237122 * pow((1 / var_Environment__K_o), 0.40000000000000002) * var_Environment__T * exp(30.015999999999998 + (-30.888000000000002 + 0.0223 * var_chaste_interface__cell__V) * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
         const double var_iKr_Markov__beta_xr4 = var_Environment__T * exp(30.061 + (-33.243000000000002 - 0.031199999999999999 * var_chaste_interface__cell__V) * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
         const double d_dt_chaste_interface_var_iKr_Markov__Ir5 = var_chaste_interface__iKr_Markov__Or4 * var_iKr_Markov__alpha_xr4 - var_chaste_interface__iKr_Markov__Ir5 * var_iKr_Markov__beta_xr4; // 1 / millisecond
 
@@ -1246,6 +1253,7 @@
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
             const double var_x110 = exp(-3.1820000000000022 - 0.031199999999999999 * var_chaste_interface__cell__V);
             const double var_x115 = var_x110;
             const double var_x116 = -var_x115;
@@ -1272,7 +1280,7 @@
         double var_chaste_interface__iKr_Markov_Sotalol_block__BCr2 = rY[7];
         // Units: dimensionless; Initial value: 0.0
         
-        
+
         // Mathematics
         const double var_Environment__T = 310.0; // kelvin
         const double var_iKr_Markov__T_Base = 310.0; // kelvin
@@ -1291,6 +1299,7 @@
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
             const double var_x87 = exp(-1.5790000000000006 + 0.0112 * var_chaste_interface__cell__V);
             const double var_x93 = var_x87;
             const double var_x94 = -var_x93;
@@ -1319,7 +1328,7 @@
         double var_chaste_interface__iKr_Markov_Sotalol_block__BCr3 = rY[8];
         // Units: dimensionless; Initial value: 0.0
         
-        
+
         // Mathematics
         const double var_Environment__T = 310.0; // kelvin
         const double var_iKr_Markov__T_Base = 310.0; // kelvin
@@ -1340,6 +1349,7 @@
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
             const double var_x90 = exp(-2.0190000000000001 - 0.060299999999999999 * var_chaste_interface__cell__V);
             const double var_x95 = var_x90;
             const double var_x96 = exp(-3.1680000000000028);
@@ -1369,7 +1379,7 @@
         double var_chaste_interface__iKr_Markov_Sotalol_block__BOr4 = rY[9];
         // Units: dimensionless; Initial value: 0.0
         
-        
+
         // Mathematics
         const double var_Environment__T = 310.0; // kelvin
         const double var_iKr_Markov__T_Base = 310.0; // kelvin
@@ -1390,6 +1400,7 @@
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
             const double var_x98 = exp(-2.5140000000000011);
             const double var_x99 = exp(-3.8160000000000025 + 0.036499999999999998 * var_chaste_interface__cell__V);
             const double var_x104 = var_x99;
@@ -1421,13 +1432,13 @@
         double var_chaste_interface__iKr_Markov_Sotalol_block__BIr5 = rY[10];
         // Units: dimensionless; Initial value: 0.0
         
-        
+
         // Mathematics
         const double var_Environment__K_o = 5.4000000000000004; // millimolar
         const double var_Environment__T = 310.0; // kelvin
         const double var_iKr_Markov__T_Base = 310.0; // kelvin
         const double var_iKr_Markov__alpha_xr3 = var_Environment__T * exp(22.097999999999999 + (-25.914000000000001 + 0.036499999999999998 * var_chaste_interface__cell__V) * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
-        const double var_iKr_Markov__alpha_xr4 = 1.9631681698237122 * pow(1 / var_Environment__K_o, 0.40000000000000002) * var_Environment__T * exp(30.015999999999998 + (-30.888000000000002 + 0.0223 * var_chaste_interface__cell__V) * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
+        const double var_iKr_Markov__alpha_xr4 = 1.9631681698237122 * pow((1 / var_Environment__K_o), 0.40000000000000002) * var_Environment__T * exp(30.015999999999998 + (-30.888000000000002 + 0.0223 * var_chaste_interface__cell__V) * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
         const double var_iKr_Markov__beta_xr3 = var_Environment__T * exp(7.3129999999999997 + (-15.707000000000001 - 0.039899999999999998 * var_chaste_interface__cell__V) * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
         const double var_iKr_Markov__beta_xr4 = var_Environment__T * exp(30.061 + (-33.243000000000002 - 0.031199999999999999 * var_chaste_interface__cell__V) * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
         const double var_iKr_Markov_Sotalol_block__Sotalol_mM = 0; // millimolar
@@ -1448,6 +1459,7 @@
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
             const double var_x102 = exp(-8.3940000000000019 - 0.039899999999999998 * var_chaste_interface__cell__V);
             const double var_x106 = var_x102;
             const double var_x107 = exp(-0.87200000000000344 + 0.0223 * var_chaste_interface__cell__V);
@@ -1476,12 +1488,12 @@
         double var_chaste_interface__iKr_Markov_Sotalol_block__BIr5 = rY[10];
         // Units: dimensionless; Initial value: 0.0
         
-        
+
         // Mathematics
         const double var_Environment__K_o = 5.4000000000000004; // millimolar
         const double var_Environment__T = 310.0; // kelvin
         const double var_iKr_Markov__T_Base = 310.0; // kelvin
-        const double var_iKr_Markov__alpha_xr4 = 1.9631681698237122 * pow(1 / var_Environment__K_o, 0.40000000000000002) * var_Environment__T * exp(30.015999999999998 + (-30.888000000000002 + 0.0223 * var_chaste_interface__cell__V) * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
+        const double var_iKr_Markov__alpha_xr4 = 1.9631681698237122 * pow((1 / var_Environment__K_o), 0.40000000000000002) * var_Environment__T * exp(30.015999999999998 + (-30.888000000000002 + 0.0223 * var_chaste_interface__cell__V) * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
         const double var_iKr_Markov__beta_xr4 = var_Environment__T * exp(30.061 + (-33.243000000000002 - 0.031199999999999999 * var_chaste_interface__cell__V) * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
         const double d_dt_chaste_interface_var_iKr_Markov_Sotalol_block__BIr5 = var_iKr_Markov__alpha_xr4 * var_chaste_interface__iKr_Markov_Sotalol_block__BOr4 - var_iKr_Markov__beta_xr4 * var_chaste_interface__iKr_Markov_Sotalol_block__BIr5; // 1 / millisecond
 
@@ -1496,6 +1508,7 @@
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
             const double var_x110 = exp(-3.1820000000000022 - 0.031199999999999999 * var_chaste_interface__cell__V);
             const double var_x115 = var_x110;
             const double var_x116 = -var_x115;
@@ -1520,7 +1533,7 @@
         double var_chaste_interface__iKs_Xs_gate__Xs = rY[11];
         // Units: dimensionless; Initial value: 0.00303
         
-        
+
         // Mathematics
         const double var_iKs_Xs_gate__alpha_xs = 1400.0 / sqrt(1.0 + exp(0.83333333333333337 - 0.16666666666666666 * var_chaste_interface__cell__V)); // dimensionless
         const double var_iKs_Xs_gate__beta_xs = 1 / (1.0 + exp(-2.3333333333333335 + 0.066666666666666666 * var_chaste_interface__cell__V)); // dimensionless
@@ -1539,6 +1552,7 @@
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
             const double var_x121 = -0.16666666666666666 * var_chaste_interface__cell__V;
             const double var_x122 = exp(0.83333333333333337 + var_x121);
             const double var_x123 = 1.0 + var_x122;
@@ -1569,7 +1583,7 @@
         double var_chaste_interface__ito_s_gate__s = rY[12];
         // Units: dimensionless; Initial value: 1.0
         
-        
+
         // Mathematics
         const double var_ito_s_gate__s_inf = 1 / (1.0 + exp(4.0 + 0.20000000000000001 * var_chaste_interface__cell__V)); // dimensionless
         const double var_ito_s_gate__tau_s = 3.0 + 5.0 / (1.0 + exp(-4.0 + 0.20000000000000001 * var_chaste_interface__cell__V)) + 85.0 * exp(-6.328125 * pow((1 + 0.022222222222222223 * var_chaste_interface__cell__V), 2)); // millisecond
@@ -1586,6 +1600,7 @@
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
             const double var_x132 = 0.20000000000000001 * var_chaste_interface__cell__V;
             const double var_x133 = exp(-4.0 + var_x132);
             const double var_x134 = 1.0 + var_x133;
@@ -1614,7 +1629,7 @@
         double var_chaste_interface__ito_r_gate__r = rY[13];
         // Units: dimensionless; Initial value: 2.11e-08
         
-        
+
         // Mathematics
         const double var_ito_r_gate__r_inf = 1 / (1.0 + exp(3.3333333333333335 - 0.16666666666666666 * var_chaste_interface__cell__V)); // dimensionless
         const double var_ito_r_gate__tau_r = 0.80000000000000004 + 9.5 * exp(-0.88888888888888884 * pow((1 + 0.025000000000000001 * var_chaste_interface__cell__V), 2)); // millisecond
@@ -1631,6 +1646,7 @@
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
             const double var_x143 = exp(-0.88888888888888884 * pow((1 + 0.025000000000000001 * var_chaste_interface__cell__V), 2));
             const double var_x144 = 1 / (0.80000000000000004 + 9.5 * var_x143);
             
@@ -1654,7 +1670,7 @@
         double var_chaste_interface__iNa_m_gate__m = rY[14];
         // Units: dimensionless; Initial value: 0.00132
         
-        
+
         // Mathematics
         const double var_iNa_m_gate__alpha_m = 1 / (1.0 + exp(-12.0 - 0.20000000000000001 * var_chaste_interface__cell__V)); // dimensionless
         const double var_iNa_m_gate__beta_m = 0.10000000000000001 / (1.0 + exp(7.0 + 0.20000000000000001 * var_chaste_interface__cell__V)) + 0.10000000000000001 / (1.0 + exp(-0.25 + 0.0050000000000000001 * var_chaste_interface__cell__V)); // dimensionless
@@ -1673,6 +1689,7 @@
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
             const double var_x132 = 0.20000000000000001 * var_chaste_interface__cell__V;
             const double var_x145 = exp(7.0 + var_x132);
             const double var_x146 = 1.0 + var_x145;
@@ -1705,7 +1722,7 @@
         double var_chaste_interface__iNa_h_gate__h = rY[15];
         // Units: dimensionless; Initial value: 0.7768
         
-        
+
         // Mathematics
         const double var_INa__shift_INa_inact = 0; // millivolt
         const double var_iNa_h_gate__alpha_h = ((var_chaste_interface__cell__V < -40.0 + var_INa__shift_INa_inact) ? (0.057000000000000002 * exp(-11.764705882352942 + 0.14705882352941177 * var_INa__shift_INa_inact - 0.14705882352941177 * var_chaste_interface__cell__V)) : (0)); // per_millisecond
@@ -1725,6 +1742,7 @@
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
             const double var_x161 = exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__cell__V);
             const double var_x162 = var_chaste_interface__cell__V < -40.0;
             const double var_x163 = exp(0.34849999999999998 * var_chaste_interface__cell__V);
@@ -1754,7 +1772,7 @@
         double var_chaste_interface__iNa_j_gate__j = rY[16];
         // Units: dimensionless; Initial value: 0.7766
         
-        
+
         // Mathematics
         const double var_INa__shift_INa_inact = 0; // millivolt
         const double var_iNa_j_gate__alpha_j = ((var_chaste_interface__cell__V < -40.0 + var_INa__shift_INa_inact) ? ((37.780000000000001 + var_chaste_interface__cell__V) * (-25428.0 * exp(0.24440000000000001 * var_chaste_interface__cell__V - 0.24440000000000001 * var_INa__shift_INa_inact) - 6.9480000000000002e-6 * exp(0.043909999999999998 * var_INa__shift_INa_inact - 0.043909999999999998 * var_chaste_interface__cell__V)) / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__V - 0.311 * var_INa__shift_INa_inact))) : (0)); // per_millisecond
@@ -1774,6 +1792,7 @@
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
             const double var_x162 = var_chaste_interface__cell__V < -40.0;
             const double var_x170 = exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__cell__V);
             const double var_x171 = 1.0 + var_x170;
@@ -1814,7 +1833,7 @@
         double var_chaste_interface__iCaL_d_gate__d = rY[17];
         // Units: dimensionless; Initial value: 5.06e-06
         
-        
+
         // Mathematics
         const double var_iCaL_d_gate__alpha_d = 0.25 + 1.3999999999999999 / (1.0 + exp(-2.6923076923076925 - 0.076923076923076927 * var_chaste_interface__cell__V)); // dimensionless
         const double var_iCaL_d_gate__beta_d = 1.3999999999999999 / (1.0 + exp(1.0 + 0.20000000000000001 * var_chaste_interface__cell__V)); // dimensionless
@@ -1835,6 +1854,7 @@
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
             const double var_x10 = -0.050000000000000003 * var_chaste_interface__cell__V;
             const double var_x132 = 0.20000000000000001 * var_chaste_interface__cell__V;
             const double var_x188 = exp(2.5 + var_x10);
@@ -1869,7 +1889,7 @@
         double var_chaste_interface__iCaL_f_gate__f = rY[18];
         // Units: dimensionless; Initial value: 0.9999
         
-        
+
         // Mathematics
         const double var_iCaL_f_gate__f_inf = 1 / (1.0 + exp(2.8571428571428572 + 0.14285714285714285 * var_chaste_interface__cell__V)); // dimensionless
         const double var_iCaL_f_gate__tau_f = 5.0 + 50.0 / (1.0 + exp(1.3 - 0.10000000000000001 * var_chaste_interface__cell__V)) + 45.0 / (1.0 + exp(3.0 + 0.10000000000000001 * var_chaste_interface__cell__V)) + 275.625 * exp(-3.2400000000000002 * pow((1 + 0.037037037037037035 * var_chaste_interface__cell__V), 2)); // millisecond
@@ -1886,6 +1906,7 @@
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
             const double var_x201 = 0.10000000000000001 * var_chaste_interface__cell__V;
             const double var_x202 = exp(3.0 + var_x201);
             const double var_x203 = 1.0 + var_x202;
@@ -1919,7 +1940,7 @@
         double var_chaste_interface__iCaL_f2_gate__f2 = rY[19];
         // Units: dimensionless; Initial value: 0.9995
         
-        
+
         // Mathematics
         const double var_iCaL_f2_gate__f2_inf = 0.25 + 0.75 / (1.0 + exp(5.0 + 0.14285714285714285 * var_chaste_interface__cell__V)); // dimensionless
         const double var_iCaL_f2_gate__tau_f2 = 40.0 / (1.0 + exp(3.0 + 0.10000000000000001 * var_chaste_interface__cell__V)) + 15.5 / (1.0 + exp(2.5 - 0.10000000000000001 * var_chaste_interface__cell__V)) + 281.0 * exp(-3.0375000000000001 * pow((1 + 0.037037037037037035 * var_chaste_interface__cell__V), 2)); // millisecond
@@ -1936,6 +1957,7 @@
             double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -86.45
             
+
             const double var_x201 = 0.10000000000000001 * var_chaste_interface__cell__V;
             const double var_x202 = exp(3.0 + var_x201);
             const double var_x203 = 1.0 + var_x202;
@@ -1969,7 +1991,7 @@
         double var_chaste_interface__Ca__Ca_ss = rY[23];
         // Units: millimolar; Initial value: 0.0001893
         
-        
+
         // Mathematics
         const double var_iCaL_fCass_gate__fCass_inf = 0.59999999999999998 + 0.40000000000000002 / (1.0 + 399.99999999999994 * pow(var_chaste_interface__Ca__Ca_ss, 2)); // dimensionless
         const double var_iCaL_fCass_gate__tau_fCass = 2.0 + 80.0 / (1.0 + 399.99999999999994 * pow(var_chaste_interface__Ca__Ca_ss, 2)); // millisecond
@@ -1986,6 +2008,7 @@
             double var_chaste_interface__Ca__Ca_ss = rY[23];
             // Units: millimolar; Initial value: 0.0001893
             
+
             const double var_x225 = pow(var_chaste_interface__Ca__Ca_ss, 2);
             const double var_x226 = 1 / (1.0 + 399.99999999999994 * var_x225);
             const double var_x227 = 1 / (2.0 + 80.0 * var_x226);
@@ -2016,7 +2039,7 @@
         double var_chaste_interface__Na__Na_i = rY[25];
         // Units: millimolar; Initial value: 7.940167
         
-        
+
         // Mathematics
         const double var_Ca__V_sr = 0.0010939999999999999; // nanolitre
         const double var_Ca_buffer__Buf_c = 0.20000000000000001; // millimolar
@@ -2070,6 +2093,7 @@
             double var_chaste_interface__Na__Na_i = rY[25];
             // Units: millimolar; Initial value: 7.940167
             
+
             const double var_x24 = exp(-0.024332029034784559 * var_chaste_interface__cell__V);
             const double var_x25 = 1.0 + 0.10000000000000001 * var_x24;
             const double var_x26 = 1 / var_x25;
@@ -2115,7 +2139,7 @@
         double var_chaste_interface__Irel__R_prime = rY[24];
         // Units: dimensionless; Initial value: 0.9864
         
-        
+
         // Mathematics
         const double var_Ca_buffer__Buf_sr = 10.0; // millimolar
         const double var_Ca_buffer__K_buf_sr = 0.29999999999999999; // millimolar
@@ -2154,6 +2178,7 @@
             double var_chaste_interface__Irel__R_prime = rY[24];
             // Units: dimensionless; Initial value: 0.9864
             
+
             const double var_x225 = pow(var_chaste_interface__Ca__Ca_ss, 2);
             const double var_x234 = 1.0 + 6.2499999999999997e-8 / pow(var_chaste_interface__Ca__Ca_i, 2);
             const double var_x236 = 1 / var_x234;
@@ -2211,7 +2236,7 @@
         double var_chaste_interface__Irel__R_prime = rY[24];
         // Units: dimensionless; Initial value: 0.9864
         
-        
+
         // Mathematics
         const double var_Ca__V_sr = 0.0010939999999999999; // nanolitre
         const double var_Ca__V_ss = 5.4679999999999998e-5; // nanolitre
@@ -2268,6 +2293,7 @@
             double var_chaste_interface__Irel__R_prime = rY[24];
             // Units: dimensionless; Initial value: 0.9864
             
+
             const double var_x42 = exp(-1.1230167246823641 + 0.074867781645490947 * var_chaste_interface__cell__V);
             const double var_x43 = -1.0 + var_x42;
             const double var_x44 = 1 / var_x43;
@@ -2320,7 +2346,7 @@
         double var_chaste_interface__Irel__R_prime = rY[24];
         // Units: dimensionless; Initial value: 0.9864
         
-        
+
         // Mathematics
         const double var_Irel__EC = 1.5; // millimolar
         const double var_Irel__k2_prime = 0.044999999999999998; // per_millimolar_per_millisecond
@@ -2344,6 +2370,7 @@
             double var_chaste_interface__Ca__Ca_ss = rY[23];
             // Units: millimolar; Initial value: 0.0001893
             
+
             const double var_x241 = pow(var_chaste_interface__Ca__Ca_SR, (-2));
             const double var_x242 = 1 / (1.0 + 2.25 * var_x241);
             const double var_x269 = -0.11249999999999999 + 0.067500000000000004 * var_x242;
@@ -2376,7 +2403,7 @@
         double var_chaste_interface__Na__Na_i = rY[25];
         // Units: millimolar; Initial value: 7.940167
         
-        
+
         // Mathematics
         const double var_Environment__Ca_o = 2.0; // millimolar
         const double var_Environment__F = 96485.341499999995; // coulomb_per_mole
@@ -2423,6 +2450,7 @@
             double var_chaste_interface__Na__Na_i = rY[25];
             // Units: millimolar; Initial value: 7.940167
             
+
             const double var_x24 = exp(-0.024332029034784559 * var_chaste_interface__cell__V);
             const double var_x25 = 1.0 + 0.10000000000000001 * var_x24;
             const double var_x26 = 1 / var_x25;
@@ -2470,7 +2498,7 @@
         double var_chaste_interface__K__K_i = rY[26];
         // Units: millimolar; Initial value: 141.0167
         
-        
+
         // Mathematics
         const double var_Environment__F = 96485.341499999995; // coulomb_per_mole
         const double var_Environment__K_o = 5.4000000000000004; // millimolar
@@ -2535,6 +2563,7 @@
             double var_chaste_interface__K__K_i = rY[26];
             // Units: millimolar; Initial value: 141.0167
             
+
             const double var_x0 = pow(var_chaste_interface__iKs_Xs_gate__Xs, 2);
             const double var_x1 = exp(4.1806020066889626 - 0.16722408026755853 * var_chaste_interface__cell__V);
             const double var_x2 = 1.0 + var_x1;
@@ -2589,7 +2618,6 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_cell__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__Environment__time); // uA_per_cm2
 

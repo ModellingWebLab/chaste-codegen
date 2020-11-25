@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellmatsuoka_model_2003FromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -63,6 +64,7 @@
     Cellmatsuoka_model_2003FromCellMLCvode::~Cellmatsuoka_model_2003FromCellMLCvode()
     {
     }
+
     
     double Cellmatsuoka_model_2003FromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -701,7 +703,6 @@
         // Units: dimensionless; Initial value: 0.00042941813853474524
         double var_chaste_interface__NL_model__X = NV_Ith_S(rY, 36);
         // Units: micrometre; Initial value: 0.9573749975411884
-        
         const double var_x0 = 1 / NV_Ith_S(mParameters, 0);
         const double var_x1 = 0.037435192301797954 * var_chaste_interface__membrane__Vm;
         const double var_x2 = exp(-var_x1);
@@ -843,7 +844,7 @@
         const double var_x138 = var_x137 * var_x90;
         const double var_x139 = 1.0 - var_chaste_interface__sodium_potassium_pump_y_gate__y;
         const double var_x140 = exp(-0.030696857687474322 * var_chaste_interface__membrane__Vm);
-        const double var_x141 = pow(1 / var_x140, 1.0600000000000001);
+        const double var_x141 = pow((1 / var_x140), 1.0600000000000001);
         const double var_x142 = var_x141 / pow((0.067138346456864173 + var_x141), 2);
         const double var_x143 = var_x139 * var_x142 * NV_Ith_S(mParameters, 0);
         const double var_x144 = var_x35 * var_chaste_interface__L_type_Ca_channel_voltage_dependent_gate__p_AP_CaL;

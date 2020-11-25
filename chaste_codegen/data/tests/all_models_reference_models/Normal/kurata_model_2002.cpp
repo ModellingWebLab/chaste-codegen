@@ -22,6 +22,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
+
     Cellkurata_model_2002FromCellML::Cellkurata_model_2002FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
@@ -40,6 +41,7 @@
     Cellkurata_model_2002FromCellML::~Cellkurata_model_2002FromCellML()
     {
     }
+
     
     double Cellkurata_model_2002FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -430,7 +432,6 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_membrane__Cm_converted = 9.9999999999999995e-7 * mParameters[0]; // uF
 

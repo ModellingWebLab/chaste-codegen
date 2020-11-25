@@ -23,6 +23,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
+
     Celliyer_model_2004FromCellMLCvode::Celliyer_model_2004FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -40,6 +41,7 @@
     Celliyer_model_2004FromCellMLCvode::~Celliyer_model_2004FromCellMLCvode()
     {
     }
+
     
     double Celliyer_model_2004FromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {

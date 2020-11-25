@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellbondarenko_model_2004_apexFromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -59,6 +60,7 @@
     Cellbondarenko_model_2004_apexFromCellMLCvode::~Cellbondarenko_model_2004_apexFromCellMLCvode()
     {
     }
+
     
     double Cellbondarenko_model_2004_apexFromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {

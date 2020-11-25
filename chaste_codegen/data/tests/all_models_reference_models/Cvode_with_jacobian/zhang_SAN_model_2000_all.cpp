@@ -23,6 +23,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
+
     Cellzhang_SAN_model_2000_allFromCellMLCvode::Cellzhang_SAN_model_2000_allFromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -42,6 +43,7 @@
     Cellzhang_SAN_model_2000_allFromCellMLCvode::~Cellzhang_SAN_model_2000_allFromCellMLCvode()
     {
     }
+
     
     double Cellzhang_SAN_model_2000_allFromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -347,7 +349,7 @@
         const double var_sodium_current_h_gate__tau_h2 = 0.0035560000000000001 + 3.1860000000000002e-8 * exp(-11.69172 - 0.62190000000000001 * var_chaste_interface__membrane__V) / (1.0 + 7.1890000000000005e-5 * exp(-22.768981 - 0.66830000000000001 * var_chaste_interface__membrane__V)); // second
         const double var_sodium_current_h_gate__h2_orig_deriv = (-var_chaste_interface__sodium_current_h_gate__h2 + var_sodium_current_h_gate__h2_infinity) / var_sodium_current_h_gate__tau_h2; // 1 / second
         const double d_dt_chaste_interface_var_sodium_current_h_gate__h2 = 0.001 * var_sodium_current_h_gate__h2_orig_deriv; // 1 / millisecond
-        const double var_sodium_current_m_gate__m_infinity = ((var_membrane__Version == 0) ? (pow(1 / (1.0 + exp(-0.18315018315018314 * var_chaste_interface__membrane__V)), 0.33333333333333331)) : (pow(1 / (1.0 + exp(-5.5531135531135529 - 0.18315018315018314 * var_chaste_interface__membrane__V)), 0.33333333333333331))); // dimensionless
+        const double var_sodium_current_m_gate__m_infinity = ((var_membrane__Version == 0) ? (pow((1 / (1.0 + exp(-0.18315018315018314 * var_chaste_interface__membrane__V))), 0.33333333333333331)) : (pow((1 / (1.0 + exp(-5.5531135531135529 - 0.18315018315018314 * var_chaste_interface__membrane__V))), 0.33333333333333331))); // dimensionless
         const double var_sodium_current_m_gate__tau_m = ((var_membrane__Version == 0) ? (4.0000000000000003e-5 + 0.00062469999999999995 / (0.627 * exp(5.330820000000001 + 0.082000000000000003 * var_chaste_interface__membrane__V) + 0.83199999999999996 * exp(-18.994500000000002 - 0.33500000000000002 * var_chaste_interface__membrane__V))) : (4.5689999999999998e-5 + 0.00062469999999999995 / (0.62739999999999996 * exp(5.3505781299999997 + 0.082299999999999998 * var_chaste_interface__membrane__V) + 0.83221659999999997 * exp(-19.034003092000003 - 0.33566000000000001 * var_chaste_interface__membrane__V)))); // second
         const double var_sodium_current_m_gate__m_orig_deriv = (-var_chaste_interface__sodium_current_m_gate__m + var_sodium_current_m_gate__m_infinity) / var_sodium_current_m_gate__tau_m; // 1 / second
         const double d_dt_chaste_interface_var_sodium_current_m_gate__m = 0.001 * var_sodium_current_m_gate__m_orig_deriv; // 1 / millisecond
@@ -556,7 +558,6 @@
         // Units: dimensionless; Initial value: 0.082293827208
         double var_chaste_interface__hyperpolarisation_activated_current_y_gate__y = NV_Ith_S(rY, 14);
         // Units: dimensionless; Initial value: 0.03889291759
-        
         const double var_x0 = 0.018714999999999999 * var_chaste_interface__membrane__V;
         const double var_x1 = -0.16666666666666666 * var_chaste_interface__membrane__V;
         const double var_x2 = exp(-2.3500000000000001 + var_x1);
