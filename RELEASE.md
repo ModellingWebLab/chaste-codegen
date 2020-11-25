@@ -1,6 +1,6 @@
 # (unreleased)
 - Improved support for secondary trigonometric functions such as sec and acoth.
-- Improved printing of devisions For example `1 / (1/cos(x))` now gets rendered as `cos(x)` whereas previously it would be `1 / 1 / cos(x)` giving the incorrect result. An side effcet of the change is that powers of formulas get extra brackets e.g. `pow((1 / x), 2)`
+- When used with Cellmlmanip version 0.2.2+ an improved printing of devisions is used. For example `1 / (1/cos(x))` now gets rendered as `cos(x)` whereas previously it would be `1 / 1 / cos(x)` giving the incorrect result. An side effcet of the change is that powers of formulas get extra brackets e.g. `pow((1 / x), 2)`.
 
 # Release 0.5.3
 - Added an additional error messages if cellml files can't be loaded and a warning if a lookup table is specified for a tag not present in the model.
