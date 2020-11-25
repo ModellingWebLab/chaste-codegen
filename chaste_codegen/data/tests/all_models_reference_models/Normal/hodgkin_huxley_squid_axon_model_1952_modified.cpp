@@ -22,6 +22,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
+
     Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellML::Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
@@ -39,6 +40,7 @@
     Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellML::~Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellML()
     {
     }
+
     
     double Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellML::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -129,7 +131,6 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_membrane__i_Stim = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // microA_per_cm2
 

@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellbeeler_reuter_model_1977FromCellMLGRL2::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -60,6 +61,7 @@
     Cellbeeler_reuter_model_1977FromCellMLGRL2::~Cellbeeler_reuter_model_1977FromCellMLGRL2()
     {
     }
+
     
     double Cellbeeler_reuter_model_1977FromCellMLGRL2::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -192,7 +194,7 @@
         double var_chaste_interface__time_dependent_outward_current_x1_gate__x1 = rY[7];
         // Units: dimensionless; Initial value: 0.0001
         
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
         const double var_slow_inward_current__E_s = 7.6990712032745758 - 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai); // mV
@@ -355,7 +357,7 @@
         double var_chaste_interface__time_dependent_outward_current_x1_gate__x1 = rY[7];
         // Units: dimensionless; Initial value: 0.0001
         
-        
+
         // Mathematics
         const double var_membrane__C = 0.01; // uF_per_mm2
         const double var_slow_inward_current__E_s = 7.6990712032745758 - 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai); // mV
@@ -394,6 +396,7 @@
             double var_chaste_interface__time_dependent_outward_current_x1_gate__x1 = rY[7];
             // Units: dimensionless; Initial value: 0.0001
             
+
             const double var_x0 = 0.040000000000000001 * var_chaste_interface__membrane__V;
             const double var_x1 = exp(-0.92000000000000004 - var_x0);
             const double var_x2 = 1.0 - var_x1;
@@ -433,7 +436,7 @@
         double var_chaste_interface__slow_inward_current_f_gate__f = rY[6];
         // Units: dimensionless; Initial value: 0.994
         
-        
+
         // Mathematics
         const double var_slow_inward_current__E_s = 7.6990712032745758 - 13.028700000000001 * log(var_chaste_interface__slow_inward_current__Cai); // mV
         const double var_slow_inward_current__g_s = 0.00089999999999999998; // mS_per_mm2
@@ -455,6 +458,7 @@
             double var_chaste_interface__slow_inward_current_f_gate__f = rY[6];
             // Units: dimensionless; Initial value: 0.994
             
+
             const double var_x7 = var_chaste_interface__slow_inward_current_d_gate__d * var_chaste_interface__slow_inward_current_f_gate__f;
             const double var_x14 = var_x7 / var_chaste_interface__slow_inward_current__Cai;
             
@@ -478,7 +482,7 @@
         double var_chaste_interface__sodium_current_m_gate__m = rY[2];
         // Units: dimensionless; Initial value: 0.011
         
-        
+
         // Mathematics
         const double var_sodium_current_m_gate__alpha_m = -(47.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-4.7000000000000002 - 0.10000000000000001 * var_chaste_interface__membrane__V)); // per_ms
         const double var_sodium_current_m_gate__beta_m = 40.0 * exp(-4.032 - 0.056000000000000001 * var_chaste_interface__membrane__V); // per_ms
@@ -495,6 +499,7 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -84.624
             
+
             const double var_x20 = exp(-4.032 - 0.056000000000000001 * var_chaste_interface__membrane__V);
             const double var_x22 = -0.10000000000000001 * var_chaste_interface__membrane__V;
             const double var_x23 = exp(-4.7000000000000002 + var_x22);
@@ -522,7 +527,7 @@
         double var_chaste_interface__sodium_current_h_gate__h = rY[3];
         // Units: dimensionless; Initial value: 0.988
         
-        
+
         // Mathematics
         const double var_sodium_current_h_gate__alpha_h = 0.126 * exp(-19.25 - 0.25 * var_chaste_interface__membrane__V); // per_ms
         const double var_sodium_current_h_gate__beta_h = 1.7 / (1.0 + exp(-1.845 - 0.082000000000000003 * var_chaste_interface__membrane__V)); // per_ms
@@ -539,6 +544,7 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -84.624
             
+
             const double var_x27 = -0.25 * var_chaste_interface__membrane__V;
             const double var_x28 = exp(-19.25 + var_x27);
             const double var_x29 = exp(-1.845 - 0.082000000000000003 * var_chaste_interface__membrane__V);
@@ -564,7 +570,7 @@
         double var_chaste_interface__sodium_current_j_gate__j = rY[4];
         // Units: dimensionless; Initial value: 0.975
         
-        
+
         // Mathematics
         const double var_sodium_current_j_gate__alpha_j = 0.055 * exp(-19.5 - 0.25 * var_chaste_interface__membrane__V) / (1.0 + exp(-15.600000000000001 - 0.20000000000000001 * var_chaste_interface__membrane__V)); // per_ms
         const double var_sodium_current_j_gate__beta_j = 0.29999999999999999 / (1.0 + exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__membrane__V)); // per_ms
@@ -581,6 +587,7 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -84.624
             
+
             const double var_x22 = -0.10000000000000001 * var_chaste_interface__membrane__V;
             const double var_x27 = -0.25 * var_chaste_interface__membrane__V;
             const double var_x32 = exp(-15.600000000000001 - 0.20000000000000001 * var_chaste_interface__membrane__V);
@@ -610,7 +617,7 @@
         double var_chaste_interface__slow_inward_current_d_gate__d = rY[5];
         // Units: dimensionless; Initial value: 0.003
         
-        
+
         // Mathematics
         const double var_slow_inward_current_d_gate__alpha_d = 0.095000000000000001 * exp(0.050000000000000003 - 0.01 * var_chaste_interface__membrane__V) / (1.0 + exp(0.35997120230381568 - 0.071994240460763137 * var_chaste_interface__membrane__V)); // per_ms
         const double var_slow_inward_current_d_gate__beta_d = 0.070000000000000007 * exp(-0.74576271186440679 - 0.016949152542372881 * var_chaste_interface__membrane__V) / (1.0 + exp(2.2000000000000002 + 0.050000000000000003 * var_chaste_interface__membrane__V)); // per_ms
@@ -627,6 +634,7 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -84.624
             
+
             const double var_x38 = exp(2.2000000000000002 + 0.050000000000000003 * var_chaste_interface__membrane__V);
             const double var_x39 = 1.0 + var_x38;
             const double var_x40 = exp(-0.74576271186440679 - 0.016949152542372881 * var_chaste_interface__membrane__V);
@@ -656,7 +664,7 @@
         double var_chaste_interface__slow_inward_current_f_gate__f = rY[6];
         // Units: dimensionless; Initial value: 0.994
         
-        
+
         // Mathematics
         const double var_slow_inward_current_f_gate__alpha_f = 0.012 * exp(-0.224 - 0.0080000000000000002 * var_chaste_interface__membrane__V) / (1.0 + exp(4.197901049475262 + 0.14992503748125938 * var_chaste_interface__membrane__V)); // per_ms
         const double var_slow_inward_current_f_gate__beta_f = 0.0064999999999999997 * exp(-0.59999999999999998 - 0.02 * var_chaste_interface__membrane__V) / (1.0 + exp(-6.0 - 0.20000000000000001 * var_chaste_interface__membrane__V)); // per_ms
@@ -673,6 +681,7 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -84.624
             
+
             const double var_x47 = exp(-6.0 - 0.20000000000000001 * var_chaste_interface__membrane__V);
             const double var_x48 = 1.0 + var_x47;
             const double var_x49 = exp(-0.59999999999999998 - 0.02 * var_chaste_interface__membrane__V);
@@ -702,7 +711,7 @@
         double var_chaste_interface__time_dependent_outward_current_x1_gate__x1 = rY[7];
         // Units: dimensionless; Initial value: 0.0001
         
-        
+
         // Mathematics
         const double var_time_dependent_outward_current_x1_gate__alpha_x1 = 0.00050000000000000001 * exp(4.1322314049586781 + 0.082644628099173556 * var_chaste_interface__membrane__V) / (1.0 + exp(2.8571428571428572 + 0.057142857142857141 * var_chaste_interface__membrane__V)); // per_ms
         const double var_time_dependent_outward_current_x1_gate__beta_x1 = 0.0012999999999999999 * exp(-1.1997600479904018 - 0.059988002399520089 * var_chaste_interface__membrane__V) / (1.0 + exp(-0.80000000000000004 - 0.040000000000000001 * var_chaste_interface__membrane__V)); // per_ms
@@ -719,6 +728,7 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: mV; Initial value: -84.624
             
+
             const double var_x56 = exp(-0.80000000000000004 - 0.040000000000000001 * var_chaste_interface__membrane__V);
             const double var_x57 = 1.0 + var_x56;
             const double var_x58 = exp(-1.1997600479904018 - 0.059988002399520089 * var_chaste_interface__membrane__V);
@@ -746,7 +756,6 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_stimulus_protocol__Istim_converted = -GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
 

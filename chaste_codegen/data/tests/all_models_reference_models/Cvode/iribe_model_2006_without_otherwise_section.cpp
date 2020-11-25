@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Celliribe_model_2006_without_otherwise_sectionFromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -71,6 +72,7 @@
     Celliribe_model_2006_without_otherwise_sectionFromCellMLCvode::~Celliribe_model_2006_without_otherwise_sectionFromCellMLCvode()
     {
     }
+
     
     double Celliribe_model_2006_without_otherwise_sectionFromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {

@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellli_mouse_2010FromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -78,6 +79,7 @@
     Cellli_mouse_2010FromCellMLCvode::~Cellli_mouse_2010FromCellMLCvode()
     {
     }
+
     
     double Cellli_mouse_2010FromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -584,7 +586,6 @@
         // Units: dimensionless; Initial value: 0.0443263407760382
         double var_chaste_interface__slow_transient_outward_K_I__ito_s = NV_Ith_S(rY, 35);
         // Units: dimensionless; Initial value: 0.887568880831388
-        
         const double var_x0 = -var_chaste_interface__calcium_concentration__Cass;
         const double var_x1 = 0.075369662812530269 * var_chaste_interface__cell__V;
         const double var_x2 = exp(-var_x1);

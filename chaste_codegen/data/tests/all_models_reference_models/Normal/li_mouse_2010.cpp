@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellli_mouse_2010FromCellML::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -73,6 +74,7 @@
     Cellli_mouse_2010FromCellML::~Cellli_mouse_2010FromCellML()
     {
     }
+
     
     double Cellli_mouse_2010FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -529,7 +531,6 @@
         double var_chaste_interface__slow_delayed_rectifier_K_I__nKs = rY[31];
         // Units: dimensionless; Initial value: 0.00336735013094628
         
-
         // Mathematics
         const double var_calcium_concentration__Cai = 1000.0 * var_chaste_interface__calcium_concentration__Cai_converted; // micromolar
         const double var_calcium_fluxes__v1_caff = 10.0; // per_millisecond

@@ -23,6 +23,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
+
     Celliyer_model_2004FromCellMLCvodeDataClamp::Celliyer_model_2004FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCellWithDataClamp(
                 pOdeSolver,
@@ -41,6 +42,7 @@
     Celliyer_model_2004FromCellMLCvodeDataClamp::~Celliyer_model_2004FromCellMLCvodeDataClamp()
     {
     }
+
     
     double Celliyer_model_2004FromCellMLCvodeDataClamp::GetIIonic(const std::vector<double>* pStateVariables)
     {

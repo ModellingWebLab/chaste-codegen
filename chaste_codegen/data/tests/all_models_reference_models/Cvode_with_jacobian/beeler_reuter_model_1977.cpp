@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellbeeler_reuter_model_1977FromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -66,6 +67,7 @@
     Cellbeeler_reuter_model_1977FromCellMLCvode::~Cellbeeler_reuter_model_1977FromCellMLCvode()
     {
     }
+
     
     double Cellbeeler_reuter_model_1977FromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -211,7 +213,6 @@
         // Units: dimensionless; Initial value: 0.994
         double var_chaste_interface__time_dependent_outward_current_x1_gate__x1 = NV_Ith_S(rY, 7);
         // Units: dimensionless; Initial value: 0.0001
-        
         const double var_x0 = 0.040000000000000001 * var_chaste_interface__membrane__V;
         const double var_x1 = exp(-0.92000000000000004 - var_x0);
         const double var_x2 = 1.0 - var_x1;

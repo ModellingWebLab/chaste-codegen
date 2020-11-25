@@ -131,7 +131,7 @@
         const double var_IK1__GK1_ = 0.43033148291193518 * sqrt(var_Environment__K_o) * var_IK1__GK1max; // mS_per_uF
         const double var_IKp__GKpmax = 0.0055199999999999997; // mS_per_uF
         const double var_IKs__GKsmax = 0.433; // mS_per_uF
-        const double var_IKs__gks = (1.0 + 0.59999999999999998 / (1.0 + 6.4818210260626455e-7 * pow(1 / var_Ca__Ca_i, 1.3999999999999999))) * var_IKs__GKsmax; // mS_per_uF
+        const double var_IKs__gks = (1.0 + 0.59999999999999998 / (1.0 + 6.4818210260626455e-7 * pow((1 / var_Ca__Ca_i), 1.3999999999999999))) * var_IKs__GKsmax; // mS_per_uF
         const double var_INaCa__c1 = 0.00025000000000000001; // uA_per_uF
         const double var_INaCa__c2 = 0.0001; // dimensionless
         const double var_INaCa__gammas = 0.14999999999999999; // dimensionless
@@ -248,7 +248,7 @@
         const double var_IK1__GK1_ = 0.43033148291193518 * sqrt(var_Environment__K_o) * var_IK1__GK1max; // mS_per_uF
         const double var_IKp__GKpmax = 0.0055199999999999997; // mS_per_uF
         const double var_IKs__GKsmax = 0.433; // mS_per_uF
-        const double var_IKs__gks = (1.0 + 0.59999999999999998 / (1.0 + 6.4818210260626455e-7 * pow(1 / var_Ca__Ca_i, 1.3999999999999999))) * var_IKs__GKsmax; // mS_per_uF
+        const double var_IKs__gks = (1.0 + 0.59999999999999998 / (1.0 + 6.4818210260626455e-7 * pow((1 / var_Ca__Ca_i), 1.3999999999999999))) * var_IKs__GKsmax; // mS_per_uF
         const double var_INaCa__c1 = 0.00025000000000000001; // uA_per_uF
         const double var_INaCa__c2 = 0.0001; // dimensionless
         const double var_INaCa__gammas = 0.14999999999999999; // dimensionless
@@ -430,7 +430,7 @@
         const double var_x60 = (-0.5 - 5.4000000000000004 * var_x2) / pow((-1 + var_x0 + var_x1), 2);
         const double var_x61 = 0.0025894736842105265 * var_x54;
         const double var_x62 = 0.21052631578947367 + var_x61;
-        const double var_x63 = pow(1 / var_x22, 1.3999999999999999);
+        const double var_x63 = pow((1 / var_x22), 1.3999999999999999);
         const double var_x64 = 1.0 + 6.4818210260626455e-7 * var_x63;
         const double var_x65 = 0.018329999999999999 * var_chaste_interface__Na__Na_i + var_chaste_interface__K__K_i;
         const double var_x66 = var_chaste_interface__IKs__xs1 * var_chaste_interface__IKs__xs2;
@@ -574,7 +574,7 @@
         const double var_IK1__GK1_ = 0.43033148291193518 * sqrt(var_Environment__K_o) * var_IK1__GK1max; // mS_per_uF
         const double var_IKp__GKpmax = 0.0055199999999999997; // mS_per_uF
         const double var_IKs__GKsmax = 0.433; // mS_per_uF
-        const double var_IKs__gks = (1.0 + 0.59999999999999998 / (1.0 + 6.4818210260626455e-7 * pow(1 / var_Ca__Ca_i, 1.3999999999999999))) * var_IKs__GKsmax; // mS_per_uF
+        const double var_IKs__gks = (1.0 + 0.59999999999999998 / (1.0 + 6.4818210260626455e-7 * pow((1 / var_Ca__Ca_i), 1.3999999999999999))) * var_IKs__GKsmax; // mS_per_uF
         const double var_INaCa__c1 = 0.00025000000000000001; // uA_per_uF
         const double var_INaCa__c2 = 0.0001; // dimensionless
         const double var_INaCa__gammas = 0.14999999999999999; // dimensionless

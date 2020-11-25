@@ -23,6 +23,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
+
     double Celldemir_model_1994FromCellMLCvode::GetIntracellularCalciumConcentration()
     {
         return NV_Ith_S(mStateVariables, 1);
@@ -48,6 +49,7 @@
     Celldemir_model_1994FromCellMLCvode::~Celldemir_model_1994FromCellMLCvode()
     {
     }
+
     
     double Celldemir_model_1994FromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -460,7 +462,6 @@
         // Units: dimensionless; Initial value: 0.1133251
         double var_chaste_interface__SR_Ca_uptake_and_release__F2 = NV_Ith_S(rY, 25);
         // Units: dimensionless; Initial value: 0.0007594214
-        
         const double var_x0 = pow(var_chaste_interface__hyperpolarisation_activated_current_y_gate__y, 2);
         const double var_x1 = -0.16666666666666666 * var_chaste_interface__membrane__V;
         const double var_x2 = exp(-2.3500000000000001 + var_x1);

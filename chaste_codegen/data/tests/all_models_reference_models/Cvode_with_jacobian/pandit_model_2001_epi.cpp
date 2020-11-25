@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellpandit_model_2001_epiFromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -62,6 +63,7 @@
     Cellpandit_model_2001_epiFromCellMLCvode::~Cellpandit_model_2001_epiFromCellMLCvode()
     {
     }
+
     
     double Cellpandit_model_2001_epiFromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -490,7 +492,6 @@
         // Units: millimolar; Initial value: 0.06607948
         double var_chaste_interface__intracellular_ion_concentrations__Ca_NSR = NV_Ith_S(rY, 25);
         // Units: millimolar; Initial value: 0.06600742
-        
         const double var_x0 = -0.0039900000000000005 * var_chaste_interface__Ca_independent_transient_outward_K_current_s_slow_gate__s_slow - 0.031010000000000003 * var_chaste_interface__Ca_independent_transient_outward_K_current_s_gate__s;
         const double var_x1 = var_x0 * var_chaste_interface__Ca_independent_transient_outward_K_current_r_gate__r;
         const double var_x2 = 0.10000000000000001 * var_chaste_interface__L_type_Ca_channel_Ca_inact_gate__Ca_inact;

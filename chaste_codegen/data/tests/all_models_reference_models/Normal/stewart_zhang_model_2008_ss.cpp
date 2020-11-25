@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     double Cellstewart_zhang_model_2008_ssFromCellML::GetIntracellularCalciumConcentration()
     {
         return mStateVariables[1];
@@ -48,6 +49,7 @@
     Cellstewart_zhang_model_2008_ssFromCellML::~Cellstewart_zhang_model_2008_ssFromCellML()
     {
     }
+
     
     double Cellstewart_zhang_model_2008_ssFromCellML::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -406,7 +408,6 @@
         double var_chaste_interface__potassium_dynamics__K_i = rY[19];
         // Units: millimolar; Initial value: 136.781894160227
         
-
         // Mathematics
         const double var_calcium_dynamics__Ca_o = 2.0; // millimolar
         const double var_membrane__F = 96485.341499999995; // coulomb_per_millimole

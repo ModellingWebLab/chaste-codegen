@@ -23,6 +23,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
+
     Celliyer_model_2007FromCellMLCvode::Celliyer_model_2007FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -42,6 +43,7 @@
     Celliyer_model_2007FromCellMLCvode::~Celliyer_model_2007FromCellMLCvode()
     {
     }
+
     
     double Celliyer_model_2007FromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -1031,7 +1033,6 @@
         // Units: dimensionless; Initial value: 5.65460174551007e-07
         double var_chaste_interface__IKs__O2ks = NV_Ith_S(rY, 66);
         // Units: dimensionless; Initial value: 0.0258818770122187
-        
         const double var_x0 = 1 / var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki;
         const double var_x1 = log(4.0 * var_x0);
         const double var_x2 = exp(0.047170872694120618 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V - 1.26 * var_x1);

@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellnoble_model_1991FromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -62,6 +63,7 @@
     Cellnoble_model_1991FromCellMLCvode::~Cellnoble_model_1991FromCellMLCvode()
     {
     }
+
     
     double Cellnoble_model_1991FromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -390,7 +392,6 @@
         // Units: millimolar; Initial value: 0.0003
         double var_chaste_interface__intracellular_calcium_concentration__Ca_Trop = NV_Ith_S(rY, 16);
         // Units: millimolar; Initial value: 0.0002
-        
         const double var_x0 = 0.074867781645490947 * var_chaste_interface__membrane__V;
         const double var_x1 = 1 / var_chaste_interface__intracellular_potassium_concentration__K_i;
         const double var_x2 = log(4.0 * var_x1);

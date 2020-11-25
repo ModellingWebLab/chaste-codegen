@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellwinslow_model_1999FromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -61,6 +62,7 @@
     Cellwinslow_model_1999FromCellMLCvode::~Cellwinslow_model_1999FromCellMLCvode()
     {
     }
+
     
     double Cellwinslow_model_1999FromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -554,7 +556,6 @@
         // Units: millimolar; Initial value: 0.257
         double var_chaste_interface__intracellular_ion_concentrations__Ca_NSR = NV_Ith_S(rY, 32);
         // Units: millimolar; Initial value: 0.257
-        
         const double var_x0 = pow(var_chaste_interface__slow_activating_delayed_rectifiyer_K_current_X_ks_gate__X_ks, 2);
         const double var_x1 = exp(1.2521739130434781 - 0.16722408026755853 * var_chaste_interface__membrane__V);
         const double var_x2 = 1.0 + var_x1;

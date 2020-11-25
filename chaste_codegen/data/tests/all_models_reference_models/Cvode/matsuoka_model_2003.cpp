@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellmatsuoka_model_2003FromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -61,6 +62,7 @@
     Cellmatsuoka_model_2003FromCellMLCvode::~Cellmatsuoka_model_2003FromCellMLCvode()
     {
     }
+
     
     double Cellmatsuoka_model_2003FromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {

@@ -23,6 +23,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
+
     double Celldokos_model_1996FromCellMLCvode::GetIntracellularCalciumConcentration()
     {
         return NV_Ith_S(mStateVariables, 1);
@@ -48,6 +49,7 @@
     Celldokos_model_1996FromCellMLCvode::~Celldokos_model_1996FromCellMLCvode()
     {
     }
+
     
     double Celldokos_model_1996FromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -407,7 +409,6 @@
         // Units: millimolar; Initial value: 140.0073
         double var_chaste_interface__ion_concentrations__Ko = NV_Ith_S(rY, 17);
         // Units: millimolar; Initial value: 5.4243
-        
         const double var_x0 = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3);
         const double var_x1 = var_x0 * var_chaste_interface__fast_sodium_current_h_gate__h;
         const double var_x2 = pow(var_chaste_interface__ion_concentrations__Nai, 2);

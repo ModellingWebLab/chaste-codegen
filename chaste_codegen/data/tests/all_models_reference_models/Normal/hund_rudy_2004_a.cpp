@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellhund_rudy_2004_aFromCellML::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -64,6 +65,7 @@
     Cellhund_rudy_2004_aFromCellML::~Cellhund_rudy_2004_aFromCellML()
     {
     }
+
     
     double Cellhund_rudy_2004_aFromCellML::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -132,7 +134,7 @@
         const double var_ICaL__pca = 0.000243; // L_per_F_ms
         const double var_IClb__GClb = 0.00022499999999999999; // mS_per_uF
         const double var_IKr__gkr = 0.0059618984305585326 * sqrt(var_Environment__K_o); // mS_per_uF
-        const double var_IKs__gks = 0.024897499999999999 + 0.014938499999999999 / (1.0 + 6.4818210260626455e-7 * pow(1 / var_chaste_interface__Ca__Ca_i, 1.3999999999999999)); // mS_per_uF
+        const double var_IKs__gks = 0.024897499999999999 + 0.014938499999999999 / (1.0 + 6.4818210260626455e-7 * pow((1 / var_chaste_interface__Ca__Ca_i), 1.3999999999999999)); // mS_per_uF
         const double var_INa__GNa = ((var_Environment__tissue == 0) ? (8.25) : (33.0)); // mS_per_uF
         const double var_INa__gNa = pow(var_chaste_interface__INa__m, 3) * var_INa__GNa * var_chaste_interface__INa__H * var_chaste_interface__INa__J; // mS_per_uF
         const double var_INaCa__KmCa = 0.000125; // mM
@@ -286,7 +288,7 @@
         const double var_ICaL__pca = 0.000243; // L_per_F_ms
         const double var_IClb__GClb = 0.00022499999999999999; // mS_per_uF
         const double var_IKr__gkr = 0.0059618984305585326 * sqrt(var_Environment__K_o); // mS_per_uF
-        const double var_IKs__gks = 0.024897499999999999 + 0.014938499999999999 / (1.0 + 6.4818210260626455e-7 * pow(1 / var_chaste_interface__Ca__Ca_i, 1.3999999999999999)); // mS_per_uF
+        const double var_IKs__gks = 0.024897499999999999 + 0.014938499999999999 / (1.0 + 6.4818210260626455e-7 * pow((1 / var_chaste_interface__Ca__Ca_i), 1.3999999999999999)); // mS_per_uF
         const double var_INa__GNa = ((var_Environment__tissue == 0) ? (8.25) : (33.0)); // mS_per_uF
         const double var_INa__gNa = pow(var_chaste_interface__INa__m, 3) * var_INa__GNa * var_chaste_interface__INa__H * var_chaste_interface__INa__J; // mS_per_uF
         const double var_INaCa__KmCa = 0.000125; // mM
@@ -490,7 +492,6 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_cell__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__Environment__time); // uA_per_cm2
 

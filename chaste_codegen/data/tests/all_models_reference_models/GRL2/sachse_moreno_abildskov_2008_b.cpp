@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellsachse_moreno_abildskov_2008_bFromCellMLGRL2::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -64,6 +65,7 @@
     Cellsachse_moreno_abildskov_2008_bFromCellMLGRL2::~Cellsachse_moreno_abildskov_2008_bFromCellMLGRL2()
     {
     }
+
     
     double Cellsachse_moreno_abildskov_2008_bFromCellMLGRL2::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -175,7 +177,7 @@
         double var_chaste_interface__I_Shkr__OShkr = rY[6];
         // Units: dimensionless; Initial value: 0.0
         
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_membrane__Vm;
         const double var_I_Shkr__k_o = 18.0; // first_order_rate_constant
@@ -319,7 +321,7 @@
         double var_chaste_interface__I_Shkr__OShkr = rY[6];
         // Units: dimensionless; Initial value: 0.0
         
-        
+
         // Mathematics
         const double var_I_Kir__aKir = 0.93999999999999995; // dimensionless
         const double var_I_Kir__bKir = 1.26; // dimensionless
@@ -349,6 +351,7 @@
             double var_chaste_interface__I_Shkr__OShkr = rY[6];
             // Units: dimensionless; Initial value: 0.0
             
+
             const double var_x0 = 1 / mParameters[2];
             const double var_x1 = 1 / mParameters[6];
             const double var_x2 = var_x1 * (-0.086113989637305696 * mParameters[6] * log(mParameters[1] / mParameters[0]) + var_chaste_interface__membrane__Vm);
@@ -386,7 +389,7 @@
         double var_chaste_interface__I_Shkr__C1Shkr = rY[2];
         // Units: dimensionless; Initial value: 0.0857
         
-        
+
         // Mathematics
         const double var_I_Shkr__k_v0 = 2.0; // first_order_rate_constant
         const double var_I_Shkr__kv0 = 30.0; // first_order_rate_constant
@@ -410,6 +413,7 @@
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -58.0
             
+
             const double var_x1 = 1 / mParameters[6];
             const double var_x6 = var_x1 * var_chaste_interface__membrane__Vm;
             const double var_x17 = exp(14.864019253910952 * var_x6);
@@ -439,7 +443,7 @@
         double var_chaste_interface__I_Shkr__C2Shkr = rY[3];
         // Units: dimensionless; Initial value: 0.00302
         
-        
+
         // Mathematics
         const double var_I_Shkr__k_v0 = 2.0; // first_order_rate_constant
         const double var_I_Shkr__kv0 = 30.0; // first_order_rate_constant
@@ -463,6 +467,7 @@
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -58.0
             
+
             const double var_x1 = 1 / mParameters[6];
             const double var_x6 = var_x1 * var_chaste_interface__membrane__Vm;
             const double var_x14 = exp(-17.767148014440433 * var_x6);
@@ -494,7 +499,7 @@
         double var_chaste_interface__I_Shkr__C3Shkr = rY[4];
         // Units: dimensionless; Initial value: 4.74e-05
         
-        
+
         // Mathematics
         const double var_I_Shkr__k_v0 = 2.0; // first_order_rate_constant
         const double var_I_Shkr__kv0 = 30.0; // first_order_rate_constant
@@ -518,6 +523,7 @@
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -58.0
             
+
             const double var_x1 = 1 / mParameters[6];
             const double var_x6 = var_x1 * var_chaste_interface__membrane__Vm;
             const double var_x14 = exp(-17.767148014440433 * var_x6);
@@ -549,7 +555,7 @@
         double var_chaste_interface__I_Shkr__C4Shkr = rY[5];
         // Units: dimensionless; Initial value: 2.79e-07
         
-        
+
         // Mathematics
         const double var_I_Shkr__k_v0 = 2.0; // first_order_rate_constant
         const double var_I_Shkr__kv0 = 30.0; // first_order_rate_constant
@@ -573,6 +579,7 @@
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -58.0
             
+
             const double var_x1 = 1 / mParameters[6];
             const double var_x6 = var_x1 * var_chaste_interface__membrane__Vm;
             const double var_x14 = exp(-17.767148014440433 * var_x6);
@@ -604,7 +611,7 @@
         double var_chaste_interface__I_Shkr__OShkr = rY[6];
         // Units: dimensionless; Initial value: 0.0
         
-        
+
         // Mathematics
         const double var_I_Shkr__k_o = 18.0; // first_order_rate_constant
         const double var_I_Shkr__k_v0 = 2.0; // first_order_rate_constant
@@ -630,6 +637,7 @@
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -58.0
             
+
             const double var_x1 = 1 / mParameters[6];
             const double var_x6 = var_x1 * var_chaste_interface__membrane__Vm;
             const double var_x14 = exp(-17.767148014440433 * var_x6);
@@ -655,7 +663,7 @@
         double var_chaste_interface__I_Shkr__OShkr = rY[6];
         // Units: dimensionless; Initial value: 0.0
         
-        
+
         // Mathematics
         const double var_I_Shkr__k_o = 18.0; // first_order_rate_constant
         const double var_I_Shkr__ko = 77.0; // first_order_rate_constant
@@ -671,6 +679,7 @@
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
             
             partialF = -0.017999999999999999;
         }
@@ -694,7 +703,6 @@
         double var_chaste_interface__I_Shkr__OShkr = rY[6];
         // Units: dimensionless; Initial value: 0.0
         
-
         // Mathematics
         const double var_I_Kir__aKir = 0.93999999999999995; // dimensionless
         const double var_I_Kir__bKir = 1.26; // dimensionless

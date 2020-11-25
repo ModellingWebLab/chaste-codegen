@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Celldecker_2009FromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -69,6 +70,7 @@
     Celldecker_2009FromCellMLCvode::~Celldecker_2009FromCellMLCvode()
     {
     }
+
     
     double Celldecker_2009FromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -140,7 +142,7 @@
         const double var_IClb__gClb = 0.00022499999999999999; // mS_per_uF
         const double var_IKp__gKp = 0.0027599999999999999; // mS_per_uF
         const double var_IKs__OKs = var_chaste_interface__IKs__O1 + var_chaste_interface__IKs__O2; // dimensionless
-        const double var_IKs__gKs = 0.082600000000000007 + 0.04956 / (1.0 + 6.4818210260626455e-7 * pow(1 / var_chaste_interface__Ca__Ca_i, 1.3999999999999999)); // mS_per_uF
+        const double var_IKs__gKs = 0.082600000000000007 + 0.04956 / (1.0 + 6.4818210260626455e-7 * pow((1 / var_chaste_interface__Ca__Ca_i), 1.3999999999999999)); // mS_per_uF
         const double var_INaCa__KmCa_act = 0.000125; // mM
         const double var_INaCa__KmCai = 0.0035999999999999999; // mM
         const double var_INaCa__KmCao = 1.3; // mM
@@ -374,7 +376,7 @@
         const double var_IClb__gClb = 0.00022499999999999999; // mS_per_uF
         const double var_IKp__gKp = 0.0027599999999999999; // mS_per_uF
         const double var_IKs__OKs = var_chaste_interface__IKs__O1 + var_chaste_interface__IKs__O2; // dimensionless
-        const double var_IKs__gKs = 0.082600000000000007 + 0.04956 / (1.0 + 6.4818210260626455e-7 * pow(1 / var_chaste_interface__Ca__Ca_i, 1.3999999999999999)); // mS_per_uF
+        const double var_IKs__gKs = 0.082600000000000007 + 0.04956 / (1.0 + 6.4818210260626455e-7 * pow((1 / var_chaste_interface__Ca__Ca_i), 1.3999999999999999)); // mS_per_uF
         const double var_IKs__theta = 0.089538000000000006; // per_ms
         const double var_INaCa__KmCa_act = 0.000125; // mM
         const double var_INaCa__KmCai = 0.0035999999999999999; // mM
@@ -743,7 +745,6 @@
         // Units: mM; Initial value: 145.5689
         double var_chaste_interface__CaMK_active__CaMK_trap = NV_Ith_S(rY, 47);
         // Units: dimensionless; Initial value: 0.0018861341
-        
         const double var_x0 = exp(1.2521739130434781 - 0.16722408026755853 * var_chaste_interface__membrane__Vm);
         const double var_x1 = 1.0 + var_x0;
         const double var_x2 = 1 / var_x1;

@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Celldecker_2009FromCellML::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -64,6 +65,7 @@
     Celldecker_2009FromCellML::~Celldecker_2009FromCellML()
     {
     }
+
     
     double Celldecker_2009FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -126,7 +128,7 @@
         const double var_IClb__gClb = 0.00022499999999999999; // mS_per_uF
         const double var_IKp__gKp = 0.0027599999999999999; // mS_per_uF
         const double var_IKs__OKs = var_chaste_interface__IKs__O1 + var_chaste_interface__IKs__O2; // dimensionless
-        const double var_IKs__gKs = 0.082600000000000007 + 0.04956 / (1.0 + 6.4818210260626455e-7 * pow(1 / var_chaste_interface__Ca__Ca_i, 1.3999999999999999)); // mS_per_uF
+        const double var_IKs__gKs = 0.082600000000000007 + 0.04956 / (1.0 + 6.4818210260626455e-7 * pow((1 / var_chaste_interface__Ca__Ca_i), 1.3999999999999999)); // mS_per_uF
         const double var_INaCa__KmCa_act = 0.000125; // mM
         const double var_INaCa__KmCai = 0.0035999999999999999; // mM
         const double var_INaCa__KmCao = 1.3; // mM
@@ -356,7 +358,7 @@
         const double var_IClb__gClb = 0.00022499999999999999; // mS_per_uF
         const double var_IKp__gKp = 0.0027599999999999999; // mS_per_uF
         const double var_IKs__OKs = var_chaste_interface__IKs__O1 + var_chaste_interface__IKs__O2; // dimensionless
-        const double var_IKs__gKs = 0.082600000000000007 + 0.04956 / (1.0 + 6.4818210260626455e-7 * pow(1 / var_chaste_interface__Ca__Ca_i, 1.3999999999999999)); // mS_per_uF
+        const double var_IKs__gKs = 0.082600000000000007 + 0.04956 / (1.0 + 6.4818210260626455e-7 * pow((1 / var_chaste_interface__Ca__Ca_i), 1.3999999999999999)); // mS_per_uF
         const double var_IKs__theta = 0.089538000000000006; // per_ms
         const double var_INaCa__KmCa_act = 0.000125; // mM
         const double var_INaCa__KmCai = 0.0035999999999999999; // mM
@@ -634,7 +636,6 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_membrane__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
 

@@ -687,7 +687,7 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
         const double var_cell__fcaCaj = 0; // dimensionless
         const double var_cell__pCa = 0.00027 * mParameters[0]; // dimensionless
         const double var_cell__pNa = 7.4999999999999993e-9 * mParameters[0]; // dimensionless
-        const double var_cell__kCaSR = 15.0 - 14.0 / (1.0 + 0.13584112963311223 * pow(1 / var_chaste_interface__cell__sCa_sr, 2.5)); // dimensionless
+        const double var_cell__kCaSR = 15.0 - 14.0 / (1.0 + 0.13584112963311223 * pow((1 / var_chaste_interface__cell__sCa_sr), 2.5)); // dimensionless
         const double var_cell__kiSRCa = 0.5 * var_cell__kCaSR; // dimensionless
         const double var_cell__koSRCa = 10.0 / var_cell__kCaSR; // dimensionless
         const double d_dt_chaste_interface_var_cell__sCaM = -0.23799999999999999 * var_chaste_interface__cell__sCaM + 34.0 * (0.024 - var_chaste_interface__cell__sCaM) * var_chaste_interface__cell__sCai; // 1 / ms
@@ -2065,7 +2065,7 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
 
         // Mathematics
-        const double var_cell__kCaSR = 15.0 - 14.0 / (1.0 + 0.13584112963311223 * pow(1 / var_chaste_interface__cell__sCa_sr, 2.5)); // dimensionless
+        const double var_cell__kCaSR = 15.0 - 14.0 / (1.0 + 0.13584112963311223 * pow((1 / var_chaste_interface__cell__sCa_sr), 2.5)); // dimensionless
         const double var_cell__kiSRCa = 0.5 * var_cell__kCaSR; // dimensionless
         const double var_cell__koSRCa = 10.0 / var_cell__kCaSR; // dimensionless
         const double var_cell__RI = 1.0 - var_chaste_interface__cell__sRyRi - var_chaste_interface__cell__sRyRo - var_chaste_interface__cell__sRyRr; // dimensionless
@@ -2127,7 +2127,7 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
 
         // Mathematics
-        const double var_cell__kCaSR = 15.0 - 14.0 / (1.0 + 0.13584112963311223 * pow(1 / var_chaste_interface__cell__sCa_sr, 2.5)); // dimensionless
+        const double var_cell__kCaSR = 15.0 - 14.0 / (1.0 + 0.13584112963311223 * pow((1 / var_chaste_interface__cell__sCa_sr), 2.5)); // dimensionless
         const double var_cell__kiSRCa = 0.5 * var_cell__kCaSR; // dimensionless
         const double var_cell__koSRCa = 10.0 / var_cell__kCaSR; // dimensionless
         const double d_dt_chaste_interface_var_cell__sRyRo = 0.0050000000000000001 * var_chaste_interface__cell__sRyRi - 0.059999999999999998 * var_chaste_interface__cell__sRyRo + pow(var_chaste_interface__cell__sCaj, 2) * var_cell__koSRCa * var_chaste_interface__cell__sRyRr - var_cell__kiSRCa * var_chaste_interface__cell__sCaj * var_chaste_interface__cell__sRyRo; // 1 / ms
@@ -2184,7 +2184,7 @@ std::shared_ptr<Cellgrandi2010ssFromCellMLGRL2Opt_LookupTables> Cellgrandi2010ss
 
 
         // Mathematics
-        const double var_cell__kCaSR = 15.0 - 14.0 / (1.0 + 0.13584112963311223 * pow(1 / var_chaste_interface__cell__sCa_sr, 2.5)); // dimensionless
+        const double var_cell__kCaSR = 15.0 - 14.0 / (1.0 + 0.13584112963311223 * pow((1 / var_chaste_interface__cell__sCa_sr), 2.5)); // dimensionless
         const double var_cell__kiSRCa = 0.5 * var_cell__kCaSR; // dimensionless
         const double var_cell__koSRCa = 10.0 / var_cell__kCaSR; // dimensionless
         const double var_cell__RI = 1.0 - var_chaste_interface__cell__sRyRi - var_chaste_interface__cell__sRyRo - var_chaste_interface__cell__sRyRr; // dimensionless

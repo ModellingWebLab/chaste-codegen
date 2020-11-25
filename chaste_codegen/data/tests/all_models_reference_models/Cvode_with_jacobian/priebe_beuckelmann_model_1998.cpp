@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellpriebe_beuckelmann_model_1998FromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -69,6 +70,7 @@
     Cellpriebe_beuckelmann_model_1998FromCellMLCvode::~Cellpriebe_beuckelmann_model_1998FromCellMLCvode()
     {
     }
+
     
     double Cellpriebe_beuckelmann_model_1998FromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -407,7 +409,6 @@
         // Units: mM; Initial value: 2.5
         double var_chaste_interface__Ionic_concentrations__Ca_NSR = NV_Ith_S(rY, 21);
         // Units: mM; Initial value: 2.5
-        
         const double var_x0 = pow(var_chaste_interface__IKs_Xs_gate__Xs, 2);
         const double var_x1 = 0.02 * var_x0;
         const double var_x2 = var_chaste_interface__Ito_r_gate__r * var_chaste_interface__Ito_t_gate__t;

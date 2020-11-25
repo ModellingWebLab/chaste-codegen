@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellgrandi2010ssFromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -69,6 +70,7 @@
     Cellgrandi2010ssFromCellMLCvode::~Cellgrandi2010ssFromCellMLCvode()
     {
     }
+
     
     double Cellgrandi2010ssFromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -713,7 +715,6 @@
         // Units: dimensionless; Initial value: 0.000105614570409386
         double var_chaste_interface__cell__sCai = NV_Ith_S(rY, 37);
         // Units: dimensionless; Initial value: 8.85230799863012e-05
-        
         const double var_x0 = exp(7.4880000000000004 - 0.16722408026755853 * var_chaste_interface__cell__sVm);
         const double var_x1 = 1.0 + var_x0;
         const double var_x2 = pow(var_chaste_interface__cell__sxks, 2);

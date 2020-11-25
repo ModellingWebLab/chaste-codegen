@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellespinosa_model_1998_normalFromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -67,6 +68,7 @@
     Cellespinosa_model_1998_normalFromCellMLCvode::~Cellespinosa_model_1998_normalFromCellMLCvode()
     {
     }
+
     
     double Cellespinosa_model_1998_normalFromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -451,7 +453,6 @@
         // Units: millimolar; Initial value: 0.0024448
         double var_chaste_interface__intracellular_calcium_concentration__Ca_Trop = NV_Ith_S(rY, 20);
         // Units: millimolar; Initial value: 0.0017012
-        
         const double var_x0 = 0.012 + 0.068000000000000005 * var_chaste_interface__transient_outward_current_s_gate__s;
         const double var_x1 = var_x0 * var_chaste_interface__transient_outward_current_r_gate__r;
         const double var_x2 = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3);

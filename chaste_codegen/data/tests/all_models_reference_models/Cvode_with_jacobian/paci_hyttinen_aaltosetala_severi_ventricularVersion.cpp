@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -79,6 +80,7 @@
     Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLCvode::~Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLCvode()
     {
     }
+
     
     double Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -141,7 +143,7 @@
         const double var_electric_potentials__PkNa = 0.029999999999999999; // dimensionless
         const double var_i_Kr__E4031_coeff = ((var_current_blockers__E4031_30nM == 1.0) ? (0.77000000000000002) : ((var_current_blockers__E4031_100nM == 1.0) ? (0.5) : (1.0))); // dimensionless
         const double var_i_Ks__Chromanol_coeff = ((var_current_blockers__Chromanol_iKs30 == 1.0) ? (0.69999999999999996) : ((var_current_blockers__Chromanol_iKs50 == 1.0) ? (0.5) : ((var_current_blockers__Chromanol_iKs70 == 1.0) ? (0.29999999999999999) : ((var_current_blockers__Chromanol_iKs90 == 1.0) ? (0.10000000000000001) : (1.0))))); // dimensionless
-        const double var_i_Ks__g_Ks_total = (1.0 + 0.59999999999999998 / (1.0 + 6.4818210260626455e-7 * pow(1 / var_chaste_interface__calcium_dynamics__Cai, 1.3999999999999999))) * NV_Ith_S(mParameters, 9); // S_per_F
+        const double var_i_Ks__g_Ks_total = (1.0 + 0.59999999999999998 / (1.0 + 6.4818210260626455e-7 * pow((1 / var_chaste_interface__calcium_dynamics__Cai), 1.3999999999999999))) * NV_Ith_S(mParameters, 9); // S_per_F
         const double var_i_Na__TTX_coeff = ((var_current_blockers__TTX_3uM == 1.0) ? (0.17999999999999999) : ((var_current_blockers__TTX_10uM == 1.0) ? (0.059999999999999998) : ((var_current_blockers__TTX_30uM == 1.0) ? (0.02) : (1.0)))); // dimensionless
         const double var_i_NaCa__KmCa = 1.3799999999999999; // millimolar
         const double var_i_NaCa__KmNai = 87.5; // millimolar
@@ -393,7 +395,7 @@
             const double var_electric_potentials__PkNa = 0.029999999999999999; // dimensionless
             const double var_i_Kr__E4031_coeff = ((var_current_blockers__E4031_30nM == 1.0) ? (0.77000000000000002) : ((var_current_blockers__E4031_100nM == 1.0) ? (0.5) : (1.0))); // dimensionless
             const double var_i_Ks__Chromanol_coeff = ((var_current_blockers__Chromanol_iKs30 == 1.0) ? (0.69999999999999996) : ((var_current_blockers__Chromanol_iKs50 == 1.0) ? (0.5) : ((var_current_blockers__Chromanol_iKs70 == 1.0) ? (0.29999999999999999) : ((var_current_blockers__Chromanol_iKs90 == 1.0) ? (0.10000000000000001) : (1.0))))); // dimensionless
-            const double var_i_Ks__g_Ks_total = (1.0 + 0.59999999999999998 / (1.0 + 6.4818210260626455e-7 * pow(1 / var_chaste_interface__calcium_dynamics__Cai, 1.3999999999999999))) * NV_Ith_S(mParameters, 9); // S_per_F
+            const double var_i_Ks__g_Ks_total = (1.0 + 0.59999999999999998 / (1.0 + 6.4818210260626455e-7 * pow((1 / var_chaste_interface__calcium_dynamics__Cai), 1.3999999999999999))) * NV_Ith_S(mParameters, 9); // S_per_F
             const double var_i_f__E_f = -0.017000000000000001; // volt
             const double var_i_f__i_f = (-var_i_f__E_f + var_Membrane__Vm) * NV_Ith_S(mParameters, 6) * var_chaste_interface__i_f_Xf_gate__Xf; // A_per_F
             const double var_i_K1__g_K1_total = 0.43033148291193518 * sqrt(NV_Ith_S(mParameters, 2)) * NV_Ith_S(mParameters, 7); // S_per_F
@@ -472,7 +474,6 @@
         // Units: millimolar; Initial value: -0.2734234751931
         double var_chaste_interface__calcium_dynamics__g = NV_Ith_S(rY, 17);
         // Units: dimensionless; Initial value: 0.999999981028517
-        
         const double var_x0 = pow(var_chaste_interface__i_Ks_Xs_gate__Xs, 2);
         const double var_x1 = 1 / var_chaste_interface__calcium_dynamics__Cai;
         const double var_x2 = pow(var_x1, 1.3999999999999999);
@@ -850,7 +851,7 @@
         const double var_electric_potentials__PkNa = 0.029999999999999999; // dimensionless
         const double var_i_Kr__E4031_coeff = ((var_current_blockers__E4031_30nM == 1.0) ? (0.77000000000000002) : ((var_current_blockers__E4031_100nM == 1.0) ? (0.5) : (1.0))); // dimensionless
         const double var_i_Ks__Chromanol_coeff = ((var_current_blockers__Chromanol_iKs30 == 1.0) ? (0.69999999999999996) : ((var_current_blockers__Chromanol_iKs50 == 1.0) ? (0.5) : ((var_current_blockers__Chromanol_iKs70 == 1.0) ? (0.29999999999999999) : ((var_current_blockers__Chromanol_iKs90 == 1.0) ? (0.10000000000000001) : (1.0))))); // dimensionless
-        const double var_i_Ks__g_Ks_total = (1.0 + 0.59999999999999998 / (1.0 + 6.4818210260626455e-7 * pow(1 / var_chaste_interface__calcium_dynamics__Cai, 1.3999999999999999))) * NV_Ith_S(mParameters, 9); // S_per_F
+        const double var_i_Ks__g_Ks_total = (1.0 + 0.59999999999999998 / (1.0 + 6.4818210260626455e-7 * pow((1 / var_chaste_interface__calcium_dynamics__Cai), 1.3999999999999999))) * NV_Ith_S(mParameters, 9); // S_per_F
         const double var_i_Na__TTX_coeff = ((var_current_blockers__TTX_3uM == 1.0) ? (0.17999999999999999) : ((var_current_blockers__TTX_10uM == 1.0) ? (0.059999999999999998) : ((var_current_blockers__TTX_30uM == 1.0) ? (0.02) : (1.0)))); // dimensionless
         const double var_i_NaCa__KmCa = 1.3799999999999999; // millimolar
         const double var_i_NaCa__KmNai = 87.5; // millimolar

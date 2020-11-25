@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellfink_noble_giles_model_2008FromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -61,6 +62,7 @@
     Cellfink_noble_giles_model_2008FromCellMLCvode::~Cellfink_noble_giles_model_2008FromCellMLCvode()
     {
     }
+
     
     double Cellfink_noble_giles_model_2008FromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -334,7 +336,7 @@
         const double var_iKr_Markov__alpha_xr1 = var_Environment__T * exp(24.335000000000001 + (-25.914000000000001 + 0.0112 * var_chaste_interface__cell__V) * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
         const double var_iKr_Markov__alpha_xr2 = var_Environment__T * exp(22.745999999999999 - 25.914000000000001 * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
         const double var_iKr_Markov__alpha_xr3 = var_Environment__T * exp(22.097999999999999 + (-25.914000000000001 + 0.036499999999999998 * var_chaste_interface__cell__V) * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
-        const double var_iKr_Markov__alpha_xr4 = 1.9631681698237122 * pow(1 / var_Environment__K_o, 0.40000000000000002) * var_Environment__T * exp(30.015999999999998 + (-30.888000000000002 + 0.0223 * var_chaste_interface__cell__V) * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
+        const double var_iKr_Markov__alpha_xr4 = 1.9631681698237122 * pow((1 / var_Environment__K_o), 0.40000000000000002) * var_Environment__T * exp(30.015999999999998 + (-30.888000000000002 + 0.0223 * var_chaste_interface__cell__V) * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
         const double var_iKr_Markov__beta_xr1 = var_Environment__T * exp(13.688000000000001 + (-15.707000000000001 - 0.060299999999999999 * var_chaste_interface__cell__V) * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
         const double d_dt_chaste_interface_var_iKr_Markov__Cr1 = var_chaste_interface__iKr_Markov__Cr2 * var_iKr_Markov__beta_xr1 - var_chaste_interface__iKr_Markov__Cr1 * var_iKr_Markov__alpha_xr1; // 1 / millisecond
         const double var_iKr_Markov__beta_xr2 = var_Environment__T * exp(13.193 - 15.707000000000001 * var_iKr_Markov__T_Base / var_Environment__T) / var_iKr_Markov__T_Base; // per_millisecond
@@ -500,7 +502,6 @@
         // Units: millimolar; Initial value: 7.940167
         double var_chaste_interface__K__K_i = NV_Ith_S(rY, 26);
         // Units: millimolar; Initial value: 141.0167
-        
         const double var_x0 = pow(var_chaste_interface__iKs_Xs_gate__Xs, 2);
         const double var_x1 = exp(4.1806020066889626 - 0.16722408026755853 * var_chaste_interface__cell__V);
         const double var_x2 = 1.0 + var_x1;

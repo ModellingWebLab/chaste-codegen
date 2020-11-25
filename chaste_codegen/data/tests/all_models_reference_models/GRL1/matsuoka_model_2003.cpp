@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellmatsuoka_model_2003FromCellMLGRL1::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -59,6 +60,7 @@
     Cellmatsuoka_model_2003FromCellMLGRL1::~Cellmatsuoka_model_2003FromCellMLGRL1()
     {
     }
+
     
     double Cellmatsuoka_model_2003FromCellMLGRL1::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -461,7 +463,7 @@
         double var_chaste_interface__NL_model__X = rY[36];
         // Units: micrometre; Initial value: 0.9573749975411884
         
-        
+
         // Mathematics
         const double var_ATP_production__Adenosine_Total = 5.0; // millimolar
         const double var_ATP_production__ProducingRate_Max = 0.0030000000000000001; // per_millisecond
@@ -1207,7 +1209,7 @@
         double var_chaste_interface__sodium_potassium_pump_y_gate__y = rY[27];
         // Units: dimensionless; Initial value: 0.5910747147428818
         
-        
+
         // Mathematics
         const double var_L_type_Ca_channel__P_CaL = 8712.0; // picoA_per_millimolar
         const double var_L_type_Ca_channel__p_open_CaL = (var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_U + var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_UCa) * var_chaste_interface__L_type_Ca_channel_ultra_slow_gate__y * var_chaste_interface__L_type_Ca_channel_voltage_dependent_gate__p_AP_CaL / (1.0 + 2.7439999999999993 / pow(var_chaste_interface__ATP_production__ATPi, 3)); // dimensionless
@@ -1362,6 +1364,7 @@
             double var_chaste_interface__sodium_potassium_pump_y_gate__y = rY[27];
             // Units: dimensionless; Initial value: 0.5910747147428818
             
+
             const double var_x0 = 1 / mParameters[0];
             const double var_x1 = 0.037435192301797954 * var_chaste_interface__membrane__Vm;
             const double var_x2 = exp(-var_x1);
@@ -1503,7 +1506,7 @@
             const double var_x138 = var_x137 * var_x90;
             const double var_x139 = 1.0 - var_chaste_interface__sodium_potassium_pump_y_gate__y;
             const double var_x140 = exp(-0.030696857687474322 * var_chaste_interface__membrane__Vm);
-            const double var_x141 = pow(1 / var_x140, 1.0600000000000001);
+            const double var_x141 = pow((1 / var_x140), 1.0600000000000001);
             const double var_x142 = var_x141 / pow((0.067138346456864173 + var_x141), 2);
             const double var_x143 = var_x139 * var_x142 * mParameters[0];
             const double var_x144 = var_x35 * var_chaste_interface__L_type_Ca_channel_voltage_dependent_gate__p_AP_CaL;
@@ -1567,7 +1570,7 @@
         double var_chaste_interface__sodium_potassium_pump_y_gate__y = rY[27];
         // Units: dimensionless; Initial value: 0.5910747147428818
         
-        
+
         // Mathematics
         const double var_L_type_Ca_channel__P_CaL = 8712.0; // picoA_per_millimolar
         const double var_L_type_Ca_channel__p_open_CaL = (var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_U + var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_UCa) * var_chaste_interface__L_type_Ca_channel_ultra_slow_gate__y * var_chaste_interface__L_type_Ca_channel_voltage_dependent_gate__p_AP_CaL / (1.0 + 2.7439999999999993 / pow(var_chaste_interface__ATP_production__ATPi, 3)); // dimensionless
@@ -1665,6 +1668,7 @@
             double var_chaste_interface__sodium_potassium_pump_y_gate__y = rY[27];
             // Units: dimensionless; Initial value: 0.5910747147428818
             
+
             const double var_x1 = 0.037435192301797954 * var_chaste_interface__membrane__Vm;
             const double var_x2 = exp(-var_x1);
             const double var_x3 = 1.0 - var_x2;
@@ -1769,7 +1773,7 @@
         double var_chaste_interface__sodium_potassium_pump_y_gate__y = rY[27];
         // Units: dimensionless; Initial value: 0.5910747147428818
         
-        
+
         // Mathematics
         const double var_L_type_Ca_channel__P_CaL = 8712.0; // picoA_per_millimolar
         const double var_L_type_Ca_channel__p_open_CaL = (var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_U + var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_UCa) * var_chaste_interface__L_type_Ca_channel_ultra_slow_gate__y * var_chaste_interface__L_type_Ca_channel_voltage_dependent_gate__p_AP_CaL / (1.0 + 2.7439999999999993 / pow(var_chaste_interface__ATP_production__ATPi, 3)); // dimensionless
@@ -1885,6 +1889,7 @@
             double var_chaste_interface__sodium_potassium_pump_y_gate__y = rY[27];
             // Units: dimensionless; Initial value: 0.5910747147428818
             
+
             const double var_x1 = 0.037435192301797954 * var_chaste_interface__membrane__Vm;
             const double var_x2 = exp(-var_x1);
             const double var_x3 = 1.0 - var_x2;
@@ -2073,7 +2078,7 @@
         double var_chaste_interface__NL_model__X = rY[36];
         // Units: micrometre; Initial value: 0.9573749975411884
         
-        
+
         // Mathematics
         const double var_Ca_concentrations_in_SR__CSQN_max = 10.0; // millimolar
         const double var_Ca_concentrations_in_SR__K_mCSQN = 0.80000000000000004; // millimolar
@@ -2183,6 +2188,7 @@
             double var_chaste_interface__NL_model__pCB = rY[35];
             // Units: dimensionless; Initial value: 0.00042941813853474524
             
+
             const double var_x19 = var_chaste_interface__membrane__Vm == 0;
             const double var_x26 = 0.074870384603595908 * var_chaste_interface__membrane__Vm;
             const double var_x27 = exp(-var_x26);
@@ -2259,7 +2265,7 @@
         double var_chaste_interface__NL_model__pCaCB = rY[34];
         // Units: dimensionless; Initial value: 0.001990153835322864
         
-        
+
         // Mathematics
         const double var_ATP_production__Adenosine_Total = 5.0; // millimolar
         const double var_ATP_production__ProducingRate_Max = 0.0030000000000000001; // per_millisecond
@@ -2320,6 +2326,7 @@
             double var_chaste_interface__SR_calcium_pump_y_gate__y = rY[28];
             // Units: dimensionless; Initial value: 0.46108441538480216
             
+
             const double var_x30 = sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total);
             const double var_x31 = -0.026190000000000001 + 0.5 * var_x30 + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total;
             const double var_x36 = pow(var_chaste_interface__ATP_production__ATPi, 2);
@@ -2363,7 +2370,7 @@
         double var_chaste_interface__sodium_current_voltage_dependent_gate__p_AI_Na = rY[7];
         // Units: dimensionless; Initial value: 0.40285968661346977
         
-        
+
         // Mathematics
         const double var_sodium_current_voltage_dependent_gate__k_AI_AP = 8.7499999999999999e-5; // per_millisecond
         const double var_sodium_current_voltage_dependent_gate__k_AP_AI = 1.25 / exp(-0.0025000000000000001 * var_chaste_interface__membrane__Vm); // per_millisecond
@@ -2382,6 +2389,7 @@
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
             const double var_x284 = exp(-0.0025000000000000001 * var_chaste_interface__membrane__Vm);
             const double var_x285 = 1 / var_x284;
             const double var_x287 = exp(0.00125 * var_chaste_interface__membrane__Vm);
@@ -2415,7 +2423,7 @@
         double var_chaste_interface__sodium_current_voltage_dependent_gate__p_AI_Na = rY[7];
         // Units: dimensionless; Initial value: 0.40285968661346977
         
-        
+
         // Mathematics
         const double var_sodium_current_voltage_dependent_gate__k_AI_AP = 8.7499999999999999e-5; // per_millisecond
         const double var_sodium_current_voltage_dependent_gate__k_AI_RI = 1 / (1300.0 * exp(0.050000000000000003 * var_chaste_interface__membrane__Vm) + 0.040000000000000001 * exp(0.00125 * var_chaste_interface__membrane__Vm)); // per_millisecond
@@ -2439,6 +2447,7 @@
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
             const double var_x292 = exp(-0.125 * var_chaste_interface__membrane__Vm);
             const double var_x293 = exp(-0.02 * var_chaste_interface__membrane__Vm);
             const double var_x300 = 0.25 * var_x293 + 0.1027 * var_x292;
@@ -2468,7 +2477,7 @@
         double var_chaste_interface__sodium_current_voltage_dependent_gate__p_AI_Na = rY[7];
         // Units: dimensionless; Initial value: 0.40285968661346977
         
-        
+
         // Mathematics
         const double var_sodium_current_voltage_dependent_gate__k_AI_AP = 8.7499999999999999e-5; // per_millisecond
         const double var_sodium_current_voltage_dependent_gate__k_AI_RI = 1 / (1300.0 * exp(0.050000000000000003 * var_chaste_interface__membrane__Vm) + 0.040000000000000001 * exp(0.00125 * var_chaste_interface__membrane__Vm)); // per_millisecond
@@ -2488,6 +2497,7 @@
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
             const double var_x284 = exp(-0.0025000000000000001 * var_chaste_interface__membrane__Vm);
             const double var_x287 = exp(0.00125 * var_chaste_interface__membrane__Vm);
             const double var_x292 = exp(-0.125 * var_chaste_interface__membrane__Vm);
@@ -2516,7 +2526,7 @@
         double var_chaste_interface__sodium_current_ultra_slow_gate__y = rY[8];
         // Units: dimensionless; Initial value: 0.5861887862983165
         
-        
+
         // Mathematics
         const double var_sodium_current_ultra_slow_gate__alpha_y = 1 / (8000.0 * exp(0.01 * var_chaste_interface__membrane__Vm) + 9000000000.0 * exp(0.20000000000000001 * var_chaste_interface__membrane__Vm)); // per_millisecond
         const double var_sodium_current_ultra_slow_gate__beta_y = 1 / (4000.0 * exp(-0.01 * var_chaste_interface__membrane__Vm) + 0.014 * exp(-0.20000000000000001 * var_chaste_interface__membrane__Vm)); // per_millisecond
@@ -2533,6 +2543,7 @@
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
             const double var_x317 = 0.01 * var_chaste_interface__membrane__Vm;
             const double var_x318 = exp(var_x317);
             const double var_x319 = 0.20000000000000001 * var_chaste_interface__membrane__Vm;
@@ -2564,7 +2575,7 @@
         double var_chaste_interface__L_type_Ca_channel_voltage_dependent_gate__p_AI_CaL = rY[11];
         // Units: dimensionless; Initial value: 0.000877325391245903
         
-        
+
         // Mathematics
         const double var_L_type_Ca_channel_voltage_dependent_gate__k_AI_AP = 0.001; // per_millisecond
         const double var_L_type_Ca_channel_voltage_dependent_gate__k_AP_AI = 0.0040000000000000001; // per_millisecond
@@ -2583,6 +2594,7 @@
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
             const double var_x324 = 0.015384615384615385 * var_chaste_interface__membrane__Vm;
             const double var_x329 = exp(var_x324);
             const double var_x330 = exp(0.14285714285714285 * var_chaste_interface__membrane__Vm);
@@ -2613,7 +2625,7 @@
         double var_chaste_interface__L_type_Ca_channel_voltage_dependent_gate__p_AI_CaL = rY[11];
         // Units: dimensionless; Initial value: 0.000877325391245903
         
-        
+
         // Mathematics
         const double var_L_type_Ca_channel_voltage_dependent_gate__k_AI_AP = 0.001; // per_millisecond
         const double var_L_type_Ca_channel_voltage_dependent_gate__k_AP_AI = 0.0040000000000000001; // per_millisecond
@@ -2637,6 +2649,7 @@
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
             const double var_x323 = exp(-0.16949152542372881 * var_chaste_interface__membrane__Vm);
             const double var_x324 = 0.015384615384615385 * var_chaste_interface__membrane__Vm;
             const double var_x325 = exp(-var_x324);
@@ -2667,7 +2680,7 @@
         double var_chaste_interface__L_type_Ca_channel_voltage_dependent_gate__p_AI_CaL = rY[11];
         // Units: dimensionless; Initial value: 0.000877325391245903
         
-        
+
         // Mathematics
         const double var_L_type_Ca_channel_voltage_dependent_gate__k_AI_AP = 0.001; // per_millisecond
         const double var_L_type_Ca_channel_voltage_dependent_gate__k_AP_AI = 0.0040000000000000001; // per_millisecond
@@ -2687,6 +2700,7 @@
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
             const double var_x317 = 0.01 * var_chaste_interface__membrane__Vm;
             const double var_x318 = exp(var_x317);
             const double var_x322 = exp(-var_x317);
@@ -2725,7 +2739,7 @@
         double var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_C = rY[14];
         // Units: dimensionless; Initial value: 0.4250747299372254
         
-        
+
         // Mathematics
         const double var_L_type_Ca_channel_Ca_dependent_gate__k_CCa_C = 0.0041999999999999997; // per_millisecond
         const double var_L_type_Ca_channel_Ca_dependent_gate__k_CCa_UCa = 0.00029999999999999997; // per_millisecond
@@ -2767,6 +2781,7 @@
             double var_chaste_interface__L_type_Ca_channel_voltage_dependent_gate__p_AP_CaL = rY[9];
             // Units: dimensionless; Initial value: 1.5445004166497696e-06
             
+
             const double var_x19 = var_chaste_interface__membrane__Vm == 0;
             const double var_x26 = 0.074870384603595908 * var_chaste_interface__membrane__Vm;
             const double var_x27 = exp(-var_x26);
@@ -2811,7 +2826,7 @@
         double var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_C = rY[14];
         // Units: dimensionless; Initial value: 0.4250747299372254
         
-        
+
         // Mathematics
         const double var_L_type_Ca_channel_Ca_dependent_gate__k_CCa_C = 0.0041999999999999997; // per_millisecond
         const double var_L_type_Ca_channel_Ca_dependent_gate__k_CCa_UCa = 0.00029999999999999997; // per_millisecond
@@ -2848,6 +2863,7 @@
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
             
             partialF = -2.3523000000000001;
         }
@@ -2877,7 +2893,7 @@
         double var_chaste_interface__L_type_Ca_channel_Ca_dependent_gate__p_C = rY[14];
         // Units: dimensionless; Initial value: 0.4250747299372254
         
-        
+
         // Mathematics
         const double var_L_type_Ca_channel_Ca_dependent_gate__k_CCa_C = 0.0041999999999999997; // per_millisecond
         const double var_L_type_Ca_channel_Ca_dependent_gate__k_C_CCa = 6.9539999999999997; // per_millimolar_millisecond
@@ -2913,6 +2929,7 @@
             double var_chaste_interface__L_type_Ca_channel_voltage_dependent_gate__p_AP_CaL = rY[9];
             // Units: dimensionless; Initial value: 1.5445004166497696e-06
             
+
             const double var_x19 = var_chaste_interface__membrane__Vm == 0;
             const double var_x26 = 0.074870384603595908 * var_chaste_interface__membrane__Vm;
             const double var_x27 = exp(-var_x26);
@@ -2947,7 +2964,7 @@
         double var_chaste_interface__L_type_Ca_channel_ultra_slow_gate__y = rY[15];
         // Units: dimensionless; Initial value: 0.9985266538252986
         
-        
+
         // Mathematics
         const double var_L_type_Ca_channel_ultra_slow_gate__alpha_y = 1 / (58.0 * exp(0.015384615384615385 * var_chaste_interface__membrane__Vm) + 250000.0 * exp(0.1111111111111111 * var_chaste_interface__membrane__Vm)); // per_millisecond
         const double var_L_type_Ca_channel_ultra_slow_gate__beta_y = 1 / (66.0 * exp(-0.015384615384615385 * var_chaste_interface__membrane__Vm) + 1800.0 * exp(-0.071428571428571425 * var_chaste_interface__membrane__Vm)); // per_millisecond
@@ -2964,6 +2981,7 @@
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
             const double var_x324 = 0.015384615384615385 * var_chaste_interface__membrane__Vm;
             const double var_x325 = exp(-var_x324);
             const double var_x329 = exp(var_x324);
@@ -2990,7 +3008,7 @@
         double var_chaste_interface__T_type_Ca_channel_y1_gate__y1 = rY[16];
         // Units: dimensionless; Initial value: 1.6882718240109127e-05
         
-        
+
         // Mathematics
         const double var_T_type_Ca_channel_y1_gate__alpha_y1 = 1 / (0.019 * exp(-0.17857142857142858 * var_chaste_interface__membrane__Vm) + 0.81999999999999995 * exp(-0.0040000000000000001 * var_chaste_interface__membrane__Vm)); // per_millisecond
         const double var_T_type_Ca_channel_y1_gate__beta_y1 = 1 / (1.5 * exp(0.0001 * var_chaste_interface__membrane__Vm) + 40.0 * exp(0.15873015873015872 * var_chaste_interface__membrane__Vm)); // per_millisecond
@@ -3007,6 +3025,7 @@
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
             const double var_x366 = exp(-0.17857142857142858 * var_chaste_interface__membrane__Vm);
             const double var_x367 = exp(-0.0040000000000000001 * var_chaste_interface__membrane__Vm);
             const double var_x368 = exp(0.0001 * var_chaste_interface__membrane__Vm);
@@ -3032,7 +3051,7 @@
         double var_chaste_interface__T_type_Ca_channel_y2_gate__y2 = rY[17];
         // Units: dimensionless; Initial value: 0.8585352091865849
         
-        
+
         // Mathematics
         const double var_T_type_Ca_channel_y2_gate__alpha_y2 = 1 / (30.0 * exp(0.00033333333333333332 * var_chaste_interface__membrane__Vm) + 62000.0 * exp(0.099009900990099015 * var_chaste_interface__membrane__Vm)); // per_millisecond
         const double var_T_type_Ca_channel_y2_gate__beta_y2 = 1 / (1.2 * exp(-0.040000000000000001 * var_chaste_interface__membrane__Vm) + 0.00059999999999999995 * exp(-0.14925373134328357 * var_chaste_interface__membrane__Vm)); // per_millisecond
@@ -3049,6 +3068,7 @@
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
             const double var_x370 = exp(0.00033333333333333332 * var_chaste_interface__membrane__Vm);
             const double var_x371 = exp(0.099009900990099015 * var_chaste_interface__membrane__Vm);
             const double var_x372 = exp(-0.14925373134328357 * var_chaste_interface__membrane__Vm);
@@ -3076,7 +3096,7 @@
         double var_chaste_interface__time_independent_potassium_current_y_gate__y = rY[18];
         // Units: dimensionless; Initial value: 0.6080573900752752
         
-        
+
         // Mathematics
         const double var_external_ion_concentrations__Ko = 5.4000000000000004; // millimolar
         const double var_membrane__F = 96.486699999999999; // coulomb_per_millimole
@@ -3103,6 +3123,7 @@
             double var_chaste_interface__internal_ion_concentrations__Ki = rY[2];
             // Units: millimolar; Initial value: 143.1837333000449
             
+
             const double var_x55 = 1 / var_chaste_interface__internal_ion_concentrations__Ki;
             const double var_x56 = log(5.4000000000000004 * var_x55);
             const double var_x57 = exp(-2.1000000000000001 + 0.014999999999999999 * var_chaste_interface__membrane__Vm - 0.40069247885978065 * var_x56);
@@ -3152,7 +3173,7 @@
         double var_chaste_interface__rapid_time_dependent_potassium_current_y1_gate__y1 = rY[19];
         // Units: dimensionless; Initial value: 0.0018339931180983765
         
-        
+
         // Mathematics
         const double var_rapid_time_dependent_potassium_current_y1_gate__alpha_y1 = 1 / (5.0 * exp(-0.0033333333333333335 * var_chaste_interface__membrane__Vm) + 20.0 * exp(-0.086956521739130432 * var_chaste_interface__membrane__Vm)); // per_millisecond
         const double var_rapid_time_dependent_potassium_current_y1_gate__beta_y1 = 1 / (160.0 * exp(0.035714285714285712 * var_chaste_interface__membrane__Vm) + 200.0 * exp(0.001 * var_chaste_interface__membrane__Vm)) + 0.00040000000000000002 / exp(0.050000000000000003 * var_chaste_interface__membrane__Vm); // per_millisecond
@@ -3169,6 +3190,7 @@
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
             const double var_x303 = exp(0.050000000000000003 * var_chaste_interface__membrane__Vm);
             const double var_x374 = 0.0033333333333333335 * var_chaste_interface__membrane__Vm;
             const double var_x384 = 1 / var_x303;
@@ -3198,7 +3220,7 @@
         double var_chaste_interface__rapid_time_dependent_potassium_current_y2_gate__y2 = rY[20];
         // Units: dimensionless; Initial value: 0.20443083454225305
         
-        
+
         // Mathematics
         const double var_rapid_time_dependent_potassium_current_y2_gate__alpha_y2 = 1 / (20.0 * exp(-0.0033333333333333335 * var_chaste_interface__membrane__Vm) + 200.0 * exp(-0.076923076923076927 * var_chaste_interface__membrane__Vm)); // per_millisecond
         const double var_rapid_time_dependent_potassium_current_y2_gate__beta_y2 = 1 / (1600.0 * exp(0.035714285714285712 * var_chaste_interface__membrane__Vm) + 2000.0 * exp(0.001 * var_chaste_interface__membrane__Vm)) + 0.0001 / exp(0.050000000000000003 * var_chaste_interface__membrane__Vm); // per_millisecond
@@ -3215,6 +3237,7 @@
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
             const double var_x12 = -0.076923076923076927 * var_chaste_interface__membrane__Vm;
             const double var_x303 = exp(0.050000000000000003 * var_chaste_interface__membrane__Vm);
             const double var_x374 = 0.0033333333333333335 * var_chaste_interface__membrane__Vm;
@@ -3245,7 +3268,7 @@
         double var_chaste_interface__rapid_time_dependent_potassium_current_y3_gate__y3 = rY[21];
         // Units: dimensionless; Initial value: 0.967887666264921
         
-        
+
         // Mathematics
         const double var_rapid_time_dependent_potassium_current_y3_gate__alpha_y3 = 1 / (2.5 * exp(0.0033333333333333335 * var_chaste_interface__membrane__Vm) + 10.0 * exp(0.058823529411764705 * var_chaste_interface__membrane__Vm)); // per_millisecond
         const double var_rapid_time_dependent_potassium_current_y3_gate__beta_y3 = 1 / (2.0 * exp(-0.0066666666666666671 * var_chaste_interface__membrane__Vm) + 0.34999999999999998 * exp(-0.058823529411764705 * var_chaste_interface__membrane__Vm)); // per_millisecond
@@ -3262,6 +3285,7 @@
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
             const double var_x288 = 0.058823529411764705 * var_chaste_interface__membrane__Vm;
             const double var_x289 = exp(var_x288);
             const double var_x374 = 0.0033333333333333335 * var_chaste_interface__membrane__Vm;
@@ -3289,7 +3313,7 @@
         double var_chaste_interface__slow_time_dependent_potassium_current_y1_gate__y1 = rY[22];
         // Units: dimensionless; Initial value: 0.09738789658609195
         
-        
+
         // Mathematics
         const double var_slow_time_dependent_potassium_current_y1_gate__alpha_y1 = 1 / (85.0 * exp(-0.095238095238095233 * var_chaste_interface__membrane__Vm) + 370.0 * exp(-0.016129032258064516 * var_chaste_interface__membrane__Vm)); // per_millisecond
         const double var_slow_time_dependent_potassium_current_y1_gate__beta_y1 = 1 / (260.0 * exp(0.01 * var_chaste_interface__membrane__Vm) + 1450.0 * exp(0.050000000000000003 * var_chaste_interface__membrane__Vm)); // per_millisecond
@@ -3306,6 +3330,7 @@
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
             const double var_x303 = exp(0.050000000000000003 * var_chaste_interface__membrane__Vm);
             const double var_x317 = 0.01 * var_chaste_interface__membrane__Vm;
             const double var_x318 = exp(var_x317);
@@ -3332,7 +3357,7 @@
         double var_chaste_interface__slow_time_dependent_potassium_current_y2_gate__y2 = rY[23];
         // Units: dimensionless; Initial value: 0.09745345578743213
         
-        
+
         // Mathematics
         const double var_internal_ion_concentrations__CMDN_max = 0.050000000000000003; // millimolar
         const double var_internal_ion_concentrations__K_mCMDN = 0.0023800000000000002; // millimolar
@@ -3354,6 +3379,7 @@
             double var_chaste_interface__internal_ion_concentrations__Ca_Total = rY[3];
             // Units: millimolar; Initial value: 0.00040180173572968586
             
+
             const double var_x30 = sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total);
             
             partialF = 0.092459000000000013 - 1.8500000000000001 * var_x30 - 1.8500000000000001 * var_chaste_interface__internal_ion_concentrations__Ca_Total;
@@ -3376,7 +3402,7 @@
         double var_chaste_interface__transient_outward_current_y1_gate__y1 = rY[24];
         // Units: dimensionless; Initial value: 0.0007956883250874798
         
-        
+
         // Mathematics
         const double var_transient_outward_current_y1_gate__alpha_y1 = 1 / (11.0 * exp(-0.035714285714285712 * var_chaste_interface__membrane__Vm) + 0.20000000000000001 * exp(-0.0025000000000000001 * var_chaste_interface__membrane__Vm)); // per_millisecond
         const double var_transient_outward_current_y1_gate__beta_y1 = 1 / (4.4000000000000004 * exp(0.0625 * var_chaste_interface__membrane__Vm) + 0.20000000000000001 * exp(0.002 * var_chaste_interface__membrane__Vm)); // per_millisecond
@@ -3393,6 +3419,7 @@
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
             const double var_x284 = exp(-0.0025000000000000001 * var_chaste_interface__membrane__Vm);
             const double var_x379 = 0.002 * var_chaste_interface__membrane__Vm;
             const double var_x385 = 0.035714285714285712 * var_chaste_interface__membrane__Vm;
@@ -3420,7 +3447,7 @@
         double var_chaste_interface__transient_outward_current_y2_gate__y2 = rY[25];
         // Units: dimensionless; Initial value: 0.9999125083105881
         
-        
+
         // Mathematics
         const double var_transient_outward_current_y2_gate__alpha_y2 = 0.0038 * exp(-1.1946902654867255 - 0.088495575221238937 * var_chaste_interface__membrane__Vm) / (1.0 + 0.051334999999999999 * exp(-1.1946902654867255 - 0.088495575221238937 * var_chaste_interface__membrane__Vm)); // per_millisecond
         const double var_transient_outward_current_y2_gate__beta_y2 = 0.0038 * exp(1.1946902654867255 + 0.088495575221238937 * var_chaste_interface__membrane__Vm) / (1.0 + 0.067083000000000004 * exp(1.1946902654867255 + 0.088495575221238937 * var_chaste_interface__membrane__Vm)); // per_millisecond
@@ -3437,6 +3464,7 @@
             double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -85.95752434460744
             
+
             const double var_x400 = 0.088495575221238937 * var_chaste_interface__membrane__Vm;
             const double var_x401 = exp(-1.1946902654867255 - var_x400);
             const double var_x402 = 1.0 + 0.051334999999999999 * var_x401;
@@ -3469,7 +3497,7 @@
         double var_chaste_interface__sodium_calcium_exchanger_y_gate__y = rY[26];
         // Units: dimensionless; Initial value: 0.9891789193465331
         
-        
+
         // Mathematics
         const double var_external_ion_concentrations__Cao = 1.8; // millimolar
         const double var_external_ion_concentrations__Nao = 140.0; // millimolar
@@ -3513,6 +3541,7 @@
             double var_chaste_interface__internal_ion_concentrations__Ca_Total = rY[3];
             // Units: millimolar; Initial value: 0.00040180173572968586
             
+
             const double var_x30 = sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total);
             const double var_x31 = -0.026190000000000001 + 0.5 * var_x30 + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total;
             const double var_x39 = exp(-0.025455930765222609 * var_chaste_interface__membrane__Vm);
@@ -3552,7 +3581,7 @@
         double var_chaste_interface__sodium_potassium_pump_y_gate__y = rY[27];
         // Units: dimensionless; Initial value: 0.5910747147428818
         
-        
+
         // Mathematics
         const double var_external_ion_concentrations__Ko = 5.4000000000000004; // millimolar
         const double var_external_ion_concentrations__Nao = 140.0; // millimolar
@@ -3594,9 +3623,10 @@
             double var_chaste_interface__ATP_production__ATPi = rY[4];
             // Units: millimolar; Initial value: 4.657102729020499
             
+
             const double var_x55 = 1 / var_chaste_interface__internal_ion_concentrations__Ki;
             const double var_x140 = exp(-0.030696857687474322 * var_chaste_interface__membrane__Vm);
-            const double var_x141 = pow(1 / var_x140, 1.0600000000000001);
+            const double var_x141 = pow((1 / var_x140), 1.0600000000000001);
             const double var_x160 = 1 / var_chaste_interface__internal_ion_concentrations__Nai;
             const double var_x161 = pow(var_x160, 1.0600000000000001);
             const double var_x162 = var_x161 * (1.0 + 0.020000293738509214 * pow(var_chaste_interface__internal_ion_concentrations__Ki, 1.1200000000000001));
@@ -3634,7 +3664,7 @@
         double var_chaste_interface__Ca_concentrations_in_SR__Caup = rY[32];
         // Units: millimolar; Initial value: 2.611712901567567
         
-        
+
         // Mathematics
         const double var_SR_calcium_pump__Km_ATP = 0.10000000000000001; // millimolar
         const double var_SR_calcium_pump__Km_CaCyto = 0.00080000000000000004; // millimolar
@@ -3671,6 +3701,7 @@
             double var_chaste_interface__Ca_concentrations_in_SR__Caup = rY[32];
             // Units: millimolar; Initial value: 2.611712901567567
             
+
             const double var_x30 = sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total);
             const double var_x31 = -0.026190000000000001 + 0.5 * var_x30 + 0.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total;
             const double var_x163 = 1 / var_chaste_interface__ATP_production__ATPi;
@@ -3719,7 +3750,7 @@
         double var_chaste_interface__Ca_concentrations_in_SR__Ca_Total = rY[31];
         // Units: millimolar; Initial value: 9.455741736977666
         
-        
+
         // Mathematics
         const double var_Ca_concentrations_in_SR__CSQN_max = 10.0; // millimolar
         const double var_Ca_concentrations_in_SR__K_mCSQN = 0.80000000000000004; // millimolar
@@ -3755,6 +3786,7 @@
             double var_chaste_interface__Ca_concentrations_in_SR__Ca_Total = rY[31];
             // Units: millimolar; Initial value: 9.455741736977666
             
+
             const double var_x278 = 0.092592592592592587 * var_chaste_interface__Ca_concentrations_in_SR__Ca_Total;
             const double var_x279 = sqrt(pow((1 - var_x278), 2) + 0.027434842249657067 * var_chaste_interface__Ca_concentrations_in_SR__Ca_Total);
             const double var_x425 = 1.0 + 0.35999999999999999 / (-5.4000000000000004 + 0.5 * var_chaste_interface__Ca_concentrations_in_SR__Ca_Total + 5.4000000000000004 * var_x279);
@@ -3795,7 +3827,7 @@
         double var_chaste_interface__Ca_concentrations_in_SR__Ca_Total = rY[31];
         // Units: millimolar; Initial value: 9.455741736977666
         
-        
+
         // Mathematics
         const double var_Ca_concentrations_in_SR__CSQN_max = 10.0; // millimolar
         const double var_Ca_concentrations_in_SR__K_mCSQN = 0.80000000000000004; // millimolar
@@ -3846,6 +3878,7 @@
             double var_chaste_interface__Ca_concentrations_in_SR__Ca_Total = rY[31];
             // Units: millimolar; Initial value: 9.455741736977666
             
+
             const double var_x19 = var_chaste_interface__membrane__Vm == 0;
             const double var_x26 = 0.074870384603595908 * var_chaste_interface__membrane__Vm;
             const double var_x27 = exp(-var_x26);
@@ -3897,7 +3930,7 @@
         double var_chaste_interface__Ca_concentrations_in_SR__Caup = rY[32];
         // Units: millimolar; Initial value: 2.611712901567567
         
-        
+
         // Mathematics
         const double var_Ca_concentrations_in_SR__CSQN_max = 10.0; // millimolar
         const double var_Ca_concentrations_in_SR__K_mCSQN = 0.80000000000000004; // millimolar
@@ -3930,6 +3963,7 @@
             double var_chaste_interface__Ca_concentrations_in_SR__Ca_Total = rY[31];
             // Units: millimolar; Initial value: 9.455741736977666
             
+
             const double var_x278 = 0.092592592592592587 * var_chaste_interface__Ca_concentrations_in_SR__Ca_Total;
             const double var_x279 = sqrt(pow((1 - var_x278), 2) + 0.027434842249657067 * var_chaste_interface__Ca_concentrations_in_SR__Ca_Total);
             const double var_x280 = (-0.078875171467764058 + 0.0085733882030178329 * var_chaste_interface__Ca_concentrations_in_SR__Ca_Total) / var_x279;
@@ -3960,7 +3994,7 @@
         double var_chaste_interface__Ca_concentrations_in_SR__Caup = rY[32];
         // Units: millimolar; Initial value: 2.611712901567567
         
-        
+
         // Mathematics
         const double var_Ca_concentrations_in_SR__CSQN_max = 10.0; // millimolar
         const double var_Ca_concentrations_in_SR__K_mCSQN = 0.80000000000000004; // millimolar
@@ -4002,6 +4036,7 @@
             double var_chaste_interface__Ca_concentrations_in_SR__Caup = rY[32];
             // Units: millimolar; Initial value: 2.611712901567567
             
+
             const double var_x275 = 1.0 + 0.080000000000000002 / var_chaste_interface__Ca_concentrations_in_SR__Caup;
             const double var_x281 = var_chaste_interface__SR_calcium_pump_y_gate__y / (pow(var_x275, 2) * pow(var_chaste_interface__Ca_concentrations_in_SR__Caup, 2));
             
@@ -4029,7 +4064,7 @@
         double var_chaste_interface__NL_model__pCB = rY[35];
         // Units: dimensionless; Initial value: 0.00042941813853474524
         
-        
+
         // Mathematics
         const double var_NL_model__L = 0.96237999754118841; // micrometre
         const double var_NL_model__L_a = 1.1699999999999999; // micrometre
@@ -4059,6 +4094,7 @@
             double var_chaste_interface__internal_ion_concentrations__Ca_Total = rY[3];
             // Units: millimolar; Initial value: 0.00040180173572968586
             
+
             const double var_x30 = sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total);
             const double var_x431 = 0.0038999999999999998 * exp(-0.86212130841993795);
             const double var_x432 = -19.5 * var_x30 - 19.5 * var_chaste_interface__internal_ion_concentrations__Ca_Total;
@@ -4089,7 +4125,7 @@
         double var_chaste_interface__NL_model__X = rY[36];
         // Units: micrometre; Initial value: 0.9573749975411884
         
-        
+
         // Mathematics
         const double var_NL_model__B = 1.2; // per_millisecond
         const double var_NL_model__L = 0.96237999754118841; // micrometre
@@ -4124,6 +4160,7 @@
             double var_chaste_interface__NL_model__X = rY[36];
             // Units: micrometre; Initial value: 0.9573749975411884
             
+
             const double var_x283 = pow((0.95737999754118841 - var_chaste_interface__NL_model__X), 2);
             const double var_x434 = -0.038879999999999998 * var_x283;
             
@@ -4151,7 +4188,7 @@
         double var_chaste_interface__NL_model__X = rY[36];
         // Units: micrometre; Initial value: 0.9573749975411884
         
-        
+
         // Mathematics
         const double var_NL_model__B = 1.2; // per_millisecond
         const double var_NL_model__L = 0.96237999754118841; // micrometre
@@ -4185,6 +4222,7 @@
             double var_chaste_interface__NL_model__X = rY[36];
             // Units: micrometre; Initial value: 0.9573749975411884
             
+
             const double var_x30 = sqrt(pow((0.052380000000000003 - var_chaste_interface__internal_ion_concentrations__Ca_Total), 2) + 0.0095200000000000007 * var_chaste_interface__internal_ion_concentrations__Ca_Total);
             const double var_x283 = pow((0.95737999754118841 - var_chaste_interface__NL_model__X), 2);
             const double var_x434 = -0.038879999999999998 * var_x283;
@@ -4209,7 +4247,7 @@
         double var_chaste_interface__NL_model__X = rY[36];
         // Units: micrometre; Initial value: 0.9573749975411884
         
-        
+
         // Mathematics
         const double var_NL_model__B = 1.2; // per_millisecond
         const double var_NL_model__L = 0.96237999754118841; // micrometre
@@ -4226,6 +4264,7 @@
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
             
             partialF = -1.2;
         }
@@ -4247,7 +4286,6 @@
         double var_chaste_interface__internal_ion_concentrations__Ca_Total = rY[3];
         // Units: millimolar; Initial value: 0.00040180173572968586
         
-
         // Mathematics
         const double var_internal_ion_concentrations__CMDN_max = 0.050000000000000003; // millimolar
         const double var_internal_ion_concentrations__K_mCMDN = 0.0023800000000000002; // millimolar

@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellgrandi2010ssFromCellMLGRL2::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -63,6 +64,7 @@
     Cellgrandi2010ssFromCellMLGRL2::~Cellgrandi2010ssFromCellMLGRL2()
     {
     }
+
     
     double Cellgrandi2010ssFromCellMLGRL2::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -514,7 +516,7 @@
         double var_chaste_interface__cell__sCai = rY[37];
         // Units: dimensionless; Initial value: 8.85230799863012e-05
         
-        
+
         // Mathematics
         double d_dt_chaste_interface_var_cell__sVm;
         const double var_cell__Bmax_CaM = 0.024; // dimensionless
@@ -1188,7 +1190,7 @@
         double var_chaste_interface__cell__sCasl = rY[36];
         // Units: dimensionless; Initial value: 0.000105614570409386
         
-        
+
         // Mathematics
         const double var_cell__Cao = 1.8; // dimensionless
         const double var_cell__Cli = 15.0; // dimensionless
@@ -1356,6 +1358,7 @@
             double var_chaste_interface__cell__sCasl = rY[36];
             // Units: dimensionless; Initial value: 0.000105614570409386
             
+
             const double var_x0 = exp(7.4880000000000004 - 0.16722408026755853 * var_chaste_interface__cell__sVm);
             const double var_x1 = 1.0 + var_x0;
             const double var_x2 = pow(var_chaste_interface__cell__sxks, 2);
@@ -1502,7 +1505,7 @@
         double var_chaste_interface__cell__sm = rY[1];
         // Units: dimensionless; Initial value: 0.00384941567866232
         
-        
+
         // Mathematics
         const double var_cell__mss = 1 / pow((1.0 + exp(-6.2967884828349945 - 0.11074197120708749 * var_chaste_interface__cell__sVm)), 2); // dimensionless
         const double var_cell__taum = 0.12920000000000001 * exp(-8.682389366752302 * pow((1 + 0.021838829438742085 * var_chaste_interface__cell__sVm), 2)) + 0.064869999999999997 * exp(-0.0089012876052174655 * pow((-1 + 0.2073398299813394 * var_chaste_interface__cell__sVm), 2)); // dimensionless
@@ -1519,6 +1522,7 @@
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
+
             const double var_x187 = exp(-0.0089012876052174655 * pow((-1 + 0.2073398299813394 * var_chaste_interface__cell__sVm), 2));
             const double var_x188 = exp(-8.682389366752302 * pow((1 + 0.021838829438742085 * var_chaste_interface__cell__sVm), 2));
             const double var_x191 = 0.12920000000000001 * var_x188;
@@ -1545,7 +1549,7 @@
         double var_chaste_interface__cell__sh = rY[2];
         // Units: dimensionless; Initial value: 0.623723834301669
         
-        
+
         // Mathematics
         const double var_cell__ah = ((var_chaste_interface__cell__sVm >= -40.0) ? (0) : (0.057000000000000002 * exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__cell__sVm))); // dimensionless
         const double var_cell__bh = ((var_chaste_interface__cell__sVm >= -40.0) ? (5.9230769230769234 / (1.0 + exp(-0.96036036036036043 - 0.0900900900900901 * var_chaste_interface__cell__sVm))) : (310000.0 * exp(0.34849999999999998 * var_chaste_interface__cell__sVm) + 2.7000000000000002 * exp(0.079000000000000001 * var_chaste_interface__cell__sVm))); // dimensionless
@@ -1564,6 +1568,7 @@
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
+
             const double var_x197 = var_chaste_interface__cell__sVm >= -40.0;
             const double var_x198 = exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__cell__sVm);
             const double var_x199 = exp(-0.96036036036036043 - 0.0900900900900901 * var_chaste_interface__cell__sVm);
@@ -1593,7 +1598,7 @@
         double var_chaste_interface__cell__sj = rY[3];
         // Units: dimensionless; Initial value: 0.622080736932815
         
-        
+
         // Mathematics
         const double var_cell__aj = ((var_chaste_interface__cell__sVm >= -40.0) ? (0) : ((37.780000000000001 + var_chaste_interface__cell__sVm) * (-25428.0 * exp(0.24440000000000001 * var_chaste_interface__cell__sVm) - 6.9480000000000002e-6 * exp(-0.043909999999999998 * var_chaste_interface__cell__sVm)) / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__sVm)))); // dimensionless
         const double var_cell__bj = ((var_chaste_interface__cell__sVm >= -40.0) ? (0.59999999999999998 * exp(0.057000000000000002 * var_chaste_interface__cell__sVm) / (1.0 + exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__cell__sVm))) : (0.024240000000000001 * exp(-0.01052 * var_chaste_interface__cell__sVm) / (1.0 + exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__cell__sVm)))); // dimensionless
@@ -1612,6 +1617,7 @@
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
+
             const double var_x197 = var_chaste_interface__cell__sVm >= -40.0;
             const double var_x206 = exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__sVm);
             const double var_x207 = 1.0 + var_x206;
@@ -1652,7 +1658,7 @@
         double var_chaste_interface__cell__sd = rY[4];
         // Units: dimensionless; Initial value: 2.95884913218079e-06
         
-        
+
         // Mathematics
         const double var_cell__dss = 1 / (1.0 + exp(-0.83333333333333337 - 0.16666666666666666 * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__taud = 28.571428571428569 * (1.0 - exp(-0.83333333333333337 - 0.16666666666666666 * var_chaste_interface__cell__sVm)) * var_cell__dss / (5.0 + var_chaste_interface__cell__sVm); // dimensionless
@@ -1669,6 +1675,7 @@
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
+
             const double var_x224 = exp(-0.83333333333333337 - 0.16666666666666666 * var_chaste_interface__cell__sVm);
             const double var_x225 = 1.0 - var_x224;
             const double var_x226 = 1 / var_x225;
@@ -1697,7 +1704,7 @@
         double var_chaste_interface__cell__sf = rY[5];
         // Units: dimensionless; Initial value: 0.995094078386247
         
-        
+
         // Mathematics
         const double var_cell__fss = 1 / (1.0 + exp(3.8888888888888888 + 0.1111111111111111 * var_chaste_interface__cell__sVm)) + 0.59999999999999998 / (1.0 + exp(2.5 - 0.050000000000000003 * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__tauf = 1 / (0.02 + 0.019699999999999999 * exp(-0.23877882250000002 * pow((1 + 0.068965517241379309 * var_chaste_interface__cell__sVm), 2))); // dimensionless
@@ -1714,6 +1721,7 @@
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
+
             const double var_x236 = 0.019699999999999999 * exp(-0.23877882250000002 * pow((1 + 0.068965517241379309 * var_chaste_interface__cell__sVm), 2));
             
             partialF = -0.02 - var_x236;
@@ -1736,7 +1744,7 @@
         double var_chaste_interface__cell__sCaj = rY[35];
         // Units: dimensionless; Initial value: 0.000175648385857736
         
-        
+
         // Mathematics
         const double d_dt_chaste_interface_var_cell__sfcaBj = -0.011900000000000001 * var_chaste_interface__cell__sfcaBj + 1.7 * (1.0 - var_chaste_interface__cell__sfcaBj) * var_chaste_interface__cell__sCaj; // 1 / ms
 
@@ -1751,6 +1759,7 @@
             double var_chaste_interface__cell__sCaj = rY[35];
             // Units: dimensionless; Initial value: 0.000175648385857736
             
+
             
             partialF = -0.011900000000000001 - 1.7 * var_chaste_interface__cell__sCaj;
         }
@@ -1772,7 +1781,7 @@
         double var_chaste_interface__cell__sCasl = rY[36];
         // Units: dimensionless; Initial value: 0.000105614570409386
         
-        
+
         // Mathematics
         const double d_dt_chaste_interface_var_cell__sfcaBsl = -0.011900000000000001 * var_chaste_interface__cell__sfcaBsl + 1.7 * (1.0 - var_chaste_interface__cell__sfcaBsl) * var_chaste_interface__cell__sCasl; // 1 / ms
 
@@ -1787,6 +1796,7 @@
             double var_chaste_interface__cell__sCasl = rY[36];
             // Units: dimensionless; Initial value: 0.000105614570409386
             
+
             
             partialF = -0.011900000000000001 - 1.7 * var_chaste_interface__cell__sCasl;
         }
@@ -1808,7 +1818,7 @@
         double var_chaste_interface__cell__sxtos = rY[8];
         // Units: dimensionless; Initial value: 0.000442853722673121
         
-        
+
         // Mathematics
         const double var_cell__tauxtos = 0.5 + 9.0 / (1.0 + exp(0.20000000000000001 + 0.066666666666666666 * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__xtoss = 1 / (1.0 + exp(1.4615384615384615 - 0.076923076923076927 * var_chaste_interface__cell__sVm)); // dimensionless
@@ -1825,6 +1835,7 @@
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
+
             const double var_x243 = exp(0.20000000000000001 + 0.066666666666666666 * var_chaste_interface__cell__sVm);
             const double var_x244 = 1.0 + var_x243;
             const double var_x245 = 1 / var_x244;
@@ -1850,7 +1861,7 @@
         double var_chaste_interface__cell__sytos = rY[9];
         // Units: dimensionless; Initial value: 0.789013894749951
         
-        
+
         // Mathematics
         const double var_cell__tauytos = 30.0 + 800.0 / (1.0 + exp(6.0 + 0.10000000000000001 * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__ytoss = 1 / (1.0 + exp(3.8999999999999999 + 0.20000000000000001 * var_chaste_interface__cell__sVm)); // dimensionless
@@ -1867,6 +1878,7 @@
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
+
             const double var_x251 = exp(6.0 + 0.10000000000000001 * var_chaste_interface__cell__sVm);
             const double var_x252 = 1.0 + var_x251;
             const double var_x253 = 1 / var_x252;
@@ -1892,7 +1904,7 @@
         double var_chaste_interface__cell__sxtof = rY[10];
         // Units: dimensionless; Initial value: 0.000442846429332686
         
-        
+
         // Mathematics
         const double var_cell__tauxtof = 0.5 + 8.5 * exp(-0.81000000000000005 * pow((1 + 0.022222222222222223 * var_chaste_interface__cell__sVm), 2)); // dimensionless
         const double var_cell__xtoss = 1 / (1.0 + exp(1.4615384615384615 - 0.076923076923076927 * var_chaste_interface__cell__sVm)); // dimensionless
@@ -1909,6 +1921,7 @@
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
+
             const double var_x260 = exp(-0.81000000000000005 * pow((1 + 0.022222222222222223 * var_chaste_interface__cell__sVm), 2));
             const double var_x261 = 1 / (0.5 + 8.5 * var_x260);
             
@@ -1932,7 +1945,7 @@
         double var_chaste_interface__cell__sytof = rY[11];
         // Units: dimensionless; Initial value: 0.999995784674368
         
-        
+
         // Mathematics
         const double var_cell__tauytof = 7.0 + 85.0 * exp(-7.2727272727272725 * pow((1 + 0.025000000000000001 * var_chaste_interface__cell__sVm), 2)); // dimensionless
         const double var_cell__ytoss = 1 / (1.0 + exp(3.8999999999999999 + 0.20000000000000001 * var_chaste_interface__cell__sVm)); // dimensionless
@@ -1949,6 +1962,7 @@
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
+
             const double var_x262 = exp(-7.2727272727272725 * pow((1 + 0.025000000000000001 * var_chaste_interface__cell__sVm), 2));
             const double var_x263 = 1 / (7.0 + 85.0 * var_x262);
             
@@ -1972,7 +1986,7 @@
         double var_chaste_interface__cell__sxkr = rY[12];
         // Units: dimensionless; Initial value: 0.020160578118589
         
-        
+
         // Mathematics
         const double var_cell__tauxr = 230.0 / (1.0 + exp(2.0 + 0.050000000000000003 * var_chaste_interface__cell__sVm)) + 3300.0 / ((1.0 + exp(1.2222222222222223 + 0.1111111111111111 * var_chaste_interface__cell__sVm)) * (1.0 + exp(-2.4444444444444446 - 0.1111111111111111 * var_chaste_interface__cell__sVm))); // dimensionless
         const double var_cell__xrss = 1 / (1.0 + exp(-2.0 - 0.20000000000000001 * var_chaste_interface__cell__sVm)); // dimensionless
@@ -1989,6 +2003,7 @@
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
+
             const double var_x237 = 0.050000000000000003 * var_chaste_interface__cell__sVm;
             const double var_x240 = 0.1111111111111111 * var_chaste_interface__cell__sVm;
             const double var_x264 = exp(2.0 + var_x237);
@@ -2023,7 +2038,7 @@
         double var_chaste_interface__cell__sxks = rY[13];
         // Units: dimensionless; Initial value: 0.00430143235332308
         
-        
+
         // Mathematics
         const double var_cell__tauxs = 990.10000000000002 / (1.0 + exp(-0.17252124645892353 - 0.070821529745042494 * var_chaste_interface__cell__sVm)); // dimensionless
         const double var_cell__xsss = 1 / (1.0 + exp(-0.26666666666666666 - 0.070175438596491224 * var_chaste_interface__cell__sVm)); // dimensionless
@@ -2040,6 +2055,7 @@
             double var_chaste_interface__cell__sVm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -81.3842590704928
             
+
             const double var_x279 = exp(-0.17252124645892353 - 0.070821529745042494 * var_chaste_interface__cell__sVm);
             const double var_x280 = 0.00100999899000101 * var_x279;
             
@@ -2069,7 +2085,7 @@
         double var_chaste_interface__cell__sCaj = rY[35];
         // Units: dimensionless; Initial value: 0.000175648385857736
         
-        
+
         // Mathematics
         const double var_cell__MaxSR = 15.0; // dimensionless
         const double var_cell__MinSR = 1.0; // dimensionless
@@ -2097,6 +2113,7 @@
             double var_chaste_interface__cell__sCaj = rY[35];
             // Units: dimensionless; Initial value: 0.000175648385857736
             
+
             const double var_x44 = pow(var_chaste_interface__cell__sCaj, 2);
             const double var_x281 = 1 / var_chaste_interface__cell__sCa_sr;
             const double var_x282 = pow(var_x281, 2.5);
@@ -2135,7 +2152,7 @@
         double var_chaste_interface__cell__sCaj = rY[35];
         // Units: dimensionless; Initial value: 0.000175648385857736
         
-        
+
         // Mathematics
         const double var_cell__MaxSR = 15.0; // dimensionless
         const double var_cell__MinSR = 1.0; // dimensionless
@@ -2162,6 +2179,7 @@
             double var_chaste_interface__cell__sCaj = rY[35];
             // Units: dimensionless; Initial value: 0.000175648385857736
             
+
             const double var_x281 = 1 / var_chaste_interface__cell__sCa_sr;
             const double var_x282 = pow(var_x281, 2.5);
             const double var_x283 = 1.0 + 0.13584112963311223 * var_x282;
@@ -2196,7 +2214,7 @@
         double var_chaste_interface__cell__sCaj = rY[35];
         // Units: dimensionless; Initial value: 0.000175648385857736
         
-        
+
         // Mathematics
         const double var_cell__MaxSR = 15.0; // dimensionless
         const double var_cell__MinSR = 1.0; // dimensionless
@@ -2224,6 +2242,7 @@
             double var_chaste_interface__cell__sCaj = rY[35];
             // Units: dimensionless; Initial value: 0.000175648385857736
             
+
             const double var_x44 = pow(var_chaste_interface__cell__sCaj, 2);
             const double var_x281 = 1 / var_chaste_interface__cell__sCa_sr;
             const double var_x282 = pow(var_x281, 2.5);
@@ -2253,7 +2272,7 @@
         double var_chaste_interface__cell__sNaj = rY[32];
         // Units: dimensionless; Initial value: 8.21411036389602
         
-        
+
         // Mathematics
         const double var_cell__Bmax_Naj = 7.5609999999999999; // dimensionless
         const double var_cell__koff_na = 0.001; // dimensionless
@@ -2271,6 +2290,7 @@
             double var_chaste_interface__cell__sNaj = rY[32];
             // Units: dimensionless; Initial value: 8.21411036389602
             
+
             const double var_x301 = 0.0001 * var_chaste_interface__cell__sNaj;
             
             partialF = -0.001 - var_x301;
@@ -2293,7 +2313,7 @@
         double var_chaste_interface__cell__sNasl = rY[33];
         // Units: dimensionless; Initial value: 8.21322794157889
         
-        
+
         // Mathematics
         const double var_cell__Bmax_Nasl = 1.6499999999999999; // dimensionless
         const double var_cell__koff_na = 0.001; // dimensionless
@@ -2311,6 +2331,7 @@
             double var_chaste_interface__cell__sNasl = rY[33];
             // Units: dimensionless; Initial value: 8.21322794157889
             
+
             const double var_x303 = 0.0001 * var_chaste_interface__cell__sNasl;
             
             partialF = -0.001 - var_x303;
@@ -2333,7 +2354,7 @@
         double var_chaste_interface__cell__sCai = rY[37];
         // Units: dimensionless; Initial value: 8.85230799863012e-05
         
-        
+
         // Mathematics
         const double var_cell__Bmax_TnClow = 0.070000000000000007; // dimensionless
         const double var_cell__koff_tncl = 0.019599999999999999; // dimensionless
@@ -2351,6 +2372,7 @@
             double var_chaste_interface__cell__sCai = rY[37];
             // Units: dimensionless; Initial value: 8.85230799863012e-05
             
+
             const double var_x305 = 32.700000000000003 * var_chaste_interface__cell__sCai;
             
             partialF = -0.019599999999999999 - var_x305;
@@ -2375,7 +2397,7 @@
         double var_chaste_interface__cell__sCai = rY[37];
         // Units: dimensionless; Initial value: 8.85230799863012e-05
         
-        
+
         // Mathematics
         const double var_cell__Bmax_TnChigh = 0.14000000000000001; // dimensionless
         const double var_cell__koff_tnchca = 3.1999999999999999e-5; // dimensionless
@@ -2393,6 +2415,7 @@
             double var_chaste_interface__cell__sCai = rY[37];
             // Units: dimensionless; Initial value: 8.85230799863012e-05
             
+
             const double var_x307 = 2.3700000000000001 * var_chaste_interface__cell__sCai;
             const double var_x308 = -var_x307;
             
@@ -2416,7 +2439,7 @@
         double var_chaste_interface__cell__sTnCHm = rY[21];
         // Units: dimensionless; Initial value: 0.0101423649465603
         
-        
+
         // Mathematics
         const double var_cell__Bmax_TnChigh = 0.14000000000000001; // dimensionless
         const double var_cell__Mgi = 1.0; // dimensionless
@@ -2433,6 +2456,7 @@
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
             
             partialF = -0.0063300000000000006;
         }
@@ -2454,7 +2478,7 @@
         double var_chaste_interface__cell__sCai = rY[37];
         // Units: dimensionless; Initial value: 8.85230799863012e-05
         
-        
+
         // Mathematics
         const double var_cell__Bmax_CaM = 0.024; // dimensionless
         const double var_cell__koff_cam = 0.23799999999999999; // dimensionless
@@ -2472,6 +2496,7 @@
             double var_chaste_interface__cell__sCai = rY[37];
             // Units: dimensionless; Initial value: 8.85230799863012e-05
             
+
             const double var_x311 = 34.0 * var_chaste_interface__cell__sCai;
             
             partialF = -0.23799999999999999 - var_x311;
@@ -2496,7 +2521,7 @@
         double var_chaste_interface__cell__sCai = rY[37];
         // Units: dimensionless; Initial value: 8.85230799863012e-05
         
-        
+
         // Mathematics
         const double var_cell__Bmax_myosin = 0.14000000000000001; // dimensionless
         const double var_cell__koff_myoca = 0.00046000000000000001; // dimensionless
@@ -2514,6 +2539,7 @@
             double var_chaste_interface__cell__sCai = rY[37];
             // Units: dimensionless; Initial value: 8.85230799863012e-05
             
+
             const double var_x313 = 13.800000000000001 * var_chaste_interface__cell__sCai;
             const double var_x314 = -var_x313;
             
@@ -2537,7 +2563,7 @@
         double var_chaste_interface__cell__sMyom = rY[24];
         // Units: dimensionless; Initial value: 0.137467597337588
         
-        
+
         // Mathematics
         const double var_cell__Bmax_myosin = 0.14000000000000001; // dimensionless
         const double var_cell__Mgi = 1.0; // dimensionless
@@ -2554,6 +2580,7 @@
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
             
             partialF = -0.015757;
         }
@@ -2575,7 +2602,7 @@
         double var_chaste_interface__cell__sCai = rY[37];
         // Units: dimensionless; Initial value: 8.85230799863012e-05
         
-        
+
         // Mathematics
         const double var_cell__Bmax_SR = 0.017100000000000001; // dimensionless
         const double var_cell__koff_sr = 0.059999999999999998; // dimensionless
@@ -2593,6 +2620,7 @@
             double var_chaste_interface__cell__sCai = rY[37];
             // Units: dimensionless; Initial value: 8.85230799863012e-05
             
+
             const double var_x317 = 100.0 * var_chaste_interface__cell__sCai;
             
             partialF = -0.059999999999999998 - var_x317;
@@ -2615,7 +2643,7 @@
         double var_chaste_interface__cell__sCaj = rY[35];
         // Units: dimensionless; Initial value: 0.000175648385857736
         
-        
+
         // Mathematics
         const double var_cell__cellLength = 100.0; // dimensionless
         const double var_cell__cellRadius = 10.25; // dimensionless
@@ -2638,6 +2666,7 @@
             double var_chaste_interface__cell__sCaj = rY[35];
             // Units: dimensionless; Initial value: 0.000175648385857736
             
+
             const double var_x319 = 100.0 * var_chaste_interface__cell__sCaj;
             const double var_x320 = -var_x319;
             
@@ -2661,7 +2690,7 @@
         double var_chaste_interface__cell__sCasl = rY[36];
         // Units: dimensionless; Initial value: 0.000105614570409386
         
-        
+
         // Mathematics
         const double var_cell__cellLength = 100.0; // dimensionless
         const double var_cell__cellRadius = 10.25; // dimensionless
@@ -2684,6 +2713,7 @@
             double var_chaste_interface__cell__sCasl = rY[36];
             // Units: dimensionless; Initial value: 0.000105614570409386
             
+
             const double var_x322 = 100.0 * var_chaste_interface__cell__sCasl;
             const double var_x323 = -var_x322;
             
@@ -2707,7 +2737,7 @@
         double var_chaste_interface__cell__sCaj = rY[35];
         // Units: dimensionless; Initial value: 0.000175648385857736
         
-        
+
         // Mathematics
         const double var_cell__cellLength = 100.0; // dimensionless
         const double var_cell__cellRadius = 10.25; // dimensionless
@@ -2730,6 +2760,7 @@
             double var_chaste_interface__cell__sCaj = rY[35];
             // Units: dimensionless; Initial value: 0.000175648385857736
             
+
             const double var_x319 = 100.0 * var_chaste_interface__cell__sCaj;
             const double var_x320 = -var_x319;
             
@@ -2753,7 +2784,7 @@
         double var_chaste_interface__cell__sCasl = rY[36];
         // Units: dimensionless; Initial value: 0.000105614570409386
         
-        
+
         // Mathematics
         const double var_cell__cellLength = 100.0; // dimensionless
         const double var_cell__cellRadius = 10.25; // dimensionless
@@ -2776,6 +2807,7 @@
             double var_chaste_interface__cell__sCasl = rY[36];
             // Units: dimensionless; Initial value: 0.000105614570409386
             
+
             const double var_x322 = 100.0 * var_chaste_interface__cell__sCasl;
             const double var_x323 = -var_x322;
             
@@ -2799,7 +2831,7 @@
         double var_chaste_interface__cell__sCa_sr = rY[31];
         // Units: dimensionless; Initial value: 0.563755421404699
         
-        
+
         // Mathematics
         const double var_cell__cellLength = 100.0; // dimensionless
         const double var_cell__cellRadius = 10.25; // dimensionless
@@ -2822,6 +2854,7 @@
             double var_chaste_interface__cell__sCa_sr = rY[31];
             // Units: dimensionless; Initial value: 0.563755421404699
             
+
             const double var_x327 = 100.0 * var_chaste_interface__cell__sCa_sr;
             
             partialF = -65.0 - var_x327;
@@ -2850,7 +2883,7 @@
         double var_chaste_interface__cell__sCai = rY[37];
         // Units: dimensionless; Initial value: 8.85230799863012e-05
         
-        
+
         // Mathematics
         const double var_cell__Kmf = 0.00024600000000000002; // dimensionless
         const double var_cell__Kmr = 1.7; // dimensionless
@@ -2891,6 +2924,7 @@
             double var_chaste_interface__cell__sCai = rY[37];
             // Units: dimensionless; Initial value: 8.85230799863012e-05
             
+
             const double var_x328 = 100.0 * var_chaste_interface__cell__sCsqnb;
             const double var_x329 = 25.0 * var_chaste_interface__cell__sRyRo;
             const double var_x330 = pow(var_chaste_interface__cell__sCa_sr, 1.7869999999999999);
@@ -2941,7 +2975,7 @@
         double var_chaste_interface__cell__sCaj = rY[35];
         // Units: dimensionless; Initial value: 0.000175648385857736
         
-        
+
         // Mathematics
         const double var_cell__Bmax_Naj = 7.5609999999999999; // dimensionless
         const double var_cell__Cao = 1.8; // dimensionless
@@ -3024,6 +3058,7 @@
             double var_chaste_interface__cell__sCaj = rY[35];
             // Units: dimensionless; Initial value: 0.000175648385857736
             
+
             const double var_x23 = pow(var_chaste_interface__cell__sNaj, (-4));
             const double var_x24 = exp(-0.003743588350780262 * var_chaste_interface__cell__sVm);
             const double var_x25 = exp(2.0802377414561666);
@@ -3115,7 +3150,7 @@
         double var_chaste_interface__cell__sCasl = rY[36];
         // Units: dimensionless; Initial value: 0.000105614570409386
         
-        
+
         // Mathematics
         const double var_cell__Bmax_Nasl = 1.6499999999999999; // dimensionless
         const double var_cell__Cao = 1.8; // dimensionless
@@ -3201,6 +3236,7 @@
             double var_chaste_interface__cell__sCasl = rY[36];
             // Units: dimensionless; Initial value: 0.000105614570409386
             
+
             const double var_x24 = exp(-0.003743588350780262 * var_chaste_interface__cell__sVm);
             const double var_x25 = exp(2.0802377414561666);
             const double var_x26 = 0.037435883507802616 * var_chaste_interface__cell__sVm;
@@ -3270,7 +3306,7 @@
         double var_chaste_interface__cell__sNai = rY[34];
         // Units: dimensionless; Initial value: 8.21340895351653
         
-        
+
         // Mathematics
         const double var_cell__J_na_slmyo = 1.6386279222197945e-12; // dimensionless
         const double var_cell__cellLength = 100.0; // dimensionless
@@ -3288,6 +3324,7 @@
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
             const double var_x342 = 1 / M_PI;
             const double var_x356 = 0.23994917636495411 * var_x342;
             
@@ -3329,7 +3366,7 @@
         double var_chaste_interface__cell__sCasl = rY[36];
         // Units: dimensionless; Initial value: 0.000105614570409386
         
-        
+
         // Mathematics
         const double var_cell__Cao = 1.8; // dimensionless
         const double var_cell__Cmem = 1.3809999999999999e-10; // dimensionless
@@ -3416,6 +3453,7 @@
             double var_chaste_interface__cell__sCaj = rY[35];
             // Units: dimensionless; Initial value: 0.000175648385857736
             
+
             const double var_x3 = 1 / var_chaste_interface__cell__sCaj;
             const double var_x37 = exp(-0.027328194960695912 * var_chaste_interface__cell__sVm);
             const double var_x39 = pow(var_chaste_interface__cell__sNaj, 3);
@@ -3496,7 +3534,7 @@
         double var_chaste_interface__cell__sCai = rY[37];
         // Units: dimensionless; Initial value: 8.85230799863012e-05
         
-        
+
         // Mathematics
         const double var_cell__Cao = 1.8; // dimensionless
         const double var_cell__Cmem = 1.3809999999999999e-10; // dimensionless
@@ -3580,6 +3618,7 @@
             double var_chaste_interface__cell__sCasl = rY[36];
             // Units: dimensionless; Initial value: 0.000105614570409386
             
+
             const double var_x5 = 1 / var_chaste_interface__cell__sCasl;
             const double var_x37 = exp(-0.027328194960695912 * var_chaste_interface__cell__sVm);
             const double var_x40 = exp(0.010107688547106707 * var_chaste_interface__cell__sVm);
@@ -3657,7 +3696,7 @@
         double var_chaste_interface__cell__sCai = rY[37];
         // Units: dimensionless; Initial value: 8.85230799863012e-05
         
-        
+
         // Mathematics
         const double var_cell__Bmax_CaM = 0.024; // dimensionless
         const double var_cell__Bmax_SR = 0.017100000000000001; // dimensionless
@@ -3730,6 +3769,7 @@
             double var_chaste_interface__cell__sCai = rY[37];
             // Units: dimensionless; Initial value: 8.85230799863012e-05
             
+
             const double var_x306 = 32.700000000000003 * var_chaste_interface__cell__sTnCL;
             const double var_x309 = 2.3700000000000001 * var_chaste_interface__cell__sTnCHc;
             const double var_x310 = 2.3700000000000001 * var_chaste_interface__cell__sTnCHm;
@@ -3767,7 +3807,6 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_cell__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__cell__time); // uA_per_cm2
 

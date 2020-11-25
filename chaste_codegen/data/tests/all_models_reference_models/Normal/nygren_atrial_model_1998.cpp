@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellnygren_atrial_model_1998FromCellML::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -63,6 +64,7 @@
     Cellnygren_atrial_model_1998FromCellML::~Cellnygren_atrial_model_1998FromCellML()
     {
     }
+
     
     double Cellnygren_atrial_model_1998FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -422,7 +424,6 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_membrane__Cm_converted = 0.001 * mParameters[0]; // uF
         const double var_membrane__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2

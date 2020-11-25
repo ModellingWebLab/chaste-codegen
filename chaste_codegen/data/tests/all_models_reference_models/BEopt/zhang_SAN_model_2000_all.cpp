@@ -309,7 +309,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                _lookup_table_0[i][28] = pow(1 / (1.0 + exp(-5.5531135531135529 - 0.18315018315018314 * var_chaste_interface__membrane__V)), 0.33333333333333331);
+                _lookup_table_0[i][28] = pow((1 / (1.0 + exp(-5.5531135531135529 - 0.18315018315018314 * var_chaste_interface__membrane__V))), 0.33333333333333331);
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
@@ -561,7 +561,7 @@ std::shared_ptr<Cellzhang_SAN_model_2000_allFromCellMLBackwardEuler_LookupTables
         const double var_sodium_current_h_gate__h2_infinity = var_sodium_current_h_gate__h1_infinity;
         const double var_sodium_current_h_gate__tau_h1 = 0.00059770000000000005 + 3.7170000000000002e-6 * exp(-4.8164649999999991 - 0.28149999999999997 * var_chaste_interface__membrane__V) / (1.0 + 0.0037320000000000001 * exp(-12.936576000000001 - 0.34260000000000002 * var_chaste_interface__membrane__V));
         const double var_sodium_current_h_gate__tau_h2 = 0.0035560000000000001 + 3.1860000000000002e-8 * exp(-11.69172 - 0.62190000000000001 * var_chaste_interface__membrane__V) / (1.0 + 7.1890000000000005e-5 * exp(-22.768981 - 0.66830000000000001 * var_chaste_interface__membrane__V));
-        const double var_sodium_current_m_gate__m_infinity = ((var_membrane__Version == 0) ? (pow(1 / (1.0 + exp(-0.18315018315018314 * var_chaste_interface__membrane__V)), 0.33333333333333331)) : (_lt_0_row[28]));
+        const double var_sodium_current_m_gate__m_infinity = ((var_membrane__Version == 0) ? (pow((1 / (1.0 + exp(-0.18315018315018314 * var_chaste_interface__membrane__V))), 0.33333333333333331)) : (_lt_0_row[28]));
         const double var_sodium_current_m_gate__tau_m = ((var_membrane__Version == 0) ? (4.0000000000000003e-5 + 0.00062469999999999995 / (0.627 * exp(5.330820000000001 + 0.082000000000000003 * var_chaste_interface__membrane__V) + 0.83199999999999996 * exp(-18.994500000000002 - 0.33500000000000002 * var_chaste_interface__membrane__V))) : (4.5689999999999998e-5 + 0.00062469999999999995 / (0.62739999999999996 * exp(5.3505781299999997 + 0.082299999999999998 * var_chaste_interface__membrane__V) + 0.83221659999999997 * exp(-19.034003092000003 - 0.33566000000000001 * var_chaste_interface__membrane__V))));
         
         

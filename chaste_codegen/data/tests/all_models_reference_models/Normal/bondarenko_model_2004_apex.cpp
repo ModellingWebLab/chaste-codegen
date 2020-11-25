@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellbondarenko_model_2004_apexFromCellML::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -58,6 +59,7 @@
     Cellbondarenko_model_2004_apexFromCellML::~Cellbondarenko_model_2004_apexFromCellML()
     {
     }
+
     
     double Cellbondarenko_model_2004_apexFromCellML::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -482,7 +484,6 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_membrane__i_stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
 

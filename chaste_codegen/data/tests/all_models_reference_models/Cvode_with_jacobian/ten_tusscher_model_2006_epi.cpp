@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellten_tusscher_model_2006_epiFromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -70,6 +71,7 @@
     Cellten_tusscher_model_2006_epiFromCellMLCvode::~Cellten_tusscher_model_2006_epiFromCellMLCvode()
     {
     }
+
     
     double Cellten_tusscher_model_2006_epiFromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -430,7 +432,6 @@
         // Units: millimolar; Initial value: 8.604
         double var_chaste_interface__potassium_dynamics__K_i = NV_Ith_S(rY, 18);
         // Units: millimolar; Initial value: 136.89
-        
         const double var_x0 = pow(var_chaste_interface__slow_time_dependent_potassium_current_Xs_gate__Xs, 2);
         const double var_x1 = exp(4.1806020066889626 - 0.16722408026755853 * var_chaste_interface__membrane__V);
         const double var_x2 = 1.0 + var_x1;

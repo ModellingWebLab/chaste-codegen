@@ -23,6 +23,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
+
     Cellkurata_model_2002FromCellMLCvode::Cellkurata_model_2002FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -43,6 +44,7 @@
     Cellkurata_model_2002FromCellMLCvode::~Cellkurata_model_2002FromCellMLCvode()
     {
     }
+
     
     double Cellkurata_model_2002FromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -495,7 +497,6 @@
         // Units: millimolar; Initial value: 0.602955114871
         double var_chaste_interface__calcium_buffering__fCQ = NV_Ith_S(rY, 26);
         // Units: millimolar; Initial value: 0.260317260703
-        
         const double var_x0 = pow(var_chaste_interface__hyperpolarisation_activated_current_y_gate__y, 2);
         const double var_x1 = pow(var_chaste_interface__slowly_activating_delayed_rectifier_potassium_current_n_gate__n, 2);
         const double var_x2 = exp(-0.037415977988011655 * var_chaste_interface__membrane__V);

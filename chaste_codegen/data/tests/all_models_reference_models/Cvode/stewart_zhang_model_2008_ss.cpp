@@ -23,6 +23,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
+
     double Cellstewart_zhang_model_2008_ssFromCellMLCvode::GetIntracellularCalciumConcentration()
     {
         return NV_Ith_S(mStateVariables, 1);
@@ -51,6 +52,7 @@
     Cellstewart_zhang_model_2008_ssFromCellMLCvode::~Cellstewart_zhang_model_2008_ssFromCellMLCvode()
     {
     }
+
     
     double Cellstewart_zhang_model_2008_ssFromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {

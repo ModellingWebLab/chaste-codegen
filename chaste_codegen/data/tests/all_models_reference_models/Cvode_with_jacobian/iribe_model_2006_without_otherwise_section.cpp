@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Celliribe_model_2006_without_otherwise_sectionFromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -73,6 +74,7 @@
     Celliribe_model_2006_without_otherwise_sectionFromCellMLCvode::~Celliribe_model_2006_without_otherwise_sectionFromCellMLCvode()
     {
     }
+
     
     double Celliribe_model_2006_without_otherwise_sectionFromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -451,7 +453,6 @@
         // Units: dimensionless; Initial value: 0.00023505
         double var_chaste_interface__Force__P_3 = NV_Ith_S(rY, 22);
         // Units: dimensionless; Initial value: 0.00015349
-        
         const double var_x0 = 0.074867781645490947 * var_chaste_interface__membrane_potential__V;
         const double var_x1 = 1 / var_chaste_interface__intracellular_potassium_concentration__K_i;
         const double var_x2 = log(4.0 * var_x1);

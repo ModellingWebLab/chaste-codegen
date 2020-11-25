@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellcourtemanche_ramirez_nattel_model_1998FromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -63,6 +64,7 @@
     Cellcourtemanche_ramirez_nattel_model_1998FromCellMLCvode::~Cellcourtemanche_ramirez_nattel_model_1998FromCellMLCvode()
     {
     }
+
     
     double Cellcourtemanche_ramirez_nattel_model_1998FromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -428,7 +430,6 @@
         // Units: millimolar; Initial value: 1.488
         double var_chaste_interface__intracellular_ion_concentrations__Ca_up = NV_Ith_S(rY, 20);
         // Units: millimolar; Initial value: 1.488
-        
         const double var_x0 = 1 / NV_Ith_S(mParameters, 0);
         const double var_x1 = pow(var_chaste_interface__slow_delayed_rectifier_K_current_xs_gate__xs, 2) * NV_Ith_S(mParameters, 0);
         const double var_x2 = exp(5.6000000000000005 + 0.070000000000000007 * var_chaste_interface__membrane__V);
