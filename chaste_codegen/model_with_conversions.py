@@ -124,7 +124,7 @@ def add_conversions(model, use_modifiers=True):
     # Get derivs and eqs
     model.i_ionic_lhs, model.ionic_vars = _get_ionic_vars(model)
     model.extended_ionic_vars = _get_extended_ionic_vars(model)
-    model.derivative_equations = _get_derivative_equations(model)
+    model.derivative_equations = get_equations_for(model, model.y_derivatives)
 
 
 def set_is_metadata(model, variable, metadata_tag, ontology=PYCMLMETA):
@@ -519,9 +519,3 @@ def _get_extended_ionic_vars(model):
         raise CodegenError('Ionic variables should not be a function of time. '
                            'This is often caused by missing membrane_stimulus_current tag.')
     return extended_eqs
-
-
-def _get_derivative_equations(model):
-    """ Get equations defining the derivatives including V (model.membrane_voltage_var)"""
-    # Remove equations where lhs is a modifiable parameter or default stimulus
-    return get_equations_for(model, model.y_derivatives)
