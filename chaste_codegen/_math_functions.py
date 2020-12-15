@@ -78,3 +78,20 @@ class sin_(RealFunction):
 # MATH_FUNC_SYMPY_MAPPING provides a mapping from our specified math functions back to sympy versions.
 # This can be used to put sympy function into an expression or evaluation. e.g. `expr.subs(MATH_FUNC_SYMPY_MAPPING)`.
 MATH_FUNC_SYMPY_MAPPING = {abs_: Abs, acos_: acos, cos_: cos, exp_: exp, sin_: sin, sqrt_: sqrt}
+
+
+def subs_math_func_placeholders(expr):
+    """ Substitutes the placeholder math functions in expr for their corresponding Sympy functions
+    :param expr: sympy expression
+
+    Example:
+    >> str(expr)
+    '2.0 * exp_(V)'
+    >> subs_math_func_placeholders(expr)
+    '2.0 * exp(V)'
+
+    :return: expr with all placeholder functions replaced by sympy functions.
+    """
+    for placeholder_func, sympy_func in MATH_FUNC_SYMPY_MAPPING.items():
+        expr = expr.replace(placeholder_func, sympy_func)
+    return expr
