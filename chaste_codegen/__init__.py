@@ -21,14 +21,15 @@ from ._load_template import load_template  # noqa
 #
 # Load and expose public classes and functions
 #
-from ._math_functions import RealFunction  # noqa
-from ._math_functions import (
+from ._math_functions import (  # noqa
+    RealFunction,
     abs_,
     acos_,
     cos_,
     exp_,
     sin_,
     sqrt_,
+    subs_math_func_placeholders,
 )
 from .backward_euler_model import BackwardEulerModel  # noqa
 from .backward_euler_opt_model import BackwardEulerOptModel  # noqa

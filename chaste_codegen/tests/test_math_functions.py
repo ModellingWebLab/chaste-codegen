@@ -5,7 +5,17 @@
 import logging
 
 import pytest
-from sympy import Symbol, sign
+from sympy import (
+    Abs,
+    Symbol,
+    acos,
+    cos,
+    exp,
+    pi,
+    sign,
+    sin,
+    sqrt,
+)
 
 from chaste_codegen import (
     abs_,
@@ -14,6 +24,7 @@ from chaste_codegen import (
     exp_,
     sin_,
     sqrt_,
+    subs_math_func_placeholders,
 )
 
 
@@ -32,7 +43,6 @@ def expr(x):
 
 
 def test_exp_(x, expr):
-    x = Symbol('x', real=True)
     assert exp_(x).is_real
     assert exp_(x).diff() == exp_(x)
     assert exp_(expr).diff() == expr.diff() * exp_(expr)
@@ -66,3 +76,9 @@ def test_sin_(x, expr):
     assert sin_(x).is_real
     assert sin_(x).diff() == cos_(x)
     assert sin_(expr).diff() == expr.diff() * cos_(expr)
+
+
+def test_substitute_math_func_(x, expr):
+    expr2 = (expr * exp_(x) + abs_(1 - 2) + acos_(0) * sin_(pi / 2) * cos_(0)) / sqrt_(x)
+    expr_placeholders_replaced = subs_math_func_placeholders(expr2)
+    assert expr_placeholders_replaced == (expr * exp(x) + Abs(1 - 2) + acos(0) * sin(pi / 2) * cos(0)) / sqrt(x)
