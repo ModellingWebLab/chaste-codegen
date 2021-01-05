@@ -1,5 +1,5 @@
 # (unreleased)
-- Fixed sympy deprectaion warning when using sympy 1.7
+- Fixed sympy deprecation warning when using sympy 1.7
 - Improved support for secondary trigonometric functions such as sec and acoth.
 - When used with Cellmlmanip version 0.2.2+ an improved printing of devisions is used. For example `1 / (1/cos(x))` now gets rendered as `cos(x)` whereas previously it would be `1 / 1 / cos(x)` giving the incorrect result. An side effcet of the change is that powers of formulas get extra brackets e.g. `pow((1 / x), 2)`.
 - chaste_codegen uses placeholder functions for some common maths functions like exp, in order to delay evaluation till the point where the code is written. For programmers using chaste_codegen as a library, there now is a function called `subs_math_func_placeholders` which can be used on any sympy expression to substitute these placeholders.
