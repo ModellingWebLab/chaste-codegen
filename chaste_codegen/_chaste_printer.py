@@ -6,7 +6,7 @@ from sympy import (
     S,
 )
 from sympy.core.mul import _keep_coeff
-from sympy.printing.cxxcode import cxxcode
+from sympy.printing import cxxcode
 from sympy.printing.precedence import precedence
 
 
