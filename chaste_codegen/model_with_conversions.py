@@ -11,17 +11,13 @@ from sympy import (
     Expr,
     Float,
     Function,
-    Pow,
-    Wild,
-    log,
     simplify,
     sympify,
 )
-from sympy.codegen.cfunctions import log10
-from sympy.codegen.rewriting import ReplaceOptim, log1p_opt, optimize
 
 from chaste_codegen import LOGGER, CodegenError
 from chaste_codegen._math_functions import MATH_FUNC_SYMPY_MAPPING
+from chaste_codegen._optimize import optimize_expr_for_c_output
 from chaste_codegen._rdf import OXMETA, PYCMLMETA, get_variables_transitively
 
 
@@ -33,19 +29,6 @@ STIM_PARAM_TAGS = (('membrane_stimulus_current_amplitude', 'uA_per_cm2', True),
                    ('membrane_stimulus_current_period', 'millisecond', True),
                    ('membrane_stimulus_current_offset', 'millisecond', False),
                    ('membrane_stimulus_current_end', 'millisecond', False))
-
-
-# Optimisations to be applied to equations
-_V, _W = Wild('V'), Wild('W')
-# log(x)/log(10) --> log10(x)
-_LOG10_OPT = ReplaceOptim(_V * log(_W) / log(10), _V * log10(_W), cost_function=lambda expr: expr.count(
-    lambda e: (  # cost function prevents turning log(x) into log(10) * log10(x) as we want normal log in that case
-        e.is_Pow and e.exp.is_negative  # division
-        or (isinstance(e, (log, log10)) and not e.args[0].is_number))))
-# For P^n make sure n is passed as int if it is actually a whole number
-_POW_OPT = ReplaceOptim(lambda p: p.is_Pow and (isinstance(p.exp, Float) or isinstance(p.exp, float))
-                        and float(p.exp).is_integer(),
-                        lambda p: Pow(p.base, int(float(p.exp))))
 
 
 def load_model_with_conversions(model_file, use_modifiers=False, quiet=False):
@@ -156,13 +139,7 @@ def get_equations_for(model, variables, recurse=True, filter_modifiable_paramete
                  if not filter_modifiable_parameters_lhs or eq.lhs not in model.modifiable_parameters]
     if optimise:
         for i, eq in enumerate(equations):
-            optims = tuple()
-            if len(eq.rhs.atoms(log)) > 0:
-                optims += (_LOG10_OPT, log1p_opt)
-            if len(eq.rhs.atoms(Pow)) > 0:
-                optims += (_POW_OPT, )
-            if len(optims) > 0:
-                equations[i] = Eq(eq.lhs, optimize(eq.rhs, optims))
+            equations[i] = Eq(eq.lhs, optimize_expr_for_c_output(eq.rhs))
     return equations
 
 

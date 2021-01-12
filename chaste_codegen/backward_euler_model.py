@@ -104,15 +104,12 @@ class BackwardEulerModel(ChasteModel):
 
         # remove eqs for which the lhs doesn't appear in other equations (e.g. derivatives)
         # to prevent unused variable compile errors
-        used_vars = set()
-        for eq in linear_derivs_eqs:
-            used_vars.update(self._model.find_variables_and_derivatives([eq.rhs]))
+        used_vars = self._model.find_variables_and_derivatives([eq.rhs for eq in linear_derivs_eqs])
         linear_derivs_eqs = [eq for eq in linear_derivs_eqs if eq.lhs in used_vars]
 
         for r_expr in rearranged_expr:
             # add variables used in g, h and the derivative var
-            for exp in filter(None, r_expr[0]):
-                used_vars.update(self._model.find_variables_and_derivatives([exp]))
+            used_vars.update(self._model.find_variables_and_derivatives(r_expr[0]))
             used_vars.add(r_expr[1])
 
         return formatted_expr, self.format_linear_deriv_eqs(linear_derivs_eqs), used_vars
