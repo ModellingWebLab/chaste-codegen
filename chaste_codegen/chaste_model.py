@@ -151,8 +151,7 @@ class ChasteModel(object):
         while num_derivatives < len(deriv_and_eqs):
             num_derivatives = len(deriv_and_eqs)
             eqs = set(filter(lambda eq: eq.lhs in deriv_and_eqs, self._derivative_equations))
-            for eq in eqs:
-                deriv_and_eqs.update(self._model.find_variables_and_derivatives((eq.rhs, )))
+            deriv_and_eqs.update(self._model.find_variables_and_derivatives([eq.rhs for eq in eqs]))
         return eqs
 
     def _get_derivative_eqs_voltage(self):
