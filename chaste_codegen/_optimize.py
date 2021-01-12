@@ -24,7 +24,7 @@ _POW_OPT = ReplaceOptim(lambda p: p.is_Pow and (isinstance(p.exp, Float) or isin
 def optimize_expr(expr):
     """Returns expression optimised for c++ export with regards to powers and logarithms
 
-    :param expr: the expression to apply power and log optimisations to to get defining equations for.
+    :param expr: the expression to apply power and log optimisations to.
     :return: The expression with the optimisations applied.
     """
     optims = tuple()
