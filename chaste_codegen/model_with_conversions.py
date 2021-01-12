@@ -17,7 +17,7 @@ from sympy import (
 
 from chaste_codegen import LOGGER, CodegenError
 from chaste_codegen._math_functions import MATH_FUNC_SYMPY_MAPPING
-from chaste_codegen._optimize import optimize_expr
+from chaste_codegen._optimize import optimize_expr_for_c_output
 from chaste_codegen._rdf import OXMETA, PYCMLMETA, get_variables_transitively
 
 
@@ -139,7 +139,7 @@ def get_equations_for(model, variables, recurse=True, filter_modifiable_paramete
                  if not filter_modifiable_parameters_lhs or eq.lhs not in model.modifiable_parameters]
     if optimise:
         for i, eq in enumerate(equations):
-            equations[i] = Eq(eq.lhs, optimize_expr(eq.rhs))
+            equations[i] = Eq(eq.lhs, optimize_expr_for_c_output(eq.rhs))
     return equations
 
 
