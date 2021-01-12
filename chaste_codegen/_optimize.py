@@ -21,7 +21,7 @@ _POW_OPT = ReplaceOptim(lambda p: p.is_Pow and (isinstance(p.exp, Float) or isin
                         lambda p: Pow(p.base, int(float(p.exp))))
 
 
-def optimize_expr(expr):
+def optimize_expr_for_c_output(expr):
     """Returns expression optimised for c++ export with regards to powers and logarithms
 
     :param expr: the expression to apply power and log optimisations to.
