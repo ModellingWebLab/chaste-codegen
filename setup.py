@@ -60,7 +60,7 @@ setup(
         'six>=1.15.0, <2',
         'sympy>=1.6.1, <2',
         'zipp>=1.2.0, <2',
-        'cellmlmanip>=0.2.0, <0.3',
+        'cellmlmanip>=0.2.1, <0.3',
         'Jinja2>=2.11.2, <3',
     ],
     extras_require={
