@@ -1,4 +1,4 @@
-[![travis](https://travis-ci.com/ModellingWebLab/chaste-codegen.svg?branch=master)](https://travis-ci.com/ModellingWebLab/chaste-codegen) [![Documentation Status](https://readthedocs.org/projects/chaste-codegen/badge/?version=latest)](https://chaste-codegen.readthedocs.io/en/latest/?badge=latest) [![codecov](https://codecov.io/gh/ModellingWebLab/chaste-codegen/branch/master/graph/badge.svg)](https://codecov.io/gh/ModellingWebLab/chaste-codegen)
+![build](https://github.com/ModellingWebLab/chaste-codegen//workflows/build/badge.svg)[![Documentation Status](https://readthedocs.org/projects/chaste-codegen/badge/?version=latest)](https://chaste-codegen.readthedocs.io/en/latest/?badge=latest) [![codecov](https://codecov.io/gh/ModellingWebLab/chaste-codegen/branch/master/graph/badge.svg)](https://codecov.io/gh/ModellingWebLab/chaste-codegen)
 
 # Code generation for cardiac Chaste
 
