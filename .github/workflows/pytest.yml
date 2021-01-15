@@ -31,7 +31,7 @@ jobs:
     - name: Test with pytest
       run: |
         python -m pytest -m "not all_models" --cov=chaste_codegen chaste_codegen --cov-report term-missing
-    - uses: codecov/codecov-action@v1
-      with:
-        token: 31257773-0a4c-464f-8a16-e83e9a3809a9
-        verbose: true # optional (default = false)      
+    - name: Upload to Codecov
+      env:
+        CODECOV_TOKEN: $
+        run: bash <(curl -s https://codecov.io/bash)
