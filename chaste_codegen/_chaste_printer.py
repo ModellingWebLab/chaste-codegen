@@ -142,6 +142,10 @@ class ChastePrinter(Printer):
         """ Handles ``float``s. """
         return cxxcode(expr, standard='C++11')
 
+    def _print_float2(self, expr):
+        """ Handles ``float``s. """
+        return cxxcode(expr, standard='C++11')
+
     def _print_Mul(self, expr):
         """
         Handles multiplication & division, with n terms.
