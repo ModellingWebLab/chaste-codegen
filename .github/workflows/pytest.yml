@@ -4,12 +4,10 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: [3.5, 3.6, 3.7, 3.8]
-
     steps:
     - name: Checkout repository and submodules
       uses: actions/checkout@v2
@@ -33,3 +31,4 @@ jobs:
     - name: Test with pytest
       run: |
         python -m pytest -m "not all_models" --cov=chaste_codegen chaste_codegen --cov-report term-missing
+    - uses: codecov/codecov-action@v1
