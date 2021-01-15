@@ -1,7 +1,5 @@
-name: Python package
-
+name: build
 on: [push]
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -10,11 +8,11 @@ jobs:
         python-version: [3.5, 3.6, 3.7, 3.8]
     steps:
     - name: Checkout repository and submodules
-      uses: actions/checkout@v2
+      uses: actions/checkout@v1
       with:
         submodules: recursive
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
@@ -27,8 +25,10 @@ jobs:
         python -m flake8
     - name: Test sorting wioth isort
       run: |
-        python -m isort --verbose --check-only --diff chaste_codegen setup.py
+        python -m isort --verbose --check-only --diff chaste_codegen tests setup.py
     - name: Test with pytest
       run: |
-        python -m pytest -m "not all_models" --cov=chaste_codegen chaste_codegen --cov-report term-missing
+        python -m pytest --cov --cov-config=.coveragerc
     - uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
