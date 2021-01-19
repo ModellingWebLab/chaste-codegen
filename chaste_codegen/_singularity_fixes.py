@@ -35,7 +35,7 @@ def _generate_piecewise(vs, ve, sp, ex, V):
                         Abs(V - sp) < Abs((ve - vs) / 2)), (ex, True)])
 
 
-def _get_U(expr, V, U_offset, exp_function):#U SP  if len(denominator) > 0 and len(numerator) > 0:
+def _get_U(expr, V, U_offset, exp_function):#U SP flip, check bottom
     '''Finds U in ghk equations these are of one of the the following forms where U is an expression over V:
        - `U / (exp(U) - 1.0)`
        - `U / (1.0 + exp(U))`
@@ -43,8 +43,8 @@ def _get_U(expr, V, U_offset, exp_function):#U SP  if len(denominator) > 0 and l
        - `(1.0 + exp(U)) / U`
        '''
     W = Wild('W', real=True)
-    SP = Wild('SP', real=True, include=[V])
-    U = Wild('U', real=True)
+    U = Wild('U', real=True, include=[V])
+    SP = Wild('SP', real=True)
     Z = Wild('Z', real=True)
 
     def float_dummies(expr):
@@ -67,14 +67,14 @@ def _get_U(expr, V, U_offset, exp_function):#U SP  if len(denominator) > 0 and l
     def check_bottom_match(m):
         '''Check whether the match m contains the exponential bit of a ghk equation.
              This means it must match the pattern (exp(U) * -/+Z +/- 1.0) and not be multiplied by 0'''
-        return m is not None and SP in m and Z in m and Z != 0
+        return m is not None and U in m and Z in m and Z != 0 and W in m and m[W] == _ONE
 
     def check_top_match(m, sp):
-        if m and U in m:
-            m[U] = m[U].xreplace({s: Float(str(s)) for s in m[U].free_symbols if is_float(str(s))})
+        if m and SP in m:
+            m[SP] = m[SP].xreplace({s: Float(str(s)) for s in m[SP].free_symbols if is_float(str(s))})
             sp = sp.xreplace({s: Float(str(s)) for s in sp.free_symbols if is_float(str(s))})
         return m is not None and Z in m and Z != 0 \
-            and (sp == m[U] or (isinstance(sp, Float) and isinstance(m[U], Float) and isclose(m[U], sp)))
+            and (sp == m[SP] or (isinstance(sp, Float) and isinstance(m[SP], Float) and isclose(m[SP], sp)))
 
     if  not expr.has(Pow) or not expr.has(exp_function) or not expr.has(Quantity) :  # Either not a division or doesn't have exp or 1.0 so can't have GHK equations
         return None, None, None
@@ -87,6 +87,7 @@ def _get_U(expr, V, U_offset, exp_function):#U SP  if len(denominator) > 0 and l
 
     numerator = tuple(a for a in expr.args if not isinstance(a, Pow) or a.args[1] != -1.0)
     denominator = tuple(a.args[0] for a in expr.args if isinstance(a, Pow) and a.args[1] == -1.0)
+
     if len(denominator) ==0 or len(numerator) == 0:  # Not a devision
         return None, None, None
 
@@ -96,25 +97,13 @@ def _get_U(expr, V, U_offset, exp_function):#U SP  if len(denominator) > 0 and l
         found_on_top = False
         for d in denom:  # Check arguments in denominator (or numerator)
             if d.has(exp_function):
-                find_U = d.match(exp_function(SP) * -Z + _ONE)  # look for exp(U) * -Z + 1.0 where Z != 0
+                find_U = d.match(exp_function(U) * -Z + W)  # look for exp(U) * -Z + W where -Z != 0 and W == 1.0
                 if not check_bottom_match(find_U):
-                    find_U = d.match(exp_function(SP) * Z - _ONE)  # look for exp(U) * Z - 1.0 where Z != 0
-                # in some equation types directly having _ONE in the pattern fails
-                # but if we use a wildcard and check that it matches _ONE it works
-                if not check_bottom_match(find_U):
-                    find_U = d.match(exp_function(SP) * -Z + W)  # look for exp(U) * -Z + W where -Z != 0 and W == 1.0
-                    if not find_U or SP not in find_U or Z not in find_U or find_U[Z] == 0 or W not in find_U or find_U[W] != _ONE:
-                    #if find_U and U in find_U and find_U[W] != _ONE:
-                        find_U = None
-                if not check_bottom_match(find_U):
-                    find_U = d.match(exp_function(SP) * Z - W)  # look for exp(U) * Z - W where Z != 0 and W == 1.0
-                    if not find_U or SP not in find_U or Z not in find_U or find_U[Z] == 0 or W not in find_U or find_U[W] != _ONE:
-                    #if find_U and U in find_U and find_U[W] != _ONE:
-                        find_U = None
+                    find_U = d.match(exp_function(U) * Z - W)  # look for exp(U) * Z - W where Z != 0 and W == 1.0
 
                 if check_bottom_match(find_U):
                     # We found a match, sinze exp(U) * Z == exp(U + log(Z)) we can bring Z into the u expression
-                    u = (find_U[SP] + log(find_U[Z]))
+                    u = (find_U[U] + log(find_U[Z]))
                     # We need to replace dummies by numbers to be able to solve U for V to find the singularity point
                     u = u.xreplace({s: float(str(s)) for s in u.free_symbols if is_float(str(s))})
                     try:
@@ -135,10 +124,10 @@ def _get_U(expr, V, U_offset, exp_function):#U SP  if len(denominator) > 0 and l
                         pass  # Result could be 'ConditionSet' which is not iterable and not Real
                 if vs is not None:  # check top
                     for n in num:  # Check arguments in numerator (or denominator)
-                        match = n.match(Z * V - Z * U)
+                        match = n.match(Z * V - Z * SP)
                         found_on_top = check_top_match(match, sp)  # search for a multiple of V - sp
                         if not found_on_top:
-                            match = n.match(exp_function(Z * V - Z * U))  # search for a exp(multiple of V - sp)
+                            match = n.match(exp_function(Z * V - Z * SP))  # search for a exp(multiple of V - sp)
                             found_on_top = check_top_match(match, sp)
                             if not found_on_top:
                                 # A few equations don't play ball with the SP wildcard
