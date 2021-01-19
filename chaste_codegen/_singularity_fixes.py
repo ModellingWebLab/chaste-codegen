@@ -1,7 +1,7 @@
 from math import isclose
 
 import networkx as nx
-from cellmlmanip.model import Quantity
+from cellmlmanip.model import FLOAT_PRECISION, Quantity
 from sympy import (
     Abs,
     Add,
@@ -20,9 +20,6 @@ from chaste_codegen._math_functions import exp_
 from chaste_codegen._optimize import optimize_expr_for_c_output
 
 
-_ONE = Quantity('1.0', 'dimensionless')  # Dummy representing 1.0
-
-
 def _generate_piecewise(vs, ve, sp, ex, V):
     """Generates a piecewsie for expression based on the singularity point sp and vmin (vs) and vmax (ve) """
     def f(Vx, e):
@@ -35,79 +32,61 @@ def _generate_piecewise(vs, ve, sp, ex, V):
                         Abs(V - sp) < Abs((ve - vs) / 2)), (ex, True)])
 
 
-def _get_U(expr, V, U_offset, exp_function):#U SP flip, check bottom
+def _get_U(expr, V, U_offset, exp_function):
     '''Finds U in ghk equations these are of one of the the following forms where U is an expression over V:
        - `U / (exp(U) - 1.0)`
        - `U / (1.0 + exp(U))`
        - `(exp(U) - 1.0) / U`
        - `(1.0 + exp(U)) / U`
        '''
-    W = Wild('W', real=True)
-    U = Wild('U', real=True, include=[V])
-    SP = Wild('SP', real=True)
     Z = Wild('Z', real=True)
+    U_wildcard = Wild('U_wildcard', real=True, include=[V])
+    SP_wildcard = Wild('SP_wildcard', real=True)
+
+    def check_bottom_match(m):
+        return m is not None and U_wildcard in m and Z in m and Z != 0
+
+    def check_top_match(m, sp):
+        return m is not None and Z in m and Z != 0 and (sp == m[SP_wildcard]
+                                                        or (isinstance(sp, Float)
+                                                            and isinstance(m[SP_wildcard], Float)
+                                                            and isclose(m[SP_wildcard], sp)))
 
     def float_dummies(expr):
         '''Turns flaots back into Quantity dummies to be in line with the rest of the sympy equations'''
         if expr is None:
             return None
-        try:
-            return expr.xreplace({Quantity(f, 'dimensionless') for f in expr.atoms(Float)})
-        except AttributeError:
-            return Quantity(str(expr), 'dimensionless')
+        return expr.xreplace({f: Quantity(f, 'dimensionless') for f in expr.atoms(Float)})
 
-    def is_float(expr):
-        '''Checks whether exps is really a float'''
-        try:
-            float(str(expr))
-            return True
-        except ValueError:
-            return False
-
-    def check_bottom_match(m):
-        '''Check whether the match m contains the exponential bit of a ghk equation.
-             This means it must match the pattern (exp(U) * -/+Z +/- 1.0) and not be multiplied by 0'''
-        return m is not None and U in m and Z in m and Z != 0 and W in m and m[W] == _ONE
-
-    def check_top_match(m, sp):
-        if m and SP in m:
-            m[SP] = m[SP].xreplace({s: Float(str(s)) for s in m[SP].free_symbols if is_float(str(s))})
-            sp = sp.xreplace({s: Float(str(s)) for s in sp.free_symbols if is_float(str(s))})
-        return m is not None and Z in m and Z != 0 \
-            and (sp == m[SP] or (isinstance(sp, Float) and isinstance(m[SP], Float) and isclose(m[SP], sp)))
-
-    if  not expr.has(Pow) or not expr.has(exp_function) or not expr.has(Quantity) :  # Either not a division or doesn't have exp or 1.0 so can't have GHK equations
+    # Expressions taht are not a division or don't have exp can't have GHK equations
+    if not expr.has(Pow) or not expr.has(exp_function):
         return None, None, None
 
-    # Make sure all the 1 or 1.0 terms in the equation are represented by our _ONE quantity
-    # This will make finding the pattern easier
-    one_dict = {v: _ONE for v in expr.free_symbols if str(v) in ('1.0', '1')}
-    one_dict.update({v: - _ONE for v in expr.free_symbols if str(v) in ('-1.0', '-1')})
-    expr = expr.xreplace(one_dict)
+    # Turn Quantity dummies into numbers, to enable analysis
+    subs_dict = {d: d.evalf(FLOAT_PRECISION) for d in expr.atoms(Quantity)}
+    expr = expr.xreplace(subs_dict)
 
-    numerator = tuple(a for a in expr.args if not isinstance(a, Pow) or a.args[1] != -1.0)
-    denominator = tuple(a.args[0] for a in expr.args if isinstance(a, Pow) and a.args[1] == -1.0)
+    # the denominator is all args where a **-1
+    numerator = set(a for a in expr.args if not isinstance(a, Pow) or a.args[1] != -1.0)
+    denominator = set(a.args[0] for a in expr.args if isinstance(a, Pow) and a.args[1] == -1.0)
 
-    if len(denominator) ==0 or len(numerator) == 0:  # Not a devision
+    if len(denominator) == 0 or len(numerator) == 0:  # Not a devision
         return None, None, None
 
     (vs, ve, sp) = None, None, None
     # U might be on top, try numerator / denominator and denominator / numerator
-    for denom, num in ((denominator, numerator), (numerator, denominator)):
+    for num, denom in ((numerator, denominator), (denominator, numerator)):
         found_on_top = False
         for d in denom:  # Check arguments in denominator (or numerator)
             if d.has(exp_function):
-                find_U = d.match(exp_function(U) * -Z + W)  # look for exp(U) * -Z + W where -Z != 0 and W == 1.0
+                find_U = d.match(exp_function(U_wildcard) * -Z + 1.0)  # look for exp(U) * -Z + 1.0
                 if not check_bottom_match(find_U):
-                    find_U = d.match(exp_function(U) * Z - W)  # look for exp(U) * Z - W where Z != 0 and W == 1.0
-
+                    find_U = d.match(exp_function(U_wildcard) * Z - 1.0)  # look for exp(U) * Z - 1.0
                 if check_bottom_match(find_U):
-                    # We found a match, sinze exp(U) * Z == exp(U + log(Z)) we can bring Z into the u expression
-                    u = (find_U[U] + log(find_U[Z]))
-                    # We need to replace dummies by numbers to be able to solve U for V to find the singularity point
-                    u = u.xreplace({s: float(str(s)) for s in u.free_symbols if is_float(str(s))})
+                    # We found a match, since exp(U) * Z == exp(U + log(Z)) we can bring Z into the u expression
+                    u = (find_U[U_wildcard] + log(find_U[Z]))
                     try:
-                        # Find the singularity point by solving u for v==0, excluding irratinal results
+                        # Find the singularity point by solving u for V==0, excluding irratinal results
                         sp = tuple(filter(lambda s: not s.has(I), solveset(u, V)))
                         if sp:
                             # we found a singularity point, now find vs,ve (or vmin, vmax)
@@ -122,12 +101,14 @@ def _get_U(expr, V, U_offset, exp_function):#U SP flip, check bottom
                                 (vs, ve, sp) = (find_v_low[0], find_v_up[0], sp[0])
                     except TypeError:
                         pass  # Result could be 'ConditionSet' which is not iterable and not Real
+
                 if vs is not None:  # check top
                     for n in num:  # Check arguments in numerator (or denominator)
-                        match = n.match(Z * V - Z * SP)
-                        found_on_top = check_top_match(match, sp)  # search for a multiple of V - sp
+                        match = n.match(Z * V - Z * SP_wildcard)  # search for a multiple of V - sp
+                        found_on_top = check_top_match(match, sp)
                         if not found_on_top:
-                            match = n.match(exp_function(Z * V - Z * SP))  # search for a exp(multiple of V - sp)
+                            # search for a exp(multiple of V - sp)
+                            match = n.match(exp_function(Z * V - Z * SP_wildcard))
                             found_on_top = check_top_match(match, sp)
                             if not found_on_top:
                                 # A few equations don't play ball with the SP wildcard
@@ -137,13 +118,13 @@ def _get_U(expr, V, U_offset, exp_function):#U SP flip, check bottom
                                 if not found_on_top:
                                     match = n.match(exp_function(Z * V - Z * sp))
                                     found_on_top = match is not None and Z in match and Z != 0
-                        if found_on_top:  # We've found a match stop looking in the other nuerator arguments
+                        if found_on_top:  # We've found a match stop looking in the other numerator arguments
                             break
-                    if found_on_top:  # found U, no need to try further
+                    if found_on_top:  # found singularity, no need to try further
                         break
                     else:
                         (vs, ve, sp) = None, None, None
-        if vs is not None and found_on_top:  # found U, no need to try further
+        if vs is not None and found_on_top:  # found singularity, no need to try further
             break
         else:
             (vs, ve, sp) = None, None, None
@@ -151,13 +132,14 @@ def _get_U(expr, V, U_offset, exp_function):#U SP flip, check bottom
     # Put dummies back in and return the singularity point and range bundries
     return (float_dummies(vs), float_dummies(ve), float_dummies(sp))
 
+
 def _new_expr_parts(expr, V, U_offset, exp_function):
     """Removes suitable singularities and replaces it with a piecewise, returning (vs, ve, sp, has_singularity)"""
     if not expr.has(exp_function):  # Expressions without exp don't have GHK equations
         return (None, None, None, expr, False)
 
     if isinstance(expr, Mul):  # 1 * A --> A (remove unneeded 1 *)
-        expr = Mul(*[a for a in expr.args if not a == _ONE])
+        expr = Mul(*[a for a in expr.args if not str(a) in ('1.0', '1')])
 
     if isinstance(expr, Add):  # A + B + ..
         # The expression is an addition, find singularities in each argument
@@ -239,7 +221,6 @@ def fix_singularity_equations(model, V, modifiable_parameters, U_offset=1e-7, ex
         # Skip variables that have no equation or equations defining parameters or where rhs is a Piecewise
         if eq is not None and not isinstance(eq.rhs, Piecewise) and eq.lhs not in modifiable_parameters:
             unprocessed_eqs[eq.lhs] = eq.rhs.xreplace(unprocessed_eqs)  # store partially evaluated version of the rhs
-            # evaluate singularities
             changed, new_ex = new_expr(unprocessed_eqs[eq.lhs], V, U_offset=U_offset, exp_function=exp_function)
             if changed:  # update equation if the rhs has a singularity that can be fixed
                 model.remove_equation(eq)
