@@ -24,120 +24,147 @@ _ONE = Quantity('1.0', 'dimensionless')  # Dummy representing 1.0
 
 
 def _generate_piecewise(vs, ve, sp, ex, V):
-    """Generates a piecewsie for expression ex based on the singularity point sp and vmin (vs) and vmax (ve) """
+    """Generates a piecewsie for expression based on the singularity point sp and vmin (vs) and vmax (ve) """
     def f(Vx, e):
         return e.xreplace({V: Vx})
 
-    if vs is None:  # This shouldn't be apiecewise
+    if vs is None:  # This shouldn't be apiecewise since we have no Vmin / Vmax
         return ex
 
     return Piecewise(*[(f(vs, ex) + ((V - vs) / (ve - vs)) * (f(ve, ex) - f(vs, ex)),
                         Abs(V - sp) < Abs((ve - vs) / 2)), (ex, True)])
 
 
-def _get_U(expr, V, U_offset, exp_function):
-    W = Wild('Y', real=True)
-    X = Wild('X', real=True, include=[V])
-    Y = Wild('Y', real=True)
+def _get_U(expr, V, U_offset, exp_function):#U SP  if len(denominator) > 0 and len(numerator) > 0:
+    '''Finds U in ghk equations these are of one of the the following forms where U is an expression over V:
+       - `U / (exp(U) - 1.0)`
+       - `U / (1.0 + exp(U))`
+       - `(exp(U) - 1.0) / U`
+       - `(1.0 + exp(U)) / U`
+       '''
+    W = Wild('W', real=True)
+    SP = Wild('SP', real=True, include=[V])
+    U = Wild('U', real=True)
     Z = Wild('Z', real=True)
 
     def float_dummies(expr):
+        '''Turns flaots back into Quantity dummies to be in line with the rest of the sympy equations'''
         if expr is None:
-            return expr
+            return None
         try:
             return expr.xreplace({Quantity(f, 'dimensionless') for f in expr.atoms(Float)})
         except AttributeError:
             return Quantity(str(expr), 'dimensionless')
 
-    def check_bottom_match(m):
-        return m is not None and X in m and Z in m and Z != 0
-
     def is_float(expr):
+        '''Checks whether exps is really a float'''
         try:
             float(str(expr))
             return True
         except ValueError:
             return False
 
+    def check_bottom_match(m):
+        '''Check whether the match m contains the exponential bit of a ghk equation.
+             This means it must match the pattern (exp(U) * -/+Z +/- 1.0) and not be multiplied by 0'''
+        return m is not None and SP in m and Z in m and Z != 0
+
     def check_top_match(m, sp):
-        if m and Y in m:
-            m[Y] = m[Y].xreplace({s: Float(str(s)) for s in m[Y].free_symbols if is_float(str(s))})
+        if m and U in m:
+            m[U] = m[U].xreplace({s: Float(str(s)) for s in m[U].free_symbols if is_float(str(s))})
             sp = sp.xreplace({s: Float(str(s)) for s in sp.free_symbols if is_float(str(s))})
         return m is not None and Z in m and Z != 0 \
-            and (sp == m[Y] or (isinstance(sp, Float) and isinstance(m[Y], Float) and isclose(m[Y], sp)))
+            and (sp == m[U] or (isinstance(sp, Float) and isinstance(m[U], Float) and isclose(m[U], sp)))
 
+    if  not expr.has(Pow) or not expr.has(exp_function) or not expr.has(Quantity) :  # Either not a division or doesn't have exp or 1.0 so can't have GHK equations
+        return None, None, None
+
+    # Make sure all the 1 or 1.0 terms in the equation are represented by our _ONE quantity
+    # This will make finding the pattern easier
     one_dict = {v: _ONE for v in expr.free_symbols if str(v) in ('1.0', '1')}
-    one_dict.update({v: - _ONE for v in expr.free_symbols if str(v) in ('-1.0', '1')})
+    one_dict.update({v: - _ONE for v in expr.free_symbols if str(v) in ('-1.0', '-1')})
     expr = expr.xreplace(one_dict)
 
+    numerator = tuple(a for a in expr.args if not isinstance(a, Pow) or a.args[1] != -1.0)
+    denominator = tuple(a.args[0] for a in expr.args if isinstance(a, Pow) and a.args[1] == -1.0)
+    if len(denominator) ==0 or len(numerator) == 0:  # Not a devision
+        return None, None, None
+
     (vs, ve, sp) = None, None, None
-    # the denominator is all args where a **-1
-    numerator = set(a for a in expr.args if not isinstance(a, Pow) or a.args[1] != -1.0)
-    denominator = set(a.args[0] for a in expr.args if isinstance(a, Pow) and a.args[1] == -1.0)
+    # U might be on top, try numerator / denominator and denominator / numerator
+    for denom, num in ((denominator, numerator), (numerator, denominator)):
+        found_on_top = False
+        for d in denom:  # Check arguments in denominator (or numerator)
+            if d.has(exp_function):
+                find_U = d.match(exp_function(SP) * -Z + _ONE)  # look for exp(U) * -Z + 1.0 where Z != 0
+                if not check_bottom_match(find_U):
+                    find_U = d.match(exp_function(SP) * Z - _ONE)  # look for exp(U) * Z - 1.0 where Z != 0
+                # in some equation types directly having _ONE in the pattern fails
+                # but if we use a wildcard and check that it matches _ONE it works
+                if not check_bottom_match(find_U):
+                    find_U = d.match(exp_function(SP) * -Z + W)  # look for exp(U) * -Z + W where -Z != 0 and W == 1.0
+                    if not find_U or SP not in find_U or Z not in find_U or find_U[Z] == 0 or W not in find_U or find_U[W] != _ONE:
+                    #if find_U and U in find_U and find_U[W] != _ONE:
+                        find_U = None
+                if not check_bottom_match(find_U):
+                    find_U = d.match(exp_function(SP) * Z - W)  # look for exp(U) * Z - W where Z != 0 and W == 1.0
+                    if not find_U or SP not in find_U or Z not in find_U or find_U[Z] == 0 or W not in find_U or find_U[W] != _ONE:
+                    #if find_U and U in find_U and find_U[W] != _ONE:
+                        find_U = None
 
-    if len(denominator) > 0 and len(numerator) > 0:
-        # U might be on top, try numerator / denominator and denominator / numerator
-        for denom, num in ((denominator, numerator), (numerator, denominator)):
-            found_on_top = False
-            for d in denom:
-                if d.has(exp_function):
-                    find_U = d.match(exp_function(X) * -Z + _ONE)
-                    if not check_bottom_match(find_U):
-                        find_U = d.match(exp_function(X) * Z - _ONE)
-                    if not check_bottom_match(find_U):
-                        find_U = d.match(exp_function(X) * -Z + W)
-                        if find_U and Y in find_U and find_U[W] != _ONE:
-                            find_U = None
-                    if not check_bottom_match(find_U):
-                        find_U = d.match(exp_function(X) * Z - W)
-                        if find_U and Y in find_U and find_U[W] != _ONE:
-                            find_U = None
-
-                    if check_bottom_match(find_U):
-                        u = (find_U[X] + log(find_U[Z]))
-                        # We need to replace dummies by numbers to be able to find th singularity point
-                        u = u.xreplace({s: float(str(s)) for s in u.free_symbols if is_float(str(s))})
-                        try:
-                            sp = tuple(filter(lambda s: not s.has(I), solveset(u, V)))
-                            if sp:
-                                find_v_low = solveset(u + U_offset, V)
-                                find_v_up = solveset(u - U_offset, V)
-                                find_v_low = tuple(find_v_low)
-                                find_v_up = tuple(find_v_up)
-                                if find_v_low and find_v_up:
-                                    assert len(find_v_low) == len(find_v_up) == len(sp) == 1, \
-                                        'Expecting exactly 1 solution for singularity point'
-                                    (vs, ve, sp) = (find_v_low[0], find_v_up[0], sp[0])
-                        except TypeError:
-                            pass  # Result could be 'ConditionSet' which is not iterable and not Real
-                    if vs is not None:  # check top
-                        for n in num:
-                            match = n.match(Z * V - Z * Y)
+                if check_bottom_match(find_U):
+                    # We found a match, sinze exp(U) * Z == exp(U + log(Z)) we can bring Z into the u expression
+                    u = (find_U[SP] + log(find_U[Z]))
+                    # We need to replace dummies by numbers to be able to solve U for V to find the singularity point
+                    u = u.xreplace({s: float(str(s)) for s in u.free_symbols if is_float(str(s))})
+                    try:
+                        # Find the singularity point by solving u for v==0, excluding irratinal results
+                        sp = tuple(filter(lambda s: not s.has(I), solveset(u, V)))
+                        if sp:
+                            # we found a singularity point, now find vs,ve (or vmin, vmax)
+                            # by solving for U_offset either side of U
+                            find_v_low = solveset(u + U_offset, V)
+                            find_v_up = solveset(u - U_offset, V)
+                            find_v_low = tuple(find_v_low)
+                            find_v_up = tuple(find_v_up)
+                            if find_v_low and find_v_up:
+                                assert len(find_v_low) == len(find_v_up) == len(sp) == 1, \
+                                    'Expecting exactly 1 solution for singularity point'
+                                (vs, ve, sp) = (find_v_low[0], find_v_up[0], sp[0])
+                    except TypeError:
+                        pass  # Result could be 'ConditionSet' which is not iterable and not Real
+                if vs is not None:  # check top
+                    for n in num:  # Check arguments in numerator (or denominator)
+                        match = n.match(Z * V - Z * U)
+                        found_on_top = check_top_match(match, sp)  # search for a multiple of V - sp
+                        if not found_on_top:
+                            match = n.match(exp_function(Z * V - Z * U))  # search for a exp(multiple of V - sp)
                             found_on_top = check_top_match(match, sp)
                             if not found_on_top:
-                                match = n.match(exp_function(Z * V - Z * Y))
-                                found_on_top = check_top_match(match, sp)
+                                # A few equations don't play ball with the SP wildcard
+                                # We can find those by adding sp in the pattern directly
+                                match = n.match(Z * V - Z * sp)
+                                found_on_top = match is not None and Z in match and Z != 0
                                 if not found_on_top:
-                                    match = n.match(Z * V - Z * sp)
+                                    match = n.match(exp_function(Z * V - Z * sp))
                                     found_on_top = match is not None and Z in match and Z != 0
-                                    if not found_on_top:
-                                        match = n.match(exp_function(Z * V - Z * sp))
-                                        found_on_top = match is not None and Z in match and Z != 0
-                            if found_on_top:
-                                break
+                        if found_on_top:  # We've found a match stop looking in the other nuerator arguments
+                            break
+                    if found_on_top:  # found U, no need to try further
                         break
-            if vs is not None and found_on_top:  # found U, no need to try further
-                break
-            else:
-                (vs, ve, sp) = None, None, None
+                    else:
+                        (vs, ve, sp) = None, None, None
+        if vs is not None and found_on_top:  # found U, no need to try further
+            break
+        else:
+            (vs, ve, sp) = None, None, None
 
     # Put dummies back in and return the singularity point and range bundries
     return (float_dummies(vs), float_dummies(ve), float_dummies(sp))
 
-
 def _new_expr_parts(expr, V, U_offset, exp_function):
     """Removes suitable singularities and replaces it with a piecewise, returning (vs, ve, sp, has_singularity)"""
-    if not expr.has(exp_function):
+    if not expr.has(exp_function):  # Expressions without exp don't have GHK equations
         return (None, None, None, expr, False)
 
     if isinstance(expr, Mul):  # 1 * A --> A (remove unneeded 1 *)
@@ -155,26 +182,25 @@ def _new_expr_parts(expr, V, U_offset, exp_function):
                 and all(isinstance(b, Quantity) for b in range):
             sp = new_expr_parts[0][2]
             vs, ve = min(range), max(range)
-            new_expr = (vs, ve, sp, expr, True)
+            return (vs, ve, sp, expr, True)
         else:  # Singularity points differ, so create each piecewise seperately and add them up
             expr_parts = []
             is_piecewise = False
             for vs, ve, sp, ex, has_piecewise in new_expr_parts:
                 is_piecewise = is_piecewise or has_piecewise or vs is not None
                 expr_parts.append(_generate_piecewise(vs, ve, sp, ex, V))
-            new_expr = (None, None, None, Add(*expr_parts), is_piecewise)
+            return (None, None, None, Add(*expr_parts), is_piecewise)
 
     elif isinstance(expr, Pow) and expr.args[1] == -1.0 and len(expr.args) == 2:  # 1/A
         # Find singularities in A and adjust result to represent 1 / A
-        new_expr = _new_expr_parts(expr.args[0], V, U_offset, exp_function)
-        vs, ve, sp, ex, has_piecewise = new_expr
+        vs, ve, sp, ex, has_piecewise = _new_expr_parts(expr.args[0], V, U_offset, exp_function)
         has_piecewise = has_piecewise or vs is not None
-        new_expr = (None, None, None, 1.0 / _generate_piecewise(vs, ve, sp, ex, V), has_piecewise)
+        return (None, None, None, 1.0 / _generate_piecewise(vs, ve, sp, ex, V), has_piecewise)
 
     elif isinstance(expr, Mul):  # A * B * ...
-        (vs, ve, sp) = _get_U(expr, V, U_offset, exp_function)
+        (vs, ve, sp) = _get_U(expr, V, U_offset, exp_function)  # Find the singularity point
         if vs is not None:
-            new_expr = (vs, ve, sp, expr, True)
+            return (vs, ve, sp, expr, True)
         else:  # Couldn't find singularity, try the expression's arguments
             expr_parts = []
             is_piecewise = False
@@ -182,12 +208,10 @@ def _new_expr_parts(expr, V, U_offset, exp_function):
                 vs, ve, sp, ex, has_piecewise = _new_expr_parts(sub_ex, V, U_offset, exp_function)
                 has_piecewise = is_piecewise = is_piecewise or has_piecewise or vs is not None
                 expr_parts.append(_generate_piecewise(vs, ve, sp, ex, V))
-            new_expr = (None, None, None, Mul(*expr_parts), is_piecewise)
+            return (None, None, None, Mul(*expr_parts), is_piecewise)
 
     else:  # Different type of equation e.g a number
         return (None, None, None, expr, False)
-
-    return new_expr
 
 
 def new_expr(expr, V, U_offset, exp_function):
