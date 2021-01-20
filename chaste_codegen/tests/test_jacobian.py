@@ -1,20 +1,11 @@
 import collections
-import os
 
 import pytest
 import sympy as sp
 
-import chaste_codegen as cg
-from chaste_codegen import load_model_with_conversions
 from chaste_codegen._chaste_printer import ChastePrinter
 from chaste_codegen._jacobian import format_jacobian, get_jacobian
 from chaste_codegen._partial_eval import partial_eval
-
-
-@pytest.fixture(scope='session')
-def hh_model():
-    model_folder = os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'hodgkin_huxley_squid_axon_model_1952_modified.cellml')
-    return load_model_with_conversions(model_folder)
 
 
 @pytest.fixture(scope='session')
