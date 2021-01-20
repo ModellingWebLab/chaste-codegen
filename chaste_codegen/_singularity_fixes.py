@@ -149,10 +149,10 @@ def _new_expr_parts(expr, V, U_offset, exp_function):
 
         # If all arguments have the same singularity point, return 1 singularity with the widest range
         range = [item for (vs, ve, _, _, _) in new_expr_parts for item in (vs, ve)]
-        if len(new_expr_parts) > 1 and len(set([sp for (_, _, sp, _, _) in new_expr_parts])) == 1 \
+        if len(new_expr_parts) > 1 and len(set([str(sp) for (_, _, sp, _, _) in new_expr_parts])) == 1 \
                 and all(isinstance(b, Quantity) for b in range):
             sp = new_expr_parts[0][2]
-            vs, ve = min(range), max(range)
+            vs, ve = min(range, key=lambda v: float(str(v))), max(range, key=lambda v: float(str(v)))
             return (vs, ve, sp, expr, True)
         else:  # Singularity points differ, so create each piecewise seperately and add them up
             expr_parts = []
