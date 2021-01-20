@@ -1,16 +1,6 @@
-import os
-
 import pytest
-from cellmlmanip import load_model
 
-import chaste_codegen as cg
 from chaste_codegen._partial_eval import partial_eval
-
-
-@pytest.fixture(scope='session')
-def hh_model():
-    model_folder = os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'hodgkin_huxley_squid_axon_model_1952_modified.cellml')
-    return load_model(model_folder)
 
 
 @pytest.fixture(scope='session')
@@ -42,7 +32,7 @@ def test_partial_eval(state_vars, derivatives_eqs):
     lhs_to_keep = [eq.lhs for eq in derivatives_eqs if len(eq.lhs.args) > 0 and eq.lhs.args[0] in state_vars]
     assert len(derivatives_eqs) == 22
     derivatives_eqs = partial_eval(derivatives_eqs, lhs_to_keep, keep_multiple_usages=False)
-    len(derivatives_eqs) == 4
+    assert len(derivatives_eqs) == 4
     assert str(derivatives_eqs) == \
         ("[Eq(Derivative(_potassium_channel_n_gate$n, _environment$time), -0.125*_potassium_channel_n_gate$n*exp_(0.01"
          "25*_membrane$V + 0.9375) - 0.01*(1.0 - _potassium_channel_n_gate$n)*(_membrane$V + 65.0)/(exp_(-0.1*_membran"
@@ -52,5 +42,5 @@ def test_partial_eval(state_vars, derivatives_eqs):
          "m*exp_(-0.055555555555555556*_membrane$V - 4.1666666666666667) - 0.10000000000000001*(1.0 - _sodium_channel_"
          "m_gate$m)*(_membrane$V + 50.0)/(exp_(-0.1*_membrane$V - 5.0) - 1.0)), Eq(Derivative(_membrane$V, _environmen"
          "t$time), -36.0*_potassium_channel_n_gate$n**4.0*(_membrane$V + 87.0) - 120.0*_sodium_channel_m_gate$m**3.0*_"
-         "sodium_channel_h_gate$h*(_membrane$V - 40.0) - 0.29999999999999999*_membrane$V - 1.0*Piecewise((-20.0, (_env"
-         "ironment$time >= 10.0) & (_environment$time <= 10.5)), (0, True)) - 19.316099999999999)]")
+         "sodium_channel_h_gate$h*(_membrane$V - 40.0) - 0.29999999999999999*_membrane$V - 1.0*GetIntracellularAreaSti"
+         "mulus(_environment$time) - 19.316099999999999)]")
