@@ -22,6 +22,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
+
     Celltest_V_not_state_mparamFromCellML::Celltest_V_not_state_mparamFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
@@ -39,6 +40,7 @@
     Celltest_V_not_state_mparamFromCellML::~Celltest_V_not_state_mparamFromCellML()
     {
     }
+
     
     double Celltest_V_not_state_mparamFromCellML::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -81,7 +83,6 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_membrane__V_converted = -75000.0; // millivolt
 
@@ -117,3 +118,4 @@ void OdeSystemInformation<Celltest_V_not_state_mparamFromCellML>::Initialise(voi
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Celltest_V_not_state_mparamFromCellML)
+

@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
     boost::shared_ptr<RegularStimulus> Cellnew_luo_rudy_1991_with_rangeFromCellML::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -75,6 +76,7 @@
     Cellnew_luo_rudy_1991_with_rangeFromCellML::~Cellnew_luo_rudy_1991_with_rangeFromCellML()
     {
     }
+
     
     
     void Cellnew_luo_rudy_1991_with_rangeFromCellML::VerifyStateVariables()
@@ -269,7 +271,6 @@
         double var_chaste_interface__time_dependent_potassium_current_X_gate__X = rY[7];
         // Units: dimensionless; Initial value: 0.16647703
         
-
         // Mathematics
         const double var_background_current__E_b = -59.869999999999997; // millivolt
         const double var_membrane__F = 96484.600000000006; // coulomb_per_mole

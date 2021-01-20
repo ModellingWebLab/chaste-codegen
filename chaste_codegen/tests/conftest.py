@@ -24,4 +24,4 @@ def be_model():
 @pytest.fixture(scope='session')
 def hh_model():
     model_folder = os.path.join(cellml_folder, 'hodgkin_huxley_squid_axon_model_1952_modified.cellml')
-    return load_model_with_conversions(model_folder)
+    return load_model_with_conversions(model_folder, fix_singularities=False)

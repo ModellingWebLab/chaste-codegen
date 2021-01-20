@@ -67,8 +67,8 @@ def _get_U(expr, V, U_offset, exp_function):
     expr = expr.xreplace(subs_dict)
 
     # the denominator is all args where a **-1
-    numerator = set(a for a in expr.args if not isinstance(a, Pow) or a.args[1] != -1.0)
-    denominator = set(a.args[0] for a in expr.args if isinstance(a, Pow) and a.args[1] == -1.0)
+    numerator = tuple(a for a in expr.args if not isinstance(a, Pow) or a.args[1] != -1.0)
+    denominator = tuple(a.args[0] for a in expr.args if isinstance(a, Pow) and a.args[1] == -1.0)
 
     if len(denominator) == 0 or len(numerator) == 0:  # Not a devision
         return None, None, None
@@ -185,7 +185,7 @@ def _new_expr_parts(expr, V, U_offset, exp_function):
         return (None, None, None, expr, False)
 
 
-def new_expr(expr, V, U_offset, exp_function):
+def new_expr(expr, V, U_offset=1e-7, exp_function=exp_):
     """Removes suitable singularities and replaces it with a piecewise.
     :param: expr the expression to analyse ().
     :param: V the volatge variable
