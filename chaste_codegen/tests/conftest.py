@@ -2,7 +2,6 @@ import os
 import re
 
 import pytest
-from cellmlmanip import load_model
 
 from chaste_codegen import DATA_DIR, load_model_with_conversions
 from chaste_codegen._script_utils import write_file
@@ -15,21 +14,26 @@ TIMESTAMP_REGEX = re.compile(r'(//! on .*)')
 COMMENTS_REGEX = re.compile(r'(//.*)')
 VERSION_REGEX = re.compile(r'(//! This source file was generated from CellML by chaste_codegen version .*)')
 
+cached_models = {}
+
+def cache_model(model_name):
+    return cached_models.setdefault(model_name, load_model_with_conversions(model_name, fix_singularities=False))
+
 
 @pytest.fixture(scope='session')
 def s_model():
-    return load_model(os.path.join(CELLML_FOLDER, 'Shannon2004.cellml'))
+    return cache_model(os.path.join(CELLML_FOLDER, 'Shannon2004.cellml'))
 
 
 @pytest.fixture(scope='session')
 def be_model():
-    return load_model(os.path.join(CELLML_FOLDER, 'beeler_reuter_model_1977.cellml'))
+    return cache_model(os.path.join(CELLML_FOLDER, 'beeler_reuter_model_1977.cellml'))
 
 
 @pytest.fixture(scope='session')
 def hh_model():
     model_name = os.path.join(CELLML_FOLDER, 'hodgkin_huxley_squid_axon_model_1952_modified.cellml')
-    return load_model_with_conversions(model_name, fix_singularities=False)
+    return cache_model(model_name)
 
 
 def load_chaste_models(model_types=[], reference_folder='chaste_reference_models'):
