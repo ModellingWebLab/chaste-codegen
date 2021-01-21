@@ -16,6 +16,7 @@ VERSION_REGEX = re.compile(r'(//! This source file was generated from CellML by 
 
 cached_models = {}
 
+
 def cache_model(model_name):
     return cached_models.setdefault(model_name, load_model_with_conversions(model_name))
 
