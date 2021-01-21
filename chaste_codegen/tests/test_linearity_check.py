@@ -47,7 +47,6 @@ def test_wrong_params_get_non_linear_state_vars2(derivatives_eqs, membrane_volta
 
 def test_get_non_linear_state_vars(non_linear_state_vars):
     non_linear_state_vars = sorted(non_linear_state_vars, key=lambda s: Printer().doprint(s))
-    print(str(non_linear_state_vars))
     assert str(non_linear_state_vars) == \
         ("[_Ca_buffer$Ca_Calsequestrin, _Ca_buffer$Ca_SL, _Ca_buffer$Ca_SLB_SL, _Ca_buffer$Ca_SLB_jct, _Ca_buffer$Ca_S"
          "LHigh_SL, _Ca_buffer$Ca_SLHigh_jct, _Ca_buffer$Ca_SR, _Ca_buffer$Ca_jct, _Ca_buffer$Cai, _ICaL_fCa_gate$fCaB"
