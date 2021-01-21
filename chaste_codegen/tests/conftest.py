@@ -1,30 +1,50 @@
 import os
 import re
 
-import chaste_codegen as cg
+import pytest
+from cellmlmanip import load_model
+
+from chaste_codegen import DATA_DIR, load_model_with_conversions
 from chaste_codegen._script_utils import write_file
 
+
+CELLML_FOLDER = os.path.join(DATA_DIR, 'tests', 'cellml')
+TESTS_FOLDER = os.path.join(DATA_DIR, 'tests')
 
 TIMESTAMP_REGEX = re.compile(r'(//! on .*)')
 COMMENTS_REGEX = re.compile(r'(//.*)')
 VERSION_REGEX = re.compile(r'(//! This source file was generated from CellML by chaste_codegen version .*)')
 
 
+@pytest.fixture(scope='session')
+def s_model():
+    return load_model(os.path.join(CELLML_FOLDER, 'Shannon2004.cellml'))
+
+
+@pytest.fixture(scope='session')
+def be_model():
+    return load_model(os.path.join(CELLML_FOLDER, 'beeler_reuter_model_1977.cellml'))
+
+
+@pytest.fixture(scope='session')
+def hh_model():
+    model_name = os.path.join(CELLML_FOLDER, 'hodgkin_huxley_squid_axon_model_1952_modified.cellml')
+    return load_model_with_conversions(model_name)
+
+
 def load_chaste_models(model_types=[], reference_folder='chaste_reference_models'):
     """ Load all models"""
-    # Get folder with test cellml files
-    model_folder = os.path.join(cg.DATA_DIR, 'tests', 'cellml')
 
     # Walk through all cellml files in the folder
     model_files = []
-    for root, dirs, files in os.walk(model_folder):
+    for root, dirs, files in os.walk(CELLML_FOLDER):
         for model_file in files:
             if model_file.endswith('.cellml'):  # make sure we only process .cellml files
                 model_name_from_file = model_file.replace('.cellml', '')
-                model_file = os.path.join(model_folder, model_file)
+                model_file = os.path.join(CELLML_FOLDER, model_file)
                 for model_type in model_types:
-                    expected_hpp_path = os.path.join(cg.DATA_DIR, 'tests', reference_folder)
-                    expected_cpp_path = os.path.join(cg.DATA_DIR, 'tests', reference_folder)
+                    expected_hpp_path = os.path.join(TESTS_FOLDER, reference_folder)
+                    expected_cpp_path = os.path.join(TESTS_FOLDER, reference_folder)
 
                     expected_hpp_path = os.path.join(expected_hpp_path, model_type, model_name_from_file + '.hpp')
                     expected_cpp_path = os.path.join(expected_cpp_path, model_type, model_name_from_file + '.cpp')
