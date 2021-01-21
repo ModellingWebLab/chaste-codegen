@@ -1,6 +1,9 @@
+import os
+
 import pytest
 
 from chaste_codegen._partial_eval import partial_eval
+from chaste_codegen.tests.conftest import TESTS_FOLDER
 
 
 @pytest.fixture(scope='session')
@@ -30,17 +33,8 @@ def test_wrong_params3(derivatives_eqs):
 
 def test_partial_eval(state_vars, derivatives_eqs):
     lhs_to_keep = [eq.lhs for eq in derivatives_eqs if len(eq.lhs.args) > 0 and eq.lhs.args[0] in state_vars]
-    assert len(derivatives_eqs) == 22
+    assert len(derivatives_eqs) == 22, str(len(derivatives_eqs))
     derivatives_eqs = partial_eval(derivatives_eqs, lhs_to_keep, keep_multiple_usages=False)
-    assert len(derivatives_eqs) == 4
-    assert str(derivatives_eqs) == \
-        ("[Eq(Derivative(_potassium_channel_n_gate$n, _environment$time), -0.125*_potassium_channel_n_gate$n*exp_(0.01"
-         "25*_membrane$V + 0.9375) - 0.01*(1.0 - _potassium_channel_n_gate$n)*(_membrane$V + 65.0)/(exp_(-0.1*_membran"
-         "e$V - 6.5) - 1.0)), Eq(Derivative(_sodium_channel_h_gate$h, _environment$time), -1.0*_sodium_channel_h_gate$"
-         "h/(exp_(-0.1*_membrane$V - 4.5) + 1.0) + 0.070000000000000007*(1.0 - _sodium_channel_h_gate$h)*exp_(-0.05*_m"
-         "embrane$V - 3.75)), Eq(Derivative(_sodium_channel_m_gate$m, _environment$time), -4.0*_sodium_channel_m_gate$"
-         "m*exp_(-0.055555555555555556*_membrane$V - 4.1666666666666667) - 0.10000000000000001*(1.0 - _sodium_channel_"
-         "m_gate$m)*(_membrane$V + 50.0)/(exp_(-0.1*_membrane$V - 5.0) - 1.0)), Eq(Derivative(_membrane$V, _environmen"
-         "t$time), -36.0*_potassium_channel_n_gate$n**4.0*(_membrane$V + 87.0) - 120.0*_sodium_channel_m_gate$m**3.0*_"
-         "sodium_channel_h_gate$h*(_membrane$V - 40.0) - 0.29999999999999999*_membrane$V - 1.0*GetIntracellularAreaSti"
-         "mulus(_environment$time) - 19.316099999999999)]")
+    assert len(derivatives_eqs) == 4, str(len(derivatives_eqs))
+    expected = open(os.path.join(TESTS_FOLDER, 'test_partial_eval_derivatives_eqs.txt'), 'r').read()
+    assert str(derivatives_eqs) == expected, str(derivatives_eqs)
