@@ -13,12 +13,17 @@ from chaste_codegen import (
     load_model_with_conversions,
 )
 from chaste_codegen._rdf import OXMETA
-from chaste_codegen.tests import chaste_test_utils as test_utils
+from chaste_codegen.tests.conftest import (
+    CELLML_FOLDER,
+    TESTS_FOLDER,
+    compare_model_against_reference,
+    load_chaste_models,
+)
 
 
 def get_models(ref_folder='chaste_reference_models', type='Normal'):
     """ Load all models if they haven't been loaded yet"""
-    return test_utils.load_chaste_models(model_types=[type], reference_folder=ref_folder)
+    return load_chaste_models(model_types=[type], reference_folder=ref_folder)
 
 
 chaste_normal_models = get_models(ref_folder='chaste_reference_models', type='Normal')
@@ -55,9 +60,7 @@ def test_Cvode_opt_jacobian(tmp_path, model):
     chaste_model.generate_chaste_code()
 
     # Compare against reference
-    test_utils.compare_model_against_reference(chaste_model,
-                                               tmp_path, model['expected_hpp_path'],
-                                               model['expected_cpp_path'])
+    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_cvode_opt_models)
@@ -71,9 +74,7 @@ def test_Cvode_opt(tmp_path, model):
     chaste_model.generate_chaste_code()
 
     # Compare against reference
-    test_utils.compare_model_against_reference(chaste_model,
-                                               tmp_path, model['expected_hpp_path'],
-                                               model['expected_cpp_path'])
+    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_CVODE_DATA_CLAMP)
@@ -87,9 +88,7 @@ def test_CVODE_DATA_CLAMP(tmp_path, model):
 
     chaste_model.generate_chaste_code()
     # Compare against reference
-    test_utils.compare_model_against_reference(chaste_model,
-                                               tmp_path, model['expected_hpp_path'],
-                                               model['expected_cpp_path'])
+    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_CVODE_DATA_CLAMP_OPT)
@@ -103,9 +102,7 @@ def test_CVODE_DATA_CLAMP_OPT(tmp_path, model):
 
     chaste_model.generate_chaste_code()
     # Compare against reference
-    test_utils.compare_model_against_reference(chaste_model,
-                                               tmp_path, model['expected_hpp_path'],
-                                               model['expected_cpp_path'])
+    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_GRL2Opt)
@@ -119,9 +116,7 @@ def test_GRL2Opt(tmp_path, model):
 
     chaste_model.generate_chaste_code()
     # Compare against reference
-    test_utils.compare_model_against_reference(chaste_model,
-                                               tmp_path, model['expected_hpp_path'],
-                                               model['expected_cpp_path'])
+    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_GRL2)
@@ -135,9 +130,7 @@ def test_GRL2(tmp_path, model):
 
     chaste_model.generate_chaste_code()
     # Compare against reference
-    test_utils.compare_model_against_reference(chaste_model,
-                                               tmp_path, model['expected_hpp_path'],
-                                               model['expected_cpp_path'])
+    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_GRL1Opt)
@@ -151,9 +144,7 @@ def test_GRL1Opt(tmp_path, model):
 
     chaste_model.generate_chaste_code()
     # Compare against reference
-    test_utils.compare_model_against_reference(chaste_model,
-                                               tmp_path, model['expected_hpp_path'],
-                                               model['expected_cpp_path'])
+    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_GRL1)
@@ -167,9 +158,7 @@ def test_GRL1(tmp_path, model):
 
     chaste_model.generate_chaste_code()
     # Compare against reference
-    test_utils.compare_model_against_reference(chaste_model,
-                                               tmp_path, model['expected_hpp_path'],
-                                               model['expected_cpp_path'])
+    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_RLopt)
@@ -183,9 +172,7 @@ def test_RLopt(tmp_path, model):
 
     chaste_model.generate_chaste_code()
     # Compare against reference
-    test_utils.compare_model_against_reference(chaste_model,
-                                               tmp_path, model['expected_hpp_path'],
-                                               model['expected_cpp_path'])
+    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_RL)
@@ -199,9 +186,7 @@ def test_RL(tmp_path, model):
 
     chaste_model.generate_chaste_code()
     # Compare against reference
-    test_utils.compare_model_against_reference(chaste_model,
-                                               tmp_path, model['expected_hpp_path'],
-                                               model['expected_cpp_path'])
+    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_BEopt)
@@ -215,9 +200,7 @@ def test_BEopt(tmp_path, model):
 
     chaste_model.generate_chaste_code()
     # Compare against reference
-    test_utils.compare_model_against_reference(chaste_model,
-                                               tmp_path, model['expected_hpp_path'],
-                                               model['expected_cpp_path'])
+    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_BE)
@@ -231,9 +214,7 @@ def test_BE(tmp_path, model):
 
     chaste_model.generate_chaste_code()
     # Compare against reference
-    test_utils.compare_model_against_reference(chaste_model,
-                                               tmp_path, model['expected_hpp_path'],
-                                               model['expected_cpp_path'])
+    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_cvode_models_with_jacobians)
@@ -247,9 +228,7 @@ def test_Cvode_jacobian(tmp_path, model):
     chaste_model.generate_chaste_code()
 
     # Compare against reference
-    test_utils.compare_model_against_reference(chaste_model,
-                                               tmp_path, model['expected_hpp_path'],
-                                               model['expected_cpp_path'])
+    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_cvode_models)
@@ -263,9 +242,7 @@ def test_Cvode(tmp_path, model):
     chaste_model.generate_chaste_code()
 
     # Compare against reference
-    test_utils.compare_model_against_reference(chaste_model,
-                                               tmp_path, model['expected_hpp_path'],
-                                               model['expected_cpp_path'])
+    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_normal_models)
@@ -278,8 +255,7 @@ def test_Normal(tmp_path, model):
                                         class_name=class_name)
     chaste_model.generate_chaste_code()
     # Compare against reference
-    test_utils.compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'],
-                                               model['expected_cpp_path'])
+    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_opt_models)
@@ -293,15 +269,14 @@ def test_Opt(tmp_path, model):
                                      class_name=class_name)
     chaste_model.generate_chaste_code()
     # Compare against reference
-    test_utils.compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'],
-                                               model['expected_cpp_path'])
+    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 def test_chaste_model_base_class(tmp_path):
     """ Check the base class ChasteModel behaves as expected"""
     LOGGER.info('Testing ChasteModel base class\n')
     model_file = \
-        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'luo_rudy_1994.cellml')
+        os.path.join(CELLML_FOLDER, 'luo_rudy_1994.cellml')
 
     chaste_model = cg.ChasteModel(load_model_with_conversions(model_file), 'luo_rudy_1994',
                                   class_name='Cellluo_rudy_1994FromCellML')
@@ -311,17 +286,16 @@ def test_chaste_model_base_class(tmp_path):
     chaste_model._vars_for_template['model_type'] = 'Normal'
     chaste_model.generate_chaste_code()
 
-    reference = os.path.join(os.path.join(cg.DATA_DIR, 'tests'), 'chaste_reference_models', 'Normal')
+    reference = os.path.join(TESTS_FOLDER, 'chaste_reference_models', 'Normal')
 
-    test_utils.compare_model_against_reference(chaste_model,
-                                               tmp_path, os.path.join(reference, 'luo_rudy_1994.hpp'),
-                                               os.path.join(reference, 'luo_rudy_1994.cpp'))
+    compare_model_against_reference(chaste_model, tmp_path, os.path.join(reference, 'luo_rudy_1994.hpp'),
+                                    os.path.join(reference, 'luo_rudy_1994.cpp'))
 
 
 def test_missing_V():
     LOGGER.info('Testing missing Voltage metadata tag\n')
     model_file = \
-        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'hodgkin_huxley_squid_axon_model_1952_modified.cellml')
+        os.path.join(CELLML_FOLDER, 'hodgkin_huxley_squid_axon_model_1952_modified.cellml')
     chaste_model = cellmlmanip.load_model(model_file)
 
     # Remove membrane_voltage metadata tag
@@ -335,7 +309,7 @@ def test_missing_V():
 def test_missing_capacitance():
     LOGGER.info('Testing missing capacitance\n')
     model_file = \
-        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'pandit_model_2001_epi.cellml')
+        os.path.join(CELLML_FOLDER, 'pandit_model_2001_epi.cellml')
     chaste_model = cellmlmanip.load_model(model_file)
 
     # Remove capacitance metadata tag
@@ -350,7 +324,7 @@ def test_missing_capacitance():
 def test_no_time():
     LOGGER.info('Testing missing time\n')
     model_file = \
-        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'test_no_odes.cellml')
+        os.path.join(CELLML_FOLDER, 'test_no_odes.cellml')
 
     chaste_model = cellmlmanip.load_model(model_file)
 
@@ -361,7 +335,7 @@ def test_no_time():
 def test_wrong_units_time():
     LOGGER.info('Testing wrong units for time\n')
     model_file = \
-        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'test_wrong_units_time_odes.cellml')
+        os.path.join(CELLML_FOLDER, 'test_wrong_units_time_odes.cellml')
 
     with pytest.raises(CodegenError, match=(r"Incorrect definition of free variable \(time\): "
                                             "time needs to be dimensionally equivalent to second!")):
@@ -371,7 +345,7 @@ def test_wrong_units_time():
 def test_wrong_units_voltage():
     LOGGER.info('Testing wrong units for Voltage\n')
     model_file = \
-        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'test_wrong_units_voltage.cellml')
+        os.path.join(CELLML_FOLDER, 'test_wrong_units_voltage.cellml')
 
     with pytest.raises(CodegenError, match=("Incorrect definition of membrane_voltage variable: "
                                             "units of membrane_voltage need to be dimensionally equivalent to Volt")):
@@ -381,7 +355,7 @@ def test_wrong_units_voltage():
 def test_other_current_in_wrong_units():
     LOGGER.info('Testing that conversion of currents in inconvertible units gets skipped\n')
     model_file = \
-        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'hodgkin_huxley_squid_axon_model_1952_modified.cellml')
+        os.path.join(CELLML_FOLDER, 'hodgkin_huxley_squid_axon_model_1952_modified.cellml')
     chaste_model = cellmlmanip.load_model(model_file)
 
     PRED_IS = create_rdf_node(('http://biomodels.net/biology-qualifiers/', 'is'))  # is_a for tagging variables
@@ -433,7 +407,7 @@ def test_stimulus_not_tagged():
     """ Check untagged stimulus with time in it throws an error"""
     LOGGER.info('Testing untagged stimulus\n')
     model_file = \
-        os.path.join(cg.DATA_DIR, 'tests', 'cellml', 'luo_rudy_1994.cellml')
+        os.path.join(CELLML_FOLDER, 'luo_rudy_1994.cellml')
 
     chaste_model = cellmlmanip.load_model(model_file)
 
