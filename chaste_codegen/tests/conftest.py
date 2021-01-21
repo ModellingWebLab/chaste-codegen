@@ -21,5 +21,5 @@ def be_model():
 
 @pytest.fixture(scope='session')
 def hh_model():
-    return load_model_with_conversions(os.path.join(cellml_folder,
-                                                    'hodgkin_huxley_squid_axon_model_1952_modified.cellml'))
+    model_name = os.path.join(cellml_folder, 'hodgkin_huxley_squid_axon_model_1952_modified.cellml')
+    return load_model_with_conversions(model_name, fix_singularities=False)    
