@@ -715,7 +715,7 @@ def test_script_lookup_table_check_non_existing_tag_ignored(caplog, tmp_path):
 def test_script_load_non_cellml_file(caplog):
     """Check non-existing metadata tags are ignored"""
     LOGGER.info('Testing loading a file that is not a cellml file\n')
-    model_file = os.path.join(TESTS_FOLDER, 'usage.txt')
+    model_file = os.path.join(TESTS_FOLDER, 'test_console_script_usage.txt')
     # Call commandline script
     testargs = ['chaste_codegen', model_file]
 
