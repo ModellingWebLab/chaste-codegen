@@ -18,13 +18,13 @@ from chaste_codegen.tests.conftest import (
     TESTS_FOLDER,
     compare_model_against_reference,
     load_chaste_models,
+    cache_model
 )
 
 
 def get_models(ref_folder='chaste_reference_models', type='Normal'):
     """ Load all models if they haven't been loaded yet"""
     return load_chaste_models(model_types=[type], reference_folder=ref_folder)
-
 
 chaste_normal_models = get_models(ref_folder='chaste_reference_models', type='Normal')
 chaste_opt_models = get_models(ref_folder='chaste_reference_models', type='Opt')
@@ -55,12 +55,10 @@ def test_Cvode_opt_jacobian(tmp_path, model):
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLCvodeOpt'
     LOGGER.info('Converting: Cvode opt with jacobian: ' + class_name + ' with jacobian\n')
     # Generate chaste code
-    chaste_model = cg.OptCvodeChasteModel(load_model_with_conversions(model['model']), model['model_name_from_file'],
-                                          class_name=class_name, use_analytic_jacobian=True)
-    chaste_model.generate_chaste_code()
-
-    # Compare against reference
-    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+    with cg.OptCvodeChasteModel(cache_model(model['model']), model['model_name_from_file'], class_name=class_name, use_analytic_jacobian=True) as chaste_model:
+        chaste_model.generate_chaste_code()
+        # Compare against reference
+        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_cvode_opt_models)
@@ -69,12 +67,10 @@ def test_Cvode_opt(tmp_path, model):
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLCvodeOpt'
     LOGGER.info('Converting: Cvode opt: ' + class_name + '\n')
     # Generate chaste code
-    chaste_model = cg.OptCvodeChasteModel(load_model_with_conversions(model['model']), model['model_name_from_file'],
-                                          class_name=class_name)
-    chaste_model.generate_chaste_code()
-
-    # Compare against reference
-    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+    with cg.OptCvodeChasteModel(cache_model(model['model']), model['model_name_from_file'], class_name=class_name) as chaste_model:
+        chaste_model.generate_chaste_code()
+        # Compare against reference
+        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_CVODE_DATA_CLAMP)
@@ -83,12 +79,10 @@ def test_CVODE_DATA_CLAMP(tmp_path, model):
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLCvodeDataClamp'
     LOGGER.info('Converting: CVODE with Data Clamp: ' + class_name + '\n')
     # Generate chaste code
-    chaste_model = cg.CvodeChasteModel(load_model_with_conversions(model['model']),
-                                       model['model_name_from_file'], class_name=class_name, cvode_data_clamp=True)
-
-    chaste_model.generate_chaste_code()
-    # Compare against reference
-    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+    with cg.CvodeChasteModel(cache_model(model['model']), model['model_name_from_file'], class_name=class_name, cvode_data_clamp=True) as chaste_model:
+        chaste_model.generate_chaste_code()
+        # Compare against reference
+        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_CVODE_DATA_CLAMP_OPT)
@@ -97,12 +91,10 @@ def test_CVODE_DATA_CLAMP_OPT(tmp_path, model):
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLCvodeDataClampOpt'
     LOGGER.info('Converting: CVODE with Data Clamp opt: ' + class_name + '\n')
     # Generate chaste code
-    chaste_model = cg.OptCvodeChasteModel(load_model_with_conversions(model['model']),
-                                          model['model_name_from_file'], class_name=class_name, cvode_data_clamp=True)
-
-    chaste_model.generate_chaste_code()
-    # Compare against reference
-    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+    with cg.OptCvodeChasteModel(cache_model(model['model']), model['model_name_from_file'], class_name=class_name, cvode_data_clamp=True) as chaste_model:
+        chaste_model.generate_chaste_code()
+        # Compare against reference
+        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_GRL2Opt)
@@ -111,12 +103,10 @@ def test_GRL2Opt(tmp_path, model):
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLGRL2Opt'
     LOGGER.info('Converting: Generalised Rush Larsen: ' + class_name + '\n')
     # Generate chaste code
-    chaste_model = cg.GeneralisedRushLarsenSecondOrderModelOpt(load_model_with_conversions(model['model']),
-                                                               model['model_name_from_file'], class_name=class_name)
-
-    chaste_model.generate_chaste_code()
-    # Compare against reference
-    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+    with cg.GeneralisedRushLarsenSecondOrderModelOpt(cache_model(model['model']), model['model_name_from_file'], class_name=class_name) as chaste_model:
+        chaste_model.generate_chaste_code()
+        # Compare against reference
+        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_GRL2)
@@ -125,12 +115,10 @@ def test_GRL2(tmp_path, model):
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLGRL2'
     LOGGER.info('Converting: Generalised Rush Larsen: ' + class_name + '\n')
     # Generate chaste code
-    chaste_model = cg.GeneralisedRushLarsenSecondOrderModel(load_model_with_conversions(model['model']),
-                                                            model['model_name_from_file'], class_name=class_name)
-
-    chaste_model.generate_chaste_code()
-    # Compare against reference
-    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+    with cg.GeneralisedRushLarsenSecondOrderModel(cache_model(model['model']), model['model_name_from_file'], class_name=class_name) as chaste_model:
+        chaste_model.generate_chaste_code()
+        # Compare against reference
+        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_GRL1Opt)
@@ -139,12 +127,10 @@ def test_GRL1Opt(tmp_path, model):
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLGRL1Opt'
     LOGGER.info('Converting: Generalised Rush Larsen: ' + class_name + '\n')
     # Generate chaste code
-    chaste_model = cg.GeneralisedRushLarsenFirstOrderModelOpt(load_model_with_conversions(model['model']),
-                                                              model['model_name_from_file'], class_name=class_name)
-
-    chaste_model.generate_chaste_code()
-    # Compare against reference
-    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+    with cg.GeneralisedRushLarsenFirstOrderModelOpt(cache_model(model['model']), model['model_name_from_file'], class_name=class_name) as chaste_model:
+        chaste_model.generate_chaste_code()
+        # Compare against reference
+        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_GRL1)
@@ -153,12 +139,10 @@ def test_GRL1(tmp_path, model):
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLGRL1'
     LOGGER.info('Converting: Generalised Rush Larsen: ' + class_name + '\n')
     # Generate chaste code
-    chaste_model = cg.GeneralisedRushLarsenFirstOrderModel(load_model_with_conversions(model['model']),
-                                                           model['model_name_from_file'], class_name=class_name)
-
-    chaste_model.generate_chaste_code()
-    # Compare against reference
-    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+    with cg.GeneralisedRushLarsenFirstOrderModel(cache_model(model['model']), model['model_name_from_file'], class_name=class_name) as chaste_model:
+        chaste_model.generate_chaste_code()
+        # Compare against reference
+        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_RLopt)
@@ -167,12 +151,10 @@ def test_RLopt(tmp_path, model):
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLRushLarsenOpt'
     LOGGER.info('Converting: RushLarsen Opt: ' + class_name + '\n')
     # Generate chaste code
-    chaste_model = cg.RushLarsenOptModel(load_model_with_conversions(model['model']), model['model_name_from_file'],
-                                         class_name=class_name)
-
-    chaste_model.generate_chaste_code()
-    # Compare against reference
-    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+    with cg.RushLarsenOptModel(cache_model(model['model']), model['model_name_from_file'], class_name=class_name) as chaste_model:
+        chaste_model.generate_chaste_code()
+        # Compare against reference
+        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_RL)
@@ -181,12 +163,10 @@ def test_RL(tmp_path, model):
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLRushLarsen'
     LOGGER.info('Converting: RushLarsen: ' + class_name + '\n')
     # Generate chaste code
-    chaste_model = cg.RushLarsenModel(load_model_with_conversions(model['model']), model['model_name_from_file'],
-                                      class_name=class_name)
-
-    chaste_model.generate_chaste_code()
-    # Compare against reference
-    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+    with cg.RushLarsenModel(cache_model(model['model']), model['model_name_from_file'], class_name=class_name) as chaste_model:
+        chaste_model.generate_chaste_code()
+        # Compare against reference
+        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_BEopt)
@@ -195,12 +175,10 @@ def test_BEopt(tmp_path, model):
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLBackwardEuler'
     LOGGER.info('Converting: BE opt: ' + class_name + '\n')
     # Generate chaste code
-    chaste_model = cg.BackwardEulerOptModel(load_model_with_conversions(model['model']), model['model_name_from_file'],
-                                            class_name=class_name)
-
-    chaste_model.generate_chaste_code()
-    # Compare against reference
-    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+    with cg.BackwardEulerOptModel(cache_model(model['model']), model['model_name_from_file'], class_name=class_name) as chaste_model:
+        chaste_model.generate_chaste_code()
+        # Compare against reference
+        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_BE)
@@ -209,12 +187,10 @@ def test_BE(tmp_path, model):
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLBackwardEulerNoLut'
     LOGGER.info('Converting: BE: ' + class_name + '\n')
     # Generate chaste code
-    chaste_model = cg.BackwardEulerModel(load_model_with_conversions(model['model']), model['model_name_from_file'],
-                                         class_name=class_name)
-
-    chaste_model.generate_chaste_code()
-    # Compare against reference
-    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+    with cg.BackwardEulerModel(cache_model(model['model']), model['model_name_from_file'], class_name=class_name) as chaste_model:
+        chaste_model.generate_chaste_code()
+        # Compare against reference
+        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_cvode_models_with_jacobians)
@@ -223,12 +199,10 @@ def test_Cvode_jacobian(tmp_path, model):
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLCvode'
     LOGGER.info('Converting: Cvode: ' + class_name + ' with jacobian\n')
     # Generate chaste code
-    chaste_model = cg.CvodeChasteModel(load_model_with_conversions(model['model']), model['model_name_from_file'],
-                                       class_name=class_name, use_analytic_jacobian=True)
-    chaste_model.generate_chaste_code()
-
-    # Compare against reference
-    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+    with cg.CvodeChasteModel(cache_model(model['model']), model['model_name_from_file'], class_name=class_name, use_analytic_jacobian=True) as chaste_model:
+        chaste_model.generate_chaste_code()
+        # Compare against reference
+        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_cvode_models)
@@ -237,12 +211,10 @@ def test_Cvode(tmp_path, model):
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLCvode'
     LOGGER.info('Converting: Cvode: ' + class_name + '\n')
     # Generate chaste code
-    chaste_model = cg.CvodeChasteModel(load_model_with_conversions(model['model']), model['model_name_from_file'],
-                                       class_name=class_name)
-    chaste_model.generate_chaste_code()
-
-    # Compare against reference
-    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+    with cg.CvodeChasteModel(cache_model(model['model']), model['model_name_from_file'], class_name=class_name) as chaste_model:
+        chaste_model.generate_chaste_code()
+        # Compare against reference
+        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_normal_models)
@@ -251,11 +223,10 @@ def test_Normal(tmp_path, model):
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellML'
     LOGGER.info('Converting: Normal: ' + class_name + '\n')
     # Generate chaste code
-    chaste_model = cg.NormalChasteModel(load_model_with_conversions(model['model']), model['model_name_from_file'],
-                                        class_name=class_name)
-    chaste_model.generate_chaste_code()
-    # Compare against reference
-    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+    with cg.NormalChasteModel(cache_model(model['model']), model['model_name_from_file'], class_name=class_name) as chaste_model:
+        chaste_model.generate_chaste_code()
+        # Compare against reference
+        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 @pytest.mark.parametrize(('model'), chaste_opt_models)
@@ -265,11 +236,10 @@ def test_Opt(tmp_path, model):
     class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLOpt'
     LOGGER.info('Converting: Opt: ' + class_name + '\n')
     # Generate chaste code
-    chaste_model = cg.OptChasteModel(load_model_with_conversions(model['model']), model['model_name_from_file'],
-                                     class_name=class_name)
-    chaste_model.generate_chaste_code()
-    # Compare against reference
-    compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+    with cg.OptChasteModel(cache_model(model['model']), model['model_name_from_file'], class_name=class_name) as chaste_model:
+        chaste_model.generate_chaste_code()
+        # Compare against reference
+        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
 
 
 def test_chaste_model_base_class(tmp_path):
@@ -278,18 +248,17 @@ def test_chaste_model_base_class(tmp_path):
     model_file = \
         os.path.join(CELLML_FOLDER, 'luo_rudy_1994.cellml')
 
-    chaste_model = cg.ChasteModel(load_model_with_conversions(model_file), 'luo_rudy_1994',
-                                  class_name='Cellluo_rudy_1994FromCellML')
-    chaste_model._hpp_template = 'normal_model.hpp'
-    chaste_model._cpp_template = 'normal_model.cpp'
-    chaste_model._vars_for_template['base_class'] = 'AbstractCardiacCell'
-    chaste_model._vars_for_template['model_type'] = 'Normal'
-    chaste_model.generate_chaste_code()
+    with cg.ChasteModel(cache_model(model_file), 'luo_rudy_1994', class_name='Cellluo_rudy_1994FromCellML') as chaste_model:
+        chaste_model._hpp_template = 'normal_model.hpp'
+        chaste_model._cpp_template = 'normal_model.cpp'
+        chaste_model._vars_for_template['base_class'] = 'AbstractCardiacCell'
+        chaste_model._vars_for_template['model_type'] = 'Normal'
+        chaste_model.generate_chaste_code()
 
-    reference = os.path.join(TESTS_FOLDER, 'chaste_reference_models', 'Normal')
+        reference = os.path.join(TESTS_FOLDER, 'chaste_reference_models', 'Normal')
 
-    compare_model_against_reference(chaste_model, tmp_path, os.path.join(reference, 'luo_rudy_1994.hpp'),
-                                    os.path.join(reference, 'luo_rudy_1994.cpp'))
+        compare_model_against_reference(chaste_model, tmp_path, os.path.join(reference, 'luo_rudy_1994.hpp'),
+                                        os.path.join(reference, 'luo_rudy_1994.cpp'))
 
 
 def test_missing_V():
