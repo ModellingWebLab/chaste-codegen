@@ -4,6 +4,7 @@ from sympy import (
     Eq,
     Float,
     Piecewise,
+    cse,
     piecewise_fold,
 )
 
@@ -21,6 +22,21 @@ def get_usage_count(equations):
             usage_count.setdefault(var, 0)
             usage_count[var] += 1
     return usage_count
+
+
+def fold_piecewises(expr):
+    """Performs a piecewise_fold on the sympy expression, using a work-around to prevent errors with complex nesting.
+    :param: expr the expression to piecewise_fold.
+    :return: (equivalent to) piecewise_fold(expr)
+    """
+    # Since piecewise_fold hangs with some complicated nestings, due to simplification we use the following workaround:
+    # First extract common terms, perform piecewise_fold, re-insert the common terms
+    # see: https://github.com/sympy/sympy/issues/20850
+    common_terms, expr = cse(expr)
+    expr = piecewise_fold(expr[0])
+    for term, ex in reversed(common_terms):
+        expr = expr.xreplace({term: ex})
+    return expr
 
 
 def partial_eval(equations, required_lhs, keep_multiple_usages=True):
@@ -46,15 +62,15 @@ def partial_eval(equations, required_lhs, keep_multiple_usages=True):
     for eq in equations:
         new_rhs = eq.rhs.xreplace(subs_dict)
         # only apply piecewise_fold if needed to speed things up
-        if len(eq.rhs.atoms(Piecewise)) > 0:
-            new_rhs = piecewise_fold(new_rhs)
-        new_eq = Eq(eq.lhs, new_rhs)
-        if new_eq.lhs not in required_lhs and \
-                (not keep_multiple_usages or isinstance(new_eq.rhs, Float) or usage_count[new_eq.lhs] <= 1):
-            subs_dict[new_eq.lhs] = new_eq.rhs
+        if eq.rhs.has(Piecewise):
+            new_rhs = fold_piecewises(new_rhs)
+        if eq.lhs not in required_lhs and \
+                (not keep_multiple_usages or isinstance(new_rhs, Float) or usage_count[eq.lhs] <= 1):
+            subs_dict[eq.lhs] = new_rhs
         else:
             if not keep_multiple_usages:
-                subs_dict[new_eq.lhs] = new_eq.rhs
-            evaluated_eqs.append(new_eq)
+                subs_dict[eq.lhs] = new_rhs
+            evaluated_eqs.append(Eq(eq.lhs, new_rhs))
 
     return evaluated_eqs
+

@@ -111,23 +111,36 @@ def test_new_expr5(expr1):  # Try with numbers in place of Quantity Dummies
 
 def test_fix_singularity_equations():
     # Using a fixture would make other tests fail since we're modifying the equations
-    model = load_model_with_conversions(os.path.join(DATA_DIR, 'tests', 'cellml', 'noble_SAN_model_1989.cellml'),
+    model = load_model_with_conversions(os.path.join(DATA_DIR, 'tests', 'cellml', 'FaberRudy2000.cellml'),
                                         fix_singularities=False)
-    assert len(model.derivative_equations) == 113
+    assert len(model.derivative_equations) == 206
 
     fix_singularity_equations(model, model.membrane_voltage_var, model.modifiable_parameters)
     deqs = get_equations_for(model, model.y_derivatives)
 
-    assert len(deqs) == 112
-    assert str(([eq.lhs for eq in model.derivative_equations if eq.lhs not in [e.lhs for e in deqs]])) == \
-        '[_second_inward_current$P_si]'
+    assert len(deqs) == 201
+    eqs_not_in_fixed = [eq.lhs for eq in model.derivative_equations if eq.lhs not in [e.lhs for e in deqs]]
+    assert str((eqs_not_in_fixed)) == \
+        ('[_L_type_Ca_channel$P_Ca, _L_type_Ca_channel$P_K, _L_type_Ca_channel$P_Na, _L_type_Ca_channel$gamma_Cai, '
+         '_L_type_Ca_channel$gamma_Cao]'), str(eqs_not_in_fixed)
 
     new_eqs = ([eq for eq in deqs if str(eq) not in [str(e) for e in model.derivative_equations]])
-    assert [str(eq.lhs) for eq in new_eqs] == \
-        ['intracellular_calcium_concentration$alpha_p', 'second_inward_current$i_siCa',
-         'second_inward_current$i_siK', 'second_inward_current$i_siNa']
-    assert all([isinstance(eq.rhs, Piecewise) for eq in new_eqs])
+    new_eqs_lhs = [eq.lhs for eq in new_eqs]
+    assert str(new_eqs_lhs) == ('[_L_type_Ca_channel$I_CaCa, _L_type_Ca_channel$I_CaK, _L_type_Ca_channel$I_CaNa, '
+                                '_rapid_delayed_rectifier_potassium_current_xr_gate$tau_xr, '
+                                '_slow_delayed_rectifier_potassium_current_xs1_gate$tau_xs1, '
+                                '_slow_delayed_rectifier_potassium_current_xs2_gate$tau_xs2]'), str(new_eqs_lhs)
 
-    assert not any([isinstance(eq.rhs, Piecewise) for eq in model.derivative_equations
-                    if str(eq.lhs) in ('intracellular_calcium_concentration$alpha_p', 'second_inward_current$i_siCa',
-                                       'second_inward_current$i_siK', 'second_inward_current$i_siNa')])
+    eq_without_original_piecewsies = [eq for eq in deqs if str(eq.lhs) not in (str(eq.lhs)
+                                      for eq in model.derivative_equations if eq.rhs.has(Piecewise))]
+
+    expected_piecewise_lhs = set({'L_type_Ca_channel$I_CaCa',
+                                  'L_type_Ca_channel$I_CaK',
+                                  'L_type_Ca_channel$I_CaNa',
+                                  'rapid_delayed_rectifier_potassium_current_xr_gate$tau_xr',
+                                  'slow_delayed_rectifier_potassium_current_xs1_gate$tau_xs1',
+                                  'slow_delayed_rectifier_potassium_current_xs2_gate$tau_xs2'})
+
+    # New piecewsies exactly match expected ones
+    assert all([eq.rhs.has(Piecewise) == (str(eq.lhs) in expected_piecewise_lhs)
+                for eq in eq_without_original_piecewsies])
