@@ -37,6 +37,12 @@ def hh_model():
     return cache_model(model_name)
 
 
+@pytest.fixture(scope='session')
+def fr_model():
+    model_name = os.path.join(CELLML_FOLDER, 'FaberRudy2000.cellml')
+    return cache_model(model_name)
+
+
 def load_chaste_models(model_types=[], reference_folder='chaste_reference_models'):
     """ Load all models"""
 
