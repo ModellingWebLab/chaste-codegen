@@ -30,6 +30,11 @@ def expr2():
     return (Z * V - Z * SP) / (exp_(U) * Z - to_quant(1.0))
 
 
+def test_no_singularity():
+    expr = 25.0 / (exp_(U) * -Z + to_quant(1.0))
+    assert str(new_expr(expr, V)) == '(False, ' + str(expr) + ')'
+
+
 def test_new_expr1(expr1):
     assert str(new_expr(expr1, V)) == ('(True, Piecewise(((-_-3.4122746960255230 + _V)*(-(_-3.4122746960255230*_6.2 - '
                                        '_6.2*(-_5 - log(_6.2))/_2)/(_1 - _6.2*exp_(_-3.4122746960255230*_2 + _5)) + (_'
@@ -144,3 +149,21 @@ def test_fix_singularity_equations():
     # New piecewsies exactly match expected ones
     assert all([eq.rhs.has(Piecewise) == (str(eq.lhs) in expected_piecewise_lhs)
                 for eq in eq_without_original_piecewsies])
+
+
+def test_fix_singularity_equations3():
+    # Using a fixture would make other tests fail since we're modifying the equations
+    model = load_model_with_conversions(os.path.join(DATA_DIR, 'tests', 'cellml', 'bondarenko_model_2004_apex.cellml'),
+                                        fix_singularities=False)
+    assert len(model.derivative_equations) == 180
+
+    fix_singularity_equations(model, model.membrane_voltage_var, model.modifiable_parameters)
+    deqs = get_equations_for(model, model.y_derivatives)
+    assert len(deqs) == 180
+
+    print([old.lhs for old, new in zip(model.derivative_equations, deqs) if str(old.rhs) != str(new.rhs)])
+
+    assert all([str(old.lhs) == str(new.lhs) and
+                str(old.lhs) == 'slow_delayed_rectifier_potassium_current$alpha_n' and
+                not old.rhs.has(Piecewise) and new.rhs.has(Piecewise)
+                for old, new in zip(model.derivative_equations, deqs) if str(old.rhs) != str(new.rhs)])
