@@ -2,6 +2,7 @@ from cellmlmanip.printer import Printer
 from sympy import (
     Mul,
     Pow,
+    Piecewise,
     Rational,
     S,
 )
@@ -141,6 +142,10 @@ class ChastePrinter(Printer):
     def _print_float(self, expr):
         """ Handles ``float``s. """
         return cxxcode(expr, standard='C++11')
+
+    def _print_ITE(self, expr):
+        """ Handles ITE (if then else) objects by rewriting them as Piecewise """
+        return self._print_Piecewise(expr.rewrite(Piecewise))
 
     def _print_Mul(self, expr):
         """

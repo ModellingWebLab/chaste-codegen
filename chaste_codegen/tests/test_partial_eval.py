@@ -29,14 +29,13 @@ def test_partial_eval(hh_model):
     derivatives_eqs = partial_eval(derivatives_eqs, lhs_to_keep, keep_multiple_usages=False)
     assert len(derivatives_eqs) == 4, str(len(derivatives_eqs))
     expected = open(os.path.join(TESTS_FOLDER, 'test_partial_eval_derivatives_eqs.txt'), 'r').read()
-    print(derivatives_eqs)
     assert str(derivatives_eqs) == expected, str(derivatives_eqs)
 
 
 def test_partial_eval2(fr_model):
     derivatives_eqs = fr_model.derivative_equations
     lhs_to_keep = fr_model.y_derivatives
-    assert len(derivatives_eqs) == 206, str(len(derivatives_eqs))
+    assert len(derivatives_eqs) == 201, str(len(derivatives_eqs))
     derivatives_eqs = partial_eval(derivatives_eqs, lhs_to_keep, keep_multiple_usages=False)
     assert len(derivatives_eqs) == 25, str(len(derivatives_eqs))
     expected = open(os.path.join(TESTS_FOLDER, 'test_partial_eval_derivatives_eqs2.txt'), 'r').read()
