@@ -1,8 +1,8 @@
 from cellmlmanip.printer import Printer
 from sympy import (
     Mul,
-    Pow,
     Piecewise,
+    Pow,
     Rational,
     S,
 )

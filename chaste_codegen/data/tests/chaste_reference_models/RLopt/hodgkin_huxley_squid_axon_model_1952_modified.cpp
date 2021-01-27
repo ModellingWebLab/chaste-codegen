@@ -158,7 +158,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                _lookup_table_0[i][3] = 1 / (1.0 + exp(-4.5 - 0.10000000000000001 * var_chaste_interface__membrane__V));
+                _lookup_table_0[i][3] = 1.0 + exp(-4.5 - 0.10000000000000001 * var_chaste_interface__membrane__V);
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
@@ -267,7 +267,7 @@ std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushL
         const double var_potassium_channel_n_gate__alpha_n = _lt_0_row[0]; // per_millisecond
         const double var_potassium_channel_n_gate__beta_n = 0.125 * _lt_0_row[1]; // per_millisecond
         const double var_sodium_channel_h_gate__alpha_h = 0.070000000000000007 * _lt_0_row[2]; // per_millisecond
-        const double var_sodium_channel_h_gate__beta_h = _lt_0_row[3]; // per_millisecond
+        const double var_sodium_channel_h_gate__beta_h = 1 / (_lt_0_row[3]); // per_millisecond
         const double var_sodium_channel_m_gate__alpha_m = _lt_0_row[4]; // per_millisecond
         const double var_sodium_channel_m_gate__beta_m = 4.0 * _lt_0_row[5]; // per_millisecond
 
