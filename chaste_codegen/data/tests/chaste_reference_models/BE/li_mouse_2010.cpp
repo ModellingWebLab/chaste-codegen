@@ -1413,7 +1413,7 @@
         const double var_fast_transient_outward_K_I__itof_iss = 1 / (1.0 + exp(10.279999999999999 + 0.20000000000000001 * var_chaste_interface__cell__V));
         const double var_fast_transient_outward_K_I__tau_ito_f = 9.6645000000000003 + 10.936199999999999 / (1.0 + exp(10.279999999999999 + 0.20000000000000001 * var_chaste_interface__cell__V));
         const double var_non_inactivating_steady_state_K_I__tau_Kss = 13.17 + 39.299999999999997 * exp(-0.050000000000000003 * var_chaste_interface__cell__V);
-        const double var_slow_delayed_rectifier_K_I__alpha_n = 4.8133299999999997e-6 * (26.5 + var_chaste_interface__cell__V) / (1.0 - exp(-3.3919999999999999 - 0.128 * var_chaste_interface__cell__V));
+        const double var_slow_delayed_rectifier_K_I__alpha_n = ((fabs(26.5 + var_chaste_interface__cell__V) < 7.8124999999817923e-7) ? (3.7604140624912359e-12 / (1.0 - exp(-9.9999999999766942e-8)) - 640000.00000149151 * (26.499999218749998 + var_chaste_interface__cell__V) * (-3.7604140624912359e-12 / (1.0 - exp(9.9999999999766942e-8)) - 3.7604140624912359e-12 / (1.0 - exp(-9.9999999999766942e-8)))) : (4.8133299999999997e-6 * (26.5 + var_chaste_interface__cell__V) / (1.0 - exp(-3.3919999999999999 - 0.128 * var_chaste_interface__cell__V))));
         const double var_slow_delayed_rectifier_K_I__beta_n = 9.5333299999999997e-5 * exp(-1.0069999999999999 - 0.037999999999999999 * var_chaste_interface__cell__V);
         const double var_slow_transient_outward_K_I__tau_ta_s = 2.0579999999999998 + 0.49299999999999999 * exp(-0.062899999999999998 * var_chaste_interface__cell__V);
         const double var_slow_transient_outward_K_I__tau_ti_s = 270.0 + 1050.0 / (1.0 + exp(7.9298245614035094 + 0.17543859649122806 * var_chaste_interface__cell__V));
