@@ -119,7 +119,13 @@ protected:
             for (unsigned i=0 ; i<_table_size_{{outer_index}}; i++)
             {
                 const double {{param.var}} = mTableMins[{{outer_index}}] + i*mTableSteps[{{outer_index}}];
-                _lookup_table_{{outer_index}}[i][{{loop.index0}}] = {{expr}};
+                _lookup_table_{{outer_index}}[i][{{loop.index0}}] = {{expr[0]}};
+{% if expr[1] %}                if (!std::isfinite(_lookup_table_{{outer_index}}[i][{{loop.index0}}]) && {{expr[1] | lower}}){
+                      auto f = [](double {{param.var}}) { return {{expr[0]}}; };
+                      double left = f({{param.var}} - mTableSteps[{{outer_index}}]);
+                      double right = f({{param.var}} + mTableSteps[{{outer_index}}]);
+                     _lookup_table_{{outer_index}}[i][{{loop.index0}}] = (left + right) / 2.0;
+                }{% endif %}
             }
     {%- endfor %}
 
