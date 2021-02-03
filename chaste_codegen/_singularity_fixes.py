@@ -6,6 +6,7 @@ from sympy import (
     Abs,
     Add,
     Eq,
+    exp,
     Float,
     I,
     Mul,
@@ -58,19 +59,11 @@ def _get_U(expr, V, U_offset, exp_function):
             return None
         return expr.xreplace({f: Quantity(f, 'dimensionless') for f in expr.atoms(Float)})
 
-    # Expressions taht are not a division or don't have exp can't have GHK equations
-    if not expr.has(Pow) or not expr.has(exp_function):
-        return None, None, None
-
-    # Turn Quantity dummies into numbers, to enable analysis
-    subs_dict = {d: d.evalf(FLOAT_PRECISION) for d in expr.atoms(Quantity)}
-    expr = expr.xreplace(subs_dict)
-
     # the denominator is all args where a **-1
     numerator = tuple(a for a in expr.args if not isinstance(a, Pow) or a.args[1] != -1.0)
     denominator = tuple(a.args[0] for a in expr.args if isinstance(a, Pow) and a.args[1] == -1.0)
 
-    if len(denominator) == 0 or len(numerator) == 0:  # Not a devision
+    if len(denominator) == 0 or len(numerator) == 0 or not expr.has(exp_function):  # Not a devision or does not have exp
         return None, None, None
 
     (vs, ve, sp) = None, None, None
@@ -135,13 +128,24 @@ def _get_U(expr, V, U_offset, exp_function):
 
 def _new_expr_parts(expr, V, U_offset, exp_function):
     """Removes suitable singularities and replaces it with a piecewise, returning (vs, ve, sp, has_singularity)"""
-    if not expr.has(exp_function):  # Expressions without exp don't have GHK equations
-        return (None, None, None, expr, False)
 
     if isinstance(expr, Mul):  # 1 * A --> A (remove unneeded 1 *)
         expr = Mul(*[a for a in expr.args if not str(a) in ('1.0', '1')])
 
-    if isinstance(expr, Add):  # A + B + ..
+    # Turn Quantity dummies into numbers, to enable analysis
+    subs_dict = {d: d.evalf(FLOAT_PRECISION) for d in expr.atoms(Quantity)}
+    check_U_expr = expr.xreplace(subs_dict)
+
+    if check_U_expr.replace(exp_function, exp) == 0.0:# equations that trivially evaluate to 0 get replaced by 0
+        return (None, None, None, Quantity(0.0, 'dimensionless'), True)
+
+    elif not expr.has(exp_function):  # Expressions without exp don't have GHK equations
+        return (None, None, None, expr, False)
+
+    elif not expr.has(exp_function):  # Expressions without exp don't have GHK equations
+        return (None, None, None, expr, False)
+
+    elif isinstance(expr, Add):  # A + B + ..
         # The expression is an addition, find singularities in each argument
         new_expr_parts = []
         for a in expr.args:
@@ -169,7 +173,7 @@ def _new_expr_parts(expr, V, U_offset, exp_function):
         return (None, None, None, 1.0 / _generate_piecewise(vs, ve, sp, ex, V), has_piecewise)
 
     elif isinstance(expr, Mul):  # A * B * ...
-        (vs, ve, sp) = _get_U(expr, V, U_offset, exp_function)  # Find the singularity point
+        (vs, ve, sp) = _get_U(check_U_expr, V, U_offset, exp_function)  # Find the singularity point
         if vs is not None:
             return (vs, ve, sp, expr, True)
         else:  # Couldn't find singularity, try the expression's arguments
@@ -196,9 +200,9 @@ def new_expr(expr, V, U_offset=1e-7, exp_function=exp_):
     """
     if not expr.has(exp_function):
         return False, expr
-    (vs, ve, sp, ex, has_piecewise) = _new_expr_parts(expr, V, U_offset, exp_function)
+    (vs, ve, sp, ex, changed) = _new_expr_parts(expr, V, U_offset, exp_function)
     ex = _generate_piecewise(vs, ve, sp, ex, V)
-    return has_piecewise or vs is not None, ex
+    return changed or vs is not None, ex
 
 
 def fix_singularity_equations(model, V, modifiable_parameters, U_offset=1e-7, exp_function=exp_, optimize=True):

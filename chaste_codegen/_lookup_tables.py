@@ -4,6 +4,7 @@ from cellmlmanip.model import Variable
 from sympy import (
     Pow,
     Piecewise,
+    Symbol,
     acos,
     acosh,
     acot,
@@ -99,7 +100,7 @@ class LookupTables:
     def _analyse_for_lut(self, expr, in_piecewise):
         """ Analyse whether an expression contains lookup table suitable (sub-_ expressions. """
         in_piecewise = in_piecewise or isinstance(expr, Piecewise)
-        used_vars = expr.atoms(Variable)
+        used_vars = expr.atoms(Variable, Symbol)
         if not expr.has(*_EXPENSIVE_FUNCTIONS) or len(used_vars) == 0:
             return False, used_vars, in_piecewise  # other leaf
         elif expr in self._lookup_table_expr:  # expr already set for lookup table, no need to analyse
