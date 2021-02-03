@@ -112,6 +112,7 @@ class LookupTables:
             args_func_vars = []
             for ex in expr.args:
                 exp_func, vars_used, in_pw = self._analyse_for_lut(ex, in_piecewise)
+                in_pw = in_pw or in_piecewise
                 args_func_vars.append((exp_func, vars_used, ex, in_pw))
                 expensive_func = expensive_func or exp_func
                 vars_used_in_lut.update(vars_used)
@@ -133,8 +134,8 @@ class LookupTables:
 
         # Prevent putting expressions of the form 1 / A since the expressions might cause a singularity in the table
         # since expressions being analised might the bottom of a GHK equation os similar
-#        if isinstance(expr, Pow) and expr.args[1] == -1.0:
-#            expr = expr.args[0]
+        if isinstance(expr, Pow) and expr.args[1] == -1.0:
+            expr = expr.args[0]
 
         if exp_func and expr not in self._lookup_table_expr and \
                 len(vars_used) == 1 and next(iter(vars_used)) in self._lookup_variables:
@@ -150,7 +151,7 @@ class LookupTables:
             for param in self._lookup_parameters:
 #                param['lookup_epxrs'] = list(filter(lambda e: param['var'] in self._lookup_table_expr[e][0],
 #                                             self._lookup_table_expr)))
-                param['lookup_epxrs'] = [(k,v[1]) for k,v in self._lookup_table_expr.items() if param['var'] in v[0]]
+                param['lookup_epxrs'] = [(k,v[1]) for k,v in self._lookup_table_expr.items() if param['var'] in v[0]]##?
 
 
             # Filter out the parameter set for which we didn't find any complicated expressions
