@@ -16,11 +16,13 @@
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
+#include "Warnings.hpp"
 #include "OdeSystemInformation.hpp"
 #include "RegularStimulus.hpp"
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+
 
     boost::shared_ptr<RegularStimulus> Cellaslanidi_model_2009FromCellMLCvode::UseCellMLDefaultStimulus()
     {
@@ -63,6 +65,7 @@
     Cellaslanidi_model_2009FromCellMLCvode::~Cellaslanidi_model_2009FromCellMLCvode()
     {
     }
+
     
     double Cellaslanidi_model_2009FromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -520,7 +523,6 @@
         // Units: dimensionless; Initial value: 0.288039
         double var_chaste_interface__Ca_handling_by_the_SR__F2 = NV_Ith_S(rY, 27);
         // Units: dimensionless; Initial value: 0.002262
-        
         const double var_x0 = 0.083333333333333329 * var_chaste_interface__membrane__V;
         const double var_x1 = exp(1.9166666666666667 - var_x0);
         const double var_x2 = 1.0 + var_x1;

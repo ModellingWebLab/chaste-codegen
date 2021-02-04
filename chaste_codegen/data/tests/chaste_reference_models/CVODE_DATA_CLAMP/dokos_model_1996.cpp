@@ -16,11 +16,13 @@
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
+#include "Warnings.hpp"
 #include "OdeSystemInformation.hpp"
 #include "RegularStimulus.hpp"
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+
 
 
     double Celldokos_model_1996FromCellMLCvodeDataClamp::GetIntracellularCalciumConcentration()
@@ -47,6 +49,7 @@
     Celldokos_model_1996FromCellMLCvodeDataClamp::~Celldokos_model_1996FromCellMLCvodeDataClamp()
     {
     }
+
     
     double Celldokos_model_1996FromCellMLCvodeDataClamp::GetIIonic(const std::vector<double>* pStateVariables)
     {

@@ -15,6 +15,7 @@
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
+#include "Warnings.hpp"
 #include "OdeSystemInformation.hpp"
 #include "RegularStimulus.hpp"
 #include "HeartConfig.hpp"
@@ -140,37 +141,49 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                _lookup_table_0[i][0] = exp(0.9375 + 0.012500000000000001 * var_chaste_interface__membrane__V);
+                double val = exp(0.9375 + 0.012500000000000001 * var_chaste_interface__membrane__V);
+
+                _lookup_table_0[i][0] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                _lookup_table_0[i][1] = 1 / (-1.0 + exp(-6.5 - 0.10000000000000001 * var_chaste_interface__membrane__V));
+                double val = -1.0 + exp(-6.5 - 0.10000000000000001 * var_chaste_interface__membrane__V);
+
+                _lookup_table_0[i][1] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                _lookup_table_0[i][2] = exp(-3.75 - 0.050000000000000003 * var_chaste_interface__membrane__V);
+                double val = exp(-3.75 - 0.050000000000000003 * var_chaste_interface__membrane__V);
+
+                _lookup_table_0[i][2] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                _lookup_table_0[i][3] = 1 / (1.0 + exp(-4.5 - 0.10000000000000001 * var_chaste_interface__membrane__V));
+                double val = 1.0 + exp(-4.5 - 0.10000000000000001 * var_chaste_interface__membrane__V);
+
+                _lookup_table_0[i][3] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                _lookup_table_0[i][4] = exp(-4.166666666666667 - 0.055555555555555552 * var_chaste_interface__membrane__V);
+                double val = exp(-4.166666666666667 - 0.055555555555555552 * var_chaste_interface__membrane__V);
+
+                _lookup_table_0[i][4] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                _lookup_table_0[i][5] = 1 / (-1.0 + exp(-5.0 - 0.10000000000000001 * var_chaste_interface__membrane__V));
+                double val = -1.0 + exp(-5.0 - 0.10000000000000001 * var_chaste_interface__membrane__V);
+
+                _lookup_table_0[i][5] = val;
             }
 
             mNeedsRegeneration[0] = false;
@@ -188,6 +201,7 @@ private:
 
     // Lookup tables
     double (*_lookup_table_0)[6];
+    int _lookup_table_0_num_misshit_piecewise[6] = {0};
 
 };
 
@@ -264,11 +278,11 @@ std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushL
 
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
-        const double var_potassium_channel_n_gate__alpha_n = -0.01 * _lt_0_row[1] * (65.0 + var_chaste_interface__membrane__V); // per_millisecond
+        const double var_potassium_channel_n_gate__alpha_n = -0.01 * (65.0 + var_chaste_interface__membrane__V) / (_lt_0_row[1]); // per_millisecond
         const double var_potassium_channel_n_gate__beta_n = 0.125 * _lt_0_row[0]; // per_millisecond
         const double var_sodium_channel_h_gate__alpha_h = 0.070000000000000007 * _lt_0_row[2]; // per_millisecond
-        const double var_sodium_channel_h_gate__beta_h = _lt_0_row[3]; // per_millisecond
-        const double var_sodium_channel_m_gate__alpha_m = -0.10000000000000001 * _lt_0_row[5] * (50.0 + var_chaste_interface__membrane__V); // per_millisecond
+        const double var_sodium_channel_h_gate__beta_h = 1 / (_lt_0_row[3]); // per_millisecond
+        const double var_sodium_channel_m_gate__alpha_m = -0.10000000000000001 * (50.0 + var_chaste_interface__membrane__V) / (_lt_0_row[5]); // per_millisecond
         const double var_sodium_channel_m_gate__beta_m = 4.0 * _lt_0_row[4]; // per_millisecond
 
         if (mSetVoltageDerivativeToZero)

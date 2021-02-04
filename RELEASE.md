@@ -1,3 +1,8 @@
+# (unreleased)
+- For lookup tables prevented expressions of the form 1 / A from being added, instead adding A. 1 / A type expressions were causing issues, when A is 0. While many cases have a piecewise to prevent hissing this case, lookup table interpolation might cause issues.
+- Updated the way BackwardEuler models are calculated, to allow the jacobian to be taken into consideration for lookup tables.
+- Fixed a bug with BackwardEuler models where jacobian common term equations (e.g. var_x0) ended up in lookup tables.
+
 # Release 0.5.4
 - Fixed sympy deprecation warning when using sympy 1.7
 - Improved support for secondary trigonometric functions such as sec and acoth.

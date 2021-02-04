@@ -15,11 +15,13 @@
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
+#include "Warnings.hpp"
 #include "OdeSystemInformation.hpp"
 #include "RegularStimulus.hpp"
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+
 
 
     Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL1::Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL1(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
@@ -38,6 +40,7 @@
     Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL1::~Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL1()
     {
     }
+
     
     double Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL1::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -130,7 +133,7 @@
         double var_chaste_interface__potassium_channel_n_gate__n = rY[3];
         // Units: dimensionless; Initial value: 0.325
         
-        
+
         // Mathematics
         const double var_potassium_channel_n_gate__alpha_n = -0.01 * (65.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-6.5 - 0.10000000000000001 * var_chaste_interface__membrane__V)); // per_millisecond
         const double var_potassium_channel_n_gate__beta_n = 0.125 * exp(0.9375 + 0.012500000000000001 * var_chaste_interface__membrane__V); // per_millisecond
@@ -195,7 +198,7 @@
         double var_chaste_interface__potassium_channel_n_gate__n = rY[3];
         // Units: dimensionless; Initial value: 0.325
         
-        
+
         // Mathematics
         const double var_leakage_current__g_L = 0.29999999999999999; // milliS_per_cm2
         const double var_membrane__Cm = 1.0; // microF_per_cm2
@@ -226,6 +229,7 @@
             double var_chaste_interface__potassium_channel_n_gate__n = rY[3];
             // Units: dimensionless; Initial value: 0.325
             
+
             const double var_x0 = 120.0 * pow(var_chaste_interface__sodium_channel_m_gate__m, 3);
             
             partialF = -0.29999999999999999 - 36.0 * pow(var_chaste_interface__potassium_channel_n_gate__n, 4) - var_x0 * var_chaste_interface__sodium_channel_h_gate__h;
@@ -248,7 +252,7 @@
         double var_chaste_interface__sodium_channel_m_gate__m = rY[1];
         // Units: dimensionless; Initial value: 0.05
         
-        
+
         // Mathematics
         const double var_sodium_channel_m_gate__alpha_m = -0.10000000000000001 * (50.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-5.0 - 0.10000000000000001 * var_chaste_interface__membrane__V)); // per_millisecond
         const double var_sodium_channel_m_gate__beta_m = 4.0 * exp(-4.166666666666667 - 0.055555555555555552 * var_chaste_interface__membrane__V); // per_millisecond
@@ -265,6 +269,7 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -75.0
             
+
             const double var_x2 = exp(-4.166666666666667 - 0.055555555555555552 * var_chaste_interface__membrane__V);
             const double var_x4 = -0.10000000000000001 * var_chaste_interface__membrane__V;
             const double var_x5 = exp(-5.0 + var_x4);
@@ -292,7 +297,7 @@
         double var_chaste_interface__sodium_channel_h_gate__h = rY[2];
         // Units: dimensionless; Initial value: 0.6
         
-        
+
         // Mathematics
         const double var_sodium_channel_h_gate__alpha_h = 0.070000000000000007 * exp(-3.75 - 0.050000000000000003 * var_chaste_interface__membrane__V); // per_millisecond
         const double var_sodium_channel_h_gate__beta_h = 1 / (1.0 + exp(-4.5 - 0.10000000000000001 * var_chaste_interface__membrane__V)); // per_millisecond
@@ -309,6 +314,7 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -75.0
             
+
             const double var_x4 = -0.10000000000000001 * var_chaste_interface__membrane__V;
             const double var_x9 = exp(-3.75 - 0.050000000000000003 * var_chaste_interface__membrane__V);
             const double var_x10 = exp(-4.5 + var_x4);
@@ -334,7 +340,7 @@
         double var_chaste_interface__potassium_channel_n_gate__n = rY[3];
         // Units: dimensionless; Initial value: 0.325
         
-        
+
         // Mathematics
         const double var_potassium_channel_n_gate__alpha_n = -0.01 * (65.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-6.5 - 0.10000000000000001 * var_chaste_interface__membrane__V)); // per_millisecond
         const double var_potassium_channel_n_gate__beta_n = 0.125 * exp(0.9375 + 0.012500000000000001 * var_chaste_interface__membrane__V); // per_millisecond
@@ -351,6 +357,7 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -75.0
             
+
             const double var_x4 = -0.10000000000000001 * var_chaste_interface__membrane__V;
             const double var_x13 = exp(-6.5 + var_x4);
             const double var_x14 = -1.0 + var_x13;
@@ -376,7 +383,6 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_membrane__i_Stim = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // microA_per_cm2
 

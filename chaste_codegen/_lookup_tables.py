@@ -1,7 +1,10 @@
 import collections
 
-from cellmlmanip.model import Variable
+from cellmlmanip.model import Quantity, Variable
 from sympy import (
+    Piecewise,
+    Pow,
+    Symbol,
     acos,
     acosh,
     acot,
@@ -90,44 +93,55 @@ class LookupTables:
             raise ValueError('Cannot calculate lookup tables after printing has started')
 
         for equation in equations:
-            exp_func, vars_used = self._analyse_for_lut(equation.rhs)
-            self._set_lookup_table_if_appropriate(exp_func, vars_used, equation.rhs)
+            exp_func, vars_used, in_pw = self._analyse_for_lut(equation.rhs, isinstance(equation.rhs, Piecewise))
+            self._set_lookup_table_if_appropriate(exp_func, vars_used, equation.rhs, in_pw)
 
-    def _analyse_for_lut(self, expr):
+    def _analyse_for_lut(self, expr, in_piecewise):
         """ Analyse whether an expression contains lookup table suitable (sub-_ expressions. """
-        if isinstance(expr, Variable):
-            return False, set([expr])
-        elif len(expr.args) == 0:
-            return False, set()  # other leaf
+        in_piecewise = in_piecewise or isinstance(expr, Piecewise)
+        # Used variables are either Variable or Symbol but not Quantity
+        used_vars = set(filter(lambda v: not isinstance(v, Quantity), expr.atoms(Variable, Symbol)))
+        if not expr.has(*_EXPENSIVE_FUNCTIONS) or len(used_vars) == 0:
+            return False, used_vars, in_piecewise  # other leaf
         elif expr in self._lookup_table_expr:  # expr already set for lookup table, no need to analyse
-            return True, self._lookup_table_expr[expr]
+            lut_expr, in_pw = self._lookup_table_expr[expr]
+            return True, lut_expr, in_piecewise or in_pw
         else:
             expensive_func = isinstance(expr, _EXPENSIVE_FUNCTIONS)
             vars_used_in_lut = set()
             args_func_vars = []
             for ex in expr.args:
-                exp_func, vars_used = self._analyse_for_lut(ex)
-                args_func_vars.append((exp_func, vars_used, ex))
+                exp_func, vars_used, in_pw = self._analyse_for_lut(ex, in_piecewise)
+                in_pw = in_pw or in_piecewise
+                args_func_vars.append((exp_func, vars_used, ex, in_pw))
                 expensive_func = expensive_func or exp_func
                 vars_used_in_lut.update(vars_used)
 
             if expensive_func and len(vars_used_in_lut) > 1:
                 # there are arguments suitable for lookup table, but with different lookup table vars
                 # so set each appropriate child as lookup table var if appropriate, but not this expr
-                for exp_func, vars_used, ex in args_func_vars:
-                    self._set_lookup_table_if_appropriate(exp_func, vars_used, ex)
-                return False, vars_used_in_lut
-            return expensive_func, vars_used_in_lut
+                for exp_func, vars_used, ex, in_pw in args_func_vars:
+                    self._set_lookup_table_if_appropriate(exp_func, vars_used, ex, in_pw)
+                return False, vars_used_in_lut, in_piecewise
+            return expensive_func, vars_used_in_lut, in_piecewise
 
-    def _set_lookup_table_if_appropriate(self, exp_func, vars_used, expr):
+    def _set_lookup_table_if_appropriate(self, exp_func, vars_used, expr, in_pw):
         """ Store an expression to the lookup table if it's suitable. """
         # Expressions are suitable for lut if:
         # - they have an expensive function
         # - they're not already set as suitable
         # - they only contain 1 variable and this variable is one of the lookup variables
+
+        # Prevent putting expressions of the form 1 / A since the expressions might cause a singularity in the table
+        # since expressions being analised might the bottom of a GHK equation os similar
+        if isinstance(expr, Pow) and expr.args[1] == -1.0:
+            expr = expr.args[0]
+
         if exp_func and expr not in self._lookup_table_expr and \
                 len(vars_used) == 1 and next(iter(vars_used)) in self._lookup_variables:
-            self._lookup_table_expr[expr] = vars_used
+            self._lookup_table_expr[expr] = [vars_used, in_pw]
+        elif expr in self._lookup_table_expr:  # Store whether the experssion appears in a Piecewise
+            self._lookup_table_expr[expr][1] = self._lookup_table_expr[expr][1] or in_pw
 
     def _process_lookup_parameters(self):
         """ Prepare the stored lookup table parameters for generating chaste code.
@@ -135,8 +149,7 @@ class LookupTables:
         if not self._lookup_params_processed:
             # Stick in a list of all expressions for the variable for easy access in the template
             for param in self._lookup_parameters:
-                param['lookup_epxrs'] = list(filter(lambda e: param['var'] in self._lookup_table_expr[e],
-                                             self._lookup_table_expr))
+                param['lookup_epxrs'] = [(k, v[1]) for k, v in self._lookup_table_expr.items() if param['var'] in v[0]]
 
             # Filter out the parameter set for which we didn't find any complicated expressions
             self._lookup_parameters = list(filter(lambda p: len(p['lookup_epxrs']) > 0, self._lookup_parameters))
@@ -164,7 +177,8 @@ class LookupTables:
             for i, param in enumerate(self._lookup_parameters):
                 if param['var'] is var:
                     param['table_used_in_methods'].add(self._method_printed)
-                    return '_lt_{}_row[{}]'.format(i, param['lookup_epxrs'].index(expr))
+                    return '_lt_{}_row[{}]'.\
+                        format(i, param['lookup_epxrs'].index((expr, self._lookup_table_expr[expr][1])))
         return None
 
     def print_lookup_parameters(self, printer):
@@ -181,7 +195,8 @@ class LookupTables:
             printer.lookup_table_function = lambda e: None
 
             for param in self._lookup_parameters:
-                param['lookup_epxrs'] = list(map(lambda e: printer.doprint(e), param['lookup_epxrs']))
+                # For lookup table expressions we store a tuple of (expr, "is this licated in a Piecewise")
+                param['lookup_epxrs'] = list(map(lambda e: [printer.doprint(e[0]), e[1]], param['lookup_epxrs']))
                 param['var'] = printer.doprint(param['var'])
 
             # reinstate lookup tables

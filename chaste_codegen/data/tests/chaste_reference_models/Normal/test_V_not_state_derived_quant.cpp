@@ -15,11 +15,13 @@
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
+#include "Warnings.hpp"
 #include "OdeSystemInformation.hpp"
 #include "RegularStimulus.hpp"
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+
 
 
     Celltest_V_not_state_derived_quantFromCellML::Celltest_V_not_state_derived_quantFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
@@ -39,6 +41,7 @@
     Celltest_V_not_state_derived_quantFromCellML::~Celltest_V_not_state_derived_quantFromCellML()
     {
     }
+
     
     double Celltest_V_not_state_derived_quantFromCellML::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -81,7 +84,6 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_membrane__time = 0.001 * var_chaste_interface__membrane__time_converted; // second
         const double var_membrane__V_converted = 2000.0 * var_membrane__time; // millivolt
@@ -118,3 +120,4 @@ void OdeSystemInformation<Celltest_V_not_state_derived_quantFromCellML>::Initial
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Celltest_V_not_state_derived_quantFromCellML)
+
