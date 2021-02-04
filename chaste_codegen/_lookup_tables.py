@@ -195,7 +195,8 @@ class LookupTables:
             printer.lookup_table_function = lambda e: None
 
             for param in self._lookup_parameters:
-                param['lookup_epxrs'] = list(map(lambda e: [printer.doprint(e[0]), e[1]], param['lookup_epxrs']))###comment
+                # For lookup table expressions we store a tuple of (expr, "is this licated in a Piecewise")
+                param['lookup_epxrs'] = list(map(lambda e: [printer.doprint(e[0]), e[1]], param['lookup_epxrs']))
                 param['var'] = printer.doprint(param['var'])
 
             # reinstate lookup tables
