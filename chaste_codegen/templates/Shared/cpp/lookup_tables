@@ -126,6 +126,7 @@ protected:
                     double left = _lookup_table_{{outer_index}}[i-1][{{loop.index0}}];
                     double right = _lookup_table_{{outer_index}}[i+1][{{loop.index0}}];
                     double new_val = (left + right) / 2.0;
+                    WARNING("Lookup table {{loop.index0}} at ["<<i<<"][{{loop.index0}}] has non-finite value: " << val << " being terpolated to: "<<new_val);
                     val = new_val;
                    // count and limit number of misshits
                   _lookup_table_{{outer_index}}_num_misshit_piecewise[{{loop.index0}}] +=1;
