@@ -15,11 +15,13 @@
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
+#include "Warnings.hpp"
 #include "OdeSystemInformation.hpp"
 #include "RegularStimulus.hpp"
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+
 
     double Dynamicdemir_model_1994FromCellMLGRL1::GetIntracellularCalciumConcentration()
     {
@@ -42,6 +44,7 @@
     Dynamicdemir_model_1994FromCellMLGRL1::~Dynamicdemir_model_1994FromCellMLGRL1()
     {
     }
+
     
     double Dynamicdemir_model_1994FromCellMLGRL1::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -291,7 +294,7 @@
         double var_chaste_interface__SR_Ca_uptake_and_release__F3 = rY[26];
         // Units: dimensionless; Initial value: 0.8859153
         
-        
+
         // Mathematics
         const double var_L_type_Ca_channel__E_Ca_L = 46.399999999999999; // millivolt
         const double var_L_type_Ca_channel__g_Ca_L = 0.021149999999999999; // microS
@@ -802,7 +805,7 @@
         double var_chaste_interface__cleft_space_equations__K_c = rY[20];
         // Units: millimolar; Initial value: 5.389014
         
-        
+
         // Mathematics
         const double var_L_type_Ca_channel__E_Ca_L = 46.399999999999999; // millivolt
         const double var_L_type_Ca_channel__g_Ca_L = 0.021149999999999999; // microS
@@ -888,6 +891,7 @@
             double var_chaste_interface__cleft_space_equations__K_c = rY[20];
             // Units: millimolar; Initial value: 5.389014
             
+
             const double var_x0 = pow(var_chaste_interface__hyperpolarisation_activated_current_y_gate__y, 2);
             const double var_x1 = -0.16666666666666666 * var_chaste_interface__membrane__V;
             const double var_x2 = exp(-2.3500000000000001 + var_x1);
@@ -987,7 +991,7 @@
         double var_chaste_interface__SR_Ca_uptake_and_release__F2 = rY[25];
         // Units: dimensionless; Initial value: 0.0007594214
         
-        
+
         // Mathematics
         const double var_L_type_Ca_channel__E_Ca_L = 46.399999999999999; // millivolt
         const double var_L_type_Ca_channel__g_Ca_L = 0.021149999999999999; // microS
@@ -1059,6 +1063,7 @@
             double var_chaste_interface__SR_Ca_uptake_and_release__Ca_up = rY[21];
             // Units: millimolar; Initial value: 16.95311
             
+
             const double var_x7 = pow(var_chaste_interface__cleft_space_equations__Na_c, 3);
             const double var_x8 = var_x7 * var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i;
             const double var_x9 = pow(var_chaste_interface__intracellular_concentrations_and_buffer_equations__Na_i, 3);
@@ -1102,7 +1107,7 @@
         double var_chaste_interface__sodium_current_m_gate__m = rY[2];
         // Units: dimensionless; Initial value: 0.250113
         
-        
+
         // Mathematics
         const double var_sodium_current_m_gate__alpha_m = -824.0 * (51.899999999999999 + var_chaste_interface__membrane__V) / (-1.0 + exp(-5.8314606741573032 - 0.11235955056179775 * var_chaste_interface__membrane__V)); // per_second
         const double var_sodium_current_m_gate__beta_m = 32960.0 * exp(-5.8314606741573032 - 0.11235955056179775 * var_chaste_interface__membrane__V); // per_second
@@ -1122,6 +1127,7 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -49.54105
             
+
             const double var_x112 = exp(-5.8314606741573032 - 0.11235955056179775 * var_chaste_interface__membrane__V);
             const double var_x113 = 51.899999999999999 + var_chaste_interface__membrane__V;
             const double var_x114 = -1.0 + var_x112;
@@ -1152,7 +1158,7 @@
         double var_chaste_interface__sodium_current_h_gate__h1 = rY[3];
         // Units: dimensionless; Initial value: 0.001386897
         
-        
+
         // Mathematics
         const double var_sodium_current_h_gate__alpha_h1 = 165.0 * exp(-8.0396825396825395 - 0.079365079365079361 * var_chaste_interface__membrane__V); // per_second
         const double var_sodium_current_h_gate__beta_h1 = 12360.0 / (1.0 + 320.0 * exp(-8.0396825396825395 - 0.079365079365079361 * var_chaste_interface__membrane__V)); // per_second
@@ -1172,6 +1178,7 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -49.54105
             
+
             const double var_x124 = exp(-8.0396825396825395 - 0.079365079365079361 * var_chaste_interface__membrane__V);
             const double var_x125 = 1 / (1.0 + 320.0 * var_x124);
             const double var_x132 = 0.16500000000000001 * var_x124;
@@ -1196,7 +1203,7 @@
         double var_chaste_interface__sodium_current_h_gate__h2 = rY[4];
         // Units: dimensionless; Initial value: 0.002065463
         
-        
+
         // Mathematics
         const double var_sodium_current_h_gate__alpha_h1 = 165.0 * exp(-8.0396825396825395 - 0.079365079365079361 * var_chaste_interface__membrane__V); // per_second
         const double var_sodium_current_h_gate__beta_h1 = 12360.0 / (1.0 + 320.0 * exp(-8.0396825396825395 - 0.079365079365079361 * var_chaste_interface__membrane__V)); // per_second
@@ -1218,6 +1225,7 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -49.54105
             
+
             const double var_x124 = exp(-8.0396825396825395 - 0.079365079365079361 * var_chaste_interface__membrane__V);
             const double var_x125 = 1 / (1.0 + 320.0 * var_x124);
             
@@ -1241,7 +1249,7 @@
         double var_chaste_interface__L_type_Ca_channel_d_gate__d_L = rY[5];
         // Units: dimensionless; Initial value: 0.002572773
         
-        
+
         // Mathematics
         const double var_L_type_Ca_channel_d_gate__alpha_d_L = -28.390000000000001 * (35.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-14.0 - 0.40000000000000002 * var_chaste_interface__membrane__V)) - 84.900000000000006 * var_chaste_interface__membrane__V / (-1.0 + exp(-0.20799999999999999 * var_chaste_interface__membrane__V)); // per_second
         const double var_L_type_Ca_channel_d_gate__beta_d_L = 11.43 * (-5.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-2.0 + 0.40000000000000002 * var_chaste_interface__membrane__V)); // per_second
@@ -1261,6 +1269,7 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -49.54105
             
+
             const double var_x134 = exp(-2.0 + 0.40000000000000002 * var_chaste_interface__membrane__V);
             const double var_x135 = -1.0 + var_x134;
             const double var_x136 = 1 / var_x135;
@@ -1293,7 +1302,7 @@
         double var_chaste_interface__L_type_Ca_channel_f_gate__f_L = rY[6];
         // Units: dimensionless; Initial value: 0.98651
         
-        
+
         // Mathematics
         const double var_L_type_Ca_channel_f_gate__alpha_f_L = 3.75 * (28.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(7.0 + 0.25 * var_chaste_interface__membrane__V)); // per_second
         const double var_L_type_Ca_channel_f_gate__beta_f_L = 30.0 / (1.0 + exp(-7.0 - 0.25 * var_chaste_interface__membrane__V)); // per_second
@@ -1313,6 +1322,7 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -49.54105
             
+
             const double var_x150 = 0.25 * var_chaste_interface__membrane__V;
             const double var_x151 = exp(7.0 + var_x150);
             const double var_x152 = -1.0 + var_x151;
@@ -1342,7 +1352,7 @@
         double var_chaste_interface__T_type_Ca_channel_d_gate__d_T = rY[7];
         // Units: dimensionless; Initial value: 0.02012114
         
-        
+
         // Mathematics
         const double var_T_type_Ca_channel_d_gate__alpha_d_T = 1068.0 * exp(0.87666666666666671 + 0.033333333333333333 * var_chaste_interface__membrane__V); // per_second
         const double var_T_type_Ca_channel_d_gate__beta_d_T = 1068.0 * exp(-0.87666666666666671 - 0.033333333333333333 * var_chaste_interface__membrane__V); // per_second
@@ -1362,6 +1372,7 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -49.54105
             
+
             const double var_x161 = 0.033333333333333333 * var_chaste_interface__membrane__V;
             const double var_x162 = exp(0.87666666666666671 + var_x161);
             const double var_x163 = exp(-0.87666666666666671 - var_x161);
@@ -1386,7 +1397,7 @@
         double var_chaste_interface__T_type_Ca_channel_f_gate__f_T = rY[8];
         // Units: dimensionless; Initial value: 0.1945111
         
-        
+
         // Mathematics
         const double var_T_type_Ca_channel_f_gate__alpha_f_T = 15.300000000000001 * exp(-0.74069627851140463 - 0.012004801920768308 * var_chaste_interface__membrane__V); // per_second
         const double var_T_type_Ca_channel_f_gate__beta_f_T = 15.0 * exp(4.0117035110533159 + 0.065019505851755519 * var_chaste_interface__membrane__V); // per_second
@@ -1406,6 +1417,7 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -49.54105
             
+
             const double var_x166 = exp(4.0117035110533159 + 0.065019505851755519 * var_chaste_interface__membrane__V);
             const double var_x167 = exp(-0.74069627851140463 - 0.012004801920768308 * var_chaste_interface__membrane__V);
             
@@ -1429,7 +1441,7 @@
         double var_chaste_interface__delayed_rectifying_potassium_current_P_a_gate__P_a = rY[9];
         // Units: dimensionless; Initial value: 0.02302278
         
-        
+
         // Mathematics
         const double var_delayed_rectifying_potassium_current_P_a_gate__P_a_infinity = 1 / (1.0 + exp(-0.68918918918918914 - 0.13513513513513511 * var_chaste_interface__membrane__V)); // dimensionless
         const double var_delayed_rectifying_potassium_current_P_a_gate__tau_P_a = 1 / (17.0 * exp(0.039800000000000002 * var_chaste_interface__membrane__V) + 2.1099999999999999 * exp(-0.050999999999999997 * var_chaste_interface__membrane__V)); // second
@@ -1447,6 +1459,7 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -49.54105
             
+
             const double var_x168 = exp(0.039800000000000002 * var_chaste_interface__membrane__V);
             const double var_x169 = exp(-0.050999999999999997 * var_chaste_interface__membrane__V);
             
@@ -1470,7 +1483,7 @@
         double var_chaste_interface__delayed_rectifying_potassium_current_P_i_gate__P_i = rY[10];
         // Units: dimensionless; Initial value: 0.3777728
         
-        
+
         // Mathematics
         const double var_delayed_rectifying_potassium_current_P_i_gate__alpha_P_i = 100.0 * exp(-0.0183 * var_chaste_interface__membrane__V); // per_second
         const double var_delayed_rectifying_potassium_current_P_i_gate__beta_P_i = 656.0 * exp(0.0094199999999999996 * var_chaste_interface__membrane__V); // per_second
@@ -1488,6 +1501,7 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -49.54105
             
+
             const double var_x172 = exp(-0.0183 * var_chaste_interface__membrane__V);
             const double var_x173 = exp(0.0094199999999999996 * var_chaste_interface__membrane__V);
             
@@ -1511,7 +1525,7 @@
         double var_chaste_interface__hyperpolarisation_activated_current_y_gate__y = rY[11];
         // Units: dimensionless; Initial value: 0.09227776
         
-        
+
         // Mathematics
         const double var_hyperpolarisation_activated_current_y_gate__tau_y = 1 / (1.6483000000000001 * exp(-2.2219482120838472 - 0.041101520756267988 * var_chaste_interface__membrane__V) + 14.01055 / (0.69999999999999996 + exp(-10.909090909090908 - 0.18181818181818182 * var_chaste_interface__membrane__V))); // second
         const double var_hyperpolarisation_activated_current_y_gate__y_infinity = 1 / (1.0 + exp(8.0222222222222221 + 0.1111111111111111 * var_chaste_interface__membrane__V)); // dimensionless
@@ -1529,6 +1543,7 @@
             double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
             // Units: millivolt; Initial value: -49.54105
             
+
             const double var_x176 = exp(-2.2219482120838472 - 0.041101520756267988 * var_chaste_interface__membrane__V);
             const double var_x177 = exp(-10.909090909090908 - 0.18181818181818182 * var_chaste_interface__membrane__V);
             const double var_x178 = 0.69999999999999996 + var_x177;
@@ -1570,7 +1585,7 @@
         double var_chaste_interface__cleft_space_equations__K_c = rY[20];
         // Units: millimolar; Initial value: 5.389014
         
-        
+
         // Mathematics
         const double var_cleft_space_equations__Vol = 3.4970000000000001e-6; // microLitre
         const double var_hyperpolarisation_activated_current__g_f_Na = 0.0067478; // microS
@@ -1622,6 +1637,7 @@
             double var_chaste_interface__cleft_space_equations__K_c = rY[20];
             // Units: millimolar; Initial value: 5.389014
             
+
             const double var_x7 = pow(var_chaste_interface__cleft_space_equations__Na_c, 3);
             const double var_x8 = var_x7 * var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i;
             const double var_x9 = pow(var_chaste_interface__intracellular_concentrations_and_buffer_equations__Na_i, 3);
@@ -1692,7 +1708,7 @@
         double var_chaste_interface__cleft_space_equations__K_c = rY[20];
         // Units: millimolar; Initial value: 5.389014
         
-        
+
         // Mathematics
         const double var_cleft_space_equations__K_b = 5.4000000000000004; // millimolar
         const double var_cleft_space_equations__Vol = 3.4970000000000001e-6; // microLitre
@@ -1729,6 +1745,7 @@
             double var_chaste_interface__intracellular_concentrations_and_buffer_equations__K_i = rY[13];
             // Units: millimolar; Initial value: 140.7347
             
+
             const double var_x19 = var_chaste_interface__delayed_rectifying_potassium_current_P_a_gate__P_a * var_chaste_interface__delayed_rectifying_potassium_current_P_i_gate__P_i;
             const double var_x68 = 1 / var_chaste_interface__intracellular_concentrations_and_buffer_equations__K_i;
             const double var_x191 = 0.0031913222489694526 * var_x19;
@@ -1753,7 +1770,7 @@
         double var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_Calmod = rY[14];
         // Units: dimensionless; Initial value: 0.1411678
         
-        
+
         // Mathematics
         const double var_intracellular_concentrations_and_buffer_equations__phi_C = -307.0 * var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_Calmod + 129000.0 * (1.0 - var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_Calmod) * var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i; // per_second
         const double var_intracellular_concentrations_and_buffer_equations__Ca_Calmod_orig_deriv = var_intracellular_concentrations_and_buffer_equations__phi_C; // 1 / second
@@ -1770,6 +1787,7 @@
             double var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i = rY[1];
             // Units: millimolar; Initial value: 0.0003787018
             
+
             const double var_x193 = -129.0 * var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i;
             
             partialF = -0.307 + var_x193;
@@ -1792,7 +1810,7 @@
         double var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_Trop = rY[15];
         // Units: dimensionless; Initial value: 0.07331396
         
-        
+
         // Mathematics
         const double var_intracellular_concentrations_and_buffer_equations__phi_TC = -252.0 * var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_Trop + 50500.0 * (1.0 - var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_Trop) * var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i; // per_second
         const double var_intracellular_concentrations_and_buffer_equations__Ca_Trop_orig_deriv = var_intracellular_concentrations_and_buffer_equations__phi_TC; // 1 / second
@@ -1809,6 +1827,7 @@
             double var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i = rY[1];
             // Units: millimolar; Initial value: 0.0003787018
             
+
             
             partialF = -0.252 - 50.5 * var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i;
         }
@@ -1832,7 +1851,7 @@
         double var_chaste_interface__intracellular_concentrations_and_buffer_equations__Mg_Mg_Trop = rY[17];
         // Units: dimensionless; Initial value: 0.2097049
         
-        
+
         // Mathematics
         const double var_intracellular_concentrations_and_buffer_equations__phi_TMgC = -4.25 * var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_Mg_Trop + 129000.0 * (1.0 - var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_Mg_Trop - var_chaste_interface__intracellular_concentrations_and_buffer_equations__Mg_Mg_Trop) * var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i; // per_second
         const double var_intracellular_concentrations_and_buffer_equations__Ca_Mg_Trop_orig_deriv = var_intracellular_concentrations_and_buffer_equations__phi_TMgC; // 1 / second
@@ -1849,6 +1868,7 @@
             double var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i = rY[1];
             // Units: millimolar; Initial value: 0.0003787018
             
+
             const double var_x193 = -129.0 * var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i;
             
             partialF = -0.0042500000000000003 + var_x193;
@@ -1871,7 +1891,7 @@
         double var_chaste_interface__intracellular_concentrations_and_buffer_equations__Mg_Mg_Trop = rY[17];
         // Units: dimensionless; Initial value: 0.2097049
         
-        
+
         // Mathematics
         const double var_intracellular_concentrations_and_buffer_equations__Mg_i = 2.5; // millimolar
         const double var_intracellular_concentrations_and_buffer_equations__phi_TMgM = -429.0 * var_chaste_interface__intracellular_concentrations_and_buffer_equations__Mg_Mg_Trop + 1290.0 * (1.0 - var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_Mg_Trop - var_chaste_interface__intracellular_concentrations_and_buffer_equations__Mg_Mg_Trop) * var_intracellular_concentrations_and_buffer_equations__Mg_i; // per_second
@@ -1887,6 +1907,7 @@
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
             
             partialF = -3.6539999999999999;
         }
@@ -1924,7 +1945,7 @@
         double var_chaste_interface__cleft_space_equations__K_c = rY[20];
         // Units: millimolar; Initial value: 5.389014
         
-        
+
         // Mathematics
         const double var_cleft_space_equations__Na_b = 140.0; // millimolar
         const double var_cleft_space_equations__Vol = 3.4970000000000001e-6; // microLitre
@@ -1976,6 +1997,7 @@
             double var_chaste_interface__cleft_space_equations__Ca_c = rY[19];
             // Units: millimolar; Initial value: 2.00474
             
+
             const double var_x7 = pow(var_chaste_interface__cleft_space_equations__Na_c, 3);
             const double var_x8 = var_x7 * var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i;
             const double var_x9 = pow(var_chaste_interface__intracellular_concentrations_and_buffer_equations__Na_i, 3);
@@ -2042,7 +2064,7 @@
         double var_chaste_interface__cleft_space_equations__Ca_c = rY[19];
         // Units: millimolar; Initial value: 2.00474
         
-        
+
         // Mathematics
         const double var_L_type_Ca_channel__E_Ca_L = 46.399999999999999; // millivolt
         const double var_L_type_Ca_channel__g_Ca_L = 0.021149999999999999; // microS
@@ -2089,6 +2111,7 @@
             double var_chaste_interface__cleft_space_equations__Ca_c = rY[19];
             // Units: millimolar; Initial value: 2.00474
             
+
             const double var_x7 = pow(var_chaste_interface__cleft_space_equations__Na_c, 3);
             const double var_x8 = var_x7 * var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i;
             const double var_x9 = pow(var_chaste_interface__intracellular_concentrations_and_buffer_equations__Na_i, 3);
@@ -2136,7 +2159,7 @@
         double var_chaste_interface__cleft_space_equations__K_c = rY[20];
         // Units: millimolar; Initial value: 5.389014
         
-        
+
         // Mathematics
         const double var_cleft_space_equations__K_b = 5.4000000000000004; // millimolar
         const double var_cleft_space_equations__Vol = 3.4970000000000001e-6; // microLitre
@@ -2178,6 +2201,7 @@
             double var_chaste_interface__cleft_space_equations__K_c = rY[20];
             // Units: millimolar; Initial value: 5.389014
             
+
             const double var_x9 = pow(var_chaste_interface__intracellular_concentrations_and_buffer_equations__Na_i, 3);
             const double var_x19 = var_chaste_interface__delayed_rectifying_potassium_current_P_a_gate__P_a * var_chaste_interface__delayed_rectifying_potassium_current_P_i_gate__P_i;
             const double var_x35 = exp(-1.5 - 0.025000000000000001 * var_chaste_interface__membrane__V);
@@ -2216,7 +2240,7 @@
         double var_chaste_interface__SR_Ca_uptake_and_release__Ca_rel = rY[22];
         // Units: millimolar; Initial value: 16.85024
         
-        
+
         // Mathematics
         const double var_SR_Ca_uptake_and_release__alpha_up = 0.080000000000000002; // nanoA
         const double var_SR_Ca_uptake_and_release__beta_up = 0.071999999999999995; // nanoA
@@ -2247,6 +2271,7 @@
             double var_chaste_interface__SR_Ca_uptake_and_release__Ca_up = rY[21];
             // Units: millimolar; Initial value: 16.95311
             
+
             const double var_x96 = 9.5000000000000005e-5 + 2.0454545454545457e-6 * var_chaste_interface__SR_Ca_uptake_and_release__Ca_up + var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i;
             const double var_x97 = 1 / var_x96;
             const double var_x98 = (0.080000000000000002 * var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i - 1.4727272727272728e-7 * var_chaste_interface__SR_Ca_uptake_and_release__Ca_up) / pow(var_x96, 2);
@@ -2275,7 +2300,7 @@
         double var_chaste_interface__SR_Ca_uptake_and_release__F2 = rY[25];
         // Units: dimensionless; Initial value: 0.0007594214
         
-        
+
         // Mathematics
         const double var_SR_Ca_uptake_and_release__alpha_rel = 0.5; // nanoA_per_millimolar
         const double var_SR_Ca_uptake_and_release__i_rel = pow(var_chaste_interface__SR_Ca_uptake_and_release__F2, 2) * var_chaste_interface__SR_Ca_uptake_and_release__Ca_rel * var_SR_Ca_uptake_and_release__alpha_rel / pow((0.25 + var_chaste_interface__SR_Ca_uptake_and_release__F2), 2); // nanoA
@@ -2302,6 +2327,7 @@
             double var_chaste_interface__SR_Ca_uptake_and_release__F2 = rY[25];
             // Units: dimensionless; Initial value: 0.0007594214
             
+
             const double var_x105 = 0.25 + var_chaste_interface__SR_Ca_uptake_and_release__F2;
             const double var_x106 = pow(var_x105, (-2));
             const double var_x107 = pow(var_chaste_interface__SR_Ca_uptake_and_release__F2, 2);
@@ -2327,7 +2353,7 @@
         double var_chaste_interface__SR_Ca_uptake_and_release__Ca_Calse = rY[23];
         // Units: dimensionless; Initial value: 0.9528726
         
-        
+
         // Mathematics
         const double var_SR_Ca_uptake_and_release__phi_Calse = -641.0 * var_chaste_interface__SR_Ca_uptake_and_release__Ca_Calse + 770.0 * (1.0 - var_chaste_interface__SR_Ca_uptake_and_release__Ca_Calse) * var_chaste_interface__SR_Ca_uptake_and_release__Ca_rel; // per_second
         const double var_SR_Ca_uptake_and_release__Ca_Calse_orig_deriv = var_SR_Ca_uptake_and_release__phi_Calse; // 1 / second
@@ -2344,6 +2370,7 @@
             double var_chaste_interface__SR_Ca_uptake_and_release__Ca_rel = rY[22];
             // Units: millimolar; Initial value: 16.85024
             
+
             
             partialF = -0.64100000000000001 - 0.77000000000000002 * var_chaste_interface__SR_Ca_uptake_and_release__Ca_rel;
         }
@@ -2369,7 +2396,7 @@
         double var_chaste_interface__SR_Ca_uptake_and_release__F3 = rY[26];
         // Units: dimensionless; Initial value: 0.8859153
         
-        
+
         // Mathematics
         const double var_SR_Ca_uptake_and_release__k_rel = 0.0040000000000000001; // millimolar
         const double var_SR_Ca_uptake_and_release__r_act = 240.0 * exp(-3.2000000000000002 + 0.080000000000000002 * var_chaste_interface__membrane__V) + 240.0 * pow(var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i, 4) / pow((var_SR_Ca_uptake_and_release__k_rel + var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i), 4); // per_second
@@ -2389,6 +2416,7 @@
             double var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i = rY[1];
             // Units: millimolar; Initial value: 0.0003787018
             
+
             const double var_x210 = exp(-3.2000000000000002 + 0.080000000000000002 * var_chaste_interface__membrane__V);
             const double var_x212 = 0.0040000000000000001 + var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i;
             const double var_x213 = pow(var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i, 4);
@@ -2421,7 +2449,7 @@
         double var_chaste_interface__SR_Ca_uptake_and_release__F2 = rY[25];
         // Units: dimensionless; Initial value: 0.0007594214
         
-        
+
         // Mathematics
         const double var_SR_Ca_uptake_and_release__k_rel = 0.0040000000000000001; // millimolar
         const double var_SR_Ca_uptake_and_release__r_inact = 40.0 + 240.0 * pow(var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i, 4) / pow((var_SR_Ca_uptake_and_release__k_rel + var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i), 4); // per_second
@@ -2440,6 +2468,7 @@
             double var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i = rY[1];
             // Units: millimolar; Initial value: 0.0003787018
             
+
             const double var_x212 = 0.0040000000000000001 + var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i;
             const double var_x213 = pow(var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i, 4);
             const double var_x215 = pow(var_x212, (-4));
@@ -2468,7 +2497,7 @@
         double var_chaste_interface__SR_Ca_uptake_and_release__F3 = rY[26];
         // Units: dimensionless; Initial value: 0.8859153
         
-        
+
         // Mathematics
         const double var_SR_Ca_uptake_and_release__k_rel = 0.0040000000000000001; // millimolar
         const double var_SR_Ca_uptake_and_release__r_inact = 40.0 + 240.0 * pow(var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i, 4) / pow((var_SR_Ca_uptake_and_release__k_rel + var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i), 4); // per_second
@@ -2484,6 +2513,7 @@
         if (!forceNumerical && this->mUseAnalyticJacobian)
         {
             
+
             
             partialF = -0.00095999999999999992;
         }
@@ -2503,7 +2533,6 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
 
         std::vector<double> dqs(1);

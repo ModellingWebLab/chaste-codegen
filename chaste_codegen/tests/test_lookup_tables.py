@@ -156,7 +156,6 @@ def test_change_lookup_table(be_model):
     assert params_for_printing[0]['mTableSteps'] == 0.01
     assert params_for_printing[0]['table_used_in_methods'] == set({'template_method'})
     assert params_for_printing[0]['var'] == 'membrane$V'
-    print(params_for_printing[0]['lookup_epxrs'])
 
     expected = open(os.path.join(TESTS_FOLDER, 'test_lookup_tables_change_lookup_table.txt'), 'r').read()
     assert str(params_for_printing[0]['lookup_epxrs']) == expected, str(params_for_printing[0]['lookup_epxrs'])
@@ -167,7 +166,9 @@ def test_change_lookup_table(be_model):
     assert params_for_printing[1]['mTableSteps'] == 0.01
     assert params_for_printing[1]['table_used_in_methods'] == set({'template_method'})
     assert params_for_printing[1]['var'] == 'slow_inward_current$Cai'
-    assert str(params_for_printing[1]['lookup_epxrs']) == "['-82.3 - 13.0287 * log(0.001 * slow_inward_current$Cai)']"
+
+    assert str(params_for_printing[1]['lookup_epxrs']) \
+        == "[['-82.3 - 13.0287 * log(0.001 * slow_inward_current$Cai)', False]]"
 
 
 def test_no_print_after_table(s_model):

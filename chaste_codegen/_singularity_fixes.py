@@ -21,6 +21,9 @@ from chaste_codegen._math_functions import exp_
 from chaste_codegen._optimize import optimize_expr_for_c_output
 
 
+ONE = Quantity(1.0, 'dimensionless')
+
+
 def _generate_piecewise(vs, ve, sp, ex, V):
     """Generates a piecewsie for expression based on the singularity point sp and vmin (vs) and vmax (ve) """
     def f(Vx, e):
@@ -63,7 +66,8 @@ def _get_U(expr, V, U_offset, exp_function):
     numerator = tuple(a for a in expr.args if not isinstance(a, Pow) or a.args[1] != -1.0)
     denominator = tuple(a.args[0] for a in expr.args if isinstance(a, Pow) and a.args[1] == -1.0)
 
-    if len(denominator) == 0 or len(numerator) == 0 or not expr.has(exp_function):  # Not a devision or does not have exp
+    # Not a devision or does not have exp
+    if len(denominator) == 0 or len(numerator) == 0 or not expr.has(exp_function):
         return None, None, None
 
     (vs, ve, sp) = None, None, None
@@ -136,7 +140,8 @@ def _new_expr_parts(expr, V, U_offset, exp_function):
     subs_dict = {d: d.evalf(FLOAT_PRECISION) for d in expr.atoms(Quantity)}
     check_U_expr = expr.xreplace(subs_dict)
 
-    if check_U_expr.replace(exp_function, exp) == 0.0:# equations that trivially evaluate to 0 get replaced by 0
+    # Equations that trivially evaluate to 0 get replaced by 0
+    if check_U_expr.replace(exp_function, exp) == 0.0:
         return (None, None, None, Quantity(0.0, 'dimensionless'), True)
 
     elif not expr.has(exp_function):  # Expressions without exp don't have GHK equations
@@ -170,7 +175,7 @@ def _new_expr_parts(expr, V, U_offset, exp_function):
         # Find singularities in A and adjust result to represent 1 / A
         vs, ve, sp, ex, has_piecewise = _new_expr_parts(expr.args[0], V, U_offset, exp_function)
         has_piecewise = has_piecewise or vs is not None
-        return (None, None, None, 1.0 / _generate_piecewise(vs, ve, sp, ex, V), has_piecewise)
+        return (None, None, None, ONE / _generate_piecewise(vs, ve, sp, ex, V), has_piecewise)
 
     elif isinstance(expr, Mul):  # A * B * ...
         (vs, ve, sp) = _get_U(check_U_expr, V, U_offset, exp_function)  # Find the singularity point

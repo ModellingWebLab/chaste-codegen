@@ -1,5 +1,9 @@
 # (unreleased)
-- Added singularity anaysis / fixes
+- Added an automatic fix for removable singularities in GHK equations (which can be switched off with --skip-ingularity-fixes). In the process, expressions that trivially evaluate to 0 are replaced by 0
+  See for more details appendix B in: Johnstone, R. H. (2018). Uncertainty characterisation in action potential modelling for cardiac drug safety [PhD thesis]. University of Oxford. https://ora.ox.ac.uk/objects/uuid:0a28829c-828d-4641-bfb0-11193ef47195
+- For lookup tables prevented expressions of the form 1 / A from being added, instead adding A. 1 / A type expressions were causing issues, when A is 0. While many caes have a piecewise to prevent hissing this case, lookup table interpolation might cause issues.
+- Updated the way BackwardEuler models are calculated, to allow the jacobian to be taken into consideraion for lookup tables.
+- Fixed a bug with BackwardEuler models where jacobian common term equations (e.g. var_x0) ended up in lookup tables.
 
 # Release 0.5.4
 - Fixed sympy deprecation warning when using sympy 1.7 and bumped cellmlmanip recuirement up to ensure sympy 1.7 compatibility

@@ -16,6 +16,7 @@
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
+#include "Warnings.hpp"
 #include "OdeSystemInformation.hpp"
 #include "RegularStimulus.hpp"
 #include "HeartConfig.hpp"
@@ -141,73 +142,175 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                _lookup_table_0[i][0] = exp(-0.018716945411372737 * var_chaste_interface__membrane__V);
+                double val = exp(-0.018716945411372737 * var_chaste_interface__membrane__V);
+
+                _lookup_table_0[i][0] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                _lookup_table_0[i][1] = exp(0.018716945411372737 * var_chaste_interface__membrane__V);
+                double val = exp(0.018716945411372737 * var_chaste_interface__membrane__V);
+
+                _lookup_table_0[i][1] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                _lookup_table_0[i][2] = -4.0 * exp(1.8716945411372736 - 0.037433890822745473 * var_chaste_interface__membrane__V);
+                double val = -4.0 * exp(1.8716945411372736 - 0.037433890822745473 * var_chaste_interface__membrane__V);
+                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
+                //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
+                if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_0 && _lookup_table_0_num_misshit_piecewise[2] < 2){
+                    double left = _lookup_table_0[i-1][2];
+                    double right = _lookup_table_0[i+1][2];
+                    double new_val = (left + right) / 2.0;
+                    WARNING("Lookup table 2 at ["<<i<<"][2] has non-finite value: " << val << " being terpolated to: "<<new_val);
+                    val = new_val;
+                   // count and limit number of misshits
+                  _lookup_table_0_num_misshit_piecewise[2] +=1;
+                }
+                else if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[2] >= 2){
+                    EXCEPTION("Lookup table 2 at ["<<i<<"][2] has non-finite value: " << val);
+                }
+                _lookup_table_0[i][2] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                _lookup_table_0[i][3] = 1.0 - exp(1.8716945411372736 - 0.037433890822745473 * var_chaste_interface__membrane__V);
+                double val = 1.0 - exp(1.8716945411372736 - 0.037433890822745473 * var_chaste_interface__membrane__V);
+                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
+                //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
+                if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_0 && _lookup_table_0_num_misshit_piecewise[3] < 2){
+                    double left = _lookup_table_0[i-1][3];
+                    double right = _lookup_table_0[i+1][3];
+                    double new_val = (left + right) / 2.0;
+                    WARNING("Lookup table 3 at ["<<i<<"][3] has non-finite value: " << val << " being terpolated to: "<<new_val);
+                    val = new_val;
+                   // count and limit number of misshits
+                  _lookup_table_0_num_misshit_piecewise[3] +=1;
+                }
+                else if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[3] >= 2){
+                    EXCEPTION("Lookup table 3 at ["<<i<<"][3] has non-finite value: " << val);
+                }
+                _lookup_table_0[i][3] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                _lookup_table_0[i][4] = -140.0 * exp(1.8716945411372736 - 0.037433890822745473 * var_chaste_interface__membrane__V);
+                double val = -140.0 * exp(1.8716945411372736 - 0.037433890822745473 * var_chaste_interface__membrane__V);
+                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
+                //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
+                if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_0 && _lookup_table_0_num_misshit_piecewise[4] < 2){
+                    double left = _lookup_table_0[i-1][4];
+                    double right = _lookup_table_0[i+1][4];
+                    double new_val = (left + right) / 2.0;
+                    WARNING("Lookup table 4 at ["<<i<<"][4] has non-finite value: " << val << " being terpolated to: "<<new_val);
+                    val = new_val;
+                   // count and limit number of misshits
+                  _lookup_table_0_num_misshit_piecewise[4] +=1;
+                }
+                else if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[4] >= 2){
+                    EXCEPTION("Lookup table 4 at ["<<i<<"][4] has non-finite value: " << val);
+                }
+                _lookup_table_0[i][4] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                _lookup_table_0[i][5] = exp(3.7433890822745473 - 0.074867781645490947 * var_chaste_interface__membrane__V);
+                double val = exp(3.7433890822745473 - 0.074867781645490947 * var_chaste_interface__membrane__V);
+                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
+                //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
+                if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_0 && _lookup_table_0_num_misshit_piecewise[5] < 2){
+                    double left = _lookup_table_0[i-1][5];
+                    double right = _lookup_table_0[i+1][5];
+                    double new_val = (left + right) / 2.0;
+                    WARNING("Lookup table 5 at ["<<i<<"][5] has non-finite value: " << val << " being terpolated to: "<<new_val);
+                    val = new_val;
+                   // count and limit number of misshits
+                  _lookup_table_0_num_misshit_piecewise[5] +=1;
+                }
+                else if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[5] >= 2){
+                    EXCEPTION("Lookup table 5 at ["<<i<<"][5] has non-finite value: " << val);
+                }
+                _lookup_table_0[i][5] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                _lookup_table_0[i][6] = 1.0 - exp(3.7433890822745473 - 0.074867781645490947 * var_chaste_interface__membrane__V);
+                double val = 1.0 - exp(3.7433890822745473 - 0.074867781645490947 * var_chaste_interface__membrane__V);
+                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
+                //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
+                if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_0 && _lookup_table_0_num_misshit_piecewise[6] < 2){
+                    double left = _lookup_table_0[i-1][6];
+                    double right = _lookup_table_0[i+1][6];
+                    double new_val = (left + right) / 2.0;
+                    WARNING("Lookup table 6 at ["<<i<<"][6] has non-finite value: " << val << " being terpolated to: "<<new_val);
+                    val = new_val;
+                   // count and limit number of misshits
+                  _lookup_table_0_num_misshit_piecewise[6] +=1;
+                }
+                else if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[6] >= 2){
+                    EXCEPTION("Lookup table 6 at ["<<i<<"][6] has non-finite value: " << val);
+                }
+                _lookup_table_0[i][6] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                _lookup_table_0[i][7] = 600.0 * exp(-3.2000000000000002 + 0.080000000000000002 * var_chaste_interface__membrane__V);
+                double val = 600.0 * exp(-3.2000000000000002 + 0.080000000000000002 * var_chaste_interface__membrane__V);
+
+                _lookup_table_0[i][7] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                _lookup_table_0[i][8] = exp(-9.375 - 0.125 * var_chaste_interface__membrane__V);
+                double val = exp(-9.375 - 0.125 * var_chaste_interface__membrane__V);
+
+                _lookup_table_0[i][8] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                _lookup_table_0[i][9] = 1.0 + 320.0 * exp(-7.5 - 0.10000000000000001 * var_chaste_interface__membrane__V);
+                double val = 1.0 + 320.0 * exp(-7.5 - 0.10000000000000001 * var_chaste_interface__membrane__V);
+
+                _lookup_table_0[i][9] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                _lookup_table_0[i][10] = ((fabs(41.0 + var_chaste_interface__membrane__V) < 1.0000000000000001e-5) ? (2000.0) : (200.0 * (41.0 + var_chaste_interface__membrane__V) / (1.0 - exp(-4.1000000000000005 - 0.10000000000000001 * var_chaste_interface__membrane__V))));
+                double val = ((fabs(41.0 + var_chaste_interface__membrane__V) < 1.0000000000000001e-5) ? (2000.0) : (200.0 * (41.0 + var_chaste_interface__membrane__V) / (1.0 - exp(-4.1000000000000005 - 0.10000000000000001 * var_chaste_interface__membrane__V))));
+                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
+                //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
+                if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_0 && _lookup_table_0_num_misshit_piecewise[10] < 2){
+                    double left = _lookup_table_0[i-1][10];
+                    double right = _lookup_table_0[i+1][10];
+                    double new_val = (left + right) / 2.0;
+                    WARNING("Lookup table 10 at ["<<i<<"][10] has non-finite value: " << val << " being terpolated to: "<<new_val);
+                    val = new_val;
+                   // count and limit number of misshits
+                  _lookup_table_0_num_misshit_piecewise[10] +=1;
+                }
+                else if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[10] >= 2){
+                    EXCEPTION("Lookup table 10 at ["<<i<<"][10] has non-finite value: " << val);
+                }
+                _lookup_table_0[i][10] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                _lookup_table_0[i][11] = exp(-3.6960000000000002 - 0.056000000000000001 * var_chaste_interface__membrane__V);
+                double val = exp(-3.6960000000000002 - 0.056000000000000001 * var_chaste_interface__membrane__V);
+
+                _lookup_table_0[i][11] = val;
             }
 
             mNeedsRegeneration[0] = false;
@@ -225,6 +328,7 @@ private:
 
     // Lookup tables
     double (*_lookup_table_0)[12];
+    int _lookup_table_0_num_misshit_piecewise[12] = {0};
 
 };
 
