@@ -16,11 +16,13 @@
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
+#include "Warnings.hpp"
 #include "OdeSystemInformation.hpp"
 #include "RegularStimulus.hpp"
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+
 
     boost::shared_ptr<RegularStimulus> Cellgrandi2010ssFromCellMLCvodeDataClamp::UseCellMLDefaultStimulus()
     {
@@ -68,6 +70,7 @@
     Cellgrandi2010ssFromCellMLCvodeDataClamp::~Cellgrandi2010ssFromCellMLCvodeDataClamp()
     {
     }
+
     
     double Cellgrandi2010ssFromCellMLCvodeDataClamp::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -896,4 +899,5 @@ void OdeSystemInformation<Cellgrandi2010ssFromCellMLCvodeDataClamp>::Initialise(
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Cellgrandi2010ssFromCellMLCvodeDataClamp)
+
 #endif // CHASTE_CVODE

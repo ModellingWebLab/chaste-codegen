@@ -15,11 +15,13 @@
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
+#include "Warnings.hpp"
 #include "OdeSystemInformation.hpp"
 #include "RegularStimulus.hpp"
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+
 
     boost::shared_ptr<RegularStimulus> Cellaslanidi_model_2009FromCellML::UseCellMLDefaultStimulus()
     {
@@ -65,6 +67,7 @@
     Cellaslanidi_model_2009FromCellML::~Cellaslanidi_model_2009FromCellML()
     {
     }
+
     
     double Cellaslanidi_model_2009FromCellML::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -456,7 +459,6 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_membrane__Cm_converted = mp_membrane_capacitance_modifier->Calc(0.001 * mParameters[0], var_chaste_interface__environment__time_converted); // uF
         const double var_membrane__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2

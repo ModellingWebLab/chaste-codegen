@@ -15,11 +15,13 @@
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
+#include "Warnings.hpp"
 #include "OdeSystemInformation.hpp"
 #include "RegularStimulus.hpp"
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+
 
     boost::shared_ptr<RegularStimulus> Chaste_CG::UseCellMLDefaultStimulus()
     {
@@ -62,6 +64,7 @@
     Chaste_CG::~Chaste_CG()
     {
     }
+
     
     double Chaste_CG::GetIIonic(const std::vector<double>* pStateVariables)
     {
@@ -412,7 +415,6 @@
         // Inputs:
         // Time units: millisecond
         
-
         // Mathematics
         const double var_membrane__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
 
