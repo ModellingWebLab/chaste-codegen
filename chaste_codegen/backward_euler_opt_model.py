@@ -1,3 +1,5 @@
+from sympy import Eq
+
 from chaste_codegen._lookup_tables import DEFAULT_LOOKUP_PARAMETERS, LookupTables
 from chaste_codegen._partial_eval import partial_eval
 from chaste_codegen.backward_euler_model import BackwardEulerModel
@@ -10,6 +12,7 @@ class BackwardEulerOptModel(BackwardEulerModel):
         self._lookup_tables = LookupTables(model, lookup_params=kwargs.get('lookup_table', DEFAULT_LOOKUP_PARAMETERS))
 
         super().__init__(model, file_name, **kwargs)
+        self._update_formatted_deriv_eq()
         self._vars_for_template['lookup_parameters'] = self._lookup_tables.print_lookup_parameters(self._printer)
 
     def _get_stimulus(self):
@@ -29,21 +32,22 @@ class BackwardEulerOptModel(BackwardEulerModel):
         self._lookup_tables.calc_lookup_tables(derivative_equations)
         return derivative_equations
 
-    def update_state_vars(self, vars_in_compute_one_step):
-        """Update the state vars, savings residual and jacobian info for outputing"""
-        formatted_state_vars, formatted_nonlinear_state_vars, residual_equations, \
-            formatted_derivative_eqs = super().update_state_vars(vars_in_compute_one_step)
-        return formatted_state_vars, formatted_nonlinear_state_vars, residual_equations, formatted_derivative_eqs
+    def _pre_print_hook(self):
+        """ Retreives out linear and non-linear derivatives and the relevant jacobian for it.
+            And calculates lookup tables for the jacobian."""
+        super()._pre_print_hook()
+        # calculate lookup tables for the jacobians created by the Backward Euler
+        self._lookup_tables.calc_lookup_tables((Eq(lhs, rhs) for lhs, rhs in self._jacobian_equations))
 
-    def update_formatted_deriv_eq(self, eq, non_linear_eqs):
-        """Update derivatibve equation information"""
-        super().update_formatted_deriv_eq(eq, non_linear_eqs)
-        if not eq['linear']:
-            with self._lookup_tables.method_being_printed('ComputeResidual'):
-                eq['rhs'] = self._printer.doprint(eq['sympy_rhs'])
-        if eq['in_membrane_voltage']:
-            with self._lookup_tables.method_being_printed('UpdateTransmembranePotential'):
-                eq['rhs'] = self._printer.doprint(eq['sympy_rhs'])
+    def _update_formatted_deriv_eq(self):
+        """Update derivatibve equation information for lookup table printing"""
+        for eq in self._vars_for_template['y_derivative_equations']:
+            if not eq['linear']:
+                with self._lookup_tables.method_being_printed('ComputeResidual'):
+                    eq['rhs'] = self._printer.doprint(eq['sympy_rhs'])
+            if eq['in_membrane_voltage']:
+                with self._lookup_tables.method_being_printed('UpdateTransmembranePotential'):
+                    eq['rhs'] = self._printer.doprint(eq['sympy_rhs'])
 
     def _add_printers(self):
         """ Initialises Printers for outputting chaste code. """

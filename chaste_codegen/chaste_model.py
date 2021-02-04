@@ -15,6 +15,21 @@ from chaste_codegen.model_with_conversions import (
 TIME_STAMP = time.strftime('%Y-%m-%d %H:%M:%S')
 
 
+def get_variable_name(s, interface=False):
+    """Get the correct variable name based on the variable and whether it should be in the chaste_interface."""
+    s_name = s.expr if isinstance(s, Derivative) else s
+    s_name = str(s_name).replace('$', '__')
+    if not s_name.startswith('_'):
+        s_name = '_' + s_name
+
+    if isinstance(s, Derivative):
+        return 'd_dt_chaste_interface_var' + s_name
+    elif interface:
+        return 'var_chaste_interface_' + s_name
+    else:
+        return 'var' + s_name
+
+
 class ChasteModel(object):
     """ Holds information about a cellml model for which chaste code is to be generated.
 
@@ -79,6 +94,7 @@ class ChasteModel(object):
         self._modifiable_parameter_lookup = {p: str(i) for i, p in enumerate(self._modifiable_parameters)}
 
         # Printing
+        self._pre_print_hook()
         self._add_printers()
         self._formatted_state_vars, self._use_verify_state_variables = self._format_state_variables()
 
@@ -184,16 +200,13 @@ class ChasteModel(object):
         """ Get the defining equations for derived quantities"""
         return get_equations_for(self._model, self._derived_quant)
 
+    def _pre_print_hook(self):
+        """ The method provides a hook for subclasses to be able to add additional computation
+            before printing of the output starts"""
+        pass
+
     def _add_printers(self, lookup_table_function=lambda e: None):
         """ Initialises Printers for outputting chaste code. """
-        def get_variable_name(s, interface=False):
-            """Get the correct variable name based on the variable and whether it should be in the chaste_interface."""
-            s_name = str(s).replace('$', '__')
-
-            prefix = 'var_chaste_interface_' if interface else 'var'
-            if not s_name.startswith('_'):
-                s_name = '_' + s_name
-            return prefix + s_name
         # Printer for printing chaste regular variable assignments (var_ prefix)
         # Print variables in interface as var_chaste_interface
         # (state variables, time, lhs of default_stimulus eqs, i_ionic and lhs of y_derivatives)
@@ -203,9 +216,7 @@ class ChasteModel(object):
                              get_variable_name(variable, variable in self._in_interface)
                              if variable not in self._model.modifiable_parameters
                              else self._print_modifiable_parameters(variable),
-                             lambda deriv: 'd_dt_chaste_interface_' +
-                                           (get_variable_name(deriv.expr)
-                                            if isinstance(deriv, Derivative) else get_variable_name(deriv)),
+                             lambda deriv: get_variable_name(deriv),
                              lookup_table_function)
 
         # Printer for printing variable in comments e.g. for ode system information

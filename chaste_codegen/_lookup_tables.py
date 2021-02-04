@@ -2,6 +2,7 @@ import collections
 
 from cellmlmanip.model import Variable
 from sympy import (
+    Pow,
     acos,
     acosh,
     acot,
@@ -125,6 +126,12 @@ class LookupTables:
         # - they have an expensive function
         # - they're not already set as suitable
         # - they only contain 1 variable and this variable is one of the lookup variables
+
+        # Prevent putting expressions of the form 1 / A since the expressions might cause a singularity in the table
+        # since expressions being analised might the bottom of a GHK equation os similar
+        if isinstance(expr, Pow) and expr.args[1] == -1.0:
+            expr = expr.args[0]
+
         if exp_func and expr not in self._lookup_table_expr and \
                 len(vars_used) == 1 and next(iter(vars_used)) in self._lookup_variables:
             self._lookup_table_expr[expr] = vars_used
