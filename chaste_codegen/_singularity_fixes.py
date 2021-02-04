@@ -147,9 +147,6 @@ def _new_expr_parts(expr, V, U_offset, exp_function):
     elif not expr.has(exp_function):  # Expressions without exp don't have GHK equations
         return (None, None, None, expr, False)
 
-    elif not expr.has(exp_function):  # Expressions without exp don't have GHK equations
-        return (None, None, None, expr, False)
-
     elif isinstance(expr, Add):  # A + B + ..
         # The expression is an addition, find singularities in each argument
         new_expr_parts = []
