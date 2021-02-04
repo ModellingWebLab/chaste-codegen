@@ -1,7 +1,8 @@
+from sympy import Eq
+
 from chaste_codegen._lookup_tables import DEFAULT_LOOKUP_PARAMETERS, LookupTables
 from chaste_codegen._partial_eval import partial_eval
 from chaste_codegen.backward_euler_model import BackwardEulerModel
-from sympy import Eq
 
 
 class BackwardEulerOptModel(BackwardEulerModel):
@@ -31,34 +32,12 @@ class BackwardEulerOptModel(BackwardEulerModel):
         self._lookup_tables.calc_lookup_tables(derivative_equations)
         return derivative_equations
 
-    # def update_state_vars(self, vars_in_compute_one_step):
-        # """Update the state vars, savings residual and jacobian info for outputing"""
-        # formatted_state_vars, formatted_nonlinear_state_vars, residual_equations, \
-            # formatted_derivative_eqs = super().update_state_vars(vars_in_compute_one_step)
-        # return formatted_state_vars, formatted_nonlinear_state_vars, residual_equations, formatted_derivative_eqs
-
-    def _pre_print_hook(self):#descr todo
+    def _pre_print_hook(self):
+        """ Retreives out linear and non-linear derivatives and the relevant jacobian for it.
+            And calculates lookup tables for the jacobian."""
         super()._pre_print_hook()
-
-        # derivative_equations = \
-            # partial_eval(self._derivative_equations, self._model.y_derivatives, keep_multiple_usages=False)
-        # self._non_linear_state_vars = \
-            # sorted(get_non_linear_state_vars(derivative_equations, self._model.membrane_voltage_var,
-                   # self._model.state_vars), key=lambda s: get_variable_name(s, s in self._in_interface))
-        # # Pick the formatted equations that are for non-linear derivatives
-        
-        # non_linear_derivs = (eq.lhs for eq in self._derivative_equations if isinstance(eq.lhs, Derivative)
-                             # and eq.lhs.args[0] in self._non_linear_state_vars)
-                             
-        # self._non_linear_eqs = tuple(e for e in self._model.get_equations_for(non_linear_derivs))
-
-        # self._jacobian_equations, self._jacobian_matrix = \
-            # get_jacobian(self._non_linear_state_vars,
-                         # [d for d in derivative_equations if d.lhs.args[0] in self._non_linear_state_vars])
-
-        # self._linear_deriv_eqs, self._linear_equations, self._vars_in_one_step = \
-            # self._rearrange_linear_derivs()
-        self._lookup_tables.calc_lookup_tables((Eq(lhs,rhs) for lhs,rhs in self._jacobian_equations))
+        # calculate lookup tables for the jacobians created by the Backward Euler
+        self._lookup_tables.calc_lookup_tables((Eq(lhs, rhs) for lhs, rhs in self._jacobian_equations))
 
     def _update_formatted_deriv_eq(self):
         """Update derivatibve equation information for lookup table printing"""

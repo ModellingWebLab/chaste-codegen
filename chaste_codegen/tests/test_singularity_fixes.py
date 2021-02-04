@@ -35,8 +35,9 @@ def expr2():
     # assert str(new_expr(expr, V)) == '(False, ' + str(expr) + ')', str(new_expr(expr, V))
 
 def test_no_singularity2():
-#    expr = 25.0 / (exp_(U) * -Z + to_quant(1.0))
+expr = 25.0 / (exp_(U) * -Z + to_quant(1.0))
     from sympy import Pow
+
     #expr =  1 / (exp_(-1.25 - 0.125 * V) - 1.0)
     expr = 1 / (1.0 + exp(1.5669291338582676 - 0.07874015748031496 * V))
     print(new_expr(expr, V))

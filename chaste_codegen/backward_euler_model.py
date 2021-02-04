@@ -14,7 +14,8 @@ from chaste_codegen._rdf import OXMETA
 from chaste_codegen.chaste_model import ChasteModel, get_variable_name
 from chaste_codegen.model_with_conversions import get_equations_for
 
-class BackwardEulerModel(ChasteModel):#tuples?
+
+class BackwardEulerModel(ChasteModel):
     """ Holds template and information specific for the Backwards Euler model type"""
 
     def __init__(self, model, file_name, **kwargs):
@@ -27,8 +28,9 @@ class BackwardEulerModel(ChasteModel):#tuples?
         self._vars_for_template['linear_deriv_eqs'] = [{'state_var_index': deq['state_var_index'],
                                                         'var': self._printer.doprint(deq['var']),
                                                         'g': self._printer.doprint(deq['g']),
-                                                        'h': self._printer.doprint(deq['h'])} for deq in self._linear_deriv_eqs]
-                    
+                                                        'h': self._printer.doprint(deq['h'])}
+                                                       for deq in self._linear_deriv_eqs]
+
         self._vars_for_template['linear_equations'] = self.format_linear_deriv_eqs(self._linear_equations)
 
         self._vars_for_template['nonlinear_state_vars'] = self.format_nonlinear_state_vars()
@@ -37,7 +39,8 @@ class BackwardEulerModel(ChasteModel):#tuples?
         self._vars_for_template['jacobian_equations'], self._vars_for_template['jacobian_entries'] = \
             self.format_jacobian()
 
-    def _pre_print_hook(self):#descr todo
+    def _pre_print_hook(self):
+        """ Retreives out linear and non-linear derivatives and the relevant jacobian for it."""
         super()._pre_print_hook()
         # get deriv eqs and substitute in all variables other than state vars
         derivative_equations = \
@@ -46,10 +49,10 @@ class BackwardEulerModel(ChasteModel):#tuples?
             sorted(get_non_linear_state_vars(derivative_equations, self._model.membrane_voltage_var,
                    self._model.state_vars), key=lambda s: get_variable_name(s, s in self._in_interface))
         # Pick the formatted equations that are for non-linear derivatives
-        
+
         non_linear_derivs = (eq.lhs for eq in self._derivative_equations if isinstance(eq.lhs, Derivative)
                              and eq.lhs.args[0] in self._non_linear_state_vars)
-                             
+
         self._non_linear_eqs = tuple(e for e in self._model.get_equations_for(non_linear_derivs))
 
         self._jacobian_equations, self._jacobian_matrix = \
@@ -58,7 +61,7 @@ class BackwardEulerModel(ChasteModel):#tuples?
 
         self._linear_deriv_eqs, self._linear_equations, self._vars_in_one_step = \
             self._rearrange_linear_derivs()
-            
+
     def _rearrange_linear_derivs(self):
         """Formats the rearranged linear derivative expressions
 
@@ -127,7 +130,7 @@ class BackwardEulerModel(ChasteModel):#tuples?
     def _format_state_variables(self):
         formatted_state_vars, use_verify_state_variables = super()._format_state_variables()
 
-        jacobian_symbols = set()        
+        jacobian_symbols = set()
         non_linear_eq_symbols = set()
 
         # get symbols in jacobian
@@ -139,7 +142,7 @@ class BackwardEulerModel(ChasteModel):#tuples?
         # store symbols used in non-linear equations
         for eq in self._non_linear_eqs:
             non_linear_eq_symbols.update(eq.rhs.free_symbols)
-        
+
         for sv in formatted_state_vars:
             sv['in_non_linear_eq'] = sv['sympy_var'] in non_linear_eq_symbols
             sv['linear'] = sv['sympy_var'] not in self._non_linear_state_vars
@@ -150,7 +153,8 @@ class BackwardEulerModel(ChasteModel):#tuples?
 
     def format_derivative_equation(self, eq, modifiers_with_defining_eqs):
         formatted_derivative_equation = super().format_derivative_equation(eq, modifiers_with_defining_eqs)
-        formatted_derivative_equation['linear'] = formatted_derivative_equation['sympy_lhs'] not in (e.lhs for e in self._non_linear_eqs)
+        formatted_derivative_equation['linear'] = \
+            formatted_derivative_equation['sympy_lhs'] not in (e.lhs for e in self._non_linear_eqs)
         return formatted_derivative_equation
 
     def format_nonlinear_state_vars(self):
@@ -169,9 +173,10 @@ class BackwardEulerModel(ChasteModel):#tuples?
 
     def format_residual_equations(self):
         """Update the state vars, savings residual and jacobian info for outputing"""
-        residual_equations = [{'residual_index': self._vars_for_template['nonlinear_state_vars'].index(sv), 'state_var_index': i,
+        residual_equations = [{'residual_index': self._vars_for_template['nonlinear_state_vars'].index(sv),
+                               'state_var_index': i,
                                'var': self._vars_for_template['y_derivatives'][i]}
-                               for i, sv in enumerate(self._formatted_state_vars) if not sv['linear']]
+                              for i, sv in enumerate(self._formatted_state_vars) if not sv['linear']]
         return residual_equations
 
     def format_jacobian(self):

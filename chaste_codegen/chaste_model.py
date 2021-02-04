@@ -29,6 +29,7 @@ def get_variable_name(s, interface=False):
     else:
         return 'var' + s_name
 
+
 class ChasteModel(object):
     """ Holds information about a cellml model for which chaste code is to be generated.
 
@@ -199,7 +200,9 @@ class ChasteModel(object):
         """ Get the defining equations for derived quantities"""
         return get_equations_for(self._model, self._derived_quant)
 
-    def _pre_print_hook(self):#descr todo
+    def _pre_print_hook(self):
+        """ The method provides a hook for subclasses to be able to add additional computation
+            before printing of the output starts"""
         pass
 
     def _add_printers(self, lookup_table_function=lambda e: None):

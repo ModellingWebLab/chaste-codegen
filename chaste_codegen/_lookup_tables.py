@@ -1,9 +1,9 @@
 import collections
 
-from cellmlmanip.model import Variable
+from cellmlmanip.model import Quantity, Variable
 from sympy import (
-    Pow,
     Piecewise,
+    Pow,
     Symbol,
     acos,
     acosh,
@@ -50,7 +50,6 @@ _EXPENSIVE_FUNCTIONS = (exp, log, ln, sin, cos, tan, sec, csc, cot, sinh, cosh, 
 
 
 # tuple of ([<metadata tag>, mTableMins, mTableMaxs, mTableSteps], )
-#DEFAULT_LOOKUP_PARAMETERS = (['membrane_voltage', -250.0001, 549.9999, 0.001], )
 DEFAULT_LOOKUP_PARAMETERS = (['membrane_voltage', -250.0, 550.0, 0.001], )
 
 
@@ -100,7 +99,8 @@ class LookupTables:
     def _analyse_for_lut(self, expr, in_piecewise):
         """ Analyse whether an expression contains lookup table suitable (sub-_ expressions. """
         in_piecewise = in_piecewise or isinstance(expr, Piecewise)
-        used_vars = expr.atoms(Variable, Symbol)
+        # Used variables are either Variable or Symbol but not Quantity
+        used_vars = set(filter(lambda v: not isinstance(v, Quantity), expr.atoms(Variable, Symbol)))
         if not expr.has(*_EXPENSIVE_FUNCTIONS) or len(used_vars) == 0:
             return False, used_vars, in_piecewise  # other leaf
         elif expr in self._lookup_table_expr:  # expr already set for lookup table, no need to analyse

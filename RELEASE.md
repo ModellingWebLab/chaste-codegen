@@ -1,7 +1,5 @@
 # (unreleased)
 - Added singularity anaysis / fixes
-- Fixed sympy deprecation warning when using sympy 1.7 and bumped cellmlmanip recuirement up to ensure sympy 1.7 compatibility
-
 
 # Release 0.5.4
 - Fixed sympy deprecation warning when using sympy 1.7 and bumped cellmlmanip recuirement up to ensure sympy 1.7 compatibility
