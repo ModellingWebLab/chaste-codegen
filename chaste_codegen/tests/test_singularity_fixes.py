@@ -17,7 +17,7 @@ def to_quant(val):
 V = Variable(name='V', units='millivolt')
 Z = to_quant(6.2)
 U = to_quant(2) * V + to_quant(5.0)
-SP = (-(log(to_quant(6.2)) + to_quant(5.0)) / to_quant(2))
+SP = (-(log(Z) + to_quant(5.0)) / to_quant(2))
 
 
 @pytest.fixture(scope='session')
