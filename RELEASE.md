@@ -1,5 +1,5 @@
 # (unreleased)
-- Added an automatic fix for removable singularities in GHK equations (which can be switched off with --skip-ingularity-fixes). In the process, expressions that trivially evaluate to 0 are replaced by 0.
+- Added an automatic fix for removable singularities in GHK equations (which can be switched off with --skip-ingularity-fixes).
   The process looks for equations of any of the following forms, where U is a function of V:
   - `U / (exp(U) - 1.0)`
   - `U / (1.0 + exp(U))`

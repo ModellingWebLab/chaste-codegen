@@ -131,7 +131,7 @@ def test_fix_singularity_equations():
     fix_singularity_equations(model, model.membrane_voltage_var, model.modifiable_parameters)
     new = get_equations_for(model, model.y_derivatives)
 
-    assert len(new) == 191
+    assert len(new) == 201
 
     old_piecewises = tuple(eq.lhs for eq in old if eq.rhs.has(Piecewise))
     additional_piecewises = [eq.lhs for eq in new if eq.rhs.has(Piecewise) and eq.lhs not in old_piecewises]
@@ -153,7 +153,7 @@ def test_fix_singularity_equations2():
     fix_singularity_equations(model, model.membrane_voltage_var, model.modifiable_parameters)
     new = get_equations_for(model, model.y_derivatives)
 
-    assert len(new) == 159
+    assert len(new) == 180
 
     old_piecewises = tuple(eq.lhs for eq in old if eq.rhs.has(Piecewise))
     additional_piecewises = [eq.lhs for eq in new if eq.rhs.has(Piecewise) and eq.lhs not in old_piecewises]

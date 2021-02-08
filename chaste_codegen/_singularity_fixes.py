@@ -12,7 +12,6 @@ from sympy import (
     Piecewise,
     Pow,
     Wild,
-    exp,
     log,
     solveset,
 )
@@ -140,11 +139,7 @@ def _new_expr_parts(expr, V, U_offset, exp_function):
     subs_dict = {d: d.evalf(FLOAT_PRECISION) for d in expr.atoms(Quantity)}
     check_U_expr = expr.xreplace(subs_dict)
 
-    # Equations that trivially evaluate to 0 get replaced by 0
-    if check_U_expr.replace(exp_function, exp) == 0.0:
-        return (None, None, None, Quantity(0.0, 'dimensionless'), True)
-
-    elif not expr.has(exp_function):  # Expressions without exp don't have GHK equations
+    if not expr.has(exp_function):  # Expressions without exp don't have GHK equations
         return (None, None, None, expr, False)
 
     elif isinstance(expr, Add):  # A + B + ..
