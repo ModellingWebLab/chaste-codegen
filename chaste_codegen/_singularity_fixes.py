@@ -38,9 +38,9 @@ def _generate_piecewise(vs, ve, sp, ex, V):
 def _get_U(expr, V, U_offset, exp_function):
     '''Finds U in ghk equations these are of one of the the following forms where U is an expression over V:
        - `U / (exp(U) - 1.0)`
-       - `U / (1.0 + exp(U))`
+       - `U / (1.0 - exp(U))`
        - `(exp(U) - 1.0) / U`
-       - `(1.0 + exp(U)) / U`
+       - `(1.0 - exp(U)) / U`
        '''
     Z = Wild('Z', real=True)
     U_wildcard = Wild('U_wildcard', real=True, include=[V])

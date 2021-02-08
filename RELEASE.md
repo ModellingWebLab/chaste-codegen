@@ -2,9 +2,9 @@
 - Added an automatic fix for removable singularities in GHK equations (which can be switched off with --skip-ingularity-fixes).
   The process looks for equations of any of the following forms, where U is a function of V:
   - `U / (exp(U) - 1.0)`
-  - `U / (1.0 + exp(U))`
+  - `U / (1.0 - exp(U))`
   - `(exp(U) - 1.0) / U`
-  - `(1.0 + exp(U)) / U`  
+  - `(1.0 - exp(U)) / U`  
   It replaces these with a piecewise 1e-7 either side of U==0 drawing a stright line in the region.
   For example `(V + 5)/(exp(V + 5) - 1)` becomes `((fabs(-V - 5.0000000000000000) < fabs(-4.9999999000000000 / 2 - -5.0000001000000000 / 2)) ? ((-5.0000001000000000 + 5.0) / (-1.0 + exp(-5.0000001000000000 + 5.0)) + (--5.0000001000000000 + V) * ((-4.9999999000000000 + 5.0) / (-1.0 + exp(-4.9999999000000000 + 5.0)) - (-5.0000001000000000 + 5.0) / (-1.0 + exp(-5.0000001000000000 + 5.0))) / (--5.0000001000000000 - 4.9999999000000000)) : ((5.0 + V) / (-1.0 + exp(5.0 + V))))`
 
