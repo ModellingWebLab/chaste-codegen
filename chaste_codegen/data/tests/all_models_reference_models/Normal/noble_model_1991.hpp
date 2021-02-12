@@ -35,6 +35,7 @@ class Cellnoble_model_1991FromCellML : public AbstractCardiacCell
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
+    double GetIntracellularCalciumConcentration();
     Cellnoble_model_1991FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellnoble_model_1991FromCellML();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);

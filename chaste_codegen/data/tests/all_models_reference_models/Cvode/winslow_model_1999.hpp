@@ -36,6 +36,7 @@ class Cellwinslow_model_1999FromCellMLCvode : public AbstractCvodeCell
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
+    double GetIntracellularCalciumConcentration();
     Cellwinslow_model_1999FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellwinslow_model_1999FromCellMLCvode();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);

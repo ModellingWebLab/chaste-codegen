@@ -1,6 +1,6 @@
 #ifdef CHASTE_CVODE
-#ifndef CELLSHANNON2004FROMCELLMLCVODEDATACLAMP_HPP_
-#define CELLSHANNON2004FROMCELLMLCVODEDATACLAMP_HPP_
+#ifndef CELLSHANNON_WANG_PUGLISI_WEBER_BERS_2004FROMCELLMLCVODEDATACLAMP_HPP_
+#define CELLSHANNON_WANG_PUGLISI_WEBER_BERS_2004FROMCELLMLCVODEDATACLAMP_HPP_
 
 //! @file
 //!
@@ -21,7 +21,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractCvodeCellWithDataClamp.hpp"
 
-class CellShannon2004FromCellMLCvodeDataClamp : public AbstractCardiacCellWithModifiers<AbstractCvodeCellWithDataClamp >
+class Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp : public AbstractCardiacCellWithModifiers<AbstractCvodeCellWithDataClamp >
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -99,8 +99,8 @@ public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    CellShannon2004FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~CellShannon2004FromCellMLCvodeDataClamp();
+    Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time, const N_Vector rY, N_Vector rDY);
     N_Vector ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY);
@@ -108,7 +108,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(CellShannon2004FromCellMLCvodeDataClamp)
+CHASTE_CLASS_EXPORT(Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp)
 
 namespace boost
 {
@@ -116,7 +116,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const CellShannon2004FromCellMLCvodeDataClamp * t, const unsigned int fileVersion)
+            Archive & ar, const Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -126,18 +126,18 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, CellShannon2004FromCellMLCvodeDataClamp * t, const unsigned int fileVersion)
+            Archive & ar, Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)CellShannon2004FromCellMLCvodeDataClamp(p_solver, p_stimulus);
+            ::new(t)Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLSHANNON2004FROMCELLMLCVODEDATACLAMP_HPP_
+#endif // CELLSHANNON_WANG_PUGLISI_WEBER_BERS_2004FROMCELLMLCVODEDATACLAMP_HPP_
 #endif // CHASTE_CVODE

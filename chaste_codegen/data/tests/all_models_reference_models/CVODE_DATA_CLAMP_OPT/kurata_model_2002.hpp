@@ -35,6 +35,7 @@ class Cellkurata_model_2002FromCellMLCvodeDataClampOpt : public AbstractCvodeCel
 
 public:
 
+    double GetIntracellularCalciumConcentration();
     Cellkurata_model_2002FromCellMLCvodeDataClampOpt(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellkurata_model_2002FromCellMLCvodeDataClampOpt();
     AbstractLookupTableCollection* GetLookupTableCollection();

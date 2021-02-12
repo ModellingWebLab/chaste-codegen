@@ -15,6 +15,7 @@
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
+#include "Warnings.hpp"
 #include "OdeSystemInformation.hpp"
 #include "RegularStimulus.hpp"
 #include "HeartConfig.hpp"
@@ -138,7 +139,7 @@
         const double var_calcium_activated_chloride_current__i_ClCa = (-var_calcium_activated_chloride_current__E_Cl + var_chaste_interface__cell__V) * var_calcium_activated_chloride_current__O_ClCa * var_calcium_activated_chloride_current__g_ClCa * var_calcium_concentration__Cai / (var_calcium_activated_chloride_current__Km_Cl + var_calcium_concentration__Cai); // picoA_per_picoF
         const double var_calcium_background_current__i_Cab = (-var_calcium_background_current__E_CaN + var_chaste_interface__cell__V) * var_calcium_background_current__g_Cab; // picoA_per_picoF
         const double var_cell__Vss = 2.1999999999999998e-8; // microlitre
-        const double var_L_type_calcium_current__i_CaL = ((fabs(var_L_type_calcium_current__FVRT_Ca) > 1.0000000000000001e-5) ? (-2.0 * (-var_chaste_interface__calcium_concentration__Cass + mParameters[1] * exp(-var_L_type_calcium_current__FVRT_Ca)) * var_L_type_calcium_current__FVRT_Ca * var_chaste_interface__L_type_calcium_current__O * mParameters[4] * var_chaste_interface__L_type_calcium_current__y_gate * var_cell__F * var_cell__Vss / ((1.0 - exp(-var_L_type_calcium_current__FVRT_Ca)) * var_cell__Acap * mParameters[5])) : (-2.0000000000000002e-5 * (-var_chaste_interface__calcium_concentration__Cass + mParameters[1] * exp(-1.0000000000000001e-5)) * var_chaste_interface__L_type_calcium_current__O * mParameters[4] * var_chaste_interface__L_type_calcium_current__y_gate * var_cell__F * var_cell__Vss / ((1.0 - exp(-1.0000000000000001e-5)) * var_cell__Acap * mParameters[5]))); // picoA_per_picoF
+        const double var_L_type_calcium_current__i_CaL = -2.0 * (-var_chaste_interface__calcium_concentration__Cass + mParameters[1] * exp(-var_L_type_calcium_current__FVRT_Ca)) * var_L_type_calcium_current__FVRT_Ca * var_chaste_interface__L_type_calcium_current__O * mParameters[4] * var_chaste_interface__L_type_calcium_current__y_gate * var_cell__F * var_cell__Vss / ((1.0 - exp(-var_L_type_calcium_current__FVRT_Ca)) * var_cell__Acap * mParameters[5]); // picoA_per_picoF
         const double var_L_type_calcium_current__i_CaL_converted = HeartConfig::Instance()->GetCapacitance() * var_L_type_calcium_current__i_CaL; // uA_per_cm2
         const double var_fast_transient_outward_K_I__g_Kto_f = 0.53469999999999995; // milliS_per_microF
         const double var_fast_transient_outward_K_I__E_K = var_cell__R * var_cell__T * log(mParameters[2] / var_chaste_interface__potassium_concentration__Ki) / var_cell__F; // millivolt
@@ -327,7 +328,7 @@
         const double var_cell__VNSR = 2.3099999999999999e-7; // microlitre
         const double var_cell__Vmyo = 2.1999999999999999e-5; // microlitre
         const double var_cell__Vss = 2.1999999999999998e-8; // microlitre
-        const double var_L_type_calcium_current__i_CaL = ((fabs(var_L_type_calcium_current__FVRT_Ca) > 1.0000000000000001e-5) ? (-2.0 * (-var_chaste_interface__calcium_concentration__Cass + mParameters[1] * exp(-var_L_type_calcium_current__FVRT_Ca)) * var_L_type_calcium_current__FVRT_Ca * var_chaste_interface__L_type_calcium_current__O * mParameters[4] * var_chaste_interface__L_type_calcium_current__y_gate * var_cell__F * var_cell__Vss / ((1.0 - exp(-var_L_type_calcium_current__FVRT_Ca)) * var_cell__Acap * mParameters[5])) : (-2.0000000000000002e-5 * (-var_chaste_interface__calcium_concentration__Cass + mParameters[1] * exp(-1.0000000000000001e-5)) * var_chaste_interface__L_type_calcium_current__O * mParameters[4] * var_chaste_interface__L_type_calcium_current__y_gate * var_cell__F * var_cell__Vss / ((1.0 - exp(-1.0000000000000001e-5)) * var_cell__Acap * mParameters[5]))); // picoA_per_picoF
+        const double var_L_type_calcium_current__i_CaL = -2.0 * (-var_chaste_interface__calcium_concentration__Cass + mParameters[1] * exp(-var_L_type_calcium_current__FVRT_Ca)) * var_L_type_calcium_current__FVRT_Ca * var_chaste_interface__L_type_calcium_current__O * mParameters[4] * var_chaste_interface__L_type_calcium_current__y_gate * var_cell__F * var_cell__Vss / ((1.0 - exp(-var_L_type_calcium_current__FVRT_Ca)) * var_cell__Acap * mParameters[5]); // picoA_per_picoF
         const double d_dt_chaste_interface_var_calcium_fluxes__P_RyR = var_chaste_interface__calcium_fluxes__P_RyR * var_calcium_fluxes__P_ryr_const1 + var_L_type_calcium_current__i_CaL * var_calcium_fluxes__P_ryr_const2 * exp(-0.038580246913580245 * pow((-1 + 0.20000000000000001 * var_chaste_interface__cell__V), 2)) / var_L_type_calcium_current__i_CaL_max; // 1 / millisecond
         const double var_cell__prepulses_number = 10000000000.0; // dimensionless
         const double var_chaste_interface__cell__stim_period = 333.33300000000003; // millisecond
@@ -541,7 +542,7 @@
         const double var_L_type_calcium_current__FVRT = var_cell__F * var_chaste_interface__cell__V / (var_cell__R * var_cell__T); // dimensionless
         const double var_L_type_calcium_current__FVRT_Ca = 2.0 * var_L_type_calcium_current__FVRT; // dimensionless
         const double var_cell__Vss = 2.1999999999999998e-8; // microlitre
-        const double var_L_type_calcium_current__i_CaL = ((fabs(var_L_type_calcium_current__FVRT_Ca) > 1.0000000000000001e-5) ? (-2.0 * (-var_chaste_interface__calcium_concentration__Cass + mParameters[1] * exp(-var_L_type_calcium_current__FVRT_Ca)) * var_L_type_calcium_current__FVRT_Ca * var_chaste_interface__L_type_calcium_current__O * mParameters[4] * var_chaste_interface__L_type_calcium_current__y_gate * var_cell__F * var_cell__Vss / ((1.0 - exp(-var_L_type_calcium_current__FVRT_Ca)) * var_cell__Acap * mParameters[5])) : (-2.0000000000000002e-5 * (-var_chaste_interface__calcium_concentration__Cass + mParameters[1] * exp(-1.0000000000000001e-5)) * var_chaste_interface__L_type_calcium_current__O * mParameters[4] * var_chaste_interface__L_type_calcium_current__y_gate * var_cell__F * var_cell__Vss / ((1.0 - exp(-1.0000000000000001e-5)) * var_cell__Acap * mParameters[5]))); // picoA_per_picoF
+        const double var_L_type_calcium_current__i_CaL = -2.0 * (-var_chaste_interface__calcium_concentration__Cass + mParameters[1] * exp(-var_L_type_calcium_current__FVRT_Ca)) * var_L_type_calcium_current__FVRT_Ca * var_chaste_interface__L_type_calcium_current__O * mParameters[4] * var_chaste_interface__L_type_calcium_current__y_gate * var_cell__F * var_cell__Vss / ((1.0 - exp(-var_L_type_calcium_current__FVRT_Ca)) * var_cell__Acap * mParameters[5]); // picoA_per_picoF
         const double var_L_type_calcium_current__i_CaL_converted = HeartConfig::Instance()->GetCapacitance() * var_L_type_calcium_current__i_CaL; // uA_per_cm2
         const double var_cell__prepulses_number = 10000000000.0; // dimensionless
         const double var_chaste_interface__cell__stim_period = 333.33300000000003; // millisecond

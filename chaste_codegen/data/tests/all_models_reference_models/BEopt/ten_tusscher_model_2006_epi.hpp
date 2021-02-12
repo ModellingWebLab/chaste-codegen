@@ -5,7 +5,7 @@
 //!
 //! This source file was generated from CellML by chaste_codegen version (version omitted as unimportant)
 //!
-//! Model: tentusscher_panfilov_2006_epi
+//! Model: tentusscher_model_2006_epi
 //!
 //! Processed by chaste_codegen: https://github.com/ModellingWebLab/chaste-codegen
 //!     (translator: chaste_codegen, model type: BackwardEuler)
@@ -38,6 +38,7 @@ public:
     double GetIntracellularCalciumConcentration();
     Cellten_tusscher_model_2006_epiFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellten_tusscher_model_2006_epiFromCellMLBackwardEuler();
+    void VerifyStateVariables();
     AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[7], double rResidual[7]);
     void ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[7], double rJacobian[7][7]);protected:

@@ -35,6 +35,7 @@ class Cellwinslow_model_1999FromCellMLRushLarsenOpt : public AbstractRushLarsenC
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
+    double GetIntracellularCalciumConcentration();
     Cellwinslow_model_1999FromCellMLRushLarsenOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellwinslow_model_1999FromCellMLRushLarsenOpt();
     AbstractLookupTableCollection* GetLookupTableCollection();

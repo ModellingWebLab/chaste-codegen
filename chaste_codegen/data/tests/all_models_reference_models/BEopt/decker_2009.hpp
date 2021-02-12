@@ -18,13 +18,13 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractBackwardEulerCardiacCell.hpp"
 
-class Celldecker_2009FromCellMLBackwardEuler : public AbstractBackwardEulerCardiacCell<37>
+class Celldecker_2009FromCellMLBackwardEuler : public AbstractBackwardEulerCardiacCell<35>
 {
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & archive, const unsigned int version)
     {
-        archive & boost::serialization::base_object<AbstractBackwardEulerCardiacCell<37> >(*this);
+        archive & boost::serialization::base_object<AbstractBackwardEulerCardiacCell<35> >(*this);
         
     }
 
@@ -39,8 +39,8 @@ public:
     Celldecker_2009FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Celldecker_2009FromCellMLBackwardEuler();
     AbstractLookupTableCollection* GetLookupTableCollection();
-    double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[37], double rResidual[37]);
-    void ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[37], double rJacobian[37][37]);protected:
+    double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[35], double rResidual[35]);
+    void ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[35], double rJacobian[35][35]);protected:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time);
     void ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time);
 

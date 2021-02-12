@@ -35,6 +35,7 @@ class Cellfink_noble_giles_model_2008FromCellMLBackwardEulerNoLut : public Abstr
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
+    double GetIntracellularCalciumConcentration();
     Cellfink_noble_giles_model_2008FromCellMLBackwardEulerNoLut(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellfink_noble_giles_model_2008FromCellMLBackwardEulerNoLut();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__Environment__time, const double rCurrentGuess[17], double rResidual[17]);

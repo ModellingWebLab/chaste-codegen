@@ -34,6 +34,7 @@ class Cellkurata_model_2002FromCellMLRushLarsenOpt : public AbstractRushLarsenCa
 
 public:
 
+    double GetIntracellularCalciumConcentration();
     Cellkurata_model_2002FromCellMLRushLarsenOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellkurata_model_2002FromCellMLRushLarsenOpt();
     AbstractLookupTableCollection* GetLookupTableCollection();

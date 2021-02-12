@@ -34,6 +34,7 @@ class Cellkurata_model_2002FromCellMLGRL1Opt : public AbstractGeneralizedRushLar
 
 public:
 
+    double GetIntracellularCalciumConcentration();
     Cellkurata_model_2002FromCellMLGRL1Opt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellkurata_model_2002FromCellMLGRL1Opt();
     AbstractLookupTableCollection* GetLookupTableCollection();

@@ -15,6 +15,7 @@
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
+#include "Warnings.hpp"
 #include "OdeSystemInformation.hpp"
 #include "RegularStimulus.hpp"
 #include "HeartConfig.hpp"
@@ -141,37 +142,49 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                _lookup_table_0[i][0] = exp(0.9375 + 0.012500000000000001 * var_chaste_interface__membrane__V);
+                double val = exp(0.9375 + 0.012500000000000001 * var_chaste_interface__membrane__V);
+
+                _lookup_table_0[i][0] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                _lookup_table_0[i][1] = 1 / (-1.0 + exp(-6.5 - 0.10000000000000001 * var_chaste_interface__membrane__V));
+                double val = -1.0 + exp(-6.5 - 0.10000000000000001 * var_chaste_interface__membrane__V);
+
+                _lookup_table_0[i][1] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                _lookup_table_0[i][2] = exp(-3.75 - 0.050000000000000003 * var_chaste_interface__membrane__V);
+                double val = exp(-3.75 - 0.050000000000000003 * var_chaste_interface__membrane__V);
+
+                _lookup_table_0[i][2] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                _lookup_table_0[i][3] = 1 / (1.0 + exp(-4.5 - 0.10000000000000001 * var_chaste_interface__membrane__V));
+                double val = 1.0 + exp(-4.5 - 0.10000000000000001 * var_chaste_interface__membrane__V);
+
+                _lookup_table_0[i][3] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                _lookup_table_0[i][4] = exp(-4.166666666666667 - 0.055555555555555552 * var_chaste_interface__membrane__V);
+                double val = exp(-4.166666666666667 - 0.055555555555555552 * var_chaste_interface__membrane__V);
+
+                _lookup_table_0[i][4] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                _lookup_table_0[i][5] = 1 / (-1.0 + exp(-5.0 - 0.10000000000000001 * var_chaste_interface__membrane__V));
+                double val = -1.0 + exp(-5.0 - 0.10000000000000001 * var_chaste_interface__membrane__V);
+
+                _lookup_table_0[i][5] = val;
             }
 
             mNeedsRegeneration[0] = false;
@@ -189,11 +202,28 @@ private:
 
     // Lookup tables
     double (*_lookup_table_0)[6];
+    int _lookup_table_0_num_misshit_piecewise[6] = {0};
 
 };
 
 std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler_LookupTables> Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler_LookupTables::mpInstance;
 
+    boost::shared_ptr<RegularStimulus> Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler::UseCellMLDefaultStimulus()
+    {
+        // Use the default stimulus specified by CellML metadata
+        const double var_chaste_interface__membrane__stim_amplitude = -20.0; // microA_per_cm2
+        const double var_chaste_interface__membrane__stim_duration = 0.5; // millisecond
+        const double var_chaste_interface__membrane__stim_period = 1000.0; // millisecond
+        const double var_chaste_interface__membrane__stim_start = 10.0; // millisecond
+        boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+                -fabs(var_chaste_interface__membrane__stim_amplitude),
+                var_chaste_interface__membrane__stim_duration,
+                var_chaste_interface__membrane__stim_period,
+                var_chaste_interface__membrane__stim_start
+                ));
+        mpIntracellularStimulus = p_cellml_stim;
+        return p_cellml_stim;
+    }
 
     Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler::Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<0>(
@@ -205,7 +235,14 @@ std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackw
         //
         this->mpSystemInfo = OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler>::Instance();
         Init();
+
+        // We have a default stimulus specified in the CellML file metadata
+        this->mHasDefaultStimulusFromCellML = true;
         
+        this->mParameters[0] = 1.0; // (var_membrane__Cm) [microF_per_cm2]
+        this->mParameters[1] = 120.0; // (var_sodium_channel__g_Na) [milliS_per_cm2]
+        this->mParameters[2] = 0.29999999999999999; // (var_leakage_current__g_L) [milliS_per_cm2]
+        this->mParameters[3] = 36.0; // (var_potassium_channel__g_K) [milliS_per_cm2]
     }
 
     Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler::~Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler()
@@ -233,9 +270,9 @@ std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackw
         // Units: dimensionless; Initial value: 0.325
         
 
-        const double var_leakage_current__i_L = 19.316099999999999 + 0.29999999999999999 * var_chaste_interface__membrane__V; // microA_per_cm2
-        const double var_potassium_channel__i_K = 36.0 * pow(var_chaste_interface__potassium_channel_n_gate__n, 4) * (87.0 + var_chaste_interface__membrane__V); // microA_per_cm2
-        const double var_sodium_channel__i_Na = 120.0 * pow(var_chaste_interface__sodium_channel_m_gate__m, 3) * (-40.0 + var_chaste_interface__membrane__V) * var_chaste_interface__sodium_channel_h_gate__h; // microA_per_cm2
+        const double var_leakage_current__i_L = (64.387 + var_chaste_interface__membrane__V) * mParameters[2]; // microA_per_cm2
+        const double var_potassium_channel__i_K = pow(var_chaste_interface__potassium_channel_n_gate__n, 4) * (87.0 + var_chaste_interface__membrane__V) * mParameters[3]; // microA_per_cm2
+        const double var_sodium_channel__i_Na = pow(var_chaste_interface__sodium_channel_m_gate__m, 3) * (-40.0 + var_chaste_interface__membrane__V) * mParameters[1] * var_chaste_interface__sodium_channel_h_gate__h; // microA_per_cm2
         const double var_chaste_interface__i_ionic = var_leakage_current__i_L + var_potassium_channel__i_K + var_sodium_channel__i_Na; // uA_per_cm2
 
         const double i_ionic = var_chaste_interface__i_ionic;
@@ -259,7 +296,7 @@ std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackw
         // Units: dimensionless; Initial value: 0.325
         
 
-        const double d_dt_chaste_interface_var_membrane__V = -19.316099999999999 - GetIntracellularAreaStimulus(var_chaste_interface__environment__time) - 0.29999999999999999 * var_chaste_interface__membrane__V - 36.0 * pow(var_chaste_interface__potassium_channel_n_gate__n, 4) * (87.0 + var_chaste_interface__membrane__V) - 120.0 * pow(var_chaste_interface__sodium_channel_m_gate__m, 3) * (-40.0 + var_chaste_interface__membrane__V) * var_chaste_interface__sodium_channel_h_gate__h; // millivolt / millisecond
+        const double d_dt_chaste_interface_var_membrane__V = (-GetIntracellularAreaStimulus(var_chaste_interface__environment__time) - (64.387 + var_chaste_interface__membrane__V) * mParameters[2] - pow(var_chaste_interface__potassium_channel_n_gate__n, 4) * (87.0 + var_chaste_interface__membrane__V) * mParameters[3] - pow(var_chaste_interface__sodium_channel_m_gate__m, 3) * (-40.0 + var_chaste_interface__membrane__V) * mParameters[1] * var_chaste_interface__sodium_channel_h_gate__h) / mParameters[0]; // millivolt / millisecond
         
         rY[0] += mDt*d_dt_chaste_interface_var_membrane__V;
     }
@@ -285,11 +322,11 @@ std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackw
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
-        const double var_potassium_channel_n_gate__alpha_n = -0.01 * _lt_0_row[1] * (65.0 + var_chaste_interface__membrane__V);
+        const double var_potassium_channel_n_gate__alpha_n = -0.01 * (65.0 + var_chaste_interface__membrane__V) / (_lt_0_row[1]);
         const double var_potassium_channel_n_gate__beta_n = 0.125 * _lt_0_row[0];
         const double var_sodium_channel_h_gate__alpha_h = 0.070000000000000007 * _lt_0_row[2];
-        const double var_sodium_channel_h_gate__beta_h = _lt_0_row[3];
-        const double var_sodium_channel_m_gate__alpha_m = -0.10000000000000001 * _lt_0_row[5] * (50.0 + var_chaste_interface__membrane__V);
+        const double var_sodium_channel_h_gate__beta_h = 1 / (_lt_0_row[3]);
+        const double var_sodium_channel_m_gate__alpha_m = -0.10000000000000001 * (50.0 + var_chaste_interface__membrane__V) / (_lt_0_row[5]);
         const double var_sodium_channel_m_gate__beta_m = 4.0 * _lt_0_row[4];
         
         
@@ -303,14 +340,32 @@ std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackw
     {
         // Inputs:
         // Time units: millisecond
+        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        // Units: millivolt; Initial value: -75.0
+        double var_chaste_interface__sodium_channel_m_gate__m = rY[1];
+        // Units: dimensionless; Initial value: 0.05
+        double var_chaste_interface__sodium_channel_h_gate__h = rY[2];
+        // Units: dimensionless; Initial value: 0.6
+        double var_chaste_interface__potassium_channel_n_gate__n = rY[3];
+        // Units: dimensionless; Initial value: 0.325
         
 
         // Mathematics
+        const double var_membrane__E_R = -75.0; // millivolt
+        const double var_leakage_current__E_L = 10.613 + var_membrane__E_R; // millivolt
+        const double var_leakage_current__i_L = (-var_leakage_current__E_L + var_chaste_interface__membrane__V) * mParameters[2]; // microA_per_cm2
         const double var_membrane__i_Stim = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // microA_per_cm2
+        const double var_potassium_channel__E_K = -12.0 + var_membrane__E_R; // millivolt
+        const double var_potassium_channel__i_K = pow(var_chaste_interface__potassium_channel_n_gate__n, 4) * (-var_potassium_channel__E_K + var_chaste_interface__membrane__V) * mParameters[3]; // microA_per_cm2
+        const double var_sodium_channel__E_Na = 115.0 + var_membrane__E_R; // millivolt
+        const double var_sodium_channel__i_Na = pow(var_chaste_interface__sodium_channel_m_gate__m, 3) * (-var_sodium_channel__E_Na + var_chaste_interface__membrane__V) * mParameters[1] * var_chaste_interface__sodium_channel_h_gate__h; // microA_per_cm2
 
-        std::vector<double> dqs(2);
-        dqs[0] = var_membrane__i_Stim;
-        dqs[1] = var_chaste_interface__environment__time;
+        std::vector<double> dqs(5);
+        dqs[0] = var_sodium_channel__i_Na;
+        dqs[1] = var_leakage_current__i_L;
+        dqs[2] = var_potassium_channel__i_K;
+        dqs[3] = var_membrane__i_Stim;
+        dqs[4] = var_chaste_interface__environment__time;
         return dqs;
     }
 
@@ -341,11 +396,39 @@ void OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromC
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.325);
 
+    // mParameters[0]:
+    this->mParameterNames.push_back("membrane_capacitance");
+    this->mParameterUnits.push_back("microF_per_cm2");
+
+    // mParameters[1]:
+    this->mParameterNames.push_back("membrane_fast_sodium_current_conductance");
+    this->mParameterUnits.push_back("milliS_per_cm2");
+
+    // mParameters[2]:
+    this->mParameterNames.push_back("membrane_leakage_current_conductance");
+    this->mParameterUnits.push_back("milliS_per_cm2");
+
+    // mParameters[3]:
+    this->mParameterNames.push_back("membrane_potassium_current_conductance");
+    this->mParameterUnits.push_back("milliS_per_cm2");
+
     // Derived Quantity index [0]:
-    this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
+    this->mDerivedQuantityNames.push_back("membrane_fast_sodium_current");
     this->mDerivedQuantityUnits.push_back("microA_per_cm2");
 
     // Derived Quantity index [1]:
+    this->mDerivedQuantityNames.push_back("membrane_leakage_current");
+    this->mDerivedQuantityUnits.push_back("microA_per_cm2");
+
+    // Derived Quantity index [2]:
+    this->mDerivedQuantityNames.push_back("membrane_potassium_current");
+    this->mDerivedQuantityUnits.push_back("microA_per_cm2");
+
+    // Derived Quantity index [3]:
+    this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
+    this->mDerivedQuantityUnits.push_back("microA_per_cm2");
+
+    // Derived Quantity index [4]:
     this->mDerivedQuantityNames.push_back("time");
     this->mDerivedQuantityUnits.push_back("millisecond");
 

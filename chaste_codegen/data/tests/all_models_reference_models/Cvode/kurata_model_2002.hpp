@@ -35,6 +35,7 @@ class Cellkurata_model_2002FromCellMLCvode : public AbstractCvodeCell
 
 public:
 
+    double GetIntracellularCalciumConcentration();
     Cellkurata_model_2002FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellkurata_model_2002FromCellMLCvode();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);

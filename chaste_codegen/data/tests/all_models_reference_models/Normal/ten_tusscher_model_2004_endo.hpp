@@ -34,6 +34,7 @@ class Cellten_tusscher_model_2004_endoFromCellML : public AbstractCardiacCell
 
 public:
 
+    boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
     Cellten_tusscher_model_2004_endoFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellten_tusscher_model_2004_endoFromCellML();

@@ -134,10 +134,6 @@ public:
     double EvaluatePartialDerivative44(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical=false);
     double EvaluateYDerivative45(double var_chaste_interface__environment__time, std::vector<double>& rY);
     double EvaluatePartialDerivative45(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical=false);
-    double EvaluateYDerivative46(double var_chaste_interface__environment__time, std::vector<double>& rY);
-    double EvaluatePartialDerivative46(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical=false);
-    double EvaluateYDerivative47(double var_chaste_interface__environment__time, std::vector<double>& rY);
-    double EvaluatePartialDerivative47(double var_chaste_interface__environment__time, std::vector<double>& rY, double delta, bool forceNumerical=false);
 
     std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY);
 };

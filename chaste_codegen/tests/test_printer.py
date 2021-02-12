@@ -57,6 +57,7 @@ class TestChastePrinter(object):
         assert printer.doprint(sp.sympify('x ** (1/2)')) == 'sqrt(x)'
         assert printer.doprint(sp.sympify('x ** (-1/2)')) == '1 / sqrt(x)'
         assert printer.doprint(1 / x) == '1 / x'
+        assert printer.doprint(sp.Pow(x, 0.5)) == 'sqrt(x)'
 
     def test_piecewise_expressions(self, printer, x, y, z):
         # Piecewise expressions

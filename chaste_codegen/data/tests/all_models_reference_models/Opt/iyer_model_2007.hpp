@@ -34,6 +34,8 @@ class Celliyer_model_2007FromCellMLOpt : public AbstractCardiacCell
 
 public:
 
+    boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
+    double GetIntracellularCalciumConcentration();
     Celliyer_model_2007FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Celliyer_model_2007FromCellMLOpt();
     AbstractLookupTableCollection* GetLookupTableCollection();

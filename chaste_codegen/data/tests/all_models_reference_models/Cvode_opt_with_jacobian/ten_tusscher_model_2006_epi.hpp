@@ -6,7 +6,7 @@
 //!
 //! This source file was generated from CellML by chaste_codegen version (version omitted as unimportant)
 //!
-//! Model: tentusscher_panfilov_2006_epi
+//! Model: tentusscher_model_2006_epi
 //!
 //! Processed by chaste_codegen: https://github.com/ModellingWebLab/chaste-codegen
 //!     (translator: chaste_codegen, model type: AnalyticCvodeOpt)
@@ -39,6 +39,7 @@ public:
     double GetIntracellularCalciumConcentration();
     Cellten_tusscher_model_2006_epiFromCellMLCvodeOpt(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellten_tusscher_model_2006_epiFromCellMLCvodeOpt();
+    void VerifyStateVariables();
     AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time, const N_Vector rY, N_Vector rDY);

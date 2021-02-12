@@ -36,6 +36,7 @@ class Dynamicwinslow_model_1999FromCellMLGRL2 : public AbstractGeneralizedRushLa
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
+    double GetIntracellularCalciumConcentration();
     Dynamicwinslow_model_1999FromCellMLGRL2(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Dynamicwinslow_model_1999FromCellMLGRL2();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);

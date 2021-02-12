@@ -1,6 +1,6 @@
 #ifdef CHASTE_CVODE
-#ifndef DYNAMICSHANNON2004FROMCELLMLCVODE_HPP_
-#define DYNAMICSHANNON2004FROMCELLMLCVODE_HPP_
+#ifndef DYNAMICSHANNON_WANG_PUGLISI_WEBER_BERS_2004FROMCELLMLCVODE_HPP_
+#define DYNAMICSHANNON_WANG_PUGLISI_WEBER_BERS_2004FROMCELLMLCVODE_HPP_
 
 //! @file
 //!
@@ -20,7 +20,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractCvodeCell.hpp"
 
-class DynamicShannon2004FromCellMLCvode : public AbstractCvodeCell, public AbstractDynamicallyLoadableEntity
+class Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode : public AbstractCvodeCell, public AbstractDynamicallyLoadableEntity
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -38,8 +38,8 @@ public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    DynamicShannon2004FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~DynamicShannon2004FromCellMLCvode();
+    Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time, const N_Vector rY, N_Vector rDY);
     N_Vector ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY);
@@ -48,7 +48,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(DynamicShannon2004FromCellMLCvode)
+CHASTE_CLASS_EXPORT(Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode)
 
 namespace boost
 {
@@ -56,7 +56,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const DynamicShannon2004FromCellMLCvode * t, const unsigned int fileVersion)
+            Archive & ar, const Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -66,18 +66,18 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, DynamicShannon2004FromCellMLCvode * t, const unsigned int fileVersion)
+            Archive & ar, Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)DynamicShannon2004FromCellMLCvode(p_solver, p_stimulus);
+            ::new(t)Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // DYNAMICSHANNON2004FROMCELLMLCVODE_HPP_
+#endif // DYNAMICSHANNON_WANG_PUGLISI_WEBER_BERS_2004FROMCELLMLCVODE_HPP_
 #endif // CHASTE_CVODE

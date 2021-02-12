@@ -5,7 +5,7 @@
 //!
 //! This source file was generated from CellML by chaste_codegen version (version omitted as unimportant)
 //!
-//! Model: espinosa_model_1998_normal
+//! Model: espinosa_model_1998
 //!
 //! Processed by chaste_codegen: https://github.com/ModellingWebLab/chaste-codegen
 //!     (translator: chaste_codegen, model type: GeneralizedRushLarsenFirstOrder)
