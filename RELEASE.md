@@ -1,10 +1,20 @@
 # (unreleased)
+- Added an automatic fix for removable singularities in GHK equations (which can be switched off with --skip-ingularity-fixes).
+  The process looks for equations of any of the following forms, where U is a function of V:
+  - `U / (exp(U) - 1.0)`
+  - `U / (1.0 - exp(U))`
+  - `(exp(U) - 1.0) / U`
+  - `(1.0 - exp(U)) / U`  
+  It replaces these with a piecewise 1e-7 either side of U==0 drawing a stright line in the region.
+  For example `(V + 5)/(exp(V + 5) - 1)` becomes `((fabs(-V - 5.0000000000000000) < fabs(-4.9999999000000000 / 2 - -5.0000001000000000 / 2)) ? ((-5.0000001000000000 + 5.0) / (-1.0 + exp(-5.0000001000000000 + 5.0)) + (--5.0000001000000000 + V) * ((-4.9999999000000000 + 5.0) / (-1.0 + exp(-4.9999999000000000 + 5.0)) - (-5.0000001000000000 + 5.0) / (-1.0 + exp(-5.0000001000000000 + 5.0))) / (--5.0000001000000000 - 4.9999999000000000)) : ((5.0 + V) / (-1.0 + exp(5.0 + V))))`
+
+  See for more details appendix B in: Johnstone, R. H. (2018). Uncertainty characterisation in action potential modelling for cardiac drug safety [PhD thesis]. University of Oxford. https://ora.ox.ac.uk/objects/uuid:0a28829c-828d-4641-bfb0-11193ef47195
 - For lookup tables prevented expressions of the form 1 / A from being added, instead adding A. 1 / A type expressions were causing issues, when A is 0. While many cases have a piecewise to prevent hissing this case, lookup table interpolation might cause issues.
 - Updated the way BackwardEuler models are calculated, to allow the jacobian to be taken into consideration for lookup tables.
 - Fixed a bug with BackwardEuler models where jacobian common term equations (e.g. var_x0) ended up in lookup tables.
 
 # Release 0.5.4
-- Fixed sympy deprecation warning when using sympy 1.7
+- Fixed sympy deprecation warning when using sympy 1.7 and bumped cellmlmanip recuirement up to ensure sympy 1.7 compatibility
 - Improved support for secondary trigonometric functions such as sec and acoth.
 - When used with Cellmlmanip version 0.2.2+ an improved printing of devisions is used. For example `1 / (1/cos(x))` now gets rendered as `cos(x)` whereas previously it would be `1 / 1 / cos(x)` giving the incorrect result. An side effcet of the change is that powers of formulas get extra brackets e.g. `pow((1 / x), 2)`.
 - chaste_codegen uses placeholder functions for some common maths functions like exp, in order to delay evaluation till the point where the code is written. For programmers using chaste_codegen as a library, there now is a function called `subs_math_func_placeholders` which can be used on any sympy expression to substitute these placeholders.

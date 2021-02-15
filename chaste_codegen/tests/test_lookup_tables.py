@@ -12,7 +12,7 @@ def test_defaults(s_model):
     assert str(_EXPENSIVE_FUNCTIONS) == ("(exp, log, log, sin, cos, tan, sec, csc, cot, sinh, cosh, tanh, sech, csch, "
                                          "coth, asin, acos, atan, asinh, acosh, atanh, asec, acsc, acot, asech, acsch,"
                                          " acoth, exp_, acos_, cos_, sin_)")
-    assert DEFAULT_LOOKUP_PARAMETERS == (['membrane_voltage', -250.0001, 549.9999, 0.001], )
+    assert DEFAULT_LOOKUP_PARAMETERS == (['membrane_voltage', -250.0, 550.0, 0.001], )
 
 
 def test_no_method_printed_for(s_model):
@@ -32,8 +32,8 @@ def test_no_method_printed_for(s_model):
         ['lookup_epxrs', 'mTableMaxs', 'mTableMins', 'mTableSteps', 'metadata_tag', 'table_used_in_methods', 'var']
     assert params_for_printing[0]['metadata_tag'] == 'membrane_voltage'
     assert params_for_printing[0]['metadata_tag'] == 'membrane_voltage'
-    assert params_for_printing[0]['mTableMins'] == -250.0001
-    assert params_for_printing[0]['mTableMaxs'] == 549.9999
+    assert params_for_printing[0]['mTableMins'] == -250.0
+    assert params_for_printing[0]['mTableMaxs'] == 550.0
     assert params_for_printing[0]['mTableSteps'] == 0.001
     assert params_for_printing[0]['table_used_in_methods'] == set()
     assert params_for_printing[0]['var'] == 'cell$V'
@@ -60,8 +60,8 @@ def test_method_printed_for(s_model):
         ['lookup_epxrs', 'mTableMaxs', 'mTableMins', 'mTableSteps', 'metadata_tag', 'table_used_in_methods', 'var']
     assert params_for_printing[0]['metadata_tag'] == 'membrane_voltage'
     assert params_for_printing[0]['metadata_tag'] == 'membrane_voltage'
-    assert params_for_printing[0]['mTableMins'] == -250.0001
-    assert params_for_printing[0]['mTableMaxs'] == 549.9999
+    assert params_for_printing[0]['mTableMins'] == -250.0
+    assert params_for_printing[0]['mTableMaxs'] == 550.0
     assert params_for_printing[0]['mTableSteps'] == 0.001
     assert params_for_printing[0]['table_used_in_methods'] == set({'template_method'})
     assert params_for_printing[0]['var'] == 'cell$V'
@@ -89,8 +89,8 @@ def test_nested_method_printed_for(s_model):
         ['lookup_epxrs', 'mTableMaxs', 'mTableMins', 'mTableSteps', 'metadata_tag', 'table_used_in_methods', 'var']
     assert params_for_printing[0]['metadata_tag'] == 'membrane_voltage'
     assert params_for_printing[0]['metadata_tag'] == 'membrane_voltage'
-    assert params_for_printing[0]['mTableMins'] == -250.0001
-    assert params_for_printing[0]['mTableMaxs'] == 549.9999
+    assert params_for_printing[0]['mTableMins'] == -250.0
+    assert params_for_printing[0]['mTableMaxs'] == 550.0
     assert params_for_printing[0]['mTableSteps'] == 0.001
     assert params_for_printing[0]['table_used_in_methods'] == set({'outer_method'})
     assert params_for_printing[0]['var'] == 'cell$V'
@@ -119,8 +119,8 @@ def test_multiple_methods_printed_for(s_model):
         ['lookup_epxrs', 'mTableMaxs', 'mTableMins', 'mTableSteps', 'metadata_tag', 'table_used_in_methods', 'var']
     assert params_for_printing[0]['metadata_tag'] == 'membrane_voltage'
     assert params_for_printing[0]['metadata_tag'] == 'membrane_voltage'
-    assert params_for_printing[0]['mTableMins'] == -250.0001
-    assert params_for_printing[0]['mTableMaxs'] == 549.9999
+    assert params_for_printing[0]['mTableMins'] == -250.0
+    assert params_for_printing[0]['mTableMaxs'] == 550.0
     assert params_for_printing[0]['mTableSteps'] == 0.001
     assert params_for_printing[0]['table_used_in_methods'] == set({'method1', 'method2'})
     assert params_for_printing[0]['var'] == 'cell$V'

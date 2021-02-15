@@ -40,6 +40,11 @@ class TestChastePrinter(object):
     def z(self):
         return sp.symbols('z')
 
+    def test_not(self, printer, x, y, z):
+        assert printer.doprint(sp.Not(x)) == '!(x)'
+        assert printer.doprint(sp.Not(sp.Eq(x, y))) == 'x != y'
+        assert printer.doprint(sp.Not(sp.Eq(x, y) | sp.Eq(x, z))) == '!((x == y) || (x == z))'
+
     def test_and(self, printer, x, y):
         assert printer.doprint(sp.sympify('x & y')) == '(x) && (y)'
 
@@ -169,3 +174,7 @@ class TestChastePrinter(object):
             evaluate=False
         )
         assert printer.doprint(d) == '-2 * x / (y * y)'
+
+    def test_ITE(self, printer, x, y):
+        expr = sp.ITE(x < 0.0, x < y, y < 0.0)
+        assert printer.doprint(expr) == '((x < 0.0) ? (x < y) : (y < 0.0))'

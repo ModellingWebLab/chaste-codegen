@@ -2,7 +2,7 @@ usage: chaste_codegen [-h] [--version] [--normal] [--cvode]
                       [--cvode-data-clamp] [--backward-euler] [--rush-larsen]
                       [--grl1] [--grl2] [-j] [-o OUTFILE]
                       [--output-dir OUTPUT_DIR] [--show-outputs] [-c CLS_NAME]
-                      [-q] [-y] [--opt] [-m]
+                      [-q] [--skip-ingularity-fixes] [-y] [--opt] [-m]
                       [--lookup-table <metadata tag> min max step]
                       cellml_file
 
@@ -49,6 +49,9 @@ Generated code options:
   -c CLS_NAME           explicitly set the name of the generated class
   -q, --quiet           quiet operation, don't print informational messages to
                         screen
+  --skip-ingularity-fixes
+                        skip singularity fixes in Goldman-Hodgkin-Katz (GHK)
+                        equations.
 
 Chaste options:
   Options specific to Chaste code output
@@ -69,4 +72,4 @@ Chaste options:
                         lookup tables. Please note: Can only be used in
                         combination with --opt. If the arguments are omitted,
                         following defaults will be used: --lookup-table
-                        membrane_voltage -250.0001 549.9999 0.001.
+                        membrane_voltage -250.0 550.0 0.001.

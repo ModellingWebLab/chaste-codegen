@@ -18,12 +18,9 @@ pip install chaste_codegen
 ## Using `chaste_codegen`
 After installation, chaste_codegen can be called using the `chaste_codegen` command:
 ```
-usage: chaste_codegen [-h] [--version] [--normal] [--cvode]
-                      [--cvode-data-clamp] [--backward-euler] [--rush-larsen]
-                      [--grl1] [--grl2] [-j] [-o OUTFILE]
-                      [--output-dir OUTPUT_DIR] [--show-outputs] [-c CLS_NAME]
-                      [-q] [-y] [--opt] [-m]
-                      [--lookup-table <metadata tag> min max step]
+usage: chaste_codegen [-h] [--version] [--normal] [--cvode] [--cvode-data-clamp] [--backward-euler] [--rush-larsen]
+                      [--grl1] [--grl2] [-j] [-o OUTFILE] [--output-dir OUTPUT_DIR] [--show-outputs] [-c CLS_NAME]
+                      [-q] [--skip-ingularity-fixes] [-y] [--opt] [-m] [--lookup-table <metadata tag> min max step]
                       cellml_file
 chaste_codegen: error: the following arguments are required: cellml_file
 ```

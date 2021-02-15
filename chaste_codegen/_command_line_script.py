@@ -86,11 +86,12 @@ def process_command_line():
     group.add_argument('--output-dir', action='store', help="directory to place output files in", default=None)
     group.add_argument('--show-outputs', action='store_true', default=False,
                        help="don't actually generate code, just show what files would be generated, one per line")
-
     group.add_argument('-c', default=None, dest='cls_name',
                        help='explicitly set the name of the generated class')
     group.add_argument('-q', '--quiet', action='store_true', default=False,
                        help="quiet operation, don't print informational messages to screen")
+    group.add_argument('--skip-ingularity-fixes', action='store_true', default=False,
+                       help="skip singularity fixes in Goldman-Hodgkin-Katz (GHK) equations.")
 
     group = parser.add_argument_group('Chaste options', description='Options specific to Chaste code output')
     group.add_argument('-y', '--dll', '--dynamically-loadable', dest='dynamically_loadable',
@@ -168,7 +169,8 @@ def process_command_line():
 
     if not args.show_outputs:
         # Load model once, not once per translator, but only if we're actually generating code
-        model = load_model_with_conversions(args.cellml_file, use_modifiers=args.modifiers, quiet=args.quiet)
+        model = load_model_with_conversions(args.cellml_file, use_modifiers=args.modifiers, quiet=args.quiet,
+                                            fix_singularities=not args.skip_ingularity_fixes)
 
     for translator in translators:
         # Make sure modifiers are only passed to models which can generate them
