@@ -156,7 +156,7 @@ def test_change_lookup_table(be_model):
     assert params_for_printing[0]['mTableSteps'] == 0.01
     assert params_for_printing[0]['table_used_in_methods'] == set({'template_method'})
     assert params_for_printing[0]['var'] == 'membrane$V'
-    
+
     expected = open(os.path.join(TESTS_FOLDER, 'test_lookup_tables_change_lookup_table.txt'), 'r').read()
     assert str(params_for_printing[0]['lookup_epxrs']) == expected, str(params_for_printing[0]['lookup_epxrs'])
 

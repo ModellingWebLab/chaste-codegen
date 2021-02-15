@@ -4,7 +4,7 @@ import pytest
 from cellmlmanip.model import Quantity, Variable
 from sympy import Piecewise, exp, log
 
-from chaste_codegen import DATA_DIR, load_model_with_conversions
+from chaste_codegen import load_model_with_conversions
 from chaste_codegen._math_functions import exp_
 from chaste_codegen._singularity_fixes import fix_singularity_equations, new_expr
 from chaste_codegen.model_with_conversions import get_equations_for
@@ -150,8 +150,10 @@ def test_fix_singularity_equations():
 
 def test_fix_singularity_equations2():
     # Using a fixture would make other tests fail since we're modifying the equations
-    model = load_model_with_conversions(os.path.join(CELLML_FOLDER, 'bondarenko_szigeti_bett_kim_rasmusson_2004_apical.cellml'),
-                                        fix_singularities=False)
+    model = \
+        load_model_with_conversions(os.path.join(CELLML_FOLDER,
+                                                 'bondarenko_szigeti_bett_kim_rasmusson_2004_apical.cellml'),
+                                    fix_singularities=False)
     assert len(model.derivative_equations) == 168
     old = get_equations_for(model, model.y_derivatives)
 
