@@ -35,6 +35,7 @@ class Cellnoble_model_1991FromCellMLGRL2 : public AbstractGeneralizedRushLarsenC
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
+    double GetIntracellularCalciumConcentration();
     Cellnoble_model_1991FromCellMLGRL2(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellnoble_model_1991FromCellMLGRL2();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);

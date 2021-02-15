@@ -296,7 +296,7 @@ def test_missing_V():
 def test_missing_capacitance():
     LOGGER.info('Testing missing capacitance\n')
     model_file = \
-        os.path.join(CELLML_FOLDER, 'pandit_model_2001_epi.cellml')
+        os.path.join(CELLML_FOLDER, 'pandit_clark_giles_demir_2001_epicardial_cell.cellml')
     chaste_model = cellmlmanip.load_model(model_file)
 
     # Remove capacitance metadata tag
@@ -311,7 +311,7 @@ def test_missing_capacitance():
 def test_no_time():
     LOGGER.info('Testing missing time\n')
     model_file = \
-        os.path.join(CELLML_FOLDER, 'test_no_odes.cellml')
+        os.path.join(CELLML_FOLDER, '..', '..', 'test_no_odes.cellml')
 
     chaste_model = cellmlmanip.load_model(model_file)
 
@@ -322,7 +322,7 @@ def test_no_time():
 def test_wrong_units_time():
     LOGGER.info('Testing wrong units for time\n')
     model_file = \
-        os.path.join(CELLML_FOLDER, 'test_wrong_units_time_odes.cellml')
+        os.path.join(CELLML_FOLDER, '..', '..', 'test_wrong_units_time_odes.cellml')
 
     with pytest.raises(CodegenError, match=(r"Incorrect definition of free variable \(time\): "
                                             "time needs to be dimensionally equivalent to second!")):
@@ -332,7 +332,7 @@ def test_wrong_units_time():
 def test_wrong_units_voltage():
     LOGGER.info('Testing wrong units for Voltage\n')
     model_file = \
-        os.path.join(CELLML_FOLDER, 'test_wrong_units_voltage.cellml')
+        os.path.join(CELLML_FOLDER, '..', '..', 'test_wrong_units_voltage.cellml')
 
     with pytest.raises(CodegenError, match=("Incorrect definition of membrane_voltage variable: "
                                             "units of membrane_voltage need to be dimensionally equivalent to Volt")):

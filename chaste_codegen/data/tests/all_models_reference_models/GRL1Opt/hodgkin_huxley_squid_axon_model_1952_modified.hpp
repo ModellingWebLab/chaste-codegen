@@ -34,6 +34,7 @@ class Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL1Opt : publi
 
 public:
 
+    boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL1Opt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL1Opt();
     AbstractLookupTableCollection* GetLookupTableCollection();

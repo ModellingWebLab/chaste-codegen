@@ -35,6 +35,7 @@ class Cellwinslow_model_1999FromCellMLOpt : public AbstractCardiacCell
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
+    double GetIntracellularCalciumConcentration();
     Cellwinslow_model_1999FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellwinslow_model_1999FromCellMLOpt();
     AbstractLookupTableCollection* GetLookupTableCollection();

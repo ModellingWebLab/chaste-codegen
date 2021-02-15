@@ -34,6 +34,7 @@ class Cellten_tusscher_model_2004_endoFromCellMLGRL1 : public AbstractGeneralize
 
 public:
 
+    boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
     Cellten_tusscher_model_2004_endoFromCellMLGRL1(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellten_tusscher_model_2004_endoFromCellMLGRL1();

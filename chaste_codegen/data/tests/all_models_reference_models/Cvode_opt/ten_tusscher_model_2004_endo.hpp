@@ -35,6 +35,7 @@ class Cellten_tusscher_model_2004_endoFromCellMLCvodeOpt : public AbstractCvodeC
 
 public:
 
+    boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
     Cellten_tusscher_model_2004_endoFromCellMLCvodeOpt(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellten_tusscher_model_2004_endoFromCellMLCvodeOpt();

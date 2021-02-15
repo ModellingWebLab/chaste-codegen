@@ -7,7 +7,7 @@ from chaste_codegen import DATA_DIR, load_model_with_conversions
 from chaste_codegen._script_utils import write_file
 
 
-CELLML_FOLDER = os.path.join(DATA_DIR, 'tests', 'cellml')
+CELLML_FOLDER = os.path.join(DATA_DIR, 'tests', 'cellml', 'cellml')
 TESTS_FOLDER = os.path.join(DATA_DIR, 'tests')
 
 TIMESTAMP_REGEX = re.compile(r'(//! on .*)')
@@ -23,7 +23,7 @@ def cache_model(model_name):
 
 @pytest.fixture(scope='session')
 def s_model():
-    return cache_model(os.path.join(CELLML_FOLDER, 'Shannon2004.cellml'))
+    return cache_model(os.path.join(CELLML_FOLDER, 'shannon_wang_puglisi_weber_bers_2004.cellml'))
 
 
 @pytest.fixture(scope='session')
@@ -39,7 +39,7 @@ def hh_model():
 
 @pytest.fixture(scope='session')
 def fr_model():
-    model_name = os.path.join(CELLML_FOLDER, 'FaberRudy2000.cellml')
+    model_name = os.path.join(CELLML_FOLDER, 'faber_rudy_2000.cellml')
     return cache_model(model_name)
 
 

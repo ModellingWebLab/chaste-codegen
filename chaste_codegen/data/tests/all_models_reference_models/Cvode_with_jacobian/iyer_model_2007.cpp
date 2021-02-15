@@ -16,6 +16,7 @@
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
+#include "Warnings.hpp"
 #include "OdeSystemInformation.hpp"
 #include "RegularStimulus.hpp"
 #include "HeartConfig.hpp"
@@ -23,7 +24,28 @@
 #include "MathsCustomFunctions.hpp"
 
 
+    boost::shared_ptr<RegularStimulus> Celliyer_model_2007FromCellMLCvode::UseCellMLDefaultStimulus()
+    {
+        // Use the default stimulus specified by CellML metadata
+        const double var_chaste_interface__I_stimulus__stim_amplitude_converted = -15.0 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
+        const double var_chaste_interface__I_stimulus__stim_duration = 3.0; // ms
+        const double var_chaste_interface__I_stimulus__stim_offset = 100.0; // ms
+        const double var_chaste_interface__I_stimulus__stim_period = 1000.0; // ms
+        boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+                -fabs(var_chaste_interface__I_stimulus__stim_amplitude_converted),
+                var_chaste_interface__I_stimulus__stim_duration,
+                var_chaste_interface__I_stimulus__stim_period,
+                var_chaste_interface__I_stimulus__stim_offset
+                ));
+        mpIntracellularStimulus = p_cellml_stim;
+        return p_cellml_stim;
+    }
 
+    double Celliyer_model_2007FromCellMLCvode::GetIntracellularCalciumConcentration()
+    {
+        return NV_Ith_S(mStateVariables, 1);
+    }
+    
     Celliyer_model_2007FromCellMLCvode::Celliyer_model_2007FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
@@ -35,9 +57,24 @@
         //
         this->mpSystemInfo = OdeSystemInformation<Celliyer_model_2007FromCellMLCvode>::Instance();
         Init();
+
+        // We have a default stimulus specified in the CellML file metadata
+        this->mHasDefaultStimulusFromCellML = true;
         mUseAnalyticJacobian = true;
         mHasAnalyticJacobian = true;
         
+        NV_Ith_S(this->mParameters, 0) = 1.8; // (var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__v1) [per_ms]
+        NV_Ith_S(this->mParameters, 1) = 1.2; // (var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__KSR) [mM]
+        NV_Ith_S(this->mParameters, 2) = 2.0; // (var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cao) [mM]
+        NV_Ith_S(this->mParameters, 3) = 4.0; // (var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ko) [mM]
+        NV_Ith_S(this->mParameters, 4) = 138.0; // (var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nao) [mM]
+        NV_Ith_S(this->mParameters, 5) = 0.00024689999999999998; // (var_COMPUTE_ICa_ICaK__PCa_max) [litre_per_farad_second]
+        NV_Ith_S(this->mParameters, 6) = 56.32; // (var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GNa) [mS_per_uF]
+        NV_Ith_S(this->mParameters, 7) = 0.12530512611880801; // (var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GK1) [mS_per_uF]
+        NV_Ith_S(this->mParameters, 8) = 0.018599999999999998; // (var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GKr) [mS_per_uF]
+        NV_Ith_S(this->mParameters, 9) = 0.0035000000000000001; // (var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GKs) [mS_per_uF]
+        NV_Ith_S(this->mParameters, 10) = 0.44; // (var_COMPUTE_INaK_INaCa_ICab_IpCa__kNaCa) [uA_per_uF]
+        NV_Ith_S(this->mParameters, 11) = 2.387; // (var_COMPUTE_INaK_INaCa_ICab_IpCa__INaKmax) [uA_per_uF]
     }
 
     Celliyer_model_2007FromCellMLCvode::~Celliyer_model_2007FromCellMLCvode()
@@ -62,12 +99,12 @@
         }
         double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
         // Units: mV; Initial value: -86.7261544519706
-        double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai = NV_Ith_S(rY, 1);
-        // Units: mM; Initial value: 9.85573275838928
-        double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki = NV_Ith_S(rY, 2);
-        // Units: mM; Initial value: 125.427082712469
-        double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai = NV_Ith_S(rY, 3);
+        double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai = NV_Ith_S(rY, 1);
         // Units: mM; Initial value: 0.000363968672182656
+        double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai = NV_Ith_S(rY, 2);
+        // Units: mM; Initial value: 9.85573275838928
+        double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki = NV_Ith_S(rY, 3);
+        // Units: mM; Initial value: 125.427082712469
         double var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__Open = NV_Ith_S(rY, 23);
         // Units: dimensionless; Initial value: 1.40806027419488e-11
         double var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa = NV_Ith_S(rY, 24);
@@ -87,10 +124,7 @@
         double var_chaste_interface__IKs__O2ks = NV_Ith_S(rY, 66);
         // Units: dimensionless; Initial value: 0.0258818770122187
         
-        const double var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cao = 2.0; // mM
         const double var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Faraday = 96.5; // coulomb_per_millimole
-        const double var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ko = 4.0; // mM
-        const double var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nao = 138.0; // mM
         const double var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Rgas = 8.3149999999999995; // joule_per_mole_kelvin
         const double var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Temp = 310.0; // kelvin
         const double var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F = var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Rgas * var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Temp / var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Faraday; // mV
@@ -99,12 +133,11 @@
         const double var_COMPUTE_ICa_ICaK__PK = 4.5740000000000001e-7 * var_COMPUTE_ICa_ICaK__Pscale; // litre_per_farad_second
         const double var_COMPUTE_ICa_ICaK__VF_over_RT = var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V / var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F; // dimensionless
         const double var_COMPUTE_ICa_ICaK__VFsq_over_RT = 1000.0 * var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Faraday * var_COMPUTE_ICa_ICaK__VF_over_RT; // coulomb_per_millimole
-        const double var_COMPUTE_ICa_ICaK__a1_Ca = 0.001 * exp(2.0 * var_COMPUTE_ICa_ICaK__VF_over_RT) - 0.34100000000000003 * var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cao; // mM
-        const double var_COMPUTE_ICa_ICaK__a1_K = -var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ko + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki * exp(var_COMPUTE_ICa_ICaK__VF_over_RT); // mM
+        const double var_COMPUTE_ICa_ICaK__a1_Ca = 0.001 * exp(2.0 * var_COMPUTE_ICa_ICaK__VF_over_RT) - 0.34100000000000003 * NV_Ith_S(mParameters, 2); // mM
+        const double var_COMPUTE_ICa_ICaK__a1_K = -NV_Ith_S(mParameters, 3) + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki * exp(var_COMPUTE_ICa_ICaK__VF_over_RT); // mM
         const double var_COMPUTE_ICa_ICaK__a2_Ca = -1.0 + exp(2.0 * var_COMPUTE_ICa_ICaK__VF_over_RT); // dimensionless
         const double var_COMPUTE_ICa_ICaK__a2_K = -1.0 + exp(var_COMPUTE_ICa_ICaK__VF_over_RT); // dimensionless
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__GCab = 7.6840000000000003e-5; // mS_per_uF
-        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__INaKmax = 2.387; // uA_per_uF
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__IpCamax = 0.050000000000000003; // uA_per_uF
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__KmCa = 1.3799999999999999; // mM
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__KmKo = 1.5; // mM
@@ -113,26 +146,21 @@
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__KmpCa = 0.00050000000000000001; // mM
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__IpCa = var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai * var_COMPUTE_INaK_INaCa_ICab_IpCa__IpCamax / (var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai + var_COMPUTE_INaK_INaCa_ICab_IpCa__KmpCa); // uA_per_uF
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__VF_over_RT = var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V / var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F; // dimensionless
-        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a1_K = var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ko / (var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ko + var_COMPUTE_INaK_INaCa_ICab_IpCa__KmKo); // dimensionless
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a1_K = NV_Ith_S(mParameters, 3) / (NV_Ith_S(mParameters, 3) + var_COMPUTE_INaK_INaCa_ICab_IpCa__KmKo); // dimensionless
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a1_Na = 1.0 + 0.1245 * exp(-0.10000000000000001 * var_COMPUTE_INaK_INaCa_ICab_IpCa__VF_over_RT); // dimensionless
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a2_K = 1.0 + pow((var_COMPUTE_INaK_INaCa_ICab_IpCa__KmNai / var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai), 1.5); // dimensionless
-        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a4_ncx = var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cao + var_COMPUTE_INaK_INaCa_ICab_IpCa__KmCa; // mM
-        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a5_ncx = 0.00020000000000000001 * pow(var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nao, 3) + 0.00020000000000000001 * pow(var_COMPUTE_INaK_INaCa_ICab_IpCa__KmNa, 3); // mM3
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a4_ncx = NV_Ith_S(mParameters, 2) + var_COMPUTE_INaK_INaCa_ICab_IpCa__KmCa; // mM
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a5_ncx = 0.00020000000000000001 * pow(NV_Ith_S(mParameters, 4), 3) + 0.00020000000000000001 * pow(var_COMPUTE_INaK_INaCa_ICab_IpCa__KmNa, 3); // mM3
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__eta = 0.34999999999999998; // dimensionless
-        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a1_ncx = pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai, 3) * var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cao * exp(var_COMPUTE_INaK_INaCa_ICab_IpCa__VF_over_RT * var_COMPUTE_INaK_INaCa_ICab_IpCa__eta); // mM4
-        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a2_ncx = pow(var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nao, 3) * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai * exp((-1.0 + var_COMPUTE_INaK_INaCa_ICab_IpCa__eta) * var_COMPUTE_INaK_INaCa_ICab_IpCa__VF_over_RT); // mM4
-        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__kNaCa = 0.44; // uA_per_uF
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a1_ncx = pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai, 3) * NV_Ith_S(mParameters, 2) * exp(var_COMPUTE_INaK_INaCa_ICab_IpCa__VF_over_RT * var_COMPUTE_INaK_INaCa_ICab_IpCa__eta); // mM4
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a2_ncx = pow(NV_Ith_S(mParameters, 4), 3) * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai * exp((-1.0 + var_COMPUTE_INaK_INaCa_ICab_IpCa__eta) * var_COMPUTE_INaK_INaCa_ICab_IpCa__VF_over_RT); // mM4
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__ksat = 0.20000000000000001; // dimensionless
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a3_ncx = 1.0 + var_COMPUTE_INaK_INaCa_ICab_IpCa__ksat * exp((-1.0 + var_COMPUTE_INaK_INaCa_ICab_IpCa__eta) * var_COMPUTE_INaK_INaCa_ICab_IpCa__VF_over_RT); // dimensionless
-        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__INaCa = (-var_COMPUTE_INaK_INaCa_ICab_IpCa__a2_ncx + var_COMPUTE_INaK_INaCa_ICab_IpCa__a1_ncx) * var_COMPUTE_INaK_INaCa_ICab_IpCa__kNaCa / (var_COMPUTE_INaK_INaCa_ICab_IpCa__a3_ncx * var_COMPUTE_INaK_INaCa_ICab_IpCa__a4_ncx * var_COMPUTE_INaK_INaCa_ICab_IpCa__a5_ncx); // uA_per_uF
-        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nao); // dimensionless
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__INaCa = (-var_COMPUTE_INaK_INaCa_ICab_IpCa__a2_ncx + var_COMPUTE_INaK_INaCa_ICab_IpCa__a1_ncx) * NV_Ith_S(mParameters, 10) / (var_COMPUTE_INaK_INaCa_ICab_IpCa__a3_ncx * var_COMPUTE_INaK_INaCa_ICab_IpCa__a4_ncx * var_COMPUTE_INaK_INaCa_ICab_IpCa__a5_ncx); // uA_per_uF
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * NV_Ith_S(mParameters, 4)); // dimensionless
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a2_Na = 0.036499999999999998 * var_COMPUTE_INaK_INaCa_ICab_IpCa__sigma * exp(-1.3300000000000001 * var_COMPUTE_INaK_INaCa_ICab_IpCa__VF_over_RT); // dimensionless
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__fNaK = 1 / (var_COMPUTE_INaK_INaCa_ICab_IpCa__a1_Na + var_COMPUTE_INaK_INaCa_ICab_IpCa__a2_Na); // dimensionless
-        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__INaK = var_COMPUTE_INaK_INaCa_ICab_IpCa__INaKmax * var_COMPUTE_INaK_INaCa_ICab_IpCa__a1_K * var_COMPUTE_INaK_INaCa_ICab_IpCa__fNaK / var_COMPUTE_INaK_INaCa_ICab_IpCa__a2_K; // uA_per_uF
-        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GK1 = 0.12530512611880801; // mS_per_uF
-        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GKr = 0.018599999999999998; // mS_per_uF
-        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GKs = 0.0035000000000000001; // mS_per_uF
-        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GNa = 56.32; // mS_per_uF
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__INaK = NV_Ith_S(mParameters, 11) * var_COMPUTE_INaK_INaCa_ICab_IpCa__a1_K * var_COMPUTE_INaK_INaCa_ICab_IpCa__fNaK / var_COMPUTE_INaK_INaCa_ICab_IpCa__a2_K; // uA_per_uF
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GNab = 0.001; // mS_per_uF
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__Kv43Frac = 0.88900000000000001; // dimensionless
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__KvScale = 0.872; // dimensionless
@@ -140,27 +168,30 @@
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__PKv14 = 4.2986000000000001e-7 * (1.0 - var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__Kv43Frac) * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__KvScale; // litre_per_farad_second
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__VF_over_RT = var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V / var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F; // dimensionless
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__VFsq_over_RT = 1000.0 * var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Faraday * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__VF_over_RT; // coulomb_per_millimole
-        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__a1_K = -var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ko + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki * exp(var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__VF_over_RT); // mM
-        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__a1_Na = -var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nao + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai * exp(var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__VF_over_RT); // mM
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__a1_K = -NV_Ith_S(mParameters, 3) + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki * exp(var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__VF_over_RT); // mM
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__a1_Na = -NV_Ith_S(mParameters, 4) + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai * exp(var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__VF_over_RT); // mM
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__a2 = -1.0 + exp(var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__VF_over_RT); // dimensionless
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKv14_K = var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__OKv14 * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__PKv14 * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__VFsq_over_RT * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__a1_K / var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__a2; // uA_per_uF
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKv14_Na = 0.02 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__OKv14 * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__PKv14 * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__VFsq_over_RT * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__a1_Na / var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__a2; // uA_per_uF
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKv14 = var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKv14_K + var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKv14_Na; // uA_per_uF
-        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__fKo = 0.5 * sqrt(var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ko); // dimensionless
-        const double var_COMPUTE_REVERSAL_POTENTIALS__ECa = 0.5 * var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F * log(var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cao / var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai); // mV
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__fKo = 0.5 * sqrt(NV_Ith_S(mParameters, 3)); // dimensionless
+        const double var_COMPUTE_REVERSAL_POTENTIALS__ECa = 0.5 * var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F * log(NV_Ith_S(mParameters, 2) / var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai); // mV
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__ICab = (-var_COMPUTE_REVERSAL_POTENTIALS__ECa + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * var_COMPUTE_INaK_INaCa_ICab_IpCa__GCab; // uA_per_uF
-        const double var_COMPUTE_REVERSAL_POTENTIALS__EK = var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F * log(var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ko / var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki); // mV
+        const double var_COMPUTE_REVERSAL_POTENTIALS__EK = var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F * log(NV_Ith_S(mParameters, 3) / var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki); // mV
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKv43 = (-var_COMPUTE_REVERSAL_POTENTIALS__EK + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__OKv43 * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GKv43; // uA_per_uF
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__Ito1 = var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKv14 + var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKv43; // uA_per_uF
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__K1_inf = 1 / (0.93999999999999995 + exp(1.26 * (-var_COMPUTE_REVERSAL_POTENTIALS__EK + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) / var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F)); // dimensionless
-        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IK1 = sqrt(var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ko) * (-var_COMPUTE_REVERSAL_POTENTIALS__EK + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GK1 * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__K1_inf; // uA_per_uF
-        const double var_COMPUTE_REVERSAL_POTENTIALS__ENa = var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F * log(var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nao / var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai); // mV
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IK1 = sqrt(NV_Ith_S(mParameters, 3)) * (-var_COMPUTE_REVERSAL_POTENTIALS__EK + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * NV_Ith_S(mParameters, 7) * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__K1_inf; // uA_per_uF
+        const double var_COMPUTE_REVERSAL_POTENTIALS__ENa = var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F * log(NV_Ith_S(mParameters, 4) / var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai); // mV
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__INab = (-var_COMPUTE_REVERSAL_POTENTIALS__ENa + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GNab; // uA_per_uF
-        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKr = (-var_COMPUTE_REVERSAL_POTENTIALS__EK + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GKr * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__fKo * var_chaste_interface__IKr__OHerg; // uA_per_uF
-        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKs = (-var_COMPUTE_REVERSAL_POTENTIALS__EK + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * (var_chaste_interface__IKs__O1ks + var_chaste_interface__IKs__O2ks) * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GKs; // uA_per_uF
-        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__INa = (-var_COMPUTE_REVERSAL_POTENTIALS__ENa + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * (var_chaste_interface__INa__na6 + var_chaste_interface__INa__na7) * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GNa; // uA_per_uF
+        const double var_COMPUTE_REVERSAL_POTENTIALS__a1 = 0.018329999999999999 * NV_Ith_S(mParameters, 4) + NV_Ith_S(mParameters, 3); // mM
+        const double var_COMPUTE_REVERSAL_POTENTIALS__a2 = 0.018329999999999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki; // mM
+        const double var_COMPUTE_REVERSAL_POTENTIALS__EKs = var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F * log(var_COMPUTE_REVERSAL_POTENTIALS__a1 / var_COMPUTE_REVERSAL_POTENTIALS__a2); // mV
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKr = (-var_COMPUTE_REVERSAL_POTENTIALS__EK + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * NV_Ith_S(mParameters, 8) * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__fKo * var_chaste_interface__IKr__OHerg; // uA_per_uF
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKs = (-var_COMPUTE_REVERSAL_POTENTIALS__EKs + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * (var_chaste_interface__IKs__O1ks + var_chaste_interface__IKs__O2ks) * NV_Ith_S(mParameters, 9); // uA_per_uF
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__INa = (-var_COMPUTE_REVERSAL_POTENTIALS__ENa + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * (var_chaste_interface__INa__na6 + var_chaste_interface__INa__na7) * NV_Ith_S(mParameters, 6); // uA_per_uF
         const double var_environment__iso = 0; // dimensionless
-        const double var_COMPUTE_ICa_ICaK__PCa = ((var_environment__iso == 0) ? (0.00024689999999999998 * var_COMPUTE_ICa_ICaK__Pscale) : (0.00037034999999999998 * var_COMPUTE_ICa_ICaK__Pscale)); // litre_per_farad_second
+        const double var_COMPUTE_ICa_ICaK__PCa = ((var_environment__iso == 0) ? (NV_Ith_S(mParameters, 5) * var_COMPUTE_ICa_ICaK__Pscale) : (1.5 * NV_Ith_S(mParameters, 5) * var_COMPUTE_ICa_ICaK__Pscale)); // litre_per_farad_second
         const double var_COMPUTE_ICa_ICaK__ICamax = 4.0 * var_COMPUTE_ICa_ICaK__PCa * var_COMPUTE_ICa_ICaK__VFsq_over_RT * var_COMPUTE_ICa_ICaK__a1_Ca / var_COMPUTE_ICa_ICaK__a2_Ca; // uA_per_uF
         const double var_COMPUTE_ICa_ICaK__ICa = var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__Open * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa * var_COMPUTE_ICa_ICaK__ICamax; // uA_per_uF
         const double var_COMPUTE_ICa_ICaK__Icabar = ((var_COMPUTE_ICa_ICaK__ICamax >= 0) ? (0) : (var_COMPUTE_ICa_ICaK__ICamax)); // uA_per_uF
@@ -185,12 +216,12 @@
         // Time units: millisecond
         double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
         // Units: mV; Initial value: -86.7261544519706
-        double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai = NV_Ith_S(rY, 1);
-        // Units: mM; Initial value: 9.85573275838928
-        double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki = NV_Ith_S(rY, 2);
-        // Units: mM; Initial value: 125.427082712469
-        double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai = NV_Ith_S(rY, 3);
+        double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai = NV_Ith_S(rY, 1);
         // Units: mM; Initial value: 0.000363968672182656
+        double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai = NV_Ith_S(rY, 2);
+        // Units: mM; Initial value: 9.85573275838928
+        double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki = NV_Ith_S(rY, 3);
+        // Units: mM; Initial value: 125.427082712469
         double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS = NV_Ith_S(rY, 4);
         // Units: mM; Initial value: 0.000506604278037024
         double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR = NV_Ith_S(rY, 5);
@@ -322,10 +353,7 @@
         double d_dt_chaste_interface_var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
         const double var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Acap = 0.00015339999999999999; // cm2
         const double var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__C = 0.001 * var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Acap; // mF
-        const double var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cao = 2.0; // mM
         const double var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Faraday = 96.5; // coulomb_per_millimole
-        const double var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ko = 4.0; // mM
-        const double var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nao = 138.0; // mM
         const double var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Rgas = 8.3149999999999995; // joule_per_mole_kelvin
         const double var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Temp = 310.0; // kelvin
         const double var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F = var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Rgas * var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Temp / var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Faraday; // mV
@@ -544,11 +572,10 @@
         const double var_COMPUTE_ICa_ICaK__PK = 4.5740000000000001e-7 * var_COMPUTE_ICa_ICaK__Pscale; // litre_per_farad_second
         const double var_COMPUTE_ICa_ICaK__VF_over_RT = var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V / var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F; // dimensionless
         const double var_COMPUTE_ICa_ICaK__VFsq_over_RT = 1000.0 * var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Faraday * var_COMPUTE_ICa_ICaK__VF_over_RT; // coulomb_per_millimole
-        const double var_COMPUTE_ICa_ICaK__a1_Ca = 0.001 * exp(2.0 * var_COMPUTE_ICa_ICaK__VF_over_RT) - 0.34100000000000003 * var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cao; // mM
-        const double var_COMPUTE_ICa_ICaK__a1_K = -var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ko + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki * exp(var_COMPUTE_ICa_ICaK__VF_over_RT); // mM
+        const double var_COMPUTE_ICa_ICaK__a1_Ca = 0.001 * exp(2.0 * var_COMPUTE_ICa_ICaK__VF_over_RT) - 0.34100000000000003 * NV_Ith_S(mParameters, 2); // mM
+        const double var_COMPUTE_ICa_ICaK__a1_K = -NV_Ith_S(mParameters, 3) + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki * exp(var_COMPUTE_ICa_ICaK__VF_over_RT); // mM
         const double var_COMPUTE_ICa_ICaK__a2_Ca = -1.0 + exp(2.0 * var_COMPUTE_ICa_ICaK__VF_over_RT); // dimensionless
         const double var_COMPUTE_ICa_ICaK__a2_K = -1.0 + exp(var_COMPUTE_ICa_ICaK__VF_over_RT); // dimensionless
-        const double var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__KSR = 1.2; // mM
         const double var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Kfb = 0.00016799999999999999; // mM
         const double var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Krb = 3.29; // mM
         const double var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Nfb = 1.2; // dimensionless
@@ -559,12 +586,10 @@
         const double var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Jtr = (-var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaNSR) / var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__tautr; // mM_per_ms
         const double var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__tauxfer = 26.699999999999999; // ms
         const double var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Jxfer = (-var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS) / var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__tauxfer; // mM_per_ms
-        const double var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__v1 = 1.8; // per_ms
-        const double var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Jrel = (-var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR) * (var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR + var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O2_RyR) * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__v1; // mM_per_ms
+        const double var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Jrel = (-var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR) * (var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR + var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O2_RyR) * NV_Ith_S(mParameters, 0); // mM_per_ms
         const double var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__vmaxf = 7.4800000000000002e-5; // per_ms
         const double var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__vmaxr = 0.00031799999999999998; // per_ms
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__GCab = 7.6840000000000003e-5; // mS_per_uF
-        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__INaKmax = 2.387; // uA_per_uF
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__IpCamax = 0.050000000000000003; // uA_per_uF
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__KmCa = 1.3799999999999999; // mM
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__KmKo = 1.5; // mM
@@ -573,26 +598,21 @@
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__KmpCa = 0.00050000000000000001; // mM
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__IpCa = var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai * var_COMPUTE_INaK_INaCa_ICab_IpCa__IpCamax / (var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai + var_COMPUTE_INaK_INaCa_ICab_IpCa__KmpCa); // uA_per_uF
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__VF_over_RT = var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V / var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F; // dimensionless
-        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a1_K = var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ko / (var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ko + var_COMPUTE_INaK_INaCa_ICab_IpCa__KmKo); // dimensionless
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a1_K = NV_Ith_S(mParameters, 3) / (NV_Ith_S(mParameters, 3) + var_COMPUTE_INaK_INaCa_ICab_IpCa__KmKo); // dimensionless
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a1_Na = 1.0 + 0.1245 * exp(-0.10000000000000001 * var_COMPUTE_INaK_INaCa_ICab_IpCa__VF_over_RT); // dimensionless
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a2_K = 1.0 + pow((var_COMPUTE_INaK_INaCa_ICab_IpCa__KmNai / var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai), 1.5); // dimensionless
-        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a4_ncx = var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cao + var_COMPUTE_INaK_INaCa_ICab_IpCa__KmCa; // mM
-        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a5_ncx = 0.00020000000000000001 * pow(var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nao, 3) + 0.00020000000000000001 * pow(var_COMPUTE_INaK_INaCa_ICab_IpCa__KmNa, 3); // mM3
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a4_ncx = NV_Ith_S(mParameters, 2) + var_COMPUTE_INaK_INaCa_ICab_IpCa__KmCa; // mM
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a5_ncx = 0.00020000000000000001 * pow(NV_Ith_S(mParameters, 4), 3) + 0.00020000000000000001 * pow(var_COMPUTE_INaK_INaCa_ICab_IpCa__KmNa, 3); // mM3
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__eta = 0.34999999999999998; // dimensionless
-        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a1_ncx = pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai, 3) * var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cao * exp(var_COMPUTE_INaK_INaCa_ICab_IpCa__VF_over_RT * var_COMPUTE_INaK_INaCa_ICab_IpCa__eta); // mM4
-        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a2_ncx = pow(var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nao, 3) * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai * exp((-1.0 + var_COMPUTE_INaK_INaCa_ICab_IpCa__eta) * var_COMPUTE_INaK_INaCa_ICab_IpCa__VF_over_RT); // mM4
-        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__kNaCa = 0.44; // uA_per_uF
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a1_ncx = pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai, 3) * NV_Ith_S(mParameters, 2) * exp(var_COMPUTE_INaK_INaCa_ICab_IpCa__VF_over_RT * var_COMPUTE_INaK_INaCa_ICab_IpCa__eta); // mM4
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a2_ncx = pow(NV_Ith_S(mParameters, 4), 3) * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai * exp((-1.0 + var_COMPUTE_INaK_INaCa_ICab_IpCa__eta) * var_COMPUTE_INaK_INaCa_ICab_IpCa__VF_over_RT); // mM4
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__ksat = 0.20000000000000001; // dimensionless
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a3_ncx = 1.0 + var_COMPUTE_INaK_INaCa_ICab_IpCa__ksat * exp((-1.0 + var_COMPUTE_INaK_INaCa_ICab_IpCa__eta) * var_COMPUTE_INaK_INaCa_ICab_IpCa__VF_over_RT); // dimensionless
-        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__INaCa = (-var_COMPUTE_INaK_INaCa_ICab_IpCa__a2_ncx + var_COMPUTE_INaK_INaCa_ICab_IpCa__a1_ncx) * var_COMPUTE_INaK_INaCa_ICab_IpCa__kNaCa / (var_COMPUTE_INaK_INaCa_ICab_IpCa__a3_ncx * var_COMPUTE_INaK_INaCa_ICab_IpCa__a4_ncx * var_COMPUTE_INaK_INaCa_ICab_IpCa__a5_ncx); // uA_per_uF
-        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nao); // dimensionless
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__INaCa = (-var_COMPUTE_INaK_INaCa_ICab_IpCa__a2_ncx + var_COMPUTE_INaK_INaCa_ICab_IpCa__a1_ncx) * NV_Ith_S(mParameters, 10) / (var_COMPUTE_INaK_INaCa_ICab_IpCa__a3_ncx * var_COMPUTE_INaK_INaCa_ICab_IpCa__a4_ncx * var_COMPUTE_INaK_INaCa_ICab_IpCa__a5_ncx); // uA_per_uF
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * NV_Ith_S(mParameters, 4)); // dimensionless
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a2_Na = 0.036499999999999998 * var_COMPUTE_INaK_INaCa_ICab_IpCa__sigma * exp(-1.3300000000000001 * var_COMPUTE_INaK_INaCa_ICab_IpCa__VF_over_RT); // dimensionless
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__fNaK = 1 / (var_COMPUTE_INaK_INaCa_ICab_IpCa__a1_Na + var_COMPUTE_INaK_INaCa_ICab_IpCa__a2_Na); // dimensionless
-        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__INaK = var_COMPUTE_INaK_INaCa_ICab_IpCa__INaKmax * var_COMPUTE_INaK_INaCa_ICab_IpCa__a1_K * var_COMPUTE_INaK_INaCa_ICab_IpCa__fNaK / var_COMPUTE_INaK_INaCa_ICab_IpCa__a2_K; // uA_per_uF
-        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GK1 = 0.12530512611880801; // mS_per_uF
-        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GKr = 0.018599999999999998; // mS_per_uF
-        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GKs = 0.0035000000000000001; // mS_per_uF
-        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GNa = 56.32; // mS_per_uF
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__INaK = NV_Ith_S(mParameters, 11) * var_COMPUTE_INaK_INaCa_ICab_IpCa__a1_K * var_COMPUTE_INaK_INaCa_ICab_IpCa__fNaK / var_COMPUTE_INaK_INaCa_ICab_IpCa__a2_K; // uA_per_uF
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GNab = 0.001; // mS_per_uF
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__Kv43Frac = 0.88900000000000001; // dimensionless
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__KvScale = 0.872; // dimensionless
@@ -600,12 +620,12 @@
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__PKv14 = 4.2986000000000001e-7 * (1.0 - var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__Kv43Frac) * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__KvScale; // litre_per_farad_second
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__VF_over_RT = var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V / var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F; // dimensionless
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__VFsq_over_RT = 1000.0 * var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Faraday * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__VF_over_RT; // coulomb_per_millimole
-        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__a1_K = -var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ko + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki * exp(var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__VF_over_RT); // mM
-        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__a1_Na = -var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nao + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai * exp(var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__VF_over_RT); // mM
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__a1_K = -NV_Ith_S(mParameters, 3) + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki * exp(var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__VF_over_RT); // mM
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__a1_Na = -NV_Ith_S(mParameters, 4) + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai * exp(var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__VF_over_RT); // mM
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__a2 = -1.0 + exp(var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__VF_over_RT); // dimensionless
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKv14_K = var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__OKv14 * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__PKv14 * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__VFsq_over_RT * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__a1_K / var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__a2; // uA_per_uF
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKv14_Na = 0.02 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__OKv14 * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__PKv14 * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__VFsq_over_RT * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__a1_Na / var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__a2; // uA_per_uF
-        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__fKo = 0.5 * sqrt(var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ko); // dimensionless
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__fKo = 0.5 * sqrt(NV_Ith_S(mParameters, 3)); // dimensionless
         const double var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__CMDNtot = 0.050000000000000003; // mM
         const double var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__EGTAtot = 0; // mM
         const double var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__HTRPNtot = 0.14000000000000001; // mM
@@ -622,14 +642,17 @@
         const double var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__kltrpn_plus = 40.0; // per_mM_per_ms
         const double var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__dLTRPNCa = -var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__LTRPNCa * var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__kltrpn_minus + (1.0 - var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__LTRPNCa) * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai * var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__kltrpn_plus; // per_ms
         const double var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__Jtrpn = var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__HTRPNtot * var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__dHTRPNCa + var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__LTRPNtot * var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__dLTRPNCa; // mM_per_ms
-        const double var_COMPUTE_REVERSAL_POTENTIALS__ECa = 0.5 * var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F * log(var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cao / var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai); // mV
+        const double var_COMPUTE_REVERSAL_POTENTIALS__ECa = 0.5 * var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F * log(NV_Ith_S(mParameters, 2) / var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai); // mV
         const double var_COMPUTE_INaK_INaCa_ICab_IpCa__ICab = (-var_COMPUTE_REVERSAL_POTENTIALS__ECa + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * var_COMPUTE_INaK_INaCa_ICab_IpCa__GCab; // uA_per_uF
-        const double var_COMPUTE_REVERSAL_POTENTIALS__EK = var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F * log(var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ko / var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki); // mV
+        const double var_COMPUTE_REVERSAL_POTENTIALS__EK = var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F * log(NV_Ith_S(mParameters, 3) / var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki); // mV
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKv43 = (-var_COMPUTE_REVERSAL_POTENTIALS__EK + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__OKv43 * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GKv43; // uA_per_uF
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__K1_inf = 1 / (0.93999999999999995 + exp(1.26 * (-var_COMPUTE_REVERSAL_POTENTIALS__EK + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) / var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F)); // dimensionless
-        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IK1 = sqrt(var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ko) * (-var_COMPUTE_REVERSAL_POTENTIALS__EK + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GK1 * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__K1_inf; // uA_per_uF
-        const double var_COMPUTE_REVERSAL_POTENTIALS__ENa = var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F * log(var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nao / var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai); // mV
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IK1 = sqrt(NV_Ith_S(mParameters, 3)) * (-var_COMPUTE_REVERSAL_POTENTIALS__EK + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * NV_Ith_S(mParameters, 7) * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__K1_inf; // uA_per_uF
+        const double var_COMPUTE_REVERSAL_POTENTIALS__ENa = var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F * log(NV_Ith_S(mParameters, 4) / var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai); // mV
         const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__INab = (-var_COMPUTE_REVERSAL_POTENTIALS__ENa + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GNab; // uA_per_uF
+        const double var_COMPUTE_REVERSAL_POTENTIALS__a1 = 0.018329999999999999 * NV_Ith_S(mParameters, 4) + NV_Ith_S(mParameters, 3); // mM
+        const double var_COMPUTE_REVERSAL_POTENTIALS__a2 = 0.018329999999999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki; // mM
+        const double var_COMPUTE_REVERSAL_POTENTIALS__EKs = var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F * log(var_COMPUTE_REVERSAL_POTENTIALS__a1 / var_COMPUTE_REVERSAL_POTENTIALS__a2); // mV
         const double d_dt_chaste_interface_var_COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C0Kv14 = -var_COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__a1_C0 + var_COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__a2_C0; // 1 / ms
         const double d_dt_chaste_interface_var_COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C1Kv14 = -var_COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__a1_C1 + var_COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__a2_C1; // 1 / ms
         const double d_dt_chaste_interface_var_COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C2Kv14 = -var_COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__a1_C2 + var_COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__a2_C2; // 1 / ms
@@ -678,7 +701,7 @@
         const double var_IKr__B4_HERG = 0.0056890885971700002; // per_mV
         const double var_IKr__B5_HERG = -0.045366429595429997; // per_mV
         const double var_IKr__B6_HERG = 6.9808923999999997e-7; // per_mV
-        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKr = (-var_COMPUTE_REVERSAL_POTENTIALS__EK + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GKr * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__fKo * var_chaste_interface__IKr__OHerg; // uA_per_uF
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKr = (-var_COMPUTE_REVERSAL_POTENTIALS__EK + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * NV_Ith_S(mParameters, 8) * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__fKo * var_chaste_interface__IKr__OHerg; // uA_per_uF
         const double var_IKr__T_Const_HERG = 5.3200000010000004; // dimensionless
         const double var_IKr__C1H_to_C2H = var_IKr__A0_HERG * var_IKr__T_Const_HERG * exp(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V * var_IKr__B0_HERG); // per_ms
         const double var_IKr__C2H_to_C1H = var_IKr__A1_HERG * var_IKr__T_Const_HERG * exp(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V * var_IKr__B1_HERG); // per_ms
@@ -710,7 +733,7 @@
         const double var_IKs__O1ks_C1ks = 0.0070080662892900002 * exp(-0.14999754700285001 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V); // per_ms
         const double d_dt_chaste_interface_var_IKs__C1ks = var_chaste_interface__IKs__C0ks * var_IKs__C0ks_C1ks + var_chaste_interface__IKs__O1ks * var_IKs__O1ks_C1ks - (var_IKs__C1ks_C0ks + var_IKs__C1ks_O1ks) * var_chaste_interface__IKs__C1ks; // 1 / ms
         const double var_IKs__O1ks_O2ks = 0.00767254363063 * exp(0.08662945914655 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V); // per_ms
-        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKs = (-var_COMPUTE_REVERSAL_POTENTIALS__EK + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * (var_chaste_interface__IKs__O1ks + var_chaste_interface__IKs__O2ks) * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GKs; // uA_per_uF
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKs = (-var_COMPUTE_REVERSAL_POTENTIALS__EKs + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * (var_chaste_interface__IKs__O1ks + var_chaste_interface__IKs__O2ks) * NV_Ith_S(mParameters, 9); // uA_per_uF
         const double var_IKs__O2ks_O1ks = 0.0037973799836799999 * exp(-0.014256681268810001 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V); // per_ms
         const double d_dt_chaste_interface_var_IKs__O1ks = var_chaste_interface__IKs__C1ks * var_IKs__C1ks_O1ks + var_chaste_interface__IKs__O2ks * var_IKs__O2ks_O1ks - (var_IKs__O1ks_C1ks + var_IKs__O1ks_O2ks) * var_chaste_interface__IKs__O1ks; // 1 / ms
         const double d_dt_chaste_interface_var_IKs__O2ks = var_chaste_interface__IKs__O1ks * var_IKs__O1ks_O2ks - var_chaste_interface__IKs__O2ks * var_IKs__O2ks_O1ks; // 1 / ms
@@ -750,7 +773,7 @@
         const double var_INa__mu = var_INa__KToverH * var_INa__Temp_Scale * exp(193.26499999999999 / var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Rgas - 121322.14327524199 / var_INa__RTNa - 1.74290267020903 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V / var_INa__RTNaF); // per_ms
         const double var_INa__k75 = var_INa__mu; // per_ms
         const double d_dt_chaste_interface_var_INa__na13 = var_INa__k1213 * var_chaste_interface__INa__na12 + var_INa__k613 * var_chaste_interface__INa__na6 - (var_INa__k1312 + var_INa__k136) * var_chaste_interface__INa__na13; // 1 / ms
-        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__INa = (-var_COMPUTE_REVERSAL_POTENTIALS__ENa + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * (var_chaste_interface__INa__na6 + var_chaste_interface__INa__na7) * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GNa; // uA_per_uF
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__INa = (-var_COMPUTE_REVERSAL_POTENTIALS__ENa + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * (var_chaste_interface__INa__na6 + var_chaste_interface__INa__na7) * NV_Ith_S(mParameters, 6); // uA_per_uF
         const double d_dt_chaste_interface_var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai = (-var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKv14_Na - var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__INa - var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__INab - 3.0 * var_COMPUTE_INaK_INaCa_ICab_IpCa__INaCa - 3.0 * var_COMPUTE_INaK_INaCa_ICab_IpCa__INaK) * var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__a1; // mM / ms
         const double d_dt_chaste_interface_var_INa__na1 = (-var_INa__k12 - var_INa__k18) * var_chaste_interface__INa__na1 + var_INa__k21 * var_chaste_interface__INa__na2 + var_INa__k81 * var_chaste_interface__INa__na8; // 1 / ms
         const double var_INa__omega_na = var_INa__KToverH * var_INa__Temp_Scale * exp(225.17500000000001 / var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Rgas - 121955.166154864 / var_INa__RTNa); // per_ms
@@ -804,13 +827,13 @@
         const double d_dt_chaste_interface_var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR = var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__dO1_RyR; // 1 / ms
         const double d_dt_chaste_interface_var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O2_RyR = var_COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__dO2_RyR; // 1 / ms
         const double var_environment__iso = 0; // dimensionless
-        const double var_COMPUTE_ICa_ICaK__PCa = ((var_environment__iso == 0) ? (0.00024689999999999998 * var_COMPUTE_ICa_ICaK__Pscale) : (0.00037034999999999998 * var_COMPUTE_ICa_ICaK__Pscale)); // litre_per_farad_second
+        const double var_COMPUTE_ICa_ICaK__PCa = ((var_environment__iso == 0) ? (NV_Ith_S(mParameters, 5) * var_COMPUTE_ICa_ICaK__Pscale) : (1.5 * NV_Ith_S(mParameters, 5) * var_COMPUTE_ICa_ICaK__Pscale)); // litre_per_farad_second
         const double var_COMPUTE_ICa_ICaK__ICamax = 4.0 * var_COMPUTE_ICa_ICaK__PCa * var_COMPUTE_ICa_ICaK__VFsq_over_RT * var_COMPUTE_ICa_ICaK__a1_Ca / var_COMPUTE_ICa_ICaK__a2_Ca; // uA_per_uF
         const double var_COMPUTE_ICa_ICaK__ICa = var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__Open * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa * var_COMPUTE_ICa_ICaK__ICamax; // uA_per_uF
         const double var_COMPUTE_ICa_ICaK__Icabar = ((var_COMPUTE_ICa_ICaK__ICamax >= 0) ? (0) : (var_COMPUTE_ICa_ICaK__ICamax)); // uA_per_uF
         const double var_COMPUTE_ICa_ICaK__PKprime = var_COMPUTE_ICa_ICaK__PK / (1.0 + var_COMPUTE_ICa_ICaK__Icabar / var_COMPUTE_ICa_ICaK__ICahalf); // litre_per_farad_second
         const double var_COMPUTE_ICa_ICaK__ICaK = var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__Open * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa * var_COMPUTE_ICa_ICaK__PKprime * var_COMPUTE_ICa_ICaK__VFsq_over_RT * var_COMPUTE_ICa_ICaK__a1_K / var_COMPUTE_ICa_ICaK__a2_K; // uA_per_uF
-        const double var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Jup = ((var_environment__iso == 0) ? ((var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__fb * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__vmaxf - var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__rb * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__vmaxr) * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__KSR / (1.0 + var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__fb + var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__rb)) : (1.5 * (var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__fb * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__vmaxf - var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__rb * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__vmaxr) * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__KSR / (1.0 + var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__fb + var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__rb))); // mM_per_ms
+        const double var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Jup = ((var_environment__iso == 0) ? ((var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__fb * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__vmaxf - var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__rb * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__vmaxr) * NV_Ith_S(mParameters, 1) / (1.0 + var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__fb + var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__rb)) : (1.5 * (var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__fb * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__vmaxf - var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__rb * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__vmaxr) * NV_Ith_S(mParameters, 1) / (1.0 + var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__fb + var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__rb))); // mM_per_ms
         const double d_dt_chaste_interface_var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaNSR = var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Vmyo * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Jup / var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__VNSR - var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__VJSR * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Jtr / var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__VNSR; // mM / ms
         const double d_dt_chaste_interface_var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS = (-var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__a2 * var_COMPUTE_ICa_ICaK__ICa + var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__VJSR * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Jrel / var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__VSS - var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Vmyo * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Jxfer / var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__VSS) * var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__beta_SS; // mM / ms
         const double d_dt_chaste_interface_var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai = (-var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Jup - var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__Jtrpn - 0.5 * (-2.0 * var_COMPUTE_INaK_INaCa_ICab_IpCa__INaCa + var_COMPUTE_INaK_INaCa_ICab_IpCa__ICab + var_COMPUTE_INaK_INaCa_ICab_IpCa__IpCa) * var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__a1 + var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Jxfer) * var_COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__beta_i; // mM / ms
@@ -831,9 +854,9 @@
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
-        NV_Ith_S(rDY,1) = d_dt_chaste_interface_var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai;
-        NV_Ith_S(rDY,2) = d_dt_chaste_interface_var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki;
-        NV_Ith_S(rDY,3) = d_dt_chaste_interface_var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai;
+        NV_Ith_S(rDY,1) = d_dt_chaste_interface_var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai;
+        NV_Ith_S(rDY,2) = d_dt_chaste_interface_var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai;
+        NV_Ith_S(rDY,3) = d_dt_chaste_interface_var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki;
         NV_Ith_S(rDY,4) = d_dt_chaste_interface_var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS;
         NV_Ith_S(rDY,5) = d_dt_chaste_interface_var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR;
         NV_Ith_S(rDY,6) = d_dt_chaste_interface_var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaNSR;
@@ -903,12 +926,12 @@
     {
         double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
         // Units: mV; Initial value: -86.7261544519706
-        double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai = NV_Ith_S(rY, 1);
-        // Units: mM; Initial value: 9.85573275838928
-        double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki = NV_Ith_S(rY, 2);
-        // Units: mM; Initial value: 125.427082712469
-        double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai = NV_Ith_S(rY, 3);
+        double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai = NV_Ith_S(rY, 1);
         // Units: mM; Initial value: 0.000363968672182656
+        double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai = NV_Ith_S(rY, 2);
+        // Units: mM; Initial value: 9.85573275838928
+        double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki = NV_Ith_S(rY, 3);
+        // Units: mM; Initial value: 125.427082712469
         double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS = NV_Ith_S(rY, 4);
         // Units: mM; Initial value: 0.000506604278037024
         double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR = NV_Ith_S(rY, 5);
@@ -1033,729 +1056,846 @@
         // Units: dimensionless; Initial value: 5.65460174551007e-07
         double var_chaste_interface__IKs__O2ks = NV_Ith_S(rY, 66);
         // Units: dimensionless; Initial value: 0.0258818770122187
-        const double var_x0 = 1 / var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki;
-        const double var_x1 = log(4.0 * var_x0);
-        const double var_x2 = exp(0.047170872694120618 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V - 1.26 * var_x1);
-        const double var_x3 = 0.93999999999999995 + var_x2;
-        const double var_x4 = 1 / var_x3;
-        const double var_x5 = exp(-0.024334180358078095 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x6 = 1.0 + 0.20000000000000001 * var_x5;
-        const double var_x7 = 1 / var_x6;
-        const double var_x8 = var_x5 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai;
-        const double var_x9 = exp(0.013103020192811281 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x10 = var_x9 * pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai, 3);
-        const double var_x11 = var_x7 * (63951.97804201502 * var_x8 + 0.026206040385622562 * var_x10);
-        const double var_x12 = var_x2 * (-26.71139896373057 * var_x1 + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) / pow(var_x3, 2);
-        const double var_x13 = 2.0 * var_x10 - 2628072.0 * var_x8;
-        const double var_x14 = var_x13 * var_x5 / pow(var_x6, 2);
-        const double var_x15 = 1 / var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai;
-        const double var_x16 = pow(var_x15, 1.5);
-        const double var_x17 = exp(-0.003743720055088938 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x18 = exp(2.0505200594353643);
-        const double var_x19 = exp(-0.049791476732682874 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x20 = 1.0 + 0.1245 * var_x17 + 0.036499999999999998 * var_x19 * (-0.14285714285714285 + 0.14285714285714285 * var_x18);
-        const double var_x21 = (0.00046609314685857277 * var_x17 + 0.049791476732682874 * var_x19 * (-0.0052142857142857138 + 0.0052142857142857138 * var_x18)) / (pow(var_x20, 2) * (1.0 + 89.442719099991592 * var_x16));
-        const double var_x22 = exp(0.03743720055088938 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x23 = -1.0 + var_x22;
-        const double var_x24 = 1 / var_x23;
-        const double var_x25 = var_x24 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__OKv14;
-        const double var_x26 = var_x22 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki;
-        const double var_x27 = -4.0 + var_x26;
-        const double var_x28 = 0.00015031321966819388 * var_x27;
-        const double var_x29 = var_x22 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai;
-        const double var_x30 = -138.0 + var_x29;
-        const double var_x31 = 3.006264393363878e-6 * var_x30;
-        const double var_x32 = exp(0.074874401101778759 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x33 = -1.0 + var_x32;
-        const double var_x34 = 1 / var_x33;
-        const double var_x35 = -0.68200000000000005 + 0.001 * var_x32;
-        const double var_x36 = var_x34 * var_x35;
-        const double var_x37 = 24.975247492871414 * var_x36;
-        const double var_x38 = var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__Open * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa;
-        const double var_x39 = pow(var_x23, (-2));
-        const double var_x40 = var_x22 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
-        const double var_x41 = var_x39 * var_x40 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__OKv14;
-        const double var_x42 = var_x27 * var_x41;
-        const double var_x43 = var_x30 * var_x41;
-        const double var_x44 = var_x25 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
-        const double var_x45 = var_x26 * var_x44;
-        const double var_x46 = var_x37 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
-        const double var_x47 = var_x46 >= 0;
-        const double var_x48 = ((var_x47) ? (0) : (var_x46));
-        const double var_x49 = 1 / (1.0 - 3.773584905660377 * var_x48);
-        const double var_x50 = var_x27 * var_x49;
-        const double var_x51 = 0.01156711037185033 * var_x50;
-        const double var_x52 = var_x24 * var_x38;
-        const double var_x53 = var_x29 * var_x44;
-        const double var_x54 = var_x32 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
-        const double var_x55 = var_x34 * var_x54;
-        const double var_x56 = 0.0018700066983974486 * var_x55;
-        const double var_x57 = var_x35 * var_x54 / pow(var_x33, 2);
-        const double var_x58 = 1.8700066983974486 * var_x57;
-        const double var_x59 = var_x38 * var_x39 * var_x40 * var_x50;
-        const double var_x60 = var_x24 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
-        const double var_x61 = var_x38 * var_x60;
-        const double var_x62 = var_x27 * var_x61 * ((var_x47) ? (0) : (var_x37 + var_x56 - var_x58)) / pow((0.26500000000000001 - var_x48), 2);
-        const double var_x63 = var_x49 * var_x61;
-        const double var_x64 = var_x26 * var_x63;
-        const double var_x65 = var_x15 * (var_chaste_interface__INa__na6 + var_chaste_interface__INa__na7);
-        const double var_x66 = var_x7 * var_x9 * pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai, 2);
-        const double var_x67 = var_x15 * var_x16 / (var_x20 * pow((0.011180339887498949 + var_x16), 2));
-        const double var_x68 = var_x25 * var_x40;
-        const double var_x69 = var_x0 * (var_chaste_interface__IKs__O1ks + var_chaste_interface__IKs__O2ks);
-        const double var_x70 = var_x0 * var_x4;
-        const double var_x71 = var_x0 * var_chaste_interface__IKr__OHerg;
-        const double var_x72 = var_x0 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__OKv43;
-        const double var_x73 = var_x0 * var_x12;
-        const double var_x74 = var_x22 * var_x63;
-        const double var_x75 = 0.00050000000000000001 + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai;
-        const double var_x76 = 1 / var_x75;
-        const double var_x77 = 1 / var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai;
-        const double var_x78 = var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai / pow(var_x75, 2);
-        const double var_x79 = var_x5 * var_x7;
-        const double var_x80 = var_x51 * var_x60;
-        const double var_x81 = log(138.0 * var_x15);
-        const double var_x82 = 1504.3859896373056 * var_x81 - 56.32 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
-        const double var_x83 = 0.093489896373056991 * var_x1 - 0.0035000000000000001 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
-        const double var_x84 = 1.8494079065353104e-10 * var_x30;
-        const double var_x85 = 0.092547526753060952 * var_x81 - 0.0034647203195431429 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
-        const double var_x86 = 9.2470395326765519e-9 * var_x27;
-        const double var_x87 = 7.1159095070575419e-7 * var_x50;
-        const double var_x88 = var_x60 * var_x87;
-        const double var_x89 = 5.7513555333045694e-6 * var_x1 - 2.1531465053979051e-7 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
-        const double var_x90 = 0.0023800000000000002 + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai;
-        const double var_x91 = 1.0 + 0.00011900000000000002 / pow(var_x90, 2);
-        const double var_x92 = 1 / var_x91;
-        const double var_x93 = var_x92;
-        const double var_x94 = 1.5379617895699322e-6 * var_x76;
-        const double var_x95 = pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai, 1.2);
-        const double var_x96 = pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaNSR, 1.0);
-        const double var_x97 = 1 / (1.0 + 33855.471141425078 * var_x95 + 0.303951367781155 * var_x96);
-        const double var_x98 = pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai, 0.19999999999999996);
-        const double var_x99 = var_x97 * var_x98;
-        const double var_x100 = 2.532389241378596 * var_x95 - 9.6656534954407287e-5 * var_x96;
-        const double var_x101 = var_x100 / pow((2.9537323401073989e-5 + var_x95 + 8.9779098483507565e-6 * var_x96), 2);
-        const double var_x102 = var_x101 * var_x98;
-        const double var_x103 = 2.8000000000000003 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai;
-        const double var_x104 = 16.54232713906077 * var_x36;
-        const double var_x105 = var_x104 * var_x38;
-        const double var_x106 = 0.0023800000000000002 + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS;
-        const double var_x107 = 1.0 + 0.00011900000000000002 / pow(var_x106, 2);
-        const double var_x108 = 1 / var_x107;
-        const double var_x109 = var_x108;
-        const double var_x110 = 240.0 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR;
-        const double var_x111 = 240.0 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O2_RyR;
-        const double var_x112 = (-var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR) * (var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR + var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O2_RyR);
-        const double var_x113 = var_x109 * (240.0 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR - 240.0 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS);
-        const double var_x114 = var_x104 * var_x108 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
-        const double var_x115 = 1.8 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR;
-        const double var_x116 = 1.8 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O2_RyR;
-        const double var_x117 = 0.80000000000000004 + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR;
-        const double var_x118 = pow(var_x117, (-2));
-        const double var_x119 = 1 / (1.0 + 6.0 * var_x118);
-        const double var_x120 = var_x119;
-        const double var_x121 = var_x120 * (1.8 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS - 1.8 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR);
-        const double var_x122 = pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS, 3.0);
-        const double var_x123 = 1 / var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR;
-        const double var_x124 = pow(var_x123, 2.5);
-        const double var_x125 = 1.0 + var_x124;
-        const double var_x126 = 1 / var_x125;
-        const double var_x127 = 0.5 + 4.5 * var_x126;
-        const double var_x128 = 48600000000.0 * var_x122 * var_x127 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__C1_RyR;
-        const double var_x129 = pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS, 4.0);
-        const double var_x130 = var_x123 * var_x124 / pow(var_x125, 2);
-        const double var_x131 = 136687500000.0 * var_x129 * var_x130 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__C1_RyR;
-        const double var_x132 = 12150000000.0 * var_x127 * var_x129;
-        const double var_x133 = 12150000.0 * pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS, 2.0) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR;
-        const double var_x134 = 4050000.0 * var_x122;
-        const double var_x135 = 0.0090000000000000011 * var_x130 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__C2_RyR;
-        const double var_x136 = 0.055555555555555559 * var_x130 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR / pow((0.1111111111111111 + var_x126), 2);
-        const double var_x137 = 0.0036000000000000003 * var_x126;
-        const double var_x138 = 0.10000000000000001 / var_x127;
-        const double var_x139 = exp(1.4300000000000002 - 0.065000000000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x140 = 0.0057330000000000002 * var_x139;
-        const double var_x141 = exp(-0.41999999999999998 + 0.012 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x142 = 0.095846399999999998 * var_x141;
-        const double var_x143 = var_x142 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C0;
-        const double var_x144 = 0.055397999999999996 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C0;
-        const double var_x145 = 0.055397999999999996 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS;
-        const double var_x146 = 7.9871999999999996 * var_x141;
-        const double var_x147 = -var_x146;
-        const double var_x148 = 0.088200000000000001 * var_x139;
-        const double var_x149 = 0.071884799999999999 * var_x141;
-        const double var_x150 = 0.011466 * var_x139;
-        const double var_x151 = 0.11079599999999999 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C1;
-        const double var_x152 = 5.9903999999999993 * var_x141;
-        const double var_x153 = 0.11079599999999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS;
-        const double var_x154 = -var_x148;
-        const double var_x155 = 0.1764 * var_x139;
-        const double var_x156 = 0.047923199999999999 * var_x141;
-        const double var_x157 = -var_x156;
-        const double var_x158 = 0.017199000000000002 * var_x139;
-        const double var_x159 = 0.22159199999999998 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C2;
-        const double var_x160 = 0.22159199999999998 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS;
-        const double var_x161 = -var_x155;
-        const double var_x162 = 3.9935999999999998 * var_x141;
-        const double var_x163 = -var_x162;
-        const double var_x164 = 0.2646 * var_x139;
-        const double var_x165 = 0.0239616 * var_x141;
-        const double var_x166 = 0.022932000000000001 * var_x139 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C4;
-        const double var_x167 = 0.44318399999999997 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C3;
-        const double var_x168 = 0.44318399999999997 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS;
-        const double var_x169 = 1.9967999999999999 * var_x141;
-        const double var_x170 = 0.3528 * var_x139;
-        const double var_x171 = 0.88636799999999993 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C4;
-        const double var_x172 = 0.88636799999999993 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS;
-        const double var_x173 = 0.0028665000000000001 * var_x139;
-        const double var_x174 = 0.1916928 * var_x141 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__CCa0;
-        const double var_x175 = 15.974399999999999 * var_x141;
-        const double var_x176 = 0.0441 * var_x139;
-        const double var_x177 = 0.1437696 * var_x141;
-        const double var_x178 = 11.980799999999999 * var_x141;
-        const double var_x179 = 0.0085995000000000012 * var_x139;
-        const double var_x180 = 0.1323 * var_x139;
-        const double var_x181 = var_x150 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__CCa4;
-        const double var_x182 = exp(-0.02019777813343069 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x183 = exp(-0.18053804430634462 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x184 = 0.5 + var_x183;
-        const double var_x185 = exp(3.6538461538461537 + 0.12820512820512822 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x186 = 1.0 + var_x185;
-        const double var_x187 = 0.0033633620945199998 / var_x184;
-        const double var_x188 = 0.0077904657073700001 * var_x182;
-        const double var_x189 = exp(5.3739999999999997e-8 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x190 = 4.4038962679999997e-11 * var_x189;
-        const double var_x191 = exp(0.028982999999999998 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x192 = 0.063033155855999987 * var_x191;
-        const double var_x193 = exp(-0.00037301599999999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x194 = 1.8592012678400001e-5 * var_x193;
-        const double var_x195 = exp(-0.046843700000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x196 = 0.0037561620845000003 * var_x195;
-        const double var_x197 = 2.1748319999999999 * var_x191;
-        const double var_x198 = 0.00081948199999999996 * var_x189;
-        const double var_x199 = 0.080185000000000006 * var_x195;
-        const double var_x200 = 0.049842400000000002 * var_x193;
-        const double var_x201 = 0.047274866891999993 * var_x191;
-        const double var_x202 = 8.3392179730847992e-11 * var_x189;
-        const double var_x203 = 2.7448243264023812e-6 * var_x193;
-        const double var_x204 = 0.0075123241690000005 * var_x195;
-        const double var_x205 = 1.6311239999999998 * var_x191;
-        const double var_x206 = 0.0015517711151999999 * var_x189;
-        const double var_x207 = 0.16037000000000001 * var_x195;
-        const double var_x208 = 0.0073584627104531205 * var_x193;
-        const double var_x209 = 6.2643871845094088e-10 * var_x189;
-        const double var_x210 = 0.031516577927999993 * var_x191;
-        const double var_x211 = 1.190172890246627e-6 * var_x193;
-        const double var_x212 = 0.011268486253500002 * var_x195;
-        const double var_x213 = 1.0874159999999999 * var_x191;
-        const double var_x214 = 0.011656842546537791 * var_x189;
-        const double var_x215 = 0.24055500000000002 * var_x195;
-        const double var_x216 = 0.0031906751727717496 * var_x193;
-        const double var_x217 = 0.015758288963999997 * var_x191;
-        const double var_x218 = 6.9834511318773689e-9 * var_x189;
-        const double var_x219 = 6.466053749793811e-7 * var_x193;
-        const double var_x220 = 0.015024648338000001 * var_x195;
-        const double var_x221 = 0.54370799999999997 * var_x191;
-        const double var_x222 = 0.12994884875097448 * var_x189;
-        const double var_x223 = 0.32074000000000003 * var_x195;
-        const double var_x224 = 0.0017334521172801731 * var_x193;
-        const double var_x225 = 6.2947815902170839e-9 * var_x189;
-        const double var_x226 = 3.5441967137821161e-8 * var_x193;
-        const double var_x227 = 0.11713400800552819 * var_x189;
-        const double var_x228 = 9.5014602960251466e-5 * var_x193;
-        const double var_x229 = 0.42695382052749886 * var_x191;
-        const double var_x230 = 0.00198360904335657 * var_x195;
-        const double var_x231 = 14.731181055359999 * var_x191;
-        const double var_x232 = 0.042345268272074361 * var_x195;
-        const double var_x233 = 0.10902718902100607 * var_x191;
-        const double var_x234 = 0.0010000484785595239 * var_x195;
-        const double var_x235 = 3.7617634137599998 * var_x191;
-        const double var_x236 = 0.021348622729620501 * var_x195;
-        const double var_x237 = 0.058010926130094308 * var_x191;
-        const double var_x238 = 0.0010108205748447618 * var_x195;
-        const double var_x239 = 2.0015500855706554 * var_x191;
-        const double var_x240 = 0.021578581001175438 * var_x195;
-        const double var_x241 = 0.2874951693560841 * var_x191;
-        const double var_x242 = 0.016668393642939261 * var_x195;
-        const double var_x243 = 9.9194413744637924 * var_x191;
-        const double var_x244 = 0.35582999726621212 * var_x195;
-        const double var_x245 = exp(-0.077933781739999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x246 = 0.00084304739027167303 * var_x245;
-        const double var_x247 = exp(0.0076854803100000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x248 = 0.056565877361888978 * var_x247 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C0Kv14;
-        const double var_x249 = 7.3600965821599997 * var_x247;
-        const double var_x250 = 0.010817483399999999 * var_x245;
-        const double var_x251 = 0.042424408021416733 * var_x247;
-        const double var_x252 = 0.0016860947805433461 * var_x245;
-        const double var_x253 = 5.5200724366199996 * var_x247;
-        const double var_x254 = 0.021634966799999999 * var_x245;
-        const double var_x255 = 0.028282938680944489 * var_x247;
-        const double var_x256 = 0.0025291421708150191 * var_x245;
-        const double var_x257 = 3.6800482910799999 * var_x247;
-        const double var_x258 = 0.032452450199999996 * var_x245;
-        const double var_x259 = 0.014141469340472244 * var_x247;
-        const double var_x260 = 0.0033721895610866921 * var_x245 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__OKv14;
-        const double var_x261 = 1.8400241455399999 * var_x247;
-        const double var_x262 = 0.043269933599999998 * var_x245;
-        const double var_x263 = 0.0016068735371190899 * var_x245;
-        const double var_x264 = 0.057102035392881494 * var_x247 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__CI0Kv14;
-        const double var_x265 = 7.4298590445392074 * var_x247;
-        const double var_x266 = 0.020618446856331008 * var_x245;
-        const double var_x267 = 0.049212749503964481 * var_x247;
-        const double var_x268 = 5.0494790920257417e-5 * var_x245;
-        const double var_x269 = 6.4033407827395079 * var_x247;
-        const double var_x270 = 0.00064791916666788224 * var_x245;
-        const double var_x271 = 0.015434242075859545 * var_x247;
-        const double var_x272 = 4.7206750348744694e-5 * var_x245;
-        const double var_x273 = 2.0082338973371909 * var_x247;
-        const double var_x274 = 0.00060572898292340319 * var_x245;
-        const double var_x275 = 0.04692272136005015 * var_x247;
-        const double var_x276 = 5.7810813021376416e-5 * var_x245 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__OIKv14;
-        const double var_x277 = 6.1053726595326019 * var_x247;
-        const double var_x278 = 0.00074179401705723534 * var_x245;
-        const double var_x279 = exp(-26.232056238852348 - 0.090161609404259865 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x280 = 767594485.71651864 * var_x279;
-        const double var_x281 = exp(-19.657914992626967 + 0.011298360712115747 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x282 = 384756192.24456543 * var_x281 * var_chaste_interface__INa__na1;
-        const double var_x283 = exp(-23.156677820503301);
-        const double var_x284 = 8513540195.0827656 * var_x283;
-        const double var_x285 = 34054160780.331062 * var_x281;
-        const double var_x286 = 8513540195.0827656 * var_x279;
-        const double var_x287 = exp(-24.35183300086069);
-        const double var_x288 = 8513540195.0827656 * var_x287;
-        const double var_x289 = 288567144.18342406 * var_x281;
-        const double var_x290 = 1535188971.4330373 * var_x279;
-        const double var_x291 = 11922585210.267752 * var_x283;
-        const double var_x292 = 25540620585.248295 * var_x281;
-        const double var_x293 = 17027080390.165531 * var_x279;
-        const double var_x294 = 6079249204.347868 * var_x287;
-        const double var_x295 = 192378096.12228271 * var_x281;
-        const double var_x296 = 2302783457.1495562 * var_x279;
-        const double var_x297 = 16696701353.239271 * var_x283;
-        const double var_x298 = 17027080390.165531 * var_x281;
-        const double var_x299 = 25540620585.248295 * var_x279;
-        const double var_x300 = 4340999166.2352047 * var_x287;
-        const double var_x301 = 96189048.061141357 * var_x281;
-        const double var_x302 = 3070377942.8660746 * var_x279;
-        const double var_x303 = 23382498943.197018 * var_x283;
-        const double var_x304 = 8513540195.0827656 * var_x281;
-        const double var_x305 = 34054160780.331062 * var_x279;
-        const double var_x306 = 3099769910.3661275 * var_x287;
-        const double var_x307 = exp(-19.672905196314268 + 0.084272054104636354 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x308 = 717453519.94201112 * var_x307;
-        const double var_x309 = exp(-16.535928437145476 + 0.1097131992444229 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x310 = 934047731.6985184 * var_x309;
-        const double var_x311 = exp(-27.092641999412571 - 0.061469636400174388 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x312 = 523324220.27000725 * var_x311;
-        const double var_x313 = exp(-26.358496255772213 - 0.068762962366201316 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x314 = 585416244.0376184 * var_x313 * var_chaste_interface__INa__na7;
-        const double var_x315 = 32745465422.278648 * var_x283;
-        const double var_x316 = 8513540195.0827656 * var_x309;
-        const double var_x317 = 8513540195.0827656 * var_x307;
-        const double var_x318 = 8513540195.0827656 * var_x311;
-        const double var_x319 = 8513540195.0827656 * var_x313;
-        const double var_x320 = 2213447441.3051791 * var_x287;
-        const double var_x321 = exp(-20.6726464954126 + 0.011394696340402199 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x322 = 97009205.304776609 * var_x321;
-        const double var_x323 = exp(-39.744904705650839 + 0.0027019947965296331 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x324 = 23003541.30715951 * var_x323;
-        const double var_x325 = 8513540195.0827656 * exp(-26.650781465416159);
-        const double var_x326 = 8513540195.0827656 * var_x321;
-        const double var_x327 = 8513540195.0827656 * exp(-22.779658962607588);
-        const double var_x328 = 8513540195.0827656 * var_x323;
-        const double var_x329 = 538822673.3061657 * var_x281 * var_chaste_interface__INa__na8;
-        const double var_x330 = 548114892.2335701 * var_x279;
-        const double var_x331 = 47690340841.071007 * var_x281;
-        const double var_x332 = 6079249204.347868 * var_x279;
-        const double var_x333 = 404117004.97962433 * var_x281;
-        const double var_x334 = 1096229784.4671402 * var_x279;
-        const double var_x335 = 35767755630.803253 * var_x281;
-        const double var_x336 = 12158498408.695736 * var_x279;
-        const double var_x337 = 269411336.65308285 * var_x281;
-        const double var_x338 = 1644344676.7007101 * var_x279;
-        const double var_x339 = 23845170420.535503 * var_x281;
-        const double var_x340 = 18237747613.043602 * var_x279;
-        const double var_x341 = 134705668.32654142 * var_x281;
-        const double var_x342 = 2192459568.9342804 * var_x279;
-        const double var_x343 = 11922585210.267752 * var_x281;
-        const double var_x344 = 24316996817.391472 * var_x279;
-        const double var_x345 = exp(-21.949261959797553 + 0.030147161449011892 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x346 = 256659070.76381233 * var_x345;
-        const double var_x347 = exp(-38.483942906307405 - 0.14399668707161886 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x348 = 1225921583.3429821 * var_x347;
-        const double var_x349 = 8513540195.0827656 * var_x345;
-        const double var_x350 = 8513540195.0827656 * var_x347;
-        const double var_x351 = exp(0.033046080388350003 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x352 = 0.0030146436875758886 * var_x351 * var_chaste_interface__IKr__C1Herg;
-        const double var_x353 = exp(-0.043060541639799998 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x354 = 0.0090930200797394306 * var_x353 * var_chaste_interface__IKr__C2Herg;
-        const double var_x355 = 0.091225454037165171 * var_x351;
-        const double var_x356 = 0.21116826991639448 * var_x353;
-        const double var_x357 = exp(6.9808923999999997e-7 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x358 = 2.9856908086401855e-10 * var_x357;
-        const double var_x359 = exp(0.026174127151180001 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x360 = 0.0028649222200750738 * var_x359;
-        const double var_x361 = exp(-0.026913854983990002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x362 = 0.0001923883999223735 * var_x361;
-        const double var_x363 = exp(-0.045366429595429997 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x364 = exp(0.0056890885971700002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x365 = var_x357 * var_x361 * var_x363 / (var_x359 * var_x364);
-        const double var_x366 = 1.7628212752661065e-7 * var_x365;
-        const double var_x367 = 0.10945626585855089 * var_x359;
-        const double var_x368 = 0.00042769471831999382 * var_x357;
-        const double var_x369 = 0.0071483033566472664 * var_x361;
-        const double var_x370 = 1.6926962184371784e-6 * var_x365;
-        const double var_x371 = 0.0032282621593045179 * var_x364;
-        const double var_x372 = 0.0015600678590465679 * var_x363;
-        const double var_x373 = 0.56744803744318484 * var_x364;
-        const double var_x374 = 0.034388156021070745 * var_x363;
-        const double var_x375 = exp(-1.8891230210000001e-5 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x376 = 4.0853373267232939e-6 * var_x375 * var_chaste_interface__IKs__C1ks;
-        const double var_x377 = 0.21625575895849999 * var_x375;
-        const double var_x378 = exp(-0.14999754700285001 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x379 = 0.0010511927526268654 * var_x378;
-        const double var_x380 = 0.0070080662892900002 * var_x378;
-        const double var_x381 = exp(0.08662945914655 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x382 = 0.00066466830499978399 * var_x381;
-        const double var_x383 = exp(-0.014256681268810001 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        const double var_x384 = 5.4138036083884682e-5 * var_x383 * var_chaste_interface__IKs__O2ks;
-        const double var_x385 = 0.00767254363063 * var_x381;
-        const double var_x386 = 0.0037973799836799999 * var_x383;
+        const double var_x0 = sqrt(NV_Ith_S(mParameters, 3));
+        const double var_x1 = var_x0 * NV_Ith_S(mParameters, 8);
+        const double var_x2 = 0.5 * var_x1;
+        const double var_x3 = 1 / var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki;
+        const double var_x4 = log(var_x3 * NV_Ith_S(mParameters, 3));
+        const double var_x5 = exp(0.047170872694120618 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V - 1.26 * var_x4);
+        const double var_x6 = 0.93999999999999995 + var_x5;
+        const double var_x7 = var_x0 * NV_Ith_S(mParameters, 7);
+        const double var_x8 = var_x7 / var_x6;
+        const double var_x9 = exp(0.03743720055088938 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x10 = -1.0 + var_x9;
+        const double var_x11 = 1 / var_x10;
+        const double var_x12 = var_x11 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__OKv14;
+        const double var_x13 = var_x9 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki;
+        const double var_x14 = var_x13 - NV_Ith_S(mParameters, 3);
+        const double var_x15 = 0.00015031321966819388 * var_x14;
+        const double var_x16 = var_x9 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai;
+        const double var_x17 = var_x16 - NV_Ith_S(mParameters, 4);
+        const double var_x18 = 3.006264393363878e-6 * var_x17;
+        const double var_x19 = exp(-0.024334180358078095 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x20 = pow(NV_Ith_S(mParameters, 4), 3);
+        const double var_x21 = var_x19 * var_x20;
+        const double var_x22 = var_x21 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai;
+        const double var_x23 = NV_Ith_S(mParameters, 2) * exp(0.013103020192811281 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x24 = var_x23 * pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai, 3);
+        const double var_x25 = 1.0 + 0.20000000000000001 * var_x19;
+        const double var_x26 = NV_Ith_S(mParameters, 10) / ((133.984375 + 0.00020000000000000001 * var_x20) * (1.3799999999999999 + NV_Ith_S(mParameters, 2)));
+        const double var_x27 = var_x26 / var_x25;
+        const double var_x28 = var_x27 * (0.024334180358078095 * var_x22 + 0.013103020192811281 * var_x24);
+        const double var_x29 = pow(var_x10, (-2));
+        const double var_x30 = var_x9 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
+        const double var_x31 = var_x29 * var_x30 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__OKv14;
+        const double var_x32 = var_x14 * var_x31;
+        const double var_x33 = -26.71139896373057 * var_x4 + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
+        const double var_x34 = var_x33 * var_x5 * var_x7 / pow(var_x6, 2);
+        const double var_x35 = var_x17 * var_x31;
+        const double var_x36 = var_x12 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
+        const double var_x37 = var_x13 * var_x36;
+        const double var_x38 = exp(0.074874401101778759 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x39 = 0.001 * var_x38 - 0.34100000000000003 * NV_Ith_S(mParameters, 2);
+        const double var_x40 = -1.0 + var_x38;
+        const double var_x41 = NV_Ith_S(mParameters, 5) / var_x40;
+        const double var_x42 = var_x39 * var_x41;
+        const double var_x43 = 101155.3158885031 * var_x42;
+        const double var_x44 = var_x43 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
+        const double var_x45 = var_x44 >= 0;
+        const double var_x46 = ((var_x45) ? (0) : (var_x44));
+        const double var_x47 = 1 / (1.0 - 3.773584905660377 * var_x46);
+        const double var_x48 = var_x14 * var_x47;
+        const double var_x49 = 0.01156711037185033 * var_x48;
+        const double var_x50 = var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__Open * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa;
+        const double var_x51 = var_x11 * var_x50;
+        const double var_x52 = var_x16 * var_x36;
+        const double var_x53 = 1 / var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai;
+        const double var_x54 = pow(var_x53, 1.5);
+        const double var_x55 = exp(-0.003743720055088938 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x56 = exp(0.01485884101040119 * NV_Ith_S(mParameters, 4));
+        const double var_x57 = exp(-0.049791476732682874 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x58 = 1.0 + 0.1245 * var_x55 + 0.036499999999999998 * var_x57 * (-0.14285714285714285 + 0.14285714285714285 * var_x56);
+        const double var_x59 = NV_Ith_S(mParameters, 3) * NV_Ith_S(mParameters, 11) / (1.5 + NV_Ith_S(mParameters, 3));
+        const double var_x60 = var_x59 * (0.00046609314685857277 * var_x55 + 0.049791476732682874 * var_x57 * (-0.0052142857142857138 + 0.0052142857142857138 * var_x56)) / (pow(var_x58, 2) * (1.0 + 89.442719099991592 * var_x54));
+        const double var_x61 = var_x24 - var_x22;
+        const double var_x62 = var_x19 * var_x26 * var_x61 / pow(var_x25, 2);
+        const double var_x63 = var_x38 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
+        const double var_x64 = var_x41 * var_x63;
+        const double var_x65 = 7.5739436954129147 * var_x64;
+        const double var_x66 = var_x29 * var_x30 * var_x48 * var_x50;
+        const double var_x67 = var_x39 * var_x63 * NV_Ith_S(mParameters, 5) / pow(var_x40, 2);
+        const double var_x68 = 7573.9436954129151 * var_x67;
+        const double var_x69 = var_x11 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
+        const double var_x70 = var_x50 * var_x69;
+        const double var_x71 = var_x14 * var_x70 * ((var_x45) ? (0) : (var_x43 + var_x65 - var_x68)) / pow((0.26500000000000001 - var_x46), 2);
+        const double var_x72 = var_x47 * var_x70;
+        const double var_x73 = var_x13 * var_x72;
+        const double var_x74 = 0.00050000000000000001 + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai;
+        const double var_x75 = 1 / var_x74;
+        const double var_x76 = 1 / var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai;
+        const double var_x77 = var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai / pow(var_x74, 2);
+        const double var_x78 = var_x21 * var_x27;
+        const double var_x79 = 1 / (0.018329999999999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki);
+        const double var_x80 = var_x79 * (var_chaste_interface__IKs__O1ks + var_chaste_interface__IKs__O2ks) * NV_Ith_S(mParameters, 9);
+        const double var_x81 = var_x53 * (var_chaste_interface__INa__na6 + var_chaste_interface__INa__na7) * NV_Ith_S(mParameters, 6);
+        const double var_x82 = var_x12 * var_x30;
+        const double var_x83 = var_x23 * var_x27 * pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai, 2);
+        const double var_x84 = var_x53 * var_x54 * var_x59 / (var_x58 * pow((0.011180339887498949 + var_x54), 2));
+        const double var_x85 = var_x3 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__OKv43;
+        const double var_x86 = var_x1 * var_x3 * var_chaste_interface__IKr__OHerg;
+        const double var_x87 = var_x3 * var_x8;
+        const double var_x88 = var_x3 * var_x34;
+        const double var_x89 = var_x72 * var_x9;
+        const double var_x90 = var_x49 * var_x69;
+        const double var_x91 = -var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
+        const double var_x92 = log(var_x53 * NV_Ith_S(mParameters, 4));
+        const double var_x93 = (var_x91 + 26.71139896373057 * var_x92) * NV_Ith_S(mParameters, 6);
+        const double var_x94 = log(var_x79 * (0.018329999999999999 * NV_Ith_S(mParameters, 4) + NV_Ith_S(mParameters, 3)));
+        const double var_x95 = (var_x91 + 26.71139896373057 * var_x94) * NV_Ith_S(mParameters, 9);
+        const double var_x96 = 0.0023800000000000002 + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai;
+        const double var_x97 = 1.0 + 0.00011900000000000002 / pow(var_x96, 2);
+        const double var_x98 = 1 / var_x97;
+        const double var_x99 = var_x98;
+        const double var_x100 = 1.5379617895699322e-6 * var_x75;
+        const double var_x101 = pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai, 0.19999999999999996);
+        const double var_x102 = pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai, 1.2);
+        const double var_x103 = pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaNSR, 1.0);
+        const double var_x104 = NV_Ith_S(mParameters, 1) / (1.0 + 33855.471141425078 * var_x102 + 0.303951367781155 * var_x103);
+        const double var_x105 = var_x101 * var_x104;
+        const double var_x106 = 2.532389241378596 * var_x102 - 9.6656534954407287e-5 * var_x103;
+        const double var_x107 = var_x106 * NV_Ith_S(mParameters, 1) / pow((2.9537323401073989e-5 + var_x102 + 8.9779098483507565e-6 * var_x103), 2);
+        const double var_x108 = var_x101 * var_x107;
+        const double var_x109 = 2.8000000000000003 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai;
+        const double var_x110 = 1.8494079065353104e-10 * var_x17;
+        const double var_x111 = -6.1518471582797284e-5 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
+        const double var_x112 = (var_x111 + 0.0016432444380870197 * var_x92) * NV_Ith_S(mParameters, 6);
+        const double var_x113 = 3.0759235791398642e-5 * var_x1;
+        const double var_x114 = 9.2470395326765519e-9 * var_x14;
+        const double var_x115 = 7.1159095070575419e-7 * var_x48;
+        const double var_x116 = var_x115 * var_x69;
+        const double var_x117 = (var_x111 + 0.0016432444380870197 * var_x94) * NV_Ith_S(mParameters, 9);
+        const double var_x118 = 67000.109919241688 * var_x42;
+        const double var_x119 = var_x118 * var_x50;
+        const double var_x120 = 0.0023800000000000002 + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS;
+        const double var_x121 = 1.0 + 0.00011900000000000002 / pow(var_x120, 2);
+        const double var_x122 = 1 / var_x121;
+        const double var_x123 = var_x122;
+        const double var_x124 = 133.33333333333334 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR;
+        const double var_x125 = 133.33333333333334 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O2_RyR;
+        const double var_x126 = (var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR + var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O2_RyR) * NV_Ith_S(mParameters, 0);
+        const double var_x127 = var_x126 * (-var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR);
+        const double var_x128 = var_x123 * NV_Ith_S(mParameters, 0);
+        const double var_x129 = var_x128 * (133.33333333333334 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR - 133.33333333333334 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS);
+        const double var_x130 = var_x118 * var_x122 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
+        const double var_x131 = 0.80000000000000004 + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR;
+        const double var_x132 = pow(var_x131, (-2));
+        const double var_x133 = 1 / (1.0 + 6.0 * var_x132);
+        const double var_x134 = var_x133;
+        const double var_x135 = var_x134 * (-var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS) * NV_Ith_S(mParameters, 0);
+        const double var_x136 = pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS, 3.0);
+        const double var_x137 = 1 / var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR;
+        const double var_x138 = pow(var_x137, 2.5);
+        const double var_x139 = 1.0 + var_x138;
+        const double var_x140 = 1 / var_x139;
+        const double var_x141 = 0.5 + 4.5 * var_x140;
+        const double var_x142 = 48600000000.0 * var_x136 * var_x141 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__C1_RyR;
+        const double var_x143 = pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS, 4.0);
+        const double var_x144 = var_x137 * var_x138 / pow(var_x139, 2);
+        const double var_x145 = 136687500000.0 * var_x143 * var_x144 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__C1_RyR;
+        const double var_x146 = 12150000000.0 * var_x141 * var_x143;
+        const double var_x147 = 12150000.0 * pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS, 2.0) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR;
+        const double var_x148 = 4050000.0 * var_x136;
+        const double var_x149 = 0.0090000000000000011 * var_x144 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__C2_RyR;
+        const double var_x150 = 0.055555555555555559 * var_x144 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR / pow((0.1111111111111111 + var_x140), 2);
+        const double var_x151 = 0.0036000000000000003 * var_x140;
+        const double var_x152 = 0.10000000000000001 / var_x141;
+        const double var_x153 = exp(1.4300000000000002 - 0.065000000000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x154 = 0.0057330000000000002 * var_x153;
+        const double var_x155 = exp(-0.41999999999999998 + 0.012 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x156 = 0.095846399999999998 * var_x155;
+        const double var_x157 = var_x156 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C0;
+        const double var_x158 = 0.055397999999999996 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C0;
+        const double var_x159 = 0.055397999999999996 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS;
+        const double var_x160 = 7.9871999999999996 * var_x155;
+        const double var_x161 = -var_x160;
+        const double var_x162 = 0.088200000000000001 * var_x153;
+        const double var_x163 = 0.071884799999999999 * var_x155;
+        const double var_x164 = 0.011466 * var_x153;
+        const double var_x165 = 0.11079599999999999 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C1;
+        const double var_x166 = 5.9903999999999993 * var_x155;
+        const double var_x167 = 0.11079599999999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS;
+        const double var_x168 = -var_x162;
+        const double var_x169 = 0.1764 * var_x153;
+        const double var_x170 = 0.047923199999999999 * var_x155;
+        const double var_x171 = -var_x170;
+        const double var_x172 = 0.017199000000000002 * var_x153;
+        const double var_x173 = 0.22159199999999998 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C2;
+        const double var_x174 = 0.22159199999999998 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS;
+        const double var_x175 = -var_x169;
+        const double var_x176 = 3.9935999999999998 * var_x155;
+        const double var_x177 = -var_x176;
+        const double var_x178 = 0.2646 * var_x153;
+        const double var_x179 = 0.0239616 * var_x155;
+        const double var_x180 = 0.022932000000000001 * var_x153 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C4;
+        const double var_x181 = 0.44318399999999997 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C3;
+        const double var_x182 = 0.44318399999999997 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS;
+        const double var_x183 = 1.9967999999999999 * var_x155;
+        const double var_x184 = 0.3528 * var_x153;
+        const double var_x185 = 0.88636799999999993 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C4;
+        const double var_x186 = 0.88636799999999993 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS;
+        const double var_x187 = 0.0028665000000000001 * var_x153;
+        const double var_x188 = 0.1916928 * var_x155 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__CCa0;
+        const double var_x189 = 15.974399999999999 * var_x155;
+        const double var_x190 = 0.0441 * var_x153;
+        const double var_x191 = 0.1437696 * var_x155;
+        const double var_x192 = 11.980799999999999 * var_x155;
+        const double var_x193 = 0.0085995000000000012 * var_x153;
+        const double var_x194 = 0.1323 * var_x153;
+        const double var_x195 = var_x164 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__CCa4;
+        const double var_x196 = exp(-0.02019777813343069 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x197 = exp(-0.18053804430634462 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x198 = 0.5 + var_x197;
+        const double var_x199 = exp(3.6538461538461537 + 0.12820512820512822 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x200 = 1.0 + var_x199;
+        const double var_x201 = 0.0033633620945199998 / var_x198;
+        const double var_x202 = 0.0077904657073700001 * var_x196;
+        const double var_x203 = exp(5.3739999999999997e-8 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x204 = 4.4038962679999997e-11 * var_x203;
+        const double var_x205 = exp(0.028982999999999998 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x206 = 0.063033155855999987 * var_x205;
+        const double var_x207 = exp(-0.00037301599999999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x208 = 1.8592012678400001e-5 * var_x207;
+        const double var_x209 = exp(-0.046843700000000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x210 = 0.0037561620845000003 * var_x209;
+        const double var_x211 = 2.1748319999999999 * var_x205;
+        const double var_x212 = 0.00081948199999999996 * var_x203;
+        const double var_x213 = 0.080185000000000006 * var_x209;
+        const double var_x214 = 0.049842400000000002 * var_x207;
+        const double var_x215 = 0.047274866891999993 * var_x205;
+        const double var_x216 = 8.3392179730847992e-11 * var_x203;
+        const double var_x217 = 2.7448243264023812e-6 * var_x207;
+        const double var_x218 = 0.0075123241690000005 * var_x209;
+        const double var_x219 = 1.6311239999999998 * var_x205;
+        const double var_x220 = 0.0015517711151999999 * var_x203;
+        const double var_x221 = 0.16037000000000001 * var_x209;
+        const double var_x222 = 0.0073584627104531205 * var_x207;
+        const double var_x223 = 6.2643871845094088e-10 * var_x203;
+        const double var_x224 = 0.031516577927999993 * var_x205;
+        const double var_x225 = 1.190172890246627e-6 * var_x207;
+        const double var_x226 = 0.011268486253500002 * var_x209;
+        const double var_x227 = 1.0874159999999999 * var_x205;
+        const double var_x228 = 0.011656842546537791 * var_x203;
+        const double var_x229 = 0.24055500000000002 * var_x209;
+        const double var_x230 = 0.0031906751727717496 * var_x207;
+        const double var_x231 = 0.015758288963999997 * var_x205;
+        const double var_x232 = 6.9834511318773689e-9 * var_x203;
+        const double var_x233 = 6.466053749793811e-7 * var_x207;
+        const double var_x234 = 0.015024648338000001 * var_x209;
+        const double var_x235 = 0.54370799999999997 * var_x205;
+        const double var_x236 = 0.12994884875097448 * var_x203;
+        const double var_x237 = 0.32074000000000003 * var_x209;
+        const double var_x238 = 0.0017334521172801731 * var_x207;
+        const double var_x239 = 6.2947815902170839e-9 * var_x203;
+        const double var_x240 = 3.5441967137821161e-8 * var_x207;
+        const double var_x241 = 0.11713400800552819 * var_x203;
+        const double var_x242 = 9.5014602960251466e-5 * var_x207;
+        const double var_x243 = 0.42695382052749886 * var_x205;
+        const double var_x244 = 0.00198360904335657 * var_x209;
+        const double var_x245 = 14.731181055359999 * var_x205;
+        const double var_x246 = 0.042345268272074361 * var_x209;
+        const double var_x247 = 0.10902718902100607 * var_x205;
+        const double var_x248 = 0.0010000484785595239 * var_x209;
+        const double var_x249 = 3.7617634137599998 * var_x205;
+        const double var_x250 = 0.021348622729620501 * var_x209;
+        const double var_x251 = 0.058010926130094308 * var_x205;
+        const double var_x252 = 0.0010108205748447618 * var_x209;
+        const double var_x253 = 2.0015500855706554 * var_x205;
+        const double var_x254 = 0.021578581001175438 * var_x209;
+        const double var_x255 = 0.2874951693560841 * var_x205;
+        const double var_x256 = 0.016668393642939261 * var_x209;
+        const double var_x257 = 9.9194413744637924 * var_x205;
+        const double var_x258 = 0.35582999726621212 * var_x209;
+        const double var_x259 = exp(-0.077933781739999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x260 = 0.00084304739027167303 * var_x259;
+        const double var_x261 = exp(0.0076854803100000002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x262 = 0.056565877361888978 * var_x261 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C0Kv14;
+        const double var_x263 = 7.3600965821599997 * var_x261;
+        const double var_x264 = 0.010817483399999999 * var_x259;
+        const double var_x265 = 0.042424408021416733 * var_x261;
+        const double var_x266 = 0.0016860947805433461 * var_x259;
+        const double var_x267 = 5.5200724366199996 * var_x261;
+        const double var_x268 = 0.021634966799999999 * var_x259;
+        const double var_x269 = 0.028282938680944489 * var_x261;
+        const double var_x270 = 0.0025291421708150191 * var_x259;
+        const double var_x271 = 3.6800482910799999 * var_x261;
+        const double var_x272 = 0.032452450199999996 * var_x259;
+        const double var_x273 = 0.014141469340472244 * var_x261;
+        const double var_x274 = 0.0033721895610866921 * var_x259 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__OKv14;
+        const double var_x275 = 1.8400241455399999 * var_x261;
+        const double var_x276 = 0.043269933599999998 * var_x259;
+        const double var_x277 = 0.0016068735371190899 * var_x259;
+        const double var_x278 = 0.057102035392881494 * var_x261 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__CI0Kv14;
+        const double var_x279 = 7.4298590445392074 * var_x261;
+        const double var_x280 = 0.020618446856331008 * var_x259;
+        const double var_x281 = 0.049212749503964481 * var_x261;
+        const double var_x282 = 5.0494790920257417e-5 * var_x259;
+        const double var_x283 = 6.4033407827395079 * var_x261;
+        const double var_x284 = 0.00064791916666788224 * var_x259;
+        const double var_x285 = 0.015434242075859545 * var_x261;
+        const double var_x286 = 4.7206750348744694e-5 * var_x259;
+        const double var_x287 = 2.0082338973371909 * var_x261;
+        const double var_x288 = 0.00060572898292340319 * var_x259;
+        const double var_x289 = 0.04692272136005015 * var_x261;
+        const double var_x290 = 5.7810813021376416e-5 * var_x259 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__OIKv14;
+        const double var_x291 = 6.1053726595326019 * var_x261;
+        const double var_x292 = 0.00074179401705723534 * var_x259;
+        const double var_x293 = exp(-26.232056238852348 - 0.090161609404259865 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x294 = 767594485.71651864 * var_x293;
+        const double var_x295 = exp(-19.657914992626967 + 0.011298360712115747 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x296 = 384756192.24456543 * var_x295 * var_chaste_interface__INa__na1;
+        const double var_x297 = exp(-23.156677820503301);
+        const double var_x298 = 8513540195.0827656 * var_x297;
+        const double var_x299 = 34054160780.331062 * var_x295;
+        const double var_x300 = 8513540195.0827656 * var_x293;
+        const double var_x301 = exp(-24.35183300086069);
+        const double var_x302 = 8513540195.0827656 * var_x301;
+        const double var_x303 = 288567144.18342406 * var_x295;
+        const double var_x304 = 1535188971.4330373 * var_x293;
+        const double var_x305 = 11922585210.267752 * var_x297;
+        const double var_x306 = 25540620585.248295 * var_x295;
+        const double var_x307 = 17027080390.165531 * var_x293;
+        const double var_x308 = 6079249204.347868 * var_x301;
+        const double var_x309 = 192378096.12228271 * var_x295;
+        const double var_x310 = 2302783457.1495562 * var_x293;
+        const double var_x311 = 16696701353.239271 * var_x297;
+        const double var_x312 = 17027080390.165531 * var_x295;
+        const double var_x313 = 25540620585.248295 * var_x293;
+        const double var_x314 = 4340999166.2352047 * var_x301;
+        const double var_x315 = 96189048.061141357 * var_x295;
+        const double var_x316 = 3070377942.8660746 * var_x293;
+        const double var_x317 = 23382498943.197018 * var_x297;
+        const double var_x318 = 8513540195.0827656 * var_x295;
+        const double var_x319 = 34054160780.331062 * var_x293;
+        const double var_x320 = 3099769910.3661275 * var_x301;
+        const double var_x321 = exp(-19.672905196314268 + 0.084272054104636354 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x322 = 717453519.94201112 * var_x321;
+        const double var_x323 = exp(-16.535928437145476 + 0.1097131992444229 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x324 = 934047731.6985184 * var_x323;
+        const double var_x325 = exp(-27.092641999412571 - 0.061469636400174388 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x326 = 523324220.27000725 * var_x325;
+        const double var_x327 = exp(-26.358496255772213 - 0.068762962366201316 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x328 = 585416244.0376184 * var_x327 * var_chaste_interface__INa__na7;
+        const double var_x329 = 32745465422.278648 * var_x297;
+        const double var_x330 = 8513540195.0827656 * var_x323;
+        const double var_x331 = 8513540195.0827656 * var_x321;
+        const double var_x332 = 8513540195.0827656 * var_x325;
+        const double var_x333 = 8513540195.0827656 * var_x327;
+        const double var_x334 = 2213447441.3051791 * var_x301;
+        const double var_x335 = exp(-20.6726464954126 + 0.011394696340402199 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x336 = 97009205.304776609 * var_x335;
+        const double var_x337 = exp(-39.744904705650839 + 0.0027019947965296331 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x338 = 23003541.30715951 * var_x337;
+        const double var_x339 = 8513540195.0827656 * exp(-26.650781465416159);
+        const double var_x340 = 8513540195.0827656 * var_x335;
+        const double var_x341 = 8513540195.0827656 * exp(-22.779658962607588);
+        const double var_x342 = 8513540195.0827656 * var_x337;
+        const double var_x343 = 538822673.3061657 * var_x295 * var_chaste_interface__INa__na8;
+        const double var_x344 = 548114892.2335701 * var_x293;
+        const double var_x345 = 47690340841.071007 * var_x295;
+        const double var_x346 = 6079249204.347868 * var_x293;
+        const double var_x347 = 404117004.97962433 * var_x295;
+        const double var_x348 = 1096229784.4671402 * var_x293;
+        const double var_x349 = 35767755630.803253 * var_x295;
+        const double var_x350 = 12158498408.695736 * var_x293;
+        const double var_x351 = 269411336.65308285 * var_x295;
+        const double var_x352 = 1644344676.7007101 * var_x293;
+        const double var_x353 = 23845170420.535503 * var_x295;
+        const double var_x354 = 18237747613.043602 * var_x293;
+        const double var_x355 = 134705668.32654142 * var_x295;
+        const double var_x356 = 2192459568.9342804 * var_x293;
+        const double var_x357 = 11922585210.267752 * var_x295;
+        const double var_x358 = 24316996817.391472 * var_x293;
+        const double var_x359 = exp(-21.949261959797553 + 0.030147161449011892 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x360 = 256659070.76381233 * var_x359;
+        const double var_x361 = exp(-38.483942906307405 - 0.14399668707161886 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x362 = 1225921583.3429821 * var_x361;
+        const double var_x363 = 8513540195.0827656 * var_x359;
+        const double var_x364 = 8513540195.0827656 * var_x361;
+        const double var_x365 = exp(0.033046080388350003 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x366 = 0.0030146436875758886 * var_x365 * var_chaste_interface__IKr__C1Herg;
+        const double var_x367 = exp(-0.043060541639799998 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x368 = 0.0090930200797394306 * var_x367 * var_chaste_interface__IKr__C2Herg;
+        const double var_x369 = 0.091225454037165171 * var_x365;
+        const double var_x370 = 0.21116826991639448 * var_x367;
+        const double var_x371 = exp(6.9808923999999997e-7 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x372 = 2.9856908086401855e-10 * var_x371;
+        const double var_x373 = exp(0.026174127151180001 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x374 = 0.0028649222200750738 * var_x373;
+        const double var_x375 = exp(-0.026913854983990002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x376 = 0.0001923883999223735 * var_x375;
+        const double var_x377 = exp(-0.045366429595429997 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x378 = exp(0.0056890885971700002 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x379 = var_x371 * var_x375 * var_x377 / (var_x373 * var_x378);
+        const double var_x380 = 1.7628212752661065e-7 * var_x379;
+        const double var_x381 = 0.10945626585855089 * var_x373;
+        const double var_x382 = 0.00042769471831999382 * var_x371;
+        const double var_x383 = 0.0071483033566472664 * var_x375;
+        const double var_x384 = 1.6926962184371784e-6 * var_x379;
+        const double var_x385 = 0.0032282621593045179 * var_x378;
+        const double var_x386 = 0.0015600678590465679 * var_x377;
+        const double var_x387 = 0.56744803744318484 * var_x378;
+        const double var_x388 = 0.034388156021070745 * var_x377;
+        const double var_x389 = exp(-1.8891230210000001e-5 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x390 = 4.0853373267232939e-6 * var_x389 * var_chaste_interface__IKs__C1ks;
+        const double var_x391 = 0.21625575895849999 * var_x389;
+        const double var_x392 = exp(-0.14999754700285001 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x393 = 0.0010511927526268654 * var_x392;
+        const double var_x394 = 0.0070080662892900002 * var_x392;
+        const double var_x395 = exp(0.08662945914655 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x396 = 0.00066466830499978399 * var_x395;
+        const double var_x397 = exp(-0.014256681268810001 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        const double var_x398 = 5.4138036083884682e-5 * var_x397 * var_chaste_interface__IKs__O2ks;
+        const double var_x399 = 0.00767254363063 * var_x395;
+        const double var_x400 = 0.0037973799836799999 * var_x397;
         
         // Matrix entries
-        IJth(rJacobian, 0, 0) = mSetVoltageDerivativeToZero ? 0.0 : (-0.0010768399999999999 + 0.00043304023078523341 * var_x59 + 5.6273061501680649e-6 * var_x42 + 0.011821504304142041 * var_x12 + 1.1254612300336129e-7 * var_x43 - 0.25061025223761602 * var_x4 - 0.018599999999999998 * var_chaste_interface__IKr__OHerg - 56.32 * var_chaste_interface__INa__na6 - 56.32 * var_chaste_interface__INa__na7 - 0.0035000000000000001 * var_chaste_interface__IKs__O1ks - 0.0035000000000000001 * var_chaste_interface__IKs__O2ks - 0.077520800000000001 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__OKv43 - 9.6051213058629282e-7 * var_x14 - 0.0030652842485403373 * var_x62 - 1.736 * var_x21 - 0.00043304023078523341 * var_x64 - 5.6273061501680649e-6 * var_x45 - 0.00019735863638148724 * var_x11 - 1.1254612300336129e-7 * var_x53 + var_x38 * var_x58 - var_x25 * var_x28 - var_x25 * var_x31 - var_x37 * var_x38 - var_x38 * var_x56 - var_x51 * var_x52);
-        IJth(rJacobian, 1, 0) = -6.1518471582797284e-8 + 6.9236654697362894e-12 * var_x43 - 0.00032038820000320823 * var_x21 - 0.0034647203195431429 * var_chaste_interface__INa__na6 - 0.0034647203195431429 * var_chaste_interface__INa__na7 - 3.6423604991562432e-8 * var_x11 - 1.7726771463121479e-10 * var_x14 - 6.9236654697362894e-12 * var_x53 - var_x25 * var_x84;
-        IJth(rJacobian, 2, 0) = 7.272408766002779e-7 * var_x12 + 0.00021359213333547216 * var_x21 + 2.6639973131769359e-8 * var_x59 + 3.4618327348681446e-10 * var_x42 - 1.8857160193702489e-7 * var_x62 - 2.1531465053979051e-7 * var_chaste_interface__IKs__O1ks - 2.1531465053979051e-7 * var_chaste_interface__IKs__O2ks - 2.6639973131769359e-8 * var_x64 - 1.5417159680637441e-5 * var_x4 - 1.1442435714400293e-6 * var_chaste_interface__IKr__OHerg - 4.7689611318757119e-6 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__OKv43 - 3.4618327348681446e-10 * var_x45 - var_x25 * var_x86 - var_x52 * var_x87;
-        IJth(rJacobian, 3, 0) = var_x93 * (-2.3635396782110715e-9 + 5.908923821040493e-11 * var_x14 + 1.2141201663854144e-8 * var_x11);
-        IJth(rJacobian, 4, 0) = var_x109 * (-var_x105 + 1.2385968373668765 * var_x38 * var_x57 - 0.0012385968373668766 * var_x38 * var_x55);
-        IJth(rJacobian, 13, 0) = -var_x143 - var_x140 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C1;
-        IJth(rJacobian, 14, 0) = var_x143 + (var_x140 - var_x149) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C1 - var_x150 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C2;
-        IJth(rJacobian, 15, 0) = var_x149 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C1 + (var_x150 + var_x157) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C2 - var_x158 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C3;
-        IJth(rJacobian, 16, 0) = -var_x166 + var_x156 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C2 + (var_x158 - var_x165) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C3;
-        IJth(rJacobian, 17, 0) = var_x166 + var_x165 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C3;
-        IJth(rJacobian, 18, 0) = -var_x174 - var_x173 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__CCa1;
-        IJth(rJacobian, 19, 0) = var_x174 + (var_x173 - var_x177) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__CCa1 - var_x140 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__CCa2;
-        IJth(rJacobian, 20, 0) = var_x177 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__CCa1 + (var_x140 - var_x142) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__CCa2 - var_x179 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__CCa3;
-        IJth(rJacobian, 21, 0) = -var_x181 + var_x142 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__CCa2 + (var_x157 + var_x179) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__CCa3;
-        IJth(rJacobian, 22, 0) = var_x181 + var_x156 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__CCa3;
-        IJth(rJacobian, 24, 0) = (-0.00015735009791355945 * var_x182 + 0.00060721481483873177 * var_x183 / pow(var_x184, 2)) * (0.18000000000000005 - var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa + 0.81999999999999995 / var_x186) - 0.10512820512820513 * var_x185 * (var_x187 + var_x188) / pow(var_x186, 2);
-        IJth(rJacobian, 25, 0) = (-var_x190 - var_x192) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C0Kv43 - var_x194 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI0Kv43 - var_x196 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C1Kv43;
-        IJth(rJacobian, 26, 0) = var_x192 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C0Kv43 + (var_x196 - var_x201 - var_x202) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C1Kv43 - var_x203 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI1Kv43 - var_x204 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C2Kv43;
-        IJth(rJacobian, 27, 0) = var_x201 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C1Kv43 + (var_x204 - var_x209 - var_x210) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C2Kv43 - var_x211 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI2Kv43 - var_x212 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C3Kv43;
-        IJth(rJacobian, 28, 0) = var_x210 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C2Kv43 + (var_x212 - var_x217 - var_x218) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C3Kv43 - var_x219 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI3Kv43 - var_x220 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__OKv43;
-        IJth(rJacobian, 29, 0) = var_x217 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C3Kv43 + (var_x220 - var_x225) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__OKv43 - var_x226 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__OIKv43;
-        IJth(rJacobian, 30, 0) = var_x190 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C0Kv43 + (var_x194 - var_x229) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI0Kv43 - var_x230 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI1Kv43;
-        IJth(rJacobian, 31, 0) = var_x202 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C1Kv43 + var_x229 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI0Kv43 + (var_x203 + var_x230 - var_x233) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI1Kv43 - var_x234 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI2Kv43;
-        IJth(rJacobian, 32, 0) = var_x209 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C2Kv43 + var_x233 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI1Kv43 + (var_x211 + var_x234 - var_x237) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI2Kv43 - var_x238 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI3Kv43;
-        IJth(rJacobian, 33, 0) = var_x218 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C3Kv43 + var_x237 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI2Kv43 + (var_x219 + var_x238 - var_x241) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI3Kv43 - var_x242 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__OIKv43;
-        IJth(rJacobian, 34, 0) = var_x225 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__OKv43 + var_x241 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI3Kv43 + (var_x226 + var_x242) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__OIKv43;
-        IJth(rJacobian, 35, 0) = -var_x248 - var_x246 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C1Kv14;
-        IJth(rJacobian, 36, 0) = var_x248 + (var_x246 - var_x251) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C1Kv14 - var_x252 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C2Kv14;
-        IJth(rJacobian, 37, 0) = var_x251 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C1Kv14 + (var_x252 - var_x255) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C2Kv14 - var_x256 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C3Kv14;
-        IJth(rJacobian, 38, 0) = -var_x260 + var_x255 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C2Kv14 + (var_x256 - var_x259) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C3Kv14;
-        IJth(rJacobian, 39, 0) = var_x260 + var_x259 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C3Kv14;
-        IJth(rJacobian, 40, 0) = -var_x264 - var_x263 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__CI1Kv14;
-        IJth(rJacobian, 41, 0) = var_x264 + (var_x263 - var_x267) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__CI1Kv14 - var_x268 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__CI2Kv14;
-        IJth(rJacobian, 42, 0) = var_x267 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__CI1Kv14 + (var_x268 - var_x271) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__CI2Kv14 - var_x272 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__CI3Kv14;
-        IJth(rJacobian, 43, 0) = -var_x276 + var_x271 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__CI2Kv14 + (var_x272 - var_x275) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__CI3Kv14;
-        IJth(rJacobian, 44, 0) = var_x276 + var_x275 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__CI3Kv14;
-        IJth(rJacobian, 45, 0) = -var_x282 - var_x280 * var_chaste_interface__INa__na2;
-        IJth(rJacobian, 46, 0) = var_x282 + (var_x280 - var_x289) * var_chaste_interface__INa__na2 - var_x290 * var_chaste_interface__INa__na3;
-        IJth(rJacobian, 47, 0) = var_x289 * var_chaste_interface__INa__na2 + (var_x290 - var_x295) * var_chaste_interface__INa__na3 - var_x296 * var_chaste_interface__INa__na4;
-        IJth(rJacobian, 48, 0) = var_x295 * var_chaste_interface__INa__na3 + (var_x296 - var_x301) * var_chaste_interface__INa__na4 - var_x302 * var_chaste_interface__INa__na5;
-        IJth(rJacobian, 49, 0) = -var_x314 + var_x301 * var_chaste_interface__INa__na4 + (var_x302 - var_x308 - var_x310) * var_chaste_interface__INa__na5 - var_x312 * var_chaste_interface__INa__na6;
-        IJth(rJacobian, 50, 0) = var_x310 * var_chaste_interface__INa__na5 + var_x324 * var_chaste_interface__INa__na13 + (var_x312 - var_x322) * var_chaste_interface__INa__na6;
-        IJth(rJacobian, 51, 0) = var_x314 + var_x308 * var_chaste_interface__INa__na5;
-        IJth(rJacobian, 52, 0) = -var_x329 - var_x330 * var_chaste_interface__INa__na9;
-        IJth(rJacobian, 53, 0) = var_x329 + (var_x330 - var_x333) * var_chaste_interface__INa__na9 - var_x334 * var_chaste_interface__INa__na10;
-        IJth(rJacobian, 54, 0) = var_x333 * var_chaste_interface__INa__na9 + (var_x334 - var_x337) * var_chaste_interface__INa__na10 - var_x338 * var_chaste_interface__INa__na11;
-        IJth(rJacobian, 55, 0) = var_x337 * var_chaste_interface__INa__na10 + (var_x338 - var_x341) * var_chaste_interface__INa__na11 - var_x342 * var_chaste_interface__INa__na12;
-        IJth(rJacobian, 56, 0) = var_x341 * var_chaste_interface__INa__na11 + (var_x342 - var_x346) * var_chaste_interface__INa__na12 - var_x348 * var_chaste_interface__INa__na13;
-        IJth(rJacobian, 57, 0) = var_x322 * var_chaste_interface__INa__na6 + var_x346 * var_chaste_interface__INa__na12 + (var_x348 - var_x324) * var_chaste_interface__INa__na13;
-        IJth(rJacobian, 58, 0) = -var_x352 - var_x354;
-        IJth(rJacobian, 59, 0) = var_x352 + var_x354;
-        IJth(rJacobian, 60, 0) = (-var_x358 - var_x360) * var_chaste_interface__IKr__C3Herg - var_x362 * var_chaste_interface__IKr__OHerg - var_x366 * var_chaste_interface__IKr__IHerg;
-        IJth(rJacobian, 61, 0) = var_x360 * var_chaste_interface__IKr__C3Herg + (var_x362 - var_x371) * var_chaste_interface__IKr__OHerg - var_x372 * var_chaste_interface__IKr__IHerg;
-        IJth(rJacobian, 62, 0) = var_x358 * var_chaste_interface__IKr__C3Herg + var_x371 * var_chaste_interface__IKr__OHerg + (var_x366 + var_x372) * var_chaste_interface__IKr__IHerg;
-        IJth(rJacobian, 63, 0) = -var_x376;
-        IJth(rJacobian, 64, 0) = var_x376 - var_x379 * var_chaste_interface__IKs__O1ks;
-        IJth(rJacobian, 65, 0) = -var_x384 + (var_x379 - var_x382) * var_chaste_interface__IKs__O1ks;
-        IJth(rJacobian, 66, 0) = var_x384 + var_x382 * var_chaste_interface__IKs__O1ks;
-        IJth(rJacobian, 0, 1) = mSetVoltageDerivativeToZero ? 0.0 : (-1504.3859896373056 * var_x65 - 0.029113605067047261 * var_x67 - 0.0011841518182889234 * var_x66 - 3.006264393363878e-6 * var_x68 - 0.026711398963730568 * var_x15);
-        IJth(rJacobian, 1, 1) = -1.8494079065353104e-10 * var_x68 - 5.3730734579697901e-6 * var_x67 - 0.092547526753060952 * var_x65 - 1.6432444380870198e-6 * var_x15 - 2.1854162994937459e-7 * var_x66;
-        IJth(rJacobian, 2, 1) = 3.58204897197986e-6 * var_x67;
-        IJth(rJacobian, 3, 1) = 7.2847209983124865e-8 * var_x66 * var_x92;
-        IJth(rJacobian, 0, 2) = mSetVoltageDerivativeToZero ? 0.0 : (0.3157689178193962 * var_x73 - 0.093489896373056991 * var_x69 - 6.6941504319201126 * var_x70 - 0.49683202072538851 * var_x71 - 2.0706890167875649 * var_x72 - 0.00015031321966819388 * var_x68 - 0.01156711037185033 * var_x74);
-        IJth(rJacobian, 2, 2) = 1.9425621197603174e-5 * var_x73 - 0.00012738562343605624 * var_x72 - 3.0564346548418563e-5 * var_x71 - 9.2470395326765519e-9 * var_x68 - 7.1159095070575419e-7 * var_x74 - 5.7513555333045694e-6 * var_x69 - 0.00041181390311704764 * var_x70;
-        IJth(rJacobian, 0, 3) = mSetVoltageDerivativeToZero ? 0.0 : (0.050000000000000003 * var_x78 + 518.67270623236789 * var_x79 - 0.050000000000000003 * var_x76 - 0.0010262519481865284 * var_x77);
-        IJth(rJacobian, 1, 3) = 0.095723856417385469 * var_x79;
-        IJth(rJacobian, 3, 3) = var_x93 * (-5.6374531835205994 - var_x94 + 2.8000000000000003 * var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__HTRPNCa + 2.8000000000000003 * var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__LTRPNCa + 1.5379617895699322e-6 * var_x78 + 4.2533745697546539e-5 * var_x102 - 0.03190795213912849 * var_x79 - 3.1566725655651652e-8 * var_x77 - 3.6466405075851775 * var_x99) + 0.00023800000000000004 * (0.0028000000000000004 * var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__LTRPNCa + 9.2400000000000013e-6 * var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__HTRPNCa + 3.1566725655651652e-8 * log(2.0 * var_x77) + 0.037453183520599252 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS - 0.037453183520599252 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai - 2.3635396782110715e-9 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V - var_x103 * (1.0 - var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__HTRPNCa) - var_x103 * (1.0 - var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__LTRPNCa) - var_x94 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai + 1.2141201663854144e-8 * var_x13 * var_x7 - 1.2 * var_x100 * var_x97) / (pow(var_x90, 3) * pow(var_x91, 2));
-        IJth(rJacobian, 4, 3) = 806.49188514357058 * var_x108;
-        IJth(rJacobian, 6, 3) = 44.871043198095713 * var_x99 - 0.00052336761372600129 * var_x102;
-        IJth(rJacobian, 7, 3) = 40.0 - 40.0 * var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__LTRPNCa;
-        IJth(rJacobian, 8, 3) = 20.0 - 20.0 * var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__HTRPNCa;
-        IJth(rJacobian, 3, 4) = 0.037453183520599252 * var_x92;
-        IJth(rJacobian, 4, 4) = var_x109 * (-806.49188514357058 - var_x110 - var_x111) + 0.00023800000000000004 * (806.49188514357058 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai + 240.0 * var_x112 - 806.49188514357058 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS - var_x105 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) / (pow(var_x106, 3) * pow(var_x107, 2));
-        IJth(rJacobian, 5, 4) = var_x120 * (var_x115 + var_x116);
-        IJth(rJacobian, 9, 4) = -var_x128;
-        IJth(rJacobian, 10, 4) = var_x133;
-        IJth(rJacobian, 12, 4) = var_x128 - var_x133;
-        IJth(rJacobian, 13, 4) = -var_x144;
-        IJth(rJacobian, 14, 4) = -var_x151;
-        IJth(rJacobian, 15, 4) = -var_x159;
-        IJth(rJacobian, 16, 4) = -var_x167;
-        IJth(rJacobian, 17, 4) = -var_x171;
-        IJth(rJacobian, 18, 4) = var_x144;
-        IJth(rJacobian, 19, 4) = var_x151;
-        IJth(rJacobian, 20, 4) = var_x159;
-        IJth(rJacobian, 21, 4) = var_x167;
-        IJth(rJacobian, 22, 4) = var_x171;
-        IJth(rJacobian, 4, 5) = var_x109 * (var_x110 + var_x111);
-        IJth(rJacobian, 5, 5) = var_x120 * (-1.7400382808421786 - var_x115 - var_x116) + 0.33333333333333331 * (1.7400382808421786 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaNSR - 1.8 * var_x112 - 1.7400382808421786 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR) / (pow(var_x117, 3) * pow((0.16666666666666666 + var_x118), 2));
+        IJth(rJacobian, 0, 0) = mSetVoltageDerivativeToZero ? 0.0 : (-0.0010768399999999999 - var_x28 + 0.00043304023078523341 * var_x66 + 5.6273061501680649e-6 * var_x32 + 0.047170872694120618 * var_x34 + 1.1254612300336129e-7 * var_x35 - var_x60 - var_x8 - 0.077520800000000001 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__OKv43 - 0.0030652842485403373 * var_x71 - 0.00043304023078523341 * var_x73 - 0.0048668360716156199 * var_x62 - 5.6273061501680649e-6 * var_x37 - 1.1254612300336129e-7 * var_x52 + var_x50 * var_x68 + (-var_chaste_interface__IKs__O1ks - var_chaste_interface__IKs__O2ks) * NV_Ith_S(mParameters, 9) + (-var_chaste_interface__INa__na6 - var_chaste_interface__INa__na7) * NV_Ith_S(mParameters, 6) - var_x12 * var_x15 - var_x12 * var_x18 - var_x2 * var_chaste_interface__IKr__OHerg - var_x43 * var_x50 - var_x49 * var_x51 - var_x50 * var_x65);
+        IJth(rJacobian, 1, 0) = var_x99 * (-2.3635396782110715e-9 + 6.1518471582797284e-5 * var_x28 + 2.9940031656981826e-7 * var_x62);
+        IJth(rJacobian, 2, 0) = -6.1518471582797284e-8 + 6.9236654697362894e-12 * var_x35 - 0.00018455541474839184 * var_x28 - 0.00018455541474839184 * var_x60 - 8.9820094970945477e-7 * var_x62 - 6.9236654697362894e-12 * var_x52 + (-6.1518471582797284e-5 * var_chaste_interface__INa__na6 - 6.1518471582797284e-5 * var_chaste_interface__INa__na7) * NV_Ith_S(mParameters, 6) - var_x110 * var_x12;
+        IJth(rJacobian, 3, 0) = 0.00012303694316559457 * var_x60 + 2.6639973131769359e-8 * var_x66 + 3.4618327348681446e-10 * var_x32 + 2.9018799913690074e-6 * var_x34 - 1.8857160193702489e-7 * var_x71 - 6.1518471582797284e-5 * var_x8 - 2.6639973131769359e-8 * var_x73 - 4.7689611318757119e-6 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__OKv43 - 3.4618327348681446e-10 * var_x37 + (-6.1518471582797284e-5 * var_chaste_interface__IKs__O1ks - 6.1518471582797284e-5 * var_chaste_interface__IKs__O2ks) * NV_Ith_S(mParameters, 9) - var_x113 * var_chaste_interface__IKr__OHerg - var_x114 * var_x12 - var_x115 * var_x51;
+        IJth(rJacobian, 4, 0) = var_x123 * (-var_x119 + 5016.5931039565676 * var_x50 * var_x67 - 5.0165931039565681 * var_x50 * var_x64);
+        IJth(rJacobian, 13, 0) = -var_x157 - var_x154 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C1;
+        IJth(rJacobian, 14, 0) = var_x157 + (var_x154 - var_x163) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C1 - var_x164 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C2;
+        IJth(rJacobian, 15, 0) = var_x163 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C1 + (var_x164 + var_x171) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C2 - var_x172 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C3;
+        IJth(rJacobian, 16, 0) = -var_x180 + var_x170 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C2 + (var_x172 - var_x179) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C3;
+        IJth(rJacobian, 17, 0) = var_x180 + var_x179 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__C3;
+        IJth(rJacobian, 18, 0) = -var_x188 - var_x187 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__CCa1;
+        IJth(rJacobian, 19, 0) = var_x188 + (var_x187 - var_x191) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__CCa1 - var_x154 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__CCa2;
+        IJth(rJacobian, 20, 0) = var_x191 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__CCa1 + (var_x154 - var_x156) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__CCa2 - var_x193 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__CCa3;
+        IJth(rJacobian, 21, 0) = -var_x195 + var_x156 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__CCa2 + (var_x171 + var_x193) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__CCa3;
+        IJth(rJacobian, 22, 0) = var_x195 + var_x170 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__CCa3;
+        IJth(rJacobian, 24, 0) = (-0.00015735009791355945 * var_x196 + 0.00060721481483873177 * var_x197 / pow(var_x198, 2)) * (0.18000000000000005 - var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa + 0.81999999999999995 / var_x200) - 0.10512820512820513 * var_x199 * (var_x201 + var_x202) / pow(var_x200, 2);
+        IJth(rJacobian, 25, 0) = (-var_x204 - var_x206) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C0Kv43 - var_x208 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI0Kv43 - var_x210 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C1Kv43;
+        IJth(rJacobian, 26, 0) = var_x206 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C0Kv43 + (var_x210 - var_x215 - var_x216) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C1Kv43 - var_x217 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI1Kv43 - var_x218 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C2Kv43;
+        IJth(rJacobian, 27, 0) = var_x215 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C1Kv43 + (var_x218 - var_x223 - var_x224) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C2Kv43 - var_x225 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI2Kv43 - var_x226 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C3Kv43;
+        IJth(rJacobian, 28, 0) = var_x224 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C2Kv43 + (var_x226 - var_x231 - var_x232) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C3Kv43 - var_x233 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI3Kv43 - var_x234 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__OKv43;
+        IJth(rJacobian, 29, 0) = var_x231 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C3Kv43 + (var_x234 - var_x239) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__OKv43 - var_x240 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__OIKv43;
+        IJth(rJacobian, 30, 0) = var_x204 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C0Kv43 + (var_x208 - var_x243) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI0Kv43 - var_x244 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI1Kv43;
+        IJth(rJacobian, 31, 0) = var_x216 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C1Kv43 + var_x243 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI0Kv43 + (var_x217 + var_x244 - var_x247) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI1Kv43 - var_x248 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI2Kv43;
+        IJth(rJacobian, 32, 0) = var_x223 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C2Kv43 + var_x247 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI1Kv43 + (var_x225 + var_x248 - var_x251) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI2Kv43 - var_x252 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI3Kv43;
+        IJth(rJacobian, 33, 0) = var_x232 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__C3Kv43 + var_x251 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI2Kv43 + (var_x233 + var_x252 - var_x255) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI3Kv43 - var_x256 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__OIKv43;
+        IJth(rJacobian, 34, 0) = var_x239 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__OKv43 + var_x255 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__CI3Kv43 + (var_x240 + var_x256) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__OIKv43;
+        IJth(rJacobian, 35, 0) = -var_x262 - var_x260 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C1Kv14;
+        IJth(rJacobian, 36, 0) = var_x262 + (var_x260 - var_x265) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C1Kv14 - var_x266 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C2Kv14;
+        IJth(rJacobian, 37, 0) = var_x265 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C1Kv14 + (var_x266 - var_x269) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C2Kv14 - var_x270 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C3Kv14;
+        IJth(rJacobian, 38, 0) = -var_x274 + var_x269 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C2Kv14 + (var_x270 - var_x273) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C3Kv14;
+        IJth(rJacobian, 39, 0) = var_x274 + var_x273 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__C3Kv14;
+        IJth(rJacobian, 40, 0) = -var_x278 - var_x277 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__CI1Kv14;
+        IJth(rJacobian, 41, 0) = var_x278 + (var_x277 - var_x281) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__CI1Kv14 - var_x282 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__CI2Kv14;
+        IJth(rJacobian, 42, 0) = var_x281 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__CI1Kv14 + (var_x282 - var_x285) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__CI2Kv14 - var_x286 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__CI3Kv14;
+        IJth(rJacobian, 43, 0) = -var_x290 + var_x285 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__CI2Kv14 + (var_x286 - var_x289) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__CI3Kv14;
+        IJth(rJacobian, 44, 0) = var_x290 + var_x289 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__CI3Kv14;
+        IJth(rJacobian, 45, 0) = -var_x296 - var_x294 * var_chaste_interface__INa__na2;
+        IJth(rJacobian, 46, 0) = var_x296 + (var_x294 - var_x303) * var_chaste_interface__INa__na2 - var_x304 * var_chaste_interface__INa__na3;
+        IJth(rJacobian, 47, 0) = var_x303 * var_chaste_interface__INa__na2 + (var_x304 - var_x309) * var_chaste_interface__INa__na3 - var_x310 * var_chaste_interface__INa__na4;
+        IJth(rJacobian, 48, 0) = var_x309 * var_chaste_interface__INa__na3 + (var_x310 - var_x315) * var_chaste_interface__INa__na4 - var_x316 * var_chaste_interface__INa__na5;
+        IJth(rJacobian, 49, 0) = -var_x328 + var_x315 * var_chaste_interface__INa__na4 + (var_x316 - var_x322 - var_x324) * var_chaste_interface__INa__na5 - var_x326 * var_chaste_interface__INa__na6;
+        IJth(rJacobian, 50, 0) = var_x324 * var_chaste_interface__INa__na5 + var_x338 * var_chaste_interface__INa__na13 + (var_x326 - var_x336) * var_chaste_interface__INa__na6;
+        IJth(rJacobian, 51, 0) = var_x328 + var_x322 * var_chaste_interface__INa__na5;
+        IJth(rJacobian, 52, 0) = -var_x343 - var_x344 * var_chaste_interface__INa__na9;
+        IJth(rJacobian, 53, 0) = var_x343 + (var_x344 - var_x347) * var_chaste_interface__INa__na9 - var_x348 * var_chaste_interface__INa__na10;
+        IJth(rJacobian, 54, 0) = var_x347 * var_chaste_interface__INa__na9 + (var_x348 - var_x351) * var_chaste_interface__INa__na10 - var_x352 * var_chaste_interface__INa__na11;
+        IJth(rJacobian, 55, 0) = var_x351 * var_chaste_interface__INa__na10 + (var_x352 - var_x355) * var_chaste_interface__INa__na11 - var_x356 * var_chaste_interface__INa__na12;
+        IJth(rJacobian, 56, 0) = var_x355 * var_chaste_interface__INa__na11 + (var_x356 - var_x360) * var_chaste_interface__INa__na12 - var_x362 * var_chaste_interface__INa__na13;
+        IJth(rJacobian, 57, 0) = var_x336 * var_chaste_interface__INa__na6 + var_x360 * var_chaste_interface__INa__na12 + (var_x362 - var_x338) * var_chaste_interface__INa__na13;
+        IJth(rJacobian, 58, 0) = -var_x366 - var_x368;
+        IJth(rJacobian, 59, 0) = var_x366 + var_x368;
+        IJth(rJacobian, 60, 0) = (-var_x372 - var_x374) * var_chaste_interface__IKr__C3Herg - var_x376 * var_chaste_interface__IKr__OHerg - var_x380 * var_chaste_interface__IKr__IHerg;
+        IJth(rJacobian, 61, 0) = var_x374 * var_chaste_interface__IKr__C3Herg + (var_x376 - var_x385) * var_chaste_interface__IKr__OHerg - var_x386 * var_chaste_interface__IKr__IHerg;
+        IJth(rJacobian, 62, 0) = var_x372 * var_chaste_interface__IKr__C3Herg + var_x385 * var_chaste_interface__IKr__OHerg + (var_x380 + var_x386) * var_chaste_interface__IKr__IHerg;
+        IJth(rJacobian, 63, 0) = -var_x390;
+        IJth(rJacobian, 64, 0) = var_x390 - var_x393 * var_chaste_interface__IKs__O1ks;
+        IJth(rJacobian, 65, 0) = -var_x398 + (var_x393 - var_x396) * var_chaste_interface__IKs__O1ks;
+        IJth(rJacobian, 66, 0) = var_x398 + var_x396 * var_chaste_interface__IKs__O1ks;
+        IJth(rJacobian, 0, 1) = mSetVoltageDerivativeToZero ? 0.0 : (var_x78 + 0.050000000000000003 * var_x77 - 0.050000000000000003 * var_x75 - 0.0010262519481865284 * var_x76);
+        IJth(rJacobian, 1, 1) = var_x99 * (-5.6374531835205994 - var_x100 + 2.8000000000000003 * var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__HTRPNCa + 2.8000000000000003 * var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__LTRPNCa + 3.5444788081288787e-5 * var_x108 + 1.5379617895699322e-6 * var_x77 - 6.1518471582797284e-5 * var_x78 - 3.1566725655651652e-8 * var_x76 - 3.0388670896543148 * var_x105) + 0.00023800000000000004 * (0.0028000000000000004 * var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__LTRPNCa + 9.2400000000000013e-6 * var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__HTRPNCa + 3.1566725655651652e-8 * log(var_x76 * NV_Ith_S(mParameters, 2)) + 0.037453183520599252 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS - 0.037453183520599252 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai - 2.3635396782110715e-9 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V - var_x100 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai - var_x104 * var_x106 - var_x109 * (1.0 - var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__HTRPNCa) - var_x109 * (1.0 - var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__LTRPNCa) + 6.1518471582797284e-5 * var_x27 * var_x61) / (pow(var_x96, 3) * pow(var_x97, 2));
+        IJth(rJacobian, 2, 1) = 0.00018455541474839184 * var_x78;
+        IJth(rJacobian, 4, 1) = 806.49188514357058 * var_x122;
+        IJth(rJacobian, 6, 1) = 37.392535998413095 * var_x105 - 0.00043613967810500107 * var_x108;
+        IJth(rJacobian, 7, 1) = 40.0 - 40.0 * var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__LTRPNCa;
+        IJth(rJacobian, 8, 1) = 20.0 - 20.0 * var_chaste_interface__COMPUTE_Jtrpn_and_BUFFER_SCALE_FACTORS__HTRPNCa;
+        IJth(rJacobian, 0, 2) = mSetVoltageDerivativeToZero ? 0.0 : (-3 * var_x83 - 0.016770509831248424 * var_x84 - 0.4896199430051813 * var_x80 - 3.006264393363878e-6 * var_x82 - 26.71139896373057 * var_x81 - 0.026711398963730568 * var_x53);
+        IJth(rJacobian, 1, 2) = 0.00018455541474839184 * var_x83 * var_x98;
+        IJth(rJacobian, 2, 2) = -1.8494079065353104e-10 * var_x82 - 0.0016432444380870197 * var_x81 - 3.0950883974480355e-6 * var_x84 - 0.00055366624424517559 * var_x83 - 1.6432444380870198e-6 * var_x53;
+        IJth(rJacobian, 3, 2) = 2.063392264965357e-6 * var_x84 - 3.0120670550135071e-5 * var_x80;
+        IJth(rJacobian, 0, 3) = mSetVoltageDerivativeToZero ? 0.0 : (1.26 * var_x88 - 2.0706890167875649 * var_x85 - 0.00015031321966819388 * var_x82 - 0.01156711037185033 * var_x89 - 13.355699481865285 * var_x86 - 26.71139896373057 * var_x80 - 26.71139896373057 * var_x87);
+        IJth(rJacobian, 3, 3) = 7.7513274194324582e-5 * var_x88 - 0.00082162221904350983 * var_x86 - 0.0016432444380870197 * var_x80 - 0.0016432444380870197 * var_x87 - 0.00012738562343605624 * var_x85 - 9.2470395326765519e-9 * var_x82 - 7.1159095070575419e-7 * var_x89;
+        IJth(rJacobian, 1, 4) = 0.037453183520599252 * var_x98;
+        IJth(rJacobian, 4, 4) = var_x123 * (-806.49188514357058 + (-var_x124 - var_x125) * NV_Ith_S(mParameters, 0)) + 0.00023800000000000004 * (133.33333333333334 * var_x127 + 806.49188514357058 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai - 806.49188514357058 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS - var_x119 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) / (pow(var_x120, 3) * pow(var_x121, 2));
+        IJth(rJacobian, 5, 4) = var_x126 * var_x134;
+        IJth(rJacobian, 9, 4) = -var_x142;
+        IJth(rJacobian, 10, 4) = var_x147;
+        IJth(rJacobian, 12, 4) = var_x142 - var_x147;
+        IJth(rJacobian, 13, 4) = -var_x158;
+        IJth(rJacobian, 14, 4) = -var_x165;
+        IJth(rJacobian, 15, 4) = -var_x173;
+        IJth(rJacobian, 16, 4) = -var_x181;
+        IJth(rJacobian, 17, 4) = -var_x185;
+        IJth(rJacobian, 18, 4) = var_x158;
+        IJth(rJacobian, 19, 4) = var_x165;
+        IJth(rJacobian, 20, 4) = var_x173;
+        IJth(rJacobian, 21, 4) = var_x181;
+        IJth(rJacobian, 22, 4) = var_x185;
+        IJth(rJacobian, 4, 5) = var_x128 * (var_x124 + var_x125);
+        IJth(rJacobian, 5, 5) = var_x134 * (-1.7400382808421786 + (-var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR - var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O2_RyR) * NV_Ith_S(mParameters, 0)) + 0.33333333333333331 * (-var_x127 + 1.7400382808421786 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaNSR - 1.7400382808421786 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR) / (pow(var_x131, 3) * pow((0.16666666666666666 + var_x132), 2));
         IJth(rJacobian, 6, 5) = 0.13257434520702313;
-        IJth(rJacobian, 9, 5) = -var_x131;
-        IJth(rJacobian, 11, 5) = -var_x135 - var_x136;
-        IJth(rJacobian, 12, 5) = var_x131 + var_x135 + var_x136;
-        IJth(rJacobian, 3, 6) = var_x93 * (3.1822011198770807e-10 * var_x101 + 0.00011598784194528874 * var_x97);
-        IJth(rJacobian, 5, 6) = 1.7400382808421786 * var_x119;
-        IJth(rJacobian, 6, 6) = -0.13257434520702313 - 3.9156227113154178e-9 * var_x101 - 0.001427202778983934 * var_x97;
-        IJth(rJacobian, 3, 7) = var_x93 * (0.0028000000000000004 + var_x103);
+        IJth(rJacobian, 9, 5) = -var_x145;
+        IJth(rJacobian, 11, 5) = -var_x149 - var_x150;
+        IJth(rJacobian, 12, 5) = var_x145 + var_x149 + var_x150;
+        IJth(rJacobian, 1, 6) = var_x99 * (9.6656534954407287e-5 * var_x104 + 2.651834266564234e-10 * var_x107);
+        IJth(rJacobian, 5, 6) = 1.7400382808421786 * var_x133;
+        IJth(rJacobian, 6, 6) = -0.13257434520702313 - 0.0011893356491532784 * var_x104 - 3.2630189260961816e-9 * var_x107;
+        IJth(rJacobian, 1, 7) = var_x99 * (0.0028000000000000004 + var_x109);
         IJth(rJacobian, 7, 7) = -0.040000000000000001 - 40.0 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai;
-        IJth(rJacobian, 3, 8) = var_x93 * (9.2400000000000013e-6 + var_x103);
+        IJth(rJacobian, 1, 8) = var_x99 * (9.2400000000000013e-6 + var_x109);
         IJth(rJacobian, 8, 8) = -6.6000000000000005e-5 - 20.0 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai;
-        IJth(rJacobian, 9, 9) = -var_x132;
-        IJth(rJacobian, 12, 9) = var_x132;
-        IJth(rJacobian, 4, 10) = var_x113;
-        IJth(rJacobian, 5, 10) = var_x121;
+        IJth(rJacobian, 9, 9) = -var_x146;
+        IJth(rJacobian, 12, 9) = var_x146;
+        IJth(rJacobian, 4, 10) = var_x129;
+        IJth(rJacobian, 5, 10) = var_x135;
         IJth(rJacobian, 10, 10) = -1.9299999999999999;
         IJth(rJacobian, 12, 10) = 1.9299999999999999;
-        IJth(rJacobian, 11, 11) = -0.00040000000000000002 - var_x137;
-        IJth(rJacobian, 12, 11) = 0.00040000000000000002 + var_x137;
-        IJth(rJacobian, 4, 12) = var_x113;
-        IJth(rJacobian, 5, 12) = var_x121;
+        IJth(rJacobian, 11, 11) = -0.00040000000000000002 - var_x151;
+        IJth(rJacobian, 12, 11) = 0.00040000000000000002 + var_x151;
+        IJth(rJacobian, 4, 12) = var_x129;
+        IJth(rJacobian, 5, 12) = var_x135;
         IJth(rJacobian, 9, 12) = 0.57599999999999996;
-        IJth(rJacobian, 10, 12) = var_x134;
-        IJth(rJacobian, 11, 12) = var_x138;
-        IJth(rJacobian, 12, 12) = -0.57599999999999996 - var_x134 - var_x138;
-        IJth(rJacobian, 13, 13) = var_x147 - var_x145;
-        IJth(rJacobian, 14, 13) = var_x146;
-        IJth(rJacobian, 18, 13) = var_x145;
-        IJth(rJacobian, 13, 14) = var_x148;
-        IJth(rJacobian, 14, 14) = var_x154 - var_x152 - var_x153;
-        IJth(rJacobian, 15, 14) = var_x152;
-        IJth(rJacobian, 19, 14) = var_x153;
-        IJth(rJacobian, 14, 15) = var_x155;
-        IJth(rJacobian, 15, 15) = var_x161 + var_x163 - var_x160;
-        IJth(rJacobian, 16, 15) = var_x162;
-        IJth(rJacobian, 20, 15) = var_x160;
-        IJth(rJacobian, 15, 16) = var_x164;
-        IJth(rJacobian, 16, 16) = -var_x164 - var_x168 - var_x169;
-        IJth(rJacobian, 17, 16) = var_x169;
-        IJth(rJacobian, 21, 16) = var_x168;
-        IJth(rJacobian, 16, 17) = var_x170;
-        IJth(rJacobian, 17, 17) = -0.29999999999999999 - var_x170 - var_x172;
-        IJth(rJacobian, 22, 17) = var_x172;
+        IJth(rJacobian, 10, 12) = var_x148;
+        IJth(rJacobian, 11, 12) = var_x152;
+        IJth(rJacobian, 12, 12) = -0.57599999999999996 - var_x148 - var_x152;
+        IJth(rJacobian, 13, 13) = var_x161 - var_x159;
+        IJth(rJacobian, 14, 13) = var_x160;
+        IJth(rJacobian, 18, 13) = var_x159;
+        IJth(rJacobian, 13, 14) = var_x162;
+        IJth(rJacobian, 14, 14) = var_x168 - var_x166 - var_x167;
+        IJth(rJacobian, 15, 14) = var_x166;
+        IJth(rJacobian, 19, 14) = var_x167;
+        IJth(rJacobian, 14, 15) = var_x169;
+        IJth(rJacobian, 15, 15) = var_x175 + var_x177 - var_x174;
+        IJth(rJacobian, 16, 15) = var_x176;
+        IJth(rJacobian, 20, 15) = var_x174;
+        IJth(rJacobian, 15, 16) = var_x178;
+        IJth(rJacobian, 16, 16) = -var_x178 - var_x182 - var_x183;
+        IJth(rJacobian, 17, 16) = var_x183;
+        IJth(rJacobian, 21, 16) = var_x182;
+        IJth(rJacobian, 16, 17) = var_x184;
+        IJth(rJacobian, 17, 17) = -0.29999999999999999 - var_x184 - var_x186;
+        IJth(rJacobian, 22, 17) = var_x186;
         IJth(rJacobian, 23, 17) = 0.29999999999999999;
         IJth(rJacobian, 13, 18) = 0.0025000000000000001;
-        IJth(rJacobian, 18, 18) = -0.0025000000000000001 - var_x175;
-        IJth(rJacobian, 19, 18) = var_x175;
+        IJth(rJacobian, 18, 18) = -0.0025000000000000001 - var_x189;
+        IJth(rJacobian, 19, 18) = var_x189;
         IJth(rJacobian, 14, 19) = 0.00125;
-        IJth(rJacobian, 18, 19) = var_x176;
-        IJth(rJacobian, 19, 19) = -0.00125 - var_x176 - var_x178;
-        IJth(rJacobian, 20, 19) = var_x178;
+        IJth(rJacobian, 18, 19) = var_x190;
+        IJth(rJacobian, 19, 19) = -0.00125 - var_x190 - var_x192;
+        IJth(rJacobian, 20, 19) = var_x192;
         IJth(rJacobian, 15, 20) = 0.00062500000000000001;
-        IJth(rJacobian, 19, 20) = var_x148;
-        IJth(rJacobian, 20, 20) = -0.00062500000000000001 + var_x147 + var_x154;
-        IJth(rJacobian, 21, 20) = var_x146;
+        IJth(rJacobian, 19, 20) = var_x162;
+        IJth(rJacobian, 20, 20) = -0.00062500000000000001 + var_x161 + var_x168;
+        IJth(rJacobian, 21, 20) = var_x160;
         IJth(rJacobian, 16, 21) = 0.00031250000000000001;
-        IJth(rJacobian, 20, 21) = var_x180;
-        IJth(rJacobian, 21, 21) = -0.00031250000000000001 + var_x163 - var_x180;
-        IJth(rJacobian, 22, 21) = var_x162;
+        IJth(rJacobian, 20, 21) = var_x194;
+        IJth(rJacobian, 21, 21) = -0.00031250000000000001 + var_x177 - var_x194;
+        IJth(rJacobian, 22, 21) = var_x176;
         IJth(rJacobian, 17, 22) = 0.00015625;
-        IJth(rJacobian, 21, 22) = var_x155;
-        IJth(rJacobian, 22, 22) = -0.00015625 + var_x161;
-        IJth(rJacobian, 0, 23) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x46 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa - var_x80 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa);
-        IJth(rJacobian, 2, 23) = -var_x88 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa;
-        IJth(rJacobian, 4, 23) = -var_x114 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa;
+        IJth(rJacobian, 21, 22) = var_x169;
+        IJth(rJacobian, 22, 22) = -0.00015625 + var_x175;
+        IJth(rJacobian, 0, 23) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x44 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa - var_x90 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa);
+        IJth(rJacobian, 3, 23) = -var_x116 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa;
+        IJth(rJacobian, 4, 23) = -var_x130 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa;
         IJth(rJacobian, 17, 23) = 4.0;
         IJth(rJacobian, 23, 23) = -4.0;
-        IJth(rJacobian, 0, 24) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x46 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__Open - var_x80 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__Open);
-        IJth(rJacobian, 2, 24) = -var_x88 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__Open;
-        IJth(rJacobian, 4, 24) = -var_x114 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__Open;
-        IJth(rJacobian, 24, 24) = -var_x187 - var_x188;
-        IJth(rJacobian, 25, 25) = -var_x197 - var_x198;
-        IJth(rJacobian, 26, 25) = var_x197;
-        IJth(rJacobian, 30, 25) = var_x198;
-        IJth(rJacobian, 25, 26) = var_x199;
-        IJth(rJacobian, 26, 26) = -var_x199 - var_x205 - var_x206;
-        IJth(rJacobian, 27, 26) = var_x205;
-        IJth(rJacobian, 31, 26) = var_x206;
-        IJth(rJacobian, 26, 27) = var_x207;
-        IJth(rJacobian, 27, 27) = -var_x207 - var_x213 - var_x214;
-        IJth(rJacobian, 28, 27) = var_x213;
-        IJth(rJacobian, 32, 27) = var_x214;
-        IJth(rJacobian, 27, 28) = var_x215;
-        IJth(rJacobian, 28, 28) = -var_x215 - var_x221 - var_x222;
-        IJth(rJacobian, 29, 28) = var_x221;
-        IJth(rJacobian, 33, 28) = var_x222;
-        IJth(rJacobian, 0, 29) = mSetVoltageDerivativeToZero ? 0.0 : (2.0706890167875649 * var_x1 - 0.077520800000000001 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        IJth(rJacobian, 2, 29) = 0.00012738562343605624 * var_x1 - 4.7689611318757119e-6 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
-        IJth(rJacobian, 28, 29) = var_x223;
-        IJth(rJacobian, 29, 29) = -var_x223 - var_x227;
-        IJth(rJacobian, 34, 29) = var_x227;
-        IJth(rJacobian, 25, 30) = var_x200;
-        IJth(rJacobian, 30, 30) = -var_x200 - var_x231;
-        IJth(rJacobian, 31, 30) = var_x231;
-        IJth(rJacobian, 26, 31) = var_x208;
-        IJth(rJacobian, 30, 31) = var_x232;
-        IJth(rJacobian, 31, 31) = -var_x208 - var_x232 - var_x235;
-        IJth(rJacobian, 32, 31) = var_x235;
-        IJth(rJacobian, 27, 32) = var_x216;
-        IJth(rJacobian, 31, 32) = var_x236;
-        IJth(rJacobian, 32, 32) = -var_x216 - var_x236 - var_x239;
-        IJth(rJacobian, 33, 32) = var_x239;
-        IJth(rJacobian, 28, 33) = var_x224;
-        IJth(rJacobian, 32, 33) = var_x240;
-        IJth(rJacobian, 33, 33) = -var_x224 - var_x240 - var_x243;
-        IJth(rJacobian, 34, 33) = var_x243;
-        IJth(rJacobian, 29, 34) = var_x228;
-        IJth(rJacobian, 33, 34) = var_x244;
-        IJth(rJacobian, 34, 34) = -var_x228 - var_x244;
-        IJth(rJacobian, 35, 35) = -2.44936e-6 - var_x249;
-        IJth(rJacobian, 36, 35) = var_x249;
+        IJth(rJacobian, 0, 24) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x44 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__Open - var_x90 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__Open);
+        IJth(rJacobian, 3, 24) = -var_x116 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__Open;
+        IJth(rJacobian, 4, 24) = -var_x130 * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__Open;
+        IJth(rJacobian, 24, 24) = -var_x201 - var_x202;
+        IJth(rJacobian, 25, 25) = -var_x211 - var_x212;
+        IJth(rJacobian, 26, 25) = var_x211;
+        IJth(rJacobian, 30, 25) = var_x212;
+        IJth(rJacobian, 25, 26) = var_x213;
+        IJth(rJacobian, 26, 26) = -var_x213 - var_x219 - var_x220;
+        IJth(rJacobian, 27, 26) = var_x219;
+        IJth(rJacobian, 31, 26) = var_x220;
+        IJth(rJacobian, 26, 27) = var_x221;
+        IJth(rJacobian, 27, 27) = -var_x221 - var_x227 - var_x228;
+        IJth(rJacobian, 28, 27) = var_x227;
+        IJth(rJacobian, 32, 27) = var_x228;
+        IJth(rJacobian, 27, 28) = var_x229;
+        IJth(rJacobian, 28, 28) = -var_x229 - var_x235 - var_x236;
+        IJth(rJacobian, 29, 28) = var_x235;
+        IJth(rJacobian, 33, 28) = var_x236;
+        IJth(rJacobian, 0, 29) = mSetVoltageDerivativeToZero ? 0.0 : (2.0706890167875649 * var_x4 - 0.077520800000000001 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
+        IJth(rJacobian, 3, 29) = 0.00012738562343605624 * var_x4 - 4.7689611318757119e-6 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
+        IJth(rJacobian, 28, 29) = var_x237;
+        IJth(rJacobian, 29, 29) = -var_x237 - var_x241;
+        IJth(rJacobian, 34, 29) = var_x241;
+        IJth(rJacobian, 25, 30) = var_x214;
+        IJth(rJacobian, 30, 30) = -var_x214 - var_x245;
+        IJth(rJacobian, 31, 30) = var_x245;
+        IJth(rJacobian, 26, 31) = var_x222;
+        IJth(rJacobian, 30, 31) = var_x246;
+        IJth(rJacobian, 31, 31) = -var_x222 - var_x246 - var_x249;
+        IJth(rJacobian, 32, 31) = var_x249;
+        IJth(rJacobian, 27, 32) = var_x230;
+        IJth(rJacobian, 31, 32) = var_x250;
+        IJth(rJacobian, 32, 32) = -var_x230 - var_x250 - var_x253;
+        IJth(rJacobian, 33, 32) = var_x253;
+        IJth(rJacobian, 28, 33) = var_x238;
+        IJth(rJacobian, 32, 33) = var_x254;
+        IJth(rJacobian, 33, 33) = -var_x238 - var_x254 - var_x257;
+        IJth(rJacobian, 34, 33) = var_x257;
+        IJth(rJacobian, 29, 34) = var_x242;
+        IJth(rJacobian, 33, 34) = var_x258;
+        IJth(rJacobian, 34, 34) = -var_x242 - var_x258;
+        IJth(rJacobian, 35, 35) = -2.44936e-6 - var_x263;
+        IJth(rJacobian, 36, 35) = var_x263;
         IJth(rJacobian, 40, 35) = 2.44936e-6;
-        IJth(rJacobian, 35, 36) = var_x250;
-        IJth(rJacobian, 36, 36) = -1.2850585364284256e-6 - var_x250 - var_x253;
-        IJth(rJacobian, 37, 36) = var_x253;
+        IJth(rJacobian, 35, 36) = var_x264;
+        IJth(rJacobian, 36, 36) = -1.2850585364284256e-6 - var_x264 - var_x267;
+        IJth(rJacobian, 37, 36) = var_x267;
         IJth(rJacobian, 41, 36) = 1.2850585364284256e-6;
-        IJth(rJacobian, 36, 37) = var_x254;
-        IJth(rJacobian, 37, 37) = -4.290998044504021e-5 - var_x254 - var_x257;
-        IJth(rJacobian, 38, 37) = var_x257;
+        IJth(rJacobian, 36, 37) = var_x268;
+        IJth(rJacobian, 37, 37) = -4.290998044504021e-5 - var_x268 - var_x271;
+        IJth(rJacobian, 38, 37) = var_x271;
         IJth(rJacobian, 42, 37) = 4.290998044504021e-5;
-        IJth(rJacobian, 37, 38) = var_x258;
-        IJth(rJacobian, 38, 38) = -0.0022989390350036006 - var_x258 - var_x261;
-        IJth(rJacobian, 39, 38) = var_x261;
+        IJth(rJacobian, 37, 38) = var_x272;
+        IJth(rJacobian, 38, 38) = -0.0022989390350036006 - var_x272 - var_x275;
+        IJth(rJacobian, 39, 38) = var_x275;
         IJth(rJacobian, 43, 38) = 0.0022989390350036006;
-        IJth(rJacobian, 0, 39) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x28 * var_x60 - var_x31 * var_x60);
-        IJth(rJacobian, 1, 39) = -var_x60 * var_x84;
-        IJth(rJacobian, 2, 39) = -var_x60 * var_x86;
-        IJth(rJacobian, 38, 39) = var_x262;
-        IJth(rJacobian, 39, 39) = -0.13410048761201937 - var_x262;
+        IJth(rJacobian, 0, 39) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x15 * var_x69 - var_x18 * var_x69);
+        IJth(rJacobian, 2, 39) = -var_x110 * var_x69;
+        IJth(rJacobian, 3, 39) = -var_x114 * var_x69;
+        IJth(rJacobian, 38, 39) = var_x276;
+        IJth(rJacobian, 39, 39) = -0.13410048761201937 - var_x276;
         IJth(rJacobian, 44, 39) = 0.13410048761201937;
         IJth(rJacobian, 35, 40) = 0.00305767916;
-        IJth(rJacobian, 40, 40) = -0.00305767916 - var_x265;
-        IJth(rJacobian, 41, 40) = var_x265;
+        IJth(rJacobian, 40, 40) = -0.00305767916 - var_x279;
+        IJth(rJacobian, 41, 40) = var_x279;
         IJth(rJacobian, 36, 41) = 0.0030289691634726814;
-        IJth(rJacobian, 40, 41) = var_x266;
-        IJth(rJacobian, 41, 41) = -0.0030289691634726814 - var_x266 - var_x269;
-        IJth(rJacobian, 42, 41) = var_x269;
+        IJth(rJacobian, 40, 41) = var_x280;
+        IJth(rJacobian, 41, 41) = -0.0030289691634726814 - var_x280 - var_x283;
+        IJth(rJacobian, 42, 41) = var_x283;
         IJth(rJacobian, 37, 42) = 0.0026111571690401588;
-        IJth(rJacobian, 41, 42) = var_x270;
-        IJth(rJacobian, 42, 42) = -0.0026111571690401588 - var_x270 - var_x273;
-        IJth(rJacobian, 43, 42) = var_x273;
+        IJth(rJacobian, 41, 42) = var_x284;
+        IJth(rJacobian, 42, 42) = -0.0026111571690401588 - var_x284 - var_x287;
+        IJth(rJacobian, 43, 42) = var_x287;
         IJth(rJacobian, 38, 43) = 0.0047848930796401661;
-        IJth(rJacobian, 42, 43) = var_x274;
-        IJth(rJacobian, 43, 43) = -0.0047848930796401661 - var_x274 - var_x277;
-        IJth(rJacobian, 44, 43) = var_x277;
+        IJth(rJacobian, 42, 43) = var_x288;
+        IJth(rJacobian, 43, 43) = -0.0047848930796401661 - var_x288 - var_x291;
+        IJth(rJacobian, 44, 43) = var_x291;
         IJth(rJacobian, 39, 44) = 0.0014420608358145942;
-        IJth(rJacobian, 43, 44) = var_x278;
-        IJth(rJacobian, 44, 44) = -0.0014420608358145942 - var_x278;
-        IJth(rJacobian, 45, 45) = -var_x284 - var_x285;
-        IJth(rJacobian, 46, 45) = var_x285;
-        IJth(rJacobian, 52, 45) = var_x284;
-        IJth(rJacobian, 45, 46) = var_x286;
-        IJth(rJacobian, 46, 46) = -var_x286 - var_x291 - var_x292;
-        IJth(rJacobian, 47, 46) = var_x292;
-        IJth(rJacobian, 53, 46) = var_x291;
-        IJth(rJacobian, 46, 47) = var_x293;
-        IJth(rJacobian, 47, 47) = -var_x293 - var_x297 - var_x298;
-        IJth(rJacobian, 48, 47) = var_x298;
-        IJth(rJacobian, 54, 47) = var_x297;
-        IJth(rJacobian, 47, 48) = var_x299;
-        IJth(rJacobian, 48, 48) = -var_x299 - var_x303 - var_x304;
-        IJth(rJacobian, 49, 48) = var_x304;
-        IJth(rJacobian, 55, 48) = var_x303;
-        IJth(rJacobian, 48, 49) = var_x305;
-        IJth(rJacobian, 49, 49) = -var_x305 - var_x315 - var_x316 - var_x317;
-        IJth(rJacobian, 50, 49) = var_x316;
-        IJth(rJacobian, 51, 49) = var_x317;
-        IJth(rJacobian, 56, 49) = var_x315;
-        IJth(rJacobian, 0, 50) = mSetVoltageDerivativeToZero ? 0.0 : (var_x82);
-        IJth(rJacobian, 1, 50) = var_x85;
-        IJth(rJacobian, 49, 50) = var_x318;
-        IJth(rJacobian, 50, 50) = -var_x318 - var_x325 - var_x326;
-        IJth(rJacobian, 51, 50) = var_x325;
-        IJth(rJacobian, 57, 50) = var_x326;
-        IJth(rJacobian, 0, 51) = mSetVoltageDerivativeToZero ? 0.0 : (var_x82);
-        IJth(rJacobian, 1, 51) = var_x85;
-        IJth(rJacobian, 49, 51) = var_x319;
-        IJth(rJacobian, 50, 51) = var_x327;
-        IJth(rJacobian, 51, 51) = -var_x319 - var_x327;
-        IJth(rJacobian, 45, 52) = var_x288;
-        IJth(rJacobian, 52, 52) = -var_x288 - var_x331;
-        IJth(rJacobian, 53, 52) = var_x331;
-        IJth(rJacobian, 46, 53) = var_x294;
-        IJth(rJacobian, 52, 53) = var_x332;
-        IJth(rJacobian, 53, 53) = -var_x294 - var_x332 - var_x335;
-        IJth(rJacobian, 54, 53) = var_x335;
-        IJth(rJacobian, 47, 54) = var_x300;
-        IJth(rJacobian, 53, 54) = var_x336;
-        IJth(rJacobian, 54, 54) = -var_x300 - var_x336 - var_x339;
-        IJth(rJacobian, 55, 54) = var_x339;
-        IJth(rJacobian, 48, 55) = var_x306;
-        IJth(rJacobian, 54, 55) = var_x340;
-        IJth(rJacobian, 55, 55) = -var_x306 - var_x340 - var_x343;
-        IJth(rJacobian, 56, 55) = var_x343;
-        IJth(rJacobian, 49, 56) = var_x320;
-        IJth(rJacobian, 55, 56) = var_x344;
-        IJth(rJacobian, 56, 56) = -var_x320 - var_x344 - var_x349;
-        IJth(rJacobian, 57, 56) = var_x349;
-        IJth(rJacobian, 50, 57) = var_x328;
-        IJth(rJacobian, 56, 57) = var_x350;
-        IJth(rJacobian, 57, 57) = -var_x328 - var_x350;
-        IJth(rJacobian, 58, 58) = -var_x355;
-        IJth(rJacobian, 59, 58) = var_x355;
-        IJth(rJacobian, 58, 59) = var_x356;
-        IJth(rJacobian, 59, 59) = -0.13876486073161204 - var_x356;
+        IJth(rJacobian, 43, 44) = var_x292;
+        IJth(rJacobian, 44, 44) = -0.0014420608358145942 - var_x292;
+        IJth(rJacobian, 45, 45) = -var_x298 - var_x299;
+        IJth(rJacobian, 46, 45) = var_x299;
+        IJth(rJacobian, 52, 45) = var_x298;
+        IJth(rJacobian, 45, 46) = var_x300;
+        IJth(rJacobian, 46, 46) = -var_x300 - var_x305 - var_x306;
+        IJth(rJacobian, 47, 46) = var_x306;
+        IJth(rJacobian, 53, 46) = var_x305;
+        IJth(rJacobian, 46, 47) = var_x307;
+        IJth(rJacobian, 47, 47) = -var_x307 - var_x311 - var_x312;
+        IJth(rJacobian, 48, 47) = var_x312;
+        IJth(rJacobian, 54, 47) = var_x311;
+        IJth(rJacobian, 47, 48) = var_x313;
+        IJth(rJacobian, 48, 48) = -var_x313 - var_x317 - var_x318;
+        IJth(rJacobian, 49, 48) = var_x318;
+        IJth(rJacobian, 55, 48) = var_x317;
+        IJth(rJacobian, 48, 49) = var_x319;
+        IJth(rJacobian, 49, 49) = -var_x319 - var_x329 - var_x330 - var_x331;
+        IJth(rJacobian, 50, 49) = var_x330;
+        IJth(rJacobian, 51, 49) = var_x331;
+        IJth(rJacobian, 56, 49) = var_x329;
+        IJth(rJacobian, 0, 50) = mSetVoltageDerivativeToZero ? 0.0 : (var_x93);
+        IJth(rJacobian, 2, 50) = var_x112;
+        IJth(rJacobian, 49, 50) = var_x332;
+        IJth(rJacobian, 50, 50) = -var_x332 - var_x339 - var_x340;
+        IJth(rJacobian, 51, 50) = var_x339;
+        IJth(rJacobian, 57, 50) = var_x340;
+        IJth(rJacobian, 0, 51) = mSetVoltageDerivativeToZero ? 0.0 : (var_x93);
+        IJth(rJacobian, 2, 51) = var_x112;
+        IJth(rJacobian, 49, 51) = var_x333;
+        IJth(rJacobian, 50, 51) = var_x341;
+        IJth(rJacobian, 51, 51) = -var_x333 - var_x341;
+        IJth(rJacobian, 45, 52) = var_x302;
+        IJth(rJacobian, 52, 52) = -var_x302 - var_x345;
+        IJth(rJacobian, 53, 52) = var_x345;
+        IJth(rJacobian, 46, 53) = var_x308;
+        IJth(rJacobian, 52, 53) = var_x346;
+        IJth(rJacobian, 53, 53) = -var_x308 - var_x346 - var_x349;
+        IJth(rJacobian, 54, 53) = var_x349;
+        IJth(rJacobian, 47, 54) = var_x314;
+        IJth(rJacobian, 53, 54) = var_x350;
+        IJth(rJacobian, 54, 54) = -var_x314 - var_x350 - var_x353;
+        IJth(rJacobian, 55, 54) = var_x353;
+        IJth(rJacobian, 48, 55) = var_x320;
+        IJth(rJacobian, 54, 55) = var_x354;
+        IJth(rJacobian, 55, 55) = -var_x320 - var_x354 - var_x357;
+        IJth(rJacobian, 56, 55) = var_x357;
+        IJth(rJacobian, 49, 56) = var_x334;
+        IJth(rJacobian, 55, 56) = var_x358;
+        IJth(rJacobian, 56, 56) = -var_x334 - var_x358 - var_x363;
+        IJth(rJacobian, 57, 56) = var_x363;
+        IJth(rJacobian, 50, 57) = var_x342;
+        IJth(rJacobian, 56, 57) = var_x364;
+        IJth(rJacobian, 57, 57) = -var_x342 - var_x364;
+        IJth(rJacobian, 58, 58) = -var_x369;
+        IJth(rJacobian, 59, 58) = var_x369;
+        IJth(rJacobian, 58, 59) = var_x370;
+        IJth(rJacobian, 59, 59) = -0.13876486073161204 - var_x370;
         IJth(rJacobian, 60, 59) = 0.13876486073161204;
         IJth(rJacobian, 59, 60) = 0.78911443677844384;
-        IJth(rJacobian, 60, 60) = -0.78911443677844384 - var_x367 - var_x368;
-        IJth(rJacobian, 61, 60) = var_x367;
-        IJth(rJacobian, 62, 60) = var_x368;
-        IJth(rJacobian, 0, 61) = mSetVoltageDerivativeToZero ? 0.0 : (0.49683202072538851 * var_x1 - 0.018599999999999998 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V);
-        IJth(rJacobian, 2, 61) = 3.0564346548418563e-5 * var_x1 - 1.1442435714400293e-6 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V;
-        IJth(rJacobian, 60, 61) = var_x369;
-        IJth(rJacobian, 61, 61) = -var_x369 - var_x373;
-        IJth(rJacobian, 62, 61) = var_x373;
-        IJth(rJacobian, 60, 62) = var_x370;
-        IJth(rJacobian, 61, 62) = var_x374;
-        IJth(rJacobian, 62, 62) = -var_x370 - var_x374;
+        IJth(rJacobian, 60, 60) = -0.78911443677844384 - var_x381 - var_x382;
+        IJth(rJacobian, 61, 60) = var_x381;
+        IJth(rJacobian, 62, 60) = var_x382;
+        IJth(rJacobian, 0, 61) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x2 * var_x33);
+        IJth(rJacobian, 3, 61) = -var_x113 * var_x33;
+        IJth(rJacobian, 60, 61) = var_x383;
+        IJth(rJacobian, 61, 61) = -var_x383 - var_x387;
+        IJth(rJacobian, 62, 61) = var_x387;
+        IJth(rJacobian, 60, 62) = var_x384;
+        IJth(rJacobian, 61, 62) = var_x388;
+        IJth(rJacobian, 62, 62) = -var_x384 - var_x388;
         IJth(rJacobian, 63, 63) = -0.0079560079800399999;
         IJth(rJacobian, 64, 63) = 0.0079560079800399999;
-        IJth(rJacobian, 63, 64) = var_x377;
-        IJth(rJacobian, 64, 64) = -0.039667206760709998 - var_x377;
+        IJth(rJacobian, 63, 64) = var_x391;
+        IJth(rJacobian, 64, 64) = -0.039667206760709998 - var_x391;
         IJth(rJacobian, 65, 64) = 0.039667206760709998;
-        IJth(rJacobian, 0, 65) = mSetVoltageDerivativeToZero ? 0.0 : (var_x83);
-        IJth(rJacobian, 2, 65) = var_x89;
-        IJth(rJacobian, 64, 65) = var_x380;
-        IJth(rJacobian, 65, 65) = -var_x380 - var_x385;
-        IJth(rJacobian, 66, 65) = var_x385;
-        IJth(rJacobian, 0, 66) = mSetVoltageDerivativeToZero ? 0.0 : (var_x83);
-        IJth(rJacobian, 2, 66) = var_x89;
-        IJth(rJacobian, 65, 66) = var_x386;
-        IJth(rJacobian, 66, 66) = -var_x386;
+        IJth(rJacobian, 0, 65) = mSetVoltageDerivativeToZero ? 0.0 : (var_x95);
+        IJth(rJacobian, 3, 65) = var_x117;
+        IJth(rJacobian, 64, 65) = var_x394;
+        IJth(rJacobian, 65, 65) = -var_x394 - var_x399;
+        IJth(rJacobian, 66, 65) = var_x399;
+        IJth(rJacobian, 0, 66) = mSetVoltageDerivativeToZero ? 0.0 : (var_x95);
+        IJth(rJacobian, 3, 66) = var_x117;
+        IJth(rJacobian, 65, 66) = var_x400;
+        IJth(rJacobian, 66, 66) = -var_x400;
     }
 
     N_Vector Celliyer_model_2007FromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY)
     {
         // Inputs:
         // Time units: millisecond
+        double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
+        // Units: mV; Initial value: -86.7261544519706
+        double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai = NV_Ith_S(rY, 1);
+        // Units: mM; Initial value: 0.000363968672182656
+        double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai = NV_Ith_S(rY, 2);
+        // Units: mM; Initial value: 9.85573275838928
+        double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki = NV_Ith_S(rY, 3);
+        // Units: mM; Initial value: 125.427082712469
+        double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS = NV_Ith_S(rY, 4);
+        // Units: mM; Initial value: 0.000506604278037024
+        double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR = NV_Ith_S(rY, 5);
+        // Units: mM; Initial value: 0.421936980515042
+        double var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaNSR = NV_Ith_S(rY, 6);
+        // Units: mM; Initial value: 0.423551621440241
+        double var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O2_RyR = NV_Ith_S(rY, 10);
+        // Units: dimensionless; Initial value: 3.11350788541838e-07
+        double var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR = NV_Ith_S(rY, 12);
+        // Units: dimensionless; Initial value: 0.00113684728532807
+        double var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__Open = NV_Ith_S(rY, 23);
+        // Units: dimensionless; Initial value: 1.40806027419488e-11
+        double var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa = NV_Ith_S(rY, 24);
+        // Units: dimensionless; Initial value: 0.995434385054729
+        double var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__OKv43 = NV_Ith_S(rY, 29);
+        // Units: dimensionless; Initial value: 7.42911977991342e-09
+        double var_chaste_interface__INa__na6 = NV_Ith_S(rY, 50);
+        // Units: dimensionless; Initial value: 1.02118700961583e-07
+        double var_chaste_interface__INa__na7 = NV_Ith_S(rY, 51);
+        // Units: dimensionless; Initial value: 1.93499158844817e-08
+        double var_chaste_interface__IKr__OHerg = NV_Ith_S(rY, 61);
+        // Units: dimensionless; Initial value: 0.00120284688677794
+        double var_chaste_interface__IKs__O1ks = NV_Ith_S(rY, 65);
+        // Units: dimensionless; Initial value: 5.65460174551007e-07
+        double var_chaste_interface__IKs__O2ks = NV_Ith_S(rY, 66);
+        // Units: dimensionless; Initial value: 0.0258818770122187
         
         // Mathematics
+        const double var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Acap = 0.00015339999999999999; // cm2
+        const double var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__C = 0.001 * var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Acap; // mF
+        const double var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__C_converted = 1000.0 * var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__C; // uF
+        const double var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Faraday = 96.5; // coulomb_per_millimole
+        const double var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Rgas = 8.3149999999999995; // joule_per_mole_kelvin
+        const double var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Temp = 310.0; // kelvin
+        const double var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F = var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Rgas * var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Temp / var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Faraday; // mV
+        const double var_COMPUTE_ICa_ICaK__Pscale = 7.0; // dimensionless
+        const double var_COMPUTE_ICa_ICaK__VF_over_RT = var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V / var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F; // dimensionless
+        const double var_COMPUTE_ICa_ICaK__VFsq_over_RT = 1000.0 * var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Faraday * var_COMPUTE_ICa_ICaK__VF_over_RT; // coulomb_per_millimole
+        const double var_COMPUTE_ICa_ICaK__a1_Ca = 0.001 * exp(2.0 * var_COMPUTE_ICa_ICaK__VF_over_RT) - 0.34100000000000003 * NV_Ith_S(mParameters, 2); // mM
+        const double var_COMPUTE_ICa_ICaK__a2_Ca = -1.0 + exp(2.0 * var_COMPUTE_ICa_ICaK__VF_over_RT); // dimensionless
+        const double var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Kfb = 0.00016799999999999999; // mM
+        const double var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Krb = 3.29; // mM
+        const double var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Nfb = 1.2; // dimensionless
+        const double var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Nrb = 1.0; // dimensionless
+        const double var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__fb = pow((var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai / var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Kfb), var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Nfb); // dimensionless
+        const double var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__rb = pow((var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaNSR / var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Krb), var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Nrb); // dimensionless
+        const double var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Jrel = (-var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR) * (var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O1_RyR + var_chaste_interface__COMPUTE_DERIVATIVES_OF_RyR_RECEPTOR_STATES__O2_RyR) * NV_Ith_S(mParameters, 0); // mM_per_ms
+        const double var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__vmaxf = 7.4800000000000002e-5; // per_ms
+        const double var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__vmaxr = 0.00031799999999999998; // per_ms
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__KmCa = 1.3799999999999999; // mM
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__KmNa = 87.5; // mM
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__VF_over_RT = var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V / var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F; // dimensionless
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a4_ncx = NV_Ith_S(mParameters, 2) + var_COMPUTE_INaK_INaCa_ICab_IpCa__KmCa; // mM
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a5_ncx = 0.00020000000000000001 * pow(NV_Ith_S(mParameters, 4), 3) + 0.00020000000000000001 * pow(var_COMPUTE_INaK_INaCa_ICab_IpCa__KmNa, 3); // mM3
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__eta = 0.34999999999999998; // dimensionless
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a1_ncx = pow(var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai, 3) * NV_Ith_S(mParameters, 2) * exp(var_COMPUTE_INaK_INaCa_ICab_IpCa__VF_over_RT * var_COMPUTE_INaK_INaCa_ICab_IpCa__eta); // mM4
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a2_ncx = pow(NV_Ith_S(mParameters, 4), 3) * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai * exp((-1.0 + var_COMPUTE_INaK_INaCa_ICab_IpCa__eta) * var_COMPUTE_INaK_INaCa_ICab_IpCa__VF_over_RT); // mM4
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__ksat = 0.20000000000000001; // dimensionless
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__a3_ncx = 1.0 + var_COMPUTE_INaK_INaCa_ICab_IpCa__ksat * exp((-1.0 + var_COMPUTE_INaK_INaCa_ICab_IpCa__eta) * var_COMPUTE_INaK_INaCa_ICab_IpCa__VF_over_RT); // dimensionless
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__INaCa = (-var_COMPUTE_INaK_INaCa_ICab_IpCa__a2_ncx + var_COMPUTE_INaK_INaCa_ICab_IpCa__a1_ncx) * NV_Ith_S(mParameters, 10) / (var_COMPUTE_INaK_INaCa_ICab_IpCa__a3_ncx * var_COMPUTE_INaK_INaCa_ICab_IpCa__a4_ncx * var_COMPUTE_INaK_INaCa_ICab_IpCa__a5_ncx); // uA_per_uF
+        const double var_COMPUTE_INaK_INaCa_ICab_IpCa__INaCa_converted = HeartConfig::Instance()->GetCapacitance() * var_COMPUTE_INaK_INaCa_ICab_IpCa__INaCa; // uA_per_cm2
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__Kv43Frac = 0.88900000000000001; // dimensionless
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__KvScale = 0.872; // dimensionless
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GKv43 = 0.10000000000000001 * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__Kv43Frac * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__KvScale; // mS_per_uF
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__fKo = 0.5 * sqrt(NV_Ith_S(mParameters, 3)); // dimensionless
+        const double var_COMPUTE_REVERSAL_POTENTIALS__EK = var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F * log(NV_Ith_S(mParameters, 3) / var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki); // mV
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKv43 = (-var_COMPUTE_REVERSAL_POTENTIALS__EK + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * var_chaste_interface__COMPUTE_DERIVATIVES_OF_Kv4_3_CHANNEL_STATES__OKv43 * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__GKv43; // uA_per_uF
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKv43_converted = HeartConfig::Instance()->GetCapacitance() * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKv43; // uA_per_cm2
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__K1_inf = 1 / (0.93999999999999995 + exp(1.26 * (-var_COMPUTE_REVERSAL_POTENTIALS__EK + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) / var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F)); // dimensionless
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IK1 = sqrt(NV_Ith_S(mParameters, 3)) * (-var_COMPUTE_REVERSAL_POTENTIALS__EK + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * NV_Ith_S(mParameters, 7) * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__K1_inf; // uA_per_uF
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IK1_converted = HeartConfig::Instance()->GetCapacitance() * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IK1; // uA_per_cm2
+        const double var_COMPUTE_REVERSAL_POTENTIALS__ENa = var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F * log(NV_Ith_S(mParameters, 4) / var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai); // mV
+        const double var_COMPUTE_REVERSAL_POTENTIALS__a1 = 0.018329999999999999 * NV_Ith_S(mParameters, 4) + NV_Ith_S(mParameters, 3); // mM
+        const double var_COMPUTE_REVERSAL_POTENTIALS__a2 = 0.018329999999999999 * var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki; // mM
+        const double var_COMPUTE_REVERSAL_POTENTIALS__EKs = var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__RT_over_F * log(var_COMPUTE_REVERSAL_POTENTIALS__a1 / var_COMPUTE_REVERSAL_POTENTIALS__a2); // mV
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKr = (-var_COMPUTE_REVERSAL_POTENTIALS__EK + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * NV_Ith_S(mParameters, 8) * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__fKo * var_chaste_interface__IKr__OHerg; // uA_per_uF
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKr_converted = HeartConfig::Instance()->GetCapacitance() * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKr; // uA_per_cm2
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKs = (-var_COMPUTE_REVERSAL_POTENTIALS__EKs + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * (var_chaste_interface__IKs__O1ks + var_chaste_interface__IKs__O2ks) * NV_Ith_S(mParameters, 9); // uA_per_uF
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKs_converted = HeartConfig::Instance()->GetCapacitance() * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKs; // uA_per_cm2
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__INa = (-var_COMPUTE_REVERSAL_POTENTIALS__ENa + var_chaste_interface__COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V) * (var_chaste_interface__INa__na6 + var_chaste_interface__INa__na7) * NV_Ith_S(mParameters, 6); // uA_per_uF
+        const double var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__INa_converted = HeartConfig::Instance()->GetCapacitance() * var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__INa; // uA_per_cm2
+        const double var_environment__iso = 0; // dimensionless
+        const double var_COMPUTE_ICa_ICaK__PCa = ((var_environment__iso == 0) ? (NV_Ith_S(mParameters, 5) * var_COMPUTE_ICa_ICaK__Pscale) : (1.5 * NV_Ith_S(mParameters, 5) * var_COMPUTE_ICa_ICaK__Pscale)); // litre_per_farad_second
+        const double var_COMPUTE_ICa_ICaK__ICamax = 4.0 * var_COMPUTE_ICa_ICaK__PCa * var_COMPUTE_ICa_ICaK__VFsq_over_RT * var_COMPUTE_ICa_ICaK__a1_Ca / var_COMPUTE_ICa_ICaK__a2_Ca; // uA_per_uF
+        const double var_COMPUTE_ICa_ICaK__ICa = var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__Open * var_chaste_interface__COMPUTE_DERIVATIVES_OF_LTYPE_CHANNEL_STATES__yCa * var_COMPUTE_ICa_ICaK__ICamax; // uA_per_uF
+        const double var_COMPUTE_ICa_ICaK__ICa_converted = HeartConfig::Instance()->GetCapacitance() * var_COMPUTE_ICa_ICaK__ICa; // uA_per_cm2
+        const double var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Jup = ((var_environment__iso == 0) ? ((var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__fb * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__vmaxf - var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__rb * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__vmaxr) * NV_Ith_S(mParameters, 1) / (1.0 + var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__fb + var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__rb)) : (1.5 * (var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__fb * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__vmaxf - var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__rb * var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__vmaxr) * NV_Ith_S(mParameters, 1) / (1.0 + var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__fb + var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__rb))); // mM_per_ms
         const double var_I_stimulus__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // uA_per_cm2
 
-        N_Vector dqs = N_VNew_Serial(2);
-        NV_Ith_S(dqs, 0) = var_chaste_interface__environment__time;
-        NV_Ith_S(dqs, 1) = var_I_stimulus__i_Stim_converted;
+        N_Vector dqs = N_VNew_Serial(12);
+        NV_Ith_S(dqs, 0) = var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Jrel;
+        NV_Ith_S(dqs, 1) = var_COMPUTE_INTRACELLULAR_CALCIUM_FLUXES__Jup;
+        NV_Ith_S(dqs, 2) = var_COMPUTE_ICa_ICaK__ICa_converted;
+        NV_Ith_S(dqs, 3) = var_COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__C_converted;
+        NV_Ith_S(dqs, 4) = var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__INa_converted;
+        NV_Ith_S(dqs, 5) = var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKv43_converted;
+        NV_Ith_S(dqs, 6) = var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IK1_converted;
+        NV_Ith_S(dqs, 7) = var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKr_converted;
+        NV_Ith_S(dqs, 8) = var_COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKs_converted;
+        NV_Ith_S(dqs, 9) = var_COMPUTE_INaK_INaCa_ICab_IpCa__INaCa_converted;
+        NV_Ith_S(dqs, 10) = var_I_stimulus__i_Stim_converted;
+        NV_Ith_S(dqs, 11) = var_chaste_interface__environment__time;
         return dqs;
     }
 
@@ -1763,7 +1903,7 @@ template<>
 void OdeSystemInformation<Celliyer_model_2007FromCellMLCvode>::Initialise(void)
 {
     this->mSystemName = "iyer_model_2007";
-    this->mFreeVariableName = "environment__time";
+    this->mFreeVariableName = "time";
     this->mFreeVariableUnits = "ms";
 
     // NV_Ith_S(rY, 0):
@@ -1772,27 +1912,27 @@ void OdeSystemInformation<Celliyer_model_2007FromCellMLCvode>::Initialise(void)
     this->mInitialConditions.push_back(-86.7261544519706);
 
     // NV_Ith_S(rY, 1):
-    this->mVariableNames.push_back("COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Nai");
-    this->mVariableUnits.push_back("mM");
-    this->mInitialConditions.push_back(9.85573275838928);
-
-    // NV_Ith_S(rY, 2):
-    this->mVariableNames.push_back("COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Ki");
-    this->mVariableUnits.push_back("mM");
-    this->mInitialConditions.push_back(125.427082712469);
-
-    // NV_Ith_S(rY, 3):
-    this->mVariableNames.push_back("COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__Cai");
+    this->mVariableNames.push_back("cytosolic_calcium_concentration");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(0.000363968672182656);
 
+    // NV_Ith_S(rY, 2):
+    this->mVariableNames.push_back("cytosolic_sodium_concentration");
+    this->mVariableUnits.push_back("mM");
+    this->mInitialConditions.push_back(9.85573275838928);
+
+    // NV_Ith_S(rY, 3):
+    this->mVariableNames.push_back("cytosolic_potassium_concentration");
+    this->mVariableUnits.push_back("mM");
+    this->mInitialConditions.push_back(125.427082712469);
+
     // NV_Ith_S(rY, 4):
-    this->mVariableNames.push_back("COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaSS");
+    this->mVariableNames.push_back("dyadic_space_calcium_concentration");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(0.000506604278037024);
 
     // NV_Ith_S(rY, 5):
-    this->mVariableNames.push_back("COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__CaJSR");
+    this->mVariableNames.push_back("JSR_calcium_concentration");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(0.421936980515042);
 
@@ -2101,16 +2241,102 @@ void OdeSystemInformation<Celliyer_model_2007FromCellMLCvode>::Initialise(void)
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.0258818770122187);
 
+    // mParameters[0]:
+    this->mParameterNames.push_back("SR_release_current_max");
+    this->mParameterUnits.push_back("per_ms");
+
+    // mParameters[1]:
+    this->mParameterNames.push_back("SR_uptake_current_max");
+    this->mParameterUnits.push_back("mM");
+
+    // mParameters[2]:
+    this->mParameterNames.push_back("extracellular_calcium_concentration");
+    this->mParameterUnits.push_back("mM");
+
+    // mParameters[3]:
+    this->mParameterNames.push_back("extracellular_potassium_concentration");
+    this->mParameterUnits.push_back("mM");
+
+    // mParameters[4]:
+    this->mParameterNames.push_back("extracellular_sodium_concentration");
+    this->mParameterUnits.push_back("mM");
+
+    // mParameters[5]:
+    this->mParameterNames.push_back("membrane_L_type_calcium_current_conductance");
+    this->mParameterUnits.push_back("litre_per_farad_second");
+
+    // mParameters[6]:
+    this->mParameterNames.push_back("membrane_fast_sodium_current_conductance");
+    this->mParameterUnits.push_back("mS_per_uF");
+
+    // mParameters[7]:
+    this->mParameterNames.push_back("membrane_inward_rectifier_potassium_current_conductance");
+    this->mParameterUnits.push_back("mS_per_uF");
+
+    // mParameters[8]:
+    this->mParameterNames.push_back("membrane_rapid_delayed_rectifier_potassium_current_conductance");
+    this->mParameterUnits.push_back("mS_per_uF");
+
+    // mParameters[9]:
+    this->mParameterNames.push_back("membrane_slow_delayed_rectifier_potassium_current_conductance");
+    this->mParameterUnits.push_back("mS_per_uF");
+
+    // mParameters[10]:
+    this->mParameterNames.push_back("membrane_sodium_calcium_exchanger_current_conductance");
+    this->mParameterUnits.push_back("uA_per_uF");
+
+    // mParameters[11]:
+    this->mParameterNames.push_back("membrane_sodium_potassium_pump_current_permeability");
+    this->mParameterUnits.push_back("uA_per_uF");
+
     // Derived Quantity index [0]:
-    this->mDerivedQuantityNames.push_back("environment__time");
-    this->mDerivedQuantityUnits.push_back("ms");
+    this->mDerivedQuantityNames.push_back("SR_release_current");
+    this->mDerivedQuantityUnits.push_back("mM_per_ms");
 
     // Derived Quantity index [1]:
+    this->mDerivedQuantityNames.push_back("SR_uptake_current");
+    this->mDerivedQuantityUnits.push_back("mM_per_ms");
+
+    // Derived Quantity index [2]:
+    this->mDerivedQuantityNames.push_back("membrane_L_type_calcium_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
+
+    // Derived Quantity index [3]:
+    this->mDerivedQuantityNames.push_back("membrane_capacitance");
+    this->mDerivedQuantityUnits.push_back("uF");
+
+    // Derived Quantity index [4]:
+    this->mDerivedQuantityNames.push_back("membrane_fast_sodium_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
+
+    // Derived Quantity index [5]:
+    this->mDerivedQuantityNames.push_back("membrane_fast_transient_outward_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
+
+    // Derived Quantity index [6]:
+    this->mDerivedQuantityNames.push_back("membrane_inward_rectifier_potassium_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
+
+    // Derived Quantity index [7]:
+    this->mDerivedQuantityNames.push_back("membrane_rapid_delayed_rectifier_potassium_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
+
+    // Derived Quantity index [8]:
+    this->mDerivedQuantityNames.push_back("membrane_slow_delayed_rectifier_potassium_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
+
+    // Derived Quantity index [9]:
+    this->mDerivedQuantityNames.push_back("membrane_sodium_calcium_exchanger_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
+
+    // Derived Quantity index [10]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
 
-    
-    this->mAttributes["SuggestedForwardEulerTimestep"] = 0.00001;
+    // Derived Quantity index [11]:
+    this->mDerivedQuantityNames.push_back("time");
+    this->mDerivedQuantityUnits.push_back("ms");
+
     this->mInitialised = true;
 }
 

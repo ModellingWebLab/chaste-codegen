@@ -15,6 +15,7 @@
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
+#include "Warnings.hpp"
 #include "OdeSystemInformation.hpp"
 #include "RegularStimulus.hpp"
 #include "HeartConfig.hpp"
@@ -563,8 +564,8 @@
         rY[5] = (var_chaste_interface__L_type_Ca_channel_d_gate__d + ((var_L_type_Ca_channel_d_gate__alpha_d) * mDt)) / (1.0 - ((-var_L_type_Ca_channel_d_gate__alpha_d - var_L_type_Ca_channel_d_gate__beta_d) * mDt));
         rY[6] = (var_chaste_interface__L_type_Ca_channel_f_gate__f + ((var_L_type_Ca_channel_f_gate__alpha_f) * mDt)) / (1.0 - ((-var_L_type_Ca_channel_f_gate__alpha_f - var_L_type_Ca_channel_f_gate__beta_f) * mDt));
         rY[3] = (var_chaste_interface__fast_sodium_current_h_gate__h + ((var_fast_sodium_current_h_gate__alpha_h) * mDt)) / (1.0 - ((-var_fast_sodium_current_h_gate__alpha_h - var_fast_sodium_current_h_gate__beta_h) * mDt));
-        rY[4] = (var_chaste_interface__fast_sodium_current_j_gate__j + ((var_fast_sodium_current_j_gate__alpha_j) * mDt)) / (1.0 - ((-var_fast_sodium_current_j_gate__alpha_j - var_fast_sodium_current_j_gate__beta_j) * mDt));
         rY[2] = (var_chaste_interface__fast_sodium_current_m_gate__m + ((var_fast_sodium_current_m_gate__alpha_m) * mDt)) / (1.0 - ((-var_fast_sodium_current_m_gate__alpha_m - var_fast_sodium_current_m_gate__beta_m) * mDt));
+        rY[4] = (var_chaste_interface__fast_sodium_current_j_gate__j + ((var_fast_sodium_current_j_gate__alpha_j) * mDt)) / (1.0 - ((-var_fast_sodium_current_j_gate__alpha_j - var_fast_sodium_current_j_gate__beta_j) * mDt));
         rY[7] = (var_chaste_interface__time_dependent_potassium_current_X_gate__X + ((var_time_dependent_potassium_current_X_gate__alpha_X) * mDt)) / (1.0 - ((-var_time_dependent_potassium_current_X_gate__alpha_X - var_time_dependent_potassium_current_X_gate__beta_X) * mDt));
         
         double _guess[5] = {rY[10],rY[11],rY[1],rY[9],rY[8]};
@@ -646,7 +647,7 @@ void OdeSystemInformation<Cellluo_rudy_1994FromCellMLBackwardEulerNoLut>::Initia
     this->mInitialConditions.push_back(1.0);
 
     // rY[4]:
-    this->mVariableNames.push_back("fast_sodium_current_j_gate__j");
+    this->mVariableNames.push_back("membrane_fast_sodium_current_j_gate");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.0);
 

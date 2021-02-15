@@ -24,7 +24,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
-    boost::shared_ptr<RegularStimulus> DynamicShannon2004FromCellMLCvodeDataClamp::UseCellMLDefaultStimulus()
+    boost::shared_ptr<RegularStimulus> Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__cell__stim_amplitude_converted = -9.5 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
@@ -41,12 +41,12 @@
         return p_cellml_stim;
     }
 
-    double DynamicShannon2004FromCellMLCvodeDataClamp::GetIntracellularCalciumConcentration()
+    double Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp::GetIntracellularCalciumConcentration()
     {
         return NV_Ith_S(mStateVariables, 1);
     }
     
-    DynamicShannon2004FromCellMLCvodeDataClamp::DynamicShannon2004FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp::Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCellWithDataClamp(
                 pOdeSolver,
                 45,
@@ -55,7 +55,7 @@
     {
         // Time units: millisecond
         //
-        this->mpSystemInfo = OdeSystemInformation<DynamicShannon2004FromCellMLCvodeDataClamp>::Instance();
+        this->mpSystemInfo = OdeSystemInformation<Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp>::Instance();
         Init();
 
         // We have a default stimulus specified in the CellML file metadata
@@ -88,12 +88,12 @@
         NV_Ith_S(this->mParameters, 24) = 310.0; // (var_model_parameters__T) [kelvin]
     }
 
-    DynamicShannon2004FromCellMLCvodeDataClamp::~DynamicShannon2004FromCellMLCvodeDataClamp()
+    Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp::~Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp()
     {
     }
 
     
-    double DynamicShannon2004FromCellMLCvodeDataClamp::GetIIonic(const std::vector<double>* pStateVariables)
+    double Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
@@ -288,7 +288,7 @@
         return i_ionic;
     }
 
-    void DynamicShannon2004FromCellMLCvodeDataClamp::EvaluateYDerivatives(double var_chaste_interface__environment__time, const N_Vector rY, N_Vector rDY)
+    void Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp::EvaluateYDerivatives(double var_chaste_interface__environment__time, const N_Vector rY, N_Vector rDY)
     {
         // Inputs:
         // Time units: millisecond
@@ -749,7 +749,7 @@
         NV_Ith_S(rDY,44) = d_dt_chaste_interface_var_indo_fluo_Ca_buffer_not_connected__Ca_Fluo3_jct;
     }
 
-    N_Vector DynamicShannon2004FromCellMLCvodeDataClamp::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY)
+    N_Vector Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY)
     {
         // Inputs:
         // Time units: millisecond
@@ -958,7 +958,7 @@
     }
 
 template<>
-void OdeSystemInformation<DynamicShannon2004FromCellMLCvodeDataClamp>::Initialise(void)
+void OdeSystemInformation<Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp>::Initialise(void)
 {
     this->mSystemName = "shannon_wang_puglisi_weber_bers_2004_model_updated";
     this->mFreeVariableName = "time";
@@ -1390,14 +1390,14 @@ void OdeSystemInformation<DynamicShannon2004FromCellMLCvodeDataClamp>::Initialis
 
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
-CHASTE_CLASS_EXPORT(DynamicShannon2004FromCellMLCvodeDataClamp)
+CHASTE_CLASS_EXPORT(Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp)
 extern "C"
 {
     AbstractCardiacCellInterface* MakeCardiacCell(
             boost::shared_ptr<AbstractIvpOdeSolver> pSolver,
             boost::shared_ptr<AbstractStimulusFunction> pStimulus)
     {
-        return new DynamicShannon2004FromCellMLCvodeDataClamp(pSolver, pStimulus);
+        return new Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp(pSolver, pStimulus);
     }
 
 }

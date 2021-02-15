@@ -35,6 +35,7 @@ class Cellwinslow_model_1999FromCellMLBackwardEuler : public AbstractBackwardEul
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
+    double GetIntracellularCalciumConcentration();
     Cellwinslow_model_1999FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellwinslow_model_1999FromCellMLBackwardEuler();
     AbstractLookupTableCollection* GetLookupTableCollection();

@@ -36,6 +36,7 @@ class Cellfink_noble_giles_model_2008FromCellMLCvodeDataClampOpt : public Abstra
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
+    double GetIntracellularCalciumConcentration();
     Cellfink_noble_giles_model_2008FromCellMLCvodeDataClampOpt(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellfink_noble_giles_model_2008FromCellMLCvodeDataClampOpt();
     AbstractLookupTableCollection* GetLookupTableCollection();
