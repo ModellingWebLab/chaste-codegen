@@ -113,8 +113,8 @@ protected:
 
         mKeyingVariableNames[0] = "membrane_voltage";
         mNumberOfTables[0] = 25;
-        mTableMins[0] = -250.0001;
-        mTableMaxs[0] = 549.9999;
+        mTableMins[0] = -250.0;
+        mTableMaxs[0] = 550.0;
         mTableSteps[0] = 0.001;
         mTableStepInverses[0] = 1000.0;
         mNeedsRegeneration[0] = true;
@@ -348,8 +348,21 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 58.823529411764703 * exp(-0.090909090909090912 * var_chaste_interface__membrane__V) + 235.29411764705881 * (47.130000000000003 + var_chaste_interface__membrane__V) / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__membrane__V));
-
+                double val = ((fabs(47.130000000000003 + var_chaste_interface__membrane__V) < 1.0000000000287557e-6) ? (0.00023529411765382485 / (1.0 - exp(-1.0000000000287557e-7)) + 58.823529411764703 * exp(-0.090909090909090912 * var_chaste_interface__membrane__V) - 367647058.81295747 * (47.129999000000005 + var_chaste_interface__membrane__V) * (-3.200000000092018e-7 / (1.0 - exp(1.0000000000287557e-7)) - 3.200000000092018e-7 / (1.0 - exp(-1.0000000000287557e-7)))) : (58.823529411764703 * exp(-0.090909090909090912 * var_chaste_interface__membrane__V) + 235.29411764705881 * (47.130000000000003 + var_chaste_interface__membrane__V) / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__membrane__V))));
+                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
+                //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
+                if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_0 && _lookup_table_0_num_misshit_piecewise[21] < 2){
+                    double left = _lookup_table_0[i-1][21];
+                    double right = _lookup_table_0[i+1][21];
+                    double new_val = (left + right) / 2.0;
+                    WARNING("Lookup table 21 at ["<<i<<"][21] has non-finite value: " << val << " being terpolated to: "<<new_val);
+                    val = new_val;
+                   // count and limit number of misshits
+                  _lookup_table_0_num_misshit_piecewise[21] +=1;
+                }
+                else if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[21] >= 2){
+                    EXCEPTION("Lookup table 21 at ["<<i<<"][21] has non-finite value: " << val);
+                }
                 _lookup_table_0[i][21] = val;
             }
 
@@ -758,7 +771,7 @@ std::shared_ptr<Cellpandit_clark_giles_demir_2001_endocardial_cellFromCellMLGRL2
         const double var_sarcolemmal_calcium_pump_current__i_Ca_P = 0.0040000000000000001 * var_chaste_interface__intracellular_ion_concentrations__Ca_i / (0.00040000000000000002 + var_chaste_interface__intracellular_ion_concentrations__Ca_i); // nanoA
         const double d_dt_chaste_interface_var_sodium_current_h_gate__h = 0.001 * (-var_chaste_interface__sodium_current_h_gate__h + 0.01 * mParameters[10] + (1.0 - 0.01 * mParameters[10]) / (1.0 + exp(12.537067545304776 + 0.16474464579901152 * var_chaste_interface__membrane__V - 0.16474464579901152 * mParameters[11]))) * ((var_chaste_interface__membrane__V >= -40.0) ? (1 / (0.00045370000000000002 + 0.00045370000000000002 * exp(-0.96036036036036043 + 0.0900900900900901 * mParameters[11] - 0.0900900900900901 * var_chaste_interface__membrane__V))) : (88825214.899713472 * exp(0.34999999999999998 * var_chaste_interface__membrane__V - 0.34999999999999998 * mParameters[11]) + 38.681948424068771 * exp(-11.764705882352942 + 0.14705882352941177 * mParameters[11] - 0.14705882352941177 * var_chaste_interface__membrane__V) + 1020.0573065902579 * exp(0.079000000000000001 * var_chaste_interface__membrane__V - 0.079000000000000001 * mParameters[11]))); // 1 / millisecond
         const double d_dt_chaste_interface_var_sodium_current_j_gate__j = 0.001 * (-var_chaste_interface__sodium_current_j_gate__j + 0.01 * mParameters[10] + (1.0 - 0.01 * mParameters[10]) / (1.0 + exp(12.537067545304776 + 0.16474464579901152 * var_chaste_interface__membrane__V - 0.16474464579901152 * mParameters[11]))) * ((var_chaste_interface__membrane__V >= -40.0) ? (85.984522785898534 * _lt_0_row[17] / (1.0 + exp(-3.2000000000000002 + 0.10000000000000001 * mParameters[11] - 0.10000000000000001 * var_chaste_interface__membrane__V))) : (34.727793696275072 * exp(0.01052 * mParameters[11] - 0.01052 * var_chaste_interface__membrane__V) / (_lt_0_row[18]) + 286.53295128939828 * (37.780000000000001 + var_chaste_interface__membrane__V) * (-127140.0 * exp(0.24440000000000001 * var_chaste_interface__membrane__V - 0.24440000000000001 * mParameters[11]) - 3.4740000000000003e-5 * exp(0.043909999999999998 * mParameters[11] - 0.043909999999999998 * var_chaste_interface__membrane__V)) / (_lt_0_row[19]))); // 1 / millisecond
-        const double d_dt_chaste_interface_var_sodium_current_m_gate__m = 0.001 * (-var_chaste_interface__sodium_current_m_gate__m + _lt_0_row[20]) * (_lt_0_row[21]); // 1 / millisecond
+        const double d_dt_chaste_interface_var_sodium_current_m_gate__m = 0.001 * (-var_chaste_interface__sodium_current_m_gate__m + _lt_0_row[20]) * _lt_0_row[21]; // 1 / millisecond
         const double var_background_currents__i_B_Ca = 3.2400000000000001e-5 * var_chaste_interface__membrane__V - 0.00041181708934882422 * log(mParameters[3] / var_chaste_interface__intracellular_ion_concentrations__Ca_i); // nanoA
         const double var_Ca_independent_transient_outward_K_current__E_K = 25.420807984495319 * log(mParameters[4] / var_chaste_interface__intracellular_ion_concentrations__K_i); // millivolt
         const double var_Ca_independent_transient_outward_K_current__i_t = 0.4647 * (-var_Ca_independent_transient_outward_K_current__E_K + var_chaste_interface__membrane__V) * (0.58299999999999996 * var_chaste_interface__Ca_independent_transient_outward_K_current_s_gate__s + 0.41699999999999998 * var_chaste_interface__Ca_independent_transient_outward_K_current_s_slow_gate__s_slow) * mParameters[14] * var_chaste_interface__Ca_independent_transient_outward_K_current_r_gate__r; // nanoA
@@ -1357,7 +1370,7 @@ std::shared_ptr<Cellpandit_clark_giles_demir_2001_endocardial_cellFromCellMLGRL2
         const double* const _lt_0_row = Cellpandit_clark_giles_demir_2001_endocardial_cellFromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         // Mathematics
-        const double d_dt_chaste_interface_var_sodium_current_m_gate__m = 0.001 * (-var_chaste_interface__sodium_current_m_gate__m + _lt_0_row[20]) * (_lt_0_row[21]); // 1 / millisecond
+        const double d_dt_chaste_interface_var_sodium_current_m_gate__m = 0.001 * (-var_chaste_interface__sodium_current_m_gate__m + _lt_0_row[20]) * _lt_0_row[21]; // 1 / millisecond
 
         return d_dt_chaste_interface_var_sodium_current_m_gate__m;
     }
@@ -1372,14 +1385,19 @@ std::shared_ptr<Cellpandit_clark_giles_demir_2001_endocardial_cellFromCellMLGRL2
             
 
 
-            const double var_x114 = -0.10000000000000001 * var_chaste_interface__membrane__V;
-            const double var_x115 = exp(-4.7130000000000001 + var_x114);
-            const double var_x116 = 1.0 - var_x115;
-            const double var_x117 = 1 / var_x116;
-            const double var_x119 = exp(-0.090909090909090912 * var_chaste_interface__membrane__V);
-            const double var_x120 = 47.130000000000003 + var_chaste_interface__membrane__V;
+            const double var_x115 = 1 / (1.0 - exp(1.0000000000287557e-7));
+            const double var_x116 = 1 / (1.0 - exp(-1.0000000000287557e-7));
+            const double var_x117 = exp(-0.090909090909090912 * var_chaste_interface__membrane__V);
+            const double var_x120 = (47.129999000000005 + var_chaste_interface__membrane__V) * (-3.200000000092018e-7 * var_x115 - 3.200000000092018e-7 * var_x116);
+            const double var_x122 = 47.130000000000003 + var_chaste_interface__membrane__V;
+            const double var_x123 = fabs(var_x122) < 1.0000000000287557e-6;
+            const double var_x124 = -0.10000000000000001 * var_chaste_interface__membrane__V;
+            const double var_x125 = exp(-4.7130000000000001 + var_x124);
+            const double var_x126 = 1.0 - var_x125;
+            const double var_x127 = 1 / var_x126;
+            const double var_x129 = -0.058823529411764705 * var_x117;
             
-            partialF = -0.058823529411764705 * var_x119 - 0.23529411764705882 * var_x117 * var_x120;
+            partialF = ((var_x123) ? (var_x129 + 367647.05881295743 * var_x120 - 2.3529411765382485e-7 * var_x116) : (var_x129 - 0.23529411764705882 * var_x122 * var_x127));
         }
         else
         {
@@ -1417,14 +1435,14 @@ std::shared_ptr<Cellpandit_clark_giles_demir_2001_endocardial_cellFromCellMLGRL2
             
 
 
-            const double var_x121 = exp(-0.96036036036036043 + 0.0900900900900901 * mParameters[11] - 0.0900900900900901 * var_chaste_interface__membrane__V);
-            const double var_x128 = 1 / (0.00045370000000000002 + 0.00045370000000000002 * var_x121);
-            const double var_x131 = var_chaste_interface__membrane__V >= -40.0;
-            const double var_x132 = exp(0.079000000000000001 * var_chaste_interface__membrane__V - 0.079000000000000001 * mParameters[11]);
-            const double var_x133 = exp(0.34999999999999998 * var_chaste_interface__membrane__V - 0.34999999999999998 * mParameters[11]);
-            const double var_x134 = exp(-11.764705882352942 + 0.14705882352941177 * mParameters[11] - 0.14705882352941177 * var_chaste_interface__membrane__V);
+            const double var_x130 = exp(-0.96036036036036043 + 0.0900900900900901 * mParameters[11] - 0.0900900900900901 * var_chaste_interface__membrane__V);
+            const double var_x137 = 1 / (0.00045370000000000002 + 0.00045370000000000002 * var_x130);
+            const double var_x140 = var_chaste_interface__membrane__V >= -40.0;
+            const double var_x141 = exp(0.079000000000000001 * var_chaste_interface__membrane__V - 0.079000000000000001 * mParameters[11]);
+            const double var_x142 = exp(0.34999999999999998 * var_chaste_interface__membrane__V - 0.34999999999999998 * mParameters[11]);
+            const double var_x143 = exp(-11.764705882352942 + 0.14705882352941177 * mParameters[11] - 0.14705882352941177 * var_chaste_interface__membrane__V);
             
-            partialF = ((var_x131) ? (-0.001 * var_x128) : (-1.0200573065902578 * var_x132 - 0.038681948424068767 * var_x134 - 88825.214899713465 * var_x133));
+            partialF = ((var_x140) ? (-0.001 * var_x137) : (-1.0200573065902578 * var_x141 - 0.038681948424068767 * var_x143 - 88825.214899713465 * var_x142));
         }
         else
         {
@@ -1476,28 +1494,28 @@ std::shared_ptr<Cellpandit_clark_giles_demir_2001_endocardial_cellFromCellMLGRL2
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Cellpandit_clark_giles_demir_2001_endocardial_cellFromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
-            const double var_x114 = -0.10000000000000001 * var_chaste_interface__membrane__V;
-            const double var_x131 = var_chaste_interface__membrane__V >= -40.0;
-            const double var_x136 = exp(-3.2000000000000002 + var_x114 + 0.10000000000000001 * mParameters[11]);
-            const double var_x137 = 1.0 + var_x136;
-            const double var_x138 = _lt_0_row[17];
-            const double var_x139 = var_x138 / var_x137;
-            const double var_x140 = exp(0.24440000000000001 * var_chaste_interface__membrane__V - 0.24440000000000001 * mParameters[11]);
-            const double var_x141 = exp(0.043909999999999998 * mParameters[11] - 0.043909999999999998 * var_chaste_interface__membrane__V);
-            const double var_x142 = -127140.0 * var_x140 - 3.4740000000000003e-5 * var_x141;
-            const double var_x143 = exp(24.640530000000002 + 0.311 * var_chaste_interface__membrane__V);
-            const double var_x144 = 1.0 + var_x143;
-            const double var_x145 = 0.28653295128939826 / var_x144;
-            const double var_x146 = var_x142 * var_x145;
-            const double var_x147 = exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__membrane__V);
-            const double var_x148 = 1.0 + var_x147;
-            const double var_x149 = exp(0.01052 * mParameters[11] - 0.01052 * var_chaste_interface__membrane__V);
-            const double var_x150 = var_x149 / var_x148;
-            const double var_x151 = 37.780000000000001 + var_chaste_interface__membrane__V;
-            const double var_x152 = 0.034727793696275072 * var_x150;
-            const double var_x153 = var_x146 * var_x151;
+            const double var_x124 = -0.10000000000000001 * var_chaste_interface__membrane__V;
+            const double var_x140 = var_chaste_interface__membrane__V >= -40.0;
+            const double var_x145 = exp(-3.2000000000000002 + var_x124 + 0.10000000000000001 * mParameters[11]);
+            const double var_x146 = 1.0 + var_x145;
+            const double var_x147 = _lt_0_row[17];
+            const double var_x148 = var_x147 / var_x146;
+            const double var_x149 = exp(0.24440000000000001 * var_chaste_interface__membrane__V - 0.24440000000000001 * mParameters[11]);
+            const double var_x150 = exp(0.043909999999999998 * mParameters[11] - 0.043909999999999998 * var_chaste_interface__membrane__V);
+            const double var_x151 = -127140.0 * var_x149 - 3.4740000000000003e-5 * var_x150;
+            const double var_x152 = exp(24.640530000000002 + 0.311 * var_chaste_interface__membrane__V);
+            const double var_x153 = 1.0 + var_x152;
+            const double var_x154 = 0.28653295128939826 / var_x153;
+            const double var_x155 = var_x151 * var_x154;
+            const double var_x156 = exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__membrane__V);
+            const double var_x157 = 1.0 + var_x156;
+            const double var_x158 = exp(0.01052 * mParameters[11] - 0.01052 * var_chaste_interface__membrane__V);
+            const double var_x159 = var_x158 / var_x157;
+            const double var_x160 = 37.780000000000001 + var_chaste_interface__membrane__V;
+            const double var_x161 = 0.034727793696275072 * var_x159;
+            const double var_x162 = var_x155 * var_x160;
             
-            partialF = ((var_x131) ? (-0.085984522785898534 * var_x139) : (-var_x152 - var_x153));
+            partialF = ((var_x140) ? (-0.085984522785898534 * var_x148) : (-var_x161 - var_x162));
         }
         else
         {
@@ -1542,13 +1560,13 @@ std::shared_ptr<Cellpandit_clark_giles_demir_2001_endocardial_cellFromCellMLGRL2
             
 
 
-            const double var_x154 = exp(-0.64800000000000002 * pow((-1 + 0.055555555555555552 * var_chaste_interface__membrane__V), 2));
-            const double var_x155 = exp(-0.22049999999999997 * pow((1 + 0.14285714285714285 * var_chaste_interface__membrane__V), 2));
-            const double var_x159 = 0.0010499999999999999 * var_x154;
-            const double var_x160 = 0.0030500000000000002 * var_x155;
-            const double var_x161 = 1 / (0.00025000000000000001 + var_x159 + var_x160);
+            const double var_x163 = exp(-0.64800000000000002 * pow((-1 + 0.055555555555555552 * var_chaste_interface__membrane__V), 2));
+            const double var_x164 = exp(-0.22049999999999997 * pow((1 + 0.14285714285714285 * var_chaste_interface__membrane__V), 2));
+            const double var_x168 = 0.0010499999999999999 * var_x163;
+            const double var_x169 = 0.0030500000000000002 * var_x164;
+            const double var_x170 = 1 / (0.00025000000000000001 + var_x168 + var_x169);
             
-            partialF = -0.001 * var_x161;
+            partialF = -0.001 * var_x170;
         }
         else
         {
@@ -1595,18 +1613,18 @@ std::shared_ptr<Cellpandit_clark_giles_demir_2001_endocardial_cellFromCellMLGRL2
 
             const double var_x31 = 0.040000000000000001 * var_chaste_interface__membrane__V;
             const double var_x33 = -var_x31;
-            const double var_x162 = exp(1.0 + var_x33);
-            const double var_x163 = 1.0 + var_x162;
-            const double var_x164 = 1 / var_x163;
-            const double var_x165 = exp(3.0 + var_x31);
-            const double var_x166 = 1.0 + var_x165;
-            const double var_x167 = 1 / var_x166;
-            const double var_x168 = exp(-14.0625 * pow((1 + 0.022222222222222223 * var_chaste_interface__membrane__V), 2));
-            const double var_x173 = 0.105 * var_x168;
-            const double var_x174 = 0.0016999999999999999 + 0.014999999999999999 * var_x167;
-            const double var_x175 = 1 / (var_x173 + var_x174 + 0.040000000000000001 * var_x164);
+            const double var_x171 = exp(1.0 + var_x33);
+            const double var_x172 = 1.0 + var_x171;
+            const double var_x173 = 1 / var_x172;
+            const double var_x174 = exp(3.0 + var_x31);
+            const double var_x175 = 1.0 + var_x174;
+            const double var_x176 = 1 / var_x175;
+            const double var_x177 = exp(-14.0625 * pow((1 + 0.022222222222222223 * var_chaste_interface__membrane__V), 2));
+            const double var_x182 = 0.105 * var_x177;
+            const double var_x183 = 0.0016999999999999999 + 0.014999999999999999 * var_x176;
+            const double var_x184 = 1 / (var_x182 + var_x183 + 0.040000000000000001 * var_x173);
             
-            partialF = -0.001 * var_x175;
+            partialF = -0.001 * var_x184;
         }
         else
         {
@@ -1652,19 +1670,19 @@ std::shared_ptr<Cellpandit_clark_giles_demir_2001_endocardial_cellFromCellMLGRL2
 
 
             const double var_x31 = 0.040000000000000001 * var_chaste_interface__membrane__V;
-            const double var_x156 = -0.20000000000000001 * var_chaste_interface__membrane__V;
-            const double var_x165 = exp(3.0 + var_x31);
-            const double var_x166 = 1.0 + var_x165;
-            const double var_x167 = 1 / var_x166;
-            const double var_x174 = 0.0016999999999999999 + 0.014999999999999999 * var_x167;
-            const double var_x177 = exp(-11.0 + var_x156);
-            const double var_x178 = 1.0 + var_x177;
-            const double var_x179 = 1 / var_x178;
-            const double var_x180 = exp(-15.340277777777779 * pow((1 + 0.021276595744680851 * var_chaste_interface__membrane__V), 2));
-            const double var_x181 = 0.041000000000000002 * var_x180;
-            const double var_x182 = 1 / (var_x174 + var_x181 + 0.080000000000000002 * var_x179);
+            const double var_x165 = -0.20000000000000001 * var_chaste_interface__membrane__V;
+            const double var_x174 = exp(3.0 + var_x31);
+            const double var_x175 = 1.0 + var_x174;
+            const double var_x176 = 1 / var_x175;
+            const double var_x183 = 0.0016999999999999999 + 0.014999999999999999 * var_x176;
+            const double var_x186 = exp(-11.0 + var_x165);
+            const double var_x187 = 1.0 + var_x186;
+            const double var_x188 = 1 / var_x187;
+            const double var_x189 = exp(-15.340277777777779 * pow((1 + 0.021276595744680851 * var_chaste_interface__membrane__V), 2));
+            const double var_x190 = 0.041000000000000002 * var_x189;
+            const double var_x191 = 1 / (var_x183 + var_x190 + 0.080000000000000002 * var_x188);
             
-            partialF = -0.001 * var_x182;
+            partialF = -0.001 * var_x191;
         }
         else
         {
@@ -1700,9 +1718,9 @@ std::shared_ptr<Cellpandit_clark_giles_demir_2001_endocardial_cellFromCellMLGRL2
             
 
 
-            const double var_x183 = 1 / mParameters[7];
+            const double var_x192 = 1 / mParameters[7];
             
-            partialF = -0.001 * var_x183;
+            partialF = -0.001 * var_x192;
         }
         else
         {
@@ -1747,11 +1765,11 @@ std::shared_ptr<Cellpandit_clark_giles_demir_2001_endocardial_cellFromCellMLGRL2
             
 
 
-            const double var_x114 = -0.10000000000000001 * var_chaste_interface__membrane__V;
-            const double var_x186 = exp(1.7885000000000002 + 0.035770000000000003 * var_chaste_interface__membrane__V);
-            const double var_x187 = exp(-3.8000000000000003 + var_x114);
+            const double var_x124 = -0.10000000000000001 * var_chaste_interface__membrane__V;
+            const double var_x195 = exp(1.7885000000000002 + 0.035770000000000003 * var_chaste_interface__membrane__V);
+            const double var_x196 = exp(-3.8000000000000003 + var_x124);
             
-            partialF = -0.045159999999999999 * var_x186 - 0.098900000000000002 * var_x187;
+            partialF = -0.045159999999999999 * var_x195 - 0.098900000000000002 * var_x196;
         }
         else
         {
@@ -1796,10 +1814,10 @@ std::shared_ptr<Cellpandit_clark_giles_demir_2001_endocardial_cellFromCellMLGRL2
             
 
 
-            const double var_x188 = exp(-7.8399999999999999 * pow((1 + 0.014285714285714285 * var_chaste_interface__membrane__V), 2));
-            const double var_x189 = 1 / (0.049000000000000002 + 0.55000000000000004 * var_x188);
+            const double var_x197 = exp(-7.8399999999999999 * pow((1 + 0.014285714285714285 * var_chaste_interface__membrane__V), 2));
+            const double var_x198 = 1 / (0.049000000000000002 + 0.55000000000000004 * var_x197);
             
-            partialF = -0.001 * var_x189;
+            partialF = -0.001 * var_x198;
         }
         else
         {
@@ -1844,10 +1862,10 @@ std::shared_ptr<Cellpandit_clark_giles_demir_2001_endocardial_cellFromCellMLGRL2
             
 
 
-            const double var_x194 = exp(-5.4444444444444446 * pow((1 + 0.014285714285714285 * var_chaste_interface__membrane__V), 2));
-            const double var_x195 = 1 / (0.049000000000000002 + 3.2999999999999998 * var_x194);
+            const double var_x203 = exp(-5.4444444444444446 * pow((1 + 0.014285714285714285 * var_chaste_interface__membrane__V), 2));
+            const double var_x204 = 1 / (0.049000000000000002 + 3.2999999999999998 * var_x203);
             
-            partialF = -0.001 * var_x195;
+            partialF = -0.001 * var_x204;
         }
         else
         {
@@ -1892,11 +1910,11 @@ std::shared_ptr<Cellpandit_clark_giles_demir_2001_endocardial_cellFromCellMLGRL2
             
 
 
-            const double var_x114 = -0.10000000000000001 * var_chaste_interface__membrane__V;
-            const double var_x186 = exp(1.7885000000000002 + 0.035770000000000003 * var_chaste_interface__membrane__V);
-            const double var_x187 = exp(-3.8000000000000003 + var_x114);
+            const double var_x124 = -0.10000000000000001 * var_chaste_interface__membrane__V;
+            const double var_x195 = exp(1.7885000000000002 + 0.035770000000000003 * var_chaste_interface__membrane__V);
+            const double var_x196 = exp(-3.8000000000000003 + var_x124);
             
-            partialF = -0.0098900000000000012 * var_x187 - 0.004516 * var_x186;
+            partialF = -0.0098900000000000012 * var_x196 - 0.004516 * var_x195;
         }
         else
         {
@@ -1985,10 +2003,10 @@ std::shared_ptr<Cellpandit_clark_giles_demir_2001_endocardial_cellFromCellMLGRL2
             
 
 
-            const double var_x201 = exp(2.8198801550934083 + 0.035248501938667604 * var_chaste_interface__membrane__V);
-            const double var_x202 = exp(-5.6377730796335452 - 0.070472163495419307 * var_chaste_interface__membrane__V);
+            const double var_x210 = exp(2.8198801550934083 + 0.035248501938667604 * var_chaste_interface__membrane__V);
+            const double var_x211 = exp(-5.6377730796335452 - 0.070472163495419307 * var_chaste_interface__membrane__V);
             
-            partialF = -0.00056230000000000006 * var_x202 - 0.00011885 * var_x201;
+            partialF = -0.00056230000000000006 * var_x211 - 0.00011885 * var_x210;
         }
         else
         {
@@ -2032,10 +2050,10 @@ std::shared_ptr<Cellpandit_clark_giles_demir_2001_endocardial_cellFromCellMLGRL2
             
 
 
-            const double var_x203 = pow(var_chaste_interface__intracellular_ion_concentrations__Ca_ss, 3.0);
-            const double var_x204 = 4050000.0 * var_x203;
+            const double var_x212 = pow(var_chaste_interface__intracellular_ion_concentrations__Ca_ss, 3.0);
+            const double var_x213 = 4050000.0 * var_x212;
             
-            partialF = -0.67600000000000005 - var_x204;
+            partialF = -0.67600000000000005 - var_x213;
         }
         else
         {
@@ -2114,9 +2132,9 @@ std::shared_ptr<Cellpandit_clark_giles_demir_2001_endocardial_cellFromCellMLGRL2
             
 
 
-            const double var_x205 = 12150000000.0 * pow(var_chaste_interface__intracellular_ion_concentrations__Ca_ss, 4.0);
+            const double var_x214 = 12150000000.0 * pow(var_chaste_interface__intracellular_ion_concentrations__Ca_ss, 4.0);
             
-            partialF = -var_x205;
+            partialF = -var_x214;
         }
         else
         {
@@ -2444,10 +2462,10 @@ std::shared_ptr<Cellpandit_clark_giles_demir_2001_endocardial_cellFromCellMLGRL2
             const double var_x91 = var_x0 * var_x12;
             const double var_x93 = var_x12 * var_x37;
             const double var_x94 = var_x12 * var_x42;
-            const double var_x209 = var_x1 + var_x2;
-            const double var_x214 = 0.02814781565331918 * var_x12;
+            const double var_x218 = var_x1 + var_x2;
+            const double var_x223 = 0.02814781565331918 * var_x12;
             
-            partialF = (0.001786033971717017 * var_x94 - 3.2651466157850246e-5 * var_x90 - 3.8843985601580465e-6 * var_x12 - 0.00019703470957323427 * var_x91 - 1.6557538619599519e-7 * var_x93 - var_x17 * var_x214 - var_x209 * var_x214 * var_x4) * mParameters[2];
+            partialF = (0.001786033971717017 * var_x94 - 3.2651466157850246e-5 * var_x90 - 3.8843985601580465e-6 * var_x12 - 0.00019703470957323427 * var_x91 - 1.6557538619599519e-7 * var_x93 - var_x17 * var_x223 - var_x218 * var_x223 * var_x4) * mParameters[2];
         }
         else
         {
@@ -2529,16 +2547,16 @@ std::shared_ptr<Cellpandit_clark_giles_demir_2001_endocardial_cellFromCellMLGRL2
             const double var_x10 = var_x9 * var_chaste_interface__L_type_Ca_channel_f_11_gate__f_11;
             const double var_x11 = mParameters[6] * var_chaste_interface__L_type_Ca_channel_d_gate__d;
             const double var_x68 = var_x10 + var_x8;
-            const double var_x215 = 0.0023800000000000002 + var_chaste_interface__intracellular_ion_concentrations__Ca_ss;
-            const double var_x216 = 1.0 + 0.00011900000000000002 / pow(var_x215, 2);
-            const double var_x217 = 1 / var_x216;
-            const double var_x218 = 0.001 * var_x217;
-            const double var_x224 = 46.666666666666664 * var_chaste_interface__SR_Ca_release_channel__P_O1;
-            const double var_x225 = 46.666666666666664 * var_chaste_interface__SR_Ca_release_channel__P_O2;
-            const double var_x226 = (var_chaste_interface__SR_Ca_release_channel__P_O1 + var_chaste_interface__SR_Ca_release_channel__P_O2) * mParameters[0];
-            const double var_x227 = var_x226 * (-var_chaste_interface__intracellular_ion_concentrations__Ca_ss + var_chaste_interface__intracellular_ion_concentrations__Ca_JSR);
+            const double var_x224 = 0.0023800000000000002 + var_chaste_interface__intracellular_ion_concentrations__Ca_ss;
+            const double var_x225 = 1.0 + 0.00011900000000000002 / pow(var_x224, 2);
+            const double var_x226 = 1 / var_x225;
+            const double var_x227 = 0.001 * var_x226;
+            const double var_x233 = 46.666666666666664 * var_chaste_interface__SR_Ca_release_channel__P_O1;
+            const double var_x234 = 46.666666666666664 * var_chaste_interface__SR_Ca_release_channel__P_O2;
+            const double var_x235 = (var_chaste_interface__SR_Ca_release_channel__P_O1 + var_chaste_interface__SR_Ca_release_channel__P_O2) * mParameters[0];
+            const double var_x236 = var_x235 * (-var_chaste_interface__intracellular_ion_concentrations__Ca_ss + var_chaste_interface__intracellular_ion_concentrations__Ca_JSR);
             
-            partialF = var_x218 * (-292134.83146067418 + (-var_x224 - var_x225) * mParameters[0]) + 2.3800000000000004e-7 * (292134.83146067418 * var_chaste_interface__intracellular_ion_concentrations__Ca_i + 46.666666666666664 * var_x227 - 292134.83146067418 * var_chaste_interface__intracellular_ion_concentrations__Ca_ss - 4318.3710413492663 * var_x11 * var_x68 * (-65.0 + var_chaste_interface__membrane__V)) / (pow(var_x215, 3) * pow(var_x216, 2));
+            partialF = var_x227 * (-292134.83146067418 + (-var_x233 - var_x234) * mParameters[0]) + 2.3800000000000004e-7 * (292134.83146067418 * var_chaste_interface__intracellular_ion_concentrations__Ca_i + 46.666666666666664 * var_x236 - 292134.83146067418 * var_chaste_interface__intracellular_ion_concentrations__Ca_ss - 4318.3710413492663 * var_x11 * var_x68 * (-65.0 + var_chaste_interface__membrane__V)) / (pow(var_x224, 3) * pow(var_x225, 2));
         }
         else
         {
@@ -2592,14 +2610,14 @@ std::shared_ptr<Cellpandit_clark_giles_demir_2001_endocardial_cellFromCellMLGRL2
             
 
 
-            const double var_x226 = (var_chaste_interface__SR_Ca_release_channel__P_O1 + var_chaste_interface__SR_Ca_release_channel__P_O2) * mParameters[0];
-            const double var_x227 = var_x226 * (-var_chaste_interface__intracellular_ion_concentrations__Ca_ss + var_chaste_interface__intracellular_ion_concentrations__Ca_JSR);
-            const double var_x228 = 0.80000000000000004 + var_chaste_interface__intracellular_ion_concentrations__Ca_JSR;
-            const double var_x229 = pow(var_x228, (-2));
-            const double var_x230 = 1 / (1.0 + 12.0 * var_x229);
-            const double var_x231 = 0.001 * var_x230;
+            const double var_x235 = (var_chaste_interface__SR_Ca_release_channel__P_O1 + var_chaste_interface__SR_Ca_release_channel__P_O2) * mParameters[0];
+            const double var_x236 = var_x235 * (-var_chaste_interface__intracellular_ion_concentrations__Ca_ss + var_chaste_interface__intracellular_ion_concentrations__Ca_JSR);
+            const double var_x237 = 0.80000000000000004 + var_chaste_interface__intracellular_ion_concentrations__Ca_JSR;
+            const double var_x238 = pow(var_x237, (-2));
+            const double var_x239 = 1 / (1.0 + 12.0 * var_x238);
+            const double var_x240 = 0.001 * var_x239;
             
-            partialF = var_x231 * (-1740.0382808421784 + (-var_chaste_interface__SR_Ca_release_channel__P_O1 - var_chaste_interface__SR_Ca_release_channel__P_O2) * mParameters[0]) + 0.00016666666666666666 * (-var_x227 + 1740.0382808421784 * var_chaste_interface__intracellular_ion_concentrations__Ca_NSR - 1740.0382808421784 * var_chaste_interface__intracellular_ion_concentrations__Ca_JSR) / (pow(var_x228, 3) * pow((0.083333333333333329 + var_x229), 2));
+            partialF = var_x240 * (-1740.0382808421784 + (-var_chaste_interface__SR_Ca_release_channel__P_O1 - var_chaste_interface__SR_Ca_release_channel__P_O2) * mParameters[0]) + 0.00016666666666666666 * (-var_x236 + 1740.0382808421784 * var_chaste_interface__intracellular_ion_concentrations__Ca_NSR - 1740.0382808421784 * var_chaste_interface__intracellular_ion_concentrations__Ca_JSR) / (pow(var_x237, 3) * pow((0.083333333333333329 + var_x238), 2));
         }
         else
         {

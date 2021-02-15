@@ -218,30 +218,30 @@ std::shared_ptr<Cellbueno_2007_epiFromCellMLCvodeOpt_LookupTables> Cellbueno_200
         double var_chaste_interface__slow_inward_current_s_gate__s = NV_Ith_S(rY, 3);
         // Units: dimensionless; Initial value: 0.0
         const double var_x0 = var_chaste_interface__membrane__V;
-        const double var_x1 = ((var_x0 < 0.0060000000000000001) ? (0) : (1.0));
-        const double var_x2 = ((var_x0 < 0.13) ? (0) : (1.0));
-        const double var_x3 = 9.0909090909090917 * var_chaste_interface__membrane__V;
-        const double var_x4 = var_x0 < 0.29999999999999999;
-        const double var_x5 = ((var_x4) ? (0) : (1.0));
+        const double var_x1 = var_x0 < 0.0060000000000000001;
+        const double var_x2 = ((var_x1) ? (0) : (1.0));
+        const double var_x3 = ((var_x0 < 0.13) ? (0) : (1.0));
+        const double var_x4 = 9.0909090909090917 * var_chaste_interface__membrane__V;
+        const double var_x5 = ((var_x0 < 0.29999999999999999) ? (0) : (1.0));
         const double var_x6 = var_x5 * var_chaste_interface__fast_inward_current_v_gate__v;
-        const double var_x7 = -14.090909090909092 + var_x3;
+        const double var_x7 = -14.090909090909092 + var_x4;
         const double var_x8 = tanh(-1.3297699999999999 + 2.0457999999999998 * var_chaste_interface__membrane__V);
         const double var_x9 = 1 / NV_Ith_S(mParameters, 0);
         const double var_x10 = var_x9;
-        const double var_x11 = 0.5298013245033113 * var_x2 * var_x9;
+        const double var_x11 = 0.5298013245033113 * var_x3 * var_x9;
         const double var_x12 = tanh(-1.95 + 65.0 * var_chaste_interface__membrane__V);
-        const double var_x13 = 1.0 - var_x1;
+        const double var_x13 = 1.0 - var_x2;
         const double var_x14 = var_x13 / (37.5 - 22.5 * var_x12);
-        const double var_x15 = 1 / (2.7342 + 13.2658 * var_x2);
+        const double var_x15 = 1 / (2.7342 + 13.2658 * var_x3);
         
         // Matrix entries
-        IJth(rJacobian, 0, 0) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x10 * (var_x6 * var_x7 + var_x6 * (-2.7272727272727271 + var_x3) + (1.0 - var_x2) / (400.0 - 394.0 * var_x1) + 0.0041586275611754688 * var_x2 * (29.687012959999997 - 29.687012959999997 * pow(var_x8, 2)) / pow((1 - 0.93578987418504023 * var_x8), 2)));
-        IJth(rJacobian, 2, 0) = var_x14 * (-14.285714285714285 + 14.285714285714285 * var_x1) + 0.00071111111111111115 * var_x13 * (1462.5 - 1462.5 * pow(var_x12, 2)) * (-var_chaste_interface__slow_inward_current_w_gate__w + 0.93999999999999995 * var_x1 + var_x13 * (1.0 - 14.285714285714285 * var_chaste_interface__membrane__V)) / pow((1 - 0.59999999999999998 * var_x12), 2);
+        IJth(rJacobian, 0, 0) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x10 * (var_x6 * var_x7 + var_x6 * (-2.7272727272727271 + var_x4) + (1.0 - var_x3) / (400.0 - 394.0 * var_x2) + 0.0041586275611754688 * var_x3 * (29.687012959999997 - 29.687012959999997 * pow(var_x8, 2)) / pow((1 - 0.93578987418504023 * var_x8), 2)));
+        IJth(rJacobian, 2, 0) = var_x14 * (-14.285714285714285 + 14.285714285714285 * var_x2) + 0.00071111111111111115 * var_x13 * (1462.5 - 1462.5 * pow(var_x12, 2)) * (-var_chaste_interface__slow_inward_current_w_gate__w + 0.93999999999999995 * var_x2 + var_x13 * (1.0 - 14.285714285714285 * var_chaste_interface__membrane__V)) / pow((1 - 0.59999999999999998 * var_x12), 2);
         IJth(rJacobian, 3, 0) = var_x15 * (1.0497000000000001 - 1.0497000000000001 * pow(tanh(-1.9077247800000001 + 2.0994000000000002 * var_chaste_interface__membrane__V), 2));
         IJth(rJacobian, 0, 1) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x10 * var_x5 * var_x7 * (-0.29999999999999999 + var_x0));
-        IJth(rJacobian, 1, 1) = ((var_chaste_interface__membrane__V < 0.0060000000000000001) ? (-0.016666666666666666) : ((var_x4) ? (-0.00086956521739130438) : (-0.68936991589687036)));
+        IJth(rJacobian, 1, 1) = ((var_x1) ? (-0.016666666666666666 - 0.67270324923020364 * var_x5) : (-0.00086956521739130438 - 0.68850035067947901 * var_x5));
         IJth(rJacobian, 0, 2) = mSetVoltageDerivativeToZero ? 0.0 : (var_x11 * var_chaste_interface__slow_inward_current_s_gate__s);
-        IJth(rJacobian, 2, 2) = -var_x14 - 0.0050000000000000001 * var_x1;
+        IJth(rJacobian, 2, 2) = -var_x14 - 0.0050000000000000001 * var_x2;
         IJth(rJacobian, 0, 3) = mSetVoltageDerivativeToZero ? 0.0 : (var_x11 * var_chaste_interface__slow_inward_current_w_gate__w);
         IJth(rJacobian, 3, 3) = -var_x15;
     }

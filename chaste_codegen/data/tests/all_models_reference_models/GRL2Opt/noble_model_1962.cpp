@@ -113,8 +113,8 @@ protected:
 
         mKeyingVariableNames[0] = "membrane_voltage";
         mNumberOfTables[0] = 6;
-        mTableMins[0] = -250.0001;
-        mTableMaxs[0] = 549.9999;
+        mTableMins[0] = -250.0;
+        mTableMaxs[0] = 550.0;
         mTableSteps[0] = 0.001;
         mTableStepInverses[0] = 1000.0;
         mNeedsRegeneration[0] = true;
@@ -157,15 +157,28 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                double val = exp(-1.125 - 0.012500000000000001 * var_chaste_interface__membrane__V);
-
+                double val = ((fabs(50.0 + var_chaste_interface__membrane__V) < 1.0000000000287557e-6) ? (-1.0000000000287557e-10 / (-1.0 + exp(-1.0000000000287557e-7)) - 499999.99998562218 * (49.999999000000003 + var_chaste_interface__membrane__V) * (1.0000000000287557e-10 / (-1.0 + exp(1.0000000000287557e-7)) + 1.0000000000287557e-10 / (-1.0 + exp(-1.0000000000287557e-7)))) : (0.0001 * (-50.0 - var_chaste_interface__membrane__V) / (-1.0 + exp(-5.0 - 0.10000000000000001 * var_chaste_interface__membrane__V))));
+                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
+                //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
+                if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_0 && _lookup_table_0_num_misshit_piecewise[2] < 2){
+                    double left = _lookup_table_0[i-1][2];
+                    double right = _lookup_table_0[i+1][2];
+                    double new_val = (left + right) / 2.0;
+                    WARNING("Lookup table 2 at ["<<i<<"][2] has non-finite value: " << val << " being terpolated to: "<<new_val);
+                    val = new_val;
+                   // count and limit number of misshits
+                  _lookup_table_0_num_misshit_piecewise[2] +=1;
+                }
+                else if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[2] >= 2){
+                    EXCEPTION("Lookup table 2 at ["<<i<<"][2] has non-finite value: " << val);
+                }
                 _lookup_table_0[i][2] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                double val = -1.0 + exp(-5.0 - 0.10000000000000001 * var_chaste_interface__membrane__V);
+                double val = exp(-1.125 - 0.012500000000000001 * var_chaste_interface__membrane__V);
 
                 _lookup_table_0[i][3] = val;
             }
@@ -173,16 +186,42 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                double val = -1.0 + exp(-3.2000000000000002 - 0.066666666666666666 * var_chaste_interface__membrane__V);
-
+                double val = ((fabs(48.0 + var_chaste_interface__membrane__V) < 1.5000000000153779e-6) ? (-1.4999999999876224e-7 / (-1.0 + exp(-9.9999999999174827e-8)) - 333333.333329916 * (47.999998499999997 + var_chaste_interface__membrane__V) * (1.5000000000431335e-7 / (-1.0 + exp(1.0000000000287557e-7)) + 1.4999999999876224e-7 / (-1.0 + exp(-9.9999999999174827e-8)))) : (0.10000000000000001 * (-48.0 - var_chaste_interface__membrane__V) / (-1.0 + exp(-3.2000000000000002 - 0.066666666666666666 * var_chaste_interface__membrane__V))));
+                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
+                //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
+                if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_0 && _lookup_table_0_num_misshit_piecewise[4] < 2){
+                    double left = _lookup_table_0[i-1][4];
+                    double right = _lookup_table_0[i+1][4];
+                    double new_val = (left + right) / 2.0;
+                    WARNING("Lookup table 4 at ["<<i<<"][4] has non-finite value: " << val << " being terpolated to: "<<new_val);
+                    val = new_val;
+                   // count and limit number of misshits
+                  _lookup_table_0_num_misshit_piecewise[4] +=1;
+                }
+                else if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[4] >= 2){
+                    EXCEPTION("Lookup table 4 at ["<<i<<"][4] has non-finite value: " << val);
+                }
                 _lookup_table_0[i][4] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                double val = -1.0 + exp(1.6000000000000001 + 0.20000000000000001 * var_chaste_interface__membrane__V);
-
+                double val = ((fabs(8.0 + var_chaste_interface__membrane__V) < 4.999999999970306e-7) ? (-6.0000000000060002e-8 / (-1.0 + exp(-1.0000000000010001e-7)) + 1000000.0000059388 * (8.0000005000000005 + var_chaste_interface__membrane__V) * (6.0000000000060002e-8 / (-1.0 + exp(-1.0000000000010001e-7)) + 5.9999999999227342e-8 / (-1.0 + exp(9.9999999998712227e-8)))) : (0.12 * (8.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(1.6000000000000001 + 0.20000000000000001 * var_chaste_interface__membrane__V))));
+                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
+                //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
+                if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_0 && _lookup_table_0_num_misshit_piecewise[5] < 2){
+                    double left = _lookup_table_0[i-1][5];
+                    double right = _lookup_table_0[i+1][5];
+                    double new_val = (left + right) / 2.0;
+                    WARNING("Lookup table 5 at ["<<i<<"][5] has non-finite value: " << val << " being terpolated to: "<<new_val);
+                    val = new_val;
+                   // count and limit number of misshits
+                  _lookup_table_0_num_misshit_piecewise[5] +=1;
+                }
+                else if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[5] >= 2){
+                    EXCEPTION("Lookup table 5 at ["<<i<<"][5] has non-finite value: " << val);
+                }
                 _lookup_table_0[i][5] = val;
             }
 
@@ -353,11 +392,11 @@ std::shared_ptr<Cellnoble_model_1962FromCellMLGRL2Opt_LookupTables> Cellnoble_mo
 
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
-        const double d_dt_chaste_interface_var_potassium_channel_n_gate__n = -0.002 * var_chaste_interface__potassium_channel_n_gate__n * _lt_0_row[2] + 0.0001 * (1.0 - var_chaste_interface__potassium_channel_n_gate__n) * (-50.0 - var_chaste_interface__membrane__V) / (_lt_0_row[3]); // 1 / millisecond
+        const double d_dt_chaste_interface_var_potassium_channel_n_gate__n = (1.0 - var_chaste_interface__potassium_channel_n_gate__n) * _lt_0_row[2] - 0.002 * var_chaste_interface__potassium_channel_n_gate__n * _lt_0_row[3]; // 1 / millisecond
         const double var_sodium_channel_h_gate__alpha_h = 0.17000000000000001 * exp(-4.5 + 0.050000000000000003 * mParameters[4] - 0.050000000000000003 * var_chaste_interface__membrane__V); // per_millisecond
         const double var_sodium_channel_h_gate__beta_h = 1 / (1.0 + exp(-4.2000000000000002 + 0.10000000000000001 * mParameters[4] - 0.10000000000000001 * var_chaste_interface__membrane__V)); // per_millisecond
         const double d_dt_chaste_interface_var_sodium_channel_h_gate__h = (var_sodium_channel_h_gate__alpha_h + var_sodium_channel_h_gate__beta_h) * (-var_chaste_interface__sodium_channel_h_gate__h + 0.01 * mParameters[3] + (1.0 - 0.01 * mParameters[3]) * var_sodium_channel_h_gate__alpha_h / (var_sodium_channel_h_gate__alpha_h + var_sodium_channel_h_gate__beta_h)); // 1 / millisecond
-        const double d_dt_chaste_interface_var_sodium_channel_m_gate__m = 0.10000000000000001 * (1.0 - var_chaste_interface__sodium_channel_m_gate__m) * (-48.0 - var_chaste_interface__membrane__V) / (_lt_0_row[4]) - 0.12 * (8.0 + var_chaste_interface__membrane__V) * var_chaste_interface__sodium_channel_m_gate__m / (_lt_0_row[5]); // 1 / millisecond
+        const double d_dt_chaste_interface_var_sodium_channel_m_gate__m = (1.0 - var_chaste_interface__sodium_channel_m_gate__m) * _lt_0_row[4] - _lt_0_row[5] * var_chaste_interface__sodium_channel_m_gate__m; // 1 / millisecond
 
         if (mSetVoltageDerivativeToZero)
         {
@@ -518,7 +557,7 @@ std::shared_ptr<Cellnoble_model_1962FromCellMLGRL2Opt_LookupTables> Cellnoble_mo
         const double* const _lt_0_row = Cellnoble_model_1962FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         // Mathematics
-        const double d_dt_chaste_interface_var_sodium_channel_m_gate__m = 0.10000000000000001 * (1.0 - var_chaste_interface__sodium_channel_m_gate__m) * (-48.0 - var_chaste_interface__membrane__V) / (_lt_0_row[4]) - 0.12 * (8.0 + var_chaste_interface__membrane__V) * var_chaste_interface__sodium_channel_m_gate__m / (_lt_0_row[5]); // 1 / millisecond
+        const double d_dt_chaste_interface_var_sodium_channel_m_gate__m = (1.0 - var_chaste_interface__sodium_channel_m_gate__m) * _lt_0_row[4] - _lt_0_row[5] * var_chaste_interface__sodium_channel_m_gate__m; // 1 / millisecond
 
         return d_dt_chaste_interface_var_sodium_channel_m_gate__m;
     }
@@ -534,16 +573,26 @@ std::shared_ptr<Cellnoble_model_1962FromCellMLGRL2Opt_LookupTables> Cellnoble_mo
 
 
             const double var_x1 = -var_chaste_interface__membrane__V;
-            const double var_x7 = exp(1.6000000000000001 + 0.20000000000000001 * var_chaste_interface__membrane__V);
-            const double var_x8 = -1.0 + var_x7;
-            const double var_x9 = 0.12 / var_x8;
-            const double var_x11 = exp(-3.2000000000000002 - 0.066666666666666666 * var_chaste_interface__membrane__V);
-            const double var_x12 = -1.0 + var_x11;
-            const double var_x13 = 0.10000000000000001 / var_x12;
-            const double var_x14 = -48.0 + var_x1;
-            const double var_x15 = 8.0 + var_chaste_interface__membrane__V;
+            const double var_x8 = 1 / (-1.0 + exp(-9.9999999999174827e-8));
+            const double var_x9 = 1 / (-1.0 + exp(1.0000000000287557e-7));
+            const double var_x10 = exp(1.6000000000000001 + 0.20000000000000001 * var_chaste_interface__membrane__V);
+            const double var_x11 = -1.0 + var_x10;
+            const double var_x12 = 0.12 / var_x11;
+            const double var_x13 = 8.0 + var_chaste_interface__membrane__V;
+            const double var_x15 = fabs(48.0 + var_chaste_interface__membrane__V) < 1.5000000000153779e-6;
+            const double var_x16 = 1 / (-1.0 + exp(9.9999999998712227e-8));
+            const double var_x17 = 1 / (-1.0 + exp(-1.0000000000010001e-7));
+            const double var_x18 = exp(-3.2000000000000002 - 0.066666666666666666 * var_chaste_interface__membrane__V);
+            const double var_x19 = -1.0 + var_x18;
+            const double var_x20 = 0.10000000000000001 / var_x19;
+            const double var_x21 = -48.0 + var_x1;
+            const double var_x23 = fabs(var_x13) < 4.999999999970306e-7;
+            const double var_x24 = 1.4999999999876224e-7 * var_x8;
+            const double var_x25 = -var_x12 * var_x13;
+            const double var_x26 = 6.0000000000060002e-8 * var_x17;
+            const double var_x27 = -var_x20 * var_x21;
             
-            partialF = -var_x13 * var_x14 - var_x15 * var_x9;
+            partialF = ((var_x15) ? (var_x24 + var_x25 + 333333.333329916 * (47.999998499999997 + var_chaste_interface__membrane__V) * (var_x24 + 1.5000000000431335e-7 * var_x9)) : ((var_x23) ? (var_x26 + var_x27 - 1000000.0000059388 * (8.0000005000000005 + var_chaste_interface__membrane__V) * (var_x26 + 5.9999999999227342e-8 * var_x16)) : (var_x25 + var_x27)));
         }
         else
         {
@@ -583,14 +632,14 @@ std::shared_ptr<Cellnoble_model_1962FromCellMLGRL2Opt_LookupTables> Cellnoble_mo
             
 
 
-            const double var_x16 = -0.10000000000000001 * var_chaste_interface__membrane__V;
-            const double var_x17 = exp(-4.2000000000000002 + var_x16 + 0.10000000000000001 * mParameters[4]);
-            const double var_x18 = 1.0 + var_x17;
-            const double var_x19 = 1 / var_x18;
-            const double var_x20 = exp(-4.5 + 0.050000000000000003 * mParameters[4] - 0.050000000000000003 * var_chaste_interface__membrane__V);
-            const double var_x21 = 0.17000000000000001 * var_x20;
+            const double var_x28 = -0.10000000000000001 * var_chaste_interface__membrane__V;
+            const double var_x29 = exp(-4.2000000000000002 + var_x28 + 0.10000000000000001 * mParameters[4]);
+            const double var_x30 = 1.0 + var_x29;
+            const double var_x31 = 1 / var_x30;
+            const double var_x32 = exp(-4.5 + 0.050000000000000003 * mParameters[4] - 0.050000000000000003 * var_chaste_interface__membrane__V);
+            const double var_x33 = 0.17000000000000001 * var_x32;
             
-            partialF = -var_x19 - var_x21;
+            partialF = -var_x31 - var_x33;
         }
         else
         {
@@ -620,7 +669,7 @@ std::shared_ptr<Cellnoble_model_1962FromCellMLGRL2Opt_LookupTables> Cellnoble_mo
         const double* const _lt_0_row = Cellnoble_model_1962FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         // Mathematics
-        const double d_dt_chaste_interface_var_potassium_channel_n_gate__n = -0.002 * var_chaste_interface__potassium_channel_n_gate__n * _lt_0_row[2] + 0.0001 * (1.0 - var_chaste_interface__potassium_channel_n_gate__n) * (-50.0 - var_chaste_interface__membrane__V) / (_lt_0_row[3]); // 1 / millisecond
+        const double d_dt_chaste_interface_var_potassium_channel_n_gate__n = (1.0 - var_chaste_interface__potassium_channel_n_gate__n) * _lt_0_row[2] - 0.002 * var_chaste_interface__potassium_channel_n_gate__n * _lt_0_row[3]; // 1 / millisecond
 
         return d_dt_chaste_interface_var_potassium_channel_n_gate__n;
     }
@@ -643,14 +692,19 @@ std::shared_ptr<Cellnoble_model_1962FromCellMLGRL2Opt_LookupTables> Cellnoble_mo
         const double* const _lt_0_row = Cellnoble_model_1962FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
             const double var_x1 = -var_chaste_interface__membrane__V;
-            const double var_x16 = -0.10000000000000001 * var_chaste_interface__membrane__V;
-            const double var_x28 = _lt_0_row[2];
-            const double var_x30 = exp(-5.0 + var_x16);
-            const double var_x31 = -1.0 + var_x30;
-            const double var_x32 = 0.0001 / var_x31;
-            const double var_x33 = -50.0 + var_x1;
+            const double var_x28 = -0.10000000000000001 * var_chaste_interface__membrane__V;
+            const double var_x41 = 1 / (-1.0 + exp(1.0000000000287557e-7));
+            const double var_x42 = 1 / (-1.0 + exp(-1.0000000000287557e-7));
+            const double var_x43 = _lt_0_row[3];
+            const double var_x45 = fabs(50.0 + var_chaste_interface__membrane__V) < 1.0000000000287557e-6;
+            const double var_x46 = exp(-5.0 + var_x28);
+            const double var_x47 = -1.0 + var_x46;
+            const double var_x48 = 0.0001 / var_x47;
+            const double var_x49 = -50.0 + var_x1;
+            const double var_x50 = 1.0000000000287557e-10 * var_x42;
+            const double var_x51 = -0.002 * var_x43;
             
-            partialF = -0.002 * var_x28 - var_x32 * var_x33;
+            partialF = ((var_x45) ? (var_x50 + var_x51 + 499999.99998562218 * (49.999999000000003 + var_chaste_interface__membrane__V) * (var_x50 + 1.0000000000287557e-10 * var_x41)) : (var_x51 - var_x48 * var_x49));
         }
         else
         {

@@ -113,8 +113,8 @@ protected:
 
         mKeyingVariableNames[0] = "membrane_voltage";
         mNumberOfTables[0] = 39;
-        mTableMins[0] = -250.0001;
-        mTableMaxs[0] = 549.9999;
+        mTableMins[0] = -250.0;
+        mTableMaxs[0] = 550.0;
         mTableSteps[0] = 0.001;
         mTableStepInverses[0] = 1000.0;
         mNeedsRegeneration[0] = true;
@@ -141,23 +141,49 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 1.0 + exp(5.9871794871794881 - 0.12820512820512822 * var_chaste_interface__cell__V);
-
+                double val = exp(-0.075369662812530269 * var_chaste_interface__cell__V);
+                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
+                //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
+                if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_0 && _lookup_table_0_num_misshit_piecewise[0] < 2){
+                    double left = _lookup_table_0[i-1][0];
+                    double right = _lookup_table_0[i+1][0];
+                    double new_val = (left + right) / 2.0;
+                    WARNING("Lookup table 0 at ["<<i<<"][0] has non-finite value: " << val << " being terpolated to: "<<new_val);
+                    val = new_val;
+                   // count and limit number of misshits
+                  _lookup_table_0_num_misshit_piecewise[0] +=1;
+                }
+                else if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[0] >= 2){
+                    EXCEPTION("Lookup table 0 at ["<<i<<"][0] has non-finite value: " << val);
+                }
                 _lookup_table_0[i][0] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = exp(-0.075369662812530269 * var_chaste_interface__cell__V);
-
+                double val = 1.0 - exp(-0.075369662812530269 * var_chaste_interface__cell__V);
+                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
+                //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
+                if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_0 && _lookup_table_0_num_misshit_piecewise[1] < 2){
+                    double left = _lookup_table_0[i-1][1];
+                    double right = _lookup_table_0[i+1][1];
+                    double new_val = (left + right) / 2.0;
+                    WARNING("Lookup table 1 at ["<<i<<"][1] has non-finite value: " << val << " being terpolated to: "<<new_val);
+                    val = new_val;
+                   // count and limit number of misshits
+                  _lookup_table_0_num_misshit_piecewise[1] +=1;
+                }
+                else if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[1] >= 2){
+                    EXCEPTION("Lookup table 1 at ["<<i<<"][1] has non-finite value: " << val);
+                }
                 _lookup_table_0[i][1] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 1.0 - exp(-0.075369662812530269 * var_chaste_interface__cell__V);
+                double val = 1.0 + exp(5.9871794871794881 - 0.12820512820512822 * var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][2] = val;
             }
@@ -213,7 +239,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / (1.0 + exp(4.024390243902439 + 0.12195121951219513 * var_chaste_interface__cell__V));
+                double val = exp(-0.038580246913580245 * pow((-1 + 0.20000000000000001 * var_chaste_interface__cell__V), 2));
 
                 _lookup_table_0[i][9] = val;
             }
@@ -221,7 +247,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.10000000000000001 / (1.0 + exp(6.666666666666667 - 0.16666666666666666 * var_chaste_interface__cell__V));
+                double val = 1 / (1.0 + exp(4.024390243902439 + 0.12195121951219513 * var_chaste_interface__cell__V));
 
                 _lookup_table_0[i][10] = val;
             }
@@ -229,7 +255,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 8.0 + 315.0 / (1.0 + exp(7.5 + 0.25 * var_chaste_interface__cell__V));
+                double val = 0.10000000000000001 / (1.0 + exp(6.666666666666667 - 0.16666666666666666 * var_chaste_interface__cell__V));
 
                 _lookup_table_0[i][11] = val;
             }
@@ -237,7 +263,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = exp(-0.038580246913580245 * pow((-1 + 0.20000000000000001 * var_chaste_interface__cell__V), 2));
+                double val = 8.0 + 315.0 / (1.0 + exp(7.5 + 0.25 * var_chaste_interface__cell__V));
 
                 _lookup_table_0[i][12] = val;
             }
@@ -389,15 +415,28 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = exp(-1.0069999999999999 - 0.037999999999999999 * var_chaste_interface__cell__V);
-
+                double val = ((fabs(26.5 + var_chaste_interface__cell__V) < 7.8124999999817923e-7) ? (3.7604140624912359e-12 / (1.0 - exp(-9.9999999999766942e-8)) - 640000.00000149151 * (26.499999218749998 + var_chaste_interface__cell__V) * (-3.7604140624912359e-12 / (1.0 - exp(9.9999999999766942e-8)) - 3.7604140624912359e-12 / (1.0 - exp(-9.9999999999766942e-8)))) : (4.8133299999999997e-6 * (26.5 + var_chaste_interface__cell__V) / (1.0 - exp(-3.3919999999999999 - 0.128 * var_chaste_interface__cell__V))));
+                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
+                //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
+                if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_0 && _lookup_table_0_num_misshit_piecewise[31] < 2){
+                    double left = _lookup_table_0[i-1][31];
+                    double right = _lookup_table_0[i+1][31];
+                    double new_val = (left + right) / 2.0;
+                    WARNING("Lookup table 31 at ["<<i<<"][31] has non-finite value: " << val << " being terpolated to: "<<new_val);
+                    val = new_val;
+                   // count and limit number of misshits
+                  _lookup_table_0_num_misshit_piecewise[31] +=1;
+                }
+                else if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[31] >= 2){
+                    EXCEPTION("Lookup table 31 at ["<<i<<"][31] has non-finite value: " << val);
+                }
                 _lookup_table_0[i][31] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 1.0 - exp(-3.3919999999999999 - 0.128 * var_chaste_interface__cell__V);
+                double val = exp(-1.0069999999999999 - 0.037999999999999999 * var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][32] = val;
             }
@@ -577,9 +616,9 @@ std::shared_ptr<Cellli_mouse_2010FromCellMLRushLarsenOpt_LookupTables> Cellli_mo
 
         const double var_calcium_concentration__Cai = 1000.0 * var_chaste_interface__calcium_concentration__Cai_converted; // micromolar
         const double var_calcium_pump_current__i_pCa = 0.095500000000000002 * pow(var_calcium_concentration__Cai, 2) / (0.083232249999999994 + pow(var_calcium_concentration__Cai, 2)); // picoA_per_picoF
-        const double var_calcium_activated_chloride_current__i_ClCa = 2.0 * (40.0 + var_chaste_interface__cell__V) * var_calcium_concentration__Cai / ((_lt_0_row[0]) * (10.0 + var_calcium_concentration__Cai)); // picoA_per_picoF
+        const double var_L_type_calcium_current__i_CaL_converted = HeartConfig::Instance()->GetCapacitance() * ((fabs(var_chaste_interface__cell__V) < 1.3267937823834197e-6) ? (-376848.31406265136 * (-1.3267937823834197e-6 + var_chaste_interface__cell__V) * (3.0621664503101105e-9 * (-var_chaste_interface__calcium_concentration__Cass + mParameters[1] * exp(9.9999999999999995e-8)) * var_chaste_interface__L_type_calcium_current__O * mParameters[4] * var_chaste_interface__L_type_calcium_current__y_gate / ((1.0 - exp(9.9999999999999995e-8)) * mParameters[5]) + 3.0621664503101105e-9 * (-var_chaste_interface__calcium_concentration__Cass + mParameters[1] * exp(-9.9999999999999995e-8)) * var_chaste_interface__L_type_calcium_current__O * mParameters[4] * var_chaste_interface__L_type_calcium_current__y_gate / ((1.0 - exp(-9.9999999999999995e-8)) * mParameters[5])) - 3.0621664503101105e-9 * (-var_chaste_interface__calcium_concentration__Cass + mParameters[1] * exp(-9.9999999999999995e-8)) * var_chaste_interface__L_type_calcium_current__O * mParameters[4] * var_chaste_interface__L_type_calcium_current__y_gate / ((1.0 - exp(-9.9999999999999995e-8)) * mParameters[5])) : (-0.0023079445283571576 * (-var_chaste_interface__calcium_concentration__Cass + mParameters[1] * _lt_0_row[0]) * var_chaste_interface__L_type_calcium_current__O * mParameters[4] * var_chaste_interface__L_type_calcium_current__y_gate * var_chaste_interface__cell__V / ((_lt_0_row[1]) * mParameters[5]))); // uA_per_cm2
+        const double var_calcium_activated_chloride_current__i_ClCa = 2.0 * (40.0 + var_chaste_interface__cell__V) * var_calcium_concentration__Cai / ((_lt_0_row[2]) * (10.0 + var_calcium_concentration__Cai)); // picoA_per_picoF
         const double var_calcium_background_current__i_Cab = 0.00069999999999999999 * var_chaste_interface__cell__V - 0.0092875564766839377 * log(mParameters[1] / var_calcium_concentration__Cai); // picoA_per_picoF
-        const double var_L_type_calcium_current__i_CaL_converted = -0.0023079445283571576 * (-var_chaste_interface__calcium_concentration__Cass + mParameters[1] * _lt_0_row[1]) * HeartConfig::Instance()->GetCapacitance() * var_chaste_interface__L_type_calcium_current__O * mParameters[4] * var_chaste_interface__L_type_calcium_current__y_gate * var_chaste_interface__cell__V / ((_lt_0_row[2]) * mParameters[5]); // uA_per_cm2
         const double var_fast_transient_outward_K_I__E_K = 26.535875647668394 * log(mParameters[2] / var_chaste_interface__potassium_concentration__Ki); // millivolt
         const double var_fast_transient_outward_K_I__i_Kto_f = 0.53469999999999995 * pow(var_chaste_interface__fast_transient_outward_K_I__ato_f, 3) * (-var_fast_transient_outward_K_I__E_K + var_chaste_interface__cell__V) * var_chaste_interface__fast_transient_outward_K_I__ito_f; // picoA_per_picoF
         const double var_non_inactivating_steady_state_K_I__i_Kss_converted = (-var_fast_transient_outward_K_I__E_K + var_chaste_interface__cell__V) * HeartConfig::Instance()->GetCapacitance() * var_chaste_interface__non_inactivating_steady_state_K_I__aKss * mParameters[8] * var_chaste_interface__non_inactivating_steady_state_K_I__iKss; // uA_per_cm2
@@ -736,23 +775,21 @@ std::shared_ptr<Cellli_mouse_2010FromCellMLRushLarsenOpt_LookupTables> Cellli_mo
         const double var_cell__R = 8.3140000000000001; // joule_per_mole_kelvin
         const double var_cell__T = 308.0; // kelvin
         const double var_calcium_background_current__E_CaN = 0.5 * var_cell__R * var_cell__T * log(mParameters[1] / var_calcium_concentration__Cai) / var_cell__F; // millivolt
-        const double var_L_type_calcium_current__FVRT = var_cell__F * var_chaste_interface__cell__V / (var_cell__R * var_cell__T); // dimensionless
-        const double var_L_type_calcium_current__FVRT_Ca = 2.0 * var_L_type_calcium_current__FVRT; // dimensionless
         const double var_L_type_calcium_current__expVL = exp((-var_L_type_calcium_current__V_L + var_chaste_interface__cell__V) / var_L_type_calcium_current__delta_V_L); // dimensionless
         const double var_L_type_calcium_current__alpha_p = var_L_type_calcium_current__expVL / ((1.0 + var_L_type_calcium_current__expVL) * var_L_type_calcium_current__t_L); // per_millisecond
         const double d_dt_chaste_interface_var_L_type_calcium_current__O = var_L_type_calcium_current__C * var_L_type_calcium_current__alpha_p - var_chaste_interface__L_type_calcium_current__O * var_L_type_calcium_current__alpha_m; // 1 / millisecond
         const double var_L_type_calcium_current__epsilon_m = (var_L_type_calcium_current__a + var_L_type_calcium_current__expVL) * var_L_type_calcium_current__b / ((var_L_type_calcium_current__b * var_L_type_calcium_current__expVL + var_L_type_calcium_current__a) * var_L_type_calcium_current__tau_L); // per_millisecond
         const double var_L_type_calcium_current__epsilon_p = (var_L_type_calcium_current__a + var_L_type_calcium_current__expVL) / ((1.0 + var_L_type_calcium_current__expVL) * var_L_type_calcium_current__K_L * var_L_type_calcium_current__tau_L); // per_micromolar_millisecond
         const double d_dt_chaste_interface_var_L_type_calcium_current__I = -var_chaste_interface__L_type_calcium_current__I * var_L_type_calcium_current__epsilon_m + var_L_type_calcium_current__C * var_L_type_calcium_current__epsilon_p * var_chaste_interface__calcium_concentration__Cass; // 1 / millisecond
-        const double var_L_type_calcium_current__y_gate_inf = 1 / (1.0 + exp((33.0 + var_chaste_interface__cell__V) / var_L_type_calcium_current__const5)) + _lt_0_row[10]; // dimensionless
+        const double var_L_type_calcium_current__i_CaL = ((fabs(var_chaste_interface__cell__V) < 1.3267937823834197e-6) ? (-376848.31406265136 * (-1.3267937823834197e-6 + var_chaste_interface__cell__V) * (3.0621664503101105e-9 * (-var_chaste_interface__calcium_concentration__Cass + mParameters[1] * exp(9.9999999999999995e-8)) * var_chaste_interface__L_type_calcium_current__O * mParameters[4] * var_chaste_interface__L_type_calcium_current__y_gate / ((1.0 - exp(9.9999999999999995e-8)) * mParameters[5]) + 3.0621664503101105e-9 * (-var_chaste_interface__calcium_concentration__Cass + mParameters[1] * exp(-9.9999999999999995e-8)) * var_chaste_interface__L_type_calcium_current__O * mParameters[4] * var_chaste_interface__L_type_calcium_current__y_gate / ((1.0 - exp(-9.9999999999999995e-8)) * mParameters[5])) - 3.0621664503101105e-9 * (-var_chaste_interface__calcium_concentration__Cass + mParameters[1] * exp(-9.9999999999999995e-8)) * var_chaste_interface__L_type_calcium_current__O * mParameters[4] * var_chaste_interface__L_type_calcium_current__y_gate / ((1.0 - exp(-9.9999999999999995e-8)) * mParameters[5])) : (-0.0023079445283571576 * (-var_chaste_interface__calcium_concentration__Cass + mParameters[1] * _lt_0_row[0]) * var_chaste_interface__L_type_calcium_current__O * mParameters[4] * var_chaste_interface__L_type_calcium_current__y_gate * var_chaste_interface__cell__V / ((_lt_0_row[1]) * mParameters[5]))); // picoA_per_picoF
+        const double d_dt_chaste_interface_var_calcium_fluxes__P_RyR = var_chaste_interface__calcium_fluxes__P_RyR * var_calcium_fluxes__P_ryr_const1 + var_L_type_calcium_current__i_CaL * var_calcium_fluxes__P_ryr_const2 * _lt_0_row[9] / var_L_type_calcium_current__i_CaL_max; // 1 / millisecond
+        const double var_L_type_calcium_current__y_gate_inf = 1 / (1.0 + exp((33.0 + var_chaste_interface__cell__V) / var_L_type_calcium_current__const5)) + _lt_0_row[11]; // dimensionless
         const double var_L_type_calcium_current__y_gate_tau = var_L_type_calcium_current__y_gate_tau_const2 / (1.0 + exp(7.5 + 0.25 * var_chaste_interface__cell__V)) + var_L_type_calcium_current__y_gate_tau_const1; // millisecond
         const double var_calcium_background_current__i_Cab = (-var_calcium_background_current__E_CaN + var_chaste_interface__cell__V) * var_calcium_background_current__g_Cab; // picoA_per_picoF
         const double var_cell__VJSR = 7.7000000000000001e-8; // microlitre
         const double var_cell__VNSR = 2.3099999999999999e-7; // microlitre
         const double var_cell__Vmyo = 2.1999999999999999e-5; // microlitre
         const double var_cell__Vss = 2.1999999999999998e-8; // microlitre
-        const double var_L_type_calcium_current__i_CaL = -2.0 * (-var_chaste_interface__calcium_concentration__Cass + mParameters[1] * exp(-var_L_type_calcium_current__FVRT_Ca)) * var_L_type_calcium_current__FVRT_Ca * var_chaste_interface__L_type_calcium_current__O * mParameters[4] * var_chaste_interface__L_type_calcium_current__y_gate * var_cell__F * var_cell__Vss / ((1.0 - exp(-var_L_type_calcium_current__FVRT_Ca)) * var_cell__Acap * mParameters[5]); // picoA_per_picoF
-        const double d_dt_chaste_interface_var_calcium_fluxes__P_RyR = var_chaste_interface__calcium_fluxes__P_RyR * var_calcium_fluxes__P_ryr_const1 + var_L_type_calcium_current__i_CaL * var_calcium_fluxes__P_ryr_const2 * _lt_0_row[12] / var_L_type_calcium_current__i_CaL_max; // 1 / millisecond
         const double var_cell__prepulses_number = 10000000000.0; // dimensionless
         const double var_chaste_interface__cell__stim_period = 333.33300000000003; // millisecond
         const double var_calcium_fluxes__J_leak = ((var_chaste_interface__environment__time < var_cell__prepulses_number * var_chaste_interface__cell__stim_period) ? ((-var_calcium_concentration__Cai + var_chaste_interface__calcium_concentration__CaNSR) * var_calcium_fluxes__v2) : ((-var_calcium_concentration__Cai + var_chaste_interface__calcium_concentration__CaNSR) * var_calcium_fluxes__v2_caff)); // micromolar_per_millisecond
@@ -819,8 +856,8 @@ std::shared_ptr<Cellli_mouse_2010FromCellMLRushLarsenOpt_LookupTables> Cellli_mo
         const double d_dt_chaste_interface_var_ryanodine_receptors__P_O2 = -var_chaste_interface__ryanodine_receptors__P_O2 * var_ryanodine_receptors__k_minus_b + pow(var_chaste_interface__calcium_concentration__Cass, var_ryanodine_receptors__m) * var_chaste_interface__ryanodine_receptors__P_O1 * var_ryanodine_receptors__k_plus_b; // 1 / millisecond
         const double var_ryanodine_receptors__n = 4.0; // dimensionless
         const double d_dt_chaste_interface_var_ryanodine_receptors__P_O1 = var_chaste_interface__ryanodine_receptors__P_C2 * var_ryanodine_receptors__k_minus_c + var_chaste_interface__ryanodine_receptors__P_O2 * var_ryanodine_receptors__k_minus_b - var_chaste_interface__ryanodine_receptors__P_O1 * var_ryanodine_receptors__k_minus_a - var_chaste_interface__ryanodine_receptors__P_O1 * var_ryanodine_receptors__k_plus_c + pow(var_chaste_interface__calcium_concentration__Cass, var_ryanodine_receptors__n) * var_ryanodine_receptors__P_C1 * var_ryanodine_receptors__k_plus_a - pow(var_chaste_interface__calcium_concentration__Cass, var_ryanodine_receptors__m) * var_chaste_interface__ryanodine_receptors__P_O1 * var_ryanodine_receptors__k_plus_b; // 1 / millisecond
-        const double var_slow_delayed_rectifier_K_I__alpha_n = 4.8133299999999997e-6 * (26.5 + var_chaste_interface__cell__V) / (_lt_0_row[32]); // per_millisecond
-        const double var_slow_delayed_rectifier_K_I__beta_n = 9.5333299999999997e-5 * _lt_0_row[31]; // per_millisecond
+        const double var_slow_delayed_rectifier_K_I__alpha_n = _lt_0_row[31]; // per_millisecond
+        const double var_slow_delayed_rectifier_K_I__beta_n = 9.5333299999999997e-5 * _lt_0_row[32]; // per_millisecond
         const double var_slow_delayed_rectifier_K_I__i_Ks = pow(var_chaste_interface__slow_delayed_rectifier_K_I__nKs, 2) * (-var_fast_transient_outward_K_I__E_K + var_chaste_interface__cell__V) * mParameters[10]; // picoA_per_picoF
         const double var_slow_transient_outward_K_I__g_Kto_s = 0; // milliS_per_microF
         const double var_slow_transient_outward_K_I__i_Kto_s = (-var_fast_transient_outward_K_I__E_K + var_chaste_interface__cell__V) * var_chaste_interface__slow_transient_outward_K_I__ato_s * var_slow_transient_outward_K_I__g_Kto_s * var_chaste_interface__slow_transient_outward_K_I__ito_s; // picoA_per_picoF
@@ -867,7 +904,7 @@ std::shared_ptr<Cellli_mouse_2010FromCellMLRushLarsenOpt_LookupTables> Cellli_mo
             const double var_calcium_activated_chloride_current__E_Cl = -40.0; // millivolt
             const double var_calcium_activated_chloride_current__Km_Cl = 10.0; // micromolar
             const double var_calcium_activated_chloride_current__g_ClCa = 10.0; // milliS_per_microF
-            const double var_calcium_activated_chloride_current__O_ClCa = 0.20000000000000001 / (_lt_0_row[0]); // dimensionless
+            const double var_calcium_activated_chloride_current__O_ClCa = 0.20000000000000001 / (_lt_0_row[2]); // dimensionless
             const double var_calcium_activated_chloride_current__i_ClCa = (-var_calcium_activated_chloride_current__E_Cl + var_chaste_interface__cell__V) * var_calcium_activated_chloride_current__O_ClCa * var_calcium_activated_chloride_current__g_ClCa * var_calcium_concentration__Cai / (var_calcium_activated_chloride_current__Km_Cl + var_calcium_concentration__Cai); // picoA_per_picoF
             d_dt_chaste_interface_var_cell__V = -var_L_type_calcium_current__i_CaL - var_calcium_activated_chloride_current__i_ClCa - var_calcium_background_current__i_Cab - var_calcium_pump_current__i_pCa - var_cell__i_Stim - var_fast_sodium_current__i_Na - var_fast_transient_outward_K_I__i_Kto_f - var_non_inactivating_steady_state_K_I__i_Kss - var_rapid_delayed_rectifier_K_I__i_Kr - var_slow_delayed_rectifier_K_I__i_Ks - var_slow_transient_outward_K_I__i_Kto_s - var_sodium_background_current__i_Nab - var_sodium_calcium_exchange_current__i_NCX - var_sodium_potassium_pump_current__i_NaK - var_time_independent_K_I__i_K1 - var_ultra_rapidly_activating_delayed_rectifier_K_I__i_Kur; // millivolt / millisecond
         }
@@ -1005,18 +1042,21 @@ std::shared_ptr<Cellli_mouse_2010FromCellMLRushLarsenOpt_LookupTables> Cellli_mo
         double var_chaste_interface__slow_delayed_rectifier_K_I__nKs = rY[31];
         // Units: dimensionless; Initial value: 0.00336735013094628
         
+        // Lookup table indexing
+        const bool _oob_0 = Cellli_mouse_2010FromCellMLRushLarsenOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellli_mouse_2010FromCellMLRushLarsenOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
 
         // Mathematics
         const double var_calcium_concentration__Cai = 1000.0 * var_chaste_interface__calcium_concentration__Cai_converted; // micromolar
         const double var_calcium_fluxes__v1_caff = 10.0; // per_millisecond
-        const double var_cell__Acap = 0.00013866; // cm2
         const double var_cell__F = 96.5; // coulomb_per_millimole
         const double var_cell__R = 8.3140000000000001; // joule_per_mole_kelvin
         const double var_cell__T = 308.0; // kelvin
-        const double var_L_type_calcium_current__FVRT = var_cell__F * var_chaste_interface__cell__V / (var_cell__R * var_cell__T); // dimensionless
-        const double var_L_type_calcium_current__FVRT_Ca = 2.0 * var_L_type_calcium_current__FVRT; // dimensionless
-        const double var_cell__Vss = 2.1999999999999998e-8; // microlitre
-        const double var_L_type_calcium_current__i_CaL = -2.0 * (-var_chaste_interface__calcium_concentration__Cass + mParameters[1] * exp(-var_L_type_calcium_current__FVRT_Ca)) * var_L_type_calcium_current__FVRT_Ca * var_chaste_interface__L_type_calcium_current__O * mParameters[4] * var_chaste_interface__L_type_calcium_current__y_gate * var_cell__F * var_cell__Vss / ((1.0 - exp(-var_L_type_calcium_current__FVRT_Ca)) * var_cell__Acap * mParameters[5]); // picoA_per_picoF
+        const double var_L_type_calcium_current__i_CaL = ((fabs(var_chaste_interface__cell__V) < 1.3267937823834197e-6) ? (-376848.31406265136 * (-1.3267937823834197e-6 + var_chaste_interface__cell__V) * (3.0621664503101105e-9 * (-var_chaste_interface__calcium_concentration__Cass + mParameters[1] * exp(9.9999999999999995e-8)) * var_chaste_interface__L_type_calcium_current__O * mParameters[4] * var_chaste_interface__L_type_calcium_current__y_gate / ((1.0 - exp(9.9999999999999995e-8)) * mParameters[5]) + 3.0621664503101105e-9 * (-var_chaste_interface__calcium_concentration__Cass + mParameters[1] * exp(-9.9999999999999995e-8)) * var_chaste_interface__L_type_calcium_current__O * mParameters[4] * var_chaste_interface__L_type_calcium_current__y_gate / ((1.0 - exp(-9.9999999999999995e-8)) * mParameters[5])) - 3.0621664503101105e-9 * (-var_chaste_interface__calcium_concentration__Cass + mParameters[1] * exp(-9.9999999999999995e-8)) * var_chaste_interface__L_type_calcium_current__O * mParameters[4] * var_chaste_interface__L_type_calcium_current__y_gate / ((1.0 - exp(-9.9999999999999995e-8)) * mParameters[5])) : (-0.0023079445283571576 * (-var_chaste_interface__calcium_concentration__Cass + mParameters[1] * _lt_0_row[0]) * var_chaste_interface__L_type_calcium_current__O * mParameters[4] * var_chaste_interface__L_type_calcium_current__y_gate * var_chaste_interface__cell__V / ((_lt_0_row[1]) * mParameters[5]))); // picoA_per_picoF
         const double var_L_type_calcium_current__i_CaL_converted = HeartConfig::Instance()->GetCapacitance() * var_L_type_calcium_current__i_CaL; // uA_per_cm2
         const double var_cell__prepulses_number = 10000000000.0; // dimensionless
         const double var_chaste_interface__cell__stim_period = 333.33300000000003; // millisecond

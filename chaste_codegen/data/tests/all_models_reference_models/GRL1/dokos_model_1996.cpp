@@ -355,12 +355,12 @@
         const double var_fast_sodium_current_h_gate__beta_h = 709.0 / (1.0 + 4.2000000000000002 * exp(-2.7239999999999998 - 0.059999999999999998 * var_chaste_interface__membrane__E)); // per_second
         const double var_fast_sodium_current_h_gate__h_orig_deriv = (1.0 - var_chaste_interface__fast_sodium_current_h_gate__h) * var_fast_sodium_current_h_gate__alpha_h - var_fast_sodium_current_h_gate__beta_h * var_chaste_interface__fast_sodium_current_h_gate__h; // 1 / second
         const double d_dt_chaste_interface_var_fast_sodium_current_h_gate__h = 0.001 * var_fast_sodium_current_h_gate__h_orig_deriv; // 1 / millisecond
-        const double var_fast_sodium_current_m_gate__alpha_m = 200.0 * (34.299999999999997 + var_chaste_interface__membrane__E) / (1.0 - exp(-3.0869999999999997 - 0.089999999999999997 * var_chaste_interface__membrane__E)); // per_second
+        const double var_fast_sodium_current_m_gate__alpha_m = ((fabs(34.299999999999997 + var_chaste_interface__membrane__E) < 1.1111111111183902e-6) ? (0.00022222222222367805 / (1.0 - exp(-1.0000000000065512e-7)) - 449999.99999705196 * (34.299998888888886 + var_chaste_interface__membrane__E) * (-0.00022222222222367805 / (1.0 - exp(1.0000000000065512e-7)) - 0.00022222222222367805 / (1.0 - exp(-1.0000000000065512e-7)))) : (200.0 * (34.299999999999997 + var_chaste_interface__membrane__E) / (1.0 - exp(-3.0869999999999997 - 0.089999999999999997 * var_chaste_interface__membrane__E)))); // per_second
         const double var_fast_sodium_current_m_gate__beta_m = 8000.0 * exp(-8.4299999999999997 - 0.14999999999999999 * var_chaste_interface__membrane__E); // per_second
         const double var_fast_sodium_current_m_gate__m_orig_deriv = (1.0 - var_chaste_interface__fast_sodium_current_m_gate__m) * var_fast_sodium_current_m_gate__alpha_m - var_fast_sodium_current_m_gate__beta_m * var_chaste_interface__fast_sodium_current_m_gate__m; // 1 / second
         const double d_dt_chaste_interface_var_fast_sodium_current_m_gate__m = 0.001 * var_fast_sodium_current_m_gate__m_orig_deriv; // 1 / millisecond
-        const double var_hyperpolarising_activated_current_y_gate__alpha_y = 0.35999999999999999 * (137.80000000000001 + var_chaste_interface__membrane__E) / (-1.0 + exp(9.0948000000000011 + 0.066000000000000003 * var_chaste_interface__membrane__E)); // per_second
-        const double var_hyperpolarising_activated_current_y_gate__beta_y = 0.10000000000000001 * (76.299999999999997 + var_chaste_interface__membrane__E) / (1.0 - exp(-16.023 - 0.20999999999999999 * var_chaste_interface__membrane__E)); // per_second
+        const double var_hyperpolarising_activated_current_y_gate__alpha_y = ((fabs(137.80000000000001 + var_chaste_interface__membrane__E) < 1.5151515151412553e-6) ? (-5.4545454545085189e-7 / (-1.0 + exp(-9.9999999999322859e-8)) + 330000.00000223459 * (137.80000151515154 + var_chaste_interface__membrane__E) * (5.4545454545085189e-7 / (-1.0 + exp(9.9999999999322859e-8)) + 5.4545454545085189e-7 / (-1.0 + exp(-9.9999999999322859e-8)))) : (0.35999999999999999 * (137.80000000000001 + var_chaste_interface__membrane__E) / (-1.0 + exp(9.0948000000000011 + 0.066000000000000003 * var_chaste_interface__membrane__E)))); // per_second
+        const double var_hyperpolarising_activated_current_y_gate__beta_y = ((fabs(76.299999999999997 + var_chaste_interface__membrane__E) < 4.761904762173863e-7) ? (4.7619047627289747e-8 / (1.0 - exp(-1.0000000001730847e-7)) - 1049999.9999406631 * (76.299999523809518 + var_chaste_interface__membrane__E) * (-4.7619047627289747e-8 / (1.0 - exp(-1.0000000001730847e-7)) - 4.7619047616187521e-8 / (1.0 - exp(9.9999999993993777e-8)))) : (0.10000000000000001 * (76.299999999999997 + var_chaste_interface__membrane__E) / (1.0 - exp(-16.023 - 0.20999999999999999 * var_chaste_interface__membrane__E)))); // per_second
         const double var_hyperpolarising_activated_current_y_gate__y_orig_deriv = (1.0 - var_chaste_interface__hyperpolarising_activated_current_y_gate__y) * var_hyperpolarising_activated_current_y_gate__alpha_y - var_hyperpolarising_activated_current_y_gate__beta_y * var_chaste_interface__hyperpolarising_activated_current_y_gate__y; // 1 / second
         const double d_dt_chaste_interface_var_hyperpolarising_activated_current_y_gate__y = 0.001 * var_hyperpolarising_activated_current_y_gate__y_orig_deriv; // 1 / millisecond
         const double var_reversal_potentials__E_Ca = 0.5 * var_constants__R * var_constants__T * log(var_chaste_interface__ion_concentrations__Cao / var_chaste_interface__ion_concentrations__Cai) / var_constants__F; // millivolt
@@ -1337,7 +1337,7 @@
         
 
         // Mathematics
-        const double var_fast_sodium_current_m_gate__alpha_m = 200.0 * (34.299999999999997 + var_chaste_interface__membrane__E) / (1.0 - exp(-3.0869999999999997 - 0.089999999999999997 * var_chaste_interface__membrane__E)); // per_second
+        const double var_fast_sodium_current_m_gate__alpha_m = ((fabs(34.299999999999997 + var_chaste_interface__membrane__E) < 1.1111111111183902e-6) ? (0.00022222222222367805 / (1.0 - exp(-1.0000000000065512e-7)) - 449999.99999705196 * (34.299998888888886 + var_chaste_interface__membrane__E) * (-0.00022222222222367805 / (1.0 - exp(1.0000000000065512e-7)) - 0.00022222222222367805 / (1.0 - exp(-1.0000000000065512e-7)))) : (200.0 * (34.299999999999997 + var_chaste_interface__membrane__E) / (1.0 - exp(-3.0869999999999997 - 0.089999999999999997 * var_chaste_interface__membrane__E)))); // per_second
         const double var_fast_sodium_current_m_gate__beta_m = 8000.0 * exp(-8.4299999999999997 - 0.14999999999999999 * var_chaste_interface__membrane__E); // per_second
         const double var_fast_sodium_current_m_gate__m_orig_deriv = (1.0 - var_chaste_interface__fast_sodium_current_m_gate__m) * var_fast_sodium_current_m_gate__alpha_m - var_fast_sodium_current_m_gate__beta_m * var_chaste_interface__fast_sodium_current_m_gate__m; // 1 / second
         const double d_dt_chaste_interface_var_fast_sodium_current_m_gate__m = 0.001 * var_fast_sodium_current_m_gate__m_orig_deriv; // 1 / millisecond
@@ -1354,13 +1354,17 @@
             // Units: millivolt; Initial value: -64.9
             
 
-            const double var_x257 = exp(-8.4299999999999997 - 0.14999999999999999 * var_chaste_interface__membrane__E);
-            const double var_x259 = exp(-3.0869999999999997 - 0.089999999999999997 * var_chaste_interface__membrane__E);
-            const double var_x260 = 1.0 - var_x259;
-            const double var_x261 = 0.20000000000000001 / var_x260;
-            const double var_x262 = 34.299999999999997 + var_chaste_interface__membrane__E;
+            const double var_x257 = 1 / (1.0 - exp(1.0000000000065512e-7));
+            const double var_x258 = 1 / (1.0 - exp(-1.0000000000065512e-7));
+            const double var_x259 = 34.299999999999997 + var_chaste_interface__membrane__E;
+            const double var_x260 = fabs(var_x259) < 1.1111111111183902e-6;
+            const double var_x261 = exp(-3.0869999999999997 - 0.089999999999999997 * var_chaste_interface__membrane__E);
+            const double var_x262 = 1.0 - var_x261;
+            const double var_x263 = 200.0 / var_x262;
+            const double var_x264 = exp(-8.4299999999999997 - 0.14999999999999999 * var_chaste_interface__membrane__E);
+            const double var_x265 = 0.00022222222222367805 * var_x258;
             
-            partialF = -8.0 * var_x257 - var_x261 * var_x262;
+            partialF = -8.0 * var_x264 - 0.001 * ((var_x260) ? (var_x265 - 449999.99999705196 * (34.299998888888886 + var_chaste_interface__membrane__E) * (-var_x265 - 0.00022222222222367805 * var_x257)) : (var_x259 * var_x263));
         }
         else
         {
@@ -1399,10 +1403,10 @@
             // Units: millivolt; Initial value: -64.9
             
 
-            const double var_x263 = exp(-13.076000000000002 - 0.14000000000000001 * var_chaste_interface__membrane__E);
-            const double var_x264 = exp(-2.7239999999999998 - 0.059999999999999998 * var_chaste_interface__membrane__E);
+            const double var_x266 = exp(-13.076000000000002 - 0.14000000000000001 * var_chaste_interface__membrane__E);
+            const double var_x267 = exp(-2.7239999999999998 - 0.059999999999999998 * var_chaste_interface__membrane__E);
             
-            partialF = -0.032399999999999998 * var_x263 - 0.70899999999999996 / (1.0 + 4.2000000000000002 * var_x264);
+            partialF = -0.032399999999999998 * var_x266 - 0.70899999999999996 / (1.0 + 4.2000000000000002 * var_x267);
         }
         else
         {
@@ -1441,10 +1445,10 @@
             // Units: millivolt; Initial value: -64.9
             
 
-            const double var_x265 = exp(0.039800000000000002 * var_chaste_interface__membrane__E);
-            const double var_x266 = exp(-0.050999999999999997 * var_chaste_interface__membrane__E);
+            const double var_x268 = exp(0.039800000000000002 * var_chaste_interface__membrane__E);
+            const double var_x269 = exp(-0.050999999999999997 * var_chaste_interface__membrane__E);
             
-            partialF = -0.00021100000000000001 * var_x266 - 0.017000000000000001 * var_x265;
+            partialF = -0.00021100000000000001 * var_x269 - 0.017000000000000001 * var_x268;
         }
         else
         {
@@ -1466,8 +1470,8 @@
         
 
         // Mathematics
-        const double var_hyperpolarising_activated_current_y_gate__alpha_y = 0.35999999999999999 * (137.80000000000001 + var_chaste_interface__membrane__E) / (-1.0 + exp(9.0948000000000011 + 0.066000000000000003 * var_chaste_interface__membrane__E)); // per_second
-        const double var_hyperpolarising_activated_current_y_gate__beta_y = 0.10000000000000001 * (76.299999999999997 + var_chaste_interface__membrane__E) / (1.0 - exp(-16.023 - 0.20999999999999999 * var_chaste_interface__membrane__E)); // per_second
+        const double var_hyperpolarising_activated_current_y_gate__alpha_y = ((fabs(137.80000000000001 + var_chaste_interface__membrane__E) < 1.5151515151412553e-6) ? (-5.4545454545085189e-7 / (-1.0 + exp(-9.9999999999322859e-8)) + 330000.00000223459 * (137.80000151515154 + var_chaste_interface__membrane__E) * (5.4545454545085189e-7 / (-1.0 + exp(9.9999999999322859e-8)) + 5.4545454545085189e-7 / (-1.0 + exp(-9.9999999999322859e-8)))) : (0.35999999999999999 * (137.80000000000001 + var_chaste_interface__membrane__E) / (-1.0 + exp(9.0948000000000011 + 0.066000000000000003 * var_chaste_interface__membrane__E)))); // per_second
+        const double var_hyperpolarising_activated_current_y_gate__beta_y = ((fabs(76.299999999999997 + var_chaste_interface__membrane__E) < 4.761904762173863e-7) ? (4.7619047627289747e-8 / (1.0 - exp(-1.0000000001730847e-7)) - 1049999.9999406631 * (76.299999523809518 + var_chaste_interface__membrane__E) * (-4.7619047627289747e-8 / (1.0 - exp(-1.0000000001730847e-7)) - 4.7619047616187521e-8 / (1.0 - exp(9.9999999993993777e-8)))) : (0.10000000000000001 * (76.299999999999997 + var_chaste_interface__membrane__E) / (1.0 - exp(-16.023 - 0.20999999999999999 * var_chaste_interface__membrane__E)))); // per_second
         const double var_hyperpolarising_activated_current_y_gate__y_orig_deriv = (1.0 - var_chaste_interface__hyperpolarising_activated_current_y_gate__y) * var_hyperpolarising_activated_current_y_gate__alpha_y - var_hyperpolarising_activated_current_y_gate__beta_y * var_chaste_interface__hyperpolarising_activated_current_y_gate__y; // 1 / second
         const double d_dt_chaste_interface_var_hyperpolarising_activated_current_y_gate__y = 0.001 * var_hyperpolarising_activated_current_y_gate__y_orig_deriv; // 1 / millisecond
 
@@ -1483,16 +1487,24 @@
             // Units: millivolt; Initial value: -64.9
             
 
-            const double var_x270 = exp(9.0948000000000011 + 0.066000000000000003 * var_chaste_interface__membrane__E);
-            const double var_x271 = -1.0 + var_x270;
-            const double var_x272 = 0.00035999999999999997 / var_x271;
-            const double var_x273 = exp(-16.023 - 0.20999999999999999 * var_chaste_interface__membrane__E);
-            const double var_x274 = 1.0 - var_x273;
-            const double var_x275 = 0.0001 / var_x274;
-            const double var_x276 = 76.299999999999997 + var_chaste_interface__membrane__E;
-            const double var_x277 = 137.80000000000001 + var_chaste_interface__membrane__E;
+            const double var_x273 = 1 / (-1.0 + exp(9.9999999999322859e-8));
+            const double var_x274 = 1 / (-1.0 + exp(-9.9999999999322859e-8));
+            const double var_x275 = 137.80000000000001 + var_chaste_interface__membrane__E;
+            const double var_x276 = fabs(var_x275) < 1.5151515151412553e-6;
+            const double var_x277 = exp(9.0948000000000011 + 0.066000000000000003 * var_chaste_interface__membrane__E);
+            const double var_x278 = -1.0 + var_x277;
+            const double var_x279 = 0.35999999999999999 / var_x278;
+            const double var_x280 = 1 / (1.0 - exp(9.9999999993993777e-8));
+            const double var_x281 = 1 / (1.0 - exp(-1.0000000001730847e-7));
+            const double var_x282 = 76.299999999999997 + var_chaste_interface__membrane__E;
+            const double var_x283 = fabs(var_x282) < 4.761904762173863e-7;
+            const double var_x284 = exp(-16.023 - 0.20999999999999999 * var_chaste_interface__membrane__E);
+            const double var_x285 = 1.0 - var_x284;
+            const double var_x286 = 0.10000000000000001 / var_x285;
+            const double var_x287 = 4.7619047627289747e-8 * var_x281;
+            const double var_x288 = 5.4545454545085189e-7 * var_x274;
             
-            partialF = -var_x272 * var_x277 - var_x275 * var_x276;
+            partialF = -0.001 * ((var_x283) ? (var_x287 - 1049999.9999406631 * (76.299999523809518 + var_chaste_interface__membrane__E) * (-var_x287 - 4.7619047616187521e-8 * var_x280)) : (var_x282 * var_x286)) - 0.001 * ((var_x276) ? (-var_x288 + 330000.00000223459 * (137.80000151515154 + var_chaste_interface__membrane__E) * (var_x288 + 5.4545454545085189e-7 * var_x273)) : (var_x275 * var_x279));
         }
         else
         {
@@ -1678,12 +1690,12 @@
             const double var_x163 = var_x27 * var_x55;
             const double var_x164 = -var_x157 - var_x158 - var_x159 - var_x149 * var_x71 - var_x153 * var_x162 - var_x153 * var_x163 - var_x154 * var_x71 - var_x155 * var_x161;
             const double var_x165 = 1 / var_chaste_interface__ion_concentrations__Cao;
-            const double var_x278 = 0.082914149192289482 * var_x74;
-            const double var_x279 = 3.5527883787404114e-5 * var_x90;
-            const double var_x280 = 0.011766915164383442 * var_x76;
-            const double var_x281 = 0.1384342960515699 * var_x100;
+            const double var_x289 = 0.082914149192289482 * var_x74;
+            const double var_x290 = 3.5527883787404114e-5 * var_x90;
+            const double var_x291 = 0.011766915164383442 * var_x76;
+            const double var_x292 = 0.1384342960515699 * var_x100;
             
-            partialF = -0.01 - var_x160 * var_x278 - var_x164 * var_x279 - var_x165 * var_x280 - var_x165 * var_x281;
+            partialF = -0.01 - var_x160 * var_x289 - var_x164 * var_x290 - var_x165 * var_x291 - var_x165 * var_x292;
         }
         else
         {
@@ -1994,15 +2006,15 @@
             const double var_x181 = 1.0 - 0.035938096628557313 * pow((-1 + 0.025000000000000001 * var_chaste_interface__membrane__E), 2);
             const double var_x182 = var_x103 * var_x106 * var_x181;
             const double var_x186 = var_x107 * var_x181 / pow((1 + 0.025000000000000001 * var_chaste_interface__ion_concentrations__Nai), 2);
-            const double var_x286 = 0.049748489515373688 * var_x74;
-            const double var_x287 = 2.131673027244247e-5 * var_x90;
-            const double var_x289 = 0.0001450997610865066 * var_x110;
-            const double var_x290 = var_x289 * var_chaste_interface__delayed_rectifying_potassium_current_x_gate__x;
-            const double var_x291 = 0.11074743684125593 * var_x80;
-            const double var_x292 = 0.0028107896576186134 * var_x182;
-            const double var_x293 = 0.11074743684125593 * var_x98;
+            const double var_x297 = 0.049748489515373688 * var_x74;
+            const double var_x298 = 2.131673027244247e-5 * var_x90;
+            const double var_x300 = 0.0001450997610865066 * var_x110;
+            const double var_x301 = var_x300 * var_chaste_interface__delayed_rectifying_potassium_current_x_gate__x;
+            const double var_x302 = 0.11074743684125593 * var_x80;
+            const double var_x303 = 0.0028107896576186134 * var_x182;
+            const double var_x304 = 0.11074743684125593 * var_x98;
             
-            partialF = -var_x290 + 1.7567435360116334e-6 * var_x186 - 2.6579384841901423e-5 * var_x136 - var_x136 * var_x291 - var_x136 * var_x293 - var_x178 * var_x286 - var_x180 * var_x287 - var_x292 * var_chaste_interface__ion_concentrations__Ko;
+            partialF = -var_x301 + 1.7567435360116334e-6 * var_x186 - 2.6579384841901423e-5 * var_x136 - var_x136 * var_x302 - var_x136 * var_x304 - var_x178 * var_x297 - var_x180 * var_x298 - var_x303 * var_chaste_interface__ion_concentrations__Ko;
         }
         else
         {
@@ -2206,14 +2218,14 @@
             const double var_x200 = var_x33 - var_x197;
             const double var_x201 = var_x194 * var_x73 - var_x27 * (var_x188 + var_x196 + var_x199 - var_x198) + 13.188418985520435 * var_x18 * var_x200 * var_x50 * var_x59;
             const double var_x202 = var_x198 - var_x188 - var_x196 - var_x199 + var_x197 * var_x67 - var_x161 * var_x195 - var_x162 * var_x191 - var_x162 * var_x193 - var_x163 * var_x191 - var_x163 * var_x193 - var_x194 * var_x71 - var_x33 * var_x67 - var_x11 * var_x200 * var_x49 - var_x200 * var_x27 * var_x32;
-            const double var_x295 = 0.24874244757686842 * var_x74;
-            const double var_x296 = 0.00010658365136221236 * var_x90;
-            const double var_x298 = 0.00072549880543253294 * var_x110;
-            const double var_x299 = var_x298 * var_chaste_interface__delayed_rectifying_potassium_current_x_gate__x;
-            const double var_x300 = 0.5537371842062796 * var_x80;
-            const double var_x302 = 0.5537371842062796 * var_x98;
+            const double var_x306 = 0.24874244757686842 * var_x74;
+            const double var_x307 = 0.00010658365136221236 * var_x90;
+            const double var_x309 = 0.00072549880543253294 * var_x110;
+            const double var_x310 = var_x309 * var_chaste_interface__delayed_rectifying_potassium_current_x_gate__x;
+            const double var_x311 = 0.5537371842062796 * var_x80;
+            const double var_x313 = 0.5537371842062796 * var_x98;
             
-            partialF = -0.01 - 0.0001328969242095071 * var_x187 + var_x201 * var_x295 + var_x202 * var_x296 - var_x187 * var_x300 - var_x187 * var_x302 - var_x299 * var_x77;
+            partialF = -0.01 - 0.0001328969242095071 * var_x187 + var_x201 * var_x306 + var_x202 * var_x307 - var_x187 * var_x311 - var_x187 * var_x313 - var_x310 * var_x77;
         }
         else
         {
@@ -2287,11 +2299,11 @@
             const double var_x144 = 1 / var_chaste_interface__ion_concentrations__Ki;
             const double var_x203 = pow(var_chaste_interface__ion_concentrations__Ko, 0.40999999999999998);
             const double var_x206 = var_x144 * var_x96;
-            const double var_x304 = 0.0041457074596144743 * var_x110;
-            const double var_x306 = 2.9019952217301315e-7 * var_x203;
-            const double var_x307 = var_x304 * var_chaste_interface__delayed_rectifying_potassium_current_x_gate__x;
+            const double var_x315 = 0.0041457074596144743 * var_x110;
+            const double var_x317 = 2.9019952217301315e-7 * var_x203;
+            const double var_x318 = var_x315 * var_chaste_interface__delayed_rectifying_potassium_current_x_gate__x;
             
-            partialF = -var_x306 - var_x307 - 0.11074743684125593 * var_x206;
+            partialF = -var_x317 - var_x318 - 0.11074743684125593 * var_x206;
         }
         else
         {
@@ -2387,14 +2399,14 @@
             const double var_x216 = var_x181 * var_chaste_interface__ion_concentrations__Ko * var_chaste_interface__ion_concentrations__Nai / pow(var_x105, 2);
             const double var_x217 = pow(var_chaste_interface__ion_concentrations__Ko, 2.6600000000000001) / pow((1 + 0.014012250051496243 * var_x92), 2);
             const double var_x219 = var_x145 * var_x95;
-            const double var_x308 = var_x217 * var_x219;
-            const double var_x309 = 0.0093692988587287113 * var_x103;
-            const double var_x310 = 0.020728537298072371 * var_x110;
-            const double var_x311 = 0.0093692988587287113 * var_x182;
-            const double var_x312 = 1.4509976108650656e-6 * var_x203;
-            const double var_x313 = var_x310 * var_chaste_interface__delayed_rectifying_potassium_current_x_gate__x;
+            const double var_x319 = var_x217 * var_x219;
+            const double var_x320 = 0.0093692988587287113 * var_x103;
+            const double var_x321 = 0.020728537298072371 * var_x110;
+            const double var_x322 = 0.0093692988587287113 * var_x182;
+            const double var_x323 = 1.4509976108650656e-6 * var_x203;
+            const double var_x324 = var_x321 * var_chaste_interface__delayed_rectifying_potassium_current_x_gate__x;
             
-            partialF = -0.01 + 0.037933223255472437 * var_x213 + 5.9490902045467693e-7 * var_x207 + 0.012229837005862698 * var_x209 - 7.4479286007471168e-6 * var_x308 - 0.5537371842062796 * var_x212 + var_x216 * var_x309 - var_x311 * var_chaste_interface__ion_concentrations__Nai - var_x312 * var_x77 - var_x313 * var_x77;
+            partialF = -0.01 + 0.037933223255472437 * var_x213 + 5.9490902045467693e-7 * var_x207 + 0.012229837005862698 * var_x209 - 7.4479286007471168e-6 * var_x319 - 0.5537371842062796 * var_x212 + var_x216 * var_x320 - var_x322 * var_chaste_interface__ion_concentrations__Nai - var_x323 * var_x77 - var_x324 * var_x77;
         }
         else
         {

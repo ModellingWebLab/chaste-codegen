@@ -114,8 +114,8 @@ protected:
 
         mKeyingVariableNames[0] = "membrane_voltage";
         mNumberOfTables[0] = 22;
-        mTableMins[0] = -250.0001;
-        mTableMaxs[0] = 549.9999;
+        mTableMins[0] = -250.0;
+        mTableMaxs[0] = 550.0;
         mTableSteps[0] = 0.001;
         mTableStepInverses[0] = 1000.0;
         mNeedsRegeneration[0] = true;
@@ -254,15 +254,28 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                double val = exp(-0.090909090909090912 * var_chaste_interface__membrane__V);
-
+                double val = ((fabs(47.130000000000003 + var_chaste_interface__membrane__V) < 1.0000000000287557e-6) ? (3.200000000092018e-7 / (1.0 - exp(-1.0000000000287557e-7)) - 499999.99998562218 * (47.129999000000005 + var_chaste_interface__membrane__V) * (-3.200000000092018e-7 / (1.0 - exp(1.0000000000287557e-7)) - 3.200000000092018e-7 / (1.0 - exp(-1.0000000000287557e-7)))) : (0.32000000000000001 * (47.130000000000003 + var_chaste_interface__membrane__V) / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__membrane__V))));
+                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
+                //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
+                if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_0 && _lookup_table_0_num_misshit_piecewise[14] < 2){
+                    double left = _lookup_table_0[i-1][14];
+                    double right = _lookup_table_0[i+1][14];
+                    double new_val = (left + right) / 2.0;
+                    WARNING("Lookup table 14 at ["<<i<<"][14] has non-finite value: " << val << " being terpolated to: "<<new_val);
+                    val = new_val;
+                   // count and limit number of misshits
+                  _lookup_table_0_num_misshit_piecewise[14] +=1;
+                }
+                else if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[14] >= 2){
+                    EXCEPTION("Lookup table 14 at ["<<i<<"][14] has non-finite value: " << val);
+                }
                 _lookup_table_0[i][14] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__membrane__V);
+                double val = exp(-0.090909090909090912 * var_chaste_interface__membrane__V);
 
                 _lookup_table_0[i][15] = val;
             }
@@ -499,8 +512,8 @@ std::shared_ptr<Cellbernus_wilders_zemlin_verschelde_panfilov_2002FromCellMLBack
         const double var_delayed_rectifier_potassium_current_X_gate__X_infinity = _lt_0_row[12];
         const double var_delayed_rectifier_potassium_current_X_gate__tau_X_a = 40.0 - 40.0 * tanh(160.0 + 2.0 * var_chaste_interface__membrane__V);
         const double var_delayed_rectifier_potassium_current_X_gate__tau_X = 182.0 + 240.0 * exp(-4.1682692307692308 * pow((1 + 0.039215686274509803 * var_chaste_interface__membrane__V), 2)) + 182.0 * tanh(0.154 + 0.011599999999999999 * var_chaste_interface__membrane__V) + var_delayed_rectifier_potassium_current_X_gate__tau_X_a;
-        const double var_sodium_current_m_gate__alpha_m = 0.32000000000000001 * (47.130000000000003 + var_chaste_interface__membrane__V) / (_lt_0_row[15]);
-        const double var_sodium_current_m_gate__beta_m = 0.080000000000000002 * _lt_0_row[14];
+        const double var_sodium_current_m_gate__alpha_m = _lt_0_row[14];
+        const double var_sodium_current_m_gate__beta_m = 0.080000000000000002 * _lt_0_row[15];
         const double var_sodium_current_v_gate__tau_v = _lt_0_row[17];
         const double var_sodium_current_v_gate__v_infinity = 0.5 + _lt_0_row[16];
         const double var_transient_outward_current_to_gate__alpha_to = (_lt_0_row[19]) / (_lt_0_row[18]);

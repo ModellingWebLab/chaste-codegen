@@ -114,8 +114,8 @@ protected:
 
         mKeyingVariableNames[0] = "membrane_voltage";
         mNumberOfTables[0] = 28;
-        mTableMins[0] = -250.0001;
-        mTableMaxs[0] = 549.9999;
+        mTableMins[0] = -250.0;
+        mTableMaxs[0] = 550.0;
         mTableSteps[0] = 0.001;
         mTableStepInverses[0] = 1000.0;
         mNeedsRegeneration[0] = true;
@@ -143,7 +143,20 @@ protected:
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = exp(0.074867781645490947 * var_chaste_interface__membrane__V);
-
+                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
+                //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
+                if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_0 && _lookup_table_0_num_misshit_piecewise[0] < 2){
+                    double left = _lookup_table_0[i-1][0];
+                    double right = _lookup_table_0[i+1][0];
+                    double new_val = (left + right) / 2.0;
+                    WARNING("Lookup table 0 at ["<<i<<"][0] has non-finite value: " << val << " being terpolated to: "<<new_val);
+                    val = new_val;
+                   // count and limit number of misshits
+                  _lookup_table_0_num_misshit_piecewise[0] +=1;
+                }
+                else if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[0] >= 2){
+                    EXCEPTION("Lookup table 0 at ["<<i<<"][0] has non-finite value: " << val);
+                }
                 _lookup_table_0[i][0] = val;
             }
 
@@ -151,7 +164,20 @@ protected:
             {
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = -1.0 + exp(0.074867781645490947 * var_chaste_interface__membrane__V);
-
+                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
+                //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
+                if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_0 && _lookup_table_0_num_misshit_piecewise[1] < 2){
+                    double left = _lookup_table_0[i-1][1];
+                    double right = _lookup_table_0[i+1][1];
+                    double new_val = (left + right) / 2.0;
+                    WARNING("Lookup table 1 at ["<<i<<"][1] has non-finite value: " << val << " being terpolated to: "<<new_val);
+                    val = new_val;
+                   // count and limit number of misshits
+                  _lookup_table_0_num_misshit_piecewise[1] +=1;
+                }
+                else if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[1] >= 2){
+                    EXCEPTION("Lookup table 1 at ["<<i<<"][1] has non-finite value: " << val);
+                }
                 _lookup_table_0[i][1] = val;
             }
 
@@ -511,7 +537,7 @@ std::shared_ptr<Cellten_tusscher_model_2004_MFromCellMLCvodeDataClampOpt_LookupT
         const double* const _lt_0_row = Cellten_tusscher_model_2004_MFromCellMLCvodeDataClampOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         const double var_calcium_pump_current__i_p_Ca_converted = HeartConfig::Instance()->GetCapacitance() * var_chaste_interface__calcium_dynamics__Ca_i * NV_Ith_S(mParameters, 11) / (0.00050000000000000001 + var_chaste_interface__calcium_dynamics__Ca_i); // uA_per_cm2
-        const double var_L_type_Ca_current__i_CaL_converted = 14447.286958825251 * (-0.34100000000000003 * NV_Ith_S(mParameters, 4) + var_chaste_interface__calcium_dynamics__Ca_i * _lt_0_row[0]) * HeartConfig::Instance()->GetCapacitance() * NV_Ith_S(mParameters, 7) * var_chaste_interface__L_type_Ca_current_d_gate__d * var_chaste_interface__L_type_Ca_current_fCa_gate__fCa * var_chaste_interface__L_type_Ca_current_f_gate__f * var_chaste_interface__membrane__V / (_lt_0_row[1]); // uA_per_cm2
+        const double var_L_type_Ca_current__i_CaL_converted = HeartConfig::Instance()->GetCapacitance() * ((fabs(var_chaste_interface__membrane__V) < 1.3356880329847825e-6) ? (374338.90822745475 * (1.3356880329847825e-6 + var_chaste_interface__membrane__V) * (0.019297068299999998 * (-0.34100000000000003 * NV_Ith_S(mParameters, 4) + var_chaste_interface__calcium_dynamics__Ca_i * exp(9.9999999999999995e-8)) * NV_Ith_S(mParameters, 7) * var_chaste_interface__L_type_Ca_current_d_gate__d * var_chaste_interface__L_type_Ca_current_fCa_gate__fCa * var_chaste_interface__L_type_Ca_current_f_gate__f / (-1.0 + exp(9.9999999999999995e-8)) + 0.019297068299999998 * (-0.34100000000000003 * NV_Ith_S(mParameters, 4) + var_chaste_interface__calcium_dynamics__Ca_i * exp(-9.9999999999999995e-8)) * NV_Ith_S(mParameters, 7) * var_chaste_interface__L_type_Ca_current_d_gate__d * var_chaste_interface__L_type_Ca_current_fCa_gate__fCa * var_chaste_interface__L_type_Ca_current_f_gate__f / (-1.0 + exp(-9.9999999999999995e-8))) - 0.019297068299999998 * (-0.34100000000000003 * NV_Ith_S(mParameters, 4) + var_chaste_interface__calcium_dynamics__Ca_i * exp(-9.9999999999999995e-8)) * NV_Ith_S(mParameters, 7) * var_chaste_interface__L_type_Ca_current_d_gate__d * var_chaste_interface__L_type_Ca_current_fCa_gate__fCa * var_chaste_interface__L_type_Ca_current_f_gate__f / (-1.0 + exp(-9.9999999999999995e-8))) : (14447.286958825251 * (-0.34100000000000003 * NV_Ith_S(mParameters, 4) + var_chaste_interface__calcium_dynamics__Ca_i * _lt_0_row[0]) * NV_Ith_S(mParameters, 7) * var_chaste_interface__L_type_Ca_current_d_gate__d * var_chaste_interface__L_type_Ca_current_fCa_gate__fCa * var_chaste_interface__L_type_Ca_current_f_gate__f * var_chaste_interface__membrane__V / (_lt_0_row[1]))); // uA_per_cm2
         const double var_calcium_background_current__i_b_Ca_converted = (-13.356880329847826 * log(NV_Ith_S(mParameters, 4) / var_chaste_interface__calcium_dynamics__Ca_i) + var_chaste_interface__membrane__V) * HeartConfig::Instance()->GetCapacitance() * NV_Ith_S(mParameters, 9); // uA_per_cm2
         const double var_reversal_potentials__E_K = 26.713760659695652 * log(NV_Ith_S(mParameters, 5) / var_chaste_interface__potassium_dynamics__K_i); // millivolt
         const double var_inward_rectifier_potassium_current__i_K1_converted = 0.043033148291193521 * sqrt(NV_Ith_S(mParameters, 5)) * (-var_reversal_potentials__E_K + var_chaste_interface__membrane__V) * HeartConfig::Instance()->GetCapacitance() * NV_Ith_S(mParameters, 17) / ((1.0 + exp(-12.0 + 0.059999999999999998 * var_chaste_interface__membrane__V - 0.059999999999999998 * var_reversal_potentials__E_K)) * (0.10000000000000001 / (1.0 + exp(-12.0 + 0.059999999999999998 * var_chaste_interface__membrane__V - 0.059999999999999998 * var_reversal_potentials__E_K)) + (3.0 * exp(0.02 + 0.00020000000000000001 * var_chaste_interface__membrane__V - 0.00020000000000000001 * var_reversal_potentials__E_K) + exp(-1.0 + 0.10000000000000001 * var_chaste_interface__membrane__V - 0.10000000000000001 * var_reversal_potentials__E_K)) / (1.0 + exp(0.5 * var_reversal_potentials__E_K - 0.5 * var_chaste_interface__membrane__V)))); // uA_per_cm2
@@ -592,7 +618,7 @@ std::shared_ptr<Cellten_tusscher_model_2004_MFromCellMLCvodeDataClampOpt_LookupT
         const double var_calcium_pump_current__i_p_Ca = var_chaste_interface__calcium_dynamics__Ca_i * NV_Ith_S(mParameters, 11) / (0.00050000000000000001 + var_chaste_interface__calcium_dynamics__Ca_i); // picoA_per_picoF
         const double d_dt_chaste_interface_var_L_type_Ca_current_fCa_gate__fCa = (((var_chaste_interface__membrane__V > -60.0) && (var_chaste_interface__L_type_Ca_current_fCa_gate__fCa < var_L_type_Ca_current_fCa_gate__fCa_inf)) ? (0) : ((-var_chaste_interface__L_type_Ca_current_fCa_gate__fCa + var_L_type_Ca_current_fCa_gate__fCa_inf) / NV_Ith_S(mParameters, 8))); // 1 / millisecond
         const double d_dt_chaste_interface_var_calcium_dynamics__g = (((var_chaste_interface__membrane__V > -60.0) && (var_chaste_interface__calcium_dynamics__g < var_calcium_dynamics__g_inf)) ? (0) : (0.5 * var_calcium_dynamics__g_inf - 0.5 * var_chaste_interface__calcium_dynamics__g)); // 1 / millisecond
-        const double var_L_type_Ca_current__i_CaL = 14447.286958825251 * (-0.34100000000000003 * NV_Ith_S(mParameters, 4) + var_chaste_interface__calcium_dynamics__Ca_i * _lt_0_row[0]) * NV_Ith_S(mParameters, 7) * var_chaste_interface__L_type_Ca_current_d_gate__d * var_chaste_interface__L_type_Ca_current_fCa_gate__fCa * var_chaste_interface__L_type_Ca_current_f_gate__f * var_chaste_interface__membrane__V / (_lt_0_row[1]); // picoA_per_picoF
+        const double var_L_type_Ca_current__i_CaL = ((fabs(var_chaste_interface__membrane__V) < 1.3356880329847825e-6) ? (374338.90822745475 * (1.3356880329847825e-6 + var_chaste_interface__membrane__V) * (0.019297068299999998 * (-0.34100000000000003 * NV_Ith_S(mParameters, 4) + var_chaste_interface__calcium_dynamics__Ca_i * exp(9.9999999999999995e-8)) * NV_Ith_S(mParameters, 7) * var_chaste_interface__L_type_Ca_current_d_gate__d * var_chaste_interface__L_type_Ca_current_fCa_gate__fCa * var_chaste_interface__L_type_Ca_current_f_gate__f / (-1.0 + exp(9.9999999999999995e-8)) + 0.019297068299999998 * (-0.34100000000000003 * NV_Ith_S(mParameters, 4) + var_chaste_interface__calcium_dynamics__Ca_i * exp(-9.9999999999999995e-8)) * NV_Ith_S(mParameters, 7) * var_chaste_interface__L_type_Ca_current_d_gate__d * var_chaste_interface__L_type_Ca_current_fCa_gate__fCa * var_chaste_interface__L_type_Ca_current_f_gate__f / (-1.0 + exp(-9.9999999999999995e-8))) - 0.019297068299999998 * (-0.34100000000000003 * NV_Ith_S(mParameters, 4) + var_chaste_interface__calcium_dynamics__Ca_i * exp(-9.9999999999999995e-8)) * NV_Ith_S(mParameters, 7) * var_chaste_interface__L_type_Ca_current_d_gate__d * var_chaste_interface__L_type_Ca_current_fCa_gate__fCa * var_chaste_interface__L_type_Ca_current_f_gate__f / (-1.0 + exp(-9.9999999999999995e-8))) : (14447.286958825251 * (-0.34100000000000003 * NV_Ith_S(mParameters, 4) + var_chaste_interface__calcium_dynamics__Ca_i * _lt_0_row[0]) * NV_Ith_S(mParameters, 7) * var_chaste_interface__L_type_Ca_current_d_gate__d * var_chaste_interface__L_type_Ca_current_fCa_gate__fCa * var_chaste_interface__L_type_Ca_current_f_gate__f * var_chaste_interface__membrane__V / (_lt_0_row[1]))); // picoA_per_picoF
         const double d_dt_chaste_interface_var_L_type_Ca_current_d_gate__d = (-var_chaste_interface__L_type_Ca_current_d_gate__d + _lt_0_row[7]) / (_lt_0_row[8]); // 1 / millisecond
         const double d_dt_chaste_interface_var_L_type_Ca_current_f_gate__f = (-var_chaste_interface__L_type_Ca_current_f_gate__f + _lt_0_row[9]) / (_lt_0_row[10]); // 1 / millisecond
         const double d_dt_chaste_interface_var_fast_sodium_current_h_gate__h = (_lt_0_row[11]) * (-var_chaste_interface__fast_sodium_current_h_gate__h + 0.01 * NV_Ith_S(mParameters, 15) + (1.0 - 0.01 * NV_Ith_S(mParameters, 15)) / pow((1.0 + exp(9.6298788694481825 + 0.13458950201884254 * var_chaste_interface__membrane__V - 0.13458950201884254 * NV_Ith_S(mParameters, 16))), 2)); // 1 / millisecond
@@ -706,7 +732,7 @@ std::shared_ptr<Cellten_tusscher_model_2004_MFromCellMLCvodeDataClampOpt_LookupT
         const double var_membrane__F = 96485.341499999995; // coulomb_per_millimole
         const double var_membrane__R = 8314.4719999999998; // joule_per_mole_kelvin
         const double var_membrane__T = 310.0; // kelvin
-        const double var_L_type_Ca_current__i_CaL = 4.0 * pow(var_membrane__F, 2) * (-0.34100000000000003 * NV_Ith_S(mParameters, 4) + var_chaste_interface__calcium_dynamics__Ca_i * exp(2.0 * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * NV_Ith_S(mParameters, 7) * var_chaste_interface__L_type_Ca_current_d_gate__d * var_chaste_interface__L_type_Ca_current_fCa_gate__fCa * var_chaste_interface__L_type_Ca_current_f_gate__f * var_chaste_interface__membrane__V / ((-1.0 + exp(2.0 * var_membrane__F * var_chaste_interface__membrane__V / (var_membrane__R * var_membrane__T))) * var_membrane__R * var_membrane__T); // picoA_per_picoF
+        const double var_L_type_Ca_current__i_CaL = ((fabs(var_chaste_interface__membrane__V) < 1.3356880329847825e-6) ? (374338.90822745475 * (1.3356880329847825e-6 + var_chaste_interface__membrane__V) * (0.019297068299999998 * (-0.34100000000000003 * NV_Ith_S(mParameters, 4) + var_chaste_interface__calcium_dynamics__Ca_i * exp(9.9999999999999995e-8)) * NV_Ith_S(mParameters, 7) * var_chaste_interface__L_type_Ca_current_d_gate__d * var_chaste_interface__L_type_Ca_current_fCa_gate__fCa * var_chaste_interface__L_type_Ca_current_f_gate__f / (-1.0 + exp(9.9999999999999995e-8)) + 0.019297068299999998 * (-0.34100000000000003 * NV_Ith_S(mParameters, 4) + var_chaste_interface__calcium_dynamics__Ca_i * exp(-9.9999999999999995e-8)) * NV_Ith_S(mParameters, 7) * var_chaste_interface__L_type_Ca_current_d_gate__d * var_chaste_interface__L_type_Ca_current_fCa_gate__fCa * var_chaste_interface__L_type_Ca_current_f_gate__f / (-1.0 + exp(-9.9999999999999995e-8))) - 0.019297068299999998 * (-0.34100000000000003 * NV_Ith_S(mParameters, 4) + var_chaste_interface__calcium_dynamics__Ca_i * exp(-9.9999999999999995e-8)) * NV_Ith_S(mParameters, 7) * var_chaste_interface__L_type_Ca_current_d_gate__d * var_chaste_interface__L_type_Ca_current_fCa_gate__fCa * var_chaste_interface__L_type_Ca_current_f_gate__f / (-1.0 + exp(-9.9999999999999995e-8))) : (14447.286958825251 * (-0.34100000000000003 * NV_Ith_S(mParameters, 4) + var_chaste_interface__calcium_dynamics__Ca_i * _lt_0_row[0]) * NV_Ith_S(mParameters, 7) * var_chaste_interface__L_type_Ca_current_d_gate__d * var_chaste_interface__L_type_Ca_current_fCa_gate__fCa * var_chaste_interface__L_type_Ca_current_f_gate__f * var_chaste_interface__membrane__V / (_lt_0_row[1]))); // picoA_per_picoF
         const double var_L_type_Ca_current__i_CaL_converted = HeartConfig::Instance()->GetCapacitance() * var_L_type_Ca_current__i_CaL; // uA_per_cm2
         const double var_L_type_Ca_current_f_gate__tau_f = _lt_0_row[10]; // millisecond
         const double var_fast_sodium_current_h_gate__alpha_h = ((var_chaste_interface__membrane__V < -40.0) ? (0.057000000000000002 * exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__membrane__V)) : (0)); // per_millisecond

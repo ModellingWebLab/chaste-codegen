@@ -90,7 +90,7 @@
         const double var_I_Kir__OKir = 1 / (var_I_Kir__aKir + exp((-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * var_I_Kir__bKir * var_model_parameters__F / (var_model_parameters__R * mParameters[6]))); // dimensionless
         const double var_I_Kir__I_Kir = 0.031622776601683791 * sqrt(mParameters[1]) * (-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * mParameters[4] * var_I_Kir__OKir; // nanoampere
         const double var_I_Kir__I_Kir_converted = 0.001 * HeartConfig::Instance()->GetCapacitance() * var_I_Kir__I_Kir / mParameters[2]; // uA_per_cm2
-        const double var_I_Shkr__I_Shkr = pow(var_model_parameters__F, 2) * (-mParameters[1] * exp(-var_chaste_interface__membrane__Vm * var_model_parameters__F / (var_model_parameters__R * mParameters[6])) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] * var_chaste_interface__membrane__Vm / ((1.0 - exp(-var_chaste_interface__membrane__Vm * var_model_parameters__F / (var_model_parameters__R * mParameters[6]))) * var_model_parameters__R * mParameters[6]); // nanoampere
+        const double var_I_Shkr__I_Shkr = ((fabs(var_chaste_interface__membrane__Vm) < 8.6113989637305703e-9 * fabs(mParameters[6])) ? (-58062575.210589655 * (-8.6113989637305703e-9 * mParameters[6] + var_chaste_interface__membrane__Vm) * (-0.0096499999999999989 * (-mParameters[1] * exp(9.9999999999999995e-8) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1.0 - exp(9.9999999999999995e-8)) - 0.0096499999999999989 * (-mParameters[1] * exp(-9.9999999999999995e-8) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1.0 - exp(-9.9999999999999995e-8))) / mParameters[6] + 0.0096499999999999989 * (-mParameters[1] * exp(-9.9999999999999995e-8) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1.0 - exp(-9.9999999999999995e-8))) : (1120607.7015643802 * (-mParameters[1] * exp(-11.612515042117931 * var_chaste_interface__membrane__Vm / mParameters[6]) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] * var_chaste_interface__membrane__Vm / ((1.0 - exp(-11.612515042117931 * var_chaste_interface__membrane__Vm / mParameters[6])) * mParameters[6]))); // nanoampere
         const double var_I_Shkr__I_Shkr_converted = 0.001 * HeartConfig::Instance()->GetCapacitance() * var_I_Shkr__I_Shkr / mParameters[2]; // uA_per_cm2
         const double var_chaste_interface__i_ionic = var_I_Kir__I_Kir_converted + var_I_Shkr__I_Shkr_converted + var_I_b__I_b_converted; // uA_per_cm2
 
@@ -124,7 +124,7 @@
         const double var_I_Kir__EK = var_model_parameters__R * mParameters[6] * log(mParameters[1] / mParameters[0]) / var_model_parameters__F; // millivolt
         const double var_I_Kir__OKir = 1 / (var_I_Kir__aKir + exp((-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * var_I_Kir__bKir * var_model_parameters__F / (var_model_parameters__R * mParameters[6]))); // dimensionless
         const double var_I_Kir__I_Kir = 0.031622776601683791 * sqrt(mParameters[1]) * (-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * mParameters[4] * var_I_Kir__OKir; // nanoampere
-        const double var_I_Shkr__I_Shkr = pow(var_model_parameters__F, 2) * (-mParameters[1] * exp(-var_chaste_interface__membrane__Vm * var_model_parameters__F / (var_model_parameters__R * mParameters[6])) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] * var_chaste_interface__membrane__Vm / ((1.0 - exp(-var_chaste_interface__membrane__Vm * var_model_parameters__F / (var_model_parameters__R * mParameters[6]))) * var_model_parameters__R * mParameters[6]); // nanoampere
+        const double var_I_Shkr__I_Shkr = ((fabs(var_chaste_interface__membrane__Vm) < 8.6113989637305703e-9 * fabs(mParameters[6])) ? (-58062575.210589655 * (-8.6113989637305703e-9 * mParameters[6] + var_chaste_interface__membrane__Vm) * (-0.0096499999999999989 * (-mParameters[1] * exp(9.9999999999999995e-8) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1.0 - exp(9.9999999999999995e-8)) - 0.0096499999999999989 * (-mParameters[1] * exp(-9.9999999999999995e-8) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1.0 - exp(-9.9999999999999995e-8))) / mParameters[6] + 0.0096499999999999989 * (-mParameters[1] * exp(-9.9999999999999995e-8) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1.0 - exp(-9.9999999999999995e-8))) : (1120607.7015643802 * (-mParameters[1] * exp(-11.612515042117931 * var_chaste_interface__membrane__Vm / mParameters[6]) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] * var_chaste_interface__membrane__Vm / ((1.0 - exp(-11.612515042117931 * var_chaste_interface__membrane__Vm / mParameters[6])) * mParameters[6]))); // nanoampere
         const double var_membrane__Vm_orig_deriv = (-var_I_Kir__I_Kir - var_I_Shkr__I_Shkr - var_I_b__I_b + var_I_stim__I_stim) / mParameters[2]; // millivolt / second
         d_dt_chaste_interface_var_membrane__Vm = 0.001 * var_membrane__Vm_orig_deriv; // millivolt / millisecond
 
@@ -284,7 +284,7 @@
         const double var_I_Kir__EK = var_model_parameters__R * mParameters[6] * log(mParameters[1] / mParameters[0]) / var_model_parameters__F; // millivolt
         const double var_I_Kir__OKir = 1 / (var_I_Kir__aKir + exp((-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * var_I_Kir__bKir * var_model_parameters__F / (var_model_parameters__R * mParameters[6]))); // dimensionless
         const double var_I_Kir__I_Kir = 0.031622776601683791 * sqrt(mParameters[1]) * (-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * mParameters[4] * var_I_Kir__OKir; // nanoampere
-        const double var_I_Shkr__I_Shkr = pow(var_model_parameters__F, 2) * (-mParameters[1] * exp(-var_chaste_interface__membrane__Vm * var_model_parameters__F / (var_model_parameters__R * mParameters[6])) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] * var_chaste_interface__membrane__Vm / ((1.0 - exp(-var_chaste_interface__membrane__Vm * var_model_parameters__F / (var_model_parameters__R * mParameters[6]))) * var_model_parameters__R * mParameters[6]); // nanoampere
+        const double var_I_Shkr__I_Shkr = ((fabs(var_chaste_interface__membrane__Vm) < 8.6113989637305703e-9 * fabs(mParameters[6])) ? (-58062575.210589655 * (-8.6113989637305703e-9 * mParameters[6] + var_chaste_interface__membrane__Vm) * (-0.0096499999999999989 * (-mParameters[1] * exp(9.9999999999999995e-8) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1.0 - exp(9.9999999999999995e-8)) - 0.0096499999999999989 * (-mParameters[1] * exp(-9.9999999999999995e-8) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1.0 - exp(-9.9999999999999995e-8))) / mParameters[6] + 0.0096499999999999989 * (-mParameters[1] * exp(-9.9999999999999995e-8) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1.0 - exp(-9.9999999999999995e-8))) : (1120607.7015643802 * (-mParameters[1] * exp(-11.612515042117931 * var_chaste_interface__membrane__Vm / mParameters[6]) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] * var_chaste_interface__membrane__Vm / ((1.0 - exp(-11.612515042117931 * var_chaste_interface__membrane__Vm / mParameters[6])) * mParameters[6]))); // nanoampere
         const double var_membrane__Vm_orig_deriv = (-var_I_Kir__I_Kir - var_I_Shkr__I_Shkr - var_I_b__I_b + var_I_stim__I_stim) / mParameters[2]; // millivolt / second
         d_dt_chaste_interface_var_membrane__Vm = 0.001 * var_membrane__Vm_orig_deriv; // millivolt / millisecond
 
@@ -302,22 +302,30 @@
             // Units: dimensionless; Initial value: 0.0
             
 
-            const double var_x0 = 1 / mParameters[2];
-            const double var_x1 = 1 / mParameters[6];
-            const double var_x2 = var_x1 * (-0.086113989637305696 * mParameters[6] * log(mParameters[1] / mParameters[0]) + var_chaste_interface__membrane__Vm);
-            const double var_x3 = exp(14.631768953068592 * var_x2);
-            const double var_x4 = 0.93999999999999995 + var_x3;
-            const double var_x5 = sqrt(mParameters[1]) * mParameters[4];
-            const double var_x6 = var_x1 * var_chaste_interface__membrane__Vm;
-            const double var_x7 = exp(-11.612515042117931 * var_x6);
-            const double var_x8 = 1.0 - var_x7;
-            const double var_x9 = 1 / var_x8;
-            const double var_x10 = var_x7 * mParameters[1];
-            const double var_x11 = -var_x10 + mParameters[0];
-            const double var_x12 = var_x11 * var_x9 * mParameters[3];
-            const double var_x13 = 13013073.790729566 * var_chaste_interface__I_Shkr__OShkr * mParameters[3] * var_chaste_interface__membrane__Vm / pow(mParameters[6], 2);
+            const double var_x0 = exp(9.9999999999999995e-8);
+            const double var_x1 = 0.0096499999999999989 * mParameters[3];
+            const double var_x2 = var_x1 * (-var_x0 * mParameters[1] + mParameters[0]) / (1.0 - var_x0);
+            const double var_x3 = exp(-9.9999999999999995e-8);
+            const double var_x4 = var_x1 * (-var_x3 * mParameters[1] + mParameters[0]) / (1.0 - var_x3);
+            const double var_x5 = 1 / mParameters[6];
+            const double var_x6 = 58062575.210589655 * var_x5;
+            const double var_x7 = fabs(var_chaste_interface__membrane__Vm) < 8.6113989637305703e-9 * fabs(mParameters[6]);
+            const double var_x8 = var_x5 * var_chaste_interface__membrane__Vm;
+            const double var_x9 = exp(-11.612515042117931 * var_x8);
+            const double var_x10 = 1.0 - var_x9;
+            const double var_x11 = 1 / var_x10;
+            const double var_x12 = var_x11 * var_chaste_interface__I_Shkr__OShkr * mParameters[3];
+            const double var_x13 = var_x9 * mParameters[1];
+            const double var_x14 = -var_x13 + mParameters[0];
+            const double var_x15 = 1120607.7015643802 * var_x14;
+            const double var_x16 = 13013073.790729566 * var_chaste_interface__membrane__Vm / pow(mParameters[6], 2);
+            const double var_x17 = var_x5 * (-0.086113989637305696 * mParameters[6] * log(mParameters[1] / mParameters[0]) + var_chaste_interface__membrane__Vm);
+            const double var_x18 = exp(14.631768953068592 * var_x17);
+            const double var_x19 = 0.93999999999999995 + var_x18;
+            const double var_x20 = sqrt(mParameters[1]) * mParameters[4];
+            const double var_x21 = 0.001 / mParameters[2];
             
-            partialF = 0.001 * var_x0 * (-mParameters[5] - 0.031622776601683791 * var_x5 / var_x4 - var_x10 * var_x13 * var_x9 - 1120607.7015643802 * var_x1 * var_x12 * var_chaste_interface__I_Shkr__OShkr + var_x11 * var_x13 * var_x7 / pow(var_x8, 2) + 0.46269716089034085 * var_x2 * var_x3 * var_x5 / pow(var_x4, 2));
+            partialF = var_x21 * (-((var_x7) ? (-var_x6 * (-var_x2 * var_chaste_interface__I_Shkr__OShkr - var_x4 * var_chaste_interface__I_Shkr__OShkr)) : (var_x12 * var_x13 * var_x16 + var_x12 * var_x15 * var_x5 - var_x14 * var_x16 * var_x9 * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / pow(var_x10, 2))) - mParameters[5] - 0.031622776601683791 * var_x20 / var_x19 + 0.46269716089034085 * var_x17 * var_x18 * var_x20 / pow(var_x19, 2));
         }
         else
         {
@@ -364,12 +372,12 @@
             // Units: millivolt; Initial value: -58.0
             
 
-            const double var_x1 = 1 / mParameters[6];
-            const double var_x6 = var_x1 * var_chaste_interface__membrane__Vm;
-            const double var_x17 = exp(14.864019253910952 * var_x6);
-            const double var_x20 = 0.12 * var_x17;
+            const double var_x5 = 1 / mParameters[6];
+            const double var_x8 = var_x5 * var_chaste_interface__membrane__Vm;
+            const double var_x25 = exp(14.864019253910952 * var_x8);
+            const double var_x28 = 0.12 * var_x25;
             
-            partialF = -var_x20;
+            partialF = -var_x28;
         }
         else
         {
@@ -418,14 +426,14 @@
             // Units: millivolt; Initial value: -58.0
             
 
-            const double var_x1 = 1 / mParameters[6];
-            const double var_x6 = var_x1 * var_chaste_interface__membrane__Vm;
-            const double var_x14 = exp(-17.767148014440433 * var_x6);
-            const double var_x17 = exp(14.864019253910952 * var_x6);
-            const double var_x21 = 0.002 * var_x14;
-            const double var_x23 = 0.089999999999999997 * var_x17;
+            const double var_x5 = 1 / mParameters[6];
+            const double var_x8 = var_x5 * var_chaste_interface__membrane__Vm;
+            const double var_x22 = exp(-17.767148014440433 * var_x8);
+            const double var_x25 = exp(14.864019253910952 * var_x8);
+            const double var_x29 = 0.002 * var_x22;
+            const double var_x31 = 0.089999999999999997 * var_x25;
             
-            partialF = -var_x21 - var_x23;
+            partialF = -var_x29 - var_x31;
         }
         else
         {
@@ -474,14 +482,14 @@
             // Units: millivolt; Initial value: -58.0
             
 
-            const double var_x1 = 1 / mParameters[6];
-            const double var_x6 = var_x1 * var_chaste_interface__membrane__Vm;
-            const double var_x14 = exp(-17.767148014440433 * var_x6);
-            const double var_x17 = exp(14.864019253910952 * var_x6);
-            const double var_x24 = 0.0040000000000000001 * var_x14;
-            const double var_x26 = 0.059999999999999998 * var_x17;
+            const double var_x5 = 1 / mParameters[6];
+            const double var_x8 = var_x5 * var_chaste_interface__membrane__Vm;
+            const double var_x22 = exp(-17.767148014440433 * var_x8);
+            const double var_x25 = exp(14.864019253910952 * var_x8);
+            const double var_x32 = 0.0040000000000000001 * var_x22;
+            const double var_x34 = 0.059999999999999998 * var_x25;
             
-            partialF = -var_x24 - var_x26;
+            partialF = -var_x32 - var_x34;
         }
         else
         {
@@ -530,14 +538,14 @@
             // Units: millivolt; Initial value: -58.0
             
 
-            const double var_x1 = 1 / mParameters[6];
-            const double var_x6 = var_x1 * var_chaste_interface__membrane__Vm;
-            const double var_x14 = exp(-17.767148014440433 * var_x6);
-            const double var_x17 = exp(14.864019253910952 * var_x6);
-            const double var_x27 = 0.0060000000000000001 * var_x14;
-            const double var_x30 = 0.029999999999999999 * var_x17;
+            const double var_x5 = 1 / mParameters[6];
+            const double var_x8 = var_x5 * var_chaste_interface__membrane__Vm;
+            const double var_x22 = exp(-17.767148014440433 * var_x8);
+            const double var_x25 = exp(14.864019253910952 * var_x8);
+            const double var_x35 = 0.0060000000000000001 * var_x22;
+            const double var_x38 = 0.029999999999999999 * var_x25;
             
-            partialF = -var_x27 - var_x30;
+            partialF = -var_x35 - var_x38;
         }
         else
         {
@@ -588,12 +596,12 @@
             // Units: millivolt; Initial value: -58.0
             
 
-            const double var_x1 = 1 / mParameters[6];
-            const double var_x6 = var_x1 * var_chaste_interface__membrane__Vm;
-            const double var_x14 = exp(-17.767148014440433 * var_x6);
-            const double var_x31 = 0.0080000000000000002 * var_x14;
+            const double var_x5 = 1 / mParameters[6];
+            const double var_x8 = var_x5 * var_chaste_interface__membrane__Vm;
+            const double var_x22 = exp(-17.767148014440433 * var_x8);
+            const double var_x39 = 0.0080000000000000002 * var_x22;
             
-            partialF = -0.076999999999999999 - var_x31;
+            partialF = -0.076999999999999999 - var_x39;
         }
         else
         {
@@ -666,7 +674,7 @@
         const double var_I_Kir__OKir = 1 / (var_I_Kir__aKir + exp((-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * var_I_Kir__bKir * var_model_parameters__F / (var_model_parameters__R * mParameters[6]))); // dimensionless
         const double var_I_Kir__I_Kir = 0.031622776601683791 * sqrt(mParameters[1]) * (-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * mParameters[4] * var_I_Kir__OKir; // nanoampere
         const double var_I_Kir__I_Kir_converted = 0.001 * HeartConfig::Instance()->GetCapacitance() * var_I_Kir__I_Kir / mParameters[2]; // uA_per_cm2
-        const double var_I_Shkr__I_Shkr = pow(var_model_parameters__F, 2) * (-mParameters[1] * exp(-var_chaste_interface__membrane__Vm * var_model_parameters__F / (var_model_parameters__R * mParameters[6])) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] * var_chaste_interface__membrane__Vm / ((1.0 - exp(-var_chaste_interface__membrane__Vm * var_model_parameters__F / (var_model_parameters__R * mParameters[6]))) * var_model_parameters__R * mParameters[6]); // nanoampere
+        const double var_I_Shkr__I_Shkr = ((fabs(var_chaste_interface__membrane__Vm) < 8.6113989637305703e-9 * fabs(mParameters[6])) ? (-58062575.210589655 * (-8.6113989637305703e-9 * mParameters[6] + var_chaste_interface__membrane__Vm) * (-0.0096499999999999989 * (-mParameters[1] * exp(9.9999999999999995e-8) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1.0 - exp(9.9999999999999995e-8)) - 0.0096499999999999989 * (-mParameters[1] * exp(-9.9999999999999995e-8) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1.0 - exp(-9.9999999999999995e-8))) / mParameters[6] + 0.0096499999999999989 * (-mParameters[1] * exp(-9.9999999999999995e-8) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1.0 - exp(-9.9999999999999995e-8))) : (1120607.7015643802 * (-mParameters[1] * exp(-11.612515042117931 * var_chaste_interface__membrane__Vm / mParameters[6]) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] * var_chaste_interface__membrane__Vm / ((1.0 - exp(-11.612515042117931 * var_chaste_interface__membrane__Vm / mParameters[6])) * mParameters[6]))); // nanoampere
         const double var_I_Shkr__I_Shkr_converted = 0.001 * HeartConfig::Instance()->GetCapacitance() * var_I_Shkr__I_Shkr / mParameters[2]; // uA_per_cm2
 
         std::vector<double> dqs(5);

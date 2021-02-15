@@ -113,8 +113,8 @@ protected:
 
         mKeyingVariableNames[0] = "membrane_voltage";
         mNumberOfTables[0] = 19;
-        mTableMins[0] = -250.0001;
-        mTableMaxs[0] = 549.9999;
+        mTableMins[0] = -250.0;
+        mTableMaxs[0] = 550.0;
         mTableSteps[0] = 0.001;
         mTableStepInverses[0] = 1000.0;
         mNeedsRegeneration[0] = true;
@@ -261,15 +261,28 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__E = mTableMins[0] + i*mTableSteps[0];
-                double val = exp(-8.4299999999999997 - 0.14999999999999999 * var_chaste_interface__membrane__E);
-
+                double val = ((fabs(34.299999999999997 + var_chaste_interface__membrane__E) < 1.1111111111183902e-6) ? (0.00022222222222367805 / (1.0 - exp(-1.0000000000065512e-7)) - 449999.99999705196 * (34.299998888888886 + var_chaste_interface__membrane__E) * (-0.00022222222222367805 / (1.0 - exp(1.0000000000065512e-7)) - 0.00022222222222367805 / (1.0 - exp(-1.0000000000065512e-7)))) : (200.0 * (34.299999999999997 + var_chaste_interface__membrane__E) / (1.0 - exp(-3.0869999999999997 - 0.089999999999999997 * var_chaste_interface__membrane__E))));
+                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
+                //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
+                if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_0 && _lookup_table_0_num_misshit_piecewise[15] < 2){
+                    double left = _lookup_table_0[i-1][15];
+                    double right = _lookup_table_0[i+1][15];
+                    double new_val = (left + right) / 2.0;
+                    WARNING("Lookup table 15 at ["<<i<<"][15] has non-finite value: " << val << " being terpolated to: "<<new_val);
+                    val = new_val;
+                   // count and limit number of misshits
+                  _lookup_table_0_num_misshit_piecewise[15] +=1;
+                }
+                else if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[15] >= 2){
+                    EXCEPTION("Lookup table 15 at ["<<i<<"][15] has non-finite value: " << val);
+                }
                 _lookup_table_0[i][15] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__E = mTableMins[0] + i*mTableSteps[0];
-                double val = 1.0 - exp(-3.0869999999999997 - 0.089999999999999997 * var_chaste_interface__membrane__E);
+                double val = exp(-8.4299999999999997 - 0.14999999999999999 * var_chaste_interface__membrane__E);
 
                 _lookup_table_0[i][16] = val;
             }
@@ -277,16 +290,42 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__E = mTableMins[0] + i*mTableSteps[0];
-                double val = -1.0 + exp(9.0948000000000011 + 0.066000000000000003 * var_chaste_interface__membrane__E);
-
+                double val = ((fabs(137.80000000000001 + var_chaste_interface__membrane__E) < 1.5151515151412553e-6) ? (-5.4545454545085189e-7 / (-1.0 + exp(-9.9999999999322859e-8)) + 330000.00000223459 * (137.80000151515154 + var_chaste_interface__membrane__E) * (5.4545454545085189e-7 / (-1.0 + exp(9.9999999999322859e-8)) + 5.4545454545085189e-7 / (-1.0 + exp(-9.9999999999322859e-8)))) : (0.35999999999999999 * (137.80000000000001 + var_chaste_interface__membrane__E) / (-1.0 + exp(9.0948000000000011 + 0.066000000000000003 * var_chaste_interface__membrane__E))));
+                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
+                //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
+                if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_0 && _lookup_table_0_num_misshit_piecewise[17] < 2){
+                    double left = _lookup_table_0[i-1][17];
+                    double right = _lookup_table_0[i+1][17];
+                    double new_val = (left + right) / 2.0;
+                    WARNING("Lookup table 17 at ["<<i<<"][17] has non-finite value: " << val << " being terpolated to: "<<new_val);
+                    val = new_val;
+                   // count and limit number of misshits
+                  _lookup_table_0_num_misshit_piecewise[17] +=1;
+                }
+                else if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[17] >= 2){
+                    EXCEPTION("Lookup table 17 at ["<<i<<"][17] has non-finite value: " << val);
+                }
                 _lookup_table_0[i][17] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__E = mTableMins[0] + i*mTableSteps[0];
-                double val = 1.0 - exp(-16.023 - 0.20999999999999999 * var_chaste_interface__membrane__E);
-
+                double val = ((fabs(76.299999999999997 + var_chaste_interface__membrane__E) < 4.761904762173863e-7) ? (4.7619047627289747e-8 / (1.0 - exp(-1.0000000001730847e-7)) - 1049999.9999406631 * (76.299999523809518 + var_chaste_interface__membrane__E) * (-4.7619047627289747e-8 / (1.0 - exp(-1.0000000001730847e-7)) - 4.7619047616187521e-8 / (1.0 - exp(9.9999999993993777e-8)))) : (0.10000000000000001 * (76.299999999999997 + var_chaste_interface__membrane__E) / (1.0 - exp(-16.023 - 0.20999999999999999 * var_chaste_interface__membrane__E))));
+                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
+                //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
+                if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_0 && _lookup_table_0_num_misshit_piecewise[18] < 2){
+                    double left = _lookup_table_0[i-1][18];
+                    double right = _lookup_table_0[i+1][18];
+                    double new_val = (left + right) / 2.0;
+                    WARNING("Lookup table 18 at ["<<i<<"][18] has non-finite value: " << val << " being terpolated to: "<<new_val);
+                    val = new_val;
+                   // count and limit number of misshits
+                  _lookup_table_0_num_misshit_piecewise[18] +=1;
+                }
+                else if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[18] >= 2){
+                    EXCEPTION("Lookup table 18 at ["<<i<<"][18] has non-finite value: " << val);
+                }
                 _lookup_table_0[i][18] = val;
             }
 
@@ -494,10 +533,10 @@ std::shared_ptr<Celldokos_model_1996FromCellMLRushLarsenOpt_LookupTables> Celldo
         const double var_delayed_rectifying_potassium_current_x_gate__x_infinity = _lt_0_row[11]; // dimensionless
         const double var_fast_sodium_current_h_gate__alpha_h = 32.399999999999999 * _lt_0_row[13]; // per_second
         const double var_fast_sodium_current_h_gate__beta_h = 709.0 / (_lt_0_row[14]); // per_second
-        const double var_fast_sodium_current_m_gate__alpha_m = 200.0 * (34.299999999999997 + var_chaste_interface__membrane__E) / (_lt_0_row[16]); // per_second
-        const double var_fast_sodium_current_m_gate__beta_m = 8000.0 * _lt_0_row[15]; // per_second
-        const double var_hyperpolarising_activated_current_y_gate__alpha_y = 0.35999999999999999 * (137.80000000000001 + var_chaste_interface__membrane__E) / (_lt_0_row[17]); // per_second
-        const double var_hyperpolarising_activated_current_y_gate__beta_y = 0.10000000000000001 * (76.299999999999997 + var_chaste_interface__membrane__E) / (_lt_0_row[18]); // per_second
+        const double var_fast_sodium_current_m_gate__alpha_m = _lt_0_row[15]; // per_second
+        const double var_fast_sodium_current_m_gate__beta_m = 8000.0 * _lt_0_row[16]; // per_second
+        const double var_hyperpolarising_activated_current_y_gate__alpha_y = _lt_0_row[17]; // per_second
+        const double var_hyperpolarising_activated_current_y_gate__beta_y = _lt_0_row[18]; // per_second
         const double var_reversal_potentials__E_Ca = 0.5 * var_constants__R * var_constants__T * log(var_chaste_interface__ion_concentrations__Cao / var_chaste_interface__ion_concentrations__Cai) / var_constants__F; // millivolt
         const double var_L_type_calcium_current__i_CaL = (75.0 - var_reversal_potentials__E_Ca + var_chaste_interface__membrane__E) * mParameters[0] * var_chaste_interface__L_type_calcium_current_d_gate__dL * var_chaste_interface__L_type_calcium_current_f2_gate__fL2 * var_chaste_interface__L_type_calcium_current_f_gate__fL; // picoA
         const double var_T_type_calcium_current__i_CaT = (75.0 - var_reversal_potentials__E_Ca + var_chaste_interface__membrane__E) * var_T_type_calcium_current__g_CaT * var_chaste_interface__T_type_calcium_current_d_gate__dT * var_chaste_interface__T_type_calcium_current_f_gate__fT; // picoA

@@ -111,7 +111,7 @@
 
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
-        const double var_potassium_channel_n_gate__alpha_n = 0.0001 * (-50.0 - var_chaste_interface__membrane__V) / (-1.0 + exp(-5.0 - 0.10000000000000001 * var_chaste_interface__membrane__V)); // per_millisecond
+        const double var_potassium_channel_n_gate__alpha_n = ((fabs(50.0 + var_chaste_interface__membrane__V) < 1.0000000000287557e-6) ? (-1.0000000000287557e-10 / (-1.0 + exp(-1.0000000000287557e-7)) - 499999.99998562218 * (49.999999000000003 + var_chaste_interface__membrane__V) * (1.0000000000287557e-10 / (-1.0 + exp(1.0000000000287557e-7)) + 1.0000000000287557e-10 / (-1.0 + exp(-1.0000000000287557e-7)))) : (0.0001 * (-50.0 - var_chaste_interface__membrane__V) / (-1.0 + exp(-5.0 - 0.10000000000000001 * var_chaste_interface__membrane__V)))); // per_millisecond
         const double var_potassium_channel_n_gate__beta_n = 0.002 * exp(-1.125 - 0.012500000000000001 * var_chaste_interface__membrane__V); // per_millisecond
         const double d_dt_chaste_interface_var_potassium_channel_n_gate__n = (1.0 - var_chaste_interface__potassium_channel_n_gate__n) * var_potassium_channel_n_gate__alpha_n - var_potassium_channel_n_gate__beta_n * var_chaste_interface__potassium_channel_n_gate__n; // 1 / millisecond
         const double var_sodium_channel_h_gate__alpha_h = 0.17000000000000001 * exp(-4.5 + 0.050000000000000003 * NV_Ith_S(mParameters, 4) - 0.050000000000000003 * var_chaste_interface__membrane__V); // per_millisecond
@@ -119,8 +119,8 @@
         const double var_sodium_channel_h_gate__h_inf = 0.01 * NV_Ith_S(mParameters, 3) + (1.0 - 0.01 * NV_Ith_S(mParameters, 3)) * var_sodium_channel_h_gate__alpha_h / (var_sodium_channel_h_gate__alpha_h + var_sodium_channel_h_gate__beta_h); // dimensionless
         const double var_sodium_channel_h_gate__tau_h = 1 / (var_sodium_channel_h_gate__alpha_h + var_sodium_channel_h_gate__beta_h); // millisecond
         const double d_dt_chaste_interface_var_sodium_channel_h_gate__h = (-var_chaste_interface__sodium_channel_h_gate__h + var_sodium_channel_h_gate__h_inf) / var_sodium_channel_h_gate__tau_h; // 1 / millisecond
-        const double var_sodium_channel_m_gate__alpha_m = 0.10000000000000001 * (-48.0 - var_chaste_interface__membrane__V) / (-1.0 + exp(-3.2000000000000002 - 0.066666666666666666 * var_chaste_interface__membrane__V)); // per_millisecond
-        const double var_sodium_channel_m_gate__beta_m = 0.12 * (8.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(1.6000000000000001 + 0.20000000000000001 * var_chaste_interface__membrane__V)); // per_millisecond
+        const double var_sodium_channel_m_gate__alpha_m = ((fabs(48.0 + var_chaste_interface__membrane__V) < 1.5000000000153779e-6) ? (-1.4999999999876224e-7 / (-1.0 + exp(-9.9999999999174827e-8)) - 333333.333329916 * (47.999998499999997 + var_chaste_interface__membrane__V) * (1.5000000000431335e-7 / (-1.0 + exp(1.0000000000287557e-7)) + 1.4999999999876224e-7 / (-1.0 + exp(-9.9999999999174827e-8)))) : (0.10000000000000001 * (-48.0 - var_chaste_interface__membrane__V) / (-1.0 + exp(-3.2000000000000002 - 0.066666666666666666 * var_chaste_interface__membrane__V)))); // per_millisecond
+        const double var_sodium_channel_m_gate__beta_m = ((fabs(8.0 + var_chaste_interface__membrane__V) < 4.999999999970306e-7) ? (-6.0000000000060002e-8 / (-1.0 + exp(-1.0000000000010001e-7)) + 1000000.0000059388 * (8.0000005000000005 + var_chaste_interface__membrane__V) * (6.0000000000060002e-8 / (-1.0 + exp(-1.0000000000010001e-7)) + 5.9999999999227342e-8 / (-1.0 + exp(9.9999999998712227e-8)))) : (0.12 * (8.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(1.6000000000000001 + 0.20000000000000001 * var_chaste_interface__membrane__V)))); // per_millisecond
         const double d_dt_chaste_interface_var_sodium_channel_m_gate__m = (1.0 - var_chaste_interface__sodium_channel_m_gate__m) * var_sodium_channel_m_gate__alpha_m - var_sodium_channel_m_gate__beta_m * var_chaste_interface__sodium_channel_m_gate__m; // 1 / millisecond
 
         if (mSetVoltageDerivativeToZero)
@@ -163,45 +163,55 @@
         const double var_x4 = NV_Ith_S(mParameters, 1) * exp(-1.8 - 0.02 * var_chaste_interface__membrane__V);
         const double var_x5 = pow(var_chaste_interface__sodium_channel_m_gate__m, 3) * NV_Ith_S(mParameters, 2);
         const double var_x6 = var_x0 * (-40.0 + var_chaste_interface__membrane__V);
-        const double var_x7 = exp(1.6000000000000001 + 0.20000000000000001 * var_chaste_interface__membrane__V);
-        const double var_x8 = -1.0 + var_x7;
-        const double var_x9 = 0.12 / var_x8;
-        const double var_x10 = 1.0 - var_chaste_interface__sodium_channel_m_gate__m;
-        const double var_x11 = exp(-3.2000000000000002 - 0.066666666666666666 * var_chaste_interface__membrane__V);
-        const double var_x12 = -1.0 + var_x11;
-        const double var_x13 = 0.10000000000000001 / var_x12;
-        const double var_x14 = -48.0 + var_x1;
-        const double var_x15 = 8.0 + var_chaste_interface__membrane__V;
-        const double var_x16 = -0.10000000000000001 * var_chaste_interface__membrane__V;
-        const double var_x17 = exp(-4.2000000000000002 + var_x16 + 0.10000000000000001 * NV_Ith_S(mParameters, 4));
-        const double var_x18 = 1.0 + var_x17;
-        const double var_x19 = 1 / var_x18;
-        const double var_x20 = exp(-4.5 + 0.050000000000000003 * NV_Ith_S(mParameters, 4) - 0.050000000000000003 * var_chaste_interface__membrane__V);
-        const double var_x21 = 0.17000000000000001 * var_x20;
-        const double var_x22 = var_x19 + var_x21;
-        const double var_x23 = 0.0085000000000000006 * var_x20;
-        const double var_x24 = 0.01 * NV_Ith_S(mParameters, 3);
-        const double var_x25 = 1.0 - var_x24;
-        const double var_x26 = var_x25 / var_x22;
-        const double var_x27 = 0.10000000000000001 * var_x17 / pow(var_x18, 2);
-        const double var_x28 = exp(-1.125 - 0.012500000000000001 * var_chaste_interface__membrane__V);
-        const double var_x29 = 1.0 - var_chaste_interface__potassium_channel_n_gate__n;
-        const double var_x30 = exp(-5.0 + var_x16);
-        const double var_x31 = -1.0 + var_x30;
-        const double var_x32 = 0.0001 / var_x31;
-        const double var_x33 = -50.0 + var_x1;
+        const double var_x7 = 1 / (-1.0 + exp(-9.9999999999174827e-8));
+        const double var_x8 = 1 / (-1.0 + exp(1.0000000000287557e-7));
+        const double var_x9 = fabs(48.0 + var_chaste_interface__membrane__V) < 1.5000000000153779e-6;
+        const double var_x10 = exp(-3.2000000000000002 - 0.066666666666666666 * var_chaste_interface__membrane__V);
+        const double var_x11 = -1.0 + var_x10;
+        const double var_x12 = 0.10000000000000001 / var_x11;
+        const double var_x13 = -48.0 + var_x1;
+        const double var_x14 = 1 / (-1.0 + exp(9.9999999998712227e-8));
+        const double var_x15 = 1 / (-1.0 + exp(-1.0000000000010001e-7));
+        const double var_x16 = 8.0 + var_chaste_interface__membrane__V;
+        const double var_x17 = fabs(var_x16) < 4.999999999970306e-7;
+        const double var_x18 = exp(1.6000000000000001 + 0.20000000000000001 * var_chaste_interface__membrane__V);
+        const double var_x19 = -1.0 + var_x18;
+        const double var_x20 = 0.12 / var_x19;
+        const double var_x21 = 6.0000000000060002e-8 * var_x15;
+        const double var_x22 = 1.4999999999876224e-7 * var_x7;
+        const double var_x23 = -0.10000000000000001 * var_chaste_interface__membrane__V;
+        const double var_x24 = exp(-4.2000000000000002 + var_x23 + 0.10000000000000001 * NV_Ith_S(mParameters, 4));
+        const double var_x25 = 1.0 + var_x24;
+        const double var_x26 = 1 / var_x25;
+        const double var_x27 = exp(-4.5 + 0.050000000000000003 * NV_Ith_S(mParameters, 4) - 0.050000000000000003 * var_chaste_interface__membrane__V);
+        const double var_x28 = 0.17000000000000001 * var_x27;
+        const double var_x29 = var_x26 + var_x28;
+        const double var_x30 = 0.0085000000000000006 * var_x27;
+        const double var_x31 = 0.01 * NV_Ith_S(mParameters, 3);
+        const double var_x32 = 1.0 - var_x31;
+        const double var_x33 = var_x32 / var_x29;
+        const double var_x34 = 0.10000000000000001 * var_x24 / pow(var_x25, 2);
+        const double var_x35 = 1 / (-1.0 + exp(1.0000000000287557e-7));
+        const double var_x36 = 1 / (-1.0 + exp(-1.0000000000287557e-7));
+        const double var_x37 = fabs(50.0 + var_chaste_interface__membrane__V) < 1.0000000000287557e-6;
+        const double var_x38 = exp(-5.0 + var_x23);
+        const double var_x39 = -1.0 + var_x38;
+        const double var_x40 = 0.0001 / var_x39;
+        const double var_x41 = -50.0 + var_x1;
+        const double var_x42 = exp(-1.125 - 0.012500000000000001 * var_chaste_interface__membrane__V);
+        const double var_x43 = 1.0000000000287557e-10 * var_x36;
         
         // Matrix entries
         IJth(rJacobian, 0, 0) = mSetVoltageDerivativeToZero ? 0.0 : (var_x0 * (-0.14000000000000001 - var_x3 - var_x4 - NV_Ith_S(mParameters, 6) + var_x2 * (0.016666666666666666 * var_x3 - 0.02 * var_x4) - var_x5 * var_chaste_interface__sodium_channel_h_gate__h - pow(var_chaste_interface__potassium_channel_n_gate__n, 4) * NV_Ith_S(mParameters, 1)));
-        IJth(rJacobian, 1, 0) = -var_x10 * var_x13 - var_x9 * var_chaste_interface__sodium_channel_m_gate__m + 0.0066666666666666671 * var_x10 * var_x11 * var_x14 / pow(var_x12, 2) + 0.024 * var_x15 * var_x7 * var_chaste_interface__sodium_channel_m_gate__m / pow(var_x8, 2);
-        IJth(rJacobian, 2, 0) = var_x22 * (-var_x23 * var_x26 + var_x21 * var_x25 * (var_x23 - var_x27) / pow(var_x22, 2)) + (var_x27 - var_x23) * (var_x24 - var_chaste_interface__sodium_channel_h_gate__h + var_x21 * var_x26);
-        IJth(rJacobian, 3, 0) = -var_x29 * var_x32 + 2.5000000000000001e-5 * var_x28 * var_chaste_interface__potassium_channel_n_gate__n + 1.0000000000000001e-5 * var_x29 * var_x30 * var_x33 / pow(var_x31, 2);
+        IJth(rJacobian, 1, 0) = (1.0 - var_chaste_interface__sodium_channel_m_gate__m) * ((var_x9) ? (-0.049999999999074819 * var_x7 - 0.050000000000925186 * var_x8) : (-var_x12 + 0.0066666666666666671 * var_x10 * var_x13 / pow(var_x11, 2))) - ((var_x17) ? (0.059999999999583664 * var_x14 + 0.060000000000416331 * var_x15) : (var_x20 - 0.024 * var_x16 * var_x18 / pow(var_x19, 2))) * var_chaste_interface__sodium_channel_m_gate__m;
+        IJth(rJacobian, 2, 0) = var_x29 * (-var_x30 * var_x33 + var_x28 * var_x32 * (var_x30 - var_x34) / pow(var_x29, 2)) + (var_x34 - var_x30) * (var_x31 - var_chaste_interface__sodium_channel_h_gate__h + var_x28 * var_x33);
+        IJth(rJacobian, 3, 0) = (1.0 - var_chaste_interface__potassium_channel_n_gate__n) * ((var_x37) ? (-5.0000000000000002e-5 * var_x35 - 5.0000000000000002e-5 * var_x36) : (-var_x40 + 1.0000000000000001e-5 * var_x38 * var_x41 / pow(var_x39, 2))) + 2.5000000000000001e-5 * var_x42 * var_chaste_interface__potassium_channel_n_gate__n;
         IJth(rJacobian, 0, 1) = mSetVoltageDerivativeToZero ? 0.0 : (-3 * var_x6 * pow(var_chaste_interface__sodium_channel_m_gate__m, 2) * NV_Ith_S(mParameters, 2) * var_chaste_interface__sodium_channel_h_gate__h);
-        IJth(rJacobian, 1, 1) = -var_x13 * var_x14 - var_x15 * var_x9;
+        IJth(rJacobian, 1, 1) = -((var_x17) ? (-var_x21 + 1000000.0000059388 * (8.0000005000000005 + var_chaste_interface__membrane__V) * (var_x21 + 5.9999999999227342e-8 * var_x14)) : (var_x16 * var_x20)) - ((var_x9) ? (-var_x22 - 333333.333329916 * (47.999998499999997 + var_chaste_interface__membrane__V) * (var_x22 + 1.5000000000431335e-7 * var_x8)) : (var_x12 * var_x13));
         IJth(rJacobian, 0, 2) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x5 * var_x6);
-        IJth(rJacobian, 2, 2) = -var_x19 - var_x21;
+        IJth(rJacobian, 2, 2) = -var_x26 - var_x28;
         IJth(rJacobian, 0, 3) = mSetVoltageDerivativeToZero ? 0.0 : (4 * var_x0 * var_x2 * pow(var_chaste_interface__potassium_channel_n_gate__n, 3) * NV_Ith_S(mParameters, 1));
-        IJth(rJacobian, 3, 3) = -0.002 * var_x28 - var_x32 * var_x33;
+        IJth(rJacobian, 3, 3) = -((var_x37) ? (-var_x43 - 499999.99998562218 * (49.999999000000003 + var_chaste_interface__membrane__V) * (var_x43 + 1.0000000000287557e-10 * var_x35)) : (var_x40 * var_x41)) - 0.002 * var_x42;
     }
 
     N_Vector Cellnoble_model_1962FromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY)

@@ -289,18 +289,18 @@ std::shared_ptr<Cellbueno_2007_epiFromCellMLGRL1Opt_LookupTables> Cellbueno_2007
             
 
             const double var_x0 = var_chaste_interface__membrane__V;
-            const double var_x1 = ((var_x0 < 0.0060000000000000001) ? (0) : (1.0));
-            const double var_x2 = ((var_x0 < 0.13) ? (0) : (1.0));
-            const double var_x3 = 9.0909090909090917 * var_chaste_interface__membrane__V;
-            const double var_x4 = var_x0 < 0.29999999999999999;
-            const double var_x5 = ((var_x4) ? (0) : (1.0));
+            const double var_x1 = var_x0 < 0.0060000000000000001;
+            const double var_x2 = ((var_x1) ? (0) : (1.0));
+            const double var_x3 = ((var_x0 < 0.13) ? (0) : (1.0));
+            const double var_x4 = 9.0909090909090917 * var_chaste_interface__membrane__V;
+            const double var_x5 = ((var_x0 < 0.29999999999999999) ? (0) : (1.0));
             const double var_x6 = var_x5 * var_chaste_interface__fast_inward_current_v_gate__v;
-            const double var_x7 = -14.090909090909092 + var_x3;
+            const double var_x7 = -14.090909090909092 + var_x4;
             const double var_x8 = tanh(-1.3297699999999999 + 2.0457999999999998 * var_chaste_interface__membrane__V);
             const double var_x9 = 1 / mParameters[0];
             const double var_x10 = var_x9;
             
-            partialF = -var_x10 * (var_x6 * var_x7 + var_x6 * (-2.7272727272727271 + var_x3) + (1.0 - var_x2) / (400.0 - 394.0 * var_x1) + 0.0041586275611754688 * var_x2 * (29.687012959999997 - 29.687012959999997 * pow(var_x8, 2)) / pow((1 - 0.93578987418504023 * var_x8), 2));
+            partialF = -var_x10 * (var_x6 * var_x7 + var_x6 * (-2.7272727272727271 + var_x4) + (1.0 - var_x3) / (400.0 - 394.0 * var_x2) + 0.0041586275611754688 * var_x3 * (29.687012959999997 - 29.687012959999997 * pow(var_x8, 2)) / pow((1 - 0.93578987418504023 * var_x8), 2));
         }
         else
         {
@@ -339,9 +339,10 @@ std::shared_ptr<Cellbueno_2007_epiFromCellMLGRL1Opt_LookupTables> Cellbueno_2007
             
 
             const double var_x0 = var_chaste_interface__membrane__V;
-            const double var_x4 = var_x0 < 0.29999999999999999;
+            const double var_x1 = var_x0 < 0.0060000000000000001;
+            const double var_x5 = ((var_x0 < 0.29999999999999999) ? (0) : (1.0));
             
-            partialF = ((var_chaste_interface__membrane__V < 0.0060000000000000001) ? (-0.016666666666666666) : ((var_x4) ? (-0.00086956521739130438) : (-0.68936991589687036)));
+            partialF = ((var_x1) ? (-0.016666666666666666 - 0.67270324923020364 * var_x5) : (-0.00086956521739130438 - 0.68850035067947901 * var_x5));
         }
         else
         {
@@ -380,12 +381,13 @@ std::shared_ptr<Cellbueno_2007_epiFromCellMLGRL1Opt_LookupTables> Cellbueno_2007
             
 
             const double var_x0 = var_chaste_interface__membrane__V;
-            const double var_x1 = ((var_x0 < 0.0060000000000000001) ? (0) : (1.0));
+            const double var_x1 = var_x0 < 0.0060000000000000001;
+            const double var_x2 = ((var_x1) ? (0) : (1.0));
             const double var_x12 = tanh(-1.95 + 65.0 * var_chaste_interface__membrane__V);
-            const double var_x13 = 1.0 - var_x1;
+            const double var_x13 = 1.0 - var_x2;
             const double var_x14 = var_x13 / (37.5 - 22.5 * var_x12);
             
-            partialF = -var_x14 - 0.0050000000000000001 * var_x1;
+            partialF = -var_x14 - 0.0050000000000000001 * var_x2;
         }
         else
         {
@@ -424,8 +426,8 @@ std::shared_ptr<Cellbueno_2007_epiFromCellMLGRL1Opt_LookupTables> Cellbueno_2007
             
 
             const double var_x0 = var_chaste_interface__membrane__V;
-            const double var_x2 = ((var_x0 < 0.13) ? (0) : (1.0));
-            const double var_x15 = 1 / (2.7342 + 13.2658 * var_x2);
+            const double var_x3 = ((var_x0 < 0.13) ? (0) : (1.0));
+            const double var_x15 = 1 / (2.7342 + 13.2658 * var_x3);
             
             partialF = -var_x15;
         }

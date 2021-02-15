@@ -113,8 +113,8 @@ protected:
 
         mKeyingVariableNames[0] = "membrane_voltage";
         mNumberOfTables[0] = 25;
-        mTableMins[0] = -250.0001;
-        mTableMaxs[0] = 549.9999;
+        mTableMins[0] = -250.0;
+        mTableMaxs[0] = 550.0;
         mTableSteps[0] = 0.001;
         mTableStepInverses[0] = 1000.0;
         mNeedsRegeneration[0] = true;
@@ -213,8 +213,21 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__Vm = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / (0.00013100000000000001 * (30.0 + var_chaste_interface__membrane__Vm) / (-1.0 + exp(2.0609999999999999 + 0.068699999999999997 * var_chaste_interface__membrane__Vm)) + 7.1899999999999999e-5 * (30.0 + var_chaste_interface__membrane__Vm) / (1.0 - exp(-4.4399999999999995 - 0.14799999999999999 * var_chaste_interface__membrane__Vm)));
-
+                double val = ((fabs(30.0 + var_chaste_interface__membrane__Vm) < 1.455604075689676e-6) ? (1 / (-1.0465793304208771e-10 / (1.0 - exp(2.1542940320207204e-7)) - 1.9068413391534758e-10 / (-1.0 + exp(-9.9999999999880736e-8)) + 343500.00000040967 * (30.000001455604075 + var_chaste_interface__membrane__Vm) * (1.0465793304208771e-10 / (1.0 - exp(2.1542940320207204e-7)) + 1.0465793304208771e-10 / (1.0 - exp(-2.1542940320207204e-7)) + 1.9068413391534758e-10 / (-1.0 + exp(9.9999999999880736e-8)) + 1.9068413391534758e-10 / (-1.0 + exp(-9.9999999999880736e-8))))) : (1 / (0.00013100000000000001 * (30.0 + var_chaste_interface__membrane__Vm) / (-1.0 + exp(2.0609999999999999 + 0.068699999999999997 * var_chaste_interface__membrane__Vm)) + 7.1899999999999999e-5 * (30.0 + var_chaste_interface__membrane__Vm) / (1.0 - exp(-4.4399999999999995 - 0.14799999999999999 * var_chaste_interface__membrane__Vm)))));
+                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
+                //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
+                if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_0 && _lookup_table_0_num_misshit_piecewise[9] < 2){
+                    double left = _lookup_table_0[i-1][9];
+                    double right = _lookup_table_0[i+1][9];
+                    double new_val = (left + right) / 2.0;
+                    WARNING("Lookup table 9 at ["<<i<<"][9] has non-finite value: " << val << " being terpolated to: "<<new_val);
+                    val = new_val;
+                   // count and limit number of misshits
+                  _lookup_table_0_num_misshit_piecewise[9] +=1;
+                }
+                else if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[9] >= 2){
+                    EXCEPTION("Lookup table 9 at ["<<i<<"][9] has non-finite value: " << val);
+                }
                 _lookup_table_0[i][9] = val;
             }
 
@@ -309,7 +322,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 const double var_chaste_interface__membrane__Vm = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.0013799999999999999 * (7.0 + var_chaste_interface__membrane__Vm) / (1.0 - exp(-0.86099999999999999 - 0.123 * var_chaste_interface__membrane__Vm)) + 6.0999999999999999e-5 * (10.0 + var_chaste_interface__membrane__Vm) / (-1.0 + exp(1.45 + 0.14499999999999999 * var_chaste_interface__membrane__Vm));
+                double val = ((fabs(7.0 + var_chaste_interface__membrane__Vm) < 8.1300813008222672e-7) ? (1.1219512195134727e-9 / (1.0 - exp(-1.0000000000011388e-7)) - 614999.99999929965 * (6.9999991869918698 + var_chaste_interface__membrane__Vm) * (-1.1219512195134727e-9 / (1.0 - exp(1.0000000000011388e-7)) - 1.1219512195134727e-9 / (1.0 - exp(-1.0000000000011388e-7)))) : (0.0013799999999999999 * (7.0 + var_chaste_interface__membrane__Vm) / (1.0 - exp(-0.86099999999999999 - 0.123 * var_chaste_interface__membrane__Vm)))) + ((fabs(10.0 + var_chaste_interface__membrane__Vm) < 6.8965517241448282e-7) ? (-4.2068965517283451e-11 / (-1.0 + exp(-1.000000000001e-7)) + 724999.99999927497 * (10.000000689655172 + var_chaste_interface__membrane__Vm) * (4.2068965517283451e-11 / (-1.0 + exp(1.000000000001e-7)) + 4.2068965517283451e-11 / (-1.0 + exp(-1.000000000001e-7)))) : (6.0999999999999999e-5 * (10.0 + var_chaste_interface__membrane__Vm) / (-1.0 + exp(1.45 + 0.14499999999999999 * var_chaste_interface__membrane__Vm))));
 
                 _lookup_table_0[i][21] = val;
             }
@@ -2149,18 +2162,31 @@ std::shared_ptr<Cellcorrias_purkinje_2011FromCellMLGRL1Opt_LookupTables> Cellcor
             
 
 
-            const double var_x155 = exp(-0.86099999999999999 - 0.123 * var_chaste_interface__membrane__Vm);
-            const double var_x156 = 1.0 - var_x155;
-            const double var_x157 = 0.0013799999999999999 / var_x156;
+            const double var_x156 = 1 / (1.0 - exp(1.0000000000011388e-7));
+            const double var_x157 = 1 / (1.0 - exp(-1.0000000000011388e-7));
             const double var_x158 = exp(1.45 + 0.14499999999999999 * var_chaste_interface__membrane__Vm);
             const double var_x159 = -1.0 + var_x158;
             const double var_x160 = 6.0999999999999999e-5 / var_x159;
-            const double var_x161 = 7.0 + var_chaste_interface__membrane__Vm;
-            const double var_x162 = 10.0 + var_chaste_interface__membrane__Vm;
-            const double var_x163 = var_x157 * var_x161;
-            const double var_x164 = var_x160 * var_x162;
+            const double var_x161 = 10.0 + var_chaste_interface__membrane__Vm;
+            const double var_x163 = 1.1219512195134727e-9 * var_x157;
+            const double var_x164 = var_x160 * var_x161;
+            const double var_x165 = -var_x163;
+            const double var_x166 = 614999.99999929965 * (6.9999991869918698 + var_chaste_interface__membrane__Vm) * (var_x165 - 1.1219512195134727e-9 * var_x156);
+            const double var_x168 = 7.0 + var_chaste_interface__membrane__Vm;
+            const double var_x169 = fabs(var_x168) < 8.1300813008222672e-7;
+            const double var_x170 = 1 / (-1.0 + exp(1.000000000001e-7));
+            const double var_x171 = 1 / (-1.0 + exp(-1.000000000001e-7));
+            const double var_x172 = exp(-0.86099999999999999 - 0.123 * var_chaste_interface__membrane__Vm);
+            const double var_x173 = 1.0 - var_x172;
+            const double var_x174 = 0.0013799999999999999 / var_x173;
+            const double var_x176 = 4.2068965517283451e-11 * var_x171;
+            const double var_x177 = var_x168 * var_x174;
+            const double var_x178 = 724999.99999927497 * (10.000000689655172 + var_chaste_interface__membrane__Vm) * (var_x176 + 4.2068965517283451e-11 * var_x170);
+            const double var_x179 = fabs(var_x161) < 6.8965517241448282e-7;
+            const double var_x180 = -var_x164;
+            const double var_x181 = -var_x177;
             
-            partialF = -var_x163 - var_x164;
+            partialF = ((var_x169) ? (var_x165 + var_x166 + var_x180) : ((var_x179) ? (var_x176 + var_x181 - var_x178) : (var_x180 + var_x181)));
         }
         else
         {
@@ -2207,19 +2233,23 @@ std::shared_ptr<Cellcorrias_purkinje_2011FromCellMLGRL1Opt_LookupTables> Cellcor
             
 
 
-            const double var_x168 = exp(2.0609999999999999 + 0.068699999999999997 * var_chaste_interface__membrane__Vm);
-            const double var_x169 = -1.0 + var_x168;
-            const double var_x170 = 1 / var_x169;
-            const double var_x171 = 0.00013100000000000001 * var_x170;
-            const double var_x172 = exp(-4.4399999999999995 - 0.14799999999999999 * var_chaste_interface__membrane__Vm);
-            const double var_x173 = 1.0 - var_x172;
-            const double var_x174 = 1 / var_x173;
-            const double var_x175 = 7.1899999999999999e-5 * var_x174;
-            const double var_x176 = 30.0 + var_chaste_interface__membrane__Vm;
-            const double var_x178 = var_x171 * var_x176;
-            const double var_x179 = var_x175 * var_x176;
+            const double var_x185 = 1 / (-1.0 + exp(9.9999999999880736e-8));
+            const double var_x186 = 1 / (-1.0 + exp(-9.9999999999880736e-8));
+            const double var_x187 = 1 / (1.0 - exp(2.1542940320207204e-7));
+            const double var_x188 = 1 / (1.0 - exp(-2.1542940320207204e-7));
+            const double var_x189 = 30.0 + var_chaste_interface__membrane__Vm;
+            const double var_x190 = fabs(var_x189) < 1.455604075689676e-6;
+            const double var_x191 = exp(2.0609999999999999 + 0.068699999999999997 * var_chaste_interface__membrane__Vm);
+            const double var_x192 = -1.0 + var_x191;
+            const double var_x193 = 0.00013100000000000001 / var_x192;
+            const double var_x194 = exp(-4.4399999999999995 - 0.14799999999999999 * var_chaste_interface__membrane__Vm);
+            const double var_x195 = 1.0 - var_x194;
+            const double var_x196 = 7.1899999999999999e-5 / var_x195;
+            const double var_x198 = 1.0465793304208771e-10 * var_x187;
+            const double var_x199 = 1.9068413391534758e-10 * var_x186;
+            const double var_x200 = ((var_x190) ? (-var_x198 - var_x199 + 343500.00000040967 * (30.000001455604075 + var_chaste_interface__membrane__Vm) * (var_x198 + var_x199 + 1.0465793304208771e-10 * var_x188 + 1.9068413391534758e-10 * var_x185)) : (var_x189 * var_x193 + var_x189 * var_x196));
             
-            partialF = -var_x178 - var_x179;
+            partialF = -var_x200;
         }
         else
         {
@@ -2266,15 +2296,23 @@ std::shared_ptr<Cellcorrias_purkinje_2011FromCellMLGRL1Opt_LookupTables> Cellcor
             
 
 
-            const double var_x168 = exp(2.0609999999999999 + 0.068699999999999997 * var_chaste_interface__membrane__Vm);
-            const double var_x169 = -1.0 + var_x168;
-            const double var_x170 = 1 / var_x169;
-            const double var_x172 = exp(-4.4399999999999995 - 0.14799999999999999 * var_chaste_interface__membrane__Vm);
-            const double var_x173 = 1.0 - var_x172;
-            const double var_x174 = 1 / var_x173;
-            const double var_x176 = 30.0 + var_chaste_interface__membrane__Vm;
+            const double var_x185 = 1 / (-1.0 + exp(9.9999999999880736e-8));
+            const double var_x186 = 1 / (-1.0 + exp(-9.9999999999880736e-8));
+            const double var_x187 = 1 / (1.0 - exp(2.1542940320207204e-7));
+            const double var_x188 = 1 / (1.0 - exp(-2.1542940320207204e-7));
+            const double var_x189 = 30.0 + var_chaste_interface__membrane__Vm;
+            const double var_x190 = fabs(var_x189) < 1.455604075689676e-6;
+            const double var_x191 = exp(2.0609999999999999 + 0.068699999999999997 * var_chaste_interface__membrane__Vm);
+            const double var_x192 = -1.0 + var_x191;
+            const double var_x193 = 0.00013100000000000001 / var_x192;
+            const double var_x194 = exp(-4.4399999999999995 - 0.14799999999999999 * var_chaste_interface__membrane__Vm);
+            const double var_x195 = 1.0 - var_x194;
+            const double var_x196 = 7.1899999999999999e-5 / var_x195;
+            const double var_x198 = 1.0465793304208771e-10 * var_x187;
+            const double var_x199 = 1.9068413391534758e-10 * var_x186;
+            const double var_x200 = ((var_x190) ? (-var_x198 - var_x199 + 343500.00000040967 * (30.000001455604075 + var_chaste_interface__membrane__Vm) * (var_x198 + var_x199 + 1.0465793304208771e-10 * var_x188 + 1.9068413391534758e-10 * var_x185)) : (var_x189 * var_x193 + var_x189 * var_x196));
             
-            partialF = -3.2750000000000003e-5 * var_x170 * var_x176 - 1.7975e-5 * var_x174 * var_x176;
+            partialF = -0.25 * var_x200;
         }
         else
         {
@@ -2319,13 +2357,13 @@ std::shared_ptr<Cellcorrias_purkinje_2011FromCellMLGRL1Opt_LookupTables> Cellcor
             
 
 
-            const double var_x184 = exp(3.6000000000000001 + 0.11 * var_chaste_interface__membrane__Vm);
-            const double var_x185 = exp(-2.8999999999999999 - 0.040000000000000001 * var_chaste_interface__membrane__Vm);
-            const double var_x187 = 0.00016666666666666666 * var_x184;
-            const double var_x188 = 0.00016666666666666666 * var_x185;
-            const double var_x190 = -var_x187 - var_x188;
+            const double var_x205 = exp(3.6000000000000001 + 0.11 * var_chaste_interface__membrane__Vm);
+            const double var_x206 = exp(-2.8999999999999999 - 0.040000000000000001 * var_chaste_interface__membrane__Vm);
+            const double var_x208 = 0.00016666666666666666 * var_x205;
+            const double var_x209 = 0.00016666666666666666 * var_x206;
+            const double var_x211 = -var_x208 - var_x209;
             
-            partialF = var_x190;
+            partialF = var_x211;
         }
         else
         {
@@ -2370,13 +2408,13 @@ std::shared_ptr<Cellcorrias_purkinje_2011FromCellMLGRL1Opt_LookupTables> Cellcor
             
 
 
-            const double var_x184 = exp(3.6000000000000001 + 0.11 * var_chaste_interface__membrane__Vm);
-            const double var_x185 = exp(-2.8999999999999999 - 0.040000000000000001 * var_chaste_interface__membrane__Vm);
-            const double var_x187 = 0.00016666666666666666 * var_x184;
-            const double var_x188 = 0.00016666666666666666 * var_x185;
-            const double var_x190 = -var_x187 - var_x188;
+            const double var_x205 = exp(3.6000000000000001 + 0.11 * var_chaste_interface__membrane__Vm);
+            const double var_x206 = exp(-2.8999999999999999 - 0.040000000000000001 * var_chaste_interface__membrane__Vm);
+            const double var_x208 = 0.00016666666666666666 * var_x205;
+            const double var_x209 = 0.00016666666666666666 * var_x206;
+            const double var_x211 = -var_x208 - var_x209;
             
-            partialF = var_x190;
+            partialF = var_x211;
         }
         else
         {
