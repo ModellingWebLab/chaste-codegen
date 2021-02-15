@@ -1,4 +1,4 @@
-# (unreleased)
+# Release 0.6.0
 - Added an automatic fix for removable singularities in GHK equations (which can be switched off with --skip-ingularity-fixes).
   The process looks for equations of any of the following forms, where U is a function of V:
   - `U / (exp(U) - 1.0)`
