@@ -5,6 +5,7 @@ from sympy import (
     Pow,
     Rational,
     S,
+    Not
 )
 from sympy.core.mul import _keep_coeff
 from sympy.printing import cxxcode
@@ -215,3 +216,6 @@ class ChastePrinter(Printer):
             return a_str
         b_str = ' * '.join(b_str)
         return a_str + ' / ' + (b_str if len(b) == 1 else '(' + b_str + ')')
+
+    def _print_Not(self, expr):
+        return '!(' + self._print(Not(expr)) + ')'
