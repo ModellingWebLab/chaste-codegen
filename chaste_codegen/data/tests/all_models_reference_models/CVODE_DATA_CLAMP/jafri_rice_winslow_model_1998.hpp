@@ -36,6 +36,7 @@ class Celljafri_rice_winslow_model_1998FromCellMLCvodeDataClamp : public Abstrac
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
+    double GetIntracellularCalciumConcentration();
     Celljafri_rice_winslow_model_1998FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Celljafri_rice_winslow_model_1998FromCellMLCvodeDataClamp();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);

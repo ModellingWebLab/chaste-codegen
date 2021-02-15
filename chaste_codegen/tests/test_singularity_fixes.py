@@ -8,6 +8,7 @@ from chaste_codegen import DATA_DIR, load_model_with_conversions
 from chaste_codegen._math_functions import exp_
 from chaste_codegen._singularity_fixes import fix_singularity_equations, new_expr
 from chaste_codegen.model_with_conversions import get_equations_for
+from chaste_codegen.tests.conftest import CELLML_FOLDER
 
 
 def to_quant(val):
@@ -123,21 +124,25 @@ def test_new_expr5(expr1):  # Try with numbers in place of Quantity Dummies
 
 def test_fix_singularity_equations():
     # Using a fixture would make other tests fail since we're modifying the equations
-    model = load_model_with_conversions(os.path.join(DATA_DIR, 'tests', 'cellml', 'FaberRudy2000.cellml'),
+    model = load_model_with_conversions(os.path.join(CELLML_FOLDER, 'faber_rudy_2000.cellml'),
                                         fix_singularities=False)
-    assert len(model.derivative_equations) == 206
+    assert len(model.derivative_equations) == 172
     old = get_equations_for(model, model.y_derivatives)
 
     fix_singularity_equations(model, model.membrane_voltage_var, model.modifiable_parameters)
     new = get_equations_for(model, model.y_derivatives)
 
-    assert len(new) == 201
+    assert len(new) == 163
 
     old_piecewises = tuple(eq.lhs for eq in old if eq.rhs.has(Piecewise))
     additional_piecewises = [eq.lhs for eq in new if eq.rhs.has(Piecewise) and eq.lhs not in old_piecewises]
-    print(str(additional_piecewises))
     assert str(additional_piecewises) == ('[_L_type_Ca_channel$I_CaCa, '
-                                          '_L_type_Ca_channel$I_CaK, _L_type_Ca_channel$I_CaNa, '
+                                          '_L_type_Ca_channel_d_gate$tau_d, '
+                                          '_fast_sodium_current_m_gate$alpha_m, '
+                                          '_L_type_Ca_channel$I_CaK, '
+                                          '_L_type_Ca_channel$I_CaNa, '
+                                          '_non_specific_calcium_activated_current$I_ns_K, '
+                                          '_non_specific_calcium_activated_current$I_ns_Na, '
                                           '_rapid_delayed_rectifier_potassium_current_xr_gate$tau_xr, '
                                           '_slow_delayed_rectifier_potassium_current_xs1_gate$tau_xs1, '
                                           '_slow_delayed_rectifier_potassium_current_xs2_gate$tau_xs2]')
@@ -145,15 +150,15 @@ def test_fix_singularity_equations():
 
 def test_fix_singularity_equations2():
     # Using a fixture would make other tests fail since we're modifying the equations
-    model = load_model_with_conversions(os.path.join(DATA_DIR, 'tests', 'cellml', 'bondarenko_model_2004_apex.cellml'),
+    model = load_model_with_conversions(os.path.join(CELLML_FOLDER, 'bondarenko_szigeti_bett_kim_rasmusson_2004_apical.cellml'),
                                         fix_singularities=False)
-    assert len(model.derivative_equations) == 180
+    assert len(model.derivative_equations) == 168
     old = get_equations_for(model, model.y_derivatives)
 
     fix_singularity_equations(model, model.membrane_voltage_var, model.modifiable_parameters)
     new = get_equations_for(model, model.y_derivatives)
 
-    assert len(new) == 180
+    assert len(new) == 168
 
     old_piecewises = tuple(eq.lhs for eq in old if eq.rhs.has(Piecewise))
     additional_piecewises = [eq.lhs for eq in new if eq.rhs.has(Piecewise) and eq.lhs not in old_piecewises]

@@ -38,6 +38,7 @@ public:
     double GetIntracellularCalciumConcentration();
     Cellnoble_model_1998FromCellMLGRL1Opt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellnoble_model_1998FromCellMLGRL1Opt();
+    void VerifyStateVariables();
     AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted);

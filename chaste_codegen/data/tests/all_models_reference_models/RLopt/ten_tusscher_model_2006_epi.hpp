@@ -5,7 +5,7 @@
 //!
 //! This source file was generated from CellML by chaste_codegen version (version omitted as unimportant)
 //!
-//! Model: tentusscher_panfilov_2006_epi
+//! Model: tentusscher_model_2006_epi
 //!
 //! Processed by chaste_codegen: https://github.com/ModellingWebLab/chaste-codegen
 //!     (translator: chaste_codegen, model type: RushLarsenOpt)
@@ -38,6 +38,7 @@ public:
     double GetIntracellularCalciumConcentration();
     Cellten_tusscher_model_2006_epiFromCellMLRushLarsenOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellten_tusscher_model_2006_epiFromCellMLRushLarsenOpt();
+    void VerifyStateVariables();
     AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateEquations(double var_chaste_interface__environment__time, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf);

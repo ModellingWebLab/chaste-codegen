@@ -1,3 +1,7 @@
 [submodule "chaste_codegen/ontologies"]
 	path = chaste_codegen/ontologies
 	url = https://github.com/ModellingWebLab/ontologies
+[submodule "chaste_codegen/data/tests/cellml"]
+	path = chaste_codegen/data/tests/cellml
+	url = https://github.com/Chaste/cellml.git
+	branch = no_singularity_fixes

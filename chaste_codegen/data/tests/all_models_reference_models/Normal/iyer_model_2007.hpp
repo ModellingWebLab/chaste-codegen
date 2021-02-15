@@ -34,6 +34,8 @@ class Celliyer_model_2007FromCellML : public AbstractCardiacCell
 
 public:
 
+    boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
+    double GetIntracellularCalciumConcentration();
     Celliyer_model_2007FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Celliyer_model_2007FromCellML();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);

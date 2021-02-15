@@ -35,6 +35,7 @@ class Celljafri_rice_winslow_model_1998FromCellML : public AbstractCardiacCell
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
+    double GetIntracellularCalciumConcentration();
     Celljafri_rice_winslow_model_1998FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Celljafri_rice_winslow_model_1998FromCellML();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);

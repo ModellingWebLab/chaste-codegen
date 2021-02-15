@@ -34,6 +34,7 @@ class Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellML : public Abstr
 
 public:
 
+    boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellML();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);

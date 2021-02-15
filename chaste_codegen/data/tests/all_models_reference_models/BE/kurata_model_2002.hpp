@@ -34,6 +34,7 @@ class Cellkurata_model_2002FromCellMLBackwardEulerNoLut : public AbstractBackwar
 
 public:
 
+    double GetIntracellularCalciumConcentration();
     Cellkurata_model_2002FromCellMLBackwardEulerNoLut(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellkurata_model_2002FromCellMLBackwardEulerNoLut();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[13], double rResidual[13]);

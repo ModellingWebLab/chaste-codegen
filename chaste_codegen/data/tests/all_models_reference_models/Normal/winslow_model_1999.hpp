@@ -35,6 +35,7 @@ class Cellwinslow_model_1999FromCellML : public AbstractCardiacCell
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
+    double GetIntracellularCalciumConcentration();
     Cellwinslow_model_1999FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellwinslow_model_1999FromCellML();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);

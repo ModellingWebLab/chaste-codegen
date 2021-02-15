@@ -34,6 +34,7 @@ class Cellkurata_model_2002FromCellML : public AbstractCardiacCell
 
 public:
 
+    double GetIntracellularCalciumConcentration();
     Cellkurata_model_2002FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellkurata_model_2002FromCellML();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);

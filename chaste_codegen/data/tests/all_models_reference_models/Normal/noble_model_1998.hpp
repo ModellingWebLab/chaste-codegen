@@ -38,6 +38,7 @@ public:
     double GetIntracellularCalciumConcentration();
     Cellnoble_model_1998FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellnoble_model_1998FromCellML();
+    void VerifyStateVariables();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const std::vector<double>& rY, std::vector<double>& rDY);
 

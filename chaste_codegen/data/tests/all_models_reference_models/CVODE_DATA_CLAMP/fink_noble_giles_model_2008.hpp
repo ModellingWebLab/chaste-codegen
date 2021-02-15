@@ -36,6 +36,7 @@ class Cellfink_noble_giles_model_2008FromCellMLCvodeDataClamp : public AbstractC
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
+    double GetIntracellularCalciumConcentration();
     Cellfink_noble_giles_model_2008FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellfink_noble_giles_model_2008FromCellMLCvodeDataClamp();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);

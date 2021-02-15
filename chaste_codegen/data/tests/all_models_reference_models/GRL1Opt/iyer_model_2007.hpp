@@ -34,6 +34,8 @@ class Celliyer_model_2007FromCellMLGRL1Opt : public AbstractGeneralizedRushLarse
 
 public:
 
+    boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
+    double GetIntracellularCalciumConcentration();
     Celliyer_model_2007FromCellMLGRL1Opt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Celliyer_model_2007FromCellMLGRL1Opt();
     AbstractLookupTableCollection* GetLookupTableCollection();

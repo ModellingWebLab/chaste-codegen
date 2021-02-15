@@ -15,6 +15,7 @@
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
+#include "Warnings.hpp"
 #include "OdeSystemInformation.hpp"
 #include "RegularStimulus.hpp"
 #include "HeartConfig.hpp"
@@ -37,16 +38,63 @@ public:
     void FreeMemory()
     {
 
+        if (_lookup_table_0)
+        {
+            delete[] _lookup_table_0;
+            _lookup_table_0 = NULL;
+        }
+
         mNeedsRegeneration.assign(mNeedsRegeneration.size(), true);
     }
 
     // Row lookup methods
     // using linear-interpolation
 
+    double* _lookup_0_row(unsigned i, double _factor_)
+    {
+        for (unsigned j=0; j<2; j++)
+        {
+            const double y1 = _lookup_table_0[i][j];
+            const double y2 = _lookup_table_0[i+1][j];
+            _lookup_table_0_row[j] = y1 + (y2-y1)*_factor_;
+        }
+        return _lookup_table_0_row;
+    }
 
+
+    const double * IndexTable0(double var_chaste_interface__Membrane__Vm_converted)
+    {
+        const double _offset_0 = var_chaste_interface__Membrane__Vm_converted - mTableMins[0];
+        const double _offset_0_over_table_step = _offset_0 * mTableStepInverses[0];
+        const unsigned _table_index_0 = (unsigned)(_offset_0_over_table_step);
+        const double _factor_0 = _offset_0_over_table_step - _table_index_0;
+        const double* const _lt_0_row = Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler_LookupTables::Instance()->_lookup_0_row(_table_index_0, _factor_0);
+        return _lt_0_row;
+    }
+
+
+// LCOV_EXCL_START
+    bool CheckIndex0(double& var_chaste_interface__Membrane__Vm_converted)
+    {
+        bool _oob_0 = false;
+        if (var_chaste_interface__Membrane__Vm_converted>mTableMaxs[0] || var_chaste_interface__Membrane__Vm_converted<mTableMins[0])
+        {
+// LCOV_EXCL_START
+            _oob_0 = true;
+// LCOV_EXCL_STOP
+        }
+        return _oob_0;
+    }
+// LCOV_EXCL_STOP
 
     ~Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler_LookupTables()
     {
+
+        if (_lookup_table_0)
+        {
+            delete[] _lookup_table_0;
+            _lookup_table_0 = NULL;
+        }
 
     }
 
@@ -56,13 +104,22 @@ protected:
     Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler_LookupTables()
     {
         assert(mpInstance.get() == NULL);
-        mKeyingVariableNames.resize(0);
-        mNumberOfTables.resize(0);
-        mTableMins.resize(0);
-        mTableSteps.resize(0);
-        mTableStepInverses.resize(0);
-        mTableMaxs.resize(0);
-        mNeedsRegeneration.resize(0);
+        mKeyingVariableNames.resize(1);
+        mNumberOfTables.resize(1);
+        mTableMins.resize(1);
+        mTableSteps.resize(1);
+        mTableStepInverses.resize(1);
+        mTableMaxs.resize(1);
+        mNeedsRegeneration.resize(1);
+
+        mKeyingVariableNames[0] = "membrane_voltage";
+        mNumberOfTables[0] = 2;
+        mTableMins[0] = -250.0001;
+        mTableMaxs[0] = 549.9999;
+        mTableSteps[0] = 0.001;
+        mTableStepInverses[0] = 1000.0;
+        mNeedsRegeneration[0] = true;
+        _lookup_table_0 = NULL;
 
         Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler_LookupTables::RegenerateTables();
     }
@@ -71,12 +128,49 @@ protected:
     {
         AbstractLookupTableCollection::EventHandler::BeginEvent(AbstractLookupTableCollection::EventHandler::GENERATE_TABLES);
 
+
+        if (mNeedsRegeneration[0])
+        {
+            if (_lookup_table_0)
+            {
+                delete[] _lookup_table_0;
+                _lookup_table_0 = NULL;
+            }
+            const unsigned _table_size_0 = 1 + (unsigned)((mTableMaxs[0]-mTableMins[0])/mTableSteps[0]+0.5);
+            _lookup_table_0 = new double[_table_size_0][2];
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__Membrane__Vm_converted = mTableMins[0] + i*mTableSteps[0];
+                double val = 1102.5 * exp(-2361.96 * pow((1 + 0.037037037037037035 * var_chaste_interface__Membrane__Vm_converted), 4));
+
+                _lookup_table_0[i][0] = val;
+            }
+
+            for (unsigned i=0 ; i<_table_size_0; i++)
+            {
+                const double var_chaste_interface__Membrane__Vm_converted = mTableMins[0] + i*mTableSteps[0];
+                double val = 1 / (1.0 + exp(8.6666666666666661 + 0.33333333333333331 * var_chaste_interface__Membrane__Vm_converted));
+
+                _lookup_table_0[i][1] = val;
+            }
+
+            mNeedsRegeneration[0] = false;
+        }
+
         AbstractLookupTableCollection::EventHandler::EndEvent(AbstractLookupTableCollection::EventHandler::GENERATE_TABLES);
     }
 
 private:
     /** The single instance of the class */
     static std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler_LookupTables> mpInstance;
+
+    // Row lookup methods memory
+    double _lookup_table_0_row[2];
+
+    // Lookup tables
+    double (*_lookup_table_0)[2];
+    int _lookup_table_0_num_misshit_piecewise[2] = {0};
 
 };
 
@@ -179,6 +273,7 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
         double var_chaste_interface__sodium_dynamics__Nai = rY[15];
         // Units: millimolar; Initial value: 10.9248496211574
         
+
         const double var_Membrane__Vm = 0.001 * var_chaste_interface__Membrane__Vm_converted; // volt
         const double var_i_PCa__i_PCa_converted = 0.41249999999999998 * HeartConfig::Instance()->GetCapacitance() * var_chaste_interface__calcium_dynamics__Cai / (0.00050000000000000001 + var_chaste_interface__calcium_dynamics__Cai); // uA_per_cm2
         const double var_i_f__i_f_converted = (0.017000000000000001 + var_Membrane__Vm) * HeartConfig::Instance()->GetCapacitance() * mParameters[6] * var_chaste_interface__i_f_Xf_gate__Xf; // uA_per_cm2
@@ -225,6 +320,7 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
         double var_chaste_interface__i_CaL_fCa_gate__fCa = rCurrentGuess[4];
         double var_chaste_interface__sodium_dynamics__Nai = rCurrentGuess[5];
         
+
         //output_equations
         const double var_Membrane__Vm = 0.001 * var_chaste_interface__Membrane__Vm_converted; // volt
         const double var_calcium_dynamics__g_inf = ((var_chaste_interface__calcium_dynamics__Cai <= 0.00035) ? (1 / (1.0 + 5.439910241481016e+20 * pow(var_chaste_interface__calcium_dynamics__Cai, 6))) : (1 / (1.0 + 1.9720198874049176e+55 * pow(var_chaste_interface__calcium_dynamics__Cai, 16)))); // dimensionless
@@ -272,6 +368,14 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
         double var_chaste_interface__i_CaL_f2_gate__f2 = rY[7];
         // Units: dimensionless; Initial value: 0.999965815466749
         
+        // Lookup table indexing
+        const bool _oob_0 = Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler_LookupTables::Instance()->CheckIndex0(var_chaste_interface__Membrane__Vm_converted);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time_converted));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler_LookupTables::Instance()->IndexTable0(var_chaste_interface__Membrane__Vm_converted);
+
         double var_chaste_interface__calcium_dynamics__Ca_SR = rCurrentGuess[0];
         double var_chaste_interface__calcium_dynamics__Cai = rCurrentGuess[1];
         double var_chaste_interface__calcium_dynamics__g = rCurrentGuess[2];
@@ -330,8 +434,8 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
         const double var_x48 = (var_x39) && (var_x41) && (var_x43) && (var_x45) && (var_x47);
         const double var_x49 = (var_x41) && (var_x43) && (var_x45) && (var_x47);
         const double var_x50 = 0.10000000000000001 * var_chaste_interface__Membrane__Vm_converted;
-        const double var_x51 = 1 / (20.0 + 200.0 / (1.0 + exp(1.3 - var_x50)) + 180.0 / (1.0 + exp(3.0 + var_x50)) + 1102.5 * exp(-2361.96 * pow((1 + 0.037037037037037035 * var_chaste_interface__Membrane__Vm_converted), 4)));
-        const double var_x52 = 1 / (1.0 + exp(8.6666666666666661 + 0.33333333333333331 * var_chaste_interface__Membrane__Vm_converted));
+        const double var_x51 = 1 / (20.0 + 200.0 / (1.0 + exp(1.3 - var_x50)) + 180.0 / (1.0 + exp(3.0 + var_x50)) + _lt_0_row[0]);
+        const double var_x52 = _lt_0_row[1];
         const double var_x53 = -var_x52 + var_chaste_interface__i_CaL_f1_gate__f1 < 0;
         const double var_x54 = var_x51;
         const double var_x55 = exp(-0.9375 + 1250.0 * var_chaste_interface__calcium_dynamics__Cai);
@@ -419,6 +523,7 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
         double var_chaste_interface__sodium_dynamics__Nai = rY[15];
         // Units: millimolar; Initial value: 10.9248496211574
         
+
         const double var_Membrane__Vm = 0.001 * var_chaste_interface__Membrane__Vm_converted; // volt
         const double var_i_PCa__i_PCa = 0.41249999999999998 * var_chaste_interface__calcium_dynamics__Cai / (0.00050000000000000001 + var_chaste_interface__calcium_dynamics__Cai); // A_per_F
         const double var_electric_potentials__E_K = 8.6173421482889202e-5 * mParameters[12] * log(mParameters[2] / mParameters[0]); // volt
@@ -463,6 +568,7 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
         double var_chaste_interface__i_to_r_gate__r = rY[14];
         // Units: dimensionless; Initial value: 0.00573289893326379
         
+
         const double var_Membrane__Vm = 0.001 * var_chaste_interface__Membrane__Vm_converted;
         const double var_i_CaL_d_gate__alpha_d = 0.25 + 1.3999999999999999 / (1.0 + exp(-2.6923076923076925 - 76.92307692307692 * var_Membrane__Vm));
         const double var_i_CaL_d_gate__beta_d = 1.3999999999999999 / (1.0 + exp(1.0 + 200.0 * var_Membrane__Vm));
@@ -569,6 +675,7 @@ std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellM
         double var_chaste_interface__sodium_dynamics__Nai = rY[15];
         // Units: millimolar; Initial value: 10.9248496211574
         
+
         // Mathematics
         const double var_Membrane__Vm = 0.001 * var_chaste_interface__Membrane__Vm_converted; // volt
         const double var_calcium_dynamics__Buf_C = 0.25; // millimolar

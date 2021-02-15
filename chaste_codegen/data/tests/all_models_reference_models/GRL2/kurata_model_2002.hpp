@@ -34,6 +34,7 @@ class Cellkurata_model_2002FromCellMLGRL2 : public AbstractGeneralizedRushLarsen
 
 public:
 
+    double GetIntracellularCalciumConcentration();
     Cellkurata_model_2002FromCellMLGRL2(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellkurata_model_2002FromCellMLGRL2();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);

@@ -34,6 +34,8 @@ class Celliyer_model_2007FromCellMLBackwardEuler : public AbstractBackwardEulerC
 
 public:
 
+    boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
+    double GetIntracellularCalciumConcentration();
     Celliyer_model_2007FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Celliyer_model_2007FromCellMLBackwardEuler();
     AbstractLookupTableCollection* GetLookupTableCollection();

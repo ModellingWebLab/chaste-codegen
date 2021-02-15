@@ -28,7 +28,7 @@
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__cell__stim_amplitude_converted = -15.0 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
         const double var_chaste_interface__cell__stim_duration = 3.0; // ms
-        const double var_chaste_interface__cell__stim_offset = 0; // ms
+        const double var_chaste_interface__cell__stim_offset = 100.0; // ms
         const double var_chaste_interface__cell__stim_period = 400.0; // ms
         boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__cell__stim_amplitude_converted),
@@ -54,9 +54,20 @@
         // We have a default stimulus specified in the CellML file metadata
         this->mHasDefaultStimulusFromCellML = true;
         
-        this->mParameters[0] = 1.0; // (var_ICaL__G_CaL_mult) [dimensionless]
-        this->mParameters[1] = 16.0; // (var_INa__GNa) [mS_per_uF]
-        this->mParameters[2] = 0.02614; // (var_IKr__gkrmax) [mS_per_uF]
+        this->mParameters[0] = 1.0; // (var_Iup_Ileak__leak_factor) [dimensionless]
+        this->mParameters[1] = 0.125; // (var_Irel__kappa) [mM_per_mV_ms]
+        this->mParameters[2] = 0.0087500000000000008; // (var_Iup_Ileak__iupbar) [mM_per_ms]
+        this->mParameters[3] = 1.0; // (var_Na__conc_clamp) [dimensionless]
+        this->mParameters[4] = 1.8; // (var_Environment__Ca_o) [mM]
+        this->mParameters[5] = 4.5; // (var_Environment__K_o) [mM]
+        this->mParameters[6] = 140.0; // (var_Environment__Na_o) [mM]
+        this->mParameters[7] = 0.00054000000000000001; // (var_ICaL__pca) [L_per_F_ms]
+        this->mParameters[8] = 16.0; // (var_INa__GNa) [mS_per_uF]
+        this->mParameters[9] = 0; // (var_INa__perc_reduced_inact_for_IpNa) [dimensionless]
+        this->mParameters[10] = 0; // (var_INa__shift_h) [mV]
+        this->mParameters[11] = 0.02614; // (var_IKr__gkrmax) [mS_per_uF]
+        this->mParameters[12] = 0.433; // (var_IKs__GKsmax) [mS_per_uF]
+        this->mParameters[13] = 0.00025000000000000001; // (var_INaCa__c1) [uA_per_uF]
     }
 
     Dynamiclivshitz_rudy_2007FromCellMLRushLarsen::~Dynamiclivshitz_rudy_2007FromCellMLRushLarsen()
@@ -107,10 +118,7 @@
         const double var_Ca__bmyo = -var_chaste_interface__Ca__Ca_T + var_Ca__cmdnbar + var_Ca__kmcmdn + var_Ca__kmtrpn + var_Ca__trpnbar; // mM
         const double var_Ca__cmyo = var_Ca__cmdnbar * var_Ca__kmtrpn + var_Ca__kmcmdn * var_Ca__kmtrpn + var_Ca__kmcmdn * var_Ca__trpnbar - (var_Ca__kmcmdn + var_Ca__kmtrpn) * var_chaste_interface__Ca__Ca_T; // mM2
         const double var_Ca__Ca_i = -0.33333333333333331 * var_Ca__bmyo + 1.1547005383792515 * sqrt(-var_Ca__cmyo + 0.33333333333333331 * pow(var_Ca__bmyo, 2)) * cos(0.33333333333333331 * acos(0.096225044864937631 * pow((-var_Ca__cmyo + 0.33333333333333331 * pow(var_Ca__bmyo, 2)), (-1.5)) * (-2.0 * pow(var_Ca__bmyo, 3) - 27.0 * var_Ca__dmyo + 9.0 * var_Ca__bmyo * var_Ca__cmyo))); // mM
-        const double var_Environment__Ca_o = 1.8; // mM
         const double var_Environment__F = 96485.0; // C_per_mole
-        const double var_Environment__K_o = 4.5; // mM
-        const double var_Environment__Na_o = 140.0; // mM
         const double var_Environment__R = 8314.0; // mJ_per_mole_K
         const double var_Environment__Temp = 310.0; // kelvin
         const double var_Environment__FonRT = var_Environment__F / (var_Environment__R * var_Environment__Temp); // per_mV
@@ -122,55 +130,53 @@
         const double var_ICaL__ganao = 0.75; // dimensionless
         const double var_ICaL__kmca = 0.00059999999999999995; // mM
         const double var_ICaL__fca = 1 / (1.0 + var_Ca__Ca_i / var_ICaL__kmca); // dimensionless
-        const double var_ICaL__pca = 0.00054000000000000001; // L_per_F_ms
         const double var_ICaL__pk = 1.9299999999999999e-7; // L_per_F_ms
         const double var_ICaL__pna = 6.75e-7; // L_per_F_ms
         const double var_ICaT__gcat = 0.050000000000000003; // mS_per_uF
         const double var_ICab__gcab = 0.003016; // mS_per_uF
         const double var_IK1__GK1max = 0.75; // mS_per_uF
-        const double var_IK1__GK1_ = 0.43033148291193518 * sqrt(var_Environment__K_o) * var_IK1__GK1max; // mS_per_uF
+        const double var_IK1__GK1_ = 0.43033148291193518 * sqrt(mParameters[5]) * var_IK1__GK1max; // mS_per_uF
         const double var_IKp__GKpmax = 0.0055199999999999997; // mS_per_uF
-        const double var_IKs__GKsmax = 0.433; // mS_per_uF
-        const double var_IKs__gks = (1.0 + 0.59999999999999998 / (1.0 + 6.4818210260626455e-7 * pow((1 / var_Ca__Ca_i), 1.3999999999999999))) * var_IKs__GKsmax; // mS_per_uF
-        const double var_INaCa__c1 = 0.00025000000000000001; // uA_per_uF
+        const double var_IKr__gkr = 0.43033148291193518 * sqrt(mParameters[5]) * mParameters[11]; // mS_per_uF
+        const double var_IKs__gks = (1.0 + 0.59999999999999998 / (1.0 + 6.4818210260626455e-7 * pow((1 / var_Ca__Ca_i), 1.3999999999999999))) * mParameters[12]; // mS_per_uF
         const double var_INaCa__c2 = 0.0001; // dimensionless
         const double var_INaCa__gammas = 0.14999999999999999; // dimensionless
         const double var_INaK__ibarnak = 2.25; // uA_per_uF
         const double var_INaK__kmko = 1.5; // mM
         const double var_INaK__kmnai = 10.0; // mM
-        const double var_INaK__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * var_Environment__Na_o); // dimensionless
+        const double var_INaK__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * mParameters[6]); // dimensionless
         const double var_INab__GNab = 0.0040000000000000001; // mS_per_uF
         const double var_IpCa__ibarpca = 1.1499999999999999; // uA_per_uF
         const double var_IpCa__kmpca = 0.00050000000000000001; // mM
         const double var_IpCa__ipca = var_Ca__Ca_i * var_IpCa__ibarpca / (var_Ca__Ca_i + var_IpCa__kmpca); // uA_per_uF
-        const double var_ICaL__ibarca = 4.0 * (-var_Environment__Ca_o * var_ICaL__gacao + var_Ca__Ca_i * var_ICaL__gacai * exp(2.0 * var_Environment__FonRT * var_chaste_interface__cell__V)) * var_Environment__F * var_Environment__FonRT * mParameters[0] * var_ICaL__pca * var_chaste_interface__cell__V / (-1.0 + exp(2.0 * var_Environment__FonRT * var_chaste_interface__cell__V)); // uA_per_uF
-        const double var_ICaL__ibark = (-var_Environment__K_o * var_ICaL__gako + var_ICaL__gaki * var_chaste_interface__K__K_i * exp(var_Environment__FonRT * var_chaste_interface__cell__V)) * var_Environment__F * var_Environment__FonRT * mParameters[0] * var_ICaL__pk * var_chaste_interface__cell__V / (-1.0 + exp(var_Environment__FonRT * var_chaste_interface__cell__V)); // uA_per_uF
-        const double var_ICaL__ibarna = (-var_Environment__Na_o * var_ICaL__ganao + var_ICaL__ganai * var_chaste_interface__Na__Na_i * exp(var_Environment__FonRT * var_chaste_interface__cell__V)) * var_Environment__F * var_Environment__FonRT * mParameters[0] * var_ICaL__pna * var_chaste_interface__cell__V / (-1.0 + exp(var_Environment__FonRT * var_chaste_interface__cell__V)); // uA_per_uF
+        const double var_ICaL__ibarca = 4.0 * (-mParameters[4] * var_ICaL__gacao + var_Ca__Ca_i * var_ICaL__gacai * exp(2.0 * var_Environment__FonRT * var_chaste_interface__cell__V)) * var_Environment__F * var_Environment__FonRT * mParameters[7] * var_chaste_interface__cell__V / (-1.0 + exp(2.0 * var_Environment__FonRT * var_chaste_interface__cell__V)); // uA_per_uF
+        const double var_ICaL__ibark = (-mParameters[5] * var_ICaL__gako + var_ICaL__gaki * var_chaste_interface__K__K_i * exp(var_Environment__FonRT * var_chaste_interface__cell__V)) * var_Environment__F * var_Environment__FonRT * var_ICaL__pk * var_chaste_interface__cell__V / (-1.0 + exp(var_Environment__FonRT * var_chaste_interface__cell__V)); // uA_per_uF
+        const double var_ICaL__ibarna = (-mParameters[6] * var_ICaL__ganao + var_ICaL__ganai * var_chaste_interface__Na__Na_i * exp(var_Environment__FonRT * var_chaste_interface__cell__V)) * var_Environment__F * var_Environment__FonRT * var_ICaL__pna * var_chaste_interface__cell__V / (-1.0 + exp(var_Environment__FonRT * var_chaste_interface__cell__V)); // uA_per_uF
         const double var_ICaL__ilca = var_chaste_interface__ICaL__d * var_chaste_interface__ICaL__f * var_ICaL__fca * var_ICaL__ibarca; // uA_per_uF
         const double var_ICaL__ilcak = var_chaste_interface__ICaL__d * var_chaste_interface__ICaL__f * var_ICaL__fca * var_ICaL__ibark; // uA_per_uF
         const double var_ICaL__ilcana = var_chaste_interface__ICaL__d * var_chaste_interface__ICaL__f * var_ICaL__fca * var_ICaL__ibarna; // uA_per_uF
-        const double var_ICab__icab = (-0.5 * log(var_Environment__Ca_o / var_Ca__Ca_i) / var_Environment__FonRT + var_chaste_interface__cell__V) * var_ICab__gcab; // uA_per_uF
+        const double var_ICab__icab = (-0.5 * log(mParameters[4] / var_Ca__Ca_i) / var_Environment__FonRT + var_chaste_interface__cell__V) * var_ICab__gcab; // uA_per_uF
         const double var_IKr__r = 1 / (1.0 + exp(0.4017857142857143 + 0.044642857142857144 * var_chaste_interface__cell__V)); // dimensionless
-        const double var_INaCa__inaca = (-pow(var_Environment__Na_o, 3) * var_Ca__Ca_i + pow(var_chaste_interface__Na__Na_i, 3) * var_Environment__Ca_o * exp(var_Environment__FonRT * var_chaste_interface__cell__V)) * var_INaCa__c1 * exp((-1.0 + var_INaCa__gammas) * var_Environment__FonRT * var_chaste_interface__cell__V) / (1.0 + (pow(var_Environment__Na_o, 3) * var_Ca__Ca_i + pow(var_chaste_interface__Na__Na_i, 3) * var_Environment__Ca_o * exp(var_Environment__FonRT * var_chaste_interface__cell__V)) * var_INaCa__c2 * exp((-1.0 + var_INaCa__gammas) * var_Environment__FonRT * var_chaste_interface__cell__V)); // uA_per_uF
+        const double var_INaCa__inaca = (-pow(mParameters[6], 3) * var_Ca__Ca_i + pow(var_chaste_interface__Na__Na_i, 3) * mParameters[4] * exp(var_Environment__FonRT * var_chaste_interface__cell__V)) * mParameters[13] * exp((-1.0 + var_INaCa__gammas) * var_Environment__FonRT * var_chaste_interface__cell__V) / (1.0 + (pow(mParameters[6], 3) * var_Ca__Ca_i + pow(var_chaste_interface__Na__Na_i, 3) * mParameters[4] * exp(var_Environment__FonRT * var_chaste_interface__cell__V)) * var_INaCa__c2 * exp((-1.0 + var_INaCa__gammas) * var_Environment__FonRT * var_chaste_interface__cell__V)); // uA_per_uF
         const double var_INaK__fnak = 1 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_Environment__FonRT * var_chaste_interface__cell__V) + 0.036499999999999998 * var_INaK__sigma * exp(-var_Environment__FonRT * var_chaste_interface__cell__V)); // dimensionless
-        const double var_INaK__inak = var_INaK__fnak * var_INaK__ibarnak / ((1.0 + var_INaK__kmko / var_Environment__K_o) * (1.0 + pow(var_INaK__kmnai, 2) / pow(var_chaste_interface__Na__Na_i, 2))); // uA_per_uF
+        const double var_INaK__inak = var_INaK__fnak * var_INaK__ibarnak / ((1.0 + var_INaK__kmko / mParameters[5]) * (1.0 + pow(var_INaK__kmnai, 2) / pow(var_chaste_interface__Na__Na_i, 2))); // uA_per_uF
         const double var_cell__i_Stim = 0.0; // uA_per_uF
-        const double var_reversal_potentials__ECa = 0.5 * log(var_Environment__Ca_o / var_Ca__Ca_i) / var_Environment__FonRT; // mV
+        const double var_reversal_potentials__ECa = 0.5 * log(mParameters[4] / var_Ca__Ca_i) / var_Environment__FonRT; // mV
         const double var_ICaT__icat = pow(var_chaste_interface__ICaT__b, 2) * (-var_reversal_potentials__ECa + var_chaste_interface__cell__V) * var_chaste_interface__ICaT__g * var_ICaT__gcat; // uA_per_uF
         const double var_cell__caiont = -2.0 * var_INaCa__inaca + var_ICaL__ilca + var_ICaT__icat + var_ICab__icab + var_IpCa__ipca; // uA_per_uF
-        const double var_reversal_potentials__EK = log(var_Environment__K_o / var_chaste_interface__K__K_i) / var_Environment__FonRT; // mV
+        const double var_reversal_potentials__EK = log(mParameters[5] / var_chaste_interface__K__K_i) / var_Environment__FonRT; // mV
         const double var_IK1__ak1 = 1.02 / (1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__V - 0.23849999999999999 * var_reversal_potentials__EK)); // per_ms
         const double var_IK1__bk1 = (exp(-36.698642499999998 + 0.061749999999999999 * var_chaste_interface__cell__V - 0.061749999999999999 * var_reversal_potentials__EK) + 0.49124000000000001 * exp(0.43983232 + 0.080320000000000003 * var_chaste_interface__cell__V - 0.080320000000000003 * var_reversal_potentials__EK)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_reversal_potentials__EK - 0.51429999999999998 * var_chaste_interface__cell__V)); // per_ms
         const double var_IK1__gK1 = var_IK1__GK1_ * var_IK1__ak1 / (var_IK1__ak1 + var_IK1__bk1); // mS_per_uF
         const double var_IK1__IK1 = (-var_reversal_potentials__EK + var_chaste_interface__cell__V) * var_IK1__gK1; // uA_per_uF
         const double var_IKp__ikp = (-var_reversal_potentials__EK + var_chaste_interface__cell__V) * var_IKp__GKpmax / (1.0 + exp(1.2521739130434781 - 0.16722408026755853 * var_chaste_interface__cell__V)); // uA_per_uF
-        const double var_IKr__ikr = 0.43033148291193518 * sqrt(var_Environment__K_o) * (-var_reversal_potentials__EK + var_chaste_interface__cell__V) * mParameters[2] * var_IKr__r * var_chaste_interface__IKr__xr; // uA_per_uF
-        const double var_reversal_potentials__ENa = log(var_Environment__Na_o / var_chaste_interface__Na__Na_i) / var_Environment__FonRT; // mV
-        const double var_INa__ina = pow(var_chaste_interface__INa__m, 3) * (-var_reversal_potentials__ENa + var_chaste_interface__cell__V) * mParameters[1] * var_chaste_interface__INa__H * var_chaste_interface__INa__J; // uA_per_uF
+        const double var_IKr__ikr = (-var_reversal_potentials__EK + var_chaste_interface__cell__V) * var_IKr__gkr * var_IKr__r * var_chaste_interface__IKr__xr; // uA_per_uF
+        const double var_reversal_potentials__ENa = log(mParameters[6] / var_chaste_interface__Na__Na_i) / var_Environment__FonRT; // mV
+        const double var_INa__ina = pow(var_chaste_interface__INa__m, 3) * (-var_reversal_potentials__ENa + var_chaste_interface__cell__V) * mParameters[8] * var_chaste_interface__INa__H * var_chaste_interface__INa__J; // uA_per_uF
         const double var_INab__inab = (-var_reversal_potentials__ENa + var_chaste_interface__cell__V) * var_INab__GNab; // uA_per_uF
         const double var_cell__naiont = 3.0 * var_INaCa__inaca + 3.0 * var_INaK__inak + var_ICaL__ilcana + var_INa__ina + var_INab__inab; // uA_per_uF
         const double var_reversal_potentials__prnak = 0.018329999999999999; // dimensionless
-        const double var_reversal_potentials__EKs = log((var_Environment__Na_o * var_reversal_potentials__prnak + var_Environment__K_o) / (var_chaste_interface__Na__Na_i * var_reversal_potentials__prnak + var_chaste_interface__K__K_i)) / var_Environment__FonRT; // mV
+        const double var_reversal_potentials__EKs = log((mParameters[6] * var_reversal_potentials__prnak + mParameters[5]) / (var_chaste_interface__Na__Na_i * var_reversal_potentials__prnak + var_chaste_interface__K__K_i)) / var_Environment__FonRT; // mV
         const double var_IKs__iks = (-var_reversal_potentials__EKs + var_chaste_interface__cell__V) * var_IKs__gks * var_chaste_interface__IKs__xs1 * var_chaste_interface__IKs__xs2; // uA_per_uF
         const double var_cell__kiont = -2.0 * var_INaK__inak + var_ICaL__ilcak + var_IK1__IK1 + var_IKp__ikp + var_IKr__ikr + var_IKs__iks + var_cell__i_Stim; // uA_per_uF
         const double var_chaste_interface__i_ionic = (var_cell__caiont + var_cell__kiont + var_cell__naiont) * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
@@ -230,10 +236,7 @@
         const double var_Ca__cmyo = var_Ca__cmdnbar * var_Ca__kmtrpn + var_Ca__kmcmdn * var_Ca__kmtrpn + var_Ca__kmcmdn * var_Ca__trpnbar - (var_Ca__kmcmdn + var_Ca__kmtrpn) * var_chaste_interface__Ca__Ca_T; // mM2
         const double var_Ca__Ca_i = -0.33333333333333331 * var_Ca__bmyo + 1.1547005383792515 * sqrt(-var_Ca__cmyo + 0.33333333333333331 * pow(var_Ca__bmyo, 2)) * cos(0.33333333333333331 * acos(0.096225044864937631 * pow((-var_Ca__cmyo + 0.33333333333333331 * pow(var_Ca__bmyo, 2)), (-1.5)) * (-2.0 * pow(var_Ca__bmyo, 3) - 27.0 * var_Ca__dmyo + 9.0 * var_Ca__bmyo * var_Ca__cmyo))); // mM
         const double d_dt_chaste_interface_var_Ca__Over = 0; // 1 / ms
-        const double var_Environment__Ca_o = 1.8; // mM
         const double var_Environment__F = 96485.0; // C_per_mole
-        const double var_Environment__K_o = 4.5; // mM
-        const double var_Environment__Na_o = 140.0; // mM
         const double var_Environment__R = 8314.0; // mJ_per_mole_K
         const double var_Environment__Temp = 310.0; // kelvin
         const double var_Environment__FonRT = var_Environment__F / (var_Environment__R * var_Environment__Temp); // per_mV
@@ -245,53 +248,49 @@
         const double var_ICaL__ganao = 0.75; // dimensionless
         const double var_ICaL__kmca = 0.00059999999999999995; // mM
         const double var_ICaL__fca = 1 / (1.0 + var_Ca__Ca_i / var_ICaL__kmca); // dimensionless
-        const double var_ICaL__pca = 0.00054000000000000001; // L_per_F_ms
         const double var_ICaL__pk = 1.9299999999999999e-7; // L_per_F_ms
         const double var_ICaL__pna = 6.75e-7; // L_per_F_ms
         const double var_ICaT__gcat = 0.050000000000000003; // mS_per_uF
         const double var_ICab__gcab = 0.003016; // mS_per_uF
         const double var_IK1__GK1max = 0.75; // mS_per_uF
-        const double var_IK1__GK1_ = 0.43033148291193518 * sqrt(var_Environment__K_o) * var_IK1__GK1max; // mS_per_uF
+        const double var_IK1__GK1_ = 0.43033148291193518 * sqrt(mParameters[5]) * var_IK1__GK1max; // mS_per_uF
         const double var_IKp__GKpmax = 0.0055199999999999997; // mS_per_uF
-        const double var_IKs__GKsmax = 0.433; // mS_per_uF
-        const double var_IKs__gks = (1.0 + 0.59999999999999998 / (1.0 + 6.4818210260626455e-7 * pow((1 / var_Ca__Ca_i), 1.3999999999999999))) * var_IKs__GKsmax; // mS_per_uF
-        const double var_INaCa__c1 = 0.00025000000000000001; // uA_per_uF
+        const double var_IKr__gkr = 0.43033148291193518 * sqrt(mParameters[5]) * mParameters[11]; // mS_per_uF
+        const double var_IKs__gks = (1.0 + 0.59999999999999998 / (1.0 + 6.4818210260626455e-7 * pow((1 / var_Ca__Ca_i), 1.3999999999999999))) * mParameters[12]; // mS_per_uF
         const double var_INaCa__c2 = 0.0001; // dimensionless
         const double var_INaCa__gammas = 0.14999999999999999; // dimensionless
         const double var_INaK__ibarnak = 2.25; // uA_per_uF
         const double var_INaK__kmko = 1.5; // mM
         const double var_INaK__kmnai = 10.0; // mM
-        const double var_INaK__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * var_Environment__Na_o); // dimensionless
+        const double var_INaK__sigma = -0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * mParameters[6]); // dimensionless
         const double var_INab__GNab = 0.0040000000000000001; // mS_per_uF
         const double var_IpCa__ibarpca = 1.1499999999999999; // uA_per_uF
         const double var_IpCa__kmpca = 0.00050000000000000001; // mM
         const double var_IpCa__ipca = var_Ca__Ca_i * var_IpCa__ibarpca / (var_Ca__Ca_i + var_IpCa__kmpca); // uA_per_uF
         const double var_Irel__K_Relss = 1.0; // mM
         const double var_Irel__csqnbar = 10.0; // mM
-        const double var_Irel__kappa = 0.125; // mM_per_mV_ms
         const double var_Irel__kmcsqn = 0.80000000000000004; // mM
         const double var_Irel__bbb = -var_chaste_interface__Ca__Ca_JSR_T + var_Irel__csqnbar + var_Irel__kmcsqn; // mM
         const double var_Irel__c = var_chaste_interface__Ca__Ca_JSR_T * var_Irel__kmcsqn; // mM2
         const double var_Irel__Ca_JSR_free = sqrt(0.25 * pow(var_Irel__bbb, 2) + var_Irel__c) - 0.5 * var_Irel__bbb; // mM
         const double var_Irel__qn = 9.0; // dimensionless
         const double var_Irel__tau = 4.75; // ms
-        const double var_Irel__alpha_Rel = var_Irel__kappa * var_Irel__tau; // mM_per_mV
+        const double var_Irel__alpha_Rel = mParameters[1] * var_Irel__tau; // mM_per_mV
         const double var_Irel__tau_Rel = var_Irel__tau / (1.0 + 0.0123 / var_Irel__Ca_JSR_free); // ms
         const double var_Itr__tautr = 120.0; // ms
         const double var_Itr__itr = (-var_Irel__Ca_JSR_free + var_chaste_interface__Ca__Ca_NSR) / var_Itr__tautr; // mM_per_ms
         const double d_dt_chaste_interface_var_Ca__Ca_JSR_T = -var_chaste_interface__Irel__Rel + var_Itr__itr; // mM / ms
-        const double var_Iup_Ileak__iupbar = 0.0087500000000000008; // mM_per_ms
         const double var_Iup_Ileak__kmup = 0.00092000000000000003; // mM
-        const double var_Iup_Ileak__iup = var_Ca__Ca_i * var_Iup_Ileak__iupbar / (var_Ca__Ca_i + var_Iup_Ileak__kmup); // mM_per_ms
+        const double var_Iup_Ileak__iup = var_Ca__Ca_i * mParameters[2] / (var_Ca__Ca_i + var_Iup_Ileak__kmup); // mM_per_ms
         const double var_Iup_Ileak__nsrbar = 15.0; // mM
-        const double var_Iup_Ileak__ileak = var_chaste_interface__Ca__Ca_NSR * var_Iup_Ileak__iupbar / var_Iup_Ileak__nsrbar; // mM_per_ms
+        const double var_Iup_Ileak__ileak = var_chaste_interface__Ca__Ca_NSR * mParameters[2] * mParameters[0] / var_Iup_Ileak__nsrbar; // mM_per_ms
         const double var_ICaL__dss0 = 1 / (1.0 + exp(-1.6025641025641024 - 0.16025641025641024 * var_chaste_interface__cell__V)); // dimensionless
         const double var_ICaL__dss1 = 1 / (1.0 + exp(-2500.0 - 41.666666666666664 * var_chaste_interface__cell__V)); // dimensionless
         const double var_ICaL__dss = var_ICaL__dss0 * var_ICaL__dss1; // dimensionless
         const double var_ICaL__fss = 1 / (1.0 + exp(4.0 + 0.125 * var_chaste_interface__cell__V)) + 0.59999999999999998 / (1.0 + exp(2.5 - 0.050000000000000003 * var_chaste_interface__cell__V)); // dimensionless
-        const double var_ICaL__ibarca = 4.0 * (-var_Environment__Ca_o * var_ICaL__gacao + var_Ca__Ca_i * var_ICaL__gacai * exp(2.0 * var_Environment__FonRT * var_chaste_interface__cell__V)) * var_Environment__F * var_Environment__FonRT * mParameters[0] * var_ICaL__pca * var_chaste_interface__cell__V / (-1.0 + exp(2.0 * var_Environment__FonRT * var_chaste_interface__cell__V)); // uA_per_uF
-        const double var_ICaL__ibark = (-var_Environment__K_o * var_ICaL__gako + var_ICaL__gaki * var_chaste_interface__K__K_i * exp(var_Environment__FonRT * var_chaste_interface__cell__V)) * var_Environment__F * var_Environment__FonRT * mParameters[0] * var_ICaL__pk * var_chaste_interface__cell__V / (-1.0 + exp(var_Environment__FonRT * var_chaste_interface__cell__V)); // uA_per_uF
-        const double var_ICaL__ibarna = (-var_Environment__Na_o * var_ICaL__ganao + var_ICaL__ganai * var_chaste_interface__Na__Na_i * exp(var_Environment__FonRT * var_chaste_interface__cell__V)) * var_Environment__F * var_Environment__FonRT * mParameters[0] * var_ICaL__pna * var_chaste_interface__cell__V / (-1.0 + exp(var_Environment__FonRT * var_chaste_interface__cell__V)); // uA_per_uF
+        const double var_ICaL__ibarca = 4.0 * (-mParameters[4] * var_ICaL__gacao + var_Ca__Ca_i * var_ICaL__gacai * exp(2.0 * var_Environment__FonRT * var_chaste_interface__cell__V)) * var_Environment__F * var_Environment__FonRT * mParameters[7] * var_chaste_interface__cell__V / (-1.0 + exp(2.0 * var_Environment__FonRT * var_chaste_interface__cell__V)); // uA_per_uF
+        const double var_ICaL__ibark = (-mParameters[5] * var_ICaL__gako + var_ICaL__gaki * var_chaste_interface__K__K_i * exp(var_Environment__FonRT * var_chaste_interface__cell__V)) * var_Environment__F * var_Environment__FonRT * var_ICaL__pk * var_chaste_interface__cell__V / (-1.0 + exp(var_Environment__FonRT * var_chaste_interface__cell__V)); // uA_per_uF
+        const double var_ICaL__ibarna = (-mParameters[6] * var_ICaL__ganao + var_ICaL__ganai * var_chaste_interface__Na__Na_i * exp(var_Environment__FonRT * var_chaste_interface__cell__V)) * var_Environment__F * var_Environment__FonRT * var_ICaL__pna * var_chaste_interface__cell__V / (-1.0 + exp(var_Environment__FonRT * var_chaste_interface__cell__V)); // uA_per_uF
         const double var_ICaL__ilca = var_chaste_interface__ICaL__d * var_chaste_interface__ICaL__f * var_ICaL__fca * var_ICaL__ibarca; // uA_per_uF
         const double var_ICaL__ilcak = var_chaste_interface__ICaL__d * var_chaste_interface__ICaL__f * var_ICaL__fca * var_ICaL__ibark; // uA_per_uF
         const double var_ICaL__ilcana = var_chaste_interface__ICaL__d * var_chaste_interface__ICaL__f * var_ICaL__fca * var_ICaL__ibarna; // uA_per_uF
@@ -302,22 +301,26 @@
         const double var_ICaT__gss = 1 / (1.0 + exp(10.714285714285715 + 0.17857142857142858 * var_chaste_interface__cell__V)); // dimensionless
         const double var_ICaT__taub = 3.7000000000000002 + 6.0999999999999996 / (1.0 + exp(5.5555555555555554 + 0.22222222222222221 * var_chaste_interface__cell__V)); // ms
         const double var_ICaT__taug = 12.0 - 12.0 * var_ICaT__aa + (12.0 - 0.875 * var_chaste_interface__cell__V) * var_ICaT__aa; // ms
-        const double var_ICab__icab = (-0.5 * log(var_Environment__Ca_o / var_Ca__Ca_i) / var_Environment__FonRT + var_chaste_interface__cell__V) * var_ICab__gcab; // uA_per_uF
+        const double var_ICab__icab = (-0.5 * log(mParameters[4] / var_Ca__Ca_i) / var_Environment__FonRT + var_chaste_interface__cell__V) * var_ICab__gcab; // uA_per_uF
         const double var_IKr__r = 1 / (1.0 + exp(0.4017857142857143 + 0.044642857142857144 * var_chaste_interface__cell__V)); // dimensionless
         const double var_IKr__tauxr = 1 / (0.00060999999999999997 * (38.899999999999999 + var_chaste_interface__cell__V) / (-1.0 + exp(5.6404999999999994 + 0.14499999999999999 * var_chaste_interface__cell__V)) + 0.0013799999999999999 * (14.199999999999999 + var_chaste_interface__cell__V) / (1.0 - exp(-1.7465999999999999 - 0.123 * var_chaste_interface__cell__V))); // ms
         const double var_IKr__xrss = 1 / (1.0 + exp(-2.3729411764705883 - 0.23529411764705882 * var_chaste_interface__cell__V)); // dimensionless
         const double var_IKs__tauxs = 1 / (0.00013100000000000001 * (30.0 + var_chaste_interface__cell__V) / (-1.0 + exp(2.0609999999999999 + 0.068699999999999997 * var_chaste_interface__cell__V)) + 7.1899999999999999e-5 * (30.0 + var_chaste_interface__cell__V) / (1.0 - exp(-4.4399999999999995 - 0.14799999999999999 * var_chaste_interface__cell__V))); // ms
         const double var_IKs__xss = 1 / (1.0 + exp(0.089820359281437126 - 0.059880239520958084 * var_chaste_interface__cell__V)); // dimensionless
         const double var_INa__a = 1.0 - 1 / (1.0 + exp(-1666.6666666666667 - 41.666666666666664 * var_chaste_interface__cell__V)); // per_ms
-        const double var_INa__aH = 0.13500000000000001 * var_INa__a * exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__cell__V); // per_ms
-        const double var_INa__aj = (37.780000000000001 + var_chaste_interface__cell__V) * (-127140.0 * exp(0.24440000000000001 * var_chaste_interface__cell__V) - 3.4740000000000003e-5 * exp(-0.043909999999999998 * var_chaste_interface__cell__V)) * var_INa__a / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__V)); // per_ms
+        const double var_INa__aH = 0.13500000000000001 * var_INa__a * exp(-11.764705882352942 + 0.14705882352941177 * mParameters[10] - 0.14705882352941177 * var_chaste_interface__cell__V); // per_ms
+        const double var_INa__aj = (37.780000000000001 + var_chaste_interface__cell__V) * (-127140.0 * exp(0.24440000000000001 * var_chaste_interface__cell__V - 0.24440000000000001 * mParameters[10]) - 3.4740000000000003e-5 * exp(0.043909999999999998 * mParameters[10] - 0.043909999999999998 * var_chaste_interface__cell__V)) * var_INa__a / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__V)); // per_ms
         const double var_INa__am = 0.32000000000000001 * (47.130000000000003 + var_chaste_interface__cell__V) / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__cell__V)); // per_ms
-        const double var_INa__bH = (3.5600000000000001 * exp(0.079000000000000001 * var_chaste_interface__cell__V) + 310000.0 * exp(0.34999999999999998 * var_chaste_interface__cell__V)) * var_INa__a + 7.6923076923076916 * (1.0 - var_INa__a) / (1.0 + exp(-0.96036036036036043 - 0.0900900900900901 * var_chaste_interface__cell__V)); // per_ms
-        const double var_INa__bj = 0.1212 * var_INa__a * exp(-0.01052 * var_chaste_interface__cell__V) / (1.0 + exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__cell__V)) + 0.29999999999999999 * (1.0 - var_INa__a) * exp(-2.5349999999999999e-7 * var_chaste_interface__cell__V) / (1.0 + exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__cell__V)); // per_ms
+        const double var_INa__bH = (3.5600000000000001 * exp(0.079000000000000001 * var_chaste_interface__cell__V - 0.079000000000000001 * mParameters[10]) + 310000.0 * exp(0.34999999999999998 * var_chaste_interface__cell__V - 0.34999999999999998 * mParameters[10])) * var_INa__a + 7.6923076923076916 * (1.0 - var_INa__a) / (1.0 + exp(-0.96036036036036043 - 0.0900900900900901 * var_chaste_interface__cell__V)); // per_ms
+        const double var_INa__H_inf = 0.01 * mParameters[9] + (1.0 - 0.01 * mParameters[9]) * var_INa__aH / (var_INa__aH + var_INa__bH); // dimensionless
+        const double var_INa__bj = 0.1212 * var_INa__a * exp(0.01052 * mParameters[10] - 0.01052 * var_chaste_interface__cell__V) / (1.0 + exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__cell__V)) + 0.29999999999999999 * (1.0 - var_INa__a) * exp(2.5349999999999999e-7 * mParameters[10] - 2.5349999999999999e-7 * var_chaste_interface__cell__V) / (1.0 + exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__cell__V)); // per_ms
         const double var_INa__bm = 0.080000000000000002 * exp(-0.090909090909090912 * var_chaste_interface__cell__V); // per_ms
-        const double var_INaCa__inaca = (-pow(var_Environment__Na_o, 3) * var_Ca__Ca_i + pow(var_chaste_interface__Na__Na_i, 3) * var_Environment__Ca_o * exp(var_Environment__FonRT * var_chaste_interface__cell__V)) * var_INaCa__c1 * exp((-1.0 + var_INaCa__gammas) * var_Environment__FonRT * var_chaste_interface__cell__V) / (1.0 + (pow(var_Environment__Na_o, 3) * var_Ca__Ca_i + pow(var_chaste_interface__Na__Na_i, 3) * var_Environment__Ca_o * exp(var_Environment__FonRT * var_chaste_interface__cell__V)) * var_INaCa__c2 * exp((-1.0 + var_INaCa__gammas) * var_Environment__FonRT * var_chaste_interface__cell__V)); // uA_per_uF
+        const double var_INa__j_inf = 0.01 * mParameters[9] + (1.0 - 0.01 * mParameters[9]) * var_INa__aj / (var_INa__aj + var_INa__bj); // dimensionless
+        const double var_INa__tau_H = 1 / (var_INa__aH + var_INa__bH); // ms
+        const double var_INa__tau_j = 1 / (var_INa__aj + var_INa__bj); // ms
+        const double var_INaCa__inaca = (-pow(mParameters[6], 3) * var_Ca__Ca_i + pow(var_chaste_interface__Na__Na_i, 3) * mParameters[4] * exp(var_Environment__FonRT * var_chaste_interface__cell__V)) * mParameters[13] * exp((-1.0 + var_INaCa__gammas) * var_Environment__FonRT * var_chaste_interface__cell__V) / (1.0 + (pow(mParameters[6], 3) * var_Ca__Ca_i + pow(var_chaste_interface__Na__Na_i, 3) * mParameters[4] * exp(var_Environment__FonRT * var_chaste_interface__cell__V)) * var_INaCa__c2 * exp((-1.0 + var_INaCa__gammas) * var_Environment__FonRT * var_chaste_interface__cell__V)); // uA_per_uF
         const double var_INaK__fnak = 1 / (1.0 + 0.1245 * exp(-0.10000000000000001 * var_Environment__FonRT * var_chaste_interface__cell__V) + 0.036499999999999998 * var_INaK__sigma * exp(-var_Environment__FonRT * var_chaste_interface__cell__V)); // dimensionless
-        const double var_INaK__inak = var_INaK__fnak * var_INaK__ibarnak / ((1.0 + var_INaK__kmko / var_Environment__K_o) * (1.0 + pow(var_INaK__kmnai, 2) / pow(var_chaste_interface__Na__Na_i, 2))); // uA_per_uF
+        const double var_INaK__inak = var_INaK__fnak * var_INaK__ibarnak / ((1.0 + var_INaK__kmko / mParameters[5]) * (1.0 + pow(var_INaK__kmnai, 2) / pow(var_chaste_interface__Na__Na_i, 2))); // uA_per_uF
         const double var_Irel__Rel_ss = var_ICaL__ilca * var_Irel__alpha_Rel / (1.0 + pow((var_Irel__K_Relss / var_Irel__Ca_JSR_free), var_Irel__qn)); // mM_per_ms
         const double d_dt_chaste_interface_var_Irel__Rel = (-var_chaste_interface__Irel__Rel - var_Irel__Rel_ss) / var_Irel__tau_Rel; // mM_per_ms / ms
         const double var_cell__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__Environment__time); // uA_per_cm2
@@ -332,27 +335,27 @@
         const double var_cell__vmyo = 0.68000000000000005 * var_cell__vcell; // uL
         const double var_cell__vnsr = 0.055199999999999999 * var_cell__vcell; // uL
         const double d_dt_chaste_interface_var_Ca__Ca_NSR = -var_Iup_Ileak__ileak - var_Itr__itr * var_cell__vjsr / var_cell__vnsr + var_Iup_Ileak__iup; // mM / ms
-        const double var_reversal_potentials__ECa = 0.5 * log(var_Environment__Ca_o / var_Ca__Ca_i) / var_Environment__FonRT; // mV
+        const double var_reversal_potentials__ECa = 0.5 * log(mParameters[4] / var_Ca__Ca_i) / var_Environment__FonRT; // mV
         const double var_ICaT__icat = pow(var_chaste_interface__ICaT__b, 2) * (-var_reversal_potentials__ECa + var_chaste_interface__cell__V) * var_chaste_interface__ICaT__g * var_ICaT__gcat; // uA_per_uF
         const double var_cell__caiont = -2.0 * var_INaCa__inaca + var_ICaL__ilca + var_ICaT__icat + var_ICab__icab + var_IpCa__ipca; // uA_per_uF
         const double d_dt_chaste_interface_var_Ca__Ca_T = (-var_Iup_Ileak__iup + var_Iup_Ileak__ileak) * var_cell__vnsr / var_cell__vmyo + var_chaste_interface__Irel__Rel * var_cell__vjsr / var_cell__vmyo - 0.5 * var_cell__AF * var_cell__caiont / var_cell__vmyo; // mM / ms
-        const double var_reversal_potentials__EK = log(var_Environment__K_o / var_chaste_interface__K__K_i) / var_Environment__FonRT; // mV
+        const double var_reversal_potentials__EK = log(mParameters[5] / var_chaste_interface__K__K_i) / var_Environment__FonRT; // mV
         const double var_IK1__ak1 = 1.02 / (1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__V - 0.23849999999999999 * var_reversal_potentials__EK)); // per_ms
         const double var_IK1__bk1 = (exp(-36.698642499999998 + 0.061749999999999999 * var_chaste_interface__cell__V - 0.061749999999999999 * var_reversal_potentials__EK) + 0.49124000000000001 * exp(0.43983232 + 0.080320000000000003 * var_chaste_interface__cell__V - 0.080320000000000003 * var_reversal_potentials__EK)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_reversal_potentials__EK - 0.51429999999999998 * var_chaste_interface__cell__V)); // per_ms
         const double var_IK1__gK1 = var_IK1__GK1_ * var_IK1__ak1 / (var_IK1__ak1 + var_IK1__bk1); // mS_per_uF
         const double var_IK1__IK1 = (-var_reversal_potentials__EK + var_chaste_interface__cell__V) * var_IK1__gK1; // uA_per_uF
         const double var_IKp__ikp = (-var_reversal_potentials__EK + var_chaste_interface__cell__V) * var_IKp__GKpmax / (1.0 + exp(1.2521739130434781 - 0.16722408026755853 * var_chaste_interface__cell__V)); // uA_per_uF
-        const double var_IKr__ikr = 0.43033148291193518 * sqrt(var_Environment__K_o) * (-var_reversal_potentials__EK + var_chaste_interface__cell__V) * mParameters[2] * var_IKr__r * var_chaste_interface__IKr__xr; // uA_per_uF
-        const double var_reversal_potentials__ENa = log(var_Environment__Na_o / var_chaste_interface__Na__Na_i) / var_Environment__FonRT; // mV
-        const double var_INa__ina = pow(var_chaste_interface__INa__m, 3) * (-var_reversal_potentials__ENa + var_chaste_interface__cell__V) * mParameters[1] * var_chaste_interface__INa__H * var_chaste_interface__INa__J; // uA_per_uF
+        const double var_IKr__ikr = (-var_reversal_potentials__EK + var_chaste_interface__cell__V) * var_IKr__gkr * var_IKr__r * var_chaste_interface__IKr__xr; // uA_per_uF
+        const double var_reversal_potentials__ENa = log(mParameters[6] / var_chaste_interface__Na__Na_i) / var_Environment__FonRT; // mV
+        const double var_INa__ina = pow(var_chaste_interface__INa__m, 3) * (-var_reversal_potentials__ENa + var_chaste_interface__cell__V) * mParameters[8] * var_chaste_interface__INa__H * var_chaste_interface__INa__J; // uA_per_uF
         const double var_INab__inab = (-var_reversal_potentials__ENa + var_chaste_interface__cell__V) * var_INab__GNab; // uA_per_uF
         const double var_cell__naiont = 3.0 * var_INaCa__inaca + 3.0 * var_INaK__inak + var_ICaL__ilcana + var_INa__ina + var_INab__inab; // uA_per_uF
-        const double d_dt_chaste_interface_var_Na__Na_i = -var_cell__AF * var_cell__naiont / var_cell__vmyo; // mM / ms
+        const double d_dt_chaste_interface_var_Na__Na_i = -mParameters[3] * var_cell__AF * var_cell__naiont / var_cell__vmyo; // mM / ms
         const double var_reversal_potentials__prnak = 0.018329999999999999; // dimensionless
-        const double var_reversal_potentials__EKs = log((var_Environment__Na_o * var_reversal_potentials__prnak + var_Environment__K_o) / (var_chaste_interface__Na__Na_i * var_reversal_potentials__prnak + var_chaste_interface__K__K_i)) / var_Environment__FonRT; // mV
+        const double var_reversal_potentials__EKs = log((mParameters[6] * var_reversal_potentials__prnak + mParameters[5]) / (var_chaste_interface__Na__Na_i * var_reversal_potentials__prnak + var_chaste_interface__K__K_i)) / var_Environment__FonRT; // mV
         const double var_IKs__iks = (-var_reversal_potentials__EKs + var_chaste_interface__cell__V) * var_IKs__gks * var_chaste_interface__IKs__xs1 * var_chaste_interface__IKs__xs2; // uA_per_uF
         const double var_cell__kiont = -2.0 * var_INaK__inak + var_ICaL__ilcak + var_IK1__IK1 + var_IKp__ikp + var_IKr__ikr + var_IKs__iks + var_cell__i_Stim; // uA_per_uF
-        const double d_dt_chaste_interface_var_K__K_i = -var_cell__AF * var_cell__kiont / var_cell__vmyo; // mM / ms
+        const double d_dt_chaste_interface_var_K__K_i = -mParameters[3] * var_cell__AF * var_cell__kiont / var_cell__vmyo; // mM / ms
 
         if (mSetVoltageDerivativeToZero)
         {
@@ -364,12 +367,12 @@
         }
         
         rDY[0] = d_dt_chaste_interface_var_cell__V;
-        rAlphaOrTau[1] = var_INa__aH;
-        rBetaOrInf[1] = var_INa__bH;
+        rAlphaOrTau[1] = var_INa__tau_H;
+        rBetaOrInf[1] = var_INa__H_inf;
         rAlphaOrTau[2] = var_INa__am;
         rBetaOrInf[2] = var_INa__bm;
-        rAlphaOrTau[3] = var_INa__aj;
-        rBetaOrInf[3] = var_INa__bj;
+        rAlphaOrTau[3] = var_INa__tau_j;
+        rBetaOrInf[3] = var_INa__j_inf;
         rAlphaOrTau[4] = var_ICaL__taud;
         rBetaOrInf[4] = var_ICaL__dss;
         rAlphaOrTau[5] = var_ICaL__tauf;
@@ -396,21 +399,13 @@
     {
         std::vector<double>& rY = rGetStateVariables();
         
-        {
-            const double tau_inv = rAlphaOrTau[1] + rBetaOrInf[1];
-            const double y_inf = rAlphaOrTau[1] / tau_inv;
-            rY[1] = y_inf + (rY[1] - y_inf)*exp(-mDt*tau_inv);
-        }
+        rY[1] = rBetaOrInf[1] + (rY[1] - rBetaOrInf[1])*exp(-mDt/rAlphaOrTau[1]);
         {
             const double tau_inv = rAlphaOrTau[2] + rBetaOrInf[2];
             const double y_inf = rAlphaOrTau[2] / tau_inv;
             rY[2] = y_inf + (rY[2] - y_inf)*exp(-mDt*tau_inv);
         }
-        {
-            const double tau_inv = rAlphaOrTau[3] + rBetaOrInf[3];
-            const double y_inf = rAlphaOrTau[3] / tau_inv;
-            rY[3] = y_inf + (rY[3] - y_inf)*exp(-mDt*tau_inv);
-        }
+        rY[3] = rBetaOrInf[3] + (rY[3] - rBetaOrInf[3])*exp(-mDt/rAlphaOrTau[3]);
         rY[4] = rBetaOrInf[4] + (rY[4] - rBetaOrInf[4])*exp(-mDt/rAlphaOrTau[4]);
         rY[5] = rBetaOrInf[5] + (rY[5] - rBetaOrInf[5])*exp(-mDt/rAlphaOrTau[5]);
         rY[6] = rBetaOrInf[6] + (rY[6] - rBetaOrInf[6])*exp(-mDt/rAlphaOrTau[6]);
@@ -431,6 +426,28 @@
     {
         // Inputs:
         // Time units: millisecond
+        double var_chaste_interface__cell__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        // Units: mV; Initial value: -89.4356034692784
+        double var_chaste_interface__INa__H = rY[1];
+        // Units: dimensionless; Initial value: 0.994401369032678
+        double var_chaste_interface__INa__m = rY[2];
+        // Units: dimensionless; Initial value: 0.000734780346592185
+        double var_chaste_interface__INa__J = rY[3];
+        // Units: dimensionless; Initial value: 0.996100688673679
+        double var_chaste_interface__ICaL__d = rY[4];
+        // Units: dimensionless; Initial value: 3.2514786721066e-27
+        double var_chaste_interface__ICaL__f = rY[5];
+        // Units: dimensionless; Initial value: 0.997404948824816
+        double var_chaste_interface__IKr__xr = rY[6];
+        // Units: dimensionless; Initial value: 0.000162194715543637
+        double var_chaste_interface__IKs__xs1 = rY[7];
+        // Units: dimensionless; Initial value: 0.0285147332973946
+        double var_chaste_interface__IKs__xs2 = rY[8];
+        // Units: dimensionless; Initial value: 0.0764114040188678
+        double var_chaste_interface__Na__Na_i = rY[12];
+        // Units: mM; Initial value: 16.612739313555
+        double var_chaste_interface__K__K_i = rY[13];
+        // Units: mM; Initial value: 139.730914103161
         double var_chaste_interface__Ca__Ca_T = rY[14];
         // Units: mM; Initial value: 0.0257059808595638
         
@@ -443,12 +460,68 @@
         const double var_Ca__bmyo = -var_chaste_interface__Ca__Ca_T + var_Ca__cmdnbar + var_Ca__kmcmdn + var_Ca__kmtrpn + var_Ca__trpnbar; // mM
         const double var_Ca__cmyo = var_Ca__cmdnbar * var_Ca__kmtrpn + var_Ca__kmcmdn * var_Ca__kmtrpn + var_Ca__kmcmdn * var_Ca__trpnbar - (var_Ca__kmcmdn + var_Ca__kmtrpn) * var_chaste_interface__Ca__Ca_T; // mM2
         const double var_Ca__Ca_i = -0.33333333333333331 * var_Ca__bmyo + 1.1547005383792515 * sqrt(-var_Ca__cmyo + 0.33333333333333331 * pow(var_Ca__bmyo, 2)) * cos(0.33333333333333331 * acos(0.096225044864937631 * pow((-var_Ca__cmyo + 0.33333333333333331 * pow(var_Ca__bmyo, 2)), (-1.5)) * (-2.0 * pow(var_Ca__bmyo, 3) - 27.0 * var_Ca__dmyo + 9.0 * var_Ca__bmyo * var_Ca__cmyo))); // mM
+        const double var_Environment__F = 96485.0; // C_per_mole
+        const double var_Environment__R = 8314.0; // mJ_per_mole_K
+        const double var_Environment__Temp = 310.0; // kelvin
+        const double var_Environment__FonRT = var_Environment__F / (var_Environment__R * var_Environment__Temp); // per_mV
+        const double var_ICaL__gacai = 1.0; // dimensionless
+        const double var_ICaL__gacao = 0.34100000000000003; // dimensionless
+        const double var_ICaL__kmca = 0.00059999999999999995; // mM
+        const double var_ICaL__fca = 1 / (1.0 + var_Ca__Ca_i / var_ICaL__kmca); // dimensionless
+        const double var_IK1__GK1max = 0.75; // mS_per_uF
+        const double var_IK1__GK1_ = 0.43033148291193518 * sqrt(mParameters[5]) * var_IK1__GK1max; // mS_per_uF
+        const double var_IKr__gkr = 0.43033148291193518 * sqrt(mParameters[5]) * mParameters[11]; // mS_per_uF
+        const double var_IKs__gks = (1.0 + 0.59999999999999998 / (1.0 + 6.4818210260626455e-7 * pow((1 / var_Ca__Ca_i), 1.3999999999999999))) * mParameters[12]; // mS_per_uF
+        const double var_INaCa__c2 = 0.0001; // dimensionless
+        const double var_INaCa__gammas = 0.14999999999999999; // dimensionless
+        const double var_ICaL__ibarca = 4.0 * (-mParameters[4] * var_ICaL__gacao + var_Ca__Ca_i * var_ICaL__gacai * exp(2.0 * var_Environment__FonRT * var_chaste_interface__cell__V)) * var_Environment__F * var_Environment__FonRT * mParameters[7] * var_chaste_interface__cell__V / (-1.0 + exp(2.0 * var_Environment__FonRT * var_chaste_interface__cell__V)); // uA_per_uF
+        const double var_ICaL__ilca = var_chaste_interface__ICaL__d * var_chaste_interface__ICaL__f * var_ICaL__fca * var_ICaL__ibarca; // uA_per_uF
+        const double var_ICaL__ilca_converted = HeartConfig::Instance()->GetCapacitance() * var_ICaL__ilca; // uA_per_cm2
+        const double var_ICaL__tauf = 1 / (0.02 + 0.019699999999999999 * exp(-0.113569 * pow((1 + 0.10000000000000001 * var_chaste_interface__cell__V), 2))); // ms
+        const double var_IKr__r = 1 / (1.0 + exp(0.4017857142857143 + 0.044642857142857144 * var_chaste_interface__cell__V)); // dimensionless
+        const double var_INa__a = 1.0 - 1 / (1.0 + exp(-1666.6666666666667 - 41.666666666666664 * var_chaste_interface__cell__V)); // per_ms
+        const double var_INa__aH = 0.13500000000000001 * var_INa__a * exp(-11.764705882352942 + 0.14705882352941177 * mParameters[10] - 0.14705882352941177 * var_chaste_interface__cell__V); // per_ms
+        const double var_INa__aj = (37.780000000000001 + var_chaste_interface__cell__V) * (-127140.0 * exp(0.24440000000000001 * var_chaste_interface__cell__V - 0.24440000000000001 * mParameters[10]) - 3.4740000000000003e-5 * exp(0.043909999999999998 * mParameters[10] - 0.043909999999999998 * var_chaste_interface__cell__V)) * var_INa__a / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__cell__V)); // per_ms
+        const double var_INa__bH = (3.5600000000000001 * exp(0.079000000000000001 * var_chaste_interface__cell__V - 0.079000000000000001 * mParameters[10]) + 310000.0 * exp(0.34999999999999998 * var_chaste_interface__cell__V - 0.34999999999999998 * mParameters[10])) * var_INa__a + 7.6923076923076916 * (1.0 - var_INa__a) / (1.0 + exp(-0.96036036036036043 - 0.0900900900900901 * var_chaste_interface__cell__V)); // per_ms
+        const double var_INa__bj = 0.1212 * var_INa__a * exp(0.01052 * mParameters[10] - 0.01052 * var_chaste_interface__cell__V) / (1.0 + exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__cell__V)) + 0.29999999999999999 * (1.0 - var_INa__a) * exp(2.5349999999999999e-7 * mParameters[10] - 2.5349999999999999e-7 * var_chaste_interface__cell__V) / (1.0 + exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__cell__V)); // per_ms
+        const double var_INa__tau_H = 1 / (var_INa__aH + var_INa__bH); // ms
+        const double var_INa__tau_j = 1 / (var_INa__aj + var_INa__bj); // ms
+        const double var_INaCa__inaca = (-pow(mParameters[6], 3) * var_Ca__Ca_i + pow(var_chaste_interface__Na__Na_i, 3) * mParameters[4] * exp(var_Environment__FonRT * var_chaste_interface__cell__V)) * mParameters[13] * exp((-1.0 + var_INaCa__gammas) * var_Environment__FonRT * var_chaste_interface__cell__V) / (1.0 + (pow(mParameters[6], 3) * var_Ca__Ca_i + pow(var_chaste_interface__Na__Na_i, 3) * mParameters[4] * exp(var_Environment__FonRT * var_chaste_interface__cell__V)) * var_INaCa__c2 * exp((-1.0 + var_INaCa__gammas) * var_Environment__FonRT * var_chaste_interface__cell__V)); // uA_per_uF
+        const double var_INaCa__inaca_converted = HeartConfig::Instance()->GetCapacitance() * var_INaCa__inaca; // uA_per_cm2
         const double var_cell__i_Stim_converted = GetIntracellularAreaStimulus(var_chaste_interface__Environment__time); // uA_per_cm2
+        const double var_reversal_potentials__EK = log(mParameters[5] / var_chaste_interface__K__K_i) / var_Environment__FonRT; // mV
+        const double var_IK1__ak1 = 1.02 / (1.0 + exp(-14.1227775 + 0.23849999999999999 * var_chaste_interface__cell__V - 0.23849999999999999 * var_reversal_potentials__EK)); // per_ms
+        const double var_IK1__bk1 = (exp(-36.698642499999998 + 0.061749999999999999 * var_chaste_interface__cell__V - 0.061749999999999999 * var_reversal_potentials__EK) + 0.49124000000000001 * exp(0.43983232 + 0.080320000000000003 * var_chaste_interface__cell__V - 0.080320000000000003 * var_reversal_potentials__EK)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * var_reversal_potentials__EK - 0.51429999999999998 * var_chaste_interface__cell__V)); // per_ms
+        const double var_IK1__gK1 = var_IK1__GK1_ * var_IK1__ak1 / (var_IK1__ak1 + var_IK1__bk1); // mS_per_uF
+        const double var_IK1__IK1 = (-var_reversal_potentials__EK + var_chaste_interface__cell__V) * var_IK1__gK1; // uA_per_uF
+        const double var_IK1__IK1_converted = HeartConfig::Instance()->GetCapacitance() * var_IK1__IK1; // uA_per_cm2
+        const double var_IKr__ikr = (-var_reversal_potentials__EK + var_chaste_interface__cell__V) * var_IKr__gkr * var_IKr__r * var_chaste_interface__IKr__xr; // uA_per_uF
+        const double var_IKr__ikr_converted = HeartConfig::Instance()->GetCapacitance() * var_IKr__ikr; // uA_per_cm2
+        const double var_reversal_potentials__ENa = log(mParameters[6] / var_chaste_interface__Na__Na_i) / var_Environment__FonRT; // mV
+        const double var_INa__ina = pow(var_chaste_interface__INa__m, 3) * (-var_reversal_potentials__ENa + var_chaste_interface__cell__V) * mParameters[8] * var_chaste_interface__INa__H * var_chaste_interface__INa__J; // uA_per_uF
+        const double var_INa__ina_converted = HeartConfig::Instance()->GetCapacitance() * var_INa__ina; // uA_per_cm2
+        const double var_reversal_potentials__prnak = 0.018329999999999999; // dimensionless
+        const double var_reversal_potentials__EKs = log((mParameters[6] * var_reversal_potentials__prnak + mParameters[5]) / (var_chaste_interface__Na__Na_i * var_reversal_potentials__prnak + var_chaste_interface__K__K_i)) / var_Environment__FonRT; // mV
+        const double var_IKs__iks = (-var_reversal_potentials__EKs + var_chaste_interface__cell__V) * var_IKs__gks * var_chaste_interface__IKs__xs1 * var_chaste_interface__IKs__xs2; // uA_per_uF
+        const double var_IKs__iks_converted = HeartConfig::Instance()->GetCapacitance() * var_IKs__iks; // uA_per_cm2
 
-        std::vector<double> dqs(3);
-        dqs[0] = var_chaste_interface__Environment__time;
-        dqs[1] = var_Ca__Ca_i;
-        dqs[2] = var_cell__i_Stim_converted;
+        std::vector<double> dqs(16);
+        dqs[0] = var_Ca__Ca_i;
+        dqs[1] = var_ICaL__ilca_converted;
+        dqs[2] = var_ICaL__tauf;
+        dqs[3] = var_INa__ina_converted;
+        dqs[4] = var_INa__tau_H;
+        dqs[5] = var_INa__tau_j;
+        dqs[6] = var_IK1__IK1_converted;
+        dqs[7] = var_IK1__GK1_;
+        dqs[8] = var_IK1__gK1;
+        dqs[9] = var_IKr__ikr_converted;
+        dqs[10] = var_IKr__gkr;
+        dqs[11] = var_IKs__iks_converted;
+        dqs[12] = var_IKs__gks;
+        dqs[13] = var_INaCa__inaca_converted;
+        dqs[14] = var_cell__i_Stim_converted;
+        dqs[15] = var_chaste_interface__Environment__time;
         return dqs;
     }
 
@@ -456,7 +529,7 @@ template<>
 void OdeSystemInformation<Dynamiclivshitz_rudy_2007FromCellMLRushLarsen>::Initialise(void)
 {
     this->mSystemName = "LivshitzRudy2007";
-    this->mFreeVariableName = "Environment__time";
+    this->mFreeVariableName = "time";
     this->mFreeVariableUnits = "ms";
 
     // rY[0]:
@@ -465,27 +538,27 @@ void OdeSystemInformation<Dynamiclivshitz_rudy_2007FromCellMLRushLarsen>::Initia
     this->mInitialConditions.push_back(-89.4356034692784);
 
     // rY[1]:
-    this->mVariableNames.push_back("INa__H");
+    this->mVariableNames.push_back("membrane_fast_sodium_current_h_gate");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.994401369032678);
 
     // rY[2]:
-    this->mVariableNames.push_back("INa__m");
+    this->mVariableNames.push_back("membrane_fast_sodium_current_m_gate");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.000734780346592185);
 
     // rY[3]:
-    this->mVariableNames.push_back("INa__J");
+    this->mVariableNames.push_back("membrane_fast_sodium_current_j_gate");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.996100688673679);
 
     // rY[4]:
-    this->mVariableNames.push_back("ICaL__d");
+    this->mVariableNames.push_back("membrane_L_type_calcium_current_d_gate");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(3.2514786721066e-27);
 
     // rY[5]:
-    this->mVariableNames.push_back("ICaL__f");
+    this->mVariableNames.push_back("membrane_L_type_calcium_current_f_gate");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(0.997404948824816);
 
@@ -515,17 +588,17 @@ void OdeSystemInformation<Dynamiclivshitz_rudy_2007FromCellMLRushLarsen>::Initia
     this->mInitialConditions.push_back(0.952834331760863);
 
     // rY[11]:
-    this->mVariableNames.push_back("Irel__Rel");
+    this->mVariableNames.push_back("SR_release_current");
     this->mVariableUnits.push_back("mM_per_ms");
     this->mInitialConditions.push_back(1.06874246141923e-23);
 
     // rY[12]:
-    this->mVariableNames.push_back("Na__Na_i");
+    this->mVariableNames.push_back("cytosolic_sodium_concentration");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(16.612739313555);
 
     // rY[13]:
-    this->mVariableNames.push_back("K__K_i");
+    this->mVariableNames.push_back("cytosolic_potassium_concentration");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(139.730914103161);
 
@@ -535,7 +608,7 @@ void OdeSystemInformation<Dynamiclivshitz_rudy_2007FromCellMLRushLarsen>::Initia
     this->mInitialConditions.push_back(0.0257059808595638);
 
     // rY[15]:
-    this->mVariableNames.push_back("Ca__Ca_JSR_T");
+    this->mVariableNames.push_back("JSR_calcium_concentration");
     this->mVariableUnits.push_back("mM");
     this->mInitialConditions.push_back(7.87371650296567);
 
@@ -550,28 +623,124 @@ void OdeSystemInformation<Dynamiclivshitz_rudy_2007FromCellMLRushLarsen>::Initia
     this->mInitialConditions.push_back(1e-12);
 
     // mParameters[0]:
-    this->mParameterNames.push_back("membrane_L_type_calcium_current_conductance");
+    this->mParameterNames.push_back("SR_leak_current_max");
     this->mParameterUnits.push_back("dimensionless");
 
     // mParameters[1]:
+    this->mParameterNames.push_back("SR_release_current_max");
+    this->mParameterUnits.push_back("mM_per_mV_ms");
+
+    // mParameters[2]:
+    this->mParameterNames.push_back("SR_uptake_current_max");
+    this->mParameterUnits.push_back("mM_per_ms");
+
+    // mParameters[3]:
+    this->mParameterNames.push_back("concentration_clamp_onoff");
+    this->mParameterUnits.push_back("dimensionless");
+
+    // mParameters[4]:
+    this->mParameterNames.push_back("extracellular_calcium_concentration");
+    this->mParameterUnits.push_back("mM");
+
+    // mParameters[5]:
+    this->mParameterNames.push_back("extracellular_potassium_concentration");
+    this->mParameterUnits.push_back("mM");
+
+    // mParameters[6]:
+    this->mParameterNames.push_back("extracellular_sodium_concentration");
+    this->mParameterUnits.push_back("mM");
+
+    // mParameters[7]:
+    this->mParameterNames.push_back("membrane_L_type_calcium_current_conductance");
+    this->mParameterUnits.push_back("L_per_F_ms");
+
+    // mParameters[8]:
     this->mParameterNames.push_back("membrane_fast_sodium_current_conductance");
     this->mParameterUnits.push_back("mS_per_uF");
 
-    // mParameters[2]:
-    this->mParameterNames.push_back("membrane_rapid_delayed_rectifier_potassium_current_conductance");
+    // mParameters[9]:
+    this->mParameterNames.push_back("membrane_fast_sodium_current_reduced_inactivation");
+    this->mParameterUnits.push_back("dimensionless");
+
+    // mParameters[10]:
+    this->mParameterNames.push_back("membrane_fast_sodium_current_shift_inactivation");
+    this->mParameterUnits.push_back("mV");
+
+    // mParameters[11]:
+    this->mParameterNames.push_back("membrane_rapid_delayed_rectifier_potassium_current_conductance_scaling_factor");
     this->mParameterUnits.push_back("mS_per_uF");
 
-    // Derived Quantity index [0]:
-    this->mDerivedQuantityNames.push_back("Environment__time");
-    this->mDerivedQuantityUnits.push_back("ms");
+    // mParameters[12]:
+    this->mParameterNames.push_back("membrane_slow_delayed_rectifier_potassium_current_conductance_scaling_factor");
+    this->mParameterUnits.push_back("mS_per_uF");
 
-    // Derived Quantity index [1]:
+    // mParameters[13]:
+    this->mParameterNames.push_back("membrane_sodium_calcium_exchanger_current_conductance");
+    this->mParameterUnits.push_back("uA_per_uF");
+
+    // Derived Quantity index [0]:
     this->mDerivedQuantityNames.push_back("cytosolic_calcium_concentration");
     this->mDerivedQuantityUnits.push_back("mM");
 
+    // Derived Quantity index [1]:
+    this->mDerivedQuantityNames.push_back("membrane_L_type_calcium_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
+
     // Derived Quantity index [2]:
+    this->mDerivedQuantityNames.push_back("membrane_L_type_calcium_current_f_gate_tau");
+    this->mDerivedQuantityUnits.push_back("ms");
+
+    // Derived Quantity index [3]:
+    this->mDerivedQuantityNames.push_back("membrane_fast_sodium_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
+
+    // Derived Quantity index [4]:
+    this->mDerivedQuantityNames.push_back("membrane_fast_sodium_current_h_gate_tau");
+    this->mDerivedQuantityUnits.push_back("ms");
+
+    // Derived Quantity index [5]:
+    this->mDerivedQuantityNames.push_back("membrane_fast_sodium_current_j_gate_tau");
+    this->mDerivedQuantityUnits.push_back("ms");
+
+    // Derived Quantity index [6]:
+    this->mDerivedQuantityNames.push_back("membrane_inward_rectifier_potassium_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
+
+    // Derived Quantity index [7]:
+    this->mDerivedQuantityNames.push_back("membrane_inward_rectifier_potassium_current_conductance");
+    this->mDerivedQuantityUnits.push_back("mS_per_uF");
+
+    // Derived Quantity index [8]:
+    this->mDerivedQuantityNames.push_back("membrane_inward_rectifier_potassium_current_conductance_scaling_factor");
+    this->mDerivedQuantityUnits.push_back("mS_per_uF");
+
+    // Derived Quantity index [9]:
+    this->mDerivedQuantityNames.push_back("membrane_rapid_delayed_rectifier_potassium_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
+
+    // Derived Quantity index [10]:
+    this->mDerivedQuantityNames.push_back("membrane_rapid_delayed_rectifier_potassium_current_conductance");
+    this->mDerivedQuantityUnits.push_back("mS_per_uF");
+
+    // Derived Quantity index [11]:
+    this->mDerivedQuantityNames.push_back("membrane_slow_delayed_rectifier_potassium_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
+
+    // Derived Quantity index [12]:
+    this->mDerivedQuantityNames.push_back("membrane_slow_delayed_rectifier_potassium_current_conductance");
+    this->mDerivedQuantityUnits.push_back("mS_per_uF");
+
+    // Derived Quantity index [13]:
+    this->mDerivedQuantityNames.push_back("membrane_sodium_calcium_exchanger_current");
+    this->mDerivedQuantityUnits.push_back("uA_per_cm2");
+
+    // Derived Quantity index [14]:
     this->mDerivedQuantityNames.push_back("membrane_stimulus_current");
     this->mDerivedQuantityUnits.push_back("uA_per_cm2");
+
+    // Derived Quantity index [15]:
+    this->mDerivedQuantityNames.push_back("time");
+    this->mDerivedQuantityUnits.push_back("ms");
 
     this->mInitialised = true;
 }
