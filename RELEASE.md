@@ -1,3 +1,6 @@
+# Release 0.6.1
+- Removed chaste warnings from backward euler template for cases where inf/nan would end up in the table. Intead an error is thrown when multiple (more than 2) such warnings happen.
+
 # Release 0.6.0
 - Added an automatic fix for removable singularities in GHK equations (which can be switched off with --skip-ingularity-fixes).
   The process looks for equations of any of the following forms, where U is a function of V:

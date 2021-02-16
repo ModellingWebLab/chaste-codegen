@@ -125,9 +125,7 @@ protected:
                 if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_{{outer_index}} && _lookup_table_{{outer_index}}_num_misshit_piecewise[{{loop.index0}}] < 2){
                     double left = _lookup_table_{{outer_index}}[i-1][{{loop.index0}}];
                     double right = _lookup_table_{{outer_index}}[i+1][{{loop.index0}}];
-                    double new_val = (left + right) / 2.0;
-                    WARNING("Lookup table {{loop.index0}} at ["<<i<<"][{{loop.index0}}] has non-finite value: " << val << " being terpolated to: "<<new_val);
-                    val = new_val;
+                    val = (left + right) / 2.0;
                    // count and limit number of misshits
                   _lookup_table_{{outer_index}}_num_misshit_piecewise[{{loop.index0}}] +=1;
                 }
