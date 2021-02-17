@@ -15,7 +15,6 @@
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
-#include "Warnings.hpp"
 #include "OdeSystemInformation.hpp"
 #include "RegularStimulus.hpp"
 #include "HeartConfig.hpp"
@@ -81,6 +80,7 @@ private:
 };
 
 std::shared_ptr<Cellbueno_2007_epiFromCellMLRushLarsenOpt_LookupTables> Cellbueno_2007_epiFromCellMLRushLarsenOpt_LookupTables::mpInstance;
+
 
     boost::shared_ptr<RegularStimulus> Cellbueno_2007_epiFromCellMLRushLarsenOpt::UseCellMLDefaultStimulus()
     {

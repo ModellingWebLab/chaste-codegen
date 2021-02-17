@@ -15,7 +15,6 @@
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
-#include "Warnings.hpp"
 #include "OdeSystemInformation.hpp"
 #include "RegularStimulus.hpp"
 #include "HeartConfig.hpp"
@@ -81,6 +80,7 @@ private:
 };
 
 std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_atrialVersionFromCellMLGRL1Opt_LookupTables> Cellpaci_hyttinen_aaltosetala_severi_atrialVersionFromCellMLGRL1Opt_LookupTables::mpInstance;
+
 
     boost::shared_ptr<RegularStimulus> Cellpaci_hyttinen_aaltosetala_severi_atrialVersionFromCellMLGRL1Opt::UseCellMLDefaultStimulus()
     {

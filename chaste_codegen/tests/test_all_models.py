@@ -22,6 +22,25 @@ chaste_all_GRL2Opt = get_models(ref_folder='all_models_reference_models', type='
 chaste_CVODE_DATA_CLAMP = get_models(ref_folder='all_models_reference_models', type='CVODE_DATA_CLAMP')
 chaste_CVODE_DATA_CLAMP_OPT = get_models(ref_folder='all_models_reference_models', type='CVODE_DATA_CLAMP_OPT')
 
+chaste_all_normal_models = []
+chaste_all_opt_models = []
+chaste_all_cvode_models = []
+chaste_all_cvode_models_jacobian = []
+chaste_all_cvode_opt_models = []
+chaste_all_cvode_opt_models_with_jacobians = []
+                     
+chaste_all_RL = []
+chaste_all_RLopt = []
+
+                     
+chaste_all_BE = []
+chaste_all_BEopt = []
+chaste_all_GRL1 = []
+chaste_all_GRL1Opt = []
+chaste_all_GRL2 = []
+chaste_all_GRL2Opt = []
+chaste_CVODE_DATA_CLAMP = []
+#chaste_CVODE_DATA_CLAMP_OPT = []
 
 cg.__version__ = "(version omitted as unimportant)"
 cg.chaste_model.TIME_STAMP = "(date omitted as unimportant)"

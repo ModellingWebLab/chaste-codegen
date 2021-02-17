@@ -16,12 +16,12 @@
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
-#include "Warnings.hpp"
 #include "OdeSystemInformation.hpp"
 #include "RegularStimulus.hpp"
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+
 
 
     boost::shared_ptr<RegularStimulus> Cellten_tusscher_model_2004_endoFromCellMLCvodeDataClamp::UseCellMLDefaultStimulus()

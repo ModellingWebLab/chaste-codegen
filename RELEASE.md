@@ -1,3 +1,6 @@
+# Release 0.6.2
+- Fixed memory leek on generated models within lookup table interpolation on nan/inf values in singularities.
+
 # Release 0.6.1
 - Removed chaste warnings from backward euler template for cases where inf/nan would end up in the table. Intead an error is thrown when multiple (more than 2) such warnings happen.
 

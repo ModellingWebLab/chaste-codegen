@@ -15,7 +15,6 @@
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
-#include "Warnings.hpp"
 #include "OdeSystemInformation.hpp"
 #include "RegularStimulus.hpp"
 #include "HeartConfig.hpp"
@@ -81,6 +80,7 @@ private:
 };
 
 std::shared_ptr<Cellsachse_moreno_abildskov_2008_bFromCellMLRushLarsenOpt_LookupTables> Cellsachse_moreno_abildskov_2008_bFromCellMLRushLarsenOpt_LookupTables::mpInstance;
+
 
     boost::shared_ptr<RegularStimulus> Cellsachse_moreno_abildskov_2008_bFromCellMLRushLarsenOpt::UseCellMLDefaultStimulus()
     {

@@ -16,12 +16,12 @@
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
-#include "Warnings.hpp"
 #include "OdeSystemInformation.hpp"
 #include "RegularStimulus.hpp"
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+
 
 
     boost::shared_ptr<RegularStimulus> Celljafri_rice_winslow_model_1998FromCellMLCvode::UseCellMLDefaultStimulus()
