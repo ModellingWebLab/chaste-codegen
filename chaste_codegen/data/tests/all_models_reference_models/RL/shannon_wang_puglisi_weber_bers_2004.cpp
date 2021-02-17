@@ -15,12 +15,12 @@
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
-#include "Warnings.hpp"
 #include "OdeSystemInformation.hpp"
 #include "RegularStimulus.hpp"
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+
 
 
     boost::shared_ptr<RegularStimulus> Cellshannon_wang_puglisi_weber_bers_2004FromCellMLRushLarsen::UseCellMLDefaultStimulus()

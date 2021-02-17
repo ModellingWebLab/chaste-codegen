@@ -15,7 +15,6 @@
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
-#include "Warnings.hpp"
 #include "OdeSystemInformation.hpp"
 #include "RegularStimulus.hpp"
 #include "HeartConfig.hpp"
@@ -141,16 +140,22 @@ protected:
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__Membrane__Vm_converted) {
+                    return 1102.5 * exp(-2361.96 * pow((1 + 0.037037037037037035 * var_chaste_interface__Membrane__Vm_converted), 4));
+                };
                 const double var_chaste_interface__Membrane__Vm_converted = mTableMins[0] + i*mTableSteps[0];
-                double val = 1102.5 * exp(-2361.96 * pow((1 + 0.037037037037037035 * var_chaste_interface__Membrane__Vm_converted), 4));
+                double val = f(var_chaste_interface__Membrane__Vm_converted);
 
                 _lookup_table_0[i][0] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__Membrane__Vm_converted) {
+                    return 1 / (1.0 + exp(8.6666666666666661 + 0.33333333333333331 * var_chaste_interface__Membrane__Vm_converted));
+                };
                 const double var_chaste_interface__Membrane__Vm_converted = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / (1.0 + exp(8.6666666666666661 + 0.33333333333333331 * var_chaste_interface__Membrane__Vm_converted));
+                double val = f(var_chaste_interface__Membrane__Vm_converted);
 
                 _lookup_table_0[i][1] = val;
             }
@@ -175,6 +180,7 @@ private:
 };
 
 std::shared_ptr<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler_LookupTables> Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler_LookupTables::mpInstance;
+
 
     boost::shared_ptr<RegularStimulus> Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLBackwardEuler::UseCellMLDefaultStimulus()
     {

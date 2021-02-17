@@ -118,13 +118,16 @@ protected:
 
             for (unsigned i=0 ; i<_table_size_{{outer_index}}; i++)
             {
+                auto f = [](double {{param.var}}) {
+                    return {{expr[0]}};
+                };
                 const double {{param.var}} = mTableMins[{{outer_index}}] + i*mTableSteps[{{outer_index}}];
-                double val = {{expr[0]}};
+                double val = f({{param.var}});
 {% if expr[1] %}                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
                 //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
-                if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_{{outer_index}} && _lookup_table_{{outer_index}}_num_misshit_piecewise[{{loop.index0}}] < 2){
-                    double left = _lookup_table_{{outer_index}}[i-1][{{loop.index0}}];
-                    double right = _lookup_table_{{outer_index}}[i+1][{{loop.index0}}];
+                if (!std::isfinite(val) && _lookup_table_{{outer_index}}_num_misshit_piecewise[{{loop.index0}}] < 2){
+                    double left = f({{param.var}} - mTableSteps[{{outer_index}}]);
+                    double right = f({{param.var}} + mTableSteps[{{outer_index}}]);
                     val = (left + right) / 2.0;
                    // count and limit number of misshits
                   _lookup_table_{{outer_index}}_num_misshit_piecewise[{{loop.index0}}] +=1;

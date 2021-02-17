@@ -15,7 +15,6 @@
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
-#include "Warnings.hpp"
 #include "OdeSystemInformation.hpp"
 #include "RegularStimulus.hpp"
 #include "HeartConfig.hpp"
@@ -141,56 +140,72 @@ protected:
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane__v) {
+                    return 0.29999999999999999 + 0.59999999999999998 / (1.0 + exp(-1.0 + 0.10000000000000001 * var_chaste_interface__membrane__v));
+                };
                 const double var_chaste_interface__membrane__v = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.29999999999999999 + 0.59999999999999998 / (1.0 + exp(-1.0 + 0.10000000000000001 * var_chaste_interface__membrane__v));
+                double val = f(var_chaste_interface__membrane__v);
 
                 _lookup_table_0[i][0] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane__v) {
+                    return 1 / (1.0 + exp(-1.4126984126984128 + 0.0066137566137566143 * var_chaste_interface__membrane__v));
+                };
                 const double var_chaste_interface__membrane__v = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / (1.0 + exp(-1.4126984126984128 + 0.0066137566137566143 * var_chaste_interface__membrane__v));
+                double val = f(var_chaste_interface__membrane__v);
 
                 _lookup_table_0[i][1] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane__v) {
+                    return 1.0 + exp(0.45427750749361112 - 0.041689074544234192 * var_chaste_interface__membrane__v);
+                };
                 const double var_chaste_interface__membrane__v = mTableMins[0] + i*mTableSteps[0];
-                double val = 1.0 + exp(0.45427750749361112 - 0.041689074544234192 * var_chaste_interface__membrane__v);
+                double val = f(var_chaste_interface__membrane__v);
 
                 _lookup_table_0[i][2] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane__v) {
+                    return 1 / (1.0 + exp(5.2976190476190466 + 0.27056277056277056 * var_chaste_interface__membrane__v));
+                };
                 const double var_chaste_interface__membrane__v = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / (1.0 + exp(5.2976190476190466 + 0.27056277056277056 * var_chaste_interface__membrane__v));
+                double val = f(var_chaste_interface__membrane__v);
 
                 _lookup_table_0[i][3] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane__v) {
+                    return 0.013333333333333334 / (1.0 + exp(6.4765725748674594 + 0.35821750967187277 * var_chaste_interface__membrane__v));
+                };
                 const double var_chaste_interface__membrane__v = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.013333333333333334 / (1.0 + exp(6.4765725748674594 + 0.35821750967187277 * var_chaste_interface__membrane__v));
+                double val = f(var_chaste_interface__membrane__v);
 
                 _lookup_table_0[i][4] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane__v) {
+                    return ((var_chaste_interface__membrane__v >= 31.497800000000002) ? (1.0) : (1.0763 * exp(-1.0069999999999999 * exp(-0.082900000000000001 * var_chaste_interface__membrane__v))));
+                };
                 const double var_chaste_interface__membrane__v = mTableMins[0] + i*mTableSteps[0];
-                double val = ((var_chaste_interface__membrane__v >= 31.497800000000002) ? (1.0) : (1.0763 * exp(-1.0069999999999999 * exp(-0.082900000000000001 * var_chaste_interface__membrane__v))));
+                double val = f(var_chaste_interface__membrane__v);
                 //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
                 //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
-                if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_0 && _lookup_table_0_num_misshit_piecewise[5] < 2){
-                    double left = _lookup_table_0[i-1][5];
-                    double right = _lookup_table_0[i+1][5];
-                    double new_val = (left + right) / 2.0;
-                    WARNING("Lookup table 5 at ["<<i<<"][5] has non-finite value: " << val << " being terpolated to: "<<new_val);
-                    val = new_val;
+                if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[5] < 2){
+                    double left = f(var_chaste_interface__membrane__v - mTableSteps[0]);
+                    double right = f(var_chaste_interface__membrane__v + mTableSteps[0]);
+                    val = (left + right) / 2.0;
                    // count and limit number of misshits
                   _lookup_table_0_num_misshit_piecewise[5] +=1;
                 }
@@ -202,144 +217,198 @@ protected:
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane__v) {
+                    return 0.59999999999999998 + 1 / (exp(1.26 + 0.089999999999999997 * var_chaste_interface__membrane__v) + exp(-0.30000000000000004 - 0.050000000000000003 * var_chaste_interface__membrane__v));
+                };
                 const double var_chaste_interface__membrane__v = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.59999999999999998 + 1 / (exp(1.26 + 0.089999999999999997 * var_chaste_interface__membrane__v) + exp(-0.30000000000000004 - 0.050000000000000003 * var_chaste_interface__membrane__v));
+                double val = f(var_chaste_interface__membrane__v);
 
                 _lookup_table_0[i][6] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane__v) {
+                    return 7.0 + 1 / (0.040000000000000001 * exp(0.5714285714285714 - 0.14285714285714285 * var_chaste_interface__membrane__v) + 0.040000000000000001 * exp(-0.5714285714285714 + 0.14285714285714285 * var_chaste_interface__membrane__v));
+                };
                 const double var_chaste_interface__membrane__v = mTableMins[0] + i*mTableSteps[0];
-                double val = 7.0 + 1 / (0.040000000000000001 * exp(0.5714285714285714 - 0.14285714285714285 * var_chaste_interface__membrane__v) + 0.040000000000000001 * exp(-0.5714285714285714 + 0.14285714285714285 * var_chaste_interface__membrane__v));
+                double val = f(var_chaste_interface__membrane__v);
 
                 _lookup_table_0[i][7] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane__v) {
+                    return 100.0 + 1 / (0.00012 * exp(0.14285714285714285 * var_chaste_interface__membrane__v) + 0.00012 * exp(-0.33333333333333331 * var_chaste_interface__membrane__v));
+                };
                 const double var_chaste_interface__membrane__v = mTableMins[0] + i*mTableSteps[0];
-                double val = 100.0 + 1 / (0.00012 * exp(0.14285714285714285 * var_chaste_interface__membrane__v) + 0.00012 * exp(-0.33333333333333331 * var_chaste_interface__membrane__v));
+                double val = f(var_chaste_interface__membrane__v);
 
                 _lookup_table_0[i][8] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane__v) {
+                    return 7.0 + 1 / (0.0044999999999999997 * exp(2.0 + 0.10000000000000001 * var_chaste_interface__membrane__v) + 0.0044999999999999997 * exp(-2.0 - 0.10000000000000001 * var_chaste_interface__membrane__v));
+                };
                 const double var_chaste_interface__membrane__v = mTableMins[0] + i*mTableSteps[0];
-                double val = 7.0 + 1 / (0.0044999999999999997 * exp(2.0 + 0.10000000000000001 * var_chaste_interface__membrane__v) + 0.0044999999999999997 * exp(-2.0 - 0.10000000000000001 * var_chaste_interface__membrane__v));
+                double val = f(var_chaste_interface__membrane__v);
 
                 _lookup_table_0[i][9] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane__v) {
+                    return 1000.0 + 1 / (3.4999999999999997e-5 * exp(0.83333333333333337 + 0.16666666666666666 * var_chaste_interface__membrane__v) + 3.4999999999999997e-5 * exp(-1.25 - 0.25 * var_chaste_interface__membrane__v));
+                };
                 const double var_chaste_interface__membrane__v = mTableMins[0] + i*mTableSteps[0];
-                double val = 1000.0 + 1 / (3.4999999999999997e-5 * exp(0.83333333333333337 + 0.16666666666666666 * var_chaste_interface__membrane__v) + 3.4999999999999997e-5 * exp(-1.25 - 0.25 * var_chaste_interface__membrane__v));
+                double val = f(var_chaste_interface__membrane__v);
 
                 _lookup_table_0[i][10] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane__v) {
+                    return 1 / (1.0 + exp(-1.2987012987012987 - 0.11195700850873264 * var_chaste_interface__membrane__v));
+                };
                 const double var_chaste_interface__membrane__v = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / (1.0 + exp(-1.2987012987012987 - 0.11195700850873264 * var_chaste_interface__membrane__v));
+                double val = f(var_chaste_interface__membrane__v);
 
                 _lookup_table_0[i][11] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane__v) {
+                    return 817.29999999999995 + 1 / (0.001292 * exp(-0.91304347826086951 - 0.0043478260869565218 * var_chaste_interface__membrane__v) + 0.00023259999999999999 * exp(2.7123595505617977 + 0.056179775280898875 * var_chaste_interface__membrane__v));
+                };
                 const double var_chaste_interface__membrane__v = mTableMins[0] + i*mTableSteps[0];
-                double val = 817.29999999999995 + 1 / (0.001292 * exp(-0.91304347826086951 - 0.0043478260869565218 * var_chaste_interface__membrane__v) + 0.00023259999999999999 * exp(2.7123595505617977 + 0.056179775280898875 * var_chaste_interface__membrane__v));
+                double val = f(var_chaste_interface__membrane__v);
 
                 _lookup_table_0[i][12] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane__v) {
+                    return 0.019300000000000001 * exp(-2.1464516129032258 - 0.032258064516129031 * var_chaste_interface__membrane__v) + 0.01 * exp(-2.5 + 0.050000000000000003 * var_chaste_interface__membrane__v);
+                };
                 const double var_chaste_interface__membrane__v = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.019300000000000001 * exp(-2.1464516129032258 - 0.032258064516129031 * var_chaste_interface__membrane__v) + 0.01 * exp(-2.5 + 0.050000000000000003 * var_chaste_interface__membrane__v);
+                double val = f(var_chaste_interface__membrane__v);
 
                 _lookup_table_0[i][13] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane__v) {
+                    return 1 / pow((1.0 + exp(9.6298788694481825 + 0.13458950201884254 * var_chaste_interface__membrane__v)), 2);
+                };
                 const double var_chaste_interface__membrane__v = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / pow((1.0 + exp(9.6298788694481825 + 0.13458950201884254 * var_chaste_interface__membrane__v)), 2);
+                double val = f(var_chaste_interface__membrane__v);
 
                 _lookup_table_0[i][14] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane__v) {
+                    return 1 / (((var_chaste_interface__membrane__v >= -40.0) ? (0) : (0.057000000000000002 * exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__membrane__v))) + ((var_chaste_interface__membrane__v >= -40.0) ? (5.9230769230769234 / (1.0 + exp(-0.96036036036036043 - 0.0900900900900901 * var_chaste_interface__membrane__v))) : (310000.0 * exp(0.34849999999999998 * var_chaste_interface__membrane__v) + 2.7000000000000002 * exp(0.079000000000000001 * var_chaste_interface__membrane__v))));
+                };
                 const double var_chaste_interface__membrane__v = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / (((var_chaste_interface__membrane__v >= -40.0) ? (0) : (0.057000000000000002 * exp(-11.764705882352942 - 0.14705882352941177 * var_chaste_interface__membrane__v))) + ((var_chaste_interface__membrane__v >= -40.0) ? (5.9230769230769234 / (1.0 + exp(-0.96036036036036043 - 0.0900900900900901 * var_chaste_interface__membrane__v))) : (310000.0 * exp(0.34849999999999998 * var_chaste_interface__membrane__v) + 2.7000000000000002 * exp(0.079000000000000001 * var_chaste_interface__membrane__v))));
+                double val = f(var_chaste_interface__membrane__v);
 
                 _lookup_table_0[i][15] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane__v) {
+                    return 1 / pow((1.0 + exp(10.437415881561238 + 0.13458950201884254 * var_chaste_interface__membrane__v)), 2);
+                };
                 const double var_chaste_interface__membrane__v = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / pow((1.0 + exp(10.437415881561238 + 0.13458950201884254 * var_chaste_interface__membrane__v)), 2);
+                double val = f(var_chaste_interface__membrane__v);
 
                 _lookup_table_0[i][16] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane__v) {
+                    return 1 / (((var_chaste_interface__membrane__v >= -40.0) ? (0) : ((37.780000000000001 + var_chaste_interface__membrane__v) * (-25428.0 * exp(0.24440000000000001 * var_chaste_interface__membrane__v) - 6.9480000000000002e-6 * exp(-0.043909999999999998 * var_chaste_interface__membrane__v)) / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__membrane__v)))) + ((var_chaste_interface__membrane__v >= -40.0) ? (0.59999999999999998 * exp(0.057000000000000002 * var_chaste_interface__membrane__v) / (1.0 + exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__membrane__v))) : (0.024240000000000001 * exp(-0.01052 * var_chaste_interface__membrane__v) / (1.0 + exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__membrane__v)))));
+                };
                 const double var_chaste_interface__membrane__v = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / (((var_chaste_interface__membrane__v >= -40.0) ? (0) : ((37.780000000000001 + var_chaste_interface__membrane__v) * (-25428.0 * exp(0.24440000000000001 * var_chaste_interface__membrane__v) - 6.9480000000000002e-6 * exp(-0.043909999999999998 * var_chaste_interface__membrane__v)) / (1.0 + exp(24.640530000000002 + 0.311 * var_chaste_interface__membrane__v)))) + ((var_chaste_interface__membrane__v >= -40.0) ? (0.59999999999999998 * exp(0.057000000000000002 * var_chaste_interface__membrane__v) / (1.0 + exp(-3.2000000000000002 - 0.10000000000000001 * var_chaste_interface__membrane__v))) : (0.024240000000000001 * exp(-0.01052 * var_chaste_interface__membrane__v) / (1.0 + exp(-5.5312920000000005 - 0.13780000000000001 * var_chaste_interface__membrane__v)))));
+                double val = f(var_chaste_interface__membrane__v);
 
                 _lookup_table_0[i][17] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane__v) {
+                    return 1 / pow((1.0 + exp(-6.2967884828349945 - 0.11074197120708749 * var_chaste_interface__membrane__v)), 2);
+                };
                 const double var_chaste_interface__membrane__v = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / pow((1.0 + exp(-6.2967884828349945 - 0.11074197120708749 * var_chaste_interface__membrane__v)), 2);
+                double val = f(var_chaste_interface__membrane__v);
 
                 _lookup_table_0[i][18] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane__v) {
+                    return 0.12920000000000001 * exp(-8.682389366752302 * pow((1 + 0.021838829438742085 * var_chaste_interface__membrane__v), 2)) + 0.064869999999999997 * exp(-0.0089012876052174655 * pow((-1 + 0.2073398299813394 * var_chaste_interface__membrane__v), 2));
+                };
                 const double var_chaste_interface__membrane__v = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.12920000000000001 * exp(-8.682389366752302 * pow((1 + 0.021838829438742085 * var_chaste_interface__membrane__v), 2)) + 0.064869999999999997 * exp(-0.0089012876052174655 * pow((-1 + 0.2073398299813394 * var_chaste_interface__membrane__v), 2));
+                double val = f(var_chaste_interface__membrane__v);
 
                 _lookup_table_0[i][19] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane__v) {
+                    return 0.0050000000000000001 / (1.0 + exp(11.700053418803417 + 0.13354700854700854 * var_chaste_interface__membrane__v));
+                };
                 const double var_chaste_interface__membrane__v = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.0050000000000000001 / (1.0 + exp(11.700053418803417 + 0.13354700854700854 * var_chaste_interface__membrane__v));
+                double val = f(var_chaste_interface__membrane__v);
 
                 _lookup_table_0[i][20] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane__v) {
+                    return 0.0016666666666666668 / (1.0 + exp(12.528044871794872 + 0.13354700854700854 * var_chaste_interface__membrane__v));
+                };
                 const double var_chaste_interface__membrane__v = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.0016666666666666668 / (1.0 + exp(12.528044871794872 + 0.13354700854700854 * var_chaste_interface__membrane__v));
+                double val = f(var_chaste_interface__membrane__v);
 
                 _lookup_table_0[i][21] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane__v) {
+                    return 1 / (1.0 + exp(-8.1401975683890573 - 0.18996960486322187 * var_chaste_interface__membrane__v));
+                };
                 const double var_chaste_interface__membrane__v = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / (1.0 + exp(-8.1401975683890573 - 0.18996960486322187 * var_chaste_interface__membrane__v));
+                double val = f(var_chaste_interface__membrane__v);
 
                 _lookup_table_0[i][22] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane__v) {
+                    return 0.59999999999999998 / (1.0 + exp(-1.0 + 0.10000000000000001 * var_chaste_interface__membrane__v));
+                };
                 const double var_chaste_interface__membrane__v = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.59999999999999998 / (1.0 + exp(-1.0 + 0.10000000000000001 * var_chaste_interface__membrane__v));
+                double val = f(var_chaste_interface__membrane__v);
 
                 _lookup_table_0[i][23] = val;
             }
@@ -364,6 +433,7 @@ private:
 };
 
 std::shared_ptr<CellToRORd_fkatp_epiFromCellMLBackwardEuler_LookupTables> CellToRORd_fkatp_epiFromCellMLBackwardEuler_LookupTables::mpInstance;
+
 
     boost::shared_ptr<RegularStimulus> CellToRORd_fkatp_epiFromCellMLBackwardEuler::UseCellMLDefaultStimulus()
     {

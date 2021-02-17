@@ -1,4 +1,6 @@
 include chaste_codegen/version.txt
+include README.md
+include RELEASE.md
 graft chaste_codegen/templates
 graft chaste_codegen/ontologies
 prune chaste_codegen/data

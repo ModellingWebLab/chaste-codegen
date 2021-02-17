@@ -15,7 +15,6 @@
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
-#include "Warnings.hpp"
 #include "OdeSystemInformation.hpp"
 #include "RegularStimulus.hpp"
 #include "HeartConfig.hpp"
@@ -141,40 +140,50 @@ protected:
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane_potential__V_m) {
+                    return 1 / (1.0 + exp(7.4880000000000004 - 0.16722408026755853 * var_chaste_interface__membrane_potential__V_m));
+                };
                 const double var_chaste_interface__membrane_potential__V_m = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / (1.0 + exp(7.4880000000000004 - 0.16722408026755853 * var_chaste_interface__membrane_potential__V_m));
+                double val = f(var_chaste_interface__membrane_potential__V_m);
 
                 _lookup_table_0[i][0] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane_potential__V_m) {
+                    return 1.0 + exp(3.0833333333333335 + 0.041666666666666664 * var_chaste_interface__membrane_potential__V_m);
+                };
                 const double var_chaste_interface__membrane_potential__V_m = mTableMins[0] + i*mTableSteps[0];
-                double val = 1.0 + exp(3.0833333333333335 + 0.041666666666666664 * var_chaste_interface__membrane_potential__V_m);
+                double val = f(var_chaste_interface__membrane_potential__V_m);
 
                 _lookup_table_0[i][1] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane_potential__V_m) {
+                    return 1 / (1.0 + exp(-0.83333333333333337 - 0.16666666666666666 * var_chaste_interface__membrane_potential__V_m));
+                };
                 const double var_chaste_interface__membrane_potential__V_m = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / (1.0 + exp(-0.83333333333333337 - 0.16666666666666666 * var_chaste_interface__membrane_potential__V_m));
+                double val = f(var_chaste_interface__membrane_potential__V_m);
 
                 _lookup_table_0[i][2] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane_potential__V_m) {
+                    return ((fabs(5.0 + var_chaste_interface__membrane_potential__V_m) < 6.0000000000337561e-7) ? (1 / (47619047.618779711 * (1.0 - exp(-1.000000000005626e-7)) / (1.0 + exp(-1.000000000005626e-7)) - 833333.33332864498 * (4.9999994000000001 + var_chaste_interface__membrane_potential__V_m) * (-47619047.618779711 * (1.0 - exp(1.000000000005626e-7)) / (1.0 + exp(1.000000000005626e-7)) - 47619047.618779711 * (1.0 - exp(-1.000000000005626e-7)) / (1.0 + exp(-1.000000000005626e-7))))) : (0.035000000000000003 * (1.0 + exp(-0.83333333333333337 - 0.16666666666666666 * var_chaste_interface__membrane_potential__V_m)) * (5.0 + var_chaste_interface__membrane_potential__V_m) / (1.0 - exp(-0.83333333333333337 - 0.16666666666666666 * var_chaste_interface__membrane_potential__V_m))));
+                };
                 const double var_chaste_interface__membrane_potential__V_m = mTableMins[0] + i*mTableSteps[0];
-                double val = ((fabs(5.0 + var_chaste_interface__membrane_potential__V_m) < 6.0000000000337561e-7) ? (1 / (47619047.618779711 * (1.0 - exp(-1.000000000005626e-7)) / (1.0 + exp(-1.000000000005626e-7)) - 833333.33332864498 * (4.9999994000000001 + var_chaste_interface__membrane_potential__V_m) * (-47619047.618779711 * (1.0 - exp(1.000000000005626e-7)) / (1.0 + exp(1.000000000005626e-7)) - 47619047.618779711 * (1.0 - exp(-1.000000000005626e-7)) / (1.0 + exp(-1.000000000005626e-7))))) : (0.035000000000000003 * (1.0 + exp(-0.83333333333333337 - 0.16666666666666666 * var_chaste_interface__membrane_potential__V_m)) * (5.0 + var_chaste_interface__membrane_potential__V_m) / (1.0 - exp(-0.83333333333333337 - 0.16666666666666666 * var_chaste_interface__membrane_potential__V_m))));
+                double val = f(var_chaste_interface__membrane_potential__V_m);
                 //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
                 //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
-                if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_0 && _lookup_table_0_num_misshit_piecewise[3] < 2){
-                    double left = _lookup_table_0[i-1][3];
-                    double right = _lookup_table_0[i+1][3];
-                    double new_val = (left + right) / 2.0;
-                    WARNING("Lookup table 3 at ["<<i<<"][3] has non-finite value: " << val << " being terpolated to: "<<new_val);
-                    val = new_val;
+                if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[3] < 2){
+                    double left = f(var_chaste_interface__membrane_potential__V_m - mTableSteps[0]);
+                    double right = f(var_chaste_interface__membrane_potential__V_m + mTableSteps[0]);
+                    val = (left + right) / 2.0;
                    // count and limit number of misshits
                   _lookup_table_0_num_misshit_piecewise[3] +=1;
                 }
@@ -186,120 +195,165 @@ protected:
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane_potential__V_m) {
+                    return 1 / (1.0 + exp(3.8888888888888888 + 0.1111111111111111 * var_chaste_interface__membrane_potential__V_m));
+                };
                 const double var_chaste_interface__membrane_potential__V_m = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / (1.0 + exp(3.8888888888888888 + 0.1111111111111111 * var_chaste_interface__membrane_potential__V_m));
+                double val = f(var_chaste_interface__membrane_potential__V_m);
 
                 _lookup_table_0[i][4] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane_potential__V_m) {
+                    return 0.59999999999999998 / (1.0 + exp(2.5 - 0.050000000000000003 * var_chaste_interface__membrane_potential__V_m));
+                };
                 const double var_chaste_interface__membrane_potential__V_m = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.59999999999999998 / (1.0 + exp(2.5 - 0.050000000000000003 * var_chaste_interface__membrane_potential__V_m));
+                double val = f(var_chaste_interface__membrane_potential__V_m);
 
                 _lookup_table_0[i][5] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane_potential__V_m) {
+                    return 0.02 + 0.019699999999999999 * exp(-0.23877882250000002 * pow((1 + 0.068965517241379309 * var_chaste_interface__membrane_potential__V_m), 2));
+                };
                 const double var_chaste_interface__membrane_potential__V_m = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.02 + 0.019699999999999999 * exp(-0.23877882250000002 * pow((1 + 0.068965517241379309 * var_chaste_interface__membrane_potential__V_m), 2));
+                double val = f(var_chaste_interface__membrane_potential__V_m);
 
                 _lookup_table_0[i][6] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane_potential__V_m) {
+                    return 1 / (1.0 + exp(-2.0 - 0.20000000000000001 * var_chaste_interface__membrane_potential__V_m));
+                };
                 const double var_chaste_interface__membrane_potential__V_m = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / (1.0 + exp(-2.0 - 0.20000000000000001 * var_chaste_interface__membrane_potential__V_m));
+                double val = f(var_chaste_interface__membrane_potential__V_m);
 
                 _lookup_table_0[i][7] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane_potential__V_m) {
+                    return 230.0 / (1.0 + exp(2.0 + 0.050000000000000003 * var_chaste_interface__membrane_potential__V_m)) + 3300.0 / ((1.0 + exp(1.2222222222222223 + 0.1111111111111111 * var_chaste_interface__membrane_potential__V_m)) * (1.0 + exp(-2.4444444444444446 - 0.1111111111111111 * var_chaste_interface__membrane_potential__V_m)));
+                };
                 const double var_chaste_interface__membrane_potential__V_m = mTableMins[0] + i*mTableSteps[0];
-                double val = 230.0 / (1.0 + exp(2.0 + 0.050000000000000003 * var_chaste_interface__membrane_potential__V_m)) + 3300.0 / ((1.0 + exp(1.2222222222222223 + 0.1111111111111111 * var_chaste_interface__membrane_potential__V_m)) * (1.0 + exp(-2.4444444444444446 - 0.1111111111111111 * var_chaste_interface__membrane_potential__V_m)));
+                double val = f(var_chaste_interface__membrane_potential__V_m);
 
                 _lookup_table_0[i][8] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane_potential__V_m) {
+                    return 1 / (1.0 + exp(-0.26666666666666666 - 0.070175438596491224 * var_chaste_interface__membrane_potential__V_m));
+                };
                 const double var_chaste_interface__membrane_potential__V_m = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / (1.0 + exp(-0.26666666666666666 - 0.070175438596491224 * var_chaste_interface__membrane_potential__V_m));
+                double val = f(var_chaste_interface__membrane_potential__V_m);
 
                 _lookup_table_0[i][9] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane_potential__V_m) {
+                    return 0.00100999899000101 + 0.00100999899000101 * exp(-0.17252124645892353 - 0.070821529745042494 * var_chaste_interface__membrane_potential__V_m);
+                };
                 const double var_chaste_interface__membrane_potential__V_m = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.00100999899000101 + 0.00100999899000101 * exp(-0.17252124645892353 - 0.070821529745042494 * var_chaste_interface__membrane_potential__V_m);
+                double val = f(var_chaste_interface__membrane_potential__V_m);
 
                 _lookup_table_0[i][10] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane_potential__V_m) {
+                    return 1 / pow((1.0 + exp(-6.2967884828349945 - 0.11074197120708749 * var_chaste_interface__membrane_potential__V_m)), 2);
+                };
                 const double var_chaste_interface__membrane_potential__V_m = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / pow((1.0 + exp(-6.2967884828349945 - 0.11074197120708749 * var_chaste_interface__membrane_potential__V_m)), 2);
+                double val = f(var_chaste_interface__membrane_potential__V_m);
 
                 _lookup_table_0[i][11] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane_potential__V_m) {
+                    return 0.12920000000000001 * exp(-8.682389366752302 * pow((1 + 0.021838829438742085 * var_chaste_interface__membrane_potential__V_m), 2)) + 0.064869999999999997 * exp(-0.0089012876052174655 * pow((-1 + 0.2073398299813394 * var_chaste_interface__membrane_potential__V_m), 2));
+                };
                 const double var_chaste_interface__membrane_potential__V_m = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.12920000000000001 * exp(-8.682389366752302 * pow((1 + 0.021838829438742085 * var_chaste_interface__membrane_potential__V_m), 2)) + 0.064869999999999997 * exp(-0.0089012876052174655 * pow((-1 + 0.2073398299813394 * var_chaste_interface__membrane_potential__V_m), 2));
+                double val = f(var_chaste_interface__membrane_potential__V_m);
 
                 _lookup_table_0[i][12] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane_potential__V_m) {
+                    return 1 / (1.0 + exp(1.4615384615384615 - 0.076923076923076927 * var_chaste_interface__membrane_potential__V_m));
+                };
                 const double var_chaste_interface__membrane_potential__V_m = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / (1.0 + exp(1.4615384615384615 - 0.076923076923076927 * var_chaste_interface__membrane_potential__V_m));
+                double val = f(var_chaste_interface__membrane_potential__V_m);
 
                 _lookup_table_0[i][13] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane_potential__V_m) {
+                    return 0.5 + 8.5 * exp(-0.81000000000000005 * pow((1 + 0.022222222222222223 * var_chaste_interface__membrane_potential__V_m), 2));
+                };
                 const double var_chaste_interface__membrane_potential__V_m = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.5 + 8.5 * exp(-0.81000000000000005 * pow((1 + 0.022222222222222223 * var_chaste_interface__membrane_potential__V_m), 2));
+                double val = f(var_chaste_interface__membrane_potential__V_m);
 
                 _lookup_table_0[i][14] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane_potential__V_m) {
+                    return 0.5 + 9.0 / (1.0 + exp(0.20000000000000001 + 0.066666666666666666 * var_chaste_interface__membrane_potential__V_m));
+                };
                 const double var_chaste_interface__membrane_potential__V_m = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.5 + 9.0 / (1.0 + exp(0.20000000000000001 + 0.066666666666666666 * var_chaste_interface__membrane_potential__V_m));
+                double val = f(var_chaste_interface__membrane_potential__V_m);
 
                 _lookup_table_0[i][15] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane_potential__V_m) {
+                    return 1 / (1.0 + exp(3.8999999999999999 + 0.20000000000000001 * var_chaste_interface__membrane_potential__V_m));
+                };
                 const double var_chaste_interface__membrane_potential__V_m = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / (1.0 + exp(3.8999999999999999 + 0.20000000000000001 * var_chaste_interface__membrane_potential__V_m));
+                double val = f(var_chaste_interface__membrane_potential__V_m);
 
                 _lookup_table_0[i][16] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane_potential__V_m) {
+                    return 7.0 + 85.0 * exp(-7.2727272727272725 * pow((1 + 0.025000000000000001 * var_chaste_interface__membrane_potential__V_m), 2));
+                };
                 const double var_chaste_interface__membrane_potential__V_m = mTableMins[0] + i*mTableSteps[0];
-                double val = 7.0 + 85.0 * exp(-7.2727272727272725 * pow((1 + 0.025000000000000001 * var_chaste_interface__membrane_potential__V_m), 2));
+                double val = f(var_chaste_interface__membrane_potential__V_m);
 
                 _lookup_table_0[i][17] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__membrane_potential__V_m) {
+                    return 30.0 + 800.0 / (1.0 + exp(6.0 + 0.10000000000000001 * var_chaste_interface__membrane_potential__V_m));
+                };
                 const double var_chaste_interface__membrane_potential__V_m = mTableMins[0] + i*mTableSteps[0];
-                double val = 30.0 + 800.0 / (1.0 + exp(6.0 + 0.10000000000000001 * var_chaste_interface__membrane_potential__V_m));
+                double val = f(var_chaste_interface__membrane_potential__V_m);
 
                 _lookup_table_0[i][18] = val;
             }
@@ -324,6 +378,7 @@ private:
 };
 
 std::shared_ptr<Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler_LookupTables> Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler_LookupTables::mpInstance;
+
 
     boost::shared_ptr<RegularStimulus> Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler::UseCellMLDefaultStimulus()
     {

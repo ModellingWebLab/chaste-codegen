@@ -15,7 +15,6 @@
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
-#include "Warnings.hpp"
 #include "OdeSystemInformation.hpp"
 #include "RegularStimulus.hpp"
 #include "HeartConfig.hpp"
@@ -140,16 +139,17 @@ protected:
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__Vms__Vms) {
+                    return exp(0.078728915539782576 * var_chaste_interface__Vms__Vms);
+                };
                 const double var_chaste_interface__Vms__Vms = mTableMins[0] + i*mTableSteps[0];
-                double val = exp(0.078728915539782576 * var_chaste_interface__Vms__Vms);
+                double val = f(var_chaste_interface__Vms__Vms);
                 //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
                 //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
-                if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_0 && _lookup_table_0_num_misshit_piecewise[0] < 2){
-                    double left = _lookup_table_0[i-1][0];
-                    double right = _lookup_table_0[i+1][0];
-                    double new_val = (left + right) / 2.0;
-                    WARNING("Lookup table 0 at ["<<i<<"][0] has non-finite value: " << val << " being terpolated to: "<<new_val);
-                    val = new_val;
+                if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[0] < 2){
+                    double left = f(var_chaste_interface__Vms__Vms - mTableSteps[0]);
+                    double right = f(var_chaste_interface__Vms__Vms + mTableSteps[0]);
+                    val = (left + right) / 2.0;
                    // count and limit number of misshits
                   _lookup_table_0_num_misshit_piecewise[0] +=1;
                 }
@@ -161,16 +161,17 @@ protected:
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__Vms__Vms) {
+                    return -1.0 + exp(0.078728915539782576 * var_chaste_interface__Vms__Vms);
+                };
                 const double var_chaste_interface__Vms__Vms = mTableMins[0] + i*mTableSteps[0];
-                double val = -1.0 + exp(0.078728915539782576 * var_chaste_interface__Vms__Vms);
+                double val = f(var_chaste_interface__Vms__Vms);
                 //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
                 //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
-                if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_0 && _lookup_table_0_num_misshit_piecewise[1] < 2){
-                    double left = _lookup_table_0[i-1][1];
-                    double right = _lookup_table_0[i+1][1];
-                    double new_val = (left + right) / 2.0;
-                    WARNING("Lookup table 1 at ["<<i<<"][1] has non-finite value: " << val << " being terpolated to: "<<new_val);
-                    val = new_val;
+                if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[1] < 2){
+                    double left = f(var_chaste_interface__Vms__Vms - mTableSteps[0]);
+                    double right = f(var_chaste_interface__Vms__Vms + mTableSteps[0]);
+                    val = (left + right) / 2.0;
                    // count and limit number of misshits
                   _lookup_table_0_num_misshit_piecewise[1] +=1;
                 }
@@ -182,168 +183,226 @@ protected:
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__Vms__Vms) {
+                    return exp(0.018700000000000001 * var_chaste_interface__Vms__Vms);
+                };
                 const double var_chaste_interface__Vms__Vms = mTableMins[0] + i*mTableSteps[0];
-                double val = exp(0.018700000000000001 * var_chaste_interface__Vms__Vms);
+                double val = f(var_chaste_interface__Vms__Vms);
 
                 _lookup_table_0[i][2] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__Vms__Vms) {
+                    return exp(-0.018700000000000001 * var_chaste_interface__Vms__Vms);
+                };
                 const double var_chaste_interface__Vms__Vms = mTableMins[0] + i*mTableSteps[0];
-                double val = exp(-0.018700000000000001 * var_chaste_interface__Vms__Vms);
+                double val = f(var_chaste_interface__Vms__Vms);
 
                 _lookup_table_0[i][3] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__Vms__Vms) {
+                    return 1.0 + 0.1245 * exp(-0.0039364457769891295 * var_chaste_interface__Vms__Vms) + 0.0052142857142857138 * (-1.0 + exp(2.0802377414561666)) * exp(-0.039364457769891288 * var_chaste_interface__Vms__Vms);
+                };
                 const double var_chaste_interface__Vms__Vms = mTableMins[0] + i*mTableSteps[0];
-                double val = 1.0 + 0.1245 * exp(-0.0039364457769891295 * var_chaste_interface__Vms__Vms) + 0.0052142857142857138 * (-1.0 + exp(2.0802377414561666)) * exp(-0.039364457769891288 * var_chaste_interface__Vms__Vms);
+                double val = f(var_chaste_interface__Vms__Vms);
 
                 _lookup_table_0[i][4] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__Vms__Vms) {
+                    return 1 / (1.0 + exp(4.9444444444444438 + 0.18518518518518517 * var_chaste_interface__Vms__Vms));
+                };
                 const double var_chaste_interface__Vms__Vms = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / (1.0 + exp(4.9444444444444438 + 0.18518518518518517 * var_chaste_interface__Vms__Vms));
+                double val = f(var_chaste_interface__Vms__Vms);
 
                 _lookup_table_0[i][5] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__Vms__Vms) {
+                    return 0.014999999999999999 / (1.0 + exp(3.0 + 0.040000000000000001 * var_chaste_interface__Vms__Vms)) + 0.040000000000000001 / (1.0 + exp(1.0 - 0.040000000000000001 * var_chaste_interface__Vms__Vms)) + 0.105 * exp(-14.0625 * pow((1 + 0.022222222222222223 * var_chaste_interface__Vms__Vms), 2));
+                };
                 const double var_chaste_interface__Vms__Vms = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.014999999999999999 / (1.0 + exp(3.0 + 0.040000000000000001 * var_chaste_interface__Vms__Vms)) + 0.040000000000000001 / (1.0 + exp(1.0 - 0.040000000000000001 * var_chaste_interface__Vms__Vms)) + 0.105 * exp(-14.0625 * pow((1 + 0.022222222222222223 * var_chaste_interface__Vms__Vms), 2));
+                double val = f(var_chaste_interface__Vms__Vms);
 
                 _lookup_table_0[i][6] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__Vms__Vms) {
+                    return 0.014999999999999999 / (1.0 + exp(3.0 + 0.040000000000000001 * var_chaste_interface__Vms__Vms)) + 0.080000000000000002 / (1.0 + exp(-11.0 - 0.20000000000000001 * var_chaste_interface__Vms__Vms)) + 0.041000000000000002 * exp(-15.340277777777779 * pow((1 + 0.021276595744680851 * var_chaste_interface__Vms__Vms), 2));
+                };
                 const double var_chaste_interface__Vms__Vms = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.014999999999999999 / (1.0 + exp(3.0 + 0.040000000000000001 * var_chaste_interface__Vms__Vms)) + 0.080000000000000002 / (1.0 + exp(-11.0 - 0.20000000000000001 * var_chaste_interface__Vms__Vms)) + 0.041000000000000002 * exp(-15.340277777777779 * pow((1 + 0.021276595744680851 * var_chaste_interface__Vms__Vms), 2));
+                double val = f(var_chaste_interface__Vms__Vms);
 
                 _lookup_table_0[i][7] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__Vms__Vms) {
+                    return 1 / (1.0 + exp(-3.0600000000000001 - 0.20000000000000001 * var_chaste_interface__Vms__Vms));
+                };
                 const double var_chaste_interface__Vms__Vms = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / (1.0 + exp(-3.0600000000000001 - 0.20000000000000001 * var_chaste_interface__Vms__Vms));
+                double val = f(var_chaste_interface__Vms__Vms);
 
                 _lookup_table_0[i][8] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__Vms__Vms) {
+                    return 0.00025000000000000001 + 0.0010499999999999999 * exp(-0.64800000000000002 * pow((-1 + 0.055555555555555552 * var_chaste_interface__Vms__Vms), 2)) + 0.0030500000000000002 * exp(-0.22049999999999997 * pow((1 + 0.14285714285714285 * var_chaste_interface__Vms__Vms), 2));
+                };
                 const double var_chaste_interface__Vms__Vms = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.00025000000000000001 + 0.0010499999999999999 * exp(-0.64800000000000002 * pow((-1 + 0.055555555555555552 * var_chaste_interface__Vms__Vms), 2)) + 0.0030500000000000002 * exp(-0.22049999999999997 * pow((1 + 0.14285714285714285 * var_chaste_interface__Vms__Vms), 2));
+                double val = f(var_chaste_interface__Vms__Vms);
 
                 _lookup_table_0[i][9] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__Vms__Vms) {
+                    return 1 / (1.0 + exp(13.225190839694655 + 0.095419847328244267 * var_chaste_interface__Vms__Vms));
+                };
                 const double var_chaste_interface__Vms__Vms = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / (1.0 + exp(13.225190839694655 + 0.095419847328244267 * var_chaste_interface__Vms__Vms));
+                double val = f(var_chaste_interface__Vms__Vms);
 
                 _lookup_table_0[i][10] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__Vms__Vms) {
+                    return 0.56230000000000002 * exp(-5.6377730796335452 - 0.070472163495419307 * var_chaste_interface__Vms__Vms) + 0.11885 * exp(2.8198801550934083 + 0.035248501938667604 * var_chaste_interface__Vms__Vms);
+                };
                 const double var_chaste_interface__Vms__Vms = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.56230000000000002 * exp(-5.6377730796335452 - 0.070472163495419307 * var_chaste_interface__Vms__Vms) + 0.11885 * exp(2.8198801550934083 + 0.035248501938667604 * var_chaste_interface__Vms__Vms);
+                double val = f(var_chaste_interface__Vms__Vms);
 
                 _lookup_table_0[i][11] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__Vms__Vms) {
+                    return 1 / (1.0 + exp(-0.97292724196277491 - 0.084602368866328256 * var_chaste_interface__Vms__Vms));
+                };
                 const double var_chaste_interface__Vms__Vms = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / (1.0 + exp(-0.97292724196277491 - 0.084602368866328256 * var_chaste_interface__Vms__Vms));
+                double val = f(var_chaste_interface__Vms__Vms);
 
                 _lookup_table_0[i][12] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__Vms__Vms) {
+                    return 9.8900000000000006 * exp(-3.8000000000000003 - 0.10000000000000001 * var_chaste_interface__Vms__Vms) + 4.516 * exp(1.7885000000000002 + 0.035770000000000003 * var_chaste_interface__Vms__Vms);
+                };
                 const double var_chaste_interface__Vms__Vms = mTableMins[0] + i*mTableSteps[0];
-                double val = 9.8900000000000006 * exp(-3.8000000000000003 - 0.10000000000000001 * var_chaste_interface__Vms__Vms) + 4.516 * exp(1.7885000000000002 + 0.035770000000000003 * var_chaste_interface__Vms__Vms);
+                double val = f(var_chaste_interface__Vms__Vms);
 
                 _lookup_table_0[i][13] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__Vms__Vms) {
+                    return 0.00047619047619047619 / (1.0 + exp(8.4951456310679614 + 0.097087378640776698 * var_chaste_interface__Vms__Vms));
+                };
                 const double var_chaste_interface__Vms__Vms = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.00047619047619047619 / (1.0 + exp(8.4951456310679614 + 0.097087378640776698 * var_chaste_interface__Vms__Vms));
+                double val = f(var_chaste_interface__Vms__Vms);
 
                 _lookup_table_0[i][14] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__Vms__Vms) {
+                    return 1 / (1.0 + exp(-0.92819614711033271 - 0.087565674255691769 * var_chaste_interface__Vms__Vms));
+                };
                 const double var_chaste_interface__Vms__Vms = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / (1.0 + exp(-0.92819614711033271 - 0.087565674255691769 * var_chaste_interface__Vms__Vms));
+                double val = f(var_chaste_interface__Vms__Vms);
 
                 _lookup_table_0[i][15] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__Vms__Vms) {
+                    return 45.159999999999997 * exp(1.7885000000000002 + 0.035770000000000003 * var_chaste_interface__Vms__Vms) + 98.900000000000006 * exp(-3.8000000000000003 - 0.10000000000000001 * var_chaste_interface__Vms__Vms);
+                };
                 const double var_chaste_interface__Vms__Vms = mTableMins[0] + i*mTableSteps[0];
-                double val = 45.159999999999997 * exp(1.7885000000000002 + 0.035770000000000003 * var_chaste_interface__Vms__Vms) + 98.900000000000006 * exp(-3.8000000000000003 - 0.10000000000000001 * var_chaste_interface__Vms__Vms);
+                double val = f(var_chaste_interface__Vms__Vms);
 
                 _lookup_table_0[i][16] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__Vms__Vms) {
+                    return 1 / (1.0 + exp(6.5803808776746413 + 0.14526227103034528 * var_chaste_interface__Vms__Vms));
+                };
                 const double var_chaste_interface__Vms__Vms = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / (1.0 + exp(6.5803808776746413 + 0.14526227103034528 * var_chaste_interface__Vms__Vms));
+                double val = f(var_chaste_interface__Vms__Vms);
 
                 _lookup_table_0[i][17] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__Vms__Vms) {
+                    return 0.035000000000000003 + 0.34999999999999998 * exp(-21.734244000000004 * pow((1 + 0.014285714285714285 * var_chaste_interface__Vms__Vms), 2));
+                };
                 const double var_chaste_interface__Vms__Vms = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.035000000000000003 + 0.34999999999999998 * exp(-21.734244000000004 * pow((1 + 0.014285714285714285 * var_chaste_interface__Vms__Vms), 2));
+                double val = f(var_chaste_interface__Vms__Vms);
 
                 _lookup_table_0[i][18] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__Vms__Vms) {
+                    return 0.035000000000000003 + 3.7000000000000002 * exp(-5.433561000000001 * pow((1 + 0.014285714285714285 * var_chaste_interface__Vms__Vms), 2));
+                };
                 const double var_chaste_interface__Vms__Vms = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.035000000000000003 + 3.7000000000000002 * exp(-5.433561000000001 * pow((1 + 0.014285714285714285 * var_chaste_interface__Vms__Vms), 2));
+                double val = f(var_chaste_interface__Vms__Vms);
 
                 _lookup_table_0[i][19] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__Vms__Vms) {
+                    return 1.0 + exp(9.4110800000000001 + 0.081199999999999994 * var_chaste_interface__Vms__Vms);
+                };
                 const double var_chaste_interface__Vms__Vms = mTableMins[0] + i*mTableSteps[0];
-                double val = 1.0 + exp(9.4110800000000001 + 0.081199999999999994 * var_chaste_interface__Vms__Vms);
+                double val = f(var_chaste_interface__Vms__Vms);
 
                 _lookup_table_0[i][20] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__Vms__Vms) {
+                    return ((fabs(64.400000000000006 + var_chaste_interface__Vms__Vms) < 4.5454545455347883e-7) ? (8.5318181809268536e-6 / (1.0 - exp(-9.999999998955289e-8)) - 1099999.9999805812 * (64.399999545454548 + var_chaste_interface__Vms__Vms) * (-8.5318181809268536e-6 / (1.0 - exp(-9.999999998955289e-8)) - 8.531818183010741e-6 / (1.0 - exp(1.000000000139778e-7)))) : (18.77 * (64.400000000000006 + var_chaste_interface__Vms__Vms) / (1.0 - exp(-14.168000000000001 - 0.22 * var_chaste_interface__Vms__Vms))));
+                };
                 const double var_chaste_interface__Vms__Vms = mTableMins[0] + i*mTableSteps[0];
-                double val = ((fabs(64.400000000000006 + var_chaste_interface__Vms__Vms) < 4.5454545455347883e-7) ? (8.5318181809268536e-6 / (1.0 - exp(-9.999999998955289e-8)) - 1099999.9999805812 * (64.399999545454548 + var_chaste_interface__Vms__Vms) * (-8.5318181809268536e-6 / (1.0 - exp(-9.999999998955289e-8)) - 8.531818183010741e-6 / (1.0 - exp(1.000000000139778e-7)))) : (18.77 * (64.400000000000006 + var_chaste_interface__Vms__Vms) / (1.0 - exp(-14.168000000000001 - 0.22 * var_chaste_interface__Vms__Vms))));
+                double val = f(var_chaste_interface__Vms__Vms);
                 //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
                 //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
-                if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_0 && _lookup_table_0_num_misshit_piecewise[21] < 2){
-                    double left = _lookup_table_0[i-1][21];
-                    double right = _lookup_table_0[i+1][21];
-                    double new_val = (left + right) / 2.0;
-                    WARNING("Lookup table 21 at ["<<i<<"][21] has non-finite value: " << val << " being terpolated to: "<<new_val);
-                    val = new_val;
+                if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[21] < 2){
+                    double left = f(var_chaste_interface__Vms__Vms - mTableSteps[0]);
+                    double right = f(var_chaste_interface__Vms__Vms + mTableSteps[0]);
+                    val = (left + right) / 2.0;
                    // count and limit number of misshits
                   _lookup_table_0_num_misshit_piecewise[21] +=1;
                 }
@@ -355,16 +414,17 @@ protected:
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__Vms__Vms) {
+                    return ((fabs(59.299999999999997 + var_chaste_interface__Vms__Vms) < 1.8181818181584042e-7) ? (2.1320000002980068e-5 / (1.0 - exp(-1.000000000139778e-7)) - 2750000.0000354135 * (59.299999818181817 + var_chaste_interface__Vms__Vms) * (-2.131999999647083e-5 / (1.0 - exp(9.9999999983446669e-8)) - 2.1320000002980068e-5 / (1.0 - exp(-1.000000000139778e-7)))) : (117.26000000000001 * (59.299999999999997 + var_chaste_interface__Vms__Vms) / (1.0 - exp(-32.615000000000002 - 0.55000000000000004 * var_chaste_interface__Vms__Vms))));
+                };
                 const double var_chaste_interface__Vms__Vms = mTableMins[0] + i*mTableSteps[0];
-                double val = ((fabs(59.299999999999997 + var_chaste_interface__Vms__Vms) < 1.8181818181584042e-7) ? (2.1320000002980068e-5 / (1.0 - exp(-1.000000000139778e-7)) - 2750000.0000354135 * (59.299999818181817 + var_chaste_interface__Vms__Vms) * (-2.131999999647083e-5 / (1.0 - exp(9.9999999983446669e-8)) - 2.1320000002980068e-5 / (1.0 - exp(-1.000000000139778e-7)))) : (117.26000000000001 * (59.299999999999997 + var_chaste_interface__Vms__Vms) / (1.0 - exp(-32.615000000000002 - 0.55000000000000004 * var_chaste_interface__Vms__Vms))));
+                double val = f(var_chaste_interface__Vms__Vms);
                 //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
                 //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
-                if (!std::isfinite(val) &&  i!=0 && (i+1)<_table_size_0 && _lookup_table_0_num_misshit_piecewise[22] < 2){
-                    double left = _lookup_table_0[i-1][22];
-                    double right = _lookup_table_0[i+1][22];
-                    double new_val = (left + right) / 2.0;
-                    WARNING("Lookup table 22 at ["<<i<<"][22] has non-finite value: " << val << " being terpolated to: "<<new_val);
-                    val = new_val;
+                if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[22] < 2){
+                    double left = f(var_chaste_interface__Vms__Vms - mTableSteps[0]);
+                    double right = f(var_chaste_interface__Vms__Vms + mTableSteps[0]);
+                    val = (left + right) / 2.0;
                    // count and limit number of misshits
                   _lookup_table_0_num_misshit_piecewise[22] +=1;
                 }
@@ -376,8 +436,11 @@ protected:
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__Vms__Vms) {
+                    return exp(-4.3919999999999995 - 0.071999999999999995 * var_chaste_interface__Vms__Vms);
+                };
                 const double var_chaste_interface__Vms__Vms = mTableMins[0] + i*mTableSteps[0];
-                double val = exp(-4.3919999999999995 - 0.071999999999999995 * var_chaste_interface__Vms__Vms);
+                double val = f(var_chaste_interface__Vms__Vms);
 
                 _lookup_table_0[i][23] = val;
             }
@@ -402,6 +465,7 @@ private:
 };
 
 std::shared_ptr<Cellpasek_simurda_christe_2006FromCellMLRushLarsenOpt_LookupTables> Cellpasek_simurda_christe_2006FromCellMLRushLarsenOpt_LookupTables::mpInstance;
+
 
     boost::shared_ptr<RegularStimulus> Cellpasek_simurda_christe_2006FromCellMLRushLarsenOpt::UseCellMLDefaultStimulus()
     {
