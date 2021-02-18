@@ -43,7 +43,7 @@ class BackwardEulerOptModel(BackwardEulerModel):
 #        """Get derivative eqs for non linear state vars"""
 #        non_linear_eqs = super()._get_non_linear_eqs()
 #        non_linear_eqs = partial_eval(non_linear_eqs, self._model.y_derivatives)
-#        return non_linear_eqs
+#        return non_linear_eqs 
 
     def _update_formatted_deriv_eq(self):
         """Update derivatibve equation information for lookup table printing"""
