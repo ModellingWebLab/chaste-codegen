@@ -748,7 +748,6 @@ std::shared_ptr<Cellramirez_nattel_courtemanche_2000FromCellMLBackwardEuler_Look
         double var_chaste_interface__intracellular_ion_concentrations__Ca_i = rCurrentGuess[5];
         double var_chaste_interface__intracellular_ion_concentrations__Ca_rel = rCurrentGuess[6];
         double var_chaste_interface__intracellular_ion_concentrations__Ca_up = rCurrentGuess[7];
-        double var_chaste_interface__intracellular_ion_concentrations__Cl_i = rCurrentGuess[8];
         double var_chaste_interface__intracellular_ion_concentrations__K_i = rCurrentGuess[9];
         double var_chaste_interface__intracellular_ion_concentrations__Na_i = rCurrentGuess[10];
         double var_chaste_interface__sarcolemmal_Ca_current_f_Ca_gate__f_Ca = rCurrentGuess[11];

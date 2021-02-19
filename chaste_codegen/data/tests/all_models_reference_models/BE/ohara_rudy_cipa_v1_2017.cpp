@@ -15,13 +15,13 @@
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
-#include "Warnings.hpp"
 #include "OdeSystemInformation.hpp"
 #include "RegularStimulus.hpp"
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 #include "CardiacNewtonSolver.hpp"
+
 
 
     boost::shared_ptr<RegularStimulus> Cellohara_rudy_cipa_v1_2017FromCellMLBackwardEulerNoLut::UseCellMLDefaultStimulus()
