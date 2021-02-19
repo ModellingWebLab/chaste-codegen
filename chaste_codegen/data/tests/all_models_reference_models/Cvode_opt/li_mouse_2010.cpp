@@ -16,7 +16,6 @@
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
-#include "Warnings.hpp"
 #include "OdeSystemInformation.hpp"
 #include "RegularStimulus.hpp"
 #include "HeartConfig.hpp"
@@ -114,8 +113,8 @@ protected:
 
         mKeyingVariableNames[0] = "membrane_voltage";
         mNumberOfTables[0] = 39;
-        mTableMins[0] = -250.0001;
-        mTableMaxs[0] = 549.9999;
+        mTableMins[0] = -250.0;
+        mTableMaxs[0] = 550.0;
         mTableSteps[0] = 0.001;
         mTableStepInverses[0] = 1000.0;
         mNeedsRegeneration[0] = true;
@@ -141,312 +140,462 @@ protected:
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return exp(-0.075369662812530269 * var_chaste_interface__cell__V);
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 1.0 + exp(5.9871794871794881 - 0.12820512820512822 * var_chaste_interface__cell__V);
-
+                double val = f(var_chaste_interface__cell__V);
+                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
+                //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
+                if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[0] < 2){
+                    double left = f(var_chaste_interface__cell__V - mTableSteps[0]);
+                    double right = f(var_chaste_interface__cell__V + mTableSteps[0]);
+                    val = (left + right) / 2.0;
+                   // count and limit number of misshits
+                  _lookup_table_0_num_misshit_piecewise[0] +=1;
+                }
+                else if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[0] >= 2){
+                    EXCEPTION("Lookup table 0 at ["<<i<<"][0] has non-finite value: " << val);
+                }
                 _lookup_table_0[i][0] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return 1.0 - exp(-0.075369662812530269 * var_chaste_interface__cell__V);
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = exp(-0.075369662812530269 * var_chaste_interface__cell__V);
-
+                double val = f(var_chaste_interface__cell__V);
+                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
+                //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
+                if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[1] < 2){
+                    double left = f(var_chaste_interface__cell__V - mTableSteps[0]);
+                    double right = f(var_chaste_interface__cell__V + mTableSteps[0]);
+                    val = (left + right) / 2.0;
+                   // count and limit number of misshits
+                  _lookup_table_0_num_misshit_piecewise[1] +=1;
+                }
+                else if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[1] >= 2){
+                    EXCEPTION("Lookup table 1 at ["<<i<<"][1] has non-finite value: " << val);
+                }
                 _lookup_table_0[i][1] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return 1.0 + exp(5.9871794871794881 - 0.12820512820512822 * var_chaste_interface__cell__V);
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 1.0 - exp(-0.075369662812530269 * var_chaste_interface__cell__V);
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][2] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return exp(0.013189690992192795 * var_chaste_interface__cell__V);
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = exp(0.013189690992192795 * var_chaste_interface__cell__V);
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][3] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return exp(-0.024495140414072337 * var_chaste_interface__cell__V);
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = exp(-0.024495140414072337 * var_chaste_interface__cell__V);
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][4] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return 1.0 + 0.27000000000000002 * exp(-0.024495140414072337 * var_chaste_interface__cell__V);
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 1.0 + 0.27000000000000002 * exp(-0.024495140414072337 * var_chaste_interface__cell__V);
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][5] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return exp(-0.037684831406265135 * var_chaste_interface__cell__V);
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = exp(-0.037684831406265135 * var_chaste_interface__cell__V);
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][6] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return 0.1245 * exp(-0.0037684831406265135 * var_chaste_interface__cell__V);
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.1245 * exp(-0.0037684831406265135 * var_chaste_interface__cell__V);
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][7] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return exp(0.15506520491866829 * var_chaste_interface__cell__V);
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = exp(0.15506520491866829 * var_chaste_interface__cell__V);
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][8] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return exp(-0.038580246913580245 * pow((-1 + 0.20000000000000001 * var_chaste_interface__cell__V), 2));
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / (1.0 + exp(4.024390243902439 + 0.12195121951219513 * var_chaste_interface__cell__V));
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][9] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return 1 / (1.0 + exp(4.024390243902439 + 0.12195121951219513 * var_chaste_interface__cell__V));
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.10000000000000001 / (1.0 + exp(6.666666666666667 - 0.16666666666666666 * var_chaste_interface__cell__V));
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][10] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return 0.10000000000000001 / (1.0 + exp(6.666666666666667 - 0.16666666666666666 * var_chaste_interface__cell__V));
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 8.0 + 315.0 / (1.0 + exp(7.5 + 0.25 * var_chaste_interface__cell__V));
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][11] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return 8.0 + 315.0 / (1.0 + exp(7.5 + 0.25 * var_chaste_interface__cell__V));
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = exp(-0.038580246913580245 * pow((-1 + 0.20000000000000001 * var_chaste_interface__cell__V), 2));
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][12] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return 3.802 / (0.20000000000000001 * exp(-0.016666666666666666 - 0.0066666666666666671 * var_chaste_interface__cell__V) + 0.1027 * exp(-0.14705882352941177 - 0.058823529411764705 * var_chaste_interface__cell__V));
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 3.802 / (0.20000000000000001 * exp(-0.016666666666666666 - 0.0066666666666666671 * var_chaste_interface__cell__V) + 0.1027 * exp(-0.14705882352941177 - 0.058823529411764705 * var_chaste_interface__cell__V));
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][13] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return 3.802 / (0.1027 * exp(-0.16666666666666666 - 0.066666666666666666 * var_chaste_interface__cell__V) + 0.23000000000000001 * exp(-0.016666666666666666 - 0.0066666666666666671 * var_chaste_interface__cell__V));
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 3.802 / (0.1027 * exp(-0.16666666666666666 - 0.066666666666666666 * var_chaste_interface__cell__V) + 0.23000000000000001 * exp(-0.016666666666666666 - 0.0066666666666666671 * var_chaste_interface__cell__V));
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][14] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return 3.802 / (0.25 * exp(-0.016666666666666666 - 0.0066666666666666671 * var_chaste_interface__cell__V) + 0.1027 * exp(-0.20833333333333334 - 0.083333333333333329 * var_chaste_interface__cell__V));
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 3.802 / (0.25 * exp(-0.016666666666666666 - 0.0066666666666666671 * var_chaste_interface__cell__V) + 0.1027 * exp(-0.20833333333333334 - 0.083333333333333329 * var_chaste_interface__cell__V));
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][15] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return 1 / (0.39395599999999997 + 0.188495 * exp(-0.42168674698795178 - 0.060240963855421679 * var_chaste_interface__cell__V));
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / (0.39395599999999997 + 0.188495 * exp(-0.42168674698795178 - 0.060240963855421679 * var_chaste_interface__cell__V));
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][16] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return 6.9999999999999997e-7 * exp(-0.90909090909090906 - 0.12987012987012986 * var_chaste_interface__cell__V);
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 6.9999999999999997e-7 * exp(-0.90909090909090906 - 0.12987012987012986 * var_chaste_interface__cell__V);
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][17] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return 0.19170000000000001 * exp(-0.12315270935960591 - 0.04926108374384236 * var_chaste_interface__cell__V);
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.19170000000000001 * exp(-0.12315270935960591 - 0.04926108374384236 * var_chaste_interface__cell__V);
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][18] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return 0.20000000000000001 * exp(0.12315270935960591 - 0.04926108374384236 * var_chaste_interface__cell__V);
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.20000000000000001 * exp(0.12315270935960591 - 0.04926108374384236 * var_chaste_interface__cell__V);
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][19] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return 0.22 * exp(0.36945812807881773 - 0.04926108374384236 * var_chaste_interface__cell__V);
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.22 * exp(0.36945812807881773 - 0.04926108374384236 * var_chaste_interface__cell__V);
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][20] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return exp(1.6096500000000002 + 0.035770000000000003 * var_chaste_interface__cell__V);
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = exp(1.6096500000000002 + 0.035770000000000003 * var_chaste_interface__cell__V);
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][21] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return exp(-2.8066499999999999 - 0.062370000000000002 * var_chaste_interface__cell__V);
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = exp(-2.8066499999999999 - 0.062370000000000002 * var_chaste_interface__cell__V);
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][22] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return 1 / (1.0 + exp(10.279999999999999 + 0.20000000000000001 * var_chaste_interface__cell__V));
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / (1.0 + exp(10.279999999999999 + 0.20000000000000001 * var_chaste_interface__cell__V));
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][23] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return 9.6645000000000003 + 10.936199999999999 / (1.0 + exp(10.279999999999999 + 0.20000000000000001 * var_chaste_interface__cell__V));
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 9.6645000000000003 + 10.936199999999999 / (1.0 + exp(10.279999999999999 + 0.20000000000000001 * var_chaste_interface__cell__V));
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][24] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return 0.033500000000000002 * exp(0.0109 * var_chaste_interface__cell__V);
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.033500000000000002 * exp(0.0109 * var_chaste_interface__cell__V);
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][25] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return 0.070300000000000001 * exp(0.14349999999999999 + 0.0287 * var_chaste_interface__cell__V);
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.070300000000000001 * exp(0.14349999999999999 + 0.0287 * var_chaste_interface__cell__V);
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][26] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return 6.8899999999999994e-5 * exp(-0.041779999999999998 * var_chaste_interface__cell__V);
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 6.8899999999999994e-5 * exp(-0.041779999999999998 * var_chaste_interface__cell__V);
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][27] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return 0.0064970000000000002 * exp(-0.16339999999999999 - 0.032680000000000001 * var_chaste_interface__cell__V);
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 0.0064970000000000002 * exp(-0.16339999999999999 - 0.032680000000000001 * var_chaste_interface__cell__V);
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][28] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return exp(0.01176 * var_chaste_interface__cell__V);
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = exp(0.01176 * var_chaste_interface__cell__V);
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][29] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return exp(-0.063100000000000003 * var_chaste_interface__cell__V);
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = exp(-0.063100000000000003 * var_chaste_interface__cell__V);
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][30] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return ((fabs(26.5 + var_chaste_interface__cell__V) < 7.8124999999817923e-7) ? (3.7604140624912359e-12 / (1.0 - exp(-9.9999999999766942e-8)) - 640000.00000149151 * (26.499999218749998 + var_chaste_interface__cell__V) * (-3.7604140624912359e-12 / (1.0 - exp(9.9999999999766942e-8)) - 3.7604140624912359e-12 / (1.0 - exp(-9.9999999999766942e-8)))) : (4.8133299999999997e-6 * (26.5 + var_chaste_interface__cell__V) / (1.0 - exp(-3.3919999999999999 - 0.128 * var_chaste_interface__cell__V))));
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = exp(-1.0069999999999999 - 0.037999999999999999 * var_chaste_interface__cell__V);
-
+                double val = f(var_chaste_interface__cell__V);
+                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
+                //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
+                if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[31] < 2){
+                    double left = f(var_chaste_interface__cell__V - mTableSteps[0]);
+                    double right = f(var_chaste_interface__cell__V + mTableSteps[0]);
+                    val = (left + right) / 2.0;
+                   // count and limit number of misshits
+                  _lookup_table_0_num_misshit_piecewise[31] +=1;
+                }
+                else if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[31] >= 2){
+                    EXCEPTION("Lookup table 31 at ["<<i<<"][31] has non-finite value: " << val);
+                }
                 _lookup_table_0[i][31] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return exp(-1.0069999999999999 - 0.037999999999999999 * var_chaste_interface__cell__V);
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 1.0 - exp(-3.3919999999999999 - 0.128 * var_chaste_interface__cell__V);
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][32] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return 1 / (1.0 + exp(-0.64479166666666676 - 0.10416666666666667 * var_chaste_interface__cell__V));
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / (1.0 + exp(-0.64479166666666676 - 0.10416666666666667 * var_chaste_interface__cell__V));
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][33] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return 13.17 + 39.299999999999997 * exp(-0.050000000000000003 * var_chaste_interface__cell__V);
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 13.17 + 39.299999999999997 * exp(-0.050000000000000003 * var_chaste_interface__cell__V);
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][34] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return 2.0579999999999998 + 0.49299999999999999 * exp(-0.062899999999999998 * var_chaste_interface__cell__V);
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 2.0579999999999998 + 0.49299999999999999 * exp(-0.062899999999999998 * var_chaste_interface__cell__V);
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][35] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return 1 / (1.0 + exp(7.7962962962962958 + 0.18518518518518517 * var_chaste_interface__cell__V));
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 1 / (1.0 + exp(7.7962962962962958 + 0.18518518518518517 * var_chaste_interface__cell__V));
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][36] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return 270.0 + 1050.0 / (1.0 + exp(7.9298245614035094 + 0.17543859649122806 * var_chaste_interface__cell__V));
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 270.0 + 1050.0 / (1.0 + exp(7.9298245614035094 + 0.17543859649122806 * var_chaste_interface__cell__V));
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][37] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
+                auto f = [](double var_chaste_interface__cell__V) {
+                    return 643.0 + 1000.0 / (1.0 + exp(7.7962962962962958 + 0.18518518518518517 * var_chaste_interface__cell__V));
+                };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
-                double val = 643.0 + 1000.0 / (1.0 + exp(7.7962962962962958 + 0.18518518518518517 * var_chaste_interface__cell__V));
+                double val = f(var_chaste_interface__cell__V);
 
                 _lookup_table_0[i][38] = val;
             }
@@ -471,6 +620,7 @@ private:
 };
 
 std::shared_ptr<Cellli_mouse_2010FromCellMLCvodeOpt_LookupTables> Cellli_mouse_2010FromCellMLCvodeOpt_LookupTables::mpInstance;
+
 
     boost::shared_ptr<RegularStimulus> Cellli_mouse_2010FromCellMLCvodeOpt::UseCellMLDefaultStimulus()
     {
@@ -590,9 +740,9 @@ std::shared_ptr<Cellli_mouse_2010FromCellMLCvodeOpt_LookupTables> Cellli_mouse_2
 
         const double var_calcium_concentration__Cai = 1000.0 * var_chaste_interface__calcium_concentration__Cai_converted; // micromolar
         const double var_calcium_pump_current__i_pCa = 0.095500000000000002 * pow(var_calcium_concentration__Cai, 2) / (0.083232249999999994 + pow(var_calcium_concentration__Cai, 2)); // picoA_per_picoF
-        const double var_calcium_activated_chloride_current__i_ClCa = 2.0 * (40.0 + var_chaste_interface__cell__V) * var_calcium_concentration__Cai / ((_lt_0_row[0]) * (10.0 + var_calcium_concentration__Cai)); // picoA_per_picoF
+        const double var_L_type_calcium_current__i_CaL_converted = HeartConfig::Instance()->GetCapacitance() * ((fabs(var_chaste_interface__cell__V) < 1.3267937823834197e-6) ? (-376848.31406265136 * (-1.3267937823834197e-6 + var_chaste_interface__cell__V) * (3.0621664503101105e-9 * (-var_chaste_interface__calcium_concentration__Cass + NV_Ith_S(mParameters, 1) * exp(9.9999999999999995e-8)) * var_chaste_interface__L_type_calcium_current__O * NV_Ith_S(mParameters, 4) * var_chaste_interface__L_type_calcium_current__y_gate / ((1.0 - exp(9.9999999999999995e-8)) * NV_Ith_S(mParameters, 5)) + 3.0621664503101105e-9 * (-var_chaste_interface__calcium_concentration__Cass + NV_Ith_S(mParameters, 1) * exp(-9.9999999999999995e-8)) * var_chaste_interface__L_type_calcium_current__O * NV_Ith_S(mParameters, 4) * var_chaste_interface__L_type_calcium_current__y_gate / ((1.0 - exp(-9.9999999999999995e-8)) * NV_Ith_S(mParameters, 5))) - 3.0621664503101105e-9 * (-var_chaste_interface__calcium_concentration__Cass + NV_Ith_S(mParameters, 1) * exp(-9.9999999999999995e-8)) * var_chaste_interface__L_type_calcium_current__O * NV_Ith_S(mParameters, 4) * var_chaste_interface__L_type_calcium_current__y_gate / ((1.0 - exp(-9.9999999999999995e-8)) * NV_Ith_S(mParameters, 5))) : (-0.0023079445283571576 * (-var_chaste_interface__calcium_concentration__Cass + NV_Ith_S(mParameters, 1) * _lt_0_row[0]) * var_chaste_interface__L_type_calcium_current__O * NV_Ith_S(mParameters, 4) * var_chaste_interface__L_type_calcium_current__y_gate * var_chaste_interface__cell__V / ((_lt_0_row[1]) * NV_Ith_S(mParameters, 5)))); // uA_per_cm2
+        const double var_calcium_activated_chloride_current__i_ClCa = 2.0 * (40.0 + var_chaste_interface__cell__V) * var_calcium_concentration__Cai / ((_lt_0_row[2]) * (10.0 + var_calcium_concentration__Cai)); // picoA_per_picoF
         const double var_calcium_background_current__i_Cab = 0.00069999999999999999 * var_chaste_interface__cell__V - 0.0092875564766839377 * log(NV_Ith_S(mParameters, 1) / var_calcium_concentration__Cai); // picoA_per_picoF
-        const double var_L_type_calcium_current__i_CaL_converted = -0.0023079445283571576 * (-var_chaste_interface__calcium_concentration__Cass + NV_Ith_S(mParameters, 1) * _lt_0_row[1]) * HeartConfig::Instance()->GetCapacitance() * var_chaste_interface__L_type_calcium_current__O * NV_Ith_S(mParameters, 4) * var_chaste_interface__L_type_calcium_current__y_gate * var_chaste_interface__cell__V / ((_lt_0_row[2]) * NV_Ith_S(mParameters, 5)); // uA_per_cm2
         const double var_fast_transient_outward_K_I__E_K = 26.535875647668394 * log(NV_Ith_S(mParameters, 2) / var_chaste_interface__potassium_concentration__Ki); // millivolt
         const double var_fast_transient_outward_K_I__i_Kto_f = 0.53469999999999995 * pow(var_chaste_interface__fast_transient_outward_K_I__ato_f, 3) * (-var_fast_transient_outward_K_I__E_K + var_chaste_interface__cell__V) * var_chaste_interface__fast_transient_outward_K_I__ito_f; // picoA_per_picoF
         const double var_non_inactivating_steady_state_K_I__i_Kss_converted = (-var_fast_transient_outward_K_I__E_K + var_chaste_interface__cell__V) * HeartConfig::Instance()->GetCapacitance() * var_chaste_interface__non_inactivating_steady_state_K_I__aKss * NV_Ith_S(mParameters, 8) * var_chaste_interface__non_inactivating_steady_state_K_I__iKss; // uA_per_cm2
@@ -716,10 +866,10 @@ std::shared_ptr<Cellli_mouse_2010FromCellMLCvodeOpt_LookupTables> Cellli_mouse_2
         const double var_L_type_calcium_current__expVL = _lt_0_row[8]; // dimensionless
         const double d_dt_chaste_interface_var_L_type_calcium_current__O = -1.1986666666666668 * var_chaste_interface__L_type_calcium_current__O + 0.66666666666666663 * var_L_type_calcium_current__C * var_L_type_calcium_current__expVL / (1.0 + var_L_type_calcium_current__expVL); // 1 / millisecond
         const double d_dt_chaste_interface_var_L_type_calcium_current__I = -0.00034782608695652176 * (0.0625 + var_L_type_calcium_current__expVL) * var_chaste_interface__L_type_calcium_current__I / (0.0625 + 0.40000000000000002 * var_L_type_calcium_current__expVL) + 0.0028985507246376812 * (0.0625 + var_L_type_calcium_current__expVL) * var_L_type_calcium_current__C * var_chaste_interface__calcium_concentration__Cass / (1.0 + var_L_type_calcium_current__expVL); // 1 / millisecond
-        const double d_dt_chaste_interface_var_L_type_calcium_current__y_gate = (-var_chaste_interface__L_type_calcium_current__y_gate + _lt_0_row[9] + _lt_0_row[10]) / (_lt_0_row[11]); // 1 / millisecond
+        const double var_L_type_calcium_current__i_CaL = ((fabs(var_chaste_interface__cell__V) < 1.3267937823834197e-6) ? (-376848.31406265136 * (-1.3267937823834197e-6 + var_chaste_interface__cell__V) * (3.0621664503101105e-9 * (-var_chaste_interface__calcium_concentration__Cass + NV_Ith_S(mParameters, 1) * exp(9.9999999999999995e-8)) * var_chaste_interface__L_type_calcium_current__O * NV_Ith_S(mParameters, 4) * var_chaste_interface__L_type_calcium_current__y_gate / ((1.0 - exp(9.9999999999999995e-8)) * NV_Ith_S(mParameters, 5)) + 3.0621664503101105e-9 * (-var_chaste_interface__calcium_concentration__Cass + NV_Ith_S(mParameters, 1) * exp(-9.9999999999999995e-8)) * var_chaste_interface__L_type_calcium_current__O * NV_Ith_S(mParameters, 4) * var_chaste_interface__L_type_calcium_current__y_gate / ((1.0 - exp(-9.9999999999999995e-8)) * NV_Ith_S(mParameters, 5))) - 3.0621664503101105e-9 * (-var_chaste_interface__calcium_concentration__Cass + NV_Ith_S(mParameters, 1) * exp(-9.9999999999999995e-8)) * var_chaste_interface__L_type_calcium_current__O * NV_Ith_S(mParameters, 4) * var_chaste_interface__L_type_calcium_current__y_gate / ((1.0 - exp(-9.9999999999999995e-8)) * NV_Ith_S(mParameters, 5))) : (-0.0023079445283571576 * (-var_chaste_interface__calcium_concentration__Cass + NV_Ith_S(mParameters, 1) * _lt_0_row[0]) * var_chaste_interface__L_type_calcium_current__O * NV_Ith_S(mParameters, 4) * var_chaste_interface__L_type_calcium_current__y_gate * var_chaste_interface__cell__V / ((_lt_0_row[1]) * NV_Ith_S(mParameters, 5)))); // picoA_per_picoF
+        const double d_dt_chaste_interface_var_calcium_fluxes__P_RyR = -0.01 * var_chaste_interface__calcium_fluxes__P_RyR - 0.2857142857142857 * var_L_type_calcium_current__i_CaL * _lt_0_row[9]; // 1 / millisecond
+        const double d_dt_chaste_interface_var_L_type_calcium_current__y_gate = (-var_chaste_interface__L_type_calcium_current__y_gate + _lt_0_row[10] + _lt_0_row[11]) / (_lt_0_row[12]); // 1 / millisecond
         const double var_calcium_background_current__i_Cab = 0.00069999999999999999 * var_chaste_interface__cell__V - 0.0092875564766839377 * log(NV_Ith_S(mParameters, 1) / var_calcium_concentration__Cai); // picoA_per_picoF
-        const double var_L_type_calcium_current__i_CaL = -0.0023079445283571576 * (-var_chaste_interface__calcium_concentration__Cass + NV_Ith_S(mParameters, 1) * _lt_0_row[1]) * var_chaste_interface__L_type_calcium_current__O * NV_Ith_S(mParameters, 4) * var_chaste_interface__L_type_calcium_current__y_gate * var_chaste_interface__cell__V / ((_lt_0_row[2]) * NV_Ith_S(mParameters, 5)); // picoA_per_picoF
-        const double d_dt_chaste_interface_var_calcium_fluxes__P_RyR = -0.01 * var_chaste_interface__calcium_fluxes__P_RyR - 0.2857142857142857 * var_L_type_calcium_current__i_CaL * _lt_0_row[12]; // 1 / millisecond
         const double var_calcium_fluxes__J_leak = ((var_chaste_interface__environment__time < 3333330000000.0005) ? (3.0000000000000001e-5 * var_chaste_interface__calcium_concentration__CaNSR - 3.0000000000000001e-5 * var_calcium_concentration__Cai) : (0.10000000000000001 * var_chaste_interface__calcium_concentration__CaNSR - 0.10000000000000001 * var_calcium_concentration__Cai)); // micromolar_per_millisecond
         const double d_dt_chaste_interface_var_calcium_concentration__CaNSR = 95.238095238095241 * var_calcium_fluxes__J_serca - 95.238095238095241 * var_calcium_fluxes__J_leak - 0.33333333333333337 * var_calcium_fluxes__J_tr; // micromolar / millisecond
         const double var_cell__i_Stim = GetIntracellularAreaStimulus(var_chaste_interface__environment__time) / HeartConfig::Instance()->GetCapacitance(); // picoA_per_picoF
@@ -765,7 +915,7 @@ std::shared_ptr<Cellli_mouse_2010FromCellMLCvodeOpt_LookupTables> Cellli_mouse_2
         const double d_dt_chaste_interface_var_ryanodine_receptors__P_C2 = 0.0089999999999999993 * var_chaste_interface__ryanodine_receptors__P_O1 - 0.00080000000000000004 * var_chaste_interface__ryanodine_receptors__P_C2; // 1 / millisecond
         const double d_dt_chaste_interface_var_ryanodine_receptors__P_O2 = -0.96499999999999997 * var_chaste_interface__ryanodine_receptors__P_O2 + 0.0040499999999999998 * pow(var_chaste_interface__calcium_concentration__Cass, 3.0) * var_chaste_interface__ryanodine_receptors__P_O1; // 1 / millisecond
         const double d_dt_chaste_interface_var_ryanodine_receptors__P_O1 = 0.00080000000000000004 * var_chaste_interface__ryanodine_receptors__P_C2 + 0.96499999999999997 * var_chaste_interface__ryanodine_receptors__P_O2 - 0.080249999999999988 * var_chaste_interface__ryanodine_receptors__P_O1 + 0.0060749999999999997 * pow(var_chaste_interface__calcium_concentration__Cass, 4.0) * (1.0 - var_chaste_interface__ryanodine_receptors__P_C2 - var_chaste_interface__ryanodine_receptors__P_O1 - var_chaste_interface__ryanodine_receptors__P_O2) - 0.0040499999999999998 * pow(var_chaste_interface__calcium_concentration__Cass, 3.0) * var_chaste_interface__ryanodine_receptors__P_O1; // 1 / millisecond
-        const double d_dt_chaste_interface_var_slow_delayed_rectifier_K_I__nKs = -9.5333299999999997e-5 * var_chaste_interface__slow_delayed_rectifier_K_I__nKs * _lt_0_row[31] + 4.8133299999999997e-6 * (1.0 - var_chaste_interface__slow_delayed_rectifier_K_I__nKs) * (26.5 + var_chaste_interface__cell__V) / (_lt_0_row[32]); // 1 / millisecond
+        const double d_dt_chaste_interface_var_slow_delayed_rectifier_K_I__nKs = (1.0 - var_chaste_interface__slow_delayed_rectifier_K_I__nKs) * _lt_0_row[31] - 9.5333299999999997e-5 * var_chaste_interface__slow_delayed_rectifier_K_I__nKs * _lt_0_row[32]; // 1 / millisecond
         const double var_slow_delayed_rectifier_K_I__i_Ks = pow(var_chaste_interface__slow_delayed_rectifier_K_I__nKs, 2) * (-var_fast_transient_outward_K_I__E_K + var_chaste_interface__cell__V) * NV_Ith_S(mParameters, 10); // picoA_per_picoF
         const double var_slow_transient_outward_K_I__i_Kto_s = 0; // picoA_per_picoF
         const double var_fast_sodium_current__E_Na = 26.535875647668394 * log((NV_Ith_S(mParameters, 3) + 0.1111111111111111 * NV_Ith_S(mParameters, 2)) / (var_chaste_interface__sodium_concentration__Nai + 0.1111111111111111 * var_chaste_interface__potassium_concentration__Ki)); // millivolt
@@ -793,7 +943,7 @@ std::shared_ptr<Cellli_mouse_2010FromCellMLCvodeOpt_LookupTables> Cellli_mouse_2
         }
         else
         {
-            d_dt_chaste_interface_var_cell__V = -var_L_type_calcium_current__i_CaL - var_calcium_background_current__i_Cab - var_calcium_pump_current__i_pCa - var_cell__i_Stim - var_fast_sodium_current__i_Na - var_fast_transient_outward_K_I__i_Kto_f - var_non_inactivating_steady_state_K_I__i_Kss - var_rapid_delayed_rectifier_K_I__i_Kr - var_slow_delayed_rectifier_K_I__i_Ks - var_slow_transient_outward_K_I__i_Kto_s - var_sodium_background_current__i_Nab - var_sodium_calcium_exchange_current__i_NCX - var_sodium_potassium_pump_current__i_NaK - var_time_independent_K_I__i_K1 - var_ultra_rapidly_activating_delayed_rectifier_K_I__i_Kur - 2.0 * (40.0 + var_chaste_interface__cell__V) * var_calcium_concentration__Cai / ((_lt_0_row[0]) * (10.0 + var_calcium_concentration__Cai)); // millivolt / millisecond
+            d_dt_chaste_interface_var_cell__V = -var_L_type_calcium_current__i_CaL - var_calcium_background_current__i_Cab - var_calcium_pump_current__i_pCa - var_cell__i_Stim - var_fast_sodium_current__i_Na - var_fast_transient_outward_K_I__i_Kto_f - var_non_inactivating_steady_state_K_I__i_Kss - var_rapid_delayed_rectifier_K_I__i_Kr - var_slow_delayed_rectifier_K_I__i_Ks - var_slow_transient_outward_K_I__i_Kto_s - var_sodium_background_current__i_Nab - var_sodium_calcium_exchange_current__i_NCX - var_sodium_potassium_pump_current__i_NaK - var_time_independent_K_I__i_K1 - var_ultra_rapidly_activating_delayed_rectifier_K_I__i_Kur - 2.0 * (40.0 + var_chaste_interface__cell__V) * var_calcium_concentration__Cai / ((_lt_0_row[2]) * (10.0 + var_calcium_concentration__Cai)); // millivolt / millisecond
         }
         
         NV_Ith_S(rDY,0) = d_dt_chaste_interface_var_cell__V;
@@ -871,18 +1021,21 @@ std::shared_ptr<Cellli_mouse_2010FromCellMLCvodeOpt_LookupTables> Cellli_mouse_2
         double var_chaste_interface__slow_delayed_rectifier_K_I__nKs = NV_Ith_S(rY, 31);
         // Units: dimensionless; Initial value: 0.00336735013094628
         
+        // Lookup table indexing
+        const bool _oob_0 = Cellli_mouse_2010FromCellMLCvodeOpt_LookupTables::Instance()->CheckIndex0(var_chaste_interface__cell__V);
+// LCOV_EXCL_START
+        if (_oob_0)
+            EXCEPTION(DumpState("membrane_voltage outside lookup table range", rY , var_chaste_interface__environment__time));
+// LCOV_EXCL_STOP
+        const double* const _lt_0_row = Cellli_mouse_2010FromCellMLCvodeOpt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
 
         // Mathematics
         const double var_calcium_concentration__Cai = 1000.0 * var_chaste_interface__calcium_concentration__Cai_converted; // micromolar
         const double var_calcium_fluxes__v1_caff = 10.0; // per_millisecond
-        const double var_cell__Acap = 0.00013866; // cm2
         const double var_cell__F = 96.5; // coulomb_per_millimole
         const double var_cell__R = 8.3140000000000001; // joule_per_mole_kelvin
         const double var_cell__T = 308.0; // kelvin
-        const double var_L_type_calcium_current__FVRT = var_cell__F * var_chaste_interface__cell__V / (var_cell__R * var_cell__T); // dimensionless
-        const double var_L_type_calcium_current__FVRT_Ca = 2.0 * var_L_type_calcium_current__FVRT; // dimensionless
-        const double var_cell__Vss = 2.1999999999999998e-8; // microlitre
-        const double var_L_type_calcium_current__i_CaL = -2.0 * (-var_chaste_interface__calcium_concentration__Cass + NV_Ith_S(mParameters, 1) * exp(-var_L_type_calcium_current__FVRT_Ca)) * var_L_type_calcium_current__FVRT_Ca * var_chaste_interface__L_type_calcium_current__O * NV_Ith_S(mParameters, 4) * var_chaste_interface__L_type_calcium_current__y_gate * var_cell__F * var_cell__Vss / ((1.0 - exp(-var_L_type_calcium_current__FVRT_Ca)) * var_cell__Acap * NV_Ith_S(mParameters, 5)); // picoA_per_picoF
+        const double var_L_type_calcium_current__i_CaL = ((fabs(var_chaste_interface__cell__V) < 1.3267937823834197e-6) ? (-376848.31406265136 * (-1.3267937823834197e-6 + var_chaste_interface__cell__V) * (3.0621664503101105e-9 * (-var_chaste_interface__calcium_concentration__Cass + NV_Ith_S(mParameters, 1) * exp(9.9999999999999995e-8)) * var_chaste_interface__L_type_calcium_current__O * NV_Ith_S(mParameters, 4) * var_chaste_interface__L_type_calcium_current__y_gate / ((1.0 - exp(9.9999999999999995e-8)) * NV_Ith_S(mParameters, 5)) + 3.0621664503101105e-9 * (-var_chaste_interface__calcium_concentration__Cass + NV_Ith_S(mParameters, 1) * exp(-9.9999999999999995e-8)) * var_chaste_interface__L_type_calcium_current__O * NV_Ith_S(mParameters, 4) * var_chaste_interface__L_type_calcium_current__y_gate / ((1.0 - exp(-9.9999999999999995e-8)) * NV_Ith_S(mParameters, 5))) - 3.0621664503101105e-9 * (-var_chaste_interface__calcium_concentration__Cass + NV_Ith_S(mParameters, 1) * exp(-9.9999999999999995e-8)) * var_chaste_interface__L_type_calcium_current__O * NV_Ith_S(mParameters, 4) * var_chaste_interface__L_type_calcium_current__y_gate / ((1.0 - exp(-9.9999999999999995e-8)) * NV_Ith_S(mParameters, 5))) : (-0.0023079445283571576 * (-var_chaste_interface__calcium_concentration__Cass + NV_Ith_S(mParameters, 1) * _lt_0_row[0]) * var_chaste_interface__L_type_calcium_current__O * NV_Ith_S(mParameters, 4) * var_chaste_interface__L_type_calcium_current__y_gate * var_chaste_interface__cell__V / ((_lt_0_row[1]) * NV_Ith_S(mParameters, 5)))); // picoA_per_picoF
         const double var_L_type_calcium_current__i_CaL_converted = HeartConfig::Instance()->GetCapacitance() * var_L_type_calcium_current__i_CaL; // uA_per_cm2
         const double var_cell__prepulses_number = 10000000000.0; // dimensionless
         const double var_chaste_interface__cell__stim_period = 333.33300000000003; // millisecond
