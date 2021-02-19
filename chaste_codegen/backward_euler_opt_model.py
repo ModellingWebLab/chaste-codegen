@@ -39,12 +39,6 @@ class BackwardEulerOptModel(BackwardEulerModel):
         # calculate lookup tables for the jacobians created by the Backward Euler
         self._lookup_tables.calc_lookup_tables((Eq(lhs, rhs) for lhs, rhs in self._jacobian_equations))
 
-    #def _get_non_linear_eqs(self):
-#        """Get derivative eqs for non linear state vars"""
-#        non_linear_eqs = super()._get_non_linear_eqs()
-#        non_linear_eqs = partial_eval(non_linear_eqs, self._model.y_derivatives)
-#        return non_linear_eqs 
-
     def _update_formatted_deriv_eq(self):
         """Update derivatibve equation information for lookup table printing"""
         for eq in self._vars_for_template['y_derivative_equations']:

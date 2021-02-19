@@ -858,10 +858,6 @@ std::shared_ptr<Cellli_mouse_2010FromCellMLBackwardEuler_LookupTables> Cellli_mo
         // Units: dimensionless; Initial value: 0.0142335908879204
         double var_chaste_interface__fast_transient_outward_K_I__ito_f = rY[33];
         // Units: dimensionless; Initial value: 0.996989882138174
-        double var_chaste_interface__slow_transient_outward_K_I__ato_s = rY[34];
-        // Units: dimensionless; Initial value: 0.0443263407760382
-        double var_chaste_interface__slow_transient_outward_K_I__ito_s = rY[35];
-        // Units: dimensionless; Initial value: 0.887568880831388
         
         //output_nonlinear_state_assignments
         double var_chaste_interface__L_type_calcium_current__I = rCurrentGuess[0];

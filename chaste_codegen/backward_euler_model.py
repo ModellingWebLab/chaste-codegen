@@ -64,8 +64,6 @@ class BackwardEulerModel(ChasteModel):
         non_linear_derivs = (eq.lhs for eq in self._derivative_equations if eq.lhs in self._model.y_derivatives
                              and eq.lhs.args[0] in self._non_linear_state_vars)
         non_linear_deriv_eqs = tuple(e.lhs for e in self._model.get_equations_for(non_linear_derivs))
-        
-#        return tuple(e for e in self._model.get_equations_for(non_linear_derivs)) 
         return tuple(eq for eq in self._derivative_equations if eq.lhs in non_linear_deriv_eqs)
 
     def _rearrange_linear_derivs(self):

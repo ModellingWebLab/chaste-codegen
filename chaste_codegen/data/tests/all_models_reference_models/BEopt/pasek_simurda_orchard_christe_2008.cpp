@@ -676,8 +676,6 @@ std::shared_ptr<Cellpasek_simurda_orchard_christe_2008FromCellMLBackwardEuler_Lo
         // Units: dimensionless; Initial value: 0.0061359896
         double var_chaste_interface__i_Kto_s_r2_gate__r2 = rY[36];
         // Units: dimensionless; Initial value: 0.9625701
-        double var_chaste_interface__i_Kto_s_r3_gate__r3 = rY[37];
-        // Units: dimensionless; Initial value: 0.96250049
         
         //output_nonlinear_state_assignments
         double var_chaste_interface__CaSRrel__CaSRrel = rCurrentGuess[0];
