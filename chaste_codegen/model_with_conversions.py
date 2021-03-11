@@ -300,7 +300,7 @@ def _get_membrane_capacitance(model):
                 LOGGER.warning('The model has capacitance in incompatible units, skipping.')
                 return None
 
-            
+
 def _get_stimulus(model):
     """ Store the stimulus currents in the model"""
     stim_params_orig, stim_params = set(), set()
