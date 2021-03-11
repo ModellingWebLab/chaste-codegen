@@ -1,5 +1,5 @@
 # (unreleased)
-- Reduced the number of (incorrect) warnings shown about capacitance units
+- Improved capacitance unit checking.
 
 # Release 0.6.3
 - Fixed issue with backward euler opt models where unused state variables appeard in ComputeResidual
