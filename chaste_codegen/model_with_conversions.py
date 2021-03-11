@@ -287,17 +287,20 @@ def _get_membrane_capacitance(model):
         LOGGER.info('The model has no capacitance tagged.')
         return None
     try:
-        return model.convert_variable(capacitance, model.conversion_units.get_unit('uF'), DataDirectionFlow.OUTPUT)        
+        return model.convert_variable(capacitance, model.conversion_units.get_unit('uF'), DataDirectionFlow.OUTPUT)
     except DimensionalityError:
         try:
-            return model.convert_variable(capacitance, model.conversion_units.get_unit('uA_per_cm2'), DataDirectionFlow.OUTPUT)        
+            return model.convert_variable(capacitance, model.conversion_units.get_unit('uA_per_cm2'),
+                                          DataDirectionFlow.OUTPUT)
         except DimensionalityError:
             try:
-                return model.convert_variable(capacitance, model.conversion_units.get_unit('uA_per_uF'), DataDirectionFlow.OUTPUT)        
+                return model.convert_variable(capacitance, model.conversion_units.get_unit('uA_per_uF'),
+                                              DataDirectionFlow.OUTPUT)
             except DimensionalityError:
                 LOGGER.warning('The model has capacitance in incompatible units, skipping.')
                 return None
 
+            
 def _get_stimulus(model):
     """ Store the stimulus currents in the model"""
     stim_params_orig, stim_params = set(), set()
