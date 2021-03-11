@@ -283,14 +283,20 @@ def _get_membrane_capacitance(model):
     """ Find membrane_capacitance if the model has it and convert it to uF if necessary"""
     try:
         capacitance = model.get_variable_by_ontology_term((OXMETA, 'membrane_capacitance'))
-        return model.convert_variable(capacitance, model.conversion_units.get_unit('uF'), DataDirectionFlow.OUTPUT)
     except KeyError:
         LOGGER.info('The model has no capacitance tagged.')
         return None
+    try:
+        return model.convert_variable(capacitance, model.conversion_units.get_unit('uF'), DataDirectionFlow.OUTPUT)        
     except DimensionalityError:
-        LOGGER.warning('The model has capacitance in incompatible units, skipping.')
-        return None
-
+        try:
+            return model.convert_variable(capacitance, model.conversion_units.get_unit('uA_per_cm2'), DataDirectionFlow.OUTPUT)        
+        except DimensionalityError:
+            try:
+                return model.convert_variable(capacitance, model.conversion_units.get_unit('uA_per_uF'), DataDirectionFlow.OUTPUT)        
+            except DimensionalityError:
+                LOGGER.warning('The model has capacitance in incompatible units, skipping.')
+                return None
 
 def _get_stimulus(model):
     """ Store the stimulus currents in the model"""
