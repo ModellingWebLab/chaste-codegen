@@ -1,5 +1,5 @@
-#ifndef CELLTEST_LUO_RUDY_1991_WITH_RANGEFROMCELLMLOPT_HPP_
-#define CELLTEST_LUO_RUDY_1991_WITH_RANGEFROMCELLMLOPT_HPP_
+#ifndef CELLTEST_LUO_RUDY_1991_WITH_RANGE_CAP_DIMENSIONLESSFROMCELLMLOPT_HPP_
+#define CELLTEST_LUO_RUDY_1991_WITH_RANGE_CAP_DIMENSIONLESSFROMCELLMLOPT_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractCardiacCell.hpp"
 
-class Celltest_luo_rudy_1991_with_rangeFromCellMLOpt : public AbstractCardiacCell
+class Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt : public AbstractCardiacCell
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -36,8 +36,8 @@ public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    Celltest_luo_rudy_1991_with_rangeFromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Celltest_luo_rudy_1991_with_rangeFromCellMLOpt();
+    Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt();
     void VerifyStateVariables();
     AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
@@ -48,7 +48,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Celltest_luo_rudy_1991_with_rangeFromCellMLOpt)
+CHASTE_CLASS_EXPORT(Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt)
 
 namespace boost
 {
@@ -56,7 +56,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Celltest_luo_rudy_1991_with_rangeFromCellMLOpt * t, const unsigned int fileVersion)
+            Archive & ar, const Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -66,17 +66,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Celltest_luo_rudy_1991_with_rangeFromCellMLOpt * t, const unsigned int fileVersion)
+            Archive & ar, Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Celltest_luo_rudy_1991_with_rangeFromCellMLOpt(p_solver, p_stimulus);
+            ::new(t)Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLTEST_LUO_RUDY_1991_WITH_RANGEFROMCELLMLOPT_HPP_
+#endif // CELLTEST_LUO_RUDY_1991_WITH_RANGE_CAP_DIMENSIONLESSFROMCELLMLOPT_HPP_

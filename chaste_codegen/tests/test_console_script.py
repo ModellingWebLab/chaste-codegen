@@ -756,26 +756,30 @@ def test_script_load_non_existing_file(caplog):
     assert "Could not find cellml file bla.txt" in caplog.text
 
 
-def test_range(caplog, tmp_path):
+def test_range_and_capacitance_units(caplog, tmp_path):
     """Test range"""
-    LOGGER.info('Testing range specs\n')
+    LOGGER.info('Testing range specs and capacitance incompatible units warning\n')
     tmp_path = str(tmp_path)
-    model_name = 'test_luo_rudy_1991_with_range'
+    model_name = 'test_luo_rudy_1991_with_range_cap_dimensionless'
     model_file = os.path.join(CELLML_FOLDER, '..', '..', model_name + '.cellml')
     assert os.path.isfile(model_file)
-    outfile = os.path.join(tmp_path, 'test_luo_rudy_1991_with_range.cpp')
+    outfile = os.path.join(tmp_path, 'test_luo_rudy_1991_with_range_cap_dimensionless.cpp')
     # Call commandline script
     testargs = ['chaste_codegen', model_file, '--opt', '-o', outfile]
 
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
 
+    # check capacitance units warning
+    assert 'WARNING' in caplog.text
+    assert "luo_rudy_1991 The model has capacitance in incompatible units." in caplog.text
+
     # Check output
     reference = os.path.join(os.path.join(TESTS_FOLDER), 'chaste_reference_models', 'Normal')
-    compare_file_against_reference(os.path.join(reference, 'test_luo_rudy_1991_with_range.hpp'),
-                                   os.path.join(tmp_path, 'test_luo_rudy_1991_with_range.hpp'))
-    compare_file_against_reference(os.path.join(reference, 'test_luo_rudy_1991_with_range.cpp'),
-                                   os.path.join(tmp_path, 'test_luo_rudy_1991_with_range.cpp'))
+    compare_file_against_reference(os.path.join(reference, 'test_luo_rudy_1991_with_range_cap_dimensionless.hpp'),
+                                   os.path.join(tmp_path, 'test_luo_rudy_1991_with_range_cap_dimensionless.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'test_luo_rudy_1991_with_range_cap_dimensionless.cpp'),
+                                   os.path.join(tmp_path, 'test_luo_rudy_1991_with_range_cap_dimensionless.cpp'))
 
 
 def test_piecewise_handling(caplog, tmp_path):

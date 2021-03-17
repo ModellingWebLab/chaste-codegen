@@ -179,6 +179,7 @@ def _add_units(model):
     uA_per_cm2 = units.add_unit('uA_per_cm2', 'ampere / 1e6 / (meter * 1e-2)**2')
     uA_per_uF = units.add_unit('uA_per_uF', 'ampere / 1e6 / (farad * 1e-6)')
     uA = units.add_unit('uA', 'ampere / 1e6')
+    units.add_unit('uF_per_cm2', 'ampere / 1e6 / (meter * 1e-2)**2')
     units.add_unit('uF', 'farad / 1e6')
     units.add_unit('millisecond', 'second / 1e3')
     units.add_unit('millimolar', 'mole / 1e3 / litre')
@@ -280,16 +281,46 @@ def _get_modifiable_parameters(model):
 
 
 def _get_membrane_capacitance(model):
-    """ Find membrane_capacitance if the model has it and convert it to uF if necessary"""
+    """ Find membrane_capacitance if the model has it and convert it to uF / uF_per_cm2 if necessary
+        Try to convert the capacitance and converts it to appropriate units.
+        see: https://chaste.cs.ox.ac.uk/trac/ticket/1364
+
+        units converted to:
+        Dimensions of current        Dimensions of capacitance
+        amps per unit area           farads per unit area
+        amps per unit capacitance    We don't care
+        amps                         farads
+    """
     try:
         capacitance = model.get_variable_by_ontology_term((OXMETA, 'membrane_capacitance'))
-        return model.convert_variable(capacitance, model.conversion_units.get_unit('uF'), DataDirectionFlow.OUTPUT)
     except KeyError:
         LOGGER.info('The model has no capacitance tagged.')
         return None
+
+    try:
+        capacitance = model.convert_variable(capacitance, model.conversion_units.get_unit('uF'),
+                                             DataDirectionFlow.OUTPUT)
     except DimensionalityError:
-        LOGGER.warning('The model has capacitance in incompatible units, skipping.')
-        return None
+        try:
+            capacitance = model.convert_variable(capacitance, model.conversion_units.get_unit('uF_per_cm2'),
+                                                 DataDirectionFlow.OUTPUT)
+        except DimensionalityError:
+            pass
+
+    # Check units match up with what is expected
+    if model.membrane_stimulus_current_orig is not None:
+        uA_dim = model.conversion_units.get_unit('uA').dimensionality
+        uA_per_cm2_dim = model.conversion_units.get_unit('uA_per_cm2').dimensionality
+        uF_dim = model.conversion_units.get_unit('uF').dimensionality
+        uF_per_cm2_dim = model.conversion_units.get_unit('uF_per_cm2').dimensionality
+
+        current_dim = model.membrane_stimulus_current_orig.units.dimensionality
+        capac_dim = capacitance.units.dimensionality
+
+        if (current_dim == uA_dim and not capac_dim == uF_dim) or \
+                (current_dim == uA_per_cm2_dim and not capac_dim == uF_per_cm2_dim):
+            LOGGER.warning(model.name + ' The model has capacitance in incompatible units.')
+    return capacitance
 
 
 def _get_stimulus(model):

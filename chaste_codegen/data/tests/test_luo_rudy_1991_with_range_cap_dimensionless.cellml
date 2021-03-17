@@ -154,7 +154,7 @@ The breakdown of the model into components and the definition of encapsulation a
       <variable units="joule_per_kilomole_kelvin" public_interface="out" name="R" initial_value="8314"/>
       <variable units="kelvin" public_interface="out" name="T" initial_value="310"/>
       <variable units="coulomb_per_mole" public_interface="out" name="F" initial_value="96484.6"/>
-      <variable units="microF_per_cm2" name="C" initial_value="1" cmeta:id="membrane_capacitance">
+      <variable units="dimensionless" name="C" initial_value="1" cmeta:id="membrane_capacitance">
          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
             <rdf:Description rdf:about="#membrane_capacitance">
                <bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_capacitance"/>

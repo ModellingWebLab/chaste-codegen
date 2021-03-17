@@ -1,3 +1,6 @@
+# (unreleased)
+- Improved capacitance unit checking.
+
 # Release 0.6.3
 - Fixed issue with backward euler opt models where unused state variables appeard in ComputeResidual
 - Fixed memory leek on generated models within lookup table interpolation on nan/inf values in singularities.
