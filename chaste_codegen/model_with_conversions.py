@@ -39,7 +39,8 @@ def load_model_with_conversions(model_file, use_modifiers=False, quiet=False, sk
     except Exception as e:
         raise CodegenError('Could not load cellml model: \n    ' + str(e))
     if not skip_singularity_fixes:
-        model.remove_fixable_singularities()
+        tagged = set(model.get_variables_by_rdf((PYCMLMETA, 'modifiable-parameter'), 'yes', sort=False))
+        model.remove_fixable_singularities(exclude=tagged)
     add_conversions(model, use_modifiers=use_modifiers)
     return model
 
