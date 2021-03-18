@@ -35,9 +35,11 @@ def load_model_with_conversions(model_file, use_modifiers=False, quiet=False, sk
     if quiet:
         LOGGER.setLevel(logging.ERROR)
     try:
-        model = cellmlmanip.load_model(model_file, skip_singularity_fixes=skip_singularity_fixes)
+        model = cellmlmanip.load_model(model_file)
     except Exception as e:
         raise CodegenError('Could not load cellml model: \n    ' + str(e))
+    if not skip_singularity_fixes:
+        model.remove_fixable_singularities()
     add_conversions(model, use_modifiers=use_modifiers)
     return model
 
