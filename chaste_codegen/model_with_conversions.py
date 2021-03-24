@@ -32,6 +32,12 @@ STIM_PARAM_TAGS = (('membrane_stimulus_current_amplitude', 'uA_per_cm2', True),
 
 
 def load_model_with_conversions(model_file, use_modifiers=False, quiet=False, skip_singularity_fixes=False):
+    from cellmlmanip import load_model
+    PYCMLMETA = 'https://chaste.comlab.ox.ac.uk/cellml/ns/pycml#' 
+    model = load_model('C:\\Users\\uczmh2\\Desktop\\chaste_codegen\\chaste-codegen\\chaste_codegen\\data\\tests\\cellml\\cellml\\hodgkin_huxley_squid_axon_model_1952_modified.cellml')
+    tagged = set(model.get_variables_by_rdf((PYCMLMETA, 'modifiable-parameter'), 'yes', sort=False))
+    model.remove_fixable_singularities(exclude=tagged)
+    
     if quiet:
         LOGGER.setLevel(logging.ERROR)
     try:
