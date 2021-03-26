@@ -32,12 +32,6 @@ STIM_PARAM_TAGS = (('membrane_stimulus_current_amplitude', 'uA_per_cm2', True),
 
 
 def load_model_with_conversions(model_file, use_modifiers=False, quiet=False, skip_singularity_fixes=False):
-    from cellmlmanip import load_model
-    PYCMLMETA = 'https://chaste.comlab.ox.ac.uk/cellml/ns/pycml#' 
-    model = load_model('C:\\Users\\uczmh2\\Desktop\\chaste_codegen\\chaste-codegen\\chaste_codegen\\data\\tests\\cellml\\cellml\\hodgkin_huxley_squid_axon_model_1952_modified.cellml')
-    tagged = set(model.get_variables_by_rdf((PYCMLMETA, 'modifiable-parameter'), 'yes', sort=False))
-    model.remove_fixable_singularities(exclude=tagged)
-    
     if quiet:
         LOGGER.setLevel(logging.ERROR)
     try:
@@ -45,8 +39,12 @@ def load_model_with_conversions(model_file, use_modifiers=False, quiet=False, sk
     except Exception as e:
         raise CodegenError('Could not load cellml model: \n    ' + str(e))
     if not skip_singularity_fixes:
+        V = model.get_variable_by_ontology_term((OXMETA, 'membrane_voltage'))
         tagged = set(model.get_variables_by_rdf((PYCMLMETA, 'modifiable-parameter'), 'yes', sort=False))
-        model.remove_fixable_singularities(exclude=tagged)
+        annotated = set(filter(lambda q: model.has_ontology_annotation(q, OXMETA), model.variables()))
+        excluded = (tagged | annotated) - set(model.get_derived_quantities(sort=False))
+
+        model.remove_fixable_singularities(V, exclude=excluded)
     add_conversions(model, use_modifiers=use_modifiers)
     return model
 
