@@ -141,29 +141,18 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__membrane__V) {
-                    return ((fabs(65.0 + var_chaste_interface__membrane__V) < 1.0000000000287557e-6) ? (-1.0000000000287556e-8 / (-1.0 + exp(-1.0000000000287557e-7)) - 499999.99998562218 * (64.999999000000003 + var_chaste_interface__membrane__V) * (1.0000000000287556e-8 / (-1.0 + exp(1.0000000000287557e-7)) + 1.0000000000287556e-8 / (-1.0 + exp(-1.0000000000287557e-7)))) : (-0.01 * (65.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-6.5 - 0.10000000000000001 * var_chaste_interface__membrane__V))));
+                    return exp(0.9375 + 0.012500000000000001 * var_chaste_interface__membrane__V);
                 };
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__membrane__V);
-                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
-                //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
-                if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[0] < 2){
-                    double left = f(var_chaste_interface__membrane__V - mTableSteps[0]);
-                    double right = f(var_chaste_interface__membrane__V + mTableSteps[0]);
-                    val = (left + right) / 2.0;
-                   // count and limit number of misshits
-                  _lookup_table_0_num_misshit_piecewise[0] +=1;
-                }
-                else if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[0] >= 2){
-                    EXCEPTION("Lookup table 0 at ["<<i<<"][0] has non-finite value: " << val);
-                }
+
                 _lookup_table_0[i][0] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__membrane__V) {
-                    return exp(0.9375 + 0.012500000000000001 * var_chaste_interface__membrane__V);
+                    return -1.0 + exp(-6.5 - 0.10000000000000001 * var_chaste_interface__membrane__V);
                 };
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__membrane__V);
@@ -196,29 +185,18 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__membrane__V) {
-                    return ((fabs(50.0 + var_chaste_interface__membrane__V) < 1.0000000000287557e-6) ? (-1.0000000000287557e-7 / (-1.0 + exp(-1.0000000000287557e-7)) - 499999.99998562218 * (49.999999000000003 + var_chaste_interface__membrane__V) * (1.0000000000287557e-7 / (-1.0 + exp(1.0000000000287557e-7)) + 1.0000000000287557e-7 / (-1.0 + exp(-1.0000000000287557e-7)))) : (-0.10000000000000001 * (50.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-5.0 - 0.10000000000000001 * var_chaste_interface__membrane__V))));
+                    return exp(-4.166666666666667 - 0.055555555555555552 * var_chaste_interface__membrane__V);
                 };
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__membrane__V);
-                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
-                //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
-                if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[4] < 2){
-                    double left = f(var_chaste_interface__membrane__V - mTableSteps[0]);
-                    double right = f(var_chaste_interface__membrane__V + mTableSteps[0]);
-                    val = (left + right) / 2.0;
-                   // count and limit number of misshits
-                  _lookup_table_0_num_misshit_piecewise[4] +=1;
-                }
-                else if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[4] >= 2){
-                    EXCEPTION("Lookup table 4 at ["<<i<<"][4] has non-finite value: " << val);
-                }
+
                 _lookup_table_0[i][4] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__membrane__V) {
-                    return exp(-4.166666666666667 - 0.055555555555555552 * var_chaste_interface__membrane__V);
+                    return -1.0 + exp(-5.0 - 0.10000000000000001 * var_chaste_interface__membrane__V);
                 };
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__membrane__V);
@@ -359,9 +337,9 @@ std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvode
 
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
-        const double d_dt_chaste_interface_var_potassium_channel_n_gate__n = (1.0 - var_chaste_interface__potassium_channel_n_gate__n) * _lt_0_row[0] - 0.125 * var_chaste_interface__potassium_channel_n_gate__n * _lt_0_row[1]; // 1 / millisecond
+        const double d_dt_chaste_interface_var_potassium_channel_n_gate__n = -0.125 * var_chaste_interface__potassium_channel_n_gate__n * _lt_0_row[0] - 0.01 * (1.0 - var_chaste_interface__potassium_channel_n_gate__n) * (65.0 + var_chaste_interface__membrane__V) / (_lt_0_row[1]); // 1 / millisecond
         const double d_dt_chaste_interface_var_sodium_channel_h_gate__h = 0.070000000000000007 * (1.0 - var_chaste_interface__sodium_channel_h_gate__h) * _lt_0_row[2] - var_chaste_interface__sodium_channel_h_gate__h / (_lt_0_row[3]); // 1 / millisecond
-        const double d_dt_chaste_interface_var_sodium_channel_m_gate__m = (1.0 - var_chaste_interface__sodium_channel_m_gate__m) * _lt_0_row[4] - 4.0 * var_chaste_interface__sodium_channel_m_gate__m * _lt_0_row[5]; // 1 / millisecond
+        const double d_dt_chaste_interface_var_sodium_channel_m_gate__m = -4.0 * var_chaste_interface__sodium_channel_m_gate__m * _lt_0_row[4] - 0.10000000000000001 * (1.0 - var_chaste_interface__sodium_channel_m_gate__m) * (50.0 + var_chaste_interface__membrane__V) / (_lt_0_row[5]); // 1 / millisecond
 
         if (mSetVoltageDerivativeToZero)
         {
@@ -399,44 +377,34 @@ std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvode
 const double var_x0 = 1 / NV_Ith_S(mParameters, 0);
         const double var_x1 = pow(var_chaste_interface__sodium_channel_m_gate__m, 3) * NV_Ith_S(mParameters, 1);
         const double var_x2 = var_x0 * (-40.0 + var_chaste_interface__membrane__V);
-        const double var_x3 = 1.0 - var_chaste_interface__sodium_channel_m_gate__m;
-        const double var_x4 = 1 / (-1.0 + exp(1.0000000000287557e-7));
-        const double var_x5 = 1 / (-1.0 + exp(-1.0000000000287557e-7));
-        const double var_x6 = _lt_0_row[5];
-        const double var_x7 = 0.22222222222222221 * var_x6 * var_chaste_interface__sodium_channel_m_gate__m;
-        const double var_x8 = 50.0 + var_chaste_interface__membrane__V;
-        const double var_x9 = fabs(var_x8) < 1.0000000000287557e-6;
-        const double var_x10 = -0.10000000000000001 * var_chaste_interface__membrane__V;
-        const double var_x11 = exp(-5.0 + var_x10);
-        const double var_x12 = -1.0 + var_x11;
-        const double var_x13 = 0.10000000000000001 / var_x12;
-        const double var_x14 = 1.0000000000287557e-7 * var_x5;
-        const double var_x15 = -4.0 * var_x6;
-        const double var_x16 = _lt_0_row[2];
-        const double var_x17 = exp(-4.5 + var_x10);
-        const double var_x18 = 1.0 + var_x17;
-        const double var_x19 = 1.0 - var_chaste_interface__potassium_channel_n_gate__n;
-        const double var_x20 = _lt_0_row[1];
-        const double var_x21 = -0.0015625000000000001 * var_x20 * var_chaste_interface__potassium_channel_n_gate__n;
-        const double var_x22 = 65.0 + var_chaste_interface__membrane__V;
-        const double var_x23 = fabs(var_x22) < 1.0000000000287557e-6;
-        const double var_x24 = exp(-6.5 + var_x10);
-        const double var_x25 = -1.0 + var_x24;
-        const double var_x26 = 0.01 / var_x25;
-        const double var_x27 = 1.0000000000287556e-8 * var_x5;
-        const double var_x28 = -0.125 * var_x20;
+        const double var_x3 = _lt_0_row[4];
+        const double var_x4 = 1.0 - var_chaste_interface__sodium_channel_m_gate__m;
+        const double var_x5 = -0.10000000000000001 * var_chaste_interface__membrane__V;
+        const double var_x6 = exp(-5.0 + var_x5);
+        const double var_x7 = -1.0 + var_x6;
+        const double var_x8 = 0.10000000000000001 / var_x7;
+        const double var_x9 = 50.0 + var_chaste_interface__membrane__V;
+        const double var_x10 = _lt_0_row[2];
+        const double var_x11 = exp(-4.5 + var_x5);
+        const double var_x12 = 1.0 + var_x11;
+        const double var_x13 = 1.0 - var_chaste_interface__potassium_channel_n_gate__n;
+        const double var_x14 = exp(-6.5 + var_x5);
+        const double var_x15 = -1.0 + var_x14;
+        const double var_x16 = 0.01 / var_x15;
+        const double var_x17 = _lt_0_row[0];
+        const double var_x18 = 65.0 + var_chaste_interface__membrane__V;
         
         // Matrix entries
         IJth(rJacobian, 0, 0) = mSetVoltageDerivativeToZero ? 0.0 : (var_x0 * (-NV_Ith_S(mParameters, 2) - var_x1 * var_chaste_interface__sodium_channel_h_gate__h - pow(var_chaste_interface__potassium_channel_n_gate__n, 4) * NV_Ith_S(mParameters, 3)));
-        IJth(rJacobian, 1, 0) = ((var_x9) ? (var_x7 + var_x3 * (-0.050000000000000003 * var_x4 - 0.050000000000000003 * var_x5)) : (var_x7 - var_x13 * var_x3 - 0.01 * var_x11 * var_x3 * var_x8 / pow(var_x12, 2)));
-        IJth(rJacobian, 2, 0) = -0.050000000000000003 * var_x16 * (0.070000000000000007 - 0.070000000000000007 * var_chaste_interface__sodium_channel_h_gate__h) - 0.10000000000000001 * var_x17 * var_chaste_interface__sodium_channel_h_gate__h / pow(var_x18, 2);
-        IJth(rJacobian, 3, 0) = ((var_x23) ? (var_x21 + var_x19 * (-0.0050000000000000001 * var_x4 - 0.0050000000000000001 * var_x5)) : (var_x21 - var_x19 * var_x26 - 0.001 * var_x19 * var_x22 * var_x24 / pow(var_x25, 2)));
+        IJth(rJacobian, 1, 0) = -var_x4 * var_x8 + 0.22222222222222221 * var_x3 * var_chaste_interface__sodium_channel_m_gate__m - 0.01 * var_x4 * var_x6 * var_x9 / pow(var_x7, 2);
+        IJth(rJacobian, 2, 0) = -0.050000000000000003 * var_x10 * (0.070000000000000007 - 0.070000000000000007 * var_chaste_interface__sodium_channel_h_gate__h) - 0.10000000000000001 * var_x11 * var_chaste_interface__sodium_channel_h_gate__h / pow(var_x12, 2);
+        IJth(rJacobian, 3, 0) = -var_x13 * var_x16 - 0.0015625000000000001 * var_x17 * var_chaste_interface__potassium_channel_n_gate__n - 0.001 * var_x13 * var_x14 * var_x18 / pow(var_x15, 2);
         IJth(rJacobian, 0, 1) = mSetVoltageDerivativeToZero ? 0.0 : (-3 * var_x2 * pow(var_chaste_interface__sodium_channel_m_gate__m, 2) * NV_Ith_S(mParameters, 1) * var_chaste_interface__sodium_channel_h_gate__h);
-        IJth(rJacobian, 1, 1) = ((var_x9) ? (var_x14 + var_x15 + 499999.99998562218 * (49.999999000000003 + var_chaste_interface__membrane__V) * (var_x14 + 1.0000000000287557e-7 * var_x4)) : (var_x15 + var_x13 * var_x8));
+        IJth(rJacobian, 1, 1) = -4.0 * var_x3 + var_x8 * var_x9;
         IJth(rJacobian, 0, 2) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x1 * var_x2);
-        IJth(rJacobian, 2, 2) = -1 / var_x18 - 0.070000000000000007 * var_x16;
+        IJth(rJacobian, 2, 2) = -1 / var_x12 - 0.070000000000000007 * var_x10;
         IJth(rJacobian, 0, 3) = mSetVoltageDerivativeToZero ? 0.0 : (-4 * var_x0 * pow(var_chaste_interface__potassium_channel_n_gate__n, 3) * (87.0 + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 3));
-        IJth(rJacobian, 3, 3) = ((var_x23) ? (var_x27 + var_x28 + 499999.99998562218 * (64.999999000000003 + var_chaste_interface__membrane__V) * (var_x27 + 1.0000000000287556e-8 * var_x4)) : (var_x28 + var_x22 * var_x26));
+        IJth(rJacobian, 3, 3) = -0.125 * var_x17 + var_x16 * var_x18;
     }
 
     N_Vector Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvodeOpt::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY)

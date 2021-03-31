@@ -283,7 +283,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__membrane__V) {
-                    return ((fabs(41.0 + var_chaste_interface__membrane__V) < 1.0000000000287557e-6) ? (0.00020000000000575113 / (1.0 - exp(-1.0000000000287557e-7)) - 499999.99998562218 * (40.999999000000003 + var_chaste_interface__membrane__V) * (-0.00020000000000575113 / (1.0 - exp(1.0000000000287557e-7)) - 0.00020000000000575113 / (1.0 - exp(-1.0000000000287557e-7)))) : (200.0 * (41.0 + var_chaste_interface__membrane__V) / (1.0 - exp(-4.1000000000000005 - 0.10000000000000001 * var_chaste_interface__membrane__V))));
+                    return ((fabs(41.0 + var_chaste_interface__membrane__V) < 1.0000000010279564e-6) ? (-0.00020000000091613401 / (1.0 - exp(1.0000000045806701e-7)) + 499999.99948602181 * (41.000001000000005 + var_chaste_interface__membrane__V) * (0.00019999999949504854 / (1.0 - exp(-9.9999999747524276e-8)) + 0.00020000000091613401 / (1.0 - exp(1.0000000045806701e-7)))) : (200.0 * (41.0 + var_chaste_interface__membrane__V) / (1.0 - exp(-4.1000000000000005 - 0.10000000000000001 * var_chaste_interface__membrane__V))));
                 };
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__membrane__V);
@@ -327,7 +327,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__membrane__V) {
-                    return ((fabs(52.0 + var_chaste_interface__membrane__V) < 5.0000000001437783e-7) ? (5.0000000001437783e-7 / (1.0 - exp(-1.0000000000287557e-7)) - 999999.99997124437 * (51.999999500000001 + var_chaste_interface__membrane__V) * (-5.0000000001437783e-7 / (1.0 - exp(1.0000000000287557e-7)) - 5.0000000001437783e-7 / (1.0 - exp(-1.0000000000287557e-7)))) : ((52.0 + var_chaste_interface__membrane__V) / (1.0 - exp(-10.4 - 0.20000000000000001 * var_chaste_interface__membrane__V))));
+                    return ((fabs(52.0 + var_chaste_interface__membrane__V) < 4.9999999873762135e-7) ? (-5.0000000584304871e-7 / (1.0 - exp(1.0000000116860974e-7)) + 1000000.0025247573 * (52.000000500000006 + var_chaste_interface__membrane__V) * (4.99999991632194e-7 / (1.0 - exp(-9.999999832643881e-8)) + 5.0000000584304871e-7 / (1.0 - exp(1.0000000116860974e-7)))) : ((52.0 + var_chaste_interface__membrane__V) / (1.0 - exp(-10.4 - 0.20000000000000001 * var_chaste_interface__membrane__V))));
                 };
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__membrane__V);
@@ -349,29 +349,18 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__membrane__V) {
-                    return ((fabs(64.0 + var_chaste_interface__membrane__V) < 4.0000000001150227e-7) ? (-2.5000000000718892e-7 / (-1.0 + exp(-1.0000000000287557e-7)) + 1249999.9999640554 * (64.000000400000005 + var_chaste_interface__membrane__V) * (2.5000000000718892e-7 / (-1.0 + exp(1.0000000000287557e-7)) + 2.5000000000718892e-7 / (-1.0 + exp(-1.0000000000287557e-7)))) : (0.625 * (64.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(16.0 + 0.25 * var_chaste_interface__membrane__V))));
+                    return 1.0 + exp(-16.0 - 0.25 * var_chaste_interface__membrane__V);
                 };
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__membrane__V);
-                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
-                //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
-                if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[13] < 2){
-                    double left = f(var_chaste_interface__membrane__V - mTableSteps[0]);
-                    double right = f(var_chaste_interface__membrane__V + mTableSteps[0]);
-                    val = (left + right) / 2.0;
-                   // count and limit number of misshits
-                  _lookup_table_0_num_misshit_piecewise[13] +=1;
-                }
-                else if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[13] >= 2){
-                    EXCEPTION("Lookup table 13 at ["<<i<<"][13] has non-finite value: " << val);
-                }
+
                 _lookup_table_0[i][13] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__membrane__V) {
-                    return 1.0 + exp(-16.0 - 0.25 * var_chaste_interface__membrane__V);
+                    return -1.0 + exp(16.0 + 0.25 * var_chaste_interface__membrane__V);
                 };
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__membrane__V);
@@ -382,7 +371,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__membrane__V) {
-                    return ((fabs(19.0 + var_chaste_interface__membrane__V) < 4.0000000001150227e-7) ? (1.2000000000345068e-5 / (1.0 - exp(-1.0000000000287557e-7)) - 1249999.9999640554 * (18.999999599999999 + var_chaste_interface__membrane__V) * (-1.2000000000345068e-5 / (1.0 - exp(1.0000000000287557e-7)) - 1.2000000000345068e-5 / (1.0 - exp(-1.0000000000287557e-7)))) : (30.0 * (19.0 + var_chaste_interface__membrane__V) / (1.0 - exp(-4.75 - 0.25 * var_chaste_interface__membrane__V))));
+                    return ((fabs(19.0 + var_chaste_interface__membrane__V) < 4.0000000112172529e-7) ? (-1.2000000033651759e-5 / (1.0 - exp(1.0000000028043132e-7)) + 1249999.9964946085 * (19.000000400000001 + var_chaste_interface__membrane__V) * (1.2000000033651759e-5 / (1.0 - exp(1.0000000028043132e-7)) + 1.2000000033651759e-5 / (1.0 - exp(-1.0000000028043132e-7)))) : (30.0 * (19.0 + var_chaste_interface__membrane__V) / (1.0 - exp(-4.75 - 0.25 * var_chaste_interface__membrane__V))));
                 };
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__membrane__V);
@@ -404,7 +393,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__membrane__V) {
-                    return ((fabs(19.0 + var_chaste_interface__membrane__V) < 9.999999999871223e-7) ? (-1.1999999999678934e-5 / (-1.0 + exp(-9.9999999997324457e-8)) + 500000.00000643887 * (19.000001000000001 + var_chaste_interface__membrane__V) * (1.1999999999678934e-5 / (-1.0 + exp(-9.9999999997324457e-8)) + 1.2000000000012001e-5 / (-1.0 + exp(1.0000000000010001e-7)))) : (12.0 * (19.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(1.8999999999999999 + 0.10000000000000001 * var_chaste_interface__membrane__V))));
+                    return ((fabs(19.0 + var_chaste_interface__membrane__V) < 1.0000000010279564e-6) ? (1.2000000012335477e-5 / (-1.0 + exp(1.0000000010279564e-7)) - 499999.99948602181 * (18.999998999999999 + var_chaste_interface__membrane__V) * (-1.2000000012335477e-5 / (-1.0 + exp(1.0000000010279564e-7)) - 1.2000000012335477e-5 / (-1.0 + exp(-1.0000000010279564e-7)))) : (12.0 * (19.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(1.8999999999999999 + 0.10000000000000001 * var_chaste_interface__membrane__V))));
                 };
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__membrane__V);
@@ -426,29 +415,18 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__membrane__V) {
-                    return ((fabs(34.0 + var_chaste_interface__membrane__V) < 4.0000000001150227e-7) ? (-2.5000000000718892e-6 / (-1.0 + exp(-1.0000000000287557e-7)) + 1249999.9999640554 * (34.000000399999998 + var_chaste_interface__membrane__V) * (2.5000000000718892e-6 / (-1.0 + exp(1.0000000000287557e-7)) + 2.5000000000718892e-6 / (-1.0 + exp(-1.0000000000287557e-7)))) : (6.25 * (34.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(8.5 + 0.25 * var_chaste_interface__membrane__V))));
+                    return 1.0 + exp(-8.5 - 0.25 * var_chaste_interface__membrane__V);
                 };
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__membrane__V);
-                //Expressions which are part of a piecewise could be inf / nan, this is generally accptable, due to the piecewise, however occasionally interpolation of the lookup table from a nan/inf version can give problems.
-                //To avoid this values stored in the table are intrpolated. Occurances of this to at most 2 per expression.
-                if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[17] < 2){
-                    double left = f(var_chaste_interface__membrane__V - mTableSteps[0]);
-                    double right = f(var_chaste_interface__membrane__V + mTableSteps[0]);
-                    val = (left + right) / 2.0;
-                   // count and limit number of misshits
-                  _lookup_table_0_num_misshit_piecewise[17] +=1;
-                }
-                else if (!std::isfinite(val) && _lookup_table_0_num_misshit_piecewise[17] >= 2){
-                    EXCEPTION("Lookup table 17 at ["<<i<<"][17] has non-finite value: " << val);
-                }
+
                 _lookup_table_0[i][17] = val;
             }
 
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__membrane__V) {
-                    return 1.0 + exp(-8.5 - 0.25 * var_chaste_interface__membrane__V);
+                    return -1.0 + exp(8.5 + 0.25 * var_chaste_interface__membrane__V);
                 };
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__membrane__V);
@@ -459,7 +437,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__membrane__V) {
-                    return ((fabs(22.0 + var_chaste_interface__membrane__V) < 5.0000000001437783e-7) ? (2.5000000000718892e-7 / (1.0 - exp(-1.0000000000287557e-7)) - 999999.99997124437 * (21.999999500000001 + var_chaste_interface__membrane__V) * (-2.5000000000718892e-7 / (1.0 - exp(1.0000000000287557e-7)) - 2.5000000000718892e-7 / (1.0 - exp(-1.0000000000287557e-7)))) : (0.5 * (22.0 + var_chaste_interface__membrane__V) / (1.0 - exp(-4.4000000000000004 - 0.20000000000000001 * var_chaste_interface__membrane__V))));
+                    return ((fabs(22.0 + var_chaste_interface__membrane__V) < 4.9999999873762135e-7) ? (-2.4999999936881068e-7 / (1.0 - exp(9.9999999747524276e-8)) + 1000000.0025247573 * (22.000000499999999 + var_chaste_interface__membrane__V) * (2.4999999936881068e-7 / (1.0 - exp(9.9999999747524276e-8)) + 2.4999999936881068e-7 / (1.0 - exp(-9.9999999747524276e-8)))) : (0.5 * (22.0 + var_chaste_interface__membrane__V) / (1.0 - exp(-4.4000000000000004 - 0.20000000000000001 * var_chaste_interface__membrane__V))));
                 };
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__membrane__V);
@@ -481,7 +459,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__membrane__V) {
-                    return ((fabs(22.0 + var_chaste_interface__membrane__V) < 1.4999999999876223e-6) ? (-2.6699999999779676e-7 / (-1.0 + exp(-9.9999999999174827e-8)) + 333333.33333608392 * (22.0000015 + var_chaste_interface__membrane__V) * (2.6699999999779676e-7 / (-1.0 + exp(9.9999999999174827e-8)) + 2.6699999999779676e-7 / (-1.0 + exp(-9.9999999999174827e-8)))) : (0.17799999999999999 * (22.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(1.4666666666666666 + 0.066666666666666666 * var_chaste_interface__membrane__V))));
+                    return ((fabs(22.0 + var_chaste_interface__membrane__V) < 1.4999999997655777e-6) ? (2.6699999995827282e-7 / (-1.0 + exp(9.9999999984371854e-8)) - 333333.33338542719 * (21.9999985 + var_chaste_interface__membrane__V) * (-2.6699999995827282e-7 / (-1.0 + exp(9.9999999984371854e-8)) - 2.6699999995827282e-7 / (-1.0 + exp(-9.9999999984371854e-8)))) : (0.17799999999999999 * (22.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(1.4666666666666666 + 0.066666666666666666 * var_chaste_interface__membrane__V))));
                 };
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__membrane__V);
@@ -602,7 +580,7 @@ std::shared_ptr<Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables> Ce
         const double var_calcium_background_current__i_Ca_b = 0.01 * var_chaste_interface__membrane__V - 0.13356880329847826 * log(mParameters[0] / var_chaste_interface__intracellular_calcium_concentration__Cai); // nanoA
         const double var_fast_sodium_current__i_Na_converted = 0.001 * pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * (-26.713760659695652 * log((mParameters[1] + 0.12 * var_chaste_interface__extracellular_potassium_concentration__Kc) / (var_chaste_interface__intracellular_sodium_concentration__Nai + 0.12 * var_chaste_interface__intracellular_potassium_concentration__Ki)) + var_chaste_interface__membrane__V) * HeartConfig::Instance()->GetCapacitance() * mParameters[5] * var_chaste_interface__fast_sodium_current_h_gate__h / mParameters[3]; // uA_per_cm2
         const double var_hyperpolarising_activated_current__i_f_converted = 0.001 * ((-var_hyperpolarising_activated_current__E_K + var_chaste_interface__membrane__V) * var_chaste_interface__extracellular_potassium_concentration__Kc * mParameters[6] * var_chaste_interface__hyperpolarising_activated_current_y_gate__y / (45.0 + var_chaste_interface__extracellular_potassium_concentration__Kc) + (-var_hyperpolarising_activated_current__E_Na + var_chaste_interface__membrane__V) * var_chaste_interface__extracellular_potassium_concentration__Kc * mParameters[7] * var_chaste_interface__hyperpolarising_activated_current_y_gate__y / (45.0 + var_chaste_interface__extracellular_potassium_concentration__Kc)) * HeartConfig::Instance()->GetCapacitance() / mParameters[3]; // uA_per_cm2
-        const double var_second_inward_current__i_si_converted = 0.001 * (((fabs(-50.0 + var_chaste_interface__membrane__V) < 2.6713760659657915e-6) ? (-187169.45411399176 * (-50.000002671376066 + var_chaste_interface__membrane__V) * (-9.9999999999858744e-10 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(9.9999999999858739e-8)) - 9.9999999999858744e-10 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(-9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999999858739e-8))) + 9.9999999999858744e-10 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(-9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999999858739e-8))) : (0.00037433890822745472 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * _lt_0_row[2]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[3]))) + ((fabs(-50.0 + var_chaste_interface__membrane__V) < 2.6713760659657915e-6) ? (-187169.45411399176 * (-50.000002671376066 + var_chaste_interface__membrane__V) * (-9.9999999999858744e-10 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(9.9999999999858739e-8)) - 9.9999999999858744e-10 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(-9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999999858739e-8))) + 9.9999999999858744e-10 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(-9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999999858739e-8))) : (0.00037433890822745472 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * _lt_0_row[2]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[3]))) + ((fabs(-50.0 + var_chaste_interface__membrane__V) < 1.3356880329551402e-6) ? (-374338.90823576227 * (-50.000001335688033 + var_chaste_interface__membrane__V) * (-1.9999999999556149e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(9.9999999997780743e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(9.9999999997780743e-8)) - 1.9999999999556149e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(-9.9999999997780743e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999997780743e-8))) + 1.9999999999556149e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(-9.9999999997780743e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999997780743e-8))) : (0.14973556329098189 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * _lt_0_row[4]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[5])))) * HeartConfig::Instance()->GetCapacitance() / mParameters[3]; // uA_per_cm2
+        const double var_second_inward_current__i_si_converted = 0.001 * (((fabs(-50.0 + var_chaste_interface__membrane__V) < 2.6713760661323249e-6) ? (187169.45410232362 * (-49.999997328623934 + var_chaste_interface__membrane__V) * (1.0000000000609275e-9 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7)) + 1.0000000000609275e-9 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(-1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-1.0000000000609274e-7))) - 1.0000000000609275e-9 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7))) : (0.00037433890822745472 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * _lt_0_row[2]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[3]))) + ((fabs(-50.0 + var_chaste_interface__membrane__V) < 2.6713760661323249e-6) ? (187169.45410232362 * (-49.999997328623934 + var_chaste_interface__membrane__V) * (1.0000000000609275e-9 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7)) + 1.0000000000609275e-9 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(-1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-1.0000000000609274e-7))) - 1.0000000000609275e-9 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7))) : (0.00037433890822745472 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * _lt_0_row[2]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[3]))) + ((fabs(-50.0 + var_chaste_interface__membrane__V) < 1.3356880330661625e-6) ? (374338.90820464725 * (-49.999998664311967 + var_chaste_interface__membrane__V) * (2.0000000001218549e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7)) + 2.0000000001218549e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(-1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-1.0000000000609274e-7))) - 2.0000000001218549e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7))) : (0.14973556329098189 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * _lt_0_row[4]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[5])))) * HeartConfig::Instance()->GetCapacitance() / mParameters[3]; // uA_per_cm2
         const double var_sodium_background_current__i_Na_b = 0.070000000000000007 * var_chaste_interface__membrane__V - 0.070000000000000007 * var_hyperpolarising_activated_current__E_Na; // nanoA
         const double var_sodium_potassium_pump__i_p = 50.0 * var_chaste_interface__extracellular_potassium_concentration__Kc * var_chaste_interface__intracellular_sodium_concentration__Nai / ((1.0 + var_chaste_interface__extracellular_potassium_concentration__Kc) * (40.0 + var_chaste_interface__intracellular_sodium_concentration__Nai)); // nanoA
         const double var_time_dependent_potassium_current__i_K_converted = 7.1428571428571427e-6 * (-var_chaste_interface__extracellular_potassium_concentration__Kc * _lt_0_row[6] + var_chaste_interface__intracellular_potassium_concentration__Ki) * HeartConfig::Instance()->GetCapacitance() * mParameters[4] * var_chaste_interface__time_dependent_potassium_current_x_gate__x / mParameters[3]; // uA_per_cm2
@@ -664,9 +642,9 @@ std::shared_ptr<Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables> Ce
         const double var_fast_sodium_current__i_Na = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * (-26.713760659695652 * log((mParameters[1] + 0.12 * var_chaste_interface__extracellular_potassium_concentration__Kc) / (var_chaste_interface__intracellular_sodium_concentration__Nai + 0.12 * var_chaste_interface__intracellular_potassium_concentration__Ki)) + var_chaste_interface__membrane__V) * mParameters[5] * var_chaste_interface__fast_sodium_current_h_gate__h; // nanoA
         const double var_hyperpolarising_activated_current__i_fK = (-var_hyperpolarising_activated_current__E_K + var_chaste_interface__membrane__V) * var_chaste_interface__extracellular_potassium_concentration__Kc * mParameters[6] * var_chaste_interface__hyperpolarising_activated_current_y_gate__y / (45.0 + var_chaste_interface__extracellular_potassium_concentration__Kc); // nanoA
         const double var_hyperpolarising_activated_current__i_fNa = (-var_hyperpolarising_activated_current__E_Na + var_chaste_interface__membrane__V) * var_chaste_interface__extracellular_potassium_concentration__Kc * mParameters[7] * var_chaste_interface__hyperpolarising_activated_current_y_gate__y / (45.0 + var_chaste_interface__extracellular_potassium_concentration__Kc); // nanoA
-        const double var_second_inward_current__i_siCa = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 1.3356880329551402e-6) ? (-374338.90823576227 * (-50.000001335688033 + var_chaste_interface__membrane__V) * (-1.9999999999556149e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(9.9999999997780743e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(9.9999999997780743e-8)) - 1.9999999999556149e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(-9.9999999997780743e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999997780743e-8))) + 1.9999999999556149e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(-9.9999999997780743e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999997780743e-8))) : (0.14973556329098189 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * _lt_0_row[4]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[5]))); // nanoA
-        const double var_second_inward_current__i_siK = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 2.6713760659657915e-6) ? (-187169.45411399176 * (-50.000002671376066 + var_chaste_interface__membrane__V) * (-9.9999999999858744e-10 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(9.9999999999858739e-8)) - 9.9999999999858744e-10 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(-9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999999858739e-8))) + 9.9999999999858744e-10 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(-9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999999858739e-8))) : (0.00037433890822745472 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * _lt_0_row[2]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[3]))); // nanoA
-        const double var_second_inward_current__i_siNa = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 2.6713760659657915e-6) ? (-187169.45411399176 * (-50.000002671376066 + var_chaste_interface__membrane__V) * (-9.9999999999858744e-10 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(9.9999999999858739e-8)) - 9.9999999999858744e-10 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(-9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999999858739e-8))) + 9.9999999999858744e-10 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(-9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999999858739e-8))) : (0.00037433890822745472 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * _lt_0_row[2]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[3]))); // nanoA
+        const double var_second_inward_current__i_siCa = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 1.3356880330661625e-6) ? (374338.90820464725 * (-49.999998664311967 + var_chaste_interface__membrane__V) * (2.0000000001218549e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7)) + 2.0000000001218549e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(-1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-1.0000000000609274e-7))) - 2.0000000001218549e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7))) : (0.14973556329098189 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * _lt_0_row[4]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[5]))); // nanoA
+        const double var_second_inward_current__i_siK = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 2.6713760661323249e-6) ? (187169.45410232362 * (-49.999997328623934 + var_chaste_interface__membrane__V) * (1.0000000000609275e-9 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7)) + 1.0000000000609275e-9 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(-1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-1.0000000000609274e-7))) - 1.0000000000609275e-9 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7))) : (0.00037433890822745472 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * _lt_0_row[2]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[3]))); // nanoA
+        const double var_second_inward_current__i_siNa = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 2.6713760661323249e-6) ? (187169.45410232362 * (-49.999997328623934 + var_chaste_interface__membrane__V) * (1.0000000000609275e-9 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7)) + 1.0000000000609275e-9 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(-1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-1.0000000000609274e-7))) - 1.0000000000609275e-9 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7))) : (0.00037433890822745472 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * _lt_0_row[2]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[3]))); // nanoA
         const double var_sodium_background_current__i_Na_b = 0.070000000000000007 * var_chaste_interface__membrane__V - 0.070000000000000007 * var_hyperpolarising_activated_current__E_Na; // nanoA
         const double var_sodium_potassium_pump__i_p = 50.0 * var_chaste_interface__extracellular_potassium_concentration__Kc * var_chaste_interface__intracellular_sodium_concentration__Nai / ((1.0 + var_chaste_interface__extracellular_potassium_concentration__Kc) * (40.0 + var_chaste_interface__intracellular_sodium_concentration__Nai)); // nanoA
         const double var_time_dependent_potassium_current__i_K = 0.0071428571428571426 * (-var_chaste_interface__extracellular_potassium_concentration__Kc * _lt_0_row[6] + var_chaste_interface__intracellular_potassium_concentration__Ki) * mParameters[4] * var_chaste_interface__time_dependent_potassium_current_x_gate__x; // nanoA
@@ -764,14 +742,14 @@ std::shared_ptr<Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables> Ce
         const double var_hyperpolarising_activated_current__i_fK = (-var_hyperpolarising_activated_current__E_K + var_chaste_interface__membrane__V) * var_chaste_interface__extracellular_potassium_concentration__Kc * mParameters[6] * var_chaste_interface__hyperpolarising_activated_current_y_gate__y / (45.0 + var_chaste_interface__extracellular_potassium_concentration__Kc); // nanoA
         const double var_hyperpolarising_activated_current__i_fNa = (-var_hyperpolarising_activated_current__E_Na + var_chaste_interface__membrane__V) * var_chaste_interface__extracellular_potassium_concentration__Kc * mParameters[7] * var_chaste_interface__hyperpolarising_activated_current_y_gate__y / (45.0 + var_chaste_interface__extracellular_potassium_concentration__Kc); // nanoA
         const double d_dt_chaste_interface_var_hyperpolarising_activated_current_y_gate__y = 0.0001 * (1.0 - var_chaste_interface__hyperpolarising_activated_current_y_gate__y) * _lt_0_row[11] - 0.002 * _lt_0_row[12] * var_chaste_interface__hyperpolarising_activated_current_y_gate__y; // 1 / millisecond
-        const double d_dt_chaste_interface_var_intracellular_calcium_concentration__p = 0.001 * (1.0 - var_chaste_interface__intracellular_calcium_concentration__p) * _lt_0_row[13] - 0.0050000000000000001 * var_chaste_interface__intracellular_calcium_concentration__p / (_lt_0_row[14]); // 1 / millisecond
+        const double d_dt_chaste_interface_var_intracellular_calcium_concentration__p = -0.0050000000000000001 * var_chaste_interface__intracellular_calcium_concentration__p / (_lt_0_row[13]) + 0.00062500000000000001 * (1.0 - var_chaste_interface__intracellular_calcium_concentration__p) * (64.0 + var_chaste_interface__membrane__V) / (_lt_0_row[14]); // 1 / millisecond
         const double d_dt_chaste_interface_var_second_inward_current_d_gate__d = 0.001 * (1.0 - var_chaste_interface__second_inward_current_d_gate__d) * _lt_0_row[15] - 0.001 * _lt_0_row[16] * var_chaste_interface__second_inward_current_d_gate__d; // 1 / millisecond
         const double d_dt_chaste_interface_var_second_inward_current_f2_gate__f2 = 0.01 - 0.001 * (10.0 + 20000.0 * var_chaste_interface__intracellular_calcium_concentration__Cai) * var_chaste_interface__second_inward_current_f2_gate__f2; // 1 / millisecond
-        const double var_second_inward_current__i_siCa = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 1.3356880329551402e-6) ? (-374338.90823576227 * (-50.000001335688033 + var_chaste_interface__membrane__V) * (-1.9999999999556149e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(9.9999999997780743e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(9.9999999997780743e-8)) - 1.9999999999556149e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(-9.9999999997780743e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999997780743e-8))) + 1.9999999999556149e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(-9.9999999997780743e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999997780743e-8))) : (0.14973556329098189 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * _lt_0_row[4]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[5]))); // nanoA
+        const double var_second_inward_current__i_siCa = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 1.3356880330661625e-6) ? (374338.90820464725 * (-49.999998664311967 + var_chaste_interface__membrane__V) * (2.0000000001218549e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7)) + 2.0000000001218549e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(-1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-1.0000000000609274e-7))) - 2.0000000001218549e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7))) : (0.14973556329098189 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * _lt_0_row[4]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[5]))); // nanoA
         const double d_dt_chaste_interface_var_intracellular_calcium_concentration__Cai = 3.5796974540171135e-6 * var_intracellular_calcium_concentration__i_rel + 7.1593949080342271e-6 * var_Na_Ca_exchanger__i_NaCa - 3.5796974540171135e-6 * var_calcium_background_current__i_Ca_b - 3.5796974540171135e-6 * var_intracellular_calcium_concentration__i_up - 3.5796974540171135e-6 * var_second_inward_current__i_siCa; // millimolar / millisecond
-        const double var_second_inward_current__i_siK = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 2.6713760659657915e-6) ? (-187169.45411399176 * (-50.000002671376066 + var_chaste_interface__membrane__V) * (-9.9999999999858744e-10 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(9.9999999999858739e-8)) - 9.9999999999858744e-10 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(-9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999999858739e-8))) + 9.9999999999858744e-10 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(-9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999999858739e-8))) : (0.00037433890822745472 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * _lt_0_row[2]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[3]))); // nanoA
-        const double var_second_inward_current__i_siNa = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 2.6713760659657915e-6) ? (-187169.45411399176 * (-50.000002671376066 + var_chaste_interface__membrane__V) * (-9.9999999999858744e-10 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(9.9999999999858739e-8)) - 9.9999999999858744e-10 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(-9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999999858739e-8))) + 9.9999999999858744e-10 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(-9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999999858739e-8))) : (0.00037433890822745472 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * _lt_0_row[2]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[3]))); // nanoA
-        const double d_dt_chaste_interface_var_second_inward_current_f_gate__f = 0.001 * (1.0 - var_chaste_interface__second_inward_current_f_gate__f) * _lt_0_row[17] - 0.050000000000000003 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[18]); // 1 / millisecond
+        const double var_second_inward_current__i_siK = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 2.6713760661323249e-6) ? (187169.45410232362 * (-49.999997328623934 + var_chaste_interface__membrane__V) * (1.0000000000609275e-9 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7)) + 1.0000000000609275e-9 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(-1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-1.0000000000609274e-7))) - 1.0000000000609275e-9 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7))) : (0.00037433890822745472 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * _lt_0_row[2]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[3]))); // nanoA
+        const double var_second_inward_current__i_siNa = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 2.6713760661323249e-6) ? (187169.45410232362 * (-49.999997328623934 + var_chaste_interface__membrane__V) * (1.0000000000609275e-9 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7)) + 1.0000000000609275e-9 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(-1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-1.0000000000609274e-7))) - 1.0000000000609275e-9 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7))) : (0.00037433890822745472 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * _lt_0_row[2]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[3]))); // nanoA
+        const double d_dt_chaste_interface_var_second_inward_current_f_gate__f = -0.050000000000000003 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[17]) + 0.0062500000000000003 * (1.0 - var_chaste_interface__second_inward_current_f_gate__f) * (34.0 + var_chaste_interface__membrane__V) / (_lt_0_row[18]); // 1 / millisecond
         const double var_sodium_background_current__i_Na_b = 0.070000000000000007 * var_chaste_interface__membrane__V - 0.070000000000000007 * var_hyperpolarising_activated_current__E_Na; // nanoA
         const double var_sodium_potassium_pump__i_p = 50.0 * var_chaste_interface__extracellular_potassium_concentration__Kc * var_chaste_interface__intracellular_sodium_concentration__Nai / ((1.0 + var_chaste_interface__extracellular_potassium_concentration__Kc) * (40.0 + var_chaste_interface__intracellular_sodium_concentration__Nai)); // nanoA
         const double d_dt_chaste_interface_var_intracellular_sodium_concentration__Nai = -2.147818472410268e-5 * var_Na_Ca_exchanger__i_NaCa - 2.147818472410268e-5 * var_sodium_potassium_pump__i_p - 7.1593949080342271e-6 * var_fast_sodium_current__i_Na - 7.1593949080342271e-6 * var_hyperpolarising_activated_current__i_fNa - 7.1593949080342271e-6 * var_second_inward_current__i_siNa - 7.1593949080342271e-6 * var_sodium_background_current__i_Na_b; // millimolar / millisecond
@@ -998,9 +976,9 @@ std::shared_ptr<Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables> Ce
         const double var_fast_sodium_current__i_Na = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * (-26.713760659695652 * log((mParameters[1] + 0.12 * var_chaste_interface__extracellular_potassium_concentration__Kc) / (var_chaste_interface__intracellular_sodium_concentration__Nai + 0.12 * var_chaste_interface__intracellular_potassium_concentration__Ki)) + var_chaste_interface__membrane__V) * mParameters[5] * var_chaste_interface__fast_sodium_current_h_gate__h; // nanoA
         const double var_hyperpolarising_activated_current__i_fK = (-var_hyperpolarising_activated_current__E_K + var_chaste_interface__membrane__V) * var_chaste_interface__extracellular_potassium_concentration__Kc * mParameters[6] * var_chaste_interface__hyperpolarising_activated_current_y_gate__y / (45.0 + var_chaste_interface__extracellular_potassium_concentration__Kc); // nanoA
         const double var_hyperpolarising_activated_current__i_fNa = (-var_hyperpolarising_activated_current__E_Na + var_chaste_interface__membrane__V) * var_chaste_interface__extracellular_potassium_concentration__Kc * mParameters[7] * var_chaste_interface__hyperpolarising_activated_current_y_gate__y / (45.0 + var_chaste_interface__extracellular_potassium_concentration__Kc); // nanoA
-        const double var_second_inward_current__i_siCa = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 1.3356880329551402e-6) ? (-374338.90823576227 * (-50.000001335688033 + var_chaste_interface__membrane__V) * (-1.9999999999556149e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(9.9999999997780743e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(9.9999999997780743e-8)) - 1.9999999999556149e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(-9.9999999997780743e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999997780743e-8))) + 1.9999999999556149e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(-9.9999999997780743e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999997780743e-8))) : (0.14973556329098189 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * _lt_0_row[4]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[5]))); // nanoA
-        const double var_second_inward_current__i_siK = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 2.6713760659657915e-6) ? (-187169.45411399176 * (-50.000002671376066 + var_chaste_interface__membrane__V) * (-9.9999999999858744e-10 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(9.9999999999858739e-8)) - 9.9999999999858744e-10 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(-9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999999858739e-8))) + 9.9999999999858744e-10 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(-9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999999858739e-8))) : (0.00037433890822745472 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * _lt_0_row[2]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[3]))); // nanoA
-        const double var_second_inward_current__i_siNa = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 2.6713760659657915e-6) ? (-187169.45411399176 * (-50.000002671376066 + var_chaste_interface__membrane__V) * (-9.9999999999858744e-10 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(9.9999999999858739e-8)) - 9.9999999999858744e-10 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(-9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999999858739e-8))) + 9.9999999999858744e-10 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(-9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999999858739e-8))) : (0.00037433890822745472 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * _lt_0_row[2]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[3]))); // nanoA
+        const double var_second_inward_current__i_siCa = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 1.3356880330661625e-6) ? (374338.90820464725 * (-49.999998664311967 + var_chaste_interface__membrane__V) * (2.0000000001218549e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7)) + 2.0000000001218549e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(-1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-1.0000000000609274e-7))) - 2.0000000001218549e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7))) : (0.14973556329098189 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * _lt_0_row[4]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[5]))); // nanoA
+        const double var_second_inward_current__i_siK = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 2.6713760661323249e-6) ? (187169.45410232362 * (-49.999997328623934 + var_chaste_interface__membrane__V) * (1.0000000000609275e-9 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7)) + 1.0000000000609275e-9 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(-1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-1.0000000000609274e-7))) - 1.0000000000609275e-9 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7))) : (0.00037433890822745472 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * _lt_0_row[2]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[3]))); // nanoA
+        const double var_second_inward_current__i_siNa = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 2.6713760661323249e-6) ? (187169.45410232362 * (-49.999997328623934 + var_chaste_interface__membrane__V) * (1.0000000000609275e-9 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7)) + 1.0000000000609275e-9 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(-1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-1.0000000000609274e-7))) - 1.0000000000609275e-9 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7))) : (0.00037433890822745472 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * _lt_0_row[2]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[3]))); // nanoA
         const double var_sodium_background_current__i_Na_b = 0.070000000000000007 * var_chaste_interface__membrane__V - 0.070000000000000007 * var_hyperpolarising_activated_current__E_Na; // nanoA
         const double var_sodium_potassium_pump__i_p = 50.0 * var_chaste_interface__extracellular_potassium_concentration__Kc * var_chaste_interface__intracellular_sodium_concentration__Nai / ((1.0 + var_chaste_interface__extracellular_potassium_concentration__Kc) * (40.0 + var_chaste_interface__intracellular_sodium_concentration__Nai)); // nanoA
         const double var_time_dependent_potassium_current__i_K = 0.0071428571428571426 * (-var_chaste_interface__extracellular_potassium_concentration__Kc * _lt_0_row[6] + var_chaste_interface__intracellular_potassium_concentration__Ki) * mParameters[4] * var_chaste_interface__time_dependent_potassium_current_x_gate__x; // nanoA
@@ -1049,106 +1027,100 @@ std::shared_ptr<Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables> Ce
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
-            const double var_x0 = exp(9.9999999999858739e-8);
+            const double var_x0 = exp(1.0000000000609274e-7);
             const double var_x1 = 1 / (1.0 - var_x0);
-            const double var_x2 = exp(1.8716945411372736);
-            const double var_x3 = var_x2 * var_chaste_interface__intracellular_potassium_concentration__Ki;
-            const double var_x4 = var_x3 - var_x0 * var_chaste_interface__extracellular_potassium_concentration__Kc;
-            const double var_x5 = var_x1 * var_x4;
-            const double var_x6 = var_x5 * var_chaste_interface__second_inward_current_d_gate__d;
-            const double var_x7 = mParameters[2] * var_chaste_interface__second_inward_current_f2_gate__f2;
-            const double var_x8 = var_x7 * var_chaste_interface__second_inward_current_f_gate__f;
-            const double var_x9 = 0.00018716945411372736 * var_x8;
-            const double var_x10 = exp(-9.9999999999858739e-8);
-            const double var_x11 = var_x3 - var_x10 * var_chaste_interface__extracellular_potassium_concentration__Kc;
-            const double var_x12 = 1 / (1.0 - var_x10);
-            const double var_x13 = var_x9 * var_chaste_interface__second_inward_current_d_gate__d;
-            const double var_x14 = var_x12 * var_x13;
-            const double var_x15 = -50.0 + var_chaste_interface__membrane__V;
-            const double var_x16 = fabs(var_x15);
-            const double var_x17 = var_x16 < 2.6713760659657915e-6;
-            const double var_x18 = var_x8 * var_chaste_interface__second_inward_current_d_gate__d;
-            const double var_x19 = _lt_0_row[2];
-            const double var_x20 = var_x19 * var_chaste_interface__extracellular_potassium_concentration__Kc;
+            const double var_x2 = exp(3.7433890822745473);
+            const double var_x3 = var_x2 * var_chaste_interface__intracellular_calcium_concentration__Cai;
+            const double var_x4 = var_x1 * (var_x3 - var_x0 * mParameters[0]);
+            const double var_x5 = var_x4 * var_chaste_interface__second_inward_current_d_gate__d;
+            const double var_x6 = mParameters[2] * var_chaste_interface__second_inward_current_f2_gate__f2;
+            const double var_x7 = var_x6 * var_chaste_interface__second_inward_current_f_gate__f;
+            const double var_x8 = 0.074867781645490947 * var_x7;
+            const double var_x9 = exp(-1.0000000000609274e-7);
+            const double var_x10 = 1 / (1.0 - var_x9);
+            const double var_x11 = var_x10 * (var_x3 - var_x9 * mParameters[0]);
+            const double var_x12 = var_x11 * var_chaste_interface__second_inward_current_d_gate__d;
+            const double var_x13 = -50.0 + var_chaste_interface__membrane__V;
+            const double var_x14 = fabs(var_x13);
+            const double var_x15 = var_x14 < 1.3356880330661625e-6;
+            const double var_x16 = var_x7 * var_chaste_interface__second_inward_current_d_gate__d;
+            const double var_x17 = _lt_0_row[4];
+            const double var_x18 = 1.0 - var_x17;
+            const double var_x19 = 1 / var_x18;
+            const double var_x20 = var_x17 * mParameters[0];
             const double var_x21 = var_x3 - var_x20;
-            const double var_x22 = 1.0 - var_x19;
-            const double var_x23 = 1 / var_x22;
-            const double var_x24 = 0.00037433890822745472 * var_x23;
-            const double var_x25 = var_x21 * var_x24;
-            const double var_x26 = var_x15 * var_x18;
-            const double var_x27 = 1.4012961821292276e-5 * var_x26;
-            const double var_x28 = var_x23 * var_x27;
-            const double var_x29 = var_x19 * var_x27 / pow(var_x22, 2);
-            const double var_x30 = ((var_x17) ? (var_x11 * var_x14 + var_x6 * var_x9) : (var_x18 * var_x25 + var_x20 * var_x28 - var_x21 * var_x29));
-            const double var_x31 = var_x2 * var_chaste_interface__intracellular_sodium_concentration__Nai;
-            const double var_x32 = var_x31 - var_x0 * mParameters[1];
-            const double var_x33 = var_x1 * var_x32;
-            const double var_x34 = var_x31 - var_x10 * mParameters[1];
-            const double var_x35 = var_x19 * mParameters[1];
-            const double var_x36 = var_x31 - var_x35;
-            const double var_x37 = var_x24 * var_x36;
-            const double var_x38 = ((var_x17) ? (var_x13 * var_x33 + var_x14 * var_x34) : (var_x18 * var_x37 + var_x28 * var_x35 - var_x29 * var_x36));
-            const double var_x39 = exp(9.9999999997780743e-8);
-            const double var_x40 = 1 / (1.0 - var_x39);
-            const double var_x41 = exp(3.7433890822745473);
-            const double var_x42 = var_x41 * var_chaste_interface__intracellular_calcium_concentration__Cai;
-            const double var_x43 = var_x40 * (var_x42 - var_x39 * mParameters[0]);
-            const double var_x44 = var_x43 * var_chaste_interface__second_inward_current_d_gate__d;
-            const double var_x45 = 0.074867781645490947 * var_x8;
-            const double var_x46 = exp(-9.9999999997780743e-8);
-            const double var_x47 = 1 / (1.0 - var_x46);
-            const double var_x48 = var_x47 * (var_x42 - var_x46 * mParameters[0]);
-            const double var_x49 = var_x48 * var_chaste_interface__second_inward_current_d_gate__d;
-            const double var_x50 = var_x16 < 1.3356880329551402e-6;
-            const double var_x51 = _lt_0_row[4];
-            const double var_x52 = 1.0 - var_x51;
-            const double var_x53 = 1 / var_x52;
-            const double var_x54 = var_x18 * var_x53;
-            const double var_x55 = var_x51 * mParameters[0];
-            const double var_x56 = var_x42 - var_x55;
-            const double var_x57 = 0.14973556329098189 * var_x56;
-            const double var_x58 = var_x15 * var_x54;
-            const double var_x59 = ((var_x50) ? (var_x44 * var_x45 + var_x45 * var_x49) : (var_x54 * var_x57 + 0.011210369457033822 * var_x55 * var_x58 - 0.011210369457033822 * var_x26 * var_x51 * var_x56 / pow(var_x52, 2)));
-            const double var_x60 = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * mParameters[5];
-            const double var_x61 = var_x60 * var_chaste_interface__fast_sodium_current_h_gate__h;
-            const double var_x62 = 0.018716945411372737 * var_chaste_interface__membrane__V;
-            const double var_x63 = exp(-var_x62);
-            const double var_x64 = pow(mParameters[1], 3.0);
-            const double var_x65 = var_x64 * var_chaste_interface__intracellular_calcium_concentration__Cai;
-            const double var_x66 = var_x63 * var_x65;
-            const double var_x67 = exp(var_x62);
-            const double var_x68 = pow(var_chaste_interface__intracellular_sodium_concentration__Nai, 3.0) * mParameters[0];
-            const double var_x69 = var_x67 * var_x68;
-            const double var_x70 = 1 / (1.0 + 144.92753623188406 * var_chaste_interface__intracellular_calcium_concentration__Cai);
-            const double var_x71 = 1.0 + 0.0001 * var_x65 + 0.0001 * var_x68;
-            const double var_x72 = 1 / var_x71;
-            const double var_x73 = var_x70 * var_x72;
-            const double var_x74 = var_x73 * (0.018716945411372737 * var_x66 + 0.018716945411372737 * var_x69);
-            const double var_x75 = var_chaste_interface__extracellular_potassium_concentration__Kc / var_chaste_interface__intracellular_potassium_concentration__Ki;
-            const double var_x76 = log(var_x75);
-            const double var_x77 = exp(0.74867781645490938 + 0.074867781645490947 * var_chaste_interface__membrane__V - 2.0 * var_x76);
-            const double var_x78 = 1.0 + var_x77;
-            const double var_x79 = 1 / var_x78;
-            const double var_x80 = mParameters[8] / (10.0 + var_chaste_interface__extracellular_potassium_concentration__Kc);
-            const double var_x81 = var_x79 * var_x80;
-            const double var_x82 = var_x81 * var_chaste_interface__extracellular_potassium_concentration__Kc;
-            const double var_x83 = 1 / (45.0 + var_chaste_interface__extracellular_potassium_concentration__Kc);
-            const double var_x84 = var_x83 * var_chaste_interface__extracellular_potassium_concentration__Kc;
-            const double var_x85 = var_x84 * var_chaste_interface__hyperpolarising_activated_current_y_gate__y;
-            const double var_x86 = var_x85 * mParameters[6];
-            const double var_x87 = var_x85 * mParameters[7];
-            const double var_x88 = _lt_0_row[6];
-            const double var_x89 = var_x88 * var_chaste_interface__extracellular_potassium_concentration__Kc;
-            const double var_x90 = mParameters[4] * var_chaste_interface__time_dependent_potassium_current_x_gate__x;
-            const double var_x91 = var_x89 * var_x90;
-            const double var_x92 = -26.713760659695652 * var_x76 + var_chaste_interface__membrane__V;
-            const double var_x93 = var_x92 * var_chaste_interface__extracellular_potassium_concentration__Kc;
-            const double var_x94 = var_x77 * var_x80 / pow(var_x78, 2);
-            const double var_x95 = var_x93 * var_x94;
-            const double var_x96 = 1 / mParameters[3];
-            const double var_x97 = 0.001 * var_x96;
+            const double var_x22 = 0.14973556329098189 * var_x19 * var_x21;
+            const double var_x23 = var_x13 * var_x16;
+            const double var_x24 = var_x19 * var_x23;
+            const double var_x25 = ((var_x15) ? (var_x12 * var_x8 + var_x5 * var_x8) : (var_x16 * var_x22 + 0.011210369457033822 * var_x20 * var_x24 - 0.011210369457033822 * var_x17 * var_x21 * var_x23 / pow(var_x18, 2)));
+            const double var_x26 = exp(1.8716945411372736);
+            const double var_x27 = var_x26 * var_chaste_interface__intracellular_potassium_concentration__Ki;
+            const double var_x28 = var_x27 - var_x0 * var_chaste_interface__extracellular_potassium_concentration__Kc;
+            const double var_x29 = var_x1 * var_x28;
+            const double var_x30 = var_x29 * var_chaste_interface__second_inward_current_d_gate__d;
+            const double var_x31 = var_x27 - var_x9 * var_chaste_interface__extracellular_potassium_concentration__Kc;
+            const double var_x32 = 0.00018716945411372736 * var_x16;
+            const double var_x33 = var_x10 * var_x32;
+            const double var_x34 = var_x14 < 2.6713760661323249e-6;
+            const double var_x35 = _lt_0_row[2];
+            const double var_x36 = 1.0 - var_x35;
+            const double var_x37 = 1 / var_x36;
+            const double var_x38 = 0.00037433890822745472 * var_x37;
+            const double var_x39 = var_x35 * var_chaste_interface__extracellular_potassium_concentration__Kc;
+            const double var_x40 = var_x27 - var_x39;
+            const double var_x41 = var_x16 * var_x40;
+            const double var_x42 = 1.4012961821292276e-5 * var_x23;
+            const double var_x43 = var_x37 * var_x42;
+            const double var_x44 = var_x35 / pow(var_x36, 2);
+            const double var_x45 = ((var_x34) ? (var_x31 * var_x33 + 0.00018716945411372736 * var_x30 * var_x7) : (var_x38 * var_x41 + var_x39 * var_x43 - 1.4012961821292276e-5 * var_x13 * var_x41 * var_x44));
+            const double var_x46 = var_x26 * var_chaste_interface__intracellular_sodium_concentration__Nai;
+            const double var_x47 = var_x46 - var_x0 * mParameters[1];
+            const double var_x48 = var_x1 * var_x47;
+            const double var_x49 = var_x46 - var_x9 * mParameters[1];
+            const double var_x50 = var_x35 * mParameters[1];
+            const double var_x51 = var_x46 - var_x50;
+            const double var_x52 = var_x38 * var_x51;
+            const double var_x53 = ((var_x34) ? (var_x32 * var_x48 + var_x33 * var_x49) : (var_x16 * var_x52 + var_x43 * var_x50 - var_x42 * var_x44 * var_x51));
+            const double var_x54 = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * mParameters[5];
+            const double var_x55 = var_x54 * var_chaste_interface__fast_sodium_current_h_gate__h;
+            const double var_x56 = 0.018716945411372737 * var_chaste_interface__membrane__V;
+            const double var_x57 = exp(-var_x56);
+            const double var_x58 = pow(mParameters[1], 3.0);
+            const double var_x59 = var_x58 * var_chaste_interface__intracellular_calcium_concentration__Cai;
+            const double var_x60 = var_x57 * var_x59;
+            const double var_x61 = exp(var_x56);
+            const double var_x62 = pow(var_chaste_interface__intracellular_sodium_concentration__Nai, 3.0) * mParameters[0];
+            const double var_x63 = var_x61 * var_x62;
+            const double var_x64 = 1 / (1.0 + 144.92753623188406 * var_chaste_interface__intracellular_calcium_concentration__Cai);
+            const double var_x65 = 1.0 + 0.0001 * var_x59 + 0.0001 * var_x62;
+            const double var_x66 = 1 / var_x65;
+            const double var_x67 = var_x64 * var_x66;
+            const double var_x68 = var_x67 * (0.018716945411372737 * var_x60 + 0.018716945411372737 * var_x63);
+            const double var_x69 = var_chaste_interface__extracellular_potassium_concentration__Kc / var_chaste_interface__intracellular_potassium_concentration__Ki;
+            const double var_x70 = log(var_x69);
+            const double var_x71 = exp(0.74867781645490938 + 0.074867781645490947 * var_chaste_interface__membrane__V - 2.0 * var_x70);
+            const double var_x72 = 1.0 + var_x71;
+            const double var_x73 = 1 / var_x72;
+            const double var_x74 = mParameters[8] / (10.0 + var_chaste_interface__extracellular_potassium_concentration__Kc);
+            const double var_x75 = var_x73 * var_x74;
+            const double var_x76 = var_x75 * var_chaste_interface__extracellular_potassium_concentration__Kc;
+            const double var_x77 = 1 / (45.0 + var_chaste_interface__extracellular_potassium_concentration__Kc);
+            const double var_x78 = var_x77 * var_chaste_interface__extracellular_potassium_concentration__Kc;
+            const double var_x79 = var_x78 * var_chaste_interface__hyperpolarising_activated_current_y_gate__y;
+            const double var_x80 = var_x79 * mParameters[6];
+            const double var_x81 = var_x79 * mParameters[7];
+            const double var_x82 = _lt_0_row[6];
+            const double var_x83 = var_x82 * var_chaste_interface__extracellular_potassium_concentration__Kc;
+            const double var_x84 = mParameters[4] * var_chaste_interface__time_dependent_potassium_current_x_gate__x;
+            const double var_x85 = var_x83 * var_x84;
+            const double var_x86 = -26.713760659695652 * var_x70 + var_chaste_interface__membrane__V;
+            const double var_x87 = var_x86 * var_chaste_interface__extracellular_potassium_concentration__Kc;
+            const double var_x88 = var_x71 * var_x74 / pow(var_x72, 2);
+            const double var_x89 = var_x87 * var_x88;
+            const double var_x90 = 1 / mParameters[3];
+            const double var_x91 = 0.001 * var_x90;
             
-            partialF = var_x97 * (-0.080000000000000002 - var_x30 - var_x38 - var_x59 - var_x61 - var_x82 - var_x86 - var_x87 + 0.074867781645490947 * var_x95 - 0.002 * var_x74 - 0.00026738493444818193 * var_x91);
+            partialF = var_x91 * (-0.080000000000000002 - var_x25 - var_x45 - var_x53 - var_x55 - var_x76 - var_x80 - var_x81 + 0.074867781645490947 * var_x89 - 0.002 * var_x68 - 0.00026738493444818193 * var_x85);
         }
         else
         {
@@ -1194,7 +1166,7 @@ std::shared_ptr<Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables> Ce
         const double var_intracellular_calcium_concentration__i_up = 11174.128683727798 * (5.0 - var_chaste_interface__intracellular_calcium_concentration__Ca_up) * var_chaste_interface__intracellular_calcium_concentration__Cai; // nanoA
         const double var_Na_Ca_exchanger__i_NaCa = 0.002 * (pow(var_chaste_interface__intracellular_sodium_concentration__Nai, 3.0) * mParameters[0] * _lt_0_row[0] - pow(mParameters[1], 3.0) * var_chaste_interface__intracellular_calcium_concentration__Cai * _lt_0_row[1]) / ((1.0 + 144.92753623188406 * var_chaste_interface__intracellular_calcium_concentration__Cai) * (1.0 + 0.0001 * pow(mParameters[1], 3.0) * var_chaste_interface__intracellular_calcium_concentration__Cai + 0.0001 * pow(var_chaste_interface__intracellular_sodium_concentration__Nai, 3.0) * mParameters[0])); // nanoA
         const double var_calcium_background_current__i_Ca_b = 0.01 * var_chaste_interface__membrane__V - 0.13356880329847826 * log(mParameters[0] / var_chaste_interface__intracellular_calcium_concentration__Cai); // nanoA
-        const double var_second_inward_current__i_siCa = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 1.3356880329551402e-6) ? (-374338.90823576227 * (-50.000001335688033 + var_chaste_interface__membrane__V) * (-1.9999999999556149e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(9.9999999997780743e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(9.9999999997780743e-8)) - 1.9999999999556149e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(-9.9999999997780743e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999997780743e-8))) + 1.9999999999556149e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(-9.9999999997780743e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999997780743e-8))) : (0.14973556329098189 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * _lt_0_row[4]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[5]))); // nanoA
+        const double var_second_inward_current__i_siCa = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 1.3356880330661625e-6) ? (374338.90820464725 * (-49.999998664311967 + var_chaste_interface__membrane__V) * (2.0000000001218549e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7)) + 2.0000000001218549e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(-1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-1.0000000000609274e-7))) - 2.0000000001218549e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7))) : (0.14973556329098189 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * _lt_0_row[4]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[5]))); // nanoA
         const double d_dt_chaste_interface_var_intracellular_calcium_concentration__Cai = 3.5796974540171135e-6 * var_intracellular_calcium_concentration__i_rel + 7.1593949080342271e-6 * var_Na_Ca_exchanger__i_NaCa - 3.5796974540171135e-6 * var_calcium_background_current__i_Ca_b - 3.5796974540171135e-6 * var_intracellular_calcium_concentration__i_up - 3.5796974540171135e-6 * var_second_inward_current__i_siCa; // millimolar / millisecond
 
         return d_dt_chaste_interface_var_intracellular_calcium_concentration__Cai;
@@ -1231,53 +1203,53 @@ std::shared_ptr<Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables> Ce
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
-            const double var_x7 = mParameters[2] * var_chaste_interface__second_inward_current_f2_gate__f2;
-            const double var_x8 = var_x7 * var_chaste_interface__second_inward_current_f_gate__f;
-            const double var_x15 = -50.0 + var_chaste_interface__membrane__V;
-            const double var_x16 = fabs(var_x15);
-            const double var_x18 = var_x8 * var_chaste_interface__second_inward_current_d_gate__d;
-            const double var_x39 = exp(9.9999999997780743e-8);
-            const double var_x40 = 1 / (1.0 - var_x39);
-            const double var_x41 = exp(3.7433890822745473);
-            const double var_x46 = exp(-9.9999999997780743e-8);
-            const double var_x47 = 1 / (1.0 - var_x46);
-            const double var_x50 = var_x16 < 1.3356880329551402e-6;
-            const double var_x51 = _lt_0_row[4];
-            const double var_x52 = 1.0 - var_x51;
-            const double var_x53 = 1 / var_x52;
-            const double var_x54 = var_x18 * var_x53;
-            const double var_x58 = var_x15 * var_x54;
-            const double var_x62 = 0.018716945411372737 * var_chaste_interface__membrane__V;
-            const double var_x63 = exp(-var_x62);
-            const double var_x64 = pow(mParameters[1], 3.0);
-            const double var_x65 = var_x64 * var_chaste_interface__intracellular_calcium_concentration__Cai;
-            const double var_x66 = var_x63 * var_x65;
-            const double var_x67 = exp(var_x62);
-            const double var_x68 = pow(var_chaste_interface__intracellular_sodium_concentration__Nai, 3.0) * mParameters[0];
-            const double var_x69 = var_x67 * var_x68;
-            const double var_x70 = 1 / (1.0 + 144.92753623188406 * var_chaste_interface__intracellular_calcium_concentration__Cai);
-            const double var_x71 = 1.0 + 0.0001 * var_x65 + 0.0001 * var_x68;
-            const double var_x72 = 1 / var_x71;
-            const double var_x73 = var_x70 * var_x72;
-            const double var_x98 = 18716945.911788113 - 374338.90823576227 * var_chaste_interface__membrane__V;
-            const double var_x99 = 1.9999999999556149e-7 * var_x8;
-            const double var_x100 = var_x41 * var_x99 * var_chaste_interface__second_inward_current_d_gate__d;
-            const double var_x101 = var_x100 * var_x47;
-            const double var_x102 = ((var_x50) ? (var_x101 + var_x98 * (-var_x101 - var_x100 * var_x40)) : (0.14973556329098189 * var_x41 * var_x58));
-            const double var_x103 = 1 / var_chaste_interface__intracellular_calcium_concentration__Cai;
-            const double var_x104 = var_x69 - var_x66;
-            const double var_x105 = var_x104 * var_x72 / pow((0.0068999999999999999 + var_chaste_interface__intracellular_calcium_concentration__Cai), 2);
-            const double var_x106 = var_x63 * var_x64 * var_x73;
-            const double var_x107 = var_x104 * var_x70 / pow(var_x71, 2);
-            const double var_x108 = var_x107 * var_x64;
-            const double var_x188 = 0.0040000000000000001 * var_chaste_interface__intracellular_calcium_concentration__Ca_rel;
-            const double var_x189 = pow(var_chaste_interface__intracellular_calcium_concentration__Cai, 2.0);
-            const double var_x190 = 3.9999999999999998e-6 + var_x189;
-            const double var_x191 = 1 / var_x190;
-            const double var_x192 = var_x191 * pow(var_chaste_interface__intracellular_calcium_concentration__Cai, 1.0);
-            const double var_x193 = pow(var_chaste_interface__intracellular_calcium_concentration__Cai, 3.0) / pow(var_x190, 2);
+            const double var_x0 = exp(1.0000000000609274e-7);
+            const double var_x1 = 1 / (1.0 - var_x0);
+            const double var_x2 = exp(3.7433890822745473);
+            const double var_x6 = mParameters[2] * var_chaste_interface__second_inward_current_f2_gate__f2;
+            const double var_x7 = var_x6 * var_chaste_interface__second_inward_current_f_gate__f;
+            const double var_x9 = exp(-1.0000000000609274e-7);
+            const double var_x10 = 1 / (1.0 - var_x9);
+            const double var_x13 = -50.0 + var_chaste_interface__membrane__V;
+            const double var_x14 = fabs(var_x13);
+            const double var_x15 = var_x14 < 1.3356880330661625e-6;
+            const double var_x16 = var_x7 * var_chaste_interface__second_inward_current_d_gate__d;
+            const double var_x17 = _lt_0_row[4];
+            const double var_x18 = 1.0 - var_x17;
+            const double var_x19 = 1 / var_x18;
+            const double var_x23 = var_x13 * var_x16;
+            const double var_x24 = var_x19 * var_x23;
+            const double var_x56 = 0.018716945411372737 * var_chaste_interface__membrane__V;
+            const double var_x57 = exp(-var_x56);
+            const double var_x58 = pow(mParameters[1], 3.0);
+            const double var_x59 = var_x58 * var_chaste_interface__intracellular_calcium_concentration__Cai;
+            const double var_x60 = var_x57 * var_x59;
+            const double var_x61 = exp(var_x56);
+            const double var_x62 = pow(var_chaste_interface__intracellular_sodium_concentration__Nai, 3.0) * mParameters[0];
+            const double var_x63 = var_x61 * var_x62;
+            const double var_x64 = 1 / (1.0 + 144.92753623188406 * var_chaste_interface__intracellular_calcium_concentration__Cai);
+            const double var_x65 = 1.0 + 0.0001 * var_x59 + 0.0001 * var_x62;
+            const double var_x66 = 1 / var_x65;
+            const double var_x67 = var_x64 * var_x66;
+            const double var_x92 = -18716944.910232361 + 374338.90820464725 * var_chaste_interface__membrane__V;
+            const double var_x93 = 2.0000000001218549e-7 * var_x7;
+            const double var_x94 = var_x2 * var_x93 * var_chaste_interface__second_inward_current_d_gate__d;
+            const double var_x95 = var_x1 * var_x94;
+            const double var_x96 = ((var_x15) ? (-var_x95 + var_x92 * (var_x95 + var_x10 * var_x94)) : (0.14973556329098189 * var_x2 * var_x24));
+            const double var_x97 = 1 / var_chaste_interface__intracellular_calcium_concentration__Cai;
+            const double var_x98 = var_x63 - var_x60;
+            const double var_x99 = var_x66 * var_x98 / pow((0.0068999999999999999 + var_chaste_interface__intracellular_calcium_concentration__Cai), 2);
+            const double var_x100 = var_x57 * var_x58 * var_x67;
+            const double var_x101 = var_x64 * var_x98 / pow(var_x65, 2);
+            const double var_x102 = var_x101 * var_x58;
+            const double var_x182 = 0.0040000000000000001 * var_chaste_interface__intracellular_calcium_concentration__Ca_rel;
+            const double var_x183 = pow(var_chaste_interface__intracellular_calcium_concentration__Cai, 2.0);
+            const double var_x184 = 3.9999999999999998e-6 + var_x183;
+            const double var_x185 = 1 / var_x184;
+            const double var_x186 = var_x185 * pow(var_chaste_interface__intracellular_calcium_concentration__Cai, 1.0);
+            const double var_x187 = pow(var_chaste_interface__intracellular_calcium_concentration__Cai, 3.0) / pow(var_x184, 2);
             
-            partialF = -0.19999999999999998 + 0.040000000000000001 * var_chaste_interface__intracellular_calcium_concentration__Ca_up - 9.8799649730872331e-11 * var_x105 - 4.7813590510367518e-7 * var_x103 - 1.4318789816068454e-12 * var_x108 - 3.5796974540171135e-6 * var_x102 - 1.4318789816068453e-8 * var_x106 + var_x188 * var_x192 - var_x188 * var_x193;
+            partialF = -0.19999999999999998 + 0.040000000000000001 * var_chaste_interface__intracellular_calcium_concentration__Ca_up - 9.8799649730872331e-11 * var_x99 - 4.7813590510367518e-7 * var_x97 - 1.4318789816068454e-12 * var_x102 - 3.5796974540171135e-6 * var_x96 - 1.4318789816068453e-8 * var_x100 + var_x182 * var_x186 - var_x182 * var_x187;
         }
         else
         {
@@ -1329,19 +1301,17 @@ std::shared_ptr<Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables> Ce
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
-            const double var_x195 = exp(1.0000000000287557e-7);
-            const double var_x196 = 1 / (1.0 - var_x195);
-            const double var_x197 = exp(-1.0000000000287557e-7);
-            const double var_x198 = 1 / (1.0 - var_x197);
-            const double var_x199 = _lt_0_row[11];
-            const double var_x201 = 52.0 + var_chaste_interface__membrane__V;
-            const double var_x202 = fabs(var_x201) < 5.0000000001437783e-7;
-            const double var_x203 = exp(-10.4 - 0.20000000000000001 * var_chaste_interface__membrane__V);
-            const double var_x204 = 1.0 - var_x203;
-            const double var_x205 = 0.002 / var_x204;
-            const double var_x206 = -0.0001 * var_x199;
+            const double var_x189 = 1 / (1.0 - exp(1.0000000116860974e-7));
+            const double var_x190 = 1 / (1.0 - exp(-9.999999832643881e-8));
+            const double var_x191 = _lt_0_row[11];
+            const double var_x193 = 52.0 + var_chaste_interface__membrane__V;
+            const double var_x194 = fabs(var_x193) < 4.9999999873762135e-7;
+            const double var_x195 = exp(-10.4 - 0.20000000000000001 * var_chaste_interface__membrane__V);
+            const double var_x196 = 1.0 - var_x195;
+            const double var_x197 = 0.002 / var_x196;
+            const double var_x198 = -0.0001 * var_x191;
             
-            partialF = ((var_x202) ? (var_x206 - 1.0000000000287558e-9 * var_x198 + 1999.9999999424888 * (51.999999500000001 + var_chaste_interface__membrane__V) * (-5.0000000001437783e-7 * var_x196 - 5.0000000001437783e-7 * var_x198)) : (var_x206 - var_x201 * var_x205));
+            partialF = ((var_x194) ? (var_x198 + 1.0000000116860974e-9 * var_x189 - 2000.0000050495146 * (52.000000500000006 + var_chaste_interface__membrane__V) * (4.99999991632194e-7 * var_x190 + 5.0000000584304871e-7 * var_x189)) : (var_x198 - var_x193 * var_x197));
         }
         else
         {
@@ -1386,26 +1356,24 @@ std::shared_ptr<Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables> Ce
             
 
 
-            const double var_x207 = exp(1.0000000000287557e-7);
-            const double var_x208 = 1 / (1.0 - var_x207);
-            const double var_x209 = exp(-1.0000000000287557e-7);
-            const double var_x210 = 1 / (1.0 - var_x209);
-            const double var_x211 = 1 / (-1.0 + exp(9.9999999999174827e-8));
-            const double var_x212 = 1 / (-1.0 + exp(-9.9999999999174827e-8));
-            const double var_x214 = 22.0 + var_chaste_interface__membrane__V;
-            const double var_x215 = fabs(var_x214);
-            const double var_x216 = var_x215 < 5.0000000001437783e-7;
-            const double var_x218 = exp(-4.4000000000000004 - 0.20000000000000001 * var_chaste_interface__membrane__V);
-            const double var_x219 = 1.0 - var_x218;
-            const double var_x220 = 0.00050000000000000001 / var_x219;
-            const double var_x222 = var_x215 < 1.4999999999876223e-6;
-            const double var_x223 = exp(1.4666666666666666 + 0.066666666666666666 * var_chaste_interface__membrane__V);
-            const double var_x224 = -1.0 + var_x223;
-            const double var_x225 = 0.00017799999999999999 / var_x224;
-            const double var_x226 = 2.6699999999779676e-10 * var_x212 - 333.33333333608391 * (22.0000015 + var_chaste_interface__membrane__V) * (2.6699999999779676e-7 * var_x211 + 2.6699999999779676e-7 * var_x212);
-            const double var_x227 = -var_x214 * var_x220;
+            const double var_x199 = 1 / (1.0 - exp(9.9999999747524276e-8));
+            const double var_x200 = 1 / (1.0 - exp(-9.9999999747524276e-8));
+            const double var_x201 = 1 / (-1.0 + exp(9.9999999984371854e-8));
+            const double var_x202 = 1 / (-1.0 + exp(-9.9999999984371854e-8));
+            const double var_x204 = 22.0 + var_chaste_interface__membrane__V;
+            const double var_x205 = fabs(var_x204);
+            const double var_x206 = var_x205 < 4.9999999873762135e-7;
+            const double var_x208 = exp(-4.4000000000000004 - 0.20000000000000001 * var_chaste_interface__membrane__V);
+            const double var_x209 = 1.0 - var_x208;
+            const double var_x210 = 0.00050000000000000001 / var_x209;
+            const double var_x212 = var_x205 < 1.4999999997655777e-6;
+            const double var_x213 = exp(1.4666666666666666 + 0.066666666666666666 * var_chaste_interface__membrane__V);
+            const double var_x214 = -1.0 + var_x213;
+            const double var_x215 = 0.00017799999999999999 / var_x214;
+            const double var_x216 = -2.6699999995827283e-10 * var_x201 + 333.33333338542718 * (21.9999985 + var_chaste_interface__membrane__V) * (-2.6699999995827282e-7 * var_x201 - 2.6699999995827282e-7 * var_x202);
+            const double var_x217 = -var_x204 * var_x210;
             
-            partialF = ((var_x216) ? (var_x226 - 2.5000000000718894e-10 * var_x210 + 999.99999997124439 * (21.999999500000001 + var_chaste_interface__membrane__V) * (-2.5000000000718892e-7 * var_x208 - 2.5000000000718892e-7 * var_x210)) : ((var_x222) ? (var_x226 + var_x227) : (var_x227 - var_x214 * var_x225)));
+            partialF = ((var_x206) ? (var_x216 + 2.499999993688107e-10 * var_x199 - 1000.0000025247573 * (22.000000499999999 + var_chaste_interface__membrane__V) * (2.4999999936881068e-7 * var_x199 + 2.4999999936881068e-7 * var_x200)) : ((var_x212) ? (var_x216 + var_x217) : (var_x217 - var_x204 * var_x215)));
         }
         else
         {
@@ -1457,20 +1425,18 @@ std::shared_ptr<Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables> Ce
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
-            const double var_x195 = exp(1.0000000000287557e-7);
-            const double var_x197 = exp(-1.0000000000287557e-7);
-            const double var_x228 = 1 / (1.0 - var_x195);
-            const double var_x229 = 1 / (1.0 - var_x197);
-            const double var_x230 = _lt_0_row[10];
-            const double var_x232 = 41.0 + var_chaste_interface__membrane__V;
-            const double var_x233 = fabs(var_x232) < 1.0000000000287557e-6;
-            const double var_x235 = -0.10000000000000001 * var_chaste_interface__membrane__V;
-            const double var_x236 = exp(-4.1000000000000005 + var_x235);
-            const double var_x237 = 1.0 - var_x236;
-            const double var_x238 = 0.20000000000000001 / var_x237;
-            const double var_x239 = -8.0 * var_x230;
+            const double var_x218 = 1 / (1.0 - exp(-9.9999999747524276e-8));
+            const double var_x219 = 1 / (1.0 - exp(1.0000000045806701e-7));
+            const double var_x220 = _lt_0_row[10];
+            const double var_x222 = 41.0 + var_chaste_interface__membrane__V;
+            const double var_x223 = fabs(var_x222) < 1.0000000010279564e-6;
+            const double var_x225 = -0.10000000000000001 * var_chaste_interface__membrane__V;
+            const double var_x226 = exp(-4.1000000000000005 + var_x225);
+            const double var_x227 = 1.0 - var_x226;
+            const double var_x228 = 0.20000000000000001 / var_x227;
+            const double var_x229 = -8.0 * var_x220;
             
-            partialF = ((var_x233) ? (var_x239 - 2.0000000000575113e-7 * var_x229 + 499.9999999856222 * (40.999999000000003 + var_chaste_interface__membrane__V) * (-0.00020000000000575113 * var_x228 - 0.00020000000000575113 * var_x229)) : (var_x239 - var_x232 * var_x238));
+            partialF = ((var_x223) ? (var_x229 + 2.0000000091613402e-7 * var_x219 - 499.99999948602181 * (41.000001000000005 + var_chaste_interface__membrane__V) * (0.00019999999949504854 * var_x218 + 0.00020000000091613401 * var_x219)) : (var_x229 - var_x222 * var_x228));
         }
         else
         {
@@ -1522,11 +1488,11 @@ std::shared_ptr<Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables> Ce
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
-            const double var_x235 = -0.10000000000000001 * var_chaste_interface__membrane__V;
-            const double var_x240 = _lt_0_row[7];
-            const double var_x241 = exp(-7.5 + var_x235);
+            const double var_x225 = -0.10000000000000001 * var_chaste_interface__membrane__V;
+            const double var_x230 = _lt_0_row[7];
+            const double var_x231 = exp(-7.5 + var_x225);
             
-            partialF = -2.0 / (1.0 + 320.0 * var_x241) - 0.02 * var_x240;
+            partialF = -2.0 / (1.0 + 320.0 * var_x231) - 0.02 * var_x230;
         }
         else
         {
@@ -1571,28 +1537,26 @@ std::shared_ptr<Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables> Ce
             
 
 
-            const double var_x207 = exp(1.0000000000287557e-7);
-            const double var_x208 = 1 / (1.0 - var_x207);
-            const double var_x209 = exp(-1.0000000000287557e-7);
-            const double var_x210 = 1 / (1.0 - var_x209);
-            const double var_x242 = 1 / (-1.0 + exp(-9.9999999997324457e-8));
-            const double var_x243 = 1 / (-1.0 + exp(1.0000000000010001e-7));
-            const double var_x245 = 19.0 + var_chaste_interface__membrane__V;
-            const double var_x246 = fabs(var_x245);
-            const double var_x247 = var_x246 < 4.0000000001150227e-7;
-            const double var_x249 = 0.25 * var_chaste_interface__membrane__V;
-            const double var_x250 = -var_x249;
-            const double var_x251 = exp(-4.75 + var_x250);
-            const double var_x252 = 1.0 - var_x251;
-            const double var_x253 = 0.029999999999999999 / var_x252;
-            const double var_x255 = var_x246 < 9.999999999871223e-7;
-            const double var_x256 = exp(1.8999999999999999 + 0.10000000000000001 * var_chaste_interface__membrane__V);
-            const double var_x257 = -1.0 + var_x256;
-            const double var_x258 = 0.012 / var_x257;
-            const double var_x259 = 1.1999999999678935e-8 * var_x242 - 500.00000000643882 * (19.000001000000001 + var_chaste_interface__membrane__V) * (1.1999999999678934e-5 * var_x242 + 1.2000000000012001e-5 * var_x243);
-            const double var_x260 = -var_x245 * var_x253;
+            const double var_x232 = 1 / (1.0 - exp(1.0000000028043132e-7));
+            const double var_x233 = 1 / (1.0 - exp(-1.0000000028043132e-7));
+            const double var_x234 = 1 / (-1.0 + exp(1.0000000010279564e-7));
+            const double var_x235 = 1 / (-1.0 + exp(-1.0000000010279564e-7));
+            const double var_x237 = 19.0 + var_chaste_interface__membrane__V;
+            const double var_x238 = fabs(var_x237);
+            const double var_x239 = var_x238 < 4.0000000112172529e-7;
+            const double var_x241 = 0.25 * var_chaste_interface__membrane__V;
+            const double var_x242 = -var_x241;
+            const double var_x243 = exp(-4.75 + var_x242);
+            const double var_x244 = 1.0 - var_x243;
+            const double var_x245 = 0.029999999999999999 / var_x244;
+            const double var_x247 = var_x238 < 1.0000000010279564e-6;
+            const double var_x248 = exp(1.8999999999999999 + 0.10000000000000001 * var_chaste_interface__membrane__V);
+            const double var_x249 = -1.0 + var_x248;
+            const double var_x250 = 0.012 / var_x249;
+            const double var_x251 = -1.2000000012335476e-8 * var_x234 + 499.99999948602181 * (18.999998999999999 + var_chaste_interface__membrane__V) * (-1.2000000012335477e-5 * var_x234 - 1.2000000012335477e-5 * var_x235);
+            const double var_x252 = -var_x237 * var_x245;
             
-            partialF = ((var_x247) ? (var_x259 - 1.2000000000345068e-8 * var_x210 + 1249.9999999640554 * (18.999999599999999 + var_chaste_interface__membrane__V) * (-1.2000000000345068e-5 * var_x208 - 1.2000000000345068e-5 * var_x210)) : ((var_x255) ? (var_x259 + var_x260) : (var_x260 - var_x245 * var_x258)));
+            partialF = ((var_x239) ? (var_x251 + 1.2000000033651759e-8 * var_x232 - 1249.9999964946085 * (19.000000400000001 + var_chaste_interface__membrane__V) * (1.2000000033651759e-5 * var_x232 + 1.2000000033651759e-5 * var_x233)) : ((var_x247) ? (var_x251 + var_x252) : (var_x252 - var_x237 * var_x250)));
         }
         else
         {
@@ -1622,7 +1586,7 @@ std::shared_ptr<Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables> Ce
         const double* const _lt_0_row = Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         // Mathematics
-        const double d_dt_chaste_interface_var_second_inward_current_f_gate__f = 0.001 * (1.0 - var_chaste_interface__second_inward_current_f_gate__f) * _lt_0_row[17] - 0.050000000000000003 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[18]); // 1 / millisecond
+        const double d_dt_chaste_interface_var_second_inward_current_f_gate__f = -0.050000000000000003 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[17]) + 0.0062500000000000003 * (1.0 - var_chaste_interface__second_inward_current_f_gate__f) * (34.0 + var_chaste_interface__membrane__V) / (_lt_0_row[18]); // 1 / millisecond
 
         return d_dt_chaste_interface_var_second_inward_current_f_gate__f;
     }
@@ -1637,22 +1601,16 @@ std::shared_ptr<Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables> Ce
             
 
 
-            const double var_x207 = exp(1.0000000000287557e-7);
-            const double var_x209 = exp(-1.0000000000287557e-7);
-            const double var_x249 = 0.25 * var_chaste_interface__membrane__V;
-            const double var_x250 = -var_x249;
-            const double var_x261 = 1 / (-1.0 + var_x207);
-            const double var_x262 = 1 / (-1.0 + var_x209);
-            const double var_x263 = exp(-8.5 + var_x250);
-            const double var_x264 = 1.0 + var_x263;
-            const double var_x266 = 34.0 + var_chaste_interface__membrane__V;
-            const double var_x267 = fabs(var_x266) < 4.0000000001150227e-7;
-            const double var_x269 = exp(8.5 + var_x249);
-            const double var_x270 = -1.0 + var_x269;
-            const double var_x271 = 0.0062500000000000003 / var_x270;
-            const double var_x272 = -0.050000000000000003 / var_x264;
+            const double var_x241 = 0.25 * var_chaste_interface__membrane__V;
+            const double var_x242 = -var_x241;
+            const double var_x254 = exp(8.5 + var_x241);
+            const double var_x255 = -1.0 + var_x254;
+            const double var_x256 = 0.0062500000000000003 / var_x255;
+            const double var_x257 = exp(-8.5 + var_x242);
+            const double var_x258 = 1.0 + var_x257;
+            const double var_x259 = 34.0 + var_chaste_interface__membrane__V;
             
-            partialF = ((var_x267) ? (var_x272 + 2.5000000000718891e-9 * var_x262 - 1249.9999999640554 * (34.000000399999998 + var_chaste_interface__membrane__V) * (2.5000000000718892e-6 * var_x261 + 2.5000000000718892e-6 * var_x262)) : (var_x272 - var_x266 * var_x271));
+            partialF = -0.050000000000000003 / var_x258 - var_x256 * var_x259;
         }
         else
         {
@@ -1743,7 +1701,7 @@ std::shared_ptr<Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables> Ce
         const double var_Na_Ca_exchanger__i_NaCa = 0.002 * (pow(var_chaste_interface__intracellular_sodium_concentration__Nai, 3.0) * mParameters[0] * _lt_0_row[0] - pow(mParameters[1], 3.0) * var_chaste_interface__intracellular_calcium_concentration__Cai * _lt_0_row[1]) / ((1.0 + 144.92753623188406 * var_chaste_interface__intracellular_calcium_concentration__Cai) * (1.0 + 0.0001 * pow(mParameters[1], 3.0) * var_chaste_interface__intracellular_calcium_concentration__Cai + 0.0001 * pow(var_chaste_interface__intracellular_sodium_concentration__Nai, 3.0) * mParameters[0])); // nanoA
         const double var_fast_sodium_current__i_Na = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * (-26.713760659695652 * log((mParameters[1] + 0.12 * var_chaste_interface__extracellular_potassium_concentration__Kc) / (var_chaste_interface__intracellular_sodium_concentration__Nai + 0.12 * var_chaste_interface__intracellular_potassium_concentration__Ki)) + var_chaste_interface__membrane__V) * mParameters[5] * var_chaste_interface__fast_sodium_current_h_gate__h; // nanoA
         const double var_hyperpolarising_activated_current__i_fNa = (-var_hyperpolarising_activated_current__E_Na + var_chaste_interface__membrane__V) * var_chaste_interface__extracellular_potassium_concentration__Kc * mParameters[7] * var_chaste_interface__hyperpolarising_activated_current_y_gate__y / (45.0 + var_chaste_interface__extracellular_potassium_concentration__Kc); // nanoA
-        const double var_second_inward_current__i_siNa = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 2.6713760659657915e-6) ? (-187169.45411399176 * (-50.000002671376066 + var_chaste_interface__membrane__V) * (-9.9999999999858744e-10 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(9.9999999999858739e-8)) - 9.9999999999858744e-10 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(-9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999999858739e-8))) + 9.9999999999858744e-10 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(-9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999999858739e-8))) : (0.00037433890822745472 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * _lt_0_row[2]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[3]))); // nanoA
+        const double var_second_inward_current__i_siNa = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 2.6713760661323249e-6) ? (187169.45410232362 * (-49.999997328623934 + var_chaste_interface__membrane__V) * (1.0000000000609275e-9 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7)) + 1.0000000000609275e-9 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(-1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-1.0000000000609274e-7))) - 1.0000000000609275e-9 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7))) : (0.00037433890822745472 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * _lt_0_row[2]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[3]))); // nanoA
         const double var_sodium_background_current__i_Na_b = 0.070000000000000007 * var_chaste_interface__membrane__V - 0.070000000000000007 * var_hyperpolarising_activated_current__E_Na; // nanoA
         const double var_sodium_potassium_pump__i_p = 50.0 * var_chaste_interface__extracellular_potassium_concentration__Kc * var_chaste_interface__intracellular_sodium_concentration__Nai / ((1.0 + var_chaste_interface__extracellular_potassium_concentration__Kc) * (40.0 + var_chaste_interface__intracellular_sodium_concentration__Nai)); // nanoA
         const double d_dt_chaste_interface_var_intracellular_sodium_concentration__Nai = -2.147818472410268e-5 * var_Na_Ca_exchanger__i_NaCa - 2.147818472410268e-5 * var_sodium_potassium_pump__i_p - 7.1593949080342271e-6 * var_fast_sodium_current__i_Na - 7.1593949080342271e-6 * var_hyperpolarising_activated_current__i_fNa - 7.1593949080342271e-6 * var_second_inward_current__i_siNa - 7.1593949080342271e-6 * var_sodium_background_current__i_Na_b; // millimolar / millisecond
@@ -1788,67 +1746,67 @@ std::shared_ptr<Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables> Ce
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
-            const double var_x0 = exp(9.9999999999858739e-8);
+            const double var_x0 = exp(1.0000000000609274e-7);
             const double var_x1 = 1 / (1.0 - var_x0);
-            const double var_x2 = exp(1.8716945411372736);
-            const double var_x7 = mParameters[2] * var_chaste_interface__second_inward_current_f2_gate__f2;
-            const double var_x8 = var_x7 * var_chaste_interface__second_inward_current_f_gate__f;
-            const double var_x10 = exp(-9.9999999999858739e-8);
-            const double var_x12 = 1 / (1.0 - var_x10);
-            const double var_x15 = -50.0 + var_chaste_interface__membrane__V;
-            const double var_x16 = fabs(var_x15);
-            const double var_x17 = var_x16 < 2.6713760659657915e-6;
-            const double var_x18 = var_x8 * var_chaste_interface__second_inward_current_d_gate__d;
-            const double var_x19 = _lt_0_row[2];
-            const double var_x22 = 1.0 - var_x19;
-            const double var_x23 = 1 / var_x22;
-            const double var_x24 = 0.00037433890822745472 * var_x23;
-            const double var_x26 = var_x15 * var_x18;
-            const double var_x60 = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * mParameters[5];
-            const double var_x61 = var_x60 * var_chaste_interface__fast_sodium_current_h_gate__h;
-            const double var_x62 = 0.018716945411372737 * var_chaste_interface__membrane__V;
-            const double var_x63 = exp(-var_x62);
-            const double var_x64 = pow(mParameters[1], 3.0);
-            const double var_x65 = var_x64 * var_chaste_interface__intracellular_calcium_concentration__Cai;
-            const double var_x66 = var_x63 * var_x65;
-            const double var_x67 = exp(var_x62);
-            const double var_x68 = pow(var_chaste_interface__intracellular_sodium_concentration__Nai, 3.0) * mParameters[0];
-            const double var_x69 = var_x67 * var_x68;
-            const double var_x70 = 1 / (1.0 + 144.92753623188406 * var_chaste_interface__intracellular_calcium_concentration__Cai);
-            const double var_x71 = 1.0 + 0.0001 * var_x65 + 0.0001 * var_x68;
-            const double var_x72 = 1 / var_x71;
-            const double var_x73 = var_x70 * var_x72;
-            const double var_x83 = 1 / (45.0 + var_chaste_interface__extracellular_potassium_concentration__Kc);
-            const double var_x84 = var_x83 * var_chaste_interface__extracellular_potassium_concentration__Kc;
-            const double var_x85 = var_x84 * var_chaste_interface__hyperpolarising_activated_current_y_gate__y;
-            const double var_x87 = var_x85 * mParameters[7];
-            const double var_x104 = var_x69 - var_x66;
-            const double var_x107 = var_x104 * var_x70 / pow(var_x71, 2);
-            const double var_x111 = 1 / var_chaste_interface__intracellular_sodium_concentration__Nai;
-            const double var_x114 = 1 / (var_chaste_interface__intracellular_sodium_concentration__Nai + 0.12 * var_chaste_interface__intracellular_potassium_concentration__Ki);
-            const double var_x119 = 9358473.2056995872 - 187169.45411399176 * var_chaste_interface__membrane__V;
-            const double var_x120 = 9.9999999999858744e-10 * var_x8;
-            const double var_x121 = var_x1 * var_x120;
-            const double var_x122 = var_x12 * var_x120;
-            const double var_x154 = var_x2 * var_chaste_interface__second_inward_current_d_gate__d;
-            const double var_x155 = var_x122 * var_x154;
-            const double var_x156 = var_x24 * var_x26;
-            const double var_x157 = ((var_x17) ? (var_x155 + var_x119 * (-var_x155 - var_x121 * var_x154)) : (var_x156 * var_x2));
-            const double var_x159 = 1.0 + var_chaste_interface__extracellular_potassium_concentration__Kc;
-            const double var_x160 = 1 / var_x159;
-            const double var_x161 = 1 / (40.0 + var_chaste_interface__intracellular_sodium_concentration__Nai);
-            const double var_x162 = var_x160 * var_x161;
-            const double var_x164 = var_chaste_interface__extracellular_potassium_concentration__Kc * var_chaste_interface__intracellular_sodium_concentration__Nai;
-            const double var_x165 = var_x160 * var_x164 / pow((1 + 0.025000000000000001 * var_chaste_interface__intracellular_sodium_concentration__Nai), 2);
-            const double var_x166 = var_x114 * var_x61;
-            const double var_x167 = pow(var_chaste_interface__intracellular_sodium_concentration__Nai, 2.0) * mParameters[0];
-            const double var_x168 = var_x107 * var_x167;
-            const double var_x169 = var_x167 * var_x67 * var_x73;
-            const double var_x170 = var_x111 * var_x87;
-            const double var_x273 = -7.1593949080342271e-6 * var_x157;
-            const double var_x274 = 0.0010739092362051341 * var_x162;
+            const double var_x6 = mParameters[2] * var_chaste_interface__second_inward_current_f2_gate__f2;
+            const double var_x7 = var_x6 * var_chaste_interface__second_inward_current_f_gate__f;
+            const double var_x9 = exp(-1.0000000000609274e-7);
+            const double var_x10 = 1 / (1.0 - var_x9);
+            const double var_x13 = -50.0 + var_chaste_interface__membrane__V;
+            const double var_x14 = fabs(var_x13);
+            const double var_x16 = var_x7 * var_chaste_interface__second_inward_current_d_gate__d;
+            const double var_x23 = var_x13 * var_x16;
+            const double var_x26 = exp(1.8716945411372736);
+            const double var_x34 = var_x14 < 2.6713760661323249e-6;
+            const double var_x35 = _lt_0_row[2];
+            const double var_x36 = 1.0 - var_x35;
+            const double var_x37 = 1 / var_x36;
+            const double var_x38 = 0.00037433890822745472 * var_x37;
+            const double var_x54 = pow(var_chaste_interface__fast_sodium_current_m_gate__m, 3) * mParameters[5];
+            const double var_x55 = var_x54 * var_chaste_interface__fast_sodium_current_h_gate__h;
+            const double var_x56 = 0.018716945411372737 * var_chaste_interface__membrane__V;
+            const double var_x57 = exp(-var_x56);
+            const double var_x58 = pow(mParameters[1], 3.0);
+            const double var_x59 = var_x58 * var_chaste_interface__intracellular_calcium_concentration__Cai;
+            const double var_x60 = var_x57 * var_x59;
+            const double var_x61 = exp(var_x56);
+            const double var_x62 = pow(var_chaste_interface__intracellular_sodium_concentration__Nai, 3.0) * mParameters[0];
+            const double var_x63 = var_x61 * var_x62;
+            const double var_x64 = 1 / (1.0 + 144.92753623188406 * var_chaste_interface__intracellular_calcium_concentration__Cai);
+            const double var_x65 = 1.0 + 0.0001 * var_x59 + 0.0001 * var_x62;
+            const double var_x66 = 1 / var_x65;
+            const double var_x67 = var_x64 * var_x66;
+            const double var_x77 = 1 / (45.0 + var_chaste_interface__extracellular_potassium_concentration__Kc);
+            const double var_x78 = var_x77 * var_chaste_interface__extracellular_potassium_concentration__Kc;
+            const double var_x79 = var_x78 * var_chaste_interface__hyperpolarising_activated_current_y_gate__y;
+            const double var_x81 = var_x79 * mParameters[7];
+            const double var_x98 = var_x63 - var_x60;
+            const double var_x101 = var_x64 * var_x98 / pow(var_x65, 2);
+            const double var_x105 = 1 / var_chaste_interface__intracellular_sodium_concentration__Nai;
+            const double var_x108 = 1 / (var_chaste_interface__intracellular_sodium_concentration__Nai + 0.12 * var_chaste_interface__intracellular_potassium_concentration__Ki);
+            const double var_x113 = -9358472.2051161807 + 187169.45410232362 * var_chaste_interface__membrane__V;
+            const double var_x114 = 1.0000000000609275e-9 * var_x7;
+            const double var_x115 = var_x1 * var_x114;
+            const double var_x117 = var_x10 * var_x114;
+            const double var_x148 = var_x26 * var_chaste_interface__second_inward_current_d_gate__d;
+            const double var_x149 = var_x115 * var_x148;
+            const double var_x150 = var_x23 * var_x38;
+            const double var_x151 = ((var_x34) ? (-var_x149 + var_x113 * (var_x149 + var_x117 * var_x148)) : (var_x150 * var_x26));
+            const double var_x153 = 1.0 + var_chaste_interface__extracellular_potassium_concentration__Kc;
+            const double var_x154 = 1 / var_x153;
+            const double var_x155 = 1 / (40.0 + var_chaste_interface__intracellular_sodium_concentration__Nai);
+            const double var_x156 = var_x154 * var_x155;
+            const double var_x158 = var_chaste_interface__extracellular_potassium_concentration__Kc * var_chaste_interface__intracellular_sodium_concentration__Nai;
+            const double var_x159 = var_x154 * var_x158 / pow((1 + 0.025000000000000001 * var_chaste_interface__intracellular_sodium_concentration__Nai), 2);
+            const double var_x160 = var_x108 * var_x55;
+            const double var_x161 = pow(var_chaste_interface__intracellular_sodium_concentration__Nai, 2.0) * mParameters[0];
+            const double var_x162 = var_x101 * var_x161;
+            const double var_x163 = var_x161 * var_x61 * var_x67;
+            const double var_x164 = var_x105 * var_x81;
+            const double var_x260 = -7.1593949080342271e-6 * var_x151;
+            const double var_x261 = 0.0010739092362051341 * var_x156;
             
-            partialF = var_x273 + 1.2886910834461608e-11 * var_x168 + 6.7119327262820874e-7 * var_x165 - 1.2886910834461608e-7 * var_x169 - 0.00019125436204147007 * var_x166 - 0.00019125436204147007 * var_x170 - 1.3387805342902908e-5 * var_x111 - var_x274 * var_chaste_interface__extracellular_potassium_concentration__Kc;
+            partialF = var_x260 + 1.2886910834461608e-11 * var_x162 + 6.7119327262820874e-7 * var_x159 - 1.2886910834461608e-7 * var_x163 - 0.00019125436204147007 * var_x160 - 0.00019125436204147007 * var_x164 - 1.3387805342902908e-5 * var_x105 - var_x261 * var_chaste_interface__extracellular_potassium_concentration__Kc;
         }
         else
         {
@@ -1894,9 +1852,9 @@ std::shared_ptr<Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables> Ce
             
 
 
-            const double var_x276 = 0.002 * var_chaste_interface__intracellular_calcium_concentration__p;
+            const double var_x263 = 0.002 * var_chaste_interface__intracellular_calcium_concentration__p;
             
-            partialF = -var_x276 - 0.79999999999999993 * var_chaste_interface__intracellular_calcium_concentration__Cai;
+            partialF = -var_x263 - 0.79999999999999993 * var_chaste_interface__intracellular_calcium_concentration__Cai;
         }
         else
         {
@@ -1942,13 +1900,13 @@ std::shared_ptr<Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables> Ce
             
 
 
-            const double var_x189 = pow(var_chaste_interface__intracellular_calcium_concentration__Cai, 2.0);
-            const double var_x190 = 3.9999999999999998e-6 + var_x189;
-            const double var_x191 = 1 / var_x190;
-            const double var_x194 = var_x189 * var_x191;
-            const double var_x278 = 0.0050000000000000001 * var_chaste_interface__intracellular_calcium_concentration__p;
+            const double var_x183 = pow(var_chaste_interface__intracellular_calcium_concentration__Cai, 2.0);
+            const double var_x184 = 3.9999999999999998e-6 + var_x183;
+            const double var_x185 = 1 / var_x184;
+            const double var_x188 = var_x183 * var_x185;
+            const double var_x265 = 0.0050000000000000001 * var_chaste_interface__intracellular_calcium_concentration__p;
             
-            partialF = -var_x278 - 0.099999999999999992 * var_x194;
+            partialF = -var_x265 - 0.099999999999999992 * var_x188;
         }
         else
         {
@@ -1978,7 +1936,7 @@ std::shared_ptr<Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables> Ce
         const double* const _lt_0_row = Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
         // Mathematics
-        const double d_dt_chaste_interface_var_intracellular_calcium_concentration__p = 0.001 * (1.0 - var_chaste_interface__intracellular_calcium_concentration__p) * _lt_0_row[13] - 0.0050000000000000001 * var_chaste_interface__intracellular_calcium_concentration__p / (_lt_0_row[14]); // 1 / millisecond
+        const double d_dt_chaste_interface_var_intracellular_calcium_concentration__p = -0.0050000000000000001 * var_chaste_interface__intracellular_calcium_concentration__p / (_lt_0_row[13]) + 0.00062500000000000001 * (1.0 - var_chaste_interface__intracellular_calcium_concentration__p) * (64.0 + var_chaste_interface__membrane__V) / (_lt_0_row[14]); // 1 / millisecond
 
         return d_dt_chaste_interface_var_intracellular_calcium_concentration__p;
     }
@@ -1993,22 +1951,16 @@ std::shared_ptr<Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables> Ce
             
 
 
-            const double var_x207 = exp(1.0000000000287557e-7);
-            const double var_x209 = exp(-1.0000000000287557e-7);
-            const double var_x249 = 0.25 * var_chaste_interface__membrane__V;
-            const double var_x250 = -var_x249;
-            const double var_x261 = 1 / (-1.0 + var_x207);
-            const double var_x262 = 1 / (-1.0 + var_x209);
-            const double var_x279 = exp(-16.0 + var_x250);
-            const double var_x280 = 1.0 + var_x279;
-            const double var_x282 = 64.0 + var_chaste_interface__membrane__V;
-            const double var_x283 = fabs(var_x282) < 4.0000000001150227e-7;
-            const double var_x285 = exp(16.0 + var_x249);
-            const double var_x286 = -1.0 + var_x285;
-            const double var_x287 = 0.00062500000000000001 / var_x286;
-            const double var_x288 = -0.0050000000000000001 / var_x280;
+            const double var_x241 = 0.25 * var_chaste_interface__membrane__V;
+            const double var_x242 = -var_x241;
+            const double var_x267 = exp(16.0 + var_x241);
+            const double var_x268 = -1.0 + var_x267;
+            const double var_x269 = 0.00062500000000000001 / var_x268;
+            const double var_x270 = exp(-16.0 + var_x242);
+            const double var_x271 = 1.0 + var_x270;
+            const double var_x272 = 64.0 + var_chaste_interface__membrane__V;
             
-            partialF = ((var_x283) ? (var_x288 + 2.5000000000718894e-10 * var_x262 - 1249.9999999640554 * (64.000000400000005 + var_chaste_interface__membrane__V) * (2.5000000000718892e-7 * var_x261 + 2.5000000000718892e-7 * var_x262)) : (var_x288 - var_x282 * var_x287));
+            partialF = -0.0050000000000000001 / var_x271 - var_x269 * var_x272;
         }
         else
         {
@@ -2054,7 +2006,7 @@ std::shared_ptr<Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables> Ce
         // Mathematics
         const double var_hyperpolarising_activated_current__E_K = 26.713760659695652 * log(var_chaste_interface__extracellular_potassium_concentration__Kc / var_chaste_interface__intracellular_potassium_concentration__Ki); // millivolt
         const double var_hyperpolarising_activated_current__i_fK = (-var_hyperpolarising_activated_current__E_K + var_chaste_interface__membrane__V) * var_chaste_interface__extracellular_potassium_concentration__Kc * mParameters[6] * var_chaste_interface__hyperpolarising_activated_current_y_gate__y / (45.0 + var_chaste_interface__extracellular_potassium_concentration__Kc); // nanoA
-        const double var_second_inward_current__i_siK = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 2.6713760659657915e-6) ? (-187169.45411399176 * (-50.000002671376066 + var_chaste_interface__membrane__V) * (-9.9999999999858744e-10 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(9.9999999999858739e-8)) - 9.9999999999858744e-10 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(-9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999999858739e-8))) + 9.9999999999858744e-10 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(-9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999999858739e-8))) : (0.00037433890822745472 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * _lt_0_row[2]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[3]))); // nanoA
+        const double var_second_inward_current__i_siK = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 2.6713760661323249e-6) ? (187169.45410232362 * (-49.999997328623934 + var_chaste_interface__membrane__V) * (1.0000000000609275e-9 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7)) + 1.0000000000609275e-9 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(-1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-1.0000000000609274e-7))) - 1.0000000000609275e-9 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7))) : (0.00037433890822745472 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * _lt_0_row[2]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[3]))); // nanoA
         const double var_sodium_potassium_pump__i_p = 50.0 * var_chaste_interface__extracellular_potassium_concentration__Kc * var_chaste_interface__intracellular_sodium_concentration__Nai / ((1.0 + var_chaste_interface__extracellular_potassium_concentration__Kc) * (40.0 + var_chaste_interface__intracellular_sodium_concentration__Nai)); // nanoA
         const double var_time_dependent_potassium_current__i_K = 0.0071428571428571426 * (-var_chaste_interface__extracellular_potassium_concentration__Kc * _lt_0_row[6] + var_chaste_interface__intracellular_potassium_concentration__Ki) * mParameters[4] * var_chaste_interface__time_dependent_potassium_current_x_gate__x; // nanoA
         const double var_time_independent_potassium_current__i_K1 = (-var_hyperpolarising_activated_current__E_K + var_chaste_interface__membrane__V) * var_chaste_interface__extracellular_potassium_concentration__Kc * mParameters[8] / ((1.0 + exp(0.74867781645490938 + 0.074867781645490947 * var_chaste_interface__membrane__V - 0.074867781645490947 * var_hyperpolarising_activated_current__E_K)) * (10.0 + var_chaste_interface__extracellular_potassium_concentration__Kc)); // nanoA
@@ -2097,62 +2049,62 @@ std::shared_ptr<Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables> Ce
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
-            const double var_x0 = exp(9.9999999999858739e-8);
+            const double var_x0 = exp(1.0000000000609274e-7);
             const double var_x1 = 1 / (1.0 - var_x0);
-            const double var_x7 = mParameters[2] * var_chaste_interface__second_inward_current_f2_gate__f2;
-            const double var_x8 = var_x7 * var_chaste_interface__second_inward_current_f_gate__f;
-            const double var_x10 = exp(-9.9999999999858739e-8);
-            const double var_x12 = 1 / (1.0 - var_x10);
-            const double var_x15 = -50.0 + var_chaste_interface__membrane__V;
-            const double var_x16 = fabs(var_x15);
-            const double var_x17 = var_x16 < 2.6713760659657915e-6;
-            const double var_x18 = var_x8 * var_chaste_interface__second_inward_current_d_gate__d;
-            const double var_x19 = _lt_0_row[2];
-            const double var_x22 = 1.0 - var_x19;
-            const double var_x23 = 1 / var_x22;
-            const double var_x24 = 0.00037433890822745472 * var_x23;
-            const double var_x26 = var_x15 * var_x18;
-            const double var_x75 = var_chaste_interface__extracellular_potassium_concentration__Kc / var_chaste_interface__intracellular_potassium_concentration__Ki;
-            const double var_x76 = log(var_x75);
-            const double var_x77 = exp(0.74867781645490938 + 0.074867781645490947 * var_chaste_interface__membrane__V - 2.0 * var_x76);
-            const double var_x78 = 1.0 + var_x77;
-            const double var_x79 = 1 / var_x78;
-            const double var_x80 = mParameters[8] / (10.0 + var_chaste_interface__extracellular_potassium_concentration__Kc);
-            const double var_x81 = var_x79 * var_x80;
-            const double var_x83 = 1 / (45.0 + var_chaste_interface__extracellular_potassium_concentration__Kc);
-            const double var_x88 = _lt_0_row[6];
-            const double var_x90 = mParameters[4] * var_chaste_interface__time_dependent_potassium_current_x_gate__x;
-            const double var_x92 = -26.713760659695652 * var_x76 + var_chaste_interface__membrane__V;
-            const double var_x93 = var_x92 * var_chaste_interface__extracellular_potassium_concentration__Kc;
-            const double var_x94 = var_x77 * var_x80 / pow(var_x78, 2);
-            const double var_x109 = var_x92 * mParameters[6];
-            const double var_x119 = 9358473.2056995872 - 187169.45411399176 * var_chaste_interface__membrane__V;
-            const double var_x120 = 9.9999999999858744e-10 * var_x8;
-            const double var_x121 = var_x1 * var_x120;
-            const double var_x122 = var_x12 * var_x120;
-            const double var_x156 = var_x24 * var_x26;
-            const double var_x159 = 1.0 + var_chaste_interface__extracellular_potassium_concentration__Kc;
-            const double var_x160 = 1 / var_x159;
-            const double var_x161 = 1 / (40.0 + var_chaste_interface__intracellular_sodium_concentration__Nai);
-            const double var_x162 = var_x160 * var_x161;
-            const double var_x164 = var_chaste_interface__extracellular_potassium_concentration__Kc * var_chaste_interface__intracellular_sodium_concentration__Nai;
-            const double var_x171 = var_x10 * var_x122 * var_chaste_interface__second_inward_current_d_gate__d;
-            const double var_x172 = ((var_x17) ? (-var_x171 + var_x119 * (var_x171 + var_x0 * var_x121 * var_chaste_interface__second_inward_current_d_gate__d)) : (-var_x156 * var_x19));
-            const double var_x174 = var_x83 * var_chaste_interface__hyperpolarising_activated_current_y_gate__y;
-            const double var_x175 = var_x174 * mParameters[6];
-            const double var_x178 = var_x81 * var_x92;
-            const double var_x179 = var_x109 * var_x174;
-            const double var_x181 = var_x161 * var_x164 / pow(var_x159, 2);
-            const double var_x183 = var_chaste_interface__extracellular_potassium_concentration__Kc * var_chaste_interface__hyperpolarising_activated_current_y_gate__y / pow((1 + 0.022222222222222223 * var_chaste_interface__extracellular_potassium_concentration__Kc), 2);
-            const double var_x185 = var_x79 * var_x93 * mParameters[8] / pow((1 + 0.10000000000000001 * var_chaste_interface__extracellular_potassium_concentration__Kc), 2);
-            const double var_x186 = var_x92 * var_x94;
-            const double var_x289 = 0.0064466434341209095 * var_x162;
-            const double var_x290 = 0.0017221408975750443 * var_x81;
-            const double var_x291 = 0.0017221408975750443 * var_x175;
-            const double var_x292 = 4.6047453100863642e-7 * var_x90;
-            const double var_x293 = 0.00012893286868241819 * var_x186;
+            const double var_x6 = mParameters[2] * var_chaste_interface__second_inward_current_f2_gate__f2;
+            const double var_x7 = var_x6 * var_chaste_interface__second_inward_current_f_gate__f;
+            const double var_x9 = exp(-1.0000000000609274e-7);
+            const double var_x10 = 1 / (1.0 - var_x9);
+            const double var_x13 = -50.0 + var_chaste_interface__membrane__V;
+            const double var_x14 = fabs(var_x13);
+            const double var_x16 = var_x7 * var_chaste_interface__second_inward_current_d_gate__d;
+            const double var_x23 = var_x13 * var_x16;
+            const double var_x34 = var_x14 < 2.6713760661323249e-6;
+            const double var_x35 = _lt_0_row[2];
+            const double var_x36 = 1.0 - var_x35;
+            const double var_x37 = 1 / var_x36;
+            const double var_x38 = 0.00037433890822745472 * var_x37;
+            const double var_x69 = var_chaste_interface__extracellular_potassium_concentration__Kc / var_chaste_interface__intracellular_potassium_concentration__Ki;
+            const double var_x70 = log(var_x69);
+            const double var_x71 = exp(0.74867781645490938 + 0.074867781645490947 * var_chaste_interface__membrane__V - 2.0 * var_x70);
+            const double var_x72 = 1.0 + var_x71;
+            const double var_x73 = 1 / var_x72;
+            const double var_x74 = mParameters[8] / (10.0 + var_chaste_interface__extracellular_potassium_concentration__Kc);
+            const double var_x75 = var_x73 * var_x74;
+            const double var_x77 = 1 / (45.0 + var_chaste_interface__extracellular_potassium_concentration__Kc);
+            const double var_x82 = _lt_0_row[6];
+            const double var_x84 = mParameters[4] * var_chaste_interface__time_dependent_potassium_current_x_gate__x;
+            const double var_x86 = -26.713760659695652 * var_x70 + var_chaste_interface__membrane__V;
+            const double var_x87 = var_x86 * var_chaste_interface__extracellular_potassium_concentration__Kc;
+            const double var_x88 = var_x71 * var_x74 / pow(var_x72, 2);
+            const double var_x103 = var_x86 * mParameters[6];
+            const double var_x113 = -9358472.2051161807 + 187169.45410232362 * var_chaste_interface__membrane__V;
+            const double var_x114 = 1.0000000000609275e-9 * var_x7;
+            const double var_x115 = var_x1 * var_x114;
+            const double var_x117 = var_x10 * var_x114;
+            const double var_x150 = var_x23 * var_x38;
+            const double var_x153 = 1.0 + var_chaste_interface__extracellular_potassium_concentration__Kc;
+            const double var_x154 = 1 / var_x153;
+            const double var_x155 = 1 / (40.0 + var_chaste_interface__intracellular_sodium_concentration__Nai);
+            const double var_x156 = var_x154 * var_x155;
+            const double var_x158 = var_chaste_interface__extracellular_potassium_concentration__Kc * var_chaste_interface__intracellular_sodium_concentration__Nai;
+            const double var_x165 = var_x0 * var_x115 * var_chaste_interface__second_inward_current_d_gate__d;
+            const double var_x166 = ((var_x34) ? (var_x165 + var_x113 * (-var_x165 - var_x117 * var_x9 * var_chaste_interface__second_inward_current_d_gate__d)) : (-var_x150 * var_x35));
+            const double var_x168 = var_x77 * var_chaste_interface__hyperpolarising_activated_current_y_gate__y;
+            const double var_x169 = var_x168 * mParameters[6];
+            const double var_x172 = var_x75 * var_x86;
+            const double var_x173 = var_x103 * var_x168;
+            const double var_x175 = var_x155 * var_x158 / pow(var_x153, 2);
+            const double var_x177 = var_chaste_interface__extracellular_potassium_concentration__Kc * var_chaste_interface__hyperpolarising_activated_current_y_gate__y / pow((1 + 0.022222222222222223 * var_chaste_interface__extracellular_potassium_concentration__Kc), 2);
+            const double var_x179 = var_x73 * var_x87 * mParameters[8] / pow((1 + 0.10000000000000001 * var_chaste_interface__extracellular_potassium_concentration__Kc), 2);
+            const double var_x180 = var_x86 * var_x88;
+            const double var_x273 = 0.0064466434341209095 * var_x156;
+            const double var_x274 = 0.0017221408975750443 * var_x75;
+            const double var_x275 = 0.0017221408975750443 * var_x169;
+            const double var_x276 = 4.6047453100863642e-7 * var_x84;
+            const double var_x277 = 0.00012893286868241819 * var_x180;
             
-            partialF = -0.001 + var_x293 - var_x290 - var_x291 + 6.4466434341209093e-5 * var_x172 + 6.4466434341209093e-5 * var_x178 + 6.4466434341209093e-5 * var_x179 + 0.0064466434341209095 * var_x181 - 6.4466434341209093e-7 * var_x185 - var_x289 * var_chaste_interface__intracellular_sodium_concentration__Nai - var_x292 * var_x88 - 3.1835276217881036e-8 * var_x109 * var_x183;
+            partialF = -0.001 + var_x277 - var_x274 - var_x275 + 6.4466434341209093e-5 * var_x166 + 6.4466434341209093e-5 * var_x172 + 6.4466434341209093e-5 * var_x173 + 0.0064466434341209095 * var_x175 - 6.4466434341209093e-7 * var_x179 - var_x273 * var_chaste_interface__intracellular_sodium_concentration__Nai - var_x276 * var_x82 - 3.1835276217881036e-8 * var_x103 * var_x177;
         }
         else
         {
@@ -2198,7 +2150,7 @@ std::shared_ptr<Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables> Ce
         // Mathematics
         const double var_hyperpolarising_activated_current__E_K = 26.713760659695652 * log(var_chaste_interface__extracellular_potassium_concentration__Kc / var_chaste_interface__intracellular_potassium_concentration__Ki); // millivolt
         const double var_hyperpolarising_activated_current__i_fK = (-var_hyperpolarising_activated_current__E_K + var_chaste_interface__membrane__V) * var_chaste_interface__extracellular_potassium_concentration__Kc * mParameters[6] * var_chaste_interface__hyperpolarising_activated_current_y_gate__y / (45.0 + var_chaste_interface__extracellular_potassium_concentration__Kc); // nanoA
-        const double var_second_inward_current__i_siK = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 2.6713760659657915e-6) ? (-187169.45411399176 * (-50.000002671376066 + var_chaste_interface__membrane__V) * (-9.9999999999858744e-10 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(9.9999999999858739e-8)) - 9.9999999999858744e-10 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(-9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999999858739e-8))) + 9.9999999999858744e-10 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(-9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999999858739e-8))) : (0.00037433890822745472 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * _lt_0_row[2]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[3]))); // nanoA
+        const double var_second_inward_current__i_siK = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 2.6713760661323249e-6) ? (187169.45410232362 * (-49.999997328623934 + var_chaste_interface__membrane__V) * (1.0000000000609275e-9 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7)) + 1.0000000000609275e-9 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(-1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-1.0000000000609274e-7))) - 1.0000000000609275e-9 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7))) : (0.00037433890822745472 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * _lt_0_row[2]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[3]))); // nanoA
         const double var_sodium_potassium_pump__i_p = 50.0 * var_chaste_interface__extracellular_potassium_concentration__Kc * var_chaste_interface__intracellular_sodium_concentration__Nai / ((1.0 + var_chaste_interface__extracellular_potassium_concentration__Kc) * (40.0 + var_chaste_interface__intracellular_sodium_concentration__Nai)); // nanoA
         const double var_time_dependent_potassium_current__i_K = 0.0071428571428571426 * (-var_chaste_interface__extracellular_potassium_concentration__Kc * _lt_0_row[6] + var_chaste_interface__intracellular_potassium_concentration__Ki) * mParameters[4] * var_chaste_interface__time_dependent_potassium_current_x_gate__x; // nanoA
         const double var_time_independent_potassium_current__i_K1 = (-var_hyperpolarising_activated_current__E_K + var_chaste_interface__membrane__V) * var_chaste_interface__extracellular_potassium_concentration__Kc * mParameters[8] / ((1.0 + exp(0.74867781645490938 + 0.074867781645490947 * var_chaste_interface__membrane__V - 0.074867781645490947 * var_hyperpolarising_activated_current__E_K)) * (10.0 + var_chaste_interface__extracellular_potassium_concentration__Kc)); // nanoA
@@ -2239,51 +2191,51 @@ std::shared_ptr<Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables> Ce
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
-            const double var_x0 = exp(9.9999999999858739e-8);
+            const double var_x0 = exp(1.0000000000609274e-7);
             const double var_x1 = 1 / (1.0 - var_x0);
-            const double var_x2 = exp(1.8716945411372736);
-            const double var_x7 = mParameters[2] * var_chaste_interface__second_inward_current_f2_gate__f2;
-            const double var_x8 = var_x7 * var_chaste_interface__second_inward_current_f_gate__f;
-            const double var_x10 = exp(-9.9999999999858739e-8);
-            const double var_x12 = 1 / (1.0 - var_x10);
-            const double var_x15 = -50.0 + var_chaste_interface__membrane__V;
-            const double var_x16 = fabs(var_x15);
-            const double var_x17 = var_x16 < 2.6713760659657915e-6;
-            const double var_x18 = var_x8 * var_chaste_interface__second_inward_current_d_gate__d;
-            const double var_x19 = _lt_0_row[2];
-            const double var_x22 = 1.0 - var_x19;
-            const double var_x23 = 1 / var_x22;
-            const double var_x24 = 0.00037433890822745472 * var_x23;
-            const double var_x26 = var_x15 * var_x18;
-            const double var_x75 = var_chaste_interface__extracellular_potassium_concentration__Kc / var_chaste_interface__intracellular_potassium_concentration__Ki;
-            const double var_x76 = log(var_x75);
-            const double var_x77 = exp(0.74867781645490938 + 0.074867781645490947 * var_chaste_interface__membrane__V - 2.0 * var_x76);
-            const double var_x78 = 1.0 + var_x77;
-            const double var_x79 = 1 / var_x78;
-            const double var_x80 = mParameters[8] / (10.0 + var_chaste_interface__extracellular_potassium_concentration__Kc);
-            const double var_x81 = var_x79 * var_x80;
-            const double var_x83 = 1 / (45.0 + var_chaste_interface__extracellular_potassium_concentration__Kc);
-            const double var_x90 = mParameters[4] * var_chaste_interface__time_dependent_potassium_current_x_gate__x;
-            const double var_x92 = -26.713760659695652 * var_x76 + var_chaste_interface__membrane__V;
-            const double var_x94 = var_x77 * var_x80 / pow(var_x78, 2);
-            const double var_x119 = 9358473.2056995872 - 187169.45411399176 * var_chaste_interface__membrane__V;
-            const double var_x120 = 9.9999999999858744e-10 * var_x8;
-            const double var_x121 = var_x1 * var_x120;
-            const double var_x122 = var_x12 * var_x120;
-            const double var_x154 = var_x2 * var_chaste_interface__second_inward_current_d_gate__d;
-            const double var_x155 = var_x122 * var_x154;
-            const double var_x156 = var_x24 * var_x26;
-            const double var_x157 = ((var_x17) ? (var_x155 + var_x119 * (-var_x155 - var_x121 * var_x154)) : (var_x156 * var_x2));
-            const double var_x174 = var_x83 * var_chaste_interface__hyperpolarising_activated_current_y_gate__y;
-            const double var_x175 = var_x174 * mParameters[6];
-            const double var_x186 = var_x92 * var_x94;
-            const double var_x273 = -7.1593949080342271e-6 * var_x157;
-            const double var_x295 = 5.1138535057387335e-8 * var_x90;
-            const double var_x296 = 0.00019125436204147007 * var_x81;
-            const double var_x297 = 0.00019125436204147007 * var_x175;
-            const double var_x298 = 1.4318789816068454e-5 * var_x186;
+            const double var_x6 = mParameters[2] * var_chaste_interface__second_inward_current_f2_gate__f2;
+            const double var_x7 = var_x6 * var_chaste_interface__second_inward_current_f_gate__f;
+            const double var_x9 = exp(-1.0000000000609274e-7);
+            const double var_x10 = 1 / (1.0 - var_x9);
+            const double var_x13 = -50.0 + var_chaste_interface__membrane__V;
+            const double var_x14 = fabs(var_x13);
+            const double var_x16 = var_x7 * var_chaste_interface__second_inward_current_d_gate__d;
+            const double var_x23 = var_x13 * var_x16;
+            const double var_x26 = exp(1.8716945411372736);
+            const double var_x34 = var_x14 < 2.6713760661323249e-6;
+            const double var_x35 = _lt_0_row[2];
+            const double var_x36 = 1.0 - var_x35;
+            const double var_x37 = 1 / var_x36;
+            const double var_x38 = 0.00037433890822745472 * var_x37;
+            const double var_x69 = var_chaste_interface__extracellular_potassium_concentration__Kc / var_chaste_interface__intracellular_potassium_concentration__Ki;
+            const double var_x70 = log(var_x69);
+            const double var_x71 = exp(0.74867781645490938 + 0.074867781645490947 * var_chaste_interface__membrane__V - 2.0 * var_x70);
+            const double var_x72 = 1.0 + var_x71;
+            const double var_x73 = 1 / var_x72;
+            const double var_x74 = mParameters[8] / (10.0 + var_chaste_interface__extracellular_potassium_concentration__Kc);
+            const double var_x75 = var_x73 * var_x74;
+            const double var_x77 = 1 / (45.0 + var_chaste_interface__extracellular_potassium_concentration__Kc);
+            const double var_x84 = mParameters[4] * var_chaste_interface__time_dependent_potassium_current_x_gate__x;
+            const double var_x86 = -26.713760659695652 * var_x70 + var_chaste_interface__membrane__V;
+            const double var_x88 = var_x71 * var_x74 / pow(var_x72, 2);
+            const double var_x113 = -9358472.2051161807 + 187169.45410232362 * var_chaste_interface__membrane__V;
+            const double var_x114 = 1.0000000000609275e-9 * var_x7;
+            const double var_x115 = var_x1 * var_x114;
+            const double var_x117 = var_x10 * var_x114;
+            const double var_x148 = var_x26 * var_chaste_interface__second_inward_current_d_gate__d;
+            const double var_x149 = var_x115 * var_x148;
+            const double var_x150 = var_x23 * var_x38;
+            const double var_x151 = ((var_x34) ? (-var_x149 + var_x113 * (var_x149 + var_x117 * var_x148)) : (var_x150 * var_x26));
+            const double var_x168 = var_x77 * var_chaste_interface__hyperpolarising_activated_current_y_gate__y;
+            const double var_x169 = var_x168 * mParameters[6];
+            const double var_x180 = var_x86 * var_x88;
+            const double var_x260 = -7.1593949080342271e-6 * var_x151;
+            const double var_x279 = 5.1138535057387335e-8 * var_x84;
+            const double var_x280 = 0.00019125436204147007 * var_x75;
+            const double var_x281 = 0.00019125436204147007 * var_x169;
+            const double var_x282 = 1.4318789816068454e-5 * var_x180;
             
-            partialF = var_x273 - var_x295 + var_x298 * var_x75 - var_x296 * var_x75 - var_x297 * var_x75;
+            partialF = var_x260 - var_x279 + var_x282 * var_x69 - var_x280 * var_x69 - var_x281 * var_x69;
         }
         else
         {
@@ -2348,9 +2300,9 @@ std::shared_ptr<Cellnoble_noble_SAN_model_1984FromCellMLGRL2Opt_LookupTables> Ce
         const double var_hyperpolarising_activated_current__i_fNa = (-var_hyperpolarising_activated_current__E_Na + var_chaste_interface__membrane__V) * var_chaste_interface__extracellular_potassium_concentration__Kc * mParameters[7] * var_chaste_interface__hyperpolarising_activated_current_y_gate__y / (var_chaste_interface__extracellular_potassium_concentration__Kc + var_hyperpolarising_activated_current__Km_f); // nanoA
         const double var_hyperpolarising_activated_current__i_f = var_hyperpolarising_activated_current__i_fK + var_hyperpolarising_activated_current__i_fNa; // nanoA
         const double var_hyperpolarising_activated_current__i_f_converted = 0.001 * HeartConfig::Instance()->GetCapacitance() * var_hyperpolarising_activated_current__i_f / mParameters[3]; // uA_per_cm2
-        const double var_second_inward_current__i_siCa = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 1.3356880329551402e-6) ? (-374338.90823576227 * (-50.000001335688033 + var_chaste_interface__membrane__V) * (-1.9999999999556149e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(9.9999999997780743e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(9.9999999997780743e-8)) - 1.9999999999556149e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(-9.9999999997780743e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999997780743e-8))) + 1.9999999999556149e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(-9.9999999997780743e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999997780743e-8))) : (0.14973556329098189 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * _lt_0_row[4]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[5]))); // nanoA
-        const double var_second_inward_current__i_siK = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 2.6713760659657915e-6) ? (-187169.45411399176 * (-50.000002671376066 + var_chaste_interface__membrane__V) * (-9.9999999999858744e-10 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(9.9999999999858739e-8)) - 9.9999999999858744e-10 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(-9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999999858739e-8))) + 9.9999999999858744e-10 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(-9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999999858739e-8))) : (0.00037433890822745472 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * _lt_0_row[2]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[3]))); // nanoA
-        const double var_second_inward_current__i_siNa = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 2.6713760659657915e-6) ? (-187169.45411399176 * (-50.000002671376066 + var_chaste_interface__membrane__V) * (-9.9999999999858744e-10 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(9.9999999999858739e-8)) - 9.9999999999858744e-10 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(-9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999999858739e-8))) + 9.9999999999858744e-10 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(-9.9999999999858739e-8)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-9.9999999999858739e-8))) : (0.00037433890822745472 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * _lt_0_row[2]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[3]))); // nanoA
+        const double var_second_inward_current__i_siCa = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 1.3356880330661625e-6) ? (374338.90820464725 * (-49.999998664311967 + var_chaste_interface__membrane__V) * (2.0000000001218549e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7)) + 2.0000000001218549e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(-1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-1.0000000000609274e-7))) - 2.0000000001218549e-7 * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7))) : (0.14973556329098189 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_calcium_concentration__Cai * exp(3.7433890822745473) - mParameters[0] * _lt_0_row[4]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[5]))); // nanoA
+        const double var_second_inward_current__i_siK = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 2.6713760661323249e-6) ? (187169.45410232362 * (-49.999997328623934 + var_chaste_interface__membrane__V) * (1.0000000000609275e-9 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7)) + 1.0000000000609275e-9 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(-1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-1.0000000000609274e-7))) - 1.0000000000609275e-9 * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7))) : (0.00037433890822745472 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(1.8716945411372736) - var_chaste_interface__extracellular_potassium_concentration__Kc * _lt_0_row[2]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[3]))); // nanoA
+        const double var_second_inward_current__i_siNa = ((fabs(-50.0 + var_chaste_interface__membrane__V) < 2.6713760661323249e-6) ? (187169.45410232362 * (-49.999997328623934 + var_chaste_interface__membrane__V) * (1.0000000000609275e-9 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7)) + 1.0000000000609275e-9 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(-1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(-1.0000000000609274e-7))) - 1.0000000000609275e-9 * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * exp(1.0000000000609274e-7)) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (1.0 - exp(1.0000000000609274e-7))) : (0.00037433890822745472 * (-50.0 + var_chaste_interface__membrane__V) * (var_chaste_interface__intracellular_sodium_concentration__Nai * exp(1.8716945411372736) - mParameters[1] * _lt_0_row[2]) * mParameters[2] * var_chaste_interface__second_inward_current_d_gate__d * var_chaste_interface__second_inward_current_f2_gate__f2 * var_chaste_interface__second_inward_current_f_gate__f / (_lt_0_row[3]))); // nanoA
         const double var_second_inward_current__i_si = var_second_inward_current__i_siCa + var_second_inward_current__i_siK + var_second_inward_current__i_siNa; // nanoA
         const double var_second_inward_current__i_si_converted = 0.001 * HeartConfig::Instance()->GetCapacitance() * var_second_inward_current__i_si / mParameters[3]; // uA_per_cm2
         const double var_time_dependent_potassium_current__i_K = 0.0071428571428571426 * (-var_chaste_interface__extracellular_potassium_concentration__Kc * exp(-var_chaste_interface__membrane__V / var_membrane__RTONF) + var_chaste_interface__intracellular_potassium_concentration__Ki) * mParameters[4] * var_chaste_interface__time_dependent_potassium_current_x_gate__x; // nanoA

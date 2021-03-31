@@ -283,7 +283,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__membrane__V) {
-                    return 0.5 * ((fabs(-5.0 + var_chaste_interface__membrane__V) < 2.5000000000025002e-7) ? (-2.8575000000028576e-6 / (-1.0 + exp(-1.0000000000010001e-7)) + 1999999.9999979998 * (-4.9999997499999997 + var_chaste_interface__membrane__V) * (2.8575000000028576e-6 / (-1.0 + exp(1.0000000000010001e-7)) + 2.8575000000028576e-6 / (-1.0 + exp(-1.0000000000010001e-7)))) : (11.43 * (-5.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-2.0 + 0.40000000000000002 * var_chaste_interface__membrane__V)))) + 0.5 * ((fabs(35.0 + var_chaste_interface__membrane__V) < 2.5000000000718892e-7) ? (-7.097500000992074e-6 / (-1.0 + exp(-1.000000000139778e-7)) - 84.900000000000006 * var_chaste_interface__membrane__V / (-1.0 + exp(-0.20799999999999999 * var_chaste_interface__membrane__V)) - 1999999.9999424887 * (34.999999750000001 + var_chaste_interface__membrane__V) * (7.0974999994161125e-6 / (-1.0 + exp(9.9999999991773334e-8)) + 7.097500000992074e-6 / (-1.0 + exp(-1.000000000139778e-7)))) : ((fabs(var_chaste_interface__membrane__V) < 4.8076923076923074e-7) ? (-4.0817307692307694e-5 / (-1.0 + exp(-9.9999999999999995e-8)) - 28.390000000000001 * (35.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-14.0 - 0.40000000000000002 * var_chaste_interface__membrane__V)) - 1040000.0 * (-4.8076923076923074e-7 + var_chaste_interface__membrane__V) * (4.0817307692307694e-5 / (-1.0 + exp(9.9999999999999995e-8)) + 4.0817307692307694e-5 / (-1.0 + exp(-9.9999999999999995e-8)))) : (-28.390000000000001 * (35.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-14.0 - 0.40000000000000002 * var_chaste_interface__membrane__V)) - 84.900000000000006 * var_chaste_interface__membrane__V / (-1.0 + exp(-0.20799999999999999 * var_chaste_interface__membrane__V)))));
+                    return 0.5 * ((fabs(-5.0 + var_chaste_interface__membrane__V) < 2.4999999981289989e-7) ? (2.8575000029373855e-6 / (-1.0 + exp(1.0000000010279565e-7)) - 2000000.0014968009 * (-5.0000002500000003 + var_chaste_interface__membrane__V) * (-2.8574999927855059e-6 / (-1.0 + exp(-9.9999999747524276e-8)) - 2.8575000029373855e-6 / (-1.0 + exp(1.0000000010279565e-7)))) : (11.43 * (-5.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-2.0 + 0.40000000000000002 * var_chaste_interface__membrane__V)))) + 0.5 * ((fabs(var_chaste_interface__membrane__V) < 4.8076923076923074e-7) ? (4.0817307692307694e-5 / (-1.0 + exp(9.9999999999999995e-8)) + 1040000.0 * (4.8076923076923074e-7 + var_chaste_interface__membrane__V) * (-4.0817307692307694e-5 / (-1.0 + exp(9.9999999999999995e-8)) - 4.0817307692307694e-5 / (-1.0 + exp(-9.9999999999999995e-8))) - 28.390000000000001 * (35.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-14.0 - 0.40000000000000002 * var_chaste_interface__membrane__V))) : (-28.390000000000001 * (35.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(-14.0 - 0.40000000000000002 * var_chaste_interface__membrane__V)) - 84.900000000000006 * var_chaste_interface__membrane__V / (-1.0 + exp(-0.20799999999999999 * var_chaste_interface__membrane__V))));
                 };
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__membrane__V);
@@ -305,7 +305,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__membrane__V) {
-                    return 30.0 / (1.0 + exp(-7.0 - 0.25 * var_chaste_interface__membrane__V)) + ((fabs(28.0 + var_chaste_interface__membrane__V) < 4.0000000001150227e-7) ? (-1.5000000000431335e-6 / (-1.0 + exp(-1.0000000000287557e-7)) + 1249999.9999640554 * (28.000000400000001 + var_chaste_interface__membrane__V) * (1.5000000000431335e-6 / (-1.0 + exp(1.0000000000287557e-7)) + 1.5000000000431335e-6 / (-1.0 + exp(-1.0000000000287557e-7)))) : (3.75 * (28.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(7.0 + 0.25 * var_chaste_interface__membrane__V))));
+                    return 30.0 / (1.0 + exp(-7.0 - 0.25 * var_chaste_interface__membrane__V)) + 3.75 * (28.0 + var_chaste_interface__membrane__V) / (-1.0 + exp(7.0 + 0.25 * var_chaste_interface__membrane__V));
                 };
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__membrane__V);
@@ -1193,35 +1193,30 @@ std::shared_ptr<Cellzhang_SAN_model_2000_0D_capableFromCellMLGRL1Opt_LookupTable
             
 
 
-            const double var_x40 = 1 / (-1.0 + exp(1.0000000000010001e-7));
-            const double var_x41 = 1 / (-1.0 + exp(-1.0000000000010001e-7));
+            const double var_x40 = 1 / (-1.0 + exp(-9.9999999747524276e-8));
+            const double var_x41 = 1 / (-1.0 + exp(1.0000000010279565e-7));
             const double var_x42 = exp(-0.20799999999999999 * var_chaste_interface__membrane__V);
             const double var_x43 = -1.0 + var_x42;
             const double var_x44 = 1 / var_x43;
-            const double var_x47 = exp(-14.0 - 0.40000000000000002 * var_chaste_interface__membrane__V);
-            const double var_x48 = -1.0 + var_x47;
-            const double var_x49 = 1 / var_x48;
-            const double var_x51 = 35.0 + var_chaste_interface__membrane__V;
-            const double var_x54 = (-4.9999997499999997 + var_chaste_interface__membrane__V) * (2.8575000000028576e-6 * var_x40 + 2.8575000000028576e-6 * var_x41);
-            const double var_x59 = -5.0 + var_chaste_interface__membrane__V;
-            const double var_x60 = fabs(var_x59) < 2.5000000000025002e-7;
-            const double var_x61 = 1 / (-1.0 + exp(9.9999999991773334e-8));
-            const double var_x62 = 1 / (-1.0 + exp(-1.000000000139778e-7));
-            const double var_x63 = exp(-2.0 + 0.40000000000000002 * var_chaste_interface__membrane__V);
-            const double var_x64 = -1.0 + var_x63;
-            const double var_x65 = 1 / var_x64;
-            const double var_x69 = (34.999999750000001 + var_chaste_interface__membrane__V) * (7.0974999994161125e-6 * var_x61 + 7.097500000992074e-6 * var_x62);
-            const double var_x70 = fabs(var_x51) < 2.5000000000718892e-7;
-            const double var_x71 = 1 / (-1.0 + exp(9.9999999999999995e-8));
-            const double var_x72 = 1 / (-1.0 + exp(-9.9999999999999995e-8));
-            const double var_x73 = (-4.8076923076923074e-7 + var_chaste_interface__membrane__V) * (4.0817307692307694e-5 * var_x71 + 4.0817307692307694e-5 * var_x72);
-            const double var_x74 = fabs(var_chaste_interface__membrane__V) < 4.8076923076923074e-7;
-            const double var_x75 = 0.014195000000000001 * var_x49 * var_x51;
-            const double var_x76 = 0.042450000000000002 * var_x44 * var_chaste_interface__membrane__V;
-            const double var_x77 = var_x75 + var_x76;
-            const double var_x78 = -0.0057149999999999996 * var_x59 * var_x65;
+            const double var_x46 = exp(-14.0 - 0.40000000000000002 * var_chaste_interface__membrane__V);
+            const double var_x47 = -1.0 + var_x46;
+            const double var_x48 = 1 / var_x47;
+            const double var_x50 = 35.0 + var_chaste_interface__membrane__V;
+            const double var_x53 = (-5.0000002500000003 + var_chaste_interface__membrane__V) * (-2.8574999927855059e-6 * var_x40 - 2.8575000029373855e-6 * var_x41);
+            const double var_x57 = -5.0 + var_chaste_interface__membrane__V;
+            const double var_x58 = fabs(var_x57) < 2.4999999981289989e-7;
+            const double var_x59 = 1 / (-1.0 + exp(9.9999999999999995e-8));
+            const double var_x60 = 1 / (-1.0 + exp(-9.9999999999999995e-8));
+            const double var_x61 = exp(-2.0 + 0.40000000000000002 * var_chaste_interface__membrane__V);
+            const double var_x62 = -1.0 + var_x61;
+            const double var_x63 = 1 / var_x62;
+            const double var_x67 = (4.8076923076923074e-7 + var_chaste_interface__membrane__V) * (-4.0817307692307694e-5 * var_x59 - 4.0817307692307694e-5 * var_x60);
+            const double var_x68 = fabs(var_chaste_interface__membrane__V) < 4.8076923076923074e-7;
+            const double var_x69 = 0.014195000000000001 * var_x48 * var_x50;
+            const double var_x70 = var_x69 + 0.042450000000000002 * var_x44 * var_chaste_interface__membrane__V;
+            const double var_x71 = -0.0057149999999999996 * var_x57 * var_x63;
             
-            partialF = ((var_x60) ? (var_x77 + 1.4287500000014288e-9 * var_x41 - 999.9999999989999 * var_x54) : ((var_x70) ? (var_x76 + var_x78 + 3.5487500004960372e-9 * var_x62 + 999.99999997124439 * var_x69) : ((var_x74) ? (var_x75 + var_x78 + 520.0 * var_x73 + 2.0408653846153849e-8 * var_x72) : (var_x77 + var_x78))));
+            partialF = ((var_x58) ? (var_x70 + 1000.0000007484005 * var_x53 - 1.4287500014686927e-9 * var_x41) : ((var_x68) ? (var_x69 + var_x71 - 520.0 * var_x67 - 2.0408653846153846e-8 * var_x59) : (var_x70 + var_x71)));
         }
         else
         {
@@ -1267,22 +1262,16 @@ std::shared_ptr<Cellzhang_SAN_model_2000_0D_capableFromCellMLGRL1Opt_LookupTable
             
 
 
-            const double var_x82 = 1 / (-1.0 + exp(1.0000000000287557e-7));
-            const double var_x83 = 1 / (-1.0 + exp(-1.0000000000287557e-7));
-            const double var_x84 = 0.25 * var_chaste_interface__membrane__V;
-            const double var_x85 = exp(-7.0 - var_x84);
-            const double var_x86 = 1.0 + var_x85;
-            const double var_x88 = 1 / var_x86;
-            const double var_x90 = 1.5000000000431335e-6 * var_x83;
-            const double var_x91 = (28.000000400000001 + var_chaste_interface__membrane__V) * (var_x90 + 1.5000000000431335e-6 * var_x82);
-            const double var_x93 = 28.0 + var_chaste_interface__membrane__V;
-            const double var_x94 = fabs(var_x93) < 4.0000000001150227e-7;
-            const double var_x95 = exp(7.0 + var_x84);
-            const double var_x96 = -1.0 + var_x95;
-            const double var_x97 = 1 / var_x96;
-            const double var_x99 = -0.025000000000000001 * var_x88;
+            const double var_x74 = 0.25 * var_chaste_interface__membrane__V;
+            const double var_x75 = exp(7.0 + var_x74);
+            const double var_x76 = -1.0 + var_x75;
+            const double var_x77 = 1 / var_x76;
+            const double var_x79 = exp(-7.0 - var_x74);
+            const double var_x80 = 1.0 + var_x79;
+            const double var_x81 = 28.0 + var_chaste_interface__membrane__V;
+            const double var_x82 = 1 / var_x80;
             
-            partialF = ((var_x94) ? (var_x99 + 1.2500000000359445e-9 * var_x83 - 1041.666666636713 * var_x91) : (var_x99 - 0.0031250000000000002 * var_x93 * var_x97));
+            partialF = -0.025000000000000001 * var_x82 - 0.0031250000000000002 * var_x77 * var_x81;
         }
         else
         {
@@ -1327,11 +1316,11 @@ std::shared_ptr<Cellzhang_SAN_model_2000_0D_capableFromCellMLGRL1Opt_LookupTable
             
 
 
-            const double var_x102 = 0.033333333333333333 * var_chaste_interface__membrane__V;
-            const double var_x103 = exp(0.87666666666666671 + var_x102);
-            const double var_x104 = exp(-0.87666666666666671 - var_x102);
+            const double var_x85 = 0.033333333333333333 * var_chaste_interface__membrane__V;
+            const double var_x86 = exp(0.87666666666666671 + var_x85);
+            const double var_x87 = exp(-0.87666666666666671 - var_x85);
             
-            partialF = -1.0680000000000001 * var_x103 - 1.0680000000000001 * var_x104;
+            partialF = -1.0680000000000001 * var_x86 - 1.0680000000000001 * var_x87;
         }
         else
         {
@@ -1377,10 +1366,10 @@ std::shared_ptr<Cellzhang_SAN_model_2000_0D_capableFromCellMLGRL1Opt_LookupTable
             
 
 
-            const double var_x108 = exp(4.6163849154746419 + 0.065019505851755519 * var_chaste_interface__membrane__V);
-            const double var_x109 = exp(-0.85234093637454988 - 0.012004801920768308 * var_chaste_interface__membrane__V);
+            const double var_x91 = exp(4.6163849154746419 + 0.065019505851755519 * var_chaste_interface__membrane__V);
+            const double var_x92 = exp(-0.85234093637454988 - 0.012004801920768308 * var_chaste_interface__membrane__V);
             
-            partialF = -0.015300000000000001 * var_x109 - 0.014999999999999999 * var_x108;
+            partialF = -0.015300000000000001 * var_x92 - 0.014999999999999999 * var_x91;
         }
         else
         {
@@ -1426,12 +1415,12 @@ std::shared_ptr<Cellzhang_SAN_model_2000_0D_capableFromCellMLGRL1Opt_LookupTable
             
 
 
-            const double var_x112 = exp(-3.1827900000000002 - 0.081610000000000002 * var_chaste_interface__membrane__V);
-            const double var_x113 = exp(11.128867 + 0.27189999999999998 * var_chaste_interface__membrane__V);
-            const double var_x114 = 1 / (0.56859999999999999 * var_x112 + 0.71740000000000004 * var_x113);
-            const double var_x115 = 1 / (0.010103333333333334 + 0.065166666666666664 * var_x114);
+            const double var_x95 = exp(-3.1827900000000002 - 0.081610000000000002 * var_chaste_interface__membrane__V);
+            const double var_x96 = exp(11.128867 + 0.27189999999999998 * var_chaste_interface__membrane__V);
+            const double var_x97 = 1 / (0.56859999999999999 * var_x95 + 0.71740000000000004 * var_x96);
+            const double var_x98 = 1 / (0.010103333333333334 + 0.065166666666666664 * var_x97);
             
-            partialF = -0.001 * var_x115;
+            partialF = -0.001 * var_x98;
         }
         else
         {
@@ -1476,12 +1465,12 @@ std::shared_ptr<Cellzhang_SAN_model_2000_0D_capableFromCellMLGRL1Opt_LookupTable
             
 
 
-            const double var_x118 = exp(2.7585732000000003 + 0.090120000000000006 * var_chaste_interface__membrane__V);
-            const double var_x119 = exp(-2.8369599999999999 - 0.11899999999999999 * var_chaste_interface__membrane__V);
-            const double var_x120 = 1 / (1.0369999999999999 * var_x118 + 0.36899999999999999 * var_x119);
-            const double var_x121 = 1 / (0.0029775000000000001 + 0.019595000000000001 * var_x120);
+            const double var_x101 = exp(2.7585732000000003 + 0.090120000000000006 * var_chaste_interface__membrane__V);
+            const double var_x102 = exp(-2.8369599999999999 - 0.11899999999999999 * var_chaste_interface__membrane__V);
+            const double var_x103 = 1 / (1.0369999999999999 * var_x101 + 0.36899999999999999 * var_x102);
+            const double var_x104 = 1 / (0.0029775000000000001 + 0.019595000000000001 * var_x103);
             
-            partialF = -0.001 * var_x121;
+            partialF = -0.001 * var_x104;
         }
         else
         {
@@ -1527,10 +1516,10 @@ std::shared_ptr<Cellzhang_SAN_model_2000_0D_capableFromCellMLGRL1Opt_LookupTable
             
 
 
-            const double var_x125 = exp(-0.56603773584905659 + 0.062893081761006289 * var_chaste_interface__membrane__V);
-            const double var_x126 = exp(0.40000000000000002 - 0.044444444444444446 * var_chaste_interface__membrane__V);
+            const double var_x108 = exp(-0.56603773584905659 + 0.062893081761006289 * var_chaste_interface__membrane__V);
+            const double var_x109 = exp(0.40000000000000002 - 0.044444444444444446 * var_chaste_interface__membrane__V);
             
-            partialF = -0.00095999999999999992 * var_x126 - 0.037200000000000004 * var_x125;
+            partialF = -0.00095999999999999992 * var_x109 - 0.037200000000000004 * var_x108;
         }
         else
         {
@@ -1576,10 +1565,10 @@ std::shared_ptr<Cellzhang_SAN_model_2000_0D_capableFromCellMLGRL1Opt_LookupTable
             
 
 
-            const double var_x128 = exp(-0.52941176470588236 + 0.058823529411764705 * var_chaste_interface__membrane__V);
-            const double var_x129 = exp(0.41666666666666663 - 0.046296296296296294 * var_chaste_interface__membrane__V);
+            const double var_x111 = exp(-0.52941176470588236 + 0.058823529411764705 * var_chaste_interface__membrane__V);
+            const double var_x112 = exp(0.41666666666666663 - 0.046296296296296294 * var_chaste_interface__membrane__V);
             
-            partialF = -0.00014999999999999999 * var_x129 - 0.0042000000000000006 * var_x128;
+            partialF = -0.00014999999999999999 * var_x112 - 0.0042000000000000006 * var_x111;
         }
         else
         {
@@ -1675,12 +1664,12 @@ std::shared_ptr<Cellzhang_SAN_model_2000_0D_capableFromCellMLGRL1Opt_LookupTable
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Cellzhang_SAN_model_2000_0D_capableFromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
-            const double var_x105 = 0.1111111111111111 * var_chaste_interface__membrane__V;
-            const double var_x131 = _lt_0_row[24];
-            const double var_x132 = exp(4.4444444444444446 - var_x105);
-            const double var_x133 = 1.0 + var_x132;
+            const double var_x88 = 0.1111111111111111 * var_chaste_interface__membrane__V;
+            const double var_x114 = _lt_0_row[24];
+            const double var_x115 = exp(4.4444444444444446 - var_x88);
+            const double var_x116 = 1.0 + var_x115;
             
-            partialF = -0.001 * var_x131 - 0.014 / var_x133;
+            partialF = -0.001 * var_x114 - 0.014 / var_x116;
         }
         else
         {
@@ -1732,10 +1721,10 @@ std::shared_ptr<Cellzhang_SAN_model_2000_0D_capableFromCellMLGRL1Opt_LookupTable
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Cellzhang_SAN_model_2000_0D_capableFromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
-            const double var_x134 = _lt_0_row[12];
-            const double var_x135 = _lt_0_row[11];
+            const double var_x117 = _lt_0_row[12];
+            const double var_x118 = _lt_0_row[11];
             
-            partialF = -0.001 * var_x134 - 0.001 * var_x135;
+            partialF = -0.001 * var_x117 - 0.001 * var_x118;
         }
         else
         {

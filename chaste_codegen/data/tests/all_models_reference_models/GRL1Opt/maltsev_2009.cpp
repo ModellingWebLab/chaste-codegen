@@ -228,7 +228,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__Vm__Vm) {
-                    return ((fabs(-5.0 + var_chaste_interface__Vm__Vm) < 2.5000000000025002e-7) ? (-2.8575000000028576e-9 / (-1.0 + exp(-1.0000000000010001e-7)) + 1999999.9999979998 * (-4.9999997499999997 + var_chaste_interface__Vm__Vm) * (2.8575000000028576e-9 / (-1.0 + exp(1.0000000000010001e-7)) + 2.8575000000028576e-9 / (-1.0 + exp(-1.0000000000010001e-7)))) : (0.011429999999999999 * (-5.0 + var_chaste_interface__Vm__Vm) / (-1.0 + exp(-2.0 + 0.40000000000000002 * var_chaste_interface__Vm__Vm)))) + ((fabs(35.0 + var_chaste_interface__Vm__Vm) < 2.5000000000718892e-7) ? (-7.0975000009920736e-9 / (-1.0 + exp(-1.000000000139778e-7)) - 0.084900000000000003 * var_chaste_interface__Vm__Vm / (-1.0 + exp(-0.20833333333333334 * var_chaste_interface__Vm__Vm)) - 1999999.9999424887 * (34.999999750000001 + var_chaste_interface__Vm__Vm) * (7.0975000009920736e-9 / (-1.0 + exp(-1.000000000139778e-7)) + 7.0974999994161126e-9 / (-1.0 + exp(9.9999999991773334e-8)))) : ((fabs(var_chaste_interface__Vm__Vm) < 4.7999999999999996e-7) ? (-4.0752e-8 / (-1.0 + exp(-9.9999999999999995e-8)) - 0.028389999999999999 * (35.0 + var_chaste_interface__Vm__Vm) / (-1.0 + exp(-14.0 - 0.40000000000000002 * var_chaste_interface__Vm__Vm)) - 1041666.6666666667 * (-4.7999999999999996e-7 + var_chaste_interface__Vm__Vm) * (4.0752e-8 / (-1.0 + exp(9.9999999999999995e-8)) + 4.0752e-8 / (-1.0 + exp(-9.9999999999999995e-8)))) : (-0.028389999999999999 * (35.0 + var_chaste_interface__Vm__Vm) / (-1.0 + exp(-14.0 - 0.40000000000000002 * var_chaste_interface__Vm__Vm)) - 0.084900000000000003 * var_chaste_interface__Vm__Vm / (-1.0 + exp(-0.20833333333333334 * var_chaste_interface__Vm__Vm)))));
+                    return ((fabs(-5.0 + var_chaste_interface__Vm__Vm) < 2.500000002569891e-7) ? (2.8575000029373851e-9 / (-1.0 + exp(1.0000000010279564e-7)) - 1999999.9979440873 * (-5.0000002500000003 + var_chaste_interface__Vm__Vm) * (-2.8575000029373851e-9 / (-1.0 + exp(1.0000000010279564e-7)) - 2.8575000029373851e-9 / (-1.0 + exp(-1.0000000010279564e-7)))) : (0.011429999999999999 * (-5.0 + var_chaste_interface__Vm__Vm) / (-1.0 + exp(-2.0 + 0.40000000000000002 * var_chaste_interface__Vm__Vm)))) + ((fabs(var_chaste_interface__Vm__Vm) < 4.7999999999999996e-7) ? (4.0752e-8 / (-1.0 + exp(9.9999999999999995e-8)) + 1041666.6666666667 * (4.7999999999999996e-7 + var_chaste_interface__Vm__Vm) * (-4.0752e-8 / (-1.0 + exp(9.9999999999999995e-8)) - 4.0752e-8 / (-1.0 + exp(-9.9999999999999995e-8))) - 0.028389999999999999 * (35.0 + var_chaste_interface__Vm__Vm) / (-1.0 + exp(-14.0 - 0.40000000000000002 * var_chaste_interface__Vm__Vm))) : (-0.028389999999999999 * (35.0 + var_chaste_interface__Vm__Vm) / (-1.0 + exp(-14.0 - 0.40000000000000002 * var_chaste_interface__Vm__Vm)) - 0.084900000000000003 * var_chaste_interface__Vm__Vm / (-1.0 + exp(-0.20833333333333334 * var_chaste_interface__Vm__Vm))));
                 };
                 const double var_chaste_interface__Vm__Vm = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__Vm__Vm);
@@ -1476,40 +1476,37 @@ std::shared_ptr<Cellmaltsev_2009FromCellMLGRL1Opt_LookupTables> Cellmaltsev_2009
             
 
 
-            const double var_x131 = 1 / (-1.0 + exp(1.0000000000010001e-7));
-            const double var_x132 = 1 / (-1.0 + exp(-1.0000000000010001e-7));
+            const double var_x131 = 1 / (-1.0 + exp(1.0000000010279564e-7));
+            const double var_x132 = 1 / (-1.0 + exp(-1.0000000010279564e-7));
             const double var_x133 = exp(-0.20833333333333334 * var_chaste_interface__Vm__Vm);
             const double var_x134 = -1.0 + var_x133;
             const double var_x135 = 0.084900000000000003 / var_x134;
-            const double var_x137 = 0.40000000000000002 * var_chaste_interface__Vm__Vm;
-            const double var_x138 = exp(-14.0 - var_x137);
-            const double var_x139 = -1.0 + var_x138;
-            const double var_x140 = 0.028389999999999999 / var_x139;
-            const double var_x141 = 35.0 + var_chaste_interface__Vm__Vm;
-            const double var_x144 = 2.8575000000028576e-9 * var_x132;
-            const double var_x145 = 1999999.9999979998 * (-4.9999997499999997 + var_chaste_interface__Vm__Vm) * (var_x144 + 2.8575000000028576e-9 * var_x131);
-            const double var_x146 = var_x140 * var_x141;
+            const double var_x136 = 0.40000000000000002 * var_chaste_interface__Vm__Vm;
+            const double var_x137 = exp(-14.0 - var_x136);
+            const double var_x138 = -1.0 + var_x137;
+            const double var_x139 = 0.028389999999999999 / var_x138;
+            const double var_x140 = 35.0 + var_chaste_interface__Vm__Vm;
+            const double var_x143 = 2.8575000029373851e-9 * var_x131;
+            const double var_x144 = -var_x143;
+            const double var_x145 = 1999999.9979440873 * (-5.0000002500000003 + var_chaste_interface__Vm__Vm) * (var_x144 - 2.8575000029373851e-9 * var_x132);
+            const double var_x146 = var_x139 * var_x140;
             const double var_x148 = var_x135 * var_chaste_interface__Vm__Vm;
-            const double var_x152 = -5.0 + var_chaste_interface__Vm__Vm;
-            const double var_x153 = fabs(var_x152) < 2.5000000000025002e-7;
-            const double var_x154 = 1 / (-1.0 + exp(9.9999999991773334e-8));
-            const double var_x155 = 1 / (-1.0 + exp(-1.000000000139778e-7));
-            const double var_x156 = exp(-2.0 + var_x137);
-            const double var_x157 = -1.0 + var_x156;
-            const double var_x158 = 0.011429999999999999 / var_x157;
-            const double var_x160 = 7.0975000009920736e-9 * var_x155;
-            const double var_x161 = var_x152 * var_x158;
-            const double var_x162 = 1999999.9999424887 * (34.999999750000001 + var_chaste_interface__Vm__Vm) * (var_x160 + 7.0974999994161126e-9 * var_x154);
-            const double var_x163 = fabs(var_x141) < 2.5000000000718892e-7;
-            const double var_x164 = 1 / (-1.0 + exp(9.9999999999999995e-8));
-            const double var_x165 = 1 / (-1.0 + exp(-9.9999999999999995e-8));
-            const double var_x166 = 4.0752e-8 * var_x165;
-            const double var_x167 = 1041666.6666666667 * (-4.7999999999999996e-7 + var_chaste_interface__Vm__Vm) * (var_x166 + 4.0752e-8 * var_x164);
-            const double var_x168 = fabs(var_chaste_interface__Vm__Vm) < 4.7999999999999996e-7;
-            const double var_x169 = var_x146 + var_x148;
-            const double var_x170 = -var_x161;
+            const double var_x151 = -5.0 + var_chaste_interface__Vm__Vm;
+            const double var_x152 = fabs(var_x151) < 2.500000002569891e-7;
+            const double var_x153 = 1 / (-1.0 + exp(9.9999999999999995e-8));
+            const double var_x154 = 1 / (-1.0 + exp(-9.9999999999999995e-8));
+            const double var_x155 = exp(-2.0 + var_x136);
+            const double var_x156 = -1.0 + var_x155;
+            const double var_x157 = 0.011429999999999999 / var_x156;
+            const double var_x159 = 4.0752e-8 * var_x153;
+            const double var_x160 = var_x151 * var_x157;
+            const double var_x161 = -var_x159;
+            const double var_x162 = 1041666.6666666667 * (4.7999999999999996e-7 + var_chaste_interface__Vm__Vm) * (var_x161 - 4.0752e-8 * var_x154);
+            const double var_x163 = fabs(var_chaste_interface__Vm__Vm) < 4.7999999999999996e-7;
+            const double var_x164 = var_x146 + var_x148;
+            const double var_x165 = -var_x160;
             
-            partialF = ((var_x153) ? (var_x144 + var_x169 - var_x145) : ((var_x163) ? (var_x148 + var_x160 + var_x162 + var_x170) : ((var_x168) ? (var_x146 + var_x166 + var_x167 + var_x170) : (var_x169 + var_x170))));
+            partialF = ((var_x152) ? (var_x144 + var_x145 + var_x164) : ((var_x163) ? (var_x146 + var_x161 + var_x165 - var_x162) : (var_x164 + var_x165)));
         }
         else
         {
@@ -1554,10 +1551,10 @@ std::shared_ptr<Cellmaltsev_2009FromCellMLGRL1Opt_LookupTables> Cellmaltsev_2009
             
 
 
-            const double var_x173 = exp(-5.4668495419491743 * pow((1 + 0.030769230769230771 * var_chaste_interface__Vm__Vm), 2));
-            const double var_x174 = 1 / (44.299999999999997 + 257.10000000000002 * var_x173);
+            const double var_x168 = exp(-5.4668495419491743 * pow((1 + 0.030769230769230771 * var_chaste_interface__Vm__Vm), 2));
+            const double var_x169 = 1 / (44.299999999999997 + 257.10000000000002 * var_x168);
             
-            partialF = -var_x174;
+            partialF = -var_x169;
         }
         else
         {
@@ -1596,9 +1593,9 @@ std::shared_ptr<Cellmaltsev_2009FromCellMLGRL1Opt_LookupTables> Cellmaltsev_2009
             
 
 
-            const double var_x175 = 60.000000000000007 * var_chaste_interface__calcium_dynamics__Ca_sub;
+            const double var_x170 = 60.000000000000007 * var_chaste_interface__calcium_dynamics__Ca_sub;
             
-            partialF = -0.021000000000000001 - var_x175;
+            partialF = -0.021000000000000001 - var_x170;
         }
         else
         {
@@ -1645,12 +1642,12 @@ std::shared_ptr<Cellmaltsev_2009FromCellMLGRL1Opt_LookupTables> Cellmaltsev_2009
 
             const double var_x101 = 0.033333333333333333 * var_chaste_interface__Vm__Vm;
             const double var_x102 = -var_x101;
-            const double var_x179 = exp(0.87666666666666671 + var_x101);
-            const double var_x180 = exp(-0.87666666666666671 + var_x102);
-            const double var_x181 = 1.0680000000000001 * var_x179;
-            const double var_x182 = 1.0680000000000001 * var_x180;
+            const double var_x174 = exp(0.87666666666666671 + var_x101);
+            const double var_x175 = exp(-0.87666666666666671 + var_x102);
+            const double var_x176 = 1.0680000000000001 * var_x174;
+            const double var_x177 = 1.0680000000000001 * var_x175;
             
-            partialF = -var_x181 - var_x182;
+            partialF = -var_x176 - var_x177;
         }
         else
         {
@@ -1695,12 +1692,12 @@ std::shared_ptr<Cellmaltsev_2009FromCellMLGRL1Opt_LookupTables> Cellmaltsev_2009
             
 
 
-            const double var_x185 = exp(4.0117035110533159 + 0.065019505851755519 * var_chaste_interface__Vm__Vm);
-            const double var_x186 = exp(-0.74069627851140463 - 0.012004801920768308 * var_chaste_interface__Vm__Vm);
-            const double var_x187 = 0.014999999999999999 * var_x185;
-            const double var_x188 = 0.015299999999999999 * var_x186;
+            const double var_x180 = exp(4.0117035110533159 + 0.065019505851755519 * var_chaste_interface__Vm__Vm);
+            const double var_x181 = exp(-0.74069627851140463 - 0.012004801920768308 * var_chaste_interface__Vm__Vm);
+            const double var_x182 = 0.014999999999999999 * var_x180;
+            const double var_x183 = 0.015299999999999999 * var_x181;
             
-            partialF = -var_x187 - var_x188;
+            partialF = -var_x182 - var_x183;
         }
         else
         {
@@ -1746,12 +1743,12 @@ std::shared_ptr<Cellmaltsev_2009FromCellMLGRL1Opt_LookupTables> Cellmaltsev_2009
             
 
 
-            const double var_x192 = exp(0.058823529411764705 * var_chaste_interface__Vm__Vm);
-            const double var_x193 = exp(-0.046296296296296294 * var_chaste_interface__Vm__Vm);
-            const double var_x194 = 0.0049612928202981696 * var_x192;
-            const double var_x195 = 0.0001771890292963632 * var_x193;
+            const double var_x187 = exp(0.058823529411764705 * var_chaste_interface__Vm__Vm);
+            const double var_x188 = exp(-0.046296296296296294 * var_chaste_interface__Vm__Vm);
+            const double var_x189 = 0.0049612928202981696 * var_x187;
+            const double var_x190 = 0.0001771890292963632 * var_x188;
             
-            partialF = -var_x194 - var_x195;
+            partialF = -var_x189 - var_x190;
         }
         else
         {
@@ -1797,12 +1794,12 @@ std::shared_ptr<Cellmaltsev_2009FromCellMLGRL1Opt_LookupTables> Cellmaltsev_2009
             
 
 
-            const double var_x197 = exp(0.062893081761006289 * var_chaste_interface__Vm__Vm);
-            const double var_x198 = exp(-0.044444444444444446 * var_chaste_interface__Vm__Vm);
-            const double var_x199 = 0.043942879265498072 * var_x197;
-            const double var_x200 = 0.0011340097874967246 * var_x198;
+            const double var_x192 = exp(0.062893081761006289 * var_chaste_interface__Vm__Vm);
+            const double var_x193 = exp(-0.044444444444444446 * var_chaste_interface__Vm__Vm);
+            const double var_x194 = 0.043942879265498072 * var_x192;
+            const double var_x195 = 0.0011340097874967246 * var_x193;
             
-            partialF = -var_x199 - var_x200;
+            partialF = -var_x194 - var_x195;
         }
         else
         {
@@ -1847,12 +1844,12 @@ std::shared_ptr<Cellmaltsev_2009FromCellMLGRL1Opt_LookupTables> Cellmaltsev_2009
             
 
 
-            const double var_x203 = exp(0.009420009985210585 * var_chaste_interface__Vm__Vm);
-            const double var_x204 = exp(-0.018299935950224173 * var_chaste_interface__Vm__Vm);
-            const double var_x205 = 0.10000000000000001 * var_x204;
-            const double var_x206 = 0.65600000000000003 * var_x203;
+            const double var_x198 = exp(0.009420009985210585 * var_chaste_interface__Vm__Vm);
+            const double var_x199 = exp(-0.018299935950224173 * var_chaste_interface__Vm__Vm);
+            const double var_x200 = 0.10000000000000001 * var_x199;
+            const double var_x201 = 0.65600000000000003 * var_x198;
             
-            partialF = -var_x205 - var_x206;
+            partialF = -var_x200 - var_x201;
         }
         else
         {
@@ -1899,14 +1896,14 @@ std::shared_ptr<Cellmaltsev_2009FromCellMLGRL1Opt_LookupTables> Cellmaltsev_2009
             
 
 
-            const double var_x207 = exp(-0.022222222222222223 * var_chaste_interface__Vm__Vm);
-            const double var_x208 = 0.001 * var_x207;
-            const double var_x209 = exp(4.4444444444444446 - 0.1111111111111111 * var_chaste_interface__Vm__Vm);
-            const double var_x210 = 1.0 + var_x209;
-            const double var_x211 = 1 / var_x210;
-            const double var_x212 = 0.014 * var_x211;
+            const double var_x202 = exp(-0.022222222222222223 * var_chaste_interface__Vm__Vm);
+            const double var_x203 = 0.001 * var_x202;
+            const double var_x204 = exp(4.4444444444444446 - 0.1111111111111111 * var_chaste_interface__Vm__Vm);
+            const double var_x205 = 1.0 + var_x204;
+            const double var_x206 = 1 / var_x205;
+            const double var_x207 = 0.014 * var_x206;
             
-            partialF = -var_x208 - var_x212;
+            partialF = -var_x203 - var_x207;
         }
         else
         {
@@ -1951,12 +1948,12 @@ std::shared_ptr<Cellmaltsev_2009FromCellMLGRL1Opt_LookupTables> Cellmaltsev_2009
             
 
 
-            const double var_x220 = exp(4.593 + 0.10000000000000001 * var_chaste_interface__Vm__Vm);
-            const double var_x221 = exp(-3.52 - 0.080000000000000002 * var_chaste_interface__Vm__Vm);
-            const double var_x222 = 1 / (0.065000000000000002 * var_x220 + 0.56999999999999995 * var_x221);
-            const double var_x223 = 1 / (6.0599999999999996 + 39.101999999999997 * var_x222);
+            const double var_x215 = exp(4.593 + 0.10000000000000001 * var_chaste_interface__Vm__Vm);
+            const double var_x216 = exp(-3.52 - 0.080000000000000002 * var_chaste_interface__Vm__Vm);
+            const double var_x217 = 1 / (0.065000000000000002 * var_x215 + 0.56999999999999995 * var_x216);
+            const double var_x218 = 1 / (6.0599999999999996 + 39.101999999999997 * var_x217);
             
-            partialF = -var_x223;
+            partialF = -var_x218;
         }
         else
         {
@@ -2001,12 +1998,12 @@ std::shared_ptr<Cellmaltsev_2009FromCellMLGRL1Opt_LookupTables> Cellmaltsev_2009
             
 
 
-            const double var_x226 = exp(2.7548999999999997 + 0.089999999999999997 * var_chaste_interface__Vm__Vm);
-            const double var_x227 = exp(-2.8607999999999998 - 0.12 * var_chaste_interface__Vm__Vm);
-            const double var_x228 = 1 / (1.0369999999999999 * var_x226 + 0.36899999999999999 * var_x227);
-            const double var_x229 = 1 / (2.75352 + 14.40516 * var_x228);
+            const double var_x221 = exp(2.7548999999999997 + 0.089999999999999997 * var_chaste_interface__Vm__Vm);
+            const double var_x222 = exp(-2.8607999999999998 - 0.12 * var_chaste_interface__Vm__Vm);
+            const double var_x223 = 1 / (1.0369999999999999 * var_x221 + 0.36899999999999999 * var_x222);
+            const double var_x224 = 1 / (2.75352 + 14.40516 * var_x223);
             
-            partialF = -var_x229;
+            partialF = -var_x224;
         }
         else
         {
@@ -2051,12 +2048,12 @@ std::shared_ptr<Cellmaltsev_2009FromCellMLGRL1Opt_LookupTables> Cellmaltsev_2009
             
 
 
-            const double var_x232 = exp(-3.8001143986272159 + 0.051999376007487906 * var_chaste_interface__Vm__Vm);
-            const double var_x233 = exp(-8.5404617897664554 - 0.022074080614542406 * var_chaste_interface__Vm__Vm);
-            const double var_x234 = 1.3953756414018557 * var_x233;
-            const double var_x235 = 1.3953756414018557 * var_x232;
+            const double var_x227 = exp(-3.8001143986272159 + 0.051999376007487906 * var_chaste_interface__Vm__Vm);
+            const double var_x228 = exp(-8.5404617897664554 - 0.022074080614542406 * var_chaste_interface__Vm__Vm);
+            const double var_x229 = 1.3953756414018557 * var_x228;
+            const double var_x230 = 1.3953756414018557 * var_x227;
             
-            partialF = -var_x234 - var_x235;
+            partialF = -var_x229 - var_x230;
         }
         else
         {
@@ -2101,14 +2098,14 @@ std::shared_ptr<Cellmaltsev_2009FromCellMLGRL1Opt_LookupTables> Cellmaltsev_2009
             
 
 
-            const double var_x239 = exp(0.02 * var_chaste_interface__Vm__Vm);
-            const double var_x240 = exp(0.125 * var_chaste_interface__Vm__Vm);
-            const double var_x241 = exp(-0.090909090909090912 * var_chaste_interface__Vm__Vm);
-            const double var_x242 = exp(-0.0014285714285714286 * var_chaste_interface__Vm__Vm);
-            const double var_x243 = 1 / (16.0 * var_x240 + 15.0 * var_x239);
-            const double var_x244 = 1 / (0.20000000000000001 * var_x242 + 0.14999999999999999 * var_x241);
+            const double var_x234 = exp(0.02 * var_chaste_interface__Vm__Vm);
+            const double var_x235 = exp(0.125 * var_chaste_interface__Vm__Vm);
+            const double var_x236 = exp(-0.090909090909090912 * var_chaste_interface__Vm__Vm);
+            const double var_x237 = exp(-0.0014285714285714286 * var_chaste_interface__Vm__Vm);
+            const double var_x238 = 1 / (16.0 * var_x235 + 15.0 * var_x234);
+            const double var_x239 = 1 / (0.20000000000000001 * var_x237 + 0.14999999999999999 * var_x236);
             
-            partialF = -var_x243 - var_x244;
+            partialF = -var_x238 - var_x239;
         }
         else
         {
@@ -2155,22 +2152,22 @@ std::shared_ptr<Cellmaltsev_2009FromCellMLGRL1Opt_LookupTables> Cellmaltsev_2009
             
 
 
-            const double var_x217 = 0.076923076923076927 * var_chaste_interface__Vm__Vm;
-            const double var_x236 = -0.20000000000000001 * var_chaste_interface__Vm__Vm;
-            const double var_x242 = exp(-0.0014285714285714286 * var_chaste_interface__Vm__Vm);
-            const double var_x245 = exp(-0.10000000000000001 * var_chaste_interface__Vm__Vm);
-            const double var_x246 = 1 / (50.0 * var_x242 + 95.0 * var_x245);
-            const double var_x247 = exp(0.014285714285714285 * var_chaste_interface__Vm__Vm);
-            const double var_x248 = exp(var_x217);
-            const double var_x249 = 1 / (700.0 * var_x247 + 3100.0 * var_x248);
-            const double var_x251 = exp(var_x236);
-            const double var_x252 = 1.0 + var_x251;
-            const double var_x253 = 1 / var_x252;
-            const double var_x260 = 3.4436090225563911e-5 * var_x253;
-            const double var_x261 = 0.15037593984962405 * var_x246;
-            const double var_x262 = 0.15037593984962405 * var_x249;
+            const double var_x212 = 0.076923076923076927 * var_chaste_interface__Vm__Vm;
+            const double var_x231 = -0.20000000000000001 * var_chaste_interface__Vm__Vm;
+            const double var_x237 = exp(-0.0014285714285714286 * var_chaste_interface__Vm__Vm);
+            const double var_x240 = exp(-0.10000000000000001 * var_chaste_interface__Vm__Vm);
+            const double var_x241 = 1 / (50.0 * var_x237 + 95.0 * var_x240);
+            const double var_x242 = exp(0.014285714285714285 * var_chaste_interface__Vm__Vm);
+            const double var_x243 = exp(var_x212);
+            const double var_x244 = 1 / (700.0 * var_x242 + 3100.0 * var_x243);
+            const double var_x246 = exp(var_x231);
+            const double var_x247 = 1.0 + var_x246;
+            const double var_x248 = 1 / var_x247;
+            const double var_x255 = 3.4436090225563911e-5 * var_x248;
+            const double var_x256 = 0.15037593984962405 * var_x241;
+            const double var_x257 = 0.15037593984962405 * var_x244;
             
-            partialF = -var_x260 - var_x261 - var_x262;
+            partialF = -var_x255 - var_x256 - var_x257;
         }
         else
         {
@@ -2220,18 +2217,18 @@ std::shared_ptr<Cellmaltsev_2009FromCellMLGRL1Opt_LookupTables> Cellmaltsev_2009
 
 
             const double var_x2 = pow(var_chaste_interface__calcium_dynamics__Ca_sub, 2);
-            const double var_x263 = 1 / var_chaste_interface__calcium_dynamics__Ca_jsr;
-            const double var_x264 = pow(var_x263, 2.5);
-            const double var_x265 = 1.0 + 0.13584112963311223 * var_x264;
-            const double var_x266 = 1 / var_x265;
-            const double var_x267 = 7.0 * var_x266;
-            const double var_x268 = -7.5 + var_x267;
-            const double var_x269 = var_x268 * var_chaste_interface__calcium_dynamics__Ca_sub;
-            const double var_x270 = 1 / (15.0 - 14.0 * var_x266);
-            const double var_x271 = 10.0 * var_x2 * var_x270;
-            const double var_x272 = -var_x271;
+            const double var_x258 = 1 / var_chaste_interface__calcium_dynamics__Ca_jsr;
+            const double var_x259 = pow(var_x258, 2.5);
+            const double var_x260 = 1.0 + 0.13584112963311223 * var_x259;
+            const double var_x261 = 1 / var_x260;
+            const double var_x262 = 7.0 * var_x261;
+            const double var_x263 = -7.5 + var_x262;
+            const double var_x264 = var_x263 * var_chaste_interface__calcium_dynamics__Ca_sub;
+            const double var_x265 = 1 / (15.0 - 14.0 * var_x261);
+            const double var_x266 = 10.0 * var_x2 * var_x265;
+            const double var_x267 = -var_x266;
             
-            partialF = var_x269 + var_x272;
+            partialF = var_x264 + var_x267;
         }
         else
         {
@@ -2280,15 +2277,15 @@ std::shared_ptr<Cellmaltsev_2009FromCellMLGRL1Opt_LookupTables> Cellmaltsev_2009
             
 
 
-            const double var_x263 = 1 / var_chaste_interface__calcium_dynamics__Ca_jsr;
-            const double var_x264 = pow(var_x263, 2.5);
-            const double var_x265 = 1.0 + 0.13584112963311223 * var_x264;
-            const double var_x266 = 1 / var_x265;
-            const double var_x267 = 7.0 * var_x266;
-            const double var_x268 = -7.5 + var_x267;
-            const double var_x269 = var_x268 * var_chaste_interface__calcium_dynamics__Ca_sub;
+            const double var_x258 = 1 / var_chaste_interface__calcium_dynamics__Ca_jsr;
+            const double var_x259 = pow(var_x258, 2.5);
+            const double var_x260 = 1.0 + 0.13584112963311223 * var_x259;
+            const double var_x261 = 1 / var_x260;
+            const double var_x262 = 7.0 * var_x261;
+            const double var_x263 = -7.5 + var_x262;
+            const double var_x264 = var_x263 * var_chaste_interface__calcium_dynamics__Ca_sub;
             
-            partialF = -0.059999999999999998 + var_x269;
+            partialF = -0.059999999999999998 + var_x264;
         }
         else
         {
@@ -2384,15 +2381,15 @@ std::shared_ptr<Cellmaltsev_2009FromCellMLGRL1Opt_LookupTables> Cellmaltsev_2009
 
 
             const double var_x2 = pow(var_chaste_interface__calcium_dynamics__Ca_sub, 2);
-            const double var_x263 = 1 / var_chaste_interface__calcium_dynamics__Ca_jsr;
-            const double var_x264 = pow(var_x263, 2.5);
-            const double var_x265 = 1.0 + 0.13584112963311223 * var_x264;
-            const double var_x266 = 1 / var_x265;
-            const double var_x270 = 1 / (15.0 - 14.0 * var_x266);
-            const double var_x271 = 10.0 * var_x2 * var_x270;
-            const double var_x272 = -var_x271;
+            const double var_x258 = 1 / var_chaste_interface__calcium_dynamics__Ca_jsr;
+            const double var_x259 = pow(var_x258, 2.5);
+            const double var_x260 = 1.0 + 0.13584112963311223 * var_x259;
+            const double var_x261 = 1 / var_x260;
+            const double var_x265 = 1 / (15.0 - 14.0 * var_x261);
+            const double var_x266 = 10.0 * var_x2 * var_x265;
+            const double var_x267 = -var_x266;
             
-            partialF = -0.0050000000000000001 + var_x272;
+            partialF = -0.0050000000000000001 + var_x267;
         }
         else
         {
@@ -2468,9 +2465,9 @@ std::shared_ptr<Cellmaltsev_2009FromCellMLGRL1Opt_LookupTables> Cellmaltsev_2009
             
 
 
-            const double var_x286 = -227.69999999999999 * var_chaste_interface__calcium_dynamics__Cai;
+            const double var_x281 = -227.69999999999999 * var_chaste_interface__calcium_dynamics__Cai;
             
-            partialF = -0.54200000000000004 + var_x286;
+            partialF = -0.54200000000000004 + var_x281;
         }
         else
         {
@@ -2591,9 +2588,9 @@ std::shared_ptr<Cellmaltsev_2009FromCellMLGRL1Opt_LookupTables> Cellmaltsev_2009
             
 
 
-            const double var_x286 = -227.69999999999999 * var_chaste_interface__calcium_dynamics__Cai;
+            const double var_x281 = -227.69999999999999 * var_chaste_interface__calcium_dynamics__Cai;
             
-            partialF = -0.0075100000000000002 + var_x286;
+            partialF = -0.0075100000000000002 + var_x281;
         }
         else
         {
@@ -2726,9 +2723,9 @@ std::shared_ptr<Cellmaltsev_2009FromCellMLGRL1Opt_LookupTables> Cellmaltsev_2009
             
 
 
-            const double var_x287 = 250000.0 * var_chaste_interface__j_SRCarel__O;
+            const double var_x282 = 250000.0 * var_chaste_interface__j_SRCarel__O;
             
-            partialF = -5.3650000000000002 - var_x287 + 5.3399999999999999 * var_chaste_interface__calcium_buffering__fCQ;
+            partialF = -5.3650000000000002 - var_x282 + 5.3399999999999999 * var_chaste_interface__calcium_buffering__fCQ;
         }
         else
         {
@@ -2898,12 +2895,12 @@ std::shared_ptr<Cellmaltsev_2009FromCellMLGRL1Opt_LookupTables> Cellmaltsev_2009
             const double var_x122 = var_x47 * (var_x119 + var_x120 + var_x121) - var_x116 * var_x57 - var_x27 * var_x57;
             const double var_x123 = -var_x119 - var_x120 - var_x121 - var_x117 * var_x69 - var_x118 * var_x87 - 1.2927994695413239e-7 * var_x114 * var_x90 - var_x3 * var_x76 * var_x89 - var_x115 * var_x48 * var_x55 * var_x92;
             const double var_x124 = 1 / M_PI;
-            const double var_x288 = 375.0 * var_x78;
-            const double var_x289 = 0.16068374999999999 * var_x93;
-            const double var_x290 = 0.00046385183192065399 * var_x124;
-            const double var_x294 = 30075.187969924809 * var_chaste_interface__j_SRCarel__O;
+            const double var_x283 = 375.0 * var_x78;
+            const double var_x284 = 0.16068374999999999 * var_x93;
+            const double var_x285 = 0.00046385183192065399 * var_x124;
+            const double var_x289 = 30075.187969924809 * var_chaste_interface__j_SRCarel__O;
             
-            partialF = -35.246499999999997 - var_x294 + 10.246499999999999 * var_chaste_interface__calcium_buffering__fCMs - var_x290 * (-var_x122 * var_x288 - var_x123 * var_x289);
+            partialF = -35.246499999999997 - var_x289 + 10.246499999999999 * var_chaste_interface__calcium_buffering__fCMs - var_x285 * (-var_x122 * var_x283 - var_x123 * var_x284);
         }
         else
         {
