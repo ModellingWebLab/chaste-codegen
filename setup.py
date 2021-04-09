@@ -49,7 +49,7 @@ setup(
         'decorator>=4.4.2, <5',
         'importlib-metadata>=1.7, <2',
         'isodate>=0.6.0, <1',
-        'lxml>=4.5.2, <5',
+        'lxml>=4.6.3, <5',
         'MarkupSafe>=1.1.1, <2',
         'mpmath>=1.1.0, <2',
         'networkx>=2.4, <3',
@@ -61,7 +61,9 @@ setup(
         'sympy>=1.6.1, <2',
         'zipp>=1.2.0, <2',
         'cellmlmanip>=0.3.0, <0.4',
-        'Jinja2>=2.11.2, <3',
+        'Jinja2>=2.11.3, <3',
+        'cellmlmanip>=0.2.3, <0.3',
+        'Jinja2>=2.11.3, <3',
     ],
     extras_require={
         'docs': [
