@@ -10,7 +10,7 @@ importlib-metadata==0.19  # via pluggy, pytest
 isodate==0.6.0            # via rdflib
 isort==4.3.21
 jinja2==2.11.3
-lxml==4.4.1
+lxml==4.6.3
 markupsafe==1.1.1         # via jinja2
 mccabe==0.6.1             # via flake8
 mock==3.0.5
