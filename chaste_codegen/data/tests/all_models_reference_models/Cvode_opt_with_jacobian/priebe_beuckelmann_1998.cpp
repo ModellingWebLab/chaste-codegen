@@ -262,7 +262,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__cell__V) {
-                    return ((fabs(47.130000000000003 + var_chaste_interface__cell__V) < 1.0000000010279564e-6) ? (-3.2000000146581445e-7 / (1.0 - exp(1.0000000045806701e-7)) + 499999.99948602181 * (47.130001000000007 + var_chaste_interface__cell__V) * (3.2000000146581445e-7 / (1.0 - exp(1.0000000045806701e-7)) + 3.1999999919207769e-7 / (1.0 - exp(-9.9999999747524276e-8)))) : (0.32000000000000001 * (47.130000000000003 + var_chaste_interface__cell__V) / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__cell__V))));
+                    return ((fabs(47.130000000000003 + var_chaste_interface__cell__V) < 1.0000000000287557e-6) ? (3.200000000092018e-7 / (1.0 - exp(-1.0000000000287557e-7)) - 499999.99998562218 * (47.129999000000005 + var_chaste_interface__cell__V) * (-3.200000000092018e-7 / (1.0 - exp(1.0000000000287557e-7)) - 3.200000000092018e-7 / (1.0 - exp(-1.0000000000287557e-7)))) : (0.32000000000000001 * (47.130000000000003 + var_chaste_interface__cell__V) / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__cell__V))));
                 };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__cell__V);
@@ -874,18 +874,18 @@ const double var_x0 = pow(var_chaste_interface__IKs_Xs_gate__Xs, 2) * NV_Ith_S(m
         const double var_x148 = var_x107 * var_x122;
         const double var_x149 = ((var_x130) ? (var_x129) : (0));
         const double var_x150 = 1.0 - var_chaste_interface__INa_m_gate__m;
-        const double var_x151 = 1 / (1.0 - exp(-9.9999999747524276e-8));
-        const double var_x152 = 1 / (1.0 - exp(1.0000000045806701e-7));
+        const double var_x151 = 1 / (1.0 - exp(1.0000000000287557e-7));
+        const double var_x152 = 1 / (1.0 - exp(-1.0000000000287557e-7));
         const double var_x153 = _lt_0_row[12];
         const double var_x154 = 0.0072727272727272727 * var_x153 * var_chaste_interface__INa_m_gate__m;
         const double var_x155 = 47.130000000000003 + var_chaste_interface__cell__V;
-        const double var_x156 = fabs(var_x155) < 1.0000000010279564e-6;
+        const double var_x156 = fabs(var_x155) < 1.0000000000287557e-6;
         const double var_x157 = -var_x21;
         const double var_x158 = exp(-4.7130000000000001 + var_x157);
         const double var_x159 = 1.0 - var_x158;
         const double var_x160 = 0.32000000000000001 / var_x159;
-        const double var_x161 = 3.2000000146581445e-7 * var_x152;
-        const double var_x162 = -0.080000000000000002 * var_x153;
+        const double var_x161 = -0.080000000000000002 * var_x153;
+        const double var_x162 = -3.200000000092018e-7 * var_x152;
         const double var_x163 = exp(-11.764705882352942 + 0.14705882352941177 * NV_Ith_S(mParameters, 11) - 0.14705882352941177 * var_chaste_interface__cell__V);
         const double var_x164 = var_chaste_interface__cell__V < -40.0;
         const double var_x165 = ((var_x164) ? (0.13500000000000001 * var_x163) : (0));
@@ -986,7 +986,7 @@ const double var_x0 = pow(var_chaste_interface__IKs_Xs_gate__Xs, 2) * NV_Ith_S(m
         // Matrix entries
         IJth(rJacobian, 0, 0) = mSetVoltageDerivativeToZero ? 0.0 : (-0.0018500000000000001 + var_x39 + var_x41 + var_x73 - var_x1 - var_x10 - var_x28 - var_x32 - var_x37 - var_x59 - var_x7 - var_x46 * var_x53);
         IJth(rJacobian, 1, 0) = -var_x120 * var_x123 * (var_x121 - 2.0 * var_x70 - 0.13 * var_x72);
-        IJth(rJacobian, 2, 0) = ((var_x156) ? (var_x154 + var_x150 * (0.15999999943156581 * var_x151 + 0.16000000056843419 * var_x152)) : (var_x154 + var_x150 * var_x160 - 0.032000000000000001 * var_x150 * var_x155 * var_x158 / pow(var_x159, 2)));
+        IJth(rJacobian, 2, 0) = ((var_x156) ? (var_x154 + var_x150 * (0.16 * var_x151 + 0.16 * var_x152)) : (var_x154 + var_x150 * var_x160 - 0.032000000000000001 * var_x150 * var_x155 * var_x158 / pow(var_x159, 2)));
         IJth(rJacobian, 3, 0) = (var_x166 + var_x172) * (var_x173 * var_x177 + var_x165 * var_x176 * (-var_x173 - var_x178) / pow(var_x174, 2)) + (var_x173 + var_x178) * (var_x175 - var_chaste_interface__INa_h_gate__h + var_x165 * var_x177);
         IJth(rJacobian, 4, 0) = (var_x188 + var_x198) * (var_x199 * var_x201 + var_x176 * var_x197 * (-var_x199 - var_x202) / pow(var_x200, 2)) + (var_x199 + var_x202) * (var_x175 - var_chaste_interface__INa_j_gate__j + var_x197 * var_x201);
         IJth(rJacobian, 5, 0) = var_x204 * (0.028148326932247791 - 0.0044862181136439798 * var_chaste_interface__cell__V) * var_chaste_interface__ICa_d_gate__d + var_x205 * (1.0 - var_chaste_interface__ICa_d_gate__d) * (0.080354834965543909 - 0.0035936867158114449 * var_chaste_interface__cell__V);
@@ -1005,7 +1005,7 @@ const double var_x0 = pow(var_chaste_interface__IKs_Xs_gate__Xs, 2) * NV_Ith_S(m
         IJth(rJacobian, 20, 1) = -var_x131 * var_x258;
         IJth(rJacobian, 21, 1) = 0.0044999999999999997 * var_x133 - 0.0044999999999999997 * var_x135;
         IJth(rJacobian, 0, 2) = mSetVoltageDerivativeToZero ? 0.0 : (-3.0 * var_x87);
-        IJth(rJacobian, 2, 2) = ((var_x156) ? (var_x161 + var_x162 - 499999.99948602181 * (47.130001000000007 + var_chaste_interface__cell__V) * (var_x161 + 3.1999999919207769e-7 * var_x151)) : (var_x162 - var_x155 * var_x160));
+        IJth(rJacobian, 2, 2) = ((var_x156) ? (var_x161 + var_x162 + 499999.99998562218 * (47.129999000000005 + var_chaste_interface__cell__V) * (var_x162 - 3.200000000092018e-7 * var_x151)) : (var_x161 - var_x155 * var_x160));
         IJth(rJacobian, 18, 2) = -var_x252 * var_x87;
         IJth(rJacobian, 0, 3) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x30 * var_x88);
         IJth(rJacobian, 3, 3) = -var_x166 - var_x172;

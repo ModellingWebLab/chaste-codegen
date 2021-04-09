@@ -261,7 +261,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__cell__V) {
-                    return ((fabs(47.130000000000003 + var_chaste_interface__cell__V) < 1.0000000010279564e-6) ? (-3.2000000146581445e-7 / (1.0 - exp(1.0000000045806701e-7)) + 499999.99948602181 * (47.130001000000007 + var_chaste_interface__cell__V) * (3.2000000146581445e-7 / (1.0 - exp(1.0000000045806701e-7)) + 3.1999999919207769e-7 / (1.0 - exp(-9.9999999747524276e-8)))) : (0.32000000000000001 * (47.130000000000003 + var_chaste_interface__cell__V) / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__cell__V))));
+                    return ((fabs(47.130000000000003 + var_chaste_interface__cell__V) < 1.0000000000287557e-6) ? (3.200000000092018e-7 / (1.0 - exp(-1.0000000000287557e-7)) - 499999.99998562218 * (47.129999000000005 + var_chaste_interface__cell__V) * (-3.200000000092018e-7 / (1.0 - exp(1.0000000000287557e-7)) - 3.200000000092018e-7 / (1.0 - exp(-1.0000000000287557e-7)))) : (0.32000000000000001 * (47.130000000000003 + var_chaste_interface__cell__V) / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__cell__V))));
                 };
                 const double var_chaste_interface__cell__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__cell__V);
@@ -1309,19 +1309,19 @@ std::shared_ptr<Cellpriebe_beuckelmann_1998FromCellMLGRL2Opt_LookupTables> Cellp
         const double* const _lt_0_row = Cellpriebe_beuckelmann_1998FromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__cell__V);
 
             const double var_x21 = 0.10000000000000001 * var_chaste_interface__cell__V;
-            const double var_x151 = 1 / (1.0 - exp(-9.9999999747524276e-8));
-            const double var_x152 = 1 / (1.0 - exp(1.0000000045806701e-7));
+            const double var_x151 = 1 / (1.0 - exp(1.0000000000287557e-7));
+            const double var_x152 = 1 / (1.0 - exp(-1.0000000000287557e-7));
             const double var_x153 = _lt_0_row[12];
             const double var_x155 = 47.130000000000003 + var_chaste_interface__cell__V;
-            const double var_x156 = fabs(var_x155) < 1.0000000010279564e-6;
+            const double var_x156 = fabs(var_x155) < 1.0000000000287557e-6;
             const double var_x157 = -var_x21;
             const double var_x158 = exp(-4.7130000000000001 + var_x157);
             const double var_x159 = 1.0 - var_x158;
             const double var_x160 = 0.32000000000000001 / var_x159;
-            const double var_x161 = 3.2000000146581445e-7 * var_x152;
-            const double var_x162 = -0.080000000000000002 * var_x153;
+            const double var_x161 = -0.080000000000000002 * var_x153;
+            const double var_x162 = -3.200000000092018e-7 * var_x152;
             
-            partialF = ((var_x156) ? (var_x161 + var_x162 - 499999.99948602181 * (47.130001000000007 + var_chaste_interface__cell__V) * (var_x161 + 3.1999999919207769e-7 * var_x151)) : (var_x162 - var_x155 * var_x160));
+            partialF = ((var_x156) ? (var_x161 + var_x162 + 499999.99998562218 * (47.129999000000005 + var_chaste_interface__cell__V) * (var_x162 - 3.200000000092018e-7 * var_x151)) : (var_x161 - var_x155 * var_x160));
         }
         else
         {

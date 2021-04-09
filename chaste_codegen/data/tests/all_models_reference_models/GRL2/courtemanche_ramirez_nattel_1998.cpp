@@ -356,12 +356,12 @@
         const double var_membrane__F = 96.486699999999999; // coulomb_per_millimole
         const double var_membrane__R = 8.3142999999999994; // joule_per_mole_kelvin
         const double var_membrane__T = 310.0; // kelvin
-        const double var_Ca_release_current_from_JSR_w_gate__tau_w = ((fabs(-7.9000000000000004 + var_chaste_interface__membrane__V) < 5.0000000006988898e-7) ? (999999.99986022199 * (-7.8999995000000007 + var_chaste_interface__membrane__V) * (11999999.987664523 * (1.0 - exp(-1.0000000010279564e-7)) / (1.0 + 0.29999999999999999 * exp(-1.0000000010279564e-7)) + 12000000.008980805 * (1.0 - exp(9.9999999925159949e-8)) / (1.0 + 0.29999999999999999 * exp(9.9999999925159949e-8))) - 12000000.008980805 * (1.0 - exp(9.9999999925159949e-8)) / (1.0 + 0.29999999999999999 * exp(9.9999999925159949e-8))) : (6.0 * (1.0 - exp(1.5800000000000001 - 0.20000000000000001 * var_chaste_interface__membrane__V)) / ((1.0 + 0.29999999999999999 * exp(1.5800000000000001 - 0.20000000000000001 * var_chaste_interface__membrane__V)) * (-7.9000000000000004 + var_chaste_interface__membrane__V)))); // millisecond
+        const double var_Ca_release_current_from_JSR_w_gate__tau_w = ((fabs(-7.9000000000000004 + var_chaste_interface__membrane__V) < 4.999999999970306e-7) ? (12000000.000154532 * (1.0 - exp(-9.9999999998712227e-8)) / (1.0 + 0.29999999999999999 * exp(-9.9999999998712227e-8)) - 1000000.0000059388 * (-7.9000005 + var_chaste_interface__membrane__V) * (-11999999.999987999 * (1.0 - exp(1.0000000000010001e-7)) / (1.0 + 0.29999999999999999 * exp(1.0000000000010001e-7)) - 12000000.000154532 * (1.0 - exp(-9.9999999998712227e-8)) / (1.0 + 0.29999999999999999 * exp(-9.9999999998712227e-8)))) : (6.0 * (1.0 - exp(1.5800000000000001 - 0.20000000000000001 * var_chaste_interface__membrane__V)) / ((1.0 + 0.29999999999999999 * exp(1.5800000000000001 - 0.20000000000000001 * var_chaste_interface__membrane__V)) * (-7.9000000000000004 + var_chaste_interface__membrane__V)))); // millisecond
         const double var_Ca_release_current_from_JSR_w_gate__w_infinity = 1.0 - 1 / (1.0 + exp(2.3529411764705883 - 0.058823529411764705 * var_chaste_interface__membrane__V)); // dimensionless
         const double d_dt_chaste_interface_var_Ca_release_current_from_JSR_w_gate__w = (-var_chaste_interface__Ca_release_current_from_JSR_w_gate__w + var_Ca_release_current_from_JSR_w_gate__w_infinity) / var_Ca_release_current_from_JSR_w_gate__tau_w; // 1 / millisecond
         const double var_L_type_Ca_channel__i_Ca_L = (-65.0 + var_chaste_interface__membrane__V) * mParameters[7] * var_chaste_interface__L_type_Ca_channel_d_gate__d * var_chaste_interface__L_type_Ca_channel_f_Ca_gate__f_Ca * var_chaste_interface__L_type_Ca_channel_f_gate__f * mParameters[9]; // picoA
         const double var_L_type_Ca_channel_d_gate__d_infinity = 1 / (1.0 + exp(-1.25 - 0.125 * var_chaste_interface__membrane__V)); // dimensionless
-        const double var_L_type_Ca_channel_d_gate__tau_d = ((fabs(10.0 + var_chaste_interface__membrane__V) < 6.2400000011564316e-7) ? (801282.05113355326 * (10.000000624 + var_chaste_interface__membrane__V) * (45787545.779060178 * (1.0 - exp(1.0000000001853256e-7)) / (1.0 + exp(1.0000000001853256e-7)) + 45787545.779060178 * (1.0 - exp(-1.0000000001853256e-7)) / (1.0 + exp(-1.0000000001853256e-7))) - 45787545.779060178 * (1.0 - exp(1.0000000001853256e-7)) / (1.0 + exp(1.0000000001853256e-7))) : (28.571428571428569 * (1.0 - exp(-1.6025641025641024 - 0.16025641025641024 * var_chaste_interface__membrane__V)) / ((1.0 + exp(-1.6025641025641024 - 0.16025641025641024 * var_chaste_interface__membrane__V)) * (10.0 + var_chaste_interface__membrane__V)))); // millisecond
+        const double var_L_type_Ca_channel_d_gate__tau_d = ((fabs(10.0 + var_chaste_interface__membrane__V) < 6.2399999999074307e-7) ? (45787545.788225032 * (1.0 - exp(-9.999999999851651e-8)) / (1.0 + exp(-9.999999999851651e-8)) - 801282.05129393819 * (9.9999993759999999 + var_chaste_interface__membrane__V) * (-45787545.788225032 * (1.0 - exp(9.999999999851651e-8)) / (1.0 + exp(9.999999999851651e-8)) - 45787545.788225032 * (1.0 - exp(-9.999999999851651e-8)) / (1.0 + exp(-9.999999999851651e-8)))) : (28.571428571428569 * (1.0 - exp(-1.6025641025641024 - 0.16025641025641024 * var_chaste_interface__membrane__V)) / ((1.0 + exp(-1.6025641025641024 - 0.16025641025641024 * var_chaste_interface__membrane__V)) * (10.0 + var_chaste_interface__membrane__V)))); // millisecond
         const double d_dt_chaste_interface_var_L_type_Ca_channel_d_gate__d = (-var_chaste_interface__L_type_Ca_channel_d_gate__d + var_L_type_Ca_channel_d_gate__d_infinity) / var_L_type_Ca_channel_d_gate__tau_d; // 1 / millisecond
         const double var_L_type_Ca_channel_f_gate__f_infinity = exp(-4.057971014492753 - 0.14492753623188406 * var_chaste_interface__membrane__V) / (1.0 + exp(-4.057971014492753 - 0.14492753623188406 * var_chaste_interface__membrane__V)); // dimensionless
         const double var_L_type_Ca_channel_f_gate__tau_f = 9.0 / (0.02 + 0.019699999999999999 * exp(-0.113569 * pow((1 + 0.10000000000000001 * var_chaste_interface__membrane__V), 2))); // millisecond
@@ -376,20 +376,20 @@
         const double var_fast_sodium_current_j_gate__j_inf = 0.01 * mParameters[11] + (1.0 - 0.01 * mParameters[11]) * var_fast_sodium_current_j_gate__alpha_j / (var_fast_sodium_current_j_gate__alpha_j + var_fast_sodium_current_j_gate__beta_j); // dimensionless
         const double var_fast_sodium_current_j_gate__tau_j = 1 / (var_fast_sodium_current_j_gate__alpha_j + var_fast_sodium_current_j_gate__beta_j); // millisecond
         const double d_dt_chaste_interface_var_fast_sodium_current_j_gate__j = (-var_chaste_interface__fast_sodium_current_j_gate__j + var_fast_sodium_current_j_gate__j_inf) / var_fast_sodium_current_j_gate__tau_j; // 1 / millisecond
-        const double var_fast_sodium_current_m_gate__alpha_m = ((fabs(47.130000000000003 + var_chaste_interface__membrane__V) < 1.0000000010279564e-6) ? (-3.2000000146581445e-7 / (1.0 - exp(1.0000000045806701e-7)) + 499999.99948602181 * (47.130001000000007 + var_chaste_interface__membrane__V) * (3.2000000146581445e-7 / (1.0 - exp(1.0000000045806701e-7)) + 3.1999999919207769e-7 / (1.0 - exp(-9.9999999747524276e-8)))) : (0.32000000000000001 * (47.130000000000003 + var_chaste_interface__membrane__V) / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__membrane__V)))); // per_millisecond
+        const double var_fast_sodium_current_m_gate__alpha_m = ((fabs(47.130000000000003 + var_chaste_interface__membrane__V) < 1.0000000000287557e-6) ? (3.200000000092018e-7 / (1.0 - exp(-1.0000000000287557e-7)) - 499999.99998562218 * (47.129999000000005 + var_chaste_interface__membrane__V) * (-3.200000000092018e-7 / (1.0 - exp(1.0000000000287557e-7)) - 3.200000000092018e-7 / (1.0 - exp(-1.0000000000287557e-7)))) : (0.32000000000000001 * (47.130000000000003 + var_chaste_interface__membrane__V) / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__membrane__V)))); // per_millisecond
         const double var_fast_sodium_current_m_gate__beta_m = 0.080000000000000002 * exp(-0.090909090909090912 * var_chaste_interface__membrane__V); // per_millisecond
         const double var_fast_sodium_current_m_gate__m_inf = var_fast_sodium_current_m_gate__alpha_m / (var_fast_sodium_current_m_gate__alpha_m + var_fast_sodium_current_m_gate__beta_m); // dimensionless
         const double var_fast_sodium_current_m_gate__tau_m = 1 / (var_fast_sodium_current_m_gate__alpha_m + var_fast_sodium_current_m_gate__beta_m); // millisecond
         const double d_dt_chaste_interface_var_fast_sodium_current_m_gate__m = (-var_chaste_interface__fast_sodium_current_m_gate__m + var_fast_sodium_current_m_gate__m_inf) / var_fast_sodium_current_m_gate__tau_m; // 1 / millisecond
-        const double var_rapid_delayed_rectifier_K_current_xr_gate__alpha_xr = ((fabs(14.1 + var_chaste_interface__membrane__V) < 5.0000000051397819e-7) ? (-1.5000000015419344e-10 / (1.0 - exp(1.0000000010279564e-7)) + 999999.99897204363 * (14.1000005 + var_chaste_interface__membrane__V) * (1.5000000015419344e-10 / (1.0 - exp(1.0000000010279564e-7)) + 1.5000000015419344e-10 / (1.0 - exp(-1.0000000010279564e-7)))) : (0.00029999999999999997 * (14.1 + var_chaste_interface__membrane__V) / (1.0 - exp(-2.8199999999999998 - 0.20000000000000001 * var_chaste_interface__membrane__V)))); // per_millisecond
-        const double var_rapid_delayed_rectifier_K_current_xr_gate__beta_xr = ((fabs(-3.3328000000000002 + var_chaste_interface__membrane__V) < 5.1236999998316435e-7) ? (3.786311824234723e-11 / (-1.0 + exp(9.9999999953377383e-8)) - 975857.29066188342 * (-3.33280051237 + var_chaste_interface__membrane__V) * (-3.7863118275164535e-11 / (-1.0 + exp(-1.0000000004005093e-7)) - 3.786311824234723e-11 / (-1.0 + exp(9.9999999953377383e-8)))) : (7.3898000000000003e-5 * (-3.3328000000000002 + var_chaste_interface__membrane__V) / (-1.0 + exp(-0.65046743564221166 + 0.19517145812596365 * var_chaste_interface__membrane__V)))); // per_millisecond
+        const double var_rapid_delayed_rectifier_K_current_xr_gate__alpha_xr = ((fabs(14.1 + var_chaste_interface__membrane__V) < 4.9999999999356115e-7) ? (1.4999999999598667e-10 / (1.0 - exp(-9.9999999997324457e-8)) - 1000000.0000128777 * (14.099999499999999 + var_chaste_interface__membrane__V) * (-1.5000000000015e-10 / (1.0 - exp(1.0000000000010001e-7)) - 1.4999999999598667e-10 / (1.0 - exp(-9.9999999997324457e-8)))) : (0.00029999999999999997 * (14.1 + var_chaste_interface__membrane__V) / (1.0 - exp(-2.8199999999999998 - 0.20000000000000001 * var_chaste_interface__membrane__V)))); // per_millisecond
+        const double var_rapid_delayed_rectifier_K_current_xr_gate__beta_xr = ((fabs(-3.3328000000000002 + var_chaste_interface__membrane__V) < 5.1237000000051158e-7) ? (-3.7863118260037805e-11 / (-1.0 + exp(-1.0000000000009984e-7)) + 975857.29062884394 * (-3.33279948763 + var_chaste_interface__membrane__V) * (3.7863118260037805e-11 / (-1.0 + exp(1.0000000000009984e-7)) + 3.7863118260037805e-11 / (-1.0 + exp(-1.0000000000009984e-7)))) : (7.3898000000000003e-5 * (-3.3328000000000002 + var_chaste_interface__membrane__V) / (-1.0 + exp(-0.65046743564221166 + 0.19517145812596365 * var_chaste_interface__membrane__V)))); // per_millisecond
         const double var_rapid_delayed_rectifier_K_current_xr_gate__tau_xr = 1 / (var_rapid_delayed_rectifier_K_current_xr_gate__alpha_xr + var_rapid_delayed_rectifier_K_current_xr_gate__beta_xr); // millisecond
         const double var_rapid_delayed_rectifier_K_current_xr_gate__xr_infinity = 1 / (1.0 + exp(-2.1692307692307691 - 0.15384615384615385 * var_chaste_interface__membrane__V)); // dimensionless
         const double d_dt_chaste_interface_var_rapid_delayed_rectifier_K_current_xr_gate__xr = (-var_chaste_interface__rapid_delayed_rectifier_K_current_xr_gate__xr + var_rapid_delayed_rectifier_K_current_xr_gate__xr_infinity) / var_rapid_delayed_rectifier_K_current_xr_gate__tau_xr; // 1 / millisecond
         const double var_sarcolemmal_calcium_pump_current__i_CaP_max = 0.27500000000000002; // picoA_per_picoF
         const double var_sarcolemmal_calcium_pump_current__i_CaP = var_chaste_interface__intracellular_ion_concentrations__Ca_i * mParameters[9] * var_sarcolemmal_calcium_pump_current__i_CaP_max / (0.00050000000000000001 + var_chaste_interface__intracellular_ion_concentrations__Ca_i); // picoA
-        const double var_slow_delayed_rectifier_K_current_xs_gate__alpha_xs = ((fabs(-19.899999999999999 + var_chaste_interface__membrane__V) < 1.7000000003264404e-6) ? (-6.7999999942003354e-11 / (1.0 - exp(9.9999999914710792e-8)) + 294117.64700234594 * (-19.8999983 + var_chaste_interface__membrane__V) * (6.8000000084111897e-11 / (1.0 - exp(-1.0000000012369395e-7)) + 6.7999999942003354e-11 / (1.0 - exp(9.9999999914710792e-8)))) : (4.0000000000000003e-5 * (-19.899999999999999 + var_chaste_interface__membrane__V) / (1.0 - exp(1.1705882352941175 - 0.058823529411764705 * var_chaste_interface__membrane__V)))); // per_millisecond
-        const double var_slow_delayed_rectifier_K_current_xs_gate__beta_xs = ((fabs(-19.899999999999999 + var_chaste_interface__membrane__V) < 8.9999999985934664e-7) ? (3.1499999995077133e-11 / (-1.0 + exp(9.9999999984371854e-8)) - 555555.55564237863 * (-19.900000899999998 + var_chaste_interface__membrane__V) * (-3.1499999995077133e-11 / (-1.0 + exp(9.9999999984371854e-8)) - 3.1499999995077133e-11 / (-1.0 + exp(-9.9999999984371854e-8)))) : (3.4999999999999997e-5 * (-19.899999999999999 + var_chaste_interface__membrane__V) / (-1.0 + exp(-2.2111111111111108 + 0.1111111111111111 * var_chaste_interface__membrane__V)))); // per_millisecond
+        const double var_slow_delayed_rectifier_K_current_xs_gate__alpha_xs = ((fabs(-19.899999999999999 + var_chaste_interface__membrane__V) < 1.6999999999933735e-6) ? (6.7999999999734951e-11 / (1.0 - exp(-9.9999999999610202e-8)) - 294117.64705997001 * (-19.900001699999997 + var_chaste_interface__membrane__V) * (-6.7999999999734951e-11 / (1.0 - exp(9.9999999999610202e-8)) - 6.7999999999734951e-11 / (1.0 - exp(-9.9999999999610202e-8)))) : (4.0000000000000003e-5 * (-19.899999999999999 + var_chaste_interface__membrane__V) / (1.0 - exp(1.1705882352941175 - 0.058823529411764705 * var_chaste_interface__membrane__V)))); // per_millisecond
+        const double var_slow_delayed_rectifier_K_current_xs_gate__beta_xs = ((fabs(-19.899999999999999 + var_chaste_interface__membrane__V) < 8.9999999999812452e-7) ? (-3.1499999999934357e-11 / (-1.0 + exp(-9.9999999999791612e-8)) + 555555.55555671325 * (-19.899999099999999 + var_chaste_interface__membrane__V) * (3.1499999999934357e-11 / (-1.0 + exp(9.9999999999791612e-8)) + 3.1499999999934357e-11 / (-1.0 + exp(-9.9999999999791612e-8)))) : (3.4999999999999997e-5 * (-19.899999999999999 + var_chaste_interface__membrane__V) / (-1.0 + exp(-2.2111111111111108 + 0.1111111111111111 * var_chaste_interface__membrane__V)))); // per_millisecond
         const double var_slow_delayed_rectifier_K_current_xs_gate__tau_xs = 0.5 / (var_slow_delayed_rectifier_K_current_xs_gate__alpha_xs + var_slow_delayed_rectifier_K_current_xs_gate__beta_xs); // millisecond
         const double var_slow_delayed_rectifier_K_current_xs_gate__xs_infinity = pow((1.0 + exp(1.5669291338582676 - 0.07874015748031496 * var_chaste_interface__membrane__V)), (-0.5)); // dimensionless
         const double d_dt_chaste_interface_var_slow_delayed_rectifier_K_current_xs_gate__xs = (-var_chaste_interface__slow_delayed_rectifier_K_current_xs_gate__xs + var_slow_delayed_rectifier_K_current_xs_gate__xs_infinity) / var_slow_delayed_rectifier_K_current_xs_gate__tau_xs; // 1 / millisecond
@@ -1014,7 +1014,7 @@
         
 
         // Mathematics
-        const double var_fast_sodium_current_m_gate__alpha_m = ((fabs(47.130000000000003 + var_chaste_interface__membrane__V) < 1.0000000010279564e-6) ? (-3.2000000146581445e-7 / (1.0 - exp(1.0000000045806701e-7)) + 499999.99948602181 * (47.130001000000007 + var_chaste_interface__membrane__V) * (3.2000000146581445e-7 / (1.0 - exp(1.0000000045806701e-7)) + 3.1999999919207769e-7 / (1.0 - exp(-9.9999999747524276e-8)))) : (0.32000000000000001 * (47.130000000000003 + var_chaste_interface__membrane__V) / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__membrane__V)))); // per_millisecond
+        const double var_fast_sodium_current_m_gate__alpha_m = ((fabs(47.130000000000003 + var_chaste_interface__membrane__V) < 1.0000000000287557e-6) ? (3.200000000092018e-7 / (1.0 - exp(-1.0000000000287557e-7)) - 499999.99998562218 * (47.129999000000005 + var_chaste_interface__membrane__V) * (-3.200000000092018e-7 / (1.0 - exp(1.0000000000287557e-7)) - 3.200000000092018e-7 / (1.0 - exp(-1.0000000000287557e-7)))) : (0.32000000000000001 * (47.130000000000003 + var_chaste_interface__membrane__V) / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__membrane__V)))); // per_millisecond
         const double var_fast_sodium_current_m_gate__beta_m = 0.080000000000000002 * exp(-0.090909090909090912 * var_chaste_interface__membrane__V); // per_millisecond
         const double var_fast_sodium_current_m_gate__m_inf = var_fast_sodium_current_m_gate__alpha_m / (var_fast_sodium_current_m_gate__alpha_m + var_fast_sodium_current_m_gate__beta_m); // dimensionless
         const double var_fast_sodium_current_m_gate__tau_m = 1 / (var_fast_sodium_current_m_gate__alpha_m + var_fast_sodium_current_m_gate__beta_m); // millisecond
@@ -1034,16 +1034,16 @@
 
             const double var_x109 = exp(-0.090909090909090912 * var_chaste_interface__membrane__V);
             const double var_x110 = 0.080000000000000002 * var_x109;
-            const double var_x111 = 1 / (1.0 - exp(1.0000000045806701e-7));
-            const double var_x112 = 3.2000000146581445e-7 * var_x111;
-            const double var_x113 = 1 / (1.0 - exp(-9.9999999747524276e-8));
+            const double var_x111 = 1 / (1.0 - exp(-1.0000000000287557e-7));
+            const double var_x112 = 3.200000000092018e-7 * var_x111;
+            const double var_x113 = 1 / (1.0 - exp(1.0000000000287557e-7));
             const double var_x114 = 47.130000000000003 + var_chaste_interface__membrane__V;
-            const double var_x115 = fabs(var_x114) < 1.0000000010279564e-6;
+            const double var_x115 = fabs(var_x114) < 1.0000000000287557e-6;
             const double var_x116 = -0.10000000000000001 * var_chaste_interface__membrane__V;
             const double var_x117 = exp(-4.7130000000000001 + var_x116);
             const double var_x118 = 1.0 - var_x117;
             const double var_x119 = 0.32000000000000001 / var_x118;
-            const double var_x120 = ((var_x115) ? (-var_x112 + 499999.99948602181 * (47.130001000000007 + var_chaste_interface__membrane__V) * (var_x112 + 3.1999999919207769e-7 * var_x113)) : (var_x114 * var_x119));
+            const double var_x120 = ((var_x115) ? (var_x112 - 499999.99998562218 * (47.129999000000005 + var_chaste_interface__membrane__V) * (-var_x112 - 3.200000000092018e-7 * var_x113)) : (var_x114 * var_x119));
             const double var_x125 = var_x120;
             
             partialF = -var_x110 - var_x125;
@@ -1374,8 +1374,8 @@
         
 
         // Mathematics
-        const double var_rapid_delayed_rectifier_K_current_xr_gate__alpha_xr = ((fabs(14.1 + var_chaste_interface__membrane__V) < 5.0000000051397819e-7) ? (-1.5000000015419344e-10 / (1.0 - exp(1.0000000010279564e-7)) + 999999.99897204363 * (14.1000005 + var_chaste_interface__membrane__V) * (1.5000000015419344e-10 / (1.0 - exp(1.0000000010279564e-7)) + 1.5000000015419344e-10 / (1.0 - exp(-1.0000000010279564e-7)))) : (0.00029999999999999997 * (14.1 + var_chaste_interface__membrane__V) / (1.0 - exp(-2.8199999999999998 - 0.20000000000000001 * var_chaste_interface__membrane__V)))); // per_millisecond
-        const double var_rapid_delayed_rectifier_K_current_xr_gate__beta_xr = ((fabs(-3.3328000000000002 + var_chaste_interface__membrane__V) < 5.1236999998316435e-7) ? (3.786311824234723e-11 / (-1.0 + exp(9.9999999953377383e-8)) - 975857.29066188342 * (-3.33280051237 + var_chaste_interface__membrane__V) * (-3.7863118275164535e-11 / (-1.0 + exp(-1.0000000004005093e-7)) - 3.786311824234723e-11 / (-1.0 + exp(9.9999999953377383e-8)))) : (7.3898000000000003e-5 * (-3.3328000000000002 + var_chaste_interface__membrane__V) / (-1.0 + exp(-0.65046743564221166 + 0.19517145812596365 * var_chaste_interface__membrane__V)))); // per_millisecond
+        const double var_rapid_delayed_rectifier_K_current_xr_gate__alpha_xr = ((fabs(14.1 + var_chaste_interface__membrane__V) < 4.9999999999356115e-7) ? (1.4999999999598667e-10 / (1.0 - exp(-9.9999999997324457e-8)) - 1000000.0000128777 * (14.099999499999999 + var_chaste_interface__membrane__V) * (-1.5000000000015e-10 / (1.0 - exp(1.0000000000010001e-7)) - 1.4999999999598667e-10 / (1.0 - exp(-9.9999999997324457e-8)))) : (0.00029999999999999997 * (14.1 + var_chaste_interface__membrane__V) / (1.0 - exp(-2.8199999999999998 - 0.20000000000000001 * var_chaste_interface__membrane__V)))); // per_millisecond
+        const double var_rapid_delayed_rectifier_K_current_xr_gate__beta_xr = ((fabs(-3.3328000000000002 + var_chaste_interface__membrane__V) < 5.1237000000051158e-7) ? (-3.7863118260037805e-11 / (-1.0 + exp(-1.0000000000009984e-7)) + 975857.29062884394 * (-3.33279948763 + var_chaste_interface__membrane__V) * (3.7863118260037805e-11 / (-1.0 + exp(1.0000000000009984e-7)) + 3.7863118260037805e-11 / (-1.0 + exp(-1.0000000000009984e-7)))) : (7.3898000000000003e-5 * (-3.3328000000000002 + var_chaste_interface__membrane__V) / (-1.0 + exp(-0.65046743564221166 + 0.19517145812596365 * var_chaste_interface__membrane__V)))); // per_millisecond
         const double var_rapid_delayed_rectifier_K_current_xr_gate__tau_xr = 1 / (var_rapid_delayed_rectifier_K_current_xr_gate__alpha_xr + var_rapid_delayed_rectifier_K_current_xr_gate__beta_xr); // millisecond
         const double var_rapid_delayed_rectifier_K_current_xr_gate__xr_infinity = 1 / (1.0 + exp(-2.1692307692307691 - 0.15384615384615385 * var_chaste_interface__membrane__V)); // dimensionless
         const double d_dt_chaste_interface_var_rapid_delayed_rectifier_K_current_xr_gate__xr = (-var_chaste_interface__rapid_delayed_rectifier_K_current_xr_gate__xr + var_rapid_delayed_rectifier_K_current_xr_gate__xr_infinity) / var_rapid_delayed_rectifier_K_current_xr_gate__tau_xr; // 1 / millisecond
@@ -1392,27 +1392,27 @@
             // Units: millivolt; Initial value: -81.18
             
 
-            const double var_x194 = 1 / (1.0 - exp(1.0000000010279564e-7));
-            const double var_x195 = exp(-1.0000000010279564e-7);
-            const double var_x196 = 1.0 - var_x195;
-            const double var_x197 = 1 / var_x196;
-            const double var_x198 = 14.1 + var_chaste_interface__membrane__V;
-            const double var_x199 = fabs(var_x198) < 5.0000000051397819e-7;
-            const double var_x200 = -0.20000000000000001 * var_chaste_interface__membrane__V;
-            const double var_x201 = exp(-2.8199999999999998 + var_x200);
-            const double var_x202 = 1.0 - var_x201;
-            const double var_x203 = 0.00029999999999999997 / var_x202;
-            const double var_x204 = 1 / (-1.0 + exp(-1.0000000004005093e-7));
-            const double var_x205 = 1 / (-1.0 + exp(9.9999999953377383e-8));
-            const double var_x206 = -3.3328000000000002 + var_chaste_interface__membrane__V;
-            const double var_x207 = fabs(var_x206) < 5.1236999998316435e-7;
-            const double var_x208 = exp(-0.65046743564221166 + 0.19517145812596365 * var_chaste_interface__membrane__V);
-            const double var_x209 = -1.0 + var_x208;
-            const double var_x210 = 7.3898000000000003e-5 / var_x209;
-            const double var_x211 = 3.786311824234723e-11 * var_x205;
-            const double var_x212 = ((var_x207) ? (var_x211 - 975857.29066188342 * (-3.33280051237 + var_chaste_interface__membrane__V) * (-var_x211 - 3.7863118275164535e-11 * var_x204)) : (var_x206 * var_x210));
-            const double var_x213 = 1.5000000015419344e-10 * var_x194;
-            const double var_x214 = ((var_x199) ? (-var_x213 + 999999.99897204363 * (14.1000005 + var_chaste_interface__membrane__V) * (var_x213 + 1.5000000015419344e-10 * var_x197)) : (var_x198 * var_x203));
+            const double var_x194 = 1 / (-1.0 + exp(1.0000000000009984e-7));
+            const double var_x195 = 1 / (-1.0 + exp(-1.0000000000009984e-7));
+            const double var_x196 = -3.3328000000000002 + var_chaste_interface__membrane__V;
+            const double var_x197 = fabs(var_x196) < 5.1237000000051158e-7;
+            const double var_x198 = exp(-0.65046743564221166 + 0.19517145812596365 * var_chaste_interface__membrane__V);
+            const double var_x199 = -1.0 + var_x198;
+            const double var_x200 = 7.3898000000000003e-5 / var_x199;
+            const double var_x201 = 1 / (1.0 - exp(-9.9999999997324457e-8));
+            const double var_x202 = exp(1.0000000000010001e-7);
+            const double var_x203 = 1.0 - var_x202;
+            const double var_x204 = 1 / var_x203;
+            const double var_x205 = 14.1 + var_chaste_interface__membrane__V;
+            const double var_x206 = fabs(var_x205) < 4.9999999999356115e-7;
+            const double var_x207 = -0.20000000000000001 * var_chaste_interface__membrane__V;
+            const double var_x208 = exp(-2.8199999999999998 + var_x207);
+            const double var_x209 = 1.0 - var_x208;
+            const double var_x210 = 0.00029999999999999997 / var_x209;
+            const double var_x211 = 1.4999999999598667e-10 * var_x201;
+            const double var_x212 = ((var_x206) ? (var_x211 - 1000000.0000128777 * (14.099999499999999 + var_chaste_interface__membrane__V) * (-var_x211 - 1.5000000000015e-10 * var_x204)) : (var_x205 * var_x210));
+            const double var_x213 = 3.7863118260037805e-11 * var_x195;
+            const double var_x214 = ((var_x197) ? (-var_x213 + 975857.29062884394 * (-3.33279948763 + var_chaste_interface__membrane__V) * (var_x213 + 3.7863118260037805e-11 * var_x194)) : (var_x196 * var_x200));
             
             partialF = -var_x212 - var_x214;
         }
@@ -1436,8 +1436,8 @@
         
 
         // Mathematics
-        const double var_slow_delayed_rectifier_K_current_xs_gate__alpha_xs = ((fabs(-19.899999999999999 + var_chaste_interface__membrane__V) < 1.7000000003264404e-6) ? (-6.7999999942003354e-11 / (1.0 - exp(9.9999999914710792e-8)) + 294117.64700234594 * (-19.8999983 + var_chaste_interface__membrane__V) * (6.8000000084111897e-11 / (1.0 - exp(-1.0000000012369395e-7)) + 6.7999999942003354e-11 / (1.0 - exp(9.9999999914710792e-8)))) : (4.0000000000000003e-5 * (-19.899999999999999 + var_chaste_interface__membrane__V) / (1.0 - exp(1.1705882352941175 - 0.058823529411764705 * var_chaste_interface__membrane__V)))); // per_millisecond
-        const double var_slow_delayed_rectifier_K_current_xs_gate__beta_xs = ((fabs(-19.899999999999999 + var_chaste_interface__membrane__V) < 8.9999999985934664e-7) ? (3.1499999995077133e-11 / (-1.0 + exp(9.9999999984371854e-8)) - 555555.55564237863 * (-19.900000899999998 + var_chaste_interface__membrane__V) * (-3.1499999995077133e-11 / (-1.0 + exp(9.9999999984371854e-8)) - 3.1499999995077133e-11 / (-1.0 + exp(-9.9999999984371854e-8)))) : (3.4999999999999997e-5 * (-19.899999999999999 + var_chaste_interface__membrane__V) / (-1.0 + exp(-2.2111111111111108 + 0.1111111111111111 * var_chaste_interface__membrane__V)))); // per_millisecond
+        const double var_slow_delayed_rectifier_K_current_xs_gate__alpha_xs = ((fabs(-19.899999999999999 + var_chaste_interface__membrane__V) < 1.6999999999933735e-6) ? (6.7999999999734951e-11 / (1.0 - exp(-9.9999999999610202e-8)) - 294117.64705997001 * (-19.900001699999997 + var_chaste_interface__membrane__V) * (-6.7999999999734951e-11 / (1.0 - exp(9.9999999999610202e-8)) - 6.7999999999734951e-11 / (1.0 - exp(-9.9999999999610202e-8)))) : (4.0000000000000003e-5 * (-19.899999999999999 + var_chaste_interface__membrane__V) / (1.0 - exp(1.1705882352941175 - 0.058823529411764705 * var_chaste_interface__membrane__V)))); // per_millisecond
+        const double var_slow_delayed_rectifier_K_current_xs_gate__beta_xs = ((fabs(-19.899999999999999 + var_chaste_interface__membrane__V) < 8.9999999999812452e-7) ? (-3.1499999999934357e-11 / (-1.0 + exp(-9.9999999999791612e-8)) + 555555.55555671325 * (-19.899999099999999 + var_chaste_interface__membrane__V) * (3.1499999999934357e-11 / (-1.0 + exp(9.9999999999791612e-8)) + 3.1499999999934357e-11 / (-1.0 + exp(-9.9999999999791612e-8)))) : (3.4999999999999997e-5 * (-19.899999999999999 + var_chaste_interface__membrane__V) / (-1.0 + exp(-2.2111111111111108 + 0.1111111111111111 * var_chaste_interface__membrane__V)))); // per_millisecond
         const double var_slow_delayed_rectifier_K_current_xs_gate__tau_xs = 0.5 / (var_slow_delayed_rectifier_K_current_xs_gate__alpha_xs + var_slow_delayed_rectifier_K_current_xs_gate__beta_xs); // millisecond
         const double var_slow_delayed_rectifier_K_current_xs_gate__xs_infinity = pow((1.0 + exp(1.5669291338582676 - 0.07874015748031496 * var_chaste_interface__membrane__V)), (-0.5)); // dimensionless
         const double d_dt_chaste_interface_var_slow_delayed_rectifier_K_current_xs_gate__xs = (-var_chaste_interface__slow_delayed_rectifier_K_current_xs_gate__xs + var_slow_delayed_rectifier_K_current_xs_gate__xs_infinity) / var_slow_delayed_rectifier_K_current_xs_gate__tau_xs; // 1 / millisecond
@@ -1455,25 +1455,25 @@
             
 
             const double var_x171 = 0.058823529411764705 * var_chaste_interface__membrane__V;
-            const double var_x217 = 1 / (-1.0 + exp(9.9999999984371854e-8));
-            const double var_x218 = 1 / (-1.0 + exp(-9.9999999984371854e-8));
+            const double var_x217 = 1 / (-1.0 + exp(9.9999999999791612e-8));
+            const double var_x218 = 1 / (-1.0 + exp(-9.9999999999791612e-8));
             const double var_x219 = -19.899999999999999 + var_chaste_interface__membrane__V;
             const double var_x220 = fabs(var_x219);
-            const double var_x221 = var_x220 < 8.9999999985934664e-7;
+            const double var_x221 = var_x220 < 8.9999999999812452e-7;
             const double var_x222 = exp(-2.2111111111111108 + 0.1111111111111111 * var_chaste_interface__membrane__V);
             const double var_x223 = -1.0 + var_x222;
             const double var_x224 = 3.4999999999999997e-5 / var_x223;
-            const double var_x225 = 1 / (1.0 - exp(9.9999999914710792e-8));
-            const double var_x226 = 1 / (1.0 - exp(-1.0000000012369395e-7));
-            const double var_x227 = var_x220 < 1.7000000003264404e-6;
+            const double var_x225 = 1 / (1.0 - exp(9.9999999999610202e-8));
+            const double var_x226 = 1 / (1.0 - exp(-9.9999999999610202e-8));
+            const double var_x227 = var_x220 < 1.6999999999933735e-6;
             const double var_x228 = -var_x171;
             const double var_x229 = exp(1.1705882352941175 + var_x228);
             const double var_x230 = 1.0 - var_x229;
             const double var_x231 = 4.0000000000000003e-5 / var_x230;
-            const double var_x232 = 3.1499999995077133e-11 * var_x217;
-            const double var_x233 = 2.0 * ((var_x221) ? (var_x232 - 555555.55564237863 * (-19.900000899999998 + var_chaste_interface__membrane__V) * (-var_x232 - 3.1499999995077133e-11 * var_x218)) : (var_x219 * var_x224));
-            const double var_x234 = 6.7999999942003354e-11 * var_x225;
-            const double var_x235 = 2.0 * ((var_x227) ? (-var_x234 + 294117.64700234594 * (-19.8999983 + var_chaste_interface__membrane__V) * (var_x234 + 6.8000000084111897e-11 * var_x226)) : (var_x219 * var_x231));
+            const double var_x232 = 6.7999999999734951e-11 * var_x226;
+            const double var_x233 = 2.0 * ((var_x227) ? (var_x232 - 294117.64705997001 * (-19.900001699999997 + var_chaste_interface__membrane__V) * (-var_x232 - 6.7999999999734951e-11 * var_x225)) : (var_x219 * var_x231));
+            const double var_x234 = 3.1499999999934357e-11 * var_x218;
+            const double var_x235 = 2.0 * ((var_x221) ? (-var_x234 + 555555.55555671325 * (-19.899999099999999 + var_chaste_interface__membrane__V) * (var_x234 + 3.1499999999934357e-11 * var_x217)) : (var_x219 * var_x224));
             
             partialF = -var_x233 - var_x235;
         }
@@ -1498,7 +1498,7 @@
 
         // Mathematics
         const double var_L_type_Ca_channel_d_gate__d_infinity = 1 / (1.0 + exp(-1.25 - 0.125 * var_chaste_interface__membrane__V)); // dimensionless
-        const double var_L_type_Ca_channel_d_gate__tau_d = ((fabs(10.0 + var_chaste_interface__membrane__V) < 6.2400000011564316e-7) ? (801282.05113355326 * (10.000000624 + var_chaste_interface__membrane__V) * (45787545.779060178 * (1.0 - exp(1.0000000001853256e-7)) / (1.0 + exp(1.0000000001853256e-7)) + 45787545.779060178 * (1.0 - exp(-1.0000000001853256e-7)) / (1.0 + exp(-1.0000000001853256e-7))) - 45787545.779060178 * (1.0 - exp(1.0000000001853256e-7)) / (1.0 + exp(1.0000000001853256e-7))) : (28.571428571428569 * (1.0 - exp(-1.6025641025641024 - 0.16025641025641024 * var_chaste_interface__membrane__V)) / ((1.0 + exp(-1.6025641025641024 - 0.16025641025641024 * var_chaste_interface__membrane__V)) * (10.0 + var_chaste_interface__membrane__V)))); // millisecond
+        const double var_L_type_Ca_channel_d_gate__tau_d = ((fabs(10.0 + var_chaste_interface__membrane__V) < 6.2399999999074307e-7) ? (45787545.788225032 * (1.0 - exp(-9.999999999851651e-8)) / (1.0 + exp(-9.999999999851651e-8)) - 801282.05129393819 * (9.9999993759999999 + var_chaste_interface__membrane__V) * (-45787545.788225032 * (1.0 - exp(9.999999999851651e-8)) / (1.0 + exp(9.999999999851651e-8)) - 45787545.788225032 * (1.0 - exp(-9.999999999851651e-8)) / (1.0 + exp(-9.999999999851651e-8)))) : (28.571428571428569 * (1.0 - exp(-1.6025641025641024 - 0.16025641025641024 * var_chaste_interface__membrane__V)) / ((1.0 + exp(-1.6025641025641024 - 0.16025641025641024 * var_chaste_interface__membrane__V)) * (10.0 + var_chaste_interface__membrane__V)))); // millisecond
         const double d_dt_chaste_interface_var_L_type_Ca_channel_d_gate__d = (-var_chaste_interface__L_type_Ca_channel_d_gate__d + var_L_type_Ca_channel_d_gate__d_infinity) / var_L_type_Ca_channel_d_gate__tau_d; // 1 / millisecond
 
         return d_dt_chaste_interface_var_L_type_Ca_channel_d_gate__d;
@@ -1513,20 +1513,20 @@
             // Units: millivolt; Initial value: -81.18
             
 
-            const double var_x238 = exp(1.0000000001853256e-7);
+            const double var_x238 = exp(-9.999999999851651e-8);
             const double var_x239 = (1.0 - var_x238) / (1.0 + var_x238);
-            const double var_x240 = 45787545.779060178 * var_x239;
-            const double var_x241 = exp(-1.0000000001853256e-7);
-            const double var_x242 = (1.0 - var_x241) / (1.0 + var_x241);
-            const double var_x243 = (10.000000624 + var_chaste_interface__membrane__V) * (var_x240 + 45787545.779060178 * var_x242);
+            const double var_x240 = exp(9.999999999851651e-8);
+            const double var_x241 = (1.0 - var_x240) / (1.0 + var_x240);
+            const double var_x242 = 45787545.788225032 * var_x239;
+            const double var_x243 = (9.9999993759999999 + var_chaste_interface__membrane__V) * (-var_x242 - 45787545.788225032 * var_x241);
             const double var_x244 = 10.0 + var_chaste_interface__membrane__V;
-            const double var_x245 = fabs(var_x244) < 6.2400000011564316e-7;
+            const double var_x245 = fabs(var_x244) < 6.2399999999074307e-7;
             const double var_x246 = exp(-1.6025641025641024 - 0.16025641025641024 * var_chaste_interface__membrane__V);
             const double var_x247 = 1.0 - var_x246;
             const double var_x248 = 1 / var_x247;
             const double var_x249 = 1.0 + var_x246;
             const double var_x250 = 0.035000000000000003 * var_x248 * var_x249;
-            const double var_x252 = ((var_x245) ? (1 / (-var_x240 + 801282.05113355326 * var_x243)) : (var_x244 * var_x250));
+            const double var_x252 = ((var_x245) ? (1 / (var_x242 - 801282.05129393819 * var_x243)) : (var_x244 * var_x250));
             
             partialF = -var_x252;
         }
@@ -1862,7 +1862,7 @@
         
 
         // Mathematics
-        const double var_Ca_release_current_from_JSR_w_gate__tau_w = ((fabs(-7.9000000000000004 + var_chaste_interface__membrane__V) < 5.0000000006988898e-7) ? (999999.99986022199 * (-7.8999995000000007 + var_chaste_interface__membrane__V) * (11999999.987664523 * (1.0 - exp(-1.0000000010279564e-7)) / (1.0 + 0.29999999999999999 * exp(-1.0000000010279564e-7)) + 12000000.008980805 * (1.0 - exp(9.9999999925159949e-8)) / (1.0 + 0.29999999999999999 * exp(9.9999999925159949e-8))) - 12000000.008980805 * (1.0 - exp(9.9999999925159949e-8)) / (1.0 + 0.29999999999999999 * exp(9.9999999925159949e-8))) : (6.0 * (1.0 - exp(1.5800000000000001 - 0.20000000000000001 * var_chaste_interface__membrane__V)) / ((1.0 + 0.29999999999999999 * exp(1.5800000000000001 - 0.20000000000000001 * var_chaste_interface__membrane__V)) * (-7.9000000000000004 + var_chaste_interface__membrane__V)))); // millisecond
+        const double var_Ca_release_current_from_JSR_w_gate__tau_w = ((fabs(-7.9000000000000004 + var_chaste_interface__membrane__V) < 4.999999999970306e-7) ? (12000000.000154532 * (1.0 - exp(-9.9999999998712227e-8)) / (1.0 + 0.29999999999999999 * exp(-9.9999999998712227e-8)) - 1000000.0000059388 * (-7.9000005 + var_chaste_interface__membrane__V) * (-11999999.999987999 * (1.0 - exp(1.0000000000010001e-7)) / (1.0 + 0.29999999999999999 * exp(1.0000000000010001e-7)) - 12000000.000154532 * (1.0 - exp(-9.9999999998712227e-8)) / (1.0 + 0.29999999999999999 * exp(-9.9999999998712227e-8)))) : (6.0 * (1.0 - exp(1.5800000000000001 - 0.20000000000000001 * var_chaste_interface__membrane__V)) / ((1.0 + 0.29999999999999999 * exp(1.5800000000000001 - 0.20000000000000001 * var_chaste_interface__membrane__V)) * (-7.9000000000000004 + var_chaste_interface__membrane__V)))); // millisecond
         const double var_Ca_release_current_from_JSR_w_gate__w_infinity = 1.0 - 1 / (1.0 + exp(2.3529411764705883 - 0.058823529411764705 * var_chaste_interface__membrane__V)); // dimensionless
         const double d_dt_chaste_interface_var_Ca_release_current_from_JSR_w_gate__w = (-var_chaste_interface__Ca_release_current_from_JSR_w_gate__w + var_Ca_release_current_from_JSR_w_gate__w_infinity) / var_Ca_release_current_from_JSR_w_gate__tau_w; // 1 / millisecond
 
@@ -1878,22 +1878,22 @@
             // Units: millivolt; Initial value: -81.18
             
 
-            const double var_x195 = exp(-1.0000000010279564e-7);
-            const double var_x196 = 1.0 - var_x195;
-            const double var_x200 = -0.20000000000000001 * var_chaste_interface__membrane__V;
-            const double var_x286 = exp(9.9999999925159949e-8);
+            const double var_x202 = exp(1.0000000000010001e-7);
+            const double var_x203 = 1.0 - var_x202;
+            const double var_x207 = -0.20000000000000001 * var_chaste_interface__membrane__V;
+            const double var_x286 = exp(-9.9999999998712227e-8);
             const double var_x287 = (1.0 - var_x286) / (1.0 + 0.29999999999999999 * var_x286);
-            const double var_x288 = var_x196 / (1.0 + 0.29999999999999999 * var_x195);
-            const double var_x289 = 12000000.008980805 * var_x287;
-            const double var_x290 = (-7.8999995000000007 + var_chaste_interface__membrane__V) * (var_x289 + 11999999.987664523 * var_x288);
+            const double var_x288 = var_x203 / (1.0 + 0.29999999999999999 * var_x202);
+            const double var_x289 = 12000000.000154532 * var_x287;
+            const double var_x290 = (-7.9000005 + var_chaste_interface__membrane__V) * (-var_x289 - 11999999.999987999 * var_x288);
             const double var_x291 = -7.9000000000000004 + var_chaste_interface__membrane__V;
-            const double var_x292 = fabs(var_x291) < 5.0000000006988898e-7;
-            const double var_x293 = exp(1.5800000000000001 + var_x200);
+            const double var_x292 = fabs(var_x291) < 4.999999999970306e-7;
+            const double var_x293 = exp(1.5800000000000001 + var_x207);
             const double var_x294 = 1.0 - var_x293;
             const double var_x295 = 1 / var_x294;
             const double var_x296 = 1.0 + 0.29999999999999999 * var_x293;
             const double var_x297 = 0.16666666666666666 * var_x295 * var_x296;
-            const double var_x299 = ((var_x292) ? (1 / (-var_x289 + 999999.99986022199 * var_x290)) : (var_x291 * var_x297));
+            const double var_x299 = ((var_x292) ? (1 / (var_x289 - 1000000.0000059388 * var_x290)) : (var_x291 * var_x297));
             
             partialF = -var_x299;
         }
