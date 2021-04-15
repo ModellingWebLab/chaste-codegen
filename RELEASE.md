@@ -1,3 +1,4 @@
+test codecov
 # (unreleased)
 - Improved capacitance unit checking.
 
