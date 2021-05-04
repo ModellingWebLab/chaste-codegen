@@ -24,6 +24,7 @@
 
 
 
+
     boost::shared_ptr<RegularStimulus> Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata

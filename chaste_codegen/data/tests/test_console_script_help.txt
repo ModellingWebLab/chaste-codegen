@@ -4,6 +4,7 @@ usage: chaste_codegen [-h] [--version] [--normal] [--cvode]
                       [--output-dir OUTPUT_DIR] [--show-outputs] [-c CLS_NAME]
                       [-q] [--skip-ingularity-fixes] [-y] [--opt] [-m]
                       [--lookup-table <metadata tag> min max step]
+                      [--use-model-factory]
                       cellml_file
 
 Chaste code generation for cellml.
@@ -73,3 +74,6 @@ Chaste options:
                         combination with --opt. If the arguments are omitted,
                         following defaults will be used: --lookup-table
                         membrane_voltage -250.0 550.0 0.001.
+  --use-model-factory   Make use of ModelFactoy method to allow creating
+                        models by name. Requires ModelFactory.hpp/cpp found in
+                        the ApPredict project.

@@ -20,6 +20,13 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+#include "ModelFactory.hpp"
+
+AbstractCardiacCell* Chaste_CG::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
+    return new Chaste_CG(p_solver, p_stimulus);
+}
+
+bool Chaste_CG::s_registered = ModelFactory::Register("output_class", "Normal", (ModelFactory::TCreateMethod)Chaste_CG::CreateMethod);
 
 
 

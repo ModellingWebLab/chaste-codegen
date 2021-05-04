@@ -20,6 +20,13 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+#include "ModelFactory.hpp"
+
+AbstractBackwardEulerCardiacCell* Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEulerNoLut::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
+    return new Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEulerNoLut(p_solver, p_stimulus);
+}
+
+bool Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEulerNoLut::s_registered = ModelFactory::Register("grandi_pasqualini_bers_2010_ssBackwardEulerNoLut", "BackwardEuler", (ModelFactory::TCreateMethod)Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEulerNoLut::CreateMethod);
 #include "CardiacNewtonSolver.hpp"
 
 

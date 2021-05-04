@@ -23,6 +23,7 @@
 
 
 
+
     boost::shared_ptr<RegularStimulus> Cellaslanidi_Purkinje_model_2009FromCellML::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata

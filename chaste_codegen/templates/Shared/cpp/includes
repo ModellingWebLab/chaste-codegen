@@ -8,3 +8,10 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+{% if use_model_factory %}#include "ModelFactory.hpp"
+
+{{base_class}}* {{class_name}}::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
+    return new {{class_name}}(p_solver, p_stimulus);
+}
+
+bool {{class_name}}::s_registered = ModelFactory::Register("{{file_name}}", "{{model_type}}", (ModelFactory::TCreateMethod){{class_name}}::CreateMethod);{% endif%}

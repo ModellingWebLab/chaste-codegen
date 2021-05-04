@@ -110,6 +110,7 @@ class ChasteModel(object):
              'class_name': kwargs.get('class_name', 'ModelFromCellMl'),
              'header_ext': kwargs.get('header_ext', '.hpp'),
              'dynamically_loadable': kwargs.get('dynamically_loadable', False),
+             'use_model_factory': kwargs.get('use_model_factory', False),
              'modifiers': self._format_modifiers(),
              'generation_date': TIME_STAMP,
              'use_get_intracellular_calcium_concentration':

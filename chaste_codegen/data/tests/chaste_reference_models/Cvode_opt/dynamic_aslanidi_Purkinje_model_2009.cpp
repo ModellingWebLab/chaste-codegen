@@ -21,6 +21,13 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+#include "ModelFactory.hpp"
+
+AbstractCvodeCell* Dynamicaslanidi_Purkinje_model_2009FromCellMLCvodeOpt::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
+    return new Dynamicaslanidi_Purkinje_model_2009FromCellMLCvodeOpt(p_solver, p_stimulus);
+}
+
+bool Dynamicaslanidi_Purkinje_model_2009FromCellMLCvodeOpt::s_registered = ModelFactory::Register("dynamic_aslanidi_Purkinje_model_2009", "NumericCvodeOpt", (ModelFactory::TCreateMethod)Dynamicaslanidi_Purkinje_model_2009FromCellMLCvodeOpt::CreateMethod);
 
 class Dynamicaslanidi_Purkinje_model_2009FromCellMLCvodeOpt_LookupTables : public AbstractLookupTableCollection
 {

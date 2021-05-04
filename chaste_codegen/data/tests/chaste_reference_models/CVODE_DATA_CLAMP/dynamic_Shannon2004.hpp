@@ -34,6 +34,7 @@ class Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp : publ
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

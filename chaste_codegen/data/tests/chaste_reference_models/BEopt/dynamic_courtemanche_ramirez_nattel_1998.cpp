@@ -20,6 +20,13 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+#include "ModelFactory.hpp"
+
+AbstractBackwardEulerCardiacCell* Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
+    return new Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler(p_solver, p_stimulus);
+}
+
+bool Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler::s_registered = ModelFactory::Register("dynamic_courtemanche_ramirez_nattel_1998", "BackwardEulerOpt", (ModelFactory::TCreateMethod)Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler::CreateMethod);
 #include "CardiacNewtonSolver.hpp"
 
 class Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler_LookupTables : public AbstractLookupTableCollection

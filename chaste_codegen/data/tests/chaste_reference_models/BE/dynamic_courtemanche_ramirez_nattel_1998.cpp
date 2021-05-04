@@ -20,6 +20,7 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+
 #include "CardiacNewtonSolver.hpp"
 
 

@@ -33,6 +33,7 @@ class Dynamicdemir_model_1994FromCellMLGRL1 : public AbstractGeneralizedRushLars
     // Settable parameters and readable variables
     //
 
+
 public:
 
     double GetIntracellularCalciumConcentration();

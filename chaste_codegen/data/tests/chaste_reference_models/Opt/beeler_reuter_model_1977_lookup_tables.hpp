@@ -32,6 +32,7 @@ class Cellbeeler_reuter_model_1977FromCellMLOpt : public AbstractCardiacCell
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

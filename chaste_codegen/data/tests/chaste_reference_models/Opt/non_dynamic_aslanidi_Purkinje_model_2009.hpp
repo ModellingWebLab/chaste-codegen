@@ -80,6 +80,7 @@ class Cellaslanidi_Purkinje_model_2009FromCellMLOpt : public AbstractCardiacCell
     boost::shared_ptr<AbstractModifier> mp_membrane_transient_outward_current_conductance_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_voltage_modifier;
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

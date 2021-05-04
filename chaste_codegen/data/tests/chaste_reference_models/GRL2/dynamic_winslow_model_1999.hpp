@@ -33,6 +33,7 @@ class Dynamicwinslow_model_1999FromCellMLGRL2 : public AbstractGeneralizedRushLa
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

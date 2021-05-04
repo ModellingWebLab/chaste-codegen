@@ -18,4 +18,7 @@ class {{class_name}} : public {% if modifiers|length > 0 %}AbstractCardiacCellWi
     boost::shared_ptr<AbstractModifier> {{mod.modifier}};
     {%- endfor %}
 
+{% if use_model_factory %}private:
+    static {{base_class}}* CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus);
+    static bool s_registered;{% endif%}
 public:

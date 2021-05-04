@@ -32,6 +32,9 @@ class Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEulerNoLut : public Ab
     // Settable parameters and readable variables
     //
 
+private:
+    static AbstractBackwardEulerCardiacCell<27>* CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus);
+    static bool s_registered;
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

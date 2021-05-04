@@ -33,6 +33,7 @@ class Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEulerNoLut : publ
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

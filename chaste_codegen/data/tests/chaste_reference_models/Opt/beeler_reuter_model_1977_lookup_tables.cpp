@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
 class Cellbeeler_reuter_model_1977FromCellMLOpt_LookupTables : public AbstractLookupTableCollection
 {
 public:

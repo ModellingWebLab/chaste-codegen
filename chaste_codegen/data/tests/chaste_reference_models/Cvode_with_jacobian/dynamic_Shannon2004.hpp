@@ -34,6 +34,9 @@ class Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode : public Abstra
     // Settable parameters and readable variables
     //
 
+private:
+    static AbstractCvodeCell* CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus);
+    static bool s_registered;
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

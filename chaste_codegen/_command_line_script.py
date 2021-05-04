@@ -111,6 +111,9 @@ def process_command_line():
                             '(optional). --lookup-table can be added multiple times to indicate multiple lookup tables'
                             '. Please note: Can only be used in combination with --opt. If the arguments are omitted, '
                             'following defaults will be used: %s.' % print_default_lookup_params())
+    group.add_argument('--use-model-factory', action='store_true', default=False,
+                       help='Make use of ModelFactoy method to allow creating models by name. '
+                       'Requires ModelFactory.hpp/cpp found in the ApPredict project.')
 
     # process options
     args = parser.parse_args()
