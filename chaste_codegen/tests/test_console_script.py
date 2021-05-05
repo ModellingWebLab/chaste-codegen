@@ -223,7 +223,8 @@ def test_script_double_type(tmp_path):
     target = os.path.join(tmp_path, model_name + '.cellml')
     shutil.copyfile(model_file, target)
 
-    testargs = ['chaste_codegen', '--use-model-factory', '--skip-ingularity-fixes', '--cvode-data-clamp', '--backward-euler', target]
+    testargs = ['chaste_codegen', '--use-model-factory', '--skip-ingularity-fixes', '--cvode-data-clamp',
+                '--backward-euler', target]
     # Call commandline script
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
@@ -250,7 +251,8 @@ def test_script_data_clamp_opt(tmp_path):
     target = os.path.join(tmp_path, model_name + '.cellml')
     shutil.copyfile(model_file, target)
 
-    testargs = ['chaste_codegen', '--use-model-factory', '--skip-ingularity-fixes', '--cvode-data-clamp', '--opt', target]
+    testargs = ['chaste_codegen', '--use-model-factory', '--skip-ingularity-fixes', '--cvode-data-clamp', '--opt',
+                target]
     # Call commandline script
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
@@ -281,8 +283,8 @@ def test_script_class_convtype_output_dll_loadable(tmp_path):
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'output_class.c')
     # Call commandline script
-    testargs = ['chaste_codegen', '--use-model-factory', '--skip-ingularity-fixes', model_file, '-c', 'Chaste_CG', '--normal', '-o', outfile,
-                '--dynamically-loadable']
+    testargs = ['chaste_codegen', '--use-model-factory', '--skip-ingularity-fixes', model_file, '-c', 'Chaste_CG',
+                '--normal', '-o', outfile, '--dynamically-loadable']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
@@ -305,8 +307,8 @@ def test_script_opt_dynamic(tmp_path):
     shutil.copyfile(model_file, target)
 
     # Call commandline script
-    testargs = ['chaste_codegen', '--use-model-factory', '--skip-ingularity-fixes', target, '--normal', '--opt', '--dynamically-loadable',
-                '--use-modifiers']
+    testargs = ['chaste_codegen', '--use-model-factory', '--skip-ingularity-fixes', target, '--normal', '--opt',
+                '--dynamically-loadable', '--use-modifiers']
 
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
@@ -357,8 +359,8 @@ def test_script_cvode_opt(tmp_path):
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'dynamic_aslanidi_Purkinje_model_2009.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', '--use-model-factory', '--skip-ingularity-fixes', model_file, '--cvode', '--opt', '-o', outfile,
-                '--dynamically-loadable', '--use-modifiers']
+    testargs = ['chaste_codegen', '--use-model-factory', '--skip-ingularity-fixes', model_file, '--cvode', '--opt',
+                '-o', outfile, '--dynamically-loadable', '--use-modifiers']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
@@ -399,8 +401,8 @@ def test_script_cvode_jacobian(tmp_path):
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'dynamic_Shannon2004.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', '--use-model-factory', '--skip-ingularity-fixes', model_file, '--cvode', '-o', outfile,
-                '--use-analytic-jacobian', '--dynamically-loadable']
+    testargs = ['chaste_codegen', '--use-model-factory', '--skip-ingularity-fixes', model_file, '--cvode',
+                '-o', outfile, '--use-analytic-jacobian', '--dynamically-loadable']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
@@ -420,8 +422,8 @@ def test_script_dynamic_BE(tmp_path):
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'dynamic_courtemanche_ramirez_nattel_1998.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', '--use-model-factory', '--skip-ingularity-fixes', model_file, '--backward-euler', '-o', outfile,
-                '--dynamically-loadable']
+    testargs = ['chaste_codegen', '--use-model-factory', '--skip-ingularity-fixes', model_file, '--backward-euler',
+                '-o', outfile, '--dynamically-loadable']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
@@ -441,8 +443,8 @@ def test_script_dynamic_BEopt(tmp_path):
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'dynamic_courtemanche_ramirez_nattel_1998.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', '--use-model-factory', '--skip-ingularity-fixes', model_file, '--backward-euler', '--opt', '-o', outfile,
-                '--dynamically-loadable']
+    testargs = ['chaste_codegen', '--use-model-factory', '--skip-ingularity-fixes', model_file, '--backward-euler',
+                '--opt', '-o', outfile, '--dynamically-loadable']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
@@ -483,8 +485,8 @@ def test_script_RLopt(tmp_path):
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'dynamic_bondarenko_szigeti_bett_kim_rasmusson_2004_apical.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', '--use-model-factory', '--skip-ingularity-fixes', model_file, '--rush-larsen', '--opt', '-o', outfile,
-                '--dynamically-loadable']
+    testargs = ['chaste_codegen', '--use-model-factory', '--skip-ingularity-fixes', model_file, '--rush-larsen',
+                '--opt', '-o', outfile, '--dynamically-loadable']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
@@ -529,8 +531,8 @@ def test_script_GRL1Opt(tmp_path):
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'dynamic_matsuoka_model_2003.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', '--use-model-factory', '--skip-ingularity-fixes', model_file, '--grl1', '--opt', '-o', outfile,
-                '--dynamically-loadable']
+    testargs = ['chaste_codegen', '--use-model-factory', '--skip-ingularity-fixes', model_file, '--grl1',
+                '--opt', '-o', outfile, '--dynamically-loadable']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
@@ -571,8 +573,8 @@ def test_script_GRL2Opt(tmp_path):
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'dynamic_viswanathan_model_1999_epi.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', '--use-model-factory', '--skip-ingularity-fixes', model_file, '--grl2', '--opt', '-o', outfile,
-                '--dynamically-loadable']
+    testargs = ['chaste_codegen', '--use-model-factory', '--skip-ingularity-fixes', model_file, '--grl2',
+                '--opt', '-o', outfile, '--dynamically-loadable']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output
@@ -613,8 +615,8 @@ def test_script_CVODE_DATA_CLAMP_modifiers(tmp_path):
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'Shannon2004_with_modifiers.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', '--use-model-factory', '--skip-ingularity-fixes', model_file, '--cvode-data-clamp', '-o', outfile,
-                '--use-modifiers']
+    testargs = ['chaste_codegen', '--use-model-factory', '--skip-ingularity-fixes', model_file, '--cvode-data-clamp',
+                '-o', outfile, '--use-modifiers']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
     # Check output

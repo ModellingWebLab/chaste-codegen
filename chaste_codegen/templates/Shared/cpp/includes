@@ -14,4 +14,4 @@
     return new {{class_name}}(p_solver, p_stimulus);
 }
 
-bool {{class_name}}::s_registered = ModelFactory::Register("{{file_name}}", "{{model_type}}", (ModelFactory::TCreateMethod){{class_name}}::CreateMethod);{% endif%}
+bool {{class_name}}::s_registered = ModelFactory::Register("{{cellml_base}}", "{{model_type}}", (ModelFactory::TCreateMethod){{class_name}}::CreateMethod);{% endif%}

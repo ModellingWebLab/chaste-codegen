@@ -22,11 +22,11 @@
 #include "MathsCustomFunctions.hpp"
 #include "ModelFactory.hpp"
 
-AbstractCardiacCell* Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
+AbstractCardiacCellWithModifiers<AbstractCardiacCell >* Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
     return new Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt(p_solver, p_stimulus);
 }
 
-bool Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt::s_registered = ModelFactory::Register("aslanidi_Purkinje_model_2009Opt", "NormalOpt", (ModelFactory::TCreateMethod)Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt::CreateMethod);
+bool Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt::s_registered = ModelFactory::Register("aslanidi_Purkinje_model_2009", "NormalOpt", (ModelFactory::TCreateMethod)Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt::CreateMethod);
 
 class Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt_LookupTables : public AbstractLookupTableCollection
 {

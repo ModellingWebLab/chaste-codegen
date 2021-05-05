@@ -33,7 +33,9 @@ class Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEulerNoLut : publ
     // Settable parameters and readable variables
     //
 
-
+private:
+    static AbstractBackwardEulerCardiacCell<8>* CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus);
+    static bool s_registered;
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

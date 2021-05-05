@@ -188,6 +188,7 @@ def process_command_line():
             args.class_name = ('Dynamic' if args.dynamically_loadable else 'Cell') + model_name_from_file +\
                 translator[1]
 
+        args.cellml_base = outfile_base
         if not args.outfile:
             outfile_base += translator[2]
 

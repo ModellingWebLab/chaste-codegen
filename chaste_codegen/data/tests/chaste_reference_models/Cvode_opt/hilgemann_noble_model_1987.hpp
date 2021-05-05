@@ -33,6 +33,7 @@ class Cellhilgemann_noble_model_1987FromCellMLCvodeOpt : public AbstractCvodeCel
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

@@ -32,6 +32,7 @@ class Celltest_piecewises_beFromCellMLBackwardEulerNoLut : public AbstractBackwa
     // Settable parameters and readable variables
     //
 
+
 public:
 
     Celltest_piecewises_beFromCellMLBackwardEulerNoLut(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);

@@ -82,7 +82,7 @@ class Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt : public AbstractCardiacC
     boost::shared_ptr<AbstractModifier> mp_membrane_voltage_modifier;
 
 private:
-    static AbstractCardiacCell* CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus);
+    static AbstractCardiacCellWithModifiers<AbstractCardiacCell >* CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus);
     static bool s_registered;
 public:
 
