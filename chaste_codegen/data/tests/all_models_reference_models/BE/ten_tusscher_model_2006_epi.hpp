@@ -32,6 +32,7 @@ class Cellten_tusscher_model_2006_epiFromCellMLBackwardEulerNoLut : public Abstr
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

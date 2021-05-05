@@ -32,6 +32,7 @@ class Cellmatsuoka_model_2003FromCellMLBackwardEuler : public AbstractBackwardEu
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

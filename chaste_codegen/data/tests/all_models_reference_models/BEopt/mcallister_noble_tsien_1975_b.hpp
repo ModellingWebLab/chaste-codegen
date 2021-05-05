@@ -32,6 +32,7 @@ class Cellmcallister_noble_tsien_1975_bFromCellMLBackwardEuler : public Abstract
     // Settable parameters and readable variables
     //
 
+
 public:
 
     Cellmcallister_noble_tsien_1975_bFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);

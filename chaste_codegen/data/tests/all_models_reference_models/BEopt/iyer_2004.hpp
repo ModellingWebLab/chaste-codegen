@@ -32,6 +32,7 @@ class Celliyer_2004FromCellMLBackwardEuler : public AbstractBackwardEulerCardiac
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

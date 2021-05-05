@@ -32,6 +32,7 @@ class Cellpasek_simurda_christe_2006FromCellMLBackwardEulerNoLut : public Abstra
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

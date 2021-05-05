@@ -32,6 +32,7 @@ class Cellten_tusscher_model_2006_endoFromCellMLBackwardEuler : public AbstractB
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

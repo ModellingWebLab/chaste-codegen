@@ -32,6 +32,7 @@ class Cellpriebe_beuckelmann_1998FromCellMLBackwardEulerNoLut : public AbstractB
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

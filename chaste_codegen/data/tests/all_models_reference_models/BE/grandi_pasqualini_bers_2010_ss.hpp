@@ -32,6 +32,7 @@ class Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEulerNoLut : public Ab
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

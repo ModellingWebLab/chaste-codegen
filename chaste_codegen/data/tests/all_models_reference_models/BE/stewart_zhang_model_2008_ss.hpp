@@ -32,6 +32,7 @@ class Cellstewart_zhang_model_2008_ssFromCellMLBackwardEulerNoLut : public Abstr
     // Settable parameters and readable variables
     //
 
+
 public:
 
     double GetIntracellularCalciumConcentration();

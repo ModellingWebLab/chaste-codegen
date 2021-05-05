@@ -32,6 +32,7 @@ class Celljafri_rice_winslow_model_1998FromCellMLBackwardEulerNoLut : public Abs
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

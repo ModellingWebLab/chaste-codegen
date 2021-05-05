@@ -32,6 +32,7 @@ class Cellnygren_atrial_model_1998FromCellMLBackwardEuler : public AbstractBackw
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

@@ -32,6 +32,7 @@ class Celliyer_model_2007FromCellMLBackwardEulerNoLut : public AbstractBackwardE
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

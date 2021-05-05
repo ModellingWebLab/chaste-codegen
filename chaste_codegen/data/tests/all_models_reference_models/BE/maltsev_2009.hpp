@@ -32,6 +32,7 @@ class Cellmaltsev_2009FromCellMLBackwardEulerNoLut : public AbstractBackwardEule
     // Settable parameters and readable variables
     //
 
+
 public:
 
     double GetIntracellularCalciumConcentration();

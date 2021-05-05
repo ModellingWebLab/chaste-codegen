@@ -32,6 +32,7 @@ class Cellbueno_2007_endoFromCellMLBackwardEulerNoLut : public AbstractBackwardE
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

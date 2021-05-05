@@ -32,6 +32,7 @@ class Cellramirez_nattel_courtemanche_2000FromCellMLBackwardEulerNoLut : public 
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

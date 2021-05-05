@@ -32,6 +32,7 @@ class Cellbondarenko_szigeti_bett_kim_rasmusson_2004_septalFromCellMLBackwardEul
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

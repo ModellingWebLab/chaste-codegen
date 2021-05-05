@@ -32,6 +32,7 @@ class Cellhilgemann_noble_model_1987FromCellMLBackwardEulerNoLut : public Abstra
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

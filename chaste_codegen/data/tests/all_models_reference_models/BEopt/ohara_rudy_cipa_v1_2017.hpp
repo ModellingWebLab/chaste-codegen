@@ -32,6 +32,7 @@ class Cellohara_rudy_cipa_v1_2017FromCellMLBackwardEuler : public AbstractBackwa
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

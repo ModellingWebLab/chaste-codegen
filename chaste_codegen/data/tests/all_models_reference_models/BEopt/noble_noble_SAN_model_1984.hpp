@@ -32,6 +32,7 @@ class Cellnoble_noble_SAN_model_1984FromCellMLBackwardEuler : public AbstractBac
     // Settable parameters and readable variables
     //
 
+
 public:
 
     double GetIntracellularCalciumConcentration();

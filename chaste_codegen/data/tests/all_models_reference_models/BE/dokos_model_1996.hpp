@@ -32,6 +32,7 @@ class Celldokos_model_1996FromCellMLBackwardEulerNoLut : public AbstractBackward
     // Settable parameters and readable variables
     //
 
+
 public:
 
     double GetIntracellularCalciumConcentration();

@@ -32,6 +32,7 @@ class Cellearm_noble_model_1990FromCellMLBackwardEuler : public AbstractBackward
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

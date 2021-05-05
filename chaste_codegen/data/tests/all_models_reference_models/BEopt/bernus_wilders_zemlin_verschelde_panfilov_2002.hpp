@@ -32,6 +32,7 @@ class Cellbernus_wilders_zemlin_verschelde_panfilov_2002FromCellMLBackwardEuler 
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
