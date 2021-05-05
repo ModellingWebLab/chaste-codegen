@@ -1,6 +1,6 @@
 {% include "Shared/cpp/header_comments" %}
-{% include "Shared/cpp/includes" %}
 #include "CardiacNewtonSolver.hpp"
+{% with %}{% set base_class = base_class ~ "<"~nonlinear_state_vars|length~">" %}{% include "Shared/cpp/includes" %}{% endwith %}
 {% include "Shared/cpp/lookup_tables" %}
 {% include "Shared/cpp/UseCellMLDefaultStimulus" %}
 {% include "Shared/cpp/GetIntracellularCalciumConcentration" %}

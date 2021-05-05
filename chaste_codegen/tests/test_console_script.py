@@ -420,7 +420,7 @@ def test_script_dynamic_BE(tmp_path):
     assert os.path.isfile(model_file)
     outfile = os.path.join(tmp_path, 'dynamic_courtemanche_ramirez_nattel_1998.cpp')
     # Call commandline script
-    testargs = ['chaste_codegen', '--skip-ingularity-fixes', model_file, '--backward-euler', '-o', outfile,
+    testargs = ['chaste_codegen', '--use-model-factory', '--skip-ingularity-fixes', model_file, '--backward-euler', '-o', outfile,
                 '--dynamically-loadable']
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()

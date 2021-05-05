@@ -23,7 +23,7 @@
 #include "MathsCustomFunctions.hpp"
 #include "ModelFactory.hpp"
 
-AbstractCvodeCellWithDataClamp* Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
+AbstractCardiacCellWithModifiers<AbstractCvodeCellWithDataClamp >* Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
     return new Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp(p_solver, p_stimulus);
 }
 

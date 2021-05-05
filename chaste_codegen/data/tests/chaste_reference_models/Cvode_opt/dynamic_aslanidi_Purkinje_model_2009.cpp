@@ -23,7 +23,7 @@
 #include "MathsCustomFunctions.hpp"
 #include "ModelFactory.hpp"
 
-AbstractCvodeCell* Dynamicaslanidi_Purkinje_model_2009FromCellMLCvodeOpt::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
+AbstractCardiacCellWithModifiers<AbstractCvodeCell >* Dynamicaslanidi_Purkinje_model_2009FromCellMLCvodeOpt::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
     return new Dynamicaslanidi_Purkinje_model_2009FromCellMLCvodeOpt(p_solver, p_stimulus);
 }
 
