@@ -1,4 +1,4 @@
-# (unreleased)
+# Release 0.7.0
 - The singularities fixing code from release 0.6.3 has moved to the latest cellmlmanip release (0.3.0). You may see small differences in generated code, due to singularities now being fixed prior to any unit conversion taking place. These should not cause any differences in results when run with chaste.
 - Improved capacitance unit checking.
 
