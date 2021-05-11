@@ -18,7 +18,7 @@ cached_models = {}
 
 
 def cache_model(model_name):
-    return cached_models.setdefault(model_name, load_model_with_conversions(model_name, fix_singularities=True))
+    return cached_models.setdefault(model_name, load_model_with_conversions(model_name))
 
 
 @pytest.fixture(scope='session')

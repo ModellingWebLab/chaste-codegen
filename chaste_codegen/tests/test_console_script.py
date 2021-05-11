@@ -146,7 +146,7 @@ def test_script_convert(caplog, tmp_path):
     target = os.path.join(tmp_path, model_name + '.cellml')
     shutil.copyfile(model_file, target)
 
-    testargs = ['chaste_codegen', target]
+    testargs = ['chaste_codegen', '--skip-ingularity-fixes', target]
     # Call commandline script
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
@@ -170,7 +170,7 @@ def test_script_convert_quiet(caplog, tmp_path):
     target = os.path.join(tmp_path, model_name + '.cellml')
     shutil.copyfile(model_file, target)
 
-    testargs = ['chaste_codegen', target, '--quiet']
+    testargs = ['chaste_codegen', '--skip-ingularity-fixes', target, '--quiet']
     # Call commandline script
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
