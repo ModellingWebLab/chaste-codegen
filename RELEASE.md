@@ -1,3 +1,7 @@
+# Release 0.8.0
+- Added `--use-model-factory` flag to allow code to be added for models to self-register to the model factory of the ApPredict peoject.
+- Renamed backward euler cells to be in line with others using `BackwardEulerOpt` / `BackwardEuler` instead of `BackwardEuler` and `BackwardEulerNoLot`.
+
 # Release 0.7.0
 - The singularities fixing code from release 0.6.3 has moved to the latest cellmlmanip release (0.3.0). You may see small differences in generated code, due to singularities now being fixed prior to any unit conversion taking place. These should not cause any differences in results when run with chaste.
 - Improved capacitance unit checking.
