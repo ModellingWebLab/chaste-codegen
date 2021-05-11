@@ -32,7 +32,7 @@ mpmath==1.1.0
 networkx==2.5
 numpy==1.19.5
 packaging==20.4
-Pillow==8.0.1
+Pillow==8.1.1
 Pint==0.16.1
 pkginfo==1.7.0
 pluggy==0.13.1
