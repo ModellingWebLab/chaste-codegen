@@ -12,7 +12,7 @@ class GeneralisedRushLarsenFirstOrderModelOpt(GeneralisedRushLarsenFirstOrderMod
         self._lookup_tables = LookupTables(model, lookup_params=kwargs.get('lookup_table', DEFAULT_LOOKUP_PARAMETERS))
 
         super().__init__(model, file_name, **kwargs)
-        self._vars_for_template['model_type'] = 'GeneralizedRushLarsenFirstOrderOpt'
+        self._vars_for_template['model_type'] += 'Opt'
         self._vars_for_template['lookup_parameters'] = self._lookup_tables.print_lookup_parameters(self._printer)
 
     def _get_stimulus(self):

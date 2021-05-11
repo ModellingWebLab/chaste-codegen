@@ -46,6 +46,7 @@ setup(
 
     # List of dependencies
     install_requires=[
+        'py>=1.10.0',
         'decorator>=4.4.2, <5',
         'importlib-metadata>=1.7, <2',
         'isodate>=0.6.0, <1',
