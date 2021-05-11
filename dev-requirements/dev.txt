@@ -58,7 +58,7 @@ tblib==1.7.0
 toml==0.10.2
 tqdm==4.56.2
 twine==3.3.0
-urllib3==1.26.2
+urllib3==1.26.4
 wcwidth==0.2.5
 webencodings==0.5.1
 zipp==1.2.0
