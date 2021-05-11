@@ -27,7 +27,7 @@ AbstractCardiacCellWithModifiers<AbstractCvodeCellWithDataClamp >* Cellshannon_w
     return new Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp(p_solver, p_stimulus);
 }
 
-bool Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp::s_registered = ModelFactory::Register("Shannon2004_with_modifiers", "CvodeCellWithDataClamp", (ModelFactory::TCreateMethod)Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp::CreateMethod);
+bool Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp::registered = ModelFactory::Register("Shannon2004_with_modifiers", "CvodeCellWithDataClamp", (ModelFactory::TCreateMethod)Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp::CreateMethod);
 
 
 

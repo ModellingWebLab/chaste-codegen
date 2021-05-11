@@ -27,7 +27,7 @@ AbstractCvodeCellWithDataClamp* Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvod
     return new Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClamp(p_solver, p_stimulus);
 }
 
-bool Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClamp::s_registered = ModelFactory::Register("grandi_pasqualini_bers_2010_ss", "CvodeCellWithDataClamp", (ModelFactory::TCreateMethod)Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClamp::CreateMethod);
+bool Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClamp::registered = ModelFactory::Register("grandi_pasqualini_bers_2010_ss", "CvodeCellWithDataClamp", (ModelFactory::TCreateMethod)Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClamp::CreateMethod);
 
 
 

@@ -26,7 +26,7 @@ AbstractGeneralizedRushLarsenCardiacCell* Dynamicmatsuoka_model_2003FromCellMLGR
     return new Dynamicmatsuoka_model_2003FromCellMLGRL1Opt(p_solver, p_stimulus);
 }
 
-bool Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::s_registered = ModelFactory::Register("dynamic_matsuoka_model_2003", "GeneralizedRushLarsenFirstOrderOpt", (ModelFactory::TCreateMethod)Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::CreateMethod);
+bool Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::registered = ModelFactory::Register("dynamic_matsuoka_model_2003", "GeneralizedRushLarsenFirstOrderOpt", (ModelFactory::TCreateMethod)Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::CreateMethod);
 
 class Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables : public AbstractLookupTableCollection
 {

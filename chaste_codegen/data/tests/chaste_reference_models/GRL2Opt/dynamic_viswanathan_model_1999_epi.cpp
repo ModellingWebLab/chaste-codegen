@@ -26,7 +26,7 @@ AbstractGeneralizedRushLarsenCardiacCell* Dynamicviswanathan_model_1999_epiFromC
     return new Dynamicviswanathan_model_1999_epiFromCellMLGRL2Opt(p_solver, p_stimulus);
 }
 
-bool Dynamicviswanathan_model_1999_epiFromCellMLGRL2Opt::s_registered = ModelFactory::Register("dynamic_viswanathan_model_1999_epi", "GeneralizedRushLarsenSecondOrderOpt", (ModelFactory::TCreateMethod)Dynamicviswanathan_model_1999_epiFromCellMLGRL2Opt::CreateMethod);
+bool Dynamicviswanathan_model_1999_epiFromCellMLGRL2Opt::registered = ModelFactory::Register("dynamic_viswanathan_model_1999_epi", "GeneralizedRushLarsenSecondOrderOpt", (ModelFactory::TCreateMethod)Dynamicviswanathan_model_1999_epiFromCellMLGRL2Opt::CreateMethod);
 
 class Dynamicviswanathan_model_1999_epiFromCellMLGRL2Opt_LookupTables : public AbstractLookupTableCollection
 {

@@ -27,7 +27,7 @@ AbstractCvodeCell* Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode::C
     return new Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode(p_solver, p_stimulus);
 }
 
-bool Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode::s_registered = ModelFactory::Register("dynamic_Shannon2004", "AnalyticCvode", (ModelFactory::TCreateMethod)Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode::CreateMethod);
+bool Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode::registered = ModelFactory::Register("dynamic_Shannon2004", "AnalyticCvode", (ModelFactory::TCreateMethod)Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode::CreateMethod);
 
 
 

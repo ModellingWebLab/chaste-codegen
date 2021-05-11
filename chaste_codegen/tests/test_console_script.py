@@ -100,7 +100,7 @@ def test_script_double_show_output(capsys):
         output = str(captured.out)
         assert "grandi_pasqualini_bers_2010_ssCvodeDataClamp.cpp" in output
         assert "grandi_pasqualini_bers_2010_ssCvodeDataClamp.hpp" in output
-        assert "grandi_pasqualini_bers_2010_ssBackwardEulerNoLut.hpp" in output
+        assert "grandi_pasqualini_bers_2010_ssBackwardEuler.hpp" in output
 
 
 def test_script_double_show_output2(capsys):
@@ -119,7 +119,7 @@ def test_script_double_show_output2(capsys):
         output = str(captured.out).replace("\\", "/")
         assert "/cellml/grandi_pasqualini_bers_2010_ssCvodeDataClamp.cpp" in output
         assert "/cellml/grandi_pasqualini_bers_2010_ssCvodeDataClamp.hpp" in output
-        assert "/cellml/grandi_pasqualini_bers_2010_ssBackwardEulerNoLut.hpp" in output
+        assert "/cellml/grandi_pasqualini_bers_2010_ssBackwardEuler.hpp" in output
 
 
 def test_non_existing_cellml(caplog):
@@ -235,10 +235,10 @@ def test_script_double_type(tmp_path):
     compare_file_against_reference(os.path.join(reference, 'CVODE_DATA_CLAMP', model_name + 'CvodeDataClamp.cpp'),
                                    os.path.join(tmp_path, model_name + 'CvodeDataClamp.cpp'))
 
-    compare_file_against_reference(os.path.join(reference, 'BE', model_name + 'BackwardEulerNoLut.hpp'),
-                                   os.path.join(tmp_path, model_name + 'BackwardEulerNoLut.hpp'))
-    compare_file_against_reference(os.path.join(reference, 'BE', model_name + 'BackwardEulerNoLut.cpp'),
-                                   os.path.join(tmp_path, model_name + 'BackwardEulerNoLut.cpp'))
+    compare_file_against_reference(os.path.join(reference, 'BE', model_name + 'BackwardEuler.hpp'),
+                                   os.path.join(tmp_path, model_name + 'BackwardEuler.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'BE', model_name + 'BackwardEuler.cpp'),
+                                   os.path.join(tmp_path, model_name + 'BackwardEuler.cpp'))
 
 
 def test_script_data_clamp_opt(tmp_path):

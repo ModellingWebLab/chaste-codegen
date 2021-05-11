@@ -26,7 +26,7 @@ AbstractCardiacCell* Chaste_CG::CreateMethod(boost::shared_ptr<AbstractIvpOdeSol
     return new Chaste_CG(p_solver, p_stimulus);
 }
 
-bool Chaste_CG::s_registered = ModelFactory::Register("output_class", "Normal", (ModelFactory::TCreateMethod)Chaste_CG::CreateMethod);
+bool Chaste_CG::registered = ModelFactory::Register("output_class", "Normal", (ModelFactory::TCreateMethod)Chaste_CG::CreateMethod);
 
 
 
