@@ -19,7 +19,6 @@ from chaste_codegen import LOGGER, CodegenError
 from chaste_codegen._math_functions import MATH_FUNC_SYMPY_MAPPING
 from chaste_codegen._optimize import optimize_expr_for_c_output
 from chaste_codegen._rdf import OXMETA, PYCMLMETA, get_variables_transitively
-from chaste_codegen._singularity_fixes import fix_singularity_equations
 
 
 MEMBRANE_VOLTAGE_INDEX = 0  # default index for voltage in state vector
@@ -32,18 +31,25 @@ STIM_PARAM_TAGS = (('membrane_stimulus_current_amplitude', 'uA_per_cm2', True),
                    ('membrane_stimulus_current_end', 'millisecond', False))
 
 
-def load_model_with_conversions(model_file, use_modifiers=False, quiet=False, fix_singularities=True):
+def load_model_with_conversions(model_file, use_modifiers=False, quiet=False, skip_singularity_fixes=False):
     if quiet:
         LOGGER.setLevel(logging.ERROR)
     try:
         model = cellmlmanip.load_model(model_file)
     except Exception as e:
         raise CodegenError('Could not load cellml model: \n    ' + str(e))
-    add_conversions(model, use_modifiers=use_modifiers, fix_singularities=fix_singularities)
+    if not skip_singularity_fixes:
+        V = model.get_variable_by_ontology_term((OXMETA, 'membrane_voltage'))
+        tagged = set(model.get_variables_by_rdf((PYCMLMETA, 'modifiable-parameter'), 'yes', sort=False))
+        annotated = set(filter(lambda q: model.has_ontology_annotation(q, OXMETA), model.variables()))
+        excluded = (tagged | annotated) - set(model.get_derived_quantities(sort=False))
+
+        model.remove_fixable_singularities(V, exclude=excluded)
+    add_conversions(model, use_modifiers=use_modifiers)
     return model
 
 
-def add_conversions(model, use_modifiers=True, fix_singularities=True):
+def add_conversions(model, use_modifiers=True):
     # We are adding attributes to the model from cellmlmanip. This could break if the api changes
     # The check  below guards against this
     attrs_added = ('conversion_units', 'stimulus_units', 'time_variable', 'state_vars', 'membrane_voltage_var',
@@ -86,10 +92,6 @@ def add_conversions(model, use_modifiers=True, fix_singularities=True):
 
     # Retrieve stimulus current parameters so we can exclude these from modifiers etc.
     model.modifiable_parameters = _get_modifiable_parameters(model)
-
-    # Fix singularities if desired
-    if fix_singularities:
-        fix_singularity_equations(model, model.membrane_voltage_var, model.modifiable_parameters)
 
     # Get Capactiatnce & stimulus parameters
     model.membrane_capacitance = _get_membrane_capacitance(model)
