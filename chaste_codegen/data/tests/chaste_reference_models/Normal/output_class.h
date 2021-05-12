@@ -35,7 +35,7 @@ class Chaste_CG : public AbstractCardiacCell, public AbstractDynamicallyLoadable
 
 private:
     static AbstractCardiacCell* CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus);
-    static bool s_registered;
+    static bool registered;
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
