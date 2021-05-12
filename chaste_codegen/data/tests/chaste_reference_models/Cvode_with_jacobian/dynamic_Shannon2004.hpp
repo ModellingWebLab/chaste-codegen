@@ -36,7 +36,7 @@ class Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode : public Abstra
 
 private:
     static AbstractCvodeCell* CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus);
-    static bool s_registered;
+    static bool registered;
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

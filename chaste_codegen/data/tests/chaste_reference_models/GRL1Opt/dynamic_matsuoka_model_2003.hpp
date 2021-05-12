@@ -35,7 +35,7 @@ class Dynamicmatsuoka_model_2003FromCellMLGRL1Opt : public AbstractGeneralizedRu
 
 private:
     static AbstractGeneralizedRushLarsenCardiacCell* CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus);
-    static bool s_registered;
+    static bool registered;
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
