@@ -32,7 +32,6 @@ class Cellsakmann_model_2000_epiFromCellMLBackwardEuler : public AbstractBackwar
     // Settable parameters and readable variables
     //
 
-
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

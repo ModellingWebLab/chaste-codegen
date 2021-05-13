@@ -32,7 +32,6 @@ class Cellfox_mcharg_gilmour_2002FromCellMLBackwardEulerNoLut : public AbstractB
     // Settable parameters and readable variables
     //
 
-
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

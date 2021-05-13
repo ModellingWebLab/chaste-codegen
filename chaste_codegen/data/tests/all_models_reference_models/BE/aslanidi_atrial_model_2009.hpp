@@ -32,7 +32,6 @@ class Cellaslanidi_atrial_model_2009FromCellMLBackwardEulerNoLut : public Abstra
     // Settable parameters and readable variables
     //
 
-
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

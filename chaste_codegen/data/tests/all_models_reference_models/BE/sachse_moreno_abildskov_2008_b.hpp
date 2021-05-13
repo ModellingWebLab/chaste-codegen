@@ -32,7 +32,6 @@ class Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerNoLut : public Ab
     // Settable parameters and readable variables
     //
 
-
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

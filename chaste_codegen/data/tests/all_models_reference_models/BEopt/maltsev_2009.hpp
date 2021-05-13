@@ -32,7 +32,6 @@ class Cellmaltsev_2009FromCellMLBackwardEuler : public AbstractBackwardEulerCard
     // Settable parameters and readable variables
     //
 
-
 public:
 
     double GetIntracellularCalciumConcentration();

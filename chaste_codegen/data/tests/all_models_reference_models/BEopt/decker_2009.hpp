@@ -32,7 +32,6 @@ class Celldecker_2009FromCellMLBackwardEuler : public AbstractBackwardEulerCardi
     // Settable parameters and readable variables
     //
 
-
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

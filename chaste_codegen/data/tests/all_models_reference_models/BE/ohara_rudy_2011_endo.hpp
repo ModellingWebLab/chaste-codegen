@@ -32,7 +32,6 @@ class Cellohara_rudy_2011_endoFromCellMLBackwardEulerNoLut : public AbstractBack
     // Settable parameters and readable variables
     //
 
-
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

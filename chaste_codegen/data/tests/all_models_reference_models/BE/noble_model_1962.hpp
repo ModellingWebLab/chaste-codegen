@@ -32,7 +32,6 @@ class Cellnoble_model_1962FromCellMLBackwardEulerNoLut : public AbstractBackward
     // Settable parameters and readable variables
     //
 
-
 public:
 
     Cellnoble_model_1962FromCellMLBackwardEulerNoLut(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);

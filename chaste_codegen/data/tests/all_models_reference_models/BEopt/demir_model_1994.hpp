@@ -32,7 +32,6 @@ class Celldemir_model_1994FromCellMLBackwardEuler : public AbstractBackwardEuler
     // Settable parameters and readable variables
     //
 
-
 public:
 
     double GetIntracellularCalciumConcentration();

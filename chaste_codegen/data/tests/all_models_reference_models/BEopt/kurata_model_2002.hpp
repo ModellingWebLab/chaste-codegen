@@ -32,7 +32,6 @@ class Cellkurata_model_2002FromCellMLBackwardEuler : public AbstractBackwardEule
     // Settable parameters and readable variables
     //
 
-
 public:
 
     double GetIntracellularCalciumConcentration();

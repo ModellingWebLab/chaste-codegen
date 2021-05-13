@@ -32,7 +32,6 @@ class Cellfaber_rudy_2000FromCellMLBackwardEulerNoLut : public AbstractBackwardE
     // Settable parameters and readable variables
     //
 
-
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

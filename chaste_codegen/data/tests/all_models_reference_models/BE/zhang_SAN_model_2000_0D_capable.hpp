@@ -32,7 +32,6 @@ class Cellzhang_SAN_model_2000_0D_capableFromCellMLBackwardEulerNoLut : public A
     // Settable parameters and readable variables
     //
 
-
 public:
 
     Cellzhang_SAN_model_2000_0D_capableFromCellMLBackwardEulerNoLut(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);

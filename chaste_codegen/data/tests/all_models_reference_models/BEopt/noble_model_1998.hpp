@@ -32,7 +32,6 @@ class Cellnoble_model_1998FromCellMLBackwardEuler : public AbstractBackwardEuler
     // Settable parameters and readable variables
     //
 
-
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

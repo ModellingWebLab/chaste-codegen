@@ -32,7 +32,6 @@ class Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLBackwardEulerNo
     // Settable parameters and readable variables
     //
 
-
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

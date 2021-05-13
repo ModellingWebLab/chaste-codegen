@@ -32,7 +32,6 @@ class Cellviswanathan_model_1999_epiFromCellMLBackwardEulerNoLut : public Abstra
     // Settable parameters and readable variables
     //
 
-
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

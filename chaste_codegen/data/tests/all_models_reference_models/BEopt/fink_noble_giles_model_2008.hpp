@@ -32,7 +32,6 @@ class Cellfink_noble_giles_model_2008FromCellMLBackwardEuler : public AbstractBa
     // Settable parameters and readable variables
     //
 
-
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

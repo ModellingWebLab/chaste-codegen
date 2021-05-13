@@ -32,7 +32,6 @@ class Cellnoble_noble_SAN_model_1984FromCellMLBackwardEulerNoLut : public Abstra
     // Settable parameters and readable variables
     //
 
-
 public:
 
     double GetIntracellularCalciumConcentration();

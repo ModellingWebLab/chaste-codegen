@@ -32,7 +32,6 @@ class Cellaslanidi_Purkinje_model_2009FromCellMLBackwardEulerNoLut : public Abst
     // Settable parameters and readable variables
     //
 
-
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

@@ -32,7 +32,6 @@ class Cellbenson_epicardial_2008FromCellMLBackwardEulerNoLut : public AbstractBa
     // Settable parameters and readable variables
     //
 
-
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

@@ -32,7 +32,6 @@ class Cellshannon_wang_puglisi_weber_bers_2004FromCellMLBackwardEuler : public A
     // Settable parameters and readable variables
     //
 
-
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

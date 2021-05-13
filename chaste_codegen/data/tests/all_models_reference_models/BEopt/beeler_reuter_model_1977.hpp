@@ -32,7 +32,6 @@ class Cellbeeler_reuter_model_1977FromCellMLBackwardEuler : public AbstractBackw
     // Settable parameters and readable variables
     //
 
-
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

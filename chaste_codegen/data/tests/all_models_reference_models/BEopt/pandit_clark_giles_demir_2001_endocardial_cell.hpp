@@ -32,7 +32,6 @@ class Cellpandit_clark_giles_demir_2001_endocardial_cellFromCellMLBackwardEuler 
     // Settable parameters and readable variables
     //
 
-
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

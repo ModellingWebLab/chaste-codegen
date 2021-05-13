@@ -32,7 +32,6 @@ class Cellcorrias_purkinje_2011FromCellMLBackwardEulerNoLut : public AbstractBac
     // Settable parameters and readable variables
     //
 
-
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

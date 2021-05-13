@@ -32,7 +32,6 @@ class CellToRORd_fkatp_epiFromCellMLBackwardEulerNoLut : public AbstractBackward
     // Settable parameters and readable variables
     //
 
-
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

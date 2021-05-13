@@ -32,7 +32,6 @@ class Cellpaci_hyttinen_aaltosetala_severi_atrialVersionFromCellMLBackwardEulerN
     // Settable parameters and readable variables
     //
 
-
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

@@ -32,7 +32,6 @@ class CellTrovato2020FromCellMLBackwardEuler : public AbstractBackwardEulerCardi
     // Settable parameters and readable variables
     //
 
-
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

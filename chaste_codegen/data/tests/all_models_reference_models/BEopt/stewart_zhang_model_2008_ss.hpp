@@ -32,7 +32,6 @@ class Cellstewart_zhang_model_2008_ssFromCellMLBackwardEuler : public AbstractBa
     // Settable parameters and readable variables
     //
 
-
 public:
 
     double GetIntracellularCalciumConcentration();

@@ -32,7 +32,6 @@ class Cellkurata_model_2002FromCellMLBackwardEulerNoLut : public AbstractBackwar
     // Settable parameters and readable variables
     //
 
-
 public:
 
     double GetIntracellularCalciumConcentration();
