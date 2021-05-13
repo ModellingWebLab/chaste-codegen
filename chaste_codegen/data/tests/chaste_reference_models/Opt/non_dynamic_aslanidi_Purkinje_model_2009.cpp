@@ -21,6 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
 class Cellaslanidi_Purkinje_model_2009FromCellMLOpt_LookupTables : public AbstractLookupTableCollection
 {
 public:

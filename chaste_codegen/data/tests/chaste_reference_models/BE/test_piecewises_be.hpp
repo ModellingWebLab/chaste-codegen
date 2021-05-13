@@ -1,5 +1,5 @@
-#ifndef CELLTEST_PIECEWISES_BEFROMCELLMLBACKWARDEULERNOLUT_HPP_
-#define CELLTEST_PIECEWISES_BEFROMCELLMLBACKWARDEULERNOLUT_HPP_
+#ifndef CELLTEST_PIECEWISES_BEFROMCELLMLBACKWARDEULER_HPP_
+#define CELLTEST_PIECEWISES_BEFROMCELLMLBACKWARDEULER_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractBackwardEulerCardiacCell.hpp"
 
-class Celltest_piecewises_beFromCellMLBackwardEulerNoLut : public AbstractBackwardEulerCardiacCell<2>
+class Celltest_piecewises_beFromCellMLBackwardEuler : public AbstractBackwardEulerCardiacCell<2>
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -32,10 +32,11 @@ class Celltest_piecewises_beFromCellMLBackwardEulerNoLut : public AbstractBackwa
     // Settable parameters and readable variables
     //
 
+
 public:
 
-    Celltest_piecewises_beFromCellMLBackwardEulerNoLut(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Celltest_piecewises_beFromCellMLBackwardEulerNoLut();
+    Celltest_piecewises_beFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Celltest_piecewises_beFromCellMLBackwardEuler();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[2], double rResidual[2]);
     void ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[2], double rJacobian[2][2]);protected:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted);
@@ -46,7 +47,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Celltest_piecewises_beFromCellMLBackwardEulerNoLut)
+CHASTE_CLASS_EXPORT(Celltest_piecewises_beFromCellMLBackwardEuler)
 
 namespace boost
 {
@@ -54,7 +55,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Celltest_piecewises_beFromCellMLBackwardEulerNoLut * t, const unsigned int fileVersion)
+            Archive & ar, const Celltest_piecewises_beFromCellMLBackwardEuler * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -64,17 +65,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Celltest_piecewises_beFromCellMLBackwardEulerNoLut * t, const unsigned int fileVersion)
+            Archive & ar, Celltest_piecewises_beFromCellMLBackwardEuler * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Celltest_piecewises_beFromCellMLBackwardEulerNoLut(p_solver, p_stimulus);
+            ::new(t)Celltest_piecewises_beFromCellMLBackwardEuler(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLTEST_PIECEWISES_BEFROMCELLMLBACKWARDEULERNOLUT_HPP_
+#endif // CELLTEST_PIECEWISES_BEFROMCELLMLBACKWARDEULER_HPP_

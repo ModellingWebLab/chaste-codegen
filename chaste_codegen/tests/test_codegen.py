@@ -183,7 +183,7 @@ def test_RL(tmp_path, model):
 @pytest.mark.parametrize(('model'), chaste_BEopt)
 def test_BEopt(tmp_path, model):
     """ Check generation of Backwards Euler opt models against reference"""
-    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLBackwardEuler'
+    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLBackwardEulerOpt'
     LOGGER.info('Converting: BE opt: ' + class_name + '\n')
     # Generate chaste code
     with cg.BackwardEulerOptModel(cache_model(model['model']), model['model_name_from_file'],
@@ -196,7 +196,7 @@ def test_BEopt(tmp_path, model):
 @pytest.mark.parametrize(('model'), chaste_BE)
 def test_BE(tmp_path, model):
     """ Check generation of Backwards Euler models against reference"""
-    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLBackwardEulerNoLut'
+    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellMLBackwardEuler'
     LOGGER.info('Converting: BE: ' + class_name + '\n')
     # Generate chaste code
     with cg.BackwardEulerModel(cache_model(model['model']), model['model_name_from_file'],

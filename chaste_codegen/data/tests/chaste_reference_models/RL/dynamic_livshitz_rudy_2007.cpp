@@ -23,6 +23,7 @@
 
 
 
+
     boost::shared_ptr<RegularStimulus> Dynamiclivshitz_rudy_2007FromCellMLRushLarsen::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata

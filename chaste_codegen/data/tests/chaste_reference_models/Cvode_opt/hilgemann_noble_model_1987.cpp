@@ -22,6 +22,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+
 class Cellhilgemann_noble_model_1987FromCellMLCvodeOpt_LookupTables : public AbstractLookupTableCollection
 {
 public:

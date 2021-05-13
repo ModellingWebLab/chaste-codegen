@@ -33,6 +33,9 @@ class Dynamicviswanathan_model_1999_epiFromCellMLGRL2Opt : public AbstractGenera
     // Settable parameters and readable variables
     //
 
+private:
+    static AbstractGeneralizedRushLarsenCardiacCell* CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus);
+    static bool registered;
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

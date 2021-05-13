@@ -1,5 +1,5 @@
-#ifndef CELLSACHSE_MORENO_ABILDSKOV_2008_BFROMCELLMLBACKWARDEULERNOLUT_HPP_
-#define CELLSACHSE_MORENO_ABILDSKOV_2008_BFROMCELLMLBACKWARDEULERNOLUT_HPP_
+#ifndef CELLSACHSE_MORENO_ABILDSKOV_2008_BFROMCELLMLBACKWARDEULER_HPP_
+#define CELLSACHSE_MORENO_ABILDSKOV_2008_BFROMCELLMLBACKWARDEULER_HPP_
 
 //! @file
 //!
@@ -18,7 +18,7 @@
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractBackwardEulerCardiacCell.hpp"
 
-class Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerNoLut : public AbstractBackwardEulerCardiacCell<6>
+class Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler : public AbstractBackwardEulerCardiacCell<6>
 {
     friend class boost::serialization::access;
     template<class Archive>
@@ -32,11 +32,12 @@ class Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerNoLut : public Ab
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
-    Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerNoLut(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerNoLut();
+    Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[6], double rResidual[6]);
     void ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[6], double rJacobian[6][6]);protected:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted);
@@ -47,7 +48,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerNoLut)
+CHASTE_CLASS_EXPORT(Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler)
 
 namespace boost
 {
@@ -55,7 +56,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerNoLut * t, const unsigned int fileVersion)
+            Archive & ar, const Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -65,17 +66,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerNoLut * t, const unsigned int fileVersion)
+            Archive & ar, Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEulerNoLut(p_solver, p_stimulus);
+            ::new(t)Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // CELLSACHSE_MORENO_ABILDSKOV_2008_BFROMCELLMLBACKWARDEULERNOLUT_HPP_
+#endif // CELLSACHSE_MORENO_ABILDSKOV_2008_BFROMCELLMLBACKWARDEULER_HPP_

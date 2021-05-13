@@ -95,6 +95,9 @@ class Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp : public 
     boost::shared_ptr<AbstractModifier> mp_submembrane_space_sodium_concentration_modifier;
     boost::shared_ptr<AbstractModifier> mp_temperature_modifier;
 
+private:
+    static AbstractCardiacCellWithModifiers<AbstractCvodeCellWithDataClamp >* CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus);
+    static bool registered;
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

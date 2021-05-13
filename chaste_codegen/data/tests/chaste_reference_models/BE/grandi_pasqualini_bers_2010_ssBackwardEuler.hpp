@@ -1,11 +1,11 @@
-#ifndef DYNAMICCOURTEMANCHE_RAMIREZ_NATTEL_1998FROMCELLMLBACKWARDEULER_HPP_
-#define DYNAMICCOURTEMANCHE_RAMIREZ_NATTEL_1998FROMCELLMLBACKWARDEULER_HPP_
+#ifndef CELLGRANDI_PASQUALINI_BERS_2010_SSFROMCELLMLBACKWARDEULER_HPP_
+#define CELLGRANDI_PASQUALINI_BERS_2010_SSFROMCELLMLBACKWARDEULER_HPP_
 
 //! @file
 //!
 //! This source file was generated from CellML by chaste_codegen version (version omitted as unimportant)
 //!
-//! Model: courtemanche_1998
+//! Model: grandi_pasqualini_bers_2010
 //!
 //! Processed by chaste_codegen: https://github.com/ModellingWebLab/chaste-codegen
 //!     (translator: chaste_codegen, model type: BackwardEuler)
@@ -15,18 +15,17 @@
 
 #include "ChasteSerialization.hpp"
 #include <boost/serialization/base_object.hpp>
-#include "AbstractDynamicallyLoadableEntity.hpp"
 #include "AbstractStimulusFunction.hpp"
 #include "AbstractBackwardEulerCardiacCell.hpp"
 
-class Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler : public AbstractBackwardEulerCardiacCell<8>, public AbstractDynamicallyLoadableEntity
+class Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler : public AbstractBackwardEulerCardiacCell<27>
 {
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & archive, const unsigned int version)
     {
-        archive & boost::serialization::base_object<AbstractBackwardEulerCardiacCell<8> >(*this);
-        archive & boost::serialization::base_object<AbstractDynamicallyLoadableEntity>(*this);
+        archive & boost::serialization::base_object<AbstractBackwardEulerCardiacCell<27> >(*this);
+        
     }
 
     //
@@ -34,16 +33,16 @@ class Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler : public Ab
     //
 
 private:
-    static AbstractBackwardEulerCardiacCell<8>* CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus);
+    static AbstractBackwardEulerCardiacCell<27>* CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus);
     static bool registered;
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-    ~Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler();
-    double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[8], double rResidual[8]);
-    void ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[8], double rJacobian[8][8]);protected:
+    Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    ~Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler();
+    double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[27], double rResidual[27]);
+    void ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[27], double rJacobian[27][27]);protected:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time);
     void ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time);
 
@@ -52,7 +51,7 @@ public:
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
-CHASTE_CLASS_EXPORT(Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler)
+CHASTE_CLASS_EXPORT(Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler)
 
 namespace boost
 {
@@ -60,7 +59,7 @@ namespace boost
     {
         template<class Archive>
         inline void save_construct_data(
-            Archive & ar, const Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler * t, const unsigned int fileVersion)
+            Archive & ar, const Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler * t, const unsigned int fileVersion)
         {
             const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
             const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
@@ -70,17 +69,17 @@ namespace boost
 
         template<class Archive>
         inline void load_construct_data(
-            Archive & ar, Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler * t, const unsigned int fileVersion)
+            Archive & ar, Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler * t, const unsigned int fileVersion)
         {
             boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
             boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
-            ::new(t)Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler(p_solver, p_stimulus);
+            ::new(t)Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler(p_solver, p_stimulus);
         }
 
     }
 
 }
 
-#endif // DYNAMICCOURTEMANCHE_RAMIREZ_NATTEL_1998FROMCELLMLBACKWARDEULER_HPP_
+#endif // CELLGRANDI_PASQUALINI_BERS_2010_SSFROMCELLMLBACKWARDEULER_HPP_

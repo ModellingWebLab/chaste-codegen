@@ -33,6 +33,9 @@ class Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClampOpt : public Abs
     // Settable parameters and readable variables
     //
 
+private:
+    static AbstractCvodeCellWithDataClamp* CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus);
+    static bool registered;
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

@@ -20,6 +20,13 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+#include "ModelFactory.hpp"
+
+AbstractGeneralizedRushLarsenCardiacCell* Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
+    return new Dynamicmatsuoka_model_2003FromCellMLGRL1Opt(p_solver, p_stimulus);
+}
+
+bool Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::registered = ModelFactory::Register("dynamic_matsuoka_model_2003", "GeneralizedRushLarsenFirstOrderOpt", (ModelFactory::TCreateMethod)Dynamicmatsuoka_model_2003FromCellMLGRL1Opt::CreateMethod);
 
 class Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables : public AbstractLookupTableCollection
 {

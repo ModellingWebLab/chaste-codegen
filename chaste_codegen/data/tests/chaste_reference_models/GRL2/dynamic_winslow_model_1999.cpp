@@ -23,6 +23,7 @@
 
 
 
+
     boost::shared_ptr<RegularStimulus> Dynamicwinslow_model_1999FromCellMLGRL2::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata

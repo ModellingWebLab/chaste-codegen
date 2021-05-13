@@ -21,6 +21,13 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+#include "ModelFactory.hpp"
+
+AbstractCvodeCellWithDataClamp* Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClampOpt::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
+    return new Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClampOpt(p_solver, p_stimulus);
+}
+
+bool Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClampOpt::registered = ModelFactory::Register("grandi_pasqualini_bers_2010_ss", "CvodeCellWithDataClampOpt", (ModelFactory::TCreateMethod)Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClampOpt::CreateMethod);
 
 class Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClampOpt_LookupTables : public AbstractLookupTableCollection
 {

@@ -24,6 +24,7 @@
 
 
 
+
     boost::shared_ptr<RegularStimulus> Dynamicmahajan_shiferaw_2008FromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata

@@ -81,6 +81,9 @@ class Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt : public AbstractCardiacC
     boost::shared_ptr<AbstractModifier> mp_membrane_transient_outward_current_conductance_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_voltage_modifier;
 
+private:
+    static AbstractCardiacCellWithModifiers<AbstractCardiacCell >* CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus);
+    static bool registered;
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

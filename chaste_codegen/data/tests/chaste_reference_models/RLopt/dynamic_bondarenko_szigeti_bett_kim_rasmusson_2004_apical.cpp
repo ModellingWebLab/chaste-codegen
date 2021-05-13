@@ -20,6 +20,13 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+#include "ModelFactory.hpp"
+
+AbstractRushLarsenCardiacCell* Dynamicbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLRushLarsenOpt::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
+    return new Dynamicbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLRushLarsenOpt(p_solver, p_stimulus);
+}
+
+bool Dynamicbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLRushLarsenOpt::registered = ModelFactory::Register("dynamic_bondarenko_szigeti_bett_kim_rasmusson_2004_apical", "RushLarsenOpt", (ModelFactory::TCreateMethod)Dynamicbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLRushLarsenOpt::CreateMethod);
 
 class Dynamicbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLRushLarsenOpt_LookupTables : public AbstractLookupTableCollection
 {

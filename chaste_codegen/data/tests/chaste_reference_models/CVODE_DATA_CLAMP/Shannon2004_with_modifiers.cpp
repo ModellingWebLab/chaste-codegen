@@ -21,6 +21,13 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+#include "ModelFactory.hpp"
+
+AbstractCardiacCellWithModifiers<AbstractCvodeCellWithDataClamp >* Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
+    return new Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp(p_solver, p_stimulus);
+}
+
+bool Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp::registered = ModelFactory::Register("Shannon2004_with_modifiers", "CvodeCellWithDataClamp", (ModelFactory::TCreateMethod)Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp::CreateMethod);
 
 
 

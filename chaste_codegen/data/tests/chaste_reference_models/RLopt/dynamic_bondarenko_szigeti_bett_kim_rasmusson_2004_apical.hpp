@@ -33,6 +33,9 @@ class Dynamicbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLRushLars
     // Settable parameters and readable variables
     //
 
+private:
+    static AbstractRushLarsenCardiacCell* CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus);
+    static bool registered;
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

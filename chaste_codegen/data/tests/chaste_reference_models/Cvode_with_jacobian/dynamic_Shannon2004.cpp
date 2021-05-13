@@ -21,6 +21,13 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+#include "ModelFactory.hpp"
+
+AbstractCvodeCell* Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
+    return new Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode(p_solver, p_stimulus);
+}
+
+bool Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode::registered = ModelFactory::Register("dynamic_Shannon2004", "AnalyticCvode", (ModelFactory::TCreateMethod)Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode::CreateMethod);
 
 
 
