@@ -48,7 +48,7 @@ setup(
     install_requires=[
         'py>=1.10.0',
         'decorator>=4.4.2, <5',
-        'importlib-metadata>=1.7, <2',
+        'importlib-metadata>=1.7, <5',
         'isodate>=0.6.0, <1',
         'lxml>=4.6.3, <5',
         'MarkupSafe>=1.1.1, <2',
