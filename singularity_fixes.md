@@ -1,4 +1,7 @@
-# Model: aslanidi_atrial_model_2009(aslanidi_atrial_model_2009.cellml)Number of piecewises: 6## Equation 1:
+# Model: aslanidi_atrial_model_2009
+## Number of piecewises: 6
+
+## Equation 1:
 ```
 L_type_Ca_channel_d_L_gate__alpha_d_L = -50.0 * L_type_Ca_channel_d_L_gate__E10 / (-1.0 + exp(-0.20798668885191349 * L_type_Ca_channel_d_L_gate__E10)) - 16.719999999999999 * L_type_Ca_channel_d_L_gate__E0_alpha_d_L / (-1.0 + exp(-0.40000000000000002 * L_type_Ca_channel_d_L_gate__E0_alpha_d_L))
 ```
@@ -54,10 +57,13 @@ sodium_current__i_Na = (((membrane__V >= -2.6539450910485349e-6) && (membrane__V
 ![Singularity](diagrams//aslanidi_atrial_model_2009/5_0.png)
 
 
-Number of singularities: 6
+## Number of singularities: 6
 
 
-# Model: aslanidi_2009(aslanidi_Purkinje_model_2009.cellml)Number of piecewises: 4## Equation 1:
+# Model: aslanidi_2009 (aslanidi_Purkinje_model_2009.cellml)
+## Number of piecewises: 4
+
+## Equation 1:
 ```
 i_Ks_xs1_gate__tau_xs1 = 1 / (7.6100000000000007e-5 * (44.600000000000001 + membrane__V) / (1.0 - exp(-444.66200000000003 - 9.9700000000000006 * membrane__V)) + 0.00036000000000000002 * (-0.55000000000000004 + membrane__V) / (-1.0 + exp(-0.070400000000000004 + 0.128 * membrane__V)))
 ```
@@ -136,10 +142,13 @@ i_Ca_L__i_Ca_L_max = (((membrane__V >= 14.999998664383064) && (membrane__V <= 15
 ![Singularity](diagrams//aslanidi_Purkinje_model_2009/7_0.png)
 
 
-Number of singularities: 9
+## Number of singularities: 9
 
 
-# Model: beeler_reuter_model_1977(beeler_reuter_model_1977.cellml)Number of piecewises: 0## Equation 1:
+# Model: beeler_reuter_model_1977
+## Number of piecewises: 0
+
+## Equation 1:
 ```
 sodium_current_m_gate__alpha_m = -(47.0 + membrane__V) / (-1.0 + exp(-4.7000000000000002 - 0.10000000000000001 * membrane__V))
 ```
@@ -161,10 +170,13 @@ time_independent_outward_current__i_K1 = (4.0 * (-1.0 + exp(3.3999999999999999 +
 ![Singularity](diagrams//beeler_reuter_model_1977/2_0.png)
 
 
-Number of singularities: 2
+## Number of singularities: 2
 
 
-# Model: benson_epicardial_2008(benson_epicardial_2008.cellml)Number of piecewises: 7## Equation 1:
+# Model: benson_epicardial_2008
+## Number of piecewises: 7
+
+## Equation 1:
 ```
 ICaL__ibarca = 4.0 * (-15.0 + cell__V) * (-Environment__Ca_o * ICaL__gacao + Ca__Ca_ss * ICaL__gacai * exp(2.0 * (-15.0 + cell__V) * Environment__FonRT)) * Environment__F * Environment__FonRT * ICaL__pca / (-1.0 + exp(2.0 * (-15.0 + cell__V) * Environment__FonRT))
 ```
@@ -243,10 +255,13 @@ Ito2__Ito2_max = (((cell__V >= -2.671233870550013e-6) && (cell__V <= 2.671233870
 ![Singularity](diagrams//benson_epicardial_2008/7_0.png)
 
 
-Number of singularities: 9
+## Number of singularities: 9
 
 
-# Model: bernus_wilders_zemlin_verschelde_panfilov_2002_version01(bernus_wilders_zemlin_verschelde_panfilov_2002.cellml)Number of piecewises: 0## Equation 1:
+# Model: bernus_wilders_zemlin_verschelde_panfilov_2002_version01
+## Number of piecewises: 0
+
+## Equation 1:
 ```
 sodium_current_m_gate__alpha_m = 0.32000000000000001 * (47.130000000000003 + membrane__V) / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * membrane__V))
 ```
@@ -257,10 +272,13 @@ sodium_current_m_gate__alpha_m = (((membrane__V >= -47.130001) && (membrane__V <
 ![Singularity](diagrams//bernus_wilders_zemlin_verschelde_panfilov_2002/1_0.png)
 
 
-Number of singularities: 1
+## Number of singularities: 1
 
 
-# Model: bondarenko_2004_apical(bondarenko_szigeti_bett_kim_rasmusson_2004_apical.cellml)Number of piecewises: 0## Equation 1:
+# Model: bondarenko_2004_apical
+## Number of piecewises: 0
+
+## Equation 1:
 ```
 slow_delayed_rectifier_potassium_current__alpha_n = 4.8133299999999997e-6 * (26.5 + membrane__V) / (1.0 - exp(-3.3919999999999999 - 0.128 * membrane__V))
 ```
@@ -271,10 +289,13 @@ slow_delayed_rectifier_potassium_current__alpha_n = (((membrane__V >= -26.500000
 ![Singularity](diagrams//bondarenko_szigeti_bett_kim_rasmusson_2004_apical/1_0.png)
 
 
-Number of singularities: 1
+## Number of singularities: 1
 
 
-# Model: bondarenko_2004_septum(bondarenko_szigeti_bett_kim_rasmusson_2004_septal.cellml)Number of piecewises: 0## Equation 1:
+# Model: bondarenko_2004_septum
+## Number of piecewises: 0
+
+## Equation 1:
 ```
 slow_delayed_rectifier_potassium_current__alpha_n = 4.8133299999999997e-6 * (26.5 + membrane__V) / (1.0 - exp(-3.3919999999999999 - 0.128 * membrane__V))
 ```
@@ -285,18 +306,23 @@ slow_delayed_rectifier_potassium_current__alpha_n = (((membrane__V >= -26.500000
 ![Singularity](diagrams//bondarenko_szigeti_bett_kim_rasmusson_2004_septal/1_0.png)
 
 
-Number of singularities: 1
+## Number of singularities: 1
 
 
-# Model: bueno_2007(bueno_2007_endo.cellml)Number of piecewises: 5
-Number of singularities: 0
+# Model: bueno_2007 (bueno_2007_endo.cellml)
+## Number of piecewises: 5
+## Number of singularities: 0
 
 
-# Model: bueno_2007(bueno_2007_epi.cellml)Number of piecewises: 5
-Number of singularities: 0
+# Model: bueno_2007 (bueno_2007_epi.cellml)
+## Number of piecewises: 5
+## Number of singularities: 0
 
 
-# Model: Carro_Rodriguez_Laguna_Pueyo_CinC2010_EPI(carro_2011_endo.cellml)Number of piecewises: 4## Equation 1:
+# Model: Carro_Rodriguez_Laguna_Pueyo_CinC2010_ENDO
+## Number of piecewises: 4
+
+## Equation 1:
 ```
 L_Type_Calcium_Current__Ibar_Ca_j = (-Calcium_Concentrations__Ca_o + Calcium_Concentrations__Ca_j * exp(2.0 * membrane__FoRT * membrane__V)) * L_Type_Calcium_Current__P_scale * L_Type_Calcium_Current__p_Ca * membrane__FoRT * membrane__Frdy * membrane__V / (-1.0 + exp(2.0 * membrane__FoRT * membrane__V))
 ```
@@ -351,10 +377,13 @@ L_Type_Calcium_Current__Ibar_Na_sl = (((membrane__V >= -2.6712338705498262e-6) &
 ![Singularity](diagrams//carro_2011_endo/5_0.png)
 
 
-Number of singularities: 5
+## Number of singularities: 5
 
 
-# Model: Carro_Rodriguez_Laguna_Pueyo_CinC2010_EPI(carro_2011_epi.cellml)Number of piecewises: 4## Equation 1:
+# Model: Carro_Rodriguez_Laguna_Pueyo_CinC2010_EPI
+## Number of piecewises: 4
+
+## Equation 1:
 ```
 L_Type_Calcium_Current__Ibar_Ca_j = (-Calcium_Concentrations__Ca_o + Calcium_Concentrations__Ca_j * exp(2.0 * membrane__FoRT * membrane__V)) * L_Type_Calcium_Current__P_scale * L_Type_Calcium_Current__p_Ca * membrane__FoRT * membrane__Frdy * membrane__V / (-1.0 + exp(2.0 * membrane__FoRT * membrane__V))
 ```
@@ -409,10 +438,13 @@ L_Type_Calcium_Current__Ibar_Na_sl = (((membrane__V >= -2.6712338705498262e-6) &
 ![Singularity](diagrams//carro_2011_epi/5_0.png)
 
 
-Number of singularities: 5
+## Number of singularities: 5
 
 
-# Model: clancy_rudy_2002(clancy_rudy_2002.cellml)Number of piecewises: 9## Equation 1:
+# Model: clancy_rudy_2002
+## Number of piecewises: 9
+
+## Equation 1:
 ```
 L_type_Ca_channel__I_CaCa = 4.0 * pow(membrane__F, 2) * (-L_type_Ca_channel__gamma_Cao * calcium_dynamics__Cao + L_type_Ca_channel__gamma_Cai * calcium_dynamics__Cai * exp(2.0 * membrane__F * membrane__V / (membrane__R * membrane__T))) * L_type_Ca_channel__P_Ca * L_type_Ca_channel__P_scale * membrane__V / ((-1.0 + exp(2.0 * membrane__F * membrane__V / (membrane__R * membrane__T))) * membrane__R * membrane__T)
 ```
@@ -478,10 +510,13 @@ slow_delayed_rectifier_potassium_current_xs2_gate__tau_xs2 = 0.00400000000000000
 ![Singularity](diagrams//clancy_rudy_2002/6_0.png)
 
 
-Number of singularities: 6
+## Number of singularities: 6
 
 
-# Model: Corrias_rabbit_purkinje_model(corrias_purkinje_2011.cellml)Number of piecewises: 0## Equation 1:
+# Model: Corrias_rabbit_purkinje_model
+## Number of piecewises: 0
+
+## Equation 1:
 ```
 x_ks__tau_x_ks = 1 / (0.00013100000000000001 * (30.0 + membrane__Vm) / (-1.0 + exp(2.0609999999999999 + 0.068699999999999997 * membrane__Vm)) + 7.1899999999999999e-5 * (30.0 + membrane__Vm) / (1.0 - exp(-4.4399999999999995 - 0.14799999999999999 * membrane__Vm)))
 ```
@@ -514,10 +549,13 @@ y_kr__ykrv2 = (((membrane__Vm >= -10.000000689655172) && (membrane__Vm <= -9.999
 ![Singularity](diagrams//corrias_purkinje_2011/3_0.png)
 
 
-Number of singularities: 3
+## Number of singularities: 3
 
 
-# Model: courtemanche_1998(courtemanche_ramirez_nattel_1998.cellml)Number of piecewises: 4## Equation 1:
+# Model: courtemanche_1998
+## Number of piecewises: 4
+
+## Equation 1:
 ```
 Ca_release_current_from_JSR_w_gate__tau_w = 6.0 * (1.0 - exp(1.5800000000000001 - 0.20000000000000001 * membrane__V)) / ((1.0 + 0.29999999999999999 * exp(1.5800000000000001 - 0.20000000000000001 * membrane__V)) * (-7.9000000000000004 + membrane__V))
 ```
@@ -594,10 +632,13 @@ slow_delayed_rectifier_K_current_xs_gate__beta_xs = (((membrane__V >= 19.8999990
 ![Singularity](diagrams//courtemanche_ramirez_nattel_1998/7_0.png)
 
 
-Number of singularities: 7
+## Number of singularities: 7
 
 
-# Model: davies_isap_2012(davies_isap_2012.cellml)Number of piecewises: 5## Equation 1:
+# Model: davies_isap_2012
+## Number of piecewises: 5
+
+## Equation 1:
 ```
 ICaL__ibarca = 4.0 * (-15.0 + cell__V) * (-Environment__Ca_o * ICaL__gacao + Ca__Ca_ss * ICaL__gacai * exp(2.0 * (-15.0 + cell__V) * Environment__FonRT)) * Environment__F * Environment__FonRT * ICaL__pca / (-1.0 + exp(2.0 * (-15.0 + cell__V) * Environment__FonRT))
 ```
@@ -664,10 +705,13 @@ Ito2__Ito2_max = (((cell__V >= -2.671233870550013e-6) && (cell__V <= 2.671233870
 ![Singularity](diagrams//davies_isap_2012/6_0.png)
 
 
-Number of singularities: 7
+## Number of singularities: 7
 
 
-# Model: decker_2009(decker_2009.cellml)Number of piecewises: 4## Equation 1:
+# Model: decker_2009
+## Number of piecewises: 4
+
+## Equation 1:
 ```
 IKr_xr_gate__tau_xr = 1 / (0.00029999999999999997 * (38.360799999999998 + membrane__Vm) / (-1.0 + exp(5.8385137599999997 + 0.1522 * membrane__Vm)) + 0.00059999999999999995 * (-1.7383999999999999 + membrane__Vm) / (1.0 - exp(0.2364224 - 0.13600000000000001 * membrane__Vm)))
 ```
@@ -745,10 +789,13 @@ Ito2__Ito2_max = (((membrane__Vm >= -2.6712338705498262e-6) && (membrane__Vm <= 
 ![Singularity](diagrams//decker_2009/7_0.png)
 
 
-Number of singularities: 8
+## Number of singularities: 8
 
 
-# Model: demir_model_1994(demir_model_1994.cellml)Number of piecewises: 0## Equation 1:
+# Model: demir_model_1994
+## Number of piecewises: 0
+
+## Equation 1:
 ```
 L_type_Ca_channel_d_gate__alpha_d_L = -28.390000000000001 * (35.0 + membrane__V) / (-1.0 + exp(-14.0 - 0.40000000000000002 * membrane__V)) - 84.900000000000006 * membrane__V / (-1.0 + exp(-0.20799999999999999 * membrane__V))
 ```
@@ -804,10 +851,13 @@ sodium_current__i_Na = (((membrane__V >= -2.671376065969565e-6) && (membrane__V 
 ![Singularity](diagrams//demir_model_1994/5_0.png)
 
 
-Number of singularities: 6
+## Number of singularities: 6
 
 
-# Model: difrancesco_noble_model_1985(difrancesco_noble_model_1985.cellml)Number of piecewises: 0## Equation 1:
+# Model: difrancesco_noble_model_1985
+## Number of piecewises: 0
+
+## Equation 1:
 ```
 fast_sodium_current_m_gate__alpha_m = 200.0 * (41.0 + membrane__V) / (1.0 - exp(-4.1000000000000005 - 0.10000000000000001 * membrane__V))
 ```
@@ -917,10 +967,13 @@ transient_outward_current__i_to = (((membrane__V >= -10.000000500000001) && (mem
 ![Singularity](diagrams//difrancesco_noble_model_1985/10_0.png)
 
 
-Number of singularities: 10
+## Number of singularities: 10
 
 
-# Model: dokos_model_1996(dokos_model_1996.cellml)Number of piecewises: 0## Equation 1:
+# Model: dokos_model_1996
+## Number of piecewises: 0
+
+## Equation 1:
 ```
 fast_sodium_current_m_gate__alpha_m = 200.0 * (34.299999999999997 + membrane__E) / (1.0 - exp(-3.0869999999999997 - 0.089999999999999997 * membrane__E))
 ```
@@ -953,10 +1006,13 @@ hyperpolarising_activated_current_y_gate__beta_y = (((membrane__E >= -76.3000004
 ![Singularity](diagrams//dokos_model_1996/3_0.png)
 
 
-Number of singularities: 3
+## Number of singularities: 3
 
 
-# Model: earm_noble_model_1990(earm_noble_model_1990.cellml)Number of piecewises: 4## Equation 1:
+# Model: earm_noble_model_1990
+## Number of piecewises: 4
+
+## Equation 1:
 ```
 L_type_calcium_current__i_Ca_L_Ca = 4.0 * (-50.0 + membrane__V) * (intracellular_calcium_concentration__Ca_i * exp(100.0 / membrane__RTONF) - extracellular_calcium_concentration__Ca_o * exp(2.0 * (50.0 - membrane__V) / membrane__RTONF)) * L_type_calcium_current__P_Ca_L * L_type_calcium_current_d_gate__d * L_type_calcium_current_f_Ca_gate__CaChon / ((1.0 - exp(2.0 * (50.0 - membrane__V) / membrane__RTONF)) * membrane__RTONF)
 ```
@@ -989,10 +1045,13 @@ L_type_calcium_current__i_Ca_L_Na = (((membrane__V >= 49.999997328623934) && (me
 ![Singularity](diagrams//earm_noble_model_1990/3_0.png)
 
 
-Number of singularities: 3
+## Number of singularities: 3
 
 
-# Model: espinosa_model_1998(espinosa_model_1998_normal.cellml)Number of piecewises: 1## Equation 1:
+# Model: espinosa_model_1998
+## Number of piecewises: 1
+
+## Equation 1:
 ```
 L_type_Ca_channel__i_Ca_L_Ca_ds = 4.0 * (-50.0 + membrane__V) * (intracellular_calcium_concentration__Ca_i * exp(100.0 * membrane__F / (membrane__R * membrane__T)) - extracellular_calcium_concentration__Ca_o * exp(2.0 * (50.0 - membrane__V) * membrane__F / (membrane__R * membrane__T))) * L_type_Ca_channel__FrICa * L_type_Ca_channel__P_Ca_L * L_type_Ca_channel_d_gate__d * L_type_Ca_channel_f2ds_gate__f2ds * L_type_Ca_channel_f_gate__f * membrane__F / ((1.0 - exp(2.0 * (50.0 - membrane__V) * membrane__F / (membrane__R * membrane__T))) * membrane__R * membrane__T)
 ```
@@ -1091,10 +1150,13 @@ time_dependent_potassium_current_x_gate__beta_x = (((membrane__V >= 17.9999985) 
 ![Singularity](diagrams//espinosa_model_1998_normal/9_0.png)
 
 
-Number of singularities: 9
+## Number of singularities: 9
 
 
-# Model: faber_rudy_2000(faber_rudy_2000.cellml)Number of piecewises: 13## Equation 1:
+# Model: faber_rudy_2000
+## Number of piecewises: 13
+
+## Equation 1:
 ```
 L_type_Ca_channel__I_CaCa = 4.0 * pow(cell__F, 2) * (-L_type_Ca_channel__gamma_Cao * calcium_dynamics__Cao + L_type_Ca_channel__gamma_Cai * calcium_dynamics__Cai * exp(2.0 * cell__F * cell__V / (cell__R * cell__T))) * L_type_Ca_channel__P_Ca * cell__V / ((-1.0 + exp(2.0 * cell__F * cell__V / (cell__R * cell__T))) * cell__R * cell__T)
 ```
@@ -1205,10 +1267,13 @@ slow_delayed_rectifier_potassium_current_xs2_gate__tau_xs2 = 4.0 * (((cell__V >=
 ![Singularity](diagrams//faber_rudy_2000/10_0.png)
 
 
-Number of singularities: 11
+## Number of singularities: 11
 
 
-# Model: fink_noble_giles_model_2008(fink_noble_giles_model_2008.cellml)Number of piecewises: 4## Equation 1:
+# Model: fink_noble_giles_model_2008
+## Number of piecewises: 4
+
+## Equation 1:
 ```
 ICaL__i_CaL = pow(Environment__F, 2) * pow(ICaL__z, 2) * (-15.0 + cell__V) * (-Environment__Ca_o + 0.25 * Ca__Ca_ss * exp(2.0 * (-15.0 + cell__V) * Environment__F / (Environment__R * Environment__T))) * ICaL__g_CaL * iCaL_d_gate__d * iCaL_f2_gate__f2 * iCaL_fCass_gate__fCass * iCaL_f_gate__f / ((-1.0 + exp(2.0 * (-15.0 + cell__V) * Environment__F / (Environment__R * Environment__T))) * Environment__R * Environment__T)
 ```
@@ -1219,10 +1284,13 @@ ICaL__i_CaL = (((cell__V >= 14.999998664311967) && (cell__V <= 15.00000133568803
 ![Singularity](diagrams//fink_noble_giles_model_2008/1_0.png)
 
 
-Number of singularities: 1
+## Number of singularities: 1
 
 
-# Model: fox_model_2001(fox_mcharg_gilmour_2002.cellml)Number of piecewises: 0## Equation 1:
+# Model: fox_model_2001
+## Number of piecewises: 0
+
+## Equation 1:
 ```
 fast_sodium_current_m_gate__alpha_m = 0.32000000000000001 * fast_sodium_current_m_gate__E0_m / (1.0 - exp(-0.10000000000000001 * fast_sodium_current_m_gate__E0_m))
 ```
@@ -1267,10 +1335,13 @@ L_type_Ca_current__i_CaK = (((membrane__V >= -2.6708186528497407e-6) && (membran
 ![Singularity](diagrams//fox_mcharg_gilmour_2002/4_1.png)
 
 
-Number of singularities: 4
+## Number of singularities: 4
 
 
-# Model: grandi_pasqualini_bers_2010(grandi_pasqualini_bers_2010_ss.cellml)Number of piecewises: 6## Equation 1:
+# Model: grandi_pasqualini_bers_2010 (grandi_pasqualini_bers_2010_ss.cellml)
+## Number of piecewises: 6
+
+## Equation 1:
 ```
 I_Ca__taud = 28.571428571428569 * (1.0 - exp(-0.83333333333333337 - 0.16666666666666666 * membrane_potential__V_m)) * I_Ca__dss / (5.0 + membrane_potential__V_m)
 ```
@@ -1336,10 +1407,13 @@ I_Ca__ibarna_sl = ((((membrane_potential__V_m >= -9.9999999999999995e-8 * parame
 ![Singularity](diagrams//grandi_pasqualini_bers_2010_ss/6_0.png)
 
 
-Number of singularities: 6
+## Number of singularities: 6
 
 
-# Model: grandi_pasqualini_bers_2010(grandi_pasqualini_bers_2010_ss_endo.cellml)Number of piecewises: 6## Equation 1:
+# Model: grandi_pasqualini_bers_2010 (grandi_pasqualini_bers_2010_ss_endo.cellml)
+## Number of piecewises: 6
+
+## Equation 1:
 ```
 I_Ca__taud = 28.571428571428569 * (1.0 - exp(-0.83333333333333337 - 0.16666666666666666 * membrane_potential__V_m)) * I_Ca__dss / (5.0 + membrane_potential__V_m)
 ```
@@ -1405,10 +1479,13 @@ I_Ca__ibarna_sl = (((membrane_potential__V_m >= -2.6712338705498262e-6) && (memb
 ![Singularity](diagrams//grandi_pasqualini_bers_2010_ss_endo/6_0.png)
 
 
-Number of singularities: 6
+## Number of singularities: 6
 
 
-# Model: hilgemann_noble_model_1987(hilgemann_noble_model_1987.cellml)Number of piecewises: 0## Equation 1:
+# Model: hilgemann_noble_model_1987
+## Number of piecewises: 0
+
+## Equation 1:
 ```
 fast_sodium_current_m_gate__alpha_m = 200.0 * (41.0 + membrane__V) / (1.0 - exp(-4.1000000000000005 - 0.10000000000000001 * membrane__V))
 ```
@@ -1485,10 +1562,13 @@ second_inward_calcium_current__i_siNa = (((membrane__V >= 49.999997328623934) &&
 ![Singularity](diagrams//hilgemann_noble_model_1987/7_0.png)
 
 
-Number of singularities: 7
+## Number of singularities: 7
 
 
-# Model: hodgkin_huxley_squid_axon_model_1952_modified(hodgkin_huxley_squid_axon_model_1952_modified.cellml)Number of piecewises: 0## Equation 1:
+# Model: hodgkin_huxley_squid_axon_model_1952_modified
+## Number of piecewises: 0
+
+## Equation 1:
 ```
 potassium_channel_n_gate__alpha_n = -0.01 * (65.0 + membrane__V) / (-1.0 + exp(-6.5 - 0.10000000000000001 * membrane__V))
 ```
@@ -1510,10 +1590,13 @@ sodium_channel_m_gate__alpha_m = (((membrane__V >= -50.000000999999997) && (memb
 ![Singularity](diagrams//hodgkin_huxley_squid_axon_model_1952_modified/2_0.png)
 
 
-Number of singularities: 2
+## Number of singularities: 2
 
 
-# Model: HundRudy2004_units(hund_rudy_2004.cellml)Number of piecewises: 7## Equation 1:
+# Model: HundRudy2004_units
+## Number of piecewises: 7
+
+## Equation 1:
 ```
 ICaL__ibarca = 4.0 * (-15.0 + cell__V) * (-Environment__Ca_o * ICaL__gacao + Ca__Ca_ss * ICaL__gacai * exp(2.0 * (-15.0 + cell__V) * Environment__FonRT)) * Environment__F * Environment__FonRT * ICaL__pca / (-1.0 + exp(2.0 * (-15.0 + cell__V) * Environment__FonRT))
 ```
@@ -1592,10 +1675,13 @@ Ito2__Ito2_max = (((cell__V >= -2.671233870550013e-6) && (cell__V <= 2.671233870
 ![Singularity](diagrams//hund_rudy_2004/7_0.png)
 
 
-Number of singularities: 9
+## Number of singularities: 9
 
 
-# Model: iribe_model_2006(iribe_model_2006.cellml)Number of piecewises: 1## Equation 1:
+# Model: iribe_model_2006
+## Number of piecewises: 1
+
+## Equation 1:
 ```
 L_type_Ca_channel__i_Ca_L_Ca = 4.0 * (-50.0 + membrane_potential__V) * (intracellular_calcium_concentration__Ca_i * exp(100.0 * cell_parameters__F / (cell_parameters__R * cell_parameters__T)) - cell_parameters__Ca_o * exp(-2.0 * (-50.0 + membrane_potential__V) * cell_parameters__F / (cell_parameters__R * cell_parameters__T))) * L_type_Ca_channel__P_Ca_L_Ca * L_type_Ca_channel_d_gate__d * L_type_Ca_channel_f_gate__f * cell_parameters__F / ((1.0 - exp(-2.0 * (-50.0 + membrane_potential__V) * cell_parameters__F / (cell_parameters__R * cell_parameters__T))) * cell_parameters__R * cell_parameters__T)
 ```
@@ -1672,10 +1758,13 @@ fast_sodium_current_m_gate__alpha_m = (((membrane_potential__V >= -41.0000009999
 ![Singularity](diagrams//iribe_model_2006/7_0.png)
 
 
-Number of singularities: 7
+## Number of singularities: 7
 
 
-# Model: IyerMazhariWinslow2004(iyer_2004.cellml)Number of piecewises: 1## Equation 1:
+# Model: IyerMazhariWinslow2004
+## Number of piecewises: 1
+
+## Equation 1:
 ```
 COMPUTE_ICa_ICaK__ICamax = 4.0 * COMPUTE_ICa_ICaK__PCa * COMPUTE_ICa_ICaK__VFsq_over_RT * COMPUTE_ICa_ICaK__a1_Ca / COMPUTE_ICa_ICaK__a2_Ca
 ```
@@ -1720,10 +1809,13 @@ COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKv14_Na = (((COMPUTE_CONCENTRATION_AND_V
 ![Singularity](diagrams//iyer_2004/4_0.png)
 
 
-Number of singularities: 4
+## Number of singularities: 4
 
 
-# Model: iyer_model_2007(iyer_model_2007.cellml)Number of piecewises: 7## Equation 1:
+# Model: iyer_model_2007
+## Number of piecewises: 7
+
+## Equation 1:
 ```
 COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__IKv14_K = COMPUTE_DERIVATIVES_OF_Kv1_4_CHANNEL_STATES__OKv14 * COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__PKv14 * COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__VFsq_over_RT * COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__a1_K / COMPUTE_INa_IKr_IKs_Ito1_IK1_INab_IKp__a2
 ```
@@ -1768,10 +1860,13 @@ COMPUTE_ICa_ICaK__ICaK = (((COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES__V >= 
 ![Singularity](diagrams//iyer_model_2007/4_2.png)
 
 
-Number of singularities: 4
+## Number of singularities: 4
 
 
-# Model: jafri_rice_winslow_1998(jafri_rice_winslow_model_1998.cellml)Number of piecewises: 4## Equation 1:
+# Model: jafri_rice_winslow_1998
+## Number of piecewises: 4
+
+## Equation 1:
 ```
 L_type_Ca_channel__i_Ca_L_Ca_max = 4.0 * pow(membrane__F, 2) * (0.001 * exp(2.0 * membrane__F * membrane__V / (membrane__R * membrane__T)) - 0.34100000000000003 * ionic_concentrations__Cao) * L_type_Ca_channel__P_Ca * membrane__V / ((-1.0 + exp(2.0 * membrane__F * membrane__V / (membrane__R * membrane__T))) * membrane__R * membrane__T)
 ```
@@ -1849,10 +1944,13 @@ time_dependent_potassium_current_X_gate__beta_X = (((membrane__V >= -30.00000145
 ![Singularity](diagrams//jafri_rice_winslow_model_1998/7_0.png)
 
 
-Number of singularities: 7
+## Number of singularities: 7
 
 
-# Model: kurata_model_2002(kurata_model_2002.cellml)Number of piecewises: 0## Equation 1:
+# Model: kurata_model_2002
+## Number of piecewises: 0
+
+## Equation 1:
 ```
 L_type_calcium_channel_current_d_gate__alpha_d = -0.028389999999999999 * (35.0 + membrane__V) / (-1.0 + exp(-14.0 - 0.40000000000000002 * membrane__V)) - 0.084900000000000003 * membrane__V / (-1.0 + exp(-0.20798668885191349 * membrane__V))
 ```
@@ -1875,10 +1973,13 @@ L_type_calcium_channel_current_d_gate__beta_d = (((membrane__V >= 4.999999749999
 ![Singularity](diagrams//kurata_model_2002/2_0.png)
 
 
-Number of singularities: 3
+## Number of singularities: 3
 
 
-# Model: lindblad_atrial_model_1996(lindblad_model_1996.cellml)Number of piecewises: 0## Equation 1:
+# Model: lindblad_atrial_model_1996
+## Number of piecewises: 0
+
+## Equation 1:
 ```
 L_type_Ca_channel_d_L_gate__alpha_d_L = -50.0 * membrane__V / (-1.0 + exp(-0.20798668885191349 * membrane__V)) - 16.719999999999999 * L_type_Ca_channel_d_L_gate__E0_alpha_d_L / (-1.0 + exp(-0.40000000000000002 * L_type_Ca_channel_d_L_gate__E0_alpha_d_L))
 ```
@@ -1934,10 +2035,13 @@ sodium_current__i_Na = (((membrane__V >= -2.6541413816729869e-6) && (membrane__V
 ![Singularity](diagrams//lindblad_model_1996/5_0.png)
 
 
-Number of singularities: 6
+## Number of singularities: 6
 
 
-# Model: LivshitzRudy2007(livshitz_rudy_2007.cellml)Number of piecewises: 0## Equation 1:
+# Model: LivshitzRudy2007
+## Number of piecewises: 0
+
+## Equation 1:
 ```
 ICaL__ibarca = 4.0 * (-Environment__Ca_o * ICaL__gacao + Ca__Ca_i * ICaL__gacai * exp(2.0 * Environment__FonRT * cell__V)) * Environment__F * Environment__FonRT * ICaL__pca * cell__V / (-1.0 + exp(2.0 * Environment__FonRT * cell__V))
 ```
@@ -2015,10 +2119,13 @@ INa__am = (((cell__V >= -47.130001) && (cell__V <= -47.129999000000005)) ? (-3.2
 ![Singularity](diagrams//livshitz_rudy_2007/7_0.png)
 
 
-Number of singularities: 8
+## Number of singularities: 8
 
 
-# Model: Li_Mouse_2010(li_mouse_2010.cellml)Number of piecewises: 2## Equation 1:
+# Model: Li_Mouse_2010
+## Number of piecewises: 2
+
+## Equation 1:
 ```
 L_type_calcium_current__i_CaL = -2.0 * (-calcium_concentration__Cass + cell__Cao * exp(-L_type_calcium_current__FVRT_Ca)) * L_type_calcium_current__FVRT_Ca * L_type_calcium_current__O * L_type_calcium_current__P_CaL * L_type_calcium_current__y_gate * cell__F * cell__Vss / ((1.0 - exp(-L_type_calcium_current__FVRT_Ca)) * cell__Acap * cell__Cm)
 ```
@@ -2040,10 +2147,13 @@ slow_delayed_rectifier_K_I__alpha_n = (((cell__V >= -26.500000781250002) && (cel
 ![Singularity](diagrams//li_mouse_2010/2_0.png)
 
 
-Number of singularities: 2
+## Number of singularities: 2
 
 
-# Model: luo_rudy_1991(luo_rudy_1991.cellml)Number of piecewises: 5## Equation 1:
+# Model: luo_rudy_1991
+## Number of piecewises: 5
+
+## Equation 1:
 ```
 fast_sodium_current_m_gate__alpha_m = 0.32000000000000001 * (47.130000000000003 + membrane__V) / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * membrane__V))
 ```
@@ -2065,10 +2175,13 @@ time_dependent_potassium_current_Xi_gate__temp_Xi = (((membrane__V >= -77.000002
 ![Singularity](diagrams//luo_rudy_1991/2_0.png)
 
 
-Number of singularities: 2
+## Number of singularities: 2
 
 
-# Model: luo_rudy_1994(luo_rudy_1994.cellml)Number of piecewises: 5## Equation 1:
+# Model: luo_rudy_1994
+## Number of piecewises: 5
+
+## Equation 1:
 ```
 L_type_Ca_channel__I_CaCa = 4.0 * pow(membrane__F, 2) * (-L_type_Ca_channel__gamma_Cao * ionic_concentrations__Cao + L_type_Ca_channel__gamma_Cai * ionic_concentrations__Cai * exp(2.0 * membrane__F * membrane__V / (membrane__R * membrane__T))) * L_type_Ca_channel__P_Ca * membrane__V / ((-1.0 + exp(2.0 * membrane__F * membrane__V / (membrane__R * membrane__T))) * membrane__R * membrane__T)
 ```
@@ -2167,10 +2280,13 @@ time_dependent_potassium_current_X_gate__beta_X = (((membrane__V >= -30.00000145
 ![Singularity](diagrams//luo_rudy_1994/9_0.png)
 
 
-Number of singularities: 9
+## Number of singularities: 9
 
 
-# Model: MahajanShiferaw2008_units(mahajan_shiferaw_2008.cellml)Number of piecewises: 5## Equation 1:
+# Model: MahajanShiferaw2008_units
+## Number of piecewises: 5
+
+## Equation 1:
 ```
 ICaL__rxa = 4.0 * (-0.34100000000000003 * Environment__Ca_o + Ca__csm * exp(2.0 * Environment__FonRT * cell__V)) * Environment__F * Environment__FonRT * ICaL__pca * cell__V / (-1.0 + exp(2.0 * Environment__FonRT * cell__V))
 ```
@@ -2225,10 +2341,13 @@ INa__am = (((cell__V >= -47.130001) && (cell__V <= -47.129999000000005)) ? (-3.2
 ![Singularity](diagrams//mahajan_shiferaw_2008/5_0.png)
 
 
-Number of singularities: 5
+## Number of singularities: 5
 
 
-# Model: Maleckar(maleckar_model_2009.cellml)Number of piecewises: 0## Equation 1:
+# Model: Maleckar (maleckar_model_2009.cellml)
+## Number of piecewises: 0
+
+## Equation 1:
 ```
 sodium_current__i_Na = pow(membrane__F, 2) * pow(sodium_current_m_gate__m, 3) * (-1.0 + exp((-sodium_current__E_Na + membrane__V) * membrane__F / (membrane__R * membrane__T))) * (0.10000000000000001 * sodium_current_h2_gate__h2 + 0.90000000000000002 * sodium_current_h1_gate__h1) * cleft_space_ion_concentrations__Na_c * membrane__V * sodium_current__P_Na / ((-1.0 + exp(membrane__F * membrane__V / (membrane__R * membrane__T))) * membrane__R * membrane__T)
 ```
@@ -2239,10 +2358,13 @@ sodium_current__i_Na = (((membrane__V >= -2.6380041870925613e-6) && (membrane__V
 ![Singularity](diagrams//maleckar_model_2009/1_0.png)
 
 
-Number of singularities: 1
+## Number of singularities: 1
 
 
-# Model: maltsev_2009(maltsev_2009.cellml)Number of piecewises: 0## Equation 1:
+# Model: maltsev_2009
+## Number of piecewises: 0
+
+## Equation 1:
 ```
 i_CaL_dL_gate__alpha_dL = -0.028389999999999999 * (35.0 + Vm__Vm) / (-1.0 + exp(-14.0 - 0.40000000000000002 * Vm__Vm)) - 0.084900000000000003 * Vm__Vm / (-1.0 + exp(-0.20833333333333334 * Vm__Vm))
 ```
@@ -2265,10 +2387,13 @@ i_CaL_dL_gate__beta_dL = (((Vm__Vm >= 4.9999997499999997) && (Vm__Vm <= 5.000000
 ![Singularity](diagrams//maltsev_2009/2_0.png)
 
 
-Number of singularities: 3
+## Number of singularities: 3
 
 
-# Model: matsuoka_model_2003(matsuoka_model_2003.cellml)Number of piecewises: 0## Equation 1:
+# Model: matsuoka_model_2003
+## Number of piecewises: 0
+
+## Equation 1:
 ```
 constant_field_equations__CF_Ca = 2.0 * (-external_ion_concentrations__Cao * exp(-2.0 * membrane__F * membrane__Vm / (membrane__R * membrane__T)) + internal_ion_concentrations__Cai) * membrane__F * membrane__Vm / ((1.0 - exp(-2.0 * membrane__F * membrane__Vm / (membrane__R * membrane__T))) * membrane__R * membrane__T)
 ```
@@ -2313,10 +2438,13 @@ constant_field_equations__CF_Na = (((membrane__Vm >= -2.6712831923985376e-6) && 
 ![Singularity](diagrams//matsuoka_model_2003/4_0.png)
 
 
-Number of singularities: 4
+## Number of singularities: 4
 
 
-# Model: mcallister_noble_tsien_1975_modelB(mcallister_noble_tsien_1975_b.cellml)Number of piecewises: 0## Equation 1:
+# Model: mcallister_noble_tsien_1975_modelB
+## Number of piecewises: 0
+
+## Equation 1:
 ```
 fast_sodium_current_m_gate__alpha_m = (47.0 + membrane__V) / (1.0 - exp(-4.7000000000000002 - 0.10000000000000001 * membrane__V))
 ```
@@ -2371,10 +2499,13 @@ transient_chloride_current_q_gate__alpha_q = (((membrane__V >= -9.99999999999999
 ![Singularity](diagrams//mcallister_noble_tsien_1975_b/5_0.png)
 
 
-Number of singularities: 5
+## Number of singularities: 5
 
 
-# Model: noble_model_1962(noble_model_1962.cellml)Number of piecewises: 0## Equation 1:
+# Model: noble_model_1962
+## Number of piecewises: 0
+
+## Equation 1:
 ```
 potassium_channel_n_gate__alpha_n = 0.0001 * (-50.0 - membrane__V) / (-1.0 + exp(-5.0 - 0.10000000000000001 * membrane__V))
 ```
@@ -2407,10 +2538,13 @@ sodium_channel_m_gate__beta_m = (((membrane__V >= -8.0000005000000005) && (membr
 ![Singularity](diagrams//noble_model_1962/3_0.png)
 
 
-Number of singularities: 3
+## Number of singularities: 3
 
 
-# Model: noble_model_1991(noble_model_1991.cellml)Number of piecewises: 0## Equation 1:
+# Model: noble_model_1991
+## Number of piecewises: 0
+
+## Equation 1:
 ```
 L_type_Ca_channel__i_Ca_L_Ca = 4.0 * (-50.0 + membrane__V) * (intracellular_calcium_concentration__Ca_i * exp(100.0 * membrane__F / (membrane__R * membrane__T)) - extracellular_calcium_concentration__Ca_o * exp(2.0 * (50.0 - membrane__V) * membrane__F / (membrane__R * membrane__T))) * L_type_Ca_channel__P_Ca_L * L_type_Ca_channel_d_gate__d * L_type_Ca_channel_f_gate__f * membrane__F / ((1.0 - exp(2.0 * (50.0 - membrane__V) * membrane__F / (membrane__R * membrane__T))) * membrane__R * membrane__T)
 ```
@@ -2487,10 +2621,13 @@ fast_sodium_current_m_gate__alpha_m = (((membrane__V >= -41.000000999999997) && 
 ![Singularity](diagrams//noble_model_1991/7_0.png)
 
 
-Number of singularities: 7
+## Number of singularities: 7
 
 
-# Model: noble_model_1998(noble_model_1998.cellml)Number of piecewises: 1## Equation 1:
+# Model: noble_model_1998
+## Number of piecewises: 1
+
+## Equation 1:
 ```
 L_type_Ca_channel__i_Ca_L_Ca_ds = 4.0 * (-50.0 + membrane__V) * (intracellular_calcium_concentration__Ca_i * exp(100.0 * membrane__F / (membrane__R * membrane__T)) - extracellular_calcium_concentration__Ca_o * exp(2.0 * (50.0 - membrane__V) * membrane__F / (membrane__R * membrane__T))) * L_type_Ca_channel__FrICa * L_type_Ca_channel__P_Ca_L * L_type_Ca_channel_d_gate__d * L_type_Ca_channel_f2ds_gate__f2ds * L_type_Ca_channel_f_gate__f * membrane__F / ((1.0 - exp(2.0 * (50.0 - membrane__V) * membrane__F / (membrane__R * membrane__T))) * membrane__R * membrane__T)
 ```
@@ -2567,10 +2704,13 @@ fast_sodium_current_m_gate__alpha_m = (((membrane__V >= -41.000000999999997) && 
 ![Singularity](diagrams//noble_model_1998/7_0.png)
 
 
-Number of singularities: 7
+## Number of singularities: 7
 
 
-# Model: noble_model_2001(noble_model_2001.cellml)Number of piecewises: 1## Equation 1:
+# Model: noble_model_2001
+## Number of piecewises: 1
+
+## Equation 1:
 ```
 L_type_Ca_channel__i_Ca_L_Ca_cyt = 4.0 * (1.0 - L_type_Ca_channel__FrICa) * (-50.0 + membrane__V) * (intracellular_calcium_concentration__Ca_i * exp(100.0 * membrane__F / (membrane__R * membrane__T)) - extracellular_calcium_concentration__Ca_o * exp(2.0 * (50.0 - membrane__V) * membrane__F / (membrane__R * membrane__T))) * L_type_Ca_channel__P_Ca_L * L_type_Ca_channel_d_gate__d * L_type_Ca_channel_f_gate__CaChoncyt * membrane__F / ((1.0 - exp(2.0 * (50.0 - membrane__V) * membrane__F / (membrane__R * membrane__T))) * membrane__R * membrane__T)
 ```
@@ -2680,10 +2820,13 @@ fast_sodium_current_m_gate__alpha_m = (((membrane__V >= -41.000000999999997) && 
 ![Singularity](diagrams//noble_model_2001/10_0.png)
 
 
-Number of singularities: 10
+## Number of singularities: 10
 
 
-# Model: NN_SAN_model_1984(noble_noble_SAN_model_1984.cellml)Number of piecewises: 0## Equation 1:
+# Model: NN_SAN_model_1984 (noble_noble_SAN_model_1984.cellml)
+## Number of piecewises: 0
+
+## Equation 1:
 ```
 fast_sodium_current_m_gate__alpha_m = 200.0 * (41.0 + membrane__V) / (1.0 - exp(-4.1000000000000005 - 0.10000000000000001 * membrane__V))
 ```
@@ -2804,10 +2947,13 @@ time_dependent_potassium_current_x_gate__beta_x = (((membrane__V >= -22.0000015)
 ![Singularity](diagrams//noble_noble_SAN_model_1984/11_0.png)
 
 
-Number of singularities: 11
+## Number of singularities: 11
 
 
-# Model: Noble_SAN_model_1989(noble_SAN_model_1989.cellml)Number of piecewises: 0## Equation 1:
+# Model: Noble_SAN_model_1989 (noble_SAN_model_1989.cellml)
+## Number of piecewises: 0
+
+## Equation 1:
 ```
 fast_sodium_current_m_gate__alpha_m = 200.0 * (41.0 + membrane__V) / (1.0 - exp(-4.1000000000000005 - 0.10000000000000001 * membrane__V))
 ```
@@ -2895,10 +3041,13 @@ second_inward_current__i_siNa = (((membrane__V >= 49.999997328623934) && (membra
 ![Singularity](diagrams//noble_SAN_model_1989/8_0.png)
 
 
-Number of singularities: 8
+## Number of singularities: 8
 
 
-# Model: nygren_atrial_model_1998(nygren_atrial_model_1998.cellml)Number of piecewises: 0## Equation 1:
+# Model: nygren_atrial_model_1998
+## Number of piecewises: 0
+
+## Equation 1:
 ```
 sodium_current__i_Na = pow(membrane__F, 2) * pow(sodium_current_m_gate__m, 3) * (-1.0 + exp((-sodium_current__E_Na + membrane__V) * membrane__F / (membrane__R * membrane__T))) * (0.10000000000000001 * sodium_current_h2_gate__h2 + 0.90000000000000002 * sodium_current_h1_gate__h1) * cleft_space_ion_concentrations__Na_c * membrane__V * sodium_current__P_Na / ((-1.0 + exp(membrane__F * membrane__V / (membrane__R * membrane__T))) * membrane__R * membrane__T)
 ```
@@ -2909,10 +3058,13 @@ sodium_current__i_Na = (((membrane__V >= -2.6380041870925613e-6) && (membrane__V
 ![Singularity](diagrams//nygren_atrial_model_1998/1_0.png)
 
 
-Number of singularities: 1
+## Number of singularities: 1
 
 
-# Model: ohara_rudy_2011_endo(ohara_rudy_2011_endo.cellml)Number of piecewises: 16## Equation 1:
+# Model: ohara_rudy_2011_endo
+## Number of piecewises: 16
+
+## Equation 1:
 ```
 ICaL__PhiCaK = (-0.75 * extracellular__ko + 0.75 * intracellular_ions__kss * exp(membrane__vfrt)) * membrane__vffrt / (-1.0 + exp(membrane__vfrt))
 ```
@@ -2967,10 +3119,13 @@ INab__INab = ((((membrane__v >= -9.9999999999999995e-8 * physical_constants__R *
 ![Singularity](diagrams//ohara_rudy_2011_endo/5_0.png)
 
 
-Number of singularities: 5
+## Number of singularities: 5
 
 
-# Model: ohara_rudy_2011_epi(ohara_rudy_2011_epi.cellml)Number of piecewises: 16## Equation 1:
+# Model: ohara_rudy_2011_epi
+## Number of piecewises: 16
+
+## Equation 1:
 ```
 ICaL__PhiCaK = (-0.75 * extracellular__ko + 0.75 * intracellular_ions__kss * exp(membrane__vfrt)) * membrane__vffrt / (-1.0 + exp(membrane__vfrt))
 ```
@@ -3025,10 +3180,13 @@ INab__INab = ((((membrane__v >= -9.9999999999999995e-8 * physical_constants__R *
 ![Singularity](diagrams//ohara_rudy_2011_epi/5_0.png)
 
 
-Number of singularities: 5
+## Number of singularities: 5
 
 
-# Model: ohara_rudy_cipa_v1_2017(ohara_rudy_cipa_v1_2017.cellml)Number of piecewises: 16## Equation 1:
+# Model: ohara_rudy_cipa_v1_2017
+## Number of piecewises: 16
+
+## Equation 1:
 ```
 ICaL__PhiCaK = (-0.75 * extracellular__ko + 0.75 * intracellular_ions__kss * exp(membrane__vfrt)) * membrane__vffrt / (-1.0 + exp(membrane__vfrt))
 ```
@@ -3083,10 +3241,13 @@ INab__INab = (((membrane__v >= -2.6712338705498262e-6) && (membrane__v <= 2.6712
 ![Singularity](diagrams//ohara_rudy_cipa_v1_2017/5_0.png)
 
 
-Number of singularities: 5
+## Number of singularities: 5
 
 
-# Model: paci_hyttinen_aaltosetala_severi_atrialVersion(paci_hyttinen_aaltosetala_severi_atrialVersion.cellml)Number of piecewises: 9## Equation 1:
+# Model: paci_hyttinen_aaltosetala_severi_atrialVersion
+## Number of piecewises: 9
+
+## Equation 1:
 ```
 i_CaL__i_CaL = 4.0 * pow(model_parameters__F, 2) * (-0.34100000000000003 * model_parameters__Cao + calcium_dynamics__Cai * exp(2.0 * Membrane__Vm * model_parameters__F / (model_parameters__R * model_parameters__T))) * Membrane__Vm * i_CaL__g_CaL * i_CaL_d_gate__d * i_CaL_f1_gate__f1 * i_CaL_f2_gate__f2 * i_CaL_fCa_gate__fCa / ((-1.0 + exp(2.0 * Membrane__Vm * model_parameters__F / (model_parameters__R * model_parameters__T))) * model_parameters__R * model_parameters__T)
 ```
@@ -3097,10 +3258,13 @@ i_CaL__i_CaL = ((((Membrane__Vm >= -4.3086710741444596e-12 * model_parameters__T
 ![Singularity](diagrams//paci_hyttinen_aaltosetala_severi_atrialVersion/1_0.png)
 
 
-Number of singularities: 1
+## Number of singularities: 1
 
 
-# Model: paci_hyttinen_aaltosetala_severi_ventricularVersion(paci_hyttinen_aaltosetala_severi_ventricularVersion.cellml)Number of piecewises: 13## Equation 1:
+# Model: paci_hyttinen_aaltosetala_severi_ventricularVersion
+## Number of piecewises: 13
+
+## Equation 1:
 ```
 i_CaL__i_CaL = 4.0 * pow(model_parameters__F, 2) * (-0.34100000000000003 * model_parameters__Cao + calcium_dynamics__Cai * exp(2.0 * Membrane__Vm * model_parameters__F / (model_parameters__R * model_parameters__T))) * Membrane__Vm * i_CaL__g_CaL * i_CaL_d_gate__d * i_CaL_f1_gate__f1 * i_CaL_f2_gate__f2 * i_CaL_fCa_gate__fCa / ((-1.0 + exp(2.0 * Membrane__Vm * model_parameters__F / (model_parameters__R * model_parameters__T))) * model_parameters__R * model_parameters__T)
 ```
@@ -3111,10 +3275,13 @@ i_CaL__i_CaL = ((((Membrane__Vm >= -4.3086710741444596e-12 * model_parameters__T
 ![Singularity](diagrams//paci_hyttinen_aaltosetala_severi_ventricularVersion/1_0.png)
 
 
-Number of singularities: 1
+## Number of singularities: 1
 
 
-# Model: pandit_clark_giles_demir_2001_version06_variant01(pandit_clark_giles_demir_2001_endocardial_cell.cellml)Number of piecewises: 2## Equation 1:
+# Model: pandit_clark_giles_demir_2001_version06_variant01 (pandit_clark_giles_demir_2001_endocardial_cell.cellml)
+## Number of piecewises: 2
+
+## Equation 1:
 ```
 sodium_current_m_gate__tau_m = 0.0013600000000000001 / (0.080000000000000002 * exp(-0.090909090909090912 * membrane__V) + 0.32000000000000001 * (47.130000000000003 + membrane__V) / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * membrane__V)))
 ```
@@ -3125,10 +3292,13 @@ sodium_current_m_gate__tau_m = 0.0013600000000000001 / (0.080000000000000002 * e
 ![Singularity](diagrams//pandit_clark_giles_demir_2001_endocardial_cell/1_0.png)
 
 
-Number of singularities: 1
+## Number of singularities: 1
 
 
-# Model: pandit_clark_giles_demir_2001(pandit_clark_giles_demir_2001_epicardial_cell.cellml)Number of piecewises: 2## Equation 1:
+# Model: pandit_clark_giles_demir_2001 (pandit_clark_giles_demir_2001_epicardial_cell.cellml)
+## Number of piecewises: 2
+
+## Equation 1:
 ```
 sodium_current_m_gate__tau_m = 0.0013600000000000001 / (0.080000000000000002 * exp(-0.090909090909090912 * membrane__V) + 0.32000000000000001 * (47.130000000000003 + membrane__V) / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * membrane__V)))
 ```
@@ -3139,10 +3309,13 @@ sodium_current_m_gate__tau_m = 0.0013600000000000001 / (0.080000000000000002 * e
 ![Singularity](diagrams//pandit_clark_giles_demir_2001_epicardial_cell/1_0.png)
 
 
-Number of singularities: 1
+## Number of singularities: 1
 
 
-# Model: pasek_simurda_christe_2006(pasek_simurda_christe_2006.cellml)Number of piecewises: 0## Equation 1:
+# Model: pasek_simurda_christe_2006
+## Number of piecewises: 0
+
+## Equation 1:
 ```
 i_Nas_h_gate__beta_h = 18.77 * (64.400000000000006 + Vms__Vms) / (1.0 - exp(-14.168000000000001 - 0.22 * Vms__Vms))
 ```
@@ -3175,10 +3348,13 @@ i_Cas__i_Cas = (((Vms__Vms >= -1.2701813471502589e-6) && (Vms__Vms <= 1.27018134
 ![Singularity](diagrams//pasek_simurda_christe_2006/3_0.png)
 
 
-Number of singularities: 3
+## Number of singularities: 3
 
 
-# Model: pasek_model_2008(pasek_simurda_orchard_christe_2008.cellml)Number of piecewises: 0## Equation 1:
+# Model: pasek_model_2008
+## Number of piecewises: 0
+
+## Equation 1:
 ```
 i_Kr_s_xr_gate__tau_xr = 0.001 / (0.00060999999999999997 * (38.899999999999999 + Vm_s__Vm_s) / (-1.0 + exp(5.6404999999999994 + 0.14499999999999999 * Vm_s__Vm_s)) + 0.0013799999999999999 * (14.199999999999999 + Vm_s__Vm_s) / (1.0 - exp(-1.7465999999999999 - 0.123 * Vm_s__Vm_s)))
 ```
@@ -3246,10 +3422,13 @@ i_nsNa_s__i_nsNa_s = (((Vm_s__Vm_s >= -2.6695336787564767e-6) && (Vm_s__Vm_s <= 
 ![Singularity](diagrams//pasek_simurda_orchard_christe_2008/6_0.png)
 
 
-Number of singularities: 7
+## Number of singularities: 7
 
 
-# Model: priebe_beuckelmann_1998(priebe_beuckelmann_1998.cellml)Number of piecewises: 20## Equation 1:
+# Model: priebe_beuckelmann_1998
+## Number of piecewises: 20
+
+## Equation 1:
 ```
 INa_m_gate__alpha_m = 0.32000000000000001 * (47.130000000000003 + cell__V) / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * cell__V))
 ```
@@ -3260,10 +3439,13 @@ INa_m_gate__alpha_m = (((cell__V >= -47.130001) && (cell__V <= -47.1299990000000
 ![Singularity](diagrams//priebe_beuckelmann_1998/1_0.png)
 
 
-Number of singularities: 1
+## Number of singularities: 1
 
 
-# Model: ramirez_2000(ramirez_nattel_courtemanche_2000.cellml)Number of piecewises: 4## Equation 1:
+# Model: ramirez_2000
+## Number of piecewises: 4
+
+## Equation 1:
 ```
 fast_sodium_current_m_gate__alpha_m = 0.32000000000000001 * (47.130000000000003 + membrane__V) / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * membrane__V))
 ```
@@ -3329,10 +3511,13 @@ slow_delayed_rectifier_K_current_xs_gate__beta_xs = (((membrane__V >= -28.500000
 ![Singularity](diagrams//ramirez_nattel_courtemanche_2000/6_0.png)
 
 
-Number of singularities: 6
+## Number of singularities: 6
 
 
-# Model: sachse_model_2007(sachse_moreno_abildskov_2008_b.cellml)Number of piecewises: 0## Equation 1:
+# Model: sachse_model_2007
+## Number of piecewises: 0
+
+## Equation 1:
 ```
 I_Shkr__I_Shkr = pow(model_parameters__F, 2) * (-model_parameters__Ko * exp(-membrane__Vm * model_parameters__F / (model_parameters__R * model_parameters__T)) + model_parameters__Ki) * I_Shkr__OShkr * I_Shkr__PShkr * membrane__Vm / ((1.0 - exp(-membrane__Vm * model_parameters__F / (model_parameters__R * model_parameters__T))) * model_parameters__R * model_parameters__T)
 ```
@@ -3343,10 +3528,13 @@ I_Shkr__I_Shkr = ((((membrane__Vm >= -8.6113989637305703e-9 * model_parameters__
 ![Singularity](diagrams//sachse_moreno_abildskov_2008_b/1_0.png)
 
 
-Number of singularities: 1
+## Number of singularities: 1
 
 
-# Model: sakmann_model_2000_epi(sakmann_model_2000_epi.cellml)Number of piecewises: 1## Equation 1:
+# Model: sakmann_model_2000_epi
+## Number of piecewises: 1
+
+## Equation 1:
 ```
 L_type_Ca_channel__i_Ca_L_Ca_ds = 4.0 * (-50.0 + membrane__V) * (intracellular_calcium_concentration__Ca_i * exp(100.0 * membrane__F / (membrane__R * membrane__T)) - extracellular_calcium_concentration__Ca_o * exp(2.0 * (50.0 - membrane__V) * membrane__F / (membrane__R * membrane__T))) * L_type_Ca_channel__FrICa * L_type_Ca_channel__P_Ca_L * L_type_Ca_channel_d_gate__d * L_type_Ca_channel_f2ds_gate__f2ds * L_type_Ca_channel_f_gate__f * membrane__F / ((1.0 - exp(2.0 * (50.0 - membrane__V) * membrane__F / (membrane__R * membrane__T))) * membrane__R * membrane__T)
 ```
@@ -3446,10 +3634,13 @@ slow_delayed_rectifier_potassium_current_xs_gate__tau_xs = 0.001 * (((membrane__
 ![Singularity](diagrams//sakmann_model_2000_epi/9_0.png)
 
 
-Number of singularities: 10
+## Number of singularities: 10
 
 
-# Model: shannon_wang_puglisi_weber_bers_2004_model_updated(shannon_wang_puglisi_weber_bers_2004.cellml)Number of piecewises: 4## Equation 1:
+# Model: shannon_wang_puglisi_weber_bers_2004_model_updated
+## Number of piecewises: 4
+
+## Equation 1:
 ```
 ICaL_d_gate__tau_d = 28.571428571428569 * (1.0 - exp(-2.4166666666666665 - 0.16666666666666666 * cell__V)) * ICaL_d_gate__d_infinity / (14.5 + cell__V)
 ```
@@ -3549,10 +3740,13 @@ ICaL__i_CaL_Na_jct = ((((cell__V >= -9.9999999999999995e-8 * model_parameters__R
 ![Singularity](diagrams//shannon_wang_puglisi_weber_bers_2004/9_0.png)
 
 
-Number of singularities: 10
+## Number of singularities: 10
 
 
-# Model: stewart_zhang_model_2008(stewart_zhang_model_2008_ss.cellml)Number of piecewises: 4## Equation 1:
+# Model: stewart_zhang_model_2008
+## Number of piecewises: 4
+
+## Equation 1:
 ```
 L_type_Ca_current__i_CaL = 4.0 * pow(membrane__F, 2) * (-15.0 + membrane__V) * (-calcium_dynamics__Ca_o + 0.25 * calcium_dynamics__Ca_ss * exp(2.0 * (-15.0 + membrane__V) * membrane__F / (membrane__R * membrane__T))) * L_type_Ca_current__g_CaL * L_type_Ca_current_d_gate__d * L_type_Ca_current_f2_gate__f2 * L_type_Ca_current_fCass_gate__fCass * L_type_Ca_current_f_gate__f / ((-1.0 + exp(2.0 * (-15.0 + membrane__V) * membrane__F / (membrane__R * membrane__T))) * membrane__R * membrane__T)
 ```
@@ -3563,10 +3757,13 @@ L_type_Ca_current__i_CaL = (((membrane__V >= 14.999998664311967) && (membrane__V
 ![Singularity](diagrams//stewart_zhang_model_2008_ss/1_0.png)
 
 
-Number of singularities: 1
+## Number of singularities: 1
 
 
-# Model: tentusscher_model_2004_endo(ten_tusscher_model_2004_endo.cellml)Number of piecewises: 7## Equation 1:
+# Model: tentusscher_model_2004_endo
+## Number of piecewises: 7
+
+## Equation 1:
 ```
 L_type_Ca_current__i_CaL = 4.0 * pow(membrane__F, 2) * (-0.34100000000000003 * calcium_dynamics__Ca_o + calcium_dynamics__Ca_i * exp(2.0 * membrane__F * membrane__V / (membrane__R * membrane__T))) * L_type_Ca_current__g_CaL * L_type_Ca_current_d_gate__d * L_type_Ca_current_fCa_gate__fCa * L_type_Ca_current_f_gate__f * membrane__V / ((-1.0 + exp(2.0 * membrane__F * membrane__V / (membrane__R * membrane__T))) * membrane__R * membrane__T)
 ```
@@ -3577,10 +3774,13 @@ L_type_Ca_current__i_CaL = (((membrane__V >= -1.3356880329847825e-6) && (membran
 ![Singularity](diagrams//ten_tusscher_model_2004_endo/1_0.png)
 
 
-Number of singularities: 1
+## Number of singularities: 1
 
 
-# Model: tentusscher_model_2004_epi(ten_tusscher_model_2004_epi.cellml)Number of piecewises: 7## Equation 1:
+# Model: tentusscher_model_2004_epi
+## Number of piecewises: 7
+
+## Equation 1:
 ```
 L_type_Ca_current__i_CaL = 4.0 * pow(membrane__F, 2) * (-0.34100000000000003 * calcium_dynamics__Ca_o + calcium_dynamics__Ca_i * exp(2.0 * membrane__F * membrane__V / (membrane__R * membrane__T))) * L_type_Ca_current__g_CaL * L_type_Ca_current_d_gate__d * L_type_Ca_current_fCa_gate__fCa * L_type_Ca_current_f_gate__f * membrane__V / ((-1.0 + exp(2.0 * membrane__F * membrane__V / (membrane__R * membrane__T))) * membrane__R * membrane__T)
 ```
@@ -3591,10 +3791,13 @@ L_type_Ca_current__i_CaL = (((membrane__V >= -1.3356880329847825e-6) && (membran
 ![Singularity](diagrams//ten_tusscher_model_2004_epi/1_0.png)
 
 
-Number of singularities: 1
+## Number of singularities: 1
 
 
-# Model: tentusscher_model_2004_M(ten_tusscher_model_2004_M.cellml)Number of piecewises: 7## Equation 1:
+# Model: tentusscher_model_2004_M
+## Number of piecewises: 7
+
+## Equation 1:
 ```
 L_type_Ca_current__i_CaL = 4.0 * pow(membrane__F, 2) * (-0.34100000000000003 * calcium_dynamics__Ca_o + calcium_dynamics__Ca_i * exp(2.0 * membrane__F * membrane__V / (membrane__R * membrane__T))) * L_type_Ca_current__g_CaL * L_type_Ca_current_d_gate__d * L_type_Ca_current_fCa_gate__fCa * L_type_Ca_current_f_gate__f * membrane__V / ((-1.0 + exp(2.0 * membrane__F * membrane__V / (membrane__R * membrane__T))) * membrane__R * membrane__T)
 ```
@@ -3605,10 +3808,13 @@ L_type_Ca_current__i_CaL = (((membrane__V >= -1.3356880329847825e-6) && (membran
 ![Singularity](diagrams//ten_tusscher_model_2004_M/1_0.png)
 
 
-Number of singularities: 1
+## Number of singularities: 1
 
 
-# Model: tentusscher_model_2006_endo(ten_tusscher_model_2006_endo.cellml)Number of piecewises: 4## Equation 1:
+# Model: tentusscher_model_2006_endo
+## Number of piecewises: 4
+
+## Equation 1:
 ```
 L_type_Ca_current__temp = (-15.0 + membrane__V) * (-calcium_dynamics__Ca_o + 0.25 * calcium_dynamics__Ca_ss * exp(2.0 * (-15.0 + membrane__V) * membrane__F / (membrane__R * membrane__T))) / (-1.0 + exp(2.0 * (-15.0 + membrane__V) * membrane__F / (membrane__R * membrane__T)))
 ```
@@ -3619,10 +3825,13 @@ L_type_Ca_current__temp = (((membrane__V >= 14.999998664311967) && (membrane__V 
 ![Singularity](diagrams//ten_tusscher_model_2006_endo/1_0.png)
 
 
-Number of singularities: 1
+## Number of singularities: 1
 
 
-# Model: tentusscher_model_2006_epi(ten_tusscher_model_2006_epi.cellml)Number of piecewises: 4## Equation 1:
+# Model: tentusscher_model_2006_epi
+## Number of piecewises: 4
+
+## Equation 1:
 ```
 L_type_Ca_current__temp = (-15.0 + membrane__V) * (-calcium_dynamics__Ca_o + 0.25 * calcium_dynamics__Ca_ss * exp(2.0 * (-15.0 + membrane__V) * membrane__F / (membrane__R * membrane__T))) / (-1.0 + exp(2.0 * (-15.0 + membrane__V) * membrane__F / (membrane__R * membrane__T)))
 ```
@@ -3633,10 +3842,13 @@ L_type_Ca_current__temp = ((((membrane__V >= 15.0 - 4.9999999999999998e-8 * memb
 ![Singularity](diagrams//ten_tusscher_model_2006_epi/1_0.png)
 
 
-Number of singularities: 1
+## Number of singularities: 1
 
 
-# Model: tentusscher_model_2006_M(ten_tusscher_model_2006_M.cellml)Number of piecewises: 4## Equation 1:
+# Model: tentusscher_model_2006_M
+## Number of piecewises: 4
+
+## Equation 1:
 ```
 L_type_Ca_current__temp = (-15.0 + membrane__V) * (-calcium_dynamics__Ca_o + 0.25 * calcium_dynamics__Ca_ss * exp(2.0 * (-15.0 + membrane__V) * membrane__F / (membrane__R * membrane__T))) / (-1.0 + exp(2.0 * (-15.0 + membrane__V) * membrane__F / (membrane__R * membrane__T)))
 ```
@@ -3647,10 +3859,13 @@ L_type_Ca_current__temp = (((membrane__V >= 14.999998664311967) && (membrane__V 
 ![Singularity](diagrams//ten_tusscher_model_2006_M/1_0.png)
 
 
-Number of singularities: 1
+## Number of singularities: 1
 
 
-# Model: Tomek_model13endo(ToRORd_fkatp_endo.cellml)Number of piecewises: 21## Equation 1:
+# Model: Tomek_model13endo
+## Number of piecewises: 21
+
+## Equation 1:
 ```
 ICaL__PhiCaK_i = (-ICaL__gamma_ko * extracellular__ko + ICaL__gamma_ki * intracellular_ions__ki * exp(membrane__vfrt)) * membrane__vffrt / (-1.0 + exp(membrane__vfrt))
 ```
@@ -3738,10 +3953,13 @@ INab__INab = ((((membrane__v >= -9.9999999999999995e-8 * physical_constants__R *
 ![Singularity](diagrams//ToRORd_fkatp_endo/8_0.png)
 
 
-Number of singularities: 8
+## Number of singularities: 8
 
 
-# Model: Tomek_model13epi(ToRORd_fkatp_epi.cellml)Number of piecewises: 21## Equation 1:
+# Model: Tomek_model13epi
+## Number of piecewises: 21
+
+## Equation 1:
 ```
 ICaL__PhiCaK_i = (-ICaL__gamma_ko * extracellular__ko + ICaL__gamma_ki * intracellular_ions__ki * exp(membrane__vfrt)) * membrane__vffrt / (-1.0 + exp(membrane__vfrt))
 ```
@@ -3829,10 +4047,13 @@ INab__INab = ((((membrane__v >= -9.9999999999999995e-8 * physical_constants__R *
 ![Singularity](diagrams//ToRORd_fkatp_epi/8_0.png)
 
 
-Number of singularities: 8
+## Number of singularities: 8
 
 
-# Model: Trovato2020(Trovato2020.cellml)Number of piecewises: 2## Equation 1:
+# Model: Trovato2020
+## Number of piecewises: 2
+
+## Equation 1:
 ```
 ICaL__PhiCaK = (-0.75 * extracellular__ko + 0.75 * intracellular_ions__kss * exp(membrane__vfrt)) * membrane__vffrt / (-1.0 + exp(membrane__vfrt))
 ```
@@ -3887,10 +4108,13 @@ INab__INab = ((((membrane__v >= -9.9999999999999995e-8 * physical_constants__R *
 ![Singularity](diagrams//Trovato2020/5_0.png)
 
 
-Number of singularities: 5
+## Number of singularities: 5
 
 
-# Model: viswanathan_model_1999_epi(viswanathan_model_1999_epi.cellml)Number of piecewises: 13## Equation 1:
+# Model: viswanathan_model_1999_epi
+## Number of piecewises: 13
+
+## Equation 1:
 ```
 L_type_Ca_channel__I_CaCa = 4.0 * pow(membrane__F, 2) * (-L_type_Ca_channel__gamma_Cao * calcium_dynamics__Cao + L_type_Ca_channel__gamma_Cai * calcium_dynamics__Cai * exp(2.0 * membrane__F * membrane__V / (membrane__R * membrane__T))) * L_type_Ca_channel__P_Ca * membrane__V / ((-1.0 + exp(2.0 * membrane__F * membrane__V / (membrane__R * membrane__T))) * membrane__R * membrane__T)
 ```
@@ -3979,10 +4203,13 @@ slow_delayed_rectifier_potassium_current_xs2_gate__tau_xs2 = 0.00400000000000000
 ![Singularity](diagrams//viswanathan_model_1999_epi/8_0.png)
 
 
-Number of singularities: 9
+## Number of singularities: 9
 
 
-# Model: wang_model_2008(wang_sobie_2008.cellml)Number of piecewises: 4## Equation 1:
+# Model: wang_model_2008
+## Number of piecewises: 4
+
+## Equation 1:
 ```
 calcium_activated_chloride_current__i_ClCa = pow(membrane__F, 2) * (-membrane__Cli + membrane__Clo * exp(membrane__F * membrane__V / (membrane__R * membrane__T))) * calcium_activated_chloride_current__P_ClCa * calcium_activated_chloride_current__f_ClCa * membrane__V / ((-1.0 + exp(membrane__F * membrane__V / (membrane__R * membrane__T))) * membrane__R * membrane__T)
 ```
@@ -4015,10 +4242,13 @@ slow_delayed_rectifier_potassium_current__alpha_n = (((membrane__V >= -26.500000
 ![Singularity](diagrams//wang_sobie_2008/3_0.png)
 
 
-Number of singularities: 3
+## Number of singularities: 3
 
 
-# Model: winslow_model_1999(winslow_model_1999.cellml)Number of piecewises: 5## Equation 1:
+# Model: winslow_model_1999
+## Number of piecewises: 5
+
+## Equation 1:
 ```
 fast_sodium_current_m_gate__alpha_m = 320.0 * (47.130000000000003 + membrane__V) / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * membrane__V))
 ```
@@ -4063,10 +4293,13 @@ L_type_Ca_current__i_Ca_K = (((membrane__V >= -2.671376065969565e-6) && (membran
 ![Singularity](diagrams//winslow_model_1999/4_1.png)
 
 
-Number of singularities: 4
+## Number of singularities: 4
 
 
-# Model: zhang_SAN_model_2000_0D_capable(zhang_SAN_model_2000_0D_capable.cellml)Number of piecewises: 0## Equation 1:
+# Model: zhang_SAN_model_2000_0D_capable
+## Number of piecewises: 0
+
+## Equation 1:
 ```
 L_type_Ca_channel_d_gate__alpha_d_L = -28.390000000000001 * (35.0 + membrane__V) / (-1.0 + exp(-14.0 - 0.40000000000000002 * membrane__V)) - 84.900000000000006 * membrane__V / (-1.0 + exp(-0.20799999999999999 * membrane__V))
 ```
@@ -4100,6 +4333,4 @@ L_type_Ca_channel_f_gate__alpha_f_L = (((membrane__V >= -28.000000400000001) && 
 ![Singularity](diagrams//zhang_SAN_model_2000_0D_capable/3_0.png)
 
 
-Number of singularities: 4
-
-
+## Number of singularities: 4
