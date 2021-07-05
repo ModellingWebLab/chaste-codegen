@@ -1,3 +1,7 @@
+Below we show the results of processing the cellml files in the cellml repository, branch no_singularity_fixes[https://github.com/Chaste/cellml/tree/no_singularity_fixes].(https://github.com/Chaste/cellml/tree/no_singularity_fixes). The latest commit at the time was [#2d0d8ce](https://github.com/Chaste/cellml/commit/2d0d8ce903c35c2f8734e35517564307938ff6fc).
+
+The results showL how many piecewises the model has and shows every equation a singularity is found in with the corresponding fix and a diagram comparing teh fixed and original versions.
+
 # Model: aslanidi_atrial_model_2009
 ## Number of piecewises: 6
 
