@@ -1,3 +1,7 @@
+# Release 0.9.0
+- Updated to the latest version of the Web Lab Ontology.
+- Better error messages when working with transitively finding terms, and encountering subjects that don't point to an existing node in the model.
+
 # Release 0.8.0
 - Added `--use-model-factory` flag to allow code to be added for models to self-register to the model factory of the ApPredict peoject.
 - Renamed backward euler cells to be in line with others using `BackwardEulerOpt` / `BackwardEuler` instead of `BackwardEuler` and `BackwardEulerNoLot`.
