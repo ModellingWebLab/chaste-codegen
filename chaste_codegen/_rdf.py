@@ -66,6 +66,6 @@ def get_variables_transitively(model, term):
             variables.append(model.get_variable_by_cmeta_id(cmeta_id))
         except KeyError as e:
             assert 'cmeta id' in str(e) and str(cmeta_id).replace('#', '', 1) in str(e), str(e)
-            LOGGER.warn('Rdf subject %s does not refer to any existing variable in the model.' % cmeta_id)
+            LOGGER.error('Rdf subject %s does not refer to any existing variable in the model.' % cmeta_id)
     variables.sort(key=lambda sym: sym.order_added)
     return variables
