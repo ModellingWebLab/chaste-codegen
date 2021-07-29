@@ -1,3 +1,7 @@
+# Release 0.8.1
+- Updated to the latest version of the Web Lab Ontology.
+- Some RDF errors now result in a warning. For example when looking for currents, we look for rdf triplets (subject, predicate, object) where object is an annotation term that isa type of StimulusCurrentRelated. The warning is triggered when we then find matches for which the subject points to an id that doesn't exist in teh rest of the model.
+
 # Release 0.8.0
 - Added `--use-model-factory` flag to allow code to be added for models to self-register to the model factory of the ApPredict peoject.
 - Renamed backward euler cells to be in line with others using `BackwardEulerOpt` / `BackwardEuler` instead of `BackwardEuler` and `BackwardEulerNoLot`.
