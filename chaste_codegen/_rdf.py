@@ -7,7 +7,7 @@ import rdflib
 from cellmlmanip.model import Model
 from cellmlmanip.rdf import create_rdf_node
 
-from chaste_codegen import LOGGER, MODULE_DIR
+from chaste_codegen import MODULE_DIR, CodegenError
 
 
 _ONTOLOGY = None  # The 'oxmeta' ontology graph
@@ -66,6 +66,6 @@ def get_variables_transitively(model, term):
             variables.append(model.get_variable_by_cmeta_id(cmeta_id))
         except KeyError as e:
             assert 'cmeta id' in str(e) and str(cmeta_id).replace('#', '', 1) in str(e), str(e)
-            LOGGER.error('Rdf subject %s does not refer to any existing variable in the model.' % cmeta_id)
+            raise CodegenError('Rdf subject %s does not refer to any existing variable in the model.' % cmeta_id)
     variables.sort(key=lambda sym: sym.order_added)
     return variables
