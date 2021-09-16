@@ -13,8 +13,7 @@ class RushLarsenModel(ChasteModel):
 
     def __init__(self, model, file_name, **kwargs):
         super().__init__(model, file_name, **kwargs)
-        self._hpp_template = 'rush_larsen_model.hpp'
-        self._cpp_template = 'rush_larsen_model.cpp'
+        self._templates = ['rush_larsen_model.hpp', 'rush_larsen_model.cpp']
         self._vars_for_template['base_class'] = 'AbstractRushLarsenCardiacCell'
         self._vars_for_template['model_type'] = 'RushLarsen'
 

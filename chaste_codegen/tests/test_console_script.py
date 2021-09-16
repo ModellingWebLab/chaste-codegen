@@ -849,3 +849,71 @@ def test_V_not_state_mparam(caplog, tmp_path):
                                    os.path.join(tmp_path, 'test_V_not_state_mparam.hpp'))
     compare_file_against_reference(os.path.join(reference, 'test_V_not_state_mparam.cpp'),
                                    os.path.join(tmp_path, 'test_V_not_state_mparam.cpp'))
+
+
+def test_script_RL_labview(tmp_path):
+    """Convert a RushLarsen model type in labview output"""
+    LOGGER.info('Testing model with options --rush-larsen-labview\n')
+    tmp_path = str(tmp_path)
+    model_name = 'aslanidi_Purkinje_model_2009'
+    model_file = os.path.join(CELLML_FOLDER, model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    outfile = os.path.join(tmp_path, 'aslanidi_atrial_model_2009.txt')
+    # Call commandline script
+    testargs = ['chaste_codegen', model_file, '--rush-larsen-labview', '-o', outfile]
+    with mock.patch.object(sys, 'argv', testargs):
+        chaste_codegen()
+    # Check output
+    reference = os.path.join(os.path.join(TESTS_FOLDER), 'chaste_reference_models', 'RL_labview')
+    compare_file_against_reference(os.path.join(reference, 'aslanidi_atrial_model_2009.txt'),
+                                   os.path.join(tmp_path, 'aslanidi_atrial_model_2009.txt'))
+
+
+def test_script_RL_C(tmp_path):
+    """Convert a RushLarsen model type in labview output"""
+    LOGGER.info('Testing model with options --rush-larsen-C\n')
+    tmp_path = str(tmp_path)
+    model_name = 'aslanidi_Purkinje_model_2009'
+    model_file = os.path.join(CELLML_FOLDER, model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    outfile = os.path.join(tmp_path, 'aslanidi_Purkinje_model_2009.c')
+    # Call commandline script
+    testargs = ['chaste_codegen', model_file, '--rush-larsen-c', '-o', outfile]
+    with mock.patch.object(sys, 'argv', testargs):
+        chaste_codegen()
+    # Check output
+    reference = os.path.join(os.path.join(TESTS_FOLDER), 'chaste_reference_models', 'RL_C')
+    compare_file_against_reference(os.path.join(reference, 'aslanidi_Purkinje_model_2009.h'),
+                                   os.path.join(tmp_path, 'aslanidi_Purkinje_model_2009.h'))
+    compare_file_against_reference(os.path.join(reference, 'aslanidi_Purkinje_model_2009.c'),
+                                   os.path.join(tmp_path, 'aslanidi_Purkinje_model_2009.c'))
+
+
+def test_script_RL_labview_double_type(caplog):
+    """Check error message"""
+    LOGGER.info('Testing model with options --rush-larsen-labview and --opt\n')
+    model_name = 'aslanidi_Purkinje_model_2009'
+    model_file = os.path.join(CELLML_FOLDER, model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    # Call commandline script
+    testargs = ['chaste_codegen', model_file, '--rush-larsen-labview', '--cvode']
+    with mock.patch.object(sys, 'argv', testargs):
+        chaste_codegen()
+    assert 'ERROR' in caplog.text
+    assert "--rush-larsen-labview and --rush-larsen-c cannot be used in combination with other model convertion types" \
+        in caplog.text
+
+
+def test_script_RL_C_double_type(caplog):
+    """Check error message"""
+    LOGGER.info('Testing model with options --rush-larsen-C and --opt\n')
+    model_name = 'aslanidi_Purkinje_model_2009'
+    model_file = os.path.join(CELLML_FOLDER, model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    # Call commandline script
+    testargs = ['chaste_codegen', model_file, '--rush-larsen-c', '--cvode']
+    with mock.patch.object(sys, 'argv', testargs):
+        chaste_codegen()
+    assert 'ERROR' in caplog.text
+    assert "--rush-larsen-labview and --rush-larsen-c cannot be used in combination with other model convertion types" \
+        in caplog.text
