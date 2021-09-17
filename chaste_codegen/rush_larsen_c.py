@@ -161,7 +161,7 @@ class RushLarsenC(RushLarsenModel):
         subs_dict = {v: self._print_sv_ind(v)
                      for v in self._model.find_variables_and_derivatives([eq])
                      if list(v.free_symbols)[0] in self._state_vars}
-        subs_dict |= {self._model.get_free_variable(): Variable("Y[%s]" % len(self._state_vars), units='dimensionless')}
+        subs_dict[self._model.get_free_variable()] = Variable("Y[%s]" % len(self._state_vars), units='dimensionless')
         return self._printer.doprint(eq.xreplace(subs_dict))
 
     def _print_modifiable_parameters(self, variable):
