@@ -52,7 +52,7 @@ float64 {{param.comment_name}} = {{param.initial_value}}; // {{param.units}} (in
 {%- if deriv.is_piecewise%}
 {%- for expr_conds in deriv.pw_expr_conds %}
 {% if expr_conds[1] == 'true' or loop.index0 != 0%}else {% endif %}{% if expr_conds[1] != 'true'%}if ({{expr_conds[1]}}){%- endif %}
-{{deriv.lhs}} = {{expr_conds[0]}}
+    {{deriv.lhs}} = {{expr_conds[0]}}
 {%- endfor %}
 {% else %}
 {{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}

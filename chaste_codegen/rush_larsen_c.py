@@ -152,9 +152,6 @@ class RushLarsenC(RushLarsenModel):
             var_name = "d" + var_name
         return Variable(var_name, units='dimensionless')
 
-    def _format_derivative_alpha_beta(self, deriv):
-        return {'type': 'non_linear', 'deriv': self._print_sv_ind(deriv)}
-
     def _print_rhs_with_modifiers(self, modifier, eq, modifiers_with_defining_eqs=set()):
         """ Print modifiable parameters in the correct format for the model type"""
         # replace state vars by Y vector derived by dY vector, tome by last Y
