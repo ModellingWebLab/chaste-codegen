@@ -42,9 +42,11 @@ TRANSLATORS_WITH_MODIFIERS = tuple('--' + t for t in TRANSLATORS if TRANSLATORS[
 
 
 # Store extensions we can use and how to use them, based on extension of given outfile
-EXTENSION_LOOKUP = {'.cellml': ['.hpp', '.cpp'], '': ['.hpp', '.cpp'], '.cpp': ['.hpp', '.cpp'],
+EXTENSION_LOOKUP_FROM_OUTFILE = {'.cellml': ['.hpp', '.cpp'], '': ['.hpp', '.cpp'], '.cpp': ['.hpp', '.cpp'],
                     '.hpp': ['.hpp', '.cpp'], '.c': ['.h', '.c'], '.h': ['.h', '.c'],
                     '.txt': [None, '.txt']}
+
+EXTENSION_LOOKUP_FROM_CONVERSION_TYPE = {cg.RushLarsenC: ['.h', '.c'], cg.RushLarsenLabview: [None, '.txt']}
 
 
 def print_default_lookup_params():
@@ -192,7 +194,7 @@ def process_command_line():
 
         translator_class = translator[0]
         outfile_path, model_name_from_file, outfile_base, ext = \
-            get_outfile_parts(args.outfile, args.output_dir, args.cellml_file)
+            get_outfile_parts(args.outfile, args.output_dir, args.cellml_file, translator_class)
 
         ext = ext if ext else translator_class.DEFAULT_EXTENSIONS
 
@@ -223,7 +225,7 @@ def process_command_line():
                     write_file(file, code)
 
 
-def get_outfile_parts(outfile, output_dir, cellml_file):
+def get_outfile_parts(outfile, output_dir, cellml_file, translator):
     if outfile is None:
         outfile = cellml_file
 
@@ -237,7 +239,10 @@ def get_outfile_parts(outfile, output_dir, cellml_file):
     model_name_from_file = model_file_base_parts[0]
     outfile_base = out_file_base_parts[0]
     outfile_extension = out_file_base_parts[1] if len(out_file_base_parts) > 1 else ''
-    ext = EXTENSION_LOOKUP[outfile_extension]
+    if translator in EXTENSION_LOOKUP_FROM_CONVERSION_TYPE:
+        ext = EXTENSION_LOOKUP_FROM_CONVERSION_TYPE[translator]
+    else:
+        ext = EXTENSION_LOOKUP_FROM_OUTFILE[outfile_extension]
     return outfile_path, model_name_from_file, outfile_base, ext
 
 
