@@ -37,6 +37,8 @@ class ChasteModel(object):
     Please Note: this calass cannot generate chaste code directly, instead use a subclass of the model type
     """
 
+    DEFAULT_EXTENSIONS = ('.hpp', '.cpp')
+
     def __enter__(self):
         """ Pre analysis preparation. Required to be able to use model in context (with).
         Defined for overwriting in sub-classes if pre-processing is needed to use the model for code generation. """
@@ -55,10 +57,8 @@ class ChasteModel(object):
 
         # Store default options
         self.file_name = file_name
-        self.generated_hpp = ''
-        self.generated_cpp = ''
-        self._hpp_template = ''
-        self._cpp_template = ''
+        self._templates = []
+        self.generated_code = []
 
         # Items to print as chaste_interface_...
         self._in_interface = set()
@@ -433,14 +433,9 @@ class ChasteModel(object):
 
     def generate_chaste_code(self):
         """ Generates and stores chaste code"""
-
-        # Generate hpp for model
-        template = cg.load_template(self._hpp_template)
-        self.generated_hpp = template.render(self._vars_for_template)
-
-        # Generate cpp for model
-        template = cg.load_template(self._cpp_template)
-        self.generated_cpp = template.render(self._vars_for_template)
+        for templ in self._templates:
+            template = cg.load_template(templ)
+            self.generated_code.append(template.render(self._vars_for_template))
 
     def __exit__(self, type, value, traceback):
         """ Clean-up. Required to be able to use model in context (with).

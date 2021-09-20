@@ -54,17 +54,12 @@ def load_chaste_models(model_types=[], reference_folder='chaste_reference_models
                 model_name_from_file = model_file.replace('.cellml', '')
                 model_file = os.path.join(CELLML_FOLDER, model_file)
                 for model_type in model_types:
-                    expected_hpp_path = os.path.join(TESTS_FOLDER, reference_folder)
-                    expected_cpp_path = os.path.join(TESTS_FOLDER, reference_folder)
-
-                    expected_hpp_path = os.path.join(expected_hpp_path, model_type, model_name_from_file + '.hpp')
-                    expected_cpp_path = os.path.join(expected_cpp_path, model_type, model_name_from_file + '.cpp')
+                    expected_path = \
+                        os.path.join(TESTS_FOLDER, reference_folder, model_type, model_name_from_file) + '.hpp'
 
                     # Skip cellml files without reference chaste code
-                    if os.path.isfile(expected_hpp_path) and os.path.isfile(expected_cpp_path):
+                    if os.path.isfile(expected_path):
                         model_files.append({'model_type': model_type,
-                                            'expected_hpp_path': expected_hpp_path,
-                                            'expected_cpp_path': expected_cpp_path,
                                             'model': model_file,
                                             'model_name_from_file': model_name_from_file})
     return model_files
@@ -100,20 +95,19 @@ def get_file_lines(file_name, remove_comments=False):
     return lines
 
 
-def compare_model_against_reference(chaste_model, tmp_path, expected_hpp_path, expected_cpp_path):
+def compare_model_against_reference(chaste_model, tmp_path, model_type, reference_folder='chaste_reference_models'):
     """ Check a model's generated files against given reference files
     """
     tmp_path = str(tmp_path)
-    # Compare against reference
+    expected_path = os.path.join(TESTS_FOLDER, reference_folder, model_type, chaste_model.file_name)
     # Write generated files
-    hhp_gen_file_path = os.path.join(tmp_path, chaste_model.file_name + ".hpp")
-    cpp_gen_file_path = os.path.join(tmp_path, chaste_model.file_name + ".cpp")
-    write_file(hhp_gen_file_path, chaste_model.generated_hpp)
-    write_file(cpp_gen_file_path, chaste_model.generated_cpp)
-
-    # Compare converted files vs reference
-    compare_file_against_reference(hhp_gen_file_path, expected_hpp_path)
-    compare_file_against_reference(cpp_gen_file_path, expected_cpp_path)
+    # Compare against reference
+    assert len(chaste_model.generated_code) == len(chaste_model.generated_code) == len(chaste_model.DEFAULT_EXTENSIONS)
+    assert len(chaste_model.generated_code) > 0
+    for ext, code in zip(chaste_model.DEFAULT_EXTENSIONS, chaste_model.generated_code):
+        gen_file_path = os.path.join(tmp_path, chaste_model.file_name + ext)
+        write_file(gen_file_path, code)
+        compare_file_against_reference(gen_file_path, expected_path + ext)
 
 
 def compare_file_against_reference(file, reference):

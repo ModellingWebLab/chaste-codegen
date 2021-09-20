@@ -15,7 +15,6 @@ from chaste_codegen import (
 from chaste_codegen._rdf import OXMETA
 from chaste_codegen.tests.conftest import (
     CELLML_FOLDER,
-    TESTS_FOLDER,
     cache_model,
     compare_model_against_reference,
     load_chaste_models,
@@ -60,7 +59,7 @@ def test_Cvode_opt_jacobian(tmp_path, model):
                                 use_analytic_jacobian=True) as chaste_model:
         chaste_model.generate_chaste_code()
         # Compare against reference
-        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+        compare_model_against_reference(chaste_model, tmp_path, 'Cvode_opt_with_jacobian')
 
 
 @pytest.mark.parametrize(('model'), chaste_cvode_opt_models)
@@ -73,7 +72,7 @@ def test_Cvode_opt(tmp_path, model):
                                 class_name=class_name) as chaste_model:
         chaste_model.generate_chaste_code()
         # Compare against reference
-        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+        compare_model_against_reference(chaste_model, tmp_path, 'Cvode_opt')
 
 
 @pytest.mark.parametrize(('model'), chaste_CVODE_DATA_CLAMP)
@@ -86,7 +85,7 @@ def test_CVODE_DATA_CLAMP(tmp_path, model):
                              cvode_data_clamp=True) as chaste_model:
         chaste_model.generate_chaste_code()
         # Compare against reference
-        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+        compare_model_against_reference(chaste_model, tmp_path, 'CVODE_DATA_CLAMP')
 
 
 @pytest.mark.parametrize(('model'), chaste_CVODE_DATA_CLAMP_OPT)
@@ -99,7 +98,7 @@ def test_CVODE_DATA_CLAMP_OPT(tmp_path, model):
                                 cvode_data_clamp=True) as chaste_model:
         chaste_model.generate_chaste_code()
         # Compare against reference
-        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+        compare_model_against_reference(chaste_model, tmp_path, 'CVODE_DATA_CLAMP_OPT')
 
 
 @pytest.mark.parametrize(('model'), chaste_GRL2Opt)
@@ -112,7 +111,7 @@ def test_GRL2Opt(tmp_path, model):
                                                      class_name=class_name) as chaste_model:
         chaste_model.generate_chaste_code()
         # Compare against reference
-        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+        compare_model_against_reference(chaste_model, tmp_path, 'GRL2Opt')
 
 
 @pytest.mark.parametrize(('model'), chaste_GRL2)
@@ -125,7 +124,7 @@ def test_GRL2(tmp_path, model):
                                                   class_name=class_name) as chaste_model:
         chaste_model.generate_chaste_code()
         # Compare against reference
-        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+        compare_model_against_reference(chaste_model, tmp_path, 'GRL2')
 
 
 @pytest.mark.parametrize(('model'), chaste_GRL1Opt)
@@ -138,7 +137,7 @@ def test_GRL1Opt(tmp_path, model):
                                                     class_name=class_name) as chaste_model:
         chaste_model.generate_chaste_code()
         # Compare against reference
-        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+        compare_model_against_reference(chaste_model, tmp_path, 'GRL1Opt')
 
 
 @pytest.mark.parametrize(('model'), chaste_GRL1)
@@ -151,7 +150,7 @@ def test_GRL1(tmp_path, model):
                                                  class_name=class_name) as chaste_model:
         chaste_model.generate_chaste_code()
         # Compare against reference
-        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+        compare_model_against_reference(chaste_model, tmp_path, 'GRL1')
 
 
 @pytest.mark.parametrize(('model'), chaste_RLopt)
@@ -164,7 +163,7 @@ def test_RLopt(tmp_path, model):
                                class_name=class_name) as chaste_model:
         chaste_model.generate_chaste_code()
         # Compare against reference
-        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+        compare_model_against_reference(chaste_model, tmp_path, 'RLopt')
 
 
 @pytest.mark.parametrize(('model'), chaste_RL)
@@ -177,7 +176,7 @@ def test_RL(tmp_path, model):
                             class_name=class_name) as chaste_model:
         chaste_model.generate_chaste_code()
         # Compare against reference
-        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+        compare_model_against_reference(chaste_model, tmp_path, 'RL')
 
 
 @pytest.mark.parametrize(('model'), chaste_BEopt)
@@ -190,7 +189,7 @@ def test_BEopt(tmp_path, model):
                                   class_name=class_name) as chaste_model:
         chaste_model.generate_chaste_code()
         # Compare against reference
-        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+        compare_model_against_reference(chaste_model, tmp_path, 'BEopt')
 
 
 @pytest.mark.parametrize(('model'), chaste_BE)
@@ -203,7 +202,7 @@ def test_BE(tmp_path, model):
                                class_name=class_name) as chaste_model:
         chaste_model.generate_chaste_code()
         # Compare against reference
-        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+        compare_model_against_reference(chaste_model, tmp_path, 'BE')
 
 
 @pytest.mark.parametrize(('model'), chaste_cvode_models_with_jacobians)
@@ -216,7 +215,7 @@ def test_Cvode_jacobian(tmp_path, model):
                              class_name=class_name, use_analytic_jacobian=True) as chaste_model:
         chaste_model.generate_chaste_code()
         # Compare against reference
-        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+        compare_model_against_reference(chaste_model, tmp_path, 'Cvode_with_jacobian')
 
 
 @pytest.mark.parametrize(('model'), chaste_cvode_models)
@@ -229,7 +228,7 @@ def test_Cvode(tmp_path, model):
                              class_name=class_name) as chaste_model:
         chaste_model.generate_chaste_code()
         # Compare against reference
-        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+        compare_model_against_reference(chaste_model, tmp_path, 'Cvode')
 
 
 @pytest.mark.parametrize(('model'), chaste_normal_models)
@@ -242,7 +241,7 @@ def test_Normal(tmp_path, model):
                               class_name=class_name) as chaste_model:
         chaste_model.generate_chaste_code()
         # Compare against reference
-        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+        compare_model_against_reference(chaste_model, tmp_path, 'Normal')
 
 
 @pytest.mark.parametrize(('model'), chaste_opt_models)
@@ -256,7 +255,7 @@ def test_Opt(tmp_path, model):
                            class_name=class_name) as chaste_model:
         chaste_model.generate_chaste_code()
         # Compare against reference
-        compare_model_against_reference(chaste_model, tmp_path, model['expected_hpp_path'], model['expected_cpp_path'])
+        compare_model_against_reference(chaste_model, tmp_path, 'Opt')
 
 
 def test_chaste_model_base_class(tmp_path):
@@ -267,16 +266,11 @@ def test_chaste_model_base_class(tmp_path):
 
     with cg.ChasteModel(cache_model(model_file), 'luo_rudy_1994',
                         class_name='Cellluo_rudy_1994FromCellML') as chaste_model:
-        chaste_model._hpp_template = 'normal_model.hpp'
-        chaste_model._cpp_template = 'normal_model.cpp'
+        chaste_model._templates = ['normal_model.hpp', 'normal_model.cpp']
         chaste_model._vars_for_template['base_class'] = 'AbstractCardiacCell'
         chaste_model._vars_for_template['model_type'] = 'Normal'
         chaste_model.generate_chaste_code()
-
-        reference = os.path.join(TESTS_FOLDER, 'chaste_reference_models', 'Normal')
-
-        compare_model_against_reference(chaste_model, tmp_path, os.path.join(reference, 'luo_rudy_1994.hpp'),
-                                        os.path.join(reference, 'luo_rudy_1994.cpp'))
+        compare_model_against_reference(chaste_model, tmp_path, 'Normal')
 
 
 def test_missing_V():

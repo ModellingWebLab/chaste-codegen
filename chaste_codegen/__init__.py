@@ -17,6 +17,7 @@ from ._config import (  # noqa
     __version_int__,
     version,
 )
+from ._labview_printer import LabviewPrinter  # noqa
 from ._load_template import load_template  # noqa
 #
 # Load and expose public classes and functions
@@ -43,6 +44,8 @@ from .generalised_rush_larsen_2_opt_model import GeneralisedRushLarsenSecondOrde
 from .model_with_conversions import add_conversions, load_model_with_conversions  # noqa
 from .normal_chaste_model import NormalChasteModel  # noqa
 from .opt_chaste_model import OptChasteModel  # noqa
+from .rush_larsen_c import RushLarsenC  # noqa
+from .rush_larsen_labview import RushLarsenLabview  # noqa
 from .rush_larsen_model import RushLarsenModel  # noqa
 from .rush_larsen_opt_model import RushLarsenOptModel  # noqa
 

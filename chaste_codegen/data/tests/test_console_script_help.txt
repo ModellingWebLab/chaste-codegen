@@ -1,6 +1,7 @@
 usage: chaste_codegen [-h] [--version] [--normal] [--cvode]
                       [--cvode-data-clamp] [--backward-euler] [--rush-larsen]
-                      [--grl1] [--grl2] [-j] [-o OUTFILE]
+                      [--grl1] [--grl2] [--rush-larsen-labview]
+                      [--rush-larsen-c] [-j] [-o OUTFILE]
                       [--output-dir OUTPUT_DIR] [--show-outputs] [-c CLS_NAME]
                       [-q] [--skip-ingularity-fixes] [-y] [--opt] [-m]
                       [--lookup-table <metadata tag> min max step]
@@ -27,6 +28,11 @@ ModelTypes:
   --rush-larsen         Generate rush-larsen model type
   --grl1                Generate grl1 model type
   --grl2                Generate grl2 model type
+  --rush-larsen-labview
+                        Generate rush-larsen-labview model type in
+                        mastrcriptRT with added injection current(i_inj)
+  --rush-larsen-c       Generate rush-larsen-c model type in C with added
+                        injection current(i_inj)
 
 Transformations:
   These options control which transformations (typically optimisations) are
