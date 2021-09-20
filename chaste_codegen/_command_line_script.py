@@ -43,8 +43,8 @@ TRANSLATORS_WITH_MODIFIERS = tuple('--' + t for t in TRANSLATORS if TRANSLATORS[
 
 # Store extensions we can use and how to use them, based on extension of given outfile
 EXTENSION_LOOKUP_FROM_OUTFILE = {'.cellml': ['.hpp', '.cpp'], '': ['.hpp', '.cpp'], '.cpp': ['.hpp', '.cpp'],
-                    '.hpp': ['.hpp', '.cpp'], '.c': ['.h', '.c'], '.h': ['.h', '.c'],
-                    '.txt': [None, '.txt']}
+                                 '.hpp': ['.hpp', '.cpp'], '.c': ['.h', '.c'], '.h': ['.h', '.c'],
+                                 '.txt': [None, '.txt']}
 
 EXTENSION_LOOKUP_FROM_CONVERSION_TYPE = {cg.RushLarsenC: ['.h', '.c'], cg.RushLarsenLabview: [None, '.txt']}
 

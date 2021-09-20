@@ -523,7 +523,7 @@ def _get_ionic_vars(model, skip_chaste_stimulus_conversion=False):
             factor = model.units.get_conversion_factor(from_unit=model.units.evaluate_units(var),
                                                        to_unit=model.conversion_units.get_unit('uA_per_cm2'))
         except DimensionalityError:
-                factor = 1
+            factor = 1
 
         i_ionic_rhs += factor * var
     i_ionic_rhs = simplify(i_ionic_rhs * model.ionic_stimulus_sign)  # clean up equation
