@@ -16,6 +16,7 @@
 - [ ] I have updated all documentation in the code where necessary.
 - [ ] I have checked spelling in all (new) comments and documentation.
 - [ ] I have added a note to RELEASE.md if relevant (new feature, breaking change, or notable bug fix).
+- [ ] I have updated version & citation.txt & citation.cff version.
 
 ## Testing
 - [X] Testing is done automatically and codecov shows test coverage
