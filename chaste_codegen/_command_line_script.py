@@ -180,7 +180,7 @@ def process_command_line():
     if not args.show_outputs:
         # Load model once, not once per translator, but only if we're actually generating code
         model = load_model_with_conversions(args.cellml_file, use_modifiers=args.modifiers, quiet=args.quiet,
-                                            skip_singularity_fixes=args.skip_ingularity_fixes,
+                                            skip_singularity_fixes=args.skip_singularity_fixes,
                                             skip_conversions=skip_conversion(args))
 
     if len(translators) > 1 and skip_conversion(args):
