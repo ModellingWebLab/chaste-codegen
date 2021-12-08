@@ -1,3 +1,6 @@
+# Release 0.9.2
+- Corrected a typo in command line argument `--skip-ingularity-fixes` renaming it to `--skip-singularity-fixes`
+
 # Release 0.9.1
 - Added RushLarsen translators for allowing output as c code (`--rush-larsen-c`) and labview (`--rush-larsen-labview`), These are for people wanting to generate generic c or labview code when using chaste_codegen as a stand-alone utility and are not used by chaste
 
