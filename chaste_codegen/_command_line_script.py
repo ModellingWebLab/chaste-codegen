@@ -97,7 +97,7 @@ def process_command_line():
                        help='explicitly set the name of the generated class')
     group.add_argument('-q', '--quiet', action='store_true', default=False,
                        help="quiet operation, don't print informational messages to screen")
-    group.add_argument('--skip-ingularity-fixes', action='store_true', default=False,
+    group.add_argument('--skip-singularity-fixes', action='store_true', default=False,
                        help="skip singularity fixes in Goldman-Hodgkin-Katz (GHK) equations.")
 
     group = parser.add_argument_group('Chaste options', description='Options specific to Chaste code output')
