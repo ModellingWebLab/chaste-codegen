@@ -50,7 +50,7 @@ setup(
         'decorator>=4.4.2, <5',
         'importlib-metadata>=1.7, <5',
         'isodate>=0.6.0, <1',
-        'lxml>=4.6.3, <5',
+        'lxml>=4.6.5, <5',
         'MarkupSafe>=1.1.1, <2',
         'mpmath>=1.1.0, <2',
         'networkx>=2.4, <3',
