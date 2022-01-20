@@ -27,7 +27,7 @@ class KINDS(Enum):
     NONLINEAR = 3
 
 
-@lru_cache
+@lru_cache(maxsize=128)
 def _check_expr(expr, state_var, membrane_voltage_var, state_vars):
     """Check the kind of expression given (NONE, LINEAR or NONLINEAR)
 
@@ -40,7 +40,7 @@ def _check_expr(expr, state_var, membrane_voltage_var, state_vars):
     :param state_vars: the state variables in the model the expression comes from
     :return: the kind of expr (NONE, LINEAR or NONLINEAR)
     """
-    @lru_cache
+    @lru_cache(maxsize=128)
     def max_kind(state_var, operands):
         result = KINDS.NONE
         for op in operands:
