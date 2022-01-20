@@ -1,4 +1,5 @@
 from enum import Enum
+from functools import lru_cache
 
 from cellmlmanip.model import Variable
 from sympy import (
@@ -26,6 +27,7 @@ class KINDS(Enum):
     NONLINEAR = 3
 
 
+@lru_cache
 def _check_expr(expr, state_var, membrane_voltage_var, state_vars):
     """Check the kind of expression given (NONE, LINEAR or NONLINEAR)
 
@@ -38,6 +40,7 @@ def _check_expr(expr, state_var, membrane_voltage_var, state_vars):
     :param state_vars: the state variables in the model the expression comes from
     :return: the kind of expr (NONE, LINEAR or NONLINEAR)
     """
+    @lru_cache
     def max_kind(state_var, operands):
         result = KINDS.NONE
         for op in operands:
@@ -126,7 +129,7 @@ def get_non_linear_state_vars(derivative_equations, membrane_voltage_var, state_
     return set([eq.lhs.args[0] for eq in derivative_equations
                 if isinstance(eq.lhs, Derivative) and
                 eq.lhs.args[0] != membrane_voltage_var and
-                _check_expr(eq.rhs, eq.lhs.args[0], membrane_voltage_var, state_vars) != KINDS.LINEAR])
+                _check_expr(eq.rhs, eq.lhs.args[0], membrane_voltage_var, tuple(state_vars)) != KINDS.LINEAR])
 
 
 def subst_deriv_eqs_non_linear_vars(y_derivatives, non_linear_state_vars, membrane_voltage_var, state_vars,
