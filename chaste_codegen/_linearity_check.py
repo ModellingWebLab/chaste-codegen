@@ -1,5 +1,5 @@
 from enum import Enum
-#from functools import lru_cache
+from functools import lru_cache
 
 from cellmlmanip.model import Variable
 from sympy import (
