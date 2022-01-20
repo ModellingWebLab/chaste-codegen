@@ -23,7 +23,7 @@ authors:
   given-names: "Gary R."
 
 title: "chaste-codegen"
-version: 0.9.1
+version: 0.9.3
 doi: 10.5281/zenodo.5517000
 date-released: 2021-09-20
 url: "https://github.com/ModellingWebLab/chaste-codegen"

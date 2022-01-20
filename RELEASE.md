@@ -1,3 +1,6 @@
+# Release 0.9.3
+- Performance upgrade for `--rush-larsen` using caching on linearity checking.
+
 # Release 0.9.2
 - Corrected a typo in command line argument `--skip-ingularity-fixes` renaming it to `--skip-singularity-fixes`
 
