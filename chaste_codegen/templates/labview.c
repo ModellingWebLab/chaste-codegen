@@ -22,11 +22,16 @@
 // State variables
 //------------------------------------------------------------------------------
 
-double Y[_NB_OF_STATE_VARIABLES_];
+extern double Y[_NB_OF_STATE_VARIABLES_];
 double dY[_NB_OF_STATE_VARIABLES_];
+double Ynew[_NB_OF_STATE_VARIABLES_];
+
 {%- for state_var in state_vars %}
 // {{loop.index0}}: {{state_var.var}} (units: {{state_var.units}}, initial value: {{state_var.initial_value}}, component: {{components[loop.index0]}})
 {%- endfor %}
+
+double Vmem;
+double time;
 
 char YNames[_NB_OF_STATE_VARIABLES_][{{stat_var_name_max_length +1}}];
 char YUnits[_NB_OF_STATE_VARIABLES_][{{unit_name_max_length +1}}];
@@ -61,12 +66,17 @@ void init()
 {%for state_var in state_vars %}
     Y[{{loop.index0}}] = {{state_var.initial_value}}; // {{state_var.var}} ({{state_var.units}}) (in {{components[loop.index0]}})
 {%- endfor %}
+    Y[{{state_vars | length}}]; // ({{free_variable.var_name}}} (milliseconds)
+
 {%for state_var in state_vars %}
     strcpy(YNames[{{loop.index0}}], "{{state_var.var}}");
 {%- endfor %}
+    strcpy(YNames[{{state_vars | length}}], "{{free_variable.var_name}}");
+
 {%for state_var in state_vars %}
     strcpy(YUnits[{{loop.index0}}], "{{state_var.units}}");
 {%- endfor %}
+    strcpy(YUnits[{{state_vars | length}}], "milliseconds");
 
     //------------------------------------------------------------------------------
     // Constants
@@ -79,7 +89,10 @@ void init()
 {% endif %}{%- endfor %}
 }
 
-void compute(double {{free_variable.var_name}})
+    //---------------------------------------------------------------------------
+    // Computation
+    //---------------------------------------------------------------------------
+void compute()
 {
    // time: {{free_variable.var_name}} (millisecond)
 {% for deriv in y_derivative_equations %}
@@ -95,6 +108,46 @@ void compute(double {{free_variable.var_name}})
 {%- endif %}
 {%- endfor %}
 }
+
+    //------------------------------------------------------------------------------
+    // Integration & Output
+    //------------------------------------------------------------------------------
+    // Rush-Larsen method
+
+
+// get tau/inf or alpha/beta
+void computeTauInf()
+  {% for deriv in derivative_alpha_beta %}{% if deriv.type!='non_linear'%}double alphaOrTau_{{loop.index0}} = {{deriv.r_alpha_or_tau}};
+  double betaOrInf_{{loop.index0}} = {{deriv.r_beta_or_inf}};
+  {% endif %}{%- endfor %}
+  // gating variables: Exponential integration
+  {% for deriv in derivative_alpha_beta %}{%- if deriv.type=='inftau'%}
+  Ynew[{{loop.index0}}] = betaOrInf_{{loop.index0}} + (Y[{{loop.index0}}] - betaOrInf_{{loop.index0}})*exp(-dt/alphaOrTau_{{loop.index0}});
+  {%- elif deriv.type!='non_linear'%}
+  double tau_inv_{{loop.index0}} = alphaOrTau_{{loop.index0}} + betaOrInf_{{loop.index0}};
+  double y_inf_{{loop.index0}} = alphaOrTau_{{loop.index0}} / tau_inv_{{loop.index0}};
+  Ynew[{{loop.index0}}] = y_inf_{{loop.index0}} + (Y[{{loop.index0}}] - y_inf_{{loop.index0}})*exp(-dt*tau_inv_{{loop.index0}});
+  {%- endif %}
+  {%- endfor %}
+}
+
+// Remainder: Forward Euler
+void computeRemainderForaredEuler(){
+{% for deriv in derivative_alpha_beta %}
+  {%- if deriv.type=='non_linear'%}
+  Ynew[{{loop.index0}}] = Y[{{loop.index0}}] + dt * {{deriv.deriv}};{%- endif %}{%- endfor %}
+  Ynew[{{state_vars | length}}] = Y[{{state_vars | length}}] + dt;
+}
+
+compute();
+computeTauInf();
+computeRemainderForaredEuler();
+
+
+Vmem = Ynew[0];
+time = Ynew[{{state_vars | length}}];
+
+
 
 //==============================================================================
 // End of file
