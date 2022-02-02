@@ -42,7 +42,7 @@ setup(
     include_package_data=True,
 
     # Required Python version
-    python_requires='>=3.5',
+    python_requires='>=3.6',
 
     # List of dependencies
     install_requires=[
