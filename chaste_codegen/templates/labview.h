@@ -17,13 +17,17 @@
 // State variables
 //------------------------------------------------------------------------------
 
-#define _NB_OF_STATE_VARIABLES_ {{state_vars | length}}
+#define _NB_OF_STATE_VARIABLES_ {{state_vars | length +1}}
 
 extern double Y[_NB_OF_STATE_VARIABLES_];
-extern double dY[_NB_OF_STATE_VARIABLES_];
+extern double Y[_NB_OF_STATE_VARIABLES_];
+extern double double dY[_NB_OF_STATE_VARIABLES_];
 {%- for state_var in state_vars %}
 // {{loop.index0}}: {{state_var.var}} ({{state_var.units}}) (in {{components[loop.index0]}}) (Initial value: {{state_var.initial_value}})
 {%- endfor %}
+
+extern double Vmem;
+extern double time;
 
 extern char YNames[_NB_OF_STATE_VARIABLES_][{{stat_var_name_max_length +1}}];
 extern char YUnits[_NB_OF_STATE_VARIABLES_][{{unit_name_max_length +1}}];
@@ -51,7 +55,9 @@ extern double {{param["comment_name"]}}; // {{param["units"]}} (in {{param["comp
 //------------------------------------------------------------------------------
 
 extern void init();
-extern void compute(double {{free_variable.var_name}});
+extern void compute();
+extern void computeTauInf();
+extern void computeRemainderForaredEuler();
 
 //------------------------------------------------------------------------------
 

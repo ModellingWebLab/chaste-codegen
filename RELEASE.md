@@ -1,3 +1,6 @@
+# Release 0.9.4
+- Corrected Rush-Larsen output for `--rush-larsen-c`
+
 # Release 0.9.3
 - Performance upgrade for `--rush-larsen` using caching on linearity checking.
 

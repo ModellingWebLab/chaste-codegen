@@ -22,8 +22,9 @@
 // State variables
 //------------------------------------------------------------------------------
 
-double Y[_NB_OF_STATE_VARIABLES_];
+extern double Y[_NB_OF_STATE_VARIABLES_];
 double dY[_NB_OF_STATE_VARIABLES_];
+double Ynew[_NB_OF_STATE_VARIABLES_];
 // 0: V (units: millivolt, initial value: -83.43812846286808, component: membrane)
 // 1: Ca_i (units: millimolar, initial value: 0.00022355433459434943, component: Ca_i)
 // 2: m (units: dimensionless, initial value: 0.002003390432234504, component: i_Na_m_gate)
@@ -54,6 +55,9 @@ double dY[_NB_OF_STATE_VARIABLES_];
 // 27: Ca_r (units: millimolar, initial value: 0.00022418117117903934, component: Ca_r)
 // 28: ri (units: dimensionless, initial value: 0.7802870066567904, component: q_rel_ri_gate)
 // 29: ro (units: dimensionless, initial value: 1.2785734760674763e-09, component: q_rel_ro_gate)
+
+double Vmem;
+double time;
 
 char YNames[_NB_OF_STATE_VARIABLES_][11];
 char YUnits[_NB_OF_STATE_VARIABLES_][14];
@@ -336,6 +340,8 @@ void init()
     Y[27] = 0.00022418117117903934; // Ca_r (millimolar) (in Ca_r)
     Y[28] = 0.7802870066567904; // ri (dimensionless) (in q_rel_ri_gate)
     Y[29] = 1.2785734760674763e-09; // ro (dimensionless) (in q_rel_ro_gate)
+    Y[30]; // (time} (milliseconds)
+
 
     strcpy(YNames[0], "V");
     strcpy(YNames[1], "Ca_i");
@@ -367,6 +373,8 @@ void init()
     strcpy(YNames[27], "Ca_r");
     strcpy(YNames[28], "ri");
     strcpy(YNames[29], "ro");
+    strcpy(YNames[30], "time");
+
 
     strcpy(YUnits[0], "millivolt");
     strcpy(YUnits[1], "millimolar");
@@ -398,6 +406,7 @@ void init()
     strcpy(YUnits[27], "millimolar");
     strcpy(YUnits[28], "dimensionless");
     strcpy(YUnits[29], "dimensionless");
+    strcpy(YUnits[30], "milliseconds");
 
     //------------------------------------------------------------------------------
     // Constants
@@ -504,7 +513,10 @@ void init()
 
 }
 
-void compute(double time)
+    //---------------------------------------------------------------------------
+    // Computation
+    //---------------------------------------------------------------------------
+void compute()
 {
    // time: time (millisecond)
 
@@ -707,6 +719,97 @@ void compute(double time)
     dY[25] = -q_leak - Vol_jsr * q_tr / Vol_nsr + q_up;
     dY[1] = -((-q_leak + q_up) * Vol_nsr / Vol_myo - q_diff * Vol_ss / Vol_myo + 0.5 * (-2.0 * i_NaCa + i_Ca_b + i_Ca_p) * Cm * a_cap / (F * Vol_myo)) * b_myo;
 }
+
+    //------------------------------------------------------------------------------
+    // Integration & Output
+    //------------------------------------------------------------------------------
+    // Rush-Larsen method
+
+
+// get tau/inf or alpha/beta
+void computeTauInf()
+  double alphaOrTau_2 = tau_m;
+  double betaOrInf_2 = m_infinity;
+  double alphaOrTau_3 = tau_h;
+  double betaOrInf_3 = h_infinity;
+  double alphaOrTau_4 = tau_j;
+  double betaOrInf_4 = j_infinity;
+  double alphaOrTau_5 = tau_m_L;
+  double betaOrInf_5 = m_L_infinity;
+  double alphaOrTau_6 = tau_h_L;
+  double betaOrInf_6 = h_L_infinity;
+  double alphaOrTau_7 = tau_d;
+  double betaOrInf_7 = d_infinity;
+  double alphaOrTau_8 = tau_f;
+  double betaOrInf_8 = f_infinity;
+  double alphaOrTau_9 = tau_f2;
+  double betaOrInf_9 = f2_infinity;
+  double alphaOrTau_12 = tau_b;
+  double betaOrInf_12 = b_infinity;
+  double alphaOrTau_13 = tau_g;
+  double betaOrInf_13 = g_infinity;
+  double alphaOrTau_14 = tau_a;
+  double betaOrInf_14 = a_infinity;
+  double alphaOrTau_15 = tau_i;
+  double betaOrInf_15 = i_infinity;
+  double alphaOrTau_16 = tau_i2;
+  double betaOrInf_16 = i2_infinity;
+  double alphaOrTau_17 = tau_xr;
+  double betaOrInf_17 = xr_infinity;
+  double alphaOrTau_18 = tau_xs1;
+  double betaOrInf_18 = xs1_infinity;
+  double alphaOrTau_19 = tau_xs2;
+  double betaOrInf_19 = xs2_infinity;
+  
+  // gating variables: Exponential integration
+  
+  Ynew[2] = betaOrInf_2 + (Y[2] - betaOrInf_2)*exp(-dt/alphaOrTau_2);
+  Ynew[3] = betaOrInf_3 + (Y[3] - betaOrInf_3)*exp(-dt/alphaOrTau_3);
+  Ynew[4] = betaOrInf_4 + (Y[4] - betaOrInf_4)*exp(-dt/alphaOrTau_4);
+  Ynew[5] = betaOrInf_5 + (Y[5] - betaOrInf_5)*exp(-dt/alphaOrTau_5);
+  Ynew[6] = betaOrInf_6 + (Y[6] - betaOrInf_6)*exp(-dt/alphaOrTau_6);
+  Ynew[7] = betaOrInf_7 + (Y[7] - betaOrInf_7)*exp(-dt/alphaOrTau_7);
+  Ynew[8] = betaOrInf_8 + (Y[8] - betaOrInf_8)*exp(-dt/alphaOrTau_8);
+  Ynew[9] = betaOrInf_9 + (Y[9] - betaOrInf_9)*exp(-dt/alphaOrTau_9);
+  Ynew[12] = betaOrInf_12 + (Y[12] - betaOrInf_12)*exp(-dt/alphaOrTau_12);
+  Ynew[13] = betaOrInf_13 + (Y[13] - betaOrInf_13)*exp(-dt/alphaOrTau_13);
+  Ynew[14] = betaOrInf_14 + (Y[14] - betaOrInf_14)*exp(-dt/alphaOrTau_14);
+  Ynew[15] = betaOrInf_15 + (Y[15] - betaOrInf_15)*exp(-dt/alphaOrTau_15);
+  Ynew[16] = betaOrInf_16 + (Y[16] - betaOrInf_16)*exp(-dt/alphaOrTau_16);
+  Ynew[17] = betaOrInf_17 + (Y[17] - betaOrInf_17)*exp(-dt/alphaOrTau_17);
+  Ynew[18] = betaOrInf_18 + (Y[18] - betaOrInf_18)*exp(-dt/alphaOrTau_18);
+  Ynew[19] = betaOrInf_19 + (Y[19] - betaOrInf_19)*exp(-dt/alphaOrTau_19);
+}
+
+// Remainder: Forward Euler
+void computeRemainderForaredEuler(){
+
+  Ynew[0] = Y[0] + dt * d_dt_V;
+  Ynew[1] = Y[1] + dt * d_dt_Ca_i;
+  Ynew[10] = Y[10] + dt * d_dt_f_Ca;
+  Ynew[11] = Y[11] + dt * d_dt_f_Ca2;
+  Ynew[20] = Y[20] + dt * d_dt_a;
+  Ynew[21] = Y[21] + dt * d_dt_Na_i;
+  Ynew[22] = Y[22] + dt * d_dt_Cl_i;
+  Ynew[23] = Y[23] + dt * d_dt_K_i;
+  Ynew[24] = Y[24] + dt * d_dt_Ca_MK_trap;
+  Ynew[25] = Y[25] + dt * d_dt_Ca_NSR;
+  Ynew[26] = Y[26] + dt * d_dt_Ca_JSR;
+  Ynew[27] = Y[27] + dt * d_dt_Ca_r;
+  Ynew[28] = Y[28] + dt * d_dt_ri;
+  Ynew[29] = Y[29] + dt * d_dt_ro;
+  Ynew[30] = Y[30] + dt;
+}
+
+compute();
+computeTauInf();
+computeRemainderForaredEuler();
+
+
+Vmem = Ynew[0];
+time = Ynew[30];
+
+
 
 //==============================================================================
 // End of file

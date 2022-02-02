@@ -17,10 +17,11 @@
 // State variables
 //------------------------------------------------------------------------------
 
-#define _NB_OF_STATE_VARIABLES_ 30
+#define _NB_OF_STATE_VARIABLES_ 31
 
 extern double Y[_NB_OF_STATE_VARIABLES_];
-extern double dY[_NB_OF_STATE_VARIABLES_];
+extern double Y[_NB_OF_STATE_VARIABLES_];
+extern double double dY[_NB_OF_STATE_VARIABLES_];
 // 0: V (millivolt) (in membrane) (Initial value: -83.43812846286808)
 // 1: Ca_i (millimolar) (in Ca_i) (Initial value: 0.00022355433459434943)
 // 2: m (dimensionless) (in i_Na_m_gate) (Initial value: 0.002003390432234504)
@@ -51,6 +52,9 @@ extern double dY[_NB_OF_STATE_VARIABLES_];
 // 27: Ca_r (millimolar) (in Ca_r) (Initial value: 0.00022418117117903934)
 // 28: ri (dimensionless) (in q_rel_ri_gate) (Initial value: 0.7802870066567904)
 // 29: ro (dimensionless) (in q_rel_ro_gate) (Initial value: 1.2785734760674763e-09)
+
+extern double Vmem;
+extern double time;
 
 extern char YNames[_NB_OF_STATE_VARIABLES_][11];
 extern char YUnits[_NB_OF_STATE_VARIABLES_][14];
@@ -298,7 +302,9 @@ extern double q_up; // millimolar_per_millisecond (in q_up)
 //------------------------------------------------------------------------------
 
 extern void init();
-extern void compute(double time);
+extern void compute();
+extern void computeTauInf();
+extern void computeRemainderForaredEuler();
 
 //------------------------------------------------------------------------------
 
