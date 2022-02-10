@@ -38,7 +38,8 @@ def test_script_help(capsys):
         captured = capsys.readouterr()
         # compare to expected
         expected = open(os.path.join(TESTS_FOLDER, 'test_console_script_help.txt'), 'r').read()
-        assert str(captured.out) == expected, str(captured.out)
+        expected_python_3_10 = expected.replace('optional arguments', 'options')
+        assert str(captured.out) in (expected, expected_python_3_10), str(captured.out)
 
 
 def test_script_version(capsys):
