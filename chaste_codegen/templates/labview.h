@@ -57,7 +57,7 @@ extern double {{param["comment_name"]}}; // {{param["units"]}} (in {{param["comp
 extern void init();
 extern void compute();
 extern void computeTauInf();
-extern void computeRemainderForaredEuler();
+extern void computeRemainderForwardEuler();
 
 //------------------------------------------------------------------------------
 
