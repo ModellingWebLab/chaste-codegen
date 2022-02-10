@@ -782,7 +782,7 @@ void computeTauInf()
 }
 
 // Remainder: Forward Euler
-void computeRemainderForaredEuler(){
+void computeRemainderForwardEuler(){
 
   Ynew[0] = Y[0] + dt * d_dt_V;
   Ynew[1] = Y[1] + dt * d_dt_Ca_i;
@@ -803,7 +803,7 @@ void computeRemainderForaredEuler(){
 
 compute();
 computeTauInf();
-computeRemainderForaredEuler();
+computeRemainderForwardEuler();
 
 
 Vmem = Ynew[0];

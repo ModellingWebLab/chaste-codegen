@@ -132,7 +132,7 @@ void computeTauInf()
 }
 
 // Remainder: Forward Euler
-void computeRemainderForaredEuler(){
+void computeRemainderForwardEuler(){
 {% for deriv in derivative_alpha_beta %}
   {%- if deriv.type=='non_linear'%}
   Ynew[{{loop.index0}}] = Y[{{loop.index0}}] + dt * {{deriv.deriv}};{%- endif %}{%- endfor %}
@@ -141,7 +141,7 @@ void computeRemainderForaredEuler(){
 
 compute();
 computeTauInf();
-computeRemainderForaredEuler();
+computeRemainderForwardEuler();
 
 
 Vmem = Ynew[0];
