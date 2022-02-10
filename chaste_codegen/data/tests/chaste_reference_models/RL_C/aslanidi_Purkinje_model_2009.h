@@ -304,7 +304,7 @@ extern double q_up; // millimolar_per_millisecond (in q_up)
 extern void init();
 extern void compute();
 extern void computeTauInf();
-extern void computeRemainderForaredEuler();
+extern void computeRemainderForwardEuler();
 
 //------------------------------------------------------------------------------
 
