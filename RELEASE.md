@@ -1,5 +1,6 @@
 # Release 0.9.5
 - Corrected a type in the generated output for `--rush-larsen-c`
+- Removed the suggestion form the command line help text that an (external) URI could be used as a CellML file.
  
 # Release 0.9.4
 - This version drops python 3.5 support. The reason for this is python 3.5 is end of life and the chase project will soon be dropping support.
