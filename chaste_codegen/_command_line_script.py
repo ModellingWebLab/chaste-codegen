@@ -69,7 +69,7 @@ def process_command_line():
 
     parser.add_argument('--version', action='version',
                         version='%(prog)s {version}'.format(version=cg.__version__))
-    parser.add_argument('cellml_file', metavar='cellml_file', help='The cellml file or URI to convert to chaste code')
+    parser.add_argument('cellml_file', metavar='cellml_file', help='The cellml file to convert to chaste code')
 
     group = parser.add_argument_group('ModelTypes', 'The different types of solver approach for which code can be '
                                       'generated; if no model type is set, "normal" models are generated')
