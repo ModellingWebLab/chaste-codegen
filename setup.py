@@ -61,7 +61,7 @@ setup(
         'six>=1.15.0, <2',
         'sympy>=1.6.1, <2',
         'zipp>=1.2.0, <2',
-        'cellmlmanip>=0.3.0, <0.4',
+        'cellmlmanip>=0.3.4, <0.4',
         'Jinja2>=2.11.3, <3',
         'cellmlmanip>=0.3.0, <0.4',
         'Jinja2>=2.11.3, <3',

@@ -176,5 +176,5 @@ class TestChastePrinter(object):
         assert printer.doprint(d) == '-2 * x / (y * y)'
 
     def test_ITE(self, printer, x, y):
-        expr = sp.ITE(x < 0.0, x < y, y < 0.0)
-        assert printer.doprint(expr) == '((x < 0.0) ? (x < y) : (y < 0.0))'
+        expr = sp.ITE(x < 0, x < y, y < 0)
+        assert printer.doprint(expr) == '((x < 0) ? (x < y) : (y < 0))'

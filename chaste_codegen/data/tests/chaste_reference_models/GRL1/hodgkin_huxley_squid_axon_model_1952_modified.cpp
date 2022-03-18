@@ -23,6 +23,7 @@
 
 
 
+
     boost::shared_ptr<RegularStimulus> Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL1::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
@@ -286,8 +287,8 @@
             const double var_x3 = 1 / (-1.0 + exp(1.0000000000287557e-7));
             const double var_x4 = 1 / (-1.0 + exp(-1.0000000000287557e-7));
             const double var_x5 = (var_chaste_interface__membrane__V >= -50.000000999999997) && (var_chaste_interface__membrane__V <= -49.999999000000003);
-            const double var_x6 = -0.10000000000000001 * var_chaste_interface__membrane__V;
-            const double var_x7 = exp(-5.0 + var_x6);
+            const double var_x6 = 0.10000000000000001 * var_chaste_interface__membrane__V;
+            const double var_x7 = exp(-5.0 - var_x6);
             const double var_x8 = -1.0 + var_x7;
             const double var_x9 = 0.10000000000000001 / var_x8;
             const double var_x10 = 50.0 + var_chaste_interface__membrane__V;
@@ -332,9 +333,9 @@
             // Units: millivolt; Initial value: -75.0
             
 
-            const double var_x6 = -0.10000000000000001 * var_chaste_interface__membrane__V;
+            const double var_x6 = 0.10000000000000001 * var_chaste_interface__membrane__V;
             const double var_x13 = exp(-3.75 - 0.050000000000000003 * var_chaste_interface__membrane__V);
-            const double var_x14 = exp(-4.5 + var_x6);
+            const double var_x14 = exp(-4.5 - var_x6);
             const double var_x15 = 1.0 + var_x14;
             
             partialF = -1 / var_x15 - 0.070000000000000007 * var_x13;
@@ -377,9 +378,9 @@
 
             const double var_x3 = 1 / (-1.0 + exp(1.0000000000287557e-7));
             const double var_x4 = 1 / (-1.0 + exp(-1.0000000000287557e-7));
-            const double var_x6 = -0.10000000000000001 * var_chaste_interface__membrane__V;
+            const double var_x6 = 0.10000000000000001 * var_chaste_interface__membrane__V;
             const double var_x16 = (var_chaste_interface__membrane__V >= -65.000000999999997) && (var_chaste_interface__membrane__V <= -64.999999000000003);
-            const double var_x17 = exp(-6.5 + var_x6);
+            const double var_x17 = exp(-6.5 - var_x6);
             const double var_x18 = -1.0 + var_x17;
             const double var_x19 = 0.01 / var_x18;
             const double var_x20 = 65.0 + var_chaste_interface__membrane__V;
