@@ -38,5 +38,13 @@ def test_partial_eval2(fr_model):
     assert len(derivatives_eqs) == 163, str(len(derivatives_eqs))
     derivatives_eqs = partial_eval(derivatives_eqs, lhs_to_keep, keep_multiple_usages=False)
     assert len(derivatives_eqs) == 25, str(len(derivatives_eqs))
+
+    from chaste_codegen import ChastePrinter
+    printer = ChastePrinter()
+    with open('test_partial_eval_derivatives_eqs2.txt', 'w') as f:
+        for eq in derivatives_eqs:
+            f.write(printer.doprint(eq))
+            f.write('\n\n')
+
     expected = open(os.path.join(TESTS_FOLDER, 'test_partial_eval_derivatives_eqs2.txt'), 'r').read()
     assert str(derivatives_eqs) == expected, str(derivatives_eqs)
