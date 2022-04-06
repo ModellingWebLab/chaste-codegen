@@ -2,13 +2,14 @@ from cellmlmanip.model import Variable
 from sympy import (
     Derivative,
     Eq,
-    exp,
     Float,
     Piecewise,
     cse,
+    exp,
     piecewise_fold,
 )
 from sympy.core import Symbol
+
 from chaste_codegen._math_functions import exp_
 
 
