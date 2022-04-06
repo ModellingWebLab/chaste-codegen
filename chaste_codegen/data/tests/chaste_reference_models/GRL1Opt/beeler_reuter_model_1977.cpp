@@ -732,7 +732,7 @@ std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLGRL1Opt_LookupTables> Cell
             const double var_x1 = 0.040000000000000001 * var_chaste_interface__membrane__V;
             const double var_x2 = exp(var_x1);
             const double var_x3 = exp(0.080000000000000002 * var_chaste_interface__membrane__V);
-            const double var_x4 = -4.794256007583523 * var_x2 / (8.3311374876876929 * var_x2 + 69.407851838755192 * var_x3) - 0.00083031481087087031 * (-1 + 29.964100047397014 * var_x2) * (-0.3332454995075077 * var_x2 - 5.5526281471004157 * var_x3) / pow((var_x3 + 0.12003162851145673 * var_x2), 2);
+            const double var_x4 = 4.794256007583523 * var_x2 / (8.3311374876876929 * var_x2 + 69.407851838755192 * var_x3) + 0.00083031481087087031 * (-1 + 29.964100047397014 * var_x2) * (-0.3332454995075077 * var_x2 - 5.5526281471004157 * var_x3) / pow((var_x3 + 0.12003162851145673 * var_x2), 2);
             const double var_x5 = mParameters[6] * var_chaste_interface__time_dependent_outward_current_x1_gate__x1;
             const double var_x6 = mParameters[0] * var_chaste_interface__slow_inward_current_f_gate__f;
             const double var_x7 = var_x6 * var_chaste_interface__slow_inward_current_d_gate__d;
@@ -740,10 +740,10 @@ std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLGRL1Opt_LookupTables> Cell
             const double var_x9 = var_x8 * mParameters[2] * var_chaste_interface__sodium_current_j_gate__j;
             const double var_x10 = exp(-var_x1);
             const double var_x11 = var_x10 * (0.24659696394160646 - 5.3655559711219754 * var_x2);
-            const double var_x12 = -3.0000000000000001e-5 - var_x7 - 0.21462223884487899 * var_x5 - var_x9 * var_chaste_interface__sodium_current_h_gate__h - 0.040000000000000001 * var_x11 * var_x5;
+            const double var_x12 = 3.0000000000000001e-5 + var_x7 + 0.21462223884487899 * var_x5 + var_x9 * var_chaste_interface__sodium_current_h_gate__h + 0.040000000000000001 * var_x11 * var_x5;
             const double var_x13 = 1 - 0.39851904108451419 * var_x10;
             
-            partialF = (((var_chaste_interface__membrane__V >= -23.000002500000001) && (var_chaste_interface__membrane__V <= -22.999997499999999)) ? (var_x0 * (var_x12 + (-0.099998134770640151 + var_x4) * mParameters[5])) : (var_x0 * (var_x12 + (var_x4 - 0.20000000000000001 / var_x13 + 0.0031881523286761138 * var_x10 * (23 + var_chaste_interface__membrane__V) / pow(var_x13, 2)) * mParameters[5])));
+            partialF = (((var_chaste_interface__membrane__V >= -23.000002500000001) && (var_chaste_interface__membrane__V <= -22.999997499999999)) ? (var_x0 * (-var_x12 + (-0.099998134770640151 - var_x4) * mParameters[5])) : (var_x0 * (-var_x12 + (-var_x4 - 0.20000000000000001 / var_x13 + 0.0031881523286761138 * var_x10 * (23 + var_chaste_interface__membrane__V) / pow(var_x13, 2)) * mParameters[5])));
         }
         else
         {
@@ -840,15 +840,15 @@ std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLGRL1Opt_LookupTables> Cell
 
 
             const double var_x21 = exp(-0.056000000000000001 * var_chaste_interface__membrane__V);
-            const double var_x23 = (var_chaste_interface__membrane__V >= -47.000000999999997) && (var_chaste_interface__membrane__V <= -46.999999000000003);
-            const double var_x24 = -0.10000000000000001 * var_chaste_interface__membrane__V;
-            const double var_x25 = exp(var_x24);
-            const double var_x26 = -1 + 0.0090952771016958155 * var_x25;
-            const double var_x27 = 1 / var_x26;
-            const double var_x29 = 47 + var_chaste_interface__membrane__V;
-            const double var_x30 = -0.70955267274899092 * var_x21;
+            const double var_x22 = (var_chaste_interface__membrane__V >= -47.000000999999997) && (var_chaste_interface__membrane__V <= -46.999999000000003);
+            const double var_x23 = 0.10000000000000001 * var_chaste_interface__membrane__V;
+            const double var_x24 = exp(-var_x23);
+            const double var_x25 = -1 + 0.0090952771016958155 * var_x24;
+            const double var_x26 = 1 / var_x25;
+            const double var_x28 = 47 + var_chaste_interface__membrane__V;
+            const double var_x29 = 0.70955267274899092 * var_x21;
             
-            partialF = ((var_x23) ? (-33.499561670622036 + var_x30 - 0.49999067384209878 * var_chaste_interface__membrane__V) : (var_x30 + var_x27 * var_x29));
+            partialF = ((var_x22) ? (-33.499561670622036 - var_x29 - 0.49999067384209878 * var_chaste_interface__membrane__V) : (-var_x29 + var_x26 * var_x28));
         }
         else
         {
@@ -888,15 +888,15 @@ std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLGRL1Opt_LookupTables> Cell
             
 
 
-            const double var_x31 = 0.25 * mParameters[4] - 0.25 * var_chaste_interface__membrane__V;
-            const double var_x32 = exp(-19.25 + var_x31);
-            const double var_x33 = 0.126 * var_x32;
-            const double var_x34 = exp(-1.845 + 0.082000000000000003 * mParameters[4] - 0.082000000000000003 * var_chaste_interface__membrane__V);
-            const double var_x35 = 1 + var_x34;
-            const double var_x36 = 1 / var_x35;
-            const double var_x37 = 1.7 * var_x36;
+            const double var_x30 = 0.25 * var_chaste_interface__membrane__V - 0.25 * mParameters[4];
+            const double var_x31 = exp(-19.25 - var_x30);
+            const double var_x32 = 0.126 * var_x31;
+            const double var_x33 = exp(-1.845 + 0.082000000000000003 * mParameters[4] - 0.082000000000000003 * var_chaste_interface__membrane__V);
+            const double var_x34 = 1 + var_x33;
+            const double var_x35 = 1 / var_x34;
+            const double var_x36 = var_x32 + 1.7 * var_x35;
             
-            partialF = -var_x33 - var_x37;
+            partialF = -var_x36;
         }
         else
         {
@@ -936,19 +936,20 @@ std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLGRL1Opt_LookupTables> Cell
             
 
 
-            const double var_x24 = -0.10000000000000001 * var_chaste_interface__membrane__V;
-            const double var_x31 = 0.25 * mParameters[4] - 0.25 * var_chaste_interface__membrane__V;
-            const double var_x44 = exp(-3.2000000000000002 + var_x24 + 0.10000000000000001 * mParameters[4]);
-            const double var_x45 = 1 + var_x44;
-            const double var_x46 = 1 / var_x45;
-            const double var_x47 = 0.29999999999999999 * var_x46;
-            const double var_x48 = exp(-15.600000000000001 + 0.20000000000000001 * mParameters[4] - 0.20000000000000001 * var_chaste_interface__membrane__V);
-            const double var_x49 = 1 + var_x48;
-            const double var_x50 = exp(-19.5 + var_x31);
-            const double var_x51 = var_x50 / var_x49;
-            const double var_x52 = 0.055 * var_x51;
+            const double var_x23 = 0.10000000000000001 * var_chaste_interface__membrane__V;
+            const double var_x30 = 0.25 * var_chaste_interface__membrane__V - 0.25 * mParameters[4];
+            const double var_x42 = exp(-3.2000000000000002 - var_x23 + 0.10000000000000001 * mParameters[4]);
+            const double var_x43 = 1 + var_x42;
+            const double var_x44 = 1 / var_x43;
+            const double var_x45 = exp(-15.600000000000001 + 0.20000000000000001 * mParameters[4] - 0.20000000000000001 * var_chaste_interface__membrane__V);
+            const double var_x46 = 1 + var_x45;
+            const double var_x47 = 1 / var_x46;
+            const double var_x48 = exp(-19.5 - var_x30);
+            const double var_x49 = var_x47 * var_x48;
+            const double var_x50 = 0.055 * var_x49;
+            const double var_x51 = var_x50 + 0.29999999999999999 * var_x44;
             
-            partialF = -var_x47 - var_x52;
+            partialF = -var_x51;
         }
         else
         {
@@ -1000,16 +1001,16 @@ std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLGRL1Opt_LookupTables> Cell
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Cellbeeler_reuter_model_1977FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
-            const double var_x58 = exp(2.2000000000000002 + 0.050000000000000003 * var_chaste_interface__membrane__V);
-            const double var_x59 = 1 + var_x58;
-            const double var_x60 = _lt_0_row[7];
-            const double var_x61 = var_x60 / var_x59;
-            const double var_x63 = exp(0.35997120230381568 - 0.071994240460763137 * var_chaste_interface__membrane__V);
-            const double var_x64 = 1 + var_x63;
-            const double var_x65 = _lt_0_row[5];
-            const double var_x66 = var_x65 / var_x64;
+            const double var_x55 = exp(2.2000000000000002 + 0.050000000000000003 * var_chaste_interface__membrane__V);
+            const double var_x56 = 1 + var_x55;
+            const double var_x57 = _lt_0_row[7];
+            const double var_x58 = var_x57 / var_x56;
+            const double var_x60 = exp(0.35997120230381568 - 0.071994240460763137 * var_chaste_interface__membrane__V);
+            const double var_x61 = 1 + var_x60;
+            const double var_x62 = _lt_0_row[5];
+            const double var_x63 = var_x62 / var_x61;
             
-            partialF = -0.070000000000000007 * var_x61 - 0.095000000000000001 * var_x66;
+            partialF = -0.070000000000000007 * var_x58 - 0.095000000000000001 * var_x63;
         }
         else
         {
@@ -1061,16 +1062,16 @@ std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLGRL1Opt_LookupTables> Cell
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Cellbeeler_reuter_model_1977FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
-            const double var_x67 = exp(-6 - 0.20000000000000001 * var_chaste_interface__membrane__V);
-            const double var_x68 = 1 + var_x67;
-            const double var_x69 = _lt_0_row[11];
-            const double var_x70 = var_x69 / var_x68;
-            const double var_x72 = exp(4.197901049475262 + 0.14992503748125938 * var_chaste_interface__membrane__V);
-            const double var_x73 = 1 + var_x72;
-            const double var_x74 = _lt_0_row[9];
-            const double var_x75 = var_x74 / var_x73;
+            const double var_x65 = exp(4.197901049475262 + 0.14992503748125938 * var_chaste_interface__membrane__V);
+            const double var_x66 = 1 + var_x65;
+            const double var_x67 = _lt_0_row[9];
+            const double var_x68 = var_x67 / var_x66;
+            const double var_x69 = exp(-6 - 0.20000000000000001 * var_chaste_interface__membrane__V);
+            const double var_x70 = 1 + var_x69;
+            const double var_x71 = 1 / var_x70;
+            const double var_x72 = _lt_0_row[11];
             
-            partialF = -0.012 * var_x75 - 0.0064999999999999997 * var_x70;
+            partialF = -0.012 * var_x68 - 0.0064999999999999997 * var_x71 * var_x72;
         }
         else
         {
@@ -1122,16 +1123,16 @@ std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLGRL1Opt_LookupTables> Cell
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Cellbeeler_reuter_model_1977FromCellMLGRL1Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
-            const double var_x76 = exp(-0.80000000000000004 - 0.040000000000000001 * var_chaste_interface__membrane__V);
-            const double var_x77 = 1 + var_x76;
-            const double var_x78 = _lt_0_row[17];
-            const double var_x79 = var_x78 / var_x77;
-            const double var_x81 = exp(2.8571428571428572 + 0.057142857142857141 * var_chaste_interface__membrane__V);
-            const double var_x82 = 1 + var_x81;
-            const double var_x83 = _lt_0_row[15];
-            const double var_x84 = var_x83 / var_x82;
+            const double var_x73 = exp(-0.80000000000000004 - 0.040000000000000001 * var_chaste_interface__membrane__V);
+            const double var_x74 = 1 + var_x73;
+            const double var_x75 = _lt_0_row[17];
+            const double var_x76 = var_x75 / var_x74;
+            const double var_x78 = exp(2.8571428571428572 + 0.057142857142857141 * var_chaste_interface__membrane__V);
+            const double var_x79 = 1 + var_x78;
+            const double var_x80 = _lt_0_row[15];
+            const double var_x81 = var_x80 / var_x79;
             
-            partialF = -0.00050000000000000001 * var_x84 - 0.0012999999999999999 * var_x79;
+            partialF = -0.00050000000000000001 * var_x81 - 0.0012999999999999999 * var_x76;
         }
         else
         {

@@ -285,8 +285,8 @@
             
 
             const double var_x3 = (var_chaste_interface__membrane__V >= -50.000000999999997) && (var_chaste_interface__membrane__V <= -49.999999000000003);
-            const double var_x4 = -0.10000000000000001 * var_chaste_interface__membrane__V;
-            const double var_x5 = exp(var_x4);
+            const double var_x4 = 0.10000000000000001 * var_chaste_interface__membrane__V;
+            const double var_x5 = exp(-var_x4);
             const double var_x6 = -1 + 0.006737946999085467 * var_x5;
             const double var_x7 = 0.10000000000000001 / var_x6;
             const double var_x8 = 50 + var_chaste_interface__membrane__V;
@@ -330,9 +330,9 @@
             // Units: millivolt; Initial value: -75.0
             
 
-            const double var_x4 = -0.10000000000000001 * var_chaste_interface__membrane__V;
+            const double var_x4 = 0.10000000000000001 * var_chaste_interface__membrane__V;
             const double var_x10 = exp(-3.75 - 0.050000000000000003 * var_chaste_interface__membrane__V);
-            const double var_x11 = exp(-4.5 + var_x4);
+            const double var_x11 = exp(-4.5 - var_x4);
             const double var_x12 = 1 + var_x11;
             
             partialF = -1 / var_x12 - 0.070000000000000007 * var_x10;
@@ -373,8 +373,8 @@
             // Units: millivolt; Initial value: -75.0
             
 
-            const double var_x4 = -0.10000000000000001 * var_chaste_interface__membrane__V;
-            const double var_x5 = exp(var_x4);
+            const double var_x4 = 0.10000000000000001 * var_chaste_interface__membrane__V;
+            const double var_x5 = exp(-var_x4);
             const double var_x13 = (var_chaste_interface__membrane__V >= -65.000000999999997) && (var_chaste_interface__membrane__V <= -64.999999000000003);
             const double var_x14 = -1 + 0.0015034391929775724 * var_x5;
             const double var_x15 = 0.01 / var_x14;
