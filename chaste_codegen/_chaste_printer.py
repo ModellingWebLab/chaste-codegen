@@ -140,9 +140,19 @@ class ChastePrinter(Printer):
         parts += ') : ('
         return parts
 
+    def _print_IntegerConstant(self, expr):
+        return cxxcode(int(expr), standard='C++11')
+
     def _print_float(self, expr):
         """ Handles ``float``s. """
-        return cxxcode(expr, standard='C++11')
+        if expr.is_integer():
+            return cxxcode(int(expr), standard='C++11')
+        else:
+            return cxxcode(expr, standard='C++11')
+
+    def _print_int(self, expr):
+        """ Handles ``ints``s. """
+        return cxxcode(int(expr), standard='C++11')
 
     def _print_ITE(self, expr):
         """ Handles ITE (if then else) objects by rewriting them as Piecewise """

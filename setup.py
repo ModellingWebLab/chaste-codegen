@@ -59,11 +59,10 @@ setup(
         'pyparsing>=2.4.7, <3',
         'rdflib>=5.0.0, <7',
         'six>=1.15.0, <2',
-        'sympy>=1.6.1, <1.9',
+        'sympy>=1.9, <1.11',
         'zipp>=1.2.0, <2',
-        'cellmlmanip>=0.3.0, <0.4',
         'Jinja2>=2.11.3, <3',
-        'cellmlmanip>=0.3.0, <0.4',
+        'cellmlmanip>=0.3.4, <0.4',
         'Jinja2>=2.11.3, <3',
     ],
     extras_require={

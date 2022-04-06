@@ -107,13 +107,16 @@ def compare_model_against_reference(chaste_model, tmp_path, model_type, referenc
     for ext, code in zip(chaste_model.DEFAULT_EXTENSIONS, chaste_model.generated_code):
         gen_file_path = os.path.join(tmp_path, chaste_model.file_name + ext)
         write_file(gen_file_path, code)
-        compare_file_against_reference(gen_file_path, expected_path + ext)
+        compare_file_against_reference(expected_path + ext, gen_file_path)
 
 
-def compare_file_against_reference(file, reference):
+def compare_file_against_reference(reference_file, file):
     """ Check a model's generated files against given reference files
     """
     # Load reference file
     file = get_file_lines(file)
-    reference = get_file_lines(reference)
-    assert file == reference
+    reference = get_file_lines(reference_file)
+    alt_reference = reference_file + '_alt'
+    if file != reference and os.path.exists(alt_reference):
+        reference = get_file_lines(alt_reference)
+    assert file == reference, str(alt_reference)

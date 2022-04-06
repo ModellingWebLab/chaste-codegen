@@ -33,6 +33,7 @@ class Celldokos_model_1996FromCellMLCvodeDataClamp : public AbstractCvodeCellWit
     // Settable parameters and readable variables
     //
 
+
 public:
 
     double GetIntracellularCalciumConcentration();

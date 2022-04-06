@@ -32,6 +32,7 @@ class Celltest_V_not_state_derived_quantFromCellML : public AbstractCardiacCell
     // Settable parameters and readable variables
     //
 
+
 public:
 
     Celltest_V_not_state_derived_quantFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);

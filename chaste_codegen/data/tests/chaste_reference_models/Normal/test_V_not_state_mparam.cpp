@@ -24,6 +24,7 @@
 
 
 
+
     Celltest_V_not_state_mparamFromCellML::Celltest_V_not_state_mparamFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
@@ -65,7 +66,7 @@
 
         // Mathematics
         
-        const double var_membrane__V1_orig_deriv = 25.0; // volt / second
+        const double var_membrane__V1_orig_deriv = 25; // volt / second
         const double d_dt_chaste_interface_var_membrane__V1 = 0.001 * var_membrane__V1_orig_deriv; // volt / millisecond
 
         if (mSetVoltageDerivativeToZero)
@@ -85,7 +86,7 @@
         // Time units: millisecond
         
         // Mathematics
-        const double var_membrane__V_converted = -75000.0; // millivolt
+        const double var_membrane__V_converted = -75000; // millivolt
 
         std::vector<double> dqs(2);
         dqs[0] = var_chaste_interface__membrane__time_converted;
