@@ -1,7 +1,7 @@
 # Release 0.9.5
 - Corrected a type in the generated output for `--rush-larsen-c`
 - Updated the help text to no longer imply that CellML files can be converted from remote URIs (a local file is required)
-- Fixed required sympy version to be < 1.10 since the jacobean generation has in sympy1.10 changed and makes chaste_codegen tests fail
+- Fixed tests to pass with sympy 1.10 and required latest cellmlmanip, which also workes with sympy1.10
  
 # Release 0.9.4
 - This version drops python 3.5 support. The reason for this is python 3.5 is end of life and the chase project will soon be dropping support.
