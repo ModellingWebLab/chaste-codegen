@@ -1,4 +1,4 @@
-# Release 0.9.5
+# Release 0.9.6
 - Fixed tests to pass with sympy 1.10 and required latest cellmlmanip, which also workes with sympy1.10. Updated sympy requirement to be >=1.9, < 1.11
 
 # Release 0.9.5
