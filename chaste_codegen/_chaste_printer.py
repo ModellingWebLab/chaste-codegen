@@ -143,15 +143,6 @@ class ChastePrinter(Printer):
     def _print_IntegerConstant(self, expr):
         return cxxcode(int(expr), standard='C++11')
 
-#    def _print_Relational(self, expr):
-#        prnt = self._print(expr.rhs)
-##        assert False, "relational"
-#        assert False, prnt
-#        lhs_code = self._print(expr.lhs)
-#        rhs_code = self._print(expr.rhs)
-#        op = expr.rel_op
-#        return "{} {} {}".format(lhs_code, op, rhs_code)
-
     def _print_float(self, expr):
         """ Handles ``float``s. """
         if expr.is_integer():

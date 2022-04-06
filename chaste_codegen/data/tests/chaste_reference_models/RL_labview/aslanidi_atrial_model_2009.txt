@@ -60,39 +60,39 @@ float64 time;
 //---------------------------------------------------------------------------
 
 float64 A0_bck = 1.0278; // dimensionless (in A0_bc)
-float64 Ampl_gain = 1.0; // dimensionless (in Ampl_gai)
-float64 Cext = 1.0; // picoF (in Cex)
-float64 E_l = 1.0; // millivolt (in E_)
-float64 I = 1.0; // dimensionless (in )
-float64 R_seal = 1.0; // ohm (in R_sea)
-float64 Scale_bck = 1.0; // dimensionless (in Scale_bc)
-float64 Scaling = 1.0; // dimensionless (in Scalin)
+float64 Ampl_gain = 1; // dimensionless (in Ampl_gai)
+float64 Cext = 1; // picoF (in Cex)
+float64 E_l = 1; // millivolt (in E_)
+float64 I = 1; // dimensionless (in )
+float64 R_seal = 1; // ohm (in R_sea)
+float64 Scale_bck = 1; // dimensionless (in Scale_bc)
+float64 Scaling = 1; // dimensionless (in Scalin)
 float64 k_bck = 0.098599999999999993; // one_over_millivolt (in k_bc)
-float64 leak_comp_perc = 1.0; // dimensionless (in leak_comp_per)
+float64 leak_comp_perc = 1; // dimensionless (in leak_comp_per)
 float64 q_leak_max = 0.0043750000000000004; // millimolar_per_millisecond (in q_leak)
-float64 g_rel_max = 3000.0; // per_millisecond (in q_rel)
+float64 g_rel_max = 3000; // per_millisecond (in q_rel)
 float64 q_up_max = 0.0043750000000000004; // millimolar_per_millisecond (in q_up)
-float64 conc_clamp = 1.0; // dimensionless (in intracellular_ion_concentrations)
+float64 conc_clamp = 1; // dimensionless (in intracellular_ion_concentrations)
 float64 Ca_o = 1.8; // millimolar (in model_parameters)
 float64 K_o = 5.4000000000000004; // millimolar (in model_parameters)
-float64 Na_o = 140.0; // millimolar (in model_parameters)
+float64 Na_o = 140; // millimolar (in model_parameters)
 float64 g_Ca_L = 0.3392328; // dimensionless (in i_Ca_L)
-float64 g_Na = 8.0; // milliS_per_microF (in i_Na)
+float64 g_Na = 8; // milliS_per_microF (in i_Na)
 float64 perc_reduced_inact_for_IpNa = 0; // dimensionless (in i_Na)
 float64 shift_INa_inact = 0; // millivolt (in i_Na)
 float64 g_K1_max = 0.25; // milliS_per_microF (in i_K1)
 float64 g_Kr_max = 0.040008488000000002; // milliS_per_microF (in i_Kr)
 float64 g_Ks_max = 0.052581329000000003; // milliS_per_microF (in i_Ks)
 float64 i_NaCa_max = 4.5; // microA_per_microF (in i_NaCa)
-float64 stim_amplitude = -80.0; // microA_per_microF (in membrane)
-float64 stim_duration = 1.0; // millisecond (in membrane)
-float64 stim_start = 100.0; // millisecond (in membrane)
-float64 stim_period = 800.0; // millisecond (in membrane)
+float64 stim_amplitude = -80; // microA_per_microF (in membrane)
+float64 stim_duration = 1; // millisecond (in membrane)
+float64 stim_start = 100; // millisecond (in membrane)
+float64 stim_period = 800; // millisecond (in membrane)
 float64 g_to_1 = 0.14135944; // milliS_per_microF (in i_to_1)
 
 float64 CT_K_Cl_max = 7.0755999999999996e-6; // millimolar_per_millisecond (in CT_K_Cl)
 float64 CT_Na_Cl_max = 9.8442999999999999e-6; // millimolar_per_millisecond (in CT_Na_Cl)
-float64 CSQN_max = 10.0; // millimolar (in Ca_JSR)
+float64 CSQN_max = 10; // millimolar (in Ca_JSR)
 float64 km_CSQN = 0.80000000000000004; // millimolar (in Ca_JSR)
 float64 Ca_MK_0 = 0.050000000000000003; // dimensionless (in Ca_MK_act)
 float64 alpha_Ca_MK = 0.050000000000000003; // per_millisecond (in Ca_MK_act)
@@ -124,25 +124,25 @@ float64 km_Na_i_1 = 12.300000000000001; // millimolar (in i_NaCa)
 float64 km_Na_o = 87.5; // millimolar (in i_NaCa)
 float64 g_NaK = 0.61875000000000002; // microA_per_microF (in i_NaK)
 float64 km_K_o = 1.5; // millimolar (in i_NaK)
-float64 km_Na_i_2 = 10.0; // millimolar (in i_NaK)
+float64 km_Na_i_2 = 10; // millimolar (in i_NaK)
 float64 g_Na_L = 0.037374999999999999; // milliS_per_microF (in i_Na_L)
 float64 km_to_2 = 0.1502; // millimolar (in i_to_2_a_gate)
-float64 tau_a = 1.0; // millisecond (in i_to_2_a_gate)
-float64 stim_end = 100000.0; // millisecond (in membrane)
-float64 Cl_o = 100.0; // millimolar (in model_parameters)
-float64 Cm = 1.0; // microF_per_cm2 (in model_parameters)
-float64 F = 96485.0; // coulomb_per_mole (in model_parameters)
-float64 R = 8314.0; // joule_per_kilomole_kelvin (in model_parameters)
-float64 T = 310.0; // kelvin (in model_parameters)
+float64 tau_a = 1; // millisecond (in i_to_2_a_gate)
+float64 stim_end = 100000; // millisecond (in membrane)
+float64 Cl_o = 100; // millimolar (in model_parameters)
+float64 Cm = 1; // microF_per_cm2 (in model_parameters)
+float64 F = 96485; // coulomb_per_mole (in model_parameters)
+float64 R = 8314; // joule_per_kilomole_kelvin (in model_parameters)
+float64 T = 310; // kelvin (in model_parameters)
 float64 Vol_cell = 0.34539999999999998; // microlitre (in model_parameters)
 float64 length = 0.01; // cm (in model_parameters)
 float64 radius = 0.0011000000000000001; // cm (in model_parameters)
-float64 rcg = 2.0; // dimensionless (in model_parameters)
-float64 z_Ca = 2.0; // dimensionless (in model_parameters)
-float64 NSR_max = 15.0; // millimolar (in q_leak)
-float64 tau_Ca_MK_max = 10.0; // millisecond (in q_rel_ri_gate)
-float64 tau_ro = 3.0; // millisecond (in q_rel_ro_gate)
-float64 tau_tr = 120.0; // millisecond (in q_tr)
+float64 rcg = 2; // dimensionless (in model_parameters)
+float64 z_Ca = 2; // dimensionless (in model_parameters)
+float64 NSR_max = 15; // millimolar (in q_leak)
+float64 tau_Ca_MK_max = 10; // millisecond (in q_rel_ri_gate)
+float64 tau_ro = 3; // millisecond (in q_rel_ro_gate)
+float64 tau_tr = 120; // millisecond (in q_tr)
 float64 X_q_up = 0.5; // dimensionless (in q_up)
 float64 dkm_plb_max = 0.00017000000000000001; // millimolar (in q_up)
 float64 dq_up_Ca_MK_max = 0.75; // dimensionless (in q_up)
@@ -290,104 +290,104 @@ float64 q_up; // millimolar_per_millisecond (in q_up)
 // Computation
 //---------------------------------------------------------------------------
 
-CMDN = 2.0 * CMDN_max * Y[1] / pow((km_CMDN + Y[1]), 2); // dimensionless
-TRPN = 2.0 * TRPN_max * Y[1] / pow((km_TRPN + Y[1]), 2); // dimensionless
-b_myo = 1 / (1.0 + CMDN + TRPN); // dimensionless
-Ca_MK_bound = (1.0 - Y[24]) * Ca_MK_0 / (1.0 + km_Ca_MK / Y[27]); // dimensionless
+CMDN = 2 * CMDN_max * Y[1] / pow((km_CMDN + Y[1]), 2); // dimensionless
+TRPN = 2 * TRPN_max * Y[1] / pow((km_TRPN + Y[1]), 2); // dimensionless
+b_myo = 1 / (1 + CMDN + TRPN); // dimensionless
+Ca_MK_bound = (1 - Y[24]) * Ca_MK_0 / (1 + km_Ca_MK / Y[27]); // dimensionless
 Ca_MK_act = Ca_MK_bound + Y[24]; // dimensionless
-b_SL = 2.0 * b_SL_max * Y[27] / pow((km_b_SL + Y[27]), 2); // dimensionless
-b_SR = 2.0 * b_SR_max * Y[27] / pow((km_b_SR + Y[27]), 2); // dimensionless
-Ca_r_tot = 1 / (1.0 + b_SL + b_SR); // dimensionless
+b_SL = 2 * b_SL_max * Y[27] / pow((km_b_SL + Y[27]), 2); // dimensionless
+b_SR = 2 * b_SR_max * Y[27] / pow((km_b_SR + Y[27]), 2); // dimensionless
+Ca_r_tot = 1 / (1 + b_SL + b_SR); // dimensionless
 q_diff = (-Y[1] + Y[27]) / tau_ss; // millimolar_per_millisecond
 dY[24] = -beta_Ca_MK * Y[24] + (Ca_MK_bound + Y[24]) * Ca_MK_bound * alpha_Ca_MK; // 1 / millisecond
 I_ext = I / (Ampl_gain * Cext); // dimensionless
 g_leak = 1 / R_seal; // one_over_ohm
-tau_f_Ca = 0.5 + 1 / (1.0 + 333.33333333333331 * Y[27]) + 10.0 * Ca_MK_act / (Ca_MK_act + km_Ca_MK); // millisecond
+tau_f_Ca = 0.5 + 1 / (1 + 333.33333333333331 * Y[27]) + 10 * Ca_MK_act / (Ca_MK_act + km_Ca_MK); // millisecond
 i_Ca_p = Y[1] * i_Ca_p_max / (Y[1] + km_Ca_p); // microA_per_microF
-g_Ks = (1.0 + 0.59999999999999998 / (1.0 + 6.4818210260626455e-7 * pow((1 / Y[1]), 1.3999999999999999))) * g_Ks_max; // milliS_per_microF
-a_infinity = 1 / (1.0 + km_to_2 / Y[27]); // dimensionless
+g_Ks = (1 + 0.59999999999999998 / (1 + 6.4818210260626455e-7 * pow((1 / Y[1]), 1.3999999999999999))) * g_Ks_max; // milliS_per_microF
+a_infinity = 1 / (1 + km_to_2 / Y[27]); // dimensionless
 dY[20] = (-Y[20] + a_infinity) / tau_a; // 1 / millisecond
-d_infinity = 1 / (1.0 + exp(0.59347181008902072 - 0.14836795252225518 * Y[0])); // dimensionless
-tau_d = 0.58999999999999997 + 0.80000000000000004 * exp(0.67599999999999993 + 0.051999999999999998 * Y[0]) / (1.0 + exp(1.7160000000000002 + 0.13200000000000001 * Y[0])); // millisecond
-f2_infinity = 1 / (1.0 + exp(1.8 + 0.10000000000000001 * Y[0])); // dimensionless
-tau_f2 = 38.0 + 24.217200000000005 * pow((-1 + 0.053763440860215048 * Y[0]), 2); // millisecond
-f_infinity = 1 / (1.0 + exp(1.8 + 0.10000000000000001 * Y[0])); // dimensionless
-tau_f = 4.0 + 0.03125 * pow((-1 + 0.40000000000000002 * Y[0]), 2); // millisecond
-i_Ca_T = (-50.0 + Y[0]) * Y[12] * Y[13] * g_Ca_T; // microA_per_microF
+d_infinity = 1 / (1 + exp(0.59347181008902072 - 0.14836795252225518 * Y[0])); // dimensionless
+tau_d = 0.58999999999999997 + 0.80000000000000004 * exp(0.67599999999999993 + 0.051999999999999998 * Y[0]) / (1 + exp(1.7160000000000002 + 0.13200000000000001 * Y[0])); // millisecond
+f2_infinity = 1 / (1 + exp(1.8 + 0.10000000000000001 * Y[0])); // dimensionless
+tau_f2 = 38 + 24.217200000000005 * pow((-1 + 0.053763440860215048 * Y[0]), 2); // millisecond
+f_infinity = 1 / (1 + exp(1.8 + 0.10000000000000001 * Y[0])); // dimensionless
+tau_f = 4 + 0.03125 * pow((-1 + 0.40000000000000002 * Y[0]), 2); // millisecond
+i_Ca_T = (-50 + Y[0]) * Y[12] * Y[13] * g_Ca_T; // microA_per_microF
 alpha_b = 1.0680000000000001 * exp(0.54333333333333333 + 0.033333333333333333 * Y[0]); // per_millisecond
-b_infinity = 1 / (1.0 + exp(-5.4098360655737707 - 0.16393442622950821 * Y[0])); // dimensionless
+b_infinity = 1 / (1 + exp(-5.4098360655737707 - 0.16393442622950821 * Y[0])); // dimensionless
 beta_b = 1.0680000000000001 * exp(-0.54333333333333333 - 0.033333333333333333 * Y[0]); // per_millisecond
 tau_b = 1 / (alpha_b + beta_b); // millisecond
 alpha_g = 0.014999999999999999 * exp(-0.86074429771908767 - 0.012004801920768308 * Y[0]); // per_millisecond
 beta_g = 0.014999999999999999 * exp(4.6558441558441563 + 0.064935064935064929 * Y[0]); // per_millisecond
-g_infinity = 1 / (1.0 + exp(9.0909090909090917 + 0.15151515151515152 * Y[0])); // dimensionless
+g_infinity = 1 / (1 + exp(9.0909090909090917 + 0.15151515151515152 * Y[0])); // dimensionless
 tau_g = 1 / (alpha_g + beta_g); // millisecond
-kp = 1 / (1.0 + exp(1.2521739130434781 - 0.16722408026755853 * Y[0])); // dimensionless
-rr_infinity = 1 / (1.0 + exp(-0.26470588235294124 + 0.049019607843137261 * Y[0])); // dimensionless
-tau_xr = 100.0 + 900.0 / (1.0 + exp(0.20000000000000001 * Y[0])); // millisecond
-xr_infinity = 1 / (1.0 + exp(-0.0069387755102040824 - 0.081632653061224483 * Y[0])); // dimensionless
+kp = 1 / (1 + exp(1.2521739130434781 - 0.16722408026755853 * Y[0])); // dimensionless
+rr_infinity = 1 / (1 + exp(-0.26470588235294124 + 0.049019607843137261 * Y[0])); // dimensionless
+tau_xr = 100 + 900 / (1 + exp(0.20000000000000001 * Y[0])); // millisecond
+xr_infinity = 1 / (1 + exp(-0.0069387755102040824 - 0.081632653061224483 * Y[0])); // dimensionless
 if ((Y[0] >= 0.54999921875000002) && (Y[0] <= 0.55000078125000007))
-    tau_xs1_PW_0 = -2.8124999999965681e-10 / (-1.0 + exp(-9.999999999987797e-8)) + 640000.00000042573 * (-0.54999921875000002 + Y[0]) * (2.8124999999996902e-10 / (-1.0 + exp(9.9999999999988984e-8)) + 2.8124999999965681e-10 / (-1.0 + exp(-9.999999999987797e-8)))
+    tau_xs1_PW_0 = -2.8124999999965681e-10 / (-1 + exp(-9.999999999987797e-8)) + 640000.00000042573 * (-0.54999921875000002 + Y[0]) * (2.8124999999996902e-10 / (-1 + exp(9.9999999999988984e-8)) + 2.8124999999965681e-10 / (-1 + exp(-9.999999999987797e-8)))
 else 
-    tau_xs1_PW_0 = 0.00036000000000000002 * (-0.55000000000000004 + Y[0]) / (-1.0 + exp(-0.070400000000000004 + 0.128 * Y[0]))
+    tau_xs1_PW_0 = 0.00036000000000000002 * (-0.55000000000000004 + Y[0]) / (-1 + exp(-0.070400000000000004 + 0.128 * Y[0]))
 
 if ((Y[0] >= -44.600000010030094) && (Y[0] <= -44.599999989969909))
-    tau_xs1_PW_1 = -7.6328986866047728e-13 / (1.0 - exp(9.9999999875755032e-8)) + 49850000.061936118 * (44.600000010030094 + Y[0]) * (7.6328986866047728e-13 / (1.0 - exp(9.9999999875755032e-8)) + 7.6328986866047728e-13 / (1.0 - exp(-9.9999999875755032e-8)))
+    tau_xs1_PW_1 = -7.6328986866047728e-13 / (1 - exp(9.9999999875755032e-8)) + 49850000.061936118 * (44.600000010030094 + Y[0]) * (7.6328986866047728e-13 / (1 - exp(9.9999999875755032e-8)) + 7.6328986866047728e-13 / (1 - exp(-9.9999999875755032e-8)))
 else 
-    tau_xs1_PW_1 = 7.6100000000000007e-5 * (44.600000000000001 + Y[0]) / (1.0 - exp(-444.66200000000003 - 9.9700000000000006 * Y[0]))
+    tau_xs1_PW_1 = 7.6100000000000007e-5 * (44.600000000000001 + Y[0]) / (1 - exp(-444.66200000000003 - 9.9700000000000006 * Y[0]))
 
 tau_xs1 = 1 / (tau_xs1_PW_0 + tau_xs1_PW_1); // millisecond
-xs1_infinity = 1 / (1.0 + exp(0.65693430656934315 - 0.072992700729927015 * Y[0])); // dimensionless
+xs1_infinity = 1 / (1 + exp(0.65693430656934315 - 0.072992700729927015 * Y[0])); // dimensionless
 if ((Y[0] >= 0.54999921875000002) && (Y[0] <= 0.55000078125000007))
-    tau_xs2_PW_0 = -2.8124999999965681e-10 / (-1.0 + exp(-9.999999999987797e-8)) + 640000.00000042573 * (-0.54999921875000002 + Y[0]) * (2.8124999999996902e-10 / (-1.0 + exp(9.9999999999988984e-8)) + 2.8124999999965681e-10 / (-1.0 + exp(-9.999999999987797e-8)))
+    tau_xs2_PW_0 = -2.8124999999965681e-10 / (-1 + exp(-9.999999999987797e-8)) + 640000.00000042573 * (-0.54999921875000002 + Y[0]) * (2.8124999999996902e-10 / (-1 + exp(9.9999999999988984e-8)) + 2.8124999999965681e-10 / (-1 + exp(-9.999999999987797e-8)))
 else 
-    tau_xs2_PW_0 = 0.00036000000000000002 * (-0.55000000000000004 + Y[0]) / (-1.0 + exp(-0.070400000000000004 + 0.128 * Y[0]))
+    tau_xs2_PW_0 = 0.00036000000000000002 * (-0.55000000000000004 + Y[0]) / (-1 + exp(-0.070400000000000004 + 0.128 * Y[0]))
 
 if ((Y[0] >= -44.600000010030094) && (Y[0] <= -44.599999989969909))
-    tau_xs2_PW_1 = -7.6328986866047728e-13 / (1.0 - exp(9.9999999875755032e-8)) + 49850000.061936118 * (44.600000010030094 + Y[0]) * (7.6328986866047728e-13 / (1.0 - exp(9.9999999875755032e-8)) + 7.6328986866047728e-13 / (1.0 - exp(-9.9999999875755032e-8)))
+    tau_xs2_PW_1 = -7.6328986866047728e-13 / (1 - exp(9.9999999875755032e-8)) + 49850000.061936118 * (44.600000010030094 + Y[0]) * (7.6328986866047728e-13 / (1 - exp(9.9999999875755032e-8)) + 7.6328986866047728e-13 / (1 - exp(-9.9999999875755032e-8)))
 else 
-    tau_xs2_PW_1 = 7.6100000000000007e-5 * (44.600000000000001 + Y[0]) / (1.0 - exp(-444.66200000000003 - 9.9700000000000006 * Y[0]))
+    tau_xs2_PW_1 = 7.6100000000000007e-5 * (44.600000000000001 + Y[0]) / (1 - exp(-444.66200000000003 - 9.9700000000000006 * Y[0]))
 
-tau_xs2 = 2.0 / (tau_xs2_PW_0 + tau_xs2_PW_1); // millisecond
-xs2_infinity = 1 / (1.0 + exp(0.65693430656934315 - 0.072992700729927015 * Y[0])); // dimensionless
-h_L_infinity = 1 / (1.0 + exp(11.311475409836067 + 0.16393442622950821 * Y[0])); // dimensionless
-tau_h_L = 175.0 + 125.0 / (1.0 + exp(-4.166666666666667 - 0.16666666666666666 * Y[0])); // millisecond
+tau_xs2 = 2 / (tau_xs2_PW_0 + tau_xs2_PW_1); // millisecond
+xs2_infinity = 1 / (1 + exp(0.65693430656934315 - 0.072992700729927015 * Y[0])); // dimensionless
+h_L_infinity = 1 / (1 + exp(11.311475409836067 + 0.16393442622950821 * Y[0])); // dimensionless
+tau_h_L = 175 + 125 / (1 + exp(-4.166666666666667 - 0.16666666666666666 * Y[0])); // millisecond
 if ((Y[0] >= -47.130001) && (Y[0] <= -47.129999000000005))
-    alpha_m_L = -3.200000000092018e-7 / (1.0 - exp(1.0000000000287557e-7)) + 499999.99998562218 * (47.130001 + Y[0]) * (3.200000000092018e-7 / (1.0 - exp(1.0000000000287557e-7)) + 3.200000000092018e-7 / (1.0 - exp(-1.0000000000287557e-7)))
+    alpha_m_L = -3.200000000092018e-7 / (1 - exp(1.0000000000287557e-7)) + 499999.99998562218 * (47.130001 + Y[0]) * (3.200000000092018e-7 / (1 - exp(1.0000000000287557e-7)) + 3.200000000092018e-7 / (1 - exp(-1.0000000000287557e-7)))
 else 
-    alpha_m_L = 0.32000000000000001 * (47.130000000000003 + Y[0]) / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * Y[0]))
+    alpha_m_L = 0.32000000000000001 * (47.130000000000003 + Y[0]) / (1 - exp(-4.7130000000000001 - 0.10000000000000001 * Y[0]))
 
 beta_m_L = 0.080000000000000002 * exp(-0.090909090909090912 * Y[0]); // per_millisecond
 m_L_infinity = alpha_m_L / (alpha_m_L + beta_m_L); // dimensionless
 tau_m_L = 1 / (alpha_m_L + beta_m_L); // millisecond
-if (Y[0] < -40.0)
+if (Y[0] < -40)
     alpha_h = 0.13500000000000001 * exp(-11.764705882352942 + 0.14705882352941177 * shift_INa_inact - 0.14705882352941177 * Y[0])
 else 
     alpha_h = 0
 
-if (Y[0] < -40.0)
-    beta_h = 310000.0 * exp(0.34999999999999998 * Y[0] - 0.34999999999999998 * shift_INa_inact) + 3.5600000000000001 * exp(0.079000000000000001 * Y[0] - 0.079000000000000001 * shift_INa_inact)
+if (Y[0] < -40)
+    beta_h = 310000 * exp(0.34999999999999998 * Y[0] - 0.34999999999999998 * shift_INa_inact) + 3.5600000000000001 * exp(0.079000000000000001 * Y[0] - 0.079000000000000001 * shift_INa_inact)
 else 
-    beta_h = 7.6923076923076916 / (1.0 + exp(-0.96036036036036043 + 0.0900900900900901 * shift_INa_inact - 0.0900900900900901 * Y[0]))
+    beta_h = 7.6923076923076916 / (1 + exp(-0.96036036036036043 + 0.0900900900900901 * shift_INa_inact - 0.0900900900900901 * Y[0]))
 
-h_infinity = 0.01 * perc_reduced_inact_for_IpNa + (1.0 - 0.01 * perc_reduced_inact_for_IpNa) * alpha_h / (alpha_h + beta_h); // dimensionless
+h_infinity = 0.01 * perc_reduced_inact_for_IpNa + (1 - 0.01 * perc_reduced_inact_for_IpNa) * alpha_h / (alpha_h + beta_h); // dimensionless
 tau_h = 1 / (alpha_h + beta_h); // millisecond
-if (Y[0] < -40.0)
-    alpha_j = (37.780000000000001 + Y[0]) * (-127140.0 * exp(0.24440000000000001 * Y[0] - 0.24440000000000001 * shift_INa_inact) - 3.4740000000000003e-5 * exp(0.043909999999999998 * shift_INa_inact - 0.043909999999999998 * Y[0])) / (1.0 + exp(24.640530000000002 + 0.311 * Y[0] - 0.311 * shift_INa_inact))
+if (Y[0] < -40)
+    alpha_j = (37.780000000000001 + Y[0]) * (-127140 * exp(0.24440000000000001 * Y[0] - 0.24440000000000001 * shift_INa_inact) - 3.4740000000000003e-5 * exp(0.043909999999999998 * shift_INa_inact - 0.043909999999999998 * Y[0])) / (1 + exp(24.640530000000002 + 0.311 * Y[0] - 0.311 * shift_INa_inact))
 else 
     alpha_j = 0
 
-if (Y[0] < -40.0)
-    beta_j = 0.1212 * exp(0.01052 * shift_INa_inact - 0.01052 * Y[0]) / (1.0 + exp(-5.5312920000000005 + 0.13780000000000001 * shift_INa_inact - 0.13780000000000001 * Y[0]))
+if (Y[0] < -40)
+    beta_j = 0.1212 * exp(0.01052 * shift_INa_inact - 0.01052 * Y[0]) / (1 + exp(-5.5312920000000005 + 0.13780000000000001 * shift_INa_inact - 0.13780000000000001 * Y[0]))
 else 
-    beta_j = 0.29999999999999999 * exp(2.5349999999999999e-7 * shift_INa_inact - 2.5349999999999999e-7 * Y[0]) / (1.0 + exp(-3.2000000000000002 + 0.10000000000000001 * shift_INa_inact - 0.10000000000000001 * Y[0]))
+    beta_j = 0.29999999999999999 * exp(2.5349999999999999e-7 * shift_INa_inact - 2.5349999999999999e-7 * Y[0]) / (1 + exp(-3.2000000000000002 + 0.10000000000000001 * shift_INa_inact - 0.10000000000000001 * Y[0]))
 
-j_infinity = 0.01 * perc_reduced_inact_for_IpNa + (1.0 - 0.01 * perc_reduced_inact_for_IpNa) * alpha_j / (alpha_j + beta_j); // dimensionless
+j_infinity = 0.01 * perc_reduced_inact_for_IpNa + (1 - 0.01 * perc_reduced_inact_for_IpNa) * alpha_j / (alpha_j + beta_j); // dimensionless
 tau_j = 1 / (alpha_j + beta_j); // millisecond
 if ((Y[0] >= -47.130001) && (Y[0] <= -47.129999000000005))
-    alpha_m = -3.200000000092018e-7 / (1.0 - exp(1.0000000000287557e-7)) + 499999.99998562218 * (47.130001 + Y[0]) * (3.200000000092018e-7 / (1.0 - exp(1.0000000000287557e-7)) + 3.200000000092018e-7 / (1.0 - exp(-1.0000000000287557e-7)))
+    alpha_m = -3.200000000092018e-7 / (1 - exp(1.0000000000287557e-7)) + 499999.99998562218 * (47.130001 + Y[0]) * (3.200000000092018e-7 / (1 - exp(1.0000000000287557e-7)) + 3.200000000092018e-7 / (1 - exp(-1.0000000000287557e-7)))
 else 
-    alpha_m = 0.32000000000000001 * (47.130000000000003 + Y[0]) / (1.0 - exp(-4.7130000000000001 - 0.10000000000000001 * Y[0]))
+    alpha_m = 0.32000000000000001 * (47.130000000000003 + Y[0]) / (1 - exp(-4.7130000000000001 - 0.10000000000000001 * Y[0]))
 
 beta_m = 0.080000000000000002 * exp(-0.090909090909090912 * Y[0]); // per_millisecond
 m_infinity = alpha_m / (alpha_m + beta_m); // dimensionless
@@ -395,49 +395,49 @@ tau_m = 1 / (alpha_m + beta_m); // millisecond
 i_bck = A0_bck * Scale_bck / ((1 + exp(-Y[0] * k_bck)) * Cext); // dimensionless
 i_leak_comp = (-E_l + Y[0]) * g_leak * leak_comp_perc / (100 * Cext); // dimensionless
 i_inj = (-i_bck - i_leak_comp + I_ext) * Scaling; // dimensionless
-alpha_a = 25.0 * exp(-3.7999999999999998 + 0.050000000000000003 * Y[0]) / (1.0 + exp(-3.7999999999999998 + 0.050000000000000003 * Y[0])); // per_millisecond
-beta_a = 25.0 * exp(-2.7000000000000002 - 0.050000000000000003 * Y[0]) / (1.0 + exp(-2.7000000000000002 - 0.050000000000000003 * Y[0])); // per_millisecond
+alpha_a = 25 * exp(-3.7999999999999998 + 0.050000000000000003 * Y[0]) / (1 + exp(-3.7999999999999998 + 0.050000000000000003 * Y[0])); // per_millisecond
+beta_a = 25 * exp(-2.7000000000000002 - 0.050000000000000003 * Y[0]) / (1 + exp(-2.7000000000000002 - 0.050000000000000003 * Y[0])); // per_millisecond
 a_infinity = alpha_a / (alpha_a + beta_a); // dimensionless
 tau_a = 1 / (alpha_a + beta_a); // millisecond
-alpha_i2 = 0.0044200000000000003 / (1.0 + exp(1.7333333333333334 + 0.066666666666666666 * Y[0])); // per_millisecond
-beta_i2 = 0.050000000000000003 * exp(-0.66666666666666663 + 0.066666666666666666 * Y[0]) / (1.0 + exp(-0.66666666666666663 + 0.066666666666666666 * Y[0])); // per_millisecond
+alpha_i2 = 0.0044200000000000003 / (1 + exp(1.7333333333333334 + 0.066666666666666666 * Y[0])); // per_millisecond
+beta_i2 = 0.050000000000000003 * exp(-0.66666666666666663 + 0.066666666666666666 * Y[0]) / (1 + exp(-0.66666666666666663 + 0.066666666666666666 * Y[0])); // per_millisecond
 i2_infinity = alpha_i2 / (alpha_i2 + beta_i2); // dimensionless
-tau_i2 = 21.5 + 30.0 / (1.0 + exp(-2.5 + 0.10000000000000001 * Y[0])); // millisecond
-alpha_i = 0.029999999999999999 / (1.0 + exp(1.6666666666666667 + 0.066666666666666666 * Y[0])); // per_millisecond
-beta_i = 0.10000000000000001 * exp(-2.6666666666666665 + 0.066666666666666666 * Y[0]) / (1.0 + exp(-2.6666666666666665 + 0.066666666666666666 * Y[0])); // per_millisecond
+tau_i2 = 21.5 + 30 / (1 + exp(-2.5 + 0.10000000000000001 * Y[0])); // millisecond
+alpha_i = 0.029999999999999999 / (1 + exp(1.6666666666666667 + 0.066666666666666666 * Y[0])); // per_millisecond
+beta_i = 0.10000000000000001 * exp(-2.6666666666666665 + 0.066666666666666666 * Y[0]) / (1 + exp(-2.6666666666666665 + 0.066666666666666666 * Y[0])); // per_millisecond
 i_infinity = alpha_i / (alpha_i + beta_i); // dimensionless
-tau_i = 6.0 + 5.0 / (1.0 + exp(-1.6499999999999999 + 0.10000000000000001 * Y[0])); // millisecond
+tau_i = 6 + 5 / (1 + exp(-1.6499999999999999 + 0.10000000000000001 * Y[0])); // millisecond
 if ((Y[0] >= -2.6712338705498262e-6) && (Y[0] <= 2.6712338705498262e-6))
-    i_to_2_max = 187179.41753901311 * (2.6712338705498262e-6 + Y[0]) * (3.8593999999999993e-9 * (-100.0 * exp(9.9999999999999995e-8) + Y[22]) / (1.0 - exp(9.9999999999999995e-8)) + 3.8593999999999993e-9 * (-100.0 * exp(-9.9999999999999995e-8) + Y[22]) / (1.0 - exp(-9.9999999999999995e-8))) - 3.8593999999999993e-9 * (-100.0 * exp(-9.9999999999999995e-8) + Y[22]) / (1.0 - exp(-9.9999999999999995e-8))
+    i_to_2_max = 187179.41753901311 * (2.6712338705498262e-6 + Y[0]) * (3.8593999999999993e-9 * (-100 * exp(9.9999999999999995e-8) + Y[22]) / (1 - exp(9.9999999999999995e-8)) + 3.8593999999999993e-9 * (-100 * exp(-9.9999999999999995e-8) + Y[22]) / (1 - exp(-9.9999999999999995e-8))) - 3.8593999999999993e-9 * (-100 * exp(-9.9999999999999995e-8) + Y[22]) / (1 - exp(-9.9999999999999995e-8))
 else 
-    i_to_2_max = 0.0014448004881001341 * (-100.0 * exp(0.037435883507802616 * Y[0]) + Y[22]) * Y[0] / (1.0 - exp(0.037435883507802616 * Y[0]))
+    i_to_2_max = 0.0014448004881001341 * (-100 * exp(0.037435883507802616 * Y[0]) + Y[22]) * Y[0] / (1 - exp(0.037435883507802616 * Y[0]))
 
-i_to_2 = 20.0 * Y[20] * i_to_2_max; // microA_per_microF
+i_to_2 = 20 * Y[20] * i_to_2_max; // microA_per_microF
 if ((Y[30] >= stim_start) && (Y[30] <= stim_end) && (stim_duration >= -stim_start - stim_period * floor((-stim_start + Y[30]) / stim_period) + Y[30]))
     i_stim = stim_amplitude
 else 
     i_stim = 0
 
 if ((Y[0] >= -1.3356169352749131e-6) && (Y[0] <= 1.3356169352749131e-6))
-    i_Ca_b = 374358.83507802623 * (1.3356169352749131e-6 + Y[0]) * (3.8499135947999997e-9 * (-0.34100000000000003 * Ca_o + Y[1] * exp(9.9999999999999995e-8)) / (-1.0 + exp(9.9999999999999995e-8)) + 3.8499135947999997e-9 * (-0.34100000000000003 * Ca_o + Y[1] * exp(-9.9999999999999995e-8)) / (-1.0 + exp(-9.9999999999999995e-8))) - 3.8499135947999997e-9 * (-0.34100000000000003 * Ca_o + Y[1] * exp(-9.9999999999999995e-8)) / (-1.0 + exp(-9.9999999999999995e-8))
+    i_Ca_b = 374358.83507802623 * (1.3356169352749131e-6 + Y[0]) * (3.8499135947999997e-9 * (-0.34100000000000003 * Ca_o + Y[1] * exp(9.9999999999999995e-8)) / (-1 + exp(9.9999999999999995e-8)) + 3.8499135947999997e-9 * (-0.34100000000000003 * Ca_o + Y[1] * exp(-9.9999999999999995e-8)) / (-1 + exp(-9.9999999999999995e-8))) - 3.8499135947999997e-9 * (-0.34100000000000003 * Ca_o + Y[1] * exp(-9.9999999999999995e-8)) / (-1 + exp(-9.9999999999999995e-8))
 else 
-    i_Ca_b = 0.0028824983370007683 * (-0.34100000000000003 * Ca_o + Y[1] * exp(0.074871767015605231 * Y[0])) * Y[0] / (-1.0 + exp(0.074871767015605231 * Y[0]))
+    i_Ca_b = 0.0028824983370007683 * (-0.34100000000000003 * Ca_o + Y[1] * exp(0.074871767015605231 * Y[0])) * Y[0] / (-1 + exp(0.074871767015605231 * Y[0]))
 
 if ((Y[0] >= 14.999998664383064) && (Y[0] <= 15.000001335616936))
-    i_Ca_L_max = 374358.83507888648 * (-14.999998664383064 + Y[0]) * (4.6891709999892238e-6 * (-0.34100000000000003 * Ca_o + Y[27] * exp(9.9999999999770198e-8)) / (-1.0 + exp(9.9999999999770198e-8)) + 4.6891709999892238e-6 * (-0.34100000000000003 * Ca_o + Y[27] * exp(-9.9999999999770198e-8)) / (-1.0 + exp(-9.9999999999770198e-8))) - 4.6891709999892238e-6 * (-0.34100000000000003 * Ca_o + Y[27] * exp(-9.9999999999770198e-8)) / (-1.0 + exp(-9.9999999999770198e-8))
+    i_Ca_L_max = 374358.83507888648 * (-14.999998664383064 + Y[0]) * (4.6891709999892238e-6 * (-0.34100000000000003 * Ca_o + Y[27] * exp(9.9999999999770198e-8)) / (-1 + exp(9.9999999999770198e-8)) + 4.6891709999892238e-6 * (-0.34100000000000003 * Ca_o + Y[27] * exp(-9.9999999999770198e-8)) / (-1 + exp(-9.9999999999770198e-8))) - 4.6891709999892238e-6 * (-0.34100000000000003 * Ca_o + Y[27] * exp(-9.9999999999770198e-8)) / (-1 + exp(-9.9999999999770198e-8))
 else 
-    i_Ca_L_max = 3.510865186083326 * (-15.0 + Y[0]) * (-0.34100000000000003 * Ca_o + Y[27] * exp(-1.1230765052340785 + 0.074871767015605231 * Y[0])) / (-1.0 + exp(-1.1230765052340785 + 0.074871767015605231 * Y[0]))
+    i_Ca_L_max = 3.510865186083326 * (-15 + Y[0]) * (-0.34100000000000003 * Ca_o + Y[27] * exp(-1.1230765052340785 + 0.074871767015605231 * Y[0])) / (-1 + exp(-1.1230765052340785 + 0.074871767015605231 * Y[0]))
 
 i_Ca_L = Y[10] * Y[11] * Y[7] * Y[8] * Y[9] * g_Ca_L * i_Ca_L_max; // microA_per_microF
-f_Ca2_infinity = 1 / (1.0 - 100.0 * i_Ca_L); // dimensionless
-tau_f_Ca2 = 125.0 + 300.0 / (1.0 + exp(-4.375 - 25.0 * i_Ca_L)); // millisecond
+f_Ca2_infinity = 1 / (1 - 100 * i_Ca_L); // dimensionless
+tau_f_Ca2 = 125 + 300 / (1 + exp(-4.375 - 25 * i_Ca_L)); // millisecond
 dY[11] = (-Y[11] + f_Ca2_infinity) / tau_f_Ca2; // 1 / millisecond
-f_Ca_infinity = 0.14999999999999999 + 0.55000000000000004 / (1.0 + 333.33333333333331 * Y[27]) + 0.29999999999999999 / (1.0 - 20.0 * i_Ca_L); // dimensionless
+f_Ca_infinity = 0.14999999999999999 + 0.55000000000000004 / (1 + 333.33333333333331 * Y[27]) + 0.29999999999999999 / (1 - 20 * i_Ca_L); // dimensionless
 dY[10] = (-Y[10] + f_Ca_infinity) / tau_f_Ca; // 1 / millisecond
-dNaCa_1 = pow(Y[21], 3) * km_Ca_o + 1.5 * pow(km_Na_o, 3) * Y[1] + pow(km_Na_i_1, 3) * (1.0 + 1.5 * Y[1] / km_Ca_i) * Ca_o; // millimolar4
+dNaCa_1 = pow(Y[21], 3) * km_Ca_o + 1.5 * pow(km_Na_o, 3) * Y[1] + pow(km_Na_i_1, 3) * (1 + 1.5 * Y[1] / km_Ca_i) * Ca_o; // millimolar4
 g_K1 = 0.43033148291193518 * sqrt(K_o) * g_K1_max; // milliS_per_microF
 g_Kr = 0.43033148291193518 * sqrt(K_o) * g_Kr_max; // milliS_per_microF
-dNaCa_2 = pow(Y[21], 3) * Ca_o + 1.5 * pow(Na_o, 3) * Y[1] + pow(Na_o, 3) * (1.0 + Y[21] / km_Na_i_1) * km_Ca_i; // millimolar4
+dNaCa_2 = pow(Y[21], 3) * Ca_o + 1.5 * pow(Na_o, 3) * Y[1] + pow(Na_o, 3) * (1 + Y[21] / km_Na_i_1) * km_Ca_i; // millimolar4
 sigma = -0.14285714285714285 + 0.14285714285714285 * exp(0.01485884101040119 * Na_o); // dimensionless
 E_Cl = -R * T * log(Cl_o / Y[22]) / F; // millivolt
 i_Cl_b = (-E_Cl + Y[0]) * g_Cl_b; // microA_per_microF
@@ -448,17 +448,17 @@ E_Ks = R * T * log((r_NaK * Na_o + K_o) / (Y[21] * r_NaK + Y[23])) / F; // milli
 E_Na = R * T * log(Na_o / Y[21]) / F; // millivolt
 CT_Na_Cl = pow((-E_Cl + E_Na), 4) * CT_Na_Cl_max / (59494197.640692554 + pow((-E_Cl + E_Na), 4)); // millimolar_per_millisecond
 i_Na_b = (-E_Na + Y[0]) * g_Na_b; // microA_per_microF
-alpha_xK1 = 1.02 / (1.0 + exp(-14.1227775 + 0.23849999999999999 * Y[0] - 0.23849999999999999 * E_K)); // dimensionless
-beta_xK1 = (0.49124000000000001 * exp(0.43983232 + 0.080320000000000003 * Y[0] - 0.080320000000000003 * E_K) + exp(-36.698642499999998 + 0.061749999999999999 * Y[0] - 0.061749999999999999 * E_K)) / (1.0 + exp(-2.4444678999999998 + 0.51429999999999998 * E_K - 0.51429999999999998 * Y[0])); // dimensionless
+alpha_xK1 = 1.02 / (1 + exp(-14.1227775 + 0.23849999999999999 * Y[0] - 0.23849999999999999 * E_K)); // dimensionless
+beta_xK1 = (0.49124000000000001 * exp(0.43983232 + 0.080320000000000003 * Y[0] - 0.080320000000000003 * E_K) + exp(-36.698642499999998 + 0.061749999999999999 * Y[0] - 0.061749999999999999 * E_K)) / (1 + exp(-2.4444678999999998 + 0.51429999999999998 * E_K - 0.51429999999999998 * Y[0])); // dimensionless
 xK1 = alpha_xK1 / (alpha_xK1 + beta_xK1); // dimensionless
 i_K1 = (0.0040000000000000001 + g_K1 * xK1) * (-E_K + Y[0]); // microA_per_microF
 i_K_p = (-E_K + Y[0]) * g_K_p * kp; // microA_per_microF
 i_Kr = (-E_K + Y[0]) * Y[17] * g_Kr * rr_infinity; // microA_per_microF
 i_Ks = (-E_Ks + Y[0]) * Y[18] * Y[19] * g_Ks; // microA_per_microF
 i_Na = pow(Y[2], 3) * (-E_Na + Y[0]) * (0.20000000000000001 * Y[4] + 0.80000000000000004 * Y[3]) * g_Na; // microA_per_microF
-i_NaCa = (-1.5 * pow(Na_o, 3) * Y[1] * exp(-0.65000000000000002 * Y[0] * F / (R * T)) + pow(Y[21], 3) * X_NaCa * i_NaCa_max * Ca_o * exp(0.34999999999999998 * Y[0] * F / (R * T))) / ((1.0 + k_sat * exp(-0.65000000000000002 * Y[0] * F / (R * T))) * (1.0 + 0.44444444444444442 * pow(km_Ca_act, 2) / pow(Y[1], 2)) * (dNaCa_1 + dNaCa_2)); // microA_per_microF
-f_NaK = 1 / (1.0 + 0.1245 * exp(-0.10000000000000001 * Y[0] * F / (R * T)) + 0.036499999999999998 * sigma * exp(-Y[0] * F / (R * T))); // dimensionless
-i_NaK = f_NaK * g_NaK * K_o / ((1.0 + pow(km_Na_i_2, 2) / pow(Y[21], 2)) * (km_K_o + K_o)); // microA_per_microF
+i_NaCa = (-1.5 * pow(Na_o, 3) * Y[1] * exp(-0.65000000000000002 * Y[0] * F / (R * T)) + pow(Y[21], 3) * X_NaCa * i_NaCa_max * Ca_o * exp(0.34999999999999998 * Y[0] * F / (R * T))) / ((1 + k_sat * exp(-0.65000000000000002 * Y[0] * F / (R * T))) * (1 + 0.44444444444444442 * pow(km_Ca_act, 2) / pow(Y[1], 2)) * (dNaCa_1 + dNaCa_2)); // microA_per_microF
+f_NaK = 1 / (1 + 0.1245 * exp(-0.10000000000000001 * Y[0] * F / (R * T)) + 0.036499999999999998 * sigma * exp(-Y[0] * F / (R * T))); // dimensionless
+i_NaK = f_NaK * g_NaK * K_o / ((1 + pow(km_Na_i_2, 2) / pow(Y[21], 2)) * (km_K_o + K_o)); // microA_per_microF
 i_Na_L = pow(Y[5], 3) * (-E_Na + Y[0]) * Y[6] * g_Na_L; // microA_per_microF
 i_to_1 = (-E_K + Y[0]) * (0.20000000000000001 * Y[16] + 0.80000000000000004 * Y[15]) * Y[14] * g_to_1; // microA_per_microF
 i_tot = i_Ca_b + i_Cl_b + i_K_b + i_Na_b + i_Ca_L + i_Ca_T + i_Ca_p + i_K1 + i_K_p + i_Kr + i_Ks + i_Na + i_NaCa + i_NaK + i_Na_L + i_to_1 + i_to_2; // microA_per_microF
@@ -470,28 +470,28 @@ Vol_ss = 0.02 * Vol_cell; // microlitre
 a_geo = 6.2800000000000002 * pow(radius, 2) + 6.2800000000000002 * length * radius; // cm2
 a_cap = a_geo * rcg; // cm2
 dY[22] = (-(i_Cl_b + i_to_2) * Cm * a_cap / (F * Vol_myo) + CT_K_Cl + CT_Na_Cl) * conc_clamp; // millimolar / millisecond
-dY[23] = (-(-2.0 * i_NaK + i_K_b + i_K1 + i_K_p + i_Kr + i_Ks + i_to_1) * Cm * a_cap / (F * Vol_myo) + CT_K_Cl) * conc_clamp; // millimolar / millisecond
-dY[21] = (-(3.0 * i_NaCa + 3.0 * i_NaK + i_Na_b + i_Na + i_Na_L) * Cm * a_cap / (F * Vol_myo) + CT_Na_Cl) * conc_clamp; // millimolar / millisecond
+dY[23] = (-(-2 * i_NaK + i_K_b + i_K1 + i_K_p + i_Kr + i_Ks + i_to_1) * Cm * a_cap / (F * Vol_myo) + CT_K_Cl) * conc_clamp; // millimolar / millisecond
+dY[21] = (-(3 * i_NaCa + 3 * i_NaK + i_Na_b + i_Na + i_Na_L) * Cm * a_cap / (F * Vol_myo) + CT_Na_Cl) * conc_clamp; // millimolar / millisecond
 q_leak = Y[25] * q_leak_max / NSR_max; // millimolar_per_millisecond
-vg = 1 / (1.0 + exp(2.6000000000000001 + 0.20000000000000001 * g_Ca_L * i_Ca_L_max)); // dimensionless
+vg = 1 / (1 + exp(2.6000000000000001 + 0.20000000000000001 * g_Ca_L * i_Ca_L_max)); // dimensionless
 g_rel = g_rel_max * vg; // per_millisecond
-Ca_fac = 1 / (1.0 + exp(3.3333333333333335 + 66.666666666666671 * i_Ca_L)); // millimolar
-ri_infinity = 1 / (1.0 + exp(-16.0 + 80.0 * Ca_fac + 40000.0 * Y[27])); // dimensionless
+Ca_fac = 1 / (1 + exp(3.3333333333333335 + 66.666666666666671 * i_Ca_L)); // millimolar
+ri_infinity = 1 / (1 + exp(-16 + 80 * Ca_fac + 40000 * Y[27])); // dimensionless
 tau_Ca_MK = Ca_MK_act * tau_Ca_MK_max / (Ca_MK_act + km_Ca_MK); // millisecond
-tau_ri = 3.0 + (350.0 - tau_Ca_MK) / (1.0 + exp(-15.0 + 5000.0 * Y[27] + 15.0 * Ca_fac)) + tau_Ca_MK; // millisecond
+tau_ri = 3 + (350 - tau_Ca_MK) / (1 + exp(-15 + 5000 * Y[27] + 15 * Ca_fac)) + tau_Ca_MK; // millisecond
 dY[28] = (-Y[28] + ri_infinity) / tau_ri; // 1 / millisecond
 q_rel = (-Y[27] + Y[26]) * Y[28] * Y[29] * g_rel; // millimolar_per_millisecond
 dY[27] = (-q_diff + Vol_jsr * q_rel / Vol_ss - i_Ca_L * Cm * a_cap / (F * Vol_ss * z_Ca)) * Ca_r_tot; // millimolar / millisecond
 ro_infinity_JSR = pow(Y[26], 1.8999999999999999) / (pow(Y[26], 1.8999999999999999) + 1644.6531773416521 * pow((Y[27] / (0.0028 + Y[27])), 1.8999999999999999)); // dimensionless
-ro_infinity = pow(i_Ca_L, 2) * ro_infinity_JSR / (1.0 + pow(i_Ca_L, 2)); // dimensionless
+ro_infinity = pow(i_Ca_L, 2) * ro_infinity_JSR / (1 + pow(i_Ca_L, 2)); // dimensionless
 dY[29] = (-Y[29] + ro_infinity) / tau_ro; // 1 / millisecond
 q_tr = (-Y[26] + Y[25]) / tau_tr; // millimolar_per_millisecond
-dY[26] = (-q_rel + q_tr) / (1.0 + CSQN_max * km_CSQN / pow((km_CSQN + Y[26]), 2)); // millimolar / millisecond
+dY[26] = (-q_rel + q_tr) / (1 + CSQN_max * km_CSQN / pow((km_CSQN + Y[26]), 2)); // millimolar / millisecond
 dkm_plb = Ca_MK_act * dkm_plb_max / (Ca_MK_act + km_Ca_MK); // millimolar
 dq_up_Ca_MK = Ca_MK_act * dq_up_Ca_MK_max / (Ca_MK_act + km_Ca_MK); // dimensionless
-q_up = (1.0 + dq_up_Ca_MK) * Y[1] * X_q_up * q_up_max / (-dkm_plb + Y[1] + km_up); // millimolar_per_millisecond
+q_up = (1 + dq_up_Ca_MK) * Y[1] * X_q_up * q_up_max / (-dkm_plb + Y[1] + km_up); // millimolar_per_millisecond
 dY[25] = -q_leak - Vol_jsr * q_tr / Vol_nsr + q_up; // millimolar / millisecond
-dY[1] = -((-q_leak + q_up) * Vol_nsr / Vol_myo - q_diff * Vol_ss / Vol_myo + 0.5 * (-2.0 * i_NaCa + i_Ca_b + i_Ca_p) * Cm * a_cap / (F * Vol_myo)) * b_myo; // millimolar / millisecond
+dY[1] = -((-q_leak + q_up) * Vol_nsr / Vol_myo - q_diff * Vol_ss / Vol_myo + 0.5 * (-2 * i_NaCa + i_Ca_b + i_Ca_p) * Cm * a_cap / (F * Vol_myo)) * b_myo; // millimolar / millisecond
 //------------------------------------------------------------------------------
 // Integration & Output
 //------------------------------------------------------------------------------

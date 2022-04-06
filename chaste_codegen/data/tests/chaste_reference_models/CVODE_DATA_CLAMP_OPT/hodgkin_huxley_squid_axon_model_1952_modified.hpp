@@ -33,6 +33,7 @@ class Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvodeDataClampO
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

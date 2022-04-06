@@ -33,6 +33,7 @@ class Cellfaber_rudy_2000FromCellMLCvode : public AbstractCvodeCell
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

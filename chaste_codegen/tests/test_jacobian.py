@@ -8,7 +8,6 @@ from chaste_codegen._chaste_printer import ChastePrinter
 from chaste_codegen._jacobian import format_jacobian, get_jacobian
 from chaste_codegen._partial_eval import partial_eval
 from chaste_codegen.tests.conftest import TESTS_FOLDER
-from cellmlmanip.model import Variable
 
 
 @pytest.fixture(scope='session')
@@ -41,7 +40,7 @@ def test_get_jacobian(jacobian):
     expected = open(os.path.join(TESTS_FOLDER, 'test_jacobian_equations_1.txt'), 'r').read()
     # exclude x5 due to - sign difference between sympy 1.9 and 1.10
     eqs = [sp.Eq(*eq) for eq in jacobian_equations]
-    required = [e.lhs for e in eqs if not str(e.lhs).endswith('x5') ]
+    required = [e.lhs for e in eqs if not str(e.lhs).endswith('x3')]
     part_eval_jacobian_equations = partial_eval(eqs, required, keep_multiple_usages=False)
 
     assert str(part_eval_jacobian_equations) == expected, str(jacobian_equations)
@@ -83,10 +82,10 @@ def test_format_jacobian(jacobian):
 
     # exclude x5 due to - sign difference between sympy 1.9 and 1.10
     eqs = [sp.Eq(*eq) for eq in jacobian_equations]
-    required = [e.lhs for e in eqs if not str(e.lhs).endswith('x5') ]
+    required = [e.lhs for e in eqs if not str(e.lhs).endswith('x3')]
     part_eval_jacobian_equations = partial_eval(eqs, required, keep_multiple_usages=False)
-    jacobian_equations=[(e.lhs, e.rhs) for e in part_eval_jacobian_equations]
-    
+    jacobian_equations = [(e.lhs, e.rhs) for e in part_eval_jacobian_equations]
+
     equations, jacobian = format_jacobian(jacobian_equations, sp.Matrix([jacobian_matrix]), ChastePrinter(),
                                           lambda x, y: str(x) + str(y))
     # order dictionary for printing

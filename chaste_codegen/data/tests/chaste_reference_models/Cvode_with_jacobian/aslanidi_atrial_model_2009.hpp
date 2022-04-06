@@ -33,6 +33,7 @@ class Cellaslanidi_atrial_model_2009FromCellMLCvode : public AbstractCvodeCell
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

@@ -32,6 +32,7 @@ class Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLOpt : public Ab
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
