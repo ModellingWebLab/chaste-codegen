@@ -107,7 +107,7 @@ def compare_model_against_reference(chaste_model, tmp_path, model_type, referenc
     for ext, code in zip(chaste_model.DEFAULT_EXTENSIONS, chaste_model.generated_code):
         gen_file_path = os.path.join(tmp_path, chaste_model.file_name + ext)
         write_file(gen_file_path, code)
-        compare_file_against_reference(gen_file_path, expected_path + ext)
+        compare_file_against_reference(expected_path + ext, gen_file_path)
 
 
 def compare_file_against_reference(reference_file, file):
