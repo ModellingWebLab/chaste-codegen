@@ -1,4 +1,3 @@
-from sympy.printing import cxxcode
 from cellmlmanip.printer import Printer
 from sympy import (
     Mul,
