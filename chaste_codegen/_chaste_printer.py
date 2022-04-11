@@ -146,7 +146,7 @@ class ChastePrinter(Printer):
 
     def _print_float(self, expr):
         """ Handles ``float``s. """
-            return cxxcode(float(expr), standard='C++11')
+        return cxxcode(float(expr), standard='C++11')
 
     def _print_int(self, expr):
         """ Handles ``ints``s. """
