@@ -455,7 +455,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__membrane__Vm) {
-                    return 8000 * exp(0.01 * var_chaste_interface__membrane__Vm) + 9000000000 * exp(0.20000000000000001 * var_chaste_interface__membrane__Vm);
+                    return 8000 * exp(0.01 * var_chaste_interface__membrane__Vm) + 9000000000.0 * exp(0.20000000000000001 * var_chaste_interface__membrane__Vm);
                 };
                 const double var_chaste_interface__membrane__Vm = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__membrane__Vm);
@@ -2827,7 +2827,7 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
             const double var_x349 = exp(var_x347);
             const double var_x350 = exp(var_x345);
             
-            partialF = -1 / (4000 * var_x348 + 0.014 * var_x346) - 1 / (8000 * var_x349 + 9000000000 * var_x350);
+            partialF = -1 / (4000 * var_x348 + 0.014 * var_x346) - 1 / (8000 * var_x349 + 9000000000.0 * var_x350);
         }
         else
         {

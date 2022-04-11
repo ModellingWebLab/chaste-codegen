@@ -382,9 +382,9 @@
         const double var_Na_Ca_exchanger__K_sat = 0.20000000000000001; // dimensionless
         const double var_Na_Ca_exchanger__eta = 0.34999999999999998; // dimensionless
         const double var_RyR_channel__k_a_minus = 576; // per_second
-        const double var_RyR_channel__k_a_plus = 12150000000000; // millimolar4_per_second
+        const double var_RyR_channel__k_a_plus = 12150000000000.0; // millimolar4_per_second
         const double var_RyR_channel__k_b_minus = 1930; // per_second
-        const double var_RyR_channel__k_b_plus = 4050000000; // millimolar3_per_second
+        const double var_RyR_channel__k_b_plus = 4050000000.0; // millimolar3_per_second
         const double var_RyR_channel__k_c_minus = 0.80000000000000004; // per_second
         const double var_RyR_channel__k_c_plus = 100; // per_second
         const double var_RyR_channel__P_C2_orig_deriv = var_chaste_interface__RyR_channel__P_O1 * var_RyR_channel__k_c_plus - var_chaste_interface__RyR_channel__P_C2 * var_RyR_channel__k_c_minus; // 1 / second
@@ -2294,9 +2294,9 @@
 
         // Mathematics
         const double var_RyR_channel__k_a_minus = 576; // per_second
-        const double var_RyR_channel__k_a_plus = 12150000000000; // millimolar4_per_second
+        const double var_RyR_channel__k_a_plus = 12150000000000.0; // millimolar4_per_second
         const double var_RyR_channel__k_b_minus = 1930; // per_second
-        const double var_RyR_channel__k_b_plus = 4050000000; // millimolar3_per_second
+        const double var_RyR_channel__k_b_plus = 4050000000.0; // millimolar3_per_second
         const double var_RyR_channel__k_c_minus = 0.80000000000000004; // per_second
         const double var_RyR_channel__k_c_plus = 100; // per_second
         const double var_RyR_channel__m = 3; // dimensionless
@@ -2344,7 +2344,7 @@
 
         // Mathematics
         const double var_RyR_channel__k_b_minus = 1930; // per_second
-        const double var_RyR_channel__k_b_plus = 4050000000; // millimolar3_per_second
+        const double var_RyR_channel__k_b_plus = 4050000000.0; // millimolar3_per_second
         const double var_RyR_channel__m = 3; // dimensionless
         const double var_RyR_channel__P_O2_orig_deriv = -var_chaste_interface__RyR_channel__P_O2 * var_RyR_channel__k_b_minus + pow(var_chaste_interface__intracellular_ion_concentrations__Ca_ss, var_RyR_channel__m) * var_chaste_interface__RyR_channel__P_O1 * var_RyR_channel__k_b_plus; // 1 / second
         const double d_dt_chaste_interface_var_RyR_channel__P_O2 = 0.001 * var_RyR_channel__P_O2_orig_deriv; // 1 / millisecond
@@ -2385,7 +2385,7 @@
 
         // Mathematics
         const double var_RyR_channel__k_a_minus = 576; // per_second
-        const double var_RyR_channel__k_a_plus = 12150000000000; // millimolar4_per_second
+        const double var_RyR_channel__k_a_plus = 12150000000000.0; // millimolar4_per_second
         const double var_RyR_channel__n = 4; // dimensionless
         const double var_RyR_channel__P_C1_orig_deriv = var_chaste_interface__RyR_channel__P_O1 * var_RyR_channel__k_a_minus - pow(var_chaste_interface__intracellular_ion_concentrations__Ca_ss, var_RyR_channel__n) * var_chaste_interface__RyR_channel__P_C1 * var_RyR_channel__k_a_plus; // 1 / second
         const double d_dt_chaste_interface_var_RyR_channel__P_C1 = 0.001 * var_RyR_channel__P_C1_orig_deriv; // 1 / millisecond
@@ -2402,7 +2402,7 @@
             // Units: millimolar; Initial value: 0.00011
             
 
-            const double var_x242 = 12150000000 * pow(var_chaste_interface__intracellular_ion_concentrations__Ca_ss, 4);
+            const double var_x242 = 12150000000.0 * pow(var_chaste_interface__intracellular_ion_concentrations__Ca_ss, 4);
             
             partialF = -var_x242;
         }

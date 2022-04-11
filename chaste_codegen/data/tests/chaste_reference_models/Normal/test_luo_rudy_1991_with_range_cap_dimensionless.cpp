@@ -363,7 +363,7 @@ std::shared_ptr<Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude = -25.5; // microA_per_cm2
         const double var_chaste_interface__membrane__stim_duration = 2; // millisecond
-        const double var_chaste_interface__membrane__stim_end = 100000000000; // millisecond
+        const double var_chaste_interface__membrane__stim_end = 100000000000.0; // millisecond
         const double var_chaste_interface__membrane__stim_period = 1000; // millisecond
         const double var_chaste_interface__membrane__stim_start = 100; // millisecond
         boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(

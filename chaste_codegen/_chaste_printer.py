@@ -12,6 +12,10 @@ from sympy.printing import cxxcode
 from sympy.printing.precedence import precedence
 
 
+C_MAX_INT = 2147483647
+C_MIN_INT = -2147483647
+
+
 class ChastePrinter(Printer):
     """
     Converts Sympy expressions to strings for use in Chaste code generation.
@@ -146,7 +150,7 @@ class ChastePrinter(Printer):
     def _print_float(self, expr):
         """ Handles ``float``s. """
         # print integers as int if they are between min & max int in c++
-        if expr.is_integer() and -2147483647 < expr < 2147483647:
+        if expr.is_integer() and C_MIN_INT < expr < C_MAX_INT:
             return cxxcode(int(expr), standard='C++11')
         else:
             return cxxcode(float(expr), standard='C++11')
