@@ -141,18 +141,19 @@ class ChastePrinter(Printer):
         return parts
 
     def _print_IntegerConstant(self, expr):
-        return self._print_int(int(expr))
+        return self._print_int(float(expr))
 
     def _print_float(self, expr):
         """ Handles ``float``s. """
-        if expr.expr.is_integer() and -2147483647 < expr < 2147483647:
+        # print integers as int if they are between min & max int in c++
+        if expr.is_integer() and -2147483647 < expr < 2147483647:
             return cxxcode(int(expr), standard='C++11')
         else:
             return cxxcode(float(expr), standard='C++11')
 
     def _print_int(self, expr):
         """ Handles ``ints``s. """
-        return self._print_float(expr)
+        return self._print_float(float(expr))
 
     def _print_ITE(self, expr):
         """ Handles ITE (if then else) objects by rewriting them as Piecewise """
