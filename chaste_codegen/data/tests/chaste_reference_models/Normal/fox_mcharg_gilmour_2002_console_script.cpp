@@ -227,7 +227,7 @@
         const double var_calcium_dynamics__J_up = mParameters[2] / (1 + pow(var_calcium_dynamics__K_mup, 2) / pow(var_calcium_dynamics__Ca_i, 2)); // micromolar_per_millisecond
         const double var_calcium_dynamics__beta_SR = 1 / (1 + var_calcium_dynamics__CSQN_tot * var_calcium_dynamics__K_mCSQN / pow((var_chaste_interface__calcium_dynamics__Ca_SR + var_calcium_dynamics__K_mCSQN), 2)); // dimensionless
         const double var_calcium_dynamics__beta_i = 1 / (1 + var_calcium_dynamics__CMDN_tot * var_calcium_dynamics__K_mCMDN / pow((var_calcium_dynamics__Ca_i + var_calcium_dynamics__K_mCMDN), 2)); // dimensionless
-        const double var_calcium_dynamics__gamma = 1 / (1 + 8000000000 / pow(var_chaste_interface__calcium_dynamics__Ca_SR, 3)); // dimensionless
+        const double var_calcium_dynamics__gamma = 1 / (1 + 8000000000.0 / pow(var_chaste_interface__calcium_dynamics__Ca_SR, 3)); // dimensionless
         const double var_membrane__F = 96.5; // coulomb_per_millimole
         const double var_membrane__R = 8.3140000000000001; // joule_per_mole_kelvin
         const double var_membrane__T = 310; // kelvin
@@ -366,7 +366,7 @@
         const double var_Na_Ca_exchanger__K_sat = 0.20000000000000001; // dimensionless
         const double var_Na_Ca_exchanger__eta = 0.34999999999999998; // dimensionless
         const double var_calcium_dynamics__Ca_i = 1000 * var_chaste_interface__calcium_dynamics__Ca_i_converted; // micromolar
-        const double var_calcium_dynamics__gamma = 1 / (1 + 8000000000 / pow(var_chaste_interface__calcium_dynamics__Ca_SR, 3)); // dimensionless
+        const double var_calcium_dynamics__gamma = 1 / (1 + 8000000000.0 / pow(var_chaste_interface__calcium_dynamics__Ca_SR, 3)); // dimensionless
         const double var_membrane__F = 96.5; // coulomb_per_millimole
         const double var_membrane__R = 8.3140000000000001; // joule_per_mole_kelvin
         const double var_membrane__T = 310; // kelvin

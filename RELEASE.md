@@ -1,5 +1,9 @@
 # Release 0.9.6
+- This release fixes a bug printing large integers, in some environments: Large numbers such as 8.034023767017109e+27 whch were actually ints would be printed as an the int 8034023767017108950029959168 and then the C++ compiler would complain as that's more than the maximum int value. This has been fixed by only printing ints as ints if they are `MIN_INT < number < MAX_INT` else we print them as a float (and we get the sceintific notation).
+ 
+# Release 0.9.6 (yanked)
 - Fixed tests to pass with sympy 1.10 and required latest cellmlmanip, which also workes with sympy1.10. Updated sympy requirement to be >=1.9, < 1.11
+- This release was yanked due to a bug printing large integers
 
 # Release 0.9.5
 - Corrected a type in the generated output for `--rush-larsen-c`
