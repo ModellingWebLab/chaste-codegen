@@ -51,14 +51,25 @@ def format_jacobian(jacobian_equations, jacobian_matrix, printer, print_rhs,
     assert isinstance(printer, Printer), 'Expecting printer to be a cellmlmanip.printer.Printer'
     assert callable(print_rhs), 'Expecting print_rhs to be a callable'
 
-    equations = [{'lhs': printer.doprint(eq[0]), 'rhs': print_rhs(eq[0], eq[1]), 'sympy_lhs': eq[0],
-                  'sympy_rhs': eq[1]} for eq in jacobian_equations]
+    symbols_used = set()
     rows, cols = jacobian_matrix.shape
     jacobian = []
     for i in range(cols if swap_inner_outer_index else rows):
         for j in range(rows if swap_inner_outer_index else cols):
             matrix_entry = jacobian_matrix[j, i] if swap_inner_outer_index else jacobian_matrix[i, j]
             if not skip_0_entries or matrix_entry != 0:
+                symbols_used.update(matrix_entry.free_symbols)
                 jacobian.append({'i': j if swap_inner_outer_index else i, 'j': i if swap_inner_outer_index else j,
                                  'entry': printer.doprint(matrix_entry)})
+
+    num_symbols = 0
+    while num_symbols != len(symbols_used):
+        num_symbols = len(symbols_used)
+        for eq in jacobian_equations:
+            if eq[0] in symbols_used:
+                symbols_used.update(eq[1].free_symbols)
+
+    equations = [{'lhs': printer.doprint(eq[0]), 'rhs': print_rhs(eq[0], eq[1]), 'sympy_lhs': eq[0],
+                  'sympy_rhs': eq[1]} for eq in jacobian_equations if eq[0] in symbols_used]
+
     return equations, jacobian
