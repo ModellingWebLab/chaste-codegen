@@ -461,7 +461,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__membrane__V) {
-                    return (((var_chaste_interface__membrane__V >= -26.500000781250002) && (var_chaste_interface__membrane__V <= -26.499999218749998)) ? (0.00010137404180680451 + 2.4064113653459901e-6 * var_chaste_interface__membrane__V) : (4.8133299999999997e-6 * (26.5 + var_chaste_interface__membrane__V) / (1 - 0.033641326918204616 * exp(-0.128 * var_chaste_interface__membrane__V))));
+                    return (((var_chaste_interface__membrane__V >= -26.500000781250002) && (var_chaste_interface__membrane__V <= -26.499999218749998)) ? (-3.7604140624912359e-12 / (1 - exp(9.9999999999766942e-8)) + 640000.00000149151 * (26.500000781250002 + var_chaste_interface__membrane__V) * (3.7604140624912359e-12 / (1 - exp(9.9999999999766942e-8)) + 3.7604140624912359e-12 / (1 - exp(-9.9999999999766942e-8)))) : (4.8133299999999997e-6 * (26.5 + var_chaste_interface__membrane__V) / (1 - exp(-3.3919999999999999 - 0.128 * var_chaste_interface__membrane__V))));
                 };
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__membrane__V);
@@ -2298,7 +2298,7 @@ std::shared_ptr<Cellbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLB
         const double var_fast_transient_outward_potassium_current__beta_a = 0.39560000000000001 * _lt_0_row[18];
         const double var_fast_transient_outward_potassium_current__beta_i = 0.00095 * _lt_0_row[22] / (_lt_0_row[21]);
         const double var_non_inactivating_steady_state_potassium_current__tau_Kss = _lt_0_row[32];
-        const double var_slow_delayed_rectifier_potassium_current__alpha_n = (((var_chaste_interface__membrane__V >= -26.500000781250002) && (var_chaste_interface__membrane__V <= -26.499999218749998)) ? (-3.7604140624912359e-12 / (1 - exp(9.9999999999766942e-8)) + 640000.00000149151 * (26.500000781250002 + var_chaste_interface__membrane__V) * (3.7604140624912359e-12 / (1 - exp(9.9999999999766942e-8)) + 3.7604140624912359e-12 / (1 - exp(-9.9999999999766942e-8)))) : (4.8133299999999997e-6 * (26.5 + var_chaste_interface__membrane__V) / (1 - exp(-3.3919999999999999 - 0.128 * var_chaste_interface__membrane__V))));
+        const double var_slow_delayed_rectifier_potassium_current__alpha_n = _lt_0_row[29];
         const double var_slow_delayed_rectifier_potassium_current__beta_n = 9.5333299999999997e-5 * _lt_0_row[30];
         const double var_slow_transient_outward_potassium_current__ass = _lt_0_row[31];
         const double var_slow_transient_outward_potassium_current__iss = _lt_0_row[33];
