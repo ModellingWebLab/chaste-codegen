@@ -5,12 +5,9 @@ from sympy import (
     Float,
     Piecewise,
     cse,
-    exp,
     piecewise_fold,
 )
 from sympy.core import Symbol
-
-from chaste_codegen._math_functions import exp_
 
 
 def get_usage_count(equations):
