@@ -5,12 +5,9 @@ from sympy import (
     Float,
     Piecewise,
     cse,
-    exp,
     piecewise_fold,
 )
 from sympy.core import Symbol
-
-from chaste_codegen._math_functions import exp_
 
 
 def get_usage_count(equations):
@@ -36,12 +33,10 @@ def fold_piecewises(expr):
     # Since piecewise_fold hangs with some complicated nestings, due to simplification we use the following workaround:
     # First extract common terms, perform piecewise_fold, re-insert the common terms
     # see: https://github.com/sympy/sympy/issues/20850
-    expr = expr.replace(exp, exp_)
     common_terms, expr = cse(expr)
     expr = piecewise_fold(expr[0])
     for term, ex in reversed(common_terms):
         expr = expr.xreplace({term: ex})
-    expr = expr.replace(exp_, exp)
     return expr
 
 

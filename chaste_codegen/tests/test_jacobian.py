@@ -40,7 +40,7 @@ def test_get_jacobian(jacobian):
     expected = open(os.path.join(TESTS_FOLDER, 'test_jacobian_equations_1.txt'), 'r').read()
     # exclude x5 due to - sign difference between sympy 1.9 and 1.10
     eqs = [sp.Eq(*eq) for eq in jacobian_equations]
-    required = [e.lhs for e in eqs if not str(e.lhs).endswith('x3')]
+    required = [e.lhs for e in eqs if not str(e.lhs).endswith('x5')]
     part_eval_jacobian_equations = partial_eval(eqs, required, keep_multiple_usages=False)
 
     assert str(part_eval_jacobian_equations) == expected, str(jacobian_equations)
