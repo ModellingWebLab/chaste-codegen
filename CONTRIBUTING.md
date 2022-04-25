@@ -51,19 +51,8 @@ We follow the [PEP8 recommendations](https://www.python.org/dev/peps/pep-0008/) 
 $ flake8
 ```
 
-### Python version
-
+## Python version
 Python 3.5+
-
-
-## Testing
-
-We're using [pytest](https://docs.pytest.org/en/latest/). To run, type
-
-```sh
-$ python -m pytest
-```
-
 
 ## Documentation
 
@@ -71,38 +60,49 @@ Every method and every class should have a [docstring](https://www.python.org/de
 
 These docstrings can be fairly simple, but can also make use of [reStructuredText](http://docutils.sourceforge.net/docs/user/rst/quickref.html), a markup language designed specifically for writing [technical documentation](https://en.wikipedia.org/wiki/ReStructuredText). For example, you can link to other classes and methods by writing ```:class:`myokit.Model` ``` and  ```:meth:`run()` ```.
 
+## Testing
+Testing happens in 2 different ways: there are python-based tests to test `chaste_codegen` as a stand-alone utility and there is a test pack within the chaste project, which tests that the generated modules produce the numerical results expected (within tolerances)
 
-## Infrastructure & configuration files
+### python-based tests
+We're using [pytest](https://docs.pytest.org/en/latest/). To run, type
 
-### Visual Studio Code Development Environment
-Visual Studio Code (not to be confused with Visual Studio) is a cross-platform free lightweight IDE from Microsoft.
-To use it for ``chaste_codegen`` development you will need to install the [Python extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python).
-To be able to run and debug tests you will also need to install the [pytest extension](https://code.visualstudio.com/docs/python/testing).
-In your settings you should also make it use the correct vritual environment. This can be done via the UI but it is a bit hit and miss. 
-However there is a settings file in the `.vscode` folder in the ``chaste_codegen`` folder called `settings.json`. Note that `.vscode` is included in our `.gitignore` so any changes will not be tracked or committed.
-Below is an example `settings.json`; replace `<python_path>` with the folder that contains `python.exe` for your virtual environment (in Windows it is in `\Scripts` and on linux in `/bin `).
-`<project_path>` is just the root folder of the ``chaste_codegen`` code.
+```sh
+$ python -m pytest
 ```
-{
-    "python.pythonPath" : "<python_path>",
-    "python.venvPath": "${workspaceFolder}",
-    "python.venvFolders": [
-        "<project_path>"
-    ],
+### chaste C++ based tests
+The Codegen tastpack within chaste will download & install the latest release of chaste_codegen, compile a number of models and check their numericla outcomes. See [chatse wiki](https://chaste.cs.ox.ac.uk/trac/wiki/ChasteGuides/CmakeFirstRun). You can run this test with any changes that have been made as follows:
+- You'll need environment in which you can compile chaste (e.g. with the dependancies installed or in a docker).
+- Make sure the changes are committed to a new branch e.g. `changed_xyy_to_do_pqr`.
+- Check-out chaste. ``git clone --recursive --branch develop https://github.com/Chaste/Chaste.git`
+- from the source folder checkout the ApPreict project `git clone --recursive https://github.com/Chaste/ApPredict projects/ApPredict`
+- create a build folder and cd in to it. e.g. `mkdir build; cd build`
+- Type: `cmake <path to chaste source>`. This sets-up the build folder for compiling chaste.
+- There isshould now be a python virtual environment in the build folder called `codegen_python3_venv`
+- Uninstall the release of chatse codegen: `./codegen_python3_venv/bin/python -m pip uninstall chaste_codegen`
+- Clone the source of chatse_codegen with the changes in your branch follows `git clone --recursive --branch changed_xyy_to_do_pqr https://github.com/ModellingWebLab/chaste-codegen.git`
+- Install this version into the virtual environment `./codegen_python3_venv/bin/python -m pip install -e chaste-codegen/`
+- You can check it has worked by typing ./codegen_python3_venv/bin/python -m pip freeze` you should see something like `-e git+https://github.com/ModellingWebLab/chaste-codegen.git@e401d52fc584d4cba7330bd1aee3b741269d7084#egg=chaste_codegen` (where e401d52fc584d4cba7330bd1aee3b741269d7084 is a specific git commit id)
+- no make your project as normal `make -jN` where N is the number of processes you want to use (depending on the machine you're using)
+- Iow test the codegen output. **this will take quite a while** Ctest -JN -L `Codegen ----output-on-failure`
+- If this passes, test the ApPreidct project as well: `Ctest -jN -L project_ApPredict  ----output-on-failure`
 
-    "python.testing.unittestEnabled": false,
-    "python.testing.nosetestsEnabled": false,
-    "python.testing.pytestEnabled": true,
-    "python.testing.pytestArgs": ["--rootdir=.", "--verbose"]
-}
-```
 
-### Git setup
-The tests contain a large amount of reference files. When reference files are updated it's a common practice to regenerate them all (after they have been tested with chaste). Often only a few will have changes.
-In order to hide reference files for which only the timestamps have changed, please set up your git environment as follows.
-```
-git config --global filter.strip_gen_time.clean "sed 's;^//! on .*;//! on (date omitted as unimportant);'"
-git config --global filter.strip_gen_time.smudge cat
-```
-See https://git-scm.com/book/en/v2/Customizing-Git-Git-Attributes#_keyword_expansion for full details.
-If you are on windows you may need to install sed for windows and add it to your path: http://gnuwin32.sourceforge.net/packages/sed.htm
+## Workflow for proposing changes
+In order to propose changes to `chaste_codegen` the steps are as follows:
+- Make a new branch with your changes
+- Make sure it passes all tests locally (run them with pytest, see above) using a virtual environment. Make sure to install the dev requirements as well.
+- Make sure you're code formatting is up to scratch using `flake8`
+- Make sure you're import odering is up to scratch using 'isort'
+- You may need to regenerate quite a few reference models.
+- Commit & push your new brach.
+- Make a pull request on github, explain what and you have changed using the pull request template that comes up.
+- Github will run the python tests with different python versions, check code formatting (flake8) and sorting (isort).
+- It will also check code coverage.
+- Run chaste tests and ApPredict test with this version as per above and check these tests still pass as expected. If they do, mak a comment in the pull request.
+- If all is well and all tests above pass, ask for a code review.
+
+## Release workflow
+Once changes are ready to be release the following steps need to be taken, Note this needs publishing rights to the chaste_codgen project on PyPi:
+- update `chaste_codegen/version.txt` to the next minor/major version number as appropriate
+- add a git tag, with the version number `git tag -a <version number> -m "release <version_number>"`
+- Follow the [PyPi guide for generating distribution archives](https://packaging.python.org/en/latest/tutorials/packaging-projects/#generating-distribution-archives)
