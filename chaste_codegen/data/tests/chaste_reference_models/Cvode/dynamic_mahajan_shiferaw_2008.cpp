@@ -650,7 +650,11 @@
         const double var_IKs__xiks = (-var_reversal_potentials__eks + var_chaste_interface__cell__V) * var_IKs__gks_total * var_chaste_interface__IKs__xs1 * var_chaste_interface__IKs__xs2; // nA_per_nF
         const double var_IKs__xiks_converted = 0.99999999999999989 * HeartConfig::Instance()->GetCapacitance() * var_IKs__xiks; // uA_per_cm2
 
+#if CHASTE_SUNDIALS_VERSION >= 60000
+        N_Vector dqs = N_VNew_Serial(22, CvodeContextManager::Instance()->GetSundialsContext());
+#else
         N_Vector dqs = N_VNew_Serial(22);
+#endif
         NV_Ith_S(dqs, 0) = var_Ileak_Iup_Ixfer__jleak;
         NV_Ith_S(dqs, 1) = var_Irel__xiryr;
         NV_Ith_S(dqs, 2) = var_Ileak_Iup_Ixfer__jup;

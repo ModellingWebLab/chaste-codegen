@@ -688,7 +688,11 @@ std::shared_ptr<Cellhilgemann_noble_model_1987FromCellMLCvodeOpt_LookupTables> C
         const double var_time_independent_potassium_current__i_K1 = (-var_time_independent_potassium_current__E_K + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 5) * NV_Ith_S(mParameters, 12) / ((1 + exp(2 * (-10 - var_time_independent_potassium_current__E_K + var_chaste_interface__membrane__V) / var_membrane__RTONF)) * (NV_Ith_S(mParameters, 5) + var_time_independent_potassium_current__K_m_K1)); // nanoA
         const double var_time_independent_potassium_current__i_K1_converted = 0.001 * HeartConfig::Instance()->GetCapacitance() * var_time_independent_potassium_current__i_K1 / NV_Ith_S(mParameters, 8); // uA_per_cm2
 
+#if CHASTE_SUNDIALS_VERSION >= 60000
+        N_Vector dqs = N_VNew_Serial(9, CvodeContextManager::Instance()->GetSundialsContext());
+#else
         N_Vector dqs = N_VNew_Serial(9);
+#endif
         NV_Ith_S(dqs, 0) = var_calcium_release__i_rel;
         NV_Ith_S(dqs, 1) = var_second_inward_calcium_current__i_si_converted;
         NV_Ith_S(dqs, 2) = var_second_inward_calcium_current_f_Ca_gate__tau_f_Ca;

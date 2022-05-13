@@ -932,7 +932,11 @@ std::shared_ptr<Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClampOpt_Lo
         const double var_I_Ks__I_ks = pow(var_chaste_interface__I_Ks__x_ks, 2) * (-var_I_Ks__eks + var_chaste_interface__membrane_potential__V_m) * var_I_Ks__GKs_total; // uA_per_uF
         const double var_I_Ks__I_ks_converted = HeartConfig::Instance()->GetCapacitance() * var_I_Ks__I_ks; // uA_per_cm2
 
+#if CHASTE_SUNDIALS_VERSION >= 60000
+        N_Vector dqs = N_VNew_Serial(27, CvodeContextManager::Instance()->GetSundialsContext());
+#else
         N_Vector dqs = N_VNew_Serial(27);
+#endif
         NV_Ith_S(dqs, 0) = var_SR_Fluxes__J_SRleak;
         NV_Ith_S(dqs, 1) = var_SR_Fluxes__J_SRCarel;
         NV_Ith_S(dqs, 2) = var_SR_Fluxes__J_serca;

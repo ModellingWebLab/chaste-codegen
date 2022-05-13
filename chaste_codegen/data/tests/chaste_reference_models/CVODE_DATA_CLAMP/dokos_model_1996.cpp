@@ -439,7 +439,11 @@
         const double var_hyperpolarising_activated_current__i_f = var_hyperpolarising_activated_current__i_fK + var_hyperpolarising_activated_current__i_fNa; // picoA
         const double var_hyperpolarising_activated_current__i_f_converted = 9.9999999999999995e-7 * HeartConfig::Instance()->GetCapacitance() * var_hyperpolarising_activated_current__i_f / var_membrane__C_converted; // uA_per_cm2
 
+#if CHASTE_SUNDIALS_VERSION >= 60000
+        N_Vector dqs = N_VNew_Serial(9, CvodeContextManager::Instance()->GetSundialsContext());
+#else
         N_Vector dqs = N_VNew_Serial(9);
+#endif
         NV_Ith_S(dqs, 0) = var_L_type_calcium_current__i_CaL_converted;
         NV_Ith_S(dqs, 1) = var_membrane__C_converted;
         NV_Ith_S(dqs, 2) = var_chaste_interface__membrane_data_clamp_current;

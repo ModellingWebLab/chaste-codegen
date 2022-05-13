@@ -19,7 +19,11 @@
         }{% else %}
         const double {{eq.lhs}} = {{eq.rhs}}; // {{eq.units}}{% endif %}{%- endfor %}
 
+#if CHASTE_SUNDIALS_VERSION >= 60000
+        {{vector_decl}} dqs = N_VNew_Serial({{derived_quantities|length}}, CvodeContextManager::Instance()->GetSundialsContext());
+#else
         {{vector_decl}} dqs = N_VNew_Serial({{derived_quantities|length}});
+#endif
         {%- for quant in derived_quantities %}
         NV_Ith_S(dqs, {{loop.index0}}) = {{quant.var}};
         {%- endfor %}

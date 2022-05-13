@@ -1101,7 +1101,11 @@ std::shared_ptr<Dynamicaslanidi_Purkinje_model_2009FromCellMLCvodeOpt_LookupTabl
         const double var_q_rel__g_rel = mp_SR_release_current_max_modifier->Calc(NV_Ith_S(mParameters, 1), var_chaste_interface__environment__time) * var_q_rel__vg; // per_millisecond
         const double var_q_rel__q_rel = mp_SR_release_current_modifier->Calc((-var_chaste_interface__Ca_r__Ca_r + var_chaste_interface__Ca_JSR__Ca_JSR) * var_q_rel__g_rel * var_chaste_interface__q_rel_ri_gate__ri * var_chaste_interface__q_rel_ro_gate__ro, var_chaste_interface__environment__time); // millimolar_per_millisecond
 
+#if CHASTE_SUNDIALS_VERSION >= 60000
+        N_Vector dqs = N_VNew_Serial(16, CvodeContextManager::Instance()->GetSundialsContext());
+#else
         N_Vector dqs = N_VNew_Serial(16);
+#endif
         NV_Ith_S(dqs, 0) = var_q_rel__q_rel;
         NV_Ith_S(dqs, 1) = var_i_Ca_L__i_Ca_L_converted;
         NV_Ith_S(dqs, 2) = var_i_Ca_L_f2_gate__tau_f2;

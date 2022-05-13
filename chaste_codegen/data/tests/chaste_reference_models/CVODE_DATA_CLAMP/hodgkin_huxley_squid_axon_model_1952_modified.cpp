@@ -196,7 +196,11 @@
         const double var_sodium_channel__E_Na = 115 + var_membrane__E_R; // millivolt
         const double var_sodium_channel__i_Na = pow(var_chaste_interface__sodium_channel_m_gate__m, 3) * (-var_sodium_channel__E_Na + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 2) * var_chaste_interface__sodium_channel_h_gate__h; // microA_per_cm2
 
+#if CHASTE_SUNDIALS_VERSION >= 60000
+        N_Vector dqs = N_VNew_Serial(6, CvodeContextManager::Instance()->GetSundialsContext());
+#else
         N_Vector dqs = N_VNew_Serial(6);
+#endif
         NV_Ith_S(dqs, 0) = var_chaste_interface__membrane_data_clamp_current;
         NV_Ith_S(dqs, 1) = var_sodium_channel__i_Na;
         NV_Ith_S(dqs, 2) = var_leakage_current__i_L;
