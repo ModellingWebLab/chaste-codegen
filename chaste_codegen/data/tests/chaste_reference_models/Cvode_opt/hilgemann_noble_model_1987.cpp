@@ -22,6 +22,9 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+#if CHASTE_SUNDIALS_VERSION >= 60000
+#include "CvodeContextManager.hpp"
+#endif
 
 class Cellhilgemann_noble_model_1987FromCellMLCvodeOpt_LookupTables : public AbstractLookupTableCollection
 {

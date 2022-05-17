@@ -21,6 +21,11 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+
+#if CHASTE_SUNDIALS_VERSION >= 60000
+#include "CvodeContextManager.hpp"
+#endif
+
 #include "ModelFactory.hpp"
 
 AbstractCvodeCellWithDataClamp* Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClamp::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {

@@ -21,6 +21,11 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+
+#if CHASTE_SUNDIALS_VERSION >= 60000
+#include "CvodeContextManager.hpp"
+#endif
+
 #include "ModelFactory.hpp"
 
 AbstractCardiacCellWithModifiers<AbstractCvodeCell >* Dynamicaslanidi_Purkinje_model_2009FromCellMLCvodeOpt::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {

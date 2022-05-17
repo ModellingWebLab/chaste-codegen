@@ -22,6 +22,9 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+#if CHASTE_SUNDIALS_VERSION >= 60000
+#include "CvodeContextManager.hpp"
+#endif
 
 class Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvodeOpt_LookupTables : public AbstractLookupTableCollection
 {
