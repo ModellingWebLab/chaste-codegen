@@ -22,6 +22,9 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+#if CHASTE_SUNDIALS_VERSION >= 60000
+#include "CvodeContextManager.hpp"
+#endif
 
 
 
@@ -1026,7 +1029,11 @@
         const double var_sodium_current__i_Na = (((var_chaste_interface__membrane__V >= -2.6539450910485349e-6) && (var_chaste_interface__membrane__V <= 2.6539450910485349e-6)) ? (188398.77346612973 * (2.6539450910485349e-6 + var_chaste_interface__membrane__V) * (0.0096486999999999996 * pow(var_chaste_interface__sodium_current_m_gate__m, 3) * (-1 + exp(9.9999999999999995e-8 - log(NV_Ith_S(mParameters, 2) / var_chaste_interface__intracellular_ion_concentrations__Na_i))) * (0.36499999999999999 * var_chaste_interface__sodium_current_h2_gate__h2 + 0.63500000000000001 * var_chaste_interface__sodium_current_h1_gate__h1) * NV_Ith_S(mParameters, 2) * NV_Ith_S(mParameters, 5) / (-1 + exp(9.9999999999999995e-8)) + 0.0096486999999999996 * pow(var_chaste_interface__sodium_current_m_gate__m, 3) * (-1 + exp(-9.9999999999999995e-8 - log(NV_Ith_S(mParameters, 2) / var_chaste_interface__intracellular_ion_concentrations__Na_i))) * (0.36499999999999999 * var_chaste_interface__sodium_current_h2_gate__h2 + 0.63500000000000001 * var_chaste_interface__sodium_current_h1_gate__h1) * NV_Ith_S(mParameters, 2) * NV_Ith_S(mParameters, 5) / (-1 + exp(-9.9999999999999995e-8))) - 0.0096486999999999996 * pow(var_chaste_interface__sodium_current_m_gate__m, 3) * (-1 + exp(-9.9999999999999995e-8 - log(NV_Ith_S(mParameters, 2) / var_chaste_interface__intracellular_ion_concentrations__Na_i))) * (0.36499999999999999 * var_chaste_interface__sodium_current_h2_gate__h2 + 0.63500000000000001 * var_chaste_interface__sodium_current_h1_gate__h1) * NV_Ith_S(mParameters, 2) * NV_Ith_S(mParameters, 5) / (-1 + exp(-9.9999999999999995e-8))) : (3635.606491085292 * pow(var_chaste_interface__sodium_current_m_gate__m, 3) * (-1 + exp(0.037679754693225945 * var_chaste_interface__membrane__V - log(NV_Ith_S(mParameters, 2) / var_chaste_interface__intracellular_ion_concentrations__Na_i))) * (0.36499999999999999 * var_chaste_interface__sodium_current_h2_gate__h2 + 0.63500000000000001 * var_chaste_interface__sodium_current_h1_gate__h1) * NV_Ith_S(mParameters, 2) * var_chaste_interface__membrane__V * NV_Ith_S(mParameters, 5) / (-1 + exp(0.037679754693225945 * var_chaste_interface__membrane__V)))); // picoA
         const double var_sodium_current__i_Na_converted = 9.9999999999999995e-7 * HeartConfig::Instance()->GetCapacitance() * var_sodium_current__i_Na / var_membrane__Cm_converted; // uA_per_cm2
 
+#if CHASTE_SUNDIALS_VERSION >= 60000
+        N_Vector dqs = N_VNew_Serial(10, CvodeContextManager::Instance()->GetSundialsContext());
+#else
         N_Vector dqs = N_VNew_Serial(10);
+#endif
         NV_Ith_S(dqs, 0) = var_Ca_handling_by_the_SR__i_rel;
         NV_Ith_S(dqs, 1) = var_L_type_Ca_channel__i_Ca_L_converted;
         NV_Ith_S(dqs, 2) = var_membrane__Cm_converted;

@@ -22,6 +22,9 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+#if CHASTE_SUNDIALS_VERSION >= 60000
+#include "CvodeContextManager.hpp"
+#endif
 
 
 
@@ -583,7 +586,11 @@
         const double var_transient_outward_current__i_to = pow(var_chaste_interface__transient_outward_current_zdv_gate__zdv, 3) * (-var_time_independent_potassium_current__E_K + var_chaste_interface__cell__V) * NV_Ith_S(mParameters, 16) * var_transient_outward_current__rvdv * var_chaste_interface__transient_outward_current_ydv_gate__ydv; // microA_per_microF
         const double var_transient_outward_current__i_to_converted = HeartConfig::Instance()->GetCapacitance() * var_transient_outward_current__i_to; // uA_per_cm2
 
+#if CHASTE_SUNDIALS_VERSION >= 60000
+        N_Vector dqs = N_VNew_Serial(17, CvodeContextManager::Instance()->GetSundialsContext());
+#else
         N_Vector dqs = N_VNew_Serial(17);
+#endif
         NV_Ith_S(dqs, 0) = var_calcium_dynamics__i_rel;
         NV_Ith_S(dqs, 1) = var_L_type_Ca_channel__i_Ca_L_converted;
         NV_Ith_S(dqs, 2) = var_L_type_Ca_channel_f_Ca_gate__f_Ca;

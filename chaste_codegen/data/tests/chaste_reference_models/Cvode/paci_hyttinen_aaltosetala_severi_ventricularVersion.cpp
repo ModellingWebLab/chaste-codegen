@@ -22,6 +22,9 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+#if CHASTE_SUNDIALS_VERSION >= 60000
+#include "CvodeContextManager.hpp"
+#endif
 
 
 
@@ -537,7 +540,11 @@
         const double var_i_NaK__i_NaK_converted = HeartConfig::Instance()->GetCapacitance() * var_i_NaK__i_NaK; // uA_per_cm2
         const double var_stim_mode__i_stim_converted = -GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
 
+#if CHASTE_SUNDIALS_VERSION >= 60000
+        N_Vector dqs = N_VNew_Serial(18, CvodeContextManager::Instance()->GetSundialsContext());
+#else
         N_Vector dqs = N_VNew_Serial(18);
+#endif
         NV_Ith_S(dqs, 0) = var_calcium_dynamics__Cai_bufc;
         NV_Ith_S(dqs, 1) = var_i_CaL__i_CaL_converted;
         NV_Ith_S(dqs, 2) = var_i_PCa__i_PCa_converted;

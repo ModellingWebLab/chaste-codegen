@@ -21,6 +21,11 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+
+#if CHASTE_SUNDIALS_VERSION >= 60000
+#include "CvodeContextManager.hpp"
+#endif
+
 #include "ModelFactory.hpp"
 
 AbstractCvodeCell* Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
@@ -1641,7 +1646,11 @@ bool Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode::registered = Mo
         const double var_INab__i_Nab = var_INab__i_Nab_SL + var_INab__i_Nab_jct; // microA_per_microF
         const double var_INab__i_Nab_converted = HeartConfig::Instance()->GetCapacitance() * var_INab__i_Nab; // uA_per_cm2
 
+#if CHASTE_SUNDIALS_VERSION >= 60000
+        N_Vector dqs = N_VNew_Serial(23, CvodeContextManager::Instance()->GetSundialsContext());
+#else
         N_Vector dqs = N_VNew_Serial(23);
+#endif
         NV_Ith_S(dqs, 0) = var_Jrel_SR__j_rel_SR;
         NV_Ith_S(dqs, 1) = var_reversal_potentials__E_Cl;
         NV_Ith_S(dqs, 2) = var_ICaL__i_CaL_converted;

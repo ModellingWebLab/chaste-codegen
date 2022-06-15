@@ -22,6 +22,9 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+#if CHASTE_SUNDIALS_VERSION >= 60000
+#include "CvodeContextManager.hpp"
+#endif
 
 
 
@@ -441,7 +444,11 @@
         const double var_transient_outward_current__i_to = (((var_chaste_interface__membrane__V >= -10.000000500000001) && (var_chaste_interface__membrane__V <= -9.9999994999999995)) ? (999999.99999899988 * (10.000000500000001 + var_chaste_interface__membrane__V) * (5.0000000000050004e-7 * (0.20000000000000001 + var_chaste_interface__extracellular_potassium_concentration__Kc / (10 + var_chaste_interface__extracellular_potassium_concentration__Kc)) * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(-0.18716946347220006) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(0.18716946347220006)) * var_chaste_interface__intracellular_calcium_concentration__Cai * NV_Ith_S(mParameters, 17) * var_chaste_interface__transient_outward_current_s_gate__s / ((1 - exp(1.0000000000010001e-7)) * (0.00050000000000000001 + var_chaste_interface__intracellular_calcium_concentration__Cai)) + 5.0000000000050004e-7 * (0.20000000000000001 + var_chaste_interface__extracellular_potassium_concentration__Kc / (10 + var_chaste_interface__extracellular_potassium_concentration__Kc)) * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(-0.18716944475525465) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(0.18716944475525465)) * var_chaste_interface__intracellular_calcium_concentration__Cai * NV_Ith_S(mParameters, 17) * var_chaste_interface__transient_outward_current_s_gate__s / ((1 - exp(-1.0000000000010001e-7)) * (0.00050000000000000001 + var_chaste_interface__intracellular_calcium_concentration__Cai))) - 5.0000000000050004e-7 * (0.20000000000000001 + var_chaste_interface__extracellular_potassium_concentration__Kc / (10 + var_chaste_interface__extracellular_potassium_concentration__Kc)) * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(-0.18716946347220006) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(0.18716946347220006)) * var_chaste_interface__intracellular_calcium_concentration__Cai * NV_Ith_S(mParameters, 17) * var_chaste_interface__transient_outward_current_s_gate__s / ((1 - exp(1.0000000000010001e-7)) * (0.00050000000000000001 + var_chaste_interface__intracellular_calcium_concentration__Cai))) : ((10 + var_chaste_interface__membrane__V) * (0.20000000000000001 + var_chaste_interface__extracellular_potassium_concentration__Kc / (10 + var_chaste_interface__extracellular_potassium_concentration__Kc)) * (var_chaste_interface__intracellular_potassium_concentration__Ki * exp(0.018716945411372737 * var_chaste_interface__membrane__V) - var_chaste_interface__extracellular_potassium_concentration__Kc * exp(-0.018716945411372737 * var_chaste_interface__membrane__V)) * var_chaste_interface__intracellular_calcium_concentration__Cai * NV_Ith_S(mParameters, 17) * var_chaste_interface__transient_outward_current_s_gate__s / ((1 - exp(-2 - 0.20000000000000001 * var_chaste_interface__membrane__V)) * (0.00050000000000000001 + var_chaste_interface__intracellular_calcium_concentration__Cai)))); // nanoA
         const double var_transient_outward_current__i_to_converted = 0.001 * HeartConfig::Instance()->GetCapacitance() * var_transient_outward_current__i_to / NV_Ith_S(mParameters, 8); // uA_per_cm2
 
+#if CHASTE_SUNDIALS_VERSION >= 60000
+        N_Vector dqs = N_VNew_Serial(15, CvodeContextManager::Instance()->GetSundialsContext());
+#else
         N_Vector dqs = N_VNew_Serial(15);
+#endif
         NV_Ith_S(dqs, 0) = var_intracellular_calcium_concentration__i_rel;
         NV_Ith_S(dqs, 1) = var_second_inward_current__i_si_converted;
         NV_Ith_S(dqs, 2) = var_second_inward_current_f2_gate__tau_f2;
