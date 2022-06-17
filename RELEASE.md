@@ -1,3 +1,6 @@
+# Release 0.9.10
+- Added support for Sundials 6.0.0 which requires a newly introduced SUNContext object. This version of chaste_codegen now generates code that will work with Sundails 6.0, but is backwards compatible with previous sundails version and the 2021 release of chaste.
+
 # Release 0.9.9
 - Fixed an issue with unused variables appearing in common terms in jacobians.
 - Fixes a bug printing large integers, in some environments: Large numbers such as 8.034023767017109e+27 which were actually ints would be printed as an the int 8034023767017108950029959168 and then the C++ compiler would complain as that's more than the maximum int value. This has been fixed by only printing ints as ints if they are `MIN_INT < number < MAX_INT` else we print them as a float (and we get the sceintific notation).
