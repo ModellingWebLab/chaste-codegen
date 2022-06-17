@@ -1,5 +1,5 @@
 # Release 0.9.10
-- Added support for Sundials 6.0.0 which requires a newly introduced SUNContext object. This version of chaste_codegen now generates code that will work with Sundails 6.0, but is backwards compatible with previous sundails version and the 2021 release of chaste.
+- Added support for Sundials 6.0.0 which requires a newly introduced SUNContext object. This version of chaste_codegen now generates code that will work with Sundials 6.0, but is backwards compatible with previous Sundials versions and the 2021 release of Chaste.
 
 # Release 0.9.9
 - Fixed an issue with unused variables appearing in common terms in jacobians.
