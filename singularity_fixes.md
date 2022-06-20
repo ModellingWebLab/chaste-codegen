@@ -1,4 +1,5 @@
-Below we show the results of processing the cellml files in the cellml repository, branch no_singularity_fixes[https://github.com/Chaste/cellml/tree/no_singularity_fixes].(https://github.com/Chaste/cellml/tree/no_singularity_fixes). The latest commit at the time was [#2d0d8ce](https://github.com/Chaste/cellml/commit/2d0d8ce903c35c2f8734e35517564307938ff6fc).
+Below we show the results of processing the cellml files in the cellml repository, branch [no_singularity_fixes](https://github.com/Chaste/cellml/tree/no_singularity_fixes). 
+The latest commit at the time was [#2d0d8ce](https://github.com/Chaste/cellml/commit/2d0d8ce903c35c2f8734e35517564307938ff6fc).
 
 The results show how many piecewises the model has, and show every equation a singularity is found in with the corresponding fix, and a diagram comparing the fixed and original versions.
 For each plot, the x-axis is voltage in milliVolts around a singulatity point, and the y axis is the left hand side of the equation above.
