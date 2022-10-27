@@ -55,7 +55,7 @@ setup(
         'mpmath>=1.1.0, <2',
         'networkx>=2.4, <3',
         'packaging>=20.4, <21',
-        'Pint>=0.9, <0.20',
+        'Pint>=0.9, <1',
         'pyparsing>=2.4.7, <3',
         'rdflib>=5.0.0, <7',
         'six>=1.15.0, <2',
