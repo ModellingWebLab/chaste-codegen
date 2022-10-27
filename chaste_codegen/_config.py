@@ -19,7 +19,7 @@ try:
 finally:
     # Always manually delete frame
     # https://docs.python.org/2/library/inspect.html#the-interpreter-stack
-    del(frame)
+    del frame
 
 # Template sub-directory
 TEMPLATE_SUBDIR = os.path.join('templates')
@@ -31,7 +31,7 @@ DATA_DIR = os.path.join(MODULE_DIR, 'data')
 logging.basicConfig()
 LOGGER = logging.getLogger('chaste_codegen')
 LOGGER.setLevel(logging.INFO)
-del(logging)
+del logging
 
 #
 # Version info
