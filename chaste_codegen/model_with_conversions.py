@@ -347,7 +347,7 @@ def _get_stimulus(model, skip_chaste_stimulus_conversion):
         except TypeError as e:
             if str(e) == "unsupported operand type(s) for /: 'HeartConfig::Instance()->GetCapacitance' and 'NoneType'":
                 e = CodegenError("Membrane capacitance is required to be able to apply conversion to stimulus current!")
-            raise(e)
+            raise e
 
         return_stim_eqs = get_equations_for(model, stim_params, filter_modifiable_parameters_lhs=False)
     return stim_params | stim_params_orig, return_stim_eqs
