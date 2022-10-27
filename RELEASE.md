@@ -1,3 +1,6 @@
+# Release 0.9.11
+- Pinned Pint version to be > 0.9 and < 0.20 since 0.20 has changed the location and number of arguments of the ScaleConverter and UnitDefinition classes.
+
 # Release 0.9.10
 - Added support for Sundials 6.0.0 which requires a newly introduced SUNContext object. This version of chaste_codegen now generates code that will work with Sundials 6.0, but is backwards compatible with previous Sundials versions and the 2021 release of Chaste.
 
