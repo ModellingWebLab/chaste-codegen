@@ -1,3 +1,6 @@
+# Release 0.9.12
+- Added checks to the resulting C++ code, for state variables becoming INFO or NAN.
+
 # Release 0.9.11
 - Pinned Pint version to be > 0.9 and < 0.20 since 0.20 has changed the location and number of arguments of the ScaleConverter and UnitDefinition classes.
 
