@@ -502,7 +502,7 @@ std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLOpt_LookupTables> Cellbeel
                 EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
             }
             if(std::isinf(rY[i])){
-                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINATE"));
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE"));
             }
         }
     }

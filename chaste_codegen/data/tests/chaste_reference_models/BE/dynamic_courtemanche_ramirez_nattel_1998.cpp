@@ -104,7 +104,7 @@ bool Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler::registered 
                 EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
             }
             if(std::isinf(rY[i])){
-                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINATE"));
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE"));
             }
         }
     }

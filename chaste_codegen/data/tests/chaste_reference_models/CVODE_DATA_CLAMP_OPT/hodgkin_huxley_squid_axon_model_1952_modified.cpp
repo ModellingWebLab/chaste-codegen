@@ -315,7 +315,7 @@ std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvode
                 EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
             }
             if(std::isinf(NV_Ith_S(rY, i))){
-                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINATE"));
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE"));
             }
         }
     }

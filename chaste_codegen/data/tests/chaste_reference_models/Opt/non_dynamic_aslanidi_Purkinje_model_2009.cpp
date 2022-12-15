@@ -709,7 +709,7 @@ std::shared_ptr<Cellaslanidi_Purkinje_model_2009FromCellMLOpt_LookupTables> Cell
                 EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
             }
             if(std::isinf(rY[i])){
-                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINATE"));
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE"));
             }
         }
     }

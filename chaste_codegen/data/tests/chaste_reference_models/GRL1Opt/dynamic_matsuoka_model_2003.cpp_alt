@@ -687,7 +687,7 @@ std::shared_ptr<Dynamicmatsuoka_model_2003FromCellMLGRL1Opt_LookupTables> Dynami
                 EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
             }
             if(std::isinf(rY[i])){
-                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINATE"));
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE"));
             }
         }
     }

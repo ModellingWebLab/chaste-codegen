@@ -118,7 +118,7 @@ bool Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClamp::registered = Mo
                 EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
             }
             if(std::isinf(NV_Ith_S(rY, i))){
-                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINATE"));
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE"));
             }
         }
     }

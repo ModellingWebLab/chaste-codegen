@@ -119,7 +119,7 @@ bool Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode::registered = Mo
                 EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
             }
             if(std::isinf(NV_Ith_S(rY, i))){
-                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINATE"));
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE"));
             }
         }
     }

@@ -472,7 +472,7 @@ std::shared_ptr<Cellhilgemann_noble_model_1987FromCellMLCvodeOpt_LookupTables> C
                 EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
             }
             if(std::isinf(NV_Ith_S(rY, i))){
-                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINATE"));
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE"));
             }
         }
     }
