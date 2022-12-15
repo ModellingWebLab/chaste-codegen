@@ -13,6 +13,7 @@
 #include "test_luo_rudy_1991_with_range_cap_dimensionless.hpp"
 #include <cmath>
 #include <cfloat>
+#include <cassert>
 #include <memory>
 #include "Exception.hpp"
 #include "OdeSystemInformation.hpp"
@@ -20,6 +21,7 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+
 
 
 class Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt_LookupTables : public AbstractLookupTableCollection

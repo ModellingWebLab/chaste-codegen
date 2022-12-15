@@ -13,6 +13,7 @@
 #include "dynamic_winslow_model_1999.hpp"
 #include <cmath>
 #include <cfloat>
+#include <cassert>
 #include <memory>
 #include "Exception.hpp"
 #include "OdeSystemInformation.hpp"
@@ -20,6 +21,7 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+
 
 
 
