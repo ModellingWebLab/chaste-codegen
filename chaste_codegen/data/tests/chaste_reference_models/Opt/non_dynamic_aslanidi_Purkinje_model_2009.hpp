@@ -87,6 +87,7 @@ public:
     double GetIntracellularCalciumConcentration();
     Cellaslanidi_Purkinje_model_2009FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellaslanidi_Purkinje_model_2009FromCellMLOpt();
+    void VerifyStateVariables();
     AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time, const std::vector<double>& rY, std::vector<double>& rDY);

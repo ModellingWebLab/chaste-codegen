@@ -12,6 +12,7 @@
 
 #include "aslanidi_Purkinje_model_2009Opt.hpp"
 #include <cmath>
+#include <cfloat>
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
@@ -20,6 +21,7 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+
 #include "ModelFactory.hpp"
 
 AbstractCardiacCellWithModifiers<AbstractCardiacCell >* Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
@@ -702,6 +704,22 @@ std::shared_ptr<Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt_LookupTables> D
         return Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt_LookupTables::Instance();
     }
     
+    void Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt::VerifyStateVariables()
+    {
+        std::vector<double>& rY = rGetStateVariables();
+        
+        
+        for (unsigned i=0; i < 30; i++)
+        {
+            if(std::isnan(rY[i])){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
+            }
+            if(std::isinf(rY[i])){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINATE"));
+            }
+        }
+    }
+
     double Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,

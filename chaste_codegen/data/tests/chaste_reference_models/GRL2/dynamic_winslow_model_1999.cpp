@@ -12,6 +12,7 @@
 
 #include "dynamic_winslow_model_1999.hpp"
 #include <cmath>
+#include <cfloat>
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
@@ -20,6 +21,7 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+
 
 
 
@@ -81,6 +83,22 @@
     }
 
     
+    void Dynamicwinslow_model_1999FromCellMLGRL2::VerifyStateVariables()
+    {
+        std::vector<double>& rY = rGetStateVariables();
+        
+        
+        for (unsigned i=0; i < 33; i++)
+        {
+            if(std::isnan(rY[i])){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
+            }
+            if(std::isinf(rY[i])){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINATE"));
+            }
+        }
+    }
+
     double Dynamicwinslow_model_1999FromCellMLGRL2::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,

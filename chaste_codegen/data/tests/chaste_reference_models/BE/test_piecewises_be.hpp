@@ -37,6 +37,7 @@ public:
 
     Celltest_piecewises_beFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Celltest_piecewises_beFromCellMLBackwardEuler();
+    void VerifyStateVariables();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[2], double rResidual[2]);
     void ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[2], double rJacobian[2][2]);protected:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted);

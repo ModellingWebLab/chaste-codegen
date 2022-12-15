@@ -12,6 +12,7 @@
 
 #include "output_class.h"
 #include <cmath>
+#include <cfloat>
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
@@ -20,6 +21,7 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+
 #include "ModelFactory.hpp"
 
 AbstractCardiacCell* Chaste_CG::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
@@ -92,7 +94,6 @@ bool Chaste_CG::registered = ModelFactory::Register("output_class", "Normal", (M
     }
 
     
-    
     void Chaste_CG::VerifyStateVariables()
     {
         std::vector<double>& rY = rGetStateVariables();
@@ -104,9 +105,18 @@ bool Chaste_CG::registered = ModelFactory::Register("output_class", "Normal", (M
             EXCEPTION(DumpState("State variable dyadic_space_calcium_concentration has gone out of range. Check numerical parameters, for example time and space stepsizes, and/or solver tolerances"));
         }
         
+        
+        for (unsigned i=0; i < 22; i++)
+        {
+            if(std::isnan(rY[i])){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
+            }
+            if(std::isinf(rY[i])){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINATE"));
+            }
+        }
     }
 
-    
     double Chaste_CG::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,

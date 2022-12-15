@@ -13,6 +13,7 @@
 
 #include "dynamic_mahajan_shiferaw_2008.hpp"
 #include <cmath>
+#include <cfloat>
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
@@ -25,6 +26,8 @@
 #if CHASTE_SUNDIALS_VERSION >= 60000
 #include "CvodeContextManager.hpp"
 #endif
+
+
 
 
 
@@ -92,7 +95,24 @@
     {
     }
 
-    
+
+    void Dynamicmahajan_shiferaw_2008FromCellMLCvode::VerifyStateVariables()
+    {
+        
+        N_Vector rY = rGetStateVariables();
+        
+        
+        for (unsigned i=0; i < 26; i++)
+        {
+            if(std::isnan(NV_Ith_S(rY, i))){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
+            }
+            if(std::isinf(NV_Ith_S(rY, i))){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINATE"));
+            }
+        }
+    }
+
     double Dynamicmahajan_shiferaw_2008FromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,

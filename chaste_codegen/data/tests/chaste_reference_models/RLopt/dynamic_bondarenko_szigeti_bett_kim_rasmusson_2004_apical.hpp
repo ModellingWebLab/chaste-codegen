@@ -42,6 +42,7 @@ public:
     double GetIntracellularCalciumConcentration();
     Dynamicbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLRushLarsenOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Dynamicbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLRushLarsenOpt();
+    void VerifyStateVariables();
     AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateEquations(double var_chaste_interface__environment__time, std::vector<double> &rDY, std::vector<double> &rAlphaOrTau, std::vector<double> &rBetaOrInf);

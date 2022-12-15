@@ -13,6 +13,7 @@
 #include "CardiacNewtonSolver.hpp"
 #include "dynamic_courtemanche_ramirez_nattel_1998.hpp"
 #include <cmath>
+#include <cfloat>
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
@@ -21,6 +22,7 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+
 #include "ModelFactory.hpp"
 
 AbstractBackwardEulerCardiacCell<8>* Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEulerOpt::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
@@ -549,6 +551,22 @@ std::shared_ptr<Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEulerOp
         return Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEulerOpt_LookupTables::Instance();
     }
     
+    void Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEulerOpt::VerifyStateVariables()
+    {
+        std::vector<double>& rY = rGetStateVariables();
+        
+        
+        for (unsigned i=0; i < 21; i++)
+        {
+            if(std::isnan(rY[i])){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
+            }
+            if(std::isinf(rY[i])){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINATE"));
+            }
+        }
+    }
+
     double Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEulerOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,

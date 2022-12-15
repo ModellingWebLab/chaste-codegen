@@ -41,6 +41,7 @@ public:
     double GetIntracellularCalciumConcentration();
     Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler();
+    void VerifyStateVariables();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[27], double rResidual[27]);
     void ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[27], double rJacobian[27][27]);protected:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time);

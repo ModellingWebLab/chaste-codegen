@@ -779,7 +779,7 @@ def test_range_and_capacitance_units(caplog, tmp_path):
     assert "luo_rudy_1991 The model has capacitance in incompatible units." in caplog.text
 
     # Check output
-    reference = os.path.join(os.path.join(TESTS_FOLDER), 'chaste_reference_models', 'Normal')
+    reference = os.path.join(os.path.join(TESTS_FOLDER), 'chaste_reference_models', 'Opt')
     compare_file_against_reference(os.path.join(reference, 'test_luo_rudy_1991_with_range_cap_dimensionless.hpp'),
                                    os.path.join(tmp_path, 'test_luo_rudy_1991_with_range_cap_dimensionless.hpp'))
     compare_file_against_reference(os.path.join(reference, 'test_luo_rudy_1991_with_range_cap_dimensionless.cpp'),

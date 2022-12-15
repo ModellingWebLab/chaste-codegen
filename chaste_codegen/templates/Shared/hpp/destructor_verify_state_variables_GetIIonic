@@ -1,7 +1,5 @@
     ~{{class_name}}();
-    {%- if use_verify_state_variables %}
     void VerifyStateVariables();
-    {%- endif %}
     {%- if lookup_parameters is defined %}
     AbstractLookupTableCollection* GetLookupTableCollection();
     {%- endif %}

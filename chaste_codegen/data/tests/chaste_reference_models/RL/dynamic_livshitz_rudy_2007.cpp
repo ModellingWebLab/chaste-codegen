@@ -12,6 +12,7 @@
 
 #include "dynamic_livshitz_rudy_2007.hpp"
 #include <cmath>
+#include <cfloat>
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
@@ -20,6 +21,7 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+
 
 
 
@@ -76,6 +78,22 @@
     }
 
     
+    void Dynamiclivshitz_rudy_2007FromCellMLRushLarsen::VerifyStateVariables()
+    {
+        std::vector<double>& rY = rGetStateVariables();
+        
+        
+        for (unsigned i=0; i < 18; i++)
+        {
+            if(std::isnan(rY[i])){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
+            }
+            if(std::isinf(rY[i])){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINATE"));
+            }
+        }
+    }
+
     double Dynamiclivshitz_rudy_2007FromCellMLRushLarsen::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,

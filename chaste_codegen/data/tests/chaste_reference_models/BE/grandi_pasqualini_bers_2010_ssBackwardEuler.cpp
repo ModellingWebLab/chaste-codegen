@@ -13,6 +13,7 @@
 #include "CardiacNewtonSolver.hpp"
 #include "grandi_pasqualini_bers_2010_ssBackwardEuler.hpp"
 #include <cmath>
+#include <cfloat>
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
@@ -21,6 +22,7 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+
 #include "ModelFactory.hpp"
 
 AbstractBackwardEulerCardiacCell<27>* Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
@@ -96,6 +98,22 @@ bool Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler::registered = Mod
     }
 
     
+    void Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler::VerifyStateVariables()
+    {
+        std::vector<double>& rY = rGetStateVariables();
+        
+        
+        for (unsigned i=0; i < 39; i++)
+        {
+            if(std::isnan(rY[i])){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
+            }
+            if(std::isinf(rY[i])){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINATE"));
+            }
+        }
+    }
+
     double Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
