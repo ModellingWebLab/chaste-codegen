@@ -1,5 +1,6 @@
 #include "{{file_name}}{{header_ext}}"
 #include <cmath>
+#include <cfloat>
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"

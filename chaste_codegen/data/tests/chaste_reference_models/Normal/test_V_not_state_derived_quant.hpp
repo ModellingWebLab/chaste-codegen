@@ -37,6 +37,7 @@ public:
 
     Celltest_V_not_state_derived_quantFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Celltest_V_not_state_derived_quantFromCellML();
+    void VerifyStateVariables();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__membrane__time_converted, const std::vector<double>& rY, std::vector<double>& rDY);
 

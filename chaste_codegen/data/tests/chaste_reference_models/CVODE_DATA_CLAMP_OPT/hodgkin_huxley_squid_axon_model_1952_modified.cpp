@@ -13,6 +13,7 @@
 
 #include "hodgkin_huxley_squid_axon_model_1952_modified.hpp"
 #include <cmath>
+#include <cfloat>
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
@@ -25,6 +26,8 @@
 #if CHASTE_SUNDIALS_VERSION >= 60000
 #include "CvodeContextManager.hpp"
 #endif
+
+
 
 class Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvodeDataClampOpt_LookupTables : public AbstractLookupTableCollection
 {
@@ -299,7 +302,24 @@ std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvode
     {
         return Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvodeDataClampOpt_LookupTables::Instance();
     }
-    
+
+    void Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvodeDataClampOpt::VerifyStateVariables()
+    {
+        
+        N_Vector rY = rGetStateVariables();
+        
+        
+        for (unsigned i=0; i < 4; i++)
+        {
+            if(std::isnan(NV_Ith_S(rY, i))){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
+            }
+            if(std::isinf(NV_Ith_S(rY, i))){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE"));
+            }
+        }
+    }
+
     double Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvodeDataClampOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,

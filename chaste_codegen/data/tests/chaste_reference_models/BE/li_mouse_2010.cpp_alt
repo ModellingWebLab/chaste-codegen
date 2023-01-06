@@ -13,6 +13,7 @@
 #include "CardiacNewtonSolver.hpp"
 #include "li_mouse_2010.hpp"
 #include <cmath>
+#include <cfloat>
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
@@ -77,6 +78,22 @@
     {
     }
 
+    
+    void Cellli_mouse_2010FromCellMLBackwardEuler::VerifyStateVariables()
+    {
+        std::vector<double>& rY = rGetStateVariables();
+        
+        
+        for (unsigned i=0; i < 36; i++)
+        {
+            if(std::isnan(rY[i])){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
+            }
+            if(std::isinf(rY[i])){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE"));
+            }
+        }
+    }
     
     double Cellli_mouse_2010FromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
     {

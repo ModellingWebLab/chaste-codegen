@@ -12,6 +12,7 @@
 
 #include "test_luo_rudy_1991_with_range_cap_dimensionless.hpp"
 #include <cmath>
+#include <cfloat>
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
@@ -20,6 +21,7 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+
 
 
 class Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt_LookupTables : public AbstractLookupTableCollection
@@ -141,7 +143,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__membrane__V) {
-                    return (((var_chaste_interface__membrane__V >= -77.000002499999994) && (var_chaste_interface__membrane__V <= -76.999997500000006)) ? ((0.28823920000000003 + 0.0022696000000000001 * var_chaste_interface__membrane__V) / exp(1.4000000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V)) : ((var_chaste_interface__membrane__V > -100) ? (0.11348000000000001 * (-1 + exp(3.0800000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V)) / ((3.0800000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V) * exp(1.4000000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V))) : (1)));
+                    return (((var_chaste_interface__membrane__V > -100) && (3.0800000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V >= -9.9999999999999995e-8) && (3.0800000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V <= 9.9999999999999995e-8)) ? ((0.28823920000000003 + 0.0022696000000000001 * var_chaste_interface__membrane__V) / exp(1.4000000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V)) : ((var_chaste_interface__membrane__V > -100) ? (0.11348000000000001 * (-1 + exp(3.0800000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V)) / ((3.0800000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V) * exp(1.4000000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V))) : (1)));
                 };
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__membrane__V);
@@ -174,7 +176,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__membrane__V) {
-                    return (((var_chaste_interface__membrane__V >= -47.130001) && (var_chaste_interface__membrane__V <= -47.129999000000005)) ? (10.7408 + 0.16 * var_chaste_interface__membrane__V) : (3.1999999999999997 * (-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__membrane__V) / (-1 + exp(-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__membrane__V))));
+                    return (((4.7130000000000001 + 0.10000000000000001 * var_chaste_interface__membrane__V >= -9.9999999999999995e-8) && (4.7130000000000001 + 0.10000000000000001 * var_chaste_interface__membrane__V <= 9.9999999999999995e-8)) ? (10.7408 + 0.16 * var_chaste_interface__membrane__V) : (-3.1999999999999997 * (4.7130000000000001 + 0.10000000000000001 * var_chaste_interface__membrane__V) / (-1 + exp(-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__membrane__V))));
                 };
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__membrane__V);
@@ -418,7 +420,6 @@ std::shared_ptr<Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt
         return Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt_LookupTables::Instance();
     }
     
-    
     void Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt::VerifyStateVariables()
     {
         std::vector<double>& rY = rGetStateVariables();
@@ -430,9 +431,18 @@ std::shared_ptr<Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt
             EXCEPTION(DumpState("State variable membrane_fast_sodium_current_m_gate has gone out of range. Check numerical parameters, for example time and space stepsizes, and/or solver tolerances"));
         }
         
+        
+        for (unsigned i=0; i < 8; i++)
+        {
+            if(std::isnan(rY[i])){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
+            }
+            if(std::isinf(rY[i])){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE"));
+            }
+        }
     }
 
-    
     double Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,

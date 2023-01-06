@@ -13,6 +13,7 @@
 #include "CardiacNewtonSolver.hpp"
 #include "grandi_pasqualini_bers_2010_ssBackwardEuler.hpp"
 #include <cmath>
+#include <cfloat>
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
@@ -95,6 +96,22 @@ bool Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler::registered = Mod
     {
     }
 
+    
+    void Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler::VerifyStateVariables()
+    {
+        std::vector<double>& rY = rGetStateVariables();
+        
+        
+        for (unsigned i=0; i < 39; i++)
+        {
+            if(std::isnan(rY[i])){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
+            }
+            if(std::isinf(rY[i])){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE"));
+            }
+        }
+    }
     
     double Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
     {

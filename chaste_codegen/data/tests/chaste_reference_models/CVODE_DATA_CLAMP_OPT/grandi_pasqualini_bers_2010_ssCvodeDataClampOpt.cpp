@@ -13,6 +13,7 @@
 
 #include "grandi_pasqualini_bers_2010_ssCvodeDataClampOpt.hpp"
 #include <cmath>
+#include <cfloat>
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
@@ -453,7 +454,24 @@ std::shared_ptr<Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClampOpt_Lo
     {
         return Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClampOpt_LookupTables::Instance();
     }
-    
+
+    void Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClampOpt::VerifyStateVariables()
+    {
+        
+        N_Vector rY = rGetStateVariables();
+        
+        
+        for (unsigned i=0; i < 39; i++)
+        {
+            if(std::isnan(NV_Ith_S(rY, i))){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
+            }
+            if(std::isinf(NV_Ith_S(rY, i))){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE"));
+            }
+        }
+    }
+
     double Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClampOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,

@@ -1,9 +1,8 @@
-    {% if use_verify_state_variables %}
     
     void {{class_name}}::VerifyStateVariables()
     {
         {{vector_decl}} rY = rGetStateVariables();
-        {% for state_var in state_vars %}
+        {% if use_verify_state_variables %}{% for state_var in state_vars %}
         {%- if state_var.range_low != '' or  state_var.range_high != '' %}double {{ state_var.var }} = {{state_var.rY_lookup}};
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}
@@ -12,7 +11,16 @@
         {
             EXCEPTION(DumpState("State variable {{ state_var.annotated_var_name }} has gone out of range. Check numerical parameters, for example time and space stepsizes, and/or solver tolerances"));
         }
-        {% endif %}{%- endfor %}
+        {% endif %}{%- endfor %}{% endif%}
+        {% for state_var in state_vars %}{%if loop.last%}
+        for (unsigned i=0; i < {{state_vars|length}}; i++)
+        {
+            if(std::isnan({{ state_var.rY_lookup|replace(loop.index0, "i")  }})){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
+            }
+            if(std::isinf({{ state_var.rY_lookup|replace(loop.index0, "i")  }})){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE"));
+            }
+        }
+        {%-endif%}{%- endfor %}
     }
-
-    {% endif %}
