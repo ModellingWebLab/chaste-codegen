@@ -1,4 +1,4 @@
-[![travis](https://travis-ci.com/ModellingWebLab/chaste-codegen.svg?branch=master)](https://travis-ci.com/ModellingWebLab/chaste-codegen) [![Documentation Status](https://readthedocs.org/projects/chaste-codegen/badge/?version=latest)](https://chaste-codegen.readthedocs.io/en/latest/?badge=latest) [![codecov](https://codecov.io/gh/ModellingWebLab/chaste-codegen/branch/master/graph/badge.svg)](https://codecov.io/gh/ModellingWebLab/chaste-codegen)
+![workflow](https://github.com/ModellingWebLab/chaste-codegen/actions/workflows/pytest.yml/badge.svg) [![Documentation Status](https://readthedocs.org/projects/chaste-codegen/badge/?version=latest)](https://chaste-codegen.readthedocs.io/en/latest/?badge=latest) [![codecov](https://codecov.io/gh/ModellingWebLab/chaste-codegen/branch/master/graph/badge.svg)](https://codecov.io/gh/ModellingWebLab/chaste-codegen)
 
 # Code generation for cardiac Chaste
 
@@ -18,11 +18,17 @@ pip install chaste_codegen
 ## Using `chaste_codegen`
 After installation, chaste_codegen can be called using the `chaste_codegen` command:
 ```
-usage: chaste_codegen [-h] [--version] [--normal] [--cvode] [--cvode-data-clamp] [--backward-euler] [--rush-larsen]
-                      [--grl1] [--grl2] [-j] [-o OUTFILE] [--output-dir OUTPUT_DIR] [--show-outputs] [-c CLS_NAME]
-                      [-q] [--skip-ingularity-fixes] [-y] [--opt] [-m] [--lookup-table <metadata tag> min max step]
+usage: chaste_codegen [-h] [--version] [--normal] [--cvode]
+                      [--cvode-data-clamp] [--backward-euler] [--rush-larsen]
+                      [--grl1] [--grl2] [--rush-larsen-labview]
+                      [--rush-larsen-c] [-j] [-o OUTFILE]
+                      [--output-dir OUTPUT_DIR] [--show-outputs] [-c CLS_NAME]
+                      [-q] [--skip-ingularity-fixes] [-y] [--opt] [-m]
+                      [--lookup-table <metadata tag> min max step]
+                      [--use-model-factory]
                       cellml_file
 chaste_codegen: error: the following arguments are required: cellml_file
+
 ```
 
 For more information about the available options call

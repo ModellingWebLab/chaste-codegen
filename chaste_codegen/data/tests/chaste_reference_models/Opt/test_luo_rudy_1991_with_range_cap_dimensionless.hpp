@@ -32,6 +32,7 @@ class Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt : public 
     // Settable parameters and readable variables
     //
 
+
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

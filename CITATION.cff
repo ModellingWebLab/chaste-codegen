@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+
+- family-names: "Hendrix"
+  given-names: "Maurice"
+  orcid: "https://orcid.org/0000-0002-6621-7996"
+- family-names: "Clerx"
+  given-names: "Michael"
+  orcid: "https://orcid.org/0000-0003-4062-3061"
+- family-names: "Tamuri"
+  given-names: "Asif U."
+  orcid: "https://orcid.org/0000-0001-6633-3789"
+- family-names: "Keating"
+  given-names: "Sarah M."
+  orcid: "https://orcid.org/0000-0002-3356-3542"
+- family-names: "Johnstone"
+  given-names: "Ross H."
+- family-names: "Cooper"
+  given-names: "Jonathan"
+  orcid: "https://orcid.org/0000-0001-6009-3542"
+- family-names: "Mirams"
+  given-names: "Gary R."
+
+title: "chaste-codegen"
+version: 0.9.3
+doi: 10.5281/zenodo.5517000
+date-released: 2021-09-20
+url: "https://github.com/ModellingWebLab/chaste-codegen"

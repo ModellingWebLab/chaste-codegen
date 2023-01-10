@@ -42,7 +42,7 @@ setup(
     include_package_data=True,
 
     # Required Python version
-    python_requires='>=3.5',
+    python_requires='>=3.6',
 
     # List of dependencies
     install_requires=[
@@ -50,20 +50,19 @@ setup(
         'decorator>=4.4.2, <5',
         'importlib-metadata>=1.7, <5',
         'isodate>=0.6.0, <1',
-        'lxml>=4.6.3, <5',
+        'lxml>=4.6.5, <5',
         'MarkupSafe>=1.1.1, <2',
         'mpmath>=1.1.0, <2',
         'networkx>=2.4, <3',
         'packaging>=20.4, <21',
         'Pint>=0.9, <0.20',
         'pyparsing>=2.4.7, <3',
-        'rdflib>=5.0.0, <6',
+        'rdflib>=5.0.0, <7',
         'six>=1.15.0, <2',
-        'sympy>=1.6.1, <2',
+        'sympy>=1.9, <1.11',
         'zipp>=1.2.0, <2',
-        'cellmlmanip>=0.3.0, <0.4',
         'Jinja2>=2.11.3, <3',
-        'cellmlmanip>=0.3.0, <0.4',
+        'cellmlmanip>=0.3.5, <0.4',
         'Jinja2>=2.11.3, <3',
     ],
     extras_require={

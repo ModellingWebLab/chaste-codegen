@@ -135,6 +135,10 @@ class TestChastePrinter(object):
         assert printer.doprint(sp.pi) == 'M_PI'
         assert printer.doprint(sp.E) == 'e'
 
+        # large ints
+        assert printer.doprint(8034023767017108950029959168) == '8.034023767017109e+27'
+        assert printer.doprint(-8034023767017108950029959168) == '-8.034023767017109e+27'
+
     def test_unsupported_function(self, printer, x):
         f = sp.Function('f')
         with pytest.raises(ValueError) as err:
@@ -177,4 +181,4 @@ class TestChastePrinter(object):
 
     def test_ITE(self, printer, x, y):
         expr = sp.ITE(x < 0.0, x < y, y < 0.0)
-        assert printer.doprint(expr) == '((x < 0.0) ? (x < y) : (y < 0.0))'
+        assert printer.doprint(expr) == '((x < 0) ? (x < y) : (y < 0))'

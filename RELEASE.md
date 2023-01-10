@@ -1,6 +1,42 @@
+# Release 0.9.12
+- Added checks to the resulting C++ code, for state variables becoming INF or NAN.
+
+# Release 0.9.11
+- Pinned Pint version to be > 0.9 and < 0.20 since 0.20 has changed the location and number of arguments of the ScaleConverter and UnitDefinition classes.
+
+# Release 0.9.10
+- Added support for Sundials 6.0.0 which requires a newly introduced SUNContext object. This version of chaste_codegen now generates code that will work with Sundials 6.0, but is backwards compatible with previous Sundials versions and the 2021 release of Chaste.
+
+# Release 0.9.9
+- Fixed an issue with unused variables appearing in common terms in jacobians.
+- Fixes a bug printing large integers, in some environments: Large numbers such as 8.034023767017109e+27 which were actually ints would be printed as an the int 8034023767017108950029959168 and then the C++ compiler would complain as that's more than the maximum int value. This has been fixed by only printing ints as ints if they are `MIN_INT < number < MAX_INT` else we print them as a float (and we get the sceintific notation).
+- Fixed tests to pass with sympy 1.10 and required latest cellmlmanip, which also works with sympy1.10. Updated sympy requirement to be >=1.9, < 1.11
+
+# Release 0.9.5
+- Corrected a type in the generated output for `--rush-larsen-c`
+- Updated the help text to no longer imply that CellML files can be converted from remote URIs (a local file is required)
+- Fixed required sympy version to be < 1.9 since the jacobean generation has in sympy1.10 changed and makes chaste_codegen tests fail
+ 
+# Release 0.9.4
+- This version drops python 3.5 support. The reason for this is python 3.5 is end of life and the chase project will soon be dropping support.
+- Corrected Rush-Larsen output for `--rush-larsen-c`
+
+# Release 0.9.3
+- Performance upgrade for `--rush-larsen` using caching on linearity checking.
+
+# Release 0.9.2
+- Corrected a typo in command line argument `--skip-ingularity-fixes` renaming it to `--skip-singularity-fixes`
+
+# Release 0.9.1
+- Added RushLarsen translators for allowing output as c code (`--rush-larsen-c`) and labview (`--rush-larsen-labview`), These are for people wanting to generate generic c or labview code when using chaste_codegen as a stand-alone utility and are not used by chaste
+
+# Release 0.9.0
+- Updated to the latest version of the Web Lab Ontology.
+- Better error messages when working with transitively finding terms, and encountering subjects that don't point to an existing node in the model.
 
 # Release 0.8.1
 - Pinned Pint version to be > 0.9 and < 0.20 since 0.20 has changed the location and number of arguments of the ScaleConverter and UnitDefinition classes. Needed for python 10 & higher.
+- PLEASE NOTE: releases 0.9.0 - 0.9.10 do NOT contain this ptach.
 
 # Release 0.8.0
 - Added `--use-model-factory` flag to allow code to be added for models to self-register to the model factory of the ApPredict peoject.

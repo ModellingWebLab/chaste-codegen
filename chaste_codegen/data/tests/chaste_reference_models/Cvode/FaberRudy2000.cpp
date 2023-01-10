@@ -23,6 +23,9 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
+#if CHASTE_SUNDIALS_VERSION >= 60000
+#include "CvodeContextManager.hpp"
+#endif
 
     boost::shared_ptr<RegularStimulus> CellFaberRudy2000FromCellMLCvode::UseCellMLDefaultStimulus()
     {
@@ -517,7 +520,11 @@
         // Mathematics
         const double var_membrane__I_st_converted = GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
 
+#if CHASTE_SUNDIALS_VERSION >= 60000
+        N_Vector dqs = N_VNew_Serial(2, CvodeContextManager::Instance()->GetSundialsContext());
+#else
         N_Vector dqs = N_VNew_Serial(2);
+#endif
         NV_Ith_S(dqs, 0) = var_chaste_interface__environment__time_converted;
         NV_Ith_S(dqs, 1) = var_membrane__I_st_converted;
         return dqs;

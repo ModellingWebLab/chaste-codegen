@@ -42,6 +42,7 @@ public:
     double GetIntracellularCalciumConcentration();
     Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEulerOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEulerOpt();
+    void VerifyStateVariables();
     AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[8], double rResidual[8]);
     void ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[8], double rJacobian[8][8]);protected:

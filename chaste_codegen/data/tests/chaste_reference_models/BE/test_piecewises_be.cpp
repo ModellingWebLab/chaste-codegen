@@ -13,6 +13,7 @@
 #include "CardiacNewtonSolver.hpp"
 #include "test_piecewises_be.hpp"
 #include <cmath>
+#include <cfloat>
 #include <cassert>
 #include <memory>
 #include "Exception.hpp"
@@ -21,6 +22,7 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+
 
 
 
@@ -44,6 +46,22 @@
     }
 
     
+    void Celltest_piecewises_beFromCellMLBackwardEuler::VerifyStateVariables()
+    {
+        std::vector<double>& rY = rGetStateVariables();
+        
+        
+        for (unsigned i=0; i < 4; i++)
+        {
+            if(std::isnan(rY[i])){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
+            }
+            if(std::isinf(rY[i])){
+                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE"));
+            }
+        }
+    }
+
     double Celltest_piecewises_beFromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
@@ -69,10 +87,10 @@
         double var_chaste_interface__fast_sodium_current_m_gate__m = rCurrentGuess[1];
         
         //output_equations
-        const double var_fast_sodium_current_m_gate__alpha_m = ((fabs(pow(var_chaste_interface__fast_sodium_current_m_gate__m, 2) * var_chaste_interface__membrane__V) < 0) ? (2000.0) : (200.0 * var_chaste_interface__membrane__V / (1.0 - exp(-0.10000000000000001 * var_chaste_interface__membrane__V)))); // per_second
+        const double var_fast_sodium_current_m_gate__alpha_m = ((fabs(pow(var_chaste_interface__fast_sodium_current_m_gate__m, 2) * var_chaste_interface__membrane__V) < 0) ? (2000) : (200 * var_chaste_interface__membrane__V / (1 - exp(-0.10000000000000001 * var_chaste_interface__membrane__V)))); // per_second
         const double var_fast_sodium_current_m_gate__m_orig_deriv = var_fast_sodium_current_m_gate__alpha_m; // 1 / second
         const double d_dt_chaste_interface_var_fast_sodium_current_m_gate__m = 0.001 * var_fast_sodium_current_m_gate__m_orig_deriv; // 1 / millisecond
-        const double var_fast_sodium_current_m_gate2__alpha_m = ((fabs(var_chaste_interface__membrane__V) < 0) ? (2000.0 * pow(var_chaste_interface__fast_sodium_current_m_gate2__m, 2)) : (200.0 * var_chaste_interface__membrane__V / (1.0 - exp(-0.10000000000000001 * var_chaste_interface__membrane__V)))); // per_second
+        const double var_fast_sodium_current_m_gate2__alpha_m = ((fabs(var_chaste_interface__membrane__V) < 0) ? (2000 * pow(var_chaste_interface__fast_sodium_current_m_gate2__m, 2)) : (200 * var_chaste_interface__membrane__V / (1 - exp(-0.10000000000000001 * var_chaste_interface__membrane__V)))); // per_second
         const double var_fast_sodium_current_m_gate2__m_orig_deriv = var_fast_sodium_current_m_gate2__alpha_m; // 1 / second
         const double d_dt_chaste_interface_var_fast_sodium_current_m_gate2__m = 0.001 * var_fast_sodium_current_m_gate2__m_orig_deriv; // 1 / millisecond
         
@@ -90,7 +108,7 @@
         
         
         
-        rJacobian[0][0] = 1.0 - (mDt * (0.001 * ((fabs(var_chaste_interface__membrane__V) < 0) ? (4000.0 * var_chaste_interface__fast_sodium_current_m_gate2__m) : (0))));
+        rJacobian[0][0] = 1.0 - (mDt * (0.001 * ((fabs(var_chaste_interface__membrane__V) < 0) ? (4000 * var_chaste_interface__fast_sodium_current_m_gate2__m) : (0))));
         rJacobian[0][1] = 0.0;
         rJacobian[1][0] = 0.0;
         rJacobian[1][1] = 1.0;
@@ -120,7 +138,7 @@
         
         
         
-        rY[1] = (var_chaste_interface__fast_sodium_current_h_gate__h + ((((var_chaste_interface__membrane__V > 9999999.0) ? (0.001 * var_chaste_interface__membrane__V) : (0))) * mDt)) / (1.0 - ((0.001) * mDt));
+        rY[1] = (var_chaste_interface__fast_sodium_current_h_gate__h + ((((var_chaste_interface__membrane__V > 9999999) ? (0.001 * var_chaste_interface__membrane__V) : (0))) * mDt)) / (1.0 - ((0.001) * mDt));
         
         double _guess[2] = {rY[3],rY[2]};
         CardiacNewtonSolver<2,Celltest_piecewises_beFromCellMLBackwardEuler>* _p_solver = CardiacNewtonSolver<2,Celltest_piecewises_beFromCellMLBackwardEuler>::Instance();

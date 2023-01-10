@@ -7,6 +7,7 @@ from sympy import (
     cse,
     piecewise_fold,
 )
+from sympy.core import Symbol
 
 
 def get_usage_count(equations):
@@ -45,11 +46,11 @@ def partial_eval(equations, required_lhs, keep_multiple_usages=True):
     :param equations: the equations to partially evaluate
     :param required_lhs: variables which which the defining equation is kept and not substituted
     :param keep_multiple_usages: if a variable is used multiple times keep its defining equation
-    :return: the equations wit defining equations substituted in to create a minimal set of equations
+    :return: the equations with defining equations substituted in to create a minimal set of equations
     """
 
     assert all(map(lambda eq: isinstance(eq, Eq), equations)), "Expecting equations to be a collection of equations"
-    assert all(map(lambda v: isinstance(v, Variable) or isinstance(v, Derivative), required_lhs)), \
+    assert all(map(lambda v: isinstance(v, (Variable, Derivative, Symbol)), required_lhs)), \
         "Expecting required_lhs to be a collection of variables or derivatives"
 
     evaluated_eqs = []
@@ -71,6 +72,5 @@ def partial_eval(equations, required_lhs, keep_multiple_usages=True):
             if not keep_multiple_usages:
                 subs_dict[eq.lhs] = new_rhs
             evaluated_eqs.append(Eq(eq.lhs, new_rhs))
-
     return evaluated_eqs
 

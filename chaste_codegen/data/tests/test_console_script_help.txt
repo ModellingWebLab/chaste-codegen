@@ -1,8 +1,9 @@
 usage: chaste_codegen [-h] [--version] [--normal] [--cvode]
                       [--cvode-data-clamp] [--backward-euler] [--rush-larsen]
-                      [--grl1] [--grl2] [-j] [-o OUTFILE]
+                      [--grl1] [--grl2] [--rush-larsen-labview]
+                      [--rush-larsen-c] [-j] [-o OUTFILE]
                       [--output-dir OUTPUT_DIR] [--show-outputs] [-c CLS_NAME]
-                      [-q] [--skip-ingularity-fixes] [-y] [--opt] [-m]
+                      [-q] [--skip-singularity-fixes] [-y] [--opt] [-m]
                       [--lookup-table <metadata tag> min max step]
                       [--use-model-factory]
                       cellml_file
@@ -10,7 +11,7 @@ usage: chaste_codegen [-h] [--version] [--normal] [--cvode]
 Chaste code generation for cellml.
 
 positional arguments:
-  cellml_file           The cellml file or URI to convert to chaste code
+  cellml_file           The cellml file to convert to chaste code
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -27,6 +28,11 @@ ModelTypes:
   --rush-larsen         Generate rush-larsen model type
   --grl1                Generate grl1 model type
   --grl2                Generate grl2 model type
+  --rush-larsen-labview
+                        Generate rush-larsen-labview model type in
+                        mastrcriptRT with added injection current(i_inj)
+  --rush-larsen-c       Generate rush-larsen-c model type in C with added
+                        injection current(i_inj)
 
 Transformations:
   These options control which transformations (typically optimisations) are
@@ -50,7 +56,7 @@ Generated code options:
   -c CLS_NAME           explicitly set the name of the generated class
   -q, --quiet           quiet operation, don't print informational messages to
                         screen
-  --skip-ingularity-fixes
+  --skip-singularity-fixes
                         skip singularity fixes in Goldman-Hodgkin-Katz (GHK)
                         equations.
 

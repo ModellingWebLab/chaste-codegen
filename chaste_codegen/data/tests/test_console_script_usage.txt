@@ -1,8 +1,9 @@
 usage: chaste_codegen [-h] [--version] [--normal] [--cvode]
                       [--cvode-data-clamp] [--backward-euler] [--rush-larsen]
-                      [--grl1] [--grl2] [-j] [-o OUTFILE]
+                      [--grl1] [--grl2] [--rush-larsen-labview]
+                      [--rush-larsen-c] [-j] [-o OUTFILE]
                       [--output-dir OUTPUT_DIR] [--show-outputs] [-c CLS_NAME]
-                      [-q] [--skip-ingularity-fixes] [-y] [--opt] [-m]
+                      [-q] [--skip-singularity-fixes] [-y] [--opt] [-m]
                       [--lookup-table <metadata tag> min max step]
                       [--use-model-factory]
                       cellml_file

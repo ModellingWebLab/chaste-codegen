@@ -19,6 +19,7 @@ _LOG10_OPT = ReplaceOptim(_V * log(_W) / log(10), _V * log10(_W), cost_function=
 _POW_OPT = ReplaceOptim(lambda p: p.is_Pow and (isinstance(p.exp, Float) or isinstance(p.exp, float))
                         and float(p.exp).is_integer(),
                         lambda p: Pow(p.base, int(float(p.exp))))
+_LOG_OPTIMS = (_LOG10_OPT, log1p_opt)
 
 
 def optimize_expr_for_c_output(expr):
@@ -29,7 +30,7 @@ def optimize_expr_for_c_output(expr):
     """
     optims = tuple()
     if expr.has(log):
-        optims += (_LOG10_OPT, log1p_opt)
+        optims += (_LOG_OPTIMS)
     if expr.has(Pow):
         optims += (_POW_OPT, )
     if len(optims) > 0:
