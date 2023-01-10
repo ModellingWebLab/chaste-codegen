@@ -1,3 +1,7 @@
+
+# Release 0.8.1
+- Pinned Pint version to be > 0.9 and < 0.20 since 0.20 has changed the location and number of arguments of the ScaleConverter and UnitDefinition classes. Needed for python 10 & higher.
+
 # Release 0.8.0
 - Added `--use-model-factory` flag to allow code to be added for models to self-register to the model factory of the ApPredict peoject.
 - Renamed backward euler cells to be in line with others using `BackwardEulerOpt` / `BackwardEuler` instead of `BackwardEuler` and `BackwardEulerNoLot`.
