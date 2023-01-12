@@ -86,6 +86,10 @@
             if(std::isinf(rY[i])){
                 EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE"));
             }
+            if(rY[i] < 0){
+                EXCEPTION(DumpState("Concentration " + this->rGetStateVariableNames()[i] + " below 0"));
+            }
+
         }
     }
 

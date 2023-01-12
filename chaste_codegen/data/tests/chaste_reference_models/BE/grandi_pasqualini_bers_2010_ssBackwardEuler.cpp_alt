@@ -110,6 +110,10 @@ bool Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler::registered = Mod
             if(std::isinf(rY[i])){
                 EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE"));
             }
+            if(rY[i] < 0){
+                EXCEPTION(DumpState("Concentration " + this->rGetStateVariableNames()[i] + " below 0"));
+            }
+
         }
     }
     

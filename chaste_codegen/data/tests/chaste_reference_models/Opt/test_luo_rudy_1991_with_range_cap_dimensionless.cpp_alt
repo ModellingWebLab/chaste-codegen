@@ -440,6 +440,10 @@ std::shared_ptr<Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt
             if(std::isinf(rY[i])){
                 EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE"));
             }
+            if(rY[i] < 0){
+                EXCEPTION(DumpState("Concentration " + this->rGetStateVariableNames()[i] + " below 0"));
+            }
+
         }
     }
 

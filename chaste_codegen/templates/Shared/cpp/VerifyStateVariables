@@ -2,7 +2,9 @@
     void {{class_name}}::VerifyStateVariables()
     {
         {{vector_decl}} rY = rGetStateVariables();
-        {% if use_verify_state_variables %}{% for state_var in state_vars %}
+        std::vector<int> concentrations = {% raw %}{{% endraw %}{{concentrations | join(', ')}}};
+        std::vector<int> probabilities = {% raw %}{{% endraw %}{{probabilities | join(', ')}}};
+        {%- if use_verify_state_variables %}{% for state_var in state_vars %}
         {%- if state_var.range_low != '' or  state_var.range_high != '' %}double {{ state_var.var }} = {{state_var.rY_lookup}};
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}
@@ -15,11 +17,25 @@
         {% for state_var in state_vars %}{%if loop.last%}
         for (unsigned i=0; i < {{state_vars|length}}; i++)
         {
-            if(std::isnan({{ state_var.rY_lookup|replace(loop.index0, "i")  }})){
+            if(std::isnan({{ state_var.rY_lookup|replace(loop.index0, "i")  }}))
+            {
                 EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
             }
-            if(std::isinf({{ state_var.rY_lookup|replace(loop.index0, "i")  }})){
+            if(std::isinf({{ state_var.rY_lookup|replace(loop.index0, "i")  }}))
+            {
                 EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE"));
+            }
+            if({{ state_var.rY_lookup|replace(loop.index0, "i")  }} < 0 && (std::find(concentrations.begin(), concentrations.end(), i) != concentrations.end()))
+            {
+                EXCEPTION(DumpState("Concentration " + this->rGetStateVariableNames()[i] + " below 0"));
+            }
+            if({{ state_var.rY_lookup|replace(loop.index0, "i")  }} < 0 && (std::find(probabilities.begin(), probabilities.end(), i) != probabilities.end()))
+            {
+                EXCEPTION(DumpState("Probability " + this->rGetStateVariableNames()[i] + " below 0"));
+            }
+            if({{ state_var.rY_lookup|replace(loop.index0, "i")  }} > 1 && (std::find(probabilities.begin(), probabilities.end(), i) != probabilities.end()))
+            {
+                EXCEPTION(DumpState("Probability " + this->rGetStateVariableNames()[i] + " above 1"));
             }
         }
         {%-endif%}{%- endfor %}

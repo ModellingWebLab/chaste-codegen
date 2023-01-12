@@ -3,7 +3,7 @@ import time
 from sympy import Derivative, Float
 
 import chaste_codegen as cg
-from chaste_codegen._rdf import OXMETA, PYCMLMETA
+from chaste_codegen._rdf import OXMETA, PYCMLMETA, get_variables_transitively
 from chaste_codegen.model_with_conversions import (
     CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX,
     MEMBRANE_VOLTAGE_INDEX,
@@ -98,6 +98,10 @@ class ChasteModel(object):
         self._add_printers()
         self._formatted_state_vars, self._use_verify_state_variables = self._format_state_variables()
 
+        # store indices of concentrations & probabilities
+        concentrations = sorted([self._state_vars.index(var) for var in set(get_variables_transitively(self._model, (OXMETA, 'Concentration'))) if var in self._state_vars])
+        probabilities = sorted([self._state_vars.index(var) for var in set(get_variables_transitively(self._model, (OXMETA, 'Probability'))) if var in self._state_vars])
+        
         # dict of variables to pass to the jinja2 templates
         self._vars_for_template = \
             {'base_class': '',
@@ -133,7 +137,9 @@ class ChasteModel(object):
              'ode_system_information': self._format_system_info(),
              'named_attributes': self._format_named_attributes(),
              'derived_quantities': self._format_derived_quant(),
-             'derived_quantity_equations': self._format_derived_quant_eqs()}
+             'derived_quantity_equations': self._format_derived_quant_eqs(),
+             'concentrations': concentrations,
+             'probabilities': probabilities}
 
     def _get_initial_value(self, var):
         """Returns the initial value of a variable if it has one, 0 otherwise"""
