@@ -93,14 +93,14 @@ class ChasteModel(object):
                                              key=lambda v: self._model.get_display_name(v, OXMETA))
         self._modifiable_parameter_lookup = {p: str(i) for i, p in enumerate(self._modifiable_parameters)}
 
+        # store indices of concentrations & probabilities
+        self.concentrations = set(get_variables_transitively(self._model, (OXMETA, 'Concentration')))
+        self.probabilities = set(get_variables_transitively(self._model, (OXMETA, 'Probability')))
+
         # Printing
         self._pre_print_hook()
         self._add_printers()
         self._formatted_state_vars, self._use_verify_state_variables = self._format_state_variables()
-
-        # store indices of concentrations & probabilities
-        concentrations = sorted([self._state_vars.index(var) for var in set(get_variables_transitively(self._model, (OXMETA, 'Concentration'))) if var in self._state_vars])
-        probabilities = sorted([self._state_vars.index(var) for var in set(get_variables_transitively(self._model, (OXMETA, 'Probability'))) if var in self._state_vars])
         
         # dict of variables to pass to the jinja2 templates
         self._vars_for_template = \
@@ -137,9 +137,7 @@ class ChasteModel(object):
              'ode_system_information': self._format_system_info(),
              'named_attributes': self._format_named_attributes(),
              'derived_quantities': self._format_derived_quant(),
-             'derived_quantity_equations': self._format_derived_quant_eqs(),
-             'concentrations': concentrations,
-             'probabilities': probabilities}
+             'derived_quantity_equations': self._format_derived_quant_eqs()}
 
     def _get_initial_value(self, var):
         """Returns the initial value of a variable if it has one, 0 otherwise"""
@@ -338,7 +336,9 @@ class ChasteModel(object):
               'range_low': get_range_annotation(var[1], 'range-low'),
               'range_high': get_range_annotation(var[1], 'range-high'),
               'sympy_var': var[1],
-              'state_var_index': self._state_vars.index(var[1])}
+              'state_var_index': self._state_vars.index(var[1]),
+              'is_concentration': var[1] in self.concentrations,
+              'is_probability': var[1] in self.probabilities}
              for var in enumerate(self._state_vars)]
 
         use_verify_state_variables = next(filter(lambda eq: eq['range_low'] != '' or eq['range_high'] != '',
