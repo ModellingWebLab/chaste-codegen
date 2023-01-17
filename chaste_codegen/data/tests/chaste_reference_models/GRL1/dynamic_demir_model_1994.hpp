@@ -34,6 +34,9 @@ class Dynamicdemir_model_1994FromCellMLGRL1 : public AbstractGeneralizedRushLars
     //
 
 
+private:
+const bool is_concentration[27] = {false, true, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, true, true, true, false, false, false, false, false, false};
+const bool is_probability[27] = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 public:
 
     double GetIntracellularCalciumConcentration();

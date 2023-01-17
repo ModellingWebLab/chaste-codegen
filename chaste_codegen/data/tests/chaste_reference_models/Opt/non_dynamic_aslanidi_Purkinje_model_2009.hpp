@@ -81,6 +81,9 @@ class Cellaslanidi_Purkinje_model_2009FromCellMLOpt : public AbstractCardiacCell
     boost::shared_ptr<AbstractModifier> mp_membrane_voltage_modifier;
 
 
+private:
+const bool is_concentration[30] = {false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, true, false, false, true, true, false, false};
+const bool is_probability[30] = {false, false, true, true, true, false, false, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

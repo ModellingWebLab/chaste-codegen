@@ -34,6 +34,9 @@ class Celldokos_model_1996FromCellMLCvodeDataClamp : public AbstractCvodeCellWit
     //
 
 
+private:
+const bool is_concentration[18] = {false, true, false, false, false, false, false, false, false, false, false, true, false, false, true, true, true, true};
+const bool is_probability[18] = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 public:
 
     double GetIntracellularCalciumConcentration();

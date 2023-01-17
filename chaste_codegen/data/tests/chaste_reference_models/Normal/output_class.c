@@ -96,8 +96,7 @@ bool Chaste_CG::registered = ModelFactory::Register("output_class", "Normal", (M
     
     void Chaste_CG::VerifyStateVariables()
     {
-        std::vector<double>& rY = rGetStateVariables();
-        double var_chaste_interface__intracellular_calcium_concentration__Ca_ds = rY[17];
+        std::vector<double>& rY = rGetStateVariables();double var_chaste_interface__intracellular_calcium_concentration__Ca_ds = rY[17];
         // Units: millimolar; Initial value: 1.88e-05
         
         if (var_chaste_interface__intracellular_calcium_concentration__Ca_ds < 0.0)
@@ -105,15 +104,33 @@ bool Chaste_CG::registered = ModelFactory::Register("output_class", "Normal", (M
             EXCEPTION(DumpState("State variable dyadic_space_calcium_concentration has gone out of range. Check numerical parameters, for example time and space stepsizes, and/or solver tolerances"));
         }
         
+        std::string error_message = "";
         
         for (unsigned i=0; i < 22; i++)
         {
-            if(std::isnan(rY[i])){
-                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
+            if(std::isnan(rY[i]))
+            {
+                error_message += "State variable " + this->rGetStateVariableNames()[i] + " is not a number\n";
             }
-            if(std::isinf(rY[i])){
-                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE"));
+            if(std::isinf(rY[i]))
+            {
+                error_message += "State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE\n";
             }
+            if(this->is_concentration[i] && rY[i] < 0)
+            {
+                error_message += "Concentration " + this->rGetStateVariableNames()[i] + " below 0\n";
+            }
+            if(this->is_probability[i] && rY[i] < 0)
+            {
+                error_message += "Probability " + this->rGetStateVariableNames()[i] + " below 0\n";
+            }
+            if(this->is_probability[i] && rY[i] > 1)
+            {
+                error_message += "Probability " + this->rGetStateVariableNames()[i] + " above 1\n";
+            }
+        }
+        if (error_message != ""){
+            EXCEPTION(DumpState(error_message));
         }
     }
 

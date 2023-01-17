@@ -299,16 +299,33 @@ std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL2O
     void Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL2Opt::VerifyStateVariables()
     {
         std::vector<double>& rY = rGetStateVariables();
-        
+        std::string error_message = "";
         
         for (unsigned i=0; i < 4; i++)
         {
-            if(std::isnan(rY[i])){
-                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
+            if(std::isnan(rY[i]))
+            {
+                error_message += "State variable " + this->rGetStateVariableNames()[i] + " is not a number\n";
             }
-            if(std::isinf(rY[i])){
-                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE"));
+            if(std::isinf(rY[i]))
+            {
+                error_message += "State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE\n";
             }
+            if(this->is_concentration[i] && rY[i] < 0)
+            {
+                error_message += "Concentration " + this->rGetStateVariableNames()[i] + " below 0\n";
+            }
+            if(this->is_probability[i] && rY[i] < 0)
+            {
+                error_message += "Probability " + this->rGetStateVariableNames()[i] + " below 0\n";
+            }
+            if(this->is_probability[i] && rY[i] > 1)
+            {
+                error_message += "Probability " + this->rGetStateVariableNames()[i] + " above 1\n";
+            }
+        }
+        if (error_message != ""){
+            EXCEPTION(DumpState(error_message));
         }
     }
 
@@ -582,16 +599,16 @@ std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL2O
             const double var_x4 = 1 / (-1 + exp(1.0000000000287557e-7));
             const double var_x5 = 1 / (-1 + exp(-1.0000000000287557e-7));
             const double var_x6 = _lt_0_row[5];
-            const double var_x7 = (var_chaste_interface__membrane__V >= -50.000000999999997) && (var_chaste_interface__membrane__V <= -49.999999000000003);
-            const double var_x8 = 0.10000000000000001 * var_chaste_interface__membrane__V;
-            const double var_x9 = exp(-5 - var_x8);
-            const double var_x10 = -1 + var_x9;
-            const double var_x11 = 0.10000000000000001 / var_x10;
-            const double var_x12 = 50 + var_chaste_interface__membrane__V;
-            const double var_x13 = 4 * var_x6;
-            const double var_x14 = 1.0000000000287557e-7 * var_x4;
+            const double var_x8 = (var_chaste_interface__membrane__V >= -50.000000999999997) && (var_chaste_interface__membrane__V <= -49.999999000000003);
+            const double var_x9 = -0.10000000000000001 * var_chaste_interface__membrane__V;
+            const double var_x10 = exp(-5 + var_x9);
+            const double var_x11 = -1 + var_x10;
+            const double var_x12 = 0.10000000000000001 / var_x11;
+            const double var_x13 = 50 + var_chaste_interface__membrane__V;
+            const double var_x14 = -4 * var_x6;
+            const double var_x15 = -1.0000000000287557e-7 * var_x4;
             
-            partialF = ((var_x7) ? (-var_x13 - var_x14 - 499999.99998562218 * (50.000000999999997 + var_chaste_interface__membrane__V) * (-var_x14 - 1.0000000000287557e-7 * var_x5)) : (-var_x13 + var_x11 * var_x12));
+            partialF = ((var_x8) ? (var_x14 + var_x15 - 499999.99998562218 * (50.000000999999997 + var_chaste_interface__membrane__V) * (var_x15 - 1.0000000000287557e-7 * var_x5)) : (var_x14 + var_x12 * var_x13));
         }
         else
         {
@@ -643,12 +660,12 @@ std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL2O
 // LCOV_EXCL_STOP
         const double* const _lt_0_row = Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL2Opt_LookupTables::Instance()->IndexTable0(var_chaste_interface__membrane__V);
 
-            const double var_x8 = 0.10000000000000001 * var_chaste_interface__membrane__V;
-            const double var_x15 = _lt_0_row[2];
-            const double var_x16 = exp(-4.5 - var_x8);
-            const double var_x17 = 1 + var_x16;
+            const double var_x9 = -0.10000000000000001 * var_chaste_interface__membrane__V;
+            const double var_x16 = _lt_0_row[2];
+            const double var_x17 = exp(-4.5 + var_x9);
+            const double var_x18 = 1 + var_x17;
             
-            partialF = -1 / var_x17 - 0.070000000000000007 * var_x15;
+            partialF = -1 / var_x18 - 0.070000000000000007 * var_x16;
         }
         else
         {
@@ -702,17 +719,17 @@ std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLGRL2O
 
             const double var_x4 = 1 / (-1 + exp(1.0000000000287557e-7));
             const double var_x5 = 1 / (-1 + exp(-1.0000000000287557e-7));
-            const double var_x8 = 0.10000000000000001 * var_chaste_interface__membrane__V;
-            const double var_x19 = _lt_0_row[1];
-            const double var_x21 = (var_chaste_interface__membrane__V >= -65.000000999999997) && (var_chaste_interface__membrane__V <= -64.999999000000003);
-            const double var_x22 = exp(-6.5 - var_x8);
-            const double var_x23 = -1 + var_x22;
-            const double var_x24 = 0.01 / var_x23;
-            const double var_x25 = 65 + var_chaste_interface__membrane__V;
-            const double var_x26 = 0.125 * var_x19;
-            const double var_x27 = 1.0000000000287556e-8 * var_x4;
+            const double var_x9 = -0.10000000000000001 * var_chaste_interface__membrane__V;
+            const double var_x20 = _lt_0_row[1];
+            const double var_x22 = (var_chaste_interface__membrane__V >= -65.000000999999997) && (var_chaste_interface__membrane__V <= -64.999999000000003);
+            const double var_x23 = exp(-6.5 + var_x9);
+            const double var_x24 = -1 + var_x23;
+            const double var_x25 = 0.01 / var_x24;
+            const double var_x26 = 65 + var_chaste_interface__membrane__V;
+            const double var_x27 = -0.125 * var_x20;
+            const double var_x28 = -1.0000000000287556e-8 * var_x4;
             
-            partialF = ((var_x21) ? (-var_x26 - var_x27 - 499999.99998562218 * (65.000000999999997 + var_chaste_interface__membrane__V) * (-var_x27 - 1.0000000000287556e-8 * var_x5)) : (-var_x26 + var_x24 * var_x25));
+            partialF = ((var_x22) ? (var_x27 + var_x28 - 499999.99998562218 * (65.000000999999997 + var_chaste_interface__membrane__V) * (var_x28 - 1.0000000000287556e-8 * var_x5)) : (var_x27 + var_x25 * var_x26));
         }
         else
         {

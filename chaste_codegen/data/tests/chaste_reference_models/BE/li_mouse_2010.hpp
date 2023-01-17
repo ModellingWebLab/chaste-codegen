@@ -33,6 +33,9 @@ class Cellli_mouse_2010FromCellMLBackwardEuler : public AbstractBackwardEulerCar
     //
 
 
+private:
+const bool is_concentration[36] = {false, true, true, true, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false};
+const bool is_probability[36] = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

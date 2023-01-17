@@ -143,7 +143,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__membrane__V) {
-                    return (((var_chaste_interface__membrane__V > -100) && (3.0800000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V >= -9.9999999999999995e-8) && (3.0800000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V <= 9.9999999999999995e-8)) ? ((0.28823920000000003 + 0.0022696000000000001 * var_chaste_interface__membrane__V) / exp(1.4000000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V)) : ((var_chaste_interface__membrane__V > -100) ? (0.11348000000000001 * (-1 + exp(3.0800000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V)) / ((3.0800000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V) * exp(1.4000000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V))) : (1)));
+                    return (((var_chaste_interface__membrane__V >= -77.000002499999994) && (var_chaste_interface__membrane__V <= -76.999997500000006)) ? ((0.28823920000000003 + 0.0022696000000000001 * var_chaste_interface__membrane__V) / exp(1.4000000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V)) : ((var_chaste_interface__membrane__V > -100) ? (0.11348000000000001 * (-1 + exp(3.0800000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V)) / ((3.0800000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V) * exp(1.4000000000000001 + 0.040000000000000001 * var_chaste_interface__membrane__V))) : (1)));
                 };
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__membrane__V);
@@ -176,7 +176,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__membrane__V) {
-                    return (((4.7130000000000001 + 0.10000000000000001 * var_chaste_interface__membrane__V >= -9.9999999999999995e-8) && (4.7130000000000001 + 0.10000000000000001 * var_chaste_interface__membrane__V <= 9.9999999999999995e-8)) ? (10.7408 + 0.16 * var_chaste_interface__membrane__V) : (-3.1999999999999997 * (4.7130000000000001 + 0.10000000000000001 * var_chaste_interface__membrane__V) / (-1 + exp(-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__membrane__V))));
+                    return (((var_chaste_interface__membrane__V >= -47.130001) && (var_chaste_interface__membrane__V <= -47.129999000000005)) ? (10.7408 + 0.16 * var_chaste_interface__membrane__V) : (3.1999999999999997 * (-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__membrane__V) / (-1 + exp(-4.7130000000000001 - 0.10000000000000001 * var_chaste_interface__membrane__V))));
                 };
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__membrane__V);
@@ -422,8 +422,7 @@ std::shared_ptr<Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt
     
     void Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt::VerifyStateVariables()
     {
-        std::vector<double>& rY = rGetStateVariables();
-        double var_chaste_interface__fast_sodium_current_m_gate__m = rY[1];
+        std::vector<double>& rY = rGetStateVariables();double var_chaste_interface__fast_sodium_current_m_gate__m = rY[1];
         // Units: dimensionless; Initial value: 0.00187018
         
         if (var_chaste_interface__fast_sodium_current_m_gate__m < 0.0 || var_chaste_interface__fast_sodium_current_m_gate__m > 1.0)
@@ -431,19 +430,33 @@ std::shared_ptr<Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt
             EXCEPTION(DumpState("State variable membrane_fast_sodium_current_m_gate has gone out of range. Check numerical parameters, for example time and space stepsizes, and/or solver tolerances"));
         }
         
+        std::string error_message = "";
         
         for (unsigned i=0; i < 8; i++)
         {
-            if(std::isnan(rY[i])){
-                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
+            if(std::isnan(rY[i]))
+            {
+                error_message += "State variable " + this->rGetStateVariableNames()[i] + " is not a number\n";
             }
-            if(std::isinf(rY[i])){
-                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE"));
+            if(std::isinf(rY[i]))
+            {
+                error_message += "State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE\n";
             }
-            if(rY[i] < 0){
-                EXCEPTION(DumpState("Concentration " + this->rGetStateVariableNames()[i] + " below 0"));
+            if(this->is_concentration[i] && rY[i] < 0)
+            {
+                error_message += "Concentration " + this->rGetStateVariableNames()[i] + " below 0\n";
             }
-
+            if(this->is_probability[i] && rY[i] < 0)
+            {
+                error_message += "Probability " + this->rGetStateVariableNames()[i] + " below 0\n";
+            }
+            if(this->is_probability[i] && rY[i] > 1)
+            {
+                error_message += "Probability " + this->rGetStateVariableNames()[i] + " above 1\n";
+            }
+        }
+        if (error_message != ""){
+            EXCEPTION(DumpState(error_message));
         }
     }
 

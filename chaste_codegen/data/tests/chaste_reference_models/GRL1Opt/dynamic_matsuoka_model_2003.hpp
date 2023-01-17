@@ -36,6 +36,9 @@ class Dynamicmatsuoka_model_2003FromCellMLGRL1Opt : public AbstractGeneralizedRu
 private:
     static AbstractGeneralizedRushLarsenCardiacCell* CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus);
     static bool registered;
+private:
+const bool is_concentration[37] = {false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
+const bool is_probability[37] = {false, false, false, false, false, true, false, false, true, true, false, false, true, true, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

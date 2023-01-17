@@ -79,17 +79,33 @@
     void Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvode::VerifyStateVariables()
     {
         
+        const double tol = 100*this->mAbsTol;
         N_Vector rY = rGetStateVariables();
-        
+        std::string error_message = "";
         
         for (unsigned i=0; i < 4; i++)
         {
             if(std::isnan(NV_Ith_S(rY, i))){
-                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
+                error_message += "State variable " + this->rGetStateVariableNames()[i] + " is not a number\n";
             }
             if(std::isinf(NV_Ith_S(rY, i))){
-                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE"));
+                error_message += "State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE\n";
             }
+            if(this->is_concentration[i] && NV_Ith_S(rY, i) < -tol)
+            {
+                error_message += "Concentration " + this->rGetStateVariableNames()[i] + " below 0\n";
+            }
+            if(this->is_probability[i] && NV_Ith_S(rY, i) < -tol)
+            {
+                error_message += "Probability " + this->rGetStateVariableNames()[i] + " below 0\n";
+            }
+            if(this->is_probability[i] && NV_Ith_S(rY, i) > 1 + tol)
+            {
+                error_message += "Probability " + this->rGetStateVariableNames()[i] + " above 1\n";
+            }
+        }
+        if (error_message != ""){
+            EXCEPTION(DumpState(error_message));
         }
     }
 
@@ -199,18 +215,18 @@
         const double var_x3 = 1 / (-1 + exp(1.0000000000287557e-7));
         const double var_x4 = 1 / (-1 + exp(-1.0000000000287557e-7));
         const double var_x5 = (var_chaste_interface__membrane__V >= -50.000000999999997) && (var_chaste_interface__membrane__V <= -49.999999000000003);
-        const double var_x6 = 0.10000000000000001 * var_chaste_interface__membrane__V;
-        const double var_x7 = exp(-5 - var_x6);
+        const double var_x6 = -0.10000000000000001 * var_chaste_interface__membrane__V;
+        const double var_x7 = exp(-5 + var_x6);
         const double var_x8 = -1 + var_x7;
         const double var_x9 = 0.10000000000000001 / var_x8;
         const double var_x10 = 50 + var_chaste_interface__membrane__V;
         const double var_x11 = exp(-4.166666666666667 - 0.055555555555555552 * var_chaste_interface__membrane__V);
         const double var_x12 = 1.0000000000287557e-7 * var_x3;
         const double var_x13 = exp(-3.75 - 0.050000000000000003 * var_chaste_interface__membrane__V);
-        const double var_x14 = exp(-4.5 - var_x6);
+        const double var_x14 = exp(-4.5 + var_x6);
         const double var_x15 = 1 + var_x14;
         const double var_x16 = (var_chaste_interface__membrane__V >= -65.000000999999997) && (var_chaste_interface__membrane__V <= -64.999999000000003);
-        const double var_x17 = exp(-6.5 - var_x6);
+        const double var_x17 = exp(-6.5 + var_x6);
         const double var_x18 = -1 + var_x17;
         const double var_x19 = 0.01 / var_x18;
         const double var_x20 = 65 + var_chaste_interface__membrane__V;

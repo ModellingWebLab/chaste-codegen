@@ -33,6 +33,9 @@ class Celldecker_2009FromCellMLBackwardEulerOpt : public AbstractBackwardEulerCa
     //
 
 
+private:
+const bool is_concentration[46] = {false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, false};
+const bool is_probability[46] = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

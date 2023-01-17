@@ -33,6 +33,9 @@ class Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt : public 
     //
 
 
+private:
+const bool is_concentration[8] = {false, false, false, false, false, false, false, true};
+const bool is_probability[8] = {false, true, true, true, true, true, false, false};
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

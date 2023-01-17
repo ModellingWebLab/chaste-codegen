@@ -33,6 +33,9 @@ class Celltest_V_not_state_mparamFromCellML : public AbstractCardiacCell
     //
 
 
+private:
+const bool is_concentration[1] = {false};
+const bool is_probability[1] = {false};
 public:
 
     Celltest_V_not_state_mparamFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);

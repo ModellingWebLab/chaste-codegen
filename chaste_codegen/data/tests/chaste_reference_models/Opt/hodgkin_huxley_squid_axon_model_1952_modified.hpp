@@ -33,6 +33,9 @@ class Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLOpt : public Ab
     //
 
 
+private:
+const bool is_concentration[4] = {false, false, false, false};
+const bool is_probability[4] = {false, false, false, false};
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

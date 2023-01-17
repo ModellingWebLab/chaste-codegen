@@ -35,6 +35,9 @@ class Dynamicmahajan_shiferaw_2008FromCellMLCvode : public AbstractCvodeCell, pu
     //
 
 
+private:
+const bool is_concentration[26] = {false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, true, true, true, true, false, false};
+const bool is_probability[26] = {false, false, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

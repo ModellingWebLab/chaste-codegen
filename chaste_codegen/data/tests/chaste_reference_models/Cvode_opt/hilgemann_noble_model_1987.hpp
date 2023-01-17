@@ -34,6 +34,9 @@ class Cellhilgemann_noble_model_1987FromCellMLCvodeOpt : public AbstractCvodeCel
     //
 
 
+private:
+const bool is_concentration[15] = {false, true, false, false, false, false, false, false, true, true, true, false, true, false, false};
+const bool is_probability[15] = {false, false, true, true, true, true, false, false, false, false, false, false, false, false, false};
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

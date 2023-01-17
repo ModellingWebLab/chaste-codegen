@@ -33,6 +33,9 @@ class Cellluo_rudy_1994FromCellML : public AbstractCardiacCell
     //
 
 
+private:
+const bool is_concentration[12] = {false, true, false, false, false, false, false, false, true, true, true, true};
+const bool is_probability[12] = {false, false, false, false, true, false, false, false, false, false, false, false};
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

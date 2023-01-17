@@ -34,6 +34,9 @@ class Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLCvode : p
     //
 
 
+private:
+const bool is_concentration[18] = {false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false};
+const bool is_probability[18] = {false, false, true, true, true, true, true, true, true, false, false, false, true, false, false, false, false, false};
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
