@@ -1,3 +1,6 @@
+# Release 0.10.0
+- Added checks to the resulting C++ code that will throw an error if concentrations go below 0, or if probabilities ere below 0 or above 1. Concetrations and probabilities are identified via existing metadata in the CellML.
+
 # Release 0.9.12
 - Added checks to the resulting C++ code, for state variables becoming INF or NAN.
 
