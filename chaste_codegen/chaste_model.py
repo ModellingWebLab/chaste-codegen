@@ -101,7 +101,7 @@ class ChasteModel(object):
         self._pre_print_hook()
         self._add_printers()
         self._formatted_state_vars, self._use_verify_state_variables = self._format_state_variables()
-        
+
         # dict of variables to pass to the jinja2 templates
         self._vars_for_template = \
             {'base_class': '',
