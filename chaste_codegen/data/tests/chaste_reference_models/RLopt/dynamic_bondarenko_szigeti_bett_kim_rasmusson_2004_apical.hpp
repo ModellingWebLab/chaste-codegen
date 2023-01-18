@@ -36,6 +36,9 @@ class Dynamicbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLRushLars
 private:
     static AbstractRushLarsenCardiacCell* CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus);
     static bool registered;
+private:
+const bool is_concentration[41] = {false, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false};
+const bool is_probability[41] = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

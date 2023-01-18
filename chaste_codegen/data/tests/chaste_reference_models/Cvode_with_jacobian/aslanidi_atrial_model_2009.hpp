@@ -34,6 +34,9 @@ class Cellaslanidi_atrial_model_2009FromCellMLCvode : public AbstractCvodeCell
     //
 
 
+private:
+const bool is_concentration[29] = {false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, true, false, false, false, false, false, false};
+const bool is_probability[29] = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

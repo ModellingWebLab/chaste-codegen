@@ -34,6 +34,9 @@ class Cellfaber_rudy_2000FromCellMLCvode : public AbstractCvodeCell
     //
 
 
+private:
+const bool is_concentration[25] = {false, true, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, true, true};
+const bool is_probability[25] = {false, false, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

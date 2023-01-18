@@ -33,6 +33,9 @@ class Celltest_V_not_state_derived_quantFromCellML : public AbstractCardiacCell
     //
 
 
+private:
+const bool is_concentration[1] = {false};
+const bool is_probability[1] = {false};
 public:
 
     Celltest_V_not_state_derived_quantFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);

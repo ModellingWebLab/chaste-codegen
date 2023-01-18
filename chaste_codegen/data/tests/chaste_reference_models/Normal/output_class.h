@@ -36,6 +36,9 @@ class Chaste_CG : public AbstractCardiacCell, public AbstractDynamicallyLoadable
 private:
     static AbstractCardiacCell* CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus);
     static bool registered;
+private:
+const bool is_concentration[22] = {false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, false, true, false, false};
+const bool is_probability[22] = {false, false, false, false, false, true, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false};
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

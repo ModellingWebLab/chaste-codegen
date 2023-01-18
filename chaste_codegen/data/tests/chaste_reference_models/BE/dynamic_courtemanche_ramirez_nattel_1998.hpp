@@ -36,6 +36,9 @@ class Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler : public Ab
 private:
     static AbstractBackwardEulerCardiacCell<8>* CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus);
     static bool registered;
+private:
+const bool is_concentration[21] = {false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, false};
+const bool is_probability[21] = {false, false, true, true, true, false, false, false, false, false, false, true, true, true, false, false, false, false, false, false, false};
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

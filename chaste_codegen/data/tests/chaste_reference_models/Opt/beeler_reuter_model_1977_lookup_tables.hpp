@@ -33,6 +33,9 @@ class Cellbeeler_reuter_model_1977FromCellMLOpt : public AbstractCardiacCell
     //
 
 
+private:
+const bool is_concentration[8] = {false, true, false, false, false, false, false, false};
+const bool is_probability[8] = {false, false, true, true, true, true, true, false};
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

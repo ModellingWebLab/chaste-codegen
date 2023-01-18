@@ -33,6 +33,9 @@ class Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler : public Abstrac
     //
 
 
+private:
+const bool is_concentration[7] = {false, false, false, false, false, false, false};
+const bool is_probability[7] = {false, false, false, false, false, false, false};
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

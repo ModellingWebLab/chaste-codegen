@@ -33,6 +33,9 @@ class Celltest_piecewises_beFromCellMLBackwardEuler : public AbstractBackwardEul
     //
 
 
+private:
+const bool is_concentration[4] = {false, false, false, false};
+const bool is_probability[4] = {false, false, false, false};
 public:
 
     Celltest_piecewises_beFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);

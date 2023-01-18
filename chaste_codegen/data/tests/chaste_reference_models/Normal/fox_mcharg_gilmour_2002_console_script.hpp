@@ -33,6 +33,9 @@ class Cellfox_mcharg_gilmour_2002FromCellML : public AbstractCardiacCell
     //
 
 
+private:
+const bool is_concentration[13] = {false, true, false, false, false, false, false, false, false, false, false, false, true};
+const bool is_probability[13] = {false, false, true, true, true, false, false, false, false, true, true, true, false};
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

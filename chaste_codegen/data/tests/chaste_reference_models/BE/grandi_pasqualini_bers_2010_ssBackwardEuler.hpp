@@ -35,6 +35,9 @@ class Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler : public Abstrac
 private:
     static AbstractBackwardEulerCardiacCell<27>* CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus);
     static bool registered;
+private:
+const bool is_concentration[39] = {false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, true, true};
+const bool is_probability[39] = {false, false, true, true, true, false, false, false, false, false, false, true, true, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();

@@ -8,10 +8,10 @@
          * For 99.999% of paces 10*this->mAbsTol is fine,
          * but unfortunately 100x seems to be required on rare occasions for upstrokes.
          * This sounds bad, but is probably typically only 1e-5 or 1e-6.
-         */
-        const double tol = 100*this->mAbsTol;{% endif %}
+         */{% endif %}
+        const double tol = 100*this->mAbsTol;
         {{vector_decl}} rY = rGetStateVariables();
-        {% if use_verify_state_variables %}{% for state_var in state_vars %}
+        {%- if use_verify_state_variables %}{% for state_var in state_vars %}
         {%- if state_var.range_low != '' or  state_var.range_high != '' %}double {{ state_var.var }} = {{state_var.rY_lookup}};
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}
@@ -21,15 +21,31 @@
             EXCEPTION(DumpState("State variable {{ state_var.annotated_var_name }} has gone out of range. Check numerical parameters, for example time and space stepsizes, and/or solver tolerances"));
         }
         {% endif %}{%- endfor %}{% endif %}
+        std::string error_message = "";
         {% for state_var in state_vars %}{%if loop.last%}
         for (unsigned i=0; i < {{state_vars|length}}; i++)
         {
-            if(std::isnan({{ state_var.rY_lookup|replace(loop.index0, "i")  }})){
-                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
+            if(std::isnan({{ state_var.rY_lookup|replace(loop.index0, "i") }})){
+                error_message += "State variable " + this->rGetStateVariableNames()[i] + " is not a number\n";
             }
-            if(std::isinf({{ state_var.rY_lookup|replace(loop.index0, "i")  }})){
-                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE"));
+            if(std::isinf({{ state_var.rY_lookup|replace(loop.index0, "i") }})){
+                error_message += "State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE\n";
+            }
+            if(this->is_concentration[i] && {{ state_var.rY_lookup|replace(loop.index0, "i") }} < -tol)
+            {
+                error_message += "Concentration " + this->rGetStateVariableNames()[i] + " below 0\n";
+            }
+            if(this->is_probability[i] && {{ state_var.rY_lookup|replace(loop.index0, "i")}} < -tol)
+            {
+                error_message += "Probability " + this->rGetStateVariableNames()[i] + " below 0\n";
+            }
+            if(this->is_probability[i] && {{ state_var.rY_lookup|replace(loop.index0, "i") }} > 1 + tol)
+            {
+                error_message += "Probability " + this->rGetStateVariableNames()[i] + " above 1\n";
             }
         }
         {%-endif%}{%- endfor %}
+        if (error_message != ""){
+            EXCEPTION(DumpState(error_message));
+        }
     }

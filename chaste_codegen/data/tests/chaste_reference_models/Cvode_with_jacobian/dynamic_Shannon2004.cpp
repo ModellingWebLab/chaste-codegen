@@ -110,17 +110,33 @@ bool Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode::registered = Mo
     void Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode::VerifyStateVariables()
     {
         
+        const double tol = 100*this->mAbsTol;
         N_Vector rY = rGetStateVariables();
-        
+        std::string error_message = "";
         
         for (unsigned i=0; i < 45; i++)
         {
             if(std::isnan(NV_Ith_S(rY, i))){
-                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " is not a number"));
+                error_message += "State variable " + this->rGetStateVariableNames()[i] + " is not a number\n";
             }
             if(std::isinf(NV_Ith_S(rY, i))){
-                EXCEPTION(DumpState("State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE"));
+                error_message += "State variable " + this->rGetStateVariableNames()[i] + " has become INFINITE\n";
             }
+            if(this->is_concentration[i] && NV_Ith_S(rY, i) < -tol)
+            {
+                error_message += "Concentration " + this->rGetStateVariableNames()[i] + " below 0\n";
+            }
+            if(this->is_probability[i] && NV_Ith_S(rY, i) < -tol)
+            {
+                error_message += "Probability " + this->rGetStateVariableNames()[i] + " below 0\n";
+            }
+            if(this->is_probability[i] && NV_Ith_S(rY, i) > 1 + tol)
+            {
+                error_message += "Probability " + this->rGetStateVariableNames()[i] + " above 1\n";
+            }
+        }
+        if (error_message != ""){
+            EXCEPTION(DumpState(error_message));
         }
     }
 

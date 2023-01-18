@@ -3,7 +3,7 @@ import time
 from sympy import Derivative, Float
 
 import chaste_codegen as cg
-from chaste_codegen._rdf import OXMETA, PYCMLMETA
+from chaste_codegen._rdf import OXMETA, PYCMLMETA, get_variables_transitively
 from chaste_codegen.model_with_conversions import (
     CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX,
     MEMBRANE_VOLTAGE_INDEX,
@@ -92,6 +92,10 @@ class ChasteModel(object):
         self._modifiable_parameters = sorted(self._model.modifiable_parameters,
                                              key=lambda v: self._model.get_display_name(v, OXMETA))
         self._modifiable_parameter_lookup = {p: str(i) for i, p in enumerate(self._modifiable_parameters)}
+
+        # store indices of concentrations & probabilities
+        self.concentrations = set(get_variables_transitively(self._model, (OXMETA, 'Concentration')))
+        self.probabilities = set(get_variables_transitively(self._model, (OXMETA, 'Probability')))
 
         # Printing
         self._pre_print_hook()
@@ -332,7 +336,9 @@ class ChasteModel(object):
               'range_low': get_range_annotation(var[1], 'range-low'),
               'range_high': get_range_annotation(var[1], 'range-high'),
               'sympy_var': var[1],
-              'state_var_index': self._state_vars.index(var[1])}
+              'state_var_index': self._state_vars.index(var[1]),
+              'is_concentration': var[1] in self.concentrations,
+              'is_probability': var[1] in self.probabilities}
              for var in enumerate(self._state_vars)]
 
         use_verify_state_variables = next(filter(lambda eq: eq['range_low'] != '' or eq['range_high'] != '',
