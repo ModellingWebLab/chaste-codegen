@@ -96,6 +96,10 @@ class ChasteModel(object):
         # store indices of concentrations & probabilities
         self.concentrations = set(get_variables_transitively(self._model, (OXMETA, 'Concentration')))
         self.probabilities = set(get_variables_transitively(self._model, (OXMETA, 'Probability')))
+        # known exception
+        if self._model.name.startswith('shannon_wang_puglisi_weber_bers_2004'):
+            self.probabilities = self.probabilities - \
+                set([model.get_variable_by_ontology_term((OXMETA, 'membrane_L_type_calcium_current_f_gate'))])
 
         # Printing
         self._pre_print_hook()
