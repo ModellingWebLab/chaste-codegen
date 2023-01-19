@@ -2,7 +2,7 @@
 //!
 //! This source file was generated from CellML by chaste_codegen version (version omitted as unimportant)
 //!
-//! Model: grandi_pasqualini_bers_2010
+//! Model: grandi_pasqualini_bers_2010_epi
 //!
 //! Processed by chaste_codegen: https://github.com/ModellingWebLab/chaste-codegen
 //!     (translator: chaste_codegen, model type: BackwardEuler)
@@ -1896,7 +1896,7 @@ bool Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler::registered = Mod
 template<>
 void OdeSystemInformation<Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler>::Initialise(void)
 {
-    this->mSystemName = "grandi_pasqualini_bers_2010";
+    this->mSystemName = "grandi_pasqualini_bers_2010_epi";
     this->mFreeVariableName = "time";
     this->mFreeVariableUnits = "msec";
 
