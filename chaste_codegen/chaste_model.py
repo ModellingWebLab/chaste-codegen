@@ -100,7 +100,8 @@ class ChasteModel(object):
         if self._model.name.startswith('shannon_wang_puglisi_weber_bers_2004') or \
                 self._model.name.startswith('shannon_2004'):
             self.probabilities = self.probabilities - \
-                set([model.get_variable_by_ontology_term((OXMETA, 'membrane_L_type_calcium_current_f_gate'))])
+                set([model.get_variable_by_ontology_term((OXMETA, 'membrane_L_type_calcium_current_f_gate')),
+                     model.get_variable_by_ontology_term((OXMETA, 'membrane_fast_sodium_current_h_gate'))])
 
         # Printing
         self._pre_print_hook()
