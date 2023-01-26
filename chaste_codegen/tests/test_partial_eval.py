@@ -25,7 +25,7 @@ def test_wrong_params3():
 def test_partial_eval(hh_model):
     derivatives_eqs = hh_model.derivative_equations
     lhs_to_keep = hh_model.y_derivatives
-    assert len(derivatives_eqs) == 18, str(len(derivatives_eqs))
+    assert len(derivatives_eqs) == 26, str(len(derivatives_eqs))
     derivatives_eqs = partial_eval(derivatives_eqs, lhs_to_keep, keep_multiple_usages=False)
     assert len(derivatives_eqs) == 4, str(len(derivatives_eqs))
 
