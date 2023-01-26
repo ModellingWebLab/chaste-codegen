@@ -1,6 +1,6 @@
-# Release 0.10.1
+# Release 0.10.2
 - Added checks to the resulting C++ code that will throw an error if concentrations go below 0, or if probabilities ere below 0 or above 1. Concetrations and probabilities are identified via existing metadata in the CellML.
-- Added an exception for the Shannon2004 (shannon_wang_puglisi_weber_bers_2004) model, to allow membrane_L_type_calcium_current_f_gate and membrane_fast_sodium_current_h_gate which are labelled as a probability to be outside the probability ranges.
+- Added an exception using the ontology annotation not_a_probability_even_though_it_should_be to indicate probabilities that should not be checked as they may go outside the 0 ... 1 tange.
 
 # Release 0.9.12
 - Added checks to the resulting C++ code, for state variables becoming INF or NAN.

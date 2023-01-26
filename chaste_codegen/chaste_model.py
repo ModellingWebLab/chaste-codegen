@@ -93,15 +93,14 @@ class ChasteModel(object):
                                              key=lambda v: self._model.get_display_name(v, OXMETA))
         self._modifiable_parameter_lookup = {p: str(i) for i, p in enumerate(self._modifiable_parameters)}
 
+        # retrieve probabilities that don't stay in 0 ... 1 range and shouldn't be checked
+        not_quite_probabilities = \
+            set(get_variables_transitively(self._model, (OXMETA, 'not_a_probability_even_though_it_should_be')))
+
         # store indices of concentrations & probabilities
         self.concentrations = set(get_variables_transitively(self._model, (OXMETA, 'Concentration')))
-        self.probabilities = set(get_variables_transitively(self._model, (OXMETA, 'Probability')))
-        # known exception
-        if self._model.name.startswith('shannon_wang_puglisi_weber_bers_2004') or \
-                self._model.name.startswith('shannon_2004'):
-            self.probabilities = self.probabilities - \
-                set([model.get_variable_by_ontology_term((OXMETA, 'membrane_L_type_calcium_current_f_gate')),
-                     model.get_variable_by_ontology_term((OXMETA, 'membrane_fast_sodium_current_h_gate'))])
+        self.probabilities = set(get_variables_transitively(self._model,
+                                                            (OXMETA, 'Probability'))) - not_quite_probabilities
 
         # Printing
         self._pre_print_hook()

@@ -279,7 +279,7 @@
         double var_chaste_interface__sodium_dynamics__Nai = NV_Ith_S(rY, 15);
         // Units: millimolar; Initial value: 10.9248496211574
         double var_chaste_interface__calcium_dynamics__Ca_SR = NV_Ith_S(rY, 16);
-        // Units: millimolar; Initial value: -0.2734234751931
+        // Units: millimolar; Initial value: 0.2734234751931
         double var_chaste_interface__calcium_dynamics__g = NV_Ith_S(rY, 17);
         // Units: dimensionless; Initial value: 0.999999981028517
 
@@ -692,7 +692,7 @@ void OdeSystemInformation<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersio
     // NV_Ith_S(rY, 16):
     this->mVariableNames.push_back("JSR_calcium_concentration");
     this->mVariableUnits.push_back("millimolar");
-    this->mInitialConditions.push_back(-0.2734234751931);
+    this->mInitialConditions.push_back(0.2734234751931);
 
     // NV_Ith_S(rY, 17):
     this->mVariableNames.push_back("calcium_dynamics__g");

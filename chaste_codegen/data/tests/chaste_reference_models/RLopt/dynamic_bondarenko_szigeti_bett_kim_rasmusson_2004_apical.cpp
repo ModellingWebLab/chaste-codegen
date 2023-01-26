@@ -581,7 +581,7 @@ std::shared_ptr<Dynamicbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCell
         const double var_chaste_interface__membrane__stim_amplitude_converted = -80 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
         const double var_chaste_interface__membrane__stim_duration = 0.5; // millisecond
         const double var_chaste_interface__membrane__stim_period = 71.430000000000007; // millisecond
-        const double var_chaste_interface__membrane__stim_start = 100; // millisecond
+        const double var_chaste_interface__membrane__stim_start = 0; // millisecond
         boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__membrane__stim_amplitude_converted),
                 var_chaste_interface__membrane__stim_duration,
