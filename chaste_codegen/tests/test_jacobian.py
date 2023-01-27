@@ -38,16 +38,16 @@ def test_get_jacobian_no_partial_eval(state_vars, derivatives_eqs):
 def test_get_jacobian(jacobian):
     jacobian_equations, jacobian_matrix = jacobian
     expected = open(os.path.join(TESTS_FOLDER, 'test_jacobian_equations_1.txt'), 'r').read()
-    expected_alt = open(os.path.join(TESTS_FOLDER, 'test_jacobian_equations_1.txt_alt'), 'r').read()
+    expected_python36 = open(os.path.join(TESTS_FOLDER, 'test_jacobian_equations_1.txt_python36'), 'r').read()
     # exclude x5 due to - sign difference between sympy 1.9 and 1.10
     eqs = [sp.Eq(*eq) for eq in jacobian_equations]
     required = [e.lhs for e in eqs if not str(e.lhs).endswith('x5')]
     part_eval_jacobian_equations = partial_eval(eqs, required, keep_multiple_usages=False)
 
-    assert str(part_eval_jacobian_equations) == expected or str(part_eval_jacobian_equations) == expected_alt
+    assert str(part_eval_jacobian_equations) == expected or str(part_eval_jacobian_equations) == expected_python36
     expected = open(os.path.join(TESTS_FOLDER, 'test_jacobian_matrix_1.txt'), 'r').read()
-    expected_alt = open(os.path.join(TESTS_FOLDER, 'test_jacobian_matrix_1.txt_alt'), 'r').read()
-    assert str(jacobian_matrix) == expected or str(jacobian_matrix) == expected_alt
+    expected_python36 = open(os.path.join(TESTS_FOLDER, 'test_jacobian_matrix_1.txt_python36'), 'r').read()
+    assert str(jacobian_matrix) == expected or str(jacobian_matrix) == expected_python36
 
 
 def test_format_wrong_params1():
@@ -98,9 +98,9 @@ def test_format_jacobian(jacobian):
                 for jac in jacobian]
 
     expected = open(os.path.join(TESTS_FOLDER, 'test_jacobian_equations_2.txt'), 'r').read()
-    expected_alt = open(os.path.join(TESTS_FOLDER, 'test_jacobian_equations_2.txt_alt'), 'r').read()
-    assert str(equations) == expected or str(equations) == expected_alt
+    expected_python36 = open(os.path.join(TESTS_FOLDER, 'test_jacobian_equations_2.txt_python36'), 'r').read()
+    assert str(equations) == expected or str(equations) == expected_python36
 
     expected = open(os.path.join(TESTS_FOLDER, 'test_jacobian_matrix_2.txt'), 'r').read()
-    expected_alt = open(os.path.join(TESTS_FOLDER, 'test_jacobian_matrix_2.txt_alt'), 'r').read()
-    assert str(jacobian) == expected or str(jacobian) == expected_alt
+    expected_python36 = open(os.path.join(TESTS_FOLDER, 'test_jacobian_matrix_2.txt_python36'), 'r').read()
+    assert str(jacobian) == expected or str(jacobian) == expected_python36

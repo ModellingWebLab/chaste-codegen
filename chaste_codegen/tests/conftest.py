@@ -122,7 +122,7 @@ def compare_file_against_reference(reference_file, file):
     # Load reference file
     file = get_file_lines(file)
     reference = get_file_lines(reference_file)
-    alt_reference = reference_file + '_alt'
+    alt_reference = reference_file + '_python36'
     if file != reference and os.path.exists(alt_reference):
         reference = get_file_lines(alt_reference)
     assert file == reference, str(alt_reference)
