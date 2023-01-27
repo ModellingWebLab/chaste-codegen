@@ -43,6 +43,12 @@ def fr_model():
     return cache_model(model_name)
 
 
+@pytest.fixture(scope='session')
+def n_model():
+    model_name = os.path.join(CELLML_FOLDER, 'noble_model_1962.cellml')
+    return cache_model(model_name)
+
+
 def load_chaste_models(model_types=[], reference_folder='chaste_reference_models'):
     """ Load all models"""
 

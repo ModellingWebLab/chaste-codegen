@@ -24,6 +24,7 @@
 #include "MathsCustomFunctions.hpp"
 
 
+
 class Cellbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLBackwardEulerOpt_LookupTables : public AbstractLookupTableCollection
 {
 public:
@@ -696,7 +697,7 @@ std::shared_ptr<Cellbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLB
         const double var_chaste_interface__membrane__stim_amplitude_converted = -80 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
         const double var_chaste_interface__membrane__stim_duration = 0.5; // millisecond
         const double var_chaste_interface__membrane__stim_period = 71.430000000000007; // millisecond
-        const double var_chaste_interface__membrane__stim_start = 100; // millisecond
+        const double var_chaste_interface__membrane__stim_start = 0; // millisecond
         boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__membrane__stim_amplitude_converted),
                 var_chaste_interface__membrane__stim_duration,
@@ -784,7 +785,7 @@ std::shared_ptr<Cellbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLB
             EXCEPTION(DumpState(error_message));
         }
     }
-    
+
     double Cellbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLBackwardEulerOpt::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
