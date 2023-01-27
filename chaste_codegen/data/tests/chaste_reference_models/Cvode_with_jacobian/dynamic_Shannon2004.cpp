@@ -1784,7 +1784,7 @@ void OdeSystemInformation<Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLC
     this->mInitialConditions.push_back(6.99526086177479e-06);
 
     // NV_Ith_S(rY, 13):
-    this->mVariableNames.push_back("not_a_probability_even_though_it_should_be");
+    this->mVariableNames.push_back("membrane_L_type_calcium_current_f_gate");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.00067601563206);
 

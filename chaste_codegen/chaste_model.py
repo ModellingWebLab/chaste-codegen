@@ -1,9 +1,15 @@
 import time
 
+from cellmlmanip.rdf import create_rdf_node
 from sympy import Derivative, Float
 
 import chaste_codegen as cg
-from chaste_codegen._rdf import OXMETA, PYCMLMETA, get_variables_transitively
+from chaste_codegen._rdf import (
+    OXMETA,
+    PRED_IS,
+    PYCMLMETA,
+    get_variables_transitively,
+)
 from chaste_codegen.model_with_conversions import (
     CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX,
     MEMBRANE_VOLTAGE_INDEX,
@@ -65,6 +71,16 @@ class ChasteModel(object):
 
         self._model = model
 
+        # retrieve probabilities that don't stay in 0 ... 1 range and shouldn't be checked
+        not_quite_probabilities = \
+            set(get_variables_transitively(self._model, (OXMETA, 'not_a_probability_even_though_it_should_be')))
+
+        # remove not_a_probability_even_though_it_should_be annotation to prevent this being used for naming variables
+        for prob in not_quite_probabilities:
+            self._model.rdf.remove((prob.rdf_identity,
+                                    PRED_IS,
+                                    create_rdf_node((OXMETA, 'not_a_probability_even_though_it_should_be'))))
+
         self._stimulus_equations = self._get_stimulus()
         self.use_modifiers = kwargs.get('use_modifiers', False)
         self._modifiers = self._model.modifiers if self.use_modifiers else ()
@@ -92,10 +108,6 @@ class ChasteModel(object):
         self._modifiable_parameters = sorted(self._model.modifiable_parameters,
                                              key=lambda v: self._model.get_display_name(v, OXMETA))
         self._modifiable_parameter_lookup = {p: str(i) for i, p in enumerate(self._modifiable_parameters)}
-
-        # retrieve probabilities that don't stay in 0 ... 1 range and shouldn't be checked
-        not_quite_probabilities = \
-            set(get_variables_transitively(self._model, (OXMETA, 'not_a_probability_even_though_it_should_be')))
 
         # store indices of concentrations & probabilities
         self.concentrations = set(get_variables_transitively(self._model, (OXMETA, 'Concentration')))
