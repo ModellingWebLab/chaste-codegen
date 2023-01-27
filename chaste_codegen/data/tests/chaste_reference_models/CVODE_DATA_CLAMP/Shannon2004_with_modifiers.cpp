@@ -121,6 +121,8 @@ bool Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp::registere
                           mp_membrane_L_type_calcium_current_d_gate_modifier);
         this->AddModifier("membrane_L_type_calcium_current_fCa_gate",
                           mp_membrane_L_type_calcium_current_fCa_gate_modifier);
+        this->AddModifier("membrane_L_type_calcium_current_f_gate",
+                          mp_membrane_L_type_calcium_current_f_gate_modifier);
         this->AddModifier("membrane_L_type_calcium_current_f_gate_tau",
                           mp_membrane_L_type_calcium_current_f_gate_tau_modifier);
         this->AddModifier("membrane_background_calcium_current",
@@ -181,8 +183,6 @@ bool Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp::registere
                           mp_membrane_sodium_calcium_exchanger_current_conductance_modifier);
         this->AddModifier("membrane_voltage",
                           mp_membrane_voltage_modifier);
-        this->AddModifier("not_a_probability_even_though_it_should_be",
-                          mp_not_a_probability_even_though_it_should_be_modifier);
         this->AddModifier("potassium_reversal_potential",
                           mp_potassium_reversal_potential_modifier);
         this->AddModifier("submembrane_space_calcium_concentration",
@@ -481,7 +481,7 @@ bool Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp::registere
         // Units: dimensionless; Initial value: 0.994632857675454
         double var_chaste_interface__ICaL_d_gate__d = mp_membrane_L_type_calcium_current_d_gate_modifier->Calc(NV_Ith_S(rY, 12), var_chaste_interface__environment__time);
         // Units: dimensionless; Initial value: 6.99526086177479e-06
-        double var_chaste_interface__ICaL_f_gate__f = mp_not_a_probability_even_though_it_should_be_modifier->Calc(NV_Ith_S(rY, 13), var_chaste_interface__environment__time);
+        double var_chaste_interface__ICaL_f_gate__f = mp_membrane_L_type_calcium_current_f_gate_modifier->Calc(NV_Ith_S(rY, 13), var_chaste_interface__environment__time);
         // Units: dimensionless; Initial value: 1.00067601563206
         double var_chaste_interface__ICaL_fCa_gate__fCaB_SL = NV_Ith_S(rY, 14);
         // Units: dimensionless; Initial value: 0.0150193299768419
@@ -940,7 +940,7 @@ bool Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp::registere
         // Units: dimensionless; Initial value: 0.994632857675454
         double var_chaste_interface__ICaL_d_gate__d = mp_membrane_L_type_calcium_current_d_gate_modifier->Calc(NV_Ith_S(rY, 12), var_chaste_interface__environment__time);
         // Units: dimensionless; Initial value: 6.99526086177479e-06
-        double var_chaste_interface__ICaL_f_gate__f = mp_not_a_probability_even_though_it_should_be_modifier->Calc(NV_Ith_S(rY, 13), var_chaste_interface__environment__time);
+        double var_chaste_interface__ICaL_f_gate__f = mp_membrane_L_type_calcium_current_f_gate_modifier->Calc(NV_Ith_S(rY, 13), var_chaste_interface__environment__time);
         // Units: dimensionless; Initial value: 1.00067601563206
         double var_chaste_interface__ICaL_fCa_gate__fCaB_SL = NV_Ith_S(rY, 14);
         // Units: dimensionless; Initial value: 0.0150193299768419
@@ -1197,7 +1197,7 @@ void OdeSystemInformation<Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvod
     this->mInitialConditions.push_back(6.99526086177479e-06);
 
     // NV_Ith_S(rY, 13):
-    this->mVariableNames.push_back("not_a_probability_even_though_it_should_be");
+    this->mVariableNames.push_back("membrane_L_type_calcium_current_f_gate");
     this->mVariableUnits.push_back("dimensionless");
     this->mInitialConditions.push_back(1.00067601563206);
 

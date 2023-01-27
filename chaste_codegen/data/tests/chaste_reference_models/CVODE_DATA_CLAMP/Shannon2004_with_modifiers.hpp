@@ -59,6 +59,7 @@ class Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp : public 
     boost::shared_ptr<AbstractModifier> mp_membrane_L_type_calcium_current_conductance_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_L_type_calcium_current_d_gate_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_L_type_calcium_current_fCa_gate_modifier;
+    boost::shared_ptr<AbstractModifier> mp_membrane_L_type_calcium_current_f_gate_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_L_type_calcium_current_f_gate_tau_modifier;
     boost::shared_ptr<AbstractModifier> mp_ICab__i_Cab_modifier;
     boost::shared_ptr<AbstractModifier> mp_IClb__i_Clb_modifier;
@@ -89,7 +90,6 @@ class Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp : public 
     boost::shared_ptr<AbstractModifier> mp_INaCa__i_NaCa_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_sodium_calcium_exchanger_current_conductance_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_voltage_modifier;
-    boost::shared_ptr<AbstractModifier> mp_not_a_probability_even_though_it_should_be_modifier;
     boost::shared_ptr<AbstractModifier> mp_potassium_reversal_potential_modifier;
     boost::shared_ptr<AbstractModifier> mp_submembrane_space_calcium_concentration_modifier;
     boost::shared_ptr<AbstractModifier> mp_submembrane_space_sodium_concentration_modifier;
