@@ -43,6 +43,12 @@ def fr_model():
     return cache_model(model_name)
 
 
+@pytest.fixture(scope='session')
+def n_model():
+    model_name = os.path.join(CELLML_FOLDER, 'noble_model_1962.cellml')
+    return cache_model(model_name)
+
+
 def load_chaste_models(model_types=[], reference_folder='chaste_reference_models'):
     """ Load all models"""
 
@@ -116,7 +122,7 @@ def compare_file_against_reference(reference_file, file):
     # Load reference file
     file = get_file_lines(file)
     reference = get_file_lines(reference_file)
-    alt_reference = reference_file + '_alt'
+    alt_reference = reference_file + '_python36'
     if file != reference and os.path.exists(alt_reference):
         reference = get_file_lines(alt_reference)
     assert file == reference, str(alt_reference)

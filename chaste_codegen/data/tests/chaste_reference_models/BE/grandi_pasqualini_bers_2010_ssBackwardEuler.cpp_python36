@@ -2,7 +2,7 @@
 //!
 //! This source file was generated from CellML by chaste_codegen version (version omitted as unimportant)
 //!
-//! Model: grandi_pasqualini_bers_2010
+//! Model: grandi_pasqualini_bers_2010_epi
 //!
 //! Processed by chaste_codegen: https://github.com/ModellingWebLab/chaste-codegen
 //!     (translator: chaste_codegen, model type: BackwardEuler)
@@ -22,6 +22,7 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+
 #include "ModelFactory.hpp"
 
 AbstractBackwardEulerCardiacCell<27>* Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
@@ -129,7 +130,7 @@ bool Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler::registered = Mod
             EXCEPTION(DumpState(error_message));
         }
     }
-    
+
     double Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,
@@ -1901,7 +1902,7 @@ bool Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler::registered = Mod
 template<>
 void OdeSystemInformation<Cellgrandi_pasqualini_bers_2010_ssFromCellMLBackwardEuler>::Initialise(void)
 {
-    this->mSystemName = "grandi_pasqualini_bers_2010";
+    this->mSystemName = "grandi_pasqualini_bers_2010_epi";
     this->mFreeVariableName = "time";
     this->mFreeVariableUnits = "msec";
 

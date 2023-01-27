@@ -143,7 +143,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__membrane__V) {
-                    return (((var_chaste_interface__membrane__V >= -65.000000999999997) && (var_chaste_interface__membrane__V <= -64.999999000000003)) ? (1.0000000000287556e-8 / (-1 + exp(1.0000000000287557e-7)) + 499999.99998562218 * (65.000000999999997 + var_chaste_interface__membrane__V) * (-1.0000000000287556e-8 / (-1 + exp(1.0000000000287557e-7)) - 1.0000000000287556e-8 / (-1 + exp(-1.0000000000287557e-7)))) : (-0.01 * (65 + var_chaste_interface__membrane__V) / (-1 + exp(-6.5 - 0.10000000000000001 * var_chaste_interface__membrane__V))));
+                    return (((6.5 + 0.10000000000000001 * var_chaste_interface__membrane__V >= -9.9999999999999995e-8) && (6.5 + 0.10000000000000001 * var_chaste_interface__membrane__V <= 9.9999999999999995e-8)) ? (0.42499999999999999 + 0.0050000000000000001 * var_chaste_interface__membrane__V) : (-0.099999999999999992 * (6.5 + 0.10000000000000001 * var_chaste_interface__membrane__V) / (-1 + exp(-6.5 - 0.10000000000000001 * var_chaste_interface__membrane__V))));
                 };
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__membrane__V);
@@ -198,7 +198,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__membrane__V) {
-                    return (((var_chaste_interface__membrane__V >= -50.000000999999997) && (var_chaste_interface__membrane__V <= -49.999999000000003)) ? (1.0000000000287557e-7 / (-1 + exp(1.0000000000287557e-7)) + 499999.99998562218 * (50.000000999999997 + var_chaste_interface__membrane__V) * (-1.0000000000287557e-7 / (-1 + exp(1.0000000000287557e-7)) - 1.0000000000287557e-7 / (-1 + exp(-1.0000000000287557e-7)))) : (-0.10000000000000001 * (50 + var_chaste_interface__membrane__V) / (-1 + exp(-5 - 0.10000000000000001 * var_chaste_interface__membrane__V))));
+                    return (((5 + 0.10000000000000001 * var_chaste_interface__membrane__V >= -9.9999999999999995e-8) && (5 + 0.10000000000000001 * var_chaste_interface__membrane__V <= 9.9999999999999995e-8)) ? (3.5 + 0.050000000000000003 * var_chaste_interface__membrane__V) : (-(5 + 0.10000000000000001 * var_chaste_interface__membrane__V) / (-1 + exp(-5 - 0.10000000000000001 * var_chaste_interface__membrane__V))));
                 };
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__membrane__V);

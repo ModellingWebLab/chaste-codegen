@@ -1,9 +1,15 @@
 import time
 
+from cellmlmanip.rdf import create_rdf_node
 from sympy import Derivative, Float
 
 import chaste_codegen as cg
-from chaste_codegen._rdf import OXMETA, PYCMLMETA, get_variables_transitively
+from chaste_codegen._rdf import (
+    OXMETA,
+    PRED_IS,
+    PYCMLMETA,
+    get_variables_transitively,
+)
 from chaste_codegen.model_with_conversions import (
     CYTOSOLIC_CALCIUM_CONCENTRATION_INDEX,
     MEMBRANE_VOLTAGE_INDEX,
@@ -65,6 +71,16 @@ class ChasteModel(object):
 
         self._model = model
 
+        # retrieve probabilities that don't stay in 0 ... 1 range and shouldn't be checked
+        not_quite_probabilities = \
+            set(get_variables_transitively(self._model, (OXMETA, 'not_a_probability_even_though_it_should_be')))
+
+        # remove not_a_probability_even_though_it_should_be annotation to prevent this being used for naming variables
+        for prob in not_quite_probabilities:
+            self._model.rdf.remove((prob.rdf_identity,
+                                    PRED_IS,
+                                    create_rdf_node((OXMETA, 'not_a_probability_even_though_it_should_be'))))
+
         self._stimulus_equations = self._get_stimulus()
         self.use_modifiers = kwargs.get('use_modifiers', False)
         self._modifiers = self._model.modifiers if self.use_modifiers else ()
@@ -95,13 +111,8 @@ class ChasteModel(object):
 
         # store indices of concentrations & probabilities
         self.concentrations = set(get_variables_transitively(self._model, (OXMETA, 'Concentration')))
-        self.probabilities = set(get_variables_transitively(self._model, (OXMETA, 'Probability')))
-        # known exception
-        if self._model.name.startswith('shannon_wang_puglisi_weber_bers_2004') or \
-                self._model.name.startswith('shannon_2004'):
-            self.probabilities = self.probabilities - \
-                set([model.get_variable_by_ontology_term((OXMETA, 'membrane_L_type_calcium_current_f_gate')),
-                     model.get_variable_by_ontology_term((OXMETA, 'membrane_fast_sodium_current_h_gate'))])
+        self.probabilities = set(get_variables_transitively(self._model,
+                                                            (OXMETA, 'Probability'))) - not_quite_probabilities
 
         # Printing
         self._pre_print_hook()

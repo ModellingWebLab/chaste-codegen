@@ -164,14 +164,22 @@
 
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
-        const double var_potassium_channel_n_gate__alpha_n = (((var_chaste_interface__membrane__V >= -65.000000999999997) && (var_chaste_interface__membrane__V <= -64.999999000000003)) ? (1.0000000000287556e-8 / (-1 + exp(1.0000000000287557e-7)) + 499999.99998562218 * (65.000000999999997 + var_chaste_interface__membrane__V) * (-1.0000000000287556e-8 / (-1 + exp(1.0000000000287557e-7)) - 1.0000000000287556e-8 / (-1 + exp(-1.0000000000287557e-7)))) : (-0.01 * (65 + var_chaste_interface__membrane__V) / (-1 + exp(-6.5 - 0.10000000000000001 * var_chaste_interface__membrane__V)))); // per_millisecond
+        const double var_potassium_channel_n_gate__B = -0.10000000000000001; // per_millivolt
+        const double var_potassium_channel_n_gate__A = -0.01 / var_potassium_channel_n_gate__B; // per_millisecond
         const double var_potassium_channel_n_gate__beta_n = 0.125 * exp(0.9375 + 0.012500000000000001 * var_chaste_interface__membrane__V); // per_millisecond
+        const double var_potassium_channel_n_gate__v0 = -65; // millivolt
+        const double var_potassium_channel_n_gate__U = (-var_potassium_channel_n_gate__v0 + var_chaste_interface__membrane__V) * var_potassium_channel_n_gate__B; // dimensionless
+        const double var_potassium_channel_n_gate__alpha_n = (((var_potassium_channel_n_gate__U >= -9.9999999999999995e-8) && (var_potassium_channel_n_gate__U <= 9.9999999999999995e-8)) ? ((1 - 0.5 * var_potassium_channel_n_gate__U) * var_potassium_channel_n_gate__A) : (var_potassium_channel_n_gate__A * var_potassium_channel_n_gate__U / (-1 + exp(var_potassium_channel_n_gate__U)))); // per_millisecond
         const double d_dt_chaste_interface_var_potassium_channel_n_gate__n = (1 - var_chaste_interface__potassium_channel_n_gate__n) * var_potassium_channel_n_gate__alpha_n - var_potassium_channel_n_gate__beta_n * var_chaste_interface__potassium_channel_n_gate__n; // 1 / millisecond
         const double var_sodium_channel_h_gate__alpha_h = 0.070000000000000007 * exp(-3.75 - 0.050000000000000003 * var_chaste_interface__membrane__V); // per_millisecond
         const double var_sodium_channel_h_gate__beta_h = 1 / (1 + exp(-4.5 - 0.10000000000000001 * var_chaste_interface__membrane__V)); // per_millisecond
         const double d_dt_chaste_interface_var_sodium_channel_h_gate__h = (1 - var_chaste_interface__sodium_channel_h_gate__h) * var_sodium_channel_h_gate__alpha_h - var_sodium_channel_h_gate__beta_h * var_chaste_interface__sodium_channel_h_gate__h; // 1 / millisecond
-        const double var_sodium_channel_m_gate__alpha_m = (((var_chaste_interface__membrane__V >= -50.000000999999997) && (var_chaste_interface__membrane__V <= -49.999999000000003)) ? (1.0000000000287557e-7 / (-1 + exp(1.0000000000287557e-7)) + 499999.99998562218 * (50.000000999999997 + var_chaste_interface__membrane__V) * (-1.0000000000287557e-7 / (-1 + exp(1.0000000000287557e-7)) - 1.0000000000287557e-7 / (-1 + exp(-1.0000000000287557e-7)))) : (-0.10000000000000001 * (50 + var_chaste_interface__membrane__V) / (-1 + exp(-5 - 0.10000000000000001 * var_chaste_interface__membrane__V)))); // per_millisecond
+        const double var_sodium_channel_m_gate__B = -0.10000000000000001; // per_millivolt
+        const double var_sodium_channel_m_gate__A = -0.10000000000000001 / var_sodium_channel_m_gate__B; // per_millisecond
         const double var_sodium_channel_m_gate__beta_m = 4 * exp(-4.166666666666667 - 0.055555555555555552 * var_chaste_interface__membrane__V); // per_millisecond
+        const double var_sodium_channel_m_gate__v0 = -50; // millivolt
+        const double var_sodium_channel_m_gate__U = (-var_sodium_channel_m_gate__v0 + var_chaste_interface__membrane__V) * var_sodium_channel_m_gate__B; // dimensionless
+        const double var_sodium_channel_m_gate__alpha_m = (((var_sodium_channel_m_gate__U >= -9.9999999999999995e-8) && (var_sodium_channel_m_gate__U <= 9.9999999999999995e-8)) ? ((1 - 0.5 * var_sodium_channel_m_gate__U) * var_sodium_channel_m_gate__A) : (var_sodium_channel_m_gate__A * var_sodium_channel_m_gate__U / (-1 + exp(var_sodium_channel_m_gate__U)))); // per_millisecond
         const double d_dt_chaste_interface_var_sodium_channel_m_gate__m = (1 - var_chaste_interface__sodium_channel_m_gate__m) * var_sodium_channel_m_gate__alpha_m - var_sodium_channel_m_gate__beta_m * var_chaste_interface__sodium_channel_m_gate__m; // 1 / millisecond
 
         if (mSetVoltageDerivativeToZero)

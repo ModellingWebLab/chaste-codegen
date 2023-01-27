@@ -139,7 +139,7 @@ bool Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode::registered = Mo
             EXCEPTION(DumpState(error_message));
         }
     }
-    
+
     double Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode::GetIIonic(const std::vector<double>* pStateVariables)
     {
         // For state variable interpolation (SVI) we read in interpolated state variables,

@@ -59,7 +59,6 @@ class Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp : public 
     boost::shared_ptr<AbstractModifier> mp_membrane_L_type_calcium_current_conductance_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_L_type_calcium_current_d_gate_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_L_type_calcium_current_fCa_gate_modifier;
-    boost::shared_ptr<AbstractModifier> mp_membrane_L_type_calcium_current_f_gate_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_L_type_calcium_current_f_gate_tau_modifier;
     boost::shared_ptr<AbstractModifier> mp_ICab__i_Cab_modifier;
     boost::shared_ptr<AbstractModifier> mp_IClb__i_Clb_modifier;
@@ -90,6 +89,7 @@ class Cellshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp : public 
     boost::shared_ptr<AbstractModifier> mp_INaCa__i_NaCa_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_sodium_calcium_exchanger_current_conductance_modifier;
     boost::shared_ptr<AbstractModifier> mp_membrane_voltage_modifier;
+    boost::shared_ptr<AbstractModifier> mp_membrane_L_type_calcium_current_f_gate_modifier;
     boost::shared_ptr<AbstractModifier> mp_potassium_reversal_potential_modifier;
     boost::shared_ptr<AbstractModifier> mp_submembrane_space_calcium_concentration_modifier;
     boost::shared_ptr<AbstractModifier> mp_submembrane_space_sodium_concentration_modifier;
@@ -100,7 +100,7 @@ private:
     static bool registered;
 private:
 const bool is_concentration[45] = {false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
-const bool is_probability[45] = {false, false, false, true, true, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
+const bool is_probability[45] = {false, false, true, true, true, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 public:
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
