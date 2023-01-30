@@ -10,7 +10,7 @@ from sympy import (
 from chaste_codegen._jacobian import format_jacobian, get_jacobian
 from chaste_codegen._linearity_check import get_non_linear_state_vars, subst_deriv_eqs_non_linear_vars
 from chaste_codegen._partial_eval import partial_eval
-from chaste_codegen._rdf import OXMETA
+from chaste_codegen._rdf import OXMETA, get_MultipleUsesAllowed_tags
 from chaste_codegen.chaste_model import ChasteModel, get_variable_name
 from chaste_codegen.model_with_conversions import get_equations_for
 
@@ -110,8 +110,10 @@ class BackwardEulerModel(ChasteModel):
                                                             partial(get_equations_for, self._model))
 
         # sort the linear derivatives
-        linear_derivs = sorted([eq for eq in linear_derivs_eqs if isinstance(eq.lhs, Derivative)],
-                               key=lambda d: self._model.get_display_name(d.lhs.args[0], OXMETA))
+        linear_derivs = sorted(
+            [eq for eq in linear_derivs_eqs if isinstance(eq.lhs, Derivative)],
+            key=lambda d: self._model.get_display_name(d.lhs.args[0], OXMETA, get_MultipleUsesAllowed_tags())
+        )
         rearranged_expr = [(rearrange_expr(piecewise_fold(d.rhs), d.lhs.args[0]), d.lhs.args[0]) for d in linear_derivs]
         formatted_expr = [{'state_var_index': self._state_vars.index(var),
                            'var': var,

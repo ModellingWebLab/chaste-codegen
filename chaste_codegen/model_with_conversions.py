@@ -18,7 +18,12 @@ from sympy import (
 from chaste_codegen import LOGGER, CodegenError
 from chaste_codegen._math_functions import MATH_FUNC_SYMPY_MAPPING
 from chaste_codegen._optimize import optimize_expr_for_c_output
-from chaste_codegen._rdf import OXMETA, PYCMLMETA, get_variables_transitively
+from chaste_codegen._rdf import (
+    OXMETA,
+    PYCMLMETA,
+    get_MultipleUsesAllowed_tags,
+    get_variables_transitively,
+)
 
 
 MEMBRANE_VOLTAGE_INDEX = 0  # default index for voltage in state vector
@@ -363,8 +368,8 @@ def _get_modifiers(model):
     modifiers = set(filter(lambda m: m not in (model.membrane_stimulus_current_orig, model.time_variable) and
                            model.has_ontology_annotation(m, OXMETA), model.variables()))
     modifiers -= model.stimulus_params
-    return tuple(sorted(modifiers, key=lambda m: model.get_display_name(m, OXMETA))), \
-        {m: model.get_display_name(m, OXMETA) for m in modifiers}
+    return tuple(sorted(modifiers, key=lambda m: model.get_display_name(m, OXMETA, get_MultipleUsesAllowed_tags()))), \
+        {m: model.get_display_name(m, OXMETA, get_MultipleUsesAllowed_tags()) for m in modifiers}
 
 
 def _get_y_derivatives(model):

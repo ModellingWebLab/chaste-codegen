@@ -11,6 +11,7 @@ from chaste_codegen import MODULE_DIR, CodegenError
 
 
 _ONTOLOGY = None  # The 'oxmeta' ontology graph
+_MULTI_USES_ALLOWED_TAGS = None
 
 PYCMLMETA = 'https://chaste.comlab.ox.ac.uk/cellml/ns/pycml#'
 OXMETA = 'https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#'
@@ -18,6 +19,16 @@ BQBIOL = 'http://biomodels.net/biology-qualifiers/'
 
 PRED_IS = create_rdf_node((BQBIOL, 'is'))
 PRED_IS_VERSION_OF = create_rdf_node((BQBIOL, 'isVersionOf'))
+
+
+def _load_ontoloty():
+    global _ONTOLOGY
+
+    if _ONTOLOGY is None:
+        # Load oxmeta ontology
+        _ONTOLOGY = rdflib.Graph()
+        ttl_file = os.path.join(MODULE_DIR, 'ontologies', 'oxford-metadata.ttl')
+        _ONTOLOGY.parse(ttl_file, format='turtle')
 
 
 def get_variables_transitively(model, term):
@@ -47,12 +58,7 @@ def get_variables_transitively(model, term):
     assert isinstance(model, Model), "Expecting model to be a cellmlmanip Model"
 
     global _ONTOLOGY
-
-    if _ONTOLOGY is None:
-        # Load oxmeta ontology
-        _ONTOLOGY = rdflib.Graph()
-        ttl_file = os.path.join(MODULE_DIR, 'ontologies', 'oxford-metadata.ttl')
-        _ONTOLOGY.parse(ttl_file, format='turtle')
+    _load_ontoloty()
 
     term = create_rdf_node(term)
 
@@ -60,6 +66,7 @@ def get_variables_transitively(model, term):
     for annotation in _ONTOLOGY.transitive_subjects(rdflib.RDF.type, term):
         cmeta_ids.update(model.rdf.subjects(PRED_IS, annotation))
         cmeta_ids.update(model.rdf.subjects(PRED_IS_VERSION_OF, annotation))
+
     variables = []
     for cmeta_id in cmeta_ids:
         try:
@@ -69,3 +76,15 @@ def get_variables_transitively(model, term):
             raise CodegenError('Rdf subject %s does not refer to any existing variable in the model.' % cmeta_id)
     variables.sort(key=lambda sym: sym.order_added)
     return variables
+
+
+def get_MultipleUsesAllowed_tags():
+    global _MULTI_USES_ALLOWED_TAGS
+    if _MULTI_USES_ALLOWED_TAGS is None:
+        global _ONTOLOGY
+        _load_ontoloty()
+        _MULTI_USES_ALLOWED_TAGS = set(str(term).replace(OXMETA, '')
+                                       for term in _ONTOLOGY.subjects(rdflib.RDF.type,
+                                                                      create_rdf_node((OXMETA, 'MultipleUsesAllowed'))))
+
+    return _MULTI_USES_ALLOWED_TAGS
