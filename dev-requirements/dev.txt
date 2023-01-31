@@ -2,7 +2,7 @@ atomicwrites==1.4.0
 attrs==21.2.0
 bleach==3.3.0
 build==0.3.1.post1
-cellmlmanip==0.3.4
+cellmlmanip==0.3.6
 certifi==2022.12.7
 chardet==4.0.0
 codecov==2.1.11

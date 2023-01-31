@@ -1,13 +1,12 @@
 import time
 
-from cellmlmanip.rdf import create_rdf_node
 from sympy import Derivative, Float
 
 import chaste_codegen as cg
 from chaste_codegen._rdf import (
     OXMETA,
-    PRED_IS,
     PYCMLMETA,
+    get_MultipleUsesAllowed_tags,
     get_variables_transitively,
 )
 from chaste_codegen.model_with_conversions import (
@@ -75,12 +74,6 @@ class ChasteModel(object):
         not_quite_probabilities = \
             set(get_variables_transitively(self._model, (OXMETA, 'not_a_probability_even_though_it_should_be')))
 
-        # remove not_a_probability_even_though_it_should_be annotation to prevent this being used for naming variables
-        for prob in not_quite_probabilities:
-            self._model.rdf.remove((prob.rdf_identity,
-                                    PRED_IS,
-                                    create_rdf_node((OXMETA, 'not_a_probability_even_though_it_should_be'))))
-
         self._stimulus_equations = self._get_stimulus()
         self.use_modifiers = kwargs.get('use_modifiers', False)
         self._modifiers = self._model.modifiers if self.use_modifiers else ()
@@ -105,8 +98,10 @@ class ChasteModel(object):
         # the state variables, in similar order to pycml to prevent breaking existing code.
         self._state_vars = sorted(self._model.state_vars,
                                   key=lambda state_var: state_var_key_order(model, state_var))
-        self._modifiable_parameters = sorted(self._model.modifiable_parameters,
-                                             key=lambda v: self._model.get_display_name(v, OXMETA))
+        self._modifiable_parameters = sorted(
+            self._model.modifiable_parameters,
+            key=lambda v: self._model.get_display_name(v, OXMETA, get_MultipleUsesAllowed_tags())
+        )
         self._modifiable_parameter_lookup = {p: str(i) for i, p in enumerate(self._modifiable_parameters)}
 
         # store indices of concentrations & probabilities
@@ -217,7 +212,8 @@ class ChasteModel(object):
                                and self._model.has_ontology_annotation(q, OXMETA),
                                self._model.get_derived_quantities(sort=False)))
 
-        return sorted(tagged | annotated, key=lambda v: self._model.get_display_name(v, OXMETA))
+        return sorted(tagged | annotated,
+                      key=lambda v: self._model.get_display_name(v, OXMETA, get_MultipleUsesAllowed_tags()))
 
     def _get_derived_quant_eqs(self):
         """ Get the defining equations for derived quantities"""
@@ -265,7 +261,7 @@ class ChasteModel(object):
 
     def _format_modifier(self, var):
         """ Formatting of modifier for printing"""
-        return 'mp_' + self._model.get_display_name(var) + '_modifier'
+        return 'mp_' + self._model.get_display_name(var, OXMETA, get_MultipleUsesAllowed_tags()) + '_modifier'
 
     def _format_modifiers(self):
         """ Format the modifiers for printing to chaste code"""
@@ -281,7 +277,7 @@ class ChasteModel(object):
         """ Format the modifiable parameter for printing to chaste code"""
         return [{'units': self._model.units.format(self._model.units.evaluate_units(param)),
                  'comment_name': self._name_printer.doprint(param),
-                 'name': self._model.get_display_name(param, OXMETA),
+                 'name': self._model.get_display_name(param, OXMETA, get_MultipleUsesAllowed_tags()),
                  'initial_value': self._printer.doprint(self._get_initial_value(param))}
                 for param in self._modifiable_parameters]
 
@@ -339,7 +335,7 @@ class ChasteModel(object):
 
         formatted_state_vars = \
             [{'var': self._printer.doprint(var[1]),
-              'annotated_var_name': self._model.get_display_name(var[1], OXMETA),
+              'annotated_var_name': self._model.get_display_name(var[1], OXMETA, get_MultipleUsesAllowed_tags()),
               'rY_lookup': self._format_rY_lookup(var[0], var[1]),
               'rY_lookup_no_modifier': self._format_rY_lookup(var[0], var[1], use_modifier=False),
               'initial_value': str(self._get_initial_value(var[1])),
@@ -371,7 +367,9 @@ class ChasteModel(object):
                           'lhs_modifiable': eq.lhs in self._model.modifiable_parameters}
                          for eq in self._stimulus_equations]}
         for param in self._model.stimulus_params:
-            default_stim[self._model.get_display_name(param, OXMETA)] = self._printer.doprint(param)
+            default_stim[self._model.get_display_name(param,
+                                                      OXMETA,
+                                                      get_MultipleUsesAllowed_tags())] = self._printer.doprint(param)
 
         return default_stim
 
@@ -412,14 +410,14 @@ class ChasteModel(object):
 
     def _format_free_variable(self):
         """ Format free variable for chaste output"""
-        return {'name': self._model.get_display_name(self._model.time_variable, OXMETA),
+        return {'name': self._model.get_display_name(self._model.time_variable, OXMETA, get_MultipleUsesAllowed_tags()),
                 'units': self._model.units.format(self._model.units.evaluate_units(self._model.time_variable)),
                 'system_name': self._model.name,
                 'var_name': self._printer.doprint(self._model.time_variable)}
 
     def _format_system_info(self):
         """ Format general ode system info for chaste output"""
-        return [{'name': self._model.get_display_name(var[1], OXMETA),
+        return [{'name': self._model.get_display_name(var[1], OXMETA, get_MultipleUsesAllowed_tags()),
                  'initial_value': str(self._get_initial_value(var[1])),
                  'units': self._model.units.format(self._model.units.evaluate_units(var[1])),
                  'rY_lookup': self._format_rY_entry(var[0])}
@@ -441,7 +439,7 @@ class ChasteModel(object):
     def _format_derived_quant(self):
         return [{'units': self._model.units.format(self._model.units.evaluate_units(quant)),
                  'var': self._printer.doprint(quant),
-                 'name': self._model.get_display_name(quant, OXMETA)}
+                 'name': self._model.get_display_name(quant, OXMETA, get_MultipleUsesAllowed_tags())}
                 for quant in self._derived_quant]
 
     def _format_derived_quant_eqs(self):

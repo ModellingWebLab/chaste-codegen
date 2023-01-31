@@ -9,7 +9,7 @@ from sympy import (
 
 from chaste_codegen._jacobian import format_jacobian, get_jacobian
 from chaste_codegen._partial_eval import partial_eval
-from chaste_codegen._rdf import OXMETA
+from chaste_codegen._rdf import OXMETA, get_MultipleUsesAllowed_tags
 from chaste_codegen.chaste_model import ChasteModel
 
 
@@ -125,7 +125,7 @@ class CvodeChasteModel(ChasteModel):
             # Add membrane_data_clamp_current to modifiable parameters
             # (this was set in _get_modifiable_parameters as it's also needed in _get_derivative_equations)
             derived_quant.append(self._membrane_data_clamp_current)
-            derived_quant.sort(key=lambda q: self._model.get_display_name(q, OXMETA))
+            derived_quant.sort(key=lambda q: self._model.get_display_name(q, OXMETA, get_MultipleUsesAllowed_tags()))
         return derived_quant
 
     def _format_derivative_equations(self, derivative_equations):
