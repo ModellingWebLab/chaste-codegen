@@ -15,7 +15,7 @@ Updating Sympy or other python packages
 Sympy or any other python package may need to be updated, especially as python versions evolve. To update the version:
 - change the version listed in setup.py, e.g. for sympy it currently lists 'sympy>=1.9, <1.11', which means that the version is at least 1.9 and is less than 1.11.
 - update dev-requirements/dev.txt if you want to also update your development pinned (fixed) versions
-- create a new branch `git checkout -b <name_of_new_branc>`
+- create a new branch `git checkout -b <name_of_new_branch>`
 - `git add`, `git commit` and `git push` the changes
 - make a pull request. The tests may throw up some errors that may need fixing. The tests are in the tests folder and the reference data in data/tests. In data/tests/chaste_reference_models you'll see a few reference files ending in .cpp_python36, This is as due to sympy versions supported python 3.6 leads to an equivalent but subtly different generated model.
 - Mention the changes made in the release notes `release.txt`
