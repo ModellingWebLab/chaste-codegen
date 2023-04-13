@@ -38,7 +38,7 @@ Doing a new chaste_codegen release
 =================
 - Update the release version number in `chaste_codegen/version.txt`.
 - Update the release notes `release.txt` with the latest release number.
-- For this version number: minor numbers will be picked up by chaste automatically, for major version numbers, `chaste_codegene.txt` will need updating in the chaste repository.
+- For this version number: minor numbers will be picked up by chaste automatically, for major version numbers, `chaste_codegen.txt` will need updating in the chaste repository.
 - Follow the following tutorial to publish the package: https://packaging.python.org/en/latest/tutorials/packaging-projects/
 - You will need a login to pypi.org and the account you are using will need access to chaste_codegen.
 
