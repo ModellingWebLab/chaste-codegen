@@ -24,9 +24,9 @@ Sympy or any other python package may need to be updated, especially as python v
 Updating the ontology and including it in chaste_codegen
 =================
 - update the ontology according to the instructions in https://github.com/ModellingWebLab/ontologies
-- the ontology is included in chaste_codegen via a submodule, update this with `git submodule update chaste_codegen/ontologies --remote`. 
+- the ontology is included in chaste_codegen via a submodule, update this with `git submodule update --remote chaste_codegen/ontologies`. 
 - *Please note* this same way can be used to update the `cellml` in `chaste_codegen/data/tests/cellml` submodule if required.
-- create a new branch `git checkout -b <name_of_new_branc>`
+- create a new branch `git checkout -b <name_of_new_branch>`
 - `git add`, `git commit` and `git push` the changes
 - make a pull run the tests and fix any issues that arise
 - update the release notes `release.txt` with information about the updated ontology.
