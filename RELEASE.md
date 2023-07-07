@@ -1,6 +1,9 @@
 # Unreleased
 - Improved the developer documentation with regards to updating python packages, the ontology and releasing new versions of chaste_codegen.
 
+# Release 0.10.3
+- Updated ontology submodule (includes new `membrane_rapid_delayed_rectifier_potassium_current_open_probability`).
+
 # Release 0.10.2
 - Added checks to the resulting C++ code that will throw an error if concentrations go below 0, or if probabilities ere below 0 or above 1. Concetrations and probabilities are identified via existing metadata in the CellML.
 - Added an exception using the ontology annotation not_a_probability_even_though_it_should_be to indicate probabilities that should not be checked as they may go outside the 0 ... 1 range.
