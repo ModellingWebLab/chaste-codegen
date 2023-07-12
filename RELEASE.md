@@ -3,6 +3,8 @@
 
 # Release 0.10.3
 - Updated ontology submodule (includes new `membrane_rapid_delayed_rectifier_potassium_current_open_probability`).
+- Updated `requests` from 2.25.1 to 2.31.0 in /dev-requirements
+- Updated `mpmath` from 1.2.1 to 1.3.0 in /dev-requirements
 
 # Release 0.10.2
 - Added checks to the resulting C++ code that will throw an error if concentrations go below 0, or if probabilities ere below 0 or above 1. Concetrations and probabilities are identified via existing metadata in the CellML.
