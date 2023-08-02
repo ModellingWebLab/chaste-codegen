@@ -1,4 +1,4 @@
-# Unreleased
+# Release 0.10.4
 - Improved the developer documentation with regards to updating python packages, the ontology and releasing new versions of chaste_codegen.
 
 # Release 0.10.3
