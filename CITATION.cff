@@ -1,5 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
+type: article
 authors:
 
 - family-names: "Hendrix"
@@ -22,8 +23,9 @@ authors:
 - family-names: "Mirams"
   given-names: "Gary R."
 
-title: "chaste-codegen"
-version: 0.9.3
-doi: 10.5281/zenodo.5517000
-date-released: 2021-09-20
-url: "https://github.com/ModellingWebLab/chaste-codegen"
+title: "cellmlmanip and chaste_codegen: automatic CellML to C++ code generation with fixes for singularities and automatically generated Jacobians"
+journal: "Wellcome Open Research"
+year: 2022
+volume: 6
+start: 261
+doi: 10.12688/wellcomeopenres.17206.2
