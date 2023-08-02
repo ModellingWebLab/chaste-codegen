@@ -24,9 +24,9 @@ authors:
   orcid: "https://orcid.org/0000-0002-4569-4312"
 
 title: "chaste-codegen"
-version: 0.9.3
-doi: 10.5281/zenodo.5517000
-date-released: 2021-09-20
+version: 0.10.4
+doi: 10.5281/zenodo.8207994
+date-released: 2023-08-02
 url: "https://github.com/ModellingWebLab/chaste-codegen"
 
 preferred-citation:
