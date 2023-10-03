@@ -44,6 +44,6 @@ six==1.16.0
 sympy==1.9
 toml==0.10.2
 tqdm==4.60.0
-urllib3==1.26.5
+urllib3==1.26.17
 webencodings==0.5.1
 zipp==1.2.0
