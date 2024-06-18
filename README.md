@@ -32,7 +32,7 @@ chaste_codegen: error: the following arguments are required: cellml_file
 ```
 
 For more information about the available options call
-`chaste_codegen -h` or see the [CodeGenerationFromCellML guide](https://chaste.cs.ox.ac.uk/trac/wiki/ChasteGuides/CodeGenerationFromCellML) 
+`chaste_codegen -h` or see the [CodeGenerationFromCellML guide](https://chaste.github.io/docs/user-guides/code-generation-from-cellml/) 
 
 
 ## Release notes
