@@ -1,4 +1,3 @@
-import collections
 import os
 
 import pytest
@@ -91,10 +90,10 @@ def test_format_jacobian(jacobian):
     equations, jacobian = format_jacobian(jacobian_equations, sp.Matrix([jacobian_matrix]), ChastePrinter(),
                                           lambda x, y: str(x) + str(y))
     # order dictionary for printing
-    equations = [collections.OrderedDict([('lhs', eq['lhs']), ('rhs', eq['rhs']), ('sympy_lhs', eq['sympy_lhs'])])
+    equations = [dict([('lhs', eq['lhs']), ('rhs', eq['rhs']), ('sympy_lhs', eq['sympy_lhs'])])
                  for eq in equations]
     # order dictionary for printing
-    jacobian = [collections.OrderedDict([('i', jac['i']), ('j', jac['j']), ('entry', jac['entry'])])
+    jacobian = [dict([('i', jac['i']), ('j', jac['j']), ('entry', jac['entry'])])
                 for jac in jacobian]
 
     expected = open(os.path.join(TESTS_FOLDER, 'test_jacobian_equations_2.txt'), 'r').read()
