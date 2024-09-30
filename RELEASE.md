@@ -1,3 +1,19 @@
+# Release 0.10.5
+- Added support for Python 3.12.
+- Updated dependency versions:
+  - decorator>=4.4.2, <6
+  - importlib-metadata>=1.7, <8
+  - lxml>=4.6.5, <6
+  - MarkupSafe>=1.1.1, <3
+  - mpmath>=1.1.0, <2
+  - networkx>=2.4, <4
+  - packaging>=20.4, <24
+  - Pint>=0.9, <0.30
+  - pyparsing>=2.4.7, <4
+  - rdflib>=5.0.0, <8
+  - zipp>=1.2.0, <4
+  - Jinja2>=3.0.0, <4
+
 # Release 0.10.4
 - Improved the developer documentation with regards to updating python packages, the ontology and releasing new versions of chaste_codegen.
 
