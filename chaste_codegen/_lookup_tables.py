@@ -1,5 +1,3 @@
-import collections
-
 from cellmlmanip.model import Quantity, Variable
 from sympy import (
     Piecewise,
@@ -71,7 +69,7 @@ class LookupTables:
                                          'lookup_epxrs': []} for param in lookup_params)
         self._model = model
         self._lookup_variables = set()
-        self._lookup_table_expr = collections.OrderedDict()
+        self._lookup_table_expr = dict()
         self._lookup_params_processed, self._lookup_params_printed = False, False
 
         self._method_printed = None

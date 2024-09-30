@@ -3,7 +3,6 @@
 ######################################################################
 import argparse
 import os
-from collections import OrderedDict
 
 import chaste_codegen as cg
 from chaste_codegen import LOGGER, CodegenError, load_model_with_conversions
@@ -17,7 +16,7 @@ from chaste_codegen._script_utils import write_file
 
 # pass --<command_line_tag> to select this model type
 
-TRANSLATORS = OrderedDict(
+TRANSLATORS = dict(
     [('normal', (cg.NormalChasteModel, 'FromCellML', '', True, '')),
      ('cvode', (cg.CvodeChasteModel, 'FromCellMLCvode', 'Cvode', True, '')),
      ('cvode-data-clamp', (cg.CvodeChasteModel, 'FromCellMLCvodeDataClamp', 'CvodeDataClamp', True, '')),
@@ -29,7 +28,7 @@ TRANSLATORS = OrderedDict(
                               ' in mastrcriptRT with added injection current(i_inj)')),
      ('rush-larsen-c', (cg.RushLarsenC, '', '', False, ' in C with added injection current(i_inj)'))])
 
-TRANSLATORS_OPT = OrderedDict(
+TRANSLATORS_OPT = dict(
     [('normal', (cg.OptChasteModel, 'FromCellMLOpt', 'Opt', True, '')),
      ('cvode', (cg.OptCvodeChasteModel, 'FromCellMLCvodeOpt', 'CvodeOpt', True, '')),
      ('cvode-data-clamp', (cg.OptCvodeChasteModel, 'FromCellMLCvodeDataClampOpt', 'CvodeDataClampOpt', True, '')),
