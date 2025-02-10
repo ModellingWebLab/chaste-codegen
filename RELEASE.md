@@ -1,3 +1,8 @@
+# Release 0.10.6
+- Added support for Python 3.13.
+- Updated dependency versions:
+  - cellmlmanip>=0.3.7
+
 # Release 0.10.5
 - Added support for Python 3.12.
 - Updated dependency versions:
