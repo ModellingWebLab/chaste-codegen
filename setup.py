@@ -59,7 +59,7 @@ setup(
         'pyparsing>=2.4.7, <4',
         'rdflib>=5.0',
         'six>=1.15',
-        'sympy>=1.9, <1.13',
+        'sympy>=1.9, <1.11',
         'zipp>=1.2',
         'Jinja2>=3.0',
         'cellmlmanip>=0.3.7',
