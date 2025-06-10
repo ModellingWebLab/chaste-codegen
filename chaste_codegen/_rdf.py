@@ -57,7 +57,6 @@ def get_variables_transitively(model, term):
     assert isinstance(term, tuple), "Expecting term to be a namespace tuple"
     assert isinstance(model, Model), "Expecting model to be a cellmlmanip Model"
 
-    global _ONTOLOGY
     _load_ontoloty()
 
     term = create_rdf_node(term)
@@ -81,7 +80,6 @@ def get_variables_transitively(model, term):
 def get_MultipleUsesAllowed_tags():
     global _MULTI_USES_ALLOWED_TAGS
     if _MULTI_USES_ALLOWED_TAGS is None:
-        global _ONTOLOGY
         _load_ontoloty()
         _MULTI_USES_ALLOWED_TAGS = set(str(term).replace(OXMETA, '')
                                        for term in _ONTOLOGY.subjects(rdflib.RDF.type,
