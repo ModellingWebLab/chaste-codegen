@@ -115,7 +115,7 @@ ENV/
 chaste_codegen/data/tests/chaste_reference_models/develop/
 
 #Mac
-**DS_Store
+.DS_Store
 
 #windows
 desktop.ini
