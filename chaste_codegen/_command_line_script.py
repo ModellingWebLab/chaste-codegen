@@ -212,16 +212,21 @@ def process_command_line():
             if ex is not None:
                 get_files.append(os.path.join(outfile_path, outfile_base + ex))
 
-        # Simple bodge to generate the functor.cuh files for now
+        # Simple bodge to generate the functor.cuh files for now, can add 'Functor.cuh to ext later perhaps
         if translator_class is cg.BackwardEulerModel:
-            functor_name = outfile_base + 'Functor.cuh'
-            get_files.append(os.path.join(outfile_path, functor_name))
+            get_files.append(os.path.join(outfile_path, outfile_base + 'Functor.cuh'))
 
         if args.show_outputs:
             for file in get_files:
                 print(file)
         else:
             with translator_class(model, outfile_base, header_ext=ext[0], **vars(args)) as chaste_model:
+                # Another bodge to extract the file names so we can put it in the includes
+                try:
+                    chaste_model._vars_for_template.update({"outfile_base": outfile_base})
+                except AttributeError:
+                    # _vars_for_template missing: create it
+                    chaste_model._vars_for_template = {"outfile_base": outfile_base}
                 chaste_model.generate_chaste_code()
 
                 for file, code in zip(get_files, chaste_model.generated_code):

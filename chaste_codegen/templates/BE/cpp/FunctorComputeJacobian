@@ -1,13 +1,14 @@
 {%- if nonlinear_state_vars|length > 0 %}
 __device__
-static void ComputeJacobian(value_type environment_time,
+static void ComputeJacobian(value_type {{free_variable.var_name}},
                             const value_type rCurrentGuess[NONLINEAR_SIZE],
                             const value_type rY[],
-                            value_type Jmat[NONLINEAR_SIZE][NONLINEAR_SIZE],
+                            value_type rJacobian[NONLINEAR_SIZE][NONLINEAR_SIZE],
                             value_type mDt,
                             const value_type mParameters[],
-                            bool setVoltageDerivativeToZero,
-                            value_type fixedVoltage)
+                            bool mSetVoltageDerivativeToZero,
+                            value_type mFixedVoltage,
+                            value_type capacitance)
 {
     {% for state_var in state_vars %}
     {%- if state_var.in_y_deriv and state_var.linear and state_var.in_jacobian %}value_type {{ state_var.var }} = {{state_var.rY_lookup}};
