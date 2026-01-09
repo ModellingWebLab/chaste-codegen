@@ -2,6 +2,8 @@
 {% include "Shared/hpp/includes" %}
 #include "{{base_class}}.hpp"
 {% with %}{% set base_class = base_class ~ "<"~nonlinear_state_vars|length~">" %}{% include "Shared/hpp/class_declaration" %}{% endwith %}
+public:
+    using CellFunctor = {{ class_name | replace('FromCellML', '') }}Functor<float>;
 {% include "Shared/hpp/DefaultStimulus_IntracellularCalciumConcentration" %}
     {{class_name}}(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
 {% include "Shared/hpp/destructor_verify_state_variables_GetIIonic" %}

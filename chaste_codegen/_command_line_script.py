@@ -212,6 +212,11 @@ def process_command_line():
             if ex is not None:
                 get_files.append(os.path.join(outfile_path, outfile_base + ex))
 
+        # Simple bodge to generate the functor.cuh files for now
+        if translator_class is cg.BackwardEulerModel:
+            functor_name = outfile_base + 'Functor.cuh'
+            get_files.append(os.path.join(outfile_path, functor_name))
+
         if args.show_outputs:
             for file in get_files:
                 print(file)
