@@ -5,7 +5,7 @@
 
 {% with %}{% set base_class = base_class ~ "<"~nonlinear_state_vars|length~">" %}{% include "Shared/hpp/class_declaration" %}{% endwith %}
 public:
-    {% if not outfile_base.endswith('Opt') %}using CellFunctor = {{ class_name }}Functor<float>;{% endif %}
+    {% if not outfile_base.endswith('Opt') %}template<typename value_type> using CellFunctor = {{class_name}}Functor<value_type>;{% endif %}
 {% include "Shared/hpp/DefaultStimulus_IntracellularCalciumConcentration" %}
     {{class_name}}(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
 {% include "Shared/hpp/destructor_verify_state_variables_GetIIonic" %}
