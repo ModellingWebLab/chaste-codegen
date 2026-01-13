@@ -1,21 +1,21 @@
 /* Update transmembrane potential (GPU) */
 __device__
-static void UpdateTransmembranePotential(value_type {{free_variable.var_name}},
-                                         value_type rY[],
-                                         value_type mDt,
-                                         const value_type mParameters[],
+static void UpdateTransmembranePotential(ValueType {{free_variable.var_name}},
+                                         ValueType rY[],
+                                         ValueType mDt,
+                                         const ValueType mParameters[],
                                          bool mSetVoltageDerivativeToZero,
-                                         value_type mFixedVoltage,
-                                         DeviceStimulusFunctor<value_type> stim,
-                                         value_type capacitance)
+                                         ValueType mFixedVoltage,
+                                         DeviceStimulusFunctor<ValueType> stim,
+                                         ValueType capacitance)
 {
     {% for state_var in state_vars %}
-        {%- if state_var.in_voltage_deriv %}value_type {{ state_var.var }} = {{state_var.rY_lookup}};
+        {%- if state_var.in_voltage_deriv %}ValueType {{ state_var.var }} = {{state_var.rY_lookup}};
         // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
         {% endif %}{%- endfor %}
         {%- set method =  "UpdateTransmembranePotential" %}{% include "Shared/cpp/lookup_table_init" %}
         {% for deriv in y_derivative_equations %}
-        {%- if deriv.in_membrane_voltage %}const value_type {{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}
+        {%- if deriv.in_membrane_voltage %}const ValueType {{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}
         {% endif %}{%- endfor %}
         {% for deriv in y_derivative_equations %}{%- if deriv.is_voltage%}rY[{{membrane_voltage_index}}] += mDt*{{deriv.lhs}};{%- endif %}{%- endfor %}
 }

@@ -1,28 +1,28 @@
 {%- if nonlinear_state_vars|length > 0 %}
 /* Compute residual of non-linear system for the current guess */
 __device__
-static void ComputeResidual(value_type {{free_variable.var_name}},
-                            const value_type rCurrentGuess[NONLINEAR_SIZE],
-                            const value_type rY[],
-                            value_type rResidual[NONLINEAR_SIZE],
-                            value_type mDt,
-                            const value_type mParameters[],
+static void ComputeResidual(ValueType {{free_variable.var_name}},
+                            const ValueType rCurrentGuess[NONLINEAR_SIZE],
+                            const ValueType rY[],
+                            ValueType rResidual[NONLINEAR_SIZE],
+                            ValueType mDt,
+                            const ValueType mParameters[],
                             bool mSetVoltageDerivativeToZero,
-                            value_type mFixedVoltage,
-                            value_type capacitance)
+                            ValueType mFixedVoltage,
+                            ValueType capacitance)
 {
     {% for state_var in state_vars %}
-    {%- if state_var.linear and state_var.in_non_linear_eq %}value_type {{ state_var.var }} = {{state_var.rY_lookup}};
+    {%- if state_var.linear and state_var.in_non_linear_eq %}ValueType {{ state_var.var }} = {{state_var.rY_lookup}};
     // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
     {% endif %}{%- endfor %}
     //output_nonlinear_state_assignments
     {% for state_var in nonlinear_state_vars %}
-    {%- if state_var.in_non_linear_eq %}value_type {{ state_var.var }} = rCurrentGuess[{{loop.index0}}];
+    {%- if state_var.in_non_linear_eq %}ValueType {{ state_var.var }} = rCurrentGuess[{{loop.index0}}];
     {% endif %}{%- endfor %}
     {%- set method =  "ComputeResidual" %}{% include "Shared/cpp/lookup_table_init" %}
     //output_equations
     {%- for deriv in y_derivative_equations %}{%- if not deriv.linear %}
-    const value_type {{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
+    const ValueType {{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
     {%- endfor %}
     {% for residual_var in residual_equations %}
     rResidual[{{ residual_var.residual_index }}] = rCurrentGuess[{{ residual_var.residual_index }}] - rY[{{ residual_var.state_var_index }}] - mDt*{{ residual_var.var }};

@@ -2,10 +2,12 @@
 {% include "Shared/hpp/includes" %}
 #include "{{base_class}}.hpp"
 {% if not outfile_base.endswith('Opt') %}#include "{{ outfile_base }}Functor.cuh"{% endif %}
+{% if not outfile_base.endswith('Opt') %}#include "SolverBundles.cuh"{% endif %}
 
 {% with %}{% set base_class = base_class ~ "<"~nonlinear_state_vars|length~">" %}{% include "Shared/hpp/class_declaration" %}{% endwith %}
 public:
-    {% if not outfile_base.endswith('Opt') %}template<typename value_type> using CellFunctor = {{class_name}}Functor<value_type>;{% endif %}
+    {% if not outfile_base.endswith('Opt') %}template<typename ValueType> using CellFunctor = {{class_name}}Functor<ValueType>;{% endif %}
+    {% if not outfile_base.endswith('Opt') %}template<typename ValueType> using Bundle = BackwardEulerBundle<CellFunctor<ValueType>, ValueType>;{% endif %}
 {% include "Shared/hpp/DefaultStimulus_IntracellularCalciumConcentration" %}
     {{class_name}}(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
 {% include "Shared/hpp/destructor_verify_state_variables_GetIIonic" %}

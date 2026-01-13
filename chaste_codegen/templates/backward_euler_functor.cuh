@@ -16,10 +16,10 @@
 #include "StimulusEvaluatorCuda.hpp"   // DeviceStimulusFunctor (+ includes StimulusDescriptor)
 
 
-template<typename value_type>
+template<typename ValueType>
 struct {{ class_name }}Functor
 {
-    using value_type_t = value_type;
+    using ValueType_t = ValueType;
     static constexpr unsigned TOTAL_SIZE = {{ state_vars|length }}u;
     static constexpr unsigned NONLINEAR_SIZE = {{ nonlinear_state_vars|length }}u;
 

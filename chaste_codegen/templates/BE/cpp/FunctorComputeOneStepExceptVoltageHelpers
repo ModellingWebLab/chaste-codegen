@@ -1,18 +1,18 @@
 /* Apply all closed-form backward-Euler updates for the "linear" gating variables */
 __device__
-static void SolveClosedFormVars(value_type rY[TOTAL_SIZE],
-                                value_type mDt,
-                                const value_type mParameters[],
+static void SolveClosedFormVars(ValueType rY[TOTAL_SIZE],
+                                ValueType mDt,
+                                const ValueType mParameters[],
                                 bool mSetVoltageDerivativeToZero,
-                                value_type mFixedVoltage,
-                                value_type capacitance)
+                                ValueType mFixedVoltage,
+                                ValueType capacitance)
 {
     {% for state_var in state_vars %}
-    {%- if state_var.in_y_deriv and state_var.linear and state_var.in_one_step_except_v %}value_type {{ state_var.var }} = {{state_var.rY_lookup}};
+    {%- if state_var.in_y_deriv and state_var.linear and state_var.in_one_step_except_v %}ValueType {{ state_var.var }} = {{state_var.rY_lookup}};
     // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
     {% endif %}{%- endfor %}
 
-    {% for eq in linear_equations %}const value_type {{eq.lhs}} = {{eq.rhs}};
+    {% for eq in linear_equations %}const ValueType {{eq.lhs}} = {{eq.rhs}};
     {% endfor %}
 
     {% for deriv in linear_deriv_eqs %}
@@ -22,8 +22,8 @@ static void SolveClosedFormVars(value_type rY[TOTAL_SIZE],
 
 /* Gather non-linear variables from state and put them into guess for Newton solve */
 __device__
-static void FillInitialGuess(value_type _guess[NONLINEAR_SIZE],
-                             const value_type rY[TOTAL_SIZE])
+static void FillInitialGuess(ValueType _guess[NONLINEAR_SIZE],
+                             const ValueType rY[TOTAL_SIZE])
 {
     {% if nonlinear_state_vars|length > 0 %} {# We do not need this if really, if it is empty we just get no op#}
     {% for state_var in nonlinear_state_vars %}
@@ -34,8 +34,8 @@ static void FillInitialGuess(value_type _guess[NONLINEAR_SIZE],
 
 /* After Newton solve, scatter the solved nonlinear variables back into y */
 __device__
-static void ScatterSolution(const value_type _guess[NONLINEAR_SIZE],
-                            value_type rY[TOTAL_SIZE])
+static void ScatterSolution(const ValueType _guess[NONLINEAR_SIZE],
+                            ValueType rY[TOTAL_SIZE])
 {
     {% if nonlinear_state_vars|length > 0 %}
     {% for state_var in nonlinear_state_vars %}
