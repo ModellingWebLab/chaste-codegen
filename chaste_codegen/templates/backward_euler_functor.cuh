@@ -35,7 +35,11 @@ struct {{ class_name }}Functor
     {{ body
    | replace('this->', '')
    | replace('HeartConfig::Instance()->GetCapacitance()', 'capacitance')
-   | replace('GetIntracellularAreaStimulus', 'stim') }}
+   | replace('GetIntracellularAreaStimulus', 'stim')
+   | regex_replace('(?<![\\w>])(-?\\d+\\.\\d+(?:[eE][+-]?\\d+)?)',
+                   'static_cast<ValueType>(\\1)')
+    }}
+
 };
 
 #endif // {% filter upper %}{{class_name}}FUNCTOR_CUH_{% endfilter %}
