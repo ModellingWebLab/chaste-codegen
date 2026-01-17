@@ -9,7 +9,8 @@ static void ComputeResidual(ValueType {{free_variable.var_name}},
                             const ValueType mParameters[],
                             bool mSetVoltageDerivativeToZero,
                             ValueType mFixedVoltage,
-                            ValueType capacitance)
+                            ValueType capacitance,
+                            const DeviceStimulusFunctor<ValueType> stim)
 {
     {% for state_var in state_vars %}
     {%- if state_var.linear and state_var.in_non_linear_eq %}ValueType {{ state_var.var }} = {{state_var.rY_lookup}};

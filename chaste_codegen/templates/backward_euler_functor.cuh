@@ -36,6 +36,7 @@ struct {{ class_name }}Functor
    | replace('this->', '')
    | replace('HeartConfig::Instance()->GetCapacitance()', 'capacitance')
    | replace('GetIntracellularAreaStimulus', 'stim')
+   | regex_replace('Signum\\s*\\(([^)]+)\\)', '(((ValueType)0 < (\\1)) - ((\\1) < (ValueType)0))')
    | regex_replace('(?<![\\w>])(-?\\d+\\.\\d+(?:[eE][+-]?\\d+)?)',
                    'static_cast<ValueType>(\\1)')
     }}
