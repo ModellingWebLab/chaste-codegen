@@ -20,7 +20,7 @@ class BackwardEulerModel(ChasteModel):
 
     def __init__(self, model, file_name, **kwargs):
         super().__init__(model, file_name, **kwargs)
-        self._templates = ['backward_euler_model.hpp', 'backward_euler_model.cpp', 'backward_euler_functor.cuh']
+        self._templates = ['backward_euler_model.hpp', 'backward_euler_model.cpp', 'backward_euler_kernels.hpp']
         self._vars_for_template['base_class'] = 'AbstractBackwardEulerCardiacCell'
         self._vars_for_template['model_type'] = 'BackwardEuler'
 

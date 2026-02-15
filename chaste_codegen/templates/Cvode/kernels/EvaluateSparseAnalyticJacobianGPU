@@ -1,7 +1,7 @@
 {%- if jacobian_equations|length > 0 %}
     template<typename ValueType>
     DEVICE
-    static void EvaluateSparseAnalyticJacobianDevice(ValueType {{free_variable.var_name}}, const ValueType *rY, ValueType *rDY, ValueType *rJacobian, ValueType *rTmp1, ValueType *rTmp2, ValueType *rTmp3, const unsigned nvars, const ValueType mSetVoltageDerivativeToZero, const ValueType mFixedVoltage, const ValueType *mParameters, const ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim)
+    void {{class_name}}::EvaluateSparseAnalyticJacobianDevice(ValueType {{free_variable.var_name}}, const ValueType *rY, ValueType *rDY, ValueType *rJacobian, ValueType *rTmp1, ValueType *rTmp2, ValueType *rTmp3, const unsigned nvars, const ValueType mSetVoltageDerivativeToZero, const ValueType mFixedVoltage, const ValueType *mParameters, const ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim)
     {
         {% include "Cvode/cpp/EvaluateAnalyticJacobianParts/UnpackY" %}
         {% include "Cvode/cpp/EvaluateAnalyticJacobianParts/Mathematics" %}

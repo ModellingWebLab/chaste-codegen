@@ -39,6 +39,7 @@ TRANSLATORS_OPT = dict(
 
 TRANSLATORS_WITH_MODIFIERS = tuple('--' + t for t in TRANSLATORS if TRANSLATORS[t][3])
 
+TRANSLATORS_WITH_GPU = ['Cvode', 'BackwardEuler']
 
 # Store extensions we can use and how to use them, based on extension of given outfile
 EXTENSION_LOOKUP_FROM_OUTFILE = {'.cellml': ['.hpp', '.cpp'], '': ['.hpp', '.cpp'], '.cpp': ['.hpp', '.cpp'],
@@ -193,6 +194,9 @@ def process_command_line():
         translator_class = translator[0]
         outfile_path, model_name_from_file, outfile_base, ext = \
             get_outfile_parts(args.outfile, args.output_dir, args.cellml_file, translator_class)
+        # Make sure we generate GPU kernels for models that provide kernel templates
+        if translator[2] in TRANSLATORS_WITH_GPU:
+            ext.append('Kernels.hpp')
 
         ext = ext if ext else translator_class.DEFAULT_EXTENSIONS
 
@@ -212,21 +216,11 @@ def process_command_line():
             if ex is not None:
                 get_files.append(os.path.join(outfile_path, outfile_base + ex))
 
-        # Simple bodge to generate the functor.cuh files for now, can add 'Functor.cuh to ext later perhaps
-        if translator_class is cg.BackwardEulerModel:
-            get_files.append(os.path.join(outfile_path, outfile_base + 'Functor.cuh'))
-
         if args.show_outputs:
             for file in get_files:
                 print(file)
         else:
             with translator_class(model, outfile_base, header_ext=ext[0], **vars(args)) as chaste_model:
-                # Another bodge to extract the file names so we can put it in the includes
-                try:
-                    chaste_model._vars_for_template.update({"outfile_base": outfile_base})
-                except AttributeError:
-                    # _vars_for_template missing: create it
-                    chaste_model._vars_for_template = {"outfile_base": outfile_base}
                 chaste_model.generate_chaste_code()
 
                 for file, code in zip(get_files, chaste_model.generated_code):

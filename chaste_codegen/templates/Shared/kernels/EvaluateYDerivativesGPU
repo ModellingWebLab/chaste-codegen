@@ -1,6 +1,6 @@
 template<typename ValueType>
 DEVICE
-static void EvaluateYDerivativesDevice(ValueType {{free_variable.var_name}}, const ValueType *rY, ValueType *rDY, const ValueType mSetVoltageDerivativeToZero, const ValueType mFixedVoltage, const ValueType *mParameters, const ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim)
+void {{class_name}}::EvaluateYDerivativesDevice(ValueType {{free_variable.var_name}}, const ValueType *rY, ValueType *rDY, const ValueType mSetVoltageDerivativeToZero, const ValueType mFixedVoltage, const ValueType *mParameters, const ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim)
 {
     {% include "Shared/cpp/EvaluateYDerivativesParts/UnpackY" %}
     {% include "Shared/cpp/EvaluateYDerivativesParts/Mathematics" %}

@@ -20,7 +20,7 @@ class CvodeChasteModel(ChasteModel):
         self._use_analytic_jacobian = kwargs.get('use_analytic_jacobian', False)  # store if jacobians are needed
 
         super().__init__(model, file_name, **kwargs)
-        self._templates = ['cvode_model.hpp', 'cvode_model.cpp']
+        self._templates = ['cvode_model.hpp', 'cvode_model.cpp', 'cvode_model_kernels.hpp']
 
         if self._use_data_clamp:
             self._vars_for_template['base_class'] = 'AbstractCvodeCellWithDataClamp'
