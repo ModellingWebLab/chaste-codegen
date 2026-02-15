@@ -1,0 +1,1 @@
+{% for equation in jacobian_equations %}const double {{equation.lhs}} = {{equation.rhs}};{% endfor %}

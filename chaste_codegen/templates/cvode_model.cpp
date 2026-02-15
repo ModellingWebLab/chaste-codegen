@@ -2,6 +2,7 @@
 {% include "Shared/cpp/header_comments" %}
 {% include "Shared/cpp/includes" %}
 {% include "Shared/cpp/lookup_tables" %}
+#include "ChasteCvodeMacros.hpp"
 {% include "Shared/cpp/UseCellMLDefaultStimulus" %}
 {% include "Cvode/cpp/GetIntracellularCalciumConcentration" %}
 {%- include "Shared/cpp/constructor_declaration" %}
@@ -14,5 +15,7 @@
 {%- include "Cvode/cpp/EvaluateAnalyticJacobian" %}
 {%- include "Cvode/cpp/ComputeDerivedQuantities" %}
 {% include "Shared/cpp/OdeSystemInformation" %}
-{% include "Shared/cpp/CHASTE_CLASS_EXPORT" %}#endif // CHASTE_CVODE
+{% include "Shared/cpp/CHASTE_CLASS_EXPORT" %}
+#include "ChasteCpuMacros.hpp"
+#endif // CHASTE_CVODE
 {%endwith%}

@@ -15,6 +15,7 @@
 #include <cmath>
 #include "StimulusEvaluatorCuda.hpp"   // DeviceStimulusFunctor (+ includes StimulusDescriptor)
 #include "MathsCustomFunctions.hpp"
+#include "ChasteCudaMacros.hpp"
 
 template<typename ValueType>
 struct {{ class_name }}Functor
@@ -23,7 +24,6 @@ struct {{ class_name }}Functor
     static constexpr unsigned TOTAL_SIZE = {{ state_vars|length }}u;
     static constexpr unsigned NONLINEAR_SIZE = {{ nonlinear_state_vars|length }}u;
 
-    {% set body %}
     {% include "BE/cpp/FunctorComputeOneStepExceptVoltageHelpers" %} {# (file contains SolveClosedFormVars, FillInitialGuess, ScatterSolution) #}
 
     {% include "BE/cpp/FunctorComputeResidual" %}
@@ -31,18 +31,9 @@ struct {{ class_name }}Functor
     {% include "BE/cpp/FunctorComputeJacobian" %}
 
     {% include "BE/cpp/FunctorUpdateTransmembranePotential" %}
-    {% endset %}
-    {{ body
-   | replace('this->', '')
-   | replace('HeartConfig::Instance()->GetCapacitance()', 'capacitance')
-   | replace('GetIntracellularAreaStimulus', 'stim')
-   | regex_replace('Signum\\s*\\(([^)]+)\\)', 'SignumDevice<ValueType>(\\1)')
-   | regex_replace('pow\\s*\\(([^,]+),\\s*([^)]+)\\)', 'PowDevice<ValueType>(\\1, \\2)')
-   | regex_replace('fabs\\s*\\(([^)]+)\\)', 'AbsDevice<ValueType>(\\1)')
-   | regex_replace('(?<![\\w>])(-?\\d+\\.\\d+(?:[eE][+-]?\\d+)?)',
-                   'static_cast<ValueType>(\\1)')
-    }}
 
 };
+
+#include "ChasteCpuMacros.hpp"
 
 #endif // {% filter upper %}{{class_name}}FUNCTOR_CUH_{% endfilter %}

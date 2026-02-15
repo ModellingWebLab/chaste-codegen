@@ -43,8 +43,30 @@ class CvodeChasteModel(ChasteModel):
             self._jacobian_equations, self._jacobian_matrix = get_jacobian(self._state_vars, self._derivative_equations)
             self._formatted_state_vars = self._update_state_vars()
 
-            self._vars_for_template['jacobian_equations'], self._vars_for_template['jacobian_entries'] = \
-                self._print_jacobian()
+            jac_eqs, jac_entries = self._print_jacobian()
+            self._vars_for_template['jacobian_equations'] = jac_eqs
+            self._vars_for_template['jacobian_entries'] = jac_entries 
+
+            # TODO: not sure if we still need this sort or if the entries are guaranteed to be in this order anyway
+            sorted_jac_entries = sorted(jac_entries, key=lambda entry: (entry['i'], entry['j']))
+
+            n_vars = len(self._state_vars)
+            
+            # Build row_ptr (size n_vars + 1)
+            row_counts = [0] * n_vars
+            for entry in sorted_jac_entries:
+                row_counts[entry['i']] += 1
+            row_ptr = [0]
+            for count in row_counts:
+                row_ptr.append(row_ptr[-1] + count)
+            
+            # Build col_ind (size num_entries)
+            col_ind = [entry['j'] for entry in sorted_jac_entries]
+            
+            self._vars_for_template['sparse_jacobian_entries'] = sorted_jac_entries
+            self._vars_for_template['sparse_rowptr'] = row_ptr
+            self._vars_for_template['sparse_colind'] = col_ind
+            self._vars_for_template['sparse_nnz'] = len(sorted_jac_entries)
         else:
             self._vars_for_template['jacobian_equations'], self._vars_for_template['jacobian_entries'] = \
                 [], Matrix()
@@ -151,10 +173,10 @@ class CvodeChasteModel(ChasteModel):
                                        modifiers_with_defining_eqs=modifiers_with_defining_eqs))
 
     def _print_modifiable_parameters(self, variable):
-        return 'NV_Ith_S(mParameters, ' + self._modifiable_parameter_lookup[variable] + ')'
+        return 'CHASTE_VEC_GET(mParameters, ' + self._modifiable_parameter_lookup[variable] + ')'
 
     def _format_rY_entry(self, index):
-        return 'NV_Ith_S(rY, ' + str(index) + ')'
+        return 'CHASTE_VEC_GET(rY, ' + str(index) + ')'
 
     def _update_state_vars(self):
         jacobian_symbols = set()

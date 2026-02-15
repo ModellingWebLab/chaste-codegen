@@ -292,7 +292,7 @@ class ChasteModel(object):
             entry = self._format_modifier(var) +\
                 '->Calc(' + entry + ', ' + self._printer.doprint(self._model.time_variable) + ')'
         if var == self._model.membrane_voltage_var:
-            entry = '(mSetVoltageDerivativeToZero ? this->mFixedVoltage : ' + entry + ')'
+            entry = '(mSetVoltageDerivativeToZero ? CHASTE_THIS(mFixedVoltage) : ' + entry + ')'
         return entry
 
     def _format_state_variables(self):

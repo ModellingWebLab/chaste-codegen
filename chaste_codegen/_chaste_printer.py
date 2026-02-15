@@ -34,64 +34,69 @@ class ChastePrinter(Printer):
 
     """
     _function_names = {
-        'abs_': 'fabs',
-        'acos_': 'acos',
-        'cos_': 'cos',
-        'exp_': 'exp',
-        'sqrt_': 'sqrt',
-        'sin_': 'sin',
+        'abs_': 'CHASTE_MATH::Abs',
+        'acos_': 'CHASTE_MATH::Acos',
+        'cos_': 'CHASTE_MATH::Cos',
+        'exp_': 'CHASTE_MATH::Exp',
+        'sqrt_': 'CHASTE_MATH::Sqrt',
+        'sin_': 'CHASTE_MATH::Sin',
 
-        'Abs': 'fabs',
-        'acos': 'acos',
-        'acosh': 'acosh',
-        'asin': 'asin',
-        'asinh': 'asinh',
-        'atan': 'atan',
-        'atan2': 'atan2',
-        'atanh': 'atanh',
-        'ceiling': 'ceil',
-        'cos': 'cos',
-        'cosh': 'cosh',
-        'exp': 'exp',
-        'expm1': 'expm1',
-        'factorial': 'factorial',
-        'floor': 'floor',
-        'log': 'log',
-        'log10': 'log10',
-        'log1p': 'log1p',
-        'log2': 'log2',
-        'sin': 'sin',
-        'sinh': 'sinh',
-        'sqrt': 'sqrt',
-        'tan': 'tan',
-        'tanh': 'tanh',
+        'Abs': 'CHASTE_MATH::Abs',
+        'acos': 'CHASTE_MATH::Acos',
+        'acosh': 'CHASTE_MATH::Acosh',
+        'asin': 'CHASTE_MATH::Asin',
+        'asinh': 'CHASTE_MATH::Asinh',
+        'atan': 'CHASTE_MATH::Atan',
+        'atan2': 'CHASTE_MATH::Atan2',
+        'atanh': 'CHASTE_MATH::Atanh',
+        'ceiling': 'CHASTE_MATH::Ceil',
+        'cos': 'CHASTE_MATH::Cos',
+        'cosh': 'CHASTE_MATH::Cosh',
+        'exp': 'CHASTE_MATH::Exp',
+        'expm1': 'CHASTE_MATH::Expm1',
+        'factorial': 'CHASTE_MATH::Factorial',
+        'floor': 'CHASTE_MATH::Floor',
+        'log': 'CHASTE_MATH::Log',
+        'log10': 'CHASTE_MATH::Log10',
+        'log1p': 'CHASTE_MATH::Log1p',
+        'log2': 'CHASTE_MATH::Log2',
+        'sin': 'CHASTE_MATH::Sin',
+        'sinh': 'CHASTE_MATH::Sinh',
+        'sqrt': 'CHASTE_MATH::Sqrt',
+        'tan': 'CHASTE_MATH::Tan',
+        'tanh': 'CHASTE_MATH::Tanh',
 
-        'sign': 'Signum',
-        'GetIntracellularAreaStimulus': 'GetIntracellularAreaStimulus',
-        'HeartConfig::Instance()->GetCapacitance': 'HeartConfig::Instance()->GetCapacitance',
-        'GetExperimentalVoltageAtTimeT': 'GetExperimentalVoltageAtTimeT'
+        'sign': 'CHASTE_MATH::Sign',
+        
+        # Note: These use the special platform macros we discussed 
+        # because they require different arguments/scopes on CPU vs GPU.
+        'GetIntracellularAreaStimulus': 'CHASTE_STIM',
+        'HeartConfig::Instance()->GetCapacitance': 'CHASTE_CAP',
+        'GetExperimentalVoltageAtTimeT': 'CHASTE_EXP_VOLT'
     }
+
     _extra_trig_names = {
-        'sec': 'cos',
-        'csc': 'sin',
-        'cot': 'tan',
-        'sech': 'cosh',
-        'csch': 'sinh',
-        'coth': 'tanh',
+        'sec': 'CHASTE_MATH::Sec',
+        'csc': 'CHASTE_MATH::Csc',
+        'cot': 'CHASTE_MATH::Cot',
+        'sech': 'CHASTE_MATH::Sech',
+        'csch': 'CHASTE_MATH::Csch',
+        'coth': 'CHASTE_MATH::Coth',
     }
+
     _extra_inverse_trig_names = {
-        'asec': 'acos',
-        'acsc': 'asin',
-        'acot': 'atan',
-        'asech': 'acosh',
-        'acsch': 'asinh',
-        'acoth': 'atanh',
+        'asec': 'CHASTE_MATH::Asec',
+        'acsc': 'CHASTE_MATH::Acsc',
+        'acot': 'CHASTE_MATH::Acot',
+        'asech': 'CHASTE_MATH::Asech',
+        'acsch': 'CHASTE_MATH::Acsch',
+        'acoth': 'CHASTE_MATH::Acoth',
     }
 
     _literal_names = {
-        'e': 'e',
-        'nan': 'NAN',
-        'pi': 'M_PI',
+        'e': 'CHASTE_MATH::E',
+        'nan': 'CHASTE_MATH::NaN',
+        'pi': 'CHASTE_MATH::Pi',
     }
 
     def __init__(self, symbol_function=None, derivative_function=None, lookup_table_function=lambda e: None):
@@ -132,8 +137,8 @@ class ChastePrinter(Printer):
         For C++ printing we need to write ``x**y`` as ``pow(x, y)`` with lowercase ``p``."""
         p = precedence(expr)
         if expr.exp == 0.5:
-            return 'sqrt(' + self._bracket(expr.base, p) + ')'
-        return 'pow(' + self._bracket(expr.base, p) + ', ' + self._bracket(expr.exp, p) + ')'
+            return 'CHASTE_MATH::Sqrt(' + self._bracket(expr.base, p) + ')'
+        return 'CHASTE_MATH::Pow(' + self._bracket(expr.base, p) + ', ' + self._bracket(expr.exp, p) + ')'
 
     def _print_ternary(self, cond, expr):
         parts = ''
@@ -153,7 +158,8 @@ class ChastePrinter(Printer):
         if expr.is_integer() and C_MIN_INT < expr < C_MAX_INT:
             return cxxcode(int(expr), standard='C++11')
         else:
-            return cxxcode(float(expr), standard='C++11')
+            num_str = cxxcode(float(expr), standard='C++11')
+            return f'CHASTE_CONST({num_str})'
 
     def _print_int(self, expr):
         """ Handles ``ints``s. """

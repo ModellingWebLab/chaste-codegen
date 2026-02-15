@@ -1,0 +1,6 @@
+// Inputs:
+// Time units: millisecond
+{%- for state_var in state_vars %}
+{% if state_var.in_y_deriv %}double {{ state_var.var }} = {{state_var.rY_lookup}};
+// Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
+{%- endif %}{%- endfor %}

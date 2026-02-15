@@ -1,0 +1,3 @@
+// Matrix entries{% for entry in jacobian_entries %}
+CHASTE_MATRIX_GET(rJacobian, {{entry.i}}, {{entry.j}}) = {% if membrane_voltage_index == entry.i %}mSetVoltageDerivativeToZero ? 0.0 : ({{entry.entry}});{%- else %}{{entry.entry}};{%- endif %}
+{%- endfor %}
