@@ -1,6 +1,6 @@
 #include "{{file_name}}{{header_ext}}"
 #include "ChasteCudaMacros.hpp"
-{% include "Shared/kernels/EvaluateYDerivativesGPU"%}
-{% include "Cvode/kernels/EvaluateAnalyticJacobianGPU" %}
-{% include "Cvode/kernels/EvaluateSparseAnalyticJacobianGPU" %}
+{% include "Shared/kernels/EvaluateYDerivativesDevice"%}
+{% include "Cvode/kernels/EvaluateAnalyticJacobianDevice" %}
+{% include "Cvode/kernels/EvaluateSparseAnalyticJacobianDevice" %}
 #include "ChasteCpuMacros.hpp"

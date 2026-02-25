@@ -194,11 +194,13 @@ def process_command_line():
         translator_class = translator[0]
         outfile_path, model_name_from_file, outfile_base, ext = \
             get_outfile_parts(args.outfile, args.output_dir, args.cellml_file, translator_class)
+
+        # Must make a copy of ext so that if we modify the extensions here, this is the only translator that gets those modifications
+        ext = list(ext) if ext else list(translator_class.DEFAULT_EXTENSIONS)
+
         # Make sure we generate GPU kernels for models that provide kernel templates
         if translator[2] in TRANSLATORS_WITH_GPU:
             ext.append('Kernels.hpp')
-
-        ext = ext if ext else translator_class.DEFAULT_EXTENSIONS
 
         if args.cls_name is not None:
             args.class_name = args.cls_name

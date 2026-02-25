@@ -1,6 +1,7 @@
 /* Update transmembrane potential (GPU) */
-__device__
-static void UpdateTransmembranePotential(ValueType {{free_variable.var_name}},
+template<typename ValueType>
+DEVICE
+void {{class_name}}::UpdateTransmembranePotentialDevice(ValueType {{free_variable.var_name}},
                                          ValueType rY[],
                                          ValueType mDt,
                                          const ValueType mParameters[],
