@@ -1,0 +1,2 @@
+#include "ChasteCpuMacros.hpp"
+#endif // {% filter upper %}{{class_name}}KERNELS_HPP_{% endfilter %}
