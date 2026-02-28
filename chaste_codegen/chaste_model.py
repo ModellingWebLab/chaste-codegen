@@ -1,5 +1,4 @@
 import time
-
 from contextlib import contextmanager
 
 from sympy import Derivative, Float
@@ -54,7 +53,8 @@ class ChasteModel(object):
     @contextmanager
     def _device_mode(self):
         """ Creates an _is_generating_device_code context where we can run methods under 'with' and if the method contains
-        any branches: if self._is_generating_device_code:, the if part will run when the method is called in this context
+        any branches like: if self._is_generating_device_code:, the if part will run when the method is called in this context
+
 
         Example:
             with self._device_mode():
@@ -103,7 +103,7 @@ class ChasteModel(object):
 
         self._model = model
 
-        # By default we are generating CPU code, the context manager handles setting and unsetting this for device compilation
+        # By default we are generating CPU code, the context manager handles setting and unsetting this for device generation
         self._is_generating_device_code = False
 
         # retrieve probabilities that don't stay in 0 ... 1 range and shouldn't be checked
@@ -295,47 +295,6 @@ class ChasteModel(object):
             return self._format_modifier(modifier) + '->Calc(' + modifier_printer.doprint(eq) + ', ' + \
                 self._printer.doprint(self._model.time_variable) + ')'
         return modifier_printer.doprint(eq)
-    
-    def _print_rhs_with_modifiers2(self, modifier, eq, modifiers_with_defining_eqs=set()):
-            """Fixed RHS printer using self._state_vars for indexing"""
-            
-            def handle_variable(variable):
-                # 1. Handle Modifiers (Drug/Clamp)
-                if variable in self._modifiers and variable not in modifiers_with_defining_eqs:
-                    if self._is_generating_device_code:
-                        # On device, if it's a state var being modified, just print the raw rY[i] access
-                        if variable in self._state_vars:
-                            return self._format_rY_lookup(self._state_vars.index(variable), variable)
-                        return self._printer.doprint(variable)
-                    else:
-                        # Standard Host behavior: modifier->Calc(rY[i], time)
-                        return (self._format_modifier(variable) + '->Calc(' +
-                                self._printer.doprint(variable) + ', ' +
-                                self._printer.doprint(self._model.time_variable) + ')')
-                
-                # 2. Handle State Variables: Map Sympy symbol to vector index
-                if variable in self._state_vars:
-                    index = self._state_vars.index(variable)
-                    return self._format_rY_lookup(index, variable)
-                
-                # 3. Default: Handles parameters, time, and math constants via existing printers/macros
-                return self._printer.doprint(variable)
-
-            # Create the recursive printer
-            modifier_printer = cg.ChastePrinter(
-                symbol_function=handle_variable,
-                derivative_function=lambda deriv: self._printer.doprint(deriv),
-                # Disable lookup tables on device to avoid host-pointer access
-                lookup_table_function=lambda e: None if self._is_generating_device_code else self._printer.lookup_table_function(e)
-            )
-
-            # 4. Handle top-level modification of the RHS result
-            if modifier in self._modifiers and not self._is_generating_device_code:
-                return (self._format_modifier(modifier) + '->Calc(' + 
-                        modifier_printer.doprint(eq) + ', ' + 
-                        self._printer.doprint(self._model.time_variable) + ')')
-            
-            return modifier_printer.doprint(eq)
 
     def _format_modifier(self, var):
         """ Formatting of modifier for printing"""

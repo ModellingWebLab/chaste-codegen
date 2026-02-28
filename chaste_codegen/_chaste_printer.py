@@ -20,10 +20,19 @@ class ChastePrinter(Printer):
     """
     Converts Sympy expressions to strings for use in Chaste code generation.
 
+
+    Expressions are generated in terms of the CHASTE_MATH name space, it is then the job
+    of the Jinja template to ensure CHASTE_MATH points to the correct C++ namespace
+    using the appropriate #include. E.g., #include "ChasteCpuMacros.hpp" converts these
+    namespaced calls to std library calls
+
+
     To use, create a :class:`ChastePrinter` instance, and call its method
     :meth:`doprint()` with a Sympy expression argument.
 
+
     Arguments:
+
 
     ``symbol_function``
         A function that converts symbols to strings (variable names).
@@ -31,6 +40,7 @@ class ChastePrinter(Printer):
         A function that converts derivatives to strings.
     ``lookup_table_function``
         A function that prints lookup table expressions or returns None if the expression is not in the lookup table.
+
 
     """
     _function_names = {
@@ -68,8 +78,6 @@ class ChastePrinter(Printer):
 
         'sign': 'CHASTE_MATH::Sign',
         
-        # Note: These use the special platform macros we discussed 
-        # because they require different arguments/scopes on CPU vs GPU.
         'GetIntracellularAreaStimulus': 'CHASTE_STIM',
         'HeartConfig::Instance()->GetCapacitance': 'CHASTE_CAP',
         'GetExperimentalVoltageAtTimeT': 'CHASTE_EXP_VOLT'
@@ -133,8 +141,7 @@ class ChastePrinter(Printer):
         return ' || '.join(['(' + self._bracket(x, my_prec) + ')' for x in expr.args])
 
     def _print_ordinary_pow(self, expr):
-        """ Handles Pow(), handles just ordinary powers without division.
-        For C++ printing we need to write ``x**y`` as ``pow(x, y)`` with lowercase ``p``."""
+        """ Handles Pow(), handles just ordinary powers without division."""
         p = precedence(expr)
         if expr.exp == 0.5:
             return 'CHASTE_MATH::Sqrt(' + self._bracket(expr.base, p) + ')'
@@ -153,7 +160,11 @@ class ChastePrinter(Printer):
         return self._print_int(float(expr))
 
     def _print_float(self, expr):
-        """ Handles ``float``s. """
+        """
+        Handles ``float``s. All constants must be wrapped with a macro so that
+        generated code that ends up in a device kernel can easily be cast between 
+        float and double as this has huge performance implications on device
+        """
         # print integers as int if they are between min & max int in c++
         if expr.is_integer() and C_MIN_INT < expr < C_MAX_INT:
             return cxxcode(int(expr), standard='C++11')

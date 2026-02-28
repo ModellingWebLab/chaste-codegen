@@ -39,7 +39,8 @@ TRANSLATORS_OPT = dict(
 
 TRANSLATORS_WITH_MODIFIERS = tuple('--' + t for t in TRANSLATORS if TRANSLATORS[t][3])
 
-TRANSLATORS_WITH_GPU = ['Cvode', 'BackwardEuler']
+# Store translator types with device implementations available
+TRANSLATORS_WITH_KERNELS = ['FromCellMLCvode', 'FromCellMLBackwardEuler']
 
 # Store extensions we can use and how to use them, based on extension of given outfile
 EXTENSION_LOOKUP_FROM_OUTFILE = {'.cellml': ['.hpp', '.cpp'], '': ['.hpp', '.cpp'], '.cpp': ['.hpp', '.cpp'],
@@ -201,7 +202,7 @@ def process_command_line():
         ext = list(ext) if ext else list(translator_class.DEFAULT_EXTENSIONS)
 
         # Make sure we generate GPU kernels for models that provide kernel templates (if they are wanted)
-        if args.generate_kernels and translator[2] in TRANSLATORS_WITH_GPU:
+        if args.generate_kernels and translator[1] in TRANSLATORS_WITH_KERNELS:
             ext.append('Kernels.hpp')
 
         if args.cls_name is not None:

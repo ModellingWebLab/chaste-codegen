@@ -4,73 +4,10 @@
 import logging
 import os
 import posixpath
-import re
 
 import jinja2
 
 import chaste_codegen as cg
-
-
-def regex_replace(s, find, replace):
-    """Regex replace that skips // and /* */ comments."""
-    if s is None:
-        return s
-
-    out = []
-    in_block_comment = False
-
-    lines = s.splitlines(keepends=True)
-    for line in lines:
-        i = 0
-        result = ''
-
-        while i < len(line):
-            if in_block_comment:
-                end = line.find('*/', i)
-                if end == -1:
-                    # whole line is inside block comment
-                    result += line[i:]
-                    i = len(line)
-                else:
-                    # exit block comment
-                    result += line[i:end+2]
-                    i = end + 2
-                    in_block_comment = False
-            else:
-                # look for comment starts
-                line_comment = line.find('//', i)
-                block_comment = line.find('/*', i)
-
-                # choose nearest comment start
-                candidates = [p for p in [line_comment, block_comment] if p != -1]
-                if not candidates:
-                    # pure code
-                    result += re.sub(find, replace, line[i:])
-                    i = len(line)
-                else:
-                    next_comment = min(candidates)
-                    # process code before comment
-                    result += re.sub(find, replace, line[i:next_comment])
-                    i = next_comment
-
-                    if next_comment == line_comment:
-                        # rest of line is // comment
-                        result += line[i:]
-                        i = len(line)
-                    else:
-                        # enter /* */ block
-                        end = line.find('*/', i+2)
-                        if end == -1:
-                            result += line[i:]
-                            i = len(line)
-                            in_block_comment = True
-                        else:
-                            result += line[i:end+2]
-                            i = end + 2
-
-        out.append(result)
-
-    return ''.join(out)
 
 
 # Shared Jinja environment
@@ -95,9 +32,6 @@ def _jinja_environment():
             # but raise a jinja2.UndefinedError instead.
             undefined=jinja2.StrictUndefined,
         )
-
-        # register the filter
-        _environment.filters['regex_replace'] = regex_replace
     return _environment
 
 

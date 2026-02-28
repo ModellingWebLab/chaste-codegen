@@ -72,8 +72,14 @@ class CvodeChasteModel(ChasteModel):
             self._vars_for_template['sparse_colind'] = col_ind
             self._vars_for_template['sparse_nnz'] = len(sorted_jac_entries)
         else:
-            self._vars_for_template['jacobian_equations'], self._vars_for_template['jacobian_entries'] = \
-                [], Matrix()
+            self._vars_for_template['jacobian_equations'] = []
+            self._vars_for_template['jacobian_entries'] = Matrix()
+            self._vars_for_template['jacobian_equations_device'] = []
+            self._vars_for_template['jacobian_entries_device'] = []
+            self._vars_for_template['sparse_jacobian_entries'] = []
+            self._vars_for_template['sparse_rowptr'] = []
+            self._vars_for_template['sparse_colind'] = []
+            self._vars_for_template['sparse_nnz'] = 0
 
     def _add_data_clamp_to_model(self):
         """ Add add membrane_data_clamp_current_conductance and membrane_data_clamp_current to the model"""
