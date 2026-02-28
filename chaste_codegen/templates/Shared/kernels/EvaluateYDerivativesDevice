@@ -2,8 +2,31 @@ template<typename ValueType>
 DEVICE
 void {{class_name}}::EvaluateYDerivativesDevice(ValueType {{free_variable.var_name}}, const ValueType *rY, ValueType *rDY, const ValueType mSetVoltageDerivativeToZero, const ValueType mFixedVoltage, const ValueType *mParameters, const ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim)
 {
-    {% include "Shared/cpp/EvaluateYDerivativesParts/UnpackY" %}
-    {% include "Shared/cpp/EvaluateYDerivativesParts/Mathematics" %}
-    {% include "Shared/cpp/EvaluateYDerivativesParts/VoltageDerivsGPU" %}
-    {% include "Shared/cpp/EvaluateYDerivativesParts/PackDY" %}
+    // Inputs:
+    // Time units: millisecond
+    {%- for state_var in state_vars %}
+    {% if state_var.in_y_deriv %}double {{ state_var.var }} = {{state_var.rY_lookup_device}};
+    // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
+    {%- endif %}{%- endfor %}
+    // Mathematics
+    {% for deriv in y_derivative_equations_device %}{%- if deriv.is_voltage%}double {{deriv.lhs}};{%- endif %}{%- endfor %}
+    {%- for deriv in y_derivative_equations_device %}{%- if deriv.in_eqs_excl_voltage %}
+    const double {{deriv.lhs}} = {{deriv.rhs}}; // {{deriv.units}}{%- endif %}
+    {%- endfor %}
+    if (mSetVoltageDerivativeToZero)
+    {
+        {% for deriv in y_derivative_equations_device %}{%- if deriv.is_voltage %}{{ deriv.lhs }} = 0.0;{%- endif %}{%- endfor %}
+    }
+    else
+    {
+        {% for deriv in y_derivative_equations_device %}
+            {%- if not deriv.in_eqs_excl_voltage %}
+                {# We treat everything as a standard derivative here, omitting Data Clamp branches #}
+                {% if not deriv.is_voltage %}const double {% endif %}{{ deriv.lhs }} = {{ deriv.rhs }};
+            {%- endif %}
+        {%- endfor %}
+    }
+    {% for deriv in y_derivatives %}
+    rDY[ {{loop.index0}} ] = {{deriv}};
+    {%- endfor %}
 }

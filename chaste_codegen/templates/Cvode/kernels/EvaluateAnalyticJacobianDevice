@@ -3,8 +3,14 @@
     DEVICE
     void {{class_name}}::EvaluateAnalyticJacobianDevice(ValueType {{free_variable.var_name}}, const ValueType *rY, ValueType *rDY, ValueType *rJacobian, ValueType *rTmp1, ValueType *rTmp2, ValueType *rTmp3, const unsigned nvars, const ValueType mSetVoltageDerivativeToZero, const ValueType mFixedVoltage, const ValueType *mParameters, const ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim)
     {
-        {% include "Cvode/cpp/EvaluateAnalyticJacobianParts/UnpackY" %}
-        {% include "Cvode/cpp/EvaluateAnalyticJacobianParts/Mathematics" %}
-        {% include "Cvode/cpp/EvaluateAnalyticJacobianParts/PackJacobian" %}
+        {% for state_var in state_vars %}
+        {%- if state_var.in_jacobian %}double {{ state_var.var }} = {{state_var.rY_lookup_device}};
+        // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
+        {% endif %}{%- endfor %}
+        {% for equation in jacobian_equations_device %}const double {{equation.lhs}} = {{equation.rhs}};
+        {% endfor %}
+        // Matrix entries{% for entry in jacobian_entries_device %}
+        rJacobian[{{entry.j}} * nvars + {{entry.i}}] = {% if membrane_voltage_index == entry.i %}mSetVoltageDerivativeToZero ? 0.0 : ({{entry.entry}});{%- else %}{{entry.entry}};{%- endif %}
+        {%- endfor %}
     }
 {% endif -%}

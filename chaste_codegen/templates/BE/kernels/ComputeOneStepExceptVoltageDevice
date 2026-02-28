@@ -12,26 +12,22 @@ void {{class_name}}::SolveClosedFormVarsDevice(ValueType rY[{{class_name}}::TOTA
     {%- if state_var.in_y_deriv and state_var.linear and state_var.in_one_step_except_v %}ValueType {{ state_var.var }} = {{state_var.rY_lookup}};
     // Units: {{state_var.units}}; Initial value: {{state_var.initial_value}}
     {% endif %}{%- endfor %}
-
     {% for eq in linear_equations %}const ValueType {{eq.lhs}} = {{eq.rhs}};
-    {% endfor %}
+    {%- endfor %}
 
-    {% for deriv in linear_deriv_eqs %}
+    {% for deriv in linear_deriv_eqs -%}
     rY[{{deriv.state_var_index}}] = ({{deriv.var}} + (({{deriv.g}}) * mDt)) / (1.0 - (({{deriv.h}}) * mDt));
     {%- endfor %}
 }
-
-{%- if nonlinear_state_vars|length > 0 %}/* Gather non-linear variables from state and put them into guess for Newton solve */
+{% if nonlinear_state_vars|length > 0 %}/* Gather non-linear variables from state and put them into guess for Newton solve */
 template<typename ValueType>
 DEVICE
 void {{class_name}}::FillInitialGuessDevice(ValueType _guess[{{class_name}}::NONLINEAR_SIZE],
                              const ValueType rY[{{class_name}}::TOTAL_SIZE])
 {
-    {% if nonlinear_state_vars|length > 0 %} {# We do not need this if really, if it is empty we just get no op#}
-    {% for state_var in nonlinear_state_vars %}
-    _guess[{{ loop.index0 }}] = rY[{{ state_var.state_var_index }}];
-    {% endfor %}
-    {% endif %}
+    {% if nonlinear_state_vars|length > 0 %} {# We do not need this if really, if it is empty we just get no op -#}
+    {% for state_var in nonlinear_state_vars %}_guess[{{ loop.index0 }}] = rY[{{ state_var.state_var_index }}];{% endfor %}
+    {%- endif %}
 }
 
 /* After Newton solve, scatter the solved nonlinear variables back into y */
@@ -40,9 +36,7 @@ DEVICE
 void {{class_name}}::ScatterSolutionDevice(const ValueType _guess[{{class_name}}::NONLINEAR_SIZE],
                             ValueType rY[{{class_name}}::TOTAL_SIZE])
 {
-    {% if nonlinear_state_vars|length > 0 %}
-    {% for state_var in nonlinear_state_vars %}
-    rY[{{ state_var.state_var_index }}] = _guess[{{ loop.index0 }}];
-    {% endfor %}
-    {% endif %}
+    {% if nonlinear_state_vars|length > 0 -%}
+    {% for state_var in nonlinear_state_vars %}rY[{{ state_var.state_var_index }}] = _guess[{{ loop.index0 }}];{% endfor %}
+    {%- endif %}
 }{% endif %}

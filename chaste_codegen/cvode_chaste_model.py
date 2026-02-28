@@ -45,10 +45,14 @@ class CvodeChasteModel(ChasteModel):
 
             jac_eqs, jac_entries = self._print_jacobian()
             self._vars_for_template['jacobian_equations'] = jac_eqs
-            self._vars_for_template['jacobian_entries'] = jac_entries 
+            self._vars_for_template['jacobian_entries'] = jac_entries
+
+            jac_eqs_dev, jac_entries_dev = self._in_device_mode(self._print_jacobian)
+            self._vars_for_template['jacobian_equations_device'] = jac_eqs_dev
+            self._vars_for_template['jacobian_entries_device'] = jac_entries_dev 
 
             # TODO: not sure if we still need this sort or if the entries are guaranteed to be in this order anyway
-            sorted_jac_entries = sorted(jac_entries, key=lambda entry: (entry['i'], entry['j']))
+            sorted_jac_entries = sorted(jac_entries_dev, key=lambda entry: (entry['i'], entry['j']))
 
             n_vars = len(self._state_vars)
             
@@ -173,10 +177,14 @@ class CvodeChasteModel(ChasteModel):
                                        modifiers_with_defining_eqs=modifiers_with_defining_eqs))
 
     def _print_modifiable_parameters(self, variable):
-        return 'CHASTE_VEC_GET(mParameters, ' + self._modifiable_parameter_lookup[variable] + ')'
+        if self._is_generating_device_code:
+            return 'mParameters[' + self._modifiable_parameter_lookup[variable] + ']'
+        return 'NV_Ith_S(mParameters, ' + self._modifiable_parameter_lookup[variable] + ')'
 
     def _format_rY_entry(self, index):
-        return 'CHASTE_VEC_GET(rY, ' + str(index) + ')'
+        if self._is_generating_device_code:
+            return 'rY[' + str(index) + ']'
+        return 'NV_Ith_S(rY, ' + str(index) + ')'
 
     def _update_state_vars(self):
         jacobian_symbols = set()

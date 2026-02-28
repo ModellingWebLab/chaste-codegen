@@ -3,7 +3,6 @@
 {% include "Shared/hpp/includes" %}
 #include "{{base_class}}.hpp"
 #include "HostDeviceMacros.hpp"
-#include "ChasteCvodeMacros.hpp"
 {% include "Shared/hpp/class_declaration" %}
     static constexpr unsigned TOTAL_SIZE = {{ state_vars|length }}u;
     static constexpr unsigned NNZ = {{ sparse_nnz }}u;
@@ -37,6 +36,4 @@
 #ifdef __CUDACC__
     #include "{{ file_name }}Kernels.hpp"
 #endif{% endif %}
-
-#include "ChasteCpuMacros.hpp"
 #endif // CHASTE_CVODE

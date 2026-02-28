@@ -5,4 +5,4 @@
                           {{mod.modifier}});
         {%- endfor %}
         {%- for param in modifiable_parameters %}
-        CHASTE_VEC_GET(this->mParameters, {{loop.index0}}) = {{param["initial_value"]}}; // ({{param["comment_name"]}}) [{{param["units"]}}]{%- endfor %}
+         {% if is_cvode is defined and is_cvode %}NV_Ith_S(this->mParameters, {{loop.index0}}){% else %}this->mParameters[{{loop.index0}}]{% endif %} = {{param["initial_value"]}}; // ({{param["comment_name"]}}) [{{param["units"]}}]{%- endfor %}
