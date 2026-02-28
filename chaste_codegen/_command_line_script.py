@@ -99,6 +99,8 @@ def process_command_line():
                        help="quiet operation, don't print informational messages to screen")
     group.add_argument('--skip-singularity-fixes', action='store_true', default=False,
                        help="skip singularity fixes in Goldman-Hodgkin-Katz (GHK) equations.")
+    group.add_argument('--generate-kernels', action='store_true', default=False,
+                       help="Generate GPU/Device kernel files (...Kernels.hpp) for supported model types.")
 
     group = parser.add_argument_group('Chaste options', description='Options specific to Chaste code output')
     group.add_argument('-y', '--dll', '--dynamically-loadable', dest='dynamically_loadable',
@@ -198,8 +200,8 @@ def process_command_line():
         # Must make a copy of ext so that if we modify the extensions here, this is the only translator that gets those modifications
         ext = list(ext) if ext else list(translator_class.DEFAULT_EXTENSIONS)
 
-        # Make sure we generate GPU kernels for models that provide kernel templates
-        if translator[2] in TRANSLATORS_WITH_GPU:
+        # Make sure we generate GPU kernels for models that provide kernel templates (if they are wanted)
+        if args.generate_kernels and translator[2] in TRANSLATORS_WITH_GPU:
             ext.append('Kernels.hpp')
 
         if args.cls_name is not None:
@@ -223,6 +225,9 @@ def process_command_line():
                 print(file)
         else:
             with translator_class(model, outfile_base, header_ext=ext[0], **vars(args)) as chaste_model:
+                # TODO: Consider adding a class variable chaste_model.generate_kernels and using this to prevent
+                # filling unused jinja template variables (if filling in these variables really adds that much work!)
+
                 chaste_model.generate_chaste_code()
 
                 for file, code in zip(get_files, chaste_model.generated_code):
