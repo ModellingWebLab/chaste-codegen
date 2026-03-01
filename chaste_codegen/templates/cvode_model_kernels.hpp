@@ -1,6 +1,5 @@
 {% include "Shared/kernels/header_comments" %}
 {% include "Shared/kernels/includes" %}
-#include "ChasteCudaMacros.hpp"
 
 {% include "Shared/kernels/EvaluateYDerivativesDevice"%}
 

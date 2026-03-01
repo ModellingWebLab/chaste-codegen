@@ -12,28 +12,31 @@
     {{class_name}}(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
 {% include "Shared/hpp/destructor_verify_state_variables_GetIIonic" %}
     void EvaluateYDerivatives(double {{free_variable.var_name}}, const {{vector_decl}} rY, {{vector_decl}} rDY);
-    {% if not lookup_parameters is defined%}template<typename ValueType>
-    DEVICE
-    static void EvaluateYDerivativesDevice(ValueType {{free_variable.var_name}}, const ValueType* rY, ValueType* rDY, const ValueType mSetVoltageDerivativeToZero, const ValueType mFixedVoltage, const ValueType* mParameters, const ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim);{% endif %}
-    {%- if derived_quantities|length > 0 %}
+    {% if jacobian_equations|length > 0 -%}
+    void EvaluateAnalyticJacobian(double {{free_variable.var_name}}, {{vector_decl}} rY, {{vector_decl}} rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, {{vector_decl}} rTmp1, {{vector_decl}} rTmp2, {{vector_decl}} rTmp3);
+    {%- endif %}
+    {% if derived_quantities|length > 0 -%}
     {{vector_decl}} ComputeDerivedQuantities(double {{free_variable.var_name}}, const {{vector_decl}} & rY);
     {%- endif %}
-    {%- if jacobian_equations|length > 0 %}
-    void EvaluateAnalyticJacobian(double {{free_variable.var_name}}, {{vector_decl}} rY, {{vector_decl}} rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, {{vector_decl}} rTmp1, {{vector_decl}} rTmp2, {{vector_decl}} rTmp3);
-    {% if not lookup_parameters is defined %}template<typename ValueType>
+#if USING_DEVICE_COMPILER
+    {% if not lookup_parameters is defined%}template<typename ValueType>
+    DEVICE
+    static void EvaluateYDerivativesDevice(ValueType {{free_variable.var_name}}, const ValueType* rY, ValueType* rDY, const ValueType mSetVoltageDerivativeToZero, const ValueType mFixedVoltage, const ValueType* mParameters, const ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim);
+    template<typename ValueType>
     DEVICE
     static void EvaluateAnalyticJacobianDevice(ValueType {{free_variable.var_name}}, const ValueType *rY, ValueType *rDY, ValueType *rJacobian, ValueType *rTmp1, ValueType *rTmp2, ValueType *rTmp3, const unsigned nvars, const ValueType mSetVoltageDerivativeToZero, const ValueType mFixedVoltage, const ValueType *mParameters, const ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim);
     template<typename ValueType>
     DEVICE
-    static void EvaluateSparseAnalyticJacobianDevice(ValueType {{free_variable.var_name}}, const ValueType *rY, ValueType *rDY, ValueType *rJacobian, ValueType *rTmp1, ValueType *rTmp2, ValueType *rTmp3, const unsigned nvars, const ValueType mSetVoltageDerivativeToZero, const ValueType mFixedVoltage, const ValueType *mParameters, const ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim);{% endif %}
+    static void EvaluateSparseAnalyticJacobianDevice(ValueType {{free_variable.var_name}}, const ValueType *rY, ValueType *rDY, ValueType *rJacobian, ValueType *rTmp1, ValueType *rTmp2, ValueType *rTmp3, const unsigned nvars, const ValueType mSetVoltageDerivativeToZero, const ValueType mFixedVoltage, const ValueType *mParameters, const ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim);
     {%- endif %}
+#endif
 {% include "Shared/hpp/CHASTE_CLASS_EXPORT" %}
 {# As CHASTE_CLASS_EXPORT defines our closing bracket for our class, and also the end of the double include guard for this file,
     we cannot easily add our extra includes below within the double include guard. Hence we should ensure anything included below
     also has its own double include guard (or is ok to be included multiple times). #}
 
 {% if not lookup_parameters is defined %}
-#ifdef __CUDACC__
+#if USING_DEVICE_COMPILER
     #include "{{ file_name }}Kernels.hpp"
 #endif{% endif %}
 #endif // CHASTE_CVODE

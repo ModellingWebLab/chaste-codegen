@@ -102,9 +102,9 @@ class ChastePrinter(Printer):
     }
 
     _literal_names = {
-        'e': 'CHASTE_MATH::E',
-        'nan': 'CHASTE_MATH::NaN',
-        'pi': 'CHASTE_MATH::Pi',
+        'e': 'CHASTE_CONST(CHASTE_MATH::E)',
+        'nan': 'CHASTE_CONST(CHASTE_MATH::NaN)',
+        'pi': 'CHASTE_CONST(CHASTE_MATH::Pi)',
     }
 
     def __init__(self, symbol_function=None, derivative_function=None, lookup_table_function=lambda e: None):

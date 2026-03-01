@@ -6,4 +6,6 @@
 {%- if dynamically_loadable %}
 #include "AbstractDynamicallyLoadableEntity.hpp"{%- endif %}
 #include "AbstractStimulusFunction.hpp"
+#if USING_DEVICE_COMPILER
 #include "StimulusEvaluatorCuda.hpp"
+#endif
