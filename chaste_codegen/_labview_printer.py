@@ -1,9 +1,9 @@
 from sympy import Not
 
-from chaste_codegen._chaste_printer import ChastePrinter
+from chaste_codegen._chaste_printer_common import ChastePrinterCommon
 
 
-class LabviewPrinter(ChastePrinter):
+class LabviewPrinter(ChastePrinterCommon):
     """
     Converts Sympy expressions to strings for use in Chaste code generation.
 
