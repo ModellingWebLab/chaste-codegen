@@ -3,7 +3,8 @@ usage: chaste_codegen [-h] [--version] [--normal] [--cvode]
                       [--grl1] [--grl2] [--rush-larsen-labview]
                       [--rush-larsen-c] [-j] [-o OUTFILE]
                       [--output-dir OUTPUT_DIR] [--show-outputs] [-c CLS_NAME]
-                      [-q] [--skip-singularity-fixes] [-y] [--opt] [-m]
+                      [-q] [--skip-singularity-fixes] [--generate-kernels]
+                      [-y] [--opt] [-m]
                       [--lookup-table <metadata tag> min max step]
                       [--use-model-factory]
                       cellml_file
@@ -13,7 +14,7 @@ Chaste code generation for cellml.
 positional arguments:
   cellml_file           The cellml file to convert to chaste code
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   --version             show program's version number and exit
 
@@ -59,6 +60,8 @@ Generated code options:
   --skip-singularity-fixes
                         skip singularity fixes in Goldman-Hodgkin-Katz (GHK)
                         equations.
+  --generate-kernels    Generate GPU/Device kernel files (...Kernels.hpp) for
+                        supported model types.
 
 Chaste options:
   Options specific to Chaste code output
