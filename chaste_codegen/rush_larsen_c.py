@@ -137,11 +137,11 @@ class RushLarsenC(RushLarsenModel):
         # Print modifiable parameters as mParameters[index]
         self._printer = \
             cg.ChastePrinterCommon(lambda variable:
-                             get_variable_name(variable, variable in self._in_interface)
-                             if variable not in self._model.modifiable_parameters
-                             else self._print_modifiable_parameters(variable),
-                             lambda deriv: get_variable_name(deriv),
-                             lookup_table_function)
+                                   get_variable_name(variable, variable in self._in_interface)
+                                   if variable not in self._model.modifiable_parameters
+                                   else self._print_modifiable_parameters(variable),
+                                   lambda deriv: get_variable_name(deriv),
+                                   lookup_table_function)
 
         # Printer for printing variable in comments e.g. for ode system information
         self._name_printer = cg.ChastePrinterCommon(lambda variable: get_variable_name(variable))

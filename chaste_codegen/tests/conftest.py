@@ -119,7 +119,6 @@ def compare_model_against_reference(chaste_model, tmp_path, model_type, referenc
         write_file(gen_file_path, code)
         compare_file_against_reference(expected_path + ext, gen_file_path)
 
-# TODO: Run this to generate 'golden' kernels and then cp them from tmp to chaste_reference_models
 
 def compare_file_against_reference(reference_file, file):
     """ Check a model's generated files against given reference files

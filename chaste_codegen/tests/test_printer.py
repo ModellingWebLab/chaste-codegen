@@ -73,7 +73,8 @@ class TestChastePrinter(object):
 
     def testabs_(self, printer, x, y):
         assert printer.doprint(sp.Abs(x + y)) == 'CHASTE_MATH::Abs(x + y)'
-        assert printer.doprint(sp.Abs(sp.Float('3.2', 17), evaluate=False)) == 'CHASTE_MATH::Abs(CHASTE_CONST(3.2000000000000002))'
+        assert printer.doprint(sp.Abs(sp.Float('3.2', 17), evaluate=False)) \
+            == 'CHASTE_MATH::Abs(CHASTE_CONST(3.2000000000000002))'
         assert printer.doprint(sp.Abs(-3, evaluate=False)) == 'CHASTE_MATH::Abs(-3)'
 
     def test_trig_functions(self, printer, x):

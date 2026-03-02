@@ -3,8 +3,8 @@ Main module for cardiac Chaste code generation
 """
 from cellmlmanip.parser import Transpiler
 
-from ._chaste_printer_common import ChastePrinterCommon  # noqa
 from ._chaste_printer import ChastePrinter  # noqa
+from ._chaste_printer_common import ChastePrinterCommon  # noqa
 #
 # Load constants and version information
 #

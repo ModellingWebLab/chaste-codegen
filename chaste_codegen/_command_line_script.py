@@ -198,7 +198,7 @@ def process_command_line():
         outfile_path, model_name_from_file, outfile_base, ext = \
             get_outfile_parts(args.outfile, args.output_dir, args.cellml_file, translator_class)
 
-        # Must make a copy of ext so that if we modify the extensions here, this is the only translator that gets those modifications
+        # Must make a copy of ext else we will later try to append to the actual DEFAULT_EXTENSIONS
         ext = list(ext) if ext else list(translator_class.DEFAULT_EXTENSIONS)
 
         # Make sure we generate GPU kernels for models that provide kernel templates (if they are wanted)

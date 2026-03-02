@@ -49,12 +49,12 @@ class ChasteModel(object):
         """ Pre analysis preparation. Required to be able to use model in context (with).
         Defined for overwriting in sub-classes if pre-processing is needed to use the model for code generation. """
         return self
-    
+
     @contextmanager
     def _device_mode(self):
-        """ Creates an _is_currently_generating_kernel_code context where we can run methods under 'with' and if the method contains
-        any branches like: if self._is_currently_generating_kernel_code:, the if part will run when the method is called in this context
-
+        """ Creates an _is_currently_generating_kernel_code context where we can run methods under 'with' and if the
+        method contains any branches like: if self._is_currently_generating_kernel_code:, the if part will run when
+        the method is called in this context
 
         Example:
             with self._device_mode():
@@ -67,10 +67,10 @@ class ChasteModel(object):
             yield
         finally:
             self._is_currently_generating_kernel_code = original_state
-    
+
     def _in_device_mode(self, func):
         """ Thin wrapper to allow use of the _is_currently_generating_kernel_code context in one line
-        
+
         Example:
             self._in_device_mode(lambda: self._format_derivative_equations(self._derivative_equations))
 
@@ -103,7 +103,7 @@ class ChasteModel(object):
 
         self._model = model
 
-        # By default we are generating CPU code, the context manager handles setting and unsetting this for device generation
+        # The context manager handles setting and unsetting this for kernel code generation
         self._is_currently_generating_kernel_code = False
         self.will_generate_kernels = kwargs.get('will_generate_kernels', False)
 
@@ -182,7 +182,8 @@ class ChasteModel(object):
              'ionic_vars': self._format_ionic_vars(),
              'y_derivatives': self._format_y_derivatives(),
              'y_derivative_equations': self._format_derivative_equations(self._derivative_equations),
-             'y_derivative_equations_device': self._in_device_mode(lambda: self._format_derivative_equations(self._derivative_equations)),
+             'y_derivative_equations_device':
+                 self._in_device_mode(lambda: self._format_derivative_equations(self._derivative_equations)),
              'free_variable': self._format_free_variable(),
              'ode_system_information': self._format_system_info(),
              'named_attributes': self._format_named_attributes(),

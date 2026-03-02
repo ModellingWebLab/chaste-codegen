@@ -55,7 +55,7 @@ class LookupTables:
     """ Holds information about lookuptables and methods to analyse the model for lookup tables.
 
     Note: the use of CHASTE_CONST and CHASTE_MATH inside of lookup tables is not completely tested.
-    There may be a mixture of floats wrapped in macros and some not wrapped in macros here (such as 
+    There may be a mixture of floats wrapped in macros and some not wrapped in macros here (such as
     CHASTE_CONST(3.2) vs 3.2 by itself) because lookup tables have not been implemented on device.
     This will work as long as the macro definitions in Chaste remain sensible, however if we
     do implement lookup tables on device, we will want to ensure that we do wrap all literals with

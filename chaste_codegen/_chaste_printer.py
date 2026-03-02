@@ -1,13 +1,3 @@
-from cellmlmanip.printer import Printer
-from sympy import (
-    Mul,
-    Not,
-    Piecewise,
-    Pow,
-    Rational,
-    S,
-)
-from sympy.core.mul import _keep_coeff
 from sympy.printing import cxxcode
 from sympy.printing.precedence import precedence
 
@@ -79,7 +69,7 @@ class ChastePrinter(ChastePrinterCommon):
         'tanh': 'CHASTE_MATH::Tanh',
 
         'sign': 'CHASTE_MATH::Sign',
-        
+
         'GetIntracellularAreaStimulus': 'CHASTE_STIM',
         'HeartConfig::Instance()->GetCapacitance': 'CHASTE_CAP',
         'GetExperimentalVoltageAtTimeT': 'CHASTE_EXP_VOLT'
@@ -119,7 +109,7 @@ class ChastePrinter(ChastePrinterCommon):
     def _print_float(self, expr):
         """
         Handles ``float``s. All constants must be wrapped with a macro so that
-        generated code that ends up in a device kernel can easily be cast between 
+        generated code that ends up in a device kernel can easily be cast between
         float and double as this has huge performance implications on device
 
         ChastePrinterCommon._print_Mul strips away - signs in the expression and then
@@ -130,7 +120,7 @@ class ChastePrinter(ChastePrinterCommon):
         # print integers as int if they are between min & max int in c++
         if expr.is_integer() and C_MIN_INT < expr < C_MAX_INT:
             return cxxcode(int(expr), standard='C++11')
-        
+
         num_str = cxxcode(float(expr), standard='C++11')
         if num_str.startswith('-'):
             return f'-CHASTE_CONST({num_str[1:]})'

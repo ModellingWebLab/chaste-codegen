@@ -49,13 +49,13 @@ class CvodeChasteModel(ChasteModel):
 
             jac_eqs_dev, jac_entries_dev = self._in_device_mode(self._print_jacobian)
             self._vars_for_template['jacobian_equations_device'] = jac_eqs_dev
-            self._vars_for_template['jacobian_entries_device'] = jac_entries_dev 
+            self._vars_for_template['jacobian_entries_device'] = jac_entries_dev
 
             # TODO: not sure if we still need this sort or if the entries are guaranteed to be in this order anyway
             sorted_jac_entries = sorted(jac_entries_dev, key=lambda entry: (entry['i'], entry['j']))
 
             n_vars = len(self._state_vars)
-            
+
             # Build row_ptr (size n_vars + 1)
             row_counts = [0] * n_vars
             for entry in sorted_jac_entries:
@@ -63,10 +63,10 @@ class CvodeChasteModel(ChasteModel):
             row_ptr = [0]
             for count in row_counts:
                 row_ptr.append(row_ptr[-1] + count)
-            
+
             # Build col_ind (size num_entries)
             col_ind = [entry['j'] for entry in sorted_jac_entries]
-            
+
             self._vars_for_template['sparse_jacobian_entries'] = sorted_jac_entries
             self._vars_for_template['sparse_rowptr'] = row_ptr
             self._vars_for_template['sparse_colind'] = col_ind
