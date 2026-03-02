@@ -52,24 +52,24 @@ class ChasteModel(object):
     
     @contextmanager
     def _device_mode(self):
-        """ Creates an _is_generating_device_code context where we can run methods under 'with' and if the method contains
-        any branches like: if self._is_generating_device_code:, the if part will run when the method is called in this context
+        """ Creates an _is_currently_generating_kernel_code context where we can run methods under 'with' and if the method contains
+        any branches like: if self._is_currently_generating_kernel_code:, the if part will run when the method is called in this context
 
 
         Example:
             with self._device_mode():
-                # Any call here will execute code the if parts of if self._is_generating_device_code:
+                # Any call here will execute code the if parts of if self._is_currently_generating_kernel_code:
                 device_eqs = self._format_derivative_equations(self._derivative_equations)
         """
-        original_state = getattr(self, '_is_generating_device_code', False)
-        self._is_generating_device_code = True
+        original_state = getattr(self, '_is_currently_generating_kernel_code', False)
+        self._is_currently_generating_kernel_code = True
         try:
             yield
         finally:
-            self._is_generating_device_code = original_state
+            self._is_currently_generating_kernel_code = original_state
     
     def _in_device_mode(self, func):
-        """ Thin wrapper to allow use of the _is_generating_device_code context in one line
+        """ Thin wrapper to allow use of the _is_currently_generating_kernel_code context in one line
         
         Example:
             self._in_device_mode(lambda: self._format_derivative_equations(self._derivative_equations))
@@ -104,7 +104,8 @@ class ChasteModel(object):
         self._model = model
 
         # By default we are generating CPU code, the context manager handles setting and unsetting this for device generation
-        self._is_generating_device_code = False
+        self._is_currently_generating_kernel_code = False
+        self.will_generate_kernels = kwargs.get('will_generate_kernels', False)
 
         # retrieve probabilities that don't stay in 0 ... 1 range and shouldn't be checked
         not_quite_probabilities = \
@@ -324,7 +325,7 @@ class ChasteModel(object):
 
     def _format_rY_lookup(self, index, var, use_modifier=True):
         """ Formatting of rY lookup for printing"""
-        if self._is_generating_device_code:
+        if self._is_currently_generating_kernel_code:
             entry = 'rY[' + str(index) + ']'
         else:
             entry = self._format_rY_entry(index)
@@ -496,6 +497,8 @@ class ChasteModel(object):
     def generate_chaste_code(self):
         """ Generates and stores chaste code"""
         for templ in self._templates:
+            if templ.endswith("kernels.hpp") and not self.will_generate_kernels:
+                continue
             template = cg.load_template(templ)
             self.generated_code.append(template.render(self._vars_for_template))
 

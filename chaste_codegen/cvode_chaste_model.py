@@ -183,12 +183,12 @@ class CvodeChasteModel(ChasteModel):
                                        modifiers_with_defining_eqs=modifiers_with_defining_eqs))
 
     def _print_modifiable_parameters(self, variable):
-        if self._is_generating_device_code:
+        if self._is_currently_generating_kernel_code:
             return 'mParameters[' + self._modifiable_parameter_lookup[variable] + ']'
         return 'NV_Ith_S(mParameters, ' + self._modifiable_parameter_lookup[variable] + ')'
 
     def _format_rY_entry(self, index):
-        if self._is_generating_device_code:
+        if self._is_currently_generating_kernel_code:
             return 'rY[' + str(index) + ']'
         return 'NV_Ith_S(rY, ' + str(index) + ')'
 

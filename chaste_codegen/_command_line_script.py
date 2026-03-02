@@ -202,6 +202,8 @@ def process_command_line():
         ext = list(ext) if ext else list(translator_class.DEFAULT_EXTENSIONS)
 
         # Make sure we generate GPU kernels for models that provide kernel templates (if they are wanted)
+        # TODO: Maybe make this look more like use_modifiers by adding an extra entry to the TRANSLATORS tuples
+        args.will_generate_kernels = args.generate_kernels and translator[1] in TRANSLATORS_WITH_KERNELS
         if args.generate_kernels and translator[1] in TRANSLATORS_WITH_KERNELS:
             ext.append('Kernels.hpp')
 
