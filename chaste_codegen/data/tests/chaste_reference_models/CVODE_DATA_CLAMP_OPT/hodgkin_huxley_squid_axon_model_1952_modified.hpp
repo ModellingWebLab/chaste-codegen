@@ -17,7 +17,11 @@
 #include "ChasteSerialization.hpp"
 #include <boost/serialization/base_object.hpp>
 #include "AbstractStimulusFunction.hpp"
+#if USING_DEVICE_COMPILER
+#include "StimulusEvaluatorCuda.hpp"
+#endif
 #include "AbstractCvodeCellWithDataClamp.hpp"
+#include "HostDeviceMacros.hpp"
 
 class Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvodeDataClampOpt : public AbstractCvodeCellWithDataClamp
 {
@@ -38,6 +42,10 @@ private:
 const bool is_concentration[4] = {false, false, false, false};
 const bool is_probability[4] = {false, false, false, false};
 public:
+    static constexpr unsigned TOTAL_SIZE = 4u;
+    static constexpr unsigned NNZ = 0u;
+    static inline const int sparse_rowptr[] = {  };
+    static inline const int sparse_colind[] = {  };
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvodeDataClampOpt(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
@@ -46,7 +54,11 @@ public:
     AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time, const N_Vector rY, N_Vector rDY);
+    
     N_Vector ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY);
+#if USING_DEVICE_COMPILER
+    
+#endif
 };
 
 // Needs to be included last
@@ -83,4 +95,7 @@ namespace boost
 }
 
 #endif // CELLHODGKIN_HUXLEY_SQUID_AXON_MODEL_1952_MODIFIEDFROMCELLMLCVODEDATACLAMPOPT_HPP_
+
+
+
 #endif // CHASTE_CVODE

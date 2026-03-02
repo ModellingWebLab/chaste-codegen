@@ -18,7 +18,11 @@
 #include <boost/serialization/base_object.hpp>
 #include "AbstractDynamicallyLoadableEntity.hpp"
 #include "AbstractStimulusFunction.hpp"
+#if USING_DEVICE_COMPILER
+#include "StimulusEvaluatorCuda.hpp"
+#endif
 #include "AbstractCvodeCell.hpp"
+#include "HostDeviceMacros.hpp"
 
 class Dynamicmahajan_shiferaw_2008FromCellMLCvode : public AbstractCvodeCell, public AbstractDynamicallyLoadableEntity
 {
@@ -39,6 +43,10 @@ private:
 const bool is_concentration[26] = {false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, true, true, true, true, false, false};
 const bool is_probability[26] = {false, false, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 public:
+    static constexpr unsigned TOTAL_SIZE = 26u;
+    static constexpr unsigned NNZ = 0u;
+    static inline const int sparse_rowptr[] = {  };
+    static inline const int sparse_colind[] = {  };
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
@@ -47,7 +55,19 @@ public:
     void VerifyStateVariables();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__Environment__time, const N_Vector rY, N_Vector rDY);
+    
     N_Vector ComputeDerivedQuantities(double var_chaste_interface__Environment__time, const N_Vector & rY);
+#if USING_DEVICE_COMPILER
+    template<typename ValueType>
+    DEVICE
+    static void EvaluateYDerivativesDevice(ValueType var_chaste_interface__Environment__time, const ValueType* rY, ValueType* rDY, const ValueType mSetVoltageDerivativeToZero, const ValueType mFixedVoltage, const ValueType* mParameters, const ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim);
+    template<typename ValueType>
+    DEVICE
+    static void EvaluateAnalyticJacobianDevice(ValueType var_chaste_interface__Environment__time, const ValueType *rY, ValueType *rDY, ValueType *rJacobian, ValueType *rTmp1, ValueType *rTmp2, ValueType *rTmp3, const unsigned nvars, const ValueType mSetVoltageDerivativeToZero, const ValueType mFixedVoltage, const ValueType *mParameters, const ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim);
+    template<typename ValueType>
+    DEVICE
+    static void EvaluateSparseAnalyticJacobianDevice(ValueType var_chaste_interface__Environment__time, const ValueType *rY, ValueType *rDY, ValueType *rJacobian, ValueType *rTmp1, ValueType *rTmp2, ValueType *rTmp3, const unsigned nvars, const ValueType mSetVoltageDerivativeToZero, const ValueType mFixedVoltage, const ValueType *mParameters, const ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim);
+#endif
 };
 
 // Needs to be included last
@@ -84,4 +104,10 @@ namespace boost
 }
 
 #endif // DYNAMICMAHAJAN_SHIFERAW_2008FROMCELLMLCVODE_HPP_
+
+
+
+#if USING_DEVICE_COMPILER
+    #include "dynamic_mahajan_shiferaw_2008Kernels.hpp"
+#endif
 #endif // CHASTE_CVODE

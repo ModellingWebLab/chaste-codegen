@@ -17,7 +17,11 @@
 #include "ChasteSerialization.hpp"
 #include <boost/serialization/base_object.hpp>
 #include "AbstractStimulusFunction.hpp"
+#if USING_DEVICE_COMPILER
+#include "StimulusEvaluatorCuda.hpp"
+#endif
 #include "AbstractCvodeCellWithDataClamp.hpp"
+#include "HostDeviceMacros.hpp"
 
 class Celldokos_model_1996FromCellMLCvodeDataClamp : public AbstractCvodeCellWithDataClamp
 {
@@ -38,6 +42,10 @@ private:
 const bool is_concentration[18] = {false, true, false, false, false, false, false, false, false, false, false, true, false, false, true, true, true, true};
 const bool is_probability[18] = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 public:
+    static constexpr unsigned TOTAL_SIZE = 18u;
+    static constexpr unsigned NNZ = 0u;
+    static inline const int sparse_rowptr[] = {  };
+    static inline const int sparse_colind[] = {  };
 
     double GetIntracellularCalciumConcentration();
     Celldokos_model_1996FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
@@ -45,7 +53,19 @@ public:
     void VerifyStateVariables();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const N_Vector rY, N_Vector rDY);
+    
     N_Vector ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const N_Vector & rY);
+#if USING_DEVICE_COMPILER
+    template<typename ValueType>
+    DEVICE
+    static void EvaluateYDerivativesDevice(ValueType var_chaste_interface__environment__time_converted, const ValueType* rY, ValueType* rDY, const ValueType mSetVoltageDerivativeToZero, const ValueType mFixedVoltage, const ValueType* mParameters, const ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim);
+    template<typename ValueType>
+    DEVICE
+    static void EvaluateAnalyticJacobianDevice(ValueType var_chaste_interface__environment__time_converted, const ValueType *rY, ValueType *rDY, ValueType *rJacobian, ValueType *rTmp1, ValueType *rTmp2, ValueType *rTmp3, const unsigned nvars, const ValueType mSetVoltageDerivativeToZero, const ValueType mFixedVoltage, const ValueType *mParameters, const ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim);
+    template<typename ValueType>
+    DEVICE
+    static void EvaluateSparseAnalyticJacobianDevice(ValueType var_chaste_interface__environment__time_converted, const ValueType *rY, ValueType *rDY, ValueType *rJacobian, ValueType *rTmp1, ValueType *rTmp2, ValueType *rTmp3, const unsigned nvars, const ValueType mSetVoltageDerivativeToZero, const ValueType mFixedVoltage, const ValueType *mParameters, const ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim);
+#endif
 };
 
 // Needs to be included last
@@ -82,4 +102,10 @@ namespace boost
 }
 
 #endif // CELLDOKOS_MODEL_1996FROMCELLMLCVODEDATACLAMP_HPP_
+
+
+
+#if USING_DEVICE_COMPILER
+    #include "dokos_model_1996Kernels.hpp"
+#endif
 #endif // CHASTE_CVODE

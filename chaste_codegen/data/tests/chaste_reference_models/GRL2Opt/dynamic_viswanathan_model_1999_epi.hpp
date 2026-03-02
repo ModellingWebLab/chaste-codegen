@@ -17,6 +17,9 @@
 #include <boost/serialization/base_object.hpp>
 #include "AbstractDynamicallyLoadableEntity.hpp"
 #include "AbstractStimulusFunction.hpp"
+#if USING_DEVICE_COMPILER
+#include "StimulusEvaluatorCuda.hpp"
+#endif
 #include "AbstractGeneralizedRushLarsenCardiacCell.hpp"
 
 class Dynamicviswanathan_model_1999_epiFromCellMLGRL2Opt : public AbstractGeneralizedRushLarsenCardiacCell, public AbstractDynamicallyLoadableEntity

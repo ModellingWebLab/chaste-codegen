@@ -16,7 +16,15 @@
 #include "ChasteSerialization.hpp"
 #include <boost/serialization/base_object.hpp>
 #include "AbstractStimulusFunction.hpp"
+#if USING_DEVICE_COMPILER
+#include "StimulusEvaluatorCuda.hpp"
+#endif
 #include "AbstractBackwardEulerCardiacCell.hpp"
+
+#if USING_DEVICE_COMPILER
+template<typename CellType, typename ValueType>
+class BackwardEulerKernelLauncher; // Forward declare to hide CUDA-specifics from standard C++ compiler
+#endif
 
 class Celltest_piecewises_beFromCellMLBackwardEuler : public AbstractBackwardEulerCardiacCell<2>
 {
@@ -37,17 +45,48 @@ private:
 const bool is_concentration[4] = {false, false, false, false};
 const bool is_probability[4] = {false, false, false, false};
 public:
+#if USING_DEVICE_COMPILER
+    template<typename ValueType> using SolverKernelLauncher = BackwardEulerKernelLauncher<Celltest_piecewises_beFromCellMLBackwardEuler, ValueType>;
+    static constexpr unsigned TOTAL_SIZE = 4u;
+    static constexpr unsigned NONLINEAR_SIZE = 2u;
+#endif
 
-    Celltest_piecewises_beFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    Celltest_piecewises_beFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Celltest_piecewises_beFromCellMLBackwardEuler();
     void VerifyStateVariables();
-    double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[2], double rResidual[2]);
-    void ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[2], double rJacobian[2][2]);protected:
+    double GetIIonic(const std::vector<double>* pStateVariables=NULL);
+    void ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[2], double rResidual[2]);
+    void ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[2], double rJacobian[2][2]); 
+
+#if USING_DEVICE_COMPILER
+    template<typename ValueType>
+    DEVICE
+    static void ComputeResidualDevice(ValueType var_chaste_interface__environment__time_converted, const ValueType rCurrentGuess[NONLINEAR_SIZE], const ValueType rY[], ValueType rResidual[NONLINEAR_SIZE], ValueType mDt, const ValueType mParameters[], bool mSetVoltageDerivativeToZero, ValueType mFixedVoltage, ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim);
+
+    template<typename ValueType>
+    DEVICE
+    static void ComputeJacobianDevice(ValueType var_chaste_interface__environment__time_converted, const ValueType rCurrentGuess[NONLINEAR_SIZE], const ValueType rY[], ValueType rJacobian[NONLINEAR_SIZE][NONLINEAR_SIZE], ValueType mDt, const ValueType mParameters[], bool mSetVoltageDerivativeToZero, ValueType mFixedVoltage, ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim); 
+    template<typename ValueType>
+    DEVICE
+    static void UpdateTransmembranePotentialDevice(ValueType var_chaste_interface__environment__time_converted, ValueType rY[], ValueType mDt, const ValueType mParameters[], bool mSetVoltageDerivativeToZero, ValueType mFixedVoltage, DeviceStimulusFunctor<ValueType> stim, ValueType capacitance);
+
+    template<typename ValueType>
+    DEVICE
+    static void SolveClosedFormVarsDevice(ValueType rY[TOTAL_SIZE], ValueType mDt, const ValueType mParameters[], bool mSetVoltageDerivativeToZero, ValueType mFixedVoltage, ValueType capacitance);
+    
+    template<typename ValueType>
+    DEVICE
+    static void FillInitialGuessDevice(ValueType _guess[NONLINEAR_SIZE], const ValueType rY[TOTAL_SIZE]);
+    
+    template<typename ValueType>
+    DEVICE
+    static void ScatterSolutionDevice(const ValueType _guess[NONLINEAR_SIZE], ValueType rY[TOTAL_SIZE]);    
+#endif
+protected:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted);
     void ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time_converted);
 
-    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY);
-};
+    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const std::vector<double> & rY);};
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
@@ -83,3 +122,8 @@ namespace boost
 }
 
 #endif // CELLTEST_PIECEWISES_BEFROMCELLMLBACKWARDEULER_HPP_
+
+#if USING_DEVICE_COMPILER
+    #include "test_piecewises_beKernels.hpp"
+    #include "BackwardEulerKernels.hpp"
+#endif

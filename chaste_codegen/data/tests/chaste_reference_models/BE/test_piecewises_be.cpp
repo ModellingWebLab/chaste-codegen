@@ -22,6 +22,8 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+#include "ChasteMathDeviceNamespaces.hpp"
+#include "ChasteCpuMacros.hpp"
 
 
 
@@ -96,7 +98,7 @@
     void Celltest_piecewises_beFromCellMLBackwardEuler::ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[2], double rResidual[2])
     {
         std::vector<double>& rY = rGetStateVariables();
-        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? CHASTE_THIS(mFixedVoltage) : rY[0]);
         // Units: millivolt; Initial value: -69.1865
         
         //output_nonlinear_state_assignments
@@ -104,12 +106,12 @@
         double var_chaste_interface__fast_sodium_current_m_gate__m = rCurrentGuess[1];
         
         //output_equations
-        const double var_fast_sodium_current_m_gate__alpha_m = ((fabs(pow(var_chaste_interface__fast_sodium_current_m_gate__m, 2) * var_chaste_interface__membrane__V) < 0) ? (2000) : (200 * var_chaste_interface__membrane__V / (1 - exp(-0.10000000000000001 * var_chaste_interface__membrane__V)))); // per_second
+        const double var_fast_sodium_current_m_gate__alpha_m = ((CHASTE_MATH::Abs(CHASTE_MATH::Pow(var_chaste_interface__fast_sodium_current_m_gate__m, 2) * var_chaste_interface__membrane__V) < 0) ? (2000) : (200 * var_chaste_interface__membrane__V / (1 - CHASTE_MATH::Exp(-CHASTE_CONST(0.10000000000000001) * var_chaste_interface__membrane__V)))); // per_second
         const double var_fast_sodium_current_m_gate__m_orig_deriv = var_fast_sodium_current_m_gate__alpha_m; // 1 / second
-        const double d_dt_chaste_interface_var_fast_sodium_current_m_gate__m = 0.001 * var_fast_sodium_current_m_gate__m_orig_deriv; // 1 / millisecond
-        const double var_fast_sodium_current_m_gate2__alpha_m = ((fabs(var_chaste_interface__membrane__V) < 0) ? (2000 * pow(var_chaste_interface__fast_sodium_current_m_gate2__m, 2)) : (200 * var_chaste_interface__membrane__V / (1 - exp(-0.10000000000000001 * var_chaste_interface__membrane__V)))); // per_second
+        const double d_dt_chaste_interface_var_fast_sodium_current_m_gate__m = CHASTE_CONST(0.001) * var_fast_sodium_current_m_gate__m_orig_deriv; // 1 / millisecond
+        const double var_fast_sodium_current_m_gate2__alpha_m = ((CHASTE_MATH::Abs(var_chaste_interface__membrane__V) < 0) ? (2000 * CHASTE_MATH::Pow(var_chaste_interface__fast_sodium_current_m_gate2__m, 2)) : (200 * var_chaste_interface__membrane__V / (1 - CHASTE_MATH::Exp(-CHASTE_CONST(0.10000000000000001) * var_chaste_interface__membrane__V)))); // per_second
         const double var_fast_sodium_current_m_gate2__m_orig_deriv = var_fast_sodium_current_m_gate2__alpha_m; // 1 / second
-        const double d_dt_chaste_interface_var_fast_sodium_current_m_gate2__m = 0.001 * var_fast_sodium_current_m_gate2__m_orig_deriv; // 1 / millisecond
+        const double d_dt_chaste_interface_var_fast_sodium_current_m_gate2__m = CHASTE_CONST(0.001) * var_fast_sodium_current_m_gate2__m_orig_deriv; // 1 / millisecond
         
         rResidual[1] = rCurrentGuess[1] - rY[2] - mDt*d_dt_chaste_interface_var_fast_sodium_current_m_gate__m;
         rResidual[0] = rCurrentGuess[0] - rY[3] - mDt*d_dt_chaste_interface_var_fast_sodium_current_m_gate2__m;
@@ -118,14 +120,14 @@
     void Celltest_piecewises_beFromCellMLBackwardEuler::ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[2], double rJacobian[2][2])
     {
         std::vector<double>& rY = rGetStateVariables();
-        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? CHASTE_THIS(mFixedVoltage) : rY[0]);
         // Units: millivolt; Initial value: -69.1865
         
         double var_chaste_interface__fast_sodium_current_m_gate2__m = rCurrentGuess[0];
         
         
         
-        rJacobian[0][0] = 1.0 - (mDt * (0.001 * ((fabs(var_chaste_interface__membrane__V) < 0) ? (4000 * var_chaste_interface__fast_sodium_current_m_gate2__m) : (0))));
+        rJacobian[0][0] = 1.0 - (mDt * (CHASTE_CONST(0.001) * ((CHASTE_MATH::Abs(var_chaste_interface__membrane__V) < 0) ? (4000 * var_chaste_interface__fast_sodium_current_m_gate2__m) : (0))));
         rJacobian[0][1] = 0.0;
         rJacobian[1][0] = 0.0;
         rJacobian[1][1] = 1.0;
@@ -135,11 +137,11 @@
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
-        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? CHASTE_THIS(mFixedVoltage) : rY[0]);
         // Units: millivolt; Initial value: -69.1865
         
         const double var_membrane__V_orig_deriv = var_chaste_interface__membrane__V; // millivolt / second
-        const double d_dt_chaste_interface_var_membrane__V = 0.001 * var_membrane__V_orig_deriv; // millivolt / millisecond
+        const double d_dt_chaste_interface_var_membrane__V = CHASTE_CONST(0.001) * var_membrane__V_orig_deriv; // millivolt / millisecond
         
         rY[0] += mDt*d_dt_chaste_interface_var_membrane__V;
     }
@@ -148,14 +150,14 @@
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
-        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? CHASTE_THIS(mFixedVoltage) : rY[0]);
         // Units: millivolt; Initial value: -69.1865
         double var_chaste_interface__fast_sodium_current_h_gate__h = rY[1];
         // Units: dimensionless; Initial value: 0.1969
         
         
         
-        rY[1] = (var_chaste_interface__fast_sodium_current_h_gate__h + ((((var_chaste_interface__membrane__V > 9999999) ? (0.001 * var_chaste_interface__membrane__V) : (0))) * mDt)) / (1.0 - ((0.001) * mDt));
+        rY[1] = (var_chaste_interface__fast_sodium_current_h_gate__h + ((((var_chaste_interface__membrane__V > 9999999) ? (CHASTE_CONST(0.001) * var_chaste_interface__membrane__V) : (0))) * mDt)) / (1.0 - ((CHASTE_CONST(0.001)) * mDt));
         
         double _guess[2] = {rY[3],rY[2]};
         CardiacNewtonSolver<2,Celltest_piecewises_beFromCellMLBackwardEuler>* _p_solver = CardiacNewtonSolver<2,Celltest_piecewises_beFromCellMLBackwardEuler>::Instance();

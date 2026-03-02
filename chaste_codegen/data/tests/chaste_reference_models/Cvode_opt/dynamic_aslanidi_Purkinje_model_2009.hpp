@@ -20,7 +20,11 @@
 #include "AbstractModifier.hpp"
 #include "AbstractDynamicallyLoadableEntity.hpp"
 #include "AbstractStimulusFunction.hpp"
+#if USING_DEVICE_COMPILER
+#include "StimulusEvaluatorCuda.hpp"
+#endif
 #include "AbstractCvodeCell.hpp"
+#include "HostDeviceMacros.hpp"
 
 class Dynamicaslanidi_Purkinje_model_2009FromCellMLCvodeOpt : public AbstractCardiacCellWithModifiers<AbstractCvodeCell >, public AbstractDynamicallyLoadableEntity
 {
@@ -89,6 +93,10 @@ private:
 const bool is_concentration[30] = {false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, true, false, false, true, true, false, false};
 const bool is_probability[30] = {false, false, true, true, true, false, false, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 public:
+    static constexpr unsigned TOTAL_SIZE = 30u;
+    static constexpr unsigned NNZ = 0u;
+    static inline const int sparse_rowptr[] = {  };
+    static inline const int sparse_colind[] = {  };
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
@@ -98,7 +106,11 @@ public:
     AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time, const N_Vector rY, N_Vector rDY);
+    
     N_Vector ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY);
+#if USING_DEVICE_COMPILER
+    
+#endif
 };
 
 // Needs to be included last
@@ -135,4 +147,7 @@ namespace boost
 }
 
 #endif // DYNAMICASLANIDI_PURKINJE_MODEL_2009FROMCELLMLCVODEOPT_HPP_
+
+
+
 #endif // CHASTE_CVODE

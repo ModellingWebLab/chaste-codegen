@@ -17,7 +17,11 @@
 #include "ChasteSerialization.hpp"
 #include <boost/serialization/base_object.hpp>
 #include "AbstractStimulusFunction.hpp"
+#if USING_DEVICE_COMPILER
+#include "StimulusEvaluatorCuda.hpp"
+#endif
 #include "AbstractCvodeCell.hpp"
+#include "HostDeviceMacros.hpp"
 
 class Cellfaber_rudy_2000FromCellMLCvode : public AbstractCvodeCell
 {
@@ -38,6 +42,10 @@ private:
 const bool is_concentration[25] = {false, true, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, true, true};
 const bool is_probability[25] = {false, false, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 public:
+    static constexpr unsigned TOTAL_SIZE = 25u;
+    static constexpr unsigned NNZ = 0u;
+    static inline const int sparse_rowptr[] = {  };
+    static inline const int sparse_colind[] = {  };
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
@@ -46,7 +54,19 @@ public:
     void VerifyStateVariables();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time, const N_Vector rY, N_Vector rDY);
+    
     N_Vector ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY);
+#if USING_DEVICE_COMPILER
+    template<typename ValueType>
+    DEVICE
+    static void EvaluateYDerivativesDevice(ValueType var_chaste_interface__environment__time, const ValueType* rY, ValueType* rDY, const ValueType mSetVoltageDerivativeToZero, const ValueType mFixedVoltage, const ValueType* mParameters, const ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim);
+    template<typename ValueType>
+    DEVICE
+    static void EvaluateAnalyticJacobianDevice(ValueType var_chaste_interface__environment__time, const ValueType *rY, ValueType *rDY, ValueType *rJacobian, ValueType *rTmp1, ValueType *rTmp2, ValueType *rTmp3, const unsigned nvars, const ValueType mSetVoltageDerivativeToZero, const ValueType mFixedVoltage, const ValueType *mParameters, const ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim);
+    template<typename ValueType>
+    DEVICE
+    static void EvaluateSparseAnalyticJacobianDevice(ValueType var_chaste_interface__environment__time, const ValueType *rY, ValueType *rDY, ValueType *rJacobian, ValueType *rTmp1, ValueType *rTmp2, ValueType *rTmp3, const unsigned nvars, const ValueType mSetVoltageDerivativeToZero, const ValueType mFixedVoltage, const ValueType *mParameters, const ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim);
+#endif
 };
 
 // Needs to be included last
@@ -83,4 +103,10 @@ namespace boost
 }
 
 #endif // CELLFABER_RUDY_2000FROMCELLMLCVODE_HPP_
+
+
+
+#if USING_DEVICE_COMPILER
+    #include "faber_rudy_2000Kernels.hpp"
+#endif
 #endif // CHASTE_CVODE

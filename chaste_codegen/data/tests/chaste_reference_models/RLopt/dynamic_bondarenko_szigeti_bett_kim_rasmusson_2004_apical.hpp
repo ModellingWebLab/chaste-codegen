@@ -17,6 +17,9 @@
 #include <boost/serialization/base_object.hpp>
 #include "AbstractDynamicallyLoadableEntity.hpp"
 #include "AbstractStimulusFunction.hpp"
+#if USING_DEVICE_COMPILER
+#include "StimulusEvaluatorCuda.hpp"
+#endif
 #include "AbstractRushLarsenCardiacCell.hpp"
 
 class Dynamicbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLRushLarsenOpt : public AbstractRushLarsenCardiacCell, public AbstractDynamicallyLoadableEntity

@@ -22,6 +22,8 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+#include "ChasteMathDeviceNamespaces.hpp"
+#include "ChasteCpuMacros.hpp"
 
 #if CHASTE_SUNDIALS_VERSION >= 60000
 #include "CvodeContextManager.hpp"
@@ -35,7 +37,7 @@
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude = -20; // microA_per_cm2
-        const double var_chaste_interface__membrane__stim_duration = 0.5; // millisecond
+        const double var_chaste_interface__membrane__stim_duration = CHASTE_CONST(0.5); // millisecond
         const double var_chaste_interface__membrane__stim_period = 1000; // millisecond
         const double var_chaste_interface__membrane__stim_start = 10; // millisecond
         boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
@@ -67,7 +69,7 @@
         
         NV_Ith_S(this->mParameters, 0) = 1; // (var_membrane__Cm) [microF_per_cm2]
         NV_Ith_S(this->mParameters, 1) = 120; // (var_sodium_channel__g_Na) [milliS_per_cm2]
-        NV_Ith_S(this->mParameters, 2) = 0.29999999999999999; // (var_leakage_current__g_L) [milliS_per_cm2]
+        NV_Ith_S(this->mParameters, 2) = CHASTE_CONST(0.29999999999999999); // (var_leakage_current__g_L) [milliS_per_cm2]
         NV_Ith_S(this->mParameters, 3) = 36; // (var_potassium_channel__g_K) [milliS_per_cm2]
     }
 
@@ -124,7 +126,7 @@
             made_new_cvode_vector = true;
             rY = MakeNVector(*pStateVariables);
         }
-        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
+        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? CHASTE_THIS(mFixedVoltage) : NV_Ith_S(rY, 0));
         // Units: millivolt; Initial value: -75.0
         double var_chaste_interface__sodium_channel_m_gate__m = NV_Ith_S(rY, 1);
         // Units: dimensionless; Initial value: 0.05
@@ -134,12 +136,12 @@
         // Units: dimensionless; Initial value: 0.325
         
         const double var_membrane__E_R = -75; // millivolt
-        const double var_leakage_current__E_L = 10.613 + var_membrane__E_R; // millivolt
+        const double var_leakage_current__E_L = CHASTE_CONST(10.613) + var_membrane__E_R; // millivolt
         const double var_leakage_current__i_L = (-var_leakage_current__E_L + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 2); // microA_per_cm2
         const double var_potassium_channel__E_K = -12 + var_membrane__E_R; // millivolt
-        const double var_potassium_channel__i_K = pow(var_chaste_interface__potassium_channel_n_gate__n, 4) * (-var_potassium_channel__E_K + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 3); // microA_per_cm2
+        const double var_potassium_channel__i_K = CHASTE_MATH::Pow(var_chaste_interface__potassium_channel_n_gate__n, 4) * (-var_potassium_channel__E_K + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 3); // microA_per_cm2
         const double var_sodium_channel__E_Na = 115 + var_membrane__E_R; // millivolt
-        const double var_sodium_channel__i_Na = pow(var_chaste_interface__sodium_channel_m_gate__m, 3) * (-var_sodium_channel__E_Na + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 1) * var_chaste_interface__sodium_channel_h_gate__h; // microA_per_cm2
+        const double var_sodium_channel__i_Na = CHASTE_MATH::Pow(var_chaste_interface__sodium_channel_m_gate__m, 3) * (-var_sodium_channel__E_Na + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 1) * var_chaste_interface__sodium_channel_h_gate__h; // microA_per_cm2
         const double var_chaste_interface__i_ionic = var_leakage_current__i_L + var_potassium_channel__i_K + var_sodium_channel__i_Na; // uA_per_cm2
 
         const double i_ionic = var_chaste_interface__i_ionic;
@@ -155,7 +157,7 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
+        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? CHASTE_THIS(mFixedVoltage) : NV_Ith_S(rY, 0));
         // Units: millivolt; Initial value: -75.0
         double var_chaste_interface__sodium_channel_m_gate__m = NV_Ith_S(rY, 1);
         // Units: dimensionless; Initial value: 0.05
@@ -166,22 +168,22 @@
 
         // Mathematics
         double d_dt_chaste_interface_var_membrane__V;
-        const double var_potassium_channel_n_gate__B = -0.10000000000000001; // per_millivolt
-        const double var_potassium_channel_n_gate__A = -0.01 / var_potassium_channel_n_gate__B; // per_millisecond
-        const double var_potassium_channel_n_gate__beta_n = 0.125 * exp(0.9375 + 0.012500000000000001 * var_chaste_interface__membrane__V); // per_millisecond
+        const double var_potassium_channel_n_gate__B = -CHASTE_CONST(0.10000000000000001); // per_millivolt
+        const double var_potassium_channel_n_gate__A = -CHASTE_CONST(0.01) / var_potassium_channel_n_gate__B; // per_millisecond
+        const double var_potassium_channel_n_gate__beta_n = CHASTE_CONST(0.125) * CHASTE_MATH::Exp(CHASTE_CONST(0.9375) + CHASTE_CONST(0.012500000000000001) * var_chaste_interface__membrane__V); // per_millisecond
         const double var_potassium_channel_n_gate__v0 = -65; // millivolt
         const double var_potassium_channel_n_gate__U = (-var_potassium_channel_n_gate__v0 + var_chaste_interface__membrane__V) * var_potassium_channel_n_gate__B; // dimensionless
-        const double var_potassium_channel_n_gate__alpha_n = (((var_potassium_channel_n_gate__U >= -9.9999999999999995e-8) && (var_potassium_channel_n_gate__U <= 9.9999999999999995e-8)) ? ((1 - 0.5 * var_potassium_channel_n_gate__U) * var_potassium_channel_n_gate__A) : (var_potassium_channel_n_gate__A * var_potassium_channel_n_gate__U / (-1 + exp(var_potassium_channel_n_gate__U)))); // per_millisecond
+        const double var_potassium_channel_n_gate__alpha_n = (((var_potassium_channel_n_gate__U >= -CHASTE_CONST(9.9999999999999995e-8)) && (var_potassium_channel_n_gate__U <= CHASTE_CONST(9.9999999999999995e-8))) ? ((1 - CHASTE_CONST(0.5) * var_potassium_channel_n_gate__U) * var_potassium_channel_n_gate__A) : (var_potassium_channel_n_gate__A * var_potassium_channel_n_gate__U / (-1 + CHASTE_MATH::Exp(var_potassium_channel_n_gate__U)))); // per_millisecond
         const double d_dt_chaste_interface_var_potassium_channel_n_gate__n = (1 - var_chaste_interface__potassium_channel_n_gate__n) * var_potassium_channel_n_gate__alpha_n - var_potassium_channel_n_gate__beta_n * var_chaste_interface__potassium_channel_n_gate__n; // 1 / millisecond
-        const double var_sodium_channel_h_gate__alpha_h = 0.070000000000000007 * exp(-3.75 - 0.050000000000000003 * var_chaste_interface__membrane__V); // per_millisecond
-        const double var_sodium_channel_h_gate__beta_h = 1 / (1 + exp(-4.5 - 0.10000000000000001 * var_chaste_interface__membrane__V)); // per_millisecond
+        const double var_sodium_channel_h_gate__alpha_h = CHASTE_CONST(0.070000000000000007) * CHASTE_MATH::Exp(-CHASTE_CONST(3.75) - CHASTE_CONST(0.050000000000000003) * var_chaste_interface__membrane__V); // per_millisecond
+        const double var_sodium_channel_h_gate__beta_h = 1 / (1 + CHASTE_MATH::Exp(-CHASTE_CONST(4.5) - CHASTE_CONST(0.10000000000000001) * var_chaste_interface__membrane__V)); // per_millisecond
         const double d_dt_chaste_interface_var_sodium_channel_h_gate__h = (1 - var_chaste_interface__sodium_channel_h_gate__h) * var_sodium_channel_h_gate__alpha_h - var_sodium_channel_h_gate__beta_h * var_chaste_interface__sodium_channel_h_gate__h; // 1 / millisecond
-        const double var_sodium_channel_m_gate__B = -0.10000000000000001; // per_millivolt
-        const double var_sodium_channel_m_gate__A = -0.10000000000000001 / var_sodium_channel_m_gate__B; // per_millisecond
-        const double var_sodium_channel_m_gate__beta_m = 4 * exp(-4.166666666666667 - 0.055555555555555552 * var_chaste_interface__membrane__V); // per_millisecond
+        const double var_sodium_channel_m_gate__B = -CHASTE_CONST(0.10000000000000001); // per_millivolt
+        const double var_sodium_channel_m_gate__A = -CHASTE_CONST(0.10000000000000001) / var_sodium_channel_m_gate__B; // per_millisecond
+        const double var_sodium_channel_m_gate__beta_m = 4 * CHASTE_MATH::Exp(-CHASTE_CONST(4.166666666666667) - CHASTE_CONST(0.055555555555555552) * var_chaste_interface__membrane__V); // per_millisecond
         const double var_sodium_channel_m_gate__v0 = -50; // millivolt
         const double var_sodium_channel_m_gate__U = (-var_sodium_channel_m_gate__v0 + var_chaste_interface__membrane__V) * var_sodium_channel_m_gate__B; // dimensionless
-        const double var_sodium_channel_m_gate__alpha_m = (((var_sodium_channel_m_gate__U >= -9.9999999999999995e-8) && (var_sodium_channel_m_gate__U <= 9.9999999999999995e-8)) ? ((1 - 0.5 * var_sodium_channel_m_gate__U) * var_sodium_channel_m_gate__A) : (var_sodium_channel_m_gate__A * var_sodium_channel_m_gate__U / (-1 + exp(var_sodium_channel_m_gate__U)))); // per_millisecond
+        const double var_sodium_channel_m_gate__alpha_m = (((var_sodium_channel_m_gate__U >= -CHASTE_CONST(9.9999999999999995e-8)) && (var_sodium_channel_m_gate__U <= CHASTE_CONST(9.9999999999999995e-8))) ? ((1 - CHASTE_CONST(0.5) * var_sodium_channel_m_gate__U) * var_sodium_channel_m_gate__A) : (var_sodium_channel_m_gate__A * var_sodium_channel_m_gate__U / (-1 + CHASTE_MATH::Exp(var_sodium_channel_m_gate__U)))); // per_millisecond
         const double d_dt_chaste_interface_var_sodium_channel_m_gate__m = (1 - var_chaste_interface__sodium_channel_m_gate__m) * var_sodium_channel_m_gate__alpha_m - var_sodium_channel_m_gate__beta_m * var_chaste_interface__sodium_channel_m_gate__m; // 1 / millisecond
 
         if (mSetVoltageDerivativeToZero)
@@ -191,13 +193,13 @@
         else
         {
             const double var_membrane__E_R = -75; // millivolt
-            const double var_leakage_current__E_L = 10.613 + var_membrane__E_R; // millivolt
+            const double var_leakage_current__E_L = CHASTE_CONST(10.613) + var_membrane__E_R; // millivolt
             const double var_leakage_current__i_L = (-var_leakage_current__E_L + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 2); // microA_per_cm2
-            const double var_membrane__i_Stim = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // microA_per_cm2
+            const double var_membrane__i_Stim = CHASTE_STIM(var_chaste_interface__environment__time); // microA_per_cm2
             const double var_potassium_channel__E_K = -12 + var_membrane__E_R; // millivolt
-            const double var_potassium_channel__i_K = pow(var_chaste_interface__potassium_channel_n_gate__n, 4) * (-var_potassium_channel__E_K + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 3); // microA_per_cm2
+            const double var_potassium_channel__i_K = CHASTE_MATH::Pow(var_chaste_interface__potassium_channel_n_gate__n, 4) * (-var_potassium_channel__E_K + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 3); // microA_per_cm2
             const double var_sodium_channel__E_Na = 115 + var_membrane__E_R; // millivolt
-            const double var_sodium_channel__i_Na = pow(var_chaste_interface__sodium_channel_m_gate__m, 3) * (-var_sodium_channel__E_Na + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 1) * var_chaste_interface__sodium_channel_h_gate__h; // microA_per_cm2
+            const double var_sodium_channel__i_Na = CHASTE_MATH::Pow(var_chaste_interface__sodium_channel_m_gate__m, 3) * (-var_sodium_channel__E_Na + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 1) * var_chaste_interface__sodium_channel_h_gate__h; // microA_per_cm2
             d_dt_chaste_interface_var_membrane__V = (-var_leakage_current__i_L - var_membrane__i_Stim - var_potassium_channel__i_K - var_sodium_channel__i_Na) / NV_Ith_S(mParameters, 0); // millivolt / millisecond
         }
         
@@ -209,7 +211,7 @@
 
     void Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvode::EvaluateAnalyticJacobian(double var_chaste_interface__environment__time, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3)
     {
-        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
+        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? CHASTE_THIS(mFixedVoltage) : NV_Ith_S(rY, 0));
         // Units: millivolt; Initial value: -75.0
         double var_chaste_interface__sodium_channel_m_gate__m = NV_Ith_S(rY, 1);
         // Units: dimensionless; Initial value: 0.05
@@ -218,43 +220,43 @@
         double var_chaste_interface__potassium_channel_n_gate__n = NV_Ith_S(rY, 3);
         // Units: dimensionless; Initial value: 0.325
         const double var_x0 = 1 / NV_Ith_S(mParameters, 0);
-        const double var_x1 = pow(var_chaste_interface__sodium_channel_m_gate__m, 3) * NV_Ith_S(mParameters, 1);
+        const double var_x1 = CHASTE_MATH::Pow(var_chaste_interface__sodium_channel_m_gate__m, 3) * NV_Ith_S(mParameters, 1);
         const double var_x2 = var_x0 * (-40 + var_chaste_interface__membrane__V);
-        const double var_x3 = 0.10000000000000001 * var_chaste_interface__membrane__V;
+        const double var_x3 = CHASTE_CONST(0.10000000000000001) * var_chaste_interface__membrane__V;
         const double var_x4 = 5 + var_x3;
-        const double var_x5 = (var_x4 >= -9.9999999999999995e-8) && (var_x4 <= 9.9999999999999995e-8);
-        const double var_x6 = exp(-var_x4);
+        const double var_x5 = (var_x4 >= -CHASTE_CONST(9.9999999999999995e-8)) && (var_x4 <= CHASTE_CONST(9.9999999999999995e-8));
+        const double var_x6 = CHASTE_MATH::Exp(-var_x4);
         const double var_x7 = -1 + var_x6;
         const double var_x8 = 1 / var_x7;
-        const double var_x9 = exp(-4.166666666666667 - 0.055555555555555552 * var_chaste_interface__membrane__V);
-        const double var_x10 = exp(-3.75 - 0.050000000000000003 * var_chaste_interface__membrane__V);
-        const double var_x11 = exp(-4.5 - 0.10000000000000001 * var_chaste_interface__membrane__V);
+        const double var_x9 = CHASTE_MATH::Exp(-CHASTE_CONST(4.166666666666667) - CHASTE_CONST(0.055555555555555552) * var_chaste_interface__membrane__V);
+        const double var_x10 = CHASTE_MATH::Exp(-CHASTE_CONST(3.75) - CHASTE_CONST(0.050000000000000003) * var_chaste_interface__membrane__V);
+        const double var_x11 = CHASTE_MATH::Exp(-CHASTE_CONST(4.5) - CHASTE_CONST(0.10000000000000001) * var_chaste_interface__membrane__V);
         const double var_x12 = 1 + var_x11;
-        const double var_x13 = 6.5 + var_x3;
-        const double var_x14 = (var_x13 >= -9.9999999999999995e-8) && (var_x13 <= 9.9999999999999995e-8);
-        const double var_x15 = exp(-var_x13);
+        const double var_x13 = CHASTE_CONST(6.5) + var_x3;
+        const double var_x14 = (var_x13 >= -CHASTE_CONST(9.9999999999999995e-8)) && (var_x13 <= CHASTE_CONST(9.9999999999999995e-8));
+        const double var_x15 = CHASTE_MATH::Exp(-var_x13);
         const double var_x16 = -1 + var_x15;
         const double var_x17 = 1 / var_x16;
-        const double var_x18 = exp(0.9375 + 0.012500000000000001 * var_chaste_interface__membrane__V);
+        const double var_x18 = CHASTE_MATH::Exp(CHASTE_CONST(0.9375) + CHASTE_CONST(0.012500000000000001) * var_chaste_interface__membrane__V);
         
         // Matrix entries
-        IJth(rJacobian, 0, 0) = mSetVoltageDerivativeToZero ? 0.0 : (var_x0 * (-NV_Ith_S(mParameters, 2) - var_x1 * var_chaste_interface__sodium_channel_h_gate__h - pow(var_chaste_interface__potassium_channel_n_gate__n, 4) * NV_Ith_S(mParameters, 3)));
-        IJth(rJacobian, 1, 0) = (1 - var_chaste_interface__sodium_channel_m_gate__m) * ((var_x5) ? (0.050000000000000003) : (-0.10000000000000001 * var_x8 - 0.10000000000000001 * var_x4 * var_x6 / pow(var_x7, 2))) + 0.22222222222222221 * var_x9 * var_chaste_interface__sodium_channel_m_gate__m;
-        IJth(rJacobian, 2, 0) = -0.050000000000000003 * var_x10 * (0.070000000000000007 - 0.070000000000000007 * var_chaste_interface__sodium_channel_h_gate__h) - 0.10000000000000001 * var_x11 * var_chaste_interface__sodium_channel_h_gate__h / pow(var_x12, 2);
-        IJth(rJacobian, 3, 0) = (1 - var_chaste_interface__potassium_channel_n_gate__n) * ((var_x14) ? (0.0050000000000000001) : (-0.01 * var_x17 - 0.01 * var_x13 * var_x15 / pow(var_x16, 2))) - 0.0015625000000000001 * var_x18 * var_chaste_interface__potassium_channel_n_gate__n;
-        IJth(rJacobian, 0, 1) = mSetVoltageDerivativeToZero ? 0.0 : (-3 * var_x2 * pow(var_chaste_interface__sodium_channel_m_gate__m, 2) * NV_Ith_S(mParameters, 1) * var_chaste_interface__sodium_channel_h_gate__h);
-        IJth(rJacobian, 1, 1) = -((var_x5) ? (3.5 + 0.050000000000000003 * var_chaste_interface__membrane__V) : (-var_x4 * var_x8)) - 4 * var_x9;
+        IJth(rJacobian, 0, 0) = mSetVoltageDerivativeToZero ? 0.0 : (var_x0 * (-NV_Ith_S(mParameters, 2) - var_x1 * var_chaste_interface__sodium_channel_h_gate__h - CHASTE_MATH::Pow(var_chaste_interface__potassium_channel_n_gate__n, 4) * NV_Ith_S(mParameters, 3)));
+        IJth(rJacobian, 1, 0) = (1 - var_chaste_interface__sodium_channel_m_gate__m) * ((var_x5) ? (CHASTE_CONST(0.050000000000000003)) : (-CHASTE_CONST(0.10000000000000001) * var_x8 - CHASTE_CONST(0.10000000000000001) * var_x4 * var_x6 / CHASTE_MATH::Pow(var_x7, 2))) + CHASTE_CONST(0.22222222222222221) * var_x9 * var_chaste_interface__sodium_channel_m_gate__m;
+        IJth(rJacobian, 2, 0) = -CHASTE_CONST(0.050000000000000003) * var_x10 * (CHASTE_CONST(0.070000000000000007) - CHASTE_CONST(0.070000000000000007) * var_chaste_interface__sodium_channel_h_gate__h) - CHASTE_CONST(0.10000000000000001) * var_x11 * var_chaste_interface__sodium_channel_h_gate__h / CHASTE_MATH::Pow(var_x12, 2);
+        IJth(rJacobian, 3, 0) = (1 - var_chaste_interface__potassium_channel_n_gate__n) * ((var_x14) ? (CHASTE_CONST(0.0050000000000000001)) : (-CHASTE_CONST(0.01) * var_x17 - CHASTE_CONST(0.01) * var_x13 * var_x15 / CHASTE_MATH::Pow(var_x16, 2))) - CHASTE_CONST(0.0015625000000000001) * var_x18 * var_chaste_interface__potassium_channel_n_gate__n;
+        IJth(rJacobian, 0, 1) = mSetVoltageDerivativeToZero ? 0.0 : (-3 * var_x2 * CHASTE_MATH::Pow(var_chaste_interface__sodium_channel_m_gate__m, 2) * NV_Ith_S(mParameters, 1) * var_chaste_interface__sodium_channel_h_gate__h);
+        IJth(rJacobian, 1, 1) = -((var_x5) ? (CHASTE_CONST(3.5) + CHASTE_CONST(0.050000000000000003) * var_chaste_interface__membrane__V) : (-var_x4 * var_x8)) - 4 * var_x9;
         IJth(rJacobian, 0, 2) = mSetVoltageDerivativeToZero ? 0.0 : (-var_x1 * var_x2);
-        IJth(rJacobian, 2, 2) = -1 / var_x12 - 0.070000000000000007 * var_x10;
-        IJth(rJacobian, 0, 3) = mSetVoltageDerivativeToZero ? 0.0 : (-4 * var_x0 * pow(var_chaste_interface__potassium_channel_n_gate__n, 3) * (87 + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 3));
-        IJth(rJacobian, 3, 3) = -((var_x14) ? (0.42499999999999999 + 0.0050000000000000001 * var_chaste_interface__membrane__V) : (-0.099999999999999992 * var_x13 * var_x17)) - 0.125 * var_x18;
+        IJth(rJacobian, 2, 2) = -1 / var_x12 - CHASTE_CONST(0.070000000000000007) * var_x10;
+        IJth(rJacobian, 0, 3) = mSetVoltageDerivativeToZero ? 0.0 : (-4 * var_x0 * CHASTE_MATH::Pow(var_chaste_interface__potassium_channel_n_gate__n, 3) * (87 + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 3));
+        IJth(rJacobian, 3, 3) = -((var_x14) ? (CHASTE_CONST(0.42499999999999999) + CHASTE_CONST(0.0050000000000000001) * var_chaste_interface__membrane__V) : (-CHASTE_CONST(0.099999999999999992) * var_x13 * var_x17)) - CHASTE_CONST(0.125) * var_x18;
     }
 
     N_Vector Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvode::ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY)
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : NV_Ith_S(rY, 0));
+        double var_chaste_interface__membrane__V = (mSetVoltageDerivativeToZero ? CHASTE_THIS(mFixedVoltage) : NV_Ith_S(rY, 0));
         // Units: millivolt; Initial value: -75.0
         double var_chaste_interface__sodium_channel_m_gate__m = NV_Ith_S(rY, 1);
         // Units: dimensionless; Initial value: 0.05
@@ -265,13 +267,13 @@
         
         // Mathematics
         const double var_membrane__E_R = -75; // millivolt
-        const double var_leakage_current__E_L = 10.613 + var_membrane__E_R; // millivolt
+        const double var_leakage_current__E_L = CHASTE_CONST(10.613) + var_membrane__E_R; // millivolt
         const double var_leakage_current__i_L = (-var_leakage_current__E_L + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 2); // microA_per_cm2
-        const double var_membrane__i_Stim = GetIntracellularAreaStimulus(var_chaste_interface__environment__time); // microA_per_cm2
+        const double var_membrane__i_Stim = CHASTE_STIM(var_chaste_interface__environment__time); // microA_per_cm2
         const double var_potassium_channel__E_K = -12 + var_membrane__E_R; // millivolt
-        const double var_potassium_channel__i_K = pow(var_chaste_interface__potassium_channel_n_gate__n, 4) * (-var_potassium_channel__E_K + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 3); // microA_per_cm2
+        const double var_potassium_channel__i_K = CHASTE_MATH::Pow(var_chaste_interface__potassium_channel_n_gate__n, 4) * (-var_potassium_channel__E_K + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 3); // microA_per_cm2
         const double var_sodium_channel__E_Na = 115 + var_membrane__E_R; // millivolt
-        const double var_sodium_channel__i_Na = pow(var_chaste_interface__sodium_channel_m_gate__m, 3) * (-var_sodium_channel__E_Na + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 1) * var_chaste_interface__sodium_channel_h_gate__h; // microA_per_cm2
+        const double var_sodium_channel__i_Na = CHASTE_MATH::Pow(var_chaste_interface__sodium_channel_m_gate__m, 3) * (-var_sodium_channel__E_Na + var_chaste_interface__membrane__V) * NV_Ith_S(mParameters, 1) * var_chaste_interface__sodium_channel_h_gate__h; // microA_per_cm2
 
 #if CHASTE_SUNDIALS_VERSION >= 60000
         N_Vector dqs = N_VNew_Serial(5, CvodeContextManager::Instance()->GetSundialsContext());
@@ -355,5 +357,6 @@ void OdeSystemInformation<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromC
 // Serialization for Boost >= 1.36
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvode)
+
 
 #endif // CHASTE_CVODE

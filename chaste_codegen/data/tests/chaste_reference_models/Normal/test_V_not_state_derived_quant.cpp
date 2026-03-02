@@ -21,6 +21,8 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+#include "ChasteMathDeviceNamespaces.hpp"
+#include "ChasteCpuMacros.hpp"
 
 
 
@@ -102,7 +104,7 @@
         // Mathematics
         
         const double var_membrane__V1_orig_deriv = 25; // volt / second
-        const double d_dt_chaste_interface_var_membrane__V1 = 0.001 * var_membrane__V1_orig_deriv; // volt / millisecond
+        const double d_dt_chaste_interface_var_membrane__V1 = CHASTE_CONST(0.001) * var_membrane__V1_orig_deriv; // volt / millisecond
 
         if (mSetVoltageDerivativeToZero)
         {
@@ -121,7 +123,7 @@
         // Time units: millisecond
         
         // Mathematics
-        const double var_membrane__time = 0.001 * var_chaste_interface__membrane__time_converted; // second
+        const double var_membrane__time = CHASTE_CONST(0.001) * var_chaste_interface__membrane__time_converted; // second
         const double var_membrane__V_converted = 2000 * var_membrane__time; // millivolt
 
         std::vector<double> dqs(2);

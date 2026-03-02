@@ -16,6 +16,9 @@
 #include "ChasteSerialization.hpp"
 #include <boost/serialization/base_object.hpp>
 #include "AbstractStimulusFunction.hpp"
+#if USING_DEVICE_COMPILER
+#include "StimulusEvaluatorCuda.hpp"
+#endif
 #include "AbstractRushLarsenCardiacCell.hpp"
 
 class Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsen : public AbstractRushLarsenCardiacCell

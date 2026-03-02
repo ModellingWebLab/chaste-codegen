@@ -17,7 +17,11 @@
 #include "ChasteSerialization.hpp"
 #include <boost/serialization/base_object.hpp>
 #include "AbstractStimulusFunction.hpp"
+#if USING_DEVICE_COMPILER
+#include "StimulusEvaluatorCuda.hpp"
+#endif
 #include "AbstractCvodeCellWithDataClamp.hpp"
+#include "HostDeviceMacros.hpp"
 
 class Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClamp : public AbstractCvodeCellWithDataClamp
 {
@@ -40,6 +44,10 @@ private:
 const bool is_concentration[39] = {false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, true, true};
 const bool is_probability[39] = {false, false, true, true, true, false, false, false, false, false, false, true, true, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 public:
+    static constexpr unsigned TOTAL_SIZE = 39u;
+    static constexpr unsigned NNZ = 0u;
+    static inline const int sparse_rowptr[] = {  };
+    static inline const int sparse_colind[] = {  };
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
@@ -48,7 +56,19 @@ public:
     void VerifyStateVariables();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time, const N_Vector rY, N_Vector rDY);
+    
     N_Vector ComputeDerivedQuantities(double var_chaste_interface__environment__time, const N_Vector & rY);
+#if USING_DEVICE_COMPILER
+    template<typename ValueType>
+    DEVICE
+    static void EvaluateYDerivativesDevice(ValueType var_chaste_interface__environment__time, const ValueType* rY, ValueType* rDY, const ValueType mSetVoltageDerivativeToZero, const ValueType mFixedVoltage, const ValueType* mParameters, const ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim);
+    template<typename ValueType>
+    DEVICE
+    static void EvaluateAnalyticJacobianDevice(ValueType var_chaste_interface__environment__time, const ValueType *rY, ValueType *rDY, ValueType *rJacobian, ValueType *rTmp1, ValueType *rTmp2, ValueType *rTmp3, const unsigned nvars, const ValueType mSetVoltageDerivativeToZero, const ValueType mFixedVoltage, const ValueType *mParameters, const ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim);
+    template<typename ValueType>
+    DEVICE
+    static void EvaluateSparseAnalyticJacobianDevice(ValueType var_chaste_interface__environment__time, const ValueType *rY, ValueType *rDY, ValueType *rJacobian, ValueType *rTmp1, ValueType *rTmp2, ValueType *rTmp3, const unsigned nvars, const ValueType mSetVoltageDerivativeToZero, const ValueType mFixedVoltage, const ValueType *mParameters, const ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim);
+#endif
 };
 
 // Needs to be included last
@@ -85,4 +105,10 @@ namespace boost
 }
 
 #endif // CELLGRANDI_PASQUALINI_BERS_2010_SSFROMCELLMLCVODEDATACLAMP_HPP_
+
+
+
+#if USING_DEVICE_COMPILER
+    #include "grandi_pasqualini_bers_2010_ssCvodeDataClampKernels.hpp"
+#endif
 #endif // CHASTE_CVODE

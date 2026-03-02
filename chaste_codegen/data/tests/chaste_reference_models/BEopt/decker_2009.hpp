@@ -16,7 +16,12 @@
 #include "ChasteSerialization.hpp"
 #include <boost/serialization/base_object.hpp>
 #include "AbstractStimulusFunction.hpp"
+#if USING_DEVICE_COMPILER
+#include "StimulusEvaluatorCuda.hpp"
+#endif
 #include "AbstractBackwardEulerCardiacCell.hpp"
+
+
 
 class Celldecker_2009FromCellMLBackwardEulerOpt : public AbstractBackwardEulerCardiacCell<35>
 {
@@ -38,19 +43,25 @@ const bool is_concentration[46] = {false, true, false, false, false, false, fals
 const bool is_probability[46] = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 public:
 
+
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    Celldecker_2009FromCellMLBackwardEulerOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    Celldecker_2009FromCellMLBackwardEulerOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Celldecker_2009FromCellMLBackwardEulerOpt();
     void VerifyStateVariables();
     AbstractLookupTableCollection* GetLookupTableCollection();
-    double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[35], double rResidual[35]);
-    void ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[35], double rJacobian[35][35]);protected:
+    double GetIIonic(const std::vector<double>* pStateVariables=NULL);
+    void ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[35], double rResidual[35]);
+    void ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[35], double rJacobian[35][35]); 
+
+#if USING_DEVICE_COMPILER
+      
+#endif
+protected:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time);
     void ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time);
 
-    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY);
-};
+    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY);};
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
@@ -86,3 +97,4 @@ namespace boost
 }
 
 #endif // CELLDECKER_2009FROMCELLMLBACKWARDEULEROPT_HPP_
+

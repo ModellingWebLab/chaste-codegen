@@ -17,7 +17,11 @@
 #include "ChasteSerialization.hpp"
 #include <boost/serialization/base_object.hpp>
 #include "AbstractStimulusFunction.hpp"
+#if USING_DEVICE_COMPILER
+#include "StimulusEvaluatorCuda.hpp"
+#endif
 #include "AbstractCvodeCell.hpp"
+#include "HostDeviceMacros.hpp"
 
 class Cellaslanidi_atrial_model_2009FromCellMLCvode : public AbstractCvodeCell
 {
@@ -38,6 +42,10 @@ private:
 const bool is_concentration[29] = {false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, true, false, false, false, false, false, false};
 const bool is_probability[29] = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 public:
+    static constexpr unsigned TOTAL_SIZE = 29u;
+    static constexpr unsigned NNZ = 120u;
+    static inline const int sparse_rowptr[] = { 0, 19, 33, 35, 37, 39, 41, 43, 45, 47, 49, 51, 53, 55, 57, 59, 61, 68, 79, 81, 83, 86, 88, 99, 104, 107, 109, 113, 117, 120 };
+    static inline const int sparse_colind[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 22, 0, 1, 5, 6, 7, 8, 16, 18, 19, 20, 21, 23, 24, 27, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, 8, 0, 9, 0, 10, 0, 11, 0, 12, 0, 13, 0, 14, 0, 15, 0, 1, 2, 3, 4, 16, 22, 0, 9, 10, 11, 12, 13, 14, 15, 16, 17, 22, 1, 18, 1, 19, 1, 20, 21, 20, 21, 0, 9, 10, 11, 12, 13, 14, 15, 16, 17, 22, 1, 23, 24, 25, 27, 1, 23, 24, 23, 25, 0, 1, 26, 28, 0, 1, 26, 27, 1, 27, 28 };
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
@@ -46,8 +54,19 @@ public:
     void VerifyStateVariables();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const N_Vector rY, N_Vector rDY);
-    N_Vector ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const N_Vector & rY);
     void EvaluateAnalyticJacobian(double var_chaste_interface__environment__time_converted, N_Vector rY, N_Vector rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, N_Vector rTmp1, N_Vector rTmp2, N_Vector rTmp3);
+    N_Vector ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const N_Vector & rY);
+#if USING_DEVICE_COMPILER
+    template<typename ValueType>
+    DEVICE
+    static void EvaluateYDerivativesDevice(ValueType var_chaste_interface__environment__time_converted, const ValueType* rY, ValueType* rDY, const ValueType mSetVoltageDerivativeToZero, const ValueType mFixedVoltage, const ValueType* mParameters, const ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim);
+    template<typename ValueType>
+    DEVICE
+    static void EvaluateAnalyticJacobianDevice(ValueType var_chaste_interface__environment__time_converted, const ValueType *rY, ValueType *rDY, ValueType *rJacobian, ValueType *rTmp1, ValueType *rTmp2, ValueType *rTmp3, const unsigned nvars, const ValueType mSetVoltageDerivativeToZero, const ValueType mFixedVoltage, const ValueType *mParameters, const ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim);
+    template<typename ValueType>
+    DEVICE
+    static void EvaluateSparseAnalyticJacobianDevice(ValueType var_chaste_interface__environment__time_converted, const ValueType *rY, ValueType *rDY, ValueType *rJacobian, ValueType *rTmp1, ValueType *rTmp2, ValueType *rTmp3, const unsigned nvars, const ValueType mSetVoltageDerivativeToZero, const ValueType mFixedVoltage, const ValueType *mParameters, const ValueType capacitance, const DeviceStimulusFunctor<ValueType> stim);
+#endif
 };
 
 // Needs to be included last
@@ -84,4 +103,10 @@ namespace boost
 }
 
 #endif // CELLASLANIDI_ATRIAL_MODEL_2009FROMCELLMLCVODE_HPP_
+
+
+
+#if USING_DEVICE_COMPILER
+    #include "aslanidi_atrial_model_2009Kernels.hpp"
+#endif
 #endif // CHASTE_CVODE

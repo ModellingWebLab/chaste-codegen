@@ -16,7 +16,12 @@
 #include "ChasteSerialization.hpp"
 #include <boost/serialization/base_object.hpp>
 #include "AbstractStimulusFunction.hpp"
+#if USING_DEVICE_COMPILER
+#include "StimulusEvaluatorCuda.hpp"
+#endif
 #include "AbstractBackwardEulerCardiacCell.hpp"
+
+
 
 class Cellbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLBackwardEulerOpt : public AbstractBackwardEulerCardiacCell<32>
 {
@@ -38,19 +43,25 @@ const bool is_concentration[41] = {false, true, true, true, false, false, false,
 const bool is_probability[41] = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 public:
 
+
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    Cellbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLBackwardEulerOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    Cellbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLBackwardEulerOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Cellbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLBackwardEulerOpt();
     void VerifyStateVariables();
     AbstractLookupTableCollection* GetLookupTableCollection();
-    double GetIIonic(const std::vector<double>* pStateVariables=NULL);void ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[32], double rResidual[32]);
-    void ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[32], double rJacobian[32][32]);protected:
+    double GetIIonic(const std::vector<double>* pStateVariables=NULL);
+    void ComputeResidual(double var_chaste_interface__environment__time, const double rCurrentGuess[32], double rResidual[32]);
+    void ComputeJacobian(double var_chaste_interface__environment__time, const double rCurrentGuess[32], double rJacobian[32][32]); 
+
+#if USING_DEVICE_COMPILER
+      
+#endif
+protected:
     void UpdateTransmembranePotential(double var_chaste_interface__environment__time);
     void ComputeOneStepExceptVoltage(double var_chaste_interface__environment__time);
 
-    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY);
-};
+    std::vector<double> ComputeDerivedQuantities(double var_chaste_interface__environment__time, const std::vector<double> & rY);};
 
 // Needs to be included last
 #include "SerializationExportWrapper.hpp"
@@ -86,3 +97,4 @@ namespace boost
 }
 
 #endif // CELLBONDARENKO_SZIGETI_BETT_KIM_RASMUSSON_2004_APICALFROMCELLMLBACKWARDEULEROPT_HPP_
+

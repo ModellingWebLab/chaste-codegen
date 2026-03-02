@@ -17,7 +17,11 @@
 #include "ChasteSerialization.hpp"
 #include <boost/serialization/base_object.hpp>
 #include "AbstractStimulusFunction.hpp"
+#if USING_DEVICE_COMPILER
+#include "StimulusEvaluatorCuda.hpp"
+#endif
 #include "AbstractCvodeCell.hpp"
+#include "HostDeviceMacros.hpp"
 
 class Cellhilgemann_noble_model_1987FromCellMLCvodeOpt : public AbstractCvodeCell
 {
@@ -38,6 +42,10 @@ private:
 const bool is_concentration[15] = {false, true, false, false, false, false, false, false, true, true, true, false, true, false, false};
 const bool is_probability[15] = {false, false, true, true, true, true, false, false, false, false, false, false, false, false, false};
 public:
+    static constexpr unsigned TOTAL_SIZE = 15u;
+    static constexpr unsigned NNZ = 0u;
+    static inline const int sparse_rowptr[] = {  };
+    static inline const int sparse_colind[] = {  };
 
     boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
@@ -47,7 +55,11 @@ public:
     AbstractLookupTableCollection* GetLookupTableCollection();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
     void EvaluateYDerivatives(double var_chaste_interface__environment__time_converted, const N_Vector rY, N_Vector rDY);
+    
     N_Vector ComputeDerivedQuantities(double var_chaste_interface__environment__time_converted, const N_Vector & rY);
+#if USING_DEVICE_COMPILER
+    
+#endif
 };
 
 // Needs to be included last
@@ -84,4 +96,7 @@ namespace boost
 }
 
 #endif // CELLHILGEMANN_NOBLE_MODEL_1987FROMCELLMLCVODEOPT_HPP_
+
+
+
 #endif // CHASTE_CVODE

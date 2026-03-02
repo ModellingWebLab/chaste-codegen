@@ -16,6 +16,9 @@
 #include "ChasteSerialization.hpp"
 #include <boost/serialization/base_object.hpp>
 #include "AbstractStimulusFunction.hpp"
+#if USING_DEVICE_COMPILER
+#include "StimulusEvaluatorCuda.hpp"
+#endif
 #include "AbstractGeneralizedRushLarsenCardiacCell.hpp"
 
 class Cellbeeler_reuter_model_1977FromCellMLGRL1Opt : public AbstractGeneralizedRushLarsenCardiacCell

@@ -17,6 +17,9 @@
 #include <boost/serialization/base_object.hpp>
 #include "AbstractDynamicallyLoadableEntity.hpp"
 #include "AbstractStimulusFunction.hpp"
+#if USING_DEVICE_COMPILER
+#include "StimulusEvaluatorCuda.hpp"
+#endif
 #include "AbstractCardiacCell.hpp"
 
 class Chaste_CG : public AbstractCardiacCell, public AbstractDynamicallyLoadableEntity

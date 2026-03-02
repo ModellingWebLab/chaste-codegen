@@ -22,6 +22,8 @@
 #include "HeartConfig.hpp"
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
+#include "ChasteMathDeviceNamespaces.hpp"
+#include "ChasteCpuMacros.hpp"
 
 
 
@@ -33,7 +35,7 @@
         const double var_chaste_interface__I_stim__stim_duration_converted = 1; // millisecond
         const double var_chaste_interface__I_stim__stim_period_converted = 1000; // millisecond
         const double var_chaste_interface__I_stim__stim_start_converted = 100; // millisecond
-        const double var_chaste_interface__I_stim__stim_amplitude_converted = 0.0001 * HeartConfig::Instance()->GetCapacitance() / mParameters[2]; // uA_per_cm2
+        const double var_chaste_interface__I_stim__stim_amplitude_converted = CHASTE_CONST(0.0001) * CHASTE_CAP() / mParameters[2]; // uA_per_cm2
         boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__I_stim__stim_amplitude_converted),
                 var_chaste_interface__I_stim__stim_duration_converted,
@@ -60,10 +62,10 @@
         
         this->mParameters[0] = 140; // (var_model_parameters__Ki) [millimolar]
         this->mParameters[1] = 5; // (var_model_parameters__Ko) [millimolar]
-        this->mParameters[2] = 4.5000000000000001e-6; // (var_membrane__Cm) [microfarad]
-        this->mParameters[3] = 5.4000000000000004e-9; // (var_I_Shkr__PShkr) [microlitre_per_second]
-        this->mParameters[4] = 0.001; // (var_I_Kir__GKir) [microsiemens]
-        this->mParameters[5] = 6.9e-6; // (var_I_b__Gb) [microsiemens]
+        this->mParameters[2] = CHASTE_CONST(4.5000000000000001e-6); // (var_membrane__Cm) [microfarad]
+        this->mParameters[3] = CHASTE_CONST(5.4000000000000004e-9); // (var_I_Shkr__PShkr) [microlitre_per_second]
+        this->mParameters[4] = CHASTE_CONST(0.001); // (var_I_Kir__GKir) [microsiemens]
+        this->mParameters[5] = CHASTE_CONST(6.9e-6); // (var_I_b__Gb) [microsiemens]
         this->mParameters[6] = 295; // (var_model_parameters__T) [kelvin]
     }
 
@@ -111,24 +113,24 @@
         // otherwise for ionic current interpolation (ICI) we use the state variables of this model (node).
         if (!pStateVariables) pStateVariables = &rGetStateVariables();
         const std::vector<double>& rY = *pStateVariables;
-        double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? CHASTE_THIS(mFixedVoltage) : rY[0]);
         // Units: millivolt; Initial value: -58.0
         double var_chaste_interface__I_Shkr__OShkr = rY[6];
         // Units: dimensionless; Initial value: 0.0
         
-        const double var_I_Kir__aKir = 0.93999999999999995; // dimensionless
-        const double var_I_Kir__bKir = 1.26; // dimensionless
+        const double var_I_Kir__aKir = CHASTE_CONST(0.93999999999999995); // dimensionless
+        const double var_I_Kir__bKir = CHASTE_CONST(1.26); // dimensionless
         const double var_I_b__Eb = 0; // millivolt
         const double var_I_b__I_b = (-var_I_b__Eb + var_chaste_interface__membrane__Vm) * mParameters[5]; // nanoampere
-        const double var_I_b__I_b_converted = 0.001 * HeartConfig::Instance()->GetCapacitance() * var_I_b__I_b / mParameters[2]; // uA_per_cm2
+        const double var_I_b__I_b_converted = CHASTE_CONST(0.001) * CHASTE_CAP() * var_I_b__I_b / mParameters[2]; // uA_per_cm2
         const double var_model_parameters__F = 96500; // coulomb_per_mole
         const double var_model_parameters__R = 8310; // millijoule_per_kelvin_mole
-        const double var_I_Kir__EK = var_model_parameters__R * mParameters[6] * log(mParameters[1] / mParameters[0]) / var_model_parameters__F; // millivolt
-        const double var_I_Kir__OKir = 1 / (var_I_Kir__aKir + exp((-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * var_I_Kir__bKir * var_model_parameters__F / (var_model_parameters__R * mParameters[6]))); // dimensionless
-        const double var_I_Kir__I_Kir = 0.031622776601683791 * sqrt(mParameters[1]) * (-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * mParameters[4] * var_I_Kir__OKir; // nanoampere
-        const double var_I_Kir__I_Kir_converted = 0.001 * HeartConfig::Instance()->GetCapacitance() * var_I_Kir__I_Kir / mParameters[2]; // uA_per_cm2
-        const double var_I_Shkr__I_Shkr = ((((var_chaste_interface__membrane__Vm >= -8.6113989637305703e-9 * mParameters[6]) && (var_chaste_interface__membrane__Vm <= 8.6113989637305703e-9 * mParameters[6])) || ((var_chaste_interface__membrane__Vm >= 8.6113989637305703e-9 * mParameters[6]) && (var_chaste_interface__membrane__Vm <= -8.6113989637305703e-9 * mParameters[6]))) ? (58062575.210589655 * (8.6113989637305703e-9 * mParameters[6] + var_chaste_interface__membrane__Vm) * (0.0096499999999999989 * (-mParameters[1] * exp(9.9999999999999995e-8) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1 - exp(9.9999999999999995e-8)) + 0.0096499999999999989 * (-mParameters[1] * exp(-9.9999999999999995e-8) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1 - exp(-9.9999999999999995e-8))) / mParameters[6] - 0.0096499999999999989 * (-mParameters[1] * exp(9.9999999999999995e-8) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1 - exp(9.9999999999999995e-8))) : (1120607.7015643802 * (-mParameters[1] * exp(-11.612515042117931 * var_chaste_interface__membrane__Vm / mParameters[6]) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] * var_chaste_interface__membrane__Vm / ((1 - exp(-11.612515042117931 * var_chaste_interface__membrane__Vm / mParameters[6])) * mParameters[6]))); // nanoampere
-        const double var_I_Shkr__I_Shkr_converted = 0.001 * HeartConfig::Instance()->GetCapacitance() * var_I_Shkr__I_Shkr / mParameters[2]; // uA_per_cm2
+        const double var_I_Kir__EK = var_model_parameters__R * mParameters[6] * CHASTE_MATH::Log(mParameters[1] / mParameters[0]) / var_model_parameters__F; // millivolt
+        const double var_I_Kir__OKir = 1 / (var_I_Kir__aKir + CHASTE_MATH::Exp((-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * var_I_Kir__bKir * var_model_parameters__F / (var_model_parameters__R * mParameters[6]))); // dimensionless
+        const double var_I_Kir__I_Kir = CHASTE_CONST(0.031622776601683791) * CHASTE_MATH::Sqrt(mParameters[1]) * (-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * mParameters[4] * var_I_Kir__OKir; // nanoampere
+        const double var_I_Kir__I_Kir_converted = CHASTE_CONST(0.001) * CHASTE_CAP() * var_I_Kir__I_Kir / mParameters[2]; // uA_per_cm2
+        const double var_I_Shkr__I_Shkr = ((((var_chaste_interface__membrane__Vm >= -CHASTE_CONST(8.6113989637305703e-9) * mParameters[6]) && (var_chaste_interface__membrane__Vm <= CHASTE_CONST(8.6113989637305703e-9) * mParameters[6])) || ((var_chaste_interface__membrane__Vm >= CHASTE_CONST(8.6113989637305703e-9) * mParameters[6]) && (var_chaste_interface__membrane__Vm <= -CHASTE_CONST(8.6113989637305703e-9) * mParameters[6]))) ? (CHASTE_CONST(58062575.210589655) * (CHASTE_CONST(8.6113989637305703e-9) * mParameters[6] + var_chaste_interface__membrane__Vm) * (CHASTE_CONST(0.0096499999999999989) * (-mParameters[1] * CHASTE_MATH::Exp(CHASTE_CONST(9.9999999999999995e-8)) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1 - CHASTE_MATH::Exp(CHASTE_CONST(9.9999999999999995e-8))) + CHASTE_CONST(0.0096499999999999989) * (-mParameters[1] * CHASTE_MATH::Exp(-CHASTE_CONST(9.9999999999999995e-8)) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1 - CHASTE_MATH::Exp(-CHASTE_CONST(9.9999999999999995e-8)))) / mParameters[6] - CHASTE_CONST(0.0096499999999999989) * (-mParameters[1] * CHASTE_MATH::Exp(CHASTE_CONST(9.9999999999999995e-8)) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1 - CHASTE_MATH::Exp(CHASTE_CONST(9.9999999999999995e-8)))) : (CHASTE_CONST(1120607.7015643802) * (-mParameters[1] * CHASTE_MATH::Exp(-CHASTE_CONST(11.612515042117931) * var_chaste_interface__membrane__Vm / mParameters[6]) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] * var_chaste_interface__membrane__Vm / ((1 - CHASTE_MATH::Exp(-CHASTE_CONST(11.612515042117931) * var_chaste_interface__membrane__Vm / mParameters[6])) * mParameters[6]))); // nanoampere
+        const double var_I_Shkr__I_Shkr_converted = CHASTE_CONST(0.001) * CHASTE_CAP() * var_I_Shkr__I_Shkr / mParameters[2]; // uA_per_cm2
         const double var_chaste_interface__i_ionic = var_I_Kir__I_Kir_converted + var_I_Shkr__I_Shkr_converted + var_I_b__I_b_converted; // uA_per_cm2
 
         const double i_ionic = var_chaste_interface__i_ionic;
@@ -139,7 +141,7 @@
     void Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler::ComputeResidual(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[6], double rResidual[6])
     {
         std::vector<double>& rY = rGetStateVariables();
-        double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? CHASTE_THIS(mFixedVoltage) : rY[0]);
         // Units: millivolt; Initial value: -58.0
         
         //output_nonlinear_state_assignments
@@ -155,24 +157,24 @@
         const double var_I_Shkr__k_v0 = 2; // first_order_rate_constant
         const double var_I_Shkr__ko = 77; // first_order_rate_constant
         const double var_I_Shkr__OShkr_orig_deriv = var_chaste_interface__I_Shkr__C4Shkr * var_I_Shkr__ko - var_chaste_interface__I_Shkr__OShkr * var_I_Shkr__k_o; // 1 / second
-        const double d_dt_chaste_interface_var_I_Shkr__OShkr = 0.001 * var_I_Shkr__OShkr_orig_deriv; // 1 / millisecond
+        const double d_dt_chaste_interface_var_I_Shkr__OShkr = CHASTE_CONST(0.001) * var_I_Shkr__OShkr_orig_deriv; // 1 / millisecond
         const double var_I_Shkr__kv0 = 30; // first_order_rate_constant
-        const double var_I_Shkr__z_v = -1.53; // dimensionless
-        const double var_I_Shkr__zv = 1.28; // dimensionless
+        const double var_I_Shkr__z_v = -CHASTE_CONST(1.53); // dimensionless
+        const double var_I_Shkr__zv = CHASTE_CONST(1.28); // dimensionless
         const double var_model_parameters__F = 96500; // coulomb_per_mole
         const double var_model_parameters__R = 8310; // millijoule_per_kelvin_mole
-        const double var_I_Shkr__k_v = var_I_Shkr__k_v0 * exp(var_I_Shkr__z_v * var_chaste_interface__membrane__Vm * var_model_parameters__F / (var_model_parameters__R * mParameters[6])); // first_order_rate_constant
-        const double var_I_Shkr__kv = var_I_Shkr__kv0 * exp(var_I_Shkr__zv * var_chaste_interface__membrane__Vm * var_model_parameters__F / (var_model_parameters__R * mParameters[6])); // first_order_rate_constant
+        const double var_I_Shkr__k_v = var_I_Shkr__k_v0 * CHASTE_MATH::Exp(var_I_Shkr__z_v * var_chaste_interface__membrane__Vm * var_model_parameters__F / (var_model_parameters__R * mParameters[6])); // first_order_rate_constant
+        const double var_I_Shkr__kv = var_I_Shkr__kv0 * CHASTE_MATH::Exp(var_I_Shkr__zv * var_chaste_interface__membrane__Vm * var_model_parameters__F / (var_model_parameters__R * mParameters[6])); // first_order_rate_constant
         const double var_I_Shkr__C0Shkr_orig_deriv = var_chaste_interface__I_Shkr__C1Shkr * var_I_Shkr__k_v - 4 * var_chaste_interface__I_Shkr__C0Shkr * var_I_Shkr__kv; // 1 / second
-        const double d_dt_chaste_interface_var_I_Shkr__C0Shkr = 0.001 * var_I_Shkr__C0Shkr_orig_deriv; // 1 / millisecond
+        const double d_dt_chaste_interface_var_I_Shkr__C0Shkr = CHASTE_CONST(0.001) * var_I_Shkr__C0Shkr_orig_deriv; // 1 / millisecond
         const double var_I_Shkr__C1Shkr_orig_deriv = -(3 * var_I_Shkr__kv + var_I_Shkr__k_v) * var_chaste_interface__I_Shkr__C1Shkr + 2 * var_chaste_interface__I_Shkr__C2Shkr * var_I_Shkr__k_v + 4 * var_chaste_interface__I_Shkr__C0Shkr * var_I_Shkr__kv; // 1 / second
-        const double d_dt_chaste_interface_var_I_Shkr__C1Shkr = 0.001 * var_I_Shkr__C1Shkr_orig_deriv; // 1 / millisecond
+        const double d_dt_chaste_interface_var_I_Shkr__C1Shkr = CHASTE_CONST(0.001) * var_I_Shkr__C1Shkr_orig_deriv; // 1 / millisecond
         const double var_I_Shkr__C2Shkr_orig_deriv = -(2 * var_I_Shkr__k_v + 2 * var_I_Shkr__kv) * var_chaste_interface__I_Shkr__C2Shkr + 3 * var_chaste_interface__I_Shkr__C1Shkr * var_I_Shkr__kv + 3 * var_chaste_interface__I_Shkr__C3Shkr * var_I_Shkr__k_v; // 1 / second
-        const double d_dt_chaste_interface_var_I_Shkr__C2Shkr = 0.001 * var_I_Shkr__C2Shkr_orig_deriv; // 1 / millisecond
+        const double d_dt_chaste_interface_var_I_Shkr__C2Shkr = CHASTE_CONST(0.001) * var_I_Shkr__C2Shkr_orig_deriv; // 1 / millisecond
         const double var_I_Shkr__C3Shkr_orig_deriv = -(3 * var_I_Shkr__k_v + var_I_Shkr__kv) * var_chaste_interface__I_Shkr__C3Shkr + 2 * var_chaste_interface__I_Shkr__C2Shkr * var_I_Shkr__kv + 4 * var_chaste_interface__I_Shkr__C4Shkr * var_I_Shkr__k_v; // 1 / second
-        const double d_dt_chaste_interface_var_I_Shkr__C3Shkr = 0.001 * var_I_Shkr__C3Shkr_orig_deriv; // 1 / millisecond
+        const double d_dt_chaste_interface_var_I_Shkr__C3Shkr = CHASTE_CONST(0.001) * var_I_Shkr__C3Shkr_orig_deriv; // 1 / millisecond
         const double var_I_Shkr__C4Shkr_orig_deriv = var_chaste_interface__I_Shkr__C3Shkr * var_I_Shkr__kv + var_chaste_interface__I_Shkr__OShkr * var_I_Shkr__k_o - (4 * var_I_Shkr__k_v + var_I_Shkr__ko) * var_chaste_interface__I_Shkr__C4Shkr; // 1 / second
-        const double d_dt_chaste_interface_var_I_Shkr__C4Shkr = 0.001 * var_I_Shkr__C4Shkr_orig_deriv; // 1 / millisecond
+        const double d_dt_chaste_interface_var_I_Shkr__C4Shkr = CHASTE_CONST(0.001) * var_I_Shkr__C4Shkr_orig_deriv; // 1 / millisecond
         
         rResidual[0] = rCurrentGuess[0] - rY[1] - mDt*d_dt_chaste_interface_var_I_Shkr__C0Shkr;
         rResidual[1] = rCurrentGuess[1] - rY[2] - mDt*d_dt_chaste_interface_var_I_Shkr__C1Shkr;
@@ -185,21 +187,21 @@
     void Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler::ComputeJacobian(double var_chaste_interface__environment__time_converted, const double rCurrentGuess[6], double rJacobian[6][6])
     {
         std::vector<double>& rY = rGetStateVariables();
-        double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? CHASTE_THIS(mFixedVoltage) : rY[0]);
         // Units: millivolt; Initial value: -58.0
         
         
         const double var_x0 = var_chaste_interface__membrane__Vm / mParameters[6];
-        const double var_x1 = exp(14.864019253910952 * var_x0);
-        const double var_x2 = 0.12 * var_x1;
-        const double var_x3 = exp(-17.767148014440433 * var_x0);
-        const double var_x4 = 0.002 * var_x3;
-        const double var_x5 = 0.089999999999999997 * var_x1;
-        const double var_x6 = 0.0040000000000000001 * var_x3;
-        const double var_x7 = 0.059999999999999998 * var_x1;
-        const double var_x8 = 0.0060000000000000001 * var_x3;
-        const double var_x9 = 0.029999999999999999 * var_x1;
-        const double var_x10 = 0.0080000000000000002 * var_x3;
+        const double var_x1 = CHASTE_MATH::Exp(CHASTE_CONST(14.864019253910952) * var_x0);
+        const double var_x2 = CHASTE_CONST(0.12) * var_x1;
+        const double var_x3 = CHASTE_MATH::Exp(-CHASTE_CONST(17.767148014440433) * var_x0);
+        const double var_x4 = CHASTE_CONST(0.002) * var_x3;
+        const double var_x5 = CHASTE_CONST(0.089999999999999997) * var_x1;
+        const double var_x6 = CHASTE_CONST(0.0040000000000000001) * var_x3;
+        const double var_x7 = CHASTE_CONST(0.059999999999999998) * var_x1;
+        const double var_x8 = CHASTE_CONST(0.0060000000000000001) * var_x3;
+        const double var_x9 = CHASTE_CONST(0.029999999999999999) * var_x1;
+        const double var_x10 = CHASTE_CONST(0.0080000000000000002) * var_x3;
         
         
         rJacobian[0][0] = 1.0 - (mDt * (-var_x2));
@@ -230,39 +232,39 @@
         rJacobian[4][1] = 0.0;
         rJacobian[4][2] = 0.0;
         rJacobian[4][3] = -(mDt * (var_x9));
-        rJacobian[4][4] = 1.0 - (mDt * (-0.076999999999999999 - var_x10));
-        rJacobian[4][5] = -(mDt * (0.017999999999999999));
+        rJacobian[4][4] = 1.0 - (mDt * (-CHASTE_CONST(0.076999999999999999) - var_x10));
+        rJacobian[4][5] = -(mDt * (CHASTE_CONST(0.017999999999999999)));
         rJacobian[5][0] = 0.0;
         rJacobian[5][1] = 0.0;
         rJacobian[5][2] = 0.0;
         rJacobian[5][3] = 0.0;
-        rJacobian[5][4] = -(mDt * (0.076999999999999999));
-        rJacobian[5][5] = 1.0 - (mDt * (-0.017999999999999999));
+        rJacobian[5][4] = -(mDt * (CHASTE_CONST(0.076999999999999999)));
+        rJacobian[5][5] = 1.0 - (mDt * (-CHASTE_CONST(0.017999999999999999)));
     }
 
     void Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler::UpdateTransmembranePotential(double var_chaste_interface__environment__time_converted)
     {
         // Time units: millisecond
         std::vector<double>& rY = rGetStateVariables();
-        double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? CHASTE_THIS(mFixedVoltage) : rY[0]);
         // Units: millivolt; Initial value: -58.0
         double var_chaste_interface__I_Shkr__OShkr = rY[6];
         // Units: dimensionless; Initial value: 0.0
         
-        const double var_I_Kir__aKir = 0.93999999999999995; // dimensionless
-        const double var_I_Kir__bKir = 1.26; // dimensionless
+        const double var_I_Kir__aKir = CHASTE_CONST(0.93999999999999995); // dimensionless
+        const double var_I_Kir__bKir = CHASTE_CONST(1.26); // dimensionless
         const double var_I_b__Eb = 0; // millivolt
-        const double var_I_stim__I_stim_converted = -GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
-        const double var_I_stim__I_stim = 1000 * var_I_stim__I_stim_converted * mParameters[2] / HeartConfig::Instance()->GetCapacitance(); // nanoampere
+        const double var_I_stim__I_stim_converted = -CHASTE_STIM(var_chaste_interface__environment__time_converted); // uA_per_cm2
+        const double var_I_stim__I_stim = 1000 * var_I_stim__I_stim_converted * mParameters[2] / CHASTE_CAP(); // nanoampere
         const double var_I_b__I_b = (-var_I_b__Eb + var_chaste_interface__membrane__Vm) * mParameters[5]; // nanoampere
         const double var_model_parameters__F = 96500; // coulomb_per_mole
         const double var_model_parameters__R = 8310; // millijoule_per_kelvin_mole
-        const double var_I_Kir__EK = var_model_parameters__R * mParameters[6] * log(mParameters[1] / mParameters[0]) / var_model_parameters__F; // millivolt
-        const double var_I_Kir__OKir = 1 / (var_I_Kir__aKir + exp((-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * var_I_Kir__bKir * var_model_parameters__F / (var_model_parameters__R * mParameters[6]))); // dimensionless
-        const double var_I_Kir__I_Kir = 0.031622776601683791 * sqrt(mParameters[1]) * (-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * mParameters[4] * var_I_Kir__OKir; // nanoampere
-        const double var_I_Shkr__I_Shkr = ((((var_chaste_interface__membrane__Vm >= -8.6113989637305703e-9 * mParameters[6]) && (var_chaste_interface__membrane__Vm <= 8.6113989637305703e-9 * mParameters[6])) || ((var_chaste_interface__membrane__Vm >= 8.6113989637305703e-9 * mParameters[6]) && (var_chaste_interface__membrane__Vm <= -8.6113989637305703e-9 * mParameters[6]))) ? (58062575.210589655 * (8.6113989637305703e-9 * mParameters[6] + var_chaste_interface__membrane__Vm) * (0.0096499999999999989 * (-mParameters[1] * exp(9.9999999999999995e-8) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1 - exp(9.9999999999999995e-8)) + 0.0096499999999999989 * (-mParameters[1] * exp(-9.9999999999999995e-8) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1 - exp(-9.9999999999999995e-8))) / mParameters[6] - 0.0096499999999999989 * (-mParameters[1] * exp(9.9999999999999995e-8) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1 - exp(9.9999999999999995e-8))) : (1120607.7015643802 * (-mParameters[1] * exp(-11.612515042117931 * var_chaste_interface__membrane__Vm / mParameters[6]) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] * var_chaste_interface__membrane__Vm / ((1 - exp(-11.612515042117931 * var_chaste_interface__membrane__Vm / mParameters[6])) * mParameters[6]))); // nanoampere
+        const double var_I_Kir__EK = var_model_parameters__R * mParameters[6] * CHASTE_MATH::Log(mParameters[1] / mParameters[0]) / var_model_parameters__F; // millivolt
+        const double var_I_Kir__OKir = 1 / (var_I_Kir__aKir + CHASTE_MATH::Exp((-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * var_I_Kir__bKir * var_model_parameters__F / (var_model_parameters__R * mParameters[6]))); // dimensionless
+        const double var_I_Kir__I_Kir = CHASTE_CONST(0.031622776601683791) * CHASTE_MATH::Sqrt(mParameters[1]) * (-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * mParameters[4] * var_I_Kir__OKir; // nanoampere
+        const double var_I_Shkr__I_Shkr = ((((var_chaste_interface__membrane__Vm >= -CHASTE_CONST(8.6113989637305703e-9) * mParameters[6]) && (var_chaste_interface__membrane__Vm <= CHASTE_CONST(8.6113989637305703e-9) * mParameters[6])) || ((var_chaste_interface__membrane__Vm >= CHASTE_CONST(8.6113989637305703e-9) * mParameters[6]) && (var_chaste_interface__membrane__Vm <= -CHASTE_CONST(8.6113989637305703e-9) * mParameters[6]))) ? (CHASTE_CONST(58062575.210589655) * (CHASTE_CONST(8.6113989637305703e-9) * mParameters[6] + var_chaste_interface__membrane__Vm) * (CHASTE_CONST(0.0096499999999999989) * (-mParameters[1] * CHASTE_MATH::Exp(CHASTE_CONST(9.9999999999999995e-8)) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1 - CHASTE_MATH::Exp(CHASTE_CONST(9.9999999999999995e-8))) + CHASTE_CONST(0.0096499999999999989) * (-mParameters[1] * CHASTE_MATH::Exp(-CHASTE_CONST(9.9999999999999995e-8)) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1 - CHASTE_MATH::Exp(-CHASTE_CONST(9.9999999999999995e-8)))) / mParameters[6] - CHASTE_CONST(0.0096499999999999989) * (-mParameters[1] * CHASTE_MATH::Exp(CHASTE_CONST(9.9999999999999995e-8)) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1 - CHASTE_MATH::Exp(CHASTE_CONST(9.9999999999999995e-8)))) : (CHASTE_CONST(1120607.7015643802) * (-mParameters[1] * CHASTE_MATH::Exp(-CHASTE_CONST(11.612515042117931) * var_chaste_interface__membrane__Vm / mParameters[6]) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] * var_chaste_interface__membrane__Vm / ((1 - CHASTE_MATH::Exp(-CHASTE_CONST(11.612515042117931) * var_chaste_interface__membrane__Vm / mParameters[6])) * mParameters[6]))); // nanoampere
         const double var_membrane__Vm_orig_deriv = (-var_I_Kir__I_Kir - var_I_Shkr__I_Shkr - var_I_b__I_b + var_I_stim__I_stim) / mParameters[2]; // millivolt / second
-        const double d_dt_chaste_interface_var_membrane__Vm = 0.001 * var_membrane__Vm_orig_deriv; // millivolt / millisecond
+        const double d_dt_chaste_interface_var_membrane__Vm = CHASTE_CONST(0.001) * var_membrane__Vm_orig_deriv; // millivolt / millisecond
         
         rY[0] += mDt*d_dt_chaste_interface_var_membrane__Vm;
     }
@@ -290,26 +292,26 @@
     {
         // Inputs:
         // Time units: millisecond
-        double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? this->mFixedVoltage : rY[0]);
+        double var_chaste_interface__membrane__Vm = (mSetVoltageDerivativeToZero ? CHASTE_THIS(mFixedVoltage) : rY[0]);
         // Units: millivolt; Initial value: -58.0
         double var_chaste_interface__I_Shkr__OShkr = rY[6];
         // Units: dimensionless; Initial value: 0.0
         
         // Mathematics
-        const double var_I_Kir__aKir = 0.93999999999999995; // dimensionless
-        const double var_I_Kir__bKir = 1.26; // dimensionless
+        const double var_I_Kir__aKir = CHASTE_CONST(0.93999999999999995); // dimensionless
+        const double var_I_Kir__bKir = CHASTE_CONST(1.26); // dimensionless
         const double var_I_b__Eb = 0; // millivolt
-        const double var_I_stim__I_stim_converted = -GetIntracellularAreaStimulus(var_chaste_interface__environment__time_converted); // uA_per_cm2
+        const double var_I_stim__I_stim_converted = -CHASTE_STIM(var_chaste_interface__environment__time_converted); // uA_per_cm2
         const double var_I_b__I_b = (-var_I_b__Eb + var_chaste_interface__membrane__Vm) * mParameters[5]; // nanoampere
-        const double var_I_b__I_b_converted = 0.001 * HeartConfig::Instance()->GetCapacitance() * var_I_b__I_b / mParameters[2]; // uA_per_cm2
+        const double var_I_b__I_b_converted = CHASTE_CONST(0.001) * CHASTE_CAP() * var_I_b__I_b / mParameters[2]; // uA_per_cm2
         const double var_model_parameters__F = 96500; // coulomb_per_mole
         const double var_model_parameters__R = 8310; // millijoule_per_kelvin_mole
-        const double var_I_Kir__EK = var_model_parameters__R * mParameters[6] * log(mParameters[1] / mParameters[0]) / var_model_parameters__F; // millivolt
-        const double var_I_Kir__OKir = 1 / (var_I_Kir__aKir + exp((-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * var_I_Kir__bKir * var_model_parameters__F / (var_model_parameters__R * mParameters[6]))); // dimensionless
-        const double var_I_Kir__I_Kir = 0.031622776601683791 * sqrt(mParameters[1]) * (-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * mParameters[4] * var_I_Kir__OKir; // nanoampere
-        const double var_I_Kir__I_Kir_converted = 0.001 * HeartConfig::Instance()->GetCapacitance() * var_I_Kir__I_Kir / mParameters[2]; // uA_per_cm2
-        const double var_I_Shkr__I_Shkr = ((((var_chaste_interface__membrane__Vm >= -8.6113989637305703e-9 * mParameters[6]) && (var_chaste_interface__membrane__Vm <= 8.6113989637305703e-9 * mParameters[6])) || ((var_chaste_interface__membrane__Vm >= 8.6113989637305703e-9 * mParameters[6]) && (var_chaste_interface__membrane__Vm <= -8.6113989637305703e-9 * mParameters[6]))) ? (58062575.210589655 * (8.6113989637305703e-9 * mParameters[6] + var_chaste_interface__membrane__Vm) * (0.0096499999999999989 * (-mParameters[1] * exp(9.9999999999999995e-8) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1 - exp(9.9999999999999995e-8)) + 0.0096499999999999989 * (-mParameters[1] * exp(-9.9999999999999995e-8) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1 - exp(-9.9999999999999995e-8))) / mParameters[6] - 0.0096499999999999989 * (-mParameters[1] * exp(9.9999999999999995e-8) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1 - exp(9.9999999999999995e-8))) : (1120607.7015643802 * (-mParameters[1] * exp(-11.612515042117931 * var_chaste_interface__membrane__Vm / mParameters[6]) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] * var_chaste_interface__membrane__Vm / ((1 - exp(-11.612515042117931 * var_chaste_interface__membrane__Vm / mParameters[6])) * mParameters[6]))); // nanoampere
-        const double var_I_Shkr__I_Shkr_converted = 0.001 * HeartConfig::Instance()->GetCapacitance() * var_I_Shkr__I_Shkr / mParameters[2]; // uA_per_cm2
+        const double var_I_Kir__EK = var_model_parameters__R * mParameters[6] * CHASTE_MATH::Log(mParameters[1] / mParameters[0]) / var_model_parameters__F; // millivolt
+        const double var_I_Kir__OKir = 1 / (var_I_Kir__aKir + CHASTE_MATH::Exp((-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * var_I_Kir__bKir * var_model_parameters__F / (var_model_parameters__R * mParameters[6]))); // dimensionless
+        const double var_I_Kir__I_Kir = CHASTE_CONST(0.031622776601683791) * CHASTE_MATH::Sqrt(mParameters[1]) * (-var_I_Kir__EK + var_chaste_interface__membrane__Vm) * mParameters[4] * var_I_Kir__OKir; // nanoampere
+        const double var_I_Kir__I_Kir_converted = CHASTE_CONST(0.001) * CHASTE_CAP() * var_I_Kir__I_Kir / mParameters[2]; // uA_per_cm2
+        const double var_I_Shkr__I_Shkr = ((((var_chaste_interface__membrane__Vm >= -CHASTE_CONST(8.6113989637305703e-9) * mParameters[6]) && (var_chaste_interface__membrane__Vm <= CHASTE_CONST(8.6113989637305703e-9) * mParameters[6])) || ((var_chaste_interface__membrane__Vm >= CHASTE_CONST(8.6113989637305703e-9) * mParameters[6]) && (var_chaste_interface__membrane__Vm <= -CHASTE_CONST(8.6113989637305703e-9) * mParameters[6]))) ? (CHASTE_CONST(58062575.210589655) * (CHASTE_CONST(8.6113989637305703e-9) * mParameters[6] + var_chaste_interface__membrane__Vm) * (CHASTE_CONST(0.0096499999999999989) * (-mParameters[1] * CHASTE_MATH::Exp(CHASTE_CONST(9.9999999999999995e-8)) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1 - CHASTE_MATH::Exp(CHASTE_CONST(9.9999999999999995e-8))) + CHASTE_CONST(0.0096499999999999989) * (-mParameters[1] * CHASTE_MATH::Exp(-CHASTE_CONST(9.9999999999999995e-8)) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1 - CHASTE_MATH::Exp(-CHASTE_CONST(9.9999999999999995e-8)))) / mParameters[6] - CHASTE_CONST(0.0096499999999999989) * (-mParameters[1] * CHASTE_MATH::Exp(CHASTE_CONST(9.9999999999999995e-8)) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] / (1 - CHASTE_MATH::Exp(CHASTE_CONST(9.9999999999999995e-8)))) : (CHASTE_CONST(1120607.7015643802) * (-mParameters[1] * CHASTE_MATH::Exp(-CHASTE_CONST(11.612515042117931) * var_chaste_interface__membrane__Vm / mParameters[6]) + mParameters[0]) * var_chaste_interface__I_Shkr__OShkr * mParameters[3] * var_chaste_interface__membrane__Vm / ((1 - CHASTE_MATH::Exp(-CHASTE_CONST(11.612515042117931) * var_chaste_interface__membrane__Vm / mParameters[6])) * mParameters[6]))); // nanoampere
+        const double var_I_Shkr__I_Shkr_converted = CHASTE_CONST(0.001) * CHASTE_CAP() * var_I_Shkr__I_Shkr / mParameters[2]; // uA_per_cm2
 
         std::vector<double> dqs(5);
         dqs[0] = var_I_Shkr__I_Shkr_converted;

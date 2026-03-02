@@ -18,6 +18,9 @@
 #include "AbstractCardiacCellWithModifiers.hpp"
 #include "AbstractModifier.hpp"
 #include "AbstractStimulusFunction.hpp"
+#if USING_DEVICE_COMPILER
+#include "StimulusEvaluatorCuda.hpp"
+#endif
 #include "AbstractCardiacCell.hpp"
 
 class Cellaslanidi_Purkinje_model_2009FromCellML : public AbstractCardiacCellWithModifiers<AbstractCardiacCell >

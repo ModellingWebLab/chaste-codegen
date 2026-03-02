@@ -16,6 +16,9 @@
 #include "ChasteSerialization.hpp"
 #include <boost/serialization/base_object.hpp>
 #include "AbstractStimulusFunction.hpp"
+#if USING_DEVICE_COMPILER
+#include "StimulusEvaluatorCuda.hpp"
+#endif
 #include "AbstractCardiacCell.hpp"
 
 class Celltest_V_not_state_mparamFromCellML : public AbstractCardiacCell
