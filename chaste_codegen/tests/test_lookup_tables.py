@@ -168,7 +168,7 @@ def test_change_lookup_table(be_model):
     assert params_for_printing[1]['var'] == 'slow_inward_current$Cai'
 
     assert str(params_for_printing[1]['lookup_epxrs']) \
-        == "[['-82.3 - 13.0287 * log(0.001 * slow_inward_current$Cai)', False]]"
+        == "[['-82.3 - 13.0287 * CHASTE_MATH::Log(0.001 * slow_inward_current$Cai)', False]]"
 
 
 def test_no_print_after_table(s_model):
