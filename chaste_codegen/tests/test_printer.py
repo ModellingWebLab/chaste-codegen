@@ -57,12 +57,12 @@ class TestChastePrinter(object):
             == printer.doprint(sp.Eq(x, y) | sp.Eq(x, z)) == '(x == y) || (x == z)'
 
     def test_pow(self, printer, x, y):
-        assert printer.doprint(sp.sympify('x ** y')) == 'pow(x, y)'
-        assert printer.doprint(sp.sympify('Pow(x,y)')) == 'pow(x, y)'
-        assert printer.doprint(sp.sympify('x ** (1/2)')) == 'sqrt(x)'
-        assert printer.doprint(sp.sympify('x ** (-1/2)')) == '1 / sqrt(x)'
+        assert printer.doprint(sp.sympify('x ** y')) == 'CHASTE_MATH::Pow(x, y)'
+        assert printer.doprint(sp.sympify('Pow(x,y)')) == 'CHASTE_MATH::Pow(x, y)'
+        assert printer.doprint(sp.sympify('x ** (1/2)')) == 'CHASTE_MATH::Sqrt(x)'
+        assert printer.doprint(sp.sympify('x ** (-1/2)')) == '1 / CHASTE_MATH::Sqrt(x)'
         assert printer.doprint(1 / x) == '1 / x'
-        assert printer.doprint(sp.Pow(x, 0.5)) == 'sqrt(x)'
+        assert printer.doprint(sp.Pow(x, 0.5)) == 'CHASTE_MATH::Sqrt(x)'
 
     def test_piecewise_expressions(self, printer, x, y, z):
         # Piecewise expressions
@@ -72,72 +72,72 @@ class TestChastePrinter(object):
         assert printer.doprint(conditionalexp_r) == '((x > 0) ? (0) : ((x > 1) ? (1) : (2)))'
 
     def testabs_(self, printer, x, y):
-        assert printer.doprint(sp.Abs(x + y)) == 'fabs(x + y)'
-        assert printer.doprint(sp.Abs(sp.Float('3.2', 17), evaluate=False)) == 'fabs(3.2000000000000002)'
-        assert printer.doprint(sp.Abs(-3, evaluate=False)) == 'fabs(-3)'
+        assert printer.doprint(sp.Abs(x + y)) == 'CHASTE_MATH::Abs(x + y)'
+        assert printer.doprint(sp.Abs(sp.Float('3.2', 17), evaluate=False)) == 'CHASTE_MATH::Abs(CHASTE_CONST(3.2000000000000002))'
+        assert printer.doprint(sp.Abs(-3, evaluate=False)) == 'CHASTE_MATH::Abs(-3)'
 
     def test_trig_functions(self, printer, x):
         # Trig functions
-        assert printer.doprint(sp.acos(x)) == 'acos(x)'
-        assert printer.doprint(sp.acosh(x)) == 'acosh(x)'
-        assert printer.doprint(sp.asin(x)) == 'asin(x)'
-        assert printer.doprint(sp.asinh(x)) == 'asinh(x)'
-        assert printer.doprint(sp.atan(x)) == 'atan(x)'
-        assert printer.doprint(sp.atanh(x)) == 'atanh(x)'
-        assert printer.doprint(sp.ceiling(x)) == 'ceil(x)'
-        assert printer.doprint(sp.cos(x)) == 'cos(x)'
-        assert printer.doprint(sp.cosh(x)) == 'cosh(x)'
-        assert printer.doprint(sp.exp(x)) == 'exp(x)'
-        assert printer.doprint(sp.factorial(x)) == 'factorial(x)'
-        assert printer.doprint(sp.floor(x)) == 'floor(x)'
-        assert printer.doprint(sp.log(x)) == 'log(x)'
-        assert printer.doprint(sp.sin(x)) == 'sin(x)'
-        assert printer.doprint(sp.sinh(x)) == 'sinh(x)'
-        assert printer.doprint(sp.tan(x)) == 'tan(x)'
-        assert printer.doprint(sp.tanh(x)) == 'tanh(x)'
+        assert printer.doprint(sp.acos(x)) == 'CHASTE_MATH::Acos(x)'
+        assert printer.doprint(sp.acosh(x)) == 'CHASTE_MATH::Acosh(x)'
+        assert printer.doprint(sp.asin(x)) == 'CHASTE_MATH::Asin(x)'
+        assert printer.doprint(sp.asinh(x)) == 'CHASTE_MATH::Asinh(x)'
+        assert printer.doprint(sp.atan(x)) == 'CHASTE_MATH::Atan(x)'
+        assert printer.doprint(sp.atanh(x)) == 'CHASTE_MATH::Atanh(x)'
+        assert printer.doprint(sp.ceiling(x)) == 'CHASTE_MATH::Ceil(x)'
+        assert printer.doprint(sp.cos(x)) == 'CHASTE_MATH::Cos(x)'
+        assert printer.doprint(sp.cosh(x)) == 'CHASTE_MATH::Cosh(x)'
+        assert printer.doprint(sp.exp(x)) == 'CHASTE_MATH::Exp(x)'
+        assert printer.doprint(sp.factorial(x)) == 'CHASTE_MATH::Factorial(x)'
+        assert printer.doprint(sp.floor(x)) == 'CHASTE_MATH::Floor(x)'
+        assert printer.doprint(sp.log(x)) == 'CHASTE_MATH::Log(x)'
+        assert printer.doprint(sp.sin(x)) == 'CHASTE_MATH::Sin(x)'
+        assert printer.doprint(sp.sinh(x)) == 'CHASTE_MATH::Sinh(x)'
+        assert printer.doprint(sp.tan(x)) == 'CHASTE_MATH::Tan(x)'
+        assert printer.doprint(sp.tanh(x)) == 'CHASTE_MATH::Tanh(x)'
 
         # extra trig functions
-        assert printer.doprint(sp.sec(x)) == '1 / cos(x)'
-        assert printer.doprint(sp.csc(x)) == '1 / sin(x)'
-        assert printer.doprint(sp.cot(x)) == '1 / tan(x)'
-        assert printer.doprint(sp.asec(x)) == 'acos(1 / x)'
-        assert printer.doprint(sp.acsc(x)) == 'asin(1 / x)'
-        assert printer.doprint(sp.acot(x)) == 'atan(1 / x)'
-        assert printer.doprint(sp.sech(x)) == '1 / cosh(x)'
-        assert printer.doprint(sp.csch(x)) == '1 / sinh(x)'
-        assert printer.doprint(sp.coth(x)) == '1 / tanh(x)'
-        assert printer.doprint(sp.asech(x)) == 'acosh(1 / x)'
-        assert printer.doprint(sp.acsch(x)) == 'asinh(1 / x)'
-        assert printer.doprint(sp.acoth(x)) == 'atanh(1 / x)'
+        assert printer.doprint(sp.sec(x)) == '1 / CHASTE_MATH::Cos(x)'
+        assert printer.doprint(sp.csc(x)) == '1 / CHASTE_MATH::Sin(x)'
+        assert printer.doprint(sp.cot(x)) == '1 / CHASTE_MATH::Tan(x)'
+        assert printer.doprint(sp.asec(x)) == 'CHASTE_MATH::Acos(1 / x)'
+        assert printer.doprint(sp.acsc(x)) == 'CHASTE_MATH::Asin(1 / x)'
+        assert printer.doprint(sp.acot(x)) == 'CHASTE_MATH::Atan(1 / x)'
+        assert printer.doprint(sp.sech(x)) == '1 / CHASTE_MATH::Cosh(x)'
+        assert printer.doprint(sp.csch(x)) == '1 / CHASTE_MATH::Sinh(x)'
+        assert printer.doprint(sp.coth(x)) == '1 / CHASTE_MATH::Tanh(x)'
+        assert printer.doprint(sp.asech(x)) == 'CHASTE_MATH::Acosh(1 / x)'
+        assert printer.doprint(sp.acsch(x)) == 'CHASTE_MATH::Asinh(1 / x)'
+        assert printer.doprint(sp.acoth(x)) == 'CHASTE_MATH::Atanh(1 / x)'
 
     def test_custom_math_functions(self, printer, x):
-        assert printer.doprint(acos_(x)) == 'acos(x)'
-        assert printer.doprint(cos_(x)) == 'cos(x)'
-        assert printer.doprint(exp_(x)) == 'exp(x)'
-        assert printer.doprint(sin_(x)) == 'sin(x)'
-        assert printer.doprint(sqrt_(x)) == 'sqrt(x)'
-        assert printer.doprint(abs_(x)) == 'fabs(x)'
+        assert printer.doprint(acos_(x)) == 'CHASTE_MATH::Acos(x)'
+        assert printer.doprint(cos_(x)) == 'CHASTE_MATH::Cos(x)'
+        assert printer.doprint(exp_(x)) == 'CHASTE_MATH::Exp(x)'
+        assert printer.doprint(sin_(x)) == 'CHASTE_MATH::Sin(x)'
+        assert printer.doprint(sqrt_(x)) == 'CHASTE_MATH::Sqrt(x)'
+        assert printer.doprint(abs_(x)) == 'CHASTE_MATH::Abs(x)'
 
     def test_numbers(self, printer, x):
         # Number types
         assert printer.doprint(1) == '1'                  # int
-        assert printer.doprint(1.2) == '1.2'              # float, short format
-        assert printer.doprint(math.pi) == '3.1415926535897931'  # float, long format
-        assert printer.doprint(1.436432635636e-123) == '1.436432635636e-123'
+        assert printer.doprint(1.2) == 'CHASTE_CONST(1.2)'              # float, short format
+        assert printer.doprint(math.pi) == 'CHASTE_CONST(3.1415926535897931)'  # float, long format
+        assert printer.doprint(1.436432635636e-123) == 'CHASTE_CONST(1.436432635636e-123)'
         assert printer.doprint(x - x) == '0'              # Zero
         assert printer.doprint(x / x) == '1'              # One
         assert printer.doprint(-x / x) == '-1'            # Negative one
         assert printer.doprint(5 * (x / x)) == '5'        # Sympy integer
-        assert printer.doprint(5.5 * (x / x)) == '5.5'        # Sympy float
+        assert printer.doprint(5.5 * (x / x)) == 'CHASTE_CONST(5.5)'        # Sympy float
         assert printer.doprint(sp.Rational(5, 7)) == '5 / 7'  # Sympy rational
 
         # Special numbers
-        assert printer.doprint(sp.pi) == 'M_PI'
-        assert printer.doprint(sp.E) == 'e'
+        assert printer.doprint(sp.pi) == 'CHASTE_CONST(CHASTE_MATH::Pi)'
+        assert printer.doprint(sp.E) == 'CHASTE_CONST(CHASTE_MATH::E)'
 
         # large ints
-        assert printer.doprint(8034023767017108950029959168) == '8.034023767017109e+27'
-        assert printer.doprint(-8034023767017108950029959168) == '-8.034023767017109e+27'
+        assert printer.doprint(8034023767017108950029959168) == 'CHASTE_CONST(8.034023767017109e+27)'
+        assert printer.doprint(-8034023767017108950029959168) == '-CHASTE_CONST(8.034023767017109e+27)'
 
     def test_unsupported_function(self, printer, x):
         f = sp.Function('f')
@@ -162,13 +162,13 @@ class TestChastePrinter(object):
         assert printer.doprint(x * (y + z)) == 'x * (y + z)'
         assert printer.doprint(x * y * z) == 'x * y * z'
         assert printer.doprint(x + y > x * z), 'x + y > x * z'
-        assert printer.doprint(x**2 + 3 * y**2) == 'pow(x, 2) + 3 * pow(y, 2)'
-        assert printer.doprint(x**(2 + 3 * y**2)) == 'pow(x, (2 + 3 * pow(y, 2)))'
+        assert printer.doprint(x**2 + 3 * y**2) == 'CHASTE_MATH::Pow(x, 2) + 3 * CHASTE_MATH::Pow(y, 2)'
+        assert printer.doprint(x**(2 + 3 * y**2)) == 'CHASTE_MATH::Pow(x, (2 + 3 * CHASTE_MATH::Pow(y, 2)))'
         assert printer.doprint(x**-1 * y**-1) == '1 / (x * y)'
         assert printer.doprint(x / y / z) == 'x / (y * z)'
         assert printer.doprint(x / y * z) == 'x * z / y'
         assert printer.doprint(x / (y * z)) == 'x / (y * z)'
-        assert printer.doprint(x * y**(-2 / (3 * x / x))) == 'x / pow(y, (2 / 3))'
+        assert printer.doprint(x * y**(-2 / (3 * x / x))) == 'x / CHASTE_MATH::Pow(y, (2 / 3))'
 
         # Sympy issue #14160
         d = sp.Mul(

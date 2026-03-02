@@ -33,12 +33,66 @@ class ChastePrinterCommon(Printer):
         A function that prints lookup table expressions or returns None if the expression is not in the lookup table.
 
     """
+    _function_names = {
+        'abs_': 'fabs',
+        'acos_': 'acos',
+        'cos_': 'cos',
+        'exp_': 'exp',
+        'sqrt_': 'sqrt',
+        'sin_': 'sin',
 
-    """ Intended to be overridden by printer implementations"""
-    _function_names = {}
-    _extra_trig_names = {}
-    _extra_inverse_trig_names = {}
-    _literal_names = {}
+        'Abs': 'fabs',
+        'acos': 'acos',
+        'acosh': 'acosh',
+        'asin': 'asin',
+        'asinh': 'asinh',
+        'atan': 'atan',
+        'atan2': 'atan2',
+        'atanh': 'atanh',
+        'ceiling': 'ceil',
+        'cos': 'cos',
+        'cosh': 'cosh',
+        'exp': 'exp',
+        'expm1': 'expm1',
+        'factorial': 'factorial',
+        'floor': 'floor',
+        'log': 'log',
+        'log10': 'log10',
+        'log1p': 'log1p',
+        'log2': 'log2',
+        'sin': 'sin',
+        'sinh': 'sinh',
+        'sqrt': 'sqrt',
+        'tan': 'tan',
+        'tanh': 'tanh',
+
+        'sign': 'Signum',
+        'GetIntracellularAreaStimulus': 'GetIntracellularAreaStimulus',
+        'HeartConfig::Instance()->GetCapacitance': 'HeartConfig::Instance()->GetCapacitance',
+        'GetExperimentalVoltageAtTimeT': 'GetExperimentalVoltageAtTimeT'
+    }
+    _extra_trig_names = {
+        'sec': 'cos',
+        'csc': 'sin',
+        'cot': 'tan',
+        'sech': 'cosh',
+        'csch': 'sinh',
+        'coth': 'tanh',
+    }
+    _extra_inverse_trig_names = {
+        'asec': 'acos',
+        'acsc': 'asin',
+        'acot': 'atan',
+        'asech': 'acosh',
+        'acsch': 'asinh',
+        'acoth': 'atanh',
+    }
+
+    _literal_names = {
+        'e': 'e',
+        'nan': 'NAN',
+        'pi': 'M_PI',
+    }
 
     def __init__(self, symbol_function=None, derivative_function=None, lookup_table_function=lambda e: None):
         super().__init__(symbol_function, derivative_function)

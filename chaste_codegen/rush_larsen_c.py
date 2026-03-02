@@ -136,7 +136,7 @@ class RushLarsenC(RushLarsenModel):
         # (state variables, time, lhs of default_stimulus eqs, i_ionic and lhs of y_derivatives)
         # Print modifiable parameters as mParameters[index]
         self._printer = \
-            cg.ChastePrinter(lambda variable:
+            cg.ChastePrinterCommon(lambda variable:
                              get_variable_name(variable, variable in self._in_interface)
                              if variable not in self._model.modifiable_parameters
                              else self._print_modifiable_parameters(variable),
@@ -144,7 +144,7 @@ class RushLarsenC(RushLarsenModel):
                              lookup_table_function)
 
         # Printer for printing variable in comments e.g. for ode system information
-        self._name_printer = cg.ChastePrinter(lambda variable: get_variable_name(variable))
+        self._name_printer = cg.ChastePrinterCommon(lambda variable: get_variable_name(variable))
 
     def _print_sv_ind(self, v):
         var_name = "Y[%s]" % self._state_vars.index(list(v.free_symbols)[0])
