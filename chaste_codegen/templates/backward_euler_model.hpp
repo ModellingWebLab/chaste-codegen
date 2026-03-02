@@ -1,31 +1,28 @@
 {% include "Shared/hpp/header_comments" %}
 {% include "Shared/hpp/includes" %}
 #include "{{base_class}}.hpp"
+
 {% if not lookup_parameters is defined -%}
 #if USING_DEVICE_COMPILER
 template<typename CellType, typename ValueType>
 class BackwardEulerKernelLauncher; // Forward declare to hide CUDA-specifics from standard C++ compiler
 #endif
 {%- endif %}
-
 {% with %}{% set base_class = base_class ~ "<" ~ nonlinear_state_vars|length ~ ">" %}{% include "Shared/hpp/class_declaration" %}{% endwith %}
 {% if not lookup_parameters is defined -%}
 #if USING_DEVICE_COMPILER
     template<typename ValueType> using SolverKernelLauncher = BackwardEulerKernelLauncher<{{class_name}}, ValueType>;
     static constexpr unsigned TOTAL_SIZE = {{ state_vars|length }}u;
     static constexpr unsigned NONLINEAR_SIZE = {{ nonlinear_state_vars|length }}u;
-#endif
-{%- endif %}
-
+#endif{%- endif %}
 {% include "Shared/hpp/DefaultStimulus_IntracellularCalciumConcentration" %}
-
     {{class_name}}(boost::shared_ptr<AbstractIvpOdeSolver> /* unused */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
-
 {% include "Shared/hpp/destructor_verify_state_variables_GetIIonic" %}
     {% if nonlinear_state_vars|length > 0 -%}
     void ComputeResidual(double {{free_variable.var_name}}, const double rCurrentGuess[{{nonlinear_state_vars|length}}], double rResidual[{{nonlinear_state_vars|length}}]);
     void ComputeJacobian(double {{free_variable.var_name}}, const double rCurrentGuess[{{nonlinear_state_vars|length}}], double rJacobian[{{nonlinear_state_vars|length}}][{{nonlinear_state_vars|length}}]);
     {%- endif %} {# nonlinear_state_vars #}
+
 #if USING_DEVICE_COMPILER
     {% if not lookup_parameters is defined -%}{# only generate kernels for non opt models -#}
     {% if nonlinear_state_vars|length > 0 -%}
