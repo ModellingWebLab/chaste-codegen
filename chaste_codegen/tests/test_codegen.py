@@ -199,7 +199,7 @@ def test_BE(tmp_path, model):
     LOGGER.info('Converting: BE: ' + class_name + '\n')
     # Generate chaste code
     with cg.BackwardEulerModel(cache_model(model['model']), model['model_name_from_file'],
-                               class_name=class_name) as chaste_model:
+                               class_name=class_name, will_generate_kernels=True) as chaste_model:
         chaste_model.generate_chaste_code()
         # Compare against reference
         compare_model_against_reference(chaste_model, tmp_path, 'BE')
@@ -212,7 +212,8 @@ def test_Cvode_jacobian(tmp_path, model):
     LOGGER.info('Converting: Cvode: ' + class_name + ' with jacobian\n')
     # Generate chaste code
     with cg.CvodeChasteModel(cache_model(model['model']), model['model_name_from_file'],
-                             class_name=class_name, use_analytic_jacobian=True) as chaste_model:
+                             class_name=class_name, use_analytic_jacobian=True,
+                             will_generate_kernels=True) as chaste_model:
         chaste_model.generate_chaste_code()
         # Compare against reference
         compare_model_against_reference(chaste_model, tmp_path, 'Cvode_with_jacobian')
@@ -225,7 +226,7 @@ def test_Cvode(tmp_path, model):
     LOGGER.info('Converting: Cvode: ' + class_name + '\n')
     # Generate chaste code
     with cg.CvodeChasteModel(cache_model(model['model']), model['model_name_from_file'],
-                             class_name=class_name) as chaste_model:
+                             class_name=class_name, will_generate_kernels=True) as chaste_model:
         chaste_model.generate_chaste_code()
         # Compare against reference
         compare_model_against_reference(chaste_model, tmp_path, 'Cvode')

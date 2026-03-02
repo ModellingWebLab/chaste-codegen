@@ -1,5 +1,4 @@
 {% if nonlinear_state_vars|length > 0 -%}
-/* Compute residual of non-linear system for the current guess */
 template<typename ValueType>
 DEVICE
 void {{class_name}}::ComputeResidualDevice(ValueType {{free_variable.var_name}},

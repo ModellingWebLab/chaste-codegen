@@ -1,4 +1,3 @@
-/* Update transmembrane potential (GPU) */
 template<typename ValueType>
 DEVICE
 void {{class_name}}::UpdateTransmembranePotentialDevice(ValueType {{free_variable.var_name}},
