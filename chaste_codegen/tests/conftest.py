@@ -108,7 +108,12 @@ def compare_model_against_reference(chaste_model, tmp_path, model_type, referenc
     expected_path = os.path.join(TESTS_FOLDER, reference_folder, model_type, chaste_model.file_name)
     # Write generated files
     # Compare against reference
-    assert len(chaste_model.generated_code) == len(chaste_model.generated_code) == len(chaste_model.DEFAULT_EXTENSIONS)
+    # Certain model types will also generate a kernels file, giving us 1 extra generated file
+    if model_type.startswith('BE') or 'Cvode' in model_type or 'CVODE' in model_type:
+        expected_len = len(chaste_model.DEFAULT_EXTENSIONS) + 1
+    else:
+        expected_len = len(chaste_model.DEFAULT_EXTENSIONS)
+    assert len(chaste_model.generated_code) == expected_len
     assert len(chaste_model.generated_code) > 0
     for ext, code in zip(chaste_model.DEFAULT_EXTENSIONS, chaste_model.generated_code):
         gen_file_path = os.path.join(tmp_path, chaste_model.file_name + ext)
