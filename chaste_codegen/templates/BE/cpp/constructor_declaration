@@ -1,4 +1,4 @@
-    {{class_name}}::{{class_name}}(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    {{class_name}}::{{class_name}}(std::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : {{base_class}}<{{nonlinear_state_vars|length}}>(
                 {{state_vars|length}},
                 {{membrane_voltage_index}},

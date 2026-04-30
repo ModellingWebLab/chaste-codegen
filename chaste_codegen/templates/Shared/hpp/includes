@@ -1,3 +1,4 @@
+#include <memory>
 #include "ChasteSerialization.hpp"
 #include <boost/serialization/base_object.hpp>
 {%- if modifiers|length > 0 %}

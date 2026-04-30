@@ -26,14 +26,14 @@
 
 
 
-    boost::shared_ptr<RegularStimulus> Cellaslanidi_Purkinje_model_2009FromCellML::UseCellMLDefaultStimulus()
+    std::shared_ptr<RegularStimulus> Cellaslanidi_Purkinje_model_2009FromCellML::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -80 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
         const double var_chaste_interface__membrane__stim_duration = 1; // millisecond
         const double var_chaste_interface__membrane__stim_period = 800; // millisecond
         const double var_chaste_interface__membrane__stim_start = 100; // millisecond
-        boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+        std::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__membrane__stim_amplitude_converted),
                 var_chaste_interface__membrane__stim_duration,
                 var_chaste_interface__membrane__stim_period,
@@ -46,7 +46,7 @@
     {
         return mStateVariables[1];
     }
-    Cellaslanidi_Purkinje_model_2009FromCellML::Cellaslanidi_Purkinje_model_2009FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellaslanidi_Purkinje_model_2009FromCellML::Cellaslanidi_Purkinje_model_2009FromCellML(std::shared_ptr<AbstractIvpOdeSolver> pSolver, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCellWithModifiers<AbstractCardiacCell >(
                 pSolver,
                 30,

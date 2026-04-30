@@ -31,7 +31,7 @@
 
 
 
-    boost::shared_ptr<RegularStimulus> Cellaslanidi_atrial_model_2009FromCellMLCvode::UseCellMLDefaultStimulus()
+    std::shared_ptr<RegularStimulus> Cellaslanidi_atrial_model_2009FromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_membrane__Cm_converted = 0.001 * NV_Ith_S(mParameters, 4); // uF
@@ -39,7 +39,7 @@
         const double var_chaste_interface__membrane__stim_duration_converted = 0.5; // millisecond
         const double var_chaste_interface__membrane__stim_period_converted = 500; // millisecond
         const double var_chaste_interface__membrane__stim_start_converted = 10; // millisecond
-        boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+        std::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__membrane__stim_amplitude_converted),
                 var_chaste_interface__membrane__stim_duration_converted,
                 var_chaste_interface__membrane__stim_period_converted,
@@ -54,7 +54,7 @@
         return NV_Ith_S(mStateVariables, 1);
     }
     
-    Cellaslanidi_atrial_model_2009FromCellMLCvode::Cellaslanidi_atrial_model_2009FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellaslanidi_atrial_model_2009FromCellMLCvode::Cellaslanidi_atrial_model_2009FromCellMLCvode(std::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
                 29,

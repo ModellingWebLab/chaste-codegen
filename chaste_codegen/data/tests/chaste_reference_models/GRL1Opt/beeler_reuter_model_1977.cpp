@@ -360,14 +360,14 @@ private:
 std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLGRL1Opt_LookupTables> Cellbeeler_reuter_model_1977FromCellMLGRL1Opt_LookupTables::mpInstance;
 
 
-    boost::shared_ptr<RegularStimulus> Cellbeeler_reuter_model_1977FromCellMLGRL1Opt::UseCellMLDefaultStimulus()
+    std::shared_ptr<RegularStimulus> Cellbeeler_reuter_model_1977FromCellMLGRL1Opt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__stimulus_protocol__IstimAmplitude_converted = 50.000000000000007; // uA_per_cm2
         const double var_chaste_interface__stimulus_protocol__IstimPeriod = 1000; // ms
         const double var_chaste_interface__stimulus_protocol__IstimPulseDuration = 1; // ms
         const double var_chaste_interface__stimulus_protocol__IstimStart = 10; // ms
-        boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+        std::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__stimulus_protocol__IstimAmplitude_converted),
                 var_chaste_interface__stimulus_protocol__IstimPulseDuration,
                 var_chaste_interface__stimulus_protocol__IstimPeriod,
@@ -380,7 +380,7 @@ std::shared_ptr<Cellbeeler_reuter_model_1977FromCellMLGRL1Opt_LookupTables> Cell
     {
         return mStateVariables[1];
     }
-    Cellbeeler_reuter_model_1977FromCellMLGRL1Opt::Cellbeeler_reuter_model_1977FromCellMLGRL1Opt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellbeeler_reuter_model_1977FromCellMLGRL1Opt::Cellbeeler_reuter_model_1977FromCellMLGRL1Opt(std::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractGeneralizedRushLarsenCardiacCell(
                 8,
                 0,

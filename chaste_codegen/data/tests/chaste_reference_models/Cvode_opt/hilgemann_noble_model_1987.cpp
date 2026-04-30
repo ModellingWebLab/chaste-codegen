@@ -321,14 +321,14 @@ private:
 std::shared_ptr<Cellhilgemann_noble_model_1987FromCellMLCvodeOpt_LookupTables> Cellhilgemann_noble_model_1987FromCellMLCvodeOpt_LookupTables::mpInstance;
 
 
-    boost::shared_ptr<RegularStimulus> Cellhilgemann_noble_model_1987FromCellMLCvodeOpt::UseCellMLDefaultStimulus()
+    std::shared_ptr<RegularStimulus> Cellhilgemann_noble_model_1987FromCellMLCvodeOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -0.20000000000000001 * HeartConfig::Instance()->GetCapacitance() / NV_Ith_S(mParameters, 8); // uA_per_cm2
         const double var_chaste_interface__membrane__stim_duration_converted = 2; // millisecond
         const double var_chaste_interface__membrane__stim_period_converted = 1000; // millisecond
         const double var_chaste_interface__membrane__stim_start_converted = 100; // millisecond
-        boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+        std::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__membrane__stim_amplitude_converted),
                 var_chaste_interface__membrane__stim_duration_converted,
                 var_chaste_interface__membrane__stim_period_converted,
@@ -343,7 +343,7 @@ std::shared_ptr<Cellhilgemann_noble_model_1987FromCellMLCvodeOpt_LookupTables> C
         return NV_Ith_S(mStateVariables, 1);
     }
     
-    Cellhilgemann_noble_model_1987FromCellMLCvodeOpt::Cellhilgemann_noble_model_1987FromCellMLCvodeOpt(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellhilgemann_noble_model_1987FromCellMLCvodeOpt::Cellhilgemann_noble_model_1987FromCellMLCvodeOpt(std::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
                 15,

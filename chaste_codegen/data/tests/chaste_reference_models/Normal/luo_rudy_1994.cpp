@@ -26,13 +26,13 @@
 
 
 
-    boost::shared_ptr<RegularStimulus> Cellluo_rudy_1994FromCellML::UseCellMLDefaultStimulus()
+    std::shared_ptr<RegularStimulus> Cellluo_rudy_1994FromCellML::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stimCurrent_converted = 50.000000000000007; // uA_per_cm2
         const double var_chaste_interface__membrane__stimDuration = 0.5; // ms
         const double var_chaste_interface__membrane__stimPeriod = 1000; // ms
-        boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+        std::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__membrane__stimCurrent_converted),
                 var_chaste_interface__membrane__stimDuration,
                 var_chaste_interface__membrane__stimPeriod,
@@ -45,7 +45,7 @@
     {
         return mStateVariables[1];
     }
-    Cellluo_rudy_1994FromCellML::Cellluo_rudy_1994FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellluo_rudy_1994FromCellML::Cellluo_rudy_1994FromCellML(std::shared_ptr<AbstractIvpOdeSolver> pSolver, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 12,

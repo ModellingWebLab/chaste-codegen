@@ -24,7 +24,7 @@
 
 #include "ModelFactory.hpp"
 
-AbstractRushLarsenCardiacCell* Dynamicbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLRushLarsenOpt::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
+AbstractRushLarsenCardiacCell* Dynamicbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLRushLarsenOpt::CreateMethod(std::shared_ptr<AbstractIvpOdeSolver> p_solver, std::shared_ptr<AbstractStimulusFunction> p_stimulus) {
     return new Dynamicbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLRushLarsenOpt(p_solver, p_stimulus);
 }
 
@@ -575,14 +575,14 @@ private:
 std::shared_ptr<Dynamicbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLRushLarsenOpt_LookupTables> Dynamicbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLRushLarsenOpt_LookupTables::mpInstance;
 
 
-    boost::shared_ptr<RegularStimulus> Dynamicbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLRushLarsenOpt::UseCellMLDefaultStimulus()
+    std::shared_ptr<RegularStimulus> Dynamicbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLRushLarsenOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -80 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
         const double var_chaste_interface__membrane__stim_duration = 0.5; // millisecond
         const double var_chaste_interface__membrane__stim_period = 71.430000000000007; // millisecond
         const double var_chaste_interface__membrane__stim_start = 0; // millisecond
-        boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+        std::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__membrane__stim_amplitude_converted),
                 var_chaste_interface__membrane__stim_duration,
                 var_chaste_interface__membrane__stim_period,
@@ -595,7 +595,7 @@ std::shared_ptr<Dynamicbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCell
     {
         return mStateVariables[1];
     }
-    Dynamicbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLRushLarsenOpt::Dynamicbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLRushLarsenOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Dynamicbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLRushLarsenOpt::Dynamicbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLRushLarsenOpt(std::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractRushLarsenCardiacCell(
                 41,
                 0,
@@ -1536,8 +1536,8 @@ CHASTE_CLASS_EXPORT(Dynamicbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFrom
 extern "C"
 {
     AbstractCardiacCellInterface* MakeCardiacCell(
-            boost::shared_ptr<AbstractIvpOdeSolver> pSolver,
-            boost::shared_ptr<AbstractStimulusFunction> pStimulus)
+            std::shared_ptr<AbstractIvpOdeSolver> pSolver,
+            std::shared_ptr<AbstractStimulusFunction> pStimulus)
     {
         return new Dynamicbondarenko_szigeti_bett_kim_rasmusson_2004_apicalFromCellMLRushLarsenOpt(pSolver, pStimulus);
     }

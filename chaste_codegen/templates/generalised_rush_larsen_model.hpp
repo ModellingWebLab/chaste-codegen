@@ -3,7 +3,7 @@
 #include "{{base_class}}.hpp"
 {% include "Shared/hpp/class_declaration" %}
 {% include "Shared/hpp/DefaultStimulus_IntracellularCalciumConcentration" %}
-    {{class_name}}(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    {{class_name}}(std::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
 {% include "Shared/hpp/destructor_verify_state_variables_GetIIonic" %}
     void UpdateTransmembranePotential(double {{free_variable.var_name}});
     void ComputeOneStepExceptVoltage(double {{free_variable.var_name}});

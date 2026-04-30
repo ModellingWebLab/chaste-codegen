@@ -34,16 +34,16 @@ class Chaste_CG : public AbstractCardiacCell, public AbstractDynamicallyLoadable
     //
 
 private:
-    static AbstractCardiacCell* CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus);
+    static AbstractCardiacCell* CreateMethod(std::shared_ptr<AbstractIvpOdeSolver> p_solver, std::shared_ptr<AbstractStimulusFunction> p_stimulus);
     static bool registered;
 private:
 const bool is_concentration[22] = {false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, false, true, false, false};
 const bool is_probability[22] = {false, false, false, false, false, true, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false};
 public:
 
-    boost::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
+    std::shared_ptr<RegularStimulus> UseCellMLDefaultStimulus();
     double GetIntracellularCalciumConcentration();
-    Chaste_CG(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
+    Chaste_CG(std::shared_ptr<AbstractIvpOdeSolver> pSolver, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus);
     ~Chaste_CG();
     void VerifyStateVariables();
     double GetIIonic(const std::vector<double>* pStateVariables=NULL);
@@ -64,8 +64,8 @@ namespace boost
         inline void save_construct_data(
             Archive & ar, const Chaste_CG * t, const unsigned int fileVersion)
         {
-            const boost::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
-            const boost::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
+            const std::shared_ptr<AbstractIvpOdeSolver> p_solver = t->GetSolver();
+            const std::shared_ptr<AbstractStimulusFunction> p_stimulus = t->GetStimulusFunction();
             ar << p_solver;
             ar << p_stimulus;
         }
@@ -74,8 +74,8 @@ namespace boost
         inline void load_construct_data(
             Archive & ar, Chaste_CG * t, const unsigned int fileVersion)
         {
-            boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
-            boost::shared_ptr<AbstractStimulusFunction> p_stimulus;
+            std::shared_ptr<AbstractIvpOdeSolver> p_solver;
+            std::shared_ptr<AbstractStimulusFunction> p_stimulus;
             ar >> p_solver;
             ar >> p_stimulus;
             ::new(t)Chaste_CG(p_solver, p_stimulus);
