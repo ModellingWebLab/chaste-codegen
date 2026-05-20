@@ -9,6 +9,7 @@ ignore =
     # break after binary operator - allow either style
 exclude=
     .git,
+    .venv,
     build,
     dev-requirements,
     venv,
