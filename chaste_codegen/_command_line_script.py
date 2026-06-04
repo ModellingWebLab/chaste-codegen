@@ -60,7 +60,7 @@ def skip_conversion(args):
 
 def process_command_line():
     # add options for command line interface
-    parser = argparse.ArgumentParser(description='Chaste code generation for cellml.')
+    parser = argparse.ArgumentParser(prog='chaste_codegen', description='Chaste code generation for cellml.')
     # Options for added pycml backwards compatibility, these are now always on
     parser.add_argument('--Wu', '--warn-on-units-errors', action='store_true', help=argparse.SUPPRESS)
     parser.add_argument('-A', '--fully-automatic', action='store_true', help=argparse.SUPPRESS)
