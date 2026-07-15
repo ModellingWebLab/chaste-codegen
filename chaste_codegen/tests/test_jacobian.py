@@ -6,7 +6,7 @@ import sympy as sp
 from chaste_codegen._chaste_printer import ChastePrinter
 from chaste_codegen._jacobian import format_jacobian, get_jacobian
 from chaste_codegen._partial_eval import partial_eval
-from chaste_codegen.tests.conftest import TESTS_FOLDER
+from chaste_codegen.tests.conftest import TESTS_FOLDER, read_versioned_reference
 
 
 @pytest.fixture(scope='session')
@@ -36,17 +36,14 @@ def test_get_jacobian_no_partial_eval(state_vars, derivatives_eqs):
 
 def test_get_jacobian(jacobian):
     jacobian_equations, jacobian_matrix = jacobian
-    expected = open(os.path.join(TESTS_FOLDER, 'test_jacobian_equations_1.txt'), 'r').read()
-    expected_python36 = open(os.path.join(TESTS_FOLDER, 'test_jacobian_equations_1.txt_python36'), 'r').read()
-    # exclude x5 due to - sign difference between sympy 1.9 and 1.10
     eqs = [sp.Eq(*eq) for eq in jacobian_equations]
-    required = [e.lhs for e in eqs if not str(e.lhs).endswith('x5')]
+    required = [e.lhs for e in eqs]
     part_eval_jacobian_equations = partial_eval(eqs, required, keep_multiple_usages=False)
 
-    assert str(part_eval_jacobian_equations) == expected or str(part_eval_jacobian_equations) == expected_python36
-    expected = open(os.path.join(TESTS_FOLDER, 'test_jacobian_matrix_1.txt'), 'r').read()
-    expected_python36 = open(os.path.join(TESTS_FOLDER, 'test_jacobian_matrix_1.txt_python36'), 'r').read()
-    assert str(jacobian_matrix) == expected or str(jacobian_matrix) == expected_python36
+    assert str(part_eval_jacobian_equations) == \
+        read_versioned_reference(os.path.join(TESTS_FOLDER, 'test_jacobian_equations_1.txt'))
+    assert str(jacobian_matrix) == \
+        read_versioned_reference(os.path.join(TESTS_FOLDER, 'test_jacobian_matrix_1.txt'))
 
 
 def test_format_wrong_params1():
@@ -81,9 +78,8 @@ def test_format_wrong_params5(jacobian):
 def test_format_jacobian(jacobian):
     jacobian_equations, jacobian_matrix = jacobian
 
-    # exclude x5 due to - sign difference between sympy 1.9 and 1.10
     eqs = [sp.Eq(*eq) for eq in jacobian_equations]
-    required = [e.lhs for e in eqs if not str(e.lhs).endswith('x3')]
+    required = [e.lhs for e in eqs]
     part_eval_jacobian_equations = partial_eval(eqs, required, keep_multiple_usages=False)
     jacobian_equations = [(e.lhs, e.rhs) for e in part_eval_jacobian_equations]
 
@@ -96,10 +92,7 @@ def test_format_jacobian(jacobian):
     jacobian = [dict([('i', jac['i']), ('j', jac['j']), ('entry', jac['entry'])])
                 for jac in jacobian]
 
-    expected = open(os.path.join(TESTS_FOLDER, 'test_jacobian_equations_2.txt'), 'r').read()
-    expected_python36 = open(os.path.join(TESTS_FOLDER, 'test_jacobian_equations_2.txt_python36'), 'r').read()
-    assert str(equations) == expected or str(equations) == expected_python36
-
-    expected = open(os.path.join(TESTS_FOLDER, 'test_jacobian_matrix_2.txt'), 'r').read()
-    expected_python36 = open(os.path.join(TESTS_FOLDER, 'test_jacobian_matrix_2.txt_python36'), 'r').read()
-    assert str(jacobian) == expected or str(jacobian) == expected_python36
+    assert str(equations) == \
+        read_versioned_reference(os.path.join(TESTS_FOLDER, 'test_jacobian_equations_2.txt'))
+    assert str(jacobian) == \
+        read_versioned_reference(os.path.join(TESTS_FOLDER, 'test_jacobian_matrix_2.txt'))
