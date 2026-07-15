@@ -1,7 +1,9 @@
+import glob
 import os
 import re
 
 import pytest
+import sympy
 
 from chaste_codegen import DATA_DIR, load_model_with_conversions
 from chaste_codegen._script_utils import write_file
@@ -13,6 +15,42 @@ TESTS_FOLDER = os.path.join(DATA_DIR, 'tests')
 TIMESTAMP_REGEX = re.compile(r'(//! on .*)')
 COMMENTS_REGEX = re.compile(r'(//.*)')
 VERSION_REGEX = re.compile(r'(//! This source file was generated from CellML by chaste_codegen version .*)')
+
+
+def versioned_reference_path(reference_file, sympy_version=None):
+    """Return the reference file applicable to the running sympy version.
+
+    When sympy changes the generated output format at version X.Y, the new
+    expected output is kept in a sibling file with a ``--sympy_X_Y`` suffix
+    inserted before the extension, e.g. ``foo.cpp`` -> ``foo--sympy_1_13.cpp``.
+    The base ``reference_file`` is used for versions below the lowest threshold,
+    and whenever there are no variants.
+    """
+    if sympy_version is None:
+        sympy_version = sympy.__version__
+    running = tuple(int(part) for part in sympy_version.split('.')[:2])
+
+    root, ext = os.path.splitext(reference_file)
+    suffix = re.compile(r'--sympy_(\d+)_(\d+)' + re.escape(ext) + r'$')
+    best_threshold, best_path = (0, 0), reference_file  # base file is the fallback
+    for variant in glob.glob(glob.escape(root) + '--sympy_*_*' + glob.escape(ext)):
+        match = suffix.search(variant)
+        if match:
+            threshold = (int(match.group(1)), int(match.group(2)))
+            if best_threshold < threshold <= running:
+                best_threshold, best_path = threshold, variant
+    return best_path
+
+
+def read_versioned_reference(reference_file, sympy_version=None):
+    """Read the reference text applicable to the running sympy version.
+
+    See :func:`versioned_reference_path` for how the variant is selected.
+    """
+    with open(versioned_reference_path(reference_file, sympy_version), 'r') as f:
+        content = f.read()
+    return content[:-1] if content.endswith('\n') else content
+
 
 cached_models = {}
 
@@ -71,34 +109,37 @@ def load_chaste_models(model_types=[], reference_folder='chaste_reference_models
     return model_files
 
 
+def normalise_lines(raw_lines, remove_comments=False):
+    """ Normalise raw text lines for comparison
+
+    Strips surrounding whitespace, removes the timestamp/version header lines
+    and (optionally) comments, and drops blank lines.
+
+    :param raw_lines: an iterable of raw lines (e.g. from ``file.readlines()``)
+    :param remove_comments: indicates whether to remove all comments starting with //
+    """
+    lines = []
+    for line in raw_lines:
+        line = line.rstrip().lstrip()  # Remove trailing and preceding whitespace
+        line = TIMESTAMP_REGEX.sub("", line)  # Remove timestamp
+        line = VERSION_REGEX.sub("", line)  # Remove Version
+        if remove_comments:
+            line = COMMENTS_REGEX.sub("", line)  # Remove comments
+        if line != '':  # Skip empty lines
+            lines.append(line)
+    return lines
+
+
 def get_file_lines(file_name, remove_comments=False):
-    """ Load a file into a list of lines
+    """ Load a file into a normalised list of lines
 
     :param file_name: file name including path
     :param remove_comments: indicates whether to remove all comments  starting with //
     """
     # Check file exists
     assert os.path.isfile(file_name)
-    lines = []
     with open(file_name, 'r') as f:
-        for line in f.readlines():
-            line = line.rstrip().lstrip()  # Remove trailing and preceding whitespace
-            line = TIMESTAMP_REGEX.sub("", line)  # Remove timestamp
-            line = VERSION_REGEX.sub("", line)  # Remove Version
-            if remove_comments:
-                line = COMMENTS_REGEX.sub("", line)  # Remove comments
-            lines.append(line)
-        f.close()
-
-    # Remove empty lines
-    i = 0
-    while i < len(lines):
-        if lines[i] == '':
-            del lines[i]
-        else:
-            i += 1
-
-    return lines
+        return normalise_lines(f.readlines(), remove_comments)
 
 
 def compare_model_against_reference(chaste_model, tmp_path, model_type, reference_folder='chaste_reference_models'):
@@ -117,12 +158,17 @@ def compare_model_against_reference(chaste_model, tmp_path, model_type, referenc
 
 
 def compare_file_against_reference(reference_file, file):
-    """ Check a model's generated files against given reference files
+    """ Check a generated file against its reference.
+
+    The applicable reference is selected by :func:`versioned_reference_path` for
+    the running sympy version. Setting the ``CHASTE_CODEGEN_REGENERATE_REFERENCES``
+    environment variable dumps the generated output to a per-sympy-version file
+    (``<reference>.regen.<major>.<minor>``) instead of asserting, for later use.
     """
-    # Load reference file
-    file = get_file_lines(file)
-    reference = get_file_lines(reference_file)
-    alt_reference = reference_file + '_python36'
-    if file != reference and os.path.exists(alt_reference):
-        reference = get_file_lines(alt_reference)
-    assert file == reference, str(alt_reference)
+    if os.environ.get('CHASTE_CODEGEN_REGENERATE_REFERENCES'):
+        version = '.'.join(sympy.__version__.split('.')[:2])
+        with open(file, 'r') as gen, open(reference_file + '.regen.' + version, 'w') as out:
+            out.write(gen.read())
+        return
+    reference_file = versioned_reference_path(reference_file)
+    assert get_file_lines(file) == get_file_lines(reference_file), reference_file
