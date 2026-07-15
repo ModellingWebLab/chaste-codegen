@@ -16,7 +16,7 @@ from sympy import (
 )
 
 from chaste_codegen import LOGGER, CodegenError
-from chaste_codegen._math_functions import MATH_FUNC_SYMPY_MAPPING
+from chaste_codegen._math_functions import subs_math_func_placeholders
 from chaste_codegen._optimize import optimize_expr_for_c_output
 from chaste_codegen._rdf import (
     OXMETA,
@@ -411,7 +411,7 @@ def _stimulus_sign(model, expr_to_check, equations, stimulus_current=None):
         expr_to_check = expr_to_check.xreplace({stimulus_current: 1})  # stimulus = 1
     if isinstance(expr_to_check, Expr):
         # plug in math functions for sign calculation
-        expr_to_check = expr_to_check.subs(MATH_FUNC_SYMPY_MAPPING)
+        expr_to_check = subs_math_func_placeholders(expr_to_check)
     return - 1 if expr_to_check > 0 else 1
 
 
