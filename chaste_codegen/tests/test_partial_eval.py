@@ -4,7 +4,7 @@ import pytest
 from sympy import Eq, Piecewise, symbols
 
 from chaste_codegen._partial_eval import partial_eval
-from chaste_codegen.tests.conftest import TESTS_FOLDER
+from chaste_codegen.tests.conftest import TESTS_FOLDER, compare_string_against_reference
 
 
 def test_wrong_params():
@@ -29,8 +29,8 @@ def test_partial_eval(n_model):
     derivatives_eqs = partial_eval(derivatives_eqs, lhs_to_keep, keep_multiple_usages=False)
     assert len(derivatives_eqs) == 4, str(len(derivatives_eqs))
 
-    expected = open(os.path.join(TESTS_FOLDER, 'test_partial_eval_derivatives_eqs.txt'), 'r').read()
-    assert str(derivatives_eqs) == expected, str(derivatives_eqs)
+    compare_string_against_reference(
+        str(derivatives_eqs), os.path.join(TESTS_FOLDER, 'test_partial_eval_derivatives_eqs.txt'))
 
 
 def test_partial_eval_piecewise():
