@@ -52,6 +52,22 @@ def read_versioned_reference(reference_file, sympy_version=None):
     return content[:-1] if content.endswith('\n') else content
 
 
+def compare_string_against_reference(actual, reference_file):
+    """ Check an actual string against its reference.
+
+    The applicable reference is selected by :func:`versioned_reference_path` for
+    the running sympy version. Setting the ``CHASTE_CODEGEN_REGENERATE_REFERENCES``
+    environment variable writes the actual string to a per-sympy-version file
+    (``<reference>.regen.<major>.<minor>``) instead of asserting, for later use.
+    """
+    if os.environ.get('CHASTE_CODEGEN_REGENERATE_REFERENCES'):
+        version = '.'.join(sympy.__version__.split('.')[:2])
+        with open(reference_file + '.regen.' + version, 'w') as out:
+            out.write(actual)
+        return
+    assert actual == read_versioned_reference(reference_file), reference_file
+
+
 cached_models = {}
 
 

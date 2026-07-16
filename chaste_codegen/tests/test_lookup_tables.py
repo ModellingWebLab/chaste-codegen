@@ -4,7 +4,7 @@ import pytest
 
 from chaste_codegen._chaste_printer import ChastePrinter
 from chaste_codegen._lookup_tables import _EXPENSIVE_FUNCTIONS, DEFAULT_LOOKUP_PARAMETERS, LookupTables
-from chaste_codegen.tests.conftest import TESTS_FOLDER
+from chaste_codegen.tests.conftest import TESTS_FOLDER, compare_string_against_reference
 
 
 def test_defaults(s_model):
@@ -38,8 +38,9 @@ def test_no_method_printed_for(s_model):
     assert params_for_printing[0]['table_used_in_methods'] == set()
     assert params_for_printing[0]['var'] == 'cell$V'
 
-    expected = open(os.path.join(TESTS_FOLDER, 'test_lookup_tables_no_method_printed_for.txt'), 'r').read()
-    assert str(params_for_printing[0]['lookup_epxrs']) == expected, str(params_for_printing[0]['lookup_epxrs'])
+    compare_string_against_reference(
+        str(params_for_printing[0]['lookup_epxrs']),
+        os.path.join(TESTS_FOLDER, 'test_lookup_tables_no_method_printed_for.txt'))
 
 
 def test_method_printed_for(s_model):
@@ -66,8 +67,9 @@ def test_method_printed_for(s_model):
     assert params_for_printing[0]['table_used_in_methods'] == set({'template_method'})
     assert params_for_printing[0]['var'] == 'cell$V'
 
-    expected = open(os.path.join(TESTS_FOLDER, 'test_lookup_tables_method_printed_for.txt'), 'r').read()
-    assert str(params_for_printing[0]['lookup_epxrs']) == expected, str(params_for_printing[0]['lookup_epxrs'])
+    compare_string_against_reference(
+        str(params_for_printing[0]['lookup_epxrs']),
+        os.path.join(TESTS_FOLDER, 'test_lookup_tables_method_printed_for.txt'))
 
 
 def test_nested_method_printed_for(s_model):
@@ -95,8 +97,9 @@ def test_nested_method_printed_for(s_model):
     assert params_for_printing[0]['table_used_in_methods'] == set({'outer_method'})
     assert params_for_printing[0]['var'] == 'cell$V'
 
-    expected = open(os.path.join(TESTS_FOLDER, 'test_lookup_tables_nested_method_printed_for.txt'), 'r').read()
-    assert str(params_for_printing[0]['lookup_epxrs']) == expected, str(params_for_printing[0]['lookup_epxrs'])
+    compare_string_against_reference(
+        str(params_for_printing[0]['lookup_epxrs']),
+        os.path.join(TESTS_FOLDER, 'test_lookup_tables_nested_method_printed_for.txt'))
 
 
 def test_multiple_methods_printed_for(s_model):
@@ -125,8 +128,9 @@ def test_multiple_methods_printed_for(s_model):
     assert params_for_printing[0]['table_used_in_methods'] == set({'method1', 'method2'})
     assert params_for_printing[0]['var'] == 'cell$V'
 
-    expected = open(os.path.join(TESTS_FOLDER, 'test_lookup_tables_multiple_methods_printed_for.txt'), 'r').read()
-    assert str(params_for_printing[0]['lookup_epxrs']) == expected, str(params_for_printing[0]['lookup_epxrs'])
+    compare_string_against_reference(
+        str(params_for_printing[0]['lookup_epxrs']),
+        os.path.join(TESTS_FOLDER, 'test_lookup_tables_multiple_methods_printed_for.txt'))
 
 
 def test_change_lookup_table(be_model):
@@ -157,8 +161,9 @@ def test_change_lookup_table(be_model):
     assert params_for_printing[0]['table_used_in_methods'] == set({'template_method'})
     assert params_for_printing[0]['var'] == 'membrane$V'
 
-    expected = open(os.path.join(TESTS_FOLDER, 'test_lookup_tables_change_lookup_table.txt'), 'r').read()
-    assert str(params_for_printing[0]['lookup_epxrs']) == expected, str(params_for_printing[0]['lookup_epxrs'])
+    compare_string_against_reference(
+        str(params_for_printing[0]['lookup_epxrs']),
+        os.path.join(TESTS_FOLDER, 'test_lookup_tables_change_lookup_table.txt'))
 
     assert params_for_printing[1]['metadata_tag'] == 'cytosolic_calcium_concentration'
     assert params_for_printing[1]['mTableMins'] == 0.0
