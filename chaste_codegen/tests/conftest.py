@@ -28,7 +28,11 @@ def versioned_reference_path(reference_file, sympy_version=None):
     """
     if sympy_version is None:
         sympy_version = sympy.__version__
-    running = tuple(int(part) for part in sympy_version.split('.')[:2])
+    # Extract the leading major.minor, tolerating pre-release/dev suffixes (e.g. '1.14rc1', '1.15.dev0').
+    match = re.match(r'(\d+)\.(\d+)', sympy_version)
+    if match is None:
+        raise ValueError('Could not parse sympy version %r' % (sympy_version,))
+    running = (int(match.group(1)), int(match.group(2)))
 
     root, ext = os.path.splitext(reference_file)
     suffix = re.compile(r'--sympy_(\d+)_(\d+)' + re.escape(ext) + r'$')
