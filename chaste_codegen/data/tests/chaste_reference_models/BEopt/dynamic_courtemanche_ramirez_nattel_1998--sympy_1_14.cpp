@@ -436,7 +436,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__membrane__V) {
-                    return 3 / (35.560000000000002 + 1 * exp(-0.16935483870967738 - 0.13440860215053763 * var_chaste_interface__membrane__V)) + 3 / (18.530000000000001 + 1 * exp(10.383561643835618 + 0.091324200913242018 * var_chaste_interface__membrane__V));
+                    return 3 / (35.560000000000002 + exp(-0.16935483870967738 - 0.13440860215053763 * var_chaste_interface__membrane__V)) + 3 / (18.530000000000001 + exp(10.383561643835618 + 0.091324200913242018 * var_chaste_interface__membrane__V));
                 };
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__membrane__V);
@@ -469,7 +469,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__membrane__V) {
-                    return 3 / (21 + 1 * exp(6.6071428571428568 - 0.035714285714285712 * var_chaste_interface__membrane__V)) + 3 / exp(9.875 - 0.0625 * var_chaste_interface__membrane__V);
+                    return 3 / (21 + exp(6.6071428571428568 - 0.035714285714285712 * var_chaste_interface__membrane__V)) + 3 / exp(9.875 - 0.0625 * var_chaste_interface__membrane__V);
                 };
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__membrane__V);
@@ -1059,15 +1059,15 @@ std::shared_ptr<Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEulerOp
         const double var_transient_outward_K_current_oa_gate__beta_oa = 0.65000000000000002 / (2.5 + exp(4.8235294117647056 + 0.058823529411764705 * var_chaste_interface__membrane__V));
         const double var_transient_outward_K_current_oa_gate__oa_infinity = _lt_0_row[20];
         const double var_transient_outward_K_current_oa_gate__tau_oa = 1 / ((var_transient_outward_K_current_oa_gate__alpha_oa + var_transient_outward_K_current_oa_gate__beta_oa) * var_transient_outward_K_current__K_Q10);
-        const double var_transient_outward_K_current_oi_gate__alpha_oi = 1 / (18.530000000000001 + 1 * exp(10.383561643835618 + 0.091324200913242018 * var_chaste_interface__membrane__V));
-        const double var_transient_outward_K_current_oi_gate__beta_oi = 1 / (35.560000000000002 + 1 * exp(-0.16935483870967738 - 0.13440860215053763 * var_chaste_interface__membrane__V));
+        const double var_transient_outward_K_current_oi_gate__alpha_oi = 1 / (18.530000000000001 + exp(10.383561643835618 + 0.091324200913242018 * var_chaste_interface__membrane__V));
+        const double var_transient_outward_K_current_oi_gate__beta_oi = 1 / (35.560000000000002 + exp(-0.16935483870967738 - 0.13440860215053763 * var_chaste_interface__membrane__V));
         const double var_transient_outward_K_current_oi_gate__oi_infinity = _lt_0_row[22];
         const double var_transient_outward_K_current_oi_gate__tau_oi = 1 / ((var_transient_outward_K_current_oi_gate__alpha_oi + var_transient_outward_K_current_oi_gate__beta_oi) * var_transient_outward_K_current__K_Q10);
         const double var_ultrarapid_delayed_rectifier_K_current_ua_gate__alpha_ua = 0.65000000000000002 / (exp(0.50847457627118642 - 0.016949152542372881 * var_chaste_interface__membrane__V) + exp(-1.1764705882352942 - 0.11764705882352941 * var_chaste_interface__membrane__V));
         const double var_ultrarapid_delayed_rectifier_K_current_ua_gate__beta_ua = 0.65000000000000002 / (2.5 + exp(4.8235294117647056 + 0.058823529411764705 * var_chaste_interface__membrane__V));
         const double var_ultrarapid_delayed_rectifier_K_current_ua_gate__tau_ua = 1 / ((var_ultrarapid_delayed_rectifier_K_current_ua_gate__alpha_ua + var_ultrarapid_delayed_rectifier_K_current_ua_gate__beta_ua) * var_transient_outward_K_current__K_Q10);
         const double var_ultrarapid_delayed_rectifier_K_current_ua_gate__ua_infinity = _lt_0_row[24];
-        const double var_ultrarapid_delayed_rectifier_K_current_ui_gate__alpha_ui = 1 / (21 + 1 * exp(6.6071428571428568 - 0.035714285714285712 * var_chaste_interface__membrane__V));
+        const double var_ultrarapid_delayed_rectifier_K_current_ui_gate__alpha_ui = 1 / (21 + exp(6.6071428571428568 - 0.035714285714285712 * var_chaste_interface__membrane__V));
         const double var_ultrarapid_delayed_rectifier_K_current_ui_gate__beta_ui = 1 / exp(9.875 - 0.0625 * var_chaste_interface__membrane__V);
         const double var_ultrarapid_delayed_rectifier_K_current_ui_gate__tau_ui = 1 / ((var_ultrarapid_delayed_rectifier_K_current_ui_gate__alpha_ui + var_ultrarapid_delayed_rectifier_K_current_ui_gate__beta_ui) * var_transient_outward_K_current__K_Q10);
         const double var_ultrarapid_delayed_rectifier_K_current_ui_gate__ui_infinity = _lt_0_row[25];

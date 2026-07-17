@@ -198,7 +198,7 @@ protected:
             for (unsigned i=0 ; i<_table_size_0; i++)
             {
                 auto f = [](double var_chaste_interface__membrane__V) {
-                    return (((5 + 0.10000000000000001 * var_chaste_interface__membrane__V >= -9.9999999999999995e-8) && (5 + 0.10000000000000001 * var_chaste_interface__membrane__V <= 9.9999999999999995e-8)) ? (3.5 + 0.050000000000000003 * var_chaste_interface__membrane__V) : (-1 * (5 + 0.10000000000000001 * var_chaste_interface__membrane__V) / (-1 + exp(-5 - 0.10000000000000001 * var_chaste_interface__membrane__V))));
+                    return (((5 + 0.10000000000000001 * var_chaste_interface__membrane__V >= -9.9999999999999995e-8) && (5 + 0.10000000000000001 * var_chaste_interface__membrane__V <= 9.9999999999999995e-8)) ? (3.5 + 0.050000000000000003 * var_chaste_interface__membrane__V) : (-(5 + 0.10000000000000001 * var_chaste_interface__membrane__V) / (-1 + exp(-5 - 0.10000000000000001 * var_chaste_interface__membrane__V))));
                 };
                 const double var_chaste_interface__membrane__V = mTableMins[0] + i*mTableSteps[0];
                 double val = f(var_chaste_interface__membrane__V);
@@ -384,7 +384,7 @@ std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushL
         const double var_potassium_channel_n_gate__U = (-var_potassium_channel_n_gate__v0 + var_chaste_interface__membrane__V) * var_potassium_channel_n_gate__B; // dimensionless
         const double var_potassium_channel_n_gate__alpha_n = (((var_potassium_channel_n_gate__U >= -9.9999999999999995e-8) && (var_potassium_channel_n_gate__U <= 9.9999999999999995e-8)) ? ((1 - 0.5 * var_potassium_channel_n_gate__U) * var_potassium_channel_n_gate__A) : (var_potassium_channel_n_gate__A * var_potassium_channel_n_gate__U / (-1 + exp(var_potassium_channel_n_gate__U)))); // per_millisecond
         const double var_sodium_channel_h_gate__alpha_h = 0.070000000000000007 * _lt_0_row[2]; // per_millisecond
-        const double var_sodium_channel_h_gate__beta_h = 1 * _lt_0_row[3]; // per_millisecond
+        const double var_sodium_channel_h_gate__beta_h = _lt_0_row[3]; // per_millisecond
         const double var_sodium_channel_m_gate__B = -0.10000000000000001; // per_millivolt
         const double var_sodium_channel_m_gate__A = -0.10000000000000001 / var_sodium_channel_m_gate__B; // per_millisecond
         const double var_sodium_channel_m_gate__beta_m = 4 * _lt_0_row[5]; // per_millisecond
@@ -410,11 +410,11 @@ std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushL
         }
         
         rDY[0] = d_dt_chaste_interface_var_membrane__V;
-        rAlphaOrTau[1] = 1 * var_sodium_channel_m_gate__alpha_m;
+        rAlphaOrTau[1] = var_sodium_channel_m_gate__alpha_m;
         rBetaOrInf[1] = var_sodium_channel_m_gate__beta_m;
-        rAlphaOrTau[2] = 1 * var_sodium_channel_h_gate__alpha_h;
+        rAlphaOrTau[2] = var_sodium_channel_h_gate__alpha_h;
         rBetaOrInf[2] = var_sodium_channel_h_gate__beta_h;
-        rAlphaOrTau[3] = 1 * var_potassium_channel_n_gate__alpha_n;
+        rAlphaOrTau[3] = var_potassium_channel_n_gate__alpha_n;
         rBetaOrInf[3] = var_potassium_channel_n_gate__beta_n;
     }
     void Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLRushLarsenOpt::ComputeOneStepExceptVoltage(const std::vector<double> &rDY, const std::vector<double> &rAlphaOrTau, const std::vector<double> &rBetaOrInf)

@@ -133,7 +133,7 @@
         const double var_T_type_Ca_channel__g_Ca_T = 0.02521; // microS
         const double var_calcium_pump_current__i_Ca_P_max = 0.02869; // nanoA
         const double var_cleft_space_equations__K_b = 5.4000000000000004; // millimolar
-        const double var_delayed_rectifying_potassium_current__g_K = 1 * pow(var_cleft_space_equations__K_b, 0.58999999999999997) * mParameters[2]; // microS
+        const double var_delayed_rectifying_potassium_current__g_K = pow(var_cleft_space_equations__K_b, 0.58999999999999997) * mParameters[2]; // microS
         const double var_calcium_pump_current__i_Ca_P = var_calcium_pump_current__i_Ca_P_max * var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i / (0.00040000000000000002 + var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i); // nanoA
         const double var_linear_background_current__g_B_Ca = 3.6399999999999997e-5; // microS
         const double var_linear_background_current__g_B_K = 6.9400000000000006e-5; // microS
@@ -224,7 +224,7 @@
         const double var_T_type_Ca_channel__g_Ca_T = 0.02521; // microS
         const double var_calcium_pump_current__i_Ca_P_max = 0.02869; // nanoA
         const double var_cleft_space_equations__K_b = 5.4000000000000004; // millimolar
-        const double var_delayed_rectifying_potassium_current__g_K = 1 * pow(var_cleft_space_equations__K_b, 0.58999999999999997) * mParameters[2]; // microS
+        const double var_delayed_rectifying_potassium_current__g_K = pow(var_cleft_space_equations__K_b, 0.58999999999999997) * mParameters[2]; // microS
         const double var_calcium_pump_current__i_Ca_P = var_calcium_pump_current__i_Ca_P_max * var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i / (0.00040000000000000002 + var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i); // nanoA
         const double var_linear_background_current__g_B_Ca = 3.6399999999999997e-5; // microS
         const double var_linear_background_current__g_B_K = 6.9400000000000006e-5; // microS
@@ -355,7 +355,7 @@
         const double var_cleft_space_equations__Vol = 3.4970000000000001e-6; // microLitre
         const double var_cleft_space_equations__V_c = 0.13600000000000001 * var_cleft_space_equations__Vol; // microLitre
         const double var_cleft_space_equations__tau_p = 0.01; // second
-        const double var_delayed_rectifying_potassium_current__g_K = 1 * pow(var_cleft_space_equations__K_b, 0.58999999999999997) * mParameters[2]; // microS
+        const double var_delayed_rectifying_potassium_current__g_K = pow(var_cleft_space_equations__K_b, 0.58999999999999997) * mParameters[2]; // microS
         const double var_SR_Ca_uptake_and_release__K2 = var_chaste_interface__SR_Ca_uptake_and_release__Ca_up * var_SR_Ca_uptake_and_release__K1 + var_SR_Ca_uptake_and_release__k_cyca * var_SR_Ca_uptake_and_release__k_xcs + var_SR_Ca_uptake_and_release__k_cyca + var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i; // millimolar
         const double var_SR_Ca_uptake_and_release__i_up = (var_SR_Ca_uptake_and_release__alpha_up * var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i - var_chaste_interface__SR_Ca_uptake_and_release__Ca_up * var_SR_Ca_uptake_and_release__K1 * var_SR_Ca_uptake_and_release__beta_up) / var_SR_Ca_uptake_and_release__K2; // nanoA
         const double var_SR_Ca_uptake_and_release__r_inact = 40 + 240 * pow(var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i, 4) / pow((var_SR_Ca_uptake_and_release__k_rel + var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i), 4); // per_second
@@ -845,7 +845,7 @@
         const double var_T_type_Ca_channel__g_Ca_T = 0.02521; // microS
         const double var_calcium_pump_current__i_Ca_P_max = 0.02869; // nanoA
         const double var_cleft_space_equations__K_b = 5.4000000000000004; // millimolar
-        const double var_delayed_rectifying_potassium_current__g_K = 1 * pow(var_cleft_space_equations__K_b, 0.58999999999999997) * mParameters[2]; // microS
+        const double var_delayed_rectifying_potassium_current__g_K = pow(var_cleft_space_equations__K_b, 0.58999999999999997) * mParameters[2]; // microS
         const double var_calcium_pump_current__i_Ca_P = var_calcium_pump_current__i_Ca_P_max * var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i / (0.00040000000000000002 + var_chaste_interface__intracellular_concentrations_and_buffer_equations__Ca_i); // nanoA
         const double var_linear_background_current__g_B_Ca = 3.6399999999999997e-5; // microS
         const double var_linear_background_current__g_B_K = 6.9400000000000006e-5; // microS
@@ -1171,7 +1171,7 @@
             const double var_x121 = var_x118 * var_x120;
             const double var_x122 = -var_x121 + 32960 * var_x117;
             const double var_x123 = 1 / var_x122;
-            const double var_x126 = 1.5e-5 + 1 * var_x123;
+            const double var_x126 = 1.5e-5 + var_x123;
             const double var_x127 = 0.001 / var_x126;
             
             partialF = -var_x127;
@@ -1748,7 +1748,7 @@
         // Mathematics
         const double var_cleft_space_equations__K_b = 5.4000000000000004; // millimolar
         const double var_cleft_space_equations__Vol = 3.4970000000000001e-6; // microLitre
-        const double var_delayed_rectifying_potassium_current__g_K = 1 * pow(var_cleft_space_equations__K_b, 0.58999999999999997) * mParameters[2]; // microS
+        const double var_delayed_rectifying_potassium_current__g_K = pow(var_cleft_space_equations__K_b, 0.58999999999999997) * mParameters[2]; // microS
         const double var_intracellular_concentrations_and_buffer_equations__V_i = 0.46500000000000002 * var_cleft_space_equations__Vol; // microLitre
         const double var_linear_background_current__g_B_K = 6.9400000000000006e-5; // microS
         const double var_membrane__F = 96485.341499999995; // coulomb_per_mole
@@ -2199,7 +2199,7 @@
         const double var_cleft_space_equations__Vol = 3.4970000000000001e-6; // microLitre
         const double var_cleft_space_equations__V_c = 0.13600000000000001 * var_cleft_space_equations__Vol; // microLitre
         const double var_cleft_space_equations__tau_p = 0.01; // second
-        const double var_delayed_rectifying_potassium_current__g_K = 1 * pow(var_cleft_space_equations__K_b, 0.58999999999999997) * mParameters[2]; // microS
+        const double var_delayed_rectifying_potassium_current__g_K = pow(var_cleft_space_equations__K_b, 0.58999999999999997) * mParameters[2]; // microS
         const double var_linear_background_current__g_B_K = 6.9400000000000006e-5; // microS
         const double var_membrane__F = 96485.341499999995; // coulomb_per_mole
         const double var_membrane__R = 8314.4719999999998; // joule_per_kilomole_kelvin
@@ -2598,7 +2598,7 @@
         // Mathematics
         const double var_L_type_Ca_channel__E_Ca_L = 46.399999999999999; // millivolt
         const double var_cleft_space_equations__K_b = 5.4000000000000004; // millimolar
-        const double var_delayed_rectifying_potassium_current__g_K = 1 * pow(var_cleft_space_equations__K_b, 0.58999999999999997) * mParameters[2]; // microS
+        const double var_delayed_rectifying_potassium_current__g_K = pow(var_cleft_space_equations__K_b, 0.58999999999999997) * mParameters[2]; // microS
         const double var_membrane__F = 96485.341499999995; // coulomb_per_mole
         const double var_membrane__R = 8314.4719999999998; // joule_per_kilomole_kelvin
         const double var_membrane__T = 310; // kelvin
