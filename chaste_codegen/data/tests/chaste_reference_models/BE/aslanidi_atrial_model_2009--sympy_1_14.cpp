@@ -463,7 +463,7 @@
         const double var_x56 = var_x41 * var_x50;
         const double var_x57 = var_x47 * var_x56;
         const double var_x58 = var_x40 * var_x43 * var_x49 * var_x53 * mParameters[6];
-        const double var_x59 = var_x35 * pow(var_chaste_interface__intracellular_ion_concentrations__Na_i, 0.5);
+        const double var_x59 = var_x35 * sqrt(var_chaste_interface__intracellular_ion_concentrations__Na_i);
         const double var_x60 = pow(var_x29, (-2));
         const double var_x61 = pow(var_chaste_interface__intracellular_ion_concentrations__Na_i, 2);
         const double var_x62 = 200 * var_chaste_interface__intracellular_ion_concentrations__Ca_i;
