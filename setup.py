@@ -67,7 +67,7 @@ setup(
         'sympy>=1.10, <1.15',  # Occasional breaking changes in minor versions
         'zipp>=3.6',
         'Jinja2>=3.0',
-        'cellmlmanip>=0.3.7',
+        'cellmlmanip>=0.3.8',
     ],
     extras_require={
         'docs': [
