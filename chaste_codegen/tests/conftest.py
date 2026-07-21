@@ -17,59 +17,43 @@ COMMENTS_REGEX = re.compile(r'(//.*)')
 VERSION_REGEX = re.compile(r'(//! This source file was generated from CellML by chaste_codegen version .*)')
 
 
-def versioned_reference_path(reference_file, sympy_version=None):
-    """Return the reference file applicable to the running sympy version.
+def reference_candidates(reference_file):
+    """Return the base reference file plus any sibling ``--<label>`` variant files.
 
-    When sympy changes the generated output format at version X.Y, the new
-    expected output is kept in a sibling file with a ``--sympy_X_Y`` suffix
-    inserted before the extension, e.g. ``foo.cpp`` -> ``foo--sympy_1_13.cpp``.
-    The base ``reference_file`` is used for versions below the lowest threshold,
-    and whenever there are no variants.
+    Different dependency versions can format the generated code differently (e.g. the ordering of
+    summed terms on Python 3.10 vs 3.11+, or sympy 1.14's float handling). Each alternative
+    acceptable output is stored in a sibling file with a ``--<label>`` suffix inserted before the
+    extension, e.g. ``foo.cpp`` -> ``foo--python_3_11.cpp``. The generated output is accepted if it
+    matches the base file or *any* variant, so the tests need not know which version produced which
+    file. The ``<label>`` is purely descriptive and is not parsed.
     """
-    if sympy_version is None:
-        sympy_version = sympy.__version__
-    # Extract the leading major.minor, tolerating pre-release/dev suffixes (e.g. '1.14rc1', '1.15.dev0').
-    match = re.match(r'(\d+)\.(\d+)', sympy_version)
-    if match is None:
-        raise ValueError('Could not parse sympy version %r' % (sympy_version,))
-    running = (int(match.group(1)), int(match.group(2)))
-
     root, ext = os.path.splitext(reference_file)
-    suffix = re.compile(r'--sympy_(\d+)_(\d+)' + re.escape(ext) + r'$')
-    best_threshold, best_path = (0, 0), reference_file  # base file is the fallback
-    for variant in glob.glob(glob.escape(root) + '--sympy_*_*' + glob.escape(ext)):
-        match = suffix.search(variant)
-        if match:
-            threshold = (int(match.group(1)), int(match.group(2)))
-            if best_threshold < threshold <= running:
-                best_threshold, best_path = threshold, variant
-    return best_path
+    return [reference_file] + sorted(glob.glob(glob.escape(root) + '--*' + glob.escape(ext)))
 
 
-def read_versioned_reference(reference_file, sympy_version=None):
-    """Read the reference text applicable to the running sympy version.
-
-    See :func:`versioned_reference_path` for how the variant is selected.
-    """
-    with open(versioned_reference_path(reference_file, sympy_version), 'r') as f:
+def _read_reference(reference_file):
+    """Read a reference file, dropping a single trailing newline."""
+    with open(reference_file, 'r') as f:
         content = f.read()
     return content[:-1] if content.endswith('\n') else content
 
 
 def compare_string_against_reference(actual, reference_file):
-    """ Check an actual string against its reference.
+    """ Check an actual string against its reference(s).
 
-    The applicable reference is selected by :func:`versioned_reference_path` for
-    the running sympy version. Setting the ``CHASTE_CODEGEN_REGENERATE_REFERENCES``
-    environment variable writes the actual string to a per-sympy-version file
-    (``<reference>.regen.<major>.<minor>``) instead of asserting, for later use.
+    The generated string is accepted if it matches the base reference file or *any* sibling
+    ``--<label>`` variant (see :func:`reference_candidates`). Setting the
+    ``CHASTE_CODEGEN_REGENERATE_REFERENCES`` environment variable writes the actual string to a
+    ``<reference>.regen.<major>.<minor>`` file instead of asserting, for later use.
     """
     if os.environ.get('CHASTE_CODEGEN_REGENERATE_REFERENCES'):
         version = '.'.join(sympy.__version__.split('.')[:2])
         with open(reference_file + '.regen.' + version, 'w') as out:
             out.write(actual)
         return
-    assert actual == read_versioned_reference(reference_file), reference_file
+    if any(actual == _read_reference(candidate) for candidate in reference_candidates(reference_file)):
+        return
+    assert actual == _read_reference(reference_file), reference_file
 
 
 cached_models = {}
@@ -178,17 +162,19 @@ def compare_model_against_reference(chaste_model, tmp_path, model_type, referenc
 
 
 def compare_file_against_reference(reference_file, file):
-    """ Check a generated file against its reference.
+    """ Check a generated file against its reference(s).
 
-    The applicable reference is selected by :func:`versioned_reference_path` for
-    the running sympy version. Setting the ``CHASTE_CODEGEN_REGENERATE_REFERENCES``
-    environment variable dumps the generated output to a per-sympy-version file
-    (``<reference>.regen.<major>.<minor>``) instead of asserting, for later use.
+    The generated file is accepted if it matches the base reference file or *any* sibling
+    ``--<label>`` variant (see :func:`reference_candidates`). Setting the
+    ``CHASTE_CODEGEN_REGENERATE_REFERENCES`` environment variable dumps the generated output to a
+    ``<reference>.regen.<major>.<minor>`` file instead of asserting, for later use.
     """
     if os.environ.get('CHASTE_CODEGEN_REGENERATE_REFERENCES'):
         version = '.'.join(sympy.__version__.split('.')[:2])
         with open(file, 'r') as gen, open(reference_file + '.regen.' + version, 'w') as out:
             out.write(gen.read())
         return
-    reference_file = versioned_reference_path(reference_file)
-    assert get_file_lines(file) == get_file_lines(reference_file), reference_file
+    actual = get_file_lines(file)
+    if any(actual == get_file_lines(candidate) for candidate in reference_candidates(reference_file)):
+        return
+    assert actual == get_file_lines(reference_file), reference_file

@@ -32,21 +32,34 @@ def test_cellmlmanip_import():
     import cellmlmanip  # noqa
 
 
-def test_versioned_reference_path(tmp_path):
-    # versioned_reference_path should pick the highest --sympy_X_Y threshold <= running version,
-    # and must tolerate pre-release/dev version strings (e.g. '1.14rc1', '1.15.dev0').
-    from chaste_codegen.tests.conftest import versioned_reference_path
+def test_reference_candidates(tmp_path):
+    # reference_candidates lists the base reference plus any sibling --<label> variant files.
+    from chaste_codegen.tests.conftest import reference_candidates
 
     base = str(tmp_path / 'foo.txt')
-    variant = str(tmp_path / 'foo--sympy_1_13.txt')
-    open(base, 'w').close()
-    open(variant, 'w').close()
+    variant_1 = str(tmp_path / 'foo--python_3_11.txt')
+    variant_2 = str(tmp_path / 'foo--sympy_1_14.txt')
+    for path in (base, variant_1, variant_2):
+        open(path, 'w').close()
+    open(str(tmp_path / 'foobar.txt'), 'w').close()  # unrelated sibling, must be ignored
 
-    for below in ['1.10', '1.12', '1.12rc1']:
-        assert versioned_reference_path(base, below) == base, below
-    for at_or_above in ['1.13', '1.13.3', '1.14', '1.14rc1', '1.15.dev0', '2.0.0b1']:
-        assert versioned_reference_path(base, at_or_above) == variant, at_or_above
+    assert reference_candidates(base) == [base, variant_1, variant_2]
+
+
+def test_compare_string_matches_any_variant(tmp_path):
+    # A generated string is accepted if it matches the base reference or any variant, else it fails.
+    from chaste_codegen.tests.conftest import compare_string_against_reference
+
+    base = str(tmp_path / 'foo.txt')
+    variant = str(tmp_path / 'foo--python_3_11.txt')
+    with open(base, 'w') as f:
+        f.write('base output')
+    with open(variant, 'w') as f:
+        f.write('variant output')
+
+    compare_string_against_reference('base output', base)     # matches the base
+    compare_string_against_reference('variant output', base)  # matches a variant
 
     import pytest
-    with pytest.raises(ValueError):
-        versioned_reference_path(base, 'not-a-version')
+    with pytest.raises(AssertionError):
+        compare_string_against_reference('something else', base)  # matches neither
