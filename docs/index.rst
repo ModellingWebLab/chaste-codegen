@@ -9,7 +9,7 @@ Welcome to the chaste_codegen documentation
 chaste_codegen is hosted on GitHub_, where you can find the code and installation instructions.
 
 Updating Sympy or other python packages
-=================
+========================================
 Sympy or any other python package may need to be updated, especially as python versions evolve. To update the version:
 
 - Change the version listed in setup.py, e.g. for sympy it may list 'sympy>=1.10, <1.15', which means that the version is at least 1.10 and is less than 1.15.
