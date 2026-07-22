@@ -7,9 +7,13 @@ ignore =
     # break before binary operator - allow either style
     W504,
     # break after binary operator - allow either style
-exclude=
-    .git,
+
+extend-exclude =
     .venv,
-    build,
-    dev-requirements,
     venv,
+    build,
+    dist,
+    *.egg-info,
+    .pytest_cache,
+    .mypy_cache,
+    .ipynb_checkpoints,

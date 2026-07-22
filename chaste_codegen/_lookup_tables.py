@@ -2,6 +2,7 @@ from cellmlmanip.model import Quantity, Variable
 from sympy import (
     Piecewise,
     Pow,
+    S,
     Symbol,
     acos,
     acosh,
@@ -132,7 +133,7 @@ class LookupTables:
 
         # Prevent putting expressions of the form 1 / A since the expressions might cause a singularity in the table
         # since expressions being analised might the bottom of a GHK equation os similar
-        if isinstance(expr, Pow) and expr.args[1] == -1.0:
+        if isinstance(expr, Pow) and (expr.args[1] + S.One).is_zero:  # ... and expr.args[1] == -1.0
             expr = expr.args[0]
 
         if exp_func and expr not in self._lookup_table_expr and \
