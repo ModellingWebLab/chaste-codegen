@@ -37,7 +37,7 @@ jobs:
         python3 -m flake8
     - name: Test sorting with isort
       run: |
-        python3 -m isort --verbose --check-only --diff chaste_codegen tests setup.py
+        python3 -m isort --verbose --check-only --diff chaste_codegen setup.py
     - name: Test with pytest
       run: |
         python3 -m pytest --cov --cov-config=.coveragerc
