@@ -30,7 +30,7 @@ def test_partial_eval(n_model):
     assert len(derivatives_eqs) == 4, str(len(derivatives_eqs))
 
     compare_string_against_reference(
-        str(derivatives_eqs), os.path.join(TESTS_FOLDER, 'test_partial_eval_derivatives_eqs.txt'))
+        os.path.join(TESTS_FOLDER, 'test_partial_eval_derivatives_eqs.txt'), str(derivatives_eqs))
 
 
 def test_partial_eval_piecewise():

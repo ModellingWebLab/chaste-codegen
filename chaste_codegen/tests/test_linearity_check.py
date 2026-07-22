@@ -51,7 +51,7 @@ def test_wrong_params_get_non_linear_state_vars2(derivatives_eqs, membrane_volta
 def test_get_non_linear_state_vars(non_linear_state_vars):
     non_linear_state_vars = sorted(non_linear_state_vars, key=lambda s: Printer().doprint(s))
     compare_string_against_reference(
-        str(non_linear_state_vars), os.path.join(TESTS_FOLDER, 'test_linearity_check_non_linear_state_vars.txt'))
+        os.path.join(TESTS_FOLDER, 'test_linearity_check_non_linear_state_vars.txt'), str(non_linear_state_vars))
 
 
 def test_wrong_params_subst_deriv_eqs3():
@@ -84,4 +84,4 @@ def test_subst_deriv_eqs_non_linear_vars(s_model, y_derivatives, non_linear_stat
     deq = subst_deriv_eqs_non_linear_vars(y_derivatives, non_linear_state_vars, membrane_voltage_var, state_vars,
                                           s_model.get_equations_for)
 
-    compare_string_against_reference(str(deq), os.path.join(TESTS_FOLDER, 'test_linearity_check_deq.txt'))
+    compare_string_against_reference(os.path.join(TESTS_FOLDER, 'test_linearity_check_deq.txt'), str(deq))

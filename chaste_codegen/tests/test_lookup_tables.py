@@ -39,8 +39,8 @@ def test_no_method_printed_for(s_model):
     assert params_for_printing[0]['var'] == 'cell$V'
 
     compare_string_against_reference(
-        str(params_for_printing[0]['lookup_epxrs']),
-        os.path.join(TESTS_FOLDER, 'test_lookup_tables_no_method_printed_for.txt'))
+        os.path.join(TESTS_FOLDER, 'test_lookup_tables_no_method_printed_for.txt'),
+        str(params_for_printing[0]['lookup_epxrs']))
 
 
 def test_method_printed_for(s_model):
@@ -68,8 +68,8 @@ def test_method_printed_for(s_model):
     assert params_for_printing[0]['var'] == 'cell$V'
 
     compare_string_against_reference(
-        str(params_for_printing[0]['lookup_epxrs']),
-        os.path.join(TESTS_FOLDER, 'test_lookup_tables_method_printed_for.txt'))
+        os.path.join(TESTS_FOLDER, 'test_lookup_tables_method_printed_for.txt'),
+        str(params_for_printing[0]['lookup_epxrs']))
 
 
 def test_nested_method_printed_for(s_model):
@@ -98,8 +98,8 @@ def test_nested_method_printed_for(s_model):
     assert params_for_printing[0]['var'] == 'cell$V'
 
     compare_string_against_reference(
-        str(params_for_printing[0]['lookup_epxrs']),
-        os.path.join(TESTS_FOLDER, 'test_lookup_tables_nested_method_printed_for.txt'))
+        os.path.join(TESTS_FOLDER, 'test_lookup_tables_nested_method_printed_for.txt'),
+        str(params_for_printing[0]['lookup_epxrs']))
 
 
 def test_multiple_methods_printed_for(s_model):
@@ -129,8 +129,8 @@ def test_multiple_methods_printed_for(s_model):
     assert params_for_printing[0]['var'] == 'cell$V'
 
     compare_string_against_reference(
-        str(params_for_printing[0]['lookup_epxrs']),
-        os.path.join(TESTS_FOLDER, 'test_lookup_tables_multiple_methods_printed_for.txt'))
+        os.path.join(TESTS_FOLDER, 'test_lookup_tables_multiple_methods_printed_for.txt'),
+        str(params_for_printing[0]['lookup_epxrs']))
 
 
 def test_change_lookup_table(be_model):
@@ -162,8 +162,8 @@ def test_change_lookup_table(be_model):
     assert params_for_printing[0]['var'] == 'membrane$V'
 
     compare_string_against_reference(
-        str(params_for_printing[0]['lookup_epxrs']),
-        os.path.join(TESTS_FOLDER, 'test_lookup_tables_change_lookup_table.txt'))
+        os.path.join(TESTS_FOLDER, 'test_lookup_tables_change_lookup_table.txt'),
+        str(params_for_printing[0]['lookup_epxrs']))
 
     assert params_for_printing[1]['metadata_tag'] == 'cytosolic_calcium_concentration'
     assert params_for_printing[1]['mTableMins'] == 0.0

@@ -41,9 +41,9 @@ def test_get_jacobian(jacobian):
     part_eval_jacobian_equations = partial_eval(eqs, required, keep_multiple_usages=False)
 
     compare_string_against_reference(
-        str(part_eval_jacobian_equations), os.path.join(TESTS_FOLDER, 'test_jacobian_equations_1.txt'))
+        os.path.join(TESTS_FOLDER, 'test_jacobian_equations_1.txt'), str(part_eval_jacobian_equations))
     compare_string_against_reference(
-        str(jacobian_matrix), os.path.join(TESTS_FOLDER, 'test_jacobian_matrix_1.txt'))
+        os.path.join(TESTS_FOLDER, 'test_jacobian_matrix_1.txt'), str(jacobian_matrix))
 
 
 def test_format_wrong_params1():
@@ -93,6 +93,6 @@ def test_format_jacobian(jacobian):
                 for jac in jacobian]
 
     compare_string_against_reference(
-        str(equations), os.path.join(TESTS_FOLDER, 'test_jacobian_equations_2.txt'))
+        os.path.join(TESTS_FOLDER, 'test_jacobian_equations_2.txt'), str(equations))
     compare_string_against_reference(
-        str(jacobian), os.path.join(TESTS_FOLDER, 'test_jacobian_matrix_2.txt'))
+        os.path.join(TESTS_FOLDER, 'test_jacobian_matrix_2.txt'), str(jacobian))

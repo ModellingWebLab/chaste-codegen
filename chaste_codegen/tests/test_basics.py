@@ -32,9 +32,9 @@ def test_cellmlmanip_import():
     import cellmlmanip  # noqa
 
 
-def test_reference_candidates(tmp_path):
-    # reference_candidates lists the base reference plus any sibling --<label> variant files.
-    from chaste_codegen.tests.conftest import reference_candidates
+def test_get_reference_candidates(tmp_path):
+    # get_reference_candidates lists the base reference plus any sibling --<label> variant files.
+    from chaste_codegen.tests.conftest import get_reference_candidates
 
     base = str(tmp_path / 'foo.txt')
     variant_1 = str(tmp_path / 'foo--python_3_11.txt')
@@ -43,7 +43,7 @@ def test_reference_candidates(tmp_path):
         open(path, 'w').close()
     open(str(tmp_path / 'foobar.txt'), 'w').close()  # unrelated sibling, must be ignored
 
-    assert reference_candidates(base) == [base, variant_1, variant_2]
+    assert get_reference_candidates(base) == [base, variant_1, variant_2]
 
 
 def test_compare_string_matches_any_variant(tmp_path):
@@ -57,9 +57,9 @@ def test_compare_string_matches_any_variant(tmp_path):
     with open(variant, 'w') as f:
         f.write('variant output')
 
-    compare_string_against_reference('base output', base)     # matches the base
-    compare_string_against_reference('variant output', base)  # matches a variant
+    compare_string_against_reference(base, 'base output')     # matches the base
+    compare_string_against_reference(base, 'variant output')  # matches a variant
 
     import pytest
     with pytest.raises(AssertionError):
-        compare_string_against_reference('something else', base)  # matches neither
+        compare_string_against_reference(base, 'something else')  # matches neither
