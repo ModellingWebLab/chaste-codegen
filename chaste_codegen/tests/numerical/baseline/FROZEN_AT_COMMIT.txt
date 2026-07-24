@@ -1,0 +1,8 @@
+f42eaff9788793f47330a4d6fb94ea980cfedf30
+
+This directory is a fixed snapshot of the reference models from this repo's
+master branch at the commit above. `generate_refcheck_harness.py` reads
+baseline content only from here, and this baseline will not change unless
+`freeze_baseline.py --force` is run again. Only default (unsuffixed) reference
+renderings are included. All variants are skipped e.g. `.cpp_python36`,
+`--sympy_X_Y`/`--python_X_Y`.
