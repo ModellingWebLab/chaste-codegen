@@ -20,6 +20,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
+from typing import List
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 REFS_REL_PATH = "chaste_codegen/data/tests/chaste_reference_models"
@@ -33,12 +34,12 @@ BASELINE_DIR = Path(__file__).resolve().parent / "baseline"
 DEFAULT_REFERENCE_EXTENSIONS = {".c", ".cpp", ".h", ".hpp", ".txt"}
 
 
-def is_default_reference(path):
+def is_default_reference(path: str) -> bool:
     name = Path(path)
     return name.suffix in DEFAULT_REFERENCE_EXTENSIONS and "--" not in name.stem
 
 
-def run_git(args):
+def run_git(args: List[str]) -> str:
     result = subprocess.run(["git", "-C", str(REPO_ROOT)] + args,
                              capture_output=True, text=True)
     if result.returncode != 0:
@@ -47,7 +48,7 @@ def run_git(args):
     return result.stdout
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--force", action="store_true",
                          help="Overwrite an existing frozen baseline (moves it to a newer master).")
