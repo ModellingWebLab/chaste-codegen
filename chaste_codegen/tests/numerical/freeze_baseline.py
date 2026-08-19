@@ -41,7 +41,7 @@ def is_default_reference(path: str) -> bool:
 
 def run_git(args: List[str]) -> str:
     result = subprocess.run(["git", "-C", str(REPO_ROOT)] + args,
-                             capture_output=True, text=True)
+                            capture_output=True, text=True)
     if result.returncode != 0:
         print(f"Error: git {' '.join(args)} failed:\n{result.stderr}", file=sys.stderr)
         sys.exit(1)
@@ -51,7 +51,7 @@ def run_git(args: List[str]) -> str:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--force", action="store_true",
-                         help="Overwrite an existing frozen baseline (moves it to a newer master).")
+                        help="Overwrite an existing frozen baseline (moves it to a newer master).")
     args = parser.parse_args()
 
     if BASELINE_DIR.exists() and not args.force:
