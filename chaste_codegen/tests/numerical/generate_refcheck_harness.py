@@ -1,0 +1,606 @@
+#!/usr/bin/env python3
+"""Creates a Chaste numerical cross-check harness from the reference model
+corpus in this repository.
+
+This generates one standalone Chaste project under
+<CHASTE_SOURCE_DIR>/projects/RefCheck_<scheme>_<model>_<variant>/
+for every "case" (scheme, model) found in the reference model corpus, and for
+every "variant" rendering of it (e.g. sympy_X_Y variants), plus one more per
+case for that model's rendering in the frozen baseline/ snapshot - the fixed
+basis every other variant is compared against.
+Each project contains:
+  - the reference .hpp/.cpp for that one case variant (scheme, model, variant).
+  - one CxxTest runner that constructs the generated cell, runs it, and writes a
+  .dat file into a shared case (scheme, model) output folder.
+
+Each case variant (scheme, model, variant) gets its own project rather than
+grouping several into one shared library to sidestep name collisions during
+linking. For example, some scheme pairs (e.g. Cvode vs. Cvode_with_jacobian)
+reuse the same class name for the same model. Also, every dynamically-loadable
+model defines an identical global `MakeCardiacCell` factory function regardless
+of which scheme/model it is.
+
+The central CodegenRefCheck/ project has no generated cell code of its own. It
+numerically diffs every variant's .dat output against its model's baseline via
+Chaste's existing CompareCellModelResults helper.
+
+See run_all.sh for the full generate -> configure -> build -> test sequence, or
+README.md for the manual steps.
+"""
+
+import os
+import re
+import shutil
+import sys
+from collections import defaultdict
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
+
+import jinja2
+
+# Name of the hand-written compare project.
+REFCHECK_PROJECT = "CodegenRefCheck"
+
+# Every generated case project directory starts with this prefix.
+PROJECT_PREFIX = "RefCheck_"
+
+# Path to this numerical test harness.
+NUMERICAL_TESTS_DIR = Path(__file__).resolve().parent
+
+# Path to chaste-codegen repo root.
+REPO_ROOT = NUMERICAL_TESTS_DIR.parents[2]
+
+# Path to the reference-model corpus on the current branch.
+REFS_DIR = REPO_ROOT / "chaste_codegen" / "data" / "tests" / "chaste_reference_models"
+
+# Current frozen snapshot of the baseline reference-model corpus, written by freeze_baseline.py.
+BASELINE_DIR = NUMERICAL_TESTS_DIR / "baseline"
+
+# The CodegenRefCheck/ project template.
+REFCHECK_PROJECT_TEMPLATE_DIR = NUMERICAL_TESTS_DIR / REFCHECK_PROJECT
+
+# Path to Chaste source.
+CHASTE_SOURCE_DIR = Path(os.environ.get("CHASTE_SOURCE_DIR", str(REPO_ROOT.parent / "Chaste"))).resolve()
+PROJECTS_DIR = CHASTE_SOURCE_DIR / "projects"
+
+# Explicit allow-list: RL_C (plain C) and RL_labview (LabVIEW text) are excluded.
+SCHEMES = [
+    "Normal",
+    "Opt",
+    "BE",
+    "BEopt",
+    "Cvode",
+    "Cvode_opt",
+    "Cvode_with_jacobian",
+    "Cvode_opt_with_jacobian",
+    "CVODE_DATA_CLAMP",
+    "CVODE_DATA_CLAMP_OPT",
+    "GRL1",
+    "GRL1Opt",
+    "GRL2",
+    "GRL2Opt",
+    "RL",
+    "RLopt",
+]
+
+# A "variant" identifies which rendering of a given "case" (scheme, model) is being tested:
+# - baseline: the frozen snapshot.
+# - default: the unsuffixed reference files.
+# - sympy_X_Y: the sympy-version suffixed renderings.
+# - python_X_Y: the python-version suffixed renderings.
+# The dict keys below are used in filenames and the CamelCase forms in identifiers.
+VARIANT_VARNAME = {
+    "default": "Default",
+    "sympy_1_11": "Sympy111",
+    "sympy_1_13": "Sympy113",
+    "sympy_1_14": "Sympy114",
+    "python_3_11": "Python311",
+    "baseline": "Baseline",
+}
+
+# Separator between model name and variant tag in reference-model filenames.
+VARIANT_SEP = "--"
+
+# Skip synthetic fixtures in reference model corpus that chaste_codegen uses to
+# test one specific feature (piecewise handling, non-state-variable voltage, etc.)
+# rather than real cardiac models.
+# TODO: find a way to test these as well.
+MODEL_NAME_PREFIXES_TO_SKIP = ("test_",)
+
+# Cases (scheme, model) written against an old Chaste heart API that no longer
+# compiles against modern Chaste.
+# TODO: fix or remove these from the reference-model corpus.
+COMPILE_INCOMPATIBLE_CASES = {
+    # error: "AbstractGeneralizedRushLarsenCardiacCell is not a direct base" of the generated
+    # class - AbstractCardiacCellWithModifiers/AbstractGeneralizedRushLarsenCardiacCell's
+    # inheritance relationship has changed since this fixture was generated.
+    ("GRL1", "dynamic_matsuoka_model_2003"),
+}
+
+# Models generated with --use-model-factory need ModelFactory.hpp/.cpp from ApPredict.
+# The script will error if they can't be found.
+MODEL_FACTORY_INCLUDE = '#include "ModelFactory.hpp"'
+MODEL_FACTORY_FILES = ("ModelFactory.hpp", "ModelFactory.cpp")
+MODEL_FACTORY_DIR = Path(
+    os.environ.get("MODEL_FACTORY_DIR", str(PROJECTS_DIR / "ApPredict" / "src" / "fortests"))
+)
+
+# Preamble for every CMakeLists.txt this script writes.
+AUTOGENERATED_HEADER = (
+    "# AUTOGENERATED by chaste_codegen/tests/numerical/generate_refcheck_harness.py (chaste-codegen repo)\n"
+    "# Do not hand-edit; rerun the generator instead.\n"
+)
+
+# Matches a class declaration, to parse the generated cell's class name.
+CLASS_RE = re.compile(r"^class\s+(\w+)", re.MULTILINE)
+
+# Matches every local #include in order.
+SELF_INCLUDE_RE = re.compile(r'^#include "([^"]+)\.hpp"', re.MULTILINE)
+
+# Create a Jinja env wired to the templates in this numerical test harness.
+_JINJA_ENV = jinja2.Environment(
+    loader=jinja2.FileSystemLoader(str(NUMERICAL_TESTS_DIR / "templates")),
+    keep_trailing_newline=True,
+    trim_blocks=True,
+    lstrip_blocks=True,
+    undefined=jinja2.StrictUndefined,
+)
+
+# Renders one CxxTest runner for each case variant (see render_test_file()).
+VARIANT_RUNNER_TEMPLATE = _JINJA_ENV.get_template("variant_runner.hpp")
+
+# Renders the central compare project's RefCheckManifest.hpp, a
+# (scheme, model, variant, hasBaseline) table that TestRefCheckCompareAll uses.
+REFCHECK_MANIFEST_TEMPLATE = _JINJA_ENV.get_template("refcheck_manifest.hpp")
+
+
+def extract_self_include(cpp_text: str, hpp_dir: Path) -> Optional[Tuple[str, str, str]]:
+    """Find a generated .cpp's own paired .hpp header, by reading the .cpp's own #include.
+
+    Returns (stem, hpp_text, class_name) - the header's name without ".hpp", its content, and the
+    generated cell class it declares - or None if no local #include resolves to a header
+    declaring a class this .cpp defines. Headers are looked up in hpp_dir.
+
+    Deriving the stem from the .cpp's own filename instead would be simpler, but doesn't work:
+
+    - Variant .cpp files have no paired .hpp at all. A `<model>--sympy_1_14.cpp` shares the
+      unsuffixed `<model>.hpp`; there are no `--sympy_X_Y.hpp`/`--python_X_Y.hpp` files anywhere
+      in the corpus. The #include line is the only thing naming the right header.
+    - The stem is a compile-time contract, not just a lookup key. write_tuple_project() copies
+      the pair into the project as `<stem>.hpp`/`<stem>.cpp`, so the header must land under the
+      name the .cpp asks for or the project won't build.
+    - A few .cpp files name a header that does not exist under that name anywhere, e.g.
+      `Normal/dynamic_beeler_reuter_model_1977.cpp` includes "beeler_reuter_model_1977.hpp"
+      while the file on disk is `dynamic_beeler_reuter_model_1977.hpp` (likewise
+      `Normal/fox_mcharg_gilmour_2002_console_script.cpp` and the `aslanidi_Purkinje_model_2009`
+      files under `Normal/` and `Opt/`). A filename-derived stem finds a plausible header for
+      these, but the copied .cpp still includes a name nothing provides.
+
+    This function checks each local #include in turn, confirming the class it declares is
+    actually the one defined in the .cpp. The first #include isn't necessarily the right one.
+    """
+    # Check local includes in order.
+    for stem in SELF_INCLUDE_RE.findall(cpp_text):
+        hpp_path = hpp_dir / f"{stem}.hpp"
+        if not hpp_path.is_file():
+            continue
+        hpp_text = hpp_path.read_text()
+        # Check that the class declared in the .hpp is actually defined in the .cpp.
+        match = CLASS_RE.search(hpp_text)
+        if match is None:
+            continue
+        class_name = match.group(1)
+        if re.search(re.escape(class_name) + r"::", cpp_text):
+            return stem, hpp_text, class_name
+    return None
+
+
+def parse_construction_flags(hpp_text: str, class_name: str, label: str) -> Tuple[bool, bool]:
+    """Work out how class_name must be instantiated, from its declaration in hpp_text.
+
+    Returns (needs_empty_solver, needs_cvode_guard): whether the constructor wants a dummy ODE
+    solver (its solver argument is marked unused), and whether the whole header is behind
+    #ifdef CHASTE_CVODE. class_name comes from extract_self_include(), which has already located
+    it in this same text; label is only used for the warning message.
+    """
+    ctor_match = re.search(re.escape(class_name) + r"\s*\(([^;]*)\)\s*;", hpp_text)
+    ctor_args = ctor_match.group(1) if ctor_match else ""
+    if ctor_match is None:
+        print(
+            f"  WARNING: could not find constructor declaration for {label} "
+            f"(class {class_name}); assuming a real solver is wanted.",
+            file=sys.stderr,
+        )
+    needs_empty_solver = "unused" in ctor_args
+    needs_cvode_guard = hpp_text.lstrip().startswith("#ifdef CHASTE_CVODE")
+    return needs_empty_solver, needs_cvode_guard
+
+
+@dataclass
+class TupleProject:
+    """Everything needed to write one (scheme, model, variant) tuple's Chaste project."""
+
+    # Name of the generated project directory: PROJECT_PREFIX, then scheme, model, and this
+    # tuple's VARIANT_VARNAME value.
+    project_name: str
+    # Name (without ".hpp") the .cpp expects its own header under - see extract_self_include().
+    header_stem: str
+    # Contents of the reference .hpp/.cpp pair, copied into the project verbatim.
+    hpp_text: str
+    cpp_text: str
+    # The generated cell class the runner instantiates, declared in hpp_text.
+    class_name: str
+    # Whether the constructor wants a dummy ODE solver, and whether the header is CVODE-only.
+    needs_empty_solver: bool
+    needs_cvode_guard: bool
+    # Output folder shared by every variant of this case, "CodegenRefCheck/<scheme>/<model>".
+    output_folder: str
+    # This tuple's raw variant ("default", "baseline", "sympy_1_14", ...) - written as the
+    # literal basename WriteToFile() gives the generated .dat file, so TestRefCheckCompareAll
+    # can find it again by that same value via RefCheckEntry.variant.
+    variant: str
+
+
+def render_test_file(tp: TupleProject) -> str:
+    """Render the CxxTest runner that constructs tp's cell, simulates it, and writes its .dat."""
+    ident = f"Test_{tp.project_name}"
+    guard = re.sub(r"[^A-Za-z0-9_]", "_", ident).upper()
+    return VARIANT_RUNNER_TEMPLATE.render(
+        guard=guard,
+        ident=ident,
+        class_name=tp.class_name,
+        header_stem=tp.header_stem,
+        needs_empty_solver=tp.needs_empty_solver,
+        needs_cvode_guard=tp.needs_cvode_guard,
+        output_folder=tp.output_folder,
+        variant_basename=tp.variant,
+    )
+
+
+class TupleSkipped(Exception):
+    """One (scheme, model, variant) tuple could not be generated; the message says why.
+
+    Carries the reason rather than reporting it, because only the caller knows whether the tuple
+    is a baseline or a variant, and so which part of the report the reason belongs in.
+    """
+
+
+def write_file(path: Path, content: str) -> None:
+    """Write content to path, creating any missing parent directories first."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(content)
+
+
+def ensure_model_factory(project_name: str, cpp_text: str) -> None:
+    """Copy ModelFactory.hpp/.cpp from MODEL_FACTORY_DIR into a project if it turns out to need
+    them (detected by the generated .cpp itself #include-ing ModelFactory.hpp). Their presence is
+    a precondition of the whole run, so they are known to be there by the time this is called."""
+    if MODEL_FACTORY_INCLUDE not in cpp_text:
+        return
+    dest_dir = PROJECTS_DIR / project_name / "src" / "fortests"
+    for name in MODEL_FACTORY_FILES:
+        write_file(dest_dir / name, (MODEL_FACTORY_DIR / name).read_text())
+
+
+def write_tuple_project(tp: TupleProject) -> str:
+    """Create a complete, standalone Chaste project for exactly one (scheme, model, variant)
+    tuple: its project and test CMakeLists.txt, one src .hpp/.cpp pair (plus ModelFactory if the
+    .cpp needs it), and one test runner. Isolating each tuple in its own project/library
+    sidesteps every cross-tuple symbol collision (see module docstring) without needing any
+    custom (non-macro) CMake linking logic.
+
+    Returns the name of the generated ctest test."""
+    proj_dir = PROJECTS_DIR / tp.project_name
+    write_file(
+        proj_dir / "CMakeLists.txt",
+        AUTOGENERATED_HEADER + f"find_package(Chaste COMPONENTS heart)\nchaste_do_project({tp.project_name})\n",
+    )
+    write_file(
+        proj_dir / "test" / "CMakeLists.txt",
+        AUTOGENERATED_HEADER + f"chaste_do_test_project({tp.project_name})\n",
+    )
+    write_file(proj_dir / "src" / f"{tp.header_stem}.hpp", tp.hpp_text)
+    write_file(proj_dir / "src" / f"{tp.header_stem}.cpp", tp.cpp_text)
+    ensure_model_factory(tp.project_name, tp.cpp_text)
+
+    test_filename = f"Test_{tp.project_name}.hpp"
+    write_file(proj_dir / "test" / test_filename, render_test_file(tp))
+    write_file(proj_dir / "test" / "CodegenTestPack.txt", test_filename + "\n")
+    return f"Test_{tp.project_name}"
+
+
+def build_tuple_project(
+    cpp_path: Path,
+    label: str,
+    project_name: str,
+    output_folder: str,
+    variant: str,
+) -> str:
+    """Resolve one reference .cpp's header, then write its complete Chaste project.
+
+    The same steps serve both the frozen baseline and the current branch's variants; only which
+    corpus cpp_path comes from differs, and its own directory is where its header is resolved.
+    Returns the name of the generated ctest test, or raises TupleSkipped with the reason this
+    tuple could not be generated.
+    """
+    cpp_text = cpp_path.read_text()
+    self_include = extract_self_include(cpp_text, cpp_path.parent)
+    if self_include is None:
+        raise TupleSkipped(
+            f"self-include unresolved - no local #include target exists in "
+            f"{cpp_path.parent.name}/ (broken fixture)"
+        )
+    header_stem, hpp_text, class_name = self_include
+    needs_empty_solver, needs_cvode_guard = parse_construction_flags(hpp_text, class_name, label)
+    return write_tuple_project(
+        TupleProject(
+            project_name=project_name,
+            header_stem=header_stem,
+            hpp_text=hpp_text,
+            cpp_text=cpp_text,
+            class_name=class_name,
+            needs_empty_solver=needs_empty_solver,
+            needs_cvode_guard=needs_cvode_guard,
+            output_folder=output_folder,
+            variant=variant,
+        )
+    )
+
+
+def clean_projects_dir() -> None:
+    """Remove all generated projects from previous runs (any PROJECTS_DIR
+    subdirectory whose name starts with PROJECT_PREFIX) so each run starts from
+    a clean slate. Does not touch CodegenRefCheck/ itself, which is staged fresh
+    by stage_codegen_ref_check_project() instead."""
+    if not PROJECTS_DIR.is_dir():
+        return
+    for child in PROJECTS_DIR.iterdir():
+        if child.is_dir() and child.name.startswith(PROJECT_PREFIX):
+            shutil.rmtree(child)
+
+
+def stage_codegen_ref_check_project() -> None:
+    """Copy the CodegenRefCheck/ project template (TestRefCheckCompareAll.hpp + CMakeLists.txt)
+    wholesale into <CHASTE_SOURCE_DIR>/projects/, fresh each run. The rest of the
+    CodegenRefCheck/ project is auto-generated by the rest of this script."""
+    dest = PROJECTS_DIR / REFCHECK_PROJECT
+    if dest.exists():
+        shutil.rmtree(dest)
+    shutil.copytree(REFCHECK_PROJECT_TEMPLATE_DIR, dest)
+    (dest / "src").mkdir(exist_ok=True)
+    (dest / "src" / ".gitkeep").touch()
+
+
+@dataclass
+class GenerationReport:
+    """What one generator run produced and what it left out.
+
+    Accumulated across generate_case_projects(), then consumed by write_compare_project() (which
+    needs the tuple table and the test names) and write_report() (which needs the counts and the
+    reasons)."""
+
+    # Number of cases (scheme, model) found in the reference-model corpus.
+    cases_found: int = 0
+    # (scheme, model, variant, has_baseline) per generated variant runner, excluding baselines.
+    # Rendered into RefCheckManifest.hpp and read back by TestRefCheckCompareAll.
+    manifest_entries: List[Tuple[str, str, str, bool]] = field(default_factory=list)
+    # Names of every generated ctest test, used for the compare project's DEPENDS list.
+    test_names: List[str] = field(default_factory=list)
+    # Why each case (scheme, model) has no baseline to compare against. Keyed by case rather
+    # than a flat list so that "cases with no baseline" is a count of cases, not of messages.
+    no_baseline: Dict[Tuple[str, str], str] = field(default_factory=dict)
+    # Human-readable reasons, one per line, for everything else not fully generated.
+    skipped: List[str] = field(default_factory=list)
+    unknown_variants: List[str] = field(default_factory=list)
+
+
+def discover_cases() -> Tuple[Dict[Tuple[str, str], Dict[str, Path]], List[str]]:
+    """Scan the reference-model corpus for every (scheme, model, variant) tuple.
+
+    Returns (cases, skipped): cases maps each case (scheme, model) to {variant: cpp_path}, and
+    skipped collects a reason per file deliberately left out.
+    """
+    cases: Dict[Tuple[str, str], Dict[str, Path]] = defaultdict(dict)
+    skipped: List[str] = []
+
+    for scheme in SCHEMES:
+        scheme_dir = REFS_DIR / scheme
+        if not scheme_dir.is_dir():
+            print(f"WARNING: scheme directory not found, skipping: {scheme_dir}", file=sys.stderr)
+            continue
+        for cpp_path in sorted(scheme_dir.glob("*.cpp")):
+            name = cpp_path.stem
+            if VARIANT_SEP in name:
+                model, variant = name.split(VARIANT_SEP, 1)
+            else:
+                # The unsuffixed .cpp is the "default" variant.
+                model, variant = name, "default"
+            if model.startswith(MODEL_NAME_PREFIXES_TO_SKIP):
+                skipped.append(f"{scheme}/{cpp_path.name}: synthetic codegen-feature fixture, not a cardiac model")
+                continue
+            cases[(scheme, model)][variant] = cpp_path
+
+    return cases, skipped
+
+
+def generate_case_projects(cases: Dict[Tuple[str, str], Dict[str, Path]], report: GenerationReport) -> None:
+    """Write one standalone Chaste project per (scheme, model, variant) tuple, plus one more per
+    case for its frozen baseline rendering, recording into report what was generated and what
+    was left out."""
+    for (scheme, model), variants in sorted(cases.items()):
+        if (scheme, model) in COMPILE_INCOMPATIBLE_CASES:
+            report.skipped.append(f"{scheme}/{model}: excluded, known incompatible with current Chaste heart API.")
+            continue
+
+        # Every variant of this case writes its .dat here, for TestRefCheckCompareAll to diff.
+        output_folder = f"CodegenRefCheck/{scheme}/{model}"
+
+        # The model as rendered in the fixed baseline snapshot, if it is in there at all.
+        baseline_cpp_path = BASELINE_DIR / scheme / f"{model}.cpp"
+        has_baseline = baseline_cpp_path.is_file()
+        if not has_baseline:
+            report.no_baseline[(scheme, model)] = "no baseline (not in the snapshot)."
+        else:
+            try:
+                report.test_names.append(
+                    build_tuple_project(
+                        baseline_cpp_path,
+                        f"{scheme}/{model} (baseline)",
+                        f"{PROJECT_PREFIX}{scheme}_{model}_{VARIANT_VARNAME['baseline']}",
+                        output_folder,
+                        "baseline",
+                    )
+                )
+            except TupleSkipped as reason:
+                has_baseline = False
+                report.no_baseline[(scheme, model)] = f"baseline .cpp {reason}"
+
+        for variant, cpp_path in sorted(variants.items()):
+            # variant: "default" (the unsuffixed rendering) or a version-suffix tag. Kept in this
+            # raw form all the way to TupleProject.variant (-> the .dat filename) and to
+            # report.manifest_entries (-> RefCheckEntry.variant, read back by
+            # TestRefCheckCompareAll). short_variant is a display-only derivative of it, used
+            # just for project_name.
+            short_variant = VARIANT_VARNAME.get(variant)
+            if short_variant is None:
+                report.unknown_variants.append(
+                    f"{scheme}/{model}{VARIANT_SEP}{variant}: unrecognised variant tag, skipped"
+                )
+                continue
+
+            label = f"{scheme}/{cpp_path.name}"
+            try:
+                test_name = build_tuple_project(
+                    cpp_path,
+                    label,
+                    f"{PROJECT_PREFIX}{scheme}_{model}_{short_variant}",
+                    output_folder,
+                    variant,
+                )
+            except TupleSkipped as reason:
+                report.skipped.append(f"{label}: {reason}")
+                continue
+            report.test_names.append(test_name)
+            report.manifest_entries.append((scheme, model, variant, has_baseline))
+
+
+def write_compare_project(report: GenerationReport) -> None:
+    """Write the generated parts of the central CodegenRefCheck/ compare project: the manifest
+    header listing every tuple, and the CMakeLists.txt wiring TestRefCheckCompareAll up to run
+    after all of them."""
+    test_dir = PROJECTS_DIR / REFCHECK_PROJECT / "test"
+    write_file(
+        test_dir / "RefCheckManifest.hpp",
+        REFCHECK_MANIFEST_TEMPLATE.render(manifest_entries=report.manifest_entries),
+    )
+    write_file(test_dir / "CodegenTestPack.txt", "TestRefCheckCompareAll.hpp\n")
+
+    depends_list = ";".join(sorted(report.test_names))
+    write_file(
+        test_dir / "CMakeLists.txt",
+        AUTOGENERATED_HEADER
+        + f"""
+chaste_do_test_project({REFCHECK_PROJECT})
+
+# TestRefCheckCompareAll only makes sense after every RefCheck* tuple-runner test (each in its
+# own sibling RefCheck_<scheme>_<model>_<variant> project) has written its .dat output; ctest does
+# not order tests by default, so this dependency must be explicit.
+set_tests_properties(TestRefCheckCompareAll PROPERTIES DEPENDS "{depends_list}")
+""",
+    )
+
+
+def write_report(report: GenerationReport) -> None:
+    """Write generated_manifest.md, the human-readable account of what this run generated and
+    skipped, and echo the headline counts to stdout."""
+    cases_generated = {(scheme, model) for scheme, model, _, _ in report.manifest_entries}
+    cases_with_baseline = {
+        (scheme, model) for scheme, model, _, has_baseline in report.manifest_entries if has_baseline
+    }
+
+    lines = [
+        "# CodegenRefCheck generated manifest",
+        "",
+        f"Source repo (this checkout): `{REPO_ROOT}`",
+        f"Target Chaste checkout: `{CHASTE_SOURCE_DIR}`",
+        "",
+        f"- Cases (scheme, model) found: {report.cases_found}",
+        f"- Tuples generated (variant runners, excluding baseline): {len(report.manifest_entries)}",
+        f"- Cases with a baseline: {len(cases_with_baseline)}",
+        f"- Cases with NO baseline: {len(report.no_baseline)}",
+        f"- Skipped files: {len(report.skipped)}",
+        f"- Unknown variant tags skipped: {len(report.unknown_variants)}",
+        f"- Generated projects: {len(report.test_names)}",
+        "",
+    ]
+    no_baseline_entries = [
+        f"{scheme}/{model}: {reason}" for (scheme, model), reason in sorted(report.no_baseline.items())
+    ]
+    for heading, entries in (
+        ("No baseline", no_baseline_entries),
+        ("Skipped", report.skipped),
+        ("Unknown variant tags", report.unknown_variants),
+    ):
+        if entries:
+            lines += [f"## {heading}", ""] + [f"- {entry}" for entry in entries] + [""]
+    write_file(PROJECTS_DIR / REFCHECK_PROJECT / "generated_manifest.md", "\n".join(lines))
+
+    print(
+        f"Generated {len(report.test_names)} projects ({len(report.manifest_entries)} variant-runner tuples "
+        f"+ baselines) across {len(cases_generated)} "
+        f"(scheme, model) cases; {len(report.no_baseline)} without a baseline, "
+        f"{len(report.skipped)} files skipped, {len(report.unknown_variants)} unknown variant tags skipped."
+    )
+    print(f"Materialised into {PROJECTS_DIR}")
+    print(f"See {PROJECTS_DIR / REFCHECK_PROJECT / 'generated_manifest.md'} for details.")
+
+
+def main() -> None:
+    """Regenerate the whole harness from scratch.
+
+    - Wipe all previously generated case variant Chaste projects.
+    - Stage a fresh CodegenRefCheck/ comparison project.
+    - Discover every (scheme, model, variant) tuple in the current
+      reference-model corpus.
+    - Write one standalone Chaste project per case variant, and one per case
+      for its rendering in the frozen baseline.
+    - Write the manifest, the compare-project CMakeLists.txt, and a
+      human-readable generated_manifest.md summarising what was generated."""
+    clean_projects_dir()
+    stage_codegen_ref_check_project()
+
+    cases, skipped = discover_cases()
+    report = GenerationReport(cases_found=len(cases), skipped=skipped)
+    generate_case_projects(cases, report)
+    write_compare_project(report)
+    write_report(report)
+
+
+if __name__ == "__main__":
+    if not REFS_DIR.is_dir():
+        print(f"Error: reference model directory not found: {REFS_DIR}", file=sys.stderr)
+        sys.exit(1)
+    if not BASELINE_DIR.is_dir():
+        print(
+            f"Error: no frozen baseline found at {BASELINE_DIR}.\n" f"Run freeze_baseline.py once first.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+    if not (CHASTE_SOURCE_DIR / "CMakeLists.txt").is_file():
+        print(
+            f"Error: CHASTE_SOURCE_DIR ({CHASTE_SOURCE_DIR}) doesn't look like Chaste. "
+            f"Set CHASTE_SOURCE_DIR to a Chaste checkout.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+    if not all((MODEL_FACTORY_DIR / name).is_file() for name in MODEL_FACTORY_FILES):
+        print(
+            f"Error: ModelFactory.hpp/.cpp not found in {MODEL_FACTORY_DIR}.\n"
+            f"Models generated with --use-model-factory need them. Clone the ApPredict project "
+            f"(https://github.com/Chaste/ApPredict) into {PROJECTS_DIR}, or set MODEL_FACTORY_DIR "
+            f"to a checkout that has them.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+    main()
