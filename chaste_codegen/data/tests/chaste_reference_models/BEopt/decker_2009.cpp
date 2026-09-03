@@ -768,14 +768,14 @@ private:
 std::shared_ptr<Celldecker_2009FromCellMLBackwardEulerOpt_LookupTables> Celldecker_2009FromCellMLBackwardEulerOpt_LookupTables::mpInstance;
 
 
-    boost::shared_ptr<RegularStimulus> Celldecker_2009FromCellMLBackwardEulerOpt::UseCellMLDefaultStimulus()
+    std::shared_ptr<RegularStimulus> Celldecker_2009FromCellMLBackwardEulerOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -80 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
         const double var_chaste_interface__membrane__stim_duration = 0.5; // ms
         const double var_chaste_interface__membrane__stim_offset = 0; // ms
         const double var_chaste_interface__membrane__stim_period = 1000; // ms
-        boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+        std::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__membrane__stim_amplitude_converted),
                 var_chaste_interface__membrane__stim_duration,
                 var_chaste_interface__membrane__stim_period,
@@ -788,7 +788,7 @@ std::shared_ptr<Celldecker_2009FromCellMLBackwardEulerOpt_LookupTables> Celldeck
     {
         return mStateVariables[1];
     }
-    Celldecker_2009FromCellMLBackwardEulerOpt::Celldecker_2009FromCellMLBackwardEulerOpt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Celldecker_2009FromCellMLBackwardEulerOpt::Celldecker_2009FromCellMLBackwardEulerOpt(std::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<35>(
                 46,
                 0,

@@ -21,14 +21,14 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Dynamicwinslow_model_1999FromCellMLGRL2Opt::UseCellMLDefaultStimulus()
+    std::shared_ptr<RegularStimulus> Dynamicwinslow_model_1999FromCellMLGRL2Opt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude = -21.126799999999999 * HeartConfig::Instance()->GetCapacitance(); // microA_per_microF
         const double var_chaste_interface__membrane__stim_duration = 2.0; // millisecond
         const double var_chaste_interface__membrane__stim_period = 1000.0; // millisecond
         const double var_chaste_interface__membrane__stim_start = 100.0; // millisecond
-        boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+        std::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__membrane__stim_amplitude),
                 var_chaste_interface__membrane__stim_duration,
                 var_chaste_interface__membrane__stim_period,
@@ -38,7 +38,7 @@
         return p_cellml_stim;
     }
 
-    Dynamicwinslow_model_1999FromCellMLGRL2Opt::Dynamicwinslow_model_1999FromCellMLGRL2Opt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Dynamicwinslow_model_1999FromCellMLGRL2Opt::Dynamicwinslow_model_1999FromCellMLGRL2Opt(std::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractGeneralizedRushLarsenCardiacCell(
                 33,
                 0,
@@ -2995,8 +2995,8 @@ CHASTE_CLASS_EXPORT(Dynamicwinslow_model_1999FromCellMLGRL2Opt)
 extern "C"
 {
     AbstractCardiacCellInterface* MakeCardiacCell(
-            boost::shared_ptr<AbstractIvpOdeSolver> pSolver,
-            boost::shared_ptr<AbstractStimulusFunction> pStimulus)
+            std::shared_ptr<AbstractIvpOdeSolver> pSolver,
+            std::shared_ptr<AbstractStimulusFunction> pStimulus)
     {
         return new Dynamicwinslow_model_1999FromCellMLGRL2Opt(pSolver, pStimulus);
     }

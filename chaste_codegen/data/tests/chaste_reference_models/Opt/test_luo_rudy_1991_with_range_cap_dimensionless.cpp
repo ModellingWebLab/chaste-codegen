@@ -360,7 +360,7 @@ private:
 std::shared_ptr<Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt_LookupTables> Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt_LookupTables::mpInstance;
 
 
-    boost::shared_ptr<RegularStimulus> Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt::UseCellMLDefaultStimulus()
+    std::shared_ptr<RegularStimulus> Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude = -25.5; // microA_per_cm2
@@ -368,7 +368,7 @@ std::shared_ptr<Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt
         const double var_chaste_interface__membrane__stim_end = 100000000000.0; // millisecond
         const double var_chaste_interface__membrane__stim_period = 1000; // millisecond
         const double var_chaste_interface__membrane__stim_start = 100; // millisecond
-        boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+        std::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__membrane__stim_amplitude),
                 var_chaste_interface__membrane__stim_duration,
                 var_chaste_interface__membrane__stim_period,
@@ -381,7 +381,7 @@ std::shared_ptr<Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt
     {
         return mStateVariables[7];
     }
-    Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt::Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt::Celltest_luo_rudy_1991_with_range_cap_dimensionlessFromCellMLOpt(std::shared_ptr<AbstractIvpOdeSolver> pSolver, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 8,

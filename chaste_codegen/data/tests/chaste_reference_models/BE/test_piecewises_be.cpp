@@ -28,7 +28,7 @@
 
 
 
-    Celltest_piecewises_beFromCellMLBackwardEuler::Celltest_piecewises_beFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Celltest_piecewises_beFromCellMLBackwardEuler::Celltest_piecewises_beFromCellMLBackwardEuler(std::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<2>(
                 4,
                 0,

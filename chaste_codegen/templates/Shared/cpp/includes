@@ -16,7 +16,7 @@
 {% endif%}
 {% if use_model_factory %}#include "ModelFactory.hpp"
 
-{% if modifiers|length > 0 %}AbstractCardiacCellWithModifiers<{% endif%}{{base_class}}{%- if modifiers|length > 0 %} >{% endif%}* {{class_name}}::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
+{% if modifiers|length > 0 %}AbstractCardiacCellWithModifiers<{% endif%}{{base_class}}{%- if modifiers|length > 0 %} >{% endif%}* {{class_name}}::CreateMethod(std::shared_ptr<AbstractIvpOdeSolver> p_solver, std::shared_ptr<AbstractStimulusFunction> p_stimulus) {
     return new {{class_name}}(p_solver, p_stimulus);
 }
 

@@ -27,7 +27,7 @@
 
 
 
-    Celltest_V_not_state_derived_quantFromCellML::Celltest_V_not_state_derived_quantFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Celltest_V_not_state_derived_quantFromCellML::Celltest_V_not_state_derived_quantFromCellML(std::shared_ptr<AbstractIvpOdeSolver> pSolver, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 1,

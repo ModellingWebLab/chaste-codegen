@@ -30,7 +30,7 @@
     {
         return mStateVariables[1];
     }
-    Dynamicdemir_model_1994FromCellMLGRL1::Dynamicdemir_model_1994FromCellMLGRL1(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Dynamicdemir_model_1994FromCellMLGRL1::Dynamicdemir_model_1994FromCellMLGRL1(std::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractGeneralizedRushLarsenCardiacCell(
                 27,
                 0,
@@ -2821,8 +2821,8 @@ CHASTE_CLASS_EXPORT(Dynamicdemir_model_1994FromCellMLGRL1)
 extern "C"
 {
     AbstractCardiacCellInterface* MakeCardiacCell(
-            boost::shared_ptr<AbstractIvpOdeSolver> pSolver,
-            boost::shared_ptr<AbstractStimulusFunction> pStimulus)
+            std::shared_ptr<AbstractIvpOdeSolver> pSolver,
+            std::shared_ptr<AbstractStimulusFunction> pStimulus)
     {
         return new Dynamicdemir_model_1994FromCellMLGRL1(pSolver, pStimulus);
     }

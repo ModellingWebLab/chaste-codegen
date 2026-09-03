@@ -27,7 +27,7 @@
 
 
 
-    Celltest_V_not_state_mparamFromCellML::Celltest_V_not_state_mparamFromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Celltest_V_not_state_mparamFromCellML::Celltest_V_not_state_mparamFromCellML(std::shared_ptr<AbstractIvpOdeSolver> pSolver, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 1,

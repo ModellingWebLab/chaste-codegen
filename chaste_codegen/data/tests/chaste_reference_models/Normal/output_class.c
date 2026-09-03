@@ -24,7 +24,7 @@
 
 #include "ModelFactory.hpp"
 
-AbstractCardiacCell* Chaste_CG::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
+AbstractCardiacCell* Chaste_CG::CreateMethod(std::shared_ptr<AbstractIvpOdeSolver> p_solver, std::shared_ptr<AbstractStimulusFunction> p_stimulus) {
     return new Chaste_CG(p_solver, p_stimulus);
 }
 
@@ -32,14 +32,14 @@ bool Chaste_CG::registered = ModelFactory::Register("output_class", "Normal", (M
 
 
 
-    boost::shared_ptr<RegularStimulus> Chaste_CG::UseCellMLDefaultStimulus()
+    std::shared_ptr<RegularStimulus> Chaste_CG::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -0.0030000000000000001 * HeartConfig::Instance()->GetCapacitance() / mParameters[10]; // uA_per_cm2
         const double var_chaste_interface__membrane__stim_duration_converted = 3; // millisecond
         const double var_chaste_interface__membrane__stim_period_converted = 1000; // millisecond
         const double var_chaste_interface__membrane__stim_start_converted = 100; // millisecond
-        boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+        std::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__membrane__stim_amplitude_converted),
                 var_chaste_interface__membrane__stim_duration_converted,
                 var_chaste_interface__membrane__stim_period_converted,
@@ -52,7 +52,7 @@ bool Chaste_CG::registered = ModelFactory::Register("output_class", "Normal", (M
     {
         return mStateVariables[1];
     }
-    Chaste_CG::Chaste_CG(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Chaste_CG::Chaste_CG(std::shared_ptr<AbstractIvpOdeSolver> pSolver, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 22,
@@ -819,8 +819,8 @@ CHASTE_CLASS_EXPORT(Chaste_CG)
 extern "C"
 {
     AbstractCardiacCellInterface* MakeCardiacCell(
-            boost::shared_ptr<AbstractIvpOdeSolver> pSolver,
-            boost::shared_ptr<AbstractStimulusFunction> pStimulus)
+            std::shared_ptr<AbstractIvpOdeSolver> pSolver,
+            std::shared_ptr<AbstractStimulusFunction> pStimulus)
     {
         return new Chaste_CG(pSolver, pStimulus);
     }
