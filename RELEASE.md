@@ -1,3 +1,6 @@
+# Release 0.10.7
+- Added support for Python 3.14.
+
 # Release 0.10.6
 - Added support for Python 3.13.
 - Updated dependency versions:
