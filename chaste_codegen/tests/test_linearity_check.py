@@ -5,7 +5,7 @@ from cellmlmanip.printer import Printer
 
 from chaste_codegen._linearity_check import KINDS, get_non_linear_state_vars, subst_deriv_eqs_non_linear_vars
 from chaste_codegen._rdf import OXMETA
-from chaste_codegen.tests.conftest import TESTS_FOLDER
+from chaste_codegen.tests.conftest import TESTS_FOLDER, compare_string_against_reference
 
 
 @pytest.fixture(scope='session')
@@ -50,8 +50,8 @@ def test_wrong_params_get_non_linear_state_vars2(derivatives_eqs, membrane_volta
 
 def test_get_non_linear_state_vars(non_linear_state_vars):
     non_linear_state_vars = sorted(non_linear_state_vars, key=lambda s: Printer().doprint(s))
-    expected = open(os.path.join(TESTS_FOLDER, 'test_linearity_check_non_linear_state_vars.txt'), 'r').read()
-    assert str(non_linear_state_vars) == expected, str(non_linear_state_vars)
+    compare_string_against_reference(
+        os.path.join(TESTS_FOLDER, 'test_linearity_check_non_linear_state_vars.txt'), str(non_linear_state_vars))
 
 
 def test_wrong_params_subst_deriv_eqs3():
@@ -84,5 +84,4 @@ def test_subst_deriv_eqs_non_linear_vars(s_model, y_derivatives, non_linear_stat
     deq = subst_deriv_eqs_non_linear_vars(y_derivatives, non_linear_state_vars, membrane_voltage_var, state_vars,
                                           s_model.get_equations_for)
 
-    expected = open(os.path.join(TESTS_FOLDER, 'test_linearity_check_deq.txt'), 'r').read()
-    assert str(deq) == expected, str(deq)
+    compare_string_against_reference(os.path.join(TESTS_FOLDER, 'test_linearity_check_deq.txt'), str(deq))

@@ -76,7 +76,8 @@ class sin_(RealFunction):
 
 
 # MATH_FUNC_SYMPY_MAPPING provides a mapping from our specified math functions back to sympy versions.
-# This can be used to put sympy function into an expression or evaluation. e.g. `expr.subs(MATH_FUNC_SYMPY_MAPPING)`.
+# Apply it via subs_math_func_placeholders(), which uses expr.replace(). Do not use expr.subs() with this
+# mapping as sympy >= 1.12 strictly sympifies the substitution values and rejects e.g. the sqrt function.
 MATH_FUNC_SYMPY_MAPPING = {abs_: Abs, acos_: acos, cos_: cos, exp_: exp, sin_: sin, sqrt_: sqrt}
 
 

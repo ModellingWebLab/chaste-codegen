@@ -53,7 +53,7 @@ $ flake8
 ```
 
 ## Python version
-Python 3.5+
+Python 3.10+
 
 ## Documentation
 

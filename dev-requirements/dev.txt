@@ -1,7 +1,7 @@
 # This list was generated in Python 3.10 with `pip freeze`
 alabaster==1.0.0
 babel==2.18.0
-cellmlmanip==0.3.7
+cellmlmanip==0.3.8
 certifi==2026.10.23
 charset-normalizer==3.5.2
 coverage==7.16.2
@@ -24,7 +24,7 @@ mpmath==1.4.1
 mypy_extensions==1.1.0
 networkx==3.4.2
 packaging==26.3
-Pint==0.19.2
+Pint==0.25.3
 pluggy==1.7.0
 py==1.11.0
 pycodestyle==2.15.0

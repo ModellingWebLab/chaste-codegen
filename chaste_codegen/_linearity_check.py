@@ -10,6 +10,7 @@ from sympy import (
     Mul,
     Piecewise,
     Pow,
+    S,
     log,
 )
 from sympy.codegen.cfunctions import log2, log10
@@ -101,7 +102,7 @@ def _check_expr(expr, state_var, membrane_voltage_var, state_vars):
     elif isinstance(expr, Pow):
         if state_var not in expr.free_symbols:
             result = max_kind(state_var, operands)
-        elif len(expr.args) == 2 and expr.args[1] == -1:  # x/y divide is represented as x * pow(y, -1)
+        elif len(expr.args) == 2 and (expr.args[1] + S.One).is_zero:  # x/y divide is represented as x * pow(y, -1)
             # Linear iff only numerator linear
             result = _check_expr(expr.args[0], state_var, membrane_voltage_var, state_vars)
         else:

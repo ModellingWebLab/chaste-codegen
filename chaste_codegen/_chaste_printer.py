@@ -131,7 +131,7 @@ class ChastePrinter(Printer):
         """ Handles Pow(), handles just ordinary powers without division.
         For C++ printing we need to write ``x**y`` as ``pow(x, y)`` with lowercase ``p``."""
         p = precedence(expr)
-        if expr.exp == 0.5:
+        if (expr.exp - S.Half).is_zero:  # expr.exp == 0.5
             return 'sqrt(' + self._bracket(expr.base, p) + ')'
         return 'pow(' + self._bracket(expr.base, p) + ', ' + self._bracket(expr.exp, p) + ')'
 
@@ -185,7 +185,7 @@ class ChastePrinter(Printer):
         # Gather terms for numerator and denominator
         a, b = [], []
         for item in Mul.make_args(expr):
-            if item != 1.0:  # In multiplications remove 1.0 * ...
+            if not (item - S.One).is_zero:  # In multiplications remove 1.0 * ...
                 # Check if this is a negative power and it's not in a lookup table, so we can write it as a division
                 if (item.is_commutative and item.is_Pow and item.exp.is_Rational and item.exp.is_negative
                         and not self.lookup_table_function(item)):
