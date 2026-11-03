@@ -1,3 +1,6 @@
+# Unreleased
+- Drop support for Python 3.9.
+
 # Release 0.10.7
 - Added support for Python 3.14.
 
