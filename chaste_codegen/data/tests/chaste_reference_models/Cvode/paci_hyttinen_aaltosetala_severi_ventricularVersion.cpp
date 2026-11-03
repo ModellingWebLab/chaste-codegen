@@ -1,4 +1,3 @@
-#ifdef CHASTE_CVODE
 //! @file
 //!
 //! This source file was generated from CellML by chaste_codegen version (version omitted as unimportant)
@@ -830,4 +829,3 @@ void OdeSystemInformation<Cellpaci_hyttinen_aaltosetala_severi_ventricularVersio
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLCvode)
 
-#endif // CHASTE_CVODE
