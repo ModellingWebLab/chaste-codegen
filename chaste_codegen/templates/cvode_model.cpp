@@ -1,5 +1,4 @@
-#ifdef CHASTE_CVODE{% with %}{% set is_cvode = True %}
-{% include "Shared/cpp/header_comments" %}
+{% with %}{% set is_cvode = True %}{% include "Shared/cpp/header_comments" %}
 {% include "Shared/cpp/includes" %}
 {% include "Shared/cpp/lookup_tables" %}
 {% include "Shared/cpp/UseCellMLDefaultStimulus" %}
@@ -14,5 +13,4 @@
 {%- include "Cvode/cpp/EvaluateAnalyticJacobian" %}
 {%- include "Cvode/cpp/ComputeDerivedQuantities" %}
 {% include "Shared/cpp/OdeSystemInformation" %}
-{% include "Shared/cpp/CHASTE_CLASS_EXPORT" %}#endif // CHASTE_CVODE
-{%endwith%}
+{% include "Shared/cpp/CHASTE_CLASS_EXPORT" %}{%endwith%}

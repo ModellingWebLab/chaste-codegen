@@ -1,4 +1,3 @@
-#ifdef CHASTE_CVODE
 //! @file
 //!
 //! This source file was generated from CellML by chaste_codegen version (version omitted as unimportant)
@@ -852,4 +851,3 @@ void OdeSystemInformation<Cellhilgemann_noble_model_1987FromCellMLCvodeOpt>::Ini
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Cellhilgemann_noble_model_1987FromCellMLCvodeOpt)
 
-#endif // CHASTE_CVODE
