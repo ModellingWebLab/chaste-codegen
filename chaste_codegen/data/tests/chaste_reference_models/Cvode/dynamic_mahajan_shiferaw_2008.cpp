@@ -31,14 +31,14 @@
 
 
 
-    boost::shared_ptr<RegularStimulus> Dynamicmahajan_shiferaw_2008FromCellMLCvode::UseCellMLDefaultStimulus()
+    std::shared_ptr<RegularStimulus> Dynamicmahajan_shiferaw_2008FromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__cell__stim_amplitude_converted = -14.999999999999998 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
         const double var_chaste_interface__cell__stim_duration = 3; // ms
         const double var_chaste_interface__cell__stim_offset = 100; // ms
         const double var_chaste_interface__cell__stim_period = 400; // ms
-        boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+        std::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__cell__stim_amplitude_converted),
                 var_chaste_interface__cell__stim_duration,
                 var_chaste_interface__cell__stim_period,
@@ -53,7 +53,7 @@
         return NV_Ith_S(mStateVariables, 1);
     }
     
-    Dynamicmahajan_shiferaw_2008FromCellMLCvode::Dynamicmahajan_shiferaw_2008FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Dynamicmahajan_shiferaw_2008FromCellMLCvode::Dynamicmahajan_shiferaw_2008FromCellMLCvode(std::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
                 26,
@@ -1040,8 +1040,8 @@ CHASTE_CLASS_EXPORT(Dynamicmahajan_shiferaw_2008FromCellMLCvode)
 extern "C"
 {
     AbstractCardiacCellInterface* MakeCardiacCell(
-            boost::shared_ptr<AbstractIvpOdeSolver> pSolver,
-            boost::shared_ptr<AbstractStimulusFunction> pStimulus)
+            std::shared_ptr<AbstractIvpOdeSolver> pSolver,
+            std::shared_ptr<AbstractStimulusFunction> pStimulus)
     {
         return new Dynamicmahajan_shiferaw_2008FromCellMLCvode(pSolver, pStimulus);
     }

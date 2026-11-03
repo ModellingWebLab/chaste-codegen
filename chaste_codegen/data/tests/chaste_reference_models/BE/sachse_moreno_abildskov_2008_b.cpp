@@ -27,14 +27,14 @@
 
 
 
-    boost::shared_ptr<RegularStimulus> Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler::UseCellMLDefaultStimulus()
+    std::shared_ptr<RegularStimulus> Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__I_stim__stim_duration_converted = 1; // millisecond
         const double var_chaste_interface__I_stim__stim_period_converted = 1000; // millisecond
         const double var_chaste_interface__I_stim__stim_start_converted = 100; // millisecond
         const double var_chaste_interface__I_stim__stim_amplitude_converted = 0.0001 * HeartConfig::Instance()->GetCapacitance() / mParameters[2]; // uA_per_cm2
-        boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+        std::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__I_stim__stim_amplitude_converted),
                 var_chaste_interface__I_stim__stim_duration_converted,
                 var_chaste_interface__I_stim__stim_period_converted,
@@ -44,7 +44,7 @@
         return p_cellml_stim;
     }
 
-    Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler::Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler::Cellsachse_moreno_abildskov_2008_bFromCellMLBackwardEuler(std::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<6>(
                 7,
                 0,

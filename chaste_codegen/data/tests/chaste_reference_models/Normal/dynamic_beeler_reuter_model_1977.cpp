@@ -21,14 +21,14 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Cellbeeler_reuter_model_1977FromCellML::UseCellMLDefaultStimulus()
+    std::shared_ptr<RegularStimulus> Cellbeeler_reuter_model_1977FromCellML::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__stimulus_protocol__IstimAmplitude = 5000000000000007; // uA_per_cm2
         const double var_chaste_interface__stimulus_protocol__IstimPeriod = 1000; // millisecond
         const double var_chaste_interface__stimulus_protocol__IstimPulseDuration = 1.0; // millisecond
         const double var_chaste_interface__stimulus_protocol__IstimStart = 10; // millisecond
-        boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+        std::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__stimulus_protocol__IstimAmplitude),
                 var_chaste_interface__stimulus_protocol__IstimPulseDuration,
                 var_chaste_interface__stimulus_protocol__IstimPeriod,
@@ -41,7 +41,7 @@
     {
         return mStateVariables[1];
     }
-    Cellbeeler_reuter_model_1977FromCellML::Cellbeeler_reuter_model_1977FromCellML(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellbeeler_reuter_model_1977FromCellML::Cellbeeler_reuter_model_1977FromCellML(std::shared_ptr<AbstractIvpOdeSolver> pSolver, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 8,

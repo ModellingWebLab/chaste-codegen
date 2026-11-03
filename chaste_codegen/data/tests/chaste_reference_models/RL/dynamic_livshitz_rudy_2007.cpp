@@ -26,14 +26,14 @@
 
 
 
-    boost::shared_ptr<RegularStimulus> Dynamiclivshitz_rudy_2007FromCellMLRushLarsen::UseCellMLDefaultStimulus()
+    std::shared_ptr<RegularStimulus> Dynamiclivshitz_rudy_2007FromCellMLRushLarsen::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__cell__stim_amplitude_converted = -15 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
         const double var_chaste_interface__cell__stim_duration = 3; // ms
         const double var_chaste_interface__cell__stim_offset = 100; // ms
         const double var_chaste_interface__cell__stim_period = 400; // ms
-        boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+        std::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__cell__stim_amplitude_converted),
                 var_chaste_interface__cell__stim_duration,
                 var_chaste_interface__cell__stim_period,
@@ -43,7 +43,7 @@
         return p_cellml_stim;
     }
 
-    Dynamiclivshitz_rudy_2007FromCellMLRushLarsen::Dynamiclivshitz_rudy_2007FromCellMLRushLarsen(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Dynamiclivshitz_rudy_2007FromCellMLRushLarsen::Dynamiclivshitz_rudy_2007FromCellMLRushLarsen(std::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractRushLarsenCardiacCell(
                 18,
                 0,
@@ -787,8 +787,8 @@ CHASTE_CLASS_EXPORT(Dynamiclivshitz_rudy_2007FromCellMLRushLarsen)
 extern "C"
 {
     AbstractCardiacCellInterface* MakeCardiacCell(
-            boost::shared_ptr<AbstractIvpOdeSolver> pSolver,
-            boost::shared_ptr<AbstractStimulusFunction> pStimulus)
+            std::shared_ptr<AbstractIvpOdeSolver> pSolver,
+            std::shared_ptr<AbstractStimulusFunction> pStimulus)
     {
         return new Dynamiclivshitz_rudy_2007FromCellMLRushLarsen(pSolver, pStimulus);
     }

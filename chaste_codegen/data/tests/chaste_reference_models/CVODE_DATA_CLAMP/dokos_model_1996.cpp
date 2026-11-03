@@ -37,7 +37,7 @@
         return NV_Ith_S(mStateVariables, 1);
     }
     
-    Celldokos_model_1996FromCellMLCvodeDataClamp::Celldokos_model_1996FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Celldokos_model_1996FromCellMLCvodeDataClamp::Celldokos_model_1996FromCellMLCvodeDataClamp(std::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCellWithDataClamp(
                 pOdeSolver,
                 18,

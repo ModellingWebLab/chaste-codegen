@@ -24,7 +24,7 @@
 
 #include "ModelFactory.hpp"
 
-AbstractGeneralizedRushLarsenCardiacCell* Dynamicviswanathan_model_1999_epiFromCellMLGRL2Opt::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
+AbstractGeneralizedRushLarsenCardiacCell* Dynamicviswanathan_model_1999_epiFromCellMLGRL2Opt::CreateMethod(std::shared_ptr<AbstractIvpOdeSolver> p_solver, std::shared_ptr<AbstractStimulusFunction> p_stimulus) {
     return new Dynamicviswanathan_model_1999_epiFromCellMLGRL2Opt(p_solver, p_stimulus);
 }
 
@@ -553,14 +553,14 @@ private:
 std::shared_ptr<Dynamicviswanathan_model_1999_epiFromCellMLGRL2Opt_LookupTables> Dynamicviswanathan_model_1999_epiFromCellMLGRL2Opt_LookupTables::mpInstance;
 
 
-    boost::shared_ptr<RegularStimulus> Dynamicviswanathan_model_1999_epiFromCellMLGRL2Opt::UseCellMLDefaultStimulus()
+    std::shared_ptr<RegularStimulus> Dynamicviswanathan_model_1999_epiFromCellMLGRL2Opt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -25.5 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
         const double var_chaste_interface__membrane__stim_duration_converted = 2; // millisecond
         const double var_chaste_interface__membrane__stim_period_converted = 1000; // millisecond
         const double var_chaste_interface__membrane__stim_start_converted = 100; // millisecond
-        boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+        std::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__membrane__stim_amplitude_converted),
                 var_chaste_interface__membrane__stim_duration_converted,
                 var_chaste_interface__membrane__stim_period_converted,
@@ -573,7 +573,7 @@ std::shared_ptr<Dynamicviswanathan_model_1999_epiFromCellMLGRL2Opt_LookupTables>
     {
         return mStateVariables[1];
     }
-    Dynamicviswanathan_model_1999_epiFromCellMLGRL2Opt::Dynamicviswanathan_model_1999_epiFromCellMLGRL2Opt(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Dynamicviswanathan_model_1999_epiFromCellMLGRL2Opt::Dynamicviswanathan_model_1999_epiFromCellMLGRL2Opt(std::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractGeneralizedRushLarsenCardiacCell(
                 25,
                 0,
@@ -3463,8 +3463,8 @@ CHASTE_CLASS_EXPORT(Dynamicviswanathan_model_1999_epiFromCellMLGRL2Opt)
 extern "C"
 {
     AbstractCardiacCellInterface* MakeCardiacCell(
-            boost::shared_ptr<AbstractIvpOdeSolver> pSolver,
-            boost::shared_ptr<AbstractStimulusFunction> pStimulus)
+            std::shared_ptr<AbstractIvpOdeSolver> pSolver,
+            std::shared_ptr<AbstractStimulusFunction> pStimulus)
     {
         return new Dynamicviswanathan_model_1999_epiFromCellMLGRL2Opt(pSolver, pStimulus);
     }

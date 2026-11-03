@@ -31,14 +31,14 @@
 
 
 
-    boost::shared_ptr<RegularStimulus> Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp::UseCellMLDefaultStimulus()
+    std::shared_ptr<RegularStimulus> Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__cell__stim_amplitude_converted = -9.5 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
         const double var_chaste_interface__cell__stim_duration = 5; // millisecond
         const double var_chaste_interface__cell__stim_period = 1000; // millisecond
         const double var_chaste_interface__cell__stim_start = 100; // millisecond
-        boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+        std::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__cell__stim_amplitude_converted),
                 var_chaste_interface__cell__stim_duration,
                 var_chaste_interface__cell__stim_period,
@@ -53,7 +53,7 @@
         return NV_Ith_S(mStateVariables, 1);
     }
     
-    Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp::Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp::Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp(std::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCellWithDataClamp(
                 pOdeSolver,
                 45,
@@ -1438,8 +1438,8 @@ CHASTE_CLASS_EXPORT(Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDa
 extern "C"
 {
     AbstractCardiacCellInterface* MakeCardiacCell(
-            boost::shared_ptr<AbstractIvpOdeSolver> pSolver,
-            boost::shared_ptr<AbstractStimulusFunction> pStimulus)
+            std::shared_ptr<AbstractIvpOdeSolver> pSolver,
+            std::shared_ptr<AbstractStimulusFunction> pStimulus)
     {
         return new Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvodeDataClamp(pSolver, pStimulus);
     }

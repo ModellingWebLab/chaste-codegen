@@ -250,14 +250,14 @@ private:
 std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLOpt_LookupTables> Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLOpt_LookupTables::mpInstance;
 
 
-    boost::shared_ptr<RegularStimulus> Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLOpt::UseCellMLDefaultStimulus()
+    std::shared_ptr<RegularStimulus> Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude = -20; // microA_per_cm2
         const double var_chaste_interface__membrane__stim_duration = 0.5; // millisecond
         const double var_chaste_interface__membrane__stim_period = 1000; // millisecond
         const double var_chaste_interface__membrane__stim_start = 10; // millisecond
-        boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+        std::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__membrane__stim_amplitude),
                 var_chaste_interface__membrane__stim_duration,
                 var_chaste_interface__membrane__stim_period,
@@ -267,7 +267,7 @@ std::shared_ptr<Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLOpt_L
         return p_cellml_stim;
     }
 
-    Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLOpt::Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLOpt::Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLOpt(std::shared_ptr<AbstractIvpOdeSolver> pSolver, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCell(
                 pSolver,
                 4,

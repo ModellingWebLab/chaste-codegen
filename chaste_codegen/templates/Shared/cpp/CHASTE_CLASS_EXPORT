@@ -5,8 +5,8 @@ CHASTE_CLASS_EXPORT({{class_name}})
 {% if dynamically_loadable %}extern "C"
 {
     AbstractCardiacCellInterface* MakeCardiacCell(
-            boost::shared_ptr<AbstractIvpOdeSolver> pSolver,
-            boost::shared_ptr<AbstractStimulusFunction> pStimulus)
+            std::shared_ptr<AbstractIvpOdeSolver> pSolver,
+            std::shared_ptr<AbstractStimulusFunction> pStimulus)
     {
         return new {{class_name}}(pSolver, pStimulus);
     }

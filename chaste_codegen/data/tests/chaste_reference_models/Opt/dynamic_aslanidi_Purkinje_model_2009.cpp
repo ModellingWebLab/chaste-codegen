@@ -24,7 +24,7 @@
 
 #include "ModelFactory.hpp"
 
-AbstractCardiacCellWithModifiers<AbstractCardiacCell >* Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
+AbstractCardiacCellWithModifiers<AbstractCardiacCell >* Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt::CreateMethod(std::shared_ptr<AbstractIvpOdeSolver> p_solver, std::shared_ptr<AbstractStimulusFunction> p_stimulus) {
     return new Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt(p_solver, p_stimulus);
 }
 
@@ -553,14 +553,14 @@ private:
 std::shared_ptr<Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt_LookupTables> Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt_LookupTables::mpInstance;
 
 
-    boost::shared_ptr<RegularStimulus> Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt::UseCellMLDefaultStimulus()
+    std::shared_ptr<RegularStimulus> Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -80 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
         const double var_chaste_interface__membrane__stim_duration = 1; // millisecond
         const double var_chaste_interface__membrane__stim_period = 800; // millisecond
         const double var_chaste_interface__membrane__stim_start = 100; // millisecond
-        boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+        std::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__membrane__stim_amplitude_converted),
                 var_chaste_interface__membrane__stim_duration,
                 var_chaste_interface__membrane__stim_period,
@@ -573,7 +573,7 @@ std::shared_ptr<Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt_LookupTables> D
     {
         return mStateVariables[1];
     }
-    Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt::Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt(boost::shared_ptr<AbstractIvpOdeSolver> pSolver, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt::Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt(std::shared_ptr<AbstractIvpOdeSolver> pSolver, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCardiacCellWithModifiers<AbstractCardiacCell >(
                 pSolver,
                 30,
@@ -1434,8 +1434,8 @@ CHASTE_CLASS_EXPORT(Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt)
 extern "C"
 {
     AbstractCardiacCellInterface* MakeCardiacCell(
-            boost::shared_ptr<AbstractIvpOdeSolver> pSolver,
-            boost::shared_ptr<AbstractStimulusFunction> pStimulus)
+            std::shared_ptr<AbstractIvpOdeSolver> pSolver,
+            std::shared_ptr<AbstractStimulusFunction> pStimulus)
     {
         return new Dynamicaslanidi_Purkinje_model_2009FromCellMLOpt(pSolver, pStimulus);
     }

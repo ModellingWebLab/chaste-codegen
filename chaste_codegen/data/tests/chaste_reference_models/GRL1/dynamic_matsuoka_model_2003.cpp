@@ -21,7 +21,7 @@
 #include "IsNan.hpp"
 #include "MathsCustomFunctions.hpp"
 
-    boost::shared_ptr<RegularStimulus> Dynamicmatsuoka_model_2003FromCellMLGRL1::UseCellMLDefaultStimulus()
+    std::shared_ptr<RegularStimulus> Dynamicmatsuoka_model_2003FromCellMLGRL1::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_membrane__Cm_converted = 9.9999999999999995e-7 * mParameters[0]; // uF
@@ -29,7 +29,7 @@
         const double var_chaste_interface__membrane__stim_duration = 2.0; // millisecond
         const double var_chaste_interface__membrane__stim_period = 400.0; // millisecond
         const double var_chaste_interface__membrane__stim_start = 50.0; // millisecond
-        boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+        std::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__membrane__stim_amplitude_converted),
                 var_chaste_interface__membrane__stim_duration,
                 var_chaste_interface__membrane__stim_period,
@@ -39,7 +39,7 @@
         return p_cellml_stim;
     }
 
-    Dynamicmatsuoka_model_2003FromCellMLGRL1::Dynamicmatsuoka_model_2003FromCellMLGRL1(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Dynamicmatsuoka_model_2003FromCellMLGRL1::Dynamicmatsuoka_model_2003FromCellMLGRL1(std::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractGeneralizedRushLarsenCardiacCell(
                 37,
                 0,
@@ -3752,8 +3752,8 @@ CHASTE_CLASS_EXPORT(Dynamicmatsuoka_model_2003FromCellMLGRL1)
 extern "C"
 {
     AbstractCardiacCellInterface* MakeCardiacCell(
-            boost::shared_ptr<AbstractIvpOdeSolver> pSolver,
-            boost::shared_ptr<AbstractStimulusFunction> pStimulus)
+            std::shared_ptr<AbstractIvpOdeSolver> pSolver,
+            std::shared_ptr<AbstractStimulusFunction> pStimulus)
     {
         return new Dynamicmatsuoka_model_2003FromCellMLGRL1(pSolver, pStimulus);
     }

@@ -15,11 +15,11 @@ class {{class_name}} : public {% if modifiers|length > 0 %}AbstractCardiacCellWi
     //
     // Settable parameters and readable variables
     //{% for mod in modifiers %}
-    boost::shared_ptr<AbstractModifier> {{mod.modifier}};
+    std::shared_ptr<AbstractModifier> {{mod.modifier}};
     {%- endfor %}
 
 {% if use_model_factory %}private:
-    static {% if modifiers|length > 0 %}AbstractCardiacCellWithModifiers<{% endif%}{{base_class}}{%- if modifiers|length > 0 %} >{% endif%}* CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus);
+    static {% if modifiers|length > 0 %}AbstractCardiacCellWithModifiers<{% endif%}{{base_class}}{%- if modifiers|length > 0 %} >{% endif%}* CreateMethod(std::shared_ptr<AbstractIvpOdeSolver> p_solver, std::shared_ptr<AbstractStimulusFunction> p_stimulus);
     static bool registered;{% endif%}
 private:
 const bool is_concentration[{{state_vars|length}}] = {%raw%}{{%endraw%}{%for state_var in state_vars %}{%if not loop.first %}, {%endif%}{%if state_var.is_concentration%}true{%else%}false{%endif%}{%endfor%}};

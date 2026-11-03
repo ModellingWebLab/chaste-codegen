@@ -29,7 +29,7 @@
 
 #include "ModelFactory.hpp"
 
-AbstractCvodeCellWithDataClamp* Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClamp::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
+AbstractCvodeCellWithDataClamp* Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClamp::CreateMethod(std::shared_ptr<AbstractIvpOdeSolver> p_solver, std::shared_ptr<AbstractStimulusFunction> p_stimulus) {
     return new Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClamp(p_solver, p_stimulus);
 }
 
@@ -37,14 +37,14 @@ bool Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClamp::registered = Mo
 
 
 
-    boost::shared_ptr<RegularStimulus> Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClamp::UseCellMLDefaultStimulus()
+    std::shared_ptr<RegularStimulus> Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClamp::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane_potential__stim_amplitude_converted = -9.5 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
         const double var_chaste_interface__membrane_potential__stim_duration = 5; // msec
         const double var_chaste_interface__membrane_potential__stim_period = 1000; // msec
         const double var_chaste_interface__membrane_potential__stim_start = 100; // msec
-        boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+        std::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__membrane_potential__stim_amplitude_converted),
                 var_chaste_interface__membrane_potential__stim_duration,
                 var_chaste_interface__membrane_potential__stim_period,
@@ -59,7 +59,7 @@ bool Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClamp::registered = Mo
         return NV_Ith_S(mStateVariables, 1);
     }
     
-    Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClamp::Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClamp(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClamp::Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClamp(std::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCellWithDataClamp(
                 pOdeSolver,
                 39,

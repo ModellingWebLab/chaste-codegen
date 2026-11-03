@@ -29,7 +29,7 @@
 
 #include "ModelFactory.hpp"
 
-AbstractCvodeCell* Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
+AbstractCvodeCell* Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode::CreateMethod(std::shared_ptr<AbstractIvpOdeSolver> p_solver, std::shared_ptr<AbstractStimulusFunction> p_stimulus) {
     return new Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode(p_solver, p_stimulus);
 }
 
@@ -37,14 +37,14 @@ bool Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode::registered = Mo
 
 
 
-    boost::shared_ptr<RegularStimulus> Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode::UseCellMLDefaultStimulus()
+    std::shared_ptr<RegularStimulus> Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__cell__stim_amplitude_converted = -9.5 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
         const double var_chaste_interface__cell__stim_duration = 5; // millisecond
         const double var_chaste_interface__cell__stim_period = 1000; // millisecond
         const double var_chaste_interface__cell__stim_start = 100; // millisecond
-        boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+        std::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__cell__stim_amplitude_converted),
                 var_chaste_interface__cell__stim_duration,
                 var_chaste_interface__cell__stim_period,
@@ -59,7 +59,7 @@ bool Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode::registered = Mo
         return NV_Ith_S(mStateVariables, 1);
     }
     
-    Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode::Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode::Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode(std::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
                 45,
@@ -2140,8 +2140,8 @@ CHASTE_CLASS_EXPORT(Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode)
 extern "C"
 {
     AbstractCardiacCellInterface* MakeCardiacCell(
-            boost::shared_ptr<AbstractIvpOdeSolver> pSolver,
-            boost::shared_ptr<AbstractStimulusFunction> pStimulus)
+            std::shared_ptr<AbstractIvpOdeSolver> pSolver,
+            std::shared_ptr<AbstractStimulusFunction> pStimulus)
     {
         return new Dynamicshannon_wang_puglisi_weber_bers_2004FromCellMLCvode(pSolver, pStimulus);
     }

@@ -25,7 +25,7 @@
 
 #include "ModelFactory.hpp"
 
-AbstractBackwardEulerCardiacCell<8>* Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler::CreateMethod(boost::shared_ptr<AbstractIvpOdeSolver> p_solver, boost::shared_ptr<AbstractStimulusFunction> p_stimulus) {
+AbstractBackwardEulerCardiacCell<8>* Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler::CreateMethod(std::shared_ptr<AbstractIvpOdeSolver> p_solver, std::shared_ptr<AbstractStimulusFunction> p_stimulus) {
     return new Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler(p_solver, p_stimulus);
 }
 
@@ -33,7 +33,7 @@ bool Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler::registered 
 
 
 
-    boost::shared_ptr<RegularStimulus> Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler::UseCellMLDefaultStimulus()
+    std::shared_ptr<RegularStimulus> Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_membrane__Cm_converted = 9.9999999999999995e-7 * mParameters[9]; // uF
@@ -41,7 +41,7 @@ bool Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler::registered 
         const double var_chaste_interface__membrane__stim_duration = 2; // millisecond
         const double var_chaste_interface__membrane__stim_period = 1000; // millisecond
         const double var_chaste_interface__membrane__stim_start = 100; // millisecond
-        boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+        std::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__membrane__stim_amplitude_converted),
                 var_chaste_interface__membrane__stim_duration,
                 var_chaste_interface__membrane__stim_period,
@@ -54,7 +54,7 @@ bool Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler::registered 
     {
         return mStateVariables[1];
     }
-    Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler::Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler(boost::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler::Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler(std::shared_ptr<AbstractIvpOdeSolver> /* unused; should be empty */, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractBackwardEulerCardiacCell<8>(
                 21,
                 0,
@@ -1021,8 +1021,8 @@ CHASTE_CLASS_EXPORT(Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEul
 extern "C"
 {
     AbstractCardiacCellInterface* MakeCardiacCell(
-            boost::shared_ptr<AbstractIvpOdeSolver> pSolver,
-            boost::shared_ptr<AbstractStimulusFunction> pStimulus)
+            std::shared_ptr<AbstractIvpOdeSolver> pSolver,
+            std::shared_ptr<AbstractStimulusFunction> pStimulus)
     {
         return new Dynamiccourtemanche_ramirez_nattel_1998FromCellMLBackwardEuler(pSolver, pStimulus);
     }

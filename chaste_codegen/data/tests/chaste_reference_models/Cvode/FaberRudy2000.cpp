@@ -27,14 +27,14 @@
 #include "CvodeContextManager.hpp"
 #endif
 
-    boost::shared_ptr<RegularStimulus> CellFaberRudy2000FromCellMLCvode::UseCellMLDefaultStimulus()
+    std::shared_ptr<RegularStimulus> CellFaberRudy2000FromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__membrane__stim_amplitude_converted = -25.5 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
         const double var_chaste_interface__membrane__stim_duration_converted = 2.0; // millisecond
         const double var_chaste_interface__membrane__stim_period_converted = 1000.0; // millisecond
         const double var_chaste_interface__membrane__stim_start_converted = 100.0; // millisecond
-        boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+        std::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__membrane__stim_amplitude_converted),
                 var_chaste_interface__membrane__stim_duration_converted,
                 var_chaste_interface__membrane__stim_period_converted,
@@ -49,7 +49,7 @@
         return NV_Ith_S(mStateVariables, 1);
     }
     
-    CellFaberRudy2000FromCellMLCvode::CellFaberRudy2000FromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    CellFaberRudy2000FromCellMLCvode::CellFaberRudy2000FromCellMLCvode(std::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
                 25,

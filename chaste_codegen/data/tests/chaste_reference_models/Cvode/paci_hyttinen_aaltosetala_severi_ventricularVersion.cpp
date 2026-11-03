@@ -31,14 +31,14 @@
 
 
 
-    boost::shared_ptr<RegularStimulus> Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLCvode::UseCellMLDefaultStimulus()
+    std::shared_ptr<RegularStimulus> Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLCvode::UseCellMLDefaultStimulus()
     {
         // Use the default stimulus specified by CellML metadata
         const double var_chaste_interface__stim_mode__i_stim_Amplitude_converted = 5.5718264182641404 * HeartConfig::Instance()->GetCapacitance(); // uA_per_cm2
         const double var_chaste_interface__stim_mode__i_stim_Period_converted = 1000; // millisecond
         const double var_chaste_interface__stim_mode__i_stim_PulseDuration_converted = 5; // millisecond
         const double var_chaste_interface__stim_mode__i_stim_Start_converted = 0; // millisecond
-        boost::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
+        std::shared_ptr<RegularStimulus> p_cellml_stim(new RegularStimulus(
                 -fabs(var_chaste_interface__stim_mode__i_stim_Amplitude_converted),
                 var_chaste_interface__stim_mode__i_stim_PulseDuration_converted,
                 var_chaste_interface__stim_mode__i_stim_Period_converted,
@@ -53,7 +53,7 @@
         return NV_Ith_S(mStateVariables, 1);
     }
     
-    Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLCvode::Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLCvode(boost::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, boost::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
+    Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLCvode::Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLCvode(std::shared_ptr<AbstractIvpOdeSolver> pOdeSolver /* unused; should be empty */, std::shared_ptr<AbstractStimulusFunction> pIntracellularStimulus)
         : AbstractCvodeCell(
                 pOdeSolver,
                 18,
