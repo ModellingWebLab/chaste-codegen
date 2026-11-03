@@ -1,4 +1,3 @@
-#ifdef CHASTE_CVODE
 {% include "Shared/hpp/header_comments" %}
 {% include "Shared/hpp/includes" %}
 #include "{{base_class}}.hpp"
@@ -14,4 +13,3 @@
     void EvaluateAnalyticJacobian(double {{free_variable.var_name}}, {{vector_decl}} rY, {{vector_decl}} rDY, CHASTE_CVODE_DENSE_MATRIX rJacobian, {{vector_decl}} rTmp1, {{vector_decl}} rTmp2, {{vector_decl}} rTmp3);
     {%- endif %}
 {% include "Shared/hpp/CHASTE_CLASS_EXPORT" %}
-#endif // CHASTE_CVODE
