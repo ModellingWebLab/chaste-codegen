@@ -1,4 +1,3 @@
-#ifdef CHASTE_CVODE
 //! @file
 //!
 //! This source file was generated from CellML by chaste_codegen version (version omitted as unimportant)
@@ -1309,4 +1308,3 @@ void OdeSystemInformation<Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataC
 #include "SerializationExportWrapperForCpp.hpp"
 CHASTE_CLASS_EXPORT(Cellgrandi_pasqualini_bers_2010_ssFromCellMLCvodeDataClamp)
 
-#endif // CHASTE_CVODE

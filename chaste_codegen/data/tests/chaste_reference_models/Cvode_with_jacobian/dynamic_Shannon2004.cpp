@@ -1,4 +1,3 @@
-#ifdef CHASTE_CVODE
 //! @file
 //!
 //! This source file was generated from CellML by chaste_codegen version (version omitted as unimportant)
@@ -2147,4 +2146,3 @@ extern "C"
     }
 
 }
-#endif // CHASTE_CVODE
