@@ -258,10 +258,11 @@ def test_Device(tmp_path, model):
                               class_name=class_name) as chaste_model:
         chaste_model.generate_chaste_code()
         # Compare against reference, named after the model so that load_chaste_models finds it
-        device_file = os.path.join(str(tmp_path), chaste_model.file_name + chaste_model.DEFAULT_EXTENSIONS[0])
-        write_file(device_file, chaste_model.generated_code[0])
-        reference = os.path.join(TESTS_FOLDER, 'chaste_reference_models', 'Device', chaste_model.file_name + '.hpp')
-        compare_file_against_reference(reference, device_file)
+        reference = os.path.join(TESTS_FOLDER, 'chaste_reference_models', 'Device', chaste_model.file_name)
+        for ext, code in zip(chaste_model.DEFAULT_EXTENSIONS, chaste_model.generated_code):
+            device_file = os.path.join(str(tmp_path), chaste_model.file_name + ext)
+            write_file(device_file, code)
+            compare_file_against_reference(reference + os.path.splitext(ext)[1], device_file)
 
 
 @pytest.mark.parametrize(('model'), chaste_opt_models)

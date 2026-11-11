@@ -866,14 +866,15 @@ def test_script_device_code(tmp_path):
     with mock.patch.object(sys, 'argv', testargs):
         chaste_codegen()
 
-    # Check output, the CPU code should be unaffected by --device-code
+    # Check output, only the CPU header should be affected by --device-code
     reference = os.path.join(os.path.join(TESTS_FOLDER), 'chaste_reference_models')
-    compare_file_against_reference(os.path.join(reference, 'Normal', model_name + '.hpp'),
+    compare_file_against_reference(os.path.join(reference, 'Normal_device_code', model_name + '.hpp'),
                                    os.path.join(tmp_path, model_name + '.hpp'))
     compare_file_against_reference(os.path.join(reference, 'Normal', model_name + '.cpp'),
                                    os.path.join(tmp_path, model_name + '.cpp'))
-    compare_file_against_reference(os.path.join(reference, 'Device', model_name + '.hpp'),
-                                   os.path.join(tmp_path, model_name + 'Device.hpp'))
+    for ext in ('.hpp', '.cu'):
+        compare_file_against_reference(os.path.join(reference, 'Device', model_name + ext),
+                                       os.path.join(tmp_path, model_name + 'Device' + ext))
 
 
 def test_script_device_code_outputs(capsys):
@@ -892,6 +893,7 @@ def test_script_device_code_outputs(capsys):
         output = str(captured.out)
         assert "beeler_reuter_model_1977.hpp" in output
         assert "beeler_reuter_model_1977Device.hpp" in output
+        assert "beeler_reuter_model_1977Device.cu" in output
         assert "beeler_reuter_model_1977OptDevice.hpp" not in output
         assert "beeler_reuter_model_1977BackwardEulerDevice.hpp" not in output
 
@@ -911,6 +913,7 @@ def test_script_device_code_dynamically_loadable(capsys):
         output = str(captured.out)
         assert "beeler_reuter_model_1977.hpp" in output
         assert "Device.hpp" not in output
+        assert "Device.cu" not in output
 
 
 def test_script_RL_labview(tmp_path):

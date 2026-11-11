@@ -8,13 +8,13 @@ from chaste_codegen.normal_chaste_model import NormalChasteModel
 class NormalDeviceModel(NormalChasteModel):
     """ Holds template and information for device code of the Normal model type, generated alongside its CPU code"""
 
-    DEFAULT_EXTENSIONS = ('Device.hpp', )
+    DEFAULT_EXTENSIONS = ('Device.hpp', 'Device.cu')
 
     def __init__(self, model, file_name, **kwargs):
         # Modifiers are host objects
         kwargs['use_modifiers'] = False
         super().__init__(model, file_name, **kwargs)
-        self._templates = ['normal_model_device.hpp']
+        self._templates = ['normal_model_device.hpp', 'normal_model_device.cu']
         self._vars_for_template['device_arguments'] = self._format_device_arguments()
 
     def _add_printers(self, lookup_table_function=lambda e: None):

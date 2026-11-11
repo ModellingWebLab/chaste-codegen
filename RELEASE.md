@@ -1,6 +1,6 @@
 # Unreleased
 - Drop support for Python 3.9.
-- Added `--device-code`, which also generates a `<model>Device.hpp` header for normal models. It holds a templated `EvaluateYDerivatives` that can be compiled for GPUs as well as CPUs, in single or double precision, with the stimulus and capacitance passed in as arguments. This has been tested with CUDA (nvcc 12.8 and 13.4) only; the code is written so that HIP could also compile it, but that is untested. Other generated code is unchanged.
+- Added `--device-code`, which also generates code for solving normal models on GPUs. A `<model>Device.hpp` header holds a templated `EvaluateYDerivatives` that can be compiled for GPUs as well as CPUs, in single or double precision, with the stimulus and capacitance passed in as arguments. A `<model>Device.cu` file compiles it into the GPU forward Euler solver being added to Chaste, and the model class gets a static `SolveOnDevice` that calls it. The generated code has been compiled with nvcc 12.8 and 13.4 and run with 13.4; it is written so that HIP could also compile it, but that is untested. Without `--device-code` the generated code is unchanged.
 
 # Release 0.10.7
 - Added support for Python 3.14.
