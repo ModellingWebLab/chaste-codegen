@@ -13,9 +13,12 @@ from chaste_codegen import (
     load_model_with_conversions,
 )
 from chaste_codegen._rdf import OXMETA
+from chaste_codegen._script_utils import write_file
 from chaste_codegen.tests.conftest import (
     CELLML_FOLDER,
+    TESTS_FOLDER,
     cache_model,
+    compare_file_against_reference,
     compare_model_against_reference,
     load_chaste_models,
 )
@@ -43,6 +46,7 @@ chaste_GRL2 = get_models(ref_folder='chaste_reference_models', type='GRL2')
 chaste_GRL2Opt = get_models(ref_folder='chaste_reference_models', type='GRL2Opt')
 chaste_CVODE_DATA_CLAMP = get_models(ref_folder='chaste_reference_models', type='CVODE_DATA_CLAMP')
 chaste_CVODE_DATA_CLAMP_OPT = get_models(ref_folder='chaste_reference_models', type='CVODE_DATA_CLAMP_OPT')
+chaste_device_models = get_models(ref_folder='chaste_reference_models', type='Device')
 
 
 cg.__version__ = "(version omitted as unimportant)"
@@ -242,6 +246,22 @@ def test_Normal(tmp_path, model):
         chaste_model.generate_chaste_code()
         # Compare against reference
         compare_model_against_reference(chaste_model, tmp_path, 'Normal')
+
+
+@pytest.mark.parametrize(('model'), chaste_device_models)
+def test_Device(tmp_path, model):
+    """ Check generation of device code for Normal models against reference"""
+    class_name = 'Cell' + model['model_name_from_file'] + 'FromCellML'
+    LOGGER.info('Converting: Device: ' + class_name + '\n')
+    # Generate chaste code
+    with cg.NormalDeviceModel(cache_model(model['model']), model['model_name_from_file'],
+                              class_name=class_name) as chaste_model:
+        chaste_model.generate_chaste_code()
+        # Compare against reference, named after the model so that load_chaste_models finds it
+        device_file = os.path.join(str(tmp_path), chaste_model.file_name + chaste_model.DEFAULT_EXTENSIONS[0])
+        write_file(device_file, chaste_model.generated_code[0])
+        reference = os.path.join(TESTS_FOLDER, 'chaste_reference_models', 'Device', chaste_model.file_name + '.hpp')
+        compare_file_against_reference(reference, device_file)
 
 
 @pytest.mark.parametrize(('model'), chaste_opt_models)

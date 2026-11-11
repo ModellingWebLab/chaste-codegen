@@ -39,12 +39,17 @@ TRANSLATORS_OPT = dict(
 
 TRANSLATORS_WITH_MODIFIERS = tuple('--' + t for t in TRANSLATORS if TRANSLATORS[t][3])
 
+# Model types that can also generate device code with --device-code, generated alongside the CPU code
+TRANSLATORS_DEVICE = dict(
+    [('normal', (cg.NormalDeviceModel, 'FromCellML', '', False, ''))])
+
 
 # Store extensions we can use and how to use them, based on extension of given outfile
 EXTENSION_LOOKUP_FROM_OUTFILE = {'.cellml': ['.hpp', '.cpp'], '': ['.hpp', '.cpp'], '.cpp': ['.hpp', '.cpp'],
                                  '.hpp': ['.hpp', '.cpp'], '.c': ['.h', '.c'], '.h': ['.h', '.c']}
 
-EXTENSION_LOOKUP_FROM_CONVERSION_TYPE = {cg.RushLarsenC: ['.h', '.c'], cg.RushLarsenLabview: [None, '.txt']}
+EXTENSION_LOOKUP_FROM_CONVERSION_TYPE = {cg.RushLarsenC: ['.h', '.c'], cg.RushLarsenLabview: [None, '.txt'],
+                                         cg.NormalDeviceModel: ['Device.hpp']}
 
 
 def print_default_lookup_params():
@@ -120,6 +125,10 @@ def process_command_line():
     group.add_argument('--use-model-factory', action='store_true', default=False,
                        help='Make use of ModelFactoy method to allow creating models by name. '
                        'Requires ModelFactory.hpp/cpp found in the ApPredict project.')
+    group.add_argument('--device-code', action='store_true', default=False,
+                       help='also generate a <model>Device.hpp header with functions that can be compiled for GPUs '
+                       'as well as CPUs (currently tested with CUDA). Only applies to --normal models without --opt, '
+                       'and is ignored for other model types and for dynamically loadable models.')
 
     # process options
     args = parser.parse_args()
@@ -159,12 +168,15 @@ def process_command_line():
 
     # create list of translators to apply
     translators = []
+    device_translators = []
     for model_type in TRANSLATORS:
         use_translator_class = getattr(args, model_type.replace('-', '_'))
         if use_translator_class:
             # if -o or dynamically_loadable is selected with opt, only convert opt model type
             if not args.opt or (not args.outfile and not args.dynamically_loadable):
                 translators.append(TRANSLATORS[model_type])
+                if args.device_code and model_type in TRANSLATORS_DEVICE:
+                    device_translators.append(TRANSLATORS_DEVICE[model_type])
             if args.opt and model_type in TRANSLATORS_OPT:
                 translators.append(TRANSLATORS_OPT[model_type])
 
@@ -175,6 +187,11 @@ def process_command_line():
 
     if args.dynamically_loadable and len(translators) > 1:
         raise CodegenError("Only one model type may be specified if creating a dynamic library!")
+
+    # Device code is an extra header next to the CPU code, so it doesn't count as another model type for -o, and is
+    # compiled into GPU solvers rather than loaded at run time, so it is skipped for dynamically loadable models
+    if not args.dynamically_loadable:
+        translators += device_translators
 
     if not args.show_outputs:
         # Load model once, not once per translator, but only if we're actually generating code

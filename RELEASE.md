@@ -1,5 +1,6 @@
 # Unreleased
 - Drop support for Python 3.9.
+- Added `--device-code`, which also generates a `<model>Device.hpp` header for normal models. It holds a templated `EvaluateYDerivatives` that can be compiled for GPUs as well as CPUs, in single or double precision, with the stimulus and capacitance passed in as arguments. This has been tested with CUDA (nvcc 12.8 and 13.4) only; the code is written so that HIP could also compile it, but that is untested. Other generated code is unchanged.
 
 # Release 0.10.7
 - Added support for Python 3.14.

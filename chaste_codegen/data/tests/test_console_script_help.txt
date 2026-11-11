@@ -5,7 +5,7 @@ usage: chaste_codegen [-h] [--version] [--normal] [--cvode]
                       [--output-dir OUTPUT_DIR] [--show-outputs] [-c CLS_NAME]
                       [-q] [--skip-singularity-fixes] [-y] [--opt] [-m]
                       [--lookup-table <metadata tag> min max step]
-                      [--use-model-factory]
+                      [--use-model-factory] [--device-code]
                       cellml_file
 
 Chaste code generation for cellml.
@@ -83,3 +83,8 @@ Chaste options:
   --use-model-factory   Make use of ModelFactoy method to allow creating
                         models by name. Requires ModelFactory.hpp/cpp found in
                         the ApPredict project.
+  --device-code         also generate a <model>Device.hpp header with
+                        functions that can be compiled for GPUs as well as
+                        CPUs (currently tested with CUDA). Only applies to
+                        --normal models without --opt, and is ignored for
+                        other model types and for dynamically loadable models.

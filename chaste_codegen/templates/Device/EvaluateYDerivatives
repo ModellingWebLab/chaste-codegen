@@ -1,0 +1,40 @@
+{%- macro arg(declaration, name, used, suffix="") %}{{ declaration }} {% if used %}{{ name }}{% else %}/* {{ name }} */{% endif %}{{ suffix }}{% endmacro %}
+    // Device version of {{class_name}}::EvaluateYDerivatives. The stimulus, capacitance and, when
+    // setVoltageDerivativeToZero is true, the voltage are passed in because the Chaste calls that give them are host only.
+    template <typename ValueType>
+    CHASTE_HOST_DEVICE static void EvaluateYDerivatives({{ arg("ValueType", free_variable.var_name, device_arguments.time) }},
+                                                        {{ arg("const ValueType", "rY", device_arguments.state_vars, "[]") }},
+                                                        ValueType rDY[],
+                                                        {{ arg("const ValueType", "pParameters", device_arguments.parameters, "[]") }},
+                                                        {{ arg("ValueType", "stimulus", device_arguments.stimulus) }},
+                                                        {{ arg("ValueType", "capacitance", device_arguments.capacitance) }},
+                                                        bool setVoltageDerivativeToZero,
+                                                        {{ arg("ValueType", "fixedVoltage", device_arguments.fixed_voltage) }})
+    {
+        // Inputs:
+        // Time units: millisecond
+        {%- for state_var in state_vars %}{% if state_var.in_y_deriv %}
+        const ValueType {{ state_var.var }} = {{ state_var.rY_lookup }};
+        // Units: {{ state_var.units }}; Initial value: {{ state_var.initial_value }}
+        {%- endif %}{%- endfor %}
+
+        // Mathematics
+        {% for deriv in y_derivative_equations %}{%- if deriv.is_voltage %}ValueType {{ deriv.lhs }};{%- endif %}{%- endfor %}
+        {%- for deriv in y_derivative_equations %}{%- if deriv.in_eqs_excl_voltage %}
+        const ValueType {{ deriv.lhs }} = {{ deriv.rhs }}; // {{ deriv.units }}{%- endif %}
+        {%- endfor %}
+
+        if (setVoltageDerivativeToZero)
+        {
+            {% for deriv in y_derivative_equations %}{%- if deriv.is_voltage %}{{ deriv.lhs }} = 0;{%- endif %}{%- endfor %}
+        }
+        else
+        {
+        {%- for deriv in y_derivative_equations %}{%- if not deriv.in_eqs_excl_voltage %}
+            {% if not deriv.is_voltage %}const ValueType {% endif %}{{ deriv.lhs }} = {{ deriv.rhs }}; // {{ deriv.units }}
+        {%- endif %}{%- endfor %}
+        }
+{% for deriv in y_derivatives %}
+        rDY[{{ loop.index0 }}] = {{ deriv }};
+        {%- endfor %}
+    }
