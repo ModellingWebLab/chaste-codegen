@@ -48,6 +48,8 @@ class TestChasteDevicePrinter(object):
         assert printer.doprint(sp.Pow(x, 0.5)) == 'std::sqrt(x)'
         assert printer.doprint(sp.sympify('x ** (-1/2)')) == '1 / std::sqrt(x)'
         assert printer.doprint(1 / x) == '1 / x'
+        assert printer.doprint(sp.Pow(2, x, evaluate=False)) == 'std::pow(ValueType(2), x)'
+        assert printer.doprint(sp.Pow(2, sp.Float(0.5), evaluate=False)) == 'std::sqrt(ValueType(2))'
 
     def test_functions(self, printer, x, y):
         assert printer.doprint(sp.exp(x) + sp.log(y)) == 'std::exp(x) + std::log(y)'

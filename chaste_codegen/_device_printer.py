@@ -61,15 +61,18 @@ class ChasteDevicePrinter(ChastePrinter):
         return func + '(' + ', '.join(args) + ')'
 
     def _print_ordinary_pow(self, expr):
-        """ Handles ``Pow()`` without division. Integer exponents are cast, as ``std::pow(float, int)`` returns
-        ``double``. """
+        """ Handles ``Pow()`` without division. Integer bases and exponents are cast, as ``std::pow`` and
+        ``std::sqrt`` return ``double`` if any argument is an integer. """
         p = precedence(expr)
+        base = self._bracket(expr.base, p)
+        if _is_int_literal(base):
+            base = 'ValueType(' + base + ')'
         if expr.exp == 0.5:
-            return 'std::sqrt(' + self._bracket(expr.base, p) + ')'
+            return 'std::sqrt(' + base + ')'
         exponent = self._bracket(expr.exp, p)
         if _is_int_literal(exponent):
             exponent = 'ValueType(' + exponent + ')'
-        return 'std::pow(' + self._bracket(expr.base, p) + ', ' + exponent + ')'
+        return 'std::pow(' + base + ', ' + exponent + ')'
 
     def _print_Rational(self, expr):
         """ Handles rationals, which would otherwise be printed as integer division. """
