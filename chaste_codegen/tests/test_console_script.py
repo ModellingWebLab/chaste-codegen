@@ -852,6 +852,70 @@ def test_V_not_state_mparam(caplog, tmp_path):
                                    os.path.join(tmp_path, 'test_V_not_state_mparam.cpp'))
 
 
+def test_script_device_code(tmp_path):
+    """Test generating device code alongside a normal model"""
+    LOGGER.info('Testing device code generation\n')
+    tmp_path = str(tmp_path)
+    model_name = 'test_V_not_state_mparam'
+    model_file = os.path.join(CELLML_FOLDER, '..', '..', model_name + '.cellml')
+    assert os.path.isfile(model_file)
+    outfile = os.path.join(tmp_path, model_name + '.cpp')
+    # Call commandline script
+    testargs = ['chaste_codegen', model_file, '-o', outfile, '--device-code']
+
+    with mock.patch.object(sys, 'argv', testargs):
+        chaste_codegen()
+
+    # Check output, only the CPU header should be affected by --device-code
+    reference = os.path.join(os.path.join(TESTS_FOLDER), 'chaste_reference_models')
+    compare_file_against_reference(os.path.join(reference, 'Normal_device_code', model_name + '.hpp'),
+                                   os.path.join(tmp_path, model_name + '.hpp'))
+    compare_file_against_reference(os.path.join(reference, 'Normal', model_name + '.cpp'),
+                                   os.path.join(tmp_path, model_name + '.cpp'))
+    for ext in ('.hpp', '.cu'):
+        compare_file_against_reference(os.path.join(reference, 'Device', model_name + ext),
+                                       os.path.join(tmp_path, model_name + 'Device' + ext))
+
+
+def test_script_device_code_outputs(capsys):
+    """Test that device code is only generated for normal models without --opt"""
+    LOGGER.info('Testing --device-code with other model types\n')
+    model_name = 'beeler_reuter_model_1977'
+    model_file = os.path.join(CELLML_FOLDER, model_name + '.cellml')
+    assert os.path.isfile(model_file)
+
+    testargs = ['chaste_codegen', model_file, '--normal', '--opt', '--backward-euler', '--device-code',
+                '--show-outputs']
+    # Call commandline script
+    with mock.patch.object(sys, 'argv', testargs):
+        chaste_codegen()
+        captured = capsys.readouterr()
+        output = str(captured.out)
+        assert "beeler_reuter_model_1977.hpp" in output
+        assert "beeler_reuter_model_1977Device.hpp" in output
+        assert "beeler_reuter_model_1977Device.cu" in output
+        assert "beeler_reuter_model_1977OptDevice.hpp" not in output
+        assert "beeler_reuter_model_1977BackwardEulerDevice.hpp" not in output
+
+
+def test_script_device_code_dynamically_loadable(capsys):
+    """Test that device code is not generated for dynamically loadable models"""
+    LOGGER.info('Testing --device-code with --dynamically-loadable\n')
+    model_name = 'beeler_reuter_model_1977'
+    model_file = os.path.join(CELLML_FOLDER, model_name + '.cellml')
+    assert os.path.isfile(model_file)
+
+    testargs = ['chaste_codegen', model_file, '--dynamically-loadable', '--device-code', '--show-outputs']
+    # Call commandline script
+    with mock.patch.object(sys, 'argv', testargs):
+        chaste_codegen()
+        captured = capsys.readouterr()
+        output = str(captured.out)
+        assert "beeler_reuter_model_1977.hpp" in output
+        assert "Device.hpp" not in output
+        assert "Device.cu" not in output
+
+
 def test_script_RL_labview(tmp_path):
     """Convert a RushLarsen model type in labview output"""
     LOGGER.info('Testing model with options --rush-larsen-labview\n')

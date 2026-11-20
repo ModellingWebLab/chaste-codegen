@@ -25,7 +25,7 @@ usage: chaste_codegen [-h] [--version] [--normal] [--cvode]
                       [--output-dir OUTPUT_DIR] [--show-outputs] [-c CLS_NAME]
                       [-q] [--skip-ingularity-fixes] [-y] [--opt] [-m]
                       [--lookup-table <metadata tag> min max step]
-                      [--use-model-factory]
+                      [--use-model-factory] [--device-code]
                       cellml_file
 chaste_codegen: error: the following arguments are required: cellml_file
 

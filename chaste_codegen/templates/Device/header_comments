@@ -1,0 +1,8 @@
+#ifndef {% filter upper %}{{class_name}}DEVICE_HPP_{% endfilter %}
+#define {% filter upper %}{{class_name}}DEVICE_HPP_{% endfilter %}
+
+{% include "Device/file_comments" %}
+
+#include <cmath>
+
+#include "ChasteHostDevice.hpp"
